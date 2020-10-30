@@ -3,6 +3,7 @@ module gitlab.cee.redhat.com/mas-dx/rhmas
 go 1.12
 
 require (
+	github.com/antihax/optional v1.0.0 // indirect
 	github.com/go-resty/resty v1.8.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/spf13/cobra v0.0.6
