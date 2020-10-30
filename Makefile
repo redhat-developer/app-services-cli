@@ -18,6 +18,7 @@ ifndef SERVER_URL
 	SERVER_URL:=http://localhost:8000
 endif
 
+
 # Prints a list of useful targets.
 help:
 	@echo ""
@@ -71,7 +72,7 @@ binary: check-gopath
 
 # Install
 install: check-gopath
-	go install ./cmd/${binary}
+	go install ./cmd
 .PHONY: install
 
 # Runs the unit tests.
