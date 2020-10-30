@@ -98,10 +98,9 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	rm -rf client/generate
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go -o client/generated
+	openapi-generator generate -i openapi/managed-services-api.yaml -g go -o client/masd
 	openapi-generator validate -i openapi/managed-services-api.yaml
-	gofmt -w client/generated
+	gofmt -w client/mas
 .PHONY: openapi/generate
 
 # clean up code and dependencies
