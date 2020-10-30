@@ -15,7 +15,6 @@ servers:
 paths:
   /api/managed-services-api/v1/kafkas/{id}:
     delete:
-      operationId: deleteKafkaById
       parameters:
       - description: The id of record
         explode: false
@@ -61,7 +60,6 @@ paths:
           description: Unexpected error occurred
       summary: Delete a kafka request by id
     get:
-      operationId: getKafkaById
       parameters:
       - description: The id of record
         explode: false
@@ -110,7 +108,6 @@ paths:
       summary: Get a kafka request by id
   /api/managed-services-api/v1/kafkas:
     get:
-      operationId: createKafka
       parameters:
       - description: Page index
         examples:
@@ -163,7 +160,6 @@ paths:
       - Bearer: []
       summary: Returns a list of Kafka requests
     post:
-      operationId: listKafkas
       parameters:
       - description: Perform the action in an asynchronous manner
         explode: true

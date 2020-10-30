@@ -26,21 +26,21 @@ var (
 // DefaultApiService DefaultApi service
 type DefaultApiService service
 
-// CreateKafkaOpts Optional parameters for the method 'CreateKafka'
-type CreateKafkaOpts struct {
+// ApiManagedServicesApiV1KafkasGetOpts Optional parameters for the method 'ApiManagedServicesApiV1KafkasGet'
+type ApiManagedServicesApiV1KafkasGetOpts struct {
 	Page optional.String
 	Size optional.String
 }
 
 /*
-CreateKafka Returns a list of Kafka requests
+ApiManagedServicesApiV1KafkasGet Returns a list of Kafka requests
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *CreateKafkaOpts - Optional Parameters:
+ * @param optional nil or *ApiManagedServicesApiV1KafkasGetOpts - Optional Parameters:
  * @param "Page" (optional.String) -  Page index
  * @param "Size" (optional.String) -  Number of items in each page
 @return KafkaRequestList
 */
-func (a *DefaultApiService) CreateKafka(ctx _context.Context, localVarOptionals *CreateKafkaOpts) (KafkaRequestList, *_nethttp.Response, error) {
+func (a *DefaultApiService) ApiManagedServicesApiV1KafkasGet(ctx _context.Context, localVarOptionals *ApiManagedServicesApiV1KafkasGetOpts) (KafkaRequestList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -135,12 +135,12 @@ func (a *DefaultApiService) CreateKafka(ctx _context.Context, localVarOptionals 
 }
 
 /*
-DeleteKafkaById Delete a kafka request by id
+ApiManagedServicesApiV1KafkasIdDelete Delete a kafka request by id
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id The id of record
 @return Error
 */
-func (a *DefaultApiService) DeleteKafkaById(ctx _context.Context, id string) (Error, *_nethttp.Response, error) {
+func (a *DefaultApiService) ApiManagedServicesApiV1KafkasIdDelete(ctx _context.Context, id string) (Error, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
@@ -241,12 +241,12 @@ func (a *DefaultApiService) DeleteKafkaById(ctx _context.Context, id string) (Er
 }
 
 /*
-GetKafkaById Get a kafka request by id
+ApiManagedServicesApiV1KafkasIdGet Get a kafka request by id
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id The id of record
 @return KafkaRequest
 */
-func (a *DefaultApiService) GetKafkaById(ctx _context.Context, id string) (KafkaRequest, *_nethttp.Response, error) {
+func (a *DefaultApiService) ApiManagedServicesApiV1KafkasIdGet(ctx _context.Context, id string) (KafkaRequest, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -347,13 +347,13 @@ func (a *DefaultApiService) GetKafkaById(ctx _context.Context, id string) (Kafka
 }
 
 /*
-ListKafkas Create a new kafka Request
+ApiManagedServicesApiV1KafkasPost Create a new kafka Request
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param async Perform the action in an asynchronous manner
  * @param kafkaRequest Kafka data
 @return KafkaRequest
 */
-func (a *DefaultApiService) ListKafkas(ctx _context.Context, async bool, kafkaRequest KafkaRequest) (KafkaRequest, *_nethttp.Response, error) {
+func (a *DefaultApiService) ApiManagedServicesApiV1KafkasPost(ctx _context.Context, async bool, kafkaRequest KafkaRequest) (KafkaRequest, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
