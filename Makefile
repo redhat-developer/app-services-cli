@@ -27,7 +27,6 @@ help:
 	@echo "make verify               	verify source code"
 	@echo "make lint                 	run golangci-lint"
 	@echo "make binary               	compile binaries"
-	@echo "make install              	compile binaries and install in GOPATH bin"
 	@echo "make test                 	run unit tests"
 	@echo "make test-integration     	run integration tests"
 	@echo "make code/fix             	format files"
@@ -69,11 +68,6 @@ lint:
 binary: check-gopath
 	go build -o ${binary} ./cmd 
 .PHONY: binary
-
-# Install
-install: check-gopath
-	go install ./cmd
-.PHONY: install
 
 # Runs the unit tests.
 #

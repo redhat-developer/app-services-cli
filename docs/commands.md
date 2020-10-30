@@ -9,9 +9,9 @@ https://cloud.redhat.com/managed-application-services/token
 
 To do that use the `login` command:
 
-....
-$ rhcloud login --token=eyJ...
-....
+```
+$ rhmas login --token=eyJ...
+```
 
 
 ### OpenShift Streaming Management commands
@@ -21,7 +21,7 @@ $ rhcloud login --token=eyJ...
 Command creates Kafka instance and automatically setting it up as default instance that will be used 
 by other subcommands
 ```
-rhcloud kafka create my-cluster
+rhmas kafka create my-cluster
 ```
 
 **Arguments**:
@@ -65,7 +65,7 @@ rhcloud kafka create my-cluster
 Get details 
 
 ```
-rhcloud kafka get --format <kafka_id>
+rhmas kafka get --format <kafka_id>
 ```
 
 **Arguments**:
@@ -99,28 +99,28 @@ rhcloud kafka get --format <kafka_id>
 List Streaming instances in your current account
 
 ```
-rhcloud kafka list
+rhmas kafka list
 ```
 
 #### Switch to use managed kafka
 
 ```
-rhcloud kafka use <kafka_id>
+rhmas kafka use <kafka_id>
 ```
 
 #### Get credentials for the managed kafka
 
 ```
-rhcloud kafka get-credentials --cluster-name=my-cluster --type=TLS
+rhmas kafka get-credentials --cluster-name=my-cluster --type=TLS
 ```
 
 ### OpenShift Streaming Kafka specific commands
 
-rhcloud kafka tail <kafka_id> <topic>
+rhmas kafka tail <kafka_id> <topic>
 
 ### Community supported commands
 
 ```
-rhcloud kafka create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
+rhmas kafka create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
 ```
 

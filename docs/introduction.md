@@ -21,11 +21,11 @@ Download binary file from releases
 ### Fedora
 
 ```
-dnf install rhcloud
+dnf install rhmas
 ```
 
 ### Mac
 
 ```
-brew install rhcloud
+brew install rhmas
 ```
