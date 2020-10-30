@@ -34,6 +34,7 @@ help:
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
 	@echo "make clean                	delete temporary generated files"
+						
 	@echo "$(fake)"
 .PHONY: help
 
@@ -49,7 +50,7 @@ endif
 verify: check-gopath
 	go vet \
 		./cmd/... \
-		./pkg/... \
+		./client/... \
 		./test/...
 .PHONY: verify
 
@@ -58,7 +59,7 @@ verify: check-gopath
 lint:
 	$(GOLANGCI_LINT_BIN) run \
 		./cmd/... \
-		./pkg/... \
+		./client/... \
 		./test/...
 .PHONY: lint
 
@@ -70,7 +71,7 @@ binary: check-gopath
 
 # Install
 install: check-gopath
-	go install ./cmd/managed-services-api
+	go install ./cmd/${binary}
 .PHONY: install
 
 # Runs the unit tests.
@@ -82,7 +83,7 @@ install: check-gopath
 #   make test TESTFLAGS="-run TestSomething"
 test: install
 	OCM_ENV=testing gotestsum --format $(TEST_SUMMARY_FORMAT) -- -p 1 -v -count=1 $(TESTFLAGS) \
-		./pkg/... \
+		./client/... \
 		./cmd/...
 .PHONY: test
 
@@ -114,9 +115,5 @@ code/fix:
 	@gofmt -w `find . -type f -name '*.go' -not -path "./vendor/*"`
 .PHONY: code/fix
 
-# Run the test container
-test/run: image/build/test
-	docker run -i "$(test_image)"
-.PHONY: test/run
 
 
