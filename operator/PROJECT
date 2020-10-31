@@ -1,0 +1,11 @@
+domain: my.domain
+layout: go.kubebuilder.io/v2
+projectName: operator
+repo: gitlab.cee.redhat.com/mas-dx/rhmas
+resources:
+- group: streaming
+  kind: ManagedKafka
+  version: v1
+version: 3-alpha
+plugins:
+  go.sdk.operatorframework.io/v2-alpha: {}
