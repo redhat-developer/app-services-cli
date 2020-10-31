@@ -20,7 +20,7 @@ type KafkaRequest struct {
 	Href                string    `json:"href,omitempty"`
 	Status              string    `json:"status,omitempty"`
 	CloudProvider       string    `json:"cloud_provider,omitempty"`
-	MultiAz             string    `json:"multi_az,omitempty"`
+	MultiAz             bool      `json:"multi_az,omitempty"`
 	Region              string    `json:"region,omitempty"`
 	Owner               string    `json:"owner,omitempty"`
 	Name                string    `json:"name,omitempty"`
