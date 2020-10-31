@@ -55,9 +55,9 @@ module.exports = {
 
   listKafkas: async (c, req, res) => {
     res.status(200).json({
-      page: "1",
-      size: "1",
-      total: "1",
+      page: 1,
+      size: 1,
+      total: 1,
       items: {
         id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
         kind: "kafka",

@@ -10,9 +10,6 @@ import (
 	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
 )
 
-const testHost = "localhost:8000"
-const testScheme = "http"
-
 // NewCreateCommand creates a new command for creating kafkas.
 func NewCreateCommand() *cobra.Command {
 	cmd := &cobra.Command{
@@ -36,17 +33,11 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	provider := flags.MustGetDefinedString(FlagProvider, cmd.Flags())
 	multiAZ := flags.MustGetBool(FlagMultiAZ, cmd.Flags())
 
-	// TODO config abstraction
-
-	cfg := mas.NewConfiguration()
-	cfg.AddDefaultHeader("Authorization", "Bearer 9f4068b1c2cc720dd44dc2c6157569ae")
-	cfg.Host = testHost
-	cfg.Scheme = testScheme
-	client := mas.NewAPIClient(cfg)
+	client := BuildMasClient()
 
 	kafkaRequest := mas.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
-	data, _ := json.Marshal(kafkaRequest)
-	glog.Info("kafkaRequest API", string(data))
+	// data, _ := json.Marshal(kafkaRequest)
+	// glog.Info("kafkaRequest API", string(data))
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), false, kafkaRequest)
 
 	if err != nil {

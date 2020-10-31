@@ -34,7 +34,6 @@ make openapi/validate           validate openapi schema
 make clean                      delete temporary generated files
 ```
 
-
 ## Other Tools included
 
 - CLI (./cmd) - CLI for managed-services-api written in Golang
@@ -45,6 +44,14 @@ make clean                      delete temporary generated files
 ## Architecture
 
 ![./architecture.png](./resources/architecture.png)
+
+## Development commands
+
+When working with cmd we can execute commands using go run
+
+```
+go run ./cmd kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+```
 
 
 

@@ -1,16 +1,20 @@
 package kafka
 
 import (
+	"context"
+	"encoding/json"
+
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
 )
 
 // NewDeleteCommand command for deleting kafkas.
 func NewDeleteCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Delete a managed-services-api kafka request",
-		Long:  "Delete a managed-services-api kafka request.",
+		Short: "Delete kafka cluster",
+		Long:  "Request deletion of the kafka cluster",
 		Run:   runDelete,
 	}
 
@@ -20,7 +24,21 @@ func NewDeleteCommand() *cobra.Command {
 }
 
 func runDelete(cmd *cobra.Command, _ []string) {
-	//id := flags.MustGetDefinedString(FlagID, cmd.Flags())
+	id := flags.MustGetDefinedString(FlagID, cmd.Flags())
 
-	glog.V(10).Infof("Deleted kafka request with id %s", 1)
+	client := BuildMasClient()
+
+	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdDelete(context.Background(), id)
+
+	if err != nil {
+		glog.Fatalf("Error while deleting Kafka instance: %v", err)
+	}
+	if status.StatusCode == 200 {
+		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
+		glog.Info("Deleted Kafka \n ", string(jsonResponse))
+	} else {
+		glog.Info("Deletion failed", response, status)
+	}
+
+	glog.Infof("Deleted kafka request with id %s", 1)
 }

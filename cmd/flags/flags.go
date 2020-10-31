@@ -26,6 +26,12 @@ func MustGetString(flagName string, flags *pflag.FlagSet) string {
 	return flagVal
 }
 
+// MustGetString attempts to get a string flag from the provided flag set or panic
+func GetString(flagName string, flags *pflag.FlagSet) string {
+	flagVal, _ := flags.GetString(flagName)
+	return flagVal
+}
+
 // MustGetBool attempts to get a boolean flag from the provided flag set or panic
 func MustGetBool(flagName string, flags *pflag.FlagSet) bool {
 	flagVal, err := flags.GetBool(flagName)

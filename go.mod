@@ -5,6 +5,7 @@ go 1.12
 replace gitlab.cee.redhat.com/mas-dx/rhmas/client/mas => ./client/mas
 
 require (
+	github.com/antihax/optional v1.0.0
 	github.com/c9s/gomon v1.3.0 // indirect
 	github.com/daviddengcn/go-colortext v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
