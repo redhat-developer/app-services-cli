@@ -37,7 +37,8 @@ make clean                      delete temporary generated files
 ## Other Tools included
 
 - CLI (./cmd) - CLI for managed-services-api written in Golang
-- API CLient (./client) - API client written in golang that will be used in the CLI
+- Operator(./operator) - using SDK to manage kafka requests
+- SDK for MAS (./client) - API client written in golang that will be used in the CLI
 - Mock  (./mas-mock) - Mock server for managed API (used only to demo flows an extra cases)
 - .openshift - templates and scripts that can be used to replicate managed kafka using your own cluster
 

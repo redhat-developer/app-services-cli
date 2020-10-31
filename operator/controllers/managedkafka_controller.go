@@ -41,7 +41,7 @@ func (r *ManagedKafkaReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	_ = context.Background()
 	_ = r.Log.WithValues("managedkafka", req.NamespacedName)
 
-	// your logic here
+	r.Status()
 
 	return ctrl.Result{}, nil
 }
