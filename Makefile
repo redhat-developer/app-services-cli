@@ -98,7 +98,7 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go -o client/masd
+	openapi-generator generate -i openapi/managed-services-api.yaml -g go -o client/mas
 	openapi-generator validate -i openapi/managed-services-api.yaml
 	gofmt -w client/mas
 .PHONY: openapi/generate

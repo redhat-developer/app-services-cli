@@ -96,7 +96,7 @@ paths:
       - $ref: "#/components/parameters/id"
   /api/managed-services-api/v1/kafkas:
     post:
-      operationId: listKafkas
+      operationId: createKafka
       parameters:
         - in: query
           name: async
@@ -167,7 +167,7 @@ paths:
       summary: Create a new kafka Request
     get:
       summary: Returns a list of Kafka requests
-      operationId: createKafka
+      operationId: listKafkas
       security:
         - Bearer: []
       responses:

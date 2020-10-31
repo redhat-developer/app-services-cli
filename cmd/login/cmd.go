@@ -3,6 +3,7 @@
 package login
 
 import (
+	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +12,12 @@ func NewLoginCommand() *cobra.Command {
 		Use:   "login",
 		Short: "Login to Managed Application Services",
 		Long:  "Login to Managed Application Services in order to manage your services",
+		Run:   runLogin,
 	}
 
 	return cmd
+}
+
+func runLogin(cmd *cobra.Command, _ []string) {
+	glog.V(10).Infof("List")
 }

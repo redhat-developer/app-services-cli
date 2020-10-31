@@ -1,4 +1,4 @@
-module github.com/GIT_USER_ID/GIT_REPO_ID
+module gitlab.cee.redhat.com/mas-dx/rhmas/client/mas
 
 go 1.14
 
