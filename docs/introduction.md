@@ -1,3 +1,8 @@
+---
+id: introduction
+title: Introduction
+---
+
 # Red Hat Managed Application Services CLI
 
 Red Hat Managed Application Services is a combination of tightly integrated Red Hat technologies you can use to build a cloud infrastructure,

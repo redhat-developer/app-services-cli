@@ -1,3 +1,8 @@
+---
+id: commands
+title: Commands Guide
+---
+
 ## Command structure
 
 ### Log In
