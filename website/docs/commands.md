@@ -33,7 +33,7 @@ Command creates Kafka instance and automatically setting it up as default instan
 by other subcommands.
 
 ```
-rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+rhmas streaming create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
 **Arguments**:
@@ -77,7 +77,7 @@ rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west
 Get details 
 
 ```
-rhmas kafka get --id=name --format=json
+rhmas streaming get --id=name --format=json
 ```
 
 **Arguments**:
@@ -110,7 +110,7 @@ rhmas kafka get --id=name --format=json
 List Streaming instances in your current account
 
 ```
-rhmas kafka list
+rhmas streaming list
 ```
 
 **Arguments**:
@@ -120,22 +120,22 @@ rhmas kafka list
 #### Switch to use managed kafka
 
 ```
-rhmas kafka use kafka_id
+rhmas streaming use kafka_id
 ```
 
 #### Get credentials for the managed kafka
 
 ```
-rhmas kafka get-credentials --cluster-name=my-cluster --type=TLS
+rhmas streaming get-credentials --cluster-name=my-cluster --type=TLS
 ```
 
 ### OpenShift Streaming Kafka specific commands
 
-rhmas kafka tail kafka_id topic
+rhmas streaming tail kafka_id topic
 
 ### Community supported commands
 
 ```
-rhmas kafka create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
+rhmas streaming create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
 ```
 

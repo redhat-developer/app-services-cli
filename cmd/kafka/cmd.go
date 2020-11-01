@@ -8,13 +8,13 @@ import (
 
 func NewKafkaCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "kafka",
-		Short: "Perform managed-services-api kafka actions directly",
-		Long:  "Perform managed-services-api kafka actions directly.",
+		Use:   "streaming",
+		Short: "Manage your OpenShift Streaming instances",
+		Long:  "Manage your OpenShift Streaming instances",
 	}
 
 	// add sub-commands
-	cmd.AddCommand(NewCreateCommand(), NewGetCommand(), NewDeleteCommand(), NewListCommand())
+	cmd.AddCommand(NewCreateCommand(), NewGetCommand(), NewDeleteCommand(), NewListCommand(), NewUseCommand())
 
 	return cmd
 }
