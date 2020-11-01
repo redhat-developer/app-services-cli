@@ -27,9 +27,9 @@ import (
 type ManagedKafkaSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of ManagedKafka. Edit ManagedKafka_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Region        string `json:"region"`
+	CloudProvider string `json:"cloud_provider"`
+	Name          string `json:"name"`
 }
 
 // ManagedKafkaStatus defines the observed state of ManagedKafka
