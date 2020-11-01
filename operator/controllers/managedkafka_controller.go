@@ -18,13 +18,16 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-logr/logr"
+	"github.com/golang/glog"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	streamingv1 "gitlab.cee.redhat.com/mas-dx/rhmas/api/v1"
+	mas "gitlab.cee.redhat.com/mas-dx/rhmas/client/mas"
+	v1 "gitlab.cee.redhat.com/mas-dx/rhmas/operator/api/v1"
 )
 
 // ManagedKafkaReconciler reconciles a ManagedKafka object
@@ -38,16 +41,50 @@ type ManagedKafkaReconciler struct {
 // +kubebuilder:rbac:groups=streaming.my.domain,resources=managedkafkas/status,verbs=get;update;patch
 
 func (r *ManagedKafkaReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
-	_ = context.Background()
+	ctx := context.Background()
 	_ = r.Log.WithValues("managedkafka", req.NamespacedName)
 
-	r.Status()
+	kafka := &v1.ManagedKafka{}
+	r.Get(ctx, req.NamespacedName, kafka)
 
-	return ctrl.Result{}, nil
+	client := BuildMasClient()
+
+	kafkaRequest := mas.KafkaRequest{Name: *&kafka.Spec.Name, Region: *&kafka.Spec.Region, CloudProvider: *&kafka.Spec.CloudProvider}
+
+	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), false, kafkaRequest)
+
+	if err != nil {
+		glog.Fatalf("Error while requesting new Kafka instance: %v", err)
+	}
+	if status.StatusCode == 200 {
+		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
+		glog.Info("Created API \n ", string(jsonResponse))
+		return ctrl.Result{}, nil
+	} else {
+		glog.Info("Creation failed", response, status)
+		return ctrl.Result{}, status
+	}
+
+}
+
+func BuildMasClient() *mas.APIClient {
+	// TODO config abstraction
+	testHost := "localhost:8000"
+	testScheme := "http"
+	// Based on https://github.com/OpenAPITools/openapi-generator/blob/master/samples/client/petstore/go/pet_api_test.go
+
+	cfg := mas.NewConfiguration()
+	// TODO read flag from config
+	cfg.AddDefaultHeader("Authorization", "Bearer 9f4068b1c2cc720dd44dc2c6157569ae")
+	cfg.Host = testHost
+	cfg.Scheme = testScheme
+	client := mas.NewAPIClient(cfg)
+
+	return client
 }
 
 func (r *ManagedKafkaReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&streamingv1.ManagedKafka{}).
+		For(&v1.ManagedKafka{}).
 		Complete(r)
 }
