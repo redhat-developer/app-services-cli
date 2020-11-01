@@ -37,6 +37,4 @@ func runGet(cmd *cobra.Command, _ []string) {
 	} else {
 		glog.Info("Get failed", response, status)
 	}
-
-	glog.V(10).Infof("get")
 }
