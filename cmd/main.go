@@ -6,6 +6,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/auth"
 	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/kafka"
 	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/login"
 )
@@ -33,6 +34,7 @@ func main() {
 
 	rootCmd.AddCommand(login.NewLoginCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
+	rootCmd.AddCommand(auth.NewAuthGroupCommand())
 
 	if err := rootCmd.Execute(); err != nil {
 		glog.Fatalf("error running command: %v", err)
