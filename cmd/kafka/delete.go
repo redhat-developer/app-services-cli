@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
@@ -33,8 +34,8 @@ func runDelete(cmd *cobra.Command, _ []string) {
 		glog.Fatalf("Error while deleting Kafka instance: %v", err)
 	}
 	if status.StatusCode == 200 {
-		glog.Info("Deleted Kafka \n ", id)
+		fmt.Print("Deleted Kafka \n ", id)
 	} else {
-		glog.Info("Deletion failed", response, status)
+		fmt.Print("Deletion failed", response, status)
 	}
 }

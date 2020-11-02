@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/golang/glog"
@@ -25,7 +26,7 @@ func main() {
 
 	// Always log to stderr by default
 	if err := flag.Set("logtostderr", "true"); err != nil {
-		fmt.Printlnf("Unable to set logtostderr to true")
+		fmt.Printf("Unable to set logtostderr to true")
 	}
 
 	rootCmd := &cobra.Command{

@@ -19,6 +19,7 @@ package controllers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/go-logr/logr"
 	"github.com/golang/glog"
@@ -58,10 +59,10 @@ func (r *ManagedKafkaReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	}
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		glog.Info("Created API \n ", string(jsonResponse))
+		fmt.Print("Created API \n ", string(jsonResponse))
 		return ctrl.Result{}, nil
 	} else {
-		glog.Info("Creation failed", response, status)
+		fmt.Print("Creation failed", response, status)
 		return ctrl.Result{}, status
 	}
 

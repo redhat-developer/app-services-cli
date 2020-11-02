@@ -3,6 +3,7 @@ package kafka
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
@@ -37,7 +38,7 @@ func runCreate(cmd *cobra.Command, _ []string) {
 
 	kafkaRequest := mas.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
 	// data, _ := json.Marshal(kafkaRequest)
-	// glog.Info("kafkaRequest API", string(data))
+	// fmt.Print("kafkaRequest API", string(data))
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), false, kafkaRequest)
 
 	if err != nil {
@@ -45,8 +46,8 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	}
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		glog.Info("Created API \n ", string(jsonResponse))
+		fmt.Print("Created API \n ", string(jsonResponse))
 	} else {
-		glog.Info("Creation failed", response, status)
+		fmt.Print("Creation failed", response, status)
 	}
 }

@@ -1,7 +1,8 @@
 package kafka
 
 import (
-	"github.com/golang/glog"
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
 )
@@ -20,5 +21,5 @@ func NewUseCommand() *cobra.Command {
 func runUse(cmd *cobra.Command, _ []string) {
 	id := flags.MustGetDefinedString(FlagID, cmd.Flags())
 
-	glog.Infof("Selected kafka cluster with ", id)
+	fmt.Printf("Selected kafka cluster with ", id)
 }

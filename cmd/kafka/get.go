@@ -3,6 +3,7 @@ package kafka
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
@@ -33,8 +34,8 @@ func runGet(cmd *cobra.Command, _ []string) {
 	}
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		glog.Info("Kafka instance \n ", string(jsonResponse))
+		fmt.Print("Kafka instance \n ", string(jsonResponse))
 	} else {
-		glog.Info("Get failed", response, status)
+		fmt.Print("Get failed", response, status)
 	}
 }
