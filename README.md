@@ -62,7 +62,7 @@ make binary
 3. Execute commands
 
 ```
-./rhmas streaming list
+./rhmas streams list
 ```
 
 ## Development commands

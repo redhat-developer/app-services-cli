@@ -8,9 +8,9 @@ import (
 
 func NewKafkaCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "streaming",
-		Short: "Manage your OpenShift Streaming instances",
-		Long:  "Manage your OpenShift Streaming instances",
+		Use:   "streams",
+		Short: "Manage your OpenShift Streams instances",
+		Long:  "Manage your OpenShift Streams instances",
 	}
 
 	// add sub-commands

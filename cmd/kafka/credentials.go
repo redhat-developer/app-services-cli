@@ -19,7 +19,7 @@ func NewCredentialsCommand() *cobra.Command {
 }
 
 func runCredentials(cmd *cobra.Command, _ []string) {
-	fmt.Print(`Credentials for streaming instance: 'serviceapi' 
+	fmt.Print(`Credentials for Streams instance: 'serviceapi' 
 	----------------------------------------------
 	user=wtrocki@redhat.com
 	password=d0b8122f-8dfb-46b7-b68a-f5cc4e25d000

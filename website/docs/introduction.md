@@ -14,7 +14,7 @@ The Red Hat Cloud CLI manages services created in Red Hat cloud, authentication,
 
 ## Cloud Services supported
 
-- OpenShift Streaming (Managed Version of Apache Kafka)
+- OpenShift StreamsManaged Version of Apache Kafka)
 - Single SSO
 
 ## Installation

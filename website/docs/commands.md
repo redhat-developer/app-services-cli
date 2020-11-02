@@ -25,15 +25,15 @@ This will redirect us to the login website:
 $ rhmas login
 ```
 
-### OpenShift Streaming Management commands
+### OpenShift Streams Management commands
 
-#### Create Streaming Instance
+#### Create Streams Instance
 
 Command creates Kafka instance and automatically setting it up as default instance that will be used 
 by other subcommands.
 
 ```
-rhmas streaming create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+rhmas streams create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
 **Arguments**:
@@ -72,12 +72,12 @@ rhmas streaming create --name=test --multi-az="true" --provider=aws --region=eu-
 }
 ```
 
-### Get details of streaming instance
+### Get details of streams instance
 
 Get details 
 
 ```
-rhmas streaming get kafka-id --format=json
+rhmas streams get kafka-id --format=json
 ```
 
 **Arguments**:
@@ -104,12 +104,12 @@ rhmas streaming get kafka-id --format=json
 }
 ```
 
-#### List Streaming instances 
+#### List Streams instances 
 
-List Streaming instances in your current account
+List Streams instances in your current account
 
 ```
-rhmas streaming list
+rhmas streams list
 ```
 
 **Arguments**:
@@ -119,24 +119,24 @@ rhmas streaming list
 #### Switch to use managed kafka
 
 ```shell
-rhmas streaming use kafka-id
+rhmas streams use kafka-id
 ```
 
 #### Get credentials for the managed kafka
 
 ```
-rhmas streaming get-credentials --cluster-name=my-cluster --type=TLS
+rhmas streams get-credentials --cluster-name=my-cluster --type=TLS
 ```
 
-### OpenShift Streaming Kafka specific commands
+### OpenShift Streams Kafka specific commands
 
 ```shell
-rhmas streaming tail kafka-id topic
+rhmas streams tail kafka-id topic
 ```
 
 ### Community supported commands
 
 ```
-rhmas streaming create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
+rhmas streams create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
 ```
 
