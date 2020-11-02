@@ -1,0 +1,457 @@
+openapi: 3.0.0
+info:
+  description: Managed Service API
+  title: Managed Service API
+  version: 0.0.1
+servers:
+- description: Main (production) server
+  url: https://api.openshift.com
+- description: Staging server
+  url: https://api.stage.openshift.com
+- description: localhost
+  url: http://localhost:8000
+- description: current domain
+  url: /
+paths:
+  /api/managed-services-api/v1/kafkas/{id}:
+    delete:
+      parameters:
+      - description: The id of record
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Deleted
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "404":
+          content:
+            application/json:
+              examples:
+                "404DeleteExample":
+                  $ref: '#/components/examples/404DeleteExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: No kafka request with specified id exists
+        "500":
+          content:
+            application/json:
+              examples:
+                "500DeleteExample":
+                  $ref: '#/components/examples/500DeleteExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      summary: Delete a kafka request by id
+    get:
+      parameters:
+      - description: The id of record
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KafkaRequest'
+          description: Kafka request found by id
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "404":
+          content:
+            application/json:
+              examples:
+                "404Example":
+                  $ref: '#/components/examples/404Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: No kafka request with specified id exists
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      security:
+      - Bearer: []
+      summary: Get a kafka request by id
+  /api/managed-services-api/v1/kafkas:
+    get:
+      parameters:
+      - description: Page index
+        examples:
+          page:
+            value: "1"
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items in each page
+        examples:
+          size:
+            value: "100"
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KafkaRequestList'
+          description: A list of Kafka requests
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      security:
+      - Bearer: []
+      summary: Returns a list of Kafka requests
+    post:
+      parameters:
+      - description: Perform the action in an asynchronous manner
+        explode: true
+        in: query
+        name: async
+        required: true
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            examples:
+              USRegion:
+                $ref: '#/components/examples/USRegionExample'
+              EURegion:
+                $ref: '#/components/examples/EURegionExample'
+            schema:
+              $ref: '#/components/schemas/KafkaRequest'
+        description: Kafka data
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              examples:
+                KafkaRequestPostExample:
+                  $ref: '#/components/examples/KafkaRequestPostExample'
+              schema:
+                $ref: '#/components/schemas/KafkaRequest'
+          description: Accepted
+        "400":
+          content:
+            application/json:
+              examples:
+                "400CreationExample":
+                  $ref: '#/components/examples/400CreationExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Validation errors occurred
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "404":
+          content:
+            application/json:
+              examples:
+                "404Example":
+                  $ref: '#/components/examples/404Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The requested resource doesn't exist
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: An unexpected error occurred creating the Kafka Request
+      security:
+      - Bearer: []
+      summary: Create a new kafka Request
+components:
+  examples:
+    USRegionExample:
+      value:
+        region: us-east-1
+        cloud_provider: aws
+        name: serviceapitest
+    EURegionExample:
+      value:
+        region: eu-west-1
+        cloud_provider: aws
+        name: serviceapitest
+    KafkaRequestListExample:
+      value:
+        kind: KafkaRequestList
+        page: "1"
+        size: "1"
+        total: "1"
+        items:
+          $ref: '#/components/examples/KafkaRequestExample'
+    KafkaRequestPostExample:
+      value:
+        id: 1iX03lndlmQ0qfC7siTa5sLjV8E
+        kind: Kafka
+        href: /api/managed-services-api/v1/kafkas/1iX03lndlmQ0qfC7siTa5sLjV8E
+        status: accepted
+        cloud_provider: aws
+        region: eu-west-1
+        owner: api_kafka_service
+        name: serviceapi
+        created_at: 2020-10-06T22:40:32.667743942-04:00
+        updated_at: 2020-10-06T22:40:32.667743942-04:00
+    KafkaRequestExample:
+      value:
+        id: 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+        kind: kafka
+        href: /api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+        status: complete
+        cloud_provider: aws
+        multi_az: "false"
+        region: eu-west-1
+        owner: api_kafka_service
+        name: serviceapi
+        bootstrapServerHost: serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org
+        created_at: 2020-10-05T12:51:24.053142Z
+        updated_at: 2020-10-05T12:56:36.362208Z
+    "400CreationExample":
+      value:
+        id: "103"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/103
+        code: OCM-EX-103
+        reason: Synchronous action (creating kafka requests) is unsupported, use async=true
+          parameter
+        operation_id: 1iWIimqGcrDuL61aUxIZqBTqNRa
+    "404Example":
+      value:
+        id: "404"
+        kind: Error
+        href: /api/gateway/v1/errors/404
+        code: GATEWAY-404
+        reason: The requested resource doesn't exist
+    "404DeleteExample":
+      value:
+        id: "7"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/7
+        code: OCM-EX-7
+        reason: KafkaResource with id='1iK3duVYIvv5YvLlyz1mGR3JyqN' not found
+        operation_id: 1iYO7g2g6HTdUKUa2ksH82kQD3y
+    "401Example":
+      value:
+        id: "11"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/11
+        code: OCM-EX-11
+        reason: 'Unable to verify JWT token: Required authorization token not found'
+        operation_id: 1iY3UhEhwmXBpWPfI2lNekpd4ZD
+    "500Example":
+      value:
+        id: "9"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/9
+        code: MGD-SERV-API-9
+        reason: Unspecified error
+        operation_id: 1ieELvF9jMQY6YghfM9gGRsHvEW
+    "500DeleteExample":
+      value:
+        id: "9"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/9
+        code: OCM-EX-9
+        reason: 'error deleting syncset: OCM-EX-9: failed to delete syncset: ext-serviceapi-1ix03lndlmq0qfc7sita5sljv8e
+          for cluster id: 1g5d88q0lrcdv4g7alb7slfgnj3dhbsj%!(EXTRA *errors.Error=identifier
+          is ''404'', code is ''CLUSTERS-MGMT-404'' and operation identifier is ''1g5or50viu07oealuehrkc26dgftj1ac'':
+          Cluster ''1g5d88q0lrcdv4g7alb7slfgnj3dhbsj'' not found)'
+        operation_id: 1iYTsWry6nsqb2sNmFj5bXpD7Ca
+  parameters:
+    id:
+      description: The id of record
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      style: simple
+    page:
+      description: Page index
+      examples:
+        page:
+          value: "1"
+      explode: true
+      in: query
+      name: page
+      required: false
+      schema:
+        type: string
+      style: form
+    size:
+      description: Number of items in each page
+      examples:
+        size:
+          value: "100"
+      explode: true
+      in: query
+      name: size
+      required: false
+      schema:
+        type: string
+      style: form
+  schemas:
+    ObjectReference:
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+        href:
+          type: string
+      type: object
+    List:
+      example:
+        $ref: '#/components/examples/KafkaRequestListExample'
+      properties:
+        kind:
+          type: string
+        page:
+          type: integer
+        size:
+          type: integer
+        total:
+          type: integer
+      required:
+      - items
+      - kind
+      - page
+      - size
+      - total
+      type: object
+    Error:
+      allOf:
+      - $ref: '#/components/schemas/ObjectReference'
+      - $ref: '#/components/schemas/Error_allOf'
+    ErrorList:
+      allOf:
+      - $ref: '#/components/schemas/List'
+      - $ref: '#/components/schemas/ErrorList_allOf'
+    KafkaRequest:
+      allOf:
+      - $ref: '#/components/schemas/ObjectReference'
+      - $ref: '#/components/schemas/KafkaRequest_allOf'
+    KafkaRequestList:
+      allOf:
+      - $ref: '#/components/schemas/List'
+      - $ref: '#/components/schemas/KafkaRequestList_allOf'
+    Error_allOf:
+      properties:
+        code:
+          type: string
+        reason:
+          type: string
+        operation_id:
+          type: string
+    ErrorList_allOf:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+    KafkaRequest_allOf:
+      example: '{"$ref":"#/components/examples/KafkaRequestExample"}'
+      properties:
+        status:
+          type: string
+        cloud_provider:
+          type: string
+        multi_az:
+          type: boolean
+        region:
+          type: string
+        owner:
+          type: string
+        name:
+          type: string
+        bootstrapServerHost:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+    KafkaRequestList_allOf:
+      properties:
+        items:
+          items:
+            allOf:
+            - $ref: '#/components/schemas/KafkaRequest'
+          type: array
+  securitySchemes:
+    Bearer:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

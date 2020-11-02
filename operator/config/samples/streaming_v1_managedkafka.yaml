@@ -1,0 +1,8 @@
+apiVersion: streaming.redhat.com/v1
+kind: ManagedKafka
+metadata:
+  name: managedkafka-sample
+spec:
+  region: us-east-1
+  cloud_provider: aws
+  name: serviceapitest

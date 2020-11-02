@@ -12,6 +12,7 @@ const api = new OpenAPIBackend({ definition: "./managed-services-api.yaml" });
 // register handlers
 api.register(handlers);
 app.use(cors());
+app.use('/token',express.static('public'))
 
 // register security handler
 api.registerSecurityHandler("Bearer", (c, req, res) => {

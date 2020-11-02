@@ -15,7 +15,6 @@ servers:
 paths:
   /api/managed-services-api/v1/kafkas/{id}:
     get:
-      operationId: getKafkaById
       responses:
         "200":
           content:
@@ -54,7 +53,6 @@ paths:
         - Bearer: []
       summary: Get a kafka request by id
     delete:
-      operationId: deleteKafkaById
       responses:
         "204":
           content:
@@ -96,7 +94,6 @@ paths:
       - $ref: "#/components/parameters/id"
   /api/managed-services-api/v1/kafkas:
     post:
-      operationId: createKafka
       parameters:
         - in: query
           name: async
@@ -167,7 +164,6 @@ paths:
       summary: Create a new kafka Request
     get:
       summary: Returns a list of Kafka requests
-      operationId: listKafkas
       security:
         - Bearer: []
       responses:
