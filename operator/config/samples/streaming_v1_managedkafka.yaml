@@ -1,4 +1,4 @@
-apiVersion: streaming.my.domain/v1
+apiVersion: streaming.redhat.com/v1
 kind: ManagedKafka
 metadata:
   name: managedkafka-sample
