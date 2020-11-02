@@ -21,5 +21,5 @@ func NewUseCommand() *cobra.Command {
 func runUse(cmd *cobra.Command, _ []string) {
 	id := flags.MustGetDefinedString(FlagID, cmd.Flags())
 
-	fmt.Printf("Selected kafka cluster with ", id)
+	fmt.Print("Selected kafka cluster with ", id)
 }
