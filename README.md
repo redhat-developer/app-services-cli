@@ -47,6 +47,28 @@ make clean                      delete temporary generated files
 
 ![./architecture.png](./resources/architecture.png)
 
+
+## Development setup
+
+1. Start mock server
+```
+cd mock
+yarn install
+yarn start
+```
+
+2. Build cli
+
+```
+make binary
+```
+
+3. Execute commands
+
+```
+./rhmas streaming list
+```
+
 ## Development commands
 
 When working with cmd we can execute commands using go run
