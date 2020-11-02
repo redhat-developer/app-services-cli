@@ -46,7 +46,7 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	}
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		fmt.Print("Created API \n ", string(jsonResponse))
+		fmt.Print("Created Cluster \n ", string(jsonResponse))
 	} else {
 		fmt.Print("Creation failed", response, status)
 	}
