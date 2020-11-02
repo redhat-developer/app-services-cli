@@ -2,24 +2,23 @@ package kafka
 
 import (
 	"fmt"
-
+	
 	"github.com/spf13/cobra"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
 )
 
 func NewUseCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "use",
+		Use:   "use [Kafka ID]",
 		Short: "Use provided cluster",
 		Long:  "Set to work with cluster on current context",
+		Args:  cobra.MinimumNArgs(1),
 		Run:   runUse,
 	}
-	cmd.Flags().String(FlagID, "", "Kafka id")
 	return cmd
 }
 
-func runUse(cmd *cobra.Command, _ []string) {
-	id := flags.MustGetDefinedString(FlagID, cmd.Flags())
+func runUse(cmd *cobra.Command, args []string) {
+	id := args[0]
 
-	fmt.Print("Selected kafka cluster: ", id)
+	fmt.Print("Selected Kafka cluster: ", id)
 }

@@ -77,12 +77,11 @@ rhmas streaming create --name=test --multi-az="true" --provider=aws --region=eu-
 Get details 
 
 ```
-rhmas streaming get --id=name --format=json
+rhmas streaming get kafka-id --format=json
 ```
 
 **Arguments**:
 -f --format: format of the data (json/yaml/table)
--id (optional): id of the service or currently selected cluster 
 
 **Returns:**
 
@@ -119,8 +118,8 @@ rhmas streaming list
 
 #### Switch to use managed kafka
 
-```
-rhmas streaming use kafka_id
+```shell
+rhmas streaming use kafka-id
 ```
 
 #### Get credentials for the managed kafka
@@ -131,7 +130,9 @@ rhmas streaming get-credentials --cluster-name=my-cluster --type=TLS
 
 ### OpenShift Streaming Kafka specific commands
 
-rhmas streaming tail kafka_id topic
+```shell
+rhmas streaming tail kafka-id topic
+```
 
 ### Community supported commands
 
