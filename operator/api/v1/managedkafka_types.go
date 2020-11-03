@@ -25,10 +25,8 @@ import (
 
 // ManagedKafkaSpec defines the desired state of ManagedKafka
 type ManagedKafkaSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 	Region        string `json:"region"`
-	CloudProvider string `json:"cloud_provider"`
+	CloudProvider string `json:"cloudProvider"`
 	Name          string `json:"name"`
 }
 

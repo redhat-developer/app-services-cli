@@ -36,16 +36,14 @@ spec:
         spec:
           description: ManagedKafkaSpec defines the desired state of ManagedKafka
           properties:
-            cloud_provider:
+            cloudProvider:
               type: string
             name:
               type: string
             region:
-              description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-                Important: Run "make" to regenerate code after modifying this file'
               type: string
           required:
-          - cloud_provider
+          - cloudProvider
           - name
           - region
           type: object
