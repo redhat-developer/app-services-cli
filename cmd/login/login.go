@@ -10,8 +10,8 @@ import (
 
 	"github.com/golang/glog"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/flags"
 	"github.com/spf13/cobra"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
 )
 
 func NewLoginCommand() *cobra.Command {

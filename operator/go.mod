@@ -1,8 +1,8 @@
-module gitlab.cee.redhat.com/mas-dx/rhmas/operator
+module github.com/bf2fc6cc711aee1a0c2a/cli/operator
 
 go 1.13
 
-replace gitlab.cee.redhat.com/mas-dx/rhmas/client/mas => ./client/mas
+replace github.com/bf2fc6cc711aee1a0c2a/cli/client/mas => ./client/mas
 
 require (
 	github.com/go-logr/logr v0.1.0

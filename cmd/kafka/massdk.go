@@ -1,7 +1,7 @@
 package kafka
 
 import (
-	mas "gitlab.cee.redhat.com/mas-dx/rhmas/client/mas"
+	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
 )
 
 // TODO refactor into separate config class

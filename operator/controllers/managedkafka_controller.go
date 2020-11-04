@@ -27,8 +27,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	mas "gitlab.cee.redhat.com/mas-dx/rhmas/client/mas"
-	v1 "gitlab.cee.redhat.com/mas-dx/rhmas/operator/api/v1"
+	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
+	v1 "github.com/bf2fc6cc711aee1a0c2a/cli/operator/api/v1"
 )
 
 // ManagedKafkaReconciler reconciles a ManagedKafka object

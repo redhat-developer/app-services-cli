@@ -6,11 +6,11 @@ import (
 	"fmt"
 
 	"github.com/antihax/optional"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/pkg/kafka"
 
-	mas "gitlab.cee.redhat.com/mas-dx/rhmas/client/mas"
+	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
 )
 
 const (

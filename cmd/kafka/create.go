@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/flags"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
-	mas "gitlab.cee.redhat.com/mas-dx/rhmas/client/mas"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
