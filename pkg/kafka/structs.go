@@ -1,7 +1,7 @@
 package kafka
 
-// Instance of a Kafka cluster
-type Instance struct {
+// Cluster is the details of a Kafka cluster
+type Cluster struct {
 	ID                  string `json:"id" header:"ID"`
 	Name                string `json:"name" header:"Name"`
 	Owner               string `json:"owner" header:"Owner"`
@@ -15,11 +15,11 @@ type Instance struct {
 	UpdatedAt           string `json:"updated_at"`
 }
 
-// List of Kafka instances
-type List struct {
+// ClusterList contains a list of Kafka clusters
+type ClusterList struct {
 	Kind  string     `json:"kind"`
 	Page  int        `json:"page"`
-	Size  int        `size:"size"`
-	Total int        `total:"total"`
-	Items []Instance `items:"items"`
+	Size  int        `json:"size"`
+	Total int        `json:"total"`
+	Items []Cluster  `json:"items"`
 }

@@ -14,21 +14,23 @@ import (
 )
 
 const (
-	FlagFormat = "format"
+	FlagFormat = "output"
 	FlagPage   = "page"
 	FlagSize   = "size"
 )
+
+var outputFormat string
 
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "lists all managed kafka requests",
-		Long:  "lists all managed kafka requests",
+		Short: "lists all managed Kafka requests",
+		Long:  "lists all managed Kafka clusters",
 		Run:   runList,
 	}
 
-	cmd.PersistentFlags().String(FlagFormat, "table", "Format to display the Kafka instances. Choose from \"json\" or \"table\"")
+	cmd.Flags().StringVarP(&outputFormat, FlagFormat, "o", "table", "Format to display the Kafka clusters. Choose from \"json\" or \"table\"")
 	cmd.Flags().String(FlagPage, "1", "Page index")
 	cmd.Flags().String(FlagSize, "100", "Number of kafka requests per page")
 
@@ -44,27 +46,26 @@ func runList(cmd *cobra.Command, _ []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 
 	if err != nil {
-		fmt.Printf("Error retrieving Kafka instances: %v", err)
+		fmt.Printf("Error retrieving Kafka clusters: %v", err)
 		return
 	}
 
 	if status.StatusCode == 200 {
-		displayFormat := flags.GetString("format", cmd.Flags())
+		displayFormat := flags.GetString(FlagFormat, cmd.Flags())
 		jsonResponse, _ := json.Marshal(response)
 
-		var kafkaList kafka.List
+		var kafkaList kafka.ClusterList
 		if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
-			fmt.Print(err)
+			fmt.Printf("Could not format Kakfa cluster to table: %v", err)
 			displayFormat = "json"
 		}
-
 
 		switch displayFormat {
 		case "json":
 			data, _ := json.MarshalIndent(kafkaList.Items, "", "  ")
 			fmt.Print(string(data))
 		default:
-			kafka.PrintInstances(kafkaList.Items)
+			kafka.PrintToTable(kafkaList.Items)
 		}
 	}
 }

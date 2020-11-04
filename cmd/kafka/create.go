@@ -15,12 +15,12 @@ import (
 func NewCreateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create OpenShift Kafka instance",
-		Long:  "Create OpenShift Kafka instance",
+		Short: "Create Kafka clusters",
+		Long:  "Create Kafka clusters",
 		Run:   runCreate,
 	}
 
-	cmd.Flags().String(FlagName, "", "Kafka request name")
+	cmd.Flags().String(FlagName, "", "Kafka cluster name")
 	cmd.Flags().String(FlagRegion, "eu-west-1", "Region ID")
 	cmd.Flags().String(FlagProvider, "aws", "OCM provider ID")
 	cmd.Flags().Bool(FlagMultiAZ, false, "Whether Kafka request should be Multi AZ or not")
@@ -42,7 +42,7 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), false, kafkaRequest)
 
 	if err != nil {
-		glog.Fatalf("Error while requesting new Kafka instance: %v", err)
+		glog.Fatalf("Error while requesting new Kafka cluster: %v", err)
 	}
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")

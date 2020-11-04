@@ -62,7 +62,7 @@ make binary
 3. Execute commands
 
 ```
-./rhmas streams list
+./rhmas kafka list
 ```
 
 ## Development commands
