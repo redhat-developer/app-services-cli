@@ -4,6 +4,7 @@ package kafka
 
 import (
 	"github.com/spf13/cobra"
+	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/kafka/topics"
 )
 
 func NewKafkaCommand() *cobra.Command {
@@ -17,7 +18,7 @@ func NewKafkaCommand() *cobra.Command {
 	cmd.AddCommand(NewCreateCommand(), NewGetCommand(), NewDeleteCommand(),
 		NewListCommand(),
 		NewUseCommand(),
-		NewTopicsCommand(),
+		topics.NewTopicsCommand(),
 		NewCredentialsCommand())
 
 	return cmd
