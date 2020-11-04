@@ -21,7 +21,7 @@ func NewCredentialsCommand() *cobra.Command {
 		Long:  "Generate credentials to connect your application to kafka cluster",
 		Run:   runCredentials,
 	}
-	cmd.Flags().String(FlagOutputFormat, "", "Format of the config (quarkus, properties, json")
+	cmd.Flags().String(FlagOutputFormat, "", "Format of the config [quarkus, properties, json]")
 	return cmd
 }
 
