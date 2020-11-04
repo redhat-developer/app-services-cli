@@ -71,7 +71,7 @@ func runCredentials(cmd *cobra.Command, _ []string) {
 	dataToWrite := []byte(propertyFormat)
 	err := ioutil.WriteFile(fileName, dataToWrite, 0644)
 	if err != nil {
-		fmt.Println("Error when saving file")
+		fmt.Println("Error when saving file: %", err)
 	} else {
 		fmt.Println("Successfully written credentials into %", fileName)
 	}
