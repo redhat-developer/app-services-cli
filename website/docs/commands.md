@@ -137,3 +137,77 @@ rhmas streams tail kafka-id topic
 rhmas streams create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
 ```
 
+### Topics
+
+```bash
+rhmas kafka topics --help       
+Manage Kafka topics for the current selected Managed Kafka Cluster
+
+Usage:
+  rhmas kafka topics [command]
+
+Available Commands:
+  create      Create topic
+  delete      Delete topic
+  list        List topics
+  update      Update topic
+```
+
+#### Create command
+```bash
+rhmas kafka topics create --help
+Create topic in the current selected Managed Kafka cluster
+
+Usage:
+  rhmas kafka topics create [flags]
+
+Flags:
+  -f, --config-file string   A path to a file containing extra configuration variables. If this option is not supplied, default configurations will be used
+  -h, --help                 help for create
+  -n, --name string          Topic name (required)
+  -p, --partitions int32     Set number of partitions (default 3)
+  -r, --replicas int32       Set number of replicas (default 2)
+```
+
+#### List command
+
+```bash
+rhmas kafka topics list --help  
+List all topics in the current selected Managed Kafka cluster
+
+Usage:
+  rhmas kafka topics list [flags]
+
+Flags:
+  -h, --help            help for list
+  -o, --output string   The output format as 'plain-text', 'json', or 'yaml' (default "plain-text")
+```
+
+#### Delete command
+
+```bash
+rhmas kafka topics delete --help
+Delete topic from the current selected Managed Kafka cluster
+
+Usage:
+  rhmas kafka topics delete [flags]
+
+Flags:
+  -h, --help          help for delete
+  -n, --name string   Topic name (required)
+```
+
+#### Update command
+
+```bash
+rhmas kafka topics update --help
+Update topic in the current selected Managed Kafka cluster
+
+Usage:
+  rhmas kafka topics update [flags]
+
+Flags:
+  -c, --config string   A comma-separated list of configuration to override e.g 'key1=value1,key2=value2'. (required)
+  -h, --help            help for update
+  -n, --name string     Topic name (required)
+```
