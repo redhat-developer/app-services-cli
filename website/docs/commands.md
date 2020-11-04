@@ -77,31 +77,18 @@ rhmas streams create --name=test --multi-az="true" --provider=aws --region=eu-we
 Get details 
 
 ```
-rhmas streams get kafka-id --format=json
+rhmas streams get kafka-id
 ```
 
 **Arguments**:
--f --format: format of the data (json/yaml/table)
+--format: Format to display the Kafka instances. Choose from "json" or "table" (default "table")
 
 **Returns:**
 
-```json
-{
-  "value": {
-    "id": "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
-    "kind": "kafka",
-    "href": "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
-    "status": "complete",
-    "cloud_provider": "aws",
-    "multi_az": "false",
-    "region": "eu-west-1",
-    "owner": "api_kafka_service",
-    "name": "serviceapi",
-    "bootstrapServerHost": "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org",
-    "created_at": "2020-10-05T12:51:24.053142Z",
-    "updated_at": "2020-10-05T12:56:36.362208Z"
-  }
-}
+```shell
+  ID                            NAME         OWNER               STATUS     CLOUD PROVIDER   REGION     
+ ----------------------------- ------------ ------------------- ---------- ---------------- ----------- 
+  1iSY6RQ3JKI8Q0OTmjQFd3ocFRg   serviceapi   api_kafka_service   complete   aws              eu-west-1
 ```
 
 #### List Streams instances 
@@ -114,7 +101,17 @@ rhmas streams list
 
 **Arguments**:
   page: index (default "1")
+  format: Format to display the Kafka instances. Choose from "json" or "table" (default "table")
   size: Number of kafka requests per page (default "100")
+
+**Returns:**
+
+```shell
+  ID                            NAME          OWNER               STATUS     CLOUD PROVIDER   REGION     
+ ----------------------------- ------------- ------------------- ---------- ---------------- ----------- 
+  1iSY6RQ3JKI8Q0OTmjQFd3ocFRg   serviceapi    api_kafka_service   complete   aws              eu-west-1  
+  v5Sg6faQ3JKGas4hFd3og45fd31   serviceapi2   api_kafka_service   complete   aws              eu-west-1
+```
 
 #### Switch to use managed kafka
 
