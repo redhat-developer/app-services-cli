@@ -13,8 +13,8 @@ import (
 func NewGetCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get [Kafka cluster ID]",
-		Short: "Get Kafka cluster",
-		Long:  "Get details of a managed Kafka cluster.",
+		Short: "Get details of single Kafka cluster",
+		Long:  "Get details of single Kafka cluster",
 		Run:   runGet,
 	}
 

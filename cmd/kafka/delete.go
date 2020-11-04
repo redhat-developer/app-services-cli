@@ -13,7 +13,7 @@ func NewDeleteCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete [Kafka ID or name]",
 		Short: "Delete Kafka cluster",
-		Long:  "Request deletion of a Kafka cluster",
+		Long:  "Delete Kafka cluster",
 		Run:   runDelete,
 	}
 

@@ -24,8 +24,8 @@ var outputFormat string
 func NewListCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "lists all managed Kafka requests",
-		Long:  "lists all managed Kafka clusters",
+		Short: "Lists all Kafka clusters",
+		Long:  "Lists all Kafka clusters",
 		Run:   runList,
 	}
 

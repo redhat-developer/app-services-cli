@@ -10,8 +10,8 @@ import (
 func NewKafkaCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "kafka",
-		Short: "Manage your OpenShift Kafka clusters",
-		Long:  "Manage your OpenShift Kafka clusters",
+		Short: "Manage your Kafka clusters",
+		Long:  "Manage your Kafka clusters",
 	}
 
 	// add sub-commands
