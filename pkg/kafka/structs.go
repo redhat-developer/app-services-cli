@@ -17,9 +17,9 @@ type Cluster struct {
 
 // ClusterList contains a list of Kafka clusters
 type ClusterList struct {
-	Kind  string     `json:"kind"`
-	Page  int        `json:"page"`
-	Size  int        `json:"size"`
-	Total int        `json:"total"`
-	Items []Cluster  `json:"items"`
+	Kind  string    `json:"kind"`
+	Page  int       `json:"page"`
+	Size  int       `json:"size"`
+	Total int       `json:"total"`
+	Items []Cluster `json:"items"`
 }

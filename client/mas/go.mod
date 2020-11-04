@@ -1,4 +1,4 @@
-module gitlab.cee.redhat.com/mas-dx/rhmas/client/mas
+module github.com/bf2fc6cc711aee1a0c2a/cli/client/mas
 
 go 1.14
 

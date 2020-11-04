@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/pkg/kafka"
 )
 
 // NewGetCommand gets a new command for getting kafkas.

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/auth"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/kafka"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/login"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/auth"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/kafka"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/login"
 )
 
 func init() {
@@ -35,6 +35,7 @@ func main() {
 	}
 
 	rootCmd.AddCommand(login.NewLoginCommand())
+	rootCmd.AddCommand(login.NewLogoutCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
 	rootCmd.AddCommand(auth.NewAuthGroupCommand())
 	rootCmd.AddCommand(completionCmd)

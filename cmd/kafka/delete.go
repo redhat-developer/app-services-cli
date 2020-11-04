@@ -23,7 +23,7 @@ func NewDeleteCommand() *cobra.Command {
 func runDelete(cmd *cobra.Command, args []string) {
 	id := ""
 
-	if (len(args) > 0) {
+	if len(args) > 0 {
 		// TODO: Determine if it is an ID or name
 		id = args[0]
 	} else {

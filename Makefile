@@ -4,20 +4,9 @@ SHELL = bash
 # The details of the application:
 binary:=rhmas
 
-# The version needs to be different for each deployment because otherwise the
-# cluster will not pull the new image from the internal registry:
-version:=0.1.0
-
 
 # Enable Go modules:
 export GO111MODULE=on
-export GOPROXY=https://proxy.golang.org
-export GOPRIVATE=gitlab.cee.redhat.com
-
-ifndef SERVER_URL
-	SERVER_URL:=http://localhost:8000
-endif
-
 
 # Prints a list of useful targets.
 help:
@@ -29,7 +18,7 @@ help:
 	@echo "make binary               	compile binaries"
 	@echo "make test                 	run unit tests"
 	@echo "make test-integration     	run integration tests"
-	@echo "make code/fix             	format files"
+	@echo "make format             		format files"
 	@echo "make openapi/pull			pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
@@ -104,10 +93,10 @@ openapi/generate:
 .PHONY: openapi/generate
 
 # clean up code and dependencies
-code/fix:
+format:
 	@go mod tidy
 	@gofmt -w `find . -type f -name '*.go' -not -path "./vendor/*"`
-.PHONY: code/fix
+.PHONY: format
 
 
 
