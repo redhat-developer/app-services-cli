@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
+	"gitlab.cee.redhat.com/mas-dx/rhmas/pkg/kafka"
 )
 
 // NewGetCommand gets a new command for getting kafkas.
@@ -18,18 +19,21 @@ func NewGetCommand() *cobra.Command {
 		Run:   runGet,
 	}
 
+	cmd.PersistentFlags().String(FlagFormat, "table", "Format to display the Kafka instances. Choose from \"json\" or \"table\"")
+
 	return cmd
 }
 
 func runGet(cmd *cobra.Command, args []string) {
 	id := ""
 
-	if (len(args) > 0) {
+	if len(args) > 0 {
 		// TODO: Determine if it is an ID or name
 		id = args[0]
 	} else {
 		// TODO: Get ID of current cluster
-		glog.Fatalf("No Kafka instance selected")
+		fmt.Println("No Kafka instance selected")
+		return
 	}
 
 	client := BuildMasClient()
@@ -37,11 +41,23 @@ func runGet(cmd *cobra.Command, args []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
 
 	if err != nil {
-		glog.Fatalf("Error while fetching Kafka instance: %v", err)
+		fmt.Printf("Error retrieving Kafka instances: %v", err)
+		return
 	}
+
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		fmt.Print("Kafka instance \n ", string(jsonResponse))
+		var instance kafka.Instance
+		json.Unmarshal(jsonResponse, &instance)
+
+		displayFormat := flags.GetString("format", cmd.Flags())
+
+		switch displayFormat {
+		case "json":
+			fmt.Print(string(jsonResponse))
+		default:
+			kafka.PrintInstances([]kafka.Instance{instance})
+		}
 	} else {
 		fmt.Print("Get failed", response, status)
 	}

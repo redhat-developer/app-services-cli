@@ -1,0 +1,25 @@
+package kafka
+
+// Instance of a Kafka cluster
+type Instance struct {
+	ID                  string `json:"id" header:"ID"`
+	Name                string `json:"name" header:"Name"`
+	Owner               string `json:"owner" header:"Owner"`
+	Kind                string `json:"kind"`
+	Href                string `json:"href"`
+	Status              string `json:"status" header:"Status"`
+	CloudProvider       string `json:"cloud_provider" header:"Cloud Provider"`
+	Region              string `json:"region" header:"Region"`
+	BootstrapServerHost string `json:"bootstrapServerHost"`
+	CreatedAt           string `json:"created_at"`
+	UpdatedAt           string `json:"updated_at"`
+}
+
+// List of Kafka instances
+type List struct {
+	Kind  string     `json:"kind"`
+	Page  int        `json:"page"`
+	Size  int        `size:"size"`
+	Total int        `total:"total"`
+	Items []Instance `items:"items"`
+}

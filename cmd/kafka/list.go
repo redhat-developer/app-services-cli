@@ -6,16 +6,17 @@ import (
 	"fmt"
 
 	"github.com/antihax/optional"
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/flags"
+	"gitlab.cee.redhat.com/mas-dx/rhmas/pkg/kafka"
 
 	mas "gitlab.cee.redhat.com/mas-dx/rhmas/client/mas"
 )
 
 const (
-	FlagPage = "page"
-	FlagSize = "size"
+	FlagFormat = "format"
+	FlagPage   = "page"
+	FlagSize   = "size"
 )
 
 // NewListCommand creates a new command for listing kafkas.
@@ -27,6 +28,7 @@ func NewListCommand() *cobra.Command {
 		Run:   runList,
 	}
 
+	cmd.PersistentFlags().String(FlagFormat, "table", "Format to display the Kafka instances. Choose from \"json\" or \"table\"")
 	cmd.Flags().String(FlagPage, "1", "Page index")
 	cmd.Flags().String(FlagSize, "100", "Number of kafka requests per page")
 
@@ -42,12 +44,27 @@ func runList(cmd *cobra.Command, _ []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 
 	if err != nil {
-		glog.Fatalf("Error while fetching Kafka instance: %v", err)
+		fmt.Printf("Error retrieving Kafka instances: %v", err)
+		return
 	}
+
 	if status.StatusCode == 200 {
-		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		fmt.Print("Kafka instance \n ", string(jsonResponse))
-	} else {
-		fmt.Print("Get failed", response, status)
+		displayFormat := flags.GetString("format", cmd.Flags())
+		jsonResponse, _ := json.Marshal(response)
+
+		var kafkaList kafka.List
+		if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
+			fmt.Print(err)
+			displayFormat = "json"
+		}
+
+
+		switch displayFormat {
+		case "json":
+			data, _ := json.MarshalIndent(kafkaList.Items, "", "  ")
+			fmt.Print(string(data))
+		default:
+			kafka.PrintInstances(kafkaList.Items)
+		}
 	}
 }
