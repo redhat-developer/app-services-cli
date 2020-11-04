@@ -48,7 +48,10 @@ func runCredentials(cmd *cobra.Command, _ []string) {
 		`
 		fileName = "kafka.properties"
 	} else if format == "json" {
-		propertyFormat = `{ "user":"wtrocki-kafka-service", "password":"d0b8122f-8dfb-46b7-b68a-f5cc4e25d000" }`
+		propertyFormat = `{ 
+		"user":"wtrocki-kafka-service", 
+		"password":"d0b8122f-8dfb-46b7-b68a-f5cc4e25d000" 
+}`
 		fileName = "credentials.json"
 	} else {
 		glog.Fatalf("Invalid format", format)
