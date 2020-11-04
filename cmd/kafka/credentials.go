@@ -42,7 +42,7 @@ func NewCredentialsCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "credentials",
 		Short: "Generate credentials to connect to your cluster",
-		Long:  "Generate credentials to connect your application to kafka cluster",
+		Long:  "Generate credentials to connect your application to the Kafka cluster",
 		Run:   runCredentials,
 	}
 	cmd.Flags().String(FlagOutputFormat, "", "Format of the config [quarkus, properties, json]")
@@ -73,6 +73,6 @@ func runCredentials(cmd *cobra.Command, _ []string) {
 	if err != nil {
 		fmt.Println("Error when saving file: %", err)
 	} else {
-		fmt.Println("Successfully written credentials into %", fileName)
+		fmt.Println("Successfully saved credentials to %", fileName)
 	}
 }
