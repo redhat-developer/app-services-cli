@@ -14,8 +14,8 @@ import (
 func NewGetCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get [Kafka ID or name]",
-		Short: "Get a managed-services-api kafka request",
-		Long:  "Get a managed-services-api kafka request.",
+		Short: "Get details of a managed Kafka cluster",
+		Long:  "Get details of a managed Kafka cluster.",
 		Run:   runGet,
 	}
 

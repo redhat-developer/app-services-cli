@@ -15,8 +15,8 @@ import (
 func NewCreateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create OpenShift Streams instance",
-		Long:  "Create OpenShift Streams instance",
+		Short: "Create OpenShift Kafka instance",
+		Long:  "Create OpenShift Kafka instance",
 		Run:   runCreate,
 	}
 
