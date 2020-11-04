@@ -25,15 +25,15 @@ This will redirect us to the login website:
 $ rhmas login
 ```
 
-### OpenShift Streams Management commands
+### Apache Kafka Management commands
 
-#### Create Streams Instance
+#### Create Kafka Cluster
 
-Command creates Kafka instance and automatically setting it up as default instance that will be used 
+Command creates Kafka cluster and automatically setting it up as default cluster that will be used 
 by other subcommands.
 
 ```
-rhmas streams create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
 **Arguments**:
@@ -42,7 +42,7 @@ rhmas streams create --name=test --multi-az="true" --provider=aws --region=eu-we
   --provider string   OCM provider ID (default "aws")
   --region string     Region ID (default "eu-west-1")
 
-  -f file:  uses file as input to create instance
+  -f file:  uses file as input to create cluster
 ```
 {
   "region": "us-east-1",
@@ -72,37 +72,47 @@ rhmas streams create --name=test --multi-az="true" --provider=aws --region=eu-we
 }
 ```
 
-### Get details of streams instance
+### Get details of Kafka cluster
 
 Get details 
 
 ```
-rhmas streams get kafka-id
+rhmas kafka get kafka-id
+
 ```
-
-**Arguments**:
---format: Format to display the Kafka instances. Choose from "json" or "table" (default "table")
-
 **Returns:**
 
-```shell
-  ID                            NAME         OWNER               STATUS     CLOUD PROVIDER   REGION     
- ----------------------------- ------------ ------------------- ---------- ---------------- ----------- 
-  1iSY6RQ3JKI8Q0OTmjQFd3ocFRg   serviceapi   api_kafka_service   complete   aws              eu-west-1
+```json
+{
+  "value": {
+    "id": "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
+    "kind": "kafka",
+    "href": "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
+    "status": "complete",
+    "cloud_provider": "aws",
+    "multi_az": "false",
+    "region": "eu-west-1",
+    "owner": "api_kafka_service",
+    "name": "serviceapi",
+    "bootstrapServerHost": "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org",
+    "created_at": "2020-10-05T12:51:24.053142Z",
+    "updated_at": "2020-10-05T12:56:36.362208Z"
+  }
+}
 ```
 
-#### List Streams instances 
+#### List Kakfa clusters 
 
-List Streams instances in your current account
+List Kafka clusters in your current account
 
 ```
-rhmas streams list
+rhmas kafka list
 ```
 
 **Arguments**:
   page: index (default "1")
-  format: Format to display the Kafka instances. Choose from "json" or "table" (default "table")
-  size: Number of kafka requests per page (default "100")
+  output: Output format to display the Kafka clusters. Choose from "json" or "table" (default "table")
+  size: Number of Kafka requests per page (default "100")
 
 **Returns:**
 
@@ -116,24 +126,24 @@ rhmas streams list
 #### Switch to use managed kafka
 
 ```shell
-rhmas streams use kafka-id
+rhmas kafka use kafka-id
 ```
 
 #### Get credentials for the managed kafka
 
 ```
-rhmas streams get-credentials --cluster-name=my-cluster --type=TLS
+rhmas kafka get-credentials --cluster-name=my-cluster --type=TLS
 ```
 
-### OpenShift Streams Kafka specific commands
+### Apache Kafka specific commands
 
 ```shell
-rhmas streams tail kafka-id topic
+rhmas kafka tail kafka-id topic
 ```
 
 ### Community supported commands
 
 ```
-rhmas streams create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
+rhmas kafka create-connector --cluster-name=my-cluster --type=debezium-mysql-connector --configuration=...
 ```
 

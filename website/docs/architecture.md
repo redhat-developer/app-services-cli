@@ -8,7 +8,7 @@ title: Architecture
 MAS CLI will allow developers to mitigate access to a number of servers:
 
 - cloud.redhat.com (managed service API)
-- managed service keycloak (gateway for services like OpenShift Streams
+- managed service keycloak (gateway for services like Apache Kafka)
 - custom kafka protocol for admin tasks like topic creation
 
 To do that effectively our team will build client that could be reused across ecosystem.

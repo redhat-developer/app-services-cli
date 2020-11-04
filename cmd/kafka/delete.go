@@ -28,7 +28,7 @@ func runDelete(cmd *cobra.Command, args []string) {
 		id = args[0]
 	} else {
 		// TODO: Get ID of current cluster
-		glog.Fatalf("No Kafka instance selected")
+		glog.Fatalf("No Kafka cluster selected")
 	}
 
 	client := BuildMasClient()
@@ -36,7 +36,7 @@ func runDelete(cmd *cobra.Command, args []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdDelete(context.Background(), id)
 
 	if err != nil {
-		glog.Fatalf("Error while deleting Kafka instance: %v", err)
+		glog.Fatalf("Error while deleting Kafka cluster: %v", err)
 	}
 	if status.StatusCode == 200 {
 		fmt.Print("Deleted Kafka cluster with ID ", id)
