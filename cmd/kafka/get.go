@@ -13,8 +13,8 @@ import (
 func NewGetCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get [Kafka ID or name]",
-		Short: "Get a managed-services-api kafka request",
-		Long:  "Get a managed-services-api kafka request.",
+		Short: "Get details of a managed Kafka cluster",
+		Long:  "Get details of a managed Kafka cluster.",
 		Run:   runGet,
 	}
 
@@ -24,7 +24,7 @@ func NewGetCommand() *cobra.Command {
 func runGet(cmd *cobra.Command, args []string) {
 	id := ""
 
-	if (len(args) > 0) {
+	if len(args) > 0 {
 		// TODO: Determine if it is an ID or name
 		id = args[0]
 	} else {
