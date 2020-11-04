@@ -35,6 +35,7 @@ func main() {
 	}
 
 	rootCmd.AddCommand(login.NewLoginCommand())
+	rootCmd.AddCommand(login.NewLogoutCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
 	rootCmd.AddCommand(auth.NewAuthGroupCommand())
 	rootCmd.AddCommand(completionCmd)
