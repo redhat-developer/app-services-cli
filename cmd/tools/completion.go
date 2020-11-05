@@ -17,7 +17,7 @@ $ source <(rhmas completion bash)
 
 # To load completions for each session, execute once:
 Linux:
-  $ rhmas completion bash > /etc/bash_completion.d/yourprogram
+  $ rhmas completion bash > /etc/bash_completion.d/rhmas
 MacOS:
   $ rhmas completion bash > /usr/local/etc/bash_completion.d/rhmas
 
