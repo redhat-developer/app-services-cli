@@ -8,9 +8,9 @@ import (
 
 func NewAuthorizationCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "autorization",
-		Short: "Manage autorization rules",
-		Long:  "Manage autorization rules",
+		Use:   "authorization",
+		Short: "Manage authorization rules",
+		Long:  "Manage authorization rules",
 		Run:   runAuthz,
 	}
 
