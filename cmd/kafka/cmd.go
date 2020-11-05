@@ -3,8 +3,8 @@
 package kafka
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/kafka/topics"
 	"github.com/spf13/cobra"
-	"gitlab.cee.redhat.com/mas-dx/rhmas/cmd/kafka/topics"
 )
 
 func NewKafkaCommand() *cobra.Command {
