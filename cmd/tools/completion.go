@@ -38,7 +38,7 @@ Fish:
 $ rhmas completion fish | source
 
 # To load completions for each session, execute once:
-$ rhmas completion fish > ~/.config/fish/completions/yourprogram.fish
+$ rhmas completion fish > ~/.config/fish/completions/rhmas.fish
 `,
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
