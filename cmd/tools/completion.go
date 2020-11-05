@@ -35,7 +35,7 @@ $ rhmas completion zsh > "${fpath[1]}/_rhmas"
 
 Fish:
 
-$ yourprogram completion fish | source
+$ rhmas completion fish | source
 
 # To load completions for each session, execute once:
 $ yourprogram completion fish > ~/.config/fish/completions/yourprogram.fish
