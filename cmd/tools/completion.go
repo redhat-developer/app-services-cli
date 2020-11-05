@@ -19,7 +19,7 @@ $ source <(rhmas completion bash)
 Linux:
   $ rhmas completion bash > /etc/bash_completion.d/yourprogram
 MacOS:
-  $ rhmas completion bash > /usr/local/etc/bash_completion.d/yourprogram
+  $ rhmas completion bash > /usr/local/etc/bash_completion.d/rhmas
 
 Zsh:
 
