@@ -38,7 +38,7 @@ func runDelete(cmd *cobra.Command, args []string) {
 	if err != nil {
 		glog.Fatalf("Error while deleting Kafka cluster: %v", err)
 	}
-	if status.StatusCode == 200 {
+	if status.StatusCode == 204 {
 		fmt.Print("Deleted Kafka cluster with ID ", id)
 	} else {
 		fmt.Print("Deletion failed", response, status)

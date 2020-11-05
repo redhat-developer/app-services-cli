@@ -18,7 +18,7 @@ module.exports = {
   },
   
   deleteKafkaById: async (c, req, res) => {
-    res.status(200).json({
+    res.status(204).json({
       id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
       kind: "kafka",
       href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
