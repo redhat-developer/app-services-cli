@@ -28,15 +28,9 @@ help:
 .PHONY: help
 
 
-# Checks if a GOPATH is set, or emits an error message
-check-gopath:
-ifndef GOPATH
-	$(error GOPATH is not set)
-endif
-.PHONY: check-gopath
 
 # Verifies that source passes standard checks.
-verify: check-gopath
+verify:
 	go vet \
 		./cmd/... \
 		./client/... \
@@ -54,7 +48,7 @@ lint:
 
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
-binary: check-gopath
+binary:
 	go build -o ${binary} ./cmd 
 .PHONY: binary
 
