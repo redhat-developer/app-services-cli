@@ -41,6 +41,9 @@ func main() {
 	rootCmd.AddCommand(auth.NewAuthGroupCommand())
 	rootCmd.AddCommand(tools.CompletionCmd)
 
+	// Uncomment this to generate docs.
+	// tools.DocumentationGenerator(rootCmd)
+
 	if err := rootCmd.Execute(); err != nil {
 		glog.Fatalf("error running command: %v", err)
 	}

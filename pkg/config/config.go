@@ -1,12 +1,12 @@
 package config
 
 import (
-	"path/filepath"
+	"encoding/json"
+	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"io/ioutil"
-	"encoding/json"
 	"os"
-	"fmt"
+	"path/filepath"
 )
 
 // Config is the type used to track the config of the client

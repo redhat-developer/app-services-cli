@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/glog"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/golang/glog"
 
 	"github.com/spf13/cobra"
 )
