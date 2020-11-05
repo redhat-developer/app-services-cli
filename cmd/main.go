@@ -42,7 +42,7 @@ func main() {
 	rootCmd.AddCommand(tools.CompletionCmd)
 
 	// Uncomment this to generate docs.
-	tools.DocumentationGenerator(rootCmd)
+	// tools.DocumentationGenerator(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		glog.Fatalf("error running command: %v", err)
