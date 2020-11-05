@@ -8,14 +8,21 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/tools"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 )
 
-func init() {
-}
+var (
+	rootCmd = &cobra.Command{
+		Use:  "rhmas cli",
+		Long: "rhmas:  Manage Red Hat Managed Services",
+	}
+)
 
 func main() {
+	cobra.OnInitialize(initConfig)
+
 	// This is needed to make `glog` believe that the flags have already been parsed, otherwise
 	// every log messages is prefixed by an error message stating the the flags haven't been
 	// parsed.
@@ -28,11 +35,6 @@ func main() {
 		fmt.Printf("Unable to set logtostderr to true")
 	}
 
-	rootCmd := &cobra.Command{
-		Use:  "rhmas cli",
-		Long: "rhmas:  Manage Red Hat Managed Services",
-	}
-
 	rootCmd.AddCommand(login.NewLoginCommand())
 	rootCmd.AddCommand(login.NewLogoutCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
@@ -42,4 +44,20 @@ func main() {
 	if err := rootCmd.Execute(); err != nil {
 		glog.Fatalf("error running command: %v", err)
 	}
+}
+
+func initConfig() {
+	cfgFile, err := config.Load()
+	if cfgFile != nil {
+		return
+	}
+	if err != nil {
+		glog.Fatal(err)
+	}
+	cfgFile = &config.Config{}
+	if err := config.Save(cfgFile); err != nil {
+		glog.Fatal(err)
+	}
+	cfgPath, _ := config.Location()
+	glog.Infof("Saved config to %v", cfgPath)
 }
