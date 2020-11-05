@@ -37,12 +37,12 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	client := BuildMasClient()
 
 	kafkaRequest := mas.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
-	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), false, kafkaRequest)
+	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), true, kafkaRequest)
 
 	if err != nil {
 		glog.Fatalf("Error while requesting new Kafka cluster: %v", err)
 	}
-	if status.StatusCode == 200 {
+	if status.StatusCode == 202 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
 		fmt.Print("Created Cluster \n ", string(jsonResponse))
 	} else {
