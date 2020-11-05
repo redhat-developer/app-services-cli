@@ -25,6 +25,14 @@ This will redirect us to the login website:
 $ rhmas login
 ```
 
+### Log Out
+
+To do that use the `logout` command:
+
+```
+$ rhmas logout
+```
+
 ### Apache Kafka Management commands
 
 #### Create Kafka Cluster
