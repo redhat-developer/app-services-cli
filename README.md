@@ -12,12 +12,9 @@ used by developer experience team.
 ## Repository structure
 
 - CLI (./cmd) - CLI for managed-services-api written in Golang
-- Operator(./operator) - using SDK to manage kafka requests
 - SDK for MAS (./client) - API client written in golang that will be used in the CLI
 - Mock  (./mas-mock) - Mock server for managed API (used only to demo flows an extra cases)
-- .openshift - templates and scripts that can be used to replicate managed kafka using your own cluster
 - website - documentation for the cli
-
 
 ## Development commands
 
@@ -37,7 +34,6 @@ make openapi/generate           generate openapi modules
 make openapi/validate           validate openapi schema
 make clean                      delete temporary generated files
 ```
-
 
 ## Architecture
 
@@ -73,5 +69,15 @@ When working with cmd we can execute commands using go run
 go run ./cmd kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
+## Generating documentation
 
+1. Go to main.go
 
+2. Uncomment `	// tools.DocumentationGenerator(rootCmd)` line
+
+3. Build and execute cli
+
+4. Documentation should be updated. 
+
+5. If there were new commands added we need to update `sitebars.json` file. 
+with content that was printed into stdout
