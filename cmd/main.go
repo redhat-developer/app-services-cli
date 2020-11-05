@@ -18,6 +18,7 @@ var (
 		Use:  "rhmas cli",
 		Long: "rhmas:  Manage Red Hat Managed Services",
 	}
+	openHelp = false
 )
 
 func main() {
@@ -34,18 +35,30 @@ func main() {
 	if err := flag.Set("logtostderr", "true"); err != nil {
 		fmt.Printf("Unable to set logtostderr to true")
 	}
-
+	rootCmd.PersistentFlags().BoolVarP(&openHelp, "help-browser", "b", false, "help in browser")
 	rootCmd.AddCommand(login.NewLoginCommand())
 	rootCmd.AddCommand(login.NewLogoutCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
 	rootCmd.AddCommand(auth.NewAuthGroupCommand())
 	rootCmd.AddCommand(tools.CompletionCmd)
 
+	rootCmd.Version = "0.1.0"
+
 	// Uncomment this to generate docs.
 	// tools.DocumentationGenerator(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		glog.Fatalf("error running command: %v", err)
+	} else {
+		if openHelp {
+			fmt.Println("Opening help in browser")
+			cmd, err := tools.GetOpenBrowserCommand("http://localhost:3000/docs/commands/rhmas")
+			if err != nil {
+				glog.Fatal(err)
+			} else {
+				cmd.Start()
+			}
+		}
 	}
 }
 
