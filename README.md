@@ -79,5 +79,5 @@ go run ./cmd kafka create --name=test --multi-az="true" --provider=aws --region=
 
 4. Documentation should be updated. 
 
-5. If there were new commands added we need to update `sitebars.json` file. 
+5. If there were new commands added we need to update `sidebars.json` file. 
 with content that was printed into stdout
