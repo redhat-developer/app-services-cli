@@ -129,6 +129,12 @@ rhmas kafka list
 rhmas kafka use kafka-id
 ```
 
+#### Get the selected Kafka cluster
+
+```shell
+rhmas kafka status
+```
+
 #### Get credentials for the managed kafka
 
 ```
