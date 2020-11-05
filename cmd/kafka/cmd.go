@@ -16,8 +16,8 @@ func NewKafkaCommand() *cobra.Command {
 
 	// add sub-commands
 	cmd.AddCommand(
-		NewCreateCommand(), 
-		NewGetCommand(), 
+		NewCreateCommand(),
+		NewGetCommand(),
 		NewDeleteCommand(),
 		NewListCommand(),
 		NewUseCommand(),
