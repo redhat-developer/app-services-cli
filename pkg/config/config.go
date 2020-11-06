@@ -3,16 +3,22 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
+
+	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
 // Config is the type used to track the config of the client
 type Config struct {
-	User     string           `json:"user"`
-	Services ServiceConfigMap `json:"services,omitempty"`
+	AccessToken  string           `json:"access_token,omitempty" doc:"Bearer access token."`
+	RefreshToken string           `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
+	TokenURL     string           `json:"token_url,omitempty" doc:"OpenID token URL."`
+	Services     ServiceConfigMap `json:"services,omitempty"`
+	URL          string           `json:"url,omitempty" doc:"URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging' and 'integration'."`
 }
 
 // ServiceConfigMap is a map of configs for the managed application services
@@ -79,6 +85,23 @@ func Load() (cfg *Config, err error) {
 	return
 }
 
+// Remove removes the configuration file.
+func Remove() error {
+	file, err := Location()
+	if err != nil {
+		return err
+	}
+	_, err = os.Stat(file)
+	if os.IsNotExist(err) {
+		return nil
+	}
+	err = os.Remove(file)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Location returns the location of the configuration file.
 func Location() (path string, err error) {
 	if rhmasConfig := os.Getenv("RHMASCLI_CONFIG"); rhmasConfig != "" {
@@ -91,4 +114,42 @@ func Location() (path string, err error) {
 		path = filepath.Join(home, ".rhmascli.json")
 	}
 	return path, nil
+}
+
+// Connection creates a connection using this configuration.
+func (c *Config) Connection() (connection *sdk.Connection, err error) {
+	if err != nil {
+		return
+	}
+
+	builder := sdk.NewConnectionBuilder()
+	if c.TokenURL != "" {
+		builder.TokenURL(c.TokenURL)
+	}
+
+	// TODO read these from CLI
+	builder.Client(sdk.DefaultClientID, sdk.DefaultClientSecret)
+	builder.Scopes(sdk.DefaultScopes...)
+	builder.URL(c.URL)
+
+	tokens := make([]string, 0, 2)
+	if c.AccessToken != "" {
+		tokens = append(tokens, c.AccessToken)
+	}
+	if c.RefreshToken != "" {
+		tokens = append(tokens, c.RefreshToken)
+	}
+	if len(tokens) > 0 {
+		builder.Tokens(tokens...)
+	}
+	// disable TLS certification verification for now.
+	builder.Insecure(true)
+
+	// Create the connection:
+	connection, err = builder.Build()
+	if err != nil {
+		return
+	}
+
+	return
 }
