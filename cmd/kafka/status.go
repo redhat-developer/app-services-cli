@@ -2,7 +2,6 @@ package kafka
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -47,7 +46,7 @@ func runStatus(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	jsonCluster, _ := json.MarshalIndent(res, "", "  ")
+	//jsonCluster, _ := json.MarshalIndent(res, "", "  ")
 
 	fmt.Printf("Using Kafka cluster \"%v\":\n", res.Id)
 	// fmt.Print(string(jsonCluster))

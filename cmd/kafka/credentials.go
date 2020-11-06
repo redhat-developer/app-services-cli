@@ -56,7 +56,7 @@ func runCredentials(cmd *cobra.Command, _ []string) {
 		propertyFormat = mockedProperties
 		fileName = "kafka.properties"
 	} else if outputFlagValue == "kafka" {
-		propertyFormat = mockedQuarkus
+		propertyFormat = mockedKafka
 		fileName = "kafka.properties"
 	} else if outputFlagValue == "json" {
 		propertyFormat = mockedJSON
