@@ -27,5 +27,5 @@ func runLogout(cmd *cobra.Command, _ []string) {
 		return
 	}
 
-	fmt.Errorf("Unable to logout %v", err)
+	// fmt.Errorf("Unable to logout %v", err)
 }
