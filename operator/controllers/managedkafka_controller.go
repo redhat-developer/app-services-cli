@@ -55,7 +55,7 @@ func (r *ManagedKafkaReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), false, kafkaRequest)
 
 	if err != nil {
-		glog.Fatalf("Error while requesting new Kafka cluster: %v", err)
+		fmt.Fprintf(os.Stderr, "Error while requesting new Kafka cluster: %v", err)
 	}
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")

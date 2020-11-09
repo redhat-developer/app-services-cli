@@ -1,11 +1,11 @@
 package kafka
 
 import (
+	"os"
 	"context"
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"github.com/golang/glog"
 
 	"github.com/spf13/cobra"
 )
@@ -24,7 +24,7 @@ func NewUseCommand() *cobra.Command {
 func runUse(cmd *cobra.Command, args []string) {
 	cfg, err := config.Load()
 	if err != nil {
-		glog.Fatal(err)
+		fmt.Fprint(os.Stderr, err)
 	}
 
 	id := args[0]
@@ -33,17 +33,21 @@ func runUse(cmd *cobra.Command, args []string) {
 
 	res, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
 	if err != nil {
-		fmt.Printf("Error retrieving Kafka cluster \"%v\": %v", id, err)
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka cluster \"%v\": %v", id, err)
 		return
 	}
 
 	if status.StatusCode != 200 {
-		fmt.Printf("Could not use cluster \"%v\": %v", id, err)
+		fmt.Fprintf(os.Stderr, "Could not use cluster \"%v\": %v", id, err)
 		return
 	}
 
 	var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: res.Id}
 	cfg.Services.SetKafka(&kafkaConfig)
-	config.Save(cfg)
-	fmt.Printf("Using Kafka cluster \"%v\"", res.Id)
+	if err := config.Save(cfg); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	fmt.Fprintf(os.Stderr, "Using Kafka cluster \"%v\"", res.Id)
 }

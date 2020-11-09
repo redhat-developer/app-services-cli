@@ -3,12 +3,12 @@
 package login
 
 import (
+	"os"
 	"fmt"
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/golang/glog"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/tools"
 	sdk "github.com/openshift-online/ocm-sdk-go"
@@ -62,8 +62,8 @@ func NewLoginCommand() *cobra.Command {
 func runLogin(cmd *cobra.Command, _ []string) {
 	cfg, err := config.Load()
 	if err != nil {
-		// fmt.Errorf("Can't load config file: %v", err)
-		return
+		fmt.Fprintf(os.Stderr, "Can't load config file: %v\n", err)
+		os.Exit(1)
 	}
 	if cfg == nil {
 		cfg = new(config.Config)
@@ -83,13 +83,13 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		parser := new(jwt.Parser)
 		parsedToken, _, err = parser.ParseUnverified(args.token, jwt.MapClaims{})
 		if err != nil {
-			// fmt.Errorf("Can't parse token '%s': %v", args.token, err)
-			return
+			fmt.Fprintf(os.Stderr, "Can't parse token '%s': %v\n", args.token, err)
+			os.Exit(1)
 		}
 		tokenType, err := tokenType(parsedToken)
 		if err != nil {
-			// fmt.Errorf("Can't extract type from 'typ' claim of token '%s': %v", args.token, err)
-			return
+			fmt.Fprintf(os.Stderr, "Can't extract type from 'typ' claim of token '%s': %v\n", args.token, err)
+			os.Exit(1)
 		}
 
 		cfg.TokenURL = args.tokenURL
@@ -99,23 +99,23 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		case "Refresh", "Offline":
 			cfg.RefreshToken = args.token
 		case "":
-			// fmt.Errorf("Don't know how to handle empty type in token '%s'", args.token)
-			return
+			fmt.Fprintf(os.Stderr, "Don't know how to handle empty type in token '%s'\n", args.token)
+			os.Exit(1)
 		default:
-			// fmt.Errorf("Don't know how to handle token type '%s' in token '%s'", tokenType, args.token)
-			return
+			fmt.Fprintf(os.Stderr, "Don't know how to handle token type '%s' in token '%s'\n", tokenType, args.token)
+			os.Exit(1)
 		}
 
 		// Create a connection and get the token to verify that the crendentials are correct:
 		connection, err := cfg.Connection()
 		if err != nil {
-			// fmt.Errorf("Can't create connection: %v", err)
-			return
+			fmt.Fprintf(os.Stderr, "Can't create connection: %v", err)
+			os.Exit(1)
 		}
 		accessToken, refreshToken, err := connection.Tokens()
 		if err != nil {
-			// fmt.Errorf("Can't get token: %v", err)
-			return
+			fmt.Fprintf(os.Stderr, "Can't get token: %v\n", err)
+			os.Exit(1)
 		}
 
 		// Save the configuration, but clear the user name and password before unless we have
@@ -124,16 +124,16 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		cfg.RefreshToken = refreshToken
 		err = config.Save(cfg)
 		if err != nil {
-			// fmt.Errorf("Can't save config file: %v", err)
-			return
+			fmt.Fprintf(os.Stderr, "Can't save config file: %v\n", err)
+			os.Exit(1)
 		}
 
-		fmt.Println("Successfully logged in using token")
+		fmt.Fprintln(os.Stderr, "Successfully logged in using token")
 	} else {
-		glog.Infof("Redirecting to login page")
+		fmt.Fprintln(os.Stderr, "Redirecting to login page")
 		cmd, err := tools.GetOpenBrowserCommand("https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth?client_id=cloud-services&redirect_uri=https%3A%2F%2Fcloud.redhat.com%2F&state=d8b10b88-8699-4c9b-80fd-665c39343e53&response_mode=fragment&response_type=code&scope=openid&nonce=7ba8050f-5f7b-4a1c-80dd-0392c922f5f8")
 		if err != nil {
-			glog.Fatal(err)
+			fmt.Fprintln(os.Stderr, err)
 		} else {
 			cmd.Start()
 			time.Sleep(30 * time.Second)

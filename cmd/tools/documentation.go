@@ -1,12 +1,12 @@
 package tools
 
 import (
+	"os"
 	"fmt"
 	"path"
 	"path/filepath"
 	"strings"
 
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )
@@ -35,6 +35,7 @@ func DocumentationGenerator(rootCommand *cobra.Command) {
 
 	err := doc.GenMarkdownTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)
 	if err != nil {
-		glog.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }

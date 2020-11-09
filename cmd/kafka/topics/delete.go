@@ -1,6 +1,7 @@
 package topics
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -21,7 +22,7 @@ func NewDeleteTopicCommand() *cobra.Command {
 }
 
 func deleteTopic(cmd *cobra.Command, _ []string) {
-	fmt.Println("Deleting topic " + topicName + " ...")
+	fmt.Fprintln(os.Stderr, "Deleting topic " + topicName + " ...")
 	doRemoteOperation()
-	fmt.Println("Topic " + topicName + " deleted")
+	fmt.Fprintln(os.Stderr, "Topic " + topicName + " deleted")
 }

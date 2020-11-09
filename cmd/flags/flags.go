@@ -2,9 +2,9 @@
 package flags
 
 import (
+	"os"
 	"fmt"
 
-	"github.com/golang/glog"
 	"github.com/spf13/pflag"
 )
 
@@ -12,7 +12,8 @@ import (
 func MustGetDefinedString(flagName string, flags *pflag.FlagSet) string {
 	flagVal := MustGetString(flagName, flags)
 	if flagVal == "" {
-		glog.Fatal(undefinedValueMessage(flagName))
+		fmt.Fprintln(os.Stderr, undefinedValueMessage(flagName))
+		os.Exit(1)
 	}
 	return flagVal
 }
@@ -21,7 +22,8 @@ func MustGetDefinedString(flagName string, flags *pflag.FlagSet) string {
 func MustGetString(flagName string, flags *pflag.FlagSet) string {
 	flagVal, err := flags.GetString(flagName)
 	if err != nil {
-		glog.Fatalf(notFoundMessage(flagName, err))
+		fmt.Fprintln(os.Stderr, notFoundMessage(flagName, err))
+		os.Exit(1)
 	}
 	return flagVal
 }
@@ -38,7 +40,8 @@ func GetString(flagName string, flags *pflag.FlagSet) string {
 func MustGetBool(flagName string, flags *pflag.FlagSet) bool {
 	flagVal, err := flags.GetBool(flagName)
 	if err != nil {
-		glog.Fatalf(notFoundMessage(flagName, err))
+		fmt.Fprintln(os.Stderr, notFoundMessage(flagName, err))
+		os.Exit(1)
 	}
 	return flagVal
 }
