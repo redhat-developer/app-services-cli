@@ -16,8 +16,7 @@ help:
 	@echo "make verify               	verify source code"
 	@echo "make lint                 	run golangci-lint"
 	@echo "make binary               	compile binaries"
-	@echo "make test                 	run unit tests"
-	@echo "make test-integration     	run integration tests"
+	@echo "make test                 	run  tests"
 	@echo "make format             		format files"
 	@echo "make openapi/pull			pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
@@ -28,7 +27,6 @@ help:
 .PHONY: help
 
 
-
 # Verifies that source passes standard checks.
 verify:
 	go vet \
@@ -37,13 +35,10 @@ verify:
 		./test/...
 .PHONY: verify
 
-# Runs our linter to verify that everything is following best practices
-# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
+# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint 
+# https://golangci-lint.run/usage/install/
 lint:
-	$(GOLANGCI_LINT_BIN) run \
-		./cmd/... \
-		./client/... \
-		./test/...
+	golangci-lint run cmd/... client/... pkg/...
 .PHONY: lint
 
 # Build binaries
@@ -52,23 +47,15 @@ binary:
 	go build -o ${binary} ./cmd 
 .PHONY: binary
 
+install:
+	go install ./cmd
+.PHONY: install
+
 # Runs the unit tests.
-#
-# Args:
-#   TESTFLAGS: Flags to pass to `go test`. The `-v` argument is always passed.
-#
-# Examples:
-#   make test TESTFLAGS="-run TestSomething"
 test: install
-	OCM_ENV=testing gotestsum --format $(TEST_SUMMARY_FORMAT) -- -p 1 -v -count=1 $(TESTFLAGS) \
-		./client/... \
-		./cmd/...
+	go test ./test/integration
 .PHONY: test
 
-# Precompile everything required for development/test.
-test-prepare: install
-	go test -i ./test/integration/...
-.PHONY: test-prepare
 
 openapi/pull:
 	wget -P ./openapi -O managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
@@ -91,6 +78,12 @@ format:
 	@go mod tidy
 	@gofmt -w `find . -type f -name '*.go' -not -path "./vendor/*"`
 .PHONY: format
+
+format/check:
+	test -z $(gofmt -l ./cmd)
+.PHONY: format/check
+
+
 
 
 

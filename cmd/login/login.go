@@ -62,7 +62,7 @@ func NewLoginCommand() *cobra.Command {
 func runLogin(cmd *cobra.Command, _ []string) {
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Errorf("Can't load config file: %v", err)
+		// fmt.Errorf("Can't load config file: %v", err)
 		return
 	}
 	if cfg == nil {
@@ -83,12 +83,12 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		parser := new(jwt.Parser)
 		parsedToken, _, err = parser.ParseUnverified(args.token, jwt.MapClaims{})
 		if err != nil {
-			fmt.Errorf("Can't parse token '%s': %v", args.token, err)
+			// fmt.Errorf("Can't parse token '%s': %v", args.token, err)
 			return
 		}
 		tokenType, err := tokenType(parsedToken)
 		if err != nil {
-			fmt.Errorf("Can't extract type from 'typ' claim of token '%s': %v", args.token, err)
+			// fmt.Errorf("Can't extract type from 'typ' claim of token '%s': %v", args.token, err)
 			return
 		}
 
@@ -99,22 +99,22 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		case "Refresh", "Offline":
 			cfg.RefreshToken = args.token
 		case "":
-			fmt.Errorf("Don't know how to handle empty type in token '%s'", args.token)
+			// fmt.Errorf("Don't know how to handle empty type in token '%s'", args.token)
 			return
 		default:
-			fmt.Errorf("Don't know how to handle token type '%s' in token '%s'", tokenType, args.token)
+			// fmt.Errorf("Don't know how to handle token type '%s' in token '%s'", tokenType, args.token)
 			return
 		}
 
 		// Create a connection and get the token to verify that the crendentials are correct:
 		connection, err := cfg.Connection()
 		if err != nil {
-			fmt.Errorf("Can't create connection: %v", err)
+			// fmt.Errorf("Can't create connection: %v", err)
 			return
 		}
 		accessToken, refreshToken, err := connection.Tokens()
 		if err != nil {
-			fmt.Errorf("Can't get token: %v", err)
+			// fmt.Errorf("Can't get token: %v", err)
 			return
 		}
 
@@ -124,7 +124,7 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		cfg.RefreshToken = refreshToken
 		err = config.Save(cfg)
 		if err != nil {
-			fmt.Errorf("Can't save config file: %v", err)
+			// fmt.Errorf("Can't save config file: %v", err)
 			return
 		}
 
