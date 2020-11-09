@@ -30,6 +30,8 @@ jobs:
 
     - name: Check if formatted
       run: make formatCheck
+    - name: Check passes golang standards
+      run: make verify
     - name: Build
       run: make binary
     - name: Test

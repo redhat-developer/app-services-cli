@@ -16,8 +16,7 @@ help:
 	@echo "make verify               	verify source code"
 	@echo "make lint                 	run golangci-lint"
 	@echo "make binary               	compile binaries"
-	@echo "make test                 	run unit tests"
-	@echo "make test-integration     	run integration tests"
+	@echo "make test                 	run  tests"
 	@echo "make format             		format files"
 	@echo "make openapi/pull			pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
@@ -28,7 +27,6 @@ help:
 .PHONY: help
 
 
-
 # Verifies that source passes standard checks.
 verify:
 	go vet \
@@ -37,13 +35,10 @@ verify:
 		./test/...
 .PHONY: verify
 
-# Runs our linter to verify that everything is following best practices
-# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
+# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint 
+# https://golangci-lint.run/usage/install/
 lint:
-	golangci-lint 
-		./cmd/... \
-		./client/... \
-		./test/...
+	golangci-lint run cmd/... client/... pkg/...
 .PHONY: lint
 
 # Build binaries
@@ -57,20 +52,10 @@ install:
 .PHONY: install
 
 # Runs the unit tests.
-#
-# Args:
-#   TESTFLAGS: Flags to pass to `go test`. The `-v` argument is always passed.
-#
-# Examples:
-#   make test TESTFLAGS="-run TestSomething"
 test: install
-	echo "go test - TODO"
+	go test ./test/integration
 .PHONY: test
 
-# Precompile everything required for development/test.
-test-prepare: install
-	go test -i ./test/integration/...
-.PHONY: test-prepare
 
 openapi/pull:
 	wget -P ./openapi -O managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
