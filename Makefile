@@ -79,9 +79,9 @@ format:
 	@gofmt -w `find . -type f -name '*.go' -not -path "./vendor/*"`
 .PHONY: format
 
-formatCheck:
+format/check:
 	test -z $(gofmt -l ./cmd)
-.PHONY: formatCheck
+.PHONY: format/check
 
 
 
