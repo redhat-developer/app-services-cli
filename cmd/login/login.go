@@ -54,8 +54,7 @@ func NewLoginCommand() *cobra.Command {
 
 	cmd.Flags().StringVar(&args.token, "token", "", "access token that can be used for login")
 	cmd.Flags().StringVar(&args.tokenURL, "token-url", sdk.DefaultTokenURL, "OpenID token URL")
-	cmd.Flags().StringVar(&args.url, "url", sdk.DefaultURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
-	cmd.MarkFlagRequired("url")
+	cmd.Flags().StringVar(&args.url, "url", "staging", "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
 
 	return cmd
 }
