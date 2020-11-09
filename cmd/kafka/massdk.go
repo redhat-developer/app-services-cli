@@ -14,7 +14,6 @@ import (
 func BuildMasClient() *mas.APIClient {
 
 	masCfg := mas.NewConfiguration()
-	// TODO read flag from config
 	cfg, err := config.Load()
 
 	if err != nil {
@@ -22,8 +21,21 @@ func BuildMasClient() *mas.APIClient {
 		os.Exit(1)
 	}
 
-	if cfg.AccessToken == "" && cfg.RefreshToken == "" {
+	token := cfg.AccessToken
+
+	if token == "" {
+		token = cfg.RefreshToken
+	}
+
+	if token == "" {
 		fmt.Println("You must be loggen in. To do so use the `rhmas login` command")
+		os.Exit(1)
+	}
+
+	tokenIsValid, _ := cfg.CheckTokenValidity()
+
+	if !tokenIsValid {
+		fmt.Println("Token has expired. Login again using `rhmas login` command")
 		os.Exit(1)
 	}
 
@@ -36,7 +48,7 @@ func BuildMasClient() *mas.APIClient {
 		masCfg.Host = urlSegments[0]
 	}
 
-	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", cfg.AccessToken))
+	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", token))
 	client := mas.NewAPIClient(masCfg)
 	return client
 }

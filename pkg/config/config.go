@@ -6,7 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/mitchellh/go-homedir"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
@@ -152,4 +154,55 @@ func (c *Config) Connection() (connection *sdk.Connection, err error) {
 	}
 
 	return
+}
+
+// CheckTokenValidity checks if the configuration contains either credentials or tokens that haven't expired, so
+// that it can be used to perform authenticated requests.
+func (c *Config) CheckTokenValidity() (tokenIsValid bool, err error) {
+	now := time.Now()
+	if c.AccessToken != "" {
+		var expires bool
+		var left time.Duration
+		var accessToken *jwt.Token
+		accessToken, err = parseToken(c.AccessToken)
+		if err != nil {
+			return
+		}
+		expires, left, err = sdk.GetTokenExpiry(accessToken, now)
+		if err != nil {
+			return
+		}
+		if !expires || left > 5*time.Second {
+			tokenIsValid = true
+			return
+		}
+	}
+	if c.RefreshToken != "" {
+		var expires bool
+		var left time.Duration
+		var refreshToken *jwt.Token
+		refreshToken, err = parseToken(c.RefreshToken)
+		if err != nil {
+			return
+		}
+		expires, left, err = sdk.GetTokenExpiry(refreshToken, now)
+		if err != nil {
+			return
+		}
+		if !expires || left > 10*time.Second {
+			tokenIsValid = true
+			return
+		}
+	}
+	return
+}
+
+func parseToken(textToken string) (token *jwt.Token, err error) {
+	parser := new(jwt.Parser)
+	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
+	if err != nil {
+		err = fmt.Errorf("can't parse token: %v", err)
+		return
+	}
+	return token, nil
 }
