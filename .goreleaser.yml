@@ -1,0 +1,37 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+env:
+  - CGO_ENABLED=0
+  - GO111MODULE=on
+builds:
+  - main: ./cmd/main.go
+    id: rhmas_cli
+    binary: rhmas
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+archives:
+  - replacements:
+      darwin: mac
+      amd64: 64bit-x86
+
+    format_overrides:
+      - goos: windows
+        format: zip
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^fix:"
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
