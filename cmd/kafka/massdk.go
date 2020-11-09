@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
@@ -18,12 +19,12 @@ func BuildMasClient() *mas.APIClient {
 
 	if err != nil {
 		fmt.Println("Error loading configuration")
-		return nil
+		os.Exit(1)
 	}
 
 	if cfg.AccessToken == "" && cfg.RefreshToken == "" {
-		fmt.Println("You must be loggen in")
-		return nil
+		fmt.Println("You must be loggen in. To do so use the `rhmas login` command")
+		os.Exit(1)
 	}
 
 	urlSegments := strings.Split(cfg.URL, "://")
