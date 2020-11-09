@@ -52,6 +52,10 @@ binary:
 	go build -o ${binary} ./cmd 
 .PHONY: binary
 
+install:
+	go install ./cmd
+.PHONY: install
+
 # Runs the unit tests.
 #
 # Args:
@@ -60,9 +64,7 @@ binary:
 # Examples:
 #   make test TESTFLAGS="-run TestSomething"
 test: install
-	OCM_ENV=testing gotestsum --format $(TEST_SUMMARY_FORMAT) -- -p 1 -v -count=1 $(TESTFLAGS) \
-		./client/... \
-		./cmd/...
+	echo "go test - TODO"
 .PHONY: test
 
 # Precompile everything required for development/test.
