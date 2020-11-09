@@ -21,6 +21,10 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
       uses: actions/checkout@v2
+    - name: Check if formatted
+      run: test -z $(gofmt -l ./cmd)
     - name: Build
       run: make binary
+    - name: Test
+      run: make test
 
