@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -29,7 +30,7 @@ func runGet(cmd *cobra.Command, args []string) {
 		id = args[0]
 	} else {
 		// TODO: Get ID of current cluster
-		fmt.Println("No Kafka cluster selected")
+		fmt.Fprintln(os.Stderr, "No Kafka cluster selected")
 		return
 	}
 
@@ -38,7 +39,7 @@ func runGet(cmd *cobra.Command, args []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
 
 	if err != nil {
-		fmt.Printf("Error retrieving Kafka clusters: %v", err)
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v", err)
 		return
 	}
 
@@ -48,6 +49,6 @@ func runGet(cmd *cobra.Command, args []string) {
 		json.Unmarshal(jsonResponse, &kafkaCluster)
 		fmt.Print(string(jsonResponse))
 	} else {
-		fmt.Print("Get failed", response, status)
+		fmt.Fprintln(os.Stderr, "Get failed", response, status)
 	}
 }

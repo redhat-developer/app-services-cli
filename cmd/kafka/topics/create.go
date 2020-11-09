@@ -1,6 +1,7 @@
 package topics
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -35,7 +36,7 @@ func NewCreateTopicCommand() *cobra.Command {
 }
 
 func createTopic(cmd *cobra.Command, _ []string) {
-	fmt.Println("Creating topic " + topicName + " ...")
+	fmt.Fprintln(os.Stderr, "Creating topic " + topicName + " ...")
 	doRemoteOperation()
-	fmt.Println("Topic " + topicName + " created")
+	fmt.Fprintln(os.Stderr, "Topic " + topicName + " created")
 }

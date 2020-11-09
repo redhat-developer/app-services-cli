@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -45,7 +46,7 @@ func runList(cmd *cobra.Command, _ []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 
 	if err != nil {
-		fmt.Printf("Error retrieving Kafka clusters: %v", err)
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v", err)
 		return
 	}
 
@@ -54,7 +55,7 @@ func runList(cmd *cobra.Command, _ []string) {
 
 		var kafkaList kafka.ClusterList
 		if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
-			fmt.Printf("Could not format Kakfa cluster to table: %v", err)
+			fmt.Fprintf(os.Stderr, "Could not format Kakfa cluster to table: %v", err)
 			outputFormat = "json"
 		}
 

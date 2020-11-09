@@ -1,13 +1,13 @@
 package kafka
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"fmt"
 
 	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/flags"
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 )
 
@@ -40,12 +40,14 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), true, kafkaRequest)
 
 	if err != nil {
-		glog.Fatalf("Error while requesting new Kafka cluster: %v", err)
+		fmt.Fprintf(os.Stderr, "Error while requesting new Kafka cluster: %v", err)
+		return
 	}
 	if status.StatusCode == 202 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		fmt.Print("Created Cluster \n ", string(jsonResponse))
+		fmt.Fprintf(os.Stderr, "Created new Kakfa cluster \"%v\"\n", response.Name)
+		fmt.Print(string(jsonResponse))
 	} else {
-		fmt.Print("Creation failed", response, status)
+		fmt.Fprintf(os.Stderr, "Failed to create Kafka cluster \"%v\"", name)
 	}
 }

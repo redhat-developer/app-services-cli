@@ -1,6 +1,7 @@
 package topics
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -27,7 +28,7 @@ func NewUpdateTopicCommand() *cobra.Command {
 }
 
 func updateTopic(cmd *cobra.Command, _ []string) {
-	fmt.Println("Updating topic " + topicName + " (" + config + ") ...")
+	fmt.Fprintln(os.Stderr, "Updating topic " + topicName + " (" + config + ") ...")
 	doRemoteOperation()
-	fmt.Println("Topic " + topicName + " updated")
+	fmt.Fprintln(os.Stderr, "Topic " + topicName + " updated")
 }

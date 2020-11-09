@@ -1,7 +1,7 @@
 package main
 
 import (
-	"flag"
+	"os"
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/auth"
@@ -9,9 +9,9 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/tools"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 )
+
 
 var (
 	rootCmd = &cobra.Command{
@@ -24,17 +24,6 @@ var (
 func main() {
 	cobra.OnInitialize(initConfig)
 
-	// This is needed to make `glog` believe that the flags have already been parsed, otherwise
-	// every log messages is prefixed by an error message stating the the flags haven't been
-	// parsed.
-	_ = flag.CommandLine.Parse([]string{})
-
-	//pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
-
-	// Always log to stderr by default
-	if err := flag.Set("logtostderr", "true"); err != nil {
-		fmt.Printf("Unable to set logtostderr to true")
-	}
 	rootCmd.PersistentFlags().BoolVarP(&openHelp, "help-browser", "b", false, "help in browser")
 	rootCmd.AddCommand(login.NewLoginCommand())
 	rootCmd.AddCommand(login.NewLogoutCommand())
@@ -48,13 +37,14 @@ func main() {
 	// tools.DocumentationGenerator(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
-		glog.Fatalf("error running command: %v", err)
+		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
 	} else {
 		if openHelp {
-			fmt.Println("Opening help in browser")
+			fmt.Fprintln(os.Stderr, "Opening help in browser")
 			cmd, err := tools.GetOpenBrowserCommand("http://localhost:3000/docs/commands/rhmas")
 			if err != nil {
-				glog.Fatal(err)
+				fmt.Fprint(os.Stderr, err)
+				os.Exit(1)
 			} else {
 				cmd.Start()
 			}
@@ -68,12 +58,15 @@ func initConfig() {
 		return
 	}
 	if err != nil {
-		glog.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
+
 	cfgFile = &config.Config{}
 	if err := config.Save(cfgFile); err != nil {
-		glog.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	cfgPath, _ := config.Location()
-	glog.Infof("Saved config to %v", cfgPath)
+	fmt.Fprintf(os.Stderr, "Saved config to %v\n", cfgPath)
 }

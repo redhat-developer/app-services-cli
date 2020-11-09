@@ -1,6 +1,7 @@
 package topics
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -24,7 +25,7 @@ func NewListTopicCommand() *cobra.Command {
 }
 
 func listTopic(cmd *cobra.Command, _ []string) {
-	fmt.Println("Listing topics ...")
+	fmt.Fprintln(os.Stderr, "Listing topics ...")
 	doRemoteOperation()
 	fmt.Println(`
 3 topics:

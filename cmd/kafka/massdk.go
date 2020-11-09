@@ -17,7 +17,7 @@ func BuildMasClient() *mas.APIClient {
 	cfg, err := config.Load()
 
 	if err != nil {
-		fmt.Println("Error loading configuration")
+		fmt.Fprintln(os.Stderr, "Error loading configuration")
 		os.Exit(1)
 	}
 
@@ -28,14 +28,14 @@ func BuildMasClient() *mas.APIClient {
 	}
 
 	if token == "" {
-		fmt.Println("You must be loggen in. To do so use the `rhmas login` command")
+		fmt.Fprintln(os.Stderr, "You must be logged in. To do so use the `rhmas login` command")
 		os.Exit(1)
 	}
 
 	tokenIsValid, _ := cfg.CheckTokenValidity()
 
 	if !tokenIsValid {
-		fmt.Println("Token has expired. Login again using `rhmas login` command")
+		fmt.Fprintln(os.Stderr, "Token has expired. Login again using `rhmas login` command")
 		os.Exit(1)
 	}
 
