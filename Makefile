@@ -40,7 +40,7 @@ verify:
 # Runs our linter to verify that everything is following best practices
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 lint:
-	$(GOLANGCI_LINT_BIN) run \
+	golangci-lint 
 		./cmd/... \
 		./client/... \
 		./test/...
@@ -93,6 +93,12 @@ format:
 	@go mod tidy
 	@gofmt -w `find . -type f -name '*.go' -not -path "./vendor/*"`
 .PHONY: format
+
+formatCheck:
+	test -z $(gofmt -l ./cmd)
+.PHONY: formatCheck
+
+
 
 
 
