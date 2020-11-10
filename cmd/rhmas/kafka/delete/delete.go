@@ -1,7 +1,7 @@
 package delete
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
 	"os"
 	"context"
 	"fmt"
@@ -32,7 +32,7 @@ func runDelete(cmd *cobra.Command, args []string) {
 		fmt.Fprintln(os.Stderr, "No Kafka cluster selected")
 	}
 
-	client := sdk.BuildMasClient()
+	client := rhmas.BuildClient()
 
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdDelete(context.Background(), id)
 

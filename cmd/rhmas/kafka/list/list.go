@@ -9,7 +9,7 @@ import (
 	"github.com/antihax/optional"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
 	"github.com/spf13/cobra"
 
 	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
@@ -42,7 +42,7 @@ func runList(cmd *cobra.Command, _ []string) {
 	page := flags.GetString(FlagPage, cmd.Flags())
 	size := flags.GetString(FlagSize, cmd.Flags())
 
-	client := sdk.BuildMasClient()
+	client := rhmas.BuildClient()
 	options := mas.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 

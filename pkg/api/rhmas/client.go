@@ -1,4 +1,4 @@
-package sdk
+package rhmas
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 
 // TODO refactor into separate config class
 
-func BuildMasClient() *mas.APIClient {
+func BuildClient() *mas.APIClient {
 
 	masCfg := mas.NewConfiguration()
 	cfg, err := config.Load()

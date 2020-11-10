@@ -1,13 +1,13 @@
 package get
 
 import (
-	"os"
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk"
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +35,7 @@ func runGet(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := sdk.BuildMasClient()
+	client := rhmas.BuildClient()
 
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
 
