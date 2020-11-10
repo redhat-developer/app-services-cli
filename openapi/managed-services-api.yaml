@@ -15,6 +15,7 @@ servers:
 paths:
   /api/managed-services-api/v1/kafkas/{id}:
     get:
+      operationId: getKafkaById
       responses:
         "200":
           content:
@@ -53,6 +54,7 @@ paths:
         - Bearer: []
       summary: Get a kafka request by id
     delete:
+      operationId: deleteKafkaById
       responses:
         "204":
           content:
@@ -90,10 +92,13 @@ paths:
                   $ref: '#/components/examples/500DeleteExample'
           description: Unexpected error occurred
       summary: Delete a kafka request by id
+      security:
+        - Bearer: []
     parameters:
       - $ref: "#/components/parameters/id"
   /api/managed-services-api/v1/kafkas:
     post:
+      operationId: createKafka
       parameters:
         - in: query
           name: async
@@ -164,6 +169,7 @@ paths:
       summary: Create a new kafka Request
     get:
       summary: Returns a list of Kafka requests
+      operationId: listKafkas
       security:
         - Bearer: []
       responses:
@@ -353,7 +359,7 @@ components:
         href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
         status: "complete"
         cloud_provider: "aws"
-        multi_az: "false"
+        multi_az: false
         region: "eu-west-1"
         owner:  "api_kafka_service"
         name: "serviceapi"

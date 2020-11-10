@@ -92,6 +92,8 @@ paths:
                   $ref: '#/components/examples/500DeleteExample'
           description: Unexpected error occurred
       summary: Delete a kafka request by id
+      security:
+        - Bearer: []
     parameters:
       - $ref: "#/components/parameters/id"
   /api/managed-services-api/v1/kafkas:
@@ -357,7 +359,7 @@ components:
         href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
         status: "complete"
         cloud_provider: "aws"
-        multi_az: "false"
+        multi_az: false
         region: "eu-west-1"
         owner:  "api_kafka_service"
         name: "serviceapi"
