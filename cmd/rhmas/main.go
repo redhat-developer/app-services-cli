@@ -14,7 +14,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/logout"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
 )
@@ -24,37 +24,28 @@ var (
 		Use:  "rhmas cli",
 		Long: "rhmas:  Manage Red Hat Managed Services",
 	}
-	openHelp = false
+	openHelp     = false
+	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 )
 
 func main() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().BoolVarP(&openHelp, "help-browser", "b", false, "help in browser")
 	rootCmd.AddCommand(login.NewLoginCommand())
 	rootCmd.AddCommand(logout.NewLogoutCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
 	rootCmd.AddCommand(auth.NewAuthGroupCommand())
+	rootCmd.AddCommand(docs.NewDocsCommand())
 	rootCmd.AddCommand(completion.CompletionCmd)
 
 	rootCmd.Version = "0.1.0"
 
-	// Uncomment this to generate docs.
-	// generateDocumentation(rootCmd)
+	if generateDocs {
+		generateDocumentation(rootCmd)
+	}
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
-	} else {
-		if openHelp {
-			fmt.Fprintln(os.Stderr, "Opening help in browser")
-			cmd, err := browser.GetOpenBrowserCommand("http://localhost:3000/docs/commands/rhmas")
-			if err != nil {
-				fmt.Fprint(os.Stderr, err)
-				os.Exit(1)
-			} else {
-				cmd.Start()
-			}
-		}
 	}
 }
 
