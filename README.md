@@ -66,14 +66,14 @@ make binary
 When working with cmd we can execute commands using go run
 
 ```
-go run ./cmd kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
 ## Generating documentation
 
 1. Go to main.go
 
-2. Uncomment `	// tools.DocumentationGenerator(rootCmd)` line
+2. Uncomment `	// generateDocumentation(rootCmd)` line
 
 3. Build and execute cli
 
