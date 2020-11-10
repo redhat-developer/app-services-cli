@@ -35,11 +35,6 @@ make openapi/validate           validate openapi schema
 make clean                      delete temporary generated files
 ```
 
-## Architecture
-
-![./architecture.png](./resources/architecture.png)
-
-
 ## Development setup
 
 1. Start mock server
