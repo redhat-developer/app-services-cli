@@ -66,18 +66,15 @@ make binary
 When working with cmd we can execute commands using go run
 
 ```
-go run ./cmd kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
 ## Generating documentation
 
-1. Go to main.go
+You can generate the latest commands documentation by executing the CLI with the `GENERATE_DOCS` environment variable
+```shell
+GENERATE_DOCS=true rhmas docs
+```
 
-2. Uncomment `	// tools.DocumentationGenerator(rootCmd)` line
-
-3. Build and execute cli
-
-4. Documentation should be updated. 
-
-5. If there were new commands added we need to update `sidebars.json` file. 
-with content that was printed into stdout
+Aftr running the command, the documentation should be updated. If there were new commands added we need to update `sidebars.json` file. 
+with content that was printed into stdout.

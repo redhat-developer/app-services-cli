@@ -44,11 +44,11 @@ lint:
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
 binary:
-	go build -o ${binary} ./cmd 
+	go build -o ${binary} ./cmd/rhmas
 .PHONY: binary
 
 install:
-	go install ./cmd
+	go install ./cmd/rhmas
 .PHONY: install
 
 # Runs the unit tests.

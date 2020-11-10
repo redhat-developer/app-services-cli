@@ -6,7 +6,7 @@ env:
   - CGO_ENABLED=0
   - GO111MODULE=on
 builds:
-  - main: ./cmd/main.go
+  - main: ./cmd/rhmas/main.go
     id: rhmas_cli
     binary: rhmas
     goos:
