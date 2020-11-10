@@ -47,7 +47,7 @@ func runGet(cmd *cobra.Command, args []string) {
 	if status.StatusCode == 200 {
 		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
 		var kafkaCluster kafka.Cluster
-		json.Unmarshal(jsonResponse, &kafkaCluster)
+		_ = json.Unmarshal(jsonResponse, &kafkaCluster)
 		fmt.Print(string(jsonResponse))
 	} else {
 		fmt.Fprintln(os.Stderr, "Get failed", response, status)

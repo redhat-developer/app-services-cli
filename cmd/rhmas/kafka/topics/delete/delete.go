@@ -21,7 +21,7 @@ func NewDeleteTopicCommand() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&topicName, flags.FlagName, "n", "", "Topic name (required)")
-	cmd.MarkFlagRequired(flags.FlagName)
+	_ = cmd.MarkFlagRequired(flags.FlagName)
 	return cmd
 }
 

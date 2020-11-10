@@ -24,7 +24,6 @@ var (
 		Use:  "rhmas cli",
 		Long: "rhmas:  Manage Red Hat Managed Services",
 	}
-	openHelp     = false
 	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 )
 

@@ -30,7 +30,7 @@ func NewCreateTopicCommand() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&topicName, flags.FlagName, "n", "", "Topic name (required)")
-	cmd.MarkFlagRequired(flags.FlagName)
+	_ = cmd.MarkFlagRequired(flags.FlagName)
 	cmd.Flags().Int32VarP(&partitions, Partitions, "p", 3, "Set number of partitions")
 	cmd.Flags().Int32VarP(&replicas, Replicas, "r", 2, "Set number of replicas")
 	cmd.Flags().StringVarP(&configFile, ConfigFile, "f", "", "A path to a file containing extra configuration variables. If this option is not supplied, default configurations will be used")

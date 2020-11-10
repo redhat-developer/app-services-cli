@@ -135,7 +135,11 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		} else {
-			cmd.Start()
+			err = cmd.Start()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+				os.Exit(1)
+			}
 			time.Sleep(30 * time.Second)
 		}
 	}

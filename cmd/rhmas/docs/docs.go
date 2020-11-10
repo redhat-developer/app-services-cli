@@ -30,11 +30,11 @@ func NewDocsCommand() *cobra.Command {
 func runDocs(cmd *cobra.Command, _ []string) {
 	if flags.browser {
 		fmt.Fprintln(os.Stderr, "Opening documentation in your browser")
-		cmd, err := browser.GetOpenBrowserCommand("http://localhost:3000/docs/commands/rhmas")
+		browsercmd, err := browser.GetOpenBrowserCommand("http://localhost:3000/docs/commands/rhmas")
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
 			os.Exit(1)
 		}
-		cmd.Start()
+		_ = browsercmd.Start()
 	}
 }

@@ -24,9 +24,9 @@ func NewUpdateTopicCommand() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&topicName, flags.FlagName, "n", "", "Topic name (required)")
-	cmd.MarkFlagRequired(flags.FlagName)
+	_ = cmd.MarkFlagRequired(flags.FlagName)
 	cmd.Flags().StringVarP(&config, Config, "c", "", "A comma-separated list of configuration to override e.g 'key1=value1,key2=value2'. (required)")
-	cmd.MarkFlagRequired(Config)
+	_ = cmd.MarkFlagRequired(Config)
 	return cmd
 }
 
