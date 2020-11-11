@@ -43,7 +43,7 @@ func runList(cmd *cobra.Command, _ []string) {
 	size := flags.GetString(FlagSize, cmd.Flags())
 
 	client := msapi.BuildClient()
-	options := msapiclient.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
+	options := msclient.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
 	response, _, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 
 	if err != nil {

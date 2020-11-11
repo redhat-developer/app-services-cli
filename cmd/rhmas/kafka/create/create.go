@@ -38,7 +38,7 @@ func runCreate(cmd *cobra.Command, _ []string) {
 
 	client := msapi.BuildClient()
 
-	kafkaRequest := msapiclient.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
+	kafkaRequest := msclient.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
 	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), true, kafkaRequest)
 
 	if err != nil {

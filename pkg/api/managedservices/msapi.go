@@ -12,9 +12,9 @@ import (
 
 // TODO refactor into separate config class
 
-func BuildClient() *msapiclient.APIClient {
+func BuildClient() *msclient.APIClient {
 
-	masCfg := msapiclient.NewConfiguration()
+	masCfg := msclient.NewConfiguration()
 	cfg, err := config.Load()
 
 	if err != nil {
@@ -51,5 +51,5 @@ func BuildClient() *msapiclient.APIClient {
 
 	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", token))
 	
-	return msapiclient.NewAPIClient(masCfg)
+	return msclient.NewAPIClient(masCfg)
 }

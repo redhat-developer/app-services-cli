@@ -71,7 +71,7 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name msapiclient --git-repo-id=${git_repo_id} --git-user-id=${git_user_id} -o ${managedservices_client_dir}
+	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name msclient --git-repo-id=${git_repo_id} --git-user-id=${git_user_id} -o ${managedservices_client_dir}
 	openapi-generator validate -i openapi/managed-services-api.yaml
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
