@@ -1,8 +1,8 @@
 package update
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 	"os"
 	"time"
 

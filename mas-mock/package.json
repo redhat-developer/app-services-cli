@@ -7,7 +7,7 @@
   "keywords": [],
   "scripts": {
     "start": "node ./src/index.js",
-    "refresh": "./scripts/pullapi.sh",
+    "refresh": "../scripts/pullapi.sh",
     "test": "jest",
     "api": "openapi-editor --file ./managed-services-api.yaml --port 10000"
   },

@@ -11,10 +11,10 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/auth"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/completion"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/logout"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
 )

@@ -2,9 +2,9 @@ package topics
 
 import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/update"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/list"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/update"
 
 	"github.com/spf13/cobra"
 )
@@ -23,9 +23,9 @@ func NewTopicsCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		create.NewCreateTopicCommand(), 
+		create.NewCreateTopicCommand(),
 		list.NewListTopicCommand(),
-		update.NewUpdateTopicCommand(), 
+		update.NewUpdateTopicCommand(),
 		delete.NewDeleteTopicCommand(),
 	)
 	return cmd

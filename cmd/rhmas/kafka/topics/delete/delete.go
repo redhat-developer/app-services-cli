@@ -1,10 +1,10 @@
 package delete
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
-	"time"
-	"os"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
+	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -26,8 +26,8 @@ func NewDeleteTopicCommand() *cobra.Command {
 }
 
 func deleteTopic(cmd *cobra.Command, _ []string) {
-	fmt.Fprintln(os.Stderr, "Deleting topic " + topicName + " ...")
+	fmt.Fprintln(os.Stderr, "Deleting topic "+topicName+" ...")
 	// Mimick operation happening by sleeping for a while
 	time.Sleep(500 * time.Millisecond)
-	fmt.Fprintln(os.Stderr, "Topic " + topicName + " deleted")
+	fmt.Fprintln(os.Stderr, "Topic "+topicName+" deleted")
 }
