@@ -9,13 +9,13 @@ import (
 
 func NewAuthGroupCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "auth",
-		Short: "Authentication and Authorization",
-		Long:  "Authentication and Authorization",
+		Use:   "authz",
+		Short: "Authorization rules",
+		Long:  "Manage Authorization rules",
 	}
 
 	// add sub-commands
-	cmd.AddCommand(authorization.NewAuthorizationCommand())
+	cmd.AddCommand(authorization.NewAuthzViewCommand())
 
 	return cmd
 }
