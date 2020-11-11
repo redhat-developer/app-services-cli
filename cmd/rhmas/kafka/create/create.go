@@ -1,10 +1,10 @@
 package create
 
 import (
-	"os"
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
 	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"

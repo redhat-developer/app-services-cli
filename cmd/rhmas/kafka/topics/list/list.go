@@ -27,7 +27,7 @@ func NewListTopicCommand() *cobra.Command {
 
 func listTopic(cmd *cobra.Command, _ []string) {
 	fmt.Fprintln(os.Stderr, "Listing topics ...")
-	
+
 	// Mimick operation happening by sleeping for a while
 	time.Sleep(500 * time.Millisecond)
 

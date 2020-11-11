@@ -1,10 +1,10 @@
 package delete
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
-	"os"
 	"context"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
+	"os"
 
 	"github.com/spf13/cobra"
 )

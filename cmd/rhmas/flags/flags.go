@@ -2,8 +2,8 @@
 package flags
 
 import (
-	"os"
 	"fmt"
+	"os"
 
 	"github.com/spf13/pflag"
 )

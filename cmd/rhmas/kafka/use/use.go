@@ -1,12 +1,12 @@
 package use
 
 import (
-	"os"
 	"context"
 	"fmt"
+	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 
 	"github.com/spf13/cobra"
 )

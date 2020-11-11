@@ -73,3 +73,23 @@ GENERATE_DOCS=true rhmas docs
 
 Aftr running the command, the documentation should be updated. If there were new commands added we need to update `sidebars.json` file. 
 with content that was printed into stdout.
+
+## Performing releases
+
+Releases can be triggered directing using github releases. 
+Before performing release please make sure that numer of actions were performed.
+
+- Run ./scripts/pullapi.sh script to make sure that CLI is using latest version of the MAS API
+- Change ./pkg/version.go that will correspond to the semver
+- Push all required changes to main branch
+
+After Go to github releases and create new release.
+
+### Releasing snapshot version
+
+For testing purposes we should always release snapshot version that will not be used by end users.
+To release snapshot version please execute
+
+```
+goreleaser --snapshot --rm-dist
+```

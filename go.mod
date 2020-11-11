@@ -1,6 +1,6 @@
 module github.com/bf2fc6cc711aee1a0c2a/cli
 
-go 1.12
+go 1.15
 
 replace github.com/bf2fc6cc711aee1a0c2a/cli/client/mas => ./client/mas
 

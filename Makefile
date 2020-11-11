@@ -80,10 +80,6 @@ format:
 .PHONY: format
 
 format/check:
-	test -z $(gofmt -l ./cmd)
+	test -z $(gofmt -l ./cmd ./pkg)
 .PHONY: format/check
-
-
-
-
 

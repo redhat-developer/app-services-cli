@@ -1,9 +1,9 @@
 package credentials
 
 import (
-	"os"
 	"fmt"
 	"io/ioutil"
+	"os"
 
 	"github.com/spf13/cobra"
 )

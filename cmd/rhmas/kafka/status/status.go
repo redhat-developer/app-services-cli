@@ -1,13 +1,13 @@
 package status
 
 import (
-	"os"
-	"encoding/json"
 	"context"
+	"encoding/json"
 	"fmt"
+	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
 )
 
