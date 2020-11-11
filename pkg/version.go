@@ -1,4 +1,4 @@
-
+package version
 
 /**
  * Version for the cli used in various places.

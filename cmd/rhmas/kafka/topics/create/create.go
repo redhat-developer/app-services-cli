@@ -1,10 +1,10 @@
 package create
 
 import (
-	"time"
+	"fmt"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 	"os"
-	"fmt"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -40,8 +40,8 @@ func NewCreateTopicCommand() *cobra.Command {
 }
 
 func createTopic(cmd *cobra.Command, _ []string) {
-	fmt.Fprintln(os.Stderr, "Creating topic " + topicName + " ...")
+	fmt.Fprintln(os.Stderr, "Creating topic "+topicName+" ...")
 	// Mimick operation happening by sleeping for a while
 	time.Sleep(500 * time.Millisecond)
-	fmt.Fprintln(os.Stderr, "Topic " + topicName + " created")
+	fmt.Fprintln(os.Stderr, "Topic "+topicName+" created")
 }

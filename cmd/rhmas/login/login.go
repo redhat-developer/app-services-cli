@@ -3,8 +3,8 @@
 package login
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
