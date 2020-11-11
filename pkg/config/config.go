@@ -6,12 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/mitchellh/go-homedir"
-
-	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
 // Config is the type used to track the config of the client
@@ -116,93 +112,4 @@ func Location() (path string, err error) {
 		path = filepath.Join(home, ".rhmascli.json")
 	}
 	return path, nil
-}
-
-// Connection creates a connection using this configuration.
-func (c *Config) Connection() (connection *sdk.Connection, err error) {
-	if err != nil {
-		return
-	}
-
-	builder := sdk.NewConnectionBuilder()
-	if c.TokenURL != "" {
-		builder.TokenURL(c.TokenURL)
-	}
-
-	// TODO read these from CLI
-	builder.Client(sdk.DefaultClientID, sdk.DefaultClientSecret)
-	builder.Scopes(sdk.DefaultScopes...)
-	builder.URL(c.URL)
-
-	tokens := make([]string, 0, 2)
-	if c.AccessToken != "" {
-		tokens = append(tokens, c.AccessToken)
-	}
-	if c.RefreshToken != "" {
-		tokens = append(tokens, c.RefreshToken)
-	}
-	if len(tokens) > 0 {
-		builder.Tokens(tokens...)
-	}
-	// disable TLS certification verification for now.
-	builder.Insecure(true)
-
-	// Create the connection:
-	connection, err = builder.Build()
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-// CheckTokenValidity checks if the configuration contains either credentials or tokens that haven't expired, so
-// that it can be used to perform authenticated requests.
-func (c *Config) CheckTokenValidity() (tokenIsValid bool, err error) {
-	now := time.Now()
-	if c.AccessToken != "" {
-		var expires bool
-		var left time.Duration
-		var accessToken *jwt.Token
-		accessToken, err = parseToken(c.AccessToken)
-		if err != nil {
-			return
-		}
-		expires, left, err = sdk.GetTokenExpiry(accessToken, now)
-		if err != nil {
-			return
-		}
-		if !expires || left > 5*time.Second {
-			tokenIsValid = true
-			return
-		}
-	}
-	if c.RefreshToken != "" {
-		var expires bool
-		var left time.Duration
-		var refreshToken *jwt.Token
-		refreshToken, err = parseToken(c.RefreshToken)
-		if err != nil {
-			return
-		}
-		expires, left, err = sdk.GetTokenExpiry(refreshToken, now)
-		if err != nil {
-			return
-		}
-		if !expires || left > 10*time.Second {
-			tokenIsValid = true
-			return
-		}
-	}
-	return
-}
-
-func parseToken(textToken string) (token *jwt.Token, err error) {
-	parser := new(jwt.Parser)
-	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
-	if err != nil {
-		err = fmt.Errorf("can't parse token: %v", err)
-		return
-	}
-	return token, nil
 }
