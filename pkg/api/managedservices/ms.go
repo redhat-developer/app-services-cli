@@ -1,5 +1,5 @@
-// Package msapi is the Managed Services API client
-package msapi
+// Package ms is the Managed Services API client
+package ms
 
 import (
 	"fmt"
@@ -12,9 +12,9 @@ import (
 
 // TODO refactor into separate config class
 
-func BuildClient() *msclient.APIClient {
+func BuildClient() *msapi.APIClient {
 
-	masCfg := msclient.NewConfiguration()
+	masCfg := msapi.NewConfiguration()
 	cfg, err := config.Load()
 
 	if err != nil {
@@ -51,5 +51,5 @@ func BuildClient() *msclient.APIClient {
 
 	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", token))
 	
-	return msclient.NewAPIClient(masCfg)
+	return msapi.NewAPIClient(masCfg)
 }

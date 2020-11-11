@@ -34,9 +34,9 @@ func runStatus(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := msapi.BuildClient()
+	client := ms.BuildClient()
 
-	res, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
+	res, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error retrieving Kafka cluster \"%v\": %v", id, err)
 		return

@@ -1,4 +1,4 @@
-# Go API client for msclient
+# Go API client for msapi
 
 Managed Service API
 
@@ -23,7 +23,7 @@ go get github.com/antihax/optional
 Put the package under your project folder and add the following in import:
 
 ```golang
-import "./msclient"
+import "./msapi"
 ```
 
 ## Documentation for API Endpoints
@@ -32,10 +32,10 @@ All URIs are relative to *https://api.openshift.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**ApiManagedServicesApiV1KafkasGet**](docs/DefaultApi.md#apimanagedservicesapiv1kafkasget) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
-*DefaultApi* | [**ApiManagedServicesApiV1KafkasIdDelete**](docs/DefaultApi.md#apimanagedservicesapiv1kafkasiddelete) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
-*DefaultApi* | [**ApiManagedServicesApiV1KafkasIdGet**](docs/DefaultApi.md#apimanagedservicesapiv1kafkasidget) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
-*DefaultApi* | [**ApiManagedServicesApiV1KafkasPost**](docs/DefaultApi.md#apimanagedservicesapiv1kafkaspost) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
+*DefaultApi* | [**CreateKafka**](docs/DefaultApi.md#createkafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
+*DefaultApi* | [**DeleteKafkaById**](docs/DefaultApi.md#deletekafkabyid) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
+*DefaultApi* | [**GetKafkaById**](docs/DefaultApi.md#getkafkabyid) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
+*DefaultApi* | [**ListKafkas**](docs/DefaultApi.md#listkafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
 
 
 ## Documentation For Models

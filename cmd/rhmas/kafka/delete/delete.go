@@ -32,9 +32,9 @@ func runDelete(cmd *cobra.Command, args []string) {
 		fmt.Fprintln(os.Stderr, "No Kafka cluster selected")
 	}
 
-	client := msapi.BuildClient()
+	client := ms.BuildClient()
 
-	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdDelete(context.Background(), id)
+	response, status, err := client.DefaultApi.DeleteKafkaById(context.Background(), id)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error while deleting Kafka cluster: %v", err)

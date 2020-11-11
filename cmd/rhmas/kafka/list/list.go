@@ -42,9 +42,9 @@ func runList(cmd *cobra.Command, _ []string) {
 	page := flags.GetString(FlagPage, cmd.Flags())
 	size := flags.GetString(FlagSize, cmd.Flags())
 
-	client := msapi.BuildClient()
-	options := msclient.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
-	response, _, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
+	client := ms.BuildClient()
+	options := msapi.ListKafkasOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
+	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", err)

@@ -2,11 +2,8 @@ module github.com/bf2fc6cc711aee1a0c2a/cli
 
 go 1.15
 
-replace github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client => ./pkg/api/managedservices/client
-
 require (
 	github.com/antihax/optional v1.0.0
-	github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client v0.0.0-00010101000000-000000000000
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect

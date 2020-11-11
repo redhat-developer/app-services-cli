@@ -15,6 +15,7 @@ servers:
 paths:
   /api/managed-services-api/v1/kafkas/{id}:
     delete:
+      operationId: deleteKafkaById
       parameters:
       - description: The id of record
         explode: false
@@ -58,8 +59,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Unexpected error occurred
+      security:
+      - Bearer: []
       summary: Delete a kafka request by id
     get:
+      operationId: getKafkaById
       parameters:
       - description: The id of record
         explode: false
@@ -108,6 +112,7 @@ paths:
       summary: Get a kafka request by id
   /api/managed-services-api/v1/kafkas:
     get:
+      operationId: listKafkas
       parameters:
       - description: Page index
         examples:
@@ -160,6 +165,7 @@ paths:
       - Bearer: []
       summary: Returns a list of Kafka requests
     post:
+      operationId: createKafka
       parameters:
       - description: Perform the action in an asynchronous manner
         explode: true
@@ -269,7 +275,7 @@ components:
         href: /api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
         status: complete
         cloud_provider: aws
-        multi_az: "false"
+        multi_az: false
         region: eu-west-1
         owner: api_kafka_service
         name: serviceapi

@@ -3,8 +3,6 @@ SHELL = bash
 
 # The details of the application:
 binary:=rhmas
-git_user_id=bf2fc6cc711aee1a0c2a
-git_repo_id=cli
 
 managedservices_client_dir=./pkg/api/managedservices/client
 
@@ -71,7 +69,7 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name msclient --git-repo-id=${git_repo_id} --git-user-id=${git_user_id} -o ${managedservices_client_dir}
+	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name msapi --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
 	openapi-generator validate -i openapi/managed-services-api.yaml
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
