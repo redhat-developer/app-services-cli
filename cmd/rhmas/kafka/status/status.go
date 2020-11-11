@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +34,7 @@ func runStatus(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := rhmas.BuildClient()
+	client := msapi.BuildClient()
 
 	res, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
 	if err != nil {

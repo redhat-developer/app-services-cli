@@ -1,19 +1,20 @@
-package rhmas
+// Package msapi is the Managed Services API client
+package msapi
 
 import (
 	"fmt"
 	"os"
 	"strings"
 
-	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
 // TODO refactor into separate config class
 
-func BuildClient() *mas.APIClient {
+func BuildClient() *msapiclient.APIClient {
 
-	masCfg := mas.NewConfiguration()
+	masCfg := msapiclient.NewConfiguration()
 	cfg, err := config.Load()
 
 	if err != nil {
@@ -49,6 +50,6 @@ func BuildClient() *mas.APIClient {
 	}
 
 	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", token))
-	client := mas.NewAPIClient(masCfg)
-	return client
+	
+	return msapiclient.NewAPIClient(masCfg)
 }

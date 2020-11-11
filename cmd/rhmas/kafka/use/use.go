@@ -1,12 +1,12 @@
 package use
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"os"
 	"context"
 	"fmt"
-	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 
 	"github.com/spf13/cobra"
 )
@@ -30,7 +30,7 @@ func runUse(cmd *cobra.Command, args []string) {
 
 	id := args[0]
 
-	client := rhmas.BuildClient()
+	client := msapi.BuildClient()
 
 	res, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
 	if err != nil {

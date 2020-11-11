@@ -1,18 +1,18 @@
 package list
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/antihax/optional"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
 
-	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
 )
 
 const (
@@ -42,8 +42,8 @@ func runList(cmd *cobra.Command, _ []string) {
 	page := flags.GetString(FlagPage, cmd.Flags())
 	size := flags.GetString(FlagSize, cmd.Flags())
 
-	client := rhmas.BuildClient()
-	options := mas.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
+	client := msapi.BuildClient()
+	options := msapiclient.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
 	response, _, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 
 	if err != nil {
