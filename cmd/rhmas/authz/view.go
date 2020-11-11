@@ -1,6 +1,4 @@
-// Package cluster contains commands for interacting with cluster logic of the service directly instead of through the
-// REST API exposed via the serve command.
-package authorization
+package authz
 
 import (
 	"fmt"
@@ -14,12 +12,12 @@ func NewAuthzViewCommand() *cobra.Command {
 		Use:   "view",
 		Short: "View authorization rules",
 		Long:  "View authorization rules",
-		Run:   runAuthz,
+		Run:   runAuthzView,
 	}
 
 	return cmd
 }
 
-func runAuthz(cmd *cobra.Command, _ []string) {
+func runAuthzView(cmd *cobra.Command, _ []string) {
 	fmt.Fprintln(os.Stderr, "No available authorization rules")
 }
