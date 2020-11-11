@@ -1,15 +1,15 @@
 package list
 
 import (
-	"os"
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/antihax/optional"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
 
 	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
@@ -44,28 +44,32 @@ func runList(cmd *cobra.Command, _ []string) {
 
 	client := rhmas.BuildClient()
 	options := mas.ApiManagedServicesApiV1KafkasGetOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
-	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
+	response, _, err := client.DefaultApi.ApiManagedServicesApiV1KafkasGet(context.Background(), &options)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v", err)
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", err)
+		os.Exit(1)
+	}
+
+	if response.Size == 0 {
+		fmt.Fprintln(os.Stderr, "No Kafka clusters found.")
 		return
 	}
 
-	if status.StatusCode == 200 {
-		jsonResponse, _ := json.Marshal(response)
+	jsonResponse, _ := json.Marshal(response)
 
-		var kafkaList kafka.ClusterList
-		if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
-			fmt.Fprintf(os.Stderr, "Could not format Kakfa cluster to table: %v", err)
-			outputFormat = "json"
-		}
+	var kafkaList kafka.ClusterList
 
-		switch outputFormat {
-		case "json":
-			data, _ := json.MarshalIndent(kafkaList.Items, "", "  ")
-			fmt.Print(string(data))
-		default:
-			kafka.PrintToTable(kafkaList.Items)
-		}
+	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
+		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table: %v", err)
+		outputFormat = "json"
+	}
+
+	switch outputFormat {
+	case "json":
+		data, _ := json.MarshalIndent(kafkaList.Items, "", "  ")
+		fmt.Print(string(data))
+	default:
+		kafka.PrintToTable(kafkaList.Items)
 	}
 }
