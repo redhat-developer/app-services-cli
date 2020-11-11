@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra/doc"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/auth"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/authz"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/completion"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka"
@@ -33,7 +33,7 @@ func main() {
 	rootCmd.AddCommand(login.NewLoginCommand())
 	rootCmd.AddCommand(logout.NewLogoutCommand())
 	rootCmd.AddCommand(kafka.NewKafkaCommand())
-	rootCmd.AddCommand(auth.NewAuthGroupCommand())
+	rootCmd.AddCommand(authz.NewAuthGroupCommand())
 	rootCmd.AddCommand(docs.NewDocsCommand())
 	rootCmd.AddCommand(completion.CompletionCmd)
 
