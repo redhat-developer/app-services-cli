@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"os"
 
-	mas "github.com/bf2fc6cc711aee1a0c2a/cli/client/mas"
 	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/spf13/cobra"
 )
 
@@ -36,10 +36,10 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	provider := commonflags.MustGetDefinedString(flags.FlagProvider, cmd.Flags())
 	multiAZ := commonflags.MustGetBool(flags.FlagMultiAZ, cmd.Flags())
 
-	client := rhmas.BuildClient()
+	client := ms.BuildClient()
 
-	kafkaRequest := mas.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
-	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasPost(context.Background(), true, kafkaRequest)
+	kafkaRequest := msapi.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
+	response, status, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error while requesting new Kafka cluster: %v", err)

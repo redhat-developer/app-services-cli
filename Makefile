@@ -4,6 +4,7 @@ SHELL = bash
 # The details of the application:
 binary:=rhmas
 
+managedservices_client_dir=./pkg/api/managedservices/client
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -18,7 +19,7 @@ help:
 	@echo "make binary               	compile binaries"
 	@echo "make test                 	run  tests"
 	@echo "make format             		format files"
-	@echo "make openapi/pull			pull openapi definition"
+	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
 	@echo "make clean                	delete temporary generated files"
@@ -31,7 +32,7 @@ help:
 verify:
 	go vet \
 		./cmd/... \
-		./client/... \
+		./pkg/... \
 		./test/...
 .PHONY: verify
 
@@ -68,9 +69,9 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go -o client/mas
+	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name msapi --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
 	openapi-generator validate -i openapi/managed-services-api.yaml
-	gofmt -w client/mas
+	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
 
 # clean up code and dependencies

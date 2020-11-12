@@ -4,18 +4,18 @@ All URIs are relative to *https://api.openshift.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ApiManagedServicesApiV1KafkasGet**](DefaultApi.md#ApiManagedServicesApiV1KafkasGet) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
-[**ApiManagedServicesApiV1KafkasIdDelete**](DefaultApi.md#ApiManagedServicesApiV1KafkasIdDelete) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
-[**ApiManagedServicesApiV1KafkasIdGet**](DefaultApi.md#ApiManagedServicesApiV1KafkasIdGet) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
-[**ApiManagedServicesApiV1KafkasPost**](DefaultApi.md#ApiManagedServicesApiV1KafkasPost) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
+[**CreateKafka**](DefaultApi.md#CreateKafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
+[**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
+[**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
+[**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
 
 
 
-## ApiManagedServicesApiV1KafkasGet
+## CreateKafka
 
-> KafkaRequestList ApiManagedServicesApiV1KafkasGet(ctx, optional)
+> KafkaRequest CreateKafka(ctx, async, kafkaRequest)
 
-Returns a list of Kafka requests
+Create a new kafka Request
 
 ### Required Parameters
 
@@ -23,21 +23,12 @@ Returns a list of Kafka requests
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***ApiManagedServicesApiV1KafkasGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-
-Optional parameters are passed through a pointer to a ApiManagedServicesApiV1KafkasGetOpts struct
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **page** | **optional.String**| Page index | 
- **size** | **optional.String**| Number of items in each page | 
+**async** | **bool**| Perform the action in an asynchronous manner | 
+**kafkaRequest** | [**KafkaRequest**](KafkaRequest.md)| Kafka data | 
 
 ### Return type
 
-[**KafkaRequestList**](KafkaRequestList.md)
+[**KafkaRequest**](KafkaRequest.md)
 
 ### Authorization
 
@@ -45,7 +36,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -53,9 +44,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ApiManagedServicesApiV1KafkasIdDelete
+## DeleteKafkaById
 
-> Error ApiManagedServicesApiV1KafkasIdDelete(ctx, id)
+> Error DeleteKafkaById(ctx, id)
 
 Delete a kafka request by id
 
@@ -73,7 +64,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
@@ -85,9 +76,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## ApiManagedServicesApiV1KafkasIdGet
+## GetKafkaById
 
-> KafkaRequest ApiManagedServicesApiV1KafkasIdGet(ctx, id)
+> KafkaRequest GetKafkaById(ctx, id)
 
 Get a kafka request by id
 
@@ -117,11 +108,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ApiManagedServicesApiV1KafkasPost
+## ListKafkas
 
-> KafkaRequest ApiManagedServicesApiV1KafkasPost(ctx, async, kafkaRequest)
+> KafkaRequestList ListKafkas(ctx, optional)
 
-Create a new kafka Request
+Returns a list of Kafka requests
 
 ### Required Parameters
 
@@ -129,12 +120,21 @@ Create a new kafka Request
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**async** | **bool**| Perform the action in an asynchronous manner | 
-**kafkaRequest** | [**KafkaRequest**](KafkaRequest.md)| Kafka data | 
+ **optional** | ***ListKafkasOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+
+Optional parameters are passed through a pointer to a ListKafkasOpts struct
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **optional.String**| Page index | 
+ **size** | **optional.String**| Number of items in each page | 
 
 ### Return type
 
-[**KafkaRequest**](KafkaRequest.md)
+[**KafkaRequestList**](KafkaRequestList.md)
 
 ### Authorization
 
@@ -142,7 +142,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

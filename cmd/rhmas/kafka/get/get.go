@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/rhmas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
 )
@@ -35,9 +36,9 @@ func runGet(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := rhmas.BuildClient()
+	client := ms.BuildClient()
 
-	response, status, err := client.DefaultApi.ApiManagedServicesApiV1KafkasIdGet(context.Background(), id)
+	response, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v", err)
