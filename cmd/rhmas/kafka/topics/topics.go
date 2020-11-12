@@ -1,12 +1,12 @@
 package topics
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/list"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics/update"
-
-	"github.com/spf13/cobra"
 )
 
 const (

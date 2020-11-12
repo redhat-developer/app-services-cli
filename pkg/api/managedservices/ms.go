@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
@@ -50,6 +50,6 @@ func BuildClient() *msapi.APIClient {
 	}
 
 	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", token))
-	
+
 	return msapi.NewAPIClient(masCfg)
 }

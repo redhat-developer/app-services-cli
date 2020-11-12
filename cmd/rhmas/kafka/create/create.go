@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+
 	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
-	"github.com/spf13/cobra"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.

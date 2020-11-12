@@ -10,7 +10,6 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/mitchellh/go-homedir"
-
 	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
@@ -46,11 +45,11 @@ func Save(cfg *Config) error {
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
-		return fmt.Errorf("can't marshal config: %v", err)
+		return fmt.Errorf("can't marshal config: %w", err)
 	}
 	err = ioutil.WriteFile(file, data, 0600)
 	if err != nil {
-		return fmt.Errorf("can't write file '%s': %v", file, err)
+		return fmt.Errorf("can't write file '%s': %w", file, err)
 	}
 	return nil
 }
@@ -69,19 +68,19 @@ func Load() (cfg *Config, err error) {
 		return
 	}
 	if err != nil {
-		err = fmt.Errorf("can't check if config file '%s' exists: %v", file, err)
+		err = fmt.Errorf("can't check if config file '%s' exists: %w", file, err)
 		return
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		err = fmt.Errorf("can't read config file '%s': %v", file, err)
+		err = fmt.Errorf("can't read config file '%s': %w", file, err)
 		return
 	}
 	cfg = new(Config)
 	err = json.Unmarshal(data, cfg)
 	if err != nil {
-		err = fmt.Errorf("can't parse config file '%s': %v", file, err)
+		err = fmt.Errorf("can't parse config file '%s': %w", file, err)
 		return
 	}
 	return
@@ -201,7 +200,7 @@ func parseToken(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
 	if err != nil {
-		err = fmt.Errorf("can't parse token: %v", err)
+		err = fmt.Errorf("can't parse token: %w", err)
 		return
 	}
 	return token, nil

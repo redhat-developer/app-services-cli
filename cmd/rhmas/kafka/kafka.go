@@ -3,6 +3,8 @@
 package kafka
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/credentials"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/delete"
@@ -11,7 +13,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/status"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/topics"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/use"
-	"github.com/spf13/cobra"
 )
 
 const (

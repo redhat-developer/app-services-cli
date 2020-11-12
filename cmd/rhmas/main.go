@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/authz"
@@ -16,7 +17,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/logout"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"github.com/spf13/cobra"
 )
 
 var (
@@ -82,9 +82,10 @@ func generateDocumentation(rootCommand *cobra.Command) {
 		name := filepath.Base(filename)
 		base := strings.TrimSuffix(name, path.Ext(name))
 		fmt.Printf("\"commands/%s\",", base)
-		finalName := strings.Replace(base, "_", " ", -1)
+		finalName := strings.ReplaceAll(base, "_", " ")
 		return fmt.Sprintf(fmTemplate, base, finalName)
 	}
+
 	fmt.Print("\n")
 	linkHandler := func(s string) string { return s }
 

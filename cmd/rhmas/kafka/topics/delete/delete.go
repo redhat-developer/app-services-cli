@@ -2,11 +2,12 @@ package delete
 
 import (
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 	"os"
 	"time"
 
 	"github.com/spf13/cobra"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 )
 
 var topicName string

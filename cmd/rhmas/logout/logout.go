@@ -4,9 +4,11 @@ package logout
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"github.com/spf13/cobra"
 )
 
 // NewLogoutCommand gets the command that's logs the current logged in user
@@ -27,5 +29,5 @@ func runLogout(cmd *cobra.Command, _ []string) {
 		return
 	}
 
-	// fmt.Errorf("Unable to logout %v", err)
+	fmt.Fprintf(os.Stderr, "Unable to logout %v", err)
 }

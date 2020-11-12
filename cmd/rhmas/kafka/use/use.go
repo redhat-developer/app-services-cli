@@ -1,14 +1,14 @@
 package use
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"os"
 	"context"
 	"fmt"
-
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"os"
 
 	"github.com/spf13/cobra"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
 func NewUseCommand() *cobra.Command {
