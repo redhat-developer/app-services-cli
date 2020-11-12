@@ -21,7 +21,7 @@ rhmas kafka create [flags]
       --multi-az          Determines if cluster should be provisioned across multiple Availability Zones
       --name string       Name of Kafka cluster
       --provider string   Cloud provider ID [aws] (default "aws")
-      --region string     Cloud Provider Region ID (eu-west-1) (default "eu-west-1")
+      --region string     Cloud Provider Region ID (us-east-1) (default "us-east-1")
 ```
 
 ### SEE ALSO
