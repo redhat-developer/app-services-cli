@@ -61,7 +61,7 @@ make binary
 When working with cmd we can execute commands using go run
 
 ```
-go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
+go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
 ```
 
 ## Generating documentation
@@ -71,7 +71,7 @@ You can generate the latest commands documentation by executing the CLI with the
 GENERATE_DOCS=true rhmas docs
 ```
 
-Aftr running the command, the documentation should be updated. If there were new commands added we need to update `sidebars.json` file. 
+After running the command, the documentation should be updated. If there were new commands added we need to update `sidebars.json` file
 with content that was printed into stdout.
 
 ## Performing releases
@@ -83,7 +83,7 @@ Before performing release please make sure that numer of actions were performed.
 - Change ./pkg/version.go that will correspond to the semver
 - Push all required changes to main branch
 
-After Go to github releases and create new release.
+After that, go to github releases and create new release.
 
 ### Releasing snapshot version
 
