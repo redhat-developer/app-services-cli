@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 	"github.com/spf13/cobra"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 )
 
 var flags struct {

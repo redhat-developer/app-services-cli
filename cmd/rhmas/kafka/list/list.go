@@ -1,18 +1,18 @@
 package list
 
 import (
-	"os"
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/antihax/optional"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
 const (

@@ -53,13 +53,14 @@ func runCredentials(cmd *cobra.Command, _ []string) {
 	var propertyFormat string
 	var fileName string
 
-	if outputFlagValue == "properties" {
+	switch outputFlagValue {
+	case "properties":
 		propertyFormat = mockedProperties
 		fileName = "kafka.properties"
-	} else if outputFlagValue == "kafka" {
+	case "kafka":
 		propertyFormat = mockedKafka
 		fileName = "kafka.properties"
-	} else if outputFlagValue == "json" {
+	case "kafka.properties":
 		propertyFormat = mockedJSON
 		fileName = "credentials.json"
 	}

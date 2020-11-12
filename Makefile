@@ -39,7 +39,7 @@ verify:
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint 
 # https://golangci-lint.run/usage/install/
 lint:
-	golangci-lint run cmd/... client/... pkg/...
+	golangci-lint run cmd/... pkg/...
 .PHONY: lint
 
 # Build binaries
