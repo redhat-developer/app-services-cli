@@ -61,7 +61,7 @@ make binary
 When working with cmd we can execute commands using go run
 
 ```
-go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=eu-west-1
+go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
 ```
 
 ## Generating documentation
