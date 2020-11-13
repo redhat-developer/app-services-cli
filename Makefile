@@ -14,7 +14,6 @@ help:
 	@echo ""
 	@echo "OpenShift Managed Services CLI"
 	@echo ""
-	@echo "make verify               	verify source code"
 	@echo "make lint                 	run golangci-lint"
 	@echo "make binary               	compile binaries"
 	@echo "make test                 	run  tests"
@@ -22,19 +21,9 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
-	@echo "make clean                	delete temporary generated files"
 						
 	@echo "$(fake)"
 .PHONY: help
-
-
-# Verifies that source passes standard checks.
-verify:
-	go vet \
-		./cmd/... \
-		./pkg/... \
-		./test/...
-.PHONY: verify
 
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint 
 # https://golangci-lint.run/usage/install/
@@ -57,7 +46,6 @@ test: install
 	go test ./test/integration
 .PHONY: test
 
-
 openapi/pull:
 	wget -P ./openapi -O managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
 .PHONY: openapi/pull
@@ -74,13 +62,19 @@ openapi/generate:
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
 
+managedservices/mock:
+	cd mas-mock; yarn; yarn start
+
 # clean up code and dependencies
 format:
 	@go mod tidy
-	@gofmt -w `find . -type f -name '*.go' -not -path "./vendor/*"`
+	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 
-format/check:
-	test -z $(gofmt -l ./cmd ./pkg)
-.PHONY: format/check
+docs:
+	cd docs && yarn && yarn start
+.PHONY: docs/open
 
+docs/generate:
+	GENERATE_DOCS=true go run ./cmd/rhmas
+.PHONY: docs/generate

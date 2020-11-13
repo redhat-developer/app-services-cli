@@ -64,6 +64,7 @@ linters:
   enable:
     - funlen
     - govet
+    - gofmt
     - gocritic
     - misspell
     - golint

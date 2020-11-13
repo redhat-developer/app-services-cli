@@ -85,7 +85,7 @@ module.exports = {
       {
         docsSideNavCollapsible: true,
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve('./sidebars.json'),
 
           // Please change this to your repo.
           editUrl:

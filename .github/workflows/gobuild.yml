@@ -22,10 +22,6 @@ jobs:
         version: v1.29
         only-new-issues: true
         # args: --issues-exit-code=0
-    - name: Check if formatted
-      run: make format/check
-    - name: Check passes golang standards
-      run: make verify
     - name: Build
       run: make binary
     - name: Test
