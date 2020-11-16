@@ -22,16 +22,18 @@ You can run the CLI commands files directly with `go run`. All commands and subc
 go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
 ```
 
-### `make lint`
+### Development commands
+
+#### `make lint`
 
 Runs a linter on the Go source code. Configuration can be found in `.golangci.yaml`.
 There are a number of lint rules enabled. You can find a full list of rules [here](https://golangci-lint.run/usage/linters/) with usage and configuration guides.
 
-### `make build`
+#### `make build`
 
 Builds a binary in the `$GOPATH/bin` directory. Can be executed globally as it is in your `$PATH`.
 
-### `make binary`
+#### `make binary`
 
 Builds an executable binary `rhmas` of the CLI in the project root. Executable only inside the workspace.
 
@@ -39,7 +41,7 @@ Builds an executable binary `rhmas` of the CLI in the project root. Executable o
 
 Runs unit and integration tests.
 
-### `make format`
+#### `make format`
 
 Formats source code.
 
@@ -47,17 +49,19 @@ Formats source code.
 
 The CLI communicates with the Managed Services API. For this there is a generated API client in `./pkg/api/managedservices/client`. 
 
+### Updating the API client
+
 Please ensure you have the latest generated version. Follow the steps below to update the Managed Services API version.
 
-### `make openapi/pull`
+#### `make openapi/pull`
 
 Saves the latest version of the Managed Services OpenAPI specification file to the `./openapi` directory.
 
-### `make openapi/validate`
+#### `make openapi/validate`
 
 Validates the Managed Services OpenAPI specification file.
 
-### `make openapi/generate`
+#### `make openapi/generate`
 
 Generates a Golang API client in `./pkg/api/managedservices/client`.
 
@@ -70,6 +74,20 @@ The repo has a local mocked version of the Managed Services API in `./mas-mock`.
 ### `make managedservices/mock-server`
 
 Starts the mocked Managed Services API server at [`http://localhost:8000`](http://localhost:8000).
+
+### Logging in
+
+To log in to the mock API, run `rhmas login against the local server` with your authentication token:
+
+```shell
+rhmas login --url http://localhost:8000 --token $TOKEN
+```
+
+If you don't have an authentication token, you can still use a faked one, provided it has the correct payload:
+
+```shell
+export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4NDgzMTAyLTRhYzAtNDQ0Mi1hZjMwLTAwYWExMDdjZDc5MCJ9.eyJpYXQiOjE2MDQ1OTAzNDAsImp0aSI6ImNjZjg1MmM5LWI5YWEtNDE3Ny1hYmU0LWZkYWU0NmZmNmIxMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInN1YiI6ImY6LTMzMGVkMmRiLWEwMWUtNDI2OC04ZTkzLTE5ZjhmOGM2YTUxYzpkZXZlbG9wZXIiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoiYXBpLXNlcnZpY2VzIiwibm9uY2UiOiI5OTBjOTI1NS0xNTI3LTRiMTItOTM5OS02YWM2ZGZkMDJmZWQiLCJzZXNzaW9uX3N0YXRlIjoiYTY4Y2U1ZjktZTBiNi00MTc0LTg1YWItMDdmNzBkOGYxZmU2Iiwic2NvcGUiOiJvcGVuaWQgb2ZmbGluZV9hY2Nlc3MifQ.WTfFifDGnPkJX-IQSbzPWRhBKE7Gq5E6SKq3e70jbNc"
+```
 
 ## Documentation
 

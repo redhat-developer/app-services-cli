@@ -1,13 +1,10 @@
 # RHMAS CLI
 
-This repository contains prototypes for CLI, Operator and many other artifacts used by the Developer Experience team.
+Repository for the Red Hat Managed Application Services CLI.
 
-## Repository structure
+## Downloading CLI
 
-- (`./cmd`, `./pkg`) - CLI for managed-services-api written in Golang
-- (`./pkg/api/managedservices/client`) - Managed Services API client written used in the CLI.
-- (`./mas-mock`) - Mock server for Managed Services API (used only to demo flows an extra cases)
-- `./website` - documentation for the CLI
+Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to download the latest release for your operating system.
 
 ## Website
 
