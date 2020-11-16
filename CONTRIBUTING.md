@@ -65,9 +65,13 @@ Validates the Managed Services OpenAPI specification file.
 
 Generates a Golang API client in `./pkg/api/managedservices/client`.
 
-### Mock API
+## Mock API
 
 The repo has a local mocked version of the Managed Services API in `./mas-mock`.
+To work and test CLI locally please follow the mock readme and then login into cli using dev profile:
+
+> rhmas login --url=dev --token=mock-token
+
 
 > The mock API can become outdated from the current state of the Managed Services API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
 
