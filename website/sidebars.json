@@ -1,11 +1,14 @@
-module.exports = {
-  rhmas: {
-    "Getting Started": ["introduction", "commands"],
-    Features: ["placeholder"],
-    Commands: [
-      "commands/rhmas_auth_autorization",
-      "commands/rhmas_auth",
+{
+  "rhmas": {
+    "Getting Started": [
+      "introduction",
+      "commands"
+    ],
+    "Commands": [
+      "commands/rhmas_authz_view",
+      "commands/rhmas_authz",
       "commands/rhmas_completion",
+      "commands/rhmas_docs",
       "commands/rhmas_kafka_create",
       "commands/rhmas_kafka_credentials",
       "commands/rhmas_kafka_delete",
@@ -21,8 +24,7 @@ module.exports = {
       "commands/rhmas_kafka",
       "commands/rhmas_login",
       "commands/rhmas_logout",
-      "commands/rhmas",
-    ],
-    Reference: ["architecture", "sdkref"],
-  },
-};
+      "commands/rhmas"
+    ]
+  }
+}
