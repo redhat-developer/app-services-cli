@@ -2,11 +2,31 @@
 
 Repository for the Red Hat Managed Application Services CLI.
 
-## Downloading CLI
+## Installing CLI
 
 Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to download the latest release for your operating system.
 
+## Getting Started
+
+1. Login to service using cloud.redhat.com token
+
+```
+rhmas login --token 
+```
+
+2. Use available Kafka commands
+
+```
+rhmas kafka
+```
+
+## Documentation
+
+[Documentation](./CONTRIBUTING.md) 
+
 ## Website
+
+> NOTE: Website is not published due to limitation of the private repositories.
 
 To view the website for this repository, run `make docs/open`. The website will open at [`http://localhost:3000`](http://localhost:3000).
 
