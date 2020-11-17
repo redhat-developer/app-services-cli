@@ -28,7 +28,7 @@ rhmas kafka
 
 > NOTE: Website is not published due to limitation of the private repositories.
 
-To view the website for this repository, run `make docs/open`. The website will open at [`http://localhost:3000`](http://localhost:3000).
+To view the website for this repository, run `make docs`. The website will open at [`http://localhost:3000`](http://localhost:3000).
 
 ## Contributing
 
