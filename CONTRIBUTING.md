@@ -29,7 +29,7 @@ go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --r
 Runs a linter on the Go source code. Configuration can be found in `.golangci.yaml`.
 There are a number of lint rules enabled. You can find a full list of rules [here](https://golangci-lint.run/usage/linters/) with usage and configuration guides.
 
-#### `make build`
+#### `make install`
 
 Builds a binary in the `$GOPATH/bin` directory. Can be executed globally as it is in your `$PATH`.
 
