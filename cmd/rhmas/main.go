@@ -7,44 +7,28 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
-
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/authz"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/completion"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/docs"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/login"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/logout"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
 var (
-	rootCmd = &cobra.Command{
-		Use:  "rhmas cli",
-		Long: "rhmas:  Manage Red Hat Managed Services",
-	}
 	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 )
 
 func main() {
 	cobra.OnInitialize(initConfig)
-
-	rootCmd.AddCommand(login.NewLoginCommand())
-	rootCmd.AddCommand(logout.NewLogoutCommand())
-	rootCmd.AddCommand(kafka.NewKafkaCommand())
-	rootCmd.AddCommand(authz.NewAuthGroupCommand())
-	rootCmd.AddCommand(docs.NewDocsCommand())
-	rootCmd.AddCommand(completion.CompletionCmd)
-
-	rootCmd.Version = "0.1.0"
-
-	if generateDocs {
-		generateDocumentation(rootCmd)
-	}
+	rootCmd := root.NewCmdRoot()
+	rootCmd.Version = version.CLI_VERSION
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
+	}
+
+	if generateDocs {
+		generateDocumentation(rootCmd)
 	}
 }
 
