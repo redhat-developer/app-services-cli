@@ -11,7 +11,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
