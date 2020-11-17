@@ -2,7 +2,6 @@ package root
 
 import (
 	"github.com/MakeNowJust/heredoc"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/authz"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka"
@@ -26,7 +25,6 @@ func NewCmdRoot() *cobra.Command {
 	cmd.AddCommand(login.NewLoginCmd())
 	cmd.AddCommand(logout.NewLogoutCommand())
 	cmd.AddCommand(kafka.NewKafkaCommand())
-	cmd.AddCommand(authz.NewAuthGroupCommand())
 	cmd.AddCommand(docs.NewDocsCommand())
 	cmd.AddCommand(completion.CompletionCmd)
 
