@@ -41,8 +41,8 @@ var urlAliases = map[string]string{
 	"development": devURL,
 }
 
-// NewLoginCommand gets the command that's log the user in
-func NewLoginCommand() *cobra.Command {
+// NewLoginCmd gets the command that's log the user in
+func NewLoginCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login to Managed Application Services",
