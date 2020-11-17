@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/root"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
 	"github.com/spf13/cobra"
@@ -20,7 +20,8 @@ var (
 
 func main() {
 	cobra.OnInitialize(initConfig)
-	rootCmd := root.NewCmdRoot()
+
+	rootCmd := root.NewRootCommand()
 	rootCmd.Version = version.CLI_VERSION
 
 	if err := rootCmd.Execute(); err != nil {

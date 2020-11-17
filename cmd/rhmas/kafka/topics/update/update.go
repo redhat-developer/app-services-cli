@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 )
 
 var topicName string

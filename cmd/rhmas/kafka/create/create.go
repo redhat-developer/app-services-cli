@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
 	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
-	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
