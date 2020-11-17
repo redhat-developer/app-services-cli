@@ -22,7 +22,7 @@ rhmas kafka
 
 ## Documentation
 
-[Documentation](./CONTRIBUTING.md) 
+[Documentation](./website/docs) 
 
 ## Website
 
