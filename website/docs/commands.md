@@ -62,7 +62,7 @@ rhmas kafka get kafka-id
 ```
 
 
-#### List Kakfa clusters 
+#### List Kafka clusters 
 
 List Kafka clusters in your current account
 
