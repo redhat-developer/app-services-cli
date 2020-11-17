@@ -11,7 +11,7 @@ Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to downlo
 1. Login to service using cloud.redhat.com token
 
 ```
-rhmas login --token 
+rhmas login --token <your-token>
 ```
 
 2. Use available Kafka commands
