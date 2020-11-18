@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/root"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/root"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
 	"github.com/spf13/cobra"

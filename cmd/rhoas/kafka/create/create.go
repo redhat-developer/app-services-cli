@@ -8,8 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/cmdutil/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhmas/kafka/flags"
+	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/flags"
 	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 )

@@ -14,13 +14,13 @@ var CompletionCmd = &cobra.Command{
 
 Bash:
 
-$ source <(rhmas completion bash)
+$ source <(rhoas completion bash)
 
 # To load completions for each session, execute once:
 Linux:
-  $ rhmas completion bash > /etc/bash_completion.d/rhmas
+  $ rhoas completion bash > /etc/bash_completion.d/rhoas
 MacOS:
-  $ rhmas completion bash > /usr/local/etc/bash_completion.d/rhmas
+  $ rhoas completion bash > /usr/local/etc/bash_completion.d/rhoas
 
 Zsh:
 
@@ -30,16 +30,16 @@ Zsh:
 $ echo "autoload -U compinit; compinit" >> ~/.zshrc
 
 # To load completions for each session, execute once:
-$ rhmas completion zsh > "${fpath[1]}/_rhmas"
+$ rhoas completion zsh > "${fpath[1]}/_rhoas"
 
 # You will need to start a new shell for this setup to take effect.
 
 Fish:
 
-$ rhmas completion fish | source
+$ rhoas completion fish | source
 
 # To load completions for each session, execute once:
-$ rhmas completion fish > ~/.config/fish/completions/rhmas.fish
+$ rhoas completion fish > ~/.config/fish/completions/rhoas.fish
 `,
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},

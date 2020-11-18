@@ -29,14 +29,14 @@ func BuildClient() *msapi.APIClient {
 	}
 
 	if token == "" {
-		fmt.Fprintln(os.Stderr, "You must be logged in. To do so use the `rhmas login` command")
+		fmt.Fprintln(os.Stderr, "You must be logged in. To do so use the `rhoas login` command")
 		os.Exit(1)
 	}
 
 	tokenIsValid, _ := cfg.CheckTokenValidity()
 
 	if !tokenIsValid {
-		fmt.Fprintln(os.Stderr, "Token has expired. Login again using `rhmas login` command")
+		fmt.Fprintln(os.Stderr, "Token has expired. Login again using `rhoas login` command")
 		os.Exit(1)
 	}
 

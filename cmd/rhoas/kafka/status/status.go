@@ -31,7 +31,7 @@ func runStatus(cmd *cobra.Command, args []string) {
 	id := cfg.Services.Kafka.ClusterID
 
 	if id == "" {
-		fmt.Fprint(os.Stderr, "No Kafka cluster is being used. To use a cluster run `rhmas kafka use {clusterId}`")
+		fmt.Fprint(os.Stderr, "No Kafka cluster is being used. To use a cluster run `rhoas kafka use {clusterId}`")
 		return
 	}
 
