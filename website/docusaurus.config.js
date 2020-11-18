@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'RHMAS',
+  title: 'RHOAS',
   tagline: '',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
@@ -9,7 +9,7 @@ module.exports = {
   projectName: 'docusaurus', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'RHMAS',
+      title: 'RHOAS',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',

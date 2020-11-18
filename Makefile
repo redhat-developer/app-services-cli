@@ -2,7 +2,7 @@
 SHELL = bash
 
 # The details of the application:
-binary:=rhmas
+binary:=rhoas
 
 managedservices_client_dir=./pkg/api/managedservices/client
 
@@ -34,11 +34,11 @@ lint:
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
 binary:
-	go build -o ${binary} ./cmd/rhmas
+	go build -o ${binary} ./cmd/rhoas
 .PHONY: binary
 
 install:
-	go install ./cmd/rhmas
+	go install ./cmd/rhoas
 .PHONY: install
 
 # Runs the unit tests.
@@ -76,5 +76,5 @@ docs:
 .PHONY: docs/open
 
 docs/generate:
-	GENERATE_DOCS=true go run ./cmd/rhmas
+	GENERATE_DOCS=true go run ./cmd/rhoas
 .PHONY: docs/generate

@@ -1,6 +1,6 @@
-# Contributing to RHMAS CLI
+# Contributing to rhoas CLI
 
-Thank you for contributing to the RHMAS CLI. See below for guides to help you contribute.
+Thank you for contributing to the RHOAS CLI. See below for guides to help you contribute.
 
 ## Prerequisites
 
@@ -16,10 +16,10 @@ The following will need to be installed on your device in order to contribute to
 
 ### Running CLI commands
 
-You can run the CLI commands files directly with `go run`. All commands and subcommands are in the `./cmd/rhmas` folder.
+You can run the CLI commands files directly with `go run`. All commands and subcommands are in the `./cmd/rhoas` folder.
 
 ```shell
-go run ./cmd/rhmas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
+go run ./cmd/rhoas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
 ```
 
 ### Development commands
@@ -35,7 +35,7 @@ Builds a binary in the `$GOPATH/bin` directory. Can be executed globally as it i
 
 #### `make binary`
 
-Builds an executable binary `rhmas` of the CLI in the project root. Executable only inside the workspace.
+Builds an executable binary `rhoas` of the CLI in the project root. Executable only inside the workspace.
 
 ### `make test`
 
@@ -70,7 +70,7 @@ Generates a Golang API client in `./pkg/api/managedservices/client`.
 The repo has a local mocked version of the Managed Services API in `./mas-mock`.
 To work and test CLI locally please follow the mock readme and then login into cli using dev profile:
 
-> rhmas login --url=dev --token=mock-token
+> rhoas login --url=dev --token=mock-token
 
 
 > The mock API can become outdated from the current state of the Managed Services API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
@@ -81,10 +81,10 @@ Starts the mocked Managed Services API server at [`http://localhost:8000`](http:
 
 ### Logging in
 
-To log in to the mock API, run `rhmas login against the local server` with your authentication token:
+To log in to the mock API, run `rhoas login against the local server` with your authentication token:
 
 ```shell
-rhmas login --url http://localhost:8000 --token $TOKEN
+rhoas login --url http://localhost:8000 --token $TOKEN
 ```
 
 If you don't have an authentication token, you can still use a faked one, provided it has the correct payload:

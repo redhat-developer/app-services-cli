@@ -6,9 +6,9 @@ env:
   - CGO_ENABLED=0
   - GO111MODULE=on
 builds:
-  - main: ./cmd/rhmas/main.go
-    id: rhmas_cli
-    binary: rhmas
+  - main: ./cmd/rhoas/main.go
+    id: rhoas_cli
+    binary: rhoas
     goos:
       - linux
       - windows
