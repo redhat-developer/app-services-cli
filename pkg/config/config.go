@@ -105,14 +105,14 @@ func Remove() error {
 
 // Location returns the location of the configuration file.
 func Location() (path string, err error) {
-	if rhmasConfig := os.Getenv("RHMASCLI_CONFIG"); rhmasConfig != "" {
-		path = rhmasConfig
+	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
+		path = rhoasConfig
 	} else {
 		home, err := homedir.Dir()
 		if err != nil {
 			return "", err
 		}
-		path = filepath.Join(home, ".rhmascli.json")
+		path = filepath.Join(home, ".rhoascli.json")
 	}
 	return path, nil
 }

@@ -15,7 +15,7 @@ https://cloud.redhat.com/managed-application-services/token
 To do that use the `login` command:
 
 ```
-$ rhmas login --token=eyJ...
+$ rhoas login --token=eyJ...
 ```
 
 ### Log Out
@@ -23,7 +23,7 @@ $ rhmas login --token=eyJ...
 To do that use the `logout` command:
 
 ```
-$ rhmas logout
+$ rhoas logout
 ```
 
 ### Apache Kafka Management commands
@@ -34,7 +34,7 @@ Command creates Kafka cluster and automatically setting it up as default cluster
 by other subcommands.
 
 ```
-rhmas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
+rhoas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
 ```
 
 **Arguments**:
@@ -57,7 +57,7 @@ rhmas kafka create --name=test --multi-az="true" --provider=aws --region=us-east
 Get details 
 
 ```
-rhmas kafka get kafka-id
+rhoas kafka get kafka-id
 
 ```
 
@@ -67,7 +67,7 @@ rhmas kafka get kafka-id
 List Kafka clusters in your current account
 
 ```
-rhmas kafka list
+rhoas kafka list
 ```
 
 **Arguments**:
@@ -87,30 +87,30 @@ rhmas kafka list
 #### Switch to use managed kafka
 
 ```shell
-rhmas kafka use kafka-id
+rhoas kafka use kafka-id
 ```
 
 #### Get the selected Kafka cluster
 
 ```shell
-rhmas kafka status
+rhoas kafka status
 ```
 
 #### Get credentials for the managed kafka
 
 ```
-rhmas kafka credentials 
+rhoas kafka credentials 
 ```
 
 
 ### Topics
 
 ```bash
-rhmas kafka topics --help       
+rhoas kafka topics --help       
 Manage Kafka topics for the current selected Managed Kafka Cluster
 
 Usage:
-  rhmas kafka topics [command]
+  rhoas kafka topics [command]
 
 Available Commands:
   create      Create topic
@@ -121,11 +121,11 @@ Available Commands:
 
 #### Create command
 ```bash
-rhmas kafka topics create --help
+rhoas kafka topics create --help
 Create topic in the current selected Managed Kafka cluster
 
 Usage:
-  rhmas kafka topics create [flags]
+  rhoas kafka topics create [flags]
 
 Flags:
   -f, --config-file string   A path to a file containing extra configuration variables. If this option is not supplied, default configurations will be used
@@ -138,11 +138,11 @@ Flags:
 #### List command
 
 ```bash
-rhmas kafka topics list --help  
+rhoas kafka topics list --help  
 List all topics in the current selected Managed Kafka cluster
 
 Usage:
-  rhmas kafka topics list [flags]
+  rhoas kafka topics list [flags]
 
 Flags:
   -h, --help            help for list
@@ -152,11 +152,11 @@ Flags:
 #### Delete command
 
 ```bash
-rhmas kafka topics delete --help
+rhoas kafka topics delete --help
 Delete topic from the current selected Managed Kafka cluster
 
 Usage:
-  rhmas kafka topics delete [flags]
+  rhoas kafka topics delete [flags]
 
 Flags:
   -h, --help          help for delete
@@ -166,11 +166,11 @@ Flags:
 #### Update command
 
 ```bash
-rhmas kafka topics update --help
+rhoas kafka topics update --help
 Update topic in the current selected Managed Kafka cluster
 
 Usage:
-  rhmas kafka topics update [flags]
+  rhoas kafka topics update [flags]
 
 Flags:
   -c, --config string   A comma-separated list of configuration to override e.g 'key1=value1,key2=value2'. (required)
