@@ -13,6 +13,19 @@ servers:
   - url: /
     description: current domain
 paths:
+  /api/managed-services-api/v1/kafkas/serviceAccount:
+    get:
+      operationId: createServiceAccount
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+          description: Service Account
+      security:
+        - Bearer: []
+      summary: Create a kafka service account
   /api/managed-services-api/v1/kafkas/{id}:
     get:
       operationId: getKafkaById
@@ -251,6 +264,15 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Error"
+    TokenResponse:
+      allOf:
+        - $ref: "#/components/schemas/ObjectReference"
+        - type: object
+          properties:
+            clientToken:
+              type: string
+            clientSecret:
+              type: string
     KafkaRequest:
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
