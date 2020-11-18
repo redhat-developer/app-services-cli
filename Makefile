@@ -18,7 +18,7 @@ help:
 	@echo "make binary               	compile binaries"
 	@echo "make test                 	run  tests"
 	@echo "make format             		format files"
-	@echo "make openapi/pull					pull openapi definition"
+	@echo "make openapi/pull			pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
 						

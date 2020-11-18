@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: RHMAS CLI
+title: rhoas CLI
 sidebar_label: Introduction
 slug: /
 ---
@@ -14,11 +14,11 @@ Download binary file from releases
 ### Fedora
 
 ```
-dnf install rhmas
+dnf install rhoas
 ```
 
 ### Mac
 
 ```
-brew install rhmas
+brew install rhoas
 ```
