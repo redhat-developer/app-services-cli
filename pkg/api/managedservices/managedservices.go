@@ -1,5 +1,5 @@
 // Package ms is the Managed Services API client
-package ms
+package managedservices
 
 import (
 	"fmt"

@@ -1,8 +1,10 @@
 module.exports = {
   createServiceAccount: async (c, req, res) => {
+    const clientSecret = Number.MAX_SAFE_INTEGER - new Date().getTime();
+    const clientToken = new Date().getTime();
     res.status(200).json({
-      clientToken: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
-      clientSecret: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
+      clientToken: "bttg0jn170hp",
+      clientSecret: clientSecret.toString(),
     });
   },
   createKafka: async (c, req, res) => {
