@@ -87,7 +87,7 @@ func RunCredentials(outputFlagValue string, force bool) {
 
 	// TODO Config should also save human redable name
 	fmt.Fprintf(os.Stderr, "Writing credentials to %v \n", fileName)
-	fileContent := fmt.Sprintf(fileFormat, cfg.Services.Kafka.ClusterID, credentials.ClientID, credentials.ClientSecret)
+	fileContent := fmt.Sprintf(fileFormat, cfg.Services.Kafka.ClusterName, credentials.ClientID, credentials.ClientSecret)
 
 	dataToWrite := []byte(fileContent)
 
