@@ -16,7 +16,7 @@ func NewCredentialsCommand() *cobra.Command {
 		Long:  "Generate credentials to connect your application to the Kafka cluster",
 		Run:   runCredentials,
 	}
-	cmd.Flags().StringVarP(&outputFlagValue, "output", "o", "properties", "Format of the config [env, kafka, properties, json]")
+	cmd.Flags().StringVarP(&outputFlagValue, "output", "o", "env", "Format of the config [env, kafka, properties, json]")
 	cmd.Flags().BoolVarP(&force, "force", "f", false, "Force overwrite existing files")
 	return cmd
 }
