@@ -7,8 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var outputFlagValue string
-var force bool
+var dryrun bool
 
 // NewGetCommand gets a new command for getting kafkas.
 func NewCredentialsCommand() *cobra.Command {
@@ -31,10 +30,13 @@ func NewCredentialsCommand() *cobra.Command {
 		Run: runBind,
 	}
 
-	cmd.Flags().BoolVarP(&force, "dryrun", "d", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
+	cmd.Flags().BoolVarP(&dryrun, "dryrun", "d", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
 	return cmd
 }
 
 func runBind(cmd *cobra.Command, _ []string) {
+	if dryrun {
+		fmt.Fprintf(os.Stderr, "Generating CR files")
+	}
 	fmt.Fprintf(os.Stderr, "Successfully bound kafka credentials to your cluster")
 }
