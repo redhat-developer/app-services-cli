@@ -6,6 +6,7 @@ import (
 )
 
 var outputFlagValue string
+var force bool
 
 // NewGetCommand gets a new command for getting kafkas.
 func NewCredentialsCommand() *cobra.Command {
@@ -16,9 +17,10 @@ func NewCredentialsCommand() *cobra.Command {
 		Run:   runCredentials,
 	}
 	cmd.Flags().StringVarP(&outputFlagValue, "output", "o", "properties", "Format of the config [env, kafka, properties, json]")
+	cmd.Flags().BoolVarP(&force, "force", "f", false, "Force overwrite existing files")
 	return cmd
 }
 
 func runCredentials(cmd *cobra.Command, _ []string) {
-	credentials.RunCredentials(outputFlagValue)
+	credentials.RunCredentials(outputFlagValue, force)
 }

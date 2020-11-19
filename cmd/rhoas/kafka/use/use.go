@@ -43,7 +43,7 @@ func runUse(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: res.Id}
+	var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: res.Id, ClusterName: res.Name}
 	cfg.Services.SetKafka(&kafkaConfig)
 	if err := config.Save(cfg); err != nil {
 		fmt.Fprintln(os.Stderr, err)

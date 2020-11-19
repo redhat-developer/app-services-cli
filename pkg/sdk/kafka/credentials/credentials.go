@@ -46,7 +46,7 @@ kafka.ssl.protocol=TLSv1.2
 `
 )
 
-func RunCredentials(outputFlagValue string) {
+func RunCredentials(outputFlagValue string, force bool) {
 	var fileFormat string
 	var fileName string
 
@@ -86,23 +86,23 @@ func RunCredentials(outputFlagValue string) {
 	}
 
 	// TODO Config should also save human redable name
-	fmt.Fprintf(os.Stderr, `Writing credentials to %v \n`, fileName)
-	fmt.Fprintf(os.Stderr, fileFormat, cfg.Services.Kafka.ClusterID, credentials.ClientID, credentials.ClientSecret)
+	fmt.Fprintf(os.Stderr, "Writing credentials to %v \n", fileName)
+	fileContent := fmt.Sprintf(fileFormat, cfg.Services.Kafka.ClusterID, credentials.ClientID, credentials.ClientSecret)
 
-	dataToWrite := []byte(fileFormat)
+	dataToWrite := []byte(fileContent)
 
 	// TODO use https://github.com/manifoldco/promptui to check if file exist (overwrite?)
-	if fileExists(fileName) {
-		fmt.Fprintf(os.Stderr, "Error when saving file: %v \n", err)
+	if fileExists(fileName) && !force {
+		fmt.Fprintf(os.Stderr, "File %v already exist. Use --force (-f) flag to override file.\n", fileName)
 		return
 	}
+
 	err = ioutil.WriteFile(fileName, dataToWrite, 0600)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when saving file %v \n", err)
 	} else {
 		fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v \n", fileName)
 	}
-
 }
 
 func fileExists(path string) bool {
