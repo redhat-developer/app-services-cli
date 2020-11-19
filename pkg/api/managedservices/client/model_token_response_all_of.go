@@ -11,6 +11,6 @@ package msapi
 
 // TokenResponseAllOf struct for TokenResponseAllOf
 type TokenResponseAllOf struct {
-	ClientToken  string `json:"clientToken,omitempty"`
+	ClientID     string `json:"clientID,omitempty"`
 	ClientSecret string `json:"clientSecret,omitempty"`
 }

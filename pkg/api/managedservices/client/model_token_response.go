@@ -14,6 +14,6 @@ type TokenResponse struct {
 	Id           string `json:"id,omitempty"`
 	Kind         string `json:"kind,omitempty"`
 	Href         string `json:"href,omitempty"`
-	ClientToken  string `json:"clientToken,omitempty"`
+	ClientID     string `json:"clientID,omitempty"`
 	ClientSecret string `json:"clientSecret,omitempty"`
 }

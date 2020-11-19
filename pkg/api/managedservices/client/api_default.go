@@ -160,7 +160,7 @@ func (a *DefaultApiService) CreateServiceAccount(ctx _context.Context) (TokenRes
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/api/managed-services-api/v1/kafkas/serviceAccount"
+	localVarPath := a.client.cfg.BasePath + "/api/managed-services-api/v1/serviceAccount"
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}

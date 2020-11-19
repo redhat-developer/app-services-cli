@@ -13,7 +13,7 @@ servers:
 - description: current domain
   url: /
 paths:
-  /api/managed-services-api/v1/kafkas/serviceAccount:
+  /api/managed-services-api/v1/serviceAccount:
     get:
       operationId: createServiceAccount
       responses:
@@ -445,7 +445,7 @@ components:
           type: array
     TokenResponse_allOf:
       properties:
-        clientToken:
+        clientID:
           type: string
         clientSecret:
           type: string

@@ -1,9 +1,9 @@
 module.exports = {
   createServiceAccount: async (c, req, res) => {
     const clientSecret = Number.MAX_SAFE_INTEGER - new Date().getTime();
-    const clientToken = new Date().getTime();
+    const clientID = new Date().getTime();
     res.status(200).json({
-      clientToken: "bttg0jn170hp",
+      clientID: "bttg0jn170hp",
       clientSecret: clientSecret.toString(),
     });
   },
