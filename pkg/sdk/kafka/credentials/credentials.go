@@ -9,6 +9,7 @@ import (
 
 	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
 // Templates
@@ -46,21 +47,21 @@ kafka.ssl.protocol=TLSv1.2
 )
 
 func RunCredentials(outputFlagValue string) {
-	var propertyFormat string
+	var fileFormat string
 	var fileName string
 
 	switch outputFlagValue {
 	case "env":
-		propertyFormat = templateEnv
+		fileFormat = templateEnv
 		fileName = ".env"
 	case "properties":
-		propertyFormat = templateProperties
+		fileFormat = templateProperties
 		fileName = "kafka.properties"
 	case "kafka":
-		propertyFormat = templateKafkaPlain
+		fileFormat = templateKafkaPlain
 		fileName = "kafka.properties"
 	case "json":
-		propertyFormat = templateJSON
+		fileFormat = templateJSON
 		fileName = "credentials.json"
 	}
 
@@ -72,20 +73,36 @@ func RunCredentials(outputFlagValue string) {
 		os.Exit(1)
 	}
 
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprint(os.Stderr, "Invalid configuration file", err)
+	}
+
 	jsonResponse, _ := json.Marshal(response)
 	var credentials msapi.TokenResponse
 	err = json.Unmarshal(jsonResponse, &credentials)
+	if err != nil {
+		fmt.Fprint(os.Stderr, "Invalid response from server", err)
+	}
 
-	fmt.Fprintln(os.Stderr, `Writing credentials to`, fileName)
-	// TODO use https://github.com/manifoldco/promptui
+	// TODO Config should also save human redable name
+	fmt.Fprintf(os.Stderr, `Writing credentials to %v \n`, fileName)
+	fmt.Fprintf(os.Stderr, fileFormat, cfg.Services.Kafka.ClusterID, credentials.ClientToken, credentials.ClientSecret)
 
-	dataToWrite := []byte(propertyFormat)
+	dataToWrite := []byte(fileFormat)
+
+	// TODO use https://github.com/manifoldco/promptui to check if file exist (overwrite?)
+	if fileExists(fileName) {
+		fmt.Fprintf(os.Stderr, "Error when saving file: %v \n", err)
+		return
+	}
 	err = ioutil.WriteFile(fileName, dataToWrite, 0600)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error when saving file:", err)
+		fmt.Fprintf(os.Stderr, "Error when saving file %v \n", err)
 	} else {
-		fmt.Fprintln(os.Stderr, "Successfully saved credentials to", fileName)
+		fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v \n", fileName)
 	}
+
 }
 
 func fileExists(path string) bool {
