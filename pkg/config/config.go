@@ -29,6 +29,7 @@ type ServiceConfigMap struct {
 
 // KafkaConfig is the config for the managed Kafka service
 type KafkaConfig struct {
+	ClusterHost string `json:"clusterHost"`
 	ClusterID   string `json:"clusterId"`
 	ClusterName string `json:"clusterName"`
 }

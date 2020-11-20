@@ -3,20 +3,18 @@ package create
 import (
 	"fmt"
 	"os"
-	"time"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/topics/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
+	"github.com/segmentio/kafka-go"
 	"github.com/spf13/cobra"
-
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/flags"
 )
 
 var partitions, replicas int32
-var configFile string
 
 const (
 	Partitions = "partitions"
 	Replicas   = "replicas"
-	ConfigFile = "config-file"
 )
 
 var topicName string
@@ -32,17 +30,27 @@ func NewCreateTopicCommand() *cobra.Command {
 
 	cmd.Flags().StringVarP(&topicName, flags.FlagName, "n", "", "Topic name (required)")
 	_ = cmd.MarkFlagRequired(flags.FlagName)
-	cmd.Flags().Int32VarP(&partitions, Partitions, "p", 3, "Set number of partitions")
-	cmd.Flags().Int32VarP(&replicas, Replicas, "r", 2, "Set number of replicas")
-	cmd.Flags().StringVarP(&configFile, ConfigFile, "f", "", "A path to a file containing extra configuration variables. If this option is not supplied, default configurations will be used")
+	cmd.Flags().Int32VarP(&partitions, Partitions, "p", 1, "Set number of partitions")
+	cmd.Flags().Int32VarP(&replicas, Replicas, "r", 1, "Set number of replicas")
 
 	// TODO define file format etc
 	return cmd
 }
 
 func createTopic(cmd *cobra.Command, _ []string) {
-	fmt.Fprintln(os.Stderr, "Creating topic "+topicName+" ...")
-	// Mimick operation happening by sleeping for a while
-	time.Sleep(500 * time.Millisecond)
-	fmt.Fprintln(os.Stderr, "Topic "+topicName+" created")
+	topicConfigs := []kafka.TopicConfig{
+		{
+			Topic:             topicName,
+			NumPartitions:     int(partitions),
+			ReplicationFactor: int(replicas),
+		},
+	}
+
+	err := topics.CreateKafkaTopic(&topicConfigs)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error creating topic: %v", topicName)
+		return
+	}
+
+	fmt.Fprintf(os.Stderr, "Topic %v created", topicName)
 }
