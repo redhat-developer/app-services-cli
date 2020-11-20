@@ -72,12 +72,20 @@ To work and test CLI locally please follow the mock readme and then login into c
 
 > rhoas login --url=dev --token=mock-token
 
-
 > The mock API can become outdated from the current state of the Managed Services API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
 
-### `make managedservices/mock-server`
+### `make mock-api/start`
 
 Starts the mocked Managed Services API server at [`http://localhost:8000`](http://localhost:8000).
+
+This will also start a local Keycloak instance at [`http://localhost:8000`](http://localhost:8000) for authentication from the CLI.
+When Keycloak is up and running, log in as an admin (username: `admin`, password: `admin`).
+Next, you will need to import the custom realm and client for the RHOAS CLI by running `make mock-api/keycloak/import-realm`.
+Once complete you should see the `rhoas-cli` client in a `sso-external` realm from the Keycloak admin panel.
+
+### `make mock-api/keycloak/import-realm`
+
+Imports a Keycloak realm and `rhoas-cli` client.
 
 ### Logging in
 
