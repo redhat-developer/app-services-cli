@@ -29,7 +29,7 @@ func NewBindCommand() *cobra.Command {
 		Run: runBind,
 	}
 
-	cmd.Flags().BoolVarP(&dryrun, "dry-run", "d", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
+	cmd.Flags().BoolVarP(&dryrun, "dry-run", "", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
 	return cmd
 }
 
