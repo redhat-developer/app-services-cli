@@ -5,7 +5,7 @@ package kafka
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/bind"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/connect"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/credentials"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/delete"
@@ -37,7 +37,7 @@ func NewKafkaCommand() *cobra.Command {
 		status.NewStatusCommand(),
 		topics.NewTopicsCommand(),
 		credentials.NewCredentialsCommand(),
-		bind.NewBindCommand())
+		connect.NewConnectCommand())
 
 	return cmd
 }
