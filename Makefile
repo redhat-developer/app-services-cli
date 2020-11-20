@@ -62,8 +62,16 @@ openapi/generate:
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
 
-managedservices/mock:
-	cd mas-mock; yarn; yarn start
+mock-api/start: mock-api/server/start mock-api/client/start
+.PHONY: mock-api/start
+
+mock-api/server/start:
+	cd mas-mock && docker-compose up -d
+.PHONY: mock-api/server/start	
+
+mock-api/client/start:
+	cd mas-mock && yarn && yarn start
+.PHONY: mock-api/client/start	
 
 # clean up code and dependencies
 format:
