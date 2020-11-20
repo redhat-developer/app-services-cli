@@ -9,8 +9,7 @@ import (
 
 var dryrun bool
 
-// NewGetCommand gets a new command for getting kafkas.
-func NewCredentialsCommand() *cobra.Command {
+func NewBindCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "bind",
 		Short: "Bind currently selected kafa cluster credentials to your cluster",
@@ -30,7 +29,7 @@ func NewCredentialsCommand() *cobra.Command {
 		Run: runBind,
 	}
 
-	cmd.Flags().BoolVarP(&dryrun, "dryrun", "d", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
+	cmd.Flags().BoolVarP(&dryrun, "dry-run", "d", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
 	return cmd
 }
 

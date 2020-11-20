@@ -17,7 +17,7 @@ func NewCredentialsCommand() *cobra.Command {
 		Run:   runCredentials,
 	}
 	cmd.Flags().StringVarP(&outputFlagValue, "output", "o", "env", "Format of the config [env, kafka, properties, json]")
-	cmd.Flags().BoolVarP(&force, "force", "f", false, "Force overwrite existing files")
+	cmd.Flags().BoolVarP(&force, "force", "", false, "Force overwrite existing files")
 	return cmd
 }
 

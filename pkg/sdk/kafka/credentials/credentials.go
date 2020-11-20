@@ -70,7 +70,7 @@ func RunCredentials(outputFlagValue string, force bool) {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating Kafka Credentials: %v\n", err)
-		os.Exit(1)
+		return
 	}
 
 	cfg, err := config.Load()
@@ -93,7 +93,7 @@ func RunCredentials(outputFlagValue string, force bool) {
 
 	// TODO use https://github.com/manifoldco/promptui to check if file exist (overwrite?)
 	if fileExists(fileName) && !force {
-		fmt.Fprintf(os.Stderr, "File %v already exist. Use --force (-f) flag to override file.\n", fileName)
+		fmt.Fprintf(os.Stderr, "File %v already exist. Use --force flag to override file.\n", fileName)
 		return
 	}
 

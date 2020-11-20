@@ -11,5 +11,5 @@ import (
 func PrintToTable(clusters []Cluster) {
 	printer := tableprinter.New(os.Stdout)
 	printer.Print(clusters)
-	fmt.Print("\n")
+	fmt.Fprint(os.Stderr, "\n")
 }
