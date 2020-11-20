@@ -3,8 +3,8 @@ package list
 import (
 	"fmt"
 	"os"
-	"time"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
 	"github.com/spf13/cobra"
 )
 
@@ -28,19 +28,10 @@ func NewListTopicCommand() *cobra.Command {
 func listTopic(cmd *cobra.Command, _ []string) {
 	fmt.Fprintln(os.Stderr, "Listing topics ...")
 
-	// Mimick operation happening by sleeping for a while
-	time.Sleep(500 * time.Millisecond)
+	err := broker.ListKafkaTopics()
 
-	fmt.Println(`
-3 topics:
-topic "topic-1" with 3 partitions:
-	partition 0, leader 3, replicas: 1,2,3, isrs: 1,2,3
-	partition 1, leader 1, replicas: 1,2,3, isrs: 1,2,3
-	partition 2, leader 1, replicas: 1,2, isrs: 1,2
-topic "auto_49f744a4327b1b1e" with 2 partitions:
-	partition 0, leader 3, replicas: 3, isrs: 3
-	partition 1, leader 1, replicas: 1, isrs: 1
-topic "auto_e02f58f2c581cba" with 2 partitions:
-	partition 0, leader 3, replicas: 3, isrs: 3
-	partition 1, leader 1, replicas: 1, isrs: 1`)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to perform list operation")
+	}
+
 }

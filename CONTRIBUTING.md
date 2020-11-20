@@ -142,3 +142,26 @@ To release snapshot version please execute:
 ```shell
 goreleaser --snapshot --rm-dist
 ```
+
+### Working with mocked Kafka
+
+For testing you can use localy hosted Kafka
+
+1. Run local kafka 
+
+```
+cd mas-mock
+docker-compose up -d
+```
+
+2. Use Kafdrop to monitor it
+
+http://localhost:9000
+
+3. In CLI execute use command
+
+```
+rhoas kafka use 324234234
+```
+
+4. Edit clusterHost in ~/.rhoascli.json to point to localhost:9092

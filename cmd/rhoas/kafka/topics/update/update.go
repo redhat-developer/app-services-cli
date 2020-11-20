@@ -3,7 +3,9 @@ package update
 import (
 	"fmt"
 	"os"
-	"time"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
+	"github.com/segmentio/kafka-go"
 
 	"github.com/spf13/cobra"
 
@@ -32,8 +34,20 @@ func NewUpdateTopicCommand() *cobra.Command {
 }
 
 func updateTopic(cmd *cobra.Command, _ []string) {
-	fmt.Fprintln(os.Stderr, "Updating topic "+topicName+" ("+config+") ...")
-	// Mimick operation happening by sleeping for a while
-	time.Sleep(500 * time.Millisecond)
-	fmt.Fprintln(os.Stderr, "Topic "+topicName+" updated")
+	// TODO not sure about format
+	topicConfigs := []kafka.TopicConfig{
+		{
+			Topic:             topicName,
+			NumPartitions:     int(1),
+			ReplicationFactor: int(1),
+		},
+	}
+
+	err := broker.CreateKafkaTopic(&topicConfigs)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error updating topic: %v", topicName)
+		return
+	}
+
+	fmt.Fprintf(os.Stderr, "Topic %v updated", topicName)
 }
