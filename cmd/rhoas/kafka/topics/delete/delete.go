@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/topics/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ func NewDeleteTopicCommand() *cobra.Command {
 
 func deleteTopic(cmd *cobra.Command, _ []string) {
 	fmt.Fprintf(os.Stderr, "Deleting topic %v ", topicName)
-	err := broker.DeleteKafkaTopic(topicName)
+	err := topics.DeleteKafkaTopic(topicName)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error deleting topic: %v", topicName)
 		return

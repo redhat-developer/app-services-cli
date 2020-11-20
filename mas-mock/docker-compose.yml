@@ -43,7 +43,6 @@ services:
       - SERVER_SERVLET_CONTEXTPATH=/
       - JVM_OPTS=-Xms32M -Xmx64M
 
-services:
   postgres:
       image: postgres
       environment:

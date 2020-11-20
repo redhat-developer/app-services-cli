@@ -1,4 +1,4 @@
-package broker
+package topics
 
 import (
 	"fmt"
@@ -36,7 +36,7 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
 	}
 	var clusterURL string
 	if strings.HasPrefix(cfg.Services.Kafka.ClusterHost, "localhost") {
-		clusterURL = "localhost:9092"
+		clusterURL = cfg.Services.Kafka.ClusterHost
 	} else {
 		clusterURL = cfg.Services.Kafka.ClusterHost + ":443"
 	}

@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
 	"github.com/segmentio/kafka-go"
 
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/topics/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 )
 
 var topicName string
@@ -43,7 +43,7 @@ func updateTopic(cmd *cobra.Command, _ []string) {
 		},
 	}
 
-	err := broker.CreateKafkaTopic(&topicConfigs)
+	err := topics.CreateKafkaTopic(&topicConfigs)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error updating topic: %v", topicName)
 		return

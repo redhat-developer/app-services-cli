@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/topics/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 	"github.com/segmentio/kafka-go"
 	"github.com/spf13/cobra"
 )
@@ -46,7 +46,7 @@ func createTopic(cmd *cobra.Command, _ []string) {
 		},
 	}
 
-	err := broker.CreateKafkaTopic(&topicConfigs)
+	err := topics.CreateKafkaTopic(&topicConfigs)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating topic: %v", topicName)
 		return

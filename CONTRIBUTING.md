@@ -172,4 +172,17 @@ http://localhost:9000
 rhoas kafka use 324234234
 ```
 
-4. Edit clusterHost in ~/.rhoascli.json to point to localhost:9092
+4. Edit `clusterHost` in `~/.rhoascli.json` to point to `localhost:9092`
+
+Your config should look as follows:
+```
+  ...
+  "services": {
+    "kafka": {
+      "clusterHost": "localhost:9092",
+      "clusterId": "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
+      "clusterName": "serviceapi"
+    }
+  }
+  ...
+```

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ func NewListTopicCommand() *cobra.Command {
 func listTopic(cmd *cobra.Command, _ []string) {
 	fmt.Fprintln(os.Stderr, "Listing topics ...")
 
-	err := broker.ListKafkaTopics()
+	err := topics.ListKafkaTopics()
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to perform list operation")
