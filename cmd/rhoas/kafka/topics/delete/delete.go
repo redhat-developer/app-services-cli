@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/topics/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/broker"
 
 	"github.com/spf13/cobra"
@@ -20,8 +21,8 @@ func NewDeleteTopicCommand() *cobra.Command {
 		Run:   deleteTopic,
 	}
 
-	cmd.Flags().StringVarP(&topicName, "id", "n", "", "Topic name (required)")
-	_ = cmd.MarkFlagRequired("id")
+	cmd.Flags().StringVarP(&topicName, flags.FlagName, "n", "", "Topic name (required)")
+	_ = cmd.MarkFlagRequired(flags.FlagName)
 	return cmd
 }
 
