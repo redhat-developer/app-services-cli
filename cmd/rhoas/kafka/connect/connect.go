@@ -2,12 +2,13 @@ package connect
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	// _ "k8s.io/apimachinery/pkg/api/errors"
+	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -37,22 +38,22 @@ func NewConnectCommand() *cobra.Command {
 		Run: runBind,
 	}
 
-	cmd.Flags().BoolVarP(&localOnly, "local-only", "lo", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
-	cmd.Flags().BoolVarP(&secretOnly, "secret-only", "so", false, "Apply only secret and without CR. Can be used when no binding operator is configured")
-	cmd.Flags().StringP(&kubeConfigCustomLocation, "kubeconfig", "", "", "Location of the .kube/config file")
+	cmd.Flags().BoolVarP(&localOnly, "local-only", "l", false, "Provide yaml file containing changes without applying them to the cluster. Developers can use `oc apply -f kafka.yml` to apply it manually")
+	cmd.Flags().BoolVarP(&secretOnly, "secret-only", "s", false, "Apply only secret and without CR. Can be used when no binding operator is configured")
+	cmd.Flags().StringVarP(&kubeConfigCustomLocation, "kubeconfig", "", "", "Location of the .kube/config file")
 	return cmd
 }
 
 func runBind(cmd *cobra.Command, _ []string) {
 	connectToCluster()
-	if dryrun {
+	if localOnly {
 		fmt.Fprintf(os.Stderr, "Generating CR files")
 	}
 	fmt.Fprintf(os.Stderr, "Successfully bound kafka credentials to your cluster")
 }
 
 func connectToCluster() {
-	var kubeconfig *string
+	var kubeconfig string
 
 	if kubeConfigCustomLocation != "" {
 		kubeconfig = kubeConfigCustomLocation
@@ -62,12 +63,12 @@ func connectToCluster() {
 
 	if !fileExists(kubeconfig) {
 		fmt.Fprint(os.Stderr, `Command uses oc or kubectl login context file. 
-		Please make sure that you have configured access to your cluster and selected the right namespace`, err)
+		Please make sure that you have configured access to your cluster and selected the right namespace`)
 		return
 	}
 
 	// use the current context in kubeconfig
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "Failed to load kube config file", err)
 		panic(err.Error())
@@ -79,13 +80,45 @@ func connectToCluster() {
 		fmt.Fprint(os.Stderr, "Failed to load kube config file", err)
 		panic(err.Error())
 	}
-	for {
-		pods, err := clientset.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{})
-		if err != nil {
-			panic(err.Error())
-		}
-		fmt.Printf("There are %d pods in the cluster\n", len(pods.Items))
+
+	/**
+
+	  apiVersion: v1
+	  kind: Secret
+	  metadata:
+	    name: mysecret
+	  type: Opaque
+	  stringData:
+	    config.yaml: |
+	      apiUrl: "https://my.api.com/api/v1"
+	      username: <user>
+		  password: <password>
+
+	  **/
+
+	secret := &apiv1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "kafka-credentials2",
+		},
+		StringData: map[string]string{
+			"clientID":     "test",
+			"clientSecret": "testtestetse",
+		},
 	}
+
+	createdSecret, err := clientset.CoreV1().Secrets(metav1.NamespaceDefault).Create(context.TODO(), secret, metav1.CreateOptions{})
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Print("There is secret created", createdSecret)
+
+	secretJsonData, _ := json.Marshal(createdSecret)
+	fmt.Printf(string(secretJsonData))
+
+	// secrets, err := clientset.CoreV1().Secrets(metav1.NamespaceDefault).List(context.TODO(), metav1.ListOptions{})
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
 }
 
 func fileExists(path string) bool {
