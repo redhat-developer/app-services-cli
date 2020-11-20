@@ -1,6 +1,6 @@
 {
-  "id": "keycloak-external",
-  "realm": "keycloak-external",
+  "id": "sso-external",
+  "realm": "sso-external",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -48,7 +48,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "keycloak-external",
+        "containerId": "sso-external",
         "attributes": {}
       },
       {
@@ -56,7 +56,7 @@
         "name": "uma_authorization",
         "composite": false,
         "clientRole": false,
-        "containerId": "keycloak-external",
+        "containerId": "sso-external",
         "attributes": {}
       }
     ],
@@ -426,7 +426,7 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/keycloak-external/account/",
+      "baseUrl": "/realms/sso-external/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -437,7 +437,7 @@
         "manage-account"
       ],
       "redirectUris": [
-        "/realms/keycloak-external/account/*"
+        "/realms/sso-external/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -462,14 +462,14 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/keycloak-external/account/",
+      "baseUrl": "/realms/sso-external/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/realms/keycloak-external/account/*"
+        "/realms/sso-external/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -648,14 +648,14 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/keycloak-external/console/",
+      "baseUrl": "/admin/sso-external/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/admin/keycloak-external/console/*"
+        "/admin/sso-external/console/*"
       ],
       "webOrigins": [
         "+"
