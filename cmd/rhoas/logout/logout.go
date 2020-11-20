@@ -4,7 +4,6 @@ package logout
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 
@@ -17,17 +16,24 @@ func NewLogoutCommand() *cobra.Command {
 		Use:   "logout",
 		Short: "Logout from connected Managed Application Services cluster",
 		Long:  "Logout from connected Managed Application Services cluster",
-		Run:   runLogout,
+		RunE:  runLogout,
 	}
 	return cmd
 }
 
-func runLogout(cmd *cobra.Command, _ []string) {
-	err := config.Remove()
-	if err == nil {
-		fmt.Println("Successfully logged out")
-		return
+func runLogout(cmd *cobra.Command, _ []string) error {
+	cfg, _ := config.Load()
+
+	err := cfg.Logout()
+	if err != nil {
+		return err
 	}
 
-	fmt.Fprintf(os.Stderr, "Unable to logout %v", err)
+	fmt.Println("Successfully logged out.")
+	err = config.Remove()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

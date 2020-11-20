@@ -1,25 +1,33 @@
 package config
 
 import (
+	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/Nerzal/gocloak/v7"
 	"github.com/dgrijalva/jwt-go"
+
 	"github.com/mitchellh/go-homedir"
-	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
 // Config is the type used to track the config of the client
 type Config struct {
 	AccessToken  string           `json:"access_token,omitempty" doc:"Bearer access token."`
 	RefreshToken string           `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
-	TokenURL     string           `json:"token_url,omitempty" doc:"OpenID token URL."`
 	Services     ServiceConfigMap `json:"services,omitempty"`
+	AuthURL      string           `json:"auth_url,omitempty"`
 	URL          string           `json:"url,omitempty" doc:"URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging' and 'integration'."`
+	ClientID     string           `json:"client_id,omitempty" doc:"OpenID client identifier."`
+	Insecure     bool             `json:"insecure,omitempty" doc:"Enables insecure communication with the server. This disables verification of TLS certificates and host names."`
+	Scopes       []string         `json:"scopes,omitempty" doc:"OpenID scope. If this option is used it will replace completely the default scopes. Can be repeated multiple times to specify multiple scopes."`
 }
 
 // ServiceConfigMap is a map of configs for the managed application services
@@ -32,6 +40,34 @@ type KafkaConfig struct {
 	ClusterHost string `json:"clusterHost"`
 	ClusterID   string `json:"clusterId"`
 	ClusterName string `json:"clusterName"`
+}
+
+func (c *Config) SetAccessToken(accessToken string) {
+	c.AccessToken = accessToken
+}
+
+func (c *Config) SetRefreshToken(refreshToken string) {
+	c.RefreshToken = refreshToken
+}
+
+func (c *Config) SetClientID(clientID string) {
+	c.ClientID = clientID
+}
+
+func (c *Config) SetScopes(scopes []string) {
+	c.Scopes = scopes
+}
+
+func (c *Config) SetURL(url string) {
+	c.URL = url
+}
+
+func (c *Config) SetInsecure(insecure bool) {
+	c.Insecure = insecure
+}
+
+func (c *Config) SetAuthURL(url string) {
+	c.AuthURL = url
 }
 
 // SetKafka sets the current Kafka cluster
@@ -119,47 +155,15 @@ func Location() (path string, err error) {
 	return path, nil
 }
 
-// Connection creates a connection using this configuration.
-func (c *Config) Connection() (connection *sdk.Connection, err error) {
-	if err != nil {
-		return
+func (c *Config) CreateHTTPClient() *http.Client {
+	// #nosec 402
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: c.Insecure},
 	}
-
-	builder := sdk.NewConnectionBuilder()
-	if c.TokenURL != "" {
-		builder.TokenURL(c.TokenURL)
-	}
-
-	// TODO read these from CLI
-	builder.Client(sdk.DefaultClientID, sdk.DefaultClientSecret)
-	builder.Scopes(sdk.DefaultScopes...)
-	builder.URL(c.URL)
-
-	tokens := make([]string, 0, 2)
-	if c.AccessToken != "" {
-		tokens = append(tokens, c.AccessToken)
-	}
-	if c.RefreshToken != "" {
-		tokens = append(tokens, c.RefreshToken)
-	}
-	if len(tokens) > 0 {
-		builder.Tokens(tokens...)
-	}
-	// disable TLS certification verification for now.
-	builder.Insecure(true)
-
-	// Create the connection:
-	connection, err = builder.Build()
-	if err != nil {
-		return
-	}
-
-	return
+	return &http.Client{Transport: tr}
 }
 
-// CheckTokenValidity checks if the configuration contains either credentials or tokens that haven't expired, so
-// that it can be used to perform authenticated requests.
-func (c *Config) CheckTokenValidity() (tokenIsValid bool, err error) {
+func (c *Config) Armed() (tokenIsValid bool, err error) {
 	now := time.Now()
 	if c.AccessToken != "" {
 		var expires bool
@@ -169,7 +173,7 @@ func (c *Config) CheckTokenValidity() (tokenIsValid bool, err error) {
 		if err != nil {
 			return
 		}
-		expires, left, err = sdk.GetTokenExpiry(accessToken, now)
+		expires, left, err = getTokenExpiry(accessToken, now)
 		if err != nil {
 			return
 		}
@@ -186,7 +190,7 @@ func (c *Config) CheckTokenValidity() (tokenIsValid bool, err error) {
 		if err != nil {
 			return
 		}
-		expires, left, err = sdk.GetTokenExpiry(refreshToken, now)
+		expires, left, err = getTokenExpiry(refreshToken, now)
 		if err != nil {
 			return
 		}
@@ -198,6 +202,41 @@ func (c *Config) CheckTokenValidity() (tokenIsValid bool, err error) {
 	return
 }
 
+func (c *Config) Logout() error {
+	client := c.NewClient()
+	err := client.Logout(context.TODO(), c.ClientID, "", "redhat-external", c.RefreshToken)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Config) TokenRefresh() error {
+	client := c.NewClient()
+	tk, err := client.RefreshToken(context.TODO(), c.RefreshToken, c.ClientID, "", "redhat-external")
+	if err != nil {
+		return err
+	}
+
+	c.SetAccessToken(tk.AccessToken)
+	c.SetRefreshToken(tk.RefreshToken)
+
+	return nil
+}
+
+// Create a new Keycloak client
+func (c *Config) NewClient() gocloak.GoCloak {
+	authURL, _ := url.Parse(c.AuthURL)
+	authURLBase, _ := url.Parse(authURL.Scheme + "://" + authURL.Host)
+	client := gocloak.NewClient(authURLBase.String())
+	restyClient := *client.RestyClient()
+	// #nosec 402
+	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: c.Insecure})
+	client.SetRestyClient(&restyClient)
+	return client
+}
+
 func parseToken(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
@@ -206,4 +245,31 @@ func parseToken(textToken string) (token *jwt.Token, err error) {
 		return
 	}
 	return token, nil
+}
+
+func getTokenExpiry(token *jwt.Token, now time.Time) (expires bool,
+	left time.Duration, err error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		err = fmt.Errorf("expected map claims bug got %T", claims)
+		return
+	}
+	var exp float64
+	claim, ok := claims["exp"]
+	if ok {
+		exp, ok = claim.(float64)
+		if !ok {
+			err = fmt.Errorf("expected floating point 'exp' but got %T", claim)
+			return
+		}
+	}
+	if exp == 0 {
+		expires = false
+		left = 0
+	} else {
+		expires = true
+		left = time.Unix(int64(exp), 0).Sub(now)
+	}
+
+	return
 }

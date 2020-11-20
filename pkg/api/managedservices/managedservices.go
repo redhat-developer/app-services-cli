@@ -13,30 +13,25 @@ import (
 // TODO refactor into separate config class
 
 func BuildClient() *msapi.APIClient {
-
 	masCfg := msapi.NewConfiguration()
 	cfg, err := config.Load()
 
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error loading configuration")
+		fmt.Fprintln(os.Stderr, "Can't load config file: %w", err)
+		os.Exit(1)
+	}
+	if cfg == nil {
+		fmt.Fprintln(os.Stderr, "Not logged in, run the login command")
 		os.Exit(1)
 	}
 
-	token := cfg.AccessToken
-
-	if token == "" {
-		token = cfg.RefreshToken
-	}
-
-	if token == "" {
-		fmt.Fprintln(os.Stderr, "You must be logged in. To do so use the `rhoas login` command")
+	armed, err := cfg.Armed()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Can't check if tokens have expired: %w", err)
 		os.Exit(1)
 	}
-
-	tokenIsValid, _ := cfg.CheckTokenValidity()
-
-	if !tokenIsValid {
-		fmt.Fprintln(os.Stderr, "Token has expired. Login again using `rhoas login` command")
+	if !armed {
+		fmt.Fprintln(os.Stderr, "Tokens have expired, run the login command")
 		os.Exit(1)
 	}
 
@@ -49,7 +44,17 @@ func BuildClient() *msapi.APIClient {
 		masCfg.Host = urlSegments[0]
 	}
 
-	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", token))
+	// Refresh tokens
+	if err = cfg.TokenRefresh(); err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to refresh access token: %v", err)
+		os.Exit(1)
+	}
+	err = config.Save(cfg)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not save config file: %v", err)
+	}
+
+	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", cfg.AccessToken))
 
 	return msapi.NewAPIClient(masCfg)
 }

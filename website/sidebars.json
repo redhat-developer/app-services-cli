@@ -5,10 +5,9 @@
       "commands"
     ],
     "Commands": [
-      "commands/rhoas_authz_view",
-      "commands/rhoas_authz",
       "commands/rhoas_completion",
       "commands/rhoas_docs",
+      "commands/rhoas_kafka_bind",
       "commands/rhoas_kafka_create",
       "commands/rhoas_kafka_credentials",
       "commands/rhoas_kafka_delete",
