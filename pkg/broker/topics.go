@@ -89,7 +89,8 @@ func ListKafkaTopics() error {
 	}
 
 	for i := range partitions {
-		fmt.Println(&partitions[i])
+		topicPartition := &partitions[i]
+		fmt.Fprintf(os.Stderr, "Topic name: '%v'  Replicas: '%v' \n", topicPartition.Topic, len(topicPartition.Replicas))
 	}
 
 	return nil
