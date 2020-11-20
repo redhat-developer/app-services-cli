@@ -24,15 +24,10 @@ services:
   keycloak:
       image: quay.io/keycloak/keycloak:11.0.3
       environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: keycloak
+        DB_VENDOR: h2
         DB_USER: keycloak
-        DB_SCHEMA: public
         DB_PASSWORD: password
         KEYCLOAK_USER: admin
         KEYCLOAK_PASSWORD: admin
       ports:
         - 8080:8080
-      depends_on:
-        - postgres
