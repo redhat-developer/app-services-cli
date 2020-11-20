@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
@@ -43,7 +43,7 @@ func runUse(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: res.Id}
+	var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: res.Id, ClusterName: res.Name}
 	cfg.Services.SetKafka(&kafkaConfig)
 	if err := config.Save(cfg); err != nil {
 		fmt.Fprintln(os.Stderr, err)

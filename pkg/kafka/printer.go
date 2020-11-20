@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/landoop/tableprinter"
@@ -10,4 +11,5 @@ import (
 func PrintToTable(clusters []Cluster) {
 	printer := tableprinter.New(os.Stdout)
 	printer.Print(clusters)
+	fmt.Fprint(os.Stderr, "\n")
 }

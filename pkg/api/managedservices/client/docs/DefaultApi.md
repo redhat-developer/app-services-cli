@@ -5,6 +5,7 @@ All URIs are relative to *https://api.openshift.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateKafka**](DefaultApi.md#CreateKafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
+[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Get** /api/managed-services-api/v1/serviceAccount | Create a kafka service account
 [**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 [**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
 [**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
@@ -37,6 +38,34 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateServiceAccount
+
+> TokenResponse CreateServiceAccount(ctx, )
+
+Create a kafka service account
+
+### Required Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**TokenResponse**](TokenResponse.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

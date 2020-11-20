@@ -13,6 +13,19 @@ servers:
   - url: /
     description: current domain
 paths:
+  /api/managed-services-api/v1/serviceAccount:
+    get:
+      operationId: createServiceAccount
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+          description: Service Account
+      security:
+        - Bearer: []
+      summary: Create a kafka service account
   /api/managed-services-api/v1/kafkas/{id}:
     get:
       operationId: getKafkaById
@@ -251,6 +264,15 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Error"
+    TokenResponse:
+      allOf:
+        - $ref: "#/components/schemas/ObjectReference"
+        - type: object
+          properties:
+            clientID:
+              type: string
+            clientSecret:
+              type: string
     KafkaRequest:
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
@@ -329,7 +351,7 @@ components:
         name: "serviceapitest"
     EURegionExample:
       value:
-        region: "us-east-1"
+        region: "eu-west-1"
         cloud_provider: "aws"
         name: "serviceapitest"
     KafkaRequestListExample:
@@ -347,7 +369,7 @@ components:
         href: /api/managed-services-api/v1/kafkas/1iX03lndlmQ0qfC7siTa5sLjV8E
         status: accepted
         cloud_provider: aws
-        region: us-east-1
+        region: eu-west-1
         owner: api_kafka_service
         name: serviceapi
         created_at: '2020-10-06T22:40:32.667743942-04:00'
@@ -360,7 +382,7 @@ components:
         status: "complete"
         cloud_provider: "aws"
         multi_az: false
-        region: "us-east-1"
+        region: "eu-west-1"
         owner:  "api_kafka_service"
         name: "serviceapi"
         bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org"

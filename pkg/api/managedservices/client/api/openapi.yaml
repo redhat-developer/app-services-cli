@@ -13,6 +13,19 @@ servers:
 - description: current domain
   url: /
 paths:
+  /api/managed-services-api/v1/serviceAccount:
+    get:
+      operationId: createServiceAccount
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+          description: Service Account
+      security:
+      - Bearer: []
+      summary: Create a kafka service account
   /api/managed-services-api/v1/kafkas/{id}:
     delete:
       operationId: deleteKafkaById
@@ -404,6 +417,10 @@ components:
       allOf:
       - $ref: '#/components/schemas/List'
       - $ref: '#/components/schemas/ErrorList_allOf'
+    TokenResponse:
+      allOf:
+      - $ref: '#/components/schemas/ObjectReference'
+      - $ref: '#/components/schemas/TokenResponse_allOf'
     KafkaRequest:
       allOf:
       - $ref: '#/components/schemas/ObjectReference'
@@ -426,6 +443,12 @@ components:
           items:
             $ref: '#/components/schemas/Error'
           type: array
+    TokenResponse_allOf:
+      properties:
+        clientID:
+          type: string
+        clientSecret:
+          type: string
     KafkaRequest_allOf:
       example: '{"$ref":"#/components/examples/KafkaRequestExample"}'
       properties:

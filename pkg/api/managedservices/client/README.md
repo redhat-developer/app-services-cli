@@ -33,6 +33,7 @@ All URIs are relative to *https://api.openshift.com*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**CreateKafka**](docs/DefaultApi.md#createkafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
+*DefaultApi* | [**CreateServiceAccount**](docs/DefaultApi.md#createserviceaccount) | **Get** /api/managed-services-api/v1/serviceAccount | Create a kafka service account
 *DefaultApi* | [**DeleteKafkaById**](docs/DefaultApi.md#deletekafkabyid) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 *DefaultApi* | [**GetKafkaById**](docs/DefaultApi.md#getkafkabyid) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
 *DefaultApi* | [**ListKafkas**](docs/DefaultApi.md#listkafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
@@ -50,6 +51,8 @@ Class | Method | HTTP request | Description
  - [KafkaRequestListAllOf](docs/KafkaRequestListAllOf.md)
  - [List](docs/List.md)
  - [ObjectReference](docs/ObjectReference.md)
+ - [TokenResponse](docs/TokenResponse.md)
+ - [TokenResponseAllOf](docs/TokenResponseAllOf.md)
 
 
 ## Documentation For Authorization
