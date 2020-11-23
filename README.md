@@ -1,6 +1,6 @@
 # rhoas cli
 
-Repository for the Red Hat Managed Application Services CLI.
+Repository for the RHOAS CLI.
 
 ## Installing cli
 
