@@ -1,8 +1,8 @@
-# rhoas cli
+# RHOAS CLI
 
 Repository for the RHOAS CLI.
 
-## Installing cli
+## Installing CLI
 
 Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to download the latest release for your operating system.
 
