@@ -1,8 +1,8 @@
-# rhoas CLI
+# rhoas cli
 
 Repository for the Red Hat Managed Application Services CLI.
 
-## Installing CLI
+## Installing cli
 
 Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to download the latest release for your operating system.
 
