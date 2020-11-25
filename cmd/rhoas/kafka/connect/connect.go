@@ -131,13 +131,11 @@ func connectToCluster() {
 		return
 	}
 
+	fmt.Fprintf(os.Stderr, "\nCredentials created")
+
 	secret := &apiv1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: secretName,
-			Annotations: map[string]string{
-				"service.binding/user":   "path={.spec.credentials.clientID}",
-				"service.binding/secret": "path={.spec.credentials.clientSecret}",
-			},
 		},
 		StringData: map[string]string{
 			"clientID":     "test",
