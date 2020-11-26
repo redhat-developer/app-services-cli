@@ -10,8 +10,8 @@ import (
 
 	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/flags"
-	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
@@ -37,9 +37,9 @@ func runCreate(cmd *cobra.Command, _ []string) {
 	provider := commonflags.MustGetDefinedString(flags.FlagProvider, cmd.Flags())
 	multiAZ := commonflags.MustGetBool(flags.FlagMultiAZ, cmd.Flags())
 
-	client := ms.BuildClient()
+	client := builders.BuildClient()
 
-	kafkaRequest := msapi.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
+	kafkaRequest := managedservices.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
 	response, status, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
 
 	if err != nil {

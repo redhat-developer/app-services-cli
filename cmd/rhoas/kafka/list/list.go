@@ -10,8 +10,9 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/cmdutil/flags"
-	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
@@ -42,8 +43,8 @@ func runList(cmd *cobra.Command, _ []string) {
 	page := flags.GetString(FlagPage, cmd.Flags())
 	size := flags.GetString(FlagSize, cmd.Flags())
 
-	client := ms.BuildClient()
-	options := msapi.ListKafkasOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
+	client := builders.BuildClient()
+	options := managedservices.ListKafkasOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {

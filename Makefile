@@ -4,7 +4,7 @@ SHELL = bash
 # The details of the application:
 binary:=rhoas
 
-managedservices_client_dir=./pkg/api/managedservices/client
+managedservices_client_dir=./pkg/api/managedservices
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -57,7 +57,7 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name msapi --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
+	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name managedservices --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
 	openapi-generator validate -i openapi/managed-services-api.yaml
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
