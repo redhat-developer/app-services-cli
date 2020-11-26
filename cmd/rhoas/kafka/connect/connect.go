@@ -31,6 +31,7 @@ var localOnly bool
 var secretOnly bool
 var kubeConfigCustomLocation string
 var secretName string
+var forceKafkaSelect bool
 
 var statusMsg = `
 Linking your cluster with Managed Kafka
@@ -61,6 +62,7 @@ If your cluster has binding-operator installed you would be able to bind your ap
 	cmd.Flags().BoolVarP(&secretOnly, "secret-only", "s", false, "Apply only secret and without CR. Can be used when no binding operator is configured")
 	cmd.Flags().StringVarP(&kubeConfigCustomLocation, "kubeconfig", "", "", "Location of the .kube/config file")
 	cmd.Flags().StringVarP(&secretName, "secretName", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
+	cmd.Flags().BoolVarP(&forceKafkaSelect, "forceKafkaSelection", "", false, "Name of the secret that will be used to hold Kafka credentials")
 	return cmd
 }
 
@@ -110,6 +112,13 @@ func connectToCluster() {
 
 	currentNamespace, _, _ := kubeClientconfig.Namespace()
 	clicfg, err := config.Load()
+
+	if !clicfg.HasKafka() || forceKafkaSelect {
+		clicfg = useKafka(clicfg)
+		if clicfg == nil {
+			return
+		}
+	}
 
 	if err != nil {
 		fmt.Fprint(os.Stderr, "\nInvalid configuration file", err)
@@ -255,4 +264,41 @@ func createCR(clicfg *config.Config, credentials *managedservices.TokenResponse,
 	}
 
 	fmt.Fprintf(os.Stderr, "\nManagedKafkaConnection resource %v created\n", crName)
+}
+
+func useKafka(cliconfig *config.Config) *config.Config {
+	client := builders.BuildClient()
+	options := managedservices.ListKafkasOpts{}
+	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", err)
+		os.Exit(1)
+	}
+
+	if response.Size == 0 {
+		fmt.Fprintln(os.Stderr, "No Kafka clusters found.")
+		return nil
+	}
+
+	kafkas := []string{}
+	for index := 0; index < len(response.Items); index++ {
+		kafkas = append(kafkas, response.Items[index].Name)
+	}
+
+	prompt := promptui.Select{
+		Label: "Select Kafka cluster to connect",
+		Items: kafkas,
+	}
+
+	index, _, err := prompt.Run()
+	if err == nil {
+		selectedKafka := response.Items[index]
+		var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: selectedKafka.Id, ClusterName: selectedKafka.Name, ClusterHost: selectedKafka.BootstrapServerHost}
+		cliconfig.Services.SetKafka(&kafkaConfig)
+
+		return cliconfig
+	}
+	return nil
+
 }

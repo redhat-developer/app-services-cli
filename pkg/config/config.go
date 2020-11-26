@@ -32,7 +32,7 @@ type Config struct {
 
 // ServiceConfigMap is a map of configs for the managed application services
 type ServiceConfigMap struct {
-	Kafka KafkaConfig `json:"kafka,omitempty"`
+	Kafka *KafkaConfig `json:"kafka,omitempty"`
 }
 
 // KafkaConfig is the config for the managed Kafka service
@@ -69,10 +69,13 @@ func (c *Config) SetInsecure(insecure bool) {
 func (c *Config) SetAuthURL(url string) {
 	c.AuthURL = url
 }
+func (c *Config) HasKafka() bool {
+	return c.Services.Kafka != nil
+}
 
 // SetKafka sets the current Kafka cluster
 func (s *ServiceConfigMap) SetKafka(k *KafkaConfig) {
-	s.Kafka = *k
+	s.Kafka = k
 }
 
 // Save saves the given configuration to the configuration file.
