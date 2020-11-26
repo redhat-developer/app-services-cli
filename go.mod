@@ -12,6 +12,7 @@ require (
 	github.com/fatih/color v1.10.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20200805134727-ea32388e35c1
+	github.com/manifoldco/promptui v0.8.0
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2

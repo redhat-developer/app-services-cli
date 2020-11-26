@@ -3,13 +3,16 @@ package connect
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/fatih/color"
+	"github.com/manifoldco/promptui"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
@@ -34,7 +37,7 @@ Linking your cluster with Managed Kafka
 Kafka instance: %v
 Namespace: %v
 Secret name: %v
-Press Enter to continue
+
 `
 
 func NewConnectCommand() *cobra.Command {
@@ -113,8 +116,9 @@ func connectToCluster() {
 	}
 
 	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(clicfg.Services.Kafka.ClusterName), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
-	fmt.Scanln()
-
+	if shouldStop := showQuestion("Do you want to continue?"); shouldStop {
+		return
+	}
 	client := ms.BuildClient()
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
@@ -166,4 +170,32 @@ func connectToCluster() {
 func fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
+}
+
+func showQuestion(message string) bool {
+	allowedValues := [...]string{"y", "yes", "no", "n"}
+
+	validate := func(input string) error {
+		for _, value := range allowedValues {
+			if strings.ToLower(input) == value {
+				return nil
+			}
+		}
+		return errors.New(fmt.Sprintf("Number should be one of the values %v", allowedValues))
+	}
+
+	prompt := promptui.Prompt{
+		Label:    message,
+		Validate: validate,
+		Default:  "y",
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		return showQuestion(message)
+	}
+
+	result = strings.ToLower(result)
+
+	return result == "y" || result == "yes"
 }
