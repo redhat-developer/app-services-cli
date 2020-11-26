@@ -3,27 +3,34 @@
 package login
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 
-	"github.com/dgrijalva/jwt-go"
-	sdk "github.com/openshift-online/ocm-sdk-go"
-	"github.com/spf13/cobra"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/pkce"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+
+	"github.com/phayes/freeport"
+
+	"golang.org/x/oauth2"
+
+	"github.com/coreos/go-oidc"
+
+	"github.com/spf13/cobra"
 )
 
-var args struct {
-	tokenURL string
-	token    string
-	url      string
-}
-
 const (
-	devURL         = "http://localhost:8000"
-	productionURL  = "https://api.openshift.com"
-	stagingURL     = "https://api.stage.openshift.com"
-	integrationURL = "https://api-integration.6943.hive-integration.openshiftapps.com"
+	devURL            = "http://localhost:8000"
+	productionURL     = "https://api.openshift.com"
+	stagingURL        = "https://api.stage.openshift.com"
+	integrationURL    = "https://api-integration.6943.hive-integration.openshiftapps.com"
+	productionAuthURL = "https://sso.qa.redhat.com/auth/realms/redhat-external"
+	defaultClientID   = "rhoas-cli"
 )
 
 // When the value of the `--url` option is one of the keys of this map it will be replaced by the
@@ -41,32 +48,34 @@ var urlAliases = map[string]string{
 	"development": devURL,
 }
 
+var args struct {
+	url                   string
+	authURL               string
+	clientID              string
+	insecureSkipTLSVerify bool
+}
+
 // NewLoginCmd gets the command that's log the user in
 func NewLoginCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login to Managed Application Services",
 		Long:  "Login to Managed Application Services in order to manage your services",
-		Run:   runLogin,
+		RunE:  runLogin,
 	}
 
-	cmd.Flags().StringVar(&args.token, "token", "", "access token that can be used for login")
-	_ = cmd.MarkFlagRequired("token")
-	cmd.Flags().StringVar(&args.tokenURL, "token-url", sdk.DefaultTokenURL, "OpenID token URL")
-	cmd.Flags().StringVar(&args.url, "url", "staging", "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
+	cmd.Flags().StringVar(&args.url, "url", stagingURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
+	cmd.Flags().StringVar(&args.authURL, "auth-url", productionAuthURL, "URL of the authorization server.")
+	cmd.Flags().BoolVar(&args.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
+	cmd.Flags().StringVar(&args.clientID, "client-id", defaultClientID, "OpenID client identifier.")
 
 	return cmd
 }
 
-func runLogin(cmd *cobra.Command, _ []string) {
-	cfg, err := config.Load()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't load config file: %v\n", err)
-		os.Exit(1)
-	}
-	if cfg == nil {
-		cfg = new(config.Config)
-	}
+// nolint
+func runLogin(cmd *cobra.Command, _ []string) error {
+	cfg, _ := config.Load()
+	cfg.SetInsecure(args.insecureSkipTLSVerify)
 
 	// If the value of the `--url` is any of the aliases then replace it with the corresponding
 	// real URL:
@@ -75,77 +84,125 @@ func runLogin(cmd *cobra.Command, _ []string) {
 		gatewayURL = args.url
 	}
 
-	cfg.URL = gatewayURL
+	var authURL string
+	if args.authURL != "" {
+		authURL = args.authURL
+	}
 
-	var parsedToken *jwt.Token
-	parser := new(jwt.Parser)
-	parsedToken, _, err = parser.ParseUnverified(args.token, jwt.MapClaims{})
+	httpClient := cfg.CreateHTTPClient()
+
+	parentCtx, cancel := context.WithCancel(context.Background())
+	ctx := oidc.ClientContext(parentCtx, httpClient)
+	provider, err := oidc.NewProvider(ctx, authURL)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't parse token '%s': %v\n", args.token, err)
-		os.Exit(1)
+		return err
 	}
-	tokenType, err := tokenType(parsedToken)
+
+	redirectURLPort, err := freeport.GetFreePort()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't extract type from 'typ' claim of token '%s': %v\n", args.token, err)
-		os.Exit(1)
+		return err
+	}
+	redirectURL := url.URL{
+		Scheme: "http",
+		Host:   fmt.Sprintf("localhost:%v", redirectURLPort),
+		Path:   "sso-redhat-callback",
+	}
+	oauthCfg := oauth2.Config{
+		ClientID:    args.clientID,
+		Endpoint:    provider.Endpoint(),
+		RedirectURL: redirectURL.String(),
+		Scopes:      []string{oidc.ScopeOpenID},
 	}
 
-	cfg.TokenURL = args.tokenURL
-	switch tokenType {
-	case "Bearer":
-		cfg.AccessToken = args.token
-	case "Refresh", "Offline":
-		cfg.RefreshToken = args.token
-	case "":
-		fmt.Fprintf(os.Stderr, "Don't know how to handle empty type in token '%s'\n", args.token)
-		os.Exit(1)
-	default:
-		fmt.Fprintf(os.Stderr, "Don't know how to handle token type '%s' in token '%s'\n", tokenType, args.token)
-		os.Exit(1)
+	oidcCfg := &oidc.Config{
+		ClientID: oauthCfg.ClientID,
 	}
 
-	// Create a connection and get the token to verify that the crendentials are correct:
-	connection, err := cfg.Connection()
+	verifier := provider.Verifier(oidcCfg)
+
+	state, _ := pkce.GenerateVerifier(128)
+
+	// PKCE
+	pkceCodeVerifier, err := pkce.GenerateVerifier(128)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v", err)
-		os.Exit(1)
+		return err
 	}
-	accessToken, refreshToken, err := connection.Tokens()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't get token: %v\n", err)
-		os.Exit(1)
+	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
+	authCodeURL := oauthCfg.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
+
+	sm := http.NewServeMux()
+	server := http.Server{
+		Handler: sm,
+		Addr:    redirectURL.Host,
 	}
 
-	// Save the configuration, but clear the user name and password before unless we have
-	// explicitly been asked to store them persistently:
-	cfg.AccessToken = accessToken
-	cfg.RefreshToken = refreshToken
-	err = config.Save(cfg)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't save config file: %v\n", err)
-		os.Exit(1)
-	}
+	sm.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, authCodeURL, http.StatusFound)
+	})
 
-	fmt.Fprintln(os.Stderr, "Successfully logged in using token")
-}
+	sm.HandleFunc("/sso-redhat-callback", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("state") != state {
+			http.Error(w, "state did not match", http.StatusBadRequest)
+			return
+		}
 
-// tokenType extracts the value of the `typ` claim. It returns the value as a string, or the empty
-// string if there is no such claim.
-func tokenType(token *jwt.Token) (typ string, err error) {
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		err = fmt.Errorf("expected map claims but got %T", claims)
-		return
-	}
-	claim, ok := claims["typ"]
-	if !ok {
-		return
-	}
-	value, ok := claim.(string)
-	if !ok {
-		err = fmt.Errorf("expected string 'typ' but got %T", claim)
-		return
-	}
-	typ = value
-	return
+		oauthExchangeOpts := []oauth2.AuthCodeOption{
+			oauth2.SetAuthURLParam("code_verifier", pkceCodeVerifier),
+			oauth2.SetAuthURLParam("grant_type", "authorization_code"),
+		}
+
+		oauth2Token, err := oauthCfg.Exchange(ctx, r.URL.Query().Get("code"), oauthExchangeOpts...)
+		if err != nil {
+			http.Error(w, "Failed to exchange token: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rawIDToken, ok := oauth2Token.Extra("id_token").(string)
+		if !ok {
+			http.Error(w, "No id_token field in oauth2 token.", http.StatusInternalServerError)
+			return
+		}
+		idToken, err := verifier.Verify(ctx, rawIDToken)
+		if err != nil {
+			http.Error(w, "Failed to verify ID Token: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		resp := struct {
+			OAuth2Token   *oauth2.Token
+			IDTokenClaims *json.RawMessage // ID Token payload is just JSON.
+		}{oauth2Token, new(json.RawMessage)}
+
+		if err = idToken.Claims(&resp.IDTokenClaims); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		cfg.SetClientID(args.clientID)
+		cfg.SetAuthURL(authURL)
+		cfg.SetURL(gatewayURL)
+		cfg.SetScopes(oauthCfg.Scopes)
+		cfg.SetInsecure(args.insecureSkipTLSVerify)
+		cfg.SetAccessToken(oauth2Token.AccessToken)
+		cfg.SetRefreshToken(oauth2Token.RefreshToken)
+
+		if err = config.Save(cfg); err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			return
+		}
+
+		fmt.Fprintln(os.Stderr, "Successfully logged in to RHOAS")
+		cancel()
+	})
+
+	openBrowserExec, _ := browser.GetOpenBrowserCommand(authCodeURL)
+	_ = openBrowserExec.Run()
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil {
+			fmt.Fprintf(os.Stderr, "Error starting server: %v", err)
+		}
+	}()
+	<-parentCtx.Done()
+
+	return nil
 }
