@@ -11,6 +11,7 @@ import (
 
 	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 
@@ -66,6 +67,7 @@ If your cluster has binding-operator installed you would be able to bind your ap
 
 func runBind(cmd *cobra.Command, _ []string) {
 	if localOnly {
+		// TODO
 		fmt.Fprintf(os.Stderr, "Generating CR files locally")
 		return
 	}
@@ -116,9 +118,11 @@ func connectToCluster() {
 	}
 
 	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(clicfg.Services.Kafka.ClusterName), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
-	if shouldStop := showQuestion("Do you want to continue?"); shouldStop {
+	if shouldContinue := showQuestion("Do you want to continue?"); shouldContinue == false {
 		return
 	}
+
+	// Create credentials
 	client := ms.BuildClient()
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
@@ -137,33 +141,71 @@ func connectToCluster() {
 
 	fmt.Fprintf(os.Stderr, "\nCredentials created")
 
+	// Create secret
 	secret := &apiv1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: secretName,
 		},
 		StringData: map[string]string{
-			"clientID":     "test",
-			"clientSecret": "testtestetse",
+			"clientID":     credentials.ClientID,
+			"clientSecret": credentials.ClientSecret,
 		},
 	}
 
 	_, err = clientset.CoreV1().Secrets(currentNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 
 	if err == nil {
-		fmt.Fprint(os.Stderr, "\nSecret exist. Please use --secretName argument to change name")
+		fmt.Fprint(os.Stderr, "\nSecret exist. Please use --secretName argument to change name\n")
 		return
 	}
 
 	createdSecret, err := clientset.CoreV1().Secrets(currentNamespace).Create(context.TODO(), secret, metav1.CreateOptions{})
 	if err != nil {
-		fmt.Fprint(os.Stderr, "\nError when creating secret", err)
+		fmt.Fprint(os.Stderr, "\nError when creating secret\n", err)
 		return
 	}
 
 	fmt.Fprintf(os.Stderr, "\nSecret %v created", createdSecret.Name)
 
-	// TODO CR
 	crName := secretName + "-" + clicfg.Services.Kafka.ClusterName
+	crInstance := &connection.ManagedKafkaConnection{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: crName,
+		},
+		TypeMeta: metav1.TypeMeta{
+			Kind:       "ManagedKafkaConnection",
+			APIVersion: "oas.redhat.com/v1",
+		},
+		Spec: connection.ManagedKafkaConnectionSpec{
+			BootstrapServer: connection.BootstrapServerSpec{
+				Host: clicfg.Services.Kafka.ClusterHost,
+			},
+			Credentials: connection.CredentialsSpec{
+				CientID:      credentials.ClientID,
+				ClientSecret: credentials.ClientSecret,
+			},
+		},
+	}
+
+	crJSON, err := json.Marshal(crInstance)
+	if err != nil {
+		fmt.Fprint(os.Stderr, "\nError when parsing ManagedKafkaConnection CR: ", err)
+		return
+	}
+
+	crAPIURL := "/apis/oas.redhat.com/v1/managedkafkaconnections"
+	data := clientset.RESTClient().
+		Post().
+		AbsPath(crAPIURL).
+		Body(crJSON).
+		Do(context.TODO())
+
+	if data.Error() != nil {
+		rawData, _ := data.Raw()
+		fmt.Fprint(os.Stderr, "\nError when creating ManagedKafkaConnection CR: ", string(rawData))
+		return
+	}
+
 	fmt.Fprintf(os.Stderr, "\nManagedKafkaConnection resource %v created\n", crName)
 }
 
