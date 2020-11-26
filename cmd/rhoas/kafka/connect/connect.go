@@ -121,13 +121,55 @@ func connectToCluster() {
 		return
 	}
 
-	// Create credentials
+	credentials := createCredentials()
+	if credentials == nil {
+		return
+	}
+	createSecret(credentials, currentNamespace, clientset)
+
+	createCR(clicfg, credentials, clientset)
+}
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
+}
+
+func showQuestion(message string) bool {
+	allowedValues := [...]string{"y", "yes", "no", "n"}
+
+	validate := func(input string) error {
+		for _, value := range allowedValues {
+			if strings.ToLower(input) == value {
+				return nil
+			}
+		}
+		return fmt.Errorf("Number should be one of the values %v", allowedValues)
+	}
+
+	prompt := promptui.Prompt{
+		Label:    message,
+		Validate: validate,
+		Default:  "y",
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		return showQuestion(message)
+	}
+
+	result = strings.ToLower(result)
+
+	return result == "y" || result == "yes"
+}
+
+func createCredentials() *managedservices.TokenResponse {
 	client := builders.BuildClient()
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "\nError creating Kafka Credentials: %v\n", err)
-		return
+		return nil
 	}
 
 	jsonResponse, _ := json.Marshal(response)
@@ -135,11 +177,14 @@ func connectToCluster() {
 	err = json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "\nInvalid JSON response from server", err)
-		return
+		return nil
 	}
 
 	fmt.Fprintf(os.Stderr, "\nCredentials created")
+	return &credentials
+}
 
+func createSecret(credentials *managedservices.TokenResponse, currentNamespace string, clientset *kubernetes.Clientset) *apiv1.Secret {
 	// Create secret
 	secret := &apiv1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -151,21 +196,25 @@ func connectToCluster() {
 		},
 	}
 
-	_, err = clientset.CoreV1().Secrets(currentNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
+	_, err := clientset.CoreV1().Secrets(currentNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 
 	if err == nil {
 		fmt.Fprint(os.Stderr, "\nSecret exist. Please use --secretName argument to change name\n")
-		return
+		return nil
 	}
 
 	createdSecret, err := clientset.CoreV1().Secrets(currentNamespace).Create(context.TODO(), secret, metav1.CreateOptions{})
 	if err != nil {
 		fmt.Fprint(os.Stderr, "\nError when creating secret\n", err)
-		return
+		return nil
 	}
 
 	fmt.Fprintf(os.Stderr, "\nSecret %v created", createdSecret.Name)
 
+	return secret
+}
+
+func createCR(clicfg *config.Config, credentials *managedservices.TokenResponse, clientset *kubernetes.Clientset) {
 	crName := secretName + "-" + clicfg.Services.Kafka.ClusterName
 	crInstance := &connection.ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
@@ -206,37 +255,4 @@ func connectToCluster() {
 	}
 
 	fmt.Fprintf(os.Stderr, "\nManagedKafkaConnection resource %v created\n", crName)
-}
-
-func fileExists(path string) bool {
-	_, err := os.Stat(path)
-	return !os.IsNotExist(err)
-}
-
-func showQuestion(message string) bool {
-	allowedValues := [...]string{"y", "yes", "no", "n"}
-
-	validate := func(input string) error {
-		for _, value := range allowedValues {
-			if strings.ToLower(input) == value {
-				return nil
-			}
-		}
-		return fmt.Errorf("Number should be one of the values %v", allowedValues)
-	}
-
-	prompt := promptui.Prompt{
-		Label:    message,
-		Validate: validate,
-		Default:  "y",
-	}
-
-	result, err := prompt.Run()
-	if err != nil {
-		return showQuestion(message)
-	}
-
-	result = strings.ToLower(result)
-
-	return result == "y" || result == "yes"
 }
