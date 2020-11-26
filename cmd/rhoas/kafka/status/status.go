@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
@@ -35,7 +35,7 @@ func runStatus(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := ms.BuildClient()
+	client := builders.BuildClient()
 
 	res, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
 	if err != nil {

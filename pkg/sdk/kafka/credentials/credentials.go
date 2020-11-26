@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
@@ -65,7 +65,7 @@ func RunCredentials(outputFlagValue string, force bool) {
 		fileName = "credentials.json"
 	}
 
-	client := ms.BuildClient()
+	client := builders.BuildClient()
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
 	if err != nil {
@@ -79,7 +79,7 @@ func RunCredentials(outputFlagValue string, force bool) {
 	}
 
 	jsonResponse, _ := json.Marshal(response)
-	var credentials msapi.TokenResponse
+	var credentials managedservices.TokenResponse
 	err = json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "Invalid response from server", err)

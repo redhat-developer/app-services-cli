@@ -1,4 +1,4 @@
-# Go API client for msapi
+# Go API client for managedservices
 
 Managed Service API
 
@@ -23,7 +23,7 @@ go get github.com/antihax/optional
 Put the package under your project folder and add the following in import:
 
 ```golang
-import "./msapi"
+import "./managedservices"
 ```
 
 ## Documentation for API Endpoints
