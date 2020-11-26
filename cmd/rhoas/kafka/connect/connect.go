@@ -3,14 +3,13 @@ package connect
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
-	ms "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	msapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
@@ -123,7 +122,7 @@ func connectToCluster() {
 	}
 
 	// Create credentials
-	client := ms.BuildClient()
+	client := builders.BuildClient()
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
 	if err != nil {
@@ -132,7 +131,7 @@ func connectToCluster() {
 	}
 
 	jsonResponse, _ := json.Marshal(response)
-	var credentials msapi.TokenResponse
+	var credentials managedservices.TokenResponse
 	err = json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "\nInvalid JSON response from server", err)
@@ -223,7 +222,7 @@ func showQuestion(message string) bool {
 				return nil
 			}
 		}
-		return errors.New(fmt.Sprintf("Number should be one of the values %v", allowedValues))
+		return fmt.Errorf("Number should be one of the values %v", allowedValues)
 	}
 
 	prompt := promptui.Prompt{
