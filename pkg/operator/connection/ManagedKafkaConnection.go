@@ -22,22 +22,20 @@ type BootstrapServerSpec struct {
 	Host string `json:"host,omitempty"`
 }
 
-// CredentialType enumeration for types of credentials
+// CredentialType
 type CredentialType string
 
 const (
-	// ClientCredentials ... type
-	ClientCredentials CredentialType = "ClientCredentials"
+	// ClientCredentials ... enumeration for types of credentials
+	ClientCredentials CredentialType = "ClientCredentialsSecret"
 )
 
 // CredentialsSpec specification containing various formats of credentials
 type CredentialsSpec struct {
 	// Type of the credential format. For example "ClientCredentials"
 	Kind CredentialType `json:"kind,omitempty"`
-	// ClientID Represents username in client credentials
-	CientID string `json:"clientID,omitempty"`
-	// ClientID Represents password in client credentials
-	ClientSecret string `json:"clientSecret,omitempty"`
+	// Reference to secret name that needs to be fetched
+	SecretName string `json:"secretName,omitempty"`
 }
 
 // ManagedKafkaConnectionStatus defines the observed state of ManagedKafkaConnection
