@@ -26,7 +26,7 @@ func NewListTopicCommand() *cobra.Command {
 }
 
 func listTopic(cmd *cobra.Command, _ []string) {
-	fmt.Fprintln(os.Stderr, "Listing topics ...")
+	fmt.Fprintln(os.Stderr, "Topics:")
 
 	err := topics.ListKafkaTopics()
 

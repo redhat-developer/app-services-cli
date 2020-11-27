@@ -45,11 +45,12 @@ func NewConnectCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "connect",
 		Short: "connect currently selected Kafka to your OpenShift cluster",
-		Long: `Connect will create secret containing kafka credentials that can be co
+		Long: `Connect will create secret containing Kafka credentials.
 
-Connect command will use current Kubernetes context (namespace/project you have selected) using oc or kubectl command line.
+Connect command will use current Kubernetes context (namespace/project you have selected) created by oc or kubectl command line.
 Connect command will retrieve credentials for your kafka and mount them as secret into your project.
 You can use secret directly or utilize service-binding-operator to automatically bind your instance
+For more details please visit:
 
 https://github.com/bf2fc6cc711aee1a0c2a/operator
 

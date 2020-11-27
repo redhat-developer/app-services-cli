@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
 )
 
@@ -90,7 +91,10 @@ func ListKafkaTopics() error {
 
 	for i := range partitions {
 		topicPartition := &partitions[i]
-		fmt.Fprintf(os.Stderr, "Topic name: '%v'  Replicas: '%v' \n", topicPartition.Topic, len(topicPartition.Replicas))
+		replicas := strconv.Itoa(len(topicPartition.Replicas))
+		fmt.Fprintf(os.Stderr, "Name: %v (Replicas: %v)\n",
+			color.HiGreenString(topicPartition.Topic),
+			color.HiRedString(replicas))
 	}
 
 	return nil

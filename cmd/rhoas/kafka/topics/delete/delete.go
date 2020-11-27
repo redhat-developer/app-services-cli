@@ -34,5 +34,5 @@ func deleteTopic(cmd *cobra.Command, _ []string) {
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v deleted", topicName)
+	fmt.Fprintf(os.Stderr, "\nTopic %v deleted\n", topicName)
 }
