@@ -135,8 +135,7 @@ func connectToCluster() {
 		return
 	}
 	createSecret(credentials, currentNamespace, clientset)
-
-	createCR(clicfg, credentials, clientset)
+	createCR(clicfg, clientset)
 }
 
 func fileExists(path string) bool {
@@ -199,6 +198,7 @@ func createSecret(credentials *managedservices.TokenResponse, currentNamespace s
 		ObjectMeta: metav1.ObjectMeta{
 			Name: secretName,
 		},
+		// Type of CredentialsSecret
 		StringData: map[string]string{
 			"clientID":     credentials.ClientID,
 			"clientSecret": credentials.ClientSecret,
@@ -223,7 +223,7 @@ func createSecret(credentials *managedservices.TokenResponse, currentNamespace s
 	return secret
 }
 
-func createCR(clicfg *config.Config, credentials *managedservices.TokenResponse, clientset *kubernetes.Clientset) {
+func createCR(clicfg *config.Config, clientset *kubernetes.Clientset) {
 	crName := secretName + "-" + clicfg.Services.Kafka.ClusterName
 	crInstance := &connection.ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
@@ -238,8 +238,8 @@ func createCR(clicfg *config.Config, credentials *managedservices.TokenResponse,
 				Host: clicfg.Services.Kafka.ClusterHost,
 			},
 			Credentials: connection.CredentialsSpec{
-				CientID:      credentials.ClientID,
-				ClientSecret: credentials.ClientSecret,
+				Kind:       connection.ClientCredentials,
+				SecretName: secretName,
 			},
 		},
 	}
@@ -300,5 +300,4 @@ func useKafka(cliconfig *config.Config) *config.Config {
 		return cliconfig
 	}
 	return nil
-
 }
