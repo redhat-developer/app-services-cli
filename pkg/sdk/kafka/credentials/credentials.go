@@ -85,13 +85,11 @@ func RunCredentials(outputFlagValue string, force bool) {
 		fmt.Fprint(os.Stderr, "Invalid response from server", err)
 	}
 
-	// TODO Config should also save human redable name
 	fmt.Fprintf(os.Stderr, "Writing credentials to %v \n", fileName)
 	fileContent := fmt.Sprintf(fileFormat, cfg.Services.Kafka.ClusterName, credentials.ClientID, credentials.ClientSecret)
 
 	dataToWrite := []byte(fileContent)
 
-	// TODO use https://github.com/manifoldco/promptui to check if file exist (overwrite?)
 	if fileExists(fileName) && !force {
 		fmt.Fprintf(os.Stderr, "File %v already exist. Use --force flag to override file.\n", fileName)
 		return
