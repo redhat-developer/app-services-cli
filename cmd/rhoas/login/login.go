@@ -33,6 +33,25 @@ const (
 	defaultClientID   = "rhoas-cli"
 )
 
+const PostLoginPage = `
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap" rel="stylesheet">
+<style>
+.content {
+	font-family: 'Red Hat Display', sans-serif;
+	margin: auto;
+  width: 50%;
+	padding: 10px;
+	margin-top: 350px;
+	text-align: center;
+}
+</style> 
+
+<div class="content">
+<h1>Logged in to RHOAS. Return to your terminal to begin.</h1>
+</div>
+`
+
 // When the value of the `--url` option is one of the keys of this map it will be replaced by the
 // corresponding value.
 var urlAliases = map[string]string{
@@ -190,6 +209,8 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 			return
 		}
 
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(w, PostLoginPage)
 		fmt.Fprintln(os.Stderr, "Successfully logged in to RHOAS")
 		cancel()
 	})

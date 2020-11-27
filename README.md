@@ -8,10 +8,16 @@ Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to downlo
 
 ## Getting Started
 
-1. Login to service using cloud.redhat.com token
+1. Login to RHOAS
 
+```shell
+rhoas login --insecure
 ```
-rhoas login --token <your-token>
+
+This will redirect you to log in to https://qa.sso.redhat.com/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs. To log in to a different server use the `--auth-url` flag:
+
+```shell
+rhoas login --auth-url=http://localhost:8080/auth/realms/my-keycloak-realm
 ```
 
 2. Use available Kafka commands
