@@ -3,9 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
-	"path/filepath"
-	"strings"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -52,23 +49,13 @@ func initConfig() {
 	fmt.Fprintf(os.Stderr, "Saved config to %v\n", cfgPath)
 }
 
-const fmTemplate = `---
-id: %s
-title: %s
----
-`
-
 /**
 * Generates documentation files
  */
 func generateDocumentation(rootCommand *cobra.Command) {
-	fmt.Fprint(os.Stderr, "Generating docs. Config to put into sidebars.json: \n\n")
+	fmt.Fprint(os.Stderr, "Generating docs.\n\n")
 	filePrepender := func(filename string) string {
-		name := filepath.Base(filename)
-		base := strings.TrimSuffix(name, path.Ext(name))
-		fmt.Printf("\"commands/%s\",", base)
-		finalName := strings.ReplaceAll(base, "_", " ")
-		return fmt.Sprintf(fmTemplate, base, finalName)
+		return ""
 	}
 
 	linkHandler := func(s string) string { return s }

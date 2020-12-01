@@ -114,11 +114,6 @@ export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4NDgzMTAyLTRhYzAtND
 ## Documentation
 
 The main CLI documentation can be found in the `./docs` folder.
-The documentation website (`./website`) is built dynamically from the documentation files using [Docusaurus](https://docusaurus.io/).
-
-### `make docs/open`
-
-Opens the documentation website at [`http://localhost:3000`](http://localhost:3000).
 
 ### Generating documentation
 
@@ -130,8 +125,7 @@ make docs/generate
 
 #### `make docs/generate`
 
-After running the command, the documentation should be updated. If there were new commands added we need to update `./website/sidebars.json` file
-with content that was printed into stdout.
+After running the command, the documentation should be updated.
 
 ## Best practices
 
