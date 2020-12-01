@@ -5,15 +5,15 @@ package kafka
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/connect"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/credentials"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/delete"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/get"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/status"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/topics"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka/use"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/connect"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/create"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/credentials"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/get"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/list"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/status"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
 )
 
 const (

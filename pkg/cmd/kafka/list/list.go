@@ -9,7 +9,7 @@ import (
 	"github.com/antihax/optional"
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cmdutil/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"

@@ -16,7 +16,7 @@ The following will need to be installed on your device in order to contribute to
 
 ### Running CLI commands
 
-You can run the CLI commands files directly with `go run`. All commands and subcommands are in the `./cmd/rhoas` folder.
+You can run the CLI commands files directly with `go run`. All commands and subcommands are in the `./pkg/cmd` folder.
 
 ```shell
 go run ./cmd/rhoas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
@@ -70,9 +70,17 @@ Generates a Golang API client in `./pkg/api/managedservices/client`.
 The repo has a local mocked version of the Managed Services API in `./mas-mock`.
 To work and test CLI locally please follow the mock readme and then login into cli using dev profile:
 
-> rhoas login --url=dev --token=mock-token
+> rhoas login --url=http://locahost:8080
 
 > The mock API can become outdated from the current state of the Managed Services API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
+
+## Mock Authentication
+
+The repo has a local Keycloak instance which replicates the production environment. To start the server run `make mock-api/start`.
+
+```shell
+rhoas login --auth-url http://localhost:80
+```
 
 ### `make mock-api/start`
 
@@ -92,7 +100,7 @@ Imports a Keycloak realm and `rhoas-cli` client.
 To log in to the mock API, run `rhoas login against the local server` with your authentication token:
 
 ```shell
-rhoas login --url http://localhost:8000 --token $TOKEN
+rhoas login --url http://localhost:8000
 ```
 
 If you don't have an authentication token, you can still use a faked one, provided it has the correct payload:

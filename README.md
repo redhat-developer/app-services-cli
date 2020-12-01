@@ -17,7 +17,7 @@ rhoas login --insecure
 This will redirect you to log in to https://qa.sso.redhat.com/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs. To log in to a different server use the `--auth-url` flag:
 
 ```shell
-rhoas login --auth-url=http://localhost:8080/auth/realms/my-keycloak-realm
+rhoas login
 ```
 
 2. Use available Kafka commands
