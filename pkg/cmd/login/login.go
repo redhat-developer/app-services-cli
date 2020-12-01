@@ -24,13 +24,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	devURL            = "http://localhost:8000"
-	productionURL     = "https://api.openshift.com"
-	stagingURL        = "https://api.stage.openshift.com"
-	integrationURL    = "https://api-integration.6943.hive-integration.openshiftapps.com"
-	productionAuthURL = "https://sso.qa.redhat.com/auth/realms/redhat-external"
-	defaultClientID   = "rhoas-cli"
+var (
+	devURL          = "http://localhost:8000"
+	productionURL   = "https://api.openshift.com"
+	stagingURL      = "https://api.stage.openshift.com"
+	integrationURL  = "https://api-integration.6943.hive-integration.openshiftapps.com"
+	defaultClientID = "rhoas-cli"
 )
 
 const PostLoginPage = `
@@ -84,7 +83,6 @@ func NewLoginCmd() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&args.url, "url", stagingURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
-	cmd.Flags().StringVar(&args.authURL, "auth-url", productionAuthURL, "URL of the authorization server.")
 	cmd.Flags().BoolVar(&args.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	cmd.Flags().StringVar(&args.clientID, "client-id", defaultClientID, "OpenID client identifier.")
 
@@ -103,12 +101,9 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		gatewayURL = args.url
 	}
 
-	var authURL string
-	if args.authURL != "" {
-		authURL = args.authURL
-	}
-
 	httpClient := cfg.CreateHTTPClient()
+
+	authURL := config.AuthURL
 
 	parentCtx, cancel := context.WithCancel(context.Background())
 	ctx := oidc.ClientContext(parentCtx, httpClient)
@@ -197,7 +192,6 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		}
 
 		cfg.SetClientID(args.clientID)
-		cfg.SetAuthURL(authURL)
 		cfg.SetURL(gatewayURL)
 		cfg.SetScopes(oauthCfg.Scopes)
 		cfg.SetInsecure(args.insecureSkipTLSVerify)

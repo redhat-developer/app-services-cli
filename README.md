@@ -14,7 +14,7 @@ Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to downlo
 rhoas login --insecure
 ```
 
-This will redirect you to log in to https://qa.sso.redhat.com/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs. To log in to a different server use the `--auth-url` flag:
+This will redirect you to log in to https://sso.redhat.com/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs.
 
 ```shell
 rhoas login
