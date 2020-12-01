@@ -2,11 +2,11 @@ package root
 
 import (
 	"github.com/MakeNowJust/heredoc"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/completion"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/docs"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/kafka"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/login"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/cmd/rhoas/logout"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/docs"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/logout"
 	"github.com/spf13/cobra"
 )
 

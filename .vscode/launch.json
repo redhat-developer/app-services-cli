@@ -12,8 +12,7 @@
       "program": "${workspaceFolder}/cmd/rhoas",
       "env": {},
       "args": [
-        "login",
-        "--url=http://localhost:8080/auth/realms/redhat-external"
+        "login"
       ]
     },
     {
