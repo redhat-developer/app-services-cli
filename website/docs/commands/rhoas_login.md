@@ -17,7 +17,6 @@ rhoas login [flags]
 ### Options
 
 ```
-      --auth-url string    URL of the authorization server. (default "https://sso.qa.redhat.com/auth/realms/redhat-external")
       --client-id string   OpenID client identifier. (default "rhoas-cli")
   -h, --help               help for login
       --insecure           Enables insecure communication with the server. This disables verification of TLS certificates and host names.

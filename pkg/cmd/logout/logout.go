@@ -22,15 +22,25 @@ func NewLogoutCommand() *cobra.Command {
 }
 
 func runLogout(cmd *cobra.Command, _ []string) error {
-	cfg, _ := config.Load()
+	cfg, err := config.Load()
 
-	err := cfg.Logout()
+	if err != nil {
+		return err
+	}
+
+	err = cfg.Logout()
+
 	if err != nil {
 		return err
 	}
 
 	fmt.Println("Successfully logged out.")
-	err = config.Remove()
+
+	cfg.SetAccessToken("")
+	cfg.SetRefreshToken("")
+
+	err = config.Save(cfg)
+
 	if err != nil {
 		return err
 	}

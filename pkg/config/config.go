@@ -18,12 +18,15 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
+const (
+	AuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
+)
+
 // Config is the type used to track the config of the client
 type Config struct {
 	AccessToken  string           `json:"access_token,omitempty" doc:"Bearer access token."`
 	RefreshToken string           `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
 	Services     ServiceConfigMap `json:"services,omitempty"`
-	AuthURL      string           `json:"auth_url,omitempty"`
 	URL          string           `json:"url,omitempty" doc:"URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging' and 'integration'."`
 	ClientID     string           `json:"client_id,omitempty" doc:"OpenID client identifier."`
 	Insecure     bool             `json:"insecure,omitempty" doc:"Enables insecure communication with the server. This disables verification of TLS certificates and host names."`
@@ -66,9 +69,6 @@ func (c *Config) SetInsecure(insecure bool) {
 	c.Insecure = insecure
 }
 
-func (c *Config) SetAuthURL(url string) {
-	c.AuthURL = url
-}
 func (c *Config) HasKafka() bool {
 	return c.Services.Kafka != nil
 }
@@ -230,7 +230,7 @@ func (c *Config) TokenRefresh() error {
 
 // Create a new Keycloak client
 func (c *Config) NewClient() gocloak.GoCloak {
-	authURL, _ := url.Parse(c.AuthURL)
+	authURL, _ := url.Parse(AuthURL)
 	authURLBase, _ := url.Parse(authURL.Scheme + "://" + authURL.Host)
 	client := gocloak.NewClient(authURLBase.String())
 	restyClient := *client.RestyClient()

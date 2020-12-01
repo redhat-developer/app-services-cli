@@ -78,8 +78,10 @@ To work and test CLI locally please follow the mock readme and then login into c
 
 The repo has a local Keycloak instance which replicates the production environment. To start the server run `make mock-api/start`.
 
+You will need to update the `config.AuthURL` variable to `http;//localhost:8080/auth/realms/redhat-external`.
+
 ```shell
-rhoas login --auth-url http://localhost:80
+rhoas login
 ```
 
 ### `make mock-api/start`
