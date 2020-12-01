@@ -1,0 +1,125 @@
+== Using Bin Scripts with Managed Kafka Quickstart
+
+This project illustrates how you can interact with a Managed Kafka using
+Kafka Bin Scripts.
+
+=== Prerequisite
+
+* https://www.apache.org/dyn/closer.cgi?path=/kafka/2.6.0/kafka_2.13-2.6.0.tgz[Kafka
+Bin Scripts]
+* https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[rhmas cli]
+* https://stedolan.github.io/jq/[jq]
+* https://kubernetes.io/fr/docs/reference/kubectl/overview/[kubectl].
+This is temporary required
+
+=== Spinning a Managed Kafka cluster
+
+First you need a Kafka cluster. You can follow the instructions to
+create one.
+
+Using the https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[RHMAS
+CLI], login and create a new cluster:
+
+[source,bash]
+----
+rhmas login --token=<token-from-token-page>
+rhmas kafka create --name=<your-cluster-name>
+----
+
+____
+NOTE: `your-cluster-name` is the name of your cluster NOTE: The token
+currently need to come from stagging environment:
+https://qaprodauth.cloud.redhat.com/openshift/token
+____
+
+Wait a couple of seconds for cluster to provision.
+
+You can use the:
+
+[source,bash]
+----
+rhmas kafka list
+----
+
+to check the status of the provisioned Kafka.
+
+At the moment we are missing the certificates, since this is not
+returned by the API. To retrieve them, we’ll need `kubectl` and access
+to the staging environment.
+
+The rest of the commands assumes that you are logged in to the staging
+environment OSD cluster.
+
+____
+NOTE: Certificates retrieval part will be automated by the CLI (We’ll
+need some work on the API front).
+____
+
+Retrieve certificates.
+
+[source,bash]
+----
+kubectl get secret <cluster-name>-cluster-ca-cert -o jsonpath='{.data.ca\.p12}' | base64 -d > /tmp/ca.p12
+----
+
+Certificate password
+
+[source,bash]
+----
+kubectl get secret <cluster-name>-cluster-ca-cert-o jsonpath='{.data.ca\.password}' | base64 -d > /tmp/ca.password
+----
+
+kafka properties configuration file.
+
+[source,properties]
+----
+security.protocol=SSL
+ssl.truststore.location=ca.p12
+ssl.truststore.password=<password-from-ca-password-file>
+ssl.truststore.type=PKCS12
+----
+
+____
+NOTE: Edit the `<password-from-ca-password-file>` so that it matches the
+password from `/tmp/ca.password`file. Save the configs to
+`config.properties` file.
+____
+
+=== Retrieve Bootstrap URL
+
+[source,bash]
+----
+CLUSTER_ID=$(rhmas kafka list | grep '<your-cluster-name>' | awk '{print $1}')
+BOOTSTRAP_URL=$(rhmas kafka get $CLUSTER_ID | jq -r '.bootstrapServerHost')
+----
+
+Where `<your-cluster-name>` is the name of the cluster.
+
+=== Produce messages.
+
+[source,bash]
+----
+./bin/kafka-console-producer.sh -topic my-topic --bootstrap-server "$BOOTSTRAP_URL:443" --producer.config config.properties
+
+First message
+Second message
+Third message
+----
+
+=== Consume messages.
+
+Start the consumer
+
+[source,bash]
+----
+./bin/kafka-console-consumer.sh -topic my-topic --bootstrap-server "$BOOTSTRAP_URL:443" --from-beginning --consumer.config config.properties
+----
+
+You should see
+
+[source,log]
+----
+First message
+Second message
+Third message
+----
