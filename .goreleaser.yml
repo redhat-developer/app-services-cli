@@ -5,8 +5,11 @@ before:
 env:
   - CGO_ENABLED=0
   - GO111MODULE=on
+  - AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external
 builds:
   - main: ./cmd/rhoas/main.go
+    ldflags:
+      -s -w -X "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login.authURL={{.Env.AUTH_URL}}"
     id: rhoas_cli
     binary: rhoas
     goos:

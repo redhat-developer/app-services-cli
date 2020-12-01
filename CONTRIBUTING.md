@@ -33,9 +33,21 @@ There are a number of lint rules enabled. You can find a full list of rules [her
 
 Builds a binary in the `$GOPATH/bin` directory. Can be executed globally as it is in your `$PATH`.
 
+The authorization server URL can be configured at build time with the `AUTH_URL` environment variable. For example, to set the login server to your local Keycloak:
+
+```shell
+AUTH_URL=http://localhost:8080/auth/realms/redhat-external make install
+```
+
 #### `make binary`
 
 Builds an executable binary `rhoas` of the CLI in the project root. Executable only inside the workspace.
+
+The authorization server URL can be configured at build time with the `AUTH_URL` environment variable. For example, to set the login server to your local Keycloak:
+
+```shell
+AUTH_URL=http://localhost:8080/auth/realms/redhat-external make binary
+```
 
 ### `make test`
 

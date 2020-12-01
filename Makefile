@@ -1,6 +1,8 @@
 .DEFAULT_GOAL := help
 SHELL = bash
 
+BUILD_FLAGS="-X github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login.authURL=$$AUTH_URL"
+
 # The details of the application:
 binary:=rhoas
 
@@ -11,7 +13,7 @@ export GO111MODULE=on
 
 # Prints a list of useful targets.
 help:
-	@echo ""
+	@echo $$BUILD_FLAGS
 	@echo "OpenShift Managed Services CLI"
 	@echo ""
 	@echo "make lint                 	run golangci-lint"
@@ -34,11 +36,11 @@ lint:
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
 binary:
-	go build -o ${binary} ./cmd/rhoas
+	go build -ldflags ${BUILD_FLAGS} -o ${binary} ./cmd/rhoas
 .PHONY: binary
 
 install:
-	go install ./cmd/rhoas
+	go install -ldflags ${BUILD_FLAGS} ./cmd/rhoas
 .PHONY: install
 
 # Runs the unit tests.
