@@ -125,7 +125,7 @@ make docs/generate
 
 #### `make docs/generate`
 
-After running the command, the documentation should be updated.
+After running the command, the documentation should be updated with the command using markdown and then transformed to ascidocs
 
 ## Best practices
 

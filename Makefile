@@ -85,4 +85,5 @@ format:
 
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas
+	./scripts/pandoc.sh
 .PHONY: docs/generate
