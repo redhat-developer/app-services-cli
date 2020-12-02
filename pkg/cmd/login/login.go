@@ -4,6 +4,7 @@ package login
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -96,14 +97,23 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 
 	// If the value of the `--url` is any of the aliases then replace it with the corresponding
 	// real URL:
-	gatewayURL, ok := urlAliases[args.url]
+	unparsedGatewayURL, ok := urlAliases[args.url]
 	if !ok {
-		gatewayURL = args.url
+		unparsedGatewayURL = args.url
 	}
 
-	httpClient := cfg.CreateHTTPClient()
+	gatewayURL, err := url.ParseRequestURI(unparsedGatewayURL)
+	if err != nil {
+		return err
+	}
+	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
+		return fmt.Errorf("Scheme missing from URL '%v'. Please add either 'https' or 'https'.", unparsedGatewayURL)
+	}
 
 	authURL := config.AuthURL
+
+	tr := createTransport(args.insecureSkipTLSVerify)
+	httpClient := &http.Client{Transport: tr}
 
 	parentCtx, cancel := context.WithCancel(context.Background())
 	ctx := oidc.ClientContext(parentCtx, httpClient)
@@ -192,7 +202,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		}
 
 		cfg.SetClientID(args.clientID)
-		cfg.SetURL(gatewayURL)
+		cfg.SetURL(gatewayURL.String())
 		cfg.SetScopes(oauthCfg.Scopes)
 		cfg.SetInsecure(args.insecureSkipTLSVerify)
 		cfg.SetAccessToken(oauth2Token.AccessToken)
@@ -220,4 +230,11 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 	<-parentCtx.Done()
 
 	return nil
+}
+
+func createTransport(insecure bool) *http.Transport {
+	// #nosec 402
+	return &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure},
+	}
 }

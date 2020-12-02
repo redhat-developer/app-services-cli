@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +22,20 @@ func NewDeleteCommand() *cobra.Command {
 }
 
 func runDelete(cmd *cobra.Command, args []string) {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
+	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
+	client := connection.NewMASClient()
+
 	id := ""
 
 	if len(args) > 0 {
@@ -30,9 +44,8 @@ func runDelete(cmd *cobra.Command, args []string) {
 	} else {
 		// TODO: Get ID of current cluster
 		fmt.Fprintln(os.Stderr, "No Kafka cluster selected")
+		os.Exit(1)
 	}
-
-	client := builders.BuildClient()
 
 	response, status, err := client.DefaultApi.DeleteKafkaById(context.Background(), id)
 

@@ -8,7 +8,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
@@ -25,8 +24,17 @@ func NewStatusCommand() *cobra.Command {
 func runStatus(cmd *cobra.Command, args []string) {
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
 	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
+	client := connection.NewMASClient()
 
 	id := cfg.Services.Kafka.ClusterID
 
@@ -34,8 +42,6 @@ func runStatus(cmd *cobra.Command, args []string) {
 		fmt.Fprint(os.Stderr, "No Kafka cluster is being used. To use a cluster run `rhoas kafka use {clusterId}`")
 		return
 	}
-
-	client := builders.BuildClient()
 
 	res, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
 	if err != nil {

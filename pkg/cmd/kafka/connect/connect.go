@@ -8,9 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 
@@ -68,15 +69,27 @@ If your cluster has binding-operator installed you would be able to bind your ap
 }
 
 func runBind(cmd *cobra.Command, _ []string) {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
+	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
 	if localOnly {
 		// TODO
 		fmt.Fprintf(os.Stderr, "Generating CR files locally")
 		return
 	}
-	connectToCluster()
+	connectToCluster(connection)
 }
 
-func connectToCluster() {
+func connectToCluster(connection *pkgConnection.Connection) {
 	var kubeconfig string
 
 	if kubeConfigCustomLocation != "" {
@@ -115,7 +128,7 @@ func connectToCluster() {
 	clicfg, err := config.Load()
 
 	if !clicfg.HasKafka() || forceKafkaSelect {
-		clicfg = useKafka(clicfg)
+		clicfg = useKafka(clicfg, connection)
 		if clicfg == nil {
 			return
 		}
@@ -131,7 +144,7 @@ func connectToCluster() {
 		return
 	}
 
-	credentials := createCredentials()
+	credentials := createCredentials(connection)
 	if credentials == nil {
 		return
 	}
@@ -172,8 +185,8 @@ func showQuestion(message string) bool {
 	return result == "y" || result == "yes"
 }
 
-func createCredentials() *managedservices.TokenResponse {
-	client := builders.BuildClient()
+func createCredentials(connection *pkgConnection.Connection) *managedservices.TokenResponse {
+	client := connection.NewMASClient()
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
 	if err != nil {
@@ -267,8 +280,8 @@ func createCR(clicfg *config.Config, clientset *kubernetes.Clientset) {
 	fmt.Fprintf(os.Stderr, "\nManagedKafkaConnection resource %v created\n", crName)
 }
 
-func useKafka(cliconfig *config.Config) *config.Config {
-	client := builders.BuildClient()
+func useKafka(cliconfig *config.Config, connection *pkgConnection.Connection) *config.Config {
+	client := connection.NewMASClient()
 	options := managedservices.ListKafkasOpts{}
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
