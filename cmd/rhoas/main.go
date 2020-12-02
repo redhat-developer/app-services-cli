@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
@@ -18,15 +19,16 @@ var (
 func main() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd := root.NewRootCommand()
-	rootCmd.Version = version.CLI_VERSION
-
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
-	}
+	cmdFactory := factory.New(version.CLI_VERSION)
+	rootCmd := root.NewRootCommand(cmdFactory, version.CLI_VERSION)
+	rootCmd.InitDefaultHelpCmd()
 
 	if generateDocs {
 		generateDocumentation(rootCmd)
+	}
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
 	}
 }
 

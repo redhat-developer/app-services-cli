@@ -7,10 +7,11 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/logout"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 
-func NewRootCommand() *cobra.Command {
+func NewRootCommand(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rhoas <command> <subcommand> [flags]",
 		Short: "rhoas cli",
@@ -22,9 +23,12 @@ func NewRootCommand() *cobra.Command {
 		`),
 	}
 
+	cmd.Version = version
+
+	// Child commands
 	cmd.AddCommand(login.NewLoginCmd())
 	cmd.AddCommand(logout.NewLogoutCommand())
-	cmd.AddCommand(kafka.NewKafkaCommand())
+	cmd.AddCommand(kafka.NewKafkaCommand(f))
 	cmd.AddCommand(docs.NewDocsCommand())
 	cmd.AddCommand(completion.CompletionCmd)
 

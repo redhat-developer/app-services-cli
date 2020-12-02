@@ -6,42 +6,46 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
-	"github.com/antihax/optional"
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
-const (
-	FlagPage = "page"
-	FlagSize = "size"
-)
+type Options struct {
+	Config func() (config.Config, error)
 
-var outputFormat string
+	OutputFormat string
+}
 
 // NewListCommand creates a new command for listing kafkas.
-func NewListCommand() *cobra.Command {
+func NewListCommand(f *cmdutil.Factory) *cobra.Command {
+	opts := &Options{
+		Config: f.Config,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List all Kafka clusters",
 		Long:  "List all Kafka clusters",
-		Run:   runList,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runList(opts)
+		},
 	}
 
-	cmd.Flags().StringVarP(&outputFormat, "output", "o", "table", "Format to display the Kafka clusters. Choose from \"json\" or \"table\"")
-	cmd.Flags().String(FlagPage, "1", "Page index")
-	cmd.Flags().String(FlagSize, "100", "Number of kafka requests per page")
+	cmd.Flags().StringVarP(&opts.OutputFormat, "output", "o", "table", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
 
 	return cmd
 }
 
-func runList(cmd *cobra.Command, _ []string) {
-	cfg, err := config.Load()
+func runList(opts *Options) error {
+	cfg, err := opts.Config()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
 		os.Exit(1)
@@ -55,10 +59,7 @@ func runList(cmd *cobra.Command, _ []string) {
 
 	client := connection.NewMASClient()
 
-	page := flags.GetString(FlagPage, cmd.Flags())
-	size := flags.GetString(FlagSize, cmd.Flags())
-
-	options := managedservices.ListKafkasOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
+	options := managedservices.ListKafkasOpts{}
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {
@@ -68,12 +69,14 @@ func runList(cmd *cobra.Command, _ []string) {
 
 	if response.Size == 0 {
 		fmt.Fprintln(os.Stderr, "No Kafka clusters found.")
-		return
+		return nil
 	}
 
 	jsonResponse, _ := json.Marshal(response)
 
 	var kafkaList kafka.ClusterList
+
+	outputFormat := opts.OutputFormat
 
 	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
 		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table: %v", err)
@@ -82,9 +85,14 @@ func runList(cmd *cobra.Command, _ []string) {
 
 	switch outputFormat {
 	case "json":
-		data, _ := json.MarshalIndent(kafkaList.Items, "", "  ")
+		data, _ := json.MarshalIndent(response, "", "  ")
+		fmt.Print(string(data))
+	case "yaml", "yml":
+		data, _ := yaml.Marshal(response)
 		fmt.Print(string(data))
 	default:
 		kafka.PrintToTable(kafkaList.Items)
 	}
+
+	return nil
 }

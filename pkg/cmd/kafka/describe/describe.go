@@ -1,4 +1,4 @@
-package get
+package describe
 
 import (
 	"context"
@@ -12,19 +12,19 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
-// NewGetCommand gets a new command for getting kafkas.
-func NewGetCommand() *cobra.Command {
+// NewDescribeCommand gets a new command for getting a single Kafka.
+func NewDescribeCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get [Kafka cluster ID]",
 		Short: "Get details of single Kafka cluster",
 		Long:  "Get details of single Kafka cluster",
-		Run:   runGet,
+		Run:   runDescribe,
 	}
 
 	return cmd
 }
 
-func runGet(cmd *cobra.Command, args []string) {
+func runDescribe(cmd *cobra.Command, args []string) {
 	id := ""
 
 	if len(args) > 0 {
