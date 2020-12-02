@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+
 	"github.com/antihax/optional"
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cmdutil/flags"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
@@ -40,10 +41,23 @@ func NewListCommand() *cobra.Command {
 }
 
 func runList(cmd *cobra.Command, _ []string) {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
+	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
+	client := connection.NewMASClient()
+
 	page := flags.GetString(FlagPage, cmd.Flags())
 	size := flags.GetString(FlagSize, cmd.Flags())
 
-	client := builders.BuildClient()
 	options := managedservices.ListKafkasOpts{Page: optional.NewString(page), Size: optional.NewString(size)}
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 

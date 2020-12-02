@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
@@ -65,17 +64,25 @@ func RunCredentials(outputFlagValue string, force bool) {
 		fileName = "credentials.json"
 	}
 
-	client := builders.BuildClient()
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
+	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
+	client := connection.NewMASClient()
+
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating Kafka Credentials: %v\n", err)
 		return
-	}
-
-	cfg, err := config.Load()
-	if err != nil {
-		fmt.Fprint(os.Stderr, "Invalid configuration file", err)
 	}
 
 	jsonResponse, _ := json.Marshal(response)

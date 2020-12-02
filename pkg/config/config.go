@@ -2,24 +2,20 @@ package config
 
 import (
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
-	"time"
 
-	"github.com/Nerzal/gocloak/v7"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"github.com/mitchellh/go-homedir"
 )
 
 const (
-	AuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
+	AuthURL = "https://sso.qa.redhat.com/auth/realms/redhat-external"
+	// AuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
 )
 
 // Config is the type used to track the config of the client
@@ -158,121 +154,53 @@ func Location() (path string, err error) {
 	return path, nil
 }
 
-func (c *Config) CreateHTTPClient() *http.Client {
-	// #nosec 402
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: c.Insecure},
-	}
-	return &http.Client{Transport: tr}
-}
-
-func (c *Config) Armed() (tokenIsValid bool, err error) {
-	now := time.Now()
+func (c *Config) Connection() (conn *connection.Connection, err error) {
+	builder := connection.NewBuilder()
 	if c.AccessToken != "" {
-		var expires bool
-		var left time.Duration
-		var accessToken *jwt.Token
-		accessToken, err = parseToken(c.AccessToken)
-		if err != nil {
-			return
-		}
-		expires, left, err = getTokenExpiry(accessToken, now)
-		if err != nil {
-			return
-		}
-		if !expires || left > 5*time.Second {
-			tokenIsValid = true
-			return
-		}
+		builder.WithAccessToken(c.AccessToken)
 	}
 	if c.RefreshToken != "" {
-		var expires bool
-		var left time.Duration
-		var refreshToken *jwt.Token
-		refreshToken, err = parseToken(c.RefreshToken)
-		if err != nil {
-			return
-		}
-		expires, left, err = getTokenExpiry(refreshToken, now)
-		if err != nil {
-			return
-		}
-		if !expires || left > 10*time.Second {
-			tokenIsValid = true
-			return
-		}
+		builder.WithRefreshToken(c.RefreshToken)
 	}
-	return
-}
+	if c.ClientID != "" {
+		builder.WithClientID(c.ClientID)
+	}
+	if c.Scopes != nil {
+		builder.WithScopes(c.Scopes...)
+	}
+	if c.URL != "" {
+		builder.WithURL(c.URL)
+	}
+	builder.WithInsecure(c.Insecure)
 
-func (c *Config) Logout() error {
-	client := c.NewClient()
-	err := client.Logout(context.TODO(), c.ClientID, "", "redhat-external", c.RefreshToken)
+	conn, err = builder.Build()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
-}
-
-func (c *Config) TokenRefresh() error {
-	client := c.NewClient()
-	tk, err := client.RefreshToken(context.TODO(), c.RefreshToken, c.ClientID, "", "redhat-external")
+	accessTk, refreshTk, err := conn.RefreshTokens(context.TODO())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	c.SetAccessToken(tk.AccessToken)
-	c.SetRefreshToken(tk.RefreshToken)
+	accessTkChanged := accessTk != c.AccessToken
+	refreshTkChanged := refreshTk != c.RefreshToken
 
-	return nil
-}
+	if accessTkChanged {
+		c.SetAccessToken(accessTk)
+	}
+	if refreshTkChanged {
+		c.SetRefreshToken(refreshTk)
+	}
 
-// Create a new Keycloak client
-func (c *Config) NewClient() gocloak.GoCloak {
-	authURL, _ := url.Parse(AuthURL)
-	authURLBase, _ := url.Parse(authURL.Scheme + "://" + authURL.Host)
-	client := gocloak.NewClient(authURLBase.String())
-	restyClient := *client.RestyClient()
-	// #nosec 402
-	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: c.Insecure})
-	client.SetRestyClient(&restyClient)
-	return client
-}
+	if !accessTkChanged && refreshTkChanged {
+		return conn, nil
+	}
 
-func parseToken(textToken string) (token *jwt.Token, err error) {
-	parser := new(jwt.Parser)
-	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
+	err = Save(c)
 	if err != nil {
-		err = fmt.Errorf("can't parse token: %w", err)
-		return
-	}
-	return token, nil
-}
-
-func getTokenExpiry(token *jwt.Token, now time.Time) (expires bool,
-	left time.Duration, err error) {
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		err = fmt.Errorf("expected map claims bug got %T", claims)
-		return
-	}
-	var exp float64
-	claim, ok := claims["exp"]
-	if ok {
-		exp, ok = claim.(float64)
-		if !ok {
-			err = fmt.Errorf("expected floating point 'exp' but got %T", claim)
-			return
-		}
-	}
-	if exp == 0 {
-		expires = false
-		left = 0
-	} else {
-		expires = true
-		left = time.Unix(int64(exp), 0).Sub(now)
+		return nil, fmt.Errorf("Unable to save config file: %w", err)
 	}
 
-	return
+	return conn, nil
 }

@@ -12,7 +12,19 @@
       "program": "${workspaceFolder}/cmd/rhoas",
       "env": {},
       "args": [
-        "login"
+        "login",
+        "--url=localhost:8000"
+      ]
+    },
+     {
+      "name": "Logout",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "logout"
       ]
     },
     {

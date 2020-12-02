@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
@@ -36,7 +36,19 @@ func runGet(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := builders.BuildClient()
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
+	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
+	client := connection.NewMASClient()
 
 	response, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
 

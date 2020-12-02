@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/builders"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
@@ -32,12 +32,24 @@ func NewCreateCommand() *cobra.Command {
 }
 
 func runCreate(cmd *cobra.Command, _ []string) {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		os.Exit(1)
+	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
+	}
+
+	client := connection.NewMASClient()
+
 	name := commonflags.MustGetDefinedString(flags.FlagName, cmd.Flags())
 	region := commonflags.MustGetDefinedString(flags.FlagRegion, cmd.Flags())
 	provider := commonflags.MustGetDefinedString(flags.FlagProvider, cmd.Flags())
 	multiAZ := commonflags.MustGetBool(flags.FlagMultiAZ, cmd.Flags())
-
-	client := builders.BuildClient()
 
 	kafkaRequest := managedservices.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
 	response, status, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
