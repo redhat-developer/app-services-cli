@@ -3,8 +3,8 @@ package builders
 
 import (
 	"fmt"
+	"net/url"
 	"os"
-	"strings"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -35,14 +35,18 @@ func BuildClient() *managedservices.APIClient {
 		os.Exit(1)
 	}
 
-	urlSegments := strings.Split(cfg.URL, "://")
-
-	if len(urlSegments) > 1 {
-		masCfg.Scheme = urlSegments[0]
-		masCfg.Host = urlSegments[1]
-	} else {
-		masCfg.Host = urlSegments[0]
+	apiURL, err := url.Parse(cfg.URL)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to parse url '%v': %v", config.AuthURL, err)
+		os.Exit(1)
 	}
+
+	if apiURL.Scheme == "" {
+		apiURL.Scheme = "http"
+	}
+
+	masCfg.Scheme = apiURL.Scheme
+	masCfg.Host = apiURL.Host
 
 	// Refresh tokens
 	if err = cfg.TokenRefresh(); err != nil {
