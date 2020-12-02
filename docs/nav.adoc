@@ -1,0 +1,4 @@
+* xref:guides/index.adoc[Quickstarts]
+** xref:guides/binscripts.adoc[Using Bin Scripts with Managed Kafka]
+** xref:guides/kafkacat.adoc[Using Kafkacat with Managed Kafka] 
+** xref:guides/quarkus.adoc[Quarkas Kafka]
