@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 
@@ -99,7 +98,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 	// real URL:
 	gatewayURL, ok := urlAliases[args.url]
 	if !ok {
-		gatewayURL = path.Clean(args.url)
+		gatewayURL = args.url
 	}
 
 	httpClient := cfg.CreateHTTPClient()
