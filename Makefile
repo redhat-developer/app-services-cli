@@ -82,10 +82,8 @@ format:
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 
-docs:
-	cd docs && yarn && yarn start
-.PHONY: docs/open
 
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas
+	./scripts/pandoc.sh
 .PHONY: docs/generate

@@ -1,0 +1,7 @@
+== quickstarts
+
+Quickstarts and examples for the SDK’s
+
+* link:./mas-quarkus-kafka[Quarkus with Managed Kafka]
+* link:./mas-kafkacat[Kafkacat with Managed Kafka]
+* link:./mas-kafka-bin-scripts[Kafka Bin Scripts with Managed Kafka]
