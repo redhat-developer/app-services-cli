@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
-
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -19,16 +17,12 @@ import (
 )
 
 type Options struct {
-	Config func() (config.Config, error)
-
-	OutputFormat string
+	outputFormat string
 }
 
 // NewListCommand creates a new command for listing kafkas.
-func NewListCommand(f *cmdutil.Factory) *cobra.Command {
-	opts := &Options{
-		Config: f.Config,
-	}
+func NewListCommand() *cobra.Command {
+	opts := &Options{}
 
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -39,13 +33,16 @@ func NewListCommand(f *cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.OutputFormat, "output", "o", "table", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
 
 	return cmd
 }
 
 func runList(opts *Options) error {
-	cfg, err := opts.Config()
+	if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" && opts.outputFormat != "table" {
+		return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
+	}
+	cfg, err := config.Load()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
 		os.Exit(1)
@@ -76,7 +73,7 @@ func runList(opts *Options) error {
 
 	var kafkaList kafka.ClusterList
 
-	outputFormat := opts.OutputFormat
+	outputFormat := opts.outputFormat
 
 	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
 		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table: %v", err)

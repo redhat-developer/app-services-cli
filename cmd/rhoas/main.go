@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
@@ -19,8 +18,7 @@ var (
 func main() {
 	cobra.OnInitialize(initConfig)
 
-	cmdFactory := factory.New(version.CLI_VERSION)
-	rootCmd := root.NewRootCommand(cmdFactory, version.CLI_VERSION)
+	rootCmd := root.NewRootCommand(version.CLI_VERSION)
 	rootCmd.InitDefaultHelpCmd()
 
 	if generateDocs {

@@ -10,13 +10,12 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	cmdflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
-func NewCreateCommand(f *cmdutil.Factory) *cobra.Command {
+func NewCreateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create Kafka cluster",

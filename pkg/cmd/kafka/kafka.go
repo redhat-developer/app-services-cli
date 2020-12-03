@@ -14,14 +14,9 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/status"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 )
 
-const (
-	Testt = "lsls"
-)
-
-func NewKafkaCommand(f *cmdutil.Factory) *cobra.Command {
+func NewKafkaCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "kafka",
 		Short: "Manage your Kafka clusters",
@@ -30,10 +25,10 @@ func NewKafkaCommand(f *cmdutil.Factory) *cobra.Command {
 
 	// add sub-commands
 	cmd.AddCommand(
-		create.NewCreateCommand(f),
+		create.NewCreateCommand(),
 		describe.NewDescribeCommand(),
 		delete.NewDeleteCommand(),
-		list.NewListCommand(f),
+		list.NewListCommand(),
 		use.NewUseCommand(),
 		status.NewStatusCommand(),
 		topics.NewTopicsCommand(),
