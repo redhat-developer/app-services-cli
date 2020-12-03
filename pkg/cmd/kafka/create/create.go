@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
@@ -48,11 +49,11 @@ func NewCreateCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\"")
 	cmd.Flags().StringVar(&opts.name, flags.FlagName, "", "Name of the new Kafka cluster")
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "aws", "Cloud provider ID")
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "us-east-1", "Cloud Provider Region ID")
 	cmd.Flags().BoolVar(&opts.multiAZ, flags.FlagMultiAZ, false, "Determines if cluster should be provisioned across multiple Availability Zones")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka cluster. Choose from: \"json\", \"yaml\", \"yml\"")
 
 	_ = cmd.MarkFlagRequired(flags.FlagName)
 
@@ -68,19 +69,22 @@ func runCreate(opts *options) error {
 	client := connection.NewMASClient()
 
 	kafkaRequest := managedservices.KafkaRequest{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: opts.multiAZ}
-	response, status, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
+	response, _, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
 
 	if err != nil {
 		return fmt.Errorf("Error while requesting new Kafka cluster: %w", err)
 	}
 
-	if status.StatusCode != 202 {
-		fmt.Fprintf(os.Stderr, "Could not create Kafka cluster: %v", response)
-	}
-
-	jsonResponse, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
 	fmt.Fprintf(os.Stderr, "Created new Kafka cluster:\n")
-	fmt.Print(string(jsonResponse))
+
+	switch opts.outputFormat {
+	case "json":
+		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
+		fmt.Print(string(data))
+	case "yaml", "yml":
+		data, _ := yaml.Marshal(response)
+		fmt.Print(string(data))
+	}
 
 	return nil
 }
