@@ -245,7 +245,7 @@ func createCR(clicfg *config.Config, clientset *kubernetes.Clientset) {
 		},
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "ManagedKafkaConnection",
-			APIVersion: "oas.redhat.com/v1",
+			APIVersion: "rhoas.redhat.com/v1",
 		},
 		Spec: connection.ManagedKafkaConnectionSpec{
 			BootstrapServer: connection.BootstrapServerSpec{
