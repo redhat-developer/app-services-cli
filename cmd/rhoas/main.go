@@ -19,7 +19,7 @@ func main() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd := root.NewRootCommand(version.CLI_VERSION)
-	rootCmd.SilenceErrors = true // suppress errors downstream
+	rootCmd.SilenceErrors = true
 	rootCmd.InitDefaultHelpCmd()
 
 	if generateDocs {

@@ -22,7 +22,7 @@ const (
 type Config struct {
 	AccessToken  string           `json:"access_token,omitempty" doc:"Bearer access token."`
 	RefreshToken string           `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
-	Services     ServiceConfigMap `json:"services,omitempty"`
+	Services     ServiceConfigMap `json:"services"`
 	URL          string           `json:"url,omitempty" doc:"URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging' and 'integration'."`
 	ClientID     string           `json:"client_id,omitempty" doc:"OpenID client identifier."`
 	Insecure     bool             `json:"insecure,omitempty" doc:"Enables insecure communication with the server. This disables verification of TLS certificates and host names."`
@@ -31,7 +31,7 @@ type Config struct {
 
 // ServiceConfigMap is a map of configs for the managed application services
 type ServiceConfigMap struct {
-	Kafka *KafkaConfig `json:"kafka,omitempty"`
+	Kafka *KafkaConfig `json:"kafka"`
 }
 
 // KafkaConfig is the config for the managed Kafka service

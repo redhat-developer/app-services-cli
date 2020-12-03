@@ -6,63 +6,90 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spf13/cobra"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v2"
 )
 
-// NewDescribeCommand gets a new command for getting a single Kafka.
+type options struct {
+	id           string
+	outputFormat string
+
+	cfg *config.Config
+}
+
+// NewDescribeCommand describes a Kafka cluster, either by passing an `--id flag`
+// or by using the kafka cluster set in the config, if any
 func NewDescribeCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "get [Kafka cluster ID]",
-		Short: "Get details of single Kafka cluster",
-		Long:  "Get details of single Kafka cluster",
-		Run:   runDescribe,
+	var cfg *config.Config
+	opts := &options{
+		cfg: cfg,
 	}
+
+	cmd := &cobra.Command{
+		Use:   "describe",
+		Short: "Get details of single Kafka cluster",
+		Long:  "Get details of single Kafka cluster, either by loading the currently selected Kafka cluster or a custom one with the `--id` flag",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
+				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
+			}
+
+			cfg, err := config.Load()
+			if err != nil {
+				return fmt.Errorf("Error loading config: %w", err)
+			}
+			opts.cfg = cfg
+
+			if opts.id != "" {
+				return runDescribe(opts)
+			}
+
+			var kafkaConfig *config.KafkaConfig
+
+			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
+				return fmt.Errorf("Please select a Kafka cluster to describe with the '--id' flag, or set one with the 'use' command")
+			}
+
+			opts.id = cfg.Services.Kafka.ClusterID
+
+			return runDescribe(opts)
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\"")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to describe. If not set, the currently selected Kafka cluster will be used")
 
 	return cmd
 }
 
-func runDescribe(cmd *cobra.Command, args []string) {
-	id := ""
-
-	if len(args) > 0 {
-		// TODO: Determine if it is an ID or name
-		id = args[0]
-	} else {
-		// TODO: Get ID of current cluster
-		fmt.Fprintln(os.Stderr, "No Kafka cluster selected")
-		return
-	}
-
-	cfg, err := config.Load()
+func runDescribe(opts *options) error {
+	connection, err := opts.cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
-		os.Exit(1)
-	}
-
-	connection, err := cfg.Connection()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
 	client := connection.NewMASClient()
 
-	response, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
+	response, status, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v", err)
-		return
+		return fmt.Errorf("Error getting Kafka cluster: %w", err)
 	}
 
-	if status.StatusCode == 200 {
-		jsonResponse, _ := json.MarshalIndent(response, "", "  ")
-		var kafkaCluster kafka.Cluster
-		_ = json.Unmarshal(jsonResponse, &kafkaCluster)
-		fmt.Print(string(jsonResponse))
-	} else {
-		fmt.Fprintln(os.Stderr, "Get failed", response, status)
+	if status.StatusCode != 200 {
+		fmt.Fprintf(os.Stderr, "Unable to describe Kafka cluster with ID '%v': %v\n", opts.id, response)
+		return nil
 	}
+
+	switch opts.outputFormat {
+	case "json":
+		data, _ := json.MarshalIndent(response, "", "  ")
+		fmt.Print(string(data))
+	case "yaml", "yml":
+		data, _ := yaml.Marshal(response)
+		fmt.Print(string(data))
+	}
+
+	return nil
 }
