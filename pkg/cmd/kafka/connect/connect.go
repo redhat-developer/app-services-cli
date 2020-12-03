@@ -264,7 +264,7 @@ func createCR(clicfg *config.Config, clientset *kubernetes.Clientset) {
 		return
 	}
 
-	crAPIURL := "/apis/oas.redhat.com/v1/managedkafkaconnections"
+	crAPIURL := "/apis/rhoas.redhat.com/v1/managedkafkaconnections"
 	data := clientset.RESTClient().
 		Post().
 		AbsPath(crAPIURL).
