@@ -45,20 +45,14 @@ func runUse(opts *options) error {
 	cfg := *opts.cfg
 	connection, err := cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
 	client := connection.NewMASClient()
 
-	res, status, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
+	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 	if err != nil {
 		return fmt.Errorf("Unable to retrieve Kafka cluster \"%v\": %w", opts.id, err)
-	}
-
-	if status.StatusCode != 200 {
-		fmt.Fprintf(os.Stderr, "Unable to use Kafka cluster: %v", res)
-		return nil
 	}
 
 	// build Kafka config object from the response

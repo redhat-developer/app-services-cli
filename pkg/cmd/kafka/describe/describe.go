@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -46,7 +45,7 @@ func NewDescribeCommand() *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return fmt.Errorf("Please select a Kafka cluster to describe with the '--id' flag, or set one with the 'use' command")
+				return fmt.Errorf("No Kafka cluster selected. Use the '--id' flag or set one in context with the 'use' command")
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -55,7 +54,7 @@ func NewDescribeCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\"")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka cluster. Choose from: \"json\", \"yaml\", \"yml\"")
 	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to describe. If not set, the currently selected Kafka cluster will be used")
 
 	return cmd
@@ -69,15 +68,10 @@ func runDescribe(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	response, status, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
+	response, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 
 	if err != nil {
 		return fmt.Errorf("Error getting Kafka cluster: %w", err)
-	}
-
-	if status.StatusCode != 200 {
-		fmt.Fprintf(os.Stderr, "Unable to describe Kafka cluster with ID '%v': %v\n", opts.id, response)
-		return nil
 	}
 
 	switch opts.outputFormat {
