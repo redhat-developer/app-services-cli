@@ -13,11 +13,6 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-const (
-	AuthURL = "https://sso.qa.redhat.com/auth/realms/redhat-external"
-	// AuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
-)
-
 // Config is the type used to track the config of the client
 type Config struct {
 	AccessToken  string           `json:"access_token,omitempty" doc:"Bearer access token."`

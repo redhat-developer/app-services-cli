@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/pkce"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -110,7 +111,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("Scheme missing from URL '%v'. Please add either 'https' or 'https'.", unparsedGatewayURL)
 	}
 
-	authURL := config.AuthURL
+	authURL := connection.DefaultAuthURL
 
 	tr := createTransport(args.insecureSkipTLSVerify)
 	httpClient := &http.Client{Transport: tr}
