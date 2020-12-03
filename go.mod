@@ -3,6 +3,7 @@ module github.com/bf2fc6cc711aee1a0c2a/cli
 go 1.15
 
 require (
+	github.com/AlecAivazis/survey/v2 v2.2.4
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.7.0
 	github.com/antihax/optional v1.0.0

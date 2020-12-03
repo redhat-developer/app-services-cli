@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/MakeNowJust/heredoc"
+
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -23,7 +25,11 @@ func NewUseCommand() *cobra.Command {
 		Use:   "use",
 		Short: "Set the current Kafka cluster context",
 		Long:  "Sets a Kafka cluster in context by its unique identifier",
-		Args:  cobra.ExactArgs(0),
+		Example: heredoc.Doc(`
+			$ rhoas kafka use
+			$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
+		),
+		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := config.Load()
 			if err != nil {

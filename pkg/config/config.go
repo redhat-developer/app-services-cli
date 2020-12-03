@@ -69,6 +69,15 @@ func (s *ServiceConfigMap) SetKafka(k *KafkaConfig) {
 	s.Kafka = k
 }
 
+// Remove the current Kafka cluster from the config
+func (s *ServiceConfigMap) RemoveKafka() {
+	s.Kafka = &KafkaConfig{
+		ClusterID:   "",
+		ClusterHost: "",
+		ClusterName: "",
+	}
+}
+
 // Save saves the given configuration to the configuration file.
 func Save(cfg *Config) error {
 	file, err := Location()

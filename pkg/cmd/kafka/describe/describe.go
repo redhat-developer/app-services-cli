@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/MakeNowJust/heredoc"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
@@ -27,7 +29,11 @@ func NewDescribeCommand() *cobra.Command {
 		Use:   "describe",
 		Short: "Get details of single Kafka cluster",
 		Long:  "Get details of single Kafka cluster, either by loading the currently selected Kafka cluster or a custom one with the `--id` flag",
-		Args:  cobra.ExactArgs(0),
+		Example: heredoc.Doc(`
+			$ rhoas kafka describe
+			$ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
+		),
+		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
 				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
