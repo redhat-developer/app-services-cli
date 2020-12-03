@@ -2,60 +2,84 @@ package status
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/landoop/tableprinter"
 
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
+type options struct {
+	id string
+
+	cfg *config.Config
+}
+
 func NewStatusCommand() *cobra.Command {
+	opts := &options{}
+
 	cmd := &cobra.Command{
 		Use:   "status",
 		Short: "Get status of current Kafka cluster",
 		Long:  "Gets the status of the current Kafka cluster context",
-		Run:   runStatus,
+		Args:  cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			cfg, err := config.Load()
+			if err != nil {
+				return fmt.Errorf("Error loading config: %w", err)
+			}
+			opts.cfg = cfg
+
+			if opts.id != "" {
+				return runStatus(opts)
+			}
+
+			var kafkaConfig *config.KafkaConfig
+			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
+				return fmt.Errorf("No Kafka cluster selected. Use the '--id' flag or set one in context with the 'use' command")
+			}
+
+			opts.id = cfg.Services.Kafka.ClusterID
+
+			return runStatus(opts)
+		},
 	}
+
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to get the status from")
+
 	return cmd
 }
 
-func runStatus(cmd *cobra.Command, args []string) {
-	cfg, err := config.Load()
+func runStatus(opts *options) error {
+	connection, err := opts.cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
-		os.Exit(1)
-	}
-
-	connection, err := cfg.Connection()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
 	client := connection.NewMASClient()
 
-	id := cfg.Services.Kafka.ClusterID
-
-	if id == "" {
-		fmt.Fprint(os.Stderr, "No Kafka cluster is being used. To use a cluster run `rhoas kafka use {clusterId}`")
-		return
-	}
-
-	res, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
+	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka cluster \"%v\": %v", id, err)
-		return
+		return fmt.Errorf("Error retrieving Kafka cluster: %w", err)
 	}
 
-	if status.StatusCode != 200 {
-		fmt.Fprintf(os.Stderr, "Unable to retrieve selected Kafka cluster \"%v\": %v", id, err)
-		return
+	type kafkaStatus struct {
+		ID     string `header:"ID"`
+		Name   string `header:"Name"`
+		Status string `header:"Status"`
 	}
 
-	jsonCluster, _ := json.MarshalIndent(res, "", "  ")
+	statusInfo := &kafkaStatus{
+		ID:     res.Id,
+		Name:   res.Name,
+		Status: res.Status,
+	}
 
-	fmt.Fprintf(os.Stderr, "Using Kafka cluster \"%v\":\n", res.Id)
-	fmt.Print(string(jsonCluster))
+	printer := tableprinter.New(os.Stdout)
+	printer.Print(statusInfo)
+
+	return nil
 }
