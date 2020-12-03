@@ -22,10 +22,7 @@ type options struct {
 // NewDescribeCommand describes a Kafka cluster, either by passing an `--id flag`
 // or by using the kafka cluster set in the config, if any
 func NewDescribeCommand() *cobra.Command {
-	var cfg *config.Config
-	opts := &options{
-		cfg: cfg,
-	}
+	opts := &options{}
 
 	cmd := &cobra.Command{
 		Use:   "describe",
