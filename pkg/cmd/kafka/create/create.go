@@ -9,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	commonflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
+	cmdflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
@@ -46,10 +46,10 @@ func runCreate(cmd *cobra.Command, _ []string) {
 
 	client := connection.NewMASClient()
 
-	name := commonflags.MustGetDefinedString(flags.FlagName, cmd.Flags())
-	region := commonflags.MustGetDefinedString(flags.FlagRegion, cmd.Flags())
-	provider := commonflags.MustGetDefinedString(flags.FlagProvider, cmd.Flags())
-	multiAZ := commonflags.MustGetBool(flags.FlagMultiAZ, cmd.Flags())
+	name := cmdflags.MustGetDefinedString(flags.FlagName, cmd.Flags())
+	region := cmdflags.MustGetDefinedString(flags.FlagRegion, cmd.Flags())
+	provider := cmdflags.MustGetDefinedString(flags.FlagProvider, cmd.Flags())
+	multiAZ := cmdflags.MustGetBool(flags.FlagMultiAZ, cmd.Flags())
 
 	kafkaRequest := managedservices.KafkaRequest{Name: name, Region: region, CloudProvider: provider, MultiAz: multiAZ}
 	response, status, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)

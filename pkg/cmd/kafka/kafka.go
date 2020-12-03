@@ -9,15 +9,11 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/credentials"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/get"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/describe"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/list"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/status"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
-)
-
-const (
-	Testt = "lsls"
 )
 
 func NewKafkaCommand() *cobra.Command {
@@ -30,7 +26,7 @@ func NewKafkaCommand() *cobra.Command {
 	// add sub-commands
 	cmd.AddCommand(
 		create.NewCreateCommand(),
-		get.NewGetCommand(),
+		describe.NewDescribeCommand(),
 		delete.NewDeleteCommand(),
 		list.NewListCommand(),
 		use.NewUseCommand(),

@@ -18,15 +18,15 @@ var (
 func main() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd := root.NewRootCommand()
-	rootCmd.Version = version.CLI_VERSION
-
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
-	}
+	rootCmd := root.NewRootCommand(version.CLI_VERSION)
+	rootCmd.InitDefaultHelpCmd()
 
 	if generateDocs {
 		generateDocumentation(rootCmd)
+	}
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
 	}
 }
 

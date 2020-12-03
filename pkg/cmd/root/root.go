@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRootCommand() *cobra.Command {
+func NewRootCommand(version string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rhoas <command> <subcommand> [flags]",
 		Short: "rhoas cli",
@@ -22,6 +22,9 @@ func NewRootCommand() *cobra.Command {
 		`),
 	}
 
+	cmd.Version = version
+
+	// Child commands
 	cmd.AddCommand(login.NewLoginCmd())
 	cmd.AddCommand(logout.NewLogoutCommand())
 	cmd.AddCommand(kafka.NewKafkaCommand())
