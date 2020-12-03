@@ -214,7 +214,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, PostLoginPage)
+		fmt.Fprintln(w, PostLoginPage)
 		fmt.Fprintln(os.Stderr, "Successfully logged in to RHOAS")
 		cancel()
 	})

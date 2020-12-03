@@ -37,13 +37,21 @@ Builds a binary in the `$GOPATH/bin` directory. Can be executed globally as it i
 
 Builds an executable binary `rhoas` of the CLI in the project root. Executable only inside the workspace.
 
-### `make test`
-
-Runs unit and integration tests.
-
 #### `make format`
 
 Formats source code.
+
+### Testing
+
+If you have the Go extension for VS Code, you can generate test stubs for a file, package or function. See [Go#Test](https://code.visualstudio.com/docs/languages/go#_test)
+
+### `make test/unit`
+
+Runs unit tests
+
+### `make test/integration`
+
+Runs integration tests
 
 ## Managed Services API
 

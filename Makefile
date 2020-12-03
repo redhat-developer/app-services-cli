@@ -18,7 +18,7 @@ help:
 	@echo "make binary               	compile binaries"
 	@echo "make test                 	run  tests"
 	@echo "make format             		format files"
-	@echo "make openapi/pull			pull openapi definition"
+	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
 						
@@ -41,10 +41,15 @@ install:
 	go install ./cmd/rhoas
 .PHONY: install
 
-# Runs the unit tests.
-test: install
+# Runs the integration tests.
+test/integration: install
 	go test ./test/integration
-.PHONY: test
+.PHONY: test/integration
+
+# Runs the integration tests.
+test/unit: install
+	go test ./pkg/...
+.PHONY: test/unit
 
 openapi/pull:
 	wget -P ./openapi -O managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
