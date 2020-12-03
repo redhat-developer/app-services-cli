@@ -149,7 +149,7 @@ func connectToCluster(connection *pkgConnection.Connection) {
 		return
 	}
 	createSecret(credentials, currentNamespace, clientset)
-	createCR(clicfg, clientset)
+	createCR(clicfg, clientset, currentNamespace)
 }
 
 func fileExists(path string) bool {
@@ -237,11 +237,12 @@ func createSecret(credentials *managedservices.TokenResponse, currentNamespace s
 	return secret
 }
 
-func createCR(clicfg *config.Config, clientset *kubernetes.Clientset) {
+func createCR(clicfg *config.Config, clientset *kubernetes.Clientset, namespace string) {
 	crName := secretName + "-" + clicfg.Services.Kafka.ClusterName
 	crInstance := &connection.ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: crName,
+			Name:      crName,
+			Namespace: namespace,
 		},
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "ManagedKafkaConnection",
@@ -264,7 +265,7 @@ func createCR(clicfg *config.Config, clientset *kubernetes.Clientset) {
 		return
 	}
 
-	crAPIURL := "/apis/rhoas.redhat.com/v1/managedkafkaconnections"
+	crAPIURL := "/apis/rhoas.redhat.com/v1/namespaces/" + namespace + "/managedkafkaconnections"
 	data := clientset.RESTClient().
 		Post().
 		AbsPath(crAPIURL).
