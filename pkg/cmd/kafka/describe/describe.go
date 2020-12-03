@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -30,6 +31,7 @@ func NewDescribeCommand() *cobra.Command {
 		Use:   "describe",
 		Short: "Get details of single Kafka cluster",
 		Long:  "Get details of single Kafka cluster, either by loading the currently selected Kafka cluster or a custom one with the `--id` flag",
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
 				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
@@ -46,7 +48,6 @@ func NewDescribeCommand() *cobra.Command {
 			}
 
 			var kafkaConfig *config.KafkaConfig
-
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
 				return fmt.Errorf("Please select a Kafka cluster to describe with the '--id' flag, or set one with the 'use' command")
 			}
@@ -84,7 +85,7 @@ func runDescribe(opts *options) error {
 
 	switch opts.outputFormat {
 	case "json":
-		data, _ := json.MarshalIndent(response, "", "  ")
+		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
 		fmt.Print(string(data))
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
