@@ -49,7 +49,7 @@ func NewCreateCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.name, flags.FlagName, "", "Name of the new Kafka cluster")
+	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the new Kafka cluster")
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "aws", "Cloud provider ID")
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "us-east-1", "Cloud Provider Region ID")
 	cmd.Flags().BoolVar(&opts.multiAZ, flags.FlagMultiAZ, false, "Determines if cluster should be provisioned across multiple Availability Zones")
