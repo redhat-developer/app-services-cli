@@ -13,16 +13,49 @@ servers:
   - url: /
     description: current domain
 paths:
-  /api/managed-services-api/v1/serviceAccount:
-    get:
+  /api/managed-services-api/v1/serviceaccounts:
+    post:
       operationId: createServiceAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountRequest'
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenResponse'
+                $ref: '#/components/schemas/ServiceAccountResponse'
           description: Service Account
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
+          description: Auth token is invalid
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
+          description: Access to this resource is forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
+          description: An unexpected error occurred creating the Service Account
       security:
         - Bearer: []
       summary: Create a kafka service account
@@ -264,7 +297,16 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Error"
-    TokenResponse:
+    ServiceAccountRequest:
+      allOf:
+        - $ref: "#/components/schemas/ObjectReference"
+        - type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+    ServiceAccountResponse:
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
         - type: object
@@ -272,6 +314,10 @@ components:
             clientID:
               type: string
             clientSecret:
+              type: string
+            name:
+              type: string
+            description:
               type: string
     KafkaRequest:
       allOf:

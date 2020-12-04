@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
@@ -187,7 +188,10 @@ func showQuestion(message string) bool {
 
 func createCredentials(connection *pkgConnection.Connection) *managedservices.TokenResponse {
 	client := connection.NewMASClient()
-	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
+
+	t := time.Now()
+	serviceAcct := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
+	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *serviceAcct)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "\nError creating Kafka Credentials: %v\n", err)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -78,7 +79,9 @@ func RunCredentials(outputFlagValue string, force bool) {
 
 	client := connection.NewMASClient()
 
-	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background())
+	t := time.Now()
+	serviceAcct := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
+	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *serviceAcct)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating Kafka Credentials: %v\n", err)

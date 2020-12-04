@@ -5,7 +5,7 @@ All URIs are relative to *https://api.openshift.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateKafka**](DefaultApi.md#CreateKafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
-[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Get** /api/managed-services-api/v1/serviceAccount | Create a kafka service account
+[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Post** /api/managed-services-api/v1/serviceaccounts | Create a kafka service account
 [**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 [**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
 [**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
@@ -47,17 +47,21 @@ Name | Type | Description  | Notes
 
 ## CreateServiceAccount
 
-> TokenResponse CreateServiceAccount(ctx, )
+> ServiceAccountResponse CreateServiceAccount(ctx, serviceAccountRequest)
 
 Create a kafka service account
 
 ### Required Parameters
 
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**serviceAccountRequest** | [**ServiceAccountRequest**](ServiceAccountRequest.md)|  | 
 
 ### Return type
 
-[**TokenResponse**](TokenResponse.md)
+[**ServiceAccountResponse**](ServiceAccountResponse.md)
 
 ### Authorization
 
@@ -65,7 +69,7 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
