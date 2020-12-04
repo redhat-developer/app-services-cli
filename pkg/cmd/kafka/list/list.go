@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/landoop/tableprinter"
 	"github.com/spf13/cobra"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 
 	"gopkg.in/yaml.v2"
@@ -16,19 +18,24 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
 
-type Options struct {
+type options struct {
 	outputFormat string
 }
 
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand() *cobra.Command {
-	opts := &Options{}
+	opts := &options{}
 
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List all Kafka clusters",
 		Long:  "List all Kafka clusters",
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" && opts.outputFormat != "table" {
+				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
+			}
+
 			return runList(opts)
 		},
 	}
@@ -38,20 +45,15 @@ func NewListCommand() *cobra.Command {
 	return cmd
 }
 
-func runList(opts *Options) error {
-	if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" && opts.outputFormat != "table" {
-		return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
-	}
+func runList(opts *options) error {
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("Error loading config: %w", err)
 	}
 
 	connection, err := cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
 	client := connection.NewMASClient()
@@ -60,8 +62,7 @@ func runList(opts *Options) error {
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Error retrieving Kafka clusters: %w", err)
 	}
 
 	if response.Size == 0 {
@@ -76,19 +77,21 @@ func runList(opts *Options) error {
 	outputFormat := opts.outputFormat
 
 	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
-		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table: %v", err)
+		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table, defaulting to JSON: %v", err)
 		outputFormat = "json"
 	}
 
 	switch outputFormat {
 	case "json":
-		data, _ := json.MarshalIndent(response, "", "  ")
+		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
 		fmt.Print(string(data))
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
 		fmt.Print(string(data))
 	default:
-		kafka.PrintToTable(kafkaList.Items)
+		printer := tableprinter.New(os.Stdout)
+		printer.Print(kafkaList.Items)
+		fmt.Fprint(os.Stderr, "\n")
 	}
 
 	return nil

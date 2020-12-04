@@ -5,56 +5,75 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/MakeNowJust/heredoc"
+
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
+type options struct {
+	id string
+
+	cfg *config.Config
+}
+
 func NewUseCommand() *cobra.Command {
+	opts := &options{}
+
 	cmd := &cobra.Command{
-		Use:   "use [Kafka ID]",
-		Short: "Use provided cluster",
-		Long:  "Set to work with cluster on current context",
-		Args:  cobra.MinimumNArgs(1),
-		Run:   runUse,
+		Use:   "use",
+		Short: "Set the current Kafka cluster context",
+		Long:  "Sets a Kafka cluster in context by its unique identifier",
+		Example: heredoc.Doc(`
+			$ rhoas kafka use
+			$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
+		),
+		Args: cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			cfg, err := config.Load()
+			if err != nil {
+				return fmt.Errorf("Error loading config: %w", err)
+			}
+			opts.cfg = cfg
+
+			return runUse(opts)
+		},
 	}
+
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to use")
+	_ = cmd.MarkFlagRequired("id")
+
 	return cmd
 }
 
-func runUse(cmd *cobra.Command, args []string) {
-	cfg, err := config.Load()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
-		os.Exit(1)
-	}
-
+func runUse(opts *options) error {
+	cfg := *opts.cfg
 	connection, err := cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
 	client := connection.NewMASClient()
 
-	id := args[0]
-
-	res, status, err := client.DefaultApi.GetKafkaById(context.Background(), id)
+	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka cluster \"%v\": %v", id, err)
-		return
+		return fmt.Errorf("Unable to retrieve Kafka cluster \"%v\": %w", opts.id, err)
 	}
 
-	if status.StatusCode != 200 {
-		fmt.Fprintf(os.Stderr, "Could not use cluster \"%v\": %v", id, err)
-		return
+	// build Kafka config object from the response
+	var kafkaConfig config.KafkaConfig = config.KafkaConfig{
+		ClusterID:   res.Id,
+		ClusterName: res.Name,
+		ClusterHost: res.BootstrapServerHost,
 	}
 
-	var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: res.Id, ClusterName: res.Name, ClusterHost: res.BootstrapServerHost}
 	cfg.Services.SetKafka(&kafkaConfig)
-	if err := config.Save(cfg); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	if err := config.Save(&cfg); err != nil {
+		return fmt.Errorf("Unable to update config: %w", err)
 	}
 
 	fmt.Fprintf(os.Stderr, "Using Kafka cluster \"%v\"", res.Id)
+
+	return nil
 }

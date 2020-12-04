@@ -19,6 +19,7 @@ func main() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd := root.NewRootCommand(version.CLI_VERSION)
+	rootCmd.SilenceErrors = true
 	rootCmd.InitDefaultHelpCmd()
 
 	if generateDocs {
@@ -26,7 +27,7 @@ func main() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 	}
 }
 
