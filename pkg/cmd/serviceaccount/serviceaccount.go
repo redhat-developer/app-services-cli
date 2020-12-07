@@ -8,7 +8,7 @@ import (
 // NewServiceAccountCommand creates a new command sub-group to manage service accounts
 func NewServiceAccountCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "service-account",
+		Use:   "serviceaccount",
 		Short: "Manage your service accounts",
 		Long:  "Manage your service accounts which can be used to connect your application to a Kafka instances",
 		Args:  cobra.ExactArgs(1),
