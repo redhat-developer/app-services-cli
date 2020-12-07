@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"time"
 	"path"
 
 	"github.com/MakeNowJust/heredoc"
@@ -49,9 +48,11 @@ kafka.ssl.protocol=TLSv1.2
 )
 
 type options struct {
-	output   string
-	force    bool
-	filename string
+	output      string
+	force       bool
+	name        string
+	description string
+	filename    string
 
 	cfg *config.Config
 }
@@ -95,9 +96,13 @@ func NewCreateCommand() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "env", "Format of the config [env, kafka, properties, json]")
-	_ = cmd.MarkFlagRequired("output")
+	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account")
+	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account")
 	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Force overwrite a file if it already exists")
 	cmd.Flags().StringVar(&opts.filename, "output-file", "", "Sets a custom file location to save the credentials")
+
+	_ = cmd.MarkFlagRequired("output")
+	_ = cmd.MarkFlagRequired("name")
 
 	return cmd
 }
@@ -132,14 +137,15 @@ func runCreate(opts *options) error {
 		fileName = path.Clean(opts.filename)
 	}
 
-  fileDir := path.Dir(fileName)
+	fileDir := path.Dir(fileName)
 	if !pathExists(fileDir) {
 		return fmt.Errorf("Directory '%v' does not exist", fileDir)
 	}
 
-	t := time.Now()
-	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
+	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: opts.name, Description: opts.description}
 	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *svcAcctPayload)
+
+	fmt.Println(response.Name, response.Description)
 
 	if err != nil {
 		return fmt.Errorf("Could not create service account: %w", err)
