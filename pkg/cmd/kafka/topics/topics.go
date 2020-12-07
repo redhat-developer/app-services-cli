@@ -26,5 +26,6 @@ func NewTopicsCommand() *cobra.Command {
 		list.NewListTopicCommand(),
 		delete.NewDeleteTopicCommand(),
 	)
+
 	return cmd
 }

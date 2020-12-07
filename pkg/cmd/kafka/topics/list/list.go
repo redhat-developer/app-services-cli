@@ -9,6 +9,7 @@ import (
 )
 
 var output string
+var insecure bool
 
 const Output = "output"
 
@@ -17,15 +18,18 @@ func NewListTopicCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List topics",
-		Long:  "List all topics in the current selected Managed Kafka instance",
-		Run:   listTopic,
+		Long:  "List all topics in the current selected Managed Kafka cluster",
+		Run: func(cmd *cobra.Command, _ []string) {
+			listTopic(insecure)
+		},
 	}
 
 	cmd.Flags().StringVarP(&output, Output, "o", "plain-text", "The output format as 'plain-text', 'json', or 'yaml'")
+	cmd.Flags().BoolVar(&insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	return cmd
 }
 
-func listTopic(cmd *cobra.Command, _ []string) {
+func listTopic(insecure bool) {
 
 	err := topics.ValidateCredentials()
 	if err != nil {
@@ -33,7 +37,7 @@ func listTopic(cmd *cobra.Command, _ []string) {
 		return
 	}
 	fmt.Fprintln(os.Stderr, "Topics:")
-	err = topics.ListKafkaTopics()
+	err = topics.ListKafkaTopics(insecure)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to perform list operation: %v\n", err)
 	}

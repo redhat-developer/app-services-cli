@@ -1,7 +1,9 @@
 package topics
 
 import (
+	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 	"context"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"os"
@@ -15,7 +17,7 @@ import (
 	"github.com/segmentio/kafka-go/sasl/plain"
 )
 
-func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
+func brokerConnect(insecure bool) (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 	cfg, err := config.Load()
 	if err != nil {
 		return nil, nil, err
@@ -29,6 +31,10 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 		Timeout:       100 * time.Second,
 		DualStack:     true,
 		SASLMechanism: mechanism,
+		// #nosec 402
+		TLS: &tls.Config{
+			InsecureSkipVerify: insecure,
+		},
 	}
 
 	cfg, err = config.Load()
@@ -55,7 +61,7 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 		return nil, nil, fmt.Errorf("Kafka instance is missing a Bootstrap Server Host")
 	}
 
-	fmt.Println(kafkaInstance.BootstrapServerHost)
+	sdkkafka.TransformResponse(&kafkaInstance)
 
 	conn, err := dialer.Dial("tcp", kafkaInstance.BootstrapServerHost)
 	if err != nil {
@@ -91,21 +97,19 @@ func ValidateCredentials() error {
 		svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: "RHOAS-CLI Service Account"}
 		response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *svcAcctPayload)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
 			return err
 		}
 		cfg.ServiceAuth.ClientID = response.ClientID
 		cfg.ServiceAuth.ClientSecret = response.ClientSecret
 		if err = config.Save(cfg); err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
 			return err
 		}
 	}
 	return nil
 }
 
-func CreateKafkaTopic(topicConfigs []kafka.TopicConfig) error {
-	conn, controllerConn, err := brokerConnect()
+func CreateKafkaTopic(topicConfigs []kafka.TopicConfig, insecure bool) error {
+	conn, controllerConn, err := brokerConnect(insecure)
 	if err != nil {
 		return err
 	}
@@ -116,8 +120,8 @@ func CreateKafkaTopic(topicConfigs []kafka.TopicConfig) error {
 	return controllerConn.CreateTopics(topicConfigs...)
 }
 
-func DeleteKafkaTopic(topic string) error {
-	conn, controllerConn, err := brokerConnect()
+func DeleteKafkaTopic(topic string, insecure bool) error {
+	conn, controllerConn, err := brokerConnect(insecure)
 	if err != nil {
 		return err
 	}
@@ -128,8 +132,8 @@ func DeleteKafkaTopic(topic string) error {
 	return controllerConn.DeleteTopics([]string{topic}...)
 }
 
-func ListKafkaTopics() error {
-	conn, controllerConn, err := brokerConnect()
+func ListKafkaTopics(insecure bool) error {
+	conn, controllerConn, err := brokerConnect(insecure)
 	if err != nil {
 		return err
 	}
