@@ -87,6 +87,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Auth token is invalid
+        "403":
+          content:
+            application/json:
+              examples:
+                "403Example":
+                  $ref: '#/components/examples/403Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User not authorized to access the service.
         "404":
           content:
             application/json:
@@ -135,6 +144,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Auth token is invalid
+        "403":
+          content:
+            application/json:
+              examples:
+                "403Example":
+                  $ref: '#/components/examples/403Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User not authorized to access the service.
         "404":
           content:
             application/json:
@@ -198,6 +216,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Auth token is invalid
+        "403":
+          content:
+            application/json:
+              examples:
+                "403Example":
+                  $ref: '#/components/examples/403Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User not authorized to access the service.
         "500":
           content:
             application/json:
@@ -230,7 +257,7 @@ paths:
               EURegion:
                 $ref: '#/components/examples/EURegionExample'
             schema:
-              $ref: '#/components/schemas/KafkaRequest'
+              $ref: '#/components/schemas/KafkaRequestPayload'
         description: Kafka data
         required: true
       responses:
@@ -238,8 +265,8 @@ paths:
           content:
             application/json:
               examples:
-                KafkaRequestPostExample:
-                  $ref: '#/components/examples/KafkaRequestPostExample'
+                KafkaRequestPostResponseExample:
+                  $ref: '#/components/examples/KafkaRequestExample'
               schema:
                 $ref: '#/components/schemas/KafkaRequest'
           description: Accepted
@@ -261,6 +288,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Auth token is invalid
+        "403":
+          content:
+            application/json:
+              examples:
+                "403Example":
+                  $ref: '#/components/examples/403Example'
+                "403MaxAllowedInstanceReachedExample":
+                  $ref: '#/components/examples/403MaxAllowedInstanceReachedExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User forbidden either because the user is not authorized to
+            access the service or because the maximum number of instances that can
+            be created by this user has been reached.
         "404":
           content:
             application/json:
@@ -282,6 +322,122 @@ paths:
       security:
       - Bearer: []
       summary: Create a new kafka Request
+  /api/managed-services-api/v1/cloud_providers:
+    get:
+      operationId: listCloudProviders
+      parameters:
+      - description: Page index
+        examples:
+          page:
+            value: "1"
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items in each page
+        examples:
+          size:
+            value: "100"
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudProviderList'
+          description: Retrieved list of supported cloud providers
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      security:
+      - Bearer: []
+      summary: Retrieves the list of supported cloud providers.
+  /api/managed-services-api/v1/cloud_providers/{id}/regions:
+    get:
+      operationId: listCloudProviderRegions
+      parameters:
+      - description: The id of record
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Page index
+        examples:
+          page:
+            value: "1"
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items in each page
+        examples:
+          size:
+            value: "100"
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudRegionList'
+          description: Retrieved list of supported cloud providers regions
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      security:
+      - Bearer: []
+      summary: Retrieves the list of supported regions of the supported cloud provider.
 components:
   examples:
     USRegionExample:
@@ -294,26 +450,6 @@ components:
         region: eu-west-1
         cloud_provider: aws
         name: serviceapitest
-    KafkaRequestListExample:
-      value:
-        kind: KafkaRequestList
-        page: "1"
-        size: "1"
-        total: "1"
-        items:
-          $ref: '#/components/examples/KafkaRequestExample'
-    KafkaRequestPostExample:
-      value:
-        id: 1iX03lndlmQ0qfC7siTa5sLjV8E
-        kind: Kafka
-        href: /api/managed-services-api/v1/kafkas/1iX03lndlmQ0qfC7siTa5sLjV8E
-        status: accepted
-        cloud_provider: aws
-        region: eu-west-1
-        owner: api_kafka_service
-        name: serviceapi
-        created_at: 2020-10-06T22:40:32.667743942-04:00
-        updated_at: 2020-10-06T22:40:32.667743942-04:00
     KafkaRequestExample:
       value:
         id: 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
@@ -321,13 +457,26 @@ components:
         href: /api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
         status: complete
         cloud_provider: aws
-        multi_az: false
-        region: eu-west-1
+        multi_az: true
+        region: us-east-1
         owner: api_kafka_service
         name: serviceapi
         bootstrapServerHost: serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org
         created_at: 2020-10-05T12:51:24.053142Z
         updated_at: 2020-10-05T12:56:36.362208Z
+    CloudProviderExample:
+      value:
+        kind: CloudProvider
+        id: aws
+        name: aws
+        display_name: Amazon Web Services
+        enabled: true
+    CloudRegionExample:
+      value:
+        kind: CloudRegion
+        id: us-east-1
+        display_name: US East, N. Virginia
+        enabled: true
     "400CreationExample":
       value:
         id: "103"
@@ -360,6 +509,22 @@ components:
         code: OCM-EX-11
         reason: 'Unable to verify JWT token: Required authorization token not found'
         operation_id: 1iY3UhEhwmXBpWPfI2lNekpd4ZD
+    "403Example":
+      value:
+        id: "4"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/4
+        code: MGD-SERV-API-4
+        reason: User 'foo-bar' is not authorized to access the service.
+        operation_id: 1lY3UiEhznXBpWPfI2lNejpd4YC
+    "403MaxAllowedInstanceReachedExample":
+      value:
+        id: "4"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/4
+        code: MGD-SERV-API-4
+        reason: User 'foo-bar' has reached a maximum number of 6 allowed instances.
+        operation_id: 1lY3UiEkxnXBpVPeI2oNejd3XB
     "500Example":
       value:
         id: "9"
@@ -424,8 +589,6 @@ components:
           type: string
       type: object
     List:
-      example:
-        $ref: '#/components/examples/KafkaRequestListExample'
       properties:
         kind:
           type: string
@@ -466,6 +629,79 @@ components:
       allOf:
       - $ref: '#/components/schemas/List'
       - $ref: '#/components/schemas/KafkaRequestList_allOf'
+    KafkaRequestPayload:
+      description: Schema for the request body sent to /kafkas POST
+      example:
+        multi_az: true
+        name: name
+        cloud_provider: cloud_provider
+        region: region
+      properties:
+        cloud_provider:
+          description: The cloud provider where the Kafka cluster will be created
+            in
+          type: string
+        multi_az:
+          description: Set this to true to configure the Kafka cluster to be multiAZ
+          type: boolean
+        name:
+          description: The name of the Kafka cluster
+          type: string
+        region:
+          description: The region where the Kafka cluster will be created in
+          type: string
+      required:
+      - name
+      type: object
+    CloudProviderList:
+      allOf:
+      - $ref: '#/components/schemas/List'
+      - $ref: '#/components/schemas/CloudProviderList_allOf'
+    CloudRegionList:
+      allOf:
+      - $ref: '#/components/schemas/List'
+      - $ref: '#/components/schemas/CloudRegionList_allOf'
+    CloudProvider:
+      description: Cloud provider.
+      properties:
+        kind:
+          description: Indicates the type of this object. Will be 'CloudProvider'
+            link.
+          type: string
+        id:
+          description: Unique identifier of the object.
+          type: string
+        display_name:
+          description: Name of the cloud provider for display purposes.
+          type: string
+        name:
+          description: Human friendly identifier of the cloud provider, for example
+            `aws`.
+          type: string
+        enabled:
+          description: Whether the cloud provider is enabled for deploying an OSD
+            cluster.
+          type: boolean
+      required:
+      - enabled
+    CloudRegion:
+      description: Description of a region of a cloud provider.
+      properties:
+        kind:
+          description: Indicates the type of this object. Will be 'CloudRegion'.
+          type: string
+        id:
+          description: Unique identifier of the object.
+          type: string
+        display_name:
+          description: Name of the region for display purposes, for example `N. Virginia`.
+          type: string
+        enabled:
+          default: false
+          description: Whether the region is enabled for deploying an OSD cluster.
+          type: boolean
+      required:
+      - enabled
     Error_allOf:
       properties:
         code:
@@ -520,11 +756,28 @@ components:
           format: date-time
           type: string
     KafkaRequestList_allOf:
+      example: '{"kind":"KafkaRequestList","page":"1","size":"1","total":"1","item":{"$ref":"#/components/examples/KafkaRequestExample"}}'
       properties:
         items:
           items:
             allOf:
             - $ref: '#/components/schemas/KafkaRequest'
+          type: array
+    CloudProviderList_allOf:
+      example: '{"kind":"CloudProviderList","page":"1","size":"1","total":"1","item":{"$ref":"#/components/examples/CloudProviderExample"}}'
+      properties:
+        items:
+          items:
+            allOf:
+            - $ref: '#/components/schemas/CloudProvider'
+          type: array
+    CloudRegionList_allOf:
+      example: '{"kind":"CloudRegionList","page":"1","size":"1","total":"1","item":{"$ref":"#/components/examples/CloudRegionExample"}}'
+      properties:
+        items:
+          items:
+            allOf:
+            - $ref: '#/components/schemas/CloudRegion'
           type: array
   securitySchemes:
     Bearer:
