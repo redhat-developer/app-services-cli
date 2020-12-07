@@ -13,7 +13,7 @@ import (
 )
 
 type options struct {
-	id      string
+	id string
 
 	cfg *config.Config
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/logout"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount"
 	"github.com/spf13/cobra"
 )
 
@@ -28,6 +29,7 @@ func NewRootCommand(version string) *cobra.Command {
 	cmd.AddCommand(login.NewLoginCmd())
 	cmd.AddCommand(logout.NewLogoutCommand())
 	cmd.AddCommand(kafka.NewKafkaCommand())
+	cmd.AddCommand(serviceaccount.NewServiceAccountCommand())
 	cmd.AddCommand(docs.NewDocsCommand())
 	cmd.AddCommand(completion.CompletionCmd)
 

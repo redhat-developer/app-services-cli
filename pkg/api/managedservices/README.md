@@ -33,14 +33,22 @@ All URIs are relative to *https://api.openshift.com*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**CreateKafka**](docs/DefaultApi.md#createkafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
-*DefaultApi* | [**CreateServiceAccount**](docs/DefaultApi.md#createserviceaccount) | **Get** /api/managed-services-api/v1/serviceAccount | Create a kafka service account
+*DefaultApi* | [**CreateServiceAccount**](docs/DefaultApi.md#createserviceaccount) | **Post** /api/managed-services-api/v1/serviceaccounts | Create a kafka service account
 *DefaultApi* | [**DeleteKafkaById**](docs/DefaultApi.md#deletekafkabyid) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 *DefaultApi* | [**GetKafkaById**](docs/DefaultApi.md#getkafkabyid) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
+*DefaultApi* | [**ListCloudProviderRegions**](docs/DefaultApi.md#listcloudproviderregions) | **Get** /api/managed-services-api/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
+*DefaultApi* | [**ListCloudProviders**](docs/DefaultApi.md#listcloudproviders) | **Get** /api/managed-services-api/v1/cloud_providers | Retrieves the list of supported cloud providers.
 *DefaultApi* | [**ListKafkas**](docs/DefaultApi.md#listkafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
 
 
 ## Documentation For Models
 
+ - [CloudProvider](docs/CloudProvider.md)
+ - [CloudProviderList](docs/CloudProviderList.md)
+ - [CloudProviderListAllOf](docs/CloudProviderListAllOf.md)
+ - [CloudRegion](docs/CloudRegion.md)
+ - [CloudRegionList](docs/CloudRegionList.md)
+ - [CloudRegionListAllOf](docs/CloudRegionListAllOf.md)
  - [Error](docs/Error.md)
  - [ErrorAllOf](docs/ErrorAllOf.md)
  - [ErrorList](docs/ErrorList.md)
@@ -49,10 +57,13 @@ Class | Method | HTTP request | Description
  - [KafkaRequestAllOf](docs/KafkaRequestAllOf.md)
  - [KafkaRequestList](docs/KafkaRequestList.md)
  - [KafkaRequestListAllOf](docs/KafkaRequestListAllOf.md)
+ - [KafkaRequestPayload](docs/KafkaRequestPayload.md)
  - [List](docs/List.md)
  - [ObjectReference](docs/ObjectReference.md)
- - [TokenResponse](docs/TokenResponse.md)
- - [TokenResponseAllOf](docs/TokenResponseAllOf.md)
+ - [ServiceAccountRequest](docs/ServiceAccountRequest.md)
+ - [ServiceAccountRequestAllOf](docs/ServiceAccountRequestAllOf.md)
+ - [ServiceAccountResponse](docs/ServiceAccountResponse.md)
+ - [ServiceAccountResponseAllOf](docs/ServiceAccountResponseAllOf.md)
 
 
 ## Documentation For Authorization

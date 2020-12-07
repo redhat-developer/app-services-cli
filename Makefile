@@ -52,7 +52,7 @@ test/unit: install
 .PHONY: test/unit
 
 openapi/pull:
-	wget -P ./openapi -O managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
+	wget -O ./openapi/managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
 .PHONY: openapi/pull
 
 # validate the openapi schema

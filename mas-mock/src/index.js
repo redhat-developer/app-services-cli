@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // define api
-const api = new OpenAPIBackend({ definition: path.join(__dirname, "../managed-services-api.yaml") });
+const api = new OpenAPIBackend({ definition: path.join(__dirname, "../../openapi/managed-services-api.yaml") });
 
 // register handlers
 api.register(handlers);

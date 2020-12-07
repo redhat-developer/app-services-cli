@@ -68,7 +68,7 @@ func runCreate(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	kafkaRequest := managedservices.KafkaRequest{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: opts.multiAZ}
+	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: opts.multiAZ}
 	response, _, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
 
 	if err != nil {

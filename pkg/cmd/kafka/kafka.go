@@ -7,7 +7,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/connect"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/credentials"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/describe"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/list"
@@ -32,7 +31,6 @@ func NewKafkaCommand() *cobra.Command {
 		use.NewUseCommand(),
 		status.NewStatusCommand(),
 		topics.NewTopicsCommand(),
-		credentials.NewCredentialsCommand(),
 		connect.NewConnectCommand())
 
 	return cmd
