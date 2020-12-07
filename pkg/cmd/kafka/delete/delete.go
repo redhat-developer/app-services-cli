@@ -24,8 +24,8 @@ func NewDeleteCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Delete a Kafka cluster",
-		Long:  "Permanently delete a Kafka cluster",
+		Short: "Delete a Kafka instance",
+		Long:  "Permanently delete a Kafka instance",
 		Example: heredoc.Doc(`
 			$ rhoas kafka delete
 			$ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
@@ -44,7 +44,7 @@ func NewDeleteCommand() *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return fmt.Errorf("No Kafka cluster selected. Use the '--id' flag or set one in context with the 'use' command")
+				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -53,7 +53,7 @@ func NewDeleteCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to delete. If not set, the currently selected Kafka cluster will be used")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the currently selected Kafka instance will be used")
 
 	return cmd
 }
@@ -71,7 +71,7 @@ func runDelete(opts *options) error {
 
 	var confirmDeleteAction bool
 	var promptConfirmAction = &survey.Confirm{
-		Message: "Once a Kafka cluster is deleted it is gone forever and cannot be recovered, are you sure you want to proceed?",
+		Message: "Once a Kafka instance is deleted it is gone forever and cannot be recovered, are you sure you want to proceed?",
 	}
 
 	err = survey.AskOne(promptConfirmAction, &confirmDeleteAction)
@@ -83,7 +83,7 @@ func runDelete(opts *options) error {
 	}
 
 	var promptConfirmID = &survey.Input{
-		Message: "Please confirm the ID of the Kafka cluster you wish to permanently delete:",
+		Message: "Please confirm the ID of the Kafka instance you wish to permanently delete:",
 	}
 
 	var confirmedKafkaID string
@@ -93,18 +93,18 @@ func runDelete(opts *options) error {
 	}
 
 	if confirmedKafkaID != kafkaID {
-		fmt.Fprintln(os.Stderr, "The ID you entered does not match the ID of the Kafka cluster that you are trying to delete. Please check that it correct and try again.")
+		fmt.Fprintln(os.Stderr, "The ID you entered does not match the ID of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
 		return nil
 	}
 
-	fmt.Fprintf(os.Stderr, "Deleting Kafka cluster with ID '%v'.\n", kafkaID)
+	fmt.Fprintf(os.Stderr, "Deleting Kafka instance with ID '%v'.\n", kafkaID)
 	_, _, err = client.DefaultApi.DeleteKafkaById(context.Background(), kafkaID)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error deleting Kafka cluster: %v", err)
+		fmt.Fprintf(os.Stderr, "Error deleting Kafka instance: %v", err)
 	}
 
-	fmt.Fprint(os.Stderr, "Kafka cluster has successfully been deleted.")
+	fmt.Fprint(os.Stderr, "Kafka instance has successfully been deleted.")
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

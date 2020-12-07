@@ -1,4 +1,4 @@
-// Package kafka cluster contains commands for interacting with cluster logic of the service directly instead of through the
+// Package kafka instance contains commands for interacting with cluster logic of the service directly instead of through the
 // REST API exposed via the serve command.
 package kafka
 
@@ -18,8 +18,8 @@ import (
 func NewKafkaCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "kafka",
-		Short: "Manage your Kafka clusters",
-		Long:  "Manage your Kafka clusters",
+		Short: "Manage your Kafka instances",
+		Long:  "Manage your Kafka instances",
 	}
 
 	// add sub-commands

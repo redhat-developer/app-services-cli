@@ -67,12 +67,12 @@ func (c *Config) HasKafka() bool {
 	return c.Services.Kafka != nil
 }
 
-// SetKafka sets the current Kafka cluster
+// SetKafka sets the current Kafka instance
 func (s *ServiceConfigMap) SetKafka(k *KafkaConfig) {
 	s.Kafka = k
 }
 
-// Remove the current Kafka cluster from the config
+// Remove the current Kafka instance from the config
 func (s *ServiceConfigMap) RemoveKafka() {
 	s.Kafka = &KafkaConfig{
 		ClusterID: "",

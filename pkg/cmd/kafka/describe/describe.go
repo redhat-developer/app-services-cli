@@ -20,15 +20,15 @@ type options struct {
 	cfg *config.Config
 }
 
-// NewDescribeCommand describes a Kafka cluster, either by passing an `--id flag`
-// or by using the kafka cluster set in the config, if any
+// NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
+// or by using the kafka instance set in the config, if any
 func NewDescribeCommand() *cobra.Command {
 	opts := &options{}
 
 	cmd := &cobra.Command{
 		Use:   "describe",
-		Short: "Get details of single Kafka cluster",
-		Long:  "Get details of single Kafka cluster, either by loading the currently selected Kafka cluster or a custom one with the `--id` flag",
+		Short: "Get details of single Kafka instance",
+		Long:  "Get details of single Kafka instance, either by loading the currently selected Kafka instance or a custom one with the `--id` flag",
 		Example: heredoc.Doc(`
 			$ rhoas kafka describe
 			$ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
@@ -51,7 +51,7 @@ func NewDescribeCommand() *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return fmt.Errorf("No Kafka cluster selected. Use the '--id' flag or set one in context with the 'use' command")
+				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -60,8 +60,8 @@ func NewDescribeCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka cluster. Choose from: \"json\", \"yaml\", \"yml\"")
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to describe. If not set, the currently selected Kafka cluster will be used")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to describe. If not set, the currently selected Kafka instance will be used")
 
 	return cmd
 }
@@ -77,7 +77,7 @@ func runDescribe(opts *options) error {
 	response, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 
 	if err != nil {
-		return fmt.Errorf("Error getting Kafka cluster: %w", err)
+		return fmt.Errorf("Error getting Kafka instance: %w", err)
 	}
 
 	switch opts.outputFormat {

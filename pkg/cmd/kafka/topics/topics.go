@@ -19,7 +19,7 @@ func NewTopicsCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "topics",
 		Short: "Manage topics",
-		Long:  "Manage Kafka topics for the current selected Managed Kafka Cluster",
+		Long:  "Manage Kafka topics for the current selected Managed Kafka instance",
 	}
 
 	cmd.AddCommand(

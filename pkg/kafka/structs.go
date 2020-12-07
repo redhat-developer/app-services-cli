@@ -1,6 +1,6 @@
 package kafka
 
-// Cluster is the details of a Kafka cluster
+// Cluster is the details of a Kafka instance
 type Cluster struct {
 	ID                  string `json:"id" header:"ID"`
 	Name                string `json:"name" header:"Name"`
@@ -15,7 +15,7 @@ type Cluster struct {
 	UpdatedAt           string `json:"updated_at"`
 }
 
-// ClusterList contains a list of Kafka clusters
+// ClusterList contains a list of Kafka instances
 type ClusterList struct {
 	Kind  string    `json:"kind"`
 	Page  int       `json:"page"`

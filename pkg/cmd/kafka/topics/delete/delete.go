@@ -17,7 +17,7 @@ func NewDeleteTopicCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
 		Short: "Delete topic",
-		Long:  "Delete topic from the current selected Managed Kafka cluster",
+		Long:  "Delete topic from the current selected Managed Kafka instance",
 		Run:   deleteTopic,
 	}
 

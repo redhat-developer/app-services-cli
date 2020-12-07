@@ -145,7 +145,7 @@ func connectToCluster(connection *pkgConnection.Connection) {
 	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not get Kafka cluster with ID '%v': %v", kafkaCfg.ClusterID, err)
+		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v", kafkaCfg.ClusterID, err)
 		return
 	}
 
@@ -305,12 +305,12 @@ func useKafka(cliconfig *config.Config, connection *pkgConnection.Connection) *c
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka instances: %v\n", err)
 		os.Exit(1)
 	}
 
 	if response.Size == 0 {
-		fmt.Fprintln(os.Stderr, "No Kafka clusters found.")
+		fmt.Fprintln(os.Stderr, "No Kafka instances found.")
 		return nil
 	}
 
@@ -320,7 +320,7 @@ func useKafka(cliconfig *config.Config, connection *pkgConnection.Connection) *c
 	}
 
 	prompt := promptui.Select{
-		Label: "Select Kafka cluster to connect",
+		Label: "Select Kafka instance to connect",
 		Items: kafkas,
 	}
 
