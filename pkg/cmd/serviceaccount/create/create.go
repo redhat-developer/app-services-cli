@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"time"
+	"path"
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
@@ -128,7 +129,12 @@ func runCreate(opts *options) error {
 	}
 
 	if opts.filename != "" {
-		fileName = opts.filename
+		fileName = path.Clean(opts.filename)
+	}
+
+  fileDir := path.Dir(fileName)
+	if !pathExists(fileDir) {
+		return fmt.Errorf("Directory '%v' does not exist", fileDir)
 	}
 
 	t := time.Now()
@@ -144,15 +150,14 @@ func runCreate(opts *options) error {
 
 	dataToWrite := []byte(fileContent)
 
-	if fileExists(fileName) && !opts.force {
+	if pathExists(fileName) && !opts.force {
 		fmt.Fprintf(os.Stderr, "File '%v' already exist. Use --force flag to overwrite the file, or use the --output-file flag to choose a custom location\n", fileName)
 		return nil
 	}
 
 	err = ioutil.WriteFile(fileName, dataToWrite, 0600)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error saving file %v \n", err)
-		return nil
+		return fmt.Errorf("Could not save file: %w", err)
 	}
 
 	fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v \n", fileName)
@@ -160,7 +165,7 @@ func runCreate(opts *options) error {
 	return nil
 }
 
-func fileExists(path string) bool {
+func pathExists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
 }
