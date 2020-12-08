@@ -2,6 +2,7 @@ package root
 
 import (
 	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka"
@@ -31,6 +32,7 @@ func NewRootCommand(version string) *cobra.Command {
 	cmd.AddCommand(kafka.NewKafkaCommand())
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand())
 	cmd.AddCommand(docs.NewDocsCommand())
+	cmd.AddCommand(cluster.NewClusterCommand())
 	cmd.AddCommand(completion.CompletionCmd)
 
 	return cmd
