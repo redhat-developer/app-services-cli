@@ -21,7 +21,7 @@ type options struct {
 	name     string
 	provider string
 	region   string
-	multiAZ  bool
+	// multiAZ  bool
 
 	outputFormat string
 
