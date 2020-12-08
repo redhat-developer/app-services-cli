@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
+
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 
@@ -44,6 +46,11 @@ func NewCreateCommand() *cobra.Command {
 				return fmt.Errorf("Error loading config: %w", err)
 			}
 			opts.cfg = cfg
+
+			err = kafka.ValidateName(opts.name)
+			if err != nil {
+				return err
+			}
 
 			return runCreate(opts)
 		},
