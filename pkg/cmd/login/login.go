@@ -90,6 +90,8 @@ func NewLoginCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&args.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	cmd.Flags().StringVar(&args.clientID, "client-id", defaultClientID, "OpenID client identifier.")
 	cmd.Flags().StringVar(&args.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
+
+	// TODO: Remove this option once a CLI client is available on sso.rh
 	cmd.Flags().StringVarP(&args.token, "token", "t", "", "access token that can be used for login")
 
 	return cmd
