@@ -9,7 +9,7 @@
     "start": "node ./src/index.js",
     "refresh": "../scripts/pullapi.sh",
     "test": "jest",
-    "api": "openapi-editor --file ./managed-services-api.yaml --port 10000"
+    "api": "openapi-editor --file ../openapi/managed-services-api.yaml --port 10000"
   },
   "dependencies": {
     "cors": "^2.8.5",
