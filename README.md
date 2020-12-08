@@ -8,7 +8,7 @@ Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to downlo
 
 ## Getting Started
 
-1. Login to RHOAS
+### Login to RHOAS
 
 ```shell
 rhoas login --insecure
@@ -20,7 +20,19 @@ This will redirect you to log in to https://sso.redhat.com/realms/redhat-externa
 rhoas login
 ```
 
-2. Use available Kafka commands
+> NOTE: Work is ongoing to get a rhoas-cli client on Red Hat SSO. Until then you will not be able to interact with the control plane using this login flow. To workaround this, please use token-based login, which will be removed as soon as a client is available.
+
+### Login with offline token
+
+This login flow will not be available in the official release of the RHOAS CLI, but should be used to login to https://sso.redhat.com for now if you want to interact with the control plane API.
+
+```shell
+rhoas login --token $TOKEN
+```
+
+> NOTE: You can obtain an offline token from [cloud.redhat.com](https://cloud.redhat.com/openshift/token)
+
+### Use available Kafka commands
 
 ```
 rhoas kafka

@@ -24,6 +24,7 @@ type Builder struct {
 	clientID         string
 	scopes           []string
 	apiURL           string
+	authURL          string
 	transportWrapper TransportWrapper
 }
 
@@ -65,6 +66,11 @@ func (b *Builder) WithTransportWrapper(transportWrapper TransportWrapper) *Build
 
 func (b *Builder) WithURL(url string) *Builder {
 	b.apiURL = url
+	return b
+}
+
+func (b *Builder) WithAuthURL(authURL string) *Builder {
+	b.authURL = authURL
 	return b
 }
 
@@ -138,7 +144,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 		return
 	}
 
-	authURL, err := url.Parse(DefaultAuthURL)
+	authURL, err := url.Parse(b.authURL)
 	if err != nil {
 		err = fmt.Errorf("can't parse Auth URL '%s': %w", DefaultAuthURL, err)
 		return
