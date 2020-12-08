@@ -13,6 +13,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/pkce"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -73,6 +74,7 @@ var args struct {
 	authURL               string
 	clientID              string
 	insecureSkipTLSVerify bool
+	token                 string
 }
 
 // NewLoginCmd gets the command that's log the user in
@@ -87,6 +89,10 @@ func NewLoginCmd() *cobra.Command {
 	cmd.Flags().StringVar(&args.url, "url", stagingURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
 	cmd.Flags().BoolVar(&args.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	cmd.Flags().StringVar(&args.clientID, "client-id", defaultClientID, "OpenID client identifier.")
+	cmd.Flags().StringVar(&args.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
+
+	// TODO: Remove this option once a CLI client is available on sso.rh
+	cmd.Flags().StringVarP(&args.token, "token", "t", "", "access token that can be used for login")
 
 	return cmd
 }
@@ -95,6 +101,8 @@ func NewLoginCmd() *cobra.Command {
 func runLogin(cmd *cobra.Command, _ []string) error {
 	cfg, _ := config.Load()
 	cfg.SetInsecure(args.insecureSkipTLSVerify)
+	cfg.SetClientID(args.clientID)
+	cfg.SetAuthURL(args.authURL)
 
 	// If the value of the `--url` is any of the aliases then replace it with the corresponding
 	// real URL:
@@ -111,14 +119,17 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("Scheme missing from URL '%v'. Please add either 'https' or 'https'.", unparsedGatewayURL)
 	}
 
-	authURL := connection.DefaultAuthURL
+	if args.token != "" {
+		cfg.SetURL(gatewayURL.String())
+		return loginWithToken(args.token, cfg)
+	}
 
 	tr := createTransport(args.insecureSkipTLSVerify)
 	httpClient := &http.Client{Transport: tr}
 
 	parentCtx, cancel := context.WithCancel(context.Background())
 	ctx := oidc.ClientContext(parentCtx, httpClient)
-	provider, err := oidc.NewProvider(ctx, authURL)
+	provider, err := oidc.NewProvider(ctx, args.authURL)
 	if err != nil {
 		return err
 	}
@@ -160,6 +171,8 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		Handler: sm,
 		Addr:    redirectURL.Host,
 	}
+
+	fmt.Fprintln(os.Stderr, "Logging in...")
 
 	sm.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, authCodeURL, http.StatusFound)
@@ -238,4 +251,74 @@ func createTransport(insecure bool) *http.Transport {
 	return &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure},
 	}
+}
+
+// tokenType extracts the value of the `typ` claim. It returns the value as a string, or the empty
+// string if there is no such claim.
+func tokenType(token *jwt.Token) (typ string, err error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		err = fmt.Errorf("expected map claims but got %T", claims)
+		return
+	}
+	claim, ok := claims["typ"]
+	if !ok {
+		return
+	}
+	value, ok := claim.(string)
+	if !ok {
+		err = fmt.Errorf("expected string 'typ' but got %T", claim)
+		return
+	}
+	typ = value
+	return
+}
+
+func loginWithToken(token string, cfg *config.Config) error {
+	fmt.Fprintln(os.Stderr, "Logging in...")
+	var parsedToken *jwt.Token
+	parser := new(jwt.Parser)
+	parsedToken, _, err := parser.ParseUnverified(token, jwt.MapClaims{})
+	if err != nil {
+		return fmt.Errorf("Can't parse token '%s': %w", args.token, err)
+	}
+	tokenType, err := tokenType(parsedToken)
+	if err != nil {
+		return fmt.Errorf("Can't extract type from 'typ' claim of token '%s': %w", token, err)
+	}
+
+	switch tokenType {
+	case "Bearer":
+		cfg.AccessToken = args.token
+	case "Refresh", "Offline":
+		cfg.RefreshToken = args.token
+	case "":
+		return fmt.Errorf("Don't know how to handle empty type in token '%s'", args.token)
+	default:
+		return fmt.Errorf("Don't know how to handle token type '%s' in token '%s'", tokenType, args.token)
+	}
+
+	// Create a connection and get the token to verify that the crendentials are correct:
+	connection, err := cfg.Connection()
+	if err != nil {
+		return fmt.Errorf("Can't create connection: %w", err)
+	}
+	accessToken, refreshToken, err := connection.RefreshTokens(context.TODO())
+	if err != nil {
+		return fmt.Errorf("Can't get token: %w", err)
+	}
+	cfg.SetAccessToken(accessToken)
+	cfg.SetRefreshToken(refreshToken)
+	cfg.SetClientID(args.clientID)
+	cfg.SetInsecure(args.insecureSkipTLSVerify)
+	cfg.SetAccessToken(accessToken)
+	cfg.SetRefreshToken(refreshToken)
+	err = config.Save(cfg)
+	if err != nil {
+		return fmt.Errorf("Unable to save config: %w", err)
+	}
+
+	fmt.Fprintln(os.Stderr, "Successfully logged in to RHOAS")
+
+	return nil
 }

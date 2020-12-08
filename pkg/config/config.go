@@ -19,6 +19,7 @@ type Config struct {
 	RefreshToken string           `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
 	Services     ServiceConfigMap `json:"services"`
 	URL          string           `json:"url,omitempty" doc:"URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging' and 'integration'."`
+	AuthURL      string           `json:"auth_url" doc:"URL of the authentication server"`
 	ClientID     string           `json:"client_id,omitempty" doc:"OpenID client identifier."`
 	Insecure     bool             `json:"insecure,omitempty" doc:"Enables insecure communication with the server. This disables verification of TLS certificates and host names."`
 	Scopes       []string         `json:"scopes,omitempty" doc:"OpenID scope. If this option is used it will replace completely the default scopes. Can be repeated multiple times to specify multiple scopes."`
@@ -54,6 +55,10 @@ func (c *Config) SetScopes(scopes []string) {
 
 func (c *Config) SetURL(url string) {
 	c.URL = url
+}
+
+func (c *Config) SetAuthURL(authURL string) {
+	c.AuthURL = authURL
 }
 
 func (c *Config) SetInsecure(insecure bool) {
@@ -175,6 +180,11 @@ func (c *Config) Connection() (conn *connection.Connection, err error) {
 	if c.URL != "" {
 		builder.WithURL(c.URL)
 	}
+	if c.AuthURL == "" {
+		c.AuthURL = connection.DefaultAuthURL
+	}
+	builder.WithAuthURL(c.AuthURL)
+
 	builder.WithInsecure(c.Insecure)
 
 	conn, err = builder.Build()
