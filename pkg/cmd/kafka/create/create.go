@@ -52,7 +52,8 @@ func NewCreateCommand() *cobra.Command {
 	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the new Kafka cluster")
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "aws", "Cloud provider ID")
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "us-east-1", "Cloud Provider Region ID")
-	cmd.Flags().BoolVar(&opts.multiAZ, flags.FlagMultiAZ, false, "Determines if cluster should be provisioned across multiple Availability Zones")
+	// Hardcoded as only true is possible
+	// cmd.Flags().BoolVar(&opts.multiAZ, flags.FlagMultiAZ, true, "Determines if cluster should be provisioned across multiple Availability Zones")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka cluster. Choose from: \"json\", \"yaml\", \"yml\"")
 
 	_ = cmd.MarkFlagRequired(flags.FlagName)
@@ -68,7 +69,7 @@ func runCreate(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: opts.multiAZ}
+	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: true}
 	response, _, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
 
 	if err != nil {
