@@ -35,14 +35,14 @@ var (
 	kafka.ssl.protocol=TLSv1.2
 	`)
 
-	templateJSON = `
+	templateJSON = heredoc.Doc(`
 	{ 
 		"name":"%v",
 		"user":"%v", 
 		"password":"%v" 
-	}`
+	}`)
 
-	templateSecret = `
+	templateSecret = heredoc.Doc(`
 	kind: Secret
 	apiVersion: v1
 	metadata:
@@ -51,7 +51,7 @@ var (
 	  clientID: "%v"
 	  clientSecret: "%v"
 	type: Opaque
-	`
+	`)
 )
 
 type options struct {
