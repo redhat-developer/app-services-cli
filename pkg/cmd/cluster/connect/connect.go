@@ -41,7 +41,7 @@ Using --forceSelect will ignore current command context make interactive prompt 
 
 	cmd.Flags().BoolVarP(&secretOnly, "secret-only", "", false, "Apply only secret and without CR. Can be used without installing RHOAS operator on cluster")
 	cmd.Flags().BoolVarP(&forceSelect, "skip-context", "", false, "Allows to select services before performing binding")
-	cmd.Flags().StringVarP(&secretName, "secretName", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
+	cmd.Flags().StringVarP(&secretName, "secret-name", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
 	cmd.Flags().StringVarP(&kubeConfigCustomLocation, "kubeconfig", "", "", "Location of the .kube/config file")
 	return cmd
 }

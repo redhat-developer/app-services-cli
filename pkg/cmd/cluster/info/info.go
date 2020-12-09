@@ -21,7 +21,7 @@ import (
 
 var statusMsg = `
 Namespace: %v
-	Managed Application Services Operator: %v 
+Managed Application Services Operator: %v 
 `
 
 func NewInfoCommand() *cobra.Command {

@@ -230,8 +230,12 @@ func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
 		Do(context.TODO())
 
 	if data.Error() != nil {
-		rawData, _ := data.Raw()
-		fmt.Fprint(os.Stderr, "\nError when fetching ManagedKafkaConnection", string(rawData))
+		var status int
+		if data.StatusCode(&status); status != 404 {
+			rawData, _ := data.Raw()
+			fmt.Fprint(os.Stderr, "\nCannot verify if cluster has ManagedKafkaConnection", string(rawData))
+		}
+
 		return false
 	}
 
