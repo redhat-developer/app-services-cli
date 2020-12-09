@@ -78,7 +78,7 @@ func NewCreateCommand() *cobra.Command {
 				- env (default): Saves the credentials to a .env file as environment variables
 				- kafka, properties: Saves the credentials to a kafka.properties file
 				- json: Saves the credentials in a credentials.json JSON file
-				- kube: Saves credentials as kuberentes secret
+				- kube: Saves credentials as Kubernetes secret
 		`),
 		Example: heredoc.Doc(`
 			$ rhoas service-account create --output kafka
