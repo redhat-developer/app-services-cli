@@ -37,7 +37,7 @@ var (
 	kind: Secret
 	apiVersion: v1
 	metadata:
-	  name: "%v-secret"
+	  name: "rhoas-service-account-secret"
 	stringData:
 	  clientID: "%v"
 	  clientSecret: "%v"
