@@ -21,7 +21,7 @@ This will redirect you to log in to https://sso.redhat.com/realms/redhat-externa
 To test out this login flow, you can log in to the QA SSO server:
 
 ```shell
-rhoas login --insecure --url=https://sso.qa.redhat.com/realms/redhat-external --insecure
+rhoas login --insecure --auth-url=https://sso.qa.redhat.com/realms/redhat-external --insecure
 ```
 
 This will redirect you to log in to https://sso.qa.redhat.com/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs.
