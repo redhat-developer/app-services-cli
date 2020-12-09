@@ -14,17 +14,17 @@ Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to downlo
 rhoas login
 ```
 
-This will redirect you to log in to https://sso.redhat.com/realms/redhat-external with your browser.
+This will redirect you to log in to https://sso.redhat.com/auth/realms/redhat-external with your browser.
 
 > NOTE: Work is ongoing to get a rhoas-cli client on Red Hat SSO. Until then you will not be able to interact with the control plane using this login flow. To workaround this, please use token-based login, which will be removed as soon as a client is available.
 
 To test out this login flow, you can log in to the QA SSO server:
 
 ```shell
-rhoas login --insecure --auth-url=https://sso.qa.redhat.com/realms/redhat-external --insecure
+rhoas login --auth-url=https://sso.qa.redhat.com/auth/realms/redhat-external --insecure
 ```
 
-This will redirect you to log in to https://sso.qa.redhat.com/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs.
+This will redirect you to log in to https://sso.qa.redhat.com/auth/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs.
 
 > NOTE: Please contact the MAS Security team for credentials.
 
