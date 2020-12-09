@@ -63,9 +63,7 @@ func runUse(opts *options) error {
 
 	// build Kafka config object from the response
 	var kafkaConfig config.KafkaConfig = config.KafkaConfig{
-		ClusterID:   res.Id,
-		ClusterName: res.Name,
-		ClusterHost: res.BootstrapServerHost,
+		ClusterID: res.Id,
 	}
 
 	cfg.Services.SetKafka(&kafkaConfig)

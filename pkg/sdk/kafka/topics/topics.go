@@ -1,6 +1,7 @@
 package topics
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"os"
@@ -31,15 +32,28 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
 		fmt.Fprint(os.Stderr, err)
 	}
 
-	if cfg.Services.Kafka.ClusterHost == "" {
+	if cfg.Services.Kafka.ClusterID == "" {
 		fmt.Fprint(os.Stderr, "No Kafka selected. Run rhoas kafka use")
 		panic("Missing config")
 	}
+
+	connection, err := cfg.Connection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not create connection: %v\n", err)
+	}
+
+	managedservices := connection.NewMASClient()
+	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not get Kafka instance: %v\n", err)
+		return
+	}
+
 	var clusterURL string
-	if strings.HasPrefix(cfg.Services.Kafka.ClusterHost, "localhost") {
-		clusterURL = cfg.Services.Kafka.ClusterHost
+	if strings.HasPrefix(kafkaInstance.BootstrapServerHost, "localhost") {
+		clusterURL = kafkaInstance.BootstrapServerHost
 	} else {
-		clusterURL = cfg.Services.Kafka.ClusterHost + ":443"
+		clusterURL = kafkaInstance.BootstrapServerHost + ":443"
 	}
 
 	conn, err := dialer.Dial("tcp", clusterURL)

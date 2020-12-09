@@ -32,9 +32,7 @@ type ServiceConfigMap struct {
 
 // KafkaConfig is the config for the managed Kafka service
 type KafkaConfig struct {
-	ClusterHost string `json:"clusterHost"`
-	ClusterID   string `json:"clusterId"`
-	ClusterName string `json:"clusterName"`
+	ClusterID string `json:"clusterId"`
 }
 
 func (c *Config) SetAccessToken(accessToken string) {
@@ -77,9 +75,7 @@ func (s *ServiceConfigMap) SetKafka(k *KafkaConfig) {
 // Remove the current Kafka cluster from the config
 func (s *ServiceConfigMap) RemoveKafka() {
 	s.Kafka = &KafkaConfig{
-		ClusterID:   "",
-		ClusterHost: "",
-		ClusterName: "",
+		ClusterID: "",
 	}
 }
 
