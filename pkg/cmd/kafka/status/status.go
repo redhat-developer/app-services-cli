@@ -23,8 +23,8 @@ func NewStatusCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "status",
-		Short: "Get status of current Kafka cluster",
-		Long:  "Gets the status of the current Kafka cluster context",
+		Short: "Get status of current Kafka instance",
+		Long:  "Gets the status of the current Kafka instance context",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := config.Load()
@@ -39,7 +39,7 @@ func NewStatusCommand() *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return fmt.Errorf("No Kafka cluster selected. Use the '--id' flag or set one in context with the 'use' command")
+				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -48,7 +48,7 @@ func NewStatusCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to get the status from")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to get the status from")
 
 	return cmd
 }
@@ -63,7 +63,7 @@ func runStatus(opts *options) error {
 
 	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 	if err != nil {
-		return fmt.Errorf("Error retrieving Kafka cluster: %w", err)
+		return fmt.Errorf("Error retrieving Kafka instance: %w", err)
 	}
 
 	type kafkaStatus struct {

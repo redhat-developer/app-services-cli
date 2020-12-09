@@ -22,7 +22,7 @@ func NewUpdateTopicCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update",
 		Short: "Update topic",
-		Long:  "Update topic in the current selected Managed Kafka cluster",
+		Long:  "Update topic in the current selected Managed Kafka instance",
 		Run:   updateTopic,
 	}
 

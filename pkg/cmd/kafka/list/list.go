@@ -28,8 +28,8 @@ func NewListCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "List all Kafka clusters",
-		Long:  "List all Kafka clusters",
+		Short: "List all Kafka instances",
+		Long:  "List all Kafka instances",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" && opts.outputFormat != "table" {
@@ -40,7 +40,7 @@ func NewListCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", "Format to display the Kafka clusters. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", "Format to display the Kafka instances. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
 
 	return cmd
 }
@@ -62,11 +62,11 @@ func runList(opts *options) error {
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {
-		return fmt.Errorf("Error retrieving Kafka clusters: %w", err)
+		return fmt.Errorf("Error retrieving Kafka instances: %w", err)
 	}
 
 	if response.Size == 0 {
-		fmt.Fprintln(os.Stderr, "No Kafka clusters found.")
+		fmt.Fprintln(os.Stderr, "No Kafka instances found.")
 		return nil
 	}
 

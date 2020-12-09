@@ -34,7 +34,7 @@ func NewCreateCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create a new Kafka cluster",
+		Short: "Create a new Kafka instance",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
@@ -55,10 +55,10 @@ func NewCreateCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the new Kafka cluster")
+	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the new Kafka instance")
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "aws", "Cloud provider ID")
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "us-east-1", "Cloud Provider Region ID")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka cluster. Choose from: \"json\", \"yaml\", \"yml\"")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
 
 	_ = cmd.MarkFlagRequired(flags.FlagName)
 
@@ -75,16 +75,16 @@ func runCreate(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	fmt.Fprintln(os.Stderr, "Creating Kafka cluster")
+	fmt.Fprintln(os.Stderr, "Creating Kafka instance")
 
 	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: true}
 	response, _, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
 
 	if err != nil {
-		return fmt.Errorf("Error while requesting new Kafka cluster: %w", err)
+		return fmt.Errorf("Error while requesting new Kafka instance: %w", err)
 	}
 
-	fmt.Fprintln(os.Stderr, "Created Kafka cluster:")
+	fmt.Fprintf(os.Stderr, "Created new Kafka instance:\n")
 
 	switch opts.outputFormat {
 	case "json":
@@ -101,7 +101,7 @@ func runCreate(opts *options) error {
 
 	cfg.Services.SetKafka(kafkaCfg)
 	if err := config.Save(cfg); err != nil {
-		return fmt.Errorf("Unable to automatically use Kafka cluster: %w", err)
+		return fmt.Errorf("Unable to automatically use Kafka instance: %w", err)
 	}
 
 	return nil

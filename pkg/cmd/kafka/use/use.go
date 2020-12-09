@@ -23,8 +23,8 @@ func NewUseCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "use",
-		Short: "Set the current Kafka cluster context",
-		Long:  "Sets a Kafka cluster in context by its unique identifier",
+		Short: "Set the current Kafka instance context",
+		Long:  "Sets a Kafka instance in context by its unique identifier",
 		Example: heredoc.Doc(`
 			$ rhoas kafka use
 			$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
@@ -41,7 +41,7 @@ func NewUseCommand() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka cluster you want to use")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to use")
 	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
@@ -58,7 +58,7 @@ func runUse(opts *options) error {
 
 	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
 	if err != nil {
-		return fmt.Errorf("Unable to retrieve Kafka cluster \"%v\": %w", opts.id, err)
+		return fmt.Errorf("Unable to retrieve Kafka instance \"%v\": %w", opts.id, err)
 	}
 
 	// build Kafka config object from the response
@@ -71,7 +71,7 @@ func runUse(opts *options) error {
 		return fmt.Errorf("Unable to update config: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Using Kafka cluster \"%v\"", res.Id)
+	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"", res.Id)
 
 	return nil
 }

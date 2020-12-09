@@ -24,7 +24,7 @@ func NewCreateTopicCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create topic",
-		Long:  "Create topic in the current selected Managed Kafka cluster",
+		Long:  "Create topic in the current selected Managed Kafka instance",
 		Run:   createTopic,
 	}
 
