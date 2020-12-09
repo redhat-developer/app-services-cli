@@ -119,7 +119,7 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Creating service account with following permissions %v", opts.scopes)
+	fmt.Fprintf(os.Stderr, "\nCreating service account with following permissions %v \n", opts.scopes)
 
 	client := connection.NewMASClient()
 
