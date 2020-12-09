@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
+
 	"github.com/fatih/color"
 
 	"github.com/spf13/cobra"
@@ -19,6 +21,7 @@ import (
 
 var statusMsg = `
 Namespace: %v
+	Managed Application Services Operator: %v 
 `
 
 func NewInfoCommand() *cobra.Command {
@@ -62,7 +65,7 @@ func connectToCluster() {
 	}
 
 	// create the clientset
-	_, err = kubernetes.NewForConfig(restConfig)
+	clientset, err := kubernetes.NewForConfig(restConfig)
 
 	if err != nil {
 		fmt.Fprint(os.Stderr, "\nFailed to load kube config file", err)
@@ -71,7 +74,14 @@ func connectToCluster() {
 
 	currentNamespace, _, _ := kubeClientconfig.Namespace()
 
-	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(currentNamespace))
+	var operatorStatus string
+	// Add versioning in future
+	if cluster.IsCRDInstalled(clientset, currentNamespace) {
+		operatorStatus = color.HiGreenString("Installed")
+	} else {
+		operatorStatus = color.HiRedString("Not installed")
+	}
+	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(currentNamespace), operatorStatus)
 }
 
 func fileExists(path string) bool {
