@@ -127,6 +127,10 @@ func connectToCluster(connection *pkgConnection.Connection) {
 
 	currentNamespace, _, _ := kubeClientconfig.Namespace()
 	clicfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not load config: %v\n", err)
+		return
+	}
 
 	if !clicfg.HasKafka() || forceKafkaSelect {
 		clicfg = useKafka(clicfg, connection)
@@ -135,12 +139,22 @@ func connectToCluster(connection *pkgConnection.Connection) {
 		}
 	}
 
+	kafkaCfg := clicfg.Services.Kafka
+
+	managedservices := connection.NewMASClient()
+	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not get Kafka cluster with ID '%v': %v", kafkaCfg.ClusterID, err)
+		return
+	}
+
 	if err != nil {
 		fmt.Fprint(os.Stderr, "\nInvalid configuration file", err)
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(clicfg.Services.Kafka.ClusterName), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
+	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(kafkaInstance.Name), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
 	if shouldContinue := showQuestion("Do you want to continue?"); shouldContinue == false {
 		return
 	}
@@ -150,7 +164,7 @@ func connectToCluster(connection *pkgConnection.Connection) {
 		return
 	}
 	createSecret(credentials, currentNamespace, clientset)
-	createCR(clicfg, clientset, currentNamespace)
+	createCR(clientset, &kafkaInstance, currentNamespace)
 }
 
 func fileExists(path string) bool {
@@ -241,8 +255,8 @@ func createSecret(credentials *managedservices.TokenResponse, currentNamespace s
 	return secret
 }
 
-func createCR(clicfg *config.Config, clientset *kubernetes.Clientset, namespace string) {
-	crName := secretName + "-" + clicfg.Services.Kafka.ClusterName
+func createCR(clientset *kubernetes.Clientset, kafkaInstance *managedservices.KafkaRequest, namespace string) {
+	crName := secretName + "-" + kafkaInstance.Name
 	crInstance := &connection.ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
@@ -254,7 +268,7 @@ func createCR(clicfg *config.Config, clientset *kubernetes.Clientset, namespace 
 		},
 		Spec: connection.ManagedKafkaConnectionSpec{
 			BootstrapServer: connection.BootstrapServerSpec{
-				Host: clicfg.Services.Kafka.ClusterHost,
+				Host: kafkaInstance.BootstrapServerHost,
 			},
 			Credentials: connection.CredentialsSpec{
 				Kind:       connection.ClientCredentials,
@@ -313,7 +327,7 @@ func useKafka(cliconfig *config.Config, connection *pkgConnection.Connection) *c
 	index, _, err := prompt.Run()
 	if err == nil {
 		selectedKafka := response.Items[index]
-		var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: selectedKafka.Id, ClusterName: selectedKafka.Name, ClusterHost: selectedKafka.BootstrapServerHost}
+		var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: selectedKafka.Id}
 		cliconfig.Services.SetKafka(&kafkaConfig)
 
 		return cliconfig

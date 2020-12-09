@@ -96,9 +96,7 @@ func runCreate(opts *options) error {
 	}
 
 	kafkaCfg := &config.KafkaConfig{
-		ClusterName: response.Name,
-		ClusterHost: response.BootstrapServerHost,
-		ClusterID:   response.Id,
+		ClusterID: response.Id,
 	}
 
 	cfg.Services.SetKafka(kafkaCfg)

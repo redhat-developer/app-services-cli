@@ -191,9 +191,7 @@ Your config should look as follows:
   ...
   "services": {
     "kafka": {
-      "clusterHost": "localhost:9092",
-      "clusterId": "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
-      "clusterName": "serviceapi"
+      "clusterId": "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
     }
   }
   ...
