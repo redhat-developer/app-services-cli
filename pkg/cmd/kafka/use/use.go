@@ -71,7 +71,7 @@ func runUse(opts *options) error {
 		return fmt.Errorf("Unable to update config: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"", res.Id)
+	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"\n", res.Id)
 
 	return nil
 }

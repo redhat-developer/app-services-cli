@@ -77,7 +77,7 @@ func runList(opts *options) error {
 	outputFormat := opts.outputFormat
 
 	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
-		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table, defaulting to JSON: %v", err)
+		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table, defaulting to JSON: %v\n", err)
 		outputFormat = "json"
 	}
 

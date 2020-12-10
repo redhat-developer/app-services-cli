@@ -27,12 +27,12 @@ func NewDeleteTopicCommand() *cobra.Command {
 }
 
 func deleteTopic(cmd *cobra.Command, _ []string) {
-	fmt.Fprintf(os.Stderr, "Deleting topic %v ", topicName)
+	fmt.Fprintf(os.Stderr, "Deleting topic %v\n", topicName)
 	err := topics.DeleteKafkaTopic(topicName)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error deleting topic: %v", topicName)
+		fmt.Fprintf(os.Stderr, "Error deleting topic: %v\n", topicName)
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, "\nTopic %v deleted\n", topicName)
+	fmt.Fprintf(os.Stderr, "Topic %v deleted\n", topicName)
 }

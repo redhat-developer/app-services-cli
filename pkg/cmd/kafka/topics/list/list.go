@@ -31,7 +31,6 @@ func listTopic(cmd *cobra.Command, _ []string) {
 	err := topics.ListKafkaTopics()
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to perform list operation")
+		fmt.Fprintf(os.Stderr, "Failed to perform list operation\n")
 	}
-
 }

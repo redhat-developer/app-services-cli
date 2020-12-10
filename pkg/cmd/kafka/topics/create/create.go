@@ -48,7 +48,7 @@ func createTopic(cmd *cobra.Command, _ []string) {
 
 	err := topics.CreateKafkaTopic(&topicConfigs)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating topic: %v", topicName)
+		fmt.Fprintf(os.Stderr, "Error creating topic: %v\n", topicName)
 		return
 	}
 

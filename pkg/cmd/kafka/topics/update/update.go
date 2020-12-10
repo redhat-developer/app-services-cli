@@ -45,9 +45,9 @@ func updateTopic(cmd *cobra.Command, _ []string) {
 
 	err := topics.CreateKafkaTopic(&topicConfigs)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error updating topic: %v", topicName)
+		fmt.Fprintf(os.Stderr, "Error updating topic: %v\n", topicName)
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v updated", topicName)
+	fmt.Fprintf(os.Stderr, "Topic %v updated\n", topicName)
 }
