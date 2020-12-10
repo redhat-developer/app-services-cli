@@ -14,34 +14,12 @@ Go to [releases](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases) to downlo
 rhoas login
 ```
 
-This will redirect you to log in to https://sso.redhat.com/auth/realms/redhat-external with your browser.
-
-> NOTE: Work is ongoing to get a rhoas-cli client on Red Hat SSO. Until then you will not be able to interact with the control plane using this login flow. To workaround this, please use token-based login, which will be removed as soon as a client is available.
-
-To test out this login flow, you can log in to the QA SSO server:
-
-```shell
-rhoas login --auth-url=https://sso.qa.redhat.com/auth/realms/redhat-external --insecure
-```
-
-This will redirect you to log in to https://sso.qa.redhat.com/auth/realms/redhat-external with your browser. The `--insecure` flag is required as this uses self-signed certs.
-
-> NOTE: Please contact the MAS Security team for credentials.
-
-### Login with offline token
-
-This login flow will not be available in the official release of the RHOAS CLI, but should be used to login to https://sso.redhat.com for now if you want to interact with the control plane API.
-
-```shell
-rhoas login --token $TOKEN --client-id=cloud-services
-```
-
-> NOTE: You can obtain an offline token from [cloud.redhat.com](https://cloud.redhat.com/openshift/token)
+This will redirect you to log in securely at https://sso.redhat.com/auth/realms/redhat-external with your browser.
 
 ### Use available Kafka commands
 
 ```
-rhoas kafka
+rhoas kafka --help
 ```
 
 ## Documentation

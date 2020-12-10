@@ -271,9 +271,9 @@
         }
       ],
       "security-admin-console": [],
-      "rhmas-cli": [],
-      "admin-cli": [],
       "rhoas-cli": [],
+      "admin-cli": [],
+      "rhoas-cli-prod": [],
       "account-console": [],
       "broker": [
         {
@@ -640,7 +640,7 @@
     },
     {
       "id": "d3321ace-4ed3-4c5f-8af1-392076dde880",
-      "clientId": "rhmas-cli",
+      "clientId": "rhoas-cli",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -694,7 +694,7 @@
     },
     {
       "id": "0d0f5386-3d4a-4d0c-83c2-e218eeca5f1b",
-      "clientId": "rhoas-cli",
+      "clientId": "rhoas-cli-prod",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,

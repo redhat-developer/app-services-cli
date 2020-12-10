@@ -18,7 +18,7 @@ import (
 const (
 	// #nosec G101
 	DefaultAuthURL  = "https://sso.redhat.com/auth/realms/redhat-external"
-	DefaultClientID = "rhoas-cli"
+	DefaultClientID = "rhoas-cli-prod"
 	DefaultURL      = "https://api.openshift.com"
 )
 

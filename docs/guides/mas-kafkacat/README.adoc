@@ -7,7 +7,7 @@ https://github.com/edenhill/kafkacat[Kafkacat].
 
 * https://github.com/edenhill/kafkacat[Kafkacat]
 * https://stedolan.github.io/jq/[jq]
-* https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[rhmas cli]
+* https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[rhoas cli]
 * https://kubernetes.io/fr/docs/reference/kubectl/overview/[kubectl].
 This is temporary required
 
@@ -21,15 +21,9 @@ CLI], login and create a new cluster:
 
 [source,bash]
 ----
-rhmas login --token=<token-from-token-page>
-rhmas kafka create --name=<your-cluster-name>
+rhoas login
+rhoas kafka create --name=<your-cluster-name>
 ----
-
-____
-NOTE: `your-cluster-name` is the name of your cluster NOTE: The token
-currently need to come from stagging environment:
-https://qaprodauth.cloud.redhat.com/openshift/token
-____
 
 Wait a couple of seconds for cluster to provision.
 
@@ -37,7 +31,7 @@ You can use the:
 
 [source,bash]
 ----
-rhmas kafka list
+rhoas kafka list
 ----
 
 to check the status of the provisioned Kafka.
@@ -65,8 +59,8 @@ kubectl get secret <cluster-name>-cluster-ca-cert -o jsonpath='{.data.ca\.crt}' 
 
 [source,bash]
 ----
-CLUSTER_ID=$(rhmas kafka list | grep '<your-cluster-name>' | awk '{print $1}')
-BOOTSTRAP_URL=$(rhmas kafka get $CLUSTER_ID | jq -r '.bootstrapServerHost')
+CLUSTER_ID=$(rhoas kafka list | grep '<your-cluster-name>' | awk '{print $1}')
+BOOTSTRAP_URL=$(rhoas kafka get $CLUSTER_ID | jq -r '.bootstrapServerHost')
 ----
 
 Where `<your-cluster-name>` is the name of the cluster.
