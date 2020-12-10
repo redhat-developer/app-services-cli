@@ -228,7 +228,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error starting server: %v", err)
+			fmt.Fprintf(os.Stderr, "Error starting server: %v\n", err)
 		}
 	}()
 	<-parentCtx.Done()

@@ -26,7 +26,7 @@ func NewLogoutCommand() *cobra.Command {
 func runLogout(cmd *cobra.Command, _ []string) {
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -43,7 +43,7 @@ func runLogout(cmd *cobra.Command, _ []string) {
 		os.Exit(1)
 	}
 
-	fmt.Println("Successfully logged out.")
+	fmt.Println("Successfully logged out")
 
 	cfg.SetAccessToken("")
 	cfg.SetRefreshToken("")

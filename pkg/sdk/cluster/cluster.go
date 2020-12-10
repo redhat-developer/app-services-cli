@@ -97,12 +97,12 @@ func ConnectToCluster(connection *pkgConnection.Connection,
 	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v", kafkaCfg.ClusterID, err)
+		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v\n", kafkaCfg.ClusterID, err)
 		return
 	}
 
 	if err != nil {
-		fmt.Fprint(os.Stderr, "\nInvalid configuration file", err)
+		fmt.Fprint(os.Stderr, "Invalid configuration file\n", err)
 		return
 	}
 
@@ -136,11 +136,11 @@ func CreateCredentials(connection *pkgConnection.Connection) *managedservices.To
 	var credentials managedservices.TokenResponse
 	err = json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
-		fmt.Fprint(os.Stderr, "\nInvalid JSON response from server", err)
+		fmt.Fprint(os.Stderr, "Invalid JSON response from server\n", err)
 		return nil
 	}
 
-	fmt.Fprintf(os.Stderr, "\nCredentials created")
+	fmt.Fprintf(os.Stderr, "Credentials created\n")
 	return &credentials
 }
 
@@ -173,7 +173,7 @@ func CreateSecret(credentials *managedservices.TokenResponse,
 		return nil
 	}
 
-	fmt.Fprintf(os.Stderr, "\nSecret %v created", createdSecret.Name)
+	fmt.Fprintf(os.Stderr, "\nSecret %v created\n", createdSecret.Name)
 
 	return secret
 }

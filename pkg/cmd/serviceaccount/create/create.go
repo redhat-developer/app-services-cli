@@ -119,7 +119,7 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "\nCreating service account with following permissions %v \n", opts.scopes)
+	fmt.Fprintf(os.Stderr, "\nCreating service account with following permissions %v\n", opts.scopes)
 
 	client := connection.NewMASClient()
 
@@ -156,7 +156,7 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("Could not create service account: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Writing credentials to %v \n", fileName)
+	fmt.Fprintf(os.Stderr, "Writing credentials to %v\n", fileName)
 	fileContent := fmt.Sprintf(fileFormat, response.ClientID, response.ClientSecret)
 
 	dataToWrite := []byte(fileContent)
@@ -171,7 +171,7 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("Could not save file: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v \n", fileName)
+	fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v\n", fileName)
 
 	return nil
 }
