@@ -32,7 +32,7 @@ var (
 	productionURL   = "https://api.openshift.com"
 	stagingURL      = "https://api.stage.openshift.com"
 	integrationURL  = "https://api-integration.6943.hive-integration.openshiftapps.com"
-	defaultClientID = "rhoas-cli"
+	defaultClientID = "rhoas-cli-prod"
 )
 
 const PostLoginPage = `

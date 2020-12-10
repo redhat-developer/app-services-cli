@@ -30,7 +30,7 @@ const ADMIN_PASSWORD = process.env.KEYCLOAK_ADMIN_PASSWORD || "admin";
 let token = "";
 
 // The keycloak client used by the sample app
-const PUBLIC_CLIENT_NAME = "rhoas-cli";
+const PUBLIC_CLIENT_NAME = "rhoas-cli-prod";
 let PUBLIC_CLIENT;
 
 // The client roles you want created for the BEARER_CLIENT_NAME client

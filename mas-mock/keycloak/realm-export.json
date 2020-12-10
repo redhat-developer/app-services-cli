@@ -273,7 +273,7 @@
       "security-admin-console": [],
       "rhmas-cli": [],
       "admin-cli": [],
-      "rhoas-cli": [],
+      "rhoas-cli-prod": [],
       "account-console": [],
       "broker": [
         {
@@ -694,7 +694,7 @@
     },
     {
       "id": "0d0f5386-3d4a-4d0c-83c2-e218eeca5f1b",
-      "clientId": "rhoas-cli",
+      "clientId": "rhoas-cli-prod",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,

@@ -13,7 +13,7 @@ rhoas login [flags]
 === Options
 
 ....
-      --client-id string   OpenID client identifier. (default "rhoas-cli")
+      --client-id string   OpenID client identifier. (default "rhoas-cli-prod")
   -h, --help               help for login
       --insecure           Enables insecure communication with the server. This disables verification of TLS certificates and host names.
       --url string         URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands. (default "https://api.stage.openshift.com")

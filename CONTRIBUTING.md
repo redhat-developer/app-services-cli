@@ -19,7 +19,7 @@ The following will need to be installed on your device in order to contribute to
 You can run the CLI commands files directly with `go run`. All commands and subcommands are in the `./pkg/cmd` folder.
 
 ```shell
-go run ./cmd/rhoas kafka create --name=test --multi-az="true" --provider=aws --region=us-east-1
+go run ./cmd/rhoas kafka create --name=test --provider=aws --region=us-east-1
 ```
 
 ### Development commands
@@ -99,11 +99,11 @@ Starts the mocked Managed Services API server at [`http://localhost:8000`](http:
 This will also start a local Keycloak instance at [`http://localhost:8000`](http://localhost:8000) for authentication from the CLI.
 When Keycloak is up and running, log in as an admin (username: `admin`, password: `admin`).
 Next, you will need to import the custom realm and client for the RHOAS CLI by running `make mock-api/keycloak/import-realm`.
-Once complete you should see the `rhoas-cli` client in a `sso-external` realm from the Keycloak admin panel.
+Once complete you should see the `rhoas-cli-prod` client in a `sso-external` realm from the Keycloak admin panel.
 
 ### `make mock-api/keycloak/import-realm`
 
-Imports a Keycloak realm and `rhoas-cli` client.
+Imports a Keycloak realm and `rhoas-cli-prod` client.
 
 ### Logging in
 
