@@ -10,5 +10,4 @@ do
   sed -i '' 's/.md/.adoc/g' ${adocFile}
   echo "Generated adoc. Removing markdown"
   rm -f ${item}
-  rm -f ${item}
 done
