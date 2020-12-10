@@ -73,11 +73,11 @@ func NewCreateCommand() *cobra.Command {
 				- kube: Saves credentials as Kubernetes secret
 		`),
 		Example: heredoc.Doc(`
-			$ rhoas service-account create --output kafka
-			$ rhoas service-account create --output=env
-			$ rhoas service-account create -o=properties
-			$ rhoas service-account create -o env --force
-			$ rhoas service-account create -o json`,
+			$ rhoas serviceaccount create --output kafka
+			$ rhoas serviceaccount create --output=env
+			$ rhoas serviceaccount create -o=properties
+			$ rhoas serviceaccount create -o env --force
+			$ rhoas serviceaccount create -o json`,
 		),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "env" &&
@@ -119,7 +119,7 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "\nCreating service account with following permissions %v\n", opts.scopes)
+	fmt.Fprintf(os.Stderr, "Creating service account with the following permissions: %v\n", opts.scopes)
 
 	client := connection.NewMASClient()
 

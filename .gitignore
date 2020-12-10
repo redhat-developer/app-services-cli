@@ -4,3 +4,8 @@ dist
 /rhoas
 vendor
 node_modules
+/*.json
+/*.yaml
+/*.yml
+/*.env
+/*.properties

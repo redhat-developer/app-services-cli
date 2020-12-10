@@ -13,52 +13,6 @@ servers:
   - url: /
     description: current domain
 paths:
-  /api/managed-services-api/v1/serviceaccounts:
-    post:
-      operationId: createServiceAccount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ServiceAccountRequest'
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceAccountResponse'
-          description: Service Account
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                401Example:
-                  $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                404Example:
-                  $ref: '#/components/examples/404Example'
-          description: Access to this resource is forbidden
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                500Example:
-                  $ref: '#/components/examples/500Example'
-          description: An unexpected error occurred creating the Service Account
-      security:
-        - Bearer: []
-      summary: Create a kafka service account
   /api/managed-services-api/v1/kafkas/{id}:
     get:
       operationId: getKafkaById
@@ -80,13 +34,13 @@ paths:
           description: Auth token is invalid
         "403":
           content:
-              application/json:
-                  schema:
-                      $ref: '#/components/schemas/Error'
-                  examples:
-                      403Example:
-                          $ref: '#/components/examples/403Example'
-          description: User not authorized to access the service.    
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                403Example:
+                  $ref: '#/components/examples/403Example'
+          description: User not authorized to access the service.
         "404":
           content:
             application/json:
@@ -130,13 +84,13 @@ paths:
           description: Auth token is invalid
         "403":
           content:
-              application/json:
-                  schema:
-                      $ref: '#/components/schemas/Error'
-                  examples:
-                      403Example:
-                          $ref: '#/components/examples/403Example'
-          description: User not authorized to access the service.    
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                403Example:
+                  $ref: '#/components/examples/403Example'
+          description: User not authorized to access the service.
         "404":
           content:
             application/json:
@@ -212,15 +166,15 @@ paths:
           description: Auth token is invalid
         "403":
           content:
-              application/json:
-                  schema:
-                      $ref: '#/components/schemas/Error'
-                  examples:
-                      403Example:
-                          $ref: '#/components/examples/403Example'
-                      403MaxAllowedInstanceReachedExample:
-                          $ref: '#/components/examples/403MaxAllowedInstanceReachedExample'    
-          description: User forbidden either because the user is not authorized to access the service or because the maximum number of instances that can be created by this user has been reached. 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                403Example:
+                  $ref: '#/components/examples/403Example'
+                403MaxAllowedInstanceReachedExample:
+                  $ref: '#/components/examples/403MaxAllowedInstanceReachedExample'
+          description: User forbidden either because the user is not authorized to access the service or because the maximum number of instances that can be created by this user has been reached.
         "404":
           content:
             application/json:
@@ -265,13 +219,13 @@ paths:
                   $ref: '#/components/examples/401Example'
         "403":
           content:
-              application/json:
-                  schema:
-                      $ref: '#/components/schemas/Error'
-                  examples:
-                      403Example:
-                          $ref: '#/components/examples/403Example'
-          description: User not authorized to access the service.             
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                403Example:
+                  $ref: '#/components/examples/403Example'
+          description: User not authorized to access the service.
         "500":
           description: Unexpected error occurred
           content:
@@ -353,6 +307,159 @@ paths:
         - $ref: "#/components/parameters/id"
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/size'
+  /api/managed-services-api/v1/serviceaccounts:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceAccountList'
+          description: List of service accounts
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
+          description: Auth token is invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                403Example:
+                  $ref: '#/components/examples/403Example'
+          description: User not authorized to access the service
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
+          description: Unexpected error occurred
+      security:
+        - Bearer: []
+      operationId: listServiceAccounts
+      summary: List service accounts
+    post:
+      requestBody:
+        description: service account request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountRequest'
+            examples:
+              sa:
+                $ref: '#/components/examples/ServiceAccountRequestExample'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceAccount'
+              examples:
+                serviceaccount:
+                  $ref: '#/components/examples/ServiceAccountExample'
+          description: service account created
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
+          description: Auth token is invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                403Example:
+                  $ref: '#/components/examples/403Example'
+          description: list of service account
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
+          description: Unexpected error occurred
+      security:
+        - Bearer: []
+      operationId: createServiceAccount
+      summary: Create a service account
+  '/api/managed-services-api/v1/serviceaccounts/{id}':
+    summary: Delete a service account
+    description: Delete the service account with the given id
+    delete:
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
+          description: auth token is invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                401Example:
+                  $ref: '#/components/examples/403Example'
+          description: User not authorized to access the service
+        '500':
+          content:
+            application/json:
+              schema: {}
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
+          description: Unexpected error occurred
+      security:
+        - Bearer: []
+      operationId: deleteServiceAccount
+      summary: Delete service account
+  '/api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials':
+    post:
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceAccount'
+              examples:
+                sa-reset:
+                  $ref: '#/components/examples/ServiceAccountExample'
+          description: reset credentials
+      security:
+        - Bearer: []
+      operationId: resetServiceAccountCreds
+      summary: reset credentials for the service account
 components:
   schemas:
     ObjectReference:
@@ -401,28 +508,6 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Error"
-    ServiceAccountRequest:
-      allOf:
-        - $ref: "#/components/schemas/ObjectReference"
-        - type: object
-          properties:
-            name:
-              type: string
-            description:
-              type: string
-    ServiceAccountResponse:
-      allOf:
-        - $ref: "#/components/schemas/ObjectReference"
-        - type: object
-          properties:
-            clientID:
-              type: string
-            clientSecret:
-              type: string
-            name:
-              type: string
-            description:
-              type: string
     KafkaRequest:
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
@@ -480,7 +565,7 @@ components:
           description: Set this to true to configure the Kafka cluster to be multiAZ
           type: boolean
         name:
-          description: The name of the Kafka cluster
+          description: 'The name of the Kafka cluster. It must consist of lower-case alphanumeric characters or ''-'', start with an alphabetic character, and end with an alphanumeric character, and can not be longer than 32 characters.'
           type: string
         region:
           description: The region where the Kafka cluster will be created in
@@ -557,6 +642,73 @@ components:
           default: false
       required:
         - enabled
+    ServiceAccount:
+      description: 'Service Account created in MAS-SSO for the Kafka Cluster for authentication'
+      allOf:
+        - $ref: "#/components/schemas/ObjectReference"
+        - type: object
+          properties:
+            id:
+              description: 'server generated unique id of the service account'
+              type: string
+            name:
+              description: ''
+              type: string
+            description:
+              description: ''
+              type: string
+            clientID:
+              type: string
+            clientSecret:
+              type: string
+          example:
+            $ref: "#/components/examples/ServiceAccountExample"
+    ServiceAccountRequest:
+      description: 'Schema for the request to create a service account'
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: 'The name of the service account'
+          type: string
+        description:
+          description: 'A description for the service account'
+          type: string
+      example:
+        $ref: "#/components/examples/ServiceAccountRequestExample"
+    ServiceAccountListItem:
+      description: ''
+      allOf:
+        - $ref: "#/components/schemas/ObjectReference"
+        - type: object
+          properties:
+            id:
+              description: 'server generated unique id of the service account'
+              type: string
+            clientID:
+              description: ''
+              type: string
+            name:
+              description: ''
+              type: string
+            description:
+              description: ''
+    ServiceAccountList:
+      allOf:
+        - type: object
+          example:
+            kind: "ServiceAccountList"
+            items:
+              $ref: '#/components/examples/ServiceAccountListItemExample'
+          properties:
+            kind:
+              type: string
+            items:
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/ServiceAccountListItem"
   parameters:
     id:
       name: id
@@ -628,6 +780,27 @@ components:
         id: "us-east-1"
         display_name: "US East, N. Virginia"
         enabled: true
+    ServiceAccountRequestExample:
+      value:
+        name: "my-app-sa"
+        description: "service account for my app"
+    ServiceAccountExample:
+      value:
+        id: "1"
+        kind: "ServiceAccount"
+        href: "/api/managed-services-api/v1/serviceaccounts/1"
+        name: "my-app-sa"
+        description: "service account for my app"
+        clientID: "SA-121212"
+        clientSecret: "secret"
+    ServiceAccountListItemExample:
+      value:
+        id: "1"
+        kind: "ServiceAccountListItem"
+        href: "/api/managed-services-api/v1/serviceaccounts/1"
+        name: "my-app-sa"
+        description: "service account for my app"
+        clientID: "SA-121212"
     400CreationExample:
       value:
         id: "103"
@@ -661,20 +834,20 @@ components:
         operation_id: "1iY3UhEhwmXBpWPfI2lNekpd4ZD"
     403Example:
       value:
-         id: '4'
-         kind: Error
-         href: /api/managed-services-api/v1/errors/4
-         code: MGD-SERV-API-4
-         reason: User 'foo-bar' is not authorized to access the service.
-         operation_id: 1lY3UiEhznXBpWPfI2lNejpd4YC
+        id: '4'
+        kind: Error
+        href: /api/managed-services-api/v1/errors/4
+        code: MGD-SERV-API-4
+        reason: User 'foo-bar' is not authorized to access the service.
+        operation_id: 1lY3UiEhznXBpWPfI2lNejpd4YC
     403MaxAllowedInstanceReachedExample:
       value:
-         id: '4'
-         kind: Error
-         href: /api/managed-services-api/v1/errors/4
-         code: MGD-SERV-API-4
-         reason: User 'foo-bar' has reached a maximum number of 6 allowed instances.
-         operation_id: 1lY3UiEkxnXBpVPeI2oNejd3XB      
+        id: '4'
+        kind: Error
+        href: /api/managed-services-api/v1/errors/4
+        code: MGD-SERV-API-4
+        reason: User 'foo-bar' has reached a maximum number of 6 allowed instances.
+        operation_id: 1lY3UiEkxnXBpVPeI2oNejd3XB
     500Example:
       value:
         id: '9'

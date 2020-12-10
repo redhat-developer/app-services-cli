@@ -5,12 +5,15 @@ All URIs are relative to *https://api.openshift.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateKafka**](DefaultApi.md#CreateKafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
-[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Post** /api/managed-services-api/v1/serviceaccounts | Create a kafka service account
+[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Post** /api/managed-services-api/v1/serviceaccounts | Create a service account
 [**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
+[**DeleteServiceAccount**](DefaultApi.md#DeleteServiceAccount) | **Delete** /api/managed-services-api/v1/serviceaccounts/{id} | Delete service account
 [**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
 [**ListCloudProviderRegions**](DefaultApi.md#ListCloudProviderRegions) | **Get** /api/managed-services-api/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
 [**ListCloudProviders**](DefaultApi.md#ListCloudProviders) | **Get** /api/managed-services-api/v1/cloud_providers | Retrieves the list of supported cloud providers.
 [**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
+[**ListServiceAccounts**](DefaultApi.md#ListServiceAccounts) | **Get** /api/managed-services-api/v1/serviceaccounts | List service accounts
+[**ResetServiceAccountCreds**](DefaultApi.md#ResetServiceAccountCreds) | **Post** /api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials | reset credentials for the service account
 
 
 
@@ -49,9 +52,9 @@ Name | Type | Description  | Notes
 
 ## CreateServiceAccount
 
-> ServiceAccountResponse CreateServiceAccount(ctx, serviceAccountRequest)
+> ServiceAccount CreateServiceAccount(ctx, serviceAccountRequest)
 
-Create a kafka service account
+Create a service account
 
 ### Required Parameters
 
@@ -59,11 +62,11 @@ Create a kafka service account
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**serviceAccountRequest** | [**ServiceAccountRequest**](ServiceAccountRequest.md)|  | 
+**serviceAccountRequest** | [**ServiceAccountRequest**](ServiceAccountRequest.md)| service account request | 
 
 ### Return type
 
-[**ServiceAccountResponse**](ServiceAccountResponse.md)
+[**ServiceAccount**](ServiceAccount.md)
 
 ### Authorization
 
@@ -84,6 +87,38 @@ Name | Type | Description  | Notes
 > Error DeleteKafkaById(ctx, id)
 
 Delete a kafka request by id
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string**| The id of record | 
+
+### Return type
+
+[**Error**](Error.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## DeleteServiceAccount
+
+> Error DeleteServiceAccount(ctx, id)
+
+Delete service account
 
 ### Required Parameters
 
@@ -256,6 +291,66 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**KafkaRequestList**](KafkaRequestList.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListServiceAccounts
+
+> ServiceAccountList ListServiceAccounts(ctx, )
+
+List service accounts
+
+### Required Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ServiceAccountList**](ServiceAccountList.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ResetServiceAccountCreds
+
+> ServiceAccount ResetServiceAccountCreds(ctx, id)
+
+reset credentials for the service account
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string**| The id of record | 
+
+### Return type
+
+[**ServiceAccount**](ServiceAccount.md)
 
 ### Authorization
 

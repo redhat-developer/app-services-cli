@@ -9,11 +9,10 @@
 
 package managedservices
 
-// ServiceAccountRequest struct for ServiceAccountRequest
+// ServiceAccountRequest Schema for the request to create a service account
 type ServiceAccountRequest struct {
-	Id          string `json:"id,omitempty"`
-	Kind        string `json:"kind,omitempty"`
-	Href        string `json:"href,omitempty"`
-	Name        string `json:"name,omitempty"`
+	// The name of the service account
+	Name string `json:"name"`
+	// A description for the service account
 	Description string `json:"description,omitempty"`
 }

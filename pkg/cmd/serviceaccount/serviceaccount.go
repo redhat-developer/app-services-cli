@@ -10,7 +10,7 @@ func NewServiceAccountCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "serviceaccount",
 		Short: "Manage your service accounts",
-		Long:  "Manage your service accounts which can be used to connect your application to a Kafka instances",
+		Long:  "Manage your service accounts which can be used to connect your application to managed services",
 		Args:  cobra.ExactArgs(1),
 	}
 
