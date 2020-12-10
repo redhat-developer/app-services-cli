@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/landoop/tableprinter"
 	"github.com/spf13/cobra"
@@ -16,15 +17,22 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+
+	"github.com/antihax/optional"
 )
 
 type options struct {
 	outputFormat string
+	page         int
+	limit        int
 }
 
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand() *cobra.Command {
-	opts := &options{}
+	opts := &options{
+		page:  0,
+		limit: 100,
+	}
 
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -41,7 +49,8 @@ func NewListCommand() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", "Format to display the Kafka instances. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
-
+	cmd.Flags().IntVarP(&opts.page, "page", "", 0, "Page that should be returned from server")
+	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, "Limit of items that should be returned from server")
 	return cmd
 }
 
@@ -58,7 +67,9 @@ func runList(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	options := managedservices.ListKafkasOpts{}
+	options := managedservices.ListKafkasOpts{
+		Page: optional.NewString(strconv.Itoa(opts.page)),
+		Size: optional.NewString(strconv.Itoa(opts.limit))}
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
 
 	if err != nil {

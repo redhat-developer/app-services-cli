@@ -102,9 +102,10 @@ func runDelete(opts *options) error {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error deleting Kafka instance: %v\n", err)
+		return nil
 	}
 
-	fmt.Fprint(os.Stderr, "Kafka instance has successfully been deleted.")
+	fmt.Fprint(os.Stderr, "\nKafka instance has successfully been deleted.\n")
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done
