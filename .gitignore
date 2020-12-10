@@ -4,6 +4,11 @@ dist
 /rhoas
 vendor
 node_modules
+
+# These are ignored because they are the common extension 
+# formats for credentials which can get included during development
+# You can explicitly override these on a per file basis with a "!" prefix
+# Example: /!keycloak.json
 /*.json
 /*.yaml
 /*.yml
