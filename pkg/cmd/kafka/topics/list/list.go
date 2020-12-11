@@ -30,11 +30,11 @@ func listTopic(cmd *cobra.Command, _ []string) {
 
 	err := topics.ValidateCredentials()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating credentials for list")
+		fmt.Fprintf(os.Stderr, "Error creating credentials for list: %v\n", err)
 		return
 	}
 	err = topics.ListKafkaTopics()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to perform list operation\n")
+		fmt.Fprintf(os.Stderr, "Failed to perform list operation: %v\n", err)
 	}
 }

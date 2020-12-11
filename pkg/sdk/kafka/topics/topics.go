@@ -16,10 +16,10 @@ import (
 	"github.com/segmentio/kafka-go/sasl/plain"
 )
 
-func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
+func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		return nil, nil, err
 	}
 	mechanism := plain.Mechanism{
 		Username: cfg.ServiceAuth.ClientID,
@@ -32,26 +32,24 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
 		SASLMechanism: mechanism,
 	}
 
-	cfg, err := config.Load()
+	cfg, err = config.Load()
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		return nil, nil, err
 	}
 
 	if cfg.Services.Kafka.ClusterID == "" {
-		fmt.Fprint(os.Stderr, "No Kafka selected. Run rhoas kafka use")
-		panic("Missing config")
+		return nil, nil, fmt.Errorf("No Kafka selected. Run rhoas kafka use")
 	}
 
 	connection, err := cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not create connection: %v\n", err)
+		return nil, nil, fmt.Errorf("Could not create connection: %w", err)
 	}
 
 	managedservices := connection.NewMASClient()
 	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not get Kafka instance: %v\n", err)
-		return
+		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", err)
 	}
 
 	var clusterURL string
@@ -63,20 +61,20 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
 
 	conn, err := dialer.Dial("tcp", clusterURL)
 	if err != nil {
-		panic(err.Error())
+		return nil, nil, err
 	}
 
 	controller, err := conn.Controller()
 	if err != nil {
-		panic(err.Error())
+		return nil, nil, err
 	}
 
 	controllerConn, err := kafka.Dial("tcp", net.JoinHostPort(controller.Host, strconv.Itoa(controller.Port)))
 	if err != nil {
-		panic(err.Error())
+		return nil, nil, err
 	}
 
-	return conn, controllerConn
+	return conn, controllerConn, nil
 }
 
 func ValidateCredentials() error {
@@ -109,7 +107,10 @@ func ValidateCredentials() error {
 }
 
 func CreateKafkaTopic(topicConfigs *[]kafka.TopicConfig) error {
-	conn, controllerConn := brokerConnect()
+	conn, controllerConn, err := brokerConnect()
+	if err != nil {
+		return err
+	}
 
 	defer conn.Close()
 	defer controllerConn.Close()
@@ -118,7 +119,10 @@ func CreateKafkaTopic(topicConfigs *[]kafka.TopicConfig) error {
 }
 
 func DeleteKafkaTopic(topic string) error {
-	conn, controllerConn := brokerConnect()
+	conn, controllerConn, err := brokerConnect()
+	if err != nil {
+		return err
+	}
 
 	defer conn.Close()
 	defer controllerConn.Close()
@@ -127,7 +131,10 @@ func DeleteKafkaTopic(topic string) error {
 }
 
 func ListKafkaTopics() error {
-	conn, controllerConn := brokerConnect()
+	conn, controllerConn, err := brokerConnect()
+	if err != nil {
+		return err
+	}
 
 	defer conn.Close()
 	defer controllerConn.Close()

@@ -33,7 +33,7 @@ func deleteTopic(cmd *cobra.Command, _ []string) {
 		fmt.Fprintf(os.Stderr, "Error creating credentials for topic: %v\n", topicName)
 		return
 	}
-	err := topics.DeleteKafkaTopic(topicName)
+	err = topics.DeleteKafkaTopic(topicName)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error deleting topic: %v\n", topicName)
 		return
