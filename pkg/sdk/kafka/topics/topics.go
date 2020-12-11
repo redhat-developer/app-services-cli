@@ -89,7 +89,7 @@ func ValidateCredentials() error {
 			return fmt.Errorf("Can't create connection: %w", err)
 		}
 		client := connection.NewMASClient()
-		fmt.Fprint(os.Stderr, "No Service credentials. Creating service account for CLI")
+		fmt.Fprint(os.Stderr, "\nNo Service credentials. \nCreating service account for CLI\n")
 		svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: "RHOAS-CLI Service Account"}
 		response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *svcAcctPayload)
 		if err != nil {
