@@ -2,8 +2,22 @@
 
 :toc:
 
-== link:getting-started.adoc[Getting Started]
+== link:getting-started.adoc[Installing the CLI]
+=== link:getting-started.adoc#linux[Linux]
+=== link:getting-started.adoc#macos[macOS]
 == link:configuring-the-cli.adoc[Configuring the CLI]
+=== link:configuring-the-cli.adoc#enabling-tab-completion[Enabling tab completion]
+=== link:configuring-the-cli.adoc#linux[Linux]
 == link:logging-in.adoc[Logging in]
 == link:using-the-cli.adoc[Using the CLI]
+=== link:using-the-cli.adoc#creating-a-kafka-instance[Creating a Kafka instance]
+=== link:using-the-cli.adoc#viewing-the-status-of-a-kafka-instance[Viewing the status of a Kafka instance]
+=== link:using-the-cli.adoc#viewing-a-list-of-a-kafka-instance[Viewing a list of Kafka instances]
+=== link:using-the-cli.adoc#describing-a-kafka-instance[Describing a Kafka instance]
+=== link:using-the-cli.adoc#using-a-kafka-instance[Using a Kafka instance]
+=== link:using-the-cli.adoc#creating-a-kafka-topic[Creating a Kafka topic]
+=== link:using-the-cli.adoc#listing-kafka-topics[Listing Kafka topics]
+=== link:using-the-cli.adoc#deleting-a-kafka-topic[Delete a Kafka topic]
+=== link:using-the-cli.adoc#deleting-a-kafka-instance[Deleting a Kafka instance]
+=== link:using-the-cli.adoc#creating-a-service-account[Creating a Service Account]
 == link:logging-out.adoc[Logging out]

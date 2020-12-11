@@ -18,3 +18,7 @@ Successfully logged in to RHOAS
 ----
 2. You will be automatically redirected to your browser at https://sso.redhat.com where you will enter your credentials. If you are already logged in this step will be skipped.
 3. You will be redirected and can return to the CLI where you will have been successfully logged in.
+
+==== Next steps
+
+link:using-the-cli.adoc[Using the CLI]

@@ -103,10 +103,6 @@ $ rhoas kafka use --id
 }
 ----
 
-=== Deleting a Kafka instance
-
-To permanently delete the current Kafka instance use the `rhoas kafka delete` command.
-
 === Creating a Kafka topic
 
 You can create a topic for the current Kafka instance with the `rhoas kafka topics create` command.
@@ -176,3 +172,7 @@ $ cat credentials.json
 	"password":"facf3df1-3c8d-4253-aa87-8c95ca5e1225" 
 }
 ----
+
+==== Next steps
+
+link:logging-out.adoc[Logging out]
