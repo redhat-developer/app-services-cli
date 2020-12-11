@@ -1,0 +1,9 @@
+=== Logging out of the CLI
+
+You can log out from the `rhoas` CLI using the `rhoas logout` command.
+
+[source,shell]
+-----
+$ rhoas logout
+Successfully logged out
+-----
