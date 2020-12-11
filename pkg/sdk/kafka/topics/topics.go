@@ -9,22 +9,27 @@ import (
 	"strings"
 	"time"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
+	"github.com/segmentio/kafka-go/sasl/plain"
 )
 
 func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
-	// TODO enable and configure SASL plain
-	// mechanism := plain.Mechanism{
-	// 	Username: "username",
-	// 	Password: "password",
-	// }
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprint(os.Stderr, err)
+	}
+	mechanism := plain.Mechanism{
+		Username: cfg.ServiceAuth.ClientID,
+		Password: cfg.ServiceAuth.ClientSecret,
+	}
 
 	dialer := &kafka.Dialer{
-		Timeout:   100 * time.Second,
-		DualStack: true,
-		//SASLMechanism: mechanism,
+		Timeout:       100 * time.Second,
+		DualStack:     true,
+		SASLMechanism: mechanism,
 	}
 
 	cfg, err := config.Load()
@@ -72,6 +77,35 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn) {
 	}
 
 	return conn, controllerConn
+}
+
+func ValidateCredentials() error {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprint(os.Stderr, err)
+	}
+
+	if cfg.ServiceAuth.ClientID == "" {
+		connection, err := cfg.Connection()
+		if err != nil {
+			return fmt.Errorf("Can't create connection: %w", err)
+		}
+		client := connection.NewMASClient()
+		fmt.Fprint(os.Stderr, "No Service credentials. Creating service account for CLI")
+		svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: "RHOAS-CLI Service Account"}
+		response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *svcAcctPayload)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			return err
+		}
+		cfg.ServiceAuth.ClientID = response.ClientID
+		cfg.ServiceAuth.ClientSecret = response.ClientSecret
+		if err = config.Save(cfg); err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			return err
+		}
+	}
+	return nil
 }
 
 func CreateKafkaTopic(topicConfigs *[]kafka.TopicConfig) error {
