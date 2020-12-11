@@ -51,6 +51,18 @@
         "kafka",
         "list"
       ]
+    },
+     {
+      "name": "Describe Kafka",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "kafka",
+        "describe"
+      ]
     }
   ]
 }
