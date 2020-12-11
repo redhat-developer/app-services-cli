@@ -6,7 +6,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/update"
 )
 
 const (
@@ -25,7 +24,6 @@ func NewTopicsCommand() *cobra.Command {
 	cmd.AddCommand(
 		create.NewCreateTopicCommand(),
 		list.NewListTopicCommand(),
-		update.NewUpdateTopicCommand(),
 		delete.NewDeleteTopicCommand(),
 	)
 	return cmd

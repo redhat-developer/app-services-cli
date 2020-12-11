@@ -45,12 +45,16 @@ func createTopic(cmd *cobra.Command, _ []string) {
 			ReplicationFactor: int(replicas),
 		},
 	}
-
-	err := topics.CreateKafkaTopic(&topicConfigs)
+	err := topics.ValidateCredentials()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating topic: %v\n", topicName)
+		fmt.Fprintf(os.Stderr, "Error creating credentials for topic: %v\n", err)
+		return
+	}
+	err = topics.CreateKafkaTopic(&topicConfigs)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error creating topic: %v\n", err)
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v created\n", topicName)
+	fmt.Fprintf(os.Stderr, "Topic %v created\n", err)
 }
