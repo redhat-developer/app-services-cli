@@ -1,8 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
@@ -26,9 +29,25 @@ func main() {
 		generateDocumentation(rootCmd)
 	}
 
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	err := rootCmd.Execute()
+	if err == nil {
+		return
 	}
+
+	// Attempt to unwrap the descriptive API error message
+	var apiError managedservices.GenericOpenAPIError
+	if ok := errors.As(err, &apiError); ok {
+		errModel := apiError.Model()
+
+		e, ok := errModel.(managedservices.Error)
+		if ok {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", e.Reason)
+			os.Exit(1)
+		}
+	}
+
+	fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	os.Exit(1)
 }
 
 func initConfig() {
