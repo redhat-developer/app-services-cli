@@ -4,24 +4,21 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 	"net"
 	"os"
 	"strconv"
 	"time"
 
+	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
 )
 
-func brokerConnect(insecure bool) (broker *kafka.Conn, ctl *kafka.Conn, err error) {
-	cfg, err := config.Load()
-	if err != nil {
-		return nil, nil, err
-	}
+func brokerConnect(cfg *config.Config, insecure bool) (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 	mechanism := plain.Mechanism{
 		Username: cfg.ServiceAuth.ClientID,
 		Password: cfg.ServiceAuth.ClientSecret,
@@ -35,11 +32,6 @@ func brokerConnect(insecure bool) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 		TLS: &tls.Config{
 			InsecureSkipVerify: insecure,
 		},
-	}
-
-	cfg, err = config.Load()
-	if err != nil {
-		return nil, nil, err
 	}
 
 	if cfg.Services.Kafka.ClusterID == "" {
@@ -81,12 +73,7 @@ func brokerConnect(insecure bool) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 	return conn, controllerConn, nil
 }
 
-func ValidateCredentials() error {
-	cfg, err := config.Load()
-	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-	}
-
+func ValidateCredentials(cfg *config.Config) error {
 	if cfg.ServiceAuth.ClientID == "" {
 		connection, err := cfg.Connection()
 		if err != nil {
@@ -101,15 +88,15 @@ func ValidateCredentials() error {
 		}
 		cfg.ServiceAuth.ClientID = response.ClientID
 		cfg.ServiceAuth.ClientSecret = response.ClientSecret
-		if err = config.Save(cfg); err != nil {
+		if err = cfg.Save(); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func CreateKafkaTopic(topicConfigs []kafka.TopicConfig, insecure bool) error {
-	conn, controllerConn, err := brokerConnect(insecure)
+func CreateKafkaTopic(topicConfigs []kafka.TopicConfig, cfg *config.Config, insecure bool) error {
+	conn, controllerConn, err := brokerConnect(cfg, insecure)
 	if err != nil {
 		return err
 	}
@@ -120,8 +107,8 @@ func CreateKafkaTopic(topicConfigs []kafka.TopicConfig, insecure bool) error {
 	return controllerConn.CreateTopics(topicConfigs...)
 }
 
-func DeleteKafkaTopic(topic string, insecure bool) error {
-	conn, controllerConn, err := brokerConnect(insecure)
+func DeleteKafkaTopic(topic string, cfg *config.Config, insecure bool) error {
+	conn, controllerConn, err := brokerConnect(cfg, insecure)
 	if err != nil {
 		return err
 	}
@@ -132,8 +119,8 @@ func DeleteKafkaTopic(topic string, insecure bool) error {
 	return controllerConn.DeleteTopics([]string{topic}...)
 }
 
-func ListKafkaTopics(insecure bool) error {
-	conn, controllerConn, err := brokerConnect(insecure)
+func ListKafkaTopics(cfg *config.Config, insecure bool) error {
+	conn, controllerConn, err := brokerConnect(cfg, insecure)
 	if err != nil {
 		return err
 	}

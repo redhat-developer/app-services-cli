@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
 
 	"github.com/fatih/color"
@@ -24,22 +25,20 @@ Namespace: %v
 Managed Application Services Operator: %v 
 `
 
-func NewInfoCommand() *cobra.Command {
+func NewInfoCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "info",
 		Short: "Prints information about your OpenShift cluster connection",
 		Long:  `Prints information about your OpenShift cluster connection`,
-		Run:   runInfo,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return runInfo()
+		},
 	}
 
 	return cmd
 }
 
-func runInfo(cmd *cobra.Command, _ []string) {
-	connectToCluster()
-}
-
-func connectToCluster() {
+func runInfo() error {
 	var kubeconfig string
 
 	if home := homedir.HomeDir(); home != "" {
@@ -47,10 +46,9 @@ func connectToCluster() {
 	}
 
 	if !fileExists(kubeconfig) {
-		fmt.Fprint(os.Stderr, `
+		return fmt.Errorf(`
 		Command uses oc or kubectl login context file. 
 		Please make sure that you have configured access to your cluster and selected the right namespace`)
-		return
 	}
 
 	kubeClientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
@@ -60,16 +58,14 @@ func connectToCluster() {
 	// use the current context in kubeconfig
 	restConfig, err := kubeClientconfig.ClientConfig()
 	if err != nil {
-		fmt.Fprint(os.Stderr, "\nFailed to load kube config file", err)
-		return
+		return fmt.Errorf("Failed to load kube config file: %w", err)
 	}
 
 	// create the clientset
 	clientset, err := kubernetes.NewForConfig(restConfig)
 
 	if err != nil {
-		fmt.Fprint(os.Stderr, "\nFailed to load kube config file", err)
-		return
+		return fmt.Errorf("Failed to load kube config file: %w", err)
 	}
 
 	currentNamespace, _, _ := kubeClientconfig.Namespace()
@@ -82,6 +78,8 @@ func connectToCluster() {
 		operatorStatus = color.HiRedString("Not installed")
 	}
 	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(currentNamespace), operatorStatus)
+
+	return nil
 }
 
 func fileExists(path string) bool {

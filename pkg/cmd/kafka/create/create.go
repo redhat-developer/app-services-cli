@@ -11,26 +11,28 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 )
 
-type options struct {
+type Options struct {
 	name     string
 	provider string
 	region   string
-	// multiAZ  bool
 
 	outputFormat string
 
-	cfg *config.Config
+	Config func() (config.Config, error)
 }
 
 // NewCreateCommand creates a new command for creating kafkas.
-func NewCreateCommand() *cobra.Command {
-	opts := &options{}
+func NewCreateCommand(f *factory.Factory) *cobra.Command {
+	opts := &Options{
+		Config: f.Config,
+	}
 
 	cmd := &cobra.Command{
 		Use:   "create",
@@ -41,13 +43,7 @@ func NewCreateCommand() *cobra.Command {
 				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
 			}
 
-			cfg, err := config.Load()
-			if err != nil {
-				return fmt.Errorf("Error loading config: %w", err)
-			}
-			opts.cfg = cfg
-
-			if err = kafka.ValidateName(opts.name); err != nil {
+			if err := kafka.ValidateName(opts.name); err != nil {
 				return err
 			}
 
@@ -65,8 +61,11 @@ func NewCreateCommand() *cobra.Command {
 	return cmd
 }
 
-func runCreate(opts *options) error {
-	cfg := opts.cfg
+func runCreate(opts *Options) error {
+	cfg, err := opts.Config()
+	if err != nil {
+		return fmt.Errorf("Error loading config: %w", err)
+	}
 
 	connection, err := cfg.Connection()
 	if err != nil {
@@ -99,8 +98,8 @@ func runCreate(opts *options) error {
 		ClusterID: response.Id,
 	}
 
-	cfg.Services.SetKafka(kafkaCfg)
-	if err := config.Save(cfg); err != nil {
+	cfg.Services.Kafka = kafkaCfg
+	if err := cfg.Save(); err != nil {
 		return fmt.Errorf("Unable to automatically use Kafka instance: %w", err)
 	}
 

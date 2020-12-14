@@ -5,53 +5,60 @@ package logout
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 )
 
+type LogoutOptions struct {
+	Config func() (config.Config, error)
+}
+
 // NewLogoutCommand gets the command that's logs the current logged in user
-func NewLogoutCommand() *cobra.Command {
+func NewLogoutCommand(f *factory.Factory) *cobra.Command {
+	opts := &LogoutOptions{
+		Config: f.Config,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "logout",
 		Short: "Logout from connected Managed Application Services cluster",
 		Long:  "Logout from connected Managed Application Services cluster",
-		Run:   runLogout,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return runLogout(opts)
+		},
 	}
 	return cmd
 }
 
-func runLogout(cmd *cobra.Command, _ []string) {
-	cfg, err := config.Load()
+func runLogout(opts *LogoutOptions) error {
+	cfg, err := opts.Config()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Error loading config: %w", err)
 	}
 
 	connection, err := cfg.Connection()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(1)
+		return fmt.Errorf("Could not create connection: %w", err)
 	}
 
 	err = connection.Logout(context.TODO())
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to log out: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Unable to log out: %w", err)
 	}
 
 	fmt.Println("Successfully logged out")
 
-	cfg.SetAccessToken("")
-	cfg.SetRefreshToken("")
+	cfg.AccessToken = ""
+	cfg.RefreshToken = ""
 
-	err = config.Save(cfg)
-
+	err = cfg.Save()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not save config file: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Could not save config file: %w", err)
 	}
+
+	return nil
 }

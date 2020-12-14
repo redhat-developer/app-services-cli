@@ -1,12 +1,13 @@
 package serviceaccount
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/create"
 	"github.com/spf13/cobra"
 )
 
 // NewServiceAccountCommand creates a new command sub-group to manage service accounts
-func NewServiceAccountCommand() *cobra.Command {
+func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "serviceaccount",
 		Short: "Manage your service accounts",
@@ -15,7 +16,7 @@ func NewServiceAccountCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		create.NewCreateCommand(),
+		create.NewCreateCommand(f),
 	)
 
 	return cmd

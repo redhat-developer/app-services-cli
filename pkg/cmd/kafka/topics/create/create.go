@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	topicflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
@@ -18,48 +20,66 @@ const (
 	Replicas   = "replicas"
 )
 
+type Options struct {
+	topicName  string
+	insecure   bool
+	partitions int32
+	replicas   int32
+
+	Config func() (config.Config, error)
+}
+
 var topicName string
 var insecure bool
 
 // NewCreateTopicCommand gets a new command for creating kafka topic.
-func NewCreateTopicCommand() *cobra.Command {
+func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
+	opts := &Options{
+		Config: f.Config,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create topic",
 		Long:  "Create topic in the current selected Managed Kafka cluster",
-		Run: func(cmd *cobra.Command, _ []string) {
-			createTopic(insecure)
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return createTopic(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&topicName, topicflags.FlagName, "n", "", "Topic name (required)")
+	cmd.Flags().StringVarP(&opts.topicName, topicflags.FlagName, "n", "", "Topic name (required)")
 	_ = cmd.MarkFlagRequired(topicflags.FlagName)
-	cmd.Flags().Int32VarP(&partitions, Partitions, "p", 1, "Set number of partitions")
-	cmd.Flags().Int32VarP(&replicas, Replicas, "r", 1, "Set number of replicas")
-	cmd.Flags().BoolVar(&insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
+	cmd.Flags().Int32VarP(&opts.partitions, Partitions, "p", 1, "Set number of partitions")
+	cmd.Flags().Int32VarP(&opts.replicas, Replicas, "r", 1, "Set number of replicas")
+	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 
 	// TODO define file format etc
 	return cmd
 }
 
-func createTopic(insecure bool) {
+func createTopic(opts *Options) error {
+	cfg, err := opts.Config()
+	if err != nil {
+		return fmt.Errorf("Error loading config: %w", err)
+	}
+
 	topicConfigs := []kafka.TopicConfig{
 		{
-			Topic:             topicName,
-			NumPartitions:     int(partitions),
-			ReplicationFactor: int(replicas),
+			Topic:             opts.topicName,
+			NumPartitions:     int(opts.partitions),
+			ReplicationFactor: int(opts.replicas),
 		},
 	}
-	err := topics.ValidateCredentials()
+	err = topics.ValidateCredentials(&cfg)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating credentials for topic: %v\n", err)
-		return
+		return fmt.Errorf("Error creating credentials for topic: %w", err)
 	}
-	err = topics.CreateKafkaTopic(topicConfigs, insecure)
+	err = topics.CreateKafkaTopic(topicConfigs, &cfg, insecure)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating topic: %v\n", err)
-		return
+		return fmt.Errorf("Error creating topic: %w", err)
 	}
 
 	fmt.Fprintf(os.Stderr, "Topic %v created\n", err)
+
+	return nil
 }

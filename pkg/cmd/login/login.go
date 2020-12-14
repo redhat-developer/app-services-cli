@@ -11,7 +11,9 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 
 	"github.com/MakeNowJust/heredoc"
 
@@ -19,7 +21,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/pkce"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 
 	"github.com/phayes/freeport"
 
@@ -72,7 +73,9 @@ var urlAliases = map[string]string{
 	"development": devURL,
 }
 
-var args struct {
+type LoginOptions struct {
+	Config func() (config.Config, error)
+
 	url                   string
 	authURL               string
 	clientID              string
@@ -81,35 +84,36 @@ var args struct {
 }
 
 // NewLoginCmd gets the command that's log the user in
-func NewLoginCmd() *cobra.Command {
+func NewLoginCmd(f *factory.Factory) *cobra.Command {
+	opts := &LoginOptions{
+		Config: f.Config,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login to Managed Application Services",
 		Long:  "Login to Managed Application Services in order to manage your services",
-		RunE:  runLogin,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return runLogin(opts)
+		},
 	}
 
-	cmd.Flags().StringVar(&args.url, "url", stagingURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
-	cmd.Flags().BoolVar(&args.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
-	cmd.Flags().StringVar(&args.clientID, "client-id", defaultClientID, "OpenID client identifier.")
-	cmd.Flags().StringVar(&args.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
-	cmd.Flags().BoolVar(&args.printURL, "print-sso-url", false, "Prints the login URL to the console so you can control which browser to open it in. Useful if you need to log in with a user that is different to the one logged in on your default web browser.")
+	cmd.Flags().StringVar(&opts.url, "url", stagingURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
+	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
+	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, "OpenID client identifier.")
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
+	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the login URL to the console so you can control which browser to open it in. Useful if you need to log in with a user that is different to the one logged in on your default web browser.")
 
 	return cmd
 }
 
 // nolint
-func runLogin(cmd *cobra.Command, _ []string) error {
-	cfg, _ := config.Load()
-	cfg.SetInsecure(args.insecureSkipTLSVerify)
-	cfg.SetClientID(args.clientID)
-	cfg.SetAuthURL(args.authURL)
-
+func runLogin(opts *LoginOptions) error {
 	// If the value of the `--url` is any of the aliases then replace it with the corresponding
 	// real URL:
-	unparsedGatewayURL, ok := urlAliases[args.url]
+	unparsedGatewayURL, ok := urlAliases[opts.url]
 	if !ok {
-		unparsedGatewayURL = args.url
+		unparsedGatewayURL = opts.url
 	}
 
 	gatewayURL, err := url.ParseRequestURI(unparsedGatewayURL)
@@ -120,12 +124,12 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("Scheme missing from URL '%v'. Please add either 'https' or 'https'.", unparsedGatewayURL)
 	}
 
-	tr := createTransport(args.insecureSkipTLSVerify)
+	tr := createTransport(opts.insecureSkipTLSVerify)
 	httpClient := &http.Client{Transport: tr}
 
 	parentCtx, cancel := context.WithCancel(context.Background())
 	ctx := oidc.ClientContext(parentCtx, httpClient)
-	provider, err := oidc.NewProvider(ctx, args.authURL)
+	provider, err := oidc.NewProvider(ctx, opts.authURL)
 	if err != nil {
 		return err
 	}
@@ -140,7 +144,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		Path:   "sso-redhat-callback",
 	}
 	oauthCfg := oauth2.Config{
-		ClientID:    args.clientID,
+		ClientID:    opts.clientID,
 		Endpoint:    provider.Endpoint(),
 		RedirectURL: redirectURL.String(),
 		Scopes:      []string{oidc.ScopeOpenID},
@@ -209,16 +213,23 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 			return
 		}
 
-		cfg.SetClientID(args.clientID)
-		cfg.SetURL(gatewayURL.String())
-		cfg.SetScopes(oauthCfg.Scopes)
-		cfg.SetInsecure(args.insecureSkipTLSVerify)
-		cfg.SetAccessToken(oauth2Token.AccessToken)
-		cfg.SetRefreshToken(oauth2Token.RefreshToken)
+		cfg, err := opts.Config()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Could not load config: %v\n", err)
+			os.Exit(1)
+		}
 
-		if err = config.Save(cfg); err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			return
+		cfg.Insecure = opts.insecureSkipTLSVerify
+		cfg.ClientID = opts.clientID
+		cfg.AuthURL = opts.authURL
+		cfg.URL = gatewayURL.String()
+		cfg.Scopes = oauthCfg.Scopes
+		cfg.AccessToken  = oauth2Token.AccessToken
+		cfg.RefreshToken = oauth2Token.RefreshToken
+
+		if err = cfg.Save(); err != nil {
+			fmt.Fprintf(os.Stderr, "Could not save config: %v\n", err)
+			os.Exit(1)
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -236,7 +247,7 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		return
 	})
 
-	if args.printURL {
+	if opts.printURL {
 		fmt.Println(heredoc.Docf(`
 		Login URL: 
 		

@@ -2,20 +2,29 @@ package connect
 
 import (
 	"fmt"
-	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/spf13/cobra"
 )
 
-var secretOnly bool
-var kubeConfigCustomLocation string
-var secretName string
-var forceSelect bool
+type Options struct {
+	Config func() (config.Config, error)
 
-func NewConnectCommand() *cobra.Command {
+	secretOnly         bool
+	kubeconfigLocation string
+	secretName         string
+	// TODO: Rename to interactive
+	forceSelect bool
+}
+
+func NewConnectCommand(f *factory.Factory) *cobra.Command {
+	opts := &Options{
+		Config: f.Config,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "connect",
 		Short: "connect currently selected Kafka to your OpenShift cluster",
@@ -36,28 +45,31 @@ https://github.com/bf2fc6cc711aee1a0c2a/operator
 Using --forceSelect will ignore current command context make interactive prompt for selecting service instance you want to use.
 
 `,
-		Run: runBind,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return runBind(opts)
+		},
 	}
 
-	cmd.Flags().BoolVarP(&secretOnly, "secret-only", "", false, "Apply only secret and without CR. Can be used without installing RHOAS operator on cluster")
-	cmd.Flags().BoolVarP(&forceSelect, "skip-context", "", false, "Allows to select services before performing binding")
-	cmd.Flags().StringVarP(&secretName, "secret-name", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
-	cmd.Flags().StringVarP(&kubeConfigCustomLocation, "kubeconfig", "", "", "Location of the .kube/config file")
+	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, "Apply only secret and without CR. Can be used without installing RHOAS operator on cluster")
+	cmd.Flags().BoolVarP(&opts.forceSelect, "skip-context", "", false, "Allows to select services before performing binding")
+	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
+	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", "Location of the .kube/config file")
+
 	return cmd
 }
 
-func runBind(cmd *cobra.Command, _ []string) {
-	cfg, err := config.Load()
+func runBind(opts *Options) error {
+	cfg, err := opts.Config()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading config: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("Error loading config: %w", err)
 	}
 
 	connection, err := cfg.Connection()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
-	cluster.ConnectToCluster(connection, secretName, kubeConfigCustomLocation, forceSelect)
+	cluster.ConnectToCluster(connection, opts.secretName, opts.kubeconfigLocation, opts.forceSelect)
+
+	return nil
 }

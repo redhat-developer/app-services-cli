@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 	"github.com/spf13/cobra"
 )
@@ -11,34 +13,48 @@ import (
 var output string
 var insecure bool
 
-const Output = "output"
+type Options struct {
+	Config func() (config.Config, error)
+
+	output   string
+	insecure bool
+}
 
 // NewListTopicCommand gets a new command for getting kafkas.
-func NewListTopicCommand() *cobra.Command {
+func NewListTopicCommand(f *factory.Factory) *cobra.Command {
+	opts := &Options{
+		Config: f.Config,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List topics",
 		Long:  "List all topics in the current selected Managed Kafka cluster",
-		Run: func(cmd *cobra.Command, _ []string) {
-			listTopic(insecure)
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return listTopic(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&output, Output, "o", "plain-text", "The output format as 'plain-text', 'json', or 'yaml'")
-	cmd.Flags().BoolVar(&insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
+	cmd.Flags().StringVarP(&opts.output, "Output", "o", "plain-text", "The output format as 'plain-text', 'json', or 'yaml'")
+	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	return cmd
 }
 
-func listTopic(insecure bool) {
-
-	err := topics.ValidateCredentials()
+func listTopic(opts *Options) error {
+	cfg, err := opts.Config()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating credentials for list: %v\n", err)
-		return
+		return fmt.Errorf("Error loading config: %w", err)
+	}
+
+	err = topics.ValidateCredentials(&cfg)
+	if err != nil {
+		return fmt.Errorf("Error creating credentials for list: %w", err)
 	}
 	fmt.Fprintln(os.Stderr, "Topics:")
-	err = topics.ListKafkaTopics(insecure)
+	err = topics.ListKafkaTopics(&cfg, insecure)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to perform list operation: %v\n", err)
+		return fmt.Errorf("Failed to perform list operation: %w", err)
 	}
+
+	return err
 }
