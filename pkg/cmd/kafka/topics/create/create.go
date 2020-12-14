@@ -56,5 +56,5 @@ func createTopic(cmd *cobra.Command, _ []string) {
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v created\n", err)
+	fmt.Fprintf(os.Stderr, "Topic %v created\n", topicName)
 }

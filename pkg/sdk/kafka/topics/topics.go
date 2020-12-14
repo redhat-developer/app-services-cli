@@ -13,7 +13,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
-	"github.com/segmentio/kafka-go/sasl/plain"
 )
 
 func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
@@ -21,15 +20,15 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	mechanism := plain.Mechanism{
-		Username: cfg.ServiceAuth.ClientID,
-		Password: cfg.ServiceAuth.ClientSecret,
-	}
+	// mechanism := plain.Mechanism{
+	// 	Username: cfg.ServiceAuth.ClientID,
+	// 	Password: cfg.ServiceAuth.ClientSecret,
+	// }
 
 	dialer := &kafka.Dialer{
-		Timeout:       100 * time.Second,
-		DualStack:     true,
-		SASLMechanism: mechanism,
+		Timeout:   100 * time.Second,
+		DualStack: true,
+		// SASLMechanism: mechanism,
 	}
 
 	cfg, err = config.Load()
