@@ -19,11 +19,11 @@ func (c *Token) IsValid() (tokenIsValid bool, err error) {
 		var expires bool
 		var left time.Duration
 		var accessToken *jwt.Token
-		accessToken, err = parseToken(c.AccessToken)
+		accessToken, err = Parse(c.AccessToken)
 		if err != nil {
 			return
 		}
-		expires, left, err = getTokenExpiry(accessToken, now)
+		expires, left, err = GetExpiry(accessToken, now)
 		if err != nil {
 			return
 		}
@@ -36,11 +36,11 @@ func (c *Token) IsValid() (tokenIsValid bool, err error) {
 		var expires bool
 		var left time.Duration
 		var refreshToken *jwt.Token
-		refreshToken, err = parseToken(c.RefreshToken)
+		refreshToken, err = Parse(c.RefreshToken)
 		if err != nil {
 			return
 		}
-		expires, left, err = getTokenExpiry(refreshToken, now)
+		expires, left, err = GetExpiry(refreshToken, now)
 		if err != nil {
 			return
 		}
@@ -52,7 +52,7 @@ func (c *Token) IsValid() (tokenIsValid bool, err error) {
 	return
 }
 
-func parseToken(textToken string) (token *jwt.Token, err error) {
+func Parse(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
 	if err != nil {
@@ -62,12 +62,21 @@ func parseToken(textToken string) (token *jwt.Token, err error) {
 	return token, nil
 }
 
-func getTokenExpiry(token *jwt.Token, now time.Time) (expires bool,
-	left time.Duration, err error) {
+func MapClaims(token *jwt.Token) (jwt.MapClaims, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		err = fmt.Errorf("expected map claims bug got %T", claims)
-		return
+		err := fmt.Errorf("expected map claims bug got %T", claims)
+		return nil, err
+	}
+
+	return claims, nil
+}
+
+func GetExpiry(token *jwt.Token, now time.Time) (expires bool,
+	left time.Duration, err error) {
+	claims, err := MapClaims(token)
+	if err != nil {
+		return false, 0, err
 	}
 	var exp float64
 	claim, ok := claims["exp"]

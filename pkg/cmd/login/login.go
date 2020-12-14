@@ -11,6 +11,10 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
+
+	"github.com/MakeNowJust/heredoc"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
@@ -26,7 +30,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
+const (
 	devURL          = "http://localhost:8000"
 	productionURL   = "https://api.openshift.com"
 	stagingURL      = "https://api.stage.openshift.com"
@@ -73,6 +77,7 @@ var args struct {
 	authURL               string
 	clientID              string
 	insecureSkipTLSVerify bool
+	printURL              bool
 }
 
 // NewLoginCmd gets the command that's log the user in
@@ -88,6 +93,7 @@ func NewLoginCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&args.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	cmd.Flags().StringVar(&args.clientID, "client-id", defaultClientID, "OpenID client identifier.")
 	cmd.Flags().StringVar(&args.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
+	cmd.Flags().BoolVar(&args.printURL, "print-sso-url", false, "Prints the login URL to the console so you can control which browser to open it in. Useful if you need to log in with a user that is different to the one logged in on your default web browser.")
 
 	return cmd
 }
@@ -162,8 +168,6 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 		Addr:    redirectURL.Host,
 	}
 
-	fmt.Fprintln(os.Stderr, "Logging in...")
-
 	sm.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, authCodeURL, http.StatusFound)
 	})
@@ -219,12 +223,31 @@ func runLogin(cmd *cobra.Command, _ []string) error {
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		fmt.Fprintln(w, PostLoginPage)
-		fmt.Fprintln(os.Stderr, "Successfully logged in to RHOAS")
+
+		accessTkn, _ := token.Parse(resp.OAuth2Token.AccessToken)
+		tknClaims, _ := token.MapClaims(accessTkn)
+		userName, ok := tknClaims["preferred_username"]
+		if !ok {
+			fmt.Fprintln(os.Stderr, "\nYou are now logged in")
+		} else {
+			fmt.Fprintf(os.Stderr, "\nYou are now logged in as %v\n", userName)
+		}
 		cancel()
+		return
 	})
 
-	openBrowserExec, _ := browser.GetOpenBrowserCommand(authCodeURL)
-	_ = openBrowserExec.Run()
+	if args.printURL {
+		fmt.Println(heredoc.Docf(`
+		Login URL: 
+		
+		%v`, authCodeURL))
+	} else {
+		openBrowserExec, _ := browser.GetOpenBrowserCommand(authCodeURL)
+		err = openBrowserExec.Run()
+		if err != nil {
+			return err
+		}
+	}
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
