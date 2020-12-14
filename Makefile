@@ -27,11 +27,11 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
-						
+
 	@echo "$(fake)"
 .PHONY: help
 
-# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint 
+# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
 lint:
 	golangci-lint run cmd/... pkg/...
@@ -78,11 +78,11 @@ mock-api/start: mock-api/server/start mock-api/client/start
 
 mock-api/server/start:
 	cd mas-mock && docker-compose up -d
-.PHONY: mock-api/server/start	
+.PHONY: mock-api/server/start
 
 mock-api/client/start:
 	cd mas-mock && yarn && yarn start
-.PHONY: mock-api/client/start	
+.PHONY: mock-api/client/start
 
 mock-api/keycloak/import-realm:
 	node mas-mock/keycloak/initKeycloak.js
