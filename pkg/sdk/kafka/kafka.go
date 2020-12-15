@@ -4,6 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 
 	"github.com/MakeNowJust/heredoc"
 )
@@ -33,4 +36,12 @@ func ValidateName(name string) error {
 	}
 
 	return errInvalidName
+}
+
+// TransformResponse modifies fields from the KafkaRequest payload object
+// The main transformation is appending ":443" to the Bootstrap Server URL
+func TransformResponse(kafkaInstance *managedservices.KafkaRequest) {
+	if !strings.HasSuffix(kafkaInstance.BootstrapServerHost, ":443") {
+		kafkaInstance.BootstrapServerHost = fmt.Sprintf("%v:443", kafkaInstance.BootstrapServerHost)
+	}
 }
