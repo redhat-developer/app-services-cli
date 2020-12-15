@@ -36,6 +36,14 @@ func GetString(flagName string, flags *pflag.FlagSet) string {
 	return flagVal
 }
 
+func GetBool(flagName string, flags *pflag.FlagSet) string {
+	flagVal, err := flags.GetString(flagName)
+	if err != nil {
+		return ""
+	}
+	return flagVal
+}
+
 // MustGetBool attempts to get a boolean flag from the provided flag set or panic
 func MustGetBool(flagName string, flags *pflag.FlagSet) bool {
 	flagVal, err := flags.GetBool(flagName)
