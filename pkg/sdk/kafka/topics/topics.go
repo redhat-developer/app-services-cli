@@ -104,7 +104,7 @@ func ValidateCredentials() error {
 	return nil
 }
 
-func CreateKafkaTopic(topicConfigs *[]kafka.TopicConfig) error {
+func CreateKafkaTopic(topicConfigs []kafka.TopicConfig) error {
 	conn, controllerConn, err := brokerConnect()
 	if err != nil {
 		return err
@@ -113,7 +113,7 @@ func CreateKafkaTopic(topicConfigs *[]kafka.TopicConfig) error {
 	defer conn.Close()
 	defer controllerConn.Close()
 
-	return controllerConn.CreateTopics(*topicConfigs...)
+	return controllerConn.CreateTopics(topicConfigs...)
 }
 
 func DeleteKafkaTopic(topic string) error {

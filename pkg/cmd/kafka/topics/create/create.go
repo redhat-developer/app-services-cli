@@ -50,7 +50,7 @@ func createTopic(cmd *cobra.Command, _ []string) {
 		fmt.Fprintf(os.Stderr, "Error creating credentials for topic: %v\n", err)
 		return
 	}
-	err = topics.CreateKafkaTopic(&topicConfigs)
+	err = topics.CreateKafkaTopic(topicConfigs)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating topic: %v\n", err)
 		return

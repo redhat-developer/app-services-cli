@@ -1,6 +1,12 @@
 .DEFAULT_GOAL := help
 SHELL = bash
 
+BUILDFLAGS :=
+
+ifdef DEBUG
+BUILDFLAGS := -gcflags "all=-N -l" $(BUILDFLAGS)
+endif
+
 # The details of the application:
 binary:=rhoas
 
@@ -21,11 +27,11 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
-						
+
 	@echo "$(fake)"
 .PHONY: help
 
-# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint 
+# Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
 lint:
 	golangci-lint run cmd/... pkg/...
@@ -34,7 +40,7 @@ lint:
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
 binary:
-	go build -o ${binary} ./cmd/rhoas
+	go build $(BUILDFLAGS)-o ${binary} ./cmd/rhoas
 .PHONY: binary
 
 install:
@@ -72,11 +78,11 @@ mock-api/start: mock-api/server/start mock-api/client/start
 
 mock-api/server/start:
 	cd mas-mock && docker-compose up -d
-.PHONY: mock-api/server/start	
+.PHONY: mock-api/server/start
 
 mock-api/client/start:
 	cd mas-mock && yarn && yarn start
-.PHONY: mock-api/client/start	
+.PHONY: mock-api/client/start
 
 mock-api/keycloak/import-realm:
 	node mas-mock/keycloak/initKeycloak.js
