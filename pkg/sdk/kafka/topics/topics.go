@@ -6,7 +6,6 @@ import (
 	"net"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
@@ -52,14 +51,13 @@ func brokerConnect() (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", err)
 	}
 
-	var clusterURL string
-	if strings.HasPrefix(kafkaInstance.BootstrapServerHost, "localhost") {
-		clusterURL = kafkaInstance.BootstrapServerHost
-	} else {
-		clusterURL = kafkaInstance.BootstrapServerHost + ":443"
+	if kafkaInstance.BootstrapServerHost == "" {
+		return nil, nil, fmt.Errorf("Kafka instance is missing a Bootstrap Server Host")
 	}
 
-	conn, err := dialer.Dial("tcp", clusterURL)
+	fmt.Println(kafkaInstance.BootstrapServerHost)
+
+	conn, err := dialer.Dial("tcp", kafkaInstance.BootstrapServerHost)
 	if err != nil {
 		return nil, nil, err
 	}
