@@ -40,7 +40,7 @@ func deleteTopic(insecure bool) {
 	}
 	err = topics.DeleteKafkaTopic(topicName, insecure)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error deleting topic: %v\n", topicName)
+		fmt.Fprintf(os.Stderr, "Error deleting topic: %v\n", err)
 		return
 	}
 

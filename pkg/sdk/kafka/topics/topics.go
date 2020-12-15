@@ -1,10 +1,10 @@
 package topics
 
 import (
-	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 	"context"
 	"crypto/tls"
 	"fmt"
+	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 	"net"
 	"os"
 	"strconv"
