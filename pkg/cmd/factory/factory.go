@@ -1,7 +1,11 @@
 package factory
 
-import "github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+)
 
 type Factory struct {
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }

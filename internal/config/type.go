@@ -1,11 +1,9 @@
 package config
 
-import "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-
 type IConfig interface {
-	Save() error
+	Load() (*Config, error)
+	Save(config *Config) error
 	Remove() error
-	Connection() (*connection.Connection, error)
 }
 
 type Config struct {

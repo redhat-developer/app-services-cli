@@ -10,19 +10,22 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/spf13/cobra"
 )
 
 type options struct {
 	id string
 
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 // NewDeleteCommand command for deleting kafkas.
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config: f.Config,
+		Config:     f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -35,7 +38,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		`),
 		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			cfg, err := opts.Config()
+			cfg, err := opts.Config.Load()
 			if err != nil {
 				return fmt.Errorf("Error loading config: %w", err)
 			}
@@ -61,12 +64,12 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *options) error {
-	cfg, err := opts.Config()
+	cfg, err := opts.Config.Load()
 	if err != nil {
 		return fmt.Errorf("Error loading config: %w", err)
 	}
 
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
@@ -121,7 +124,7 @@ func runDelete(opts *options) error {
 	// the Kafka that was deleted is set as the user's current cluster
 	// since it was deleted it should be removed from the confgi
 	cfg.Services.Kafka = nil
-	err = cfg.Save()
+	err = opts.Config.Save(cfg)
 	if err != nil {
 		return fmt.Errorf("Could not save config: %w", err)
 	}

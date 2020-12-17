@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -11,7 +12,8 @@ import (
 )
 
 type Options struct {
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 
 	secretOnly         bool
 	kubeconfigLocation string
@@ -22,7 +24,8 @@ type Options struct {
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
+		Config:     f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -59,17 +62,12 @@ Using --forceSelect will ignore current command context make interactive prompt 
 }
 
 func runBind(opts *Options) error {
-	cfg, err := opts.Config()
-	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
-	}
-
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
 
-	cluster.ConnectToCluster(connection, opts.secretName, opts.kubeconfigLocation, opts.forceSelect)
+	cluster.ConnectToCluster(connection, opts.Config, opts.secretName, opts.kubeconfigLocation, opts.forceSelect)
 
 	return nil
 }

@@ -74,7 +74,7 @@ var urlAliases = map[string]string{
 }
 
 type LoginOptions struct {
-	Config func() (config.Config, error)
+	Config config.IConfig
 
 	url                   string
 	authURL               string
@@ -213,7 +213,7 @@ func runLogin(opts *LoginOptions) error {
 			return
 		}
 
-		cfg, err := opts.Config()
+		cfg, err := opts.Config.Load()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Could not load config: %v\n", err)
 			os.Exit(1)
@@ -224,10 +224,10 @@ func runLogin(opts *LoginOptions) error {
 		cfg.AuthURL = opts.authURL
 		cfg.URL = gatewayURL.String()
 		cfg.Scopes = oauthCfg.Scopes
-		cfg.AccessToken  = oauth2Token.AccessToken
+		cfg.AccessToken = oauth2Token.AccessToken
 		cfg.RefreshToken = oauth2Token.RefreshToken
 
-		if err = cfg.Save(); err != nil {
+		if err = opts.Config.Save(cfg); err != nil {
 			fmt.Fprintf(os.Stderr, "Could not save config: %v\n", err)
 			os.Exit(1)
 		}

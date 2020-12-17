@@ -11,17 +11,20 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
 type Options struct {
 	id string
 
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
+		Config:     f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -30,7 +33,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Long:  "Gets the status of the current Kafka instance context",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			cfg, err := opts.Config()
+			cfg, err := opts.Config.Load()
 			if err != nil {
 				return fmt.Errorf("Error loading config: %w", err)
 			}
@@ -56,12 +59,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *Options) error {
-	cfg, err := opts.Config()
-	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
-	}
-
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}

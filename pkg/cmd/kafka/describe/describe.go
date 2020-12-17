@@ -10,6 +10,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -19,14 +20,16 @@ type options struct {
 	id           string
 	outputFormat string
 
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
 // or by using the kafka instance set in the config, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config: f.Config,
+		Config:     f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -47,7 +50,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return runDescribe(opts)
 			}
 
-			cfg, err := opts.Config()
+			cfg, err := opts.Config.Load()
 			if err != nil {
 				return fmt.Errorf("Error loading config: %w", err)
 			}
@@ -70,11 +73,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDescribe(opts *options) error {
-	cfg, err := opts.Config()
-	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
-	}
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}

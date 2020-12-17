@@ -39,6 +39,13 @@ type Connection struct {
 	apiURL     *url.URL
 }
 
+type IConnection interface {
+	RefreshTokens(ctx context.Context) (string, string, error)
+	Logout(ctx context.Context) error
+	HTTPClient() *http.Client
+	NewMASClient() *managedservices.APIClient
+}
+
 func (c *Connection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
 	refreshedTk, err := c.authClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {

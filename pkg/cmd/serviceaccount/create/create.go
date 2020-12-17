@@ -8,9 +8,10 @@ import (
 	"path"
 
 	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/spf13/cobra"
 )
 
@@ -47,7 +48,8 @@ var (
 )
 
 type Options struct {
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 
 	output      string
 	force       bool
@@ -61,6 +63,7 @@ type Options struct {
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config: f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -110,12 +113,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *Options) error {
-	cfg, err := opts.Config()
-	if err != nil {
-		return fmt.Errorf("Could not load config: %w", err)
-	}
-	
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}

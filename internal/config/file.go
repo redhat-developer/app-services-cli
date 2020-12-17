@@ -1,57 +1,58 @@
 package config
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/mitchellh/go-homedir"
 )
 
 // New creates a new config type
-func New() *Config {
-	cfg := &Config{}
+func NewFile() IConfig {
+	cfg := &File{}
 
 	return cfg
 }
 
+type File struct{}
+
 // Load loads the configuration from the configuration file. If the configuration file doesn't exist
 // it will return an empty configuration object.
-func Load(cfg *Config) error {
-	file, err := Location()
+func (c *File) Load() (*Config, error) {
+	file, err := c.Location()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	_, err = os.Stat(file)
 	if os.IsNotExist(err) {
-		return err
+		return nil, err
 	}
 	if err != nil {
-		return fmt.Errorf("can't check if config file '%s' exists: %w", file, err)
+		return nil, fmt.Errorf("can't check if config file '%s' exists: %w", file, err)
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		return fmt.Errorf("can't read config file '%s': %w", file, err)
+		return nil, fmt.Errorf("can't read config file '%s': %w", file, err)
 	}
+	var cfg Config
 	err = json.Unmarshal(data, &cfg)
 	if err != nil {
-		return fmt.Errorf("can't parse config file '%s': %w", file, err)
+		return nil, fmt.Errorf("can't parse config file '%s': %w", file, err)
 	}
-	return nil
+	return &cfg, nil
 }
 
 // Save saves the given configuration to the configuration file.
-func (c *Config) Save() error {
-	file, err := Location()
+func (c *File) Save(cfg *Config) error {
+	file, err := c.Location()
 	if err != nil {
 		return err
 	}
-	data, err := json.MarshalIndent(c, "", "  ")
+	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
 		return fmt.Errorf("can't marshal config: %w", err)
 	}
@@ -63,8 +64,8 @@ func (c *Config) Save() error {
 }
 
 // Remove removes the configuration file.
-func (c *Config) Remove() error {
-	file, err := Location()
+func (c *File) Remove() error {
+	file, err := c.Location()
 	if err != nil {
 		return err
 	}
@@ -79,62 +80,7 @@ func (c *Config) Remove() error {
 	return nil
 }
 
-func (c *Config) Connection() (conn *connection.Connection, err error) {
-	builder := connection.NewBuilder()
-	if c.AccessToken != "" {
-		builder.WithAccessToken(c.AccessToken)
-	}
-	if c.RefreshToken != "" {
-		builder.WithRefreshToken(c.RefreshToken)
-	}
-	if c.ClientID != "" {
-		builder.WithClientID(c.ClientID)
-	}
-	if c.Scopes != nil {
-		builder.WithScopes(c.Scopes...)
-	}
-	if c.URL != "" {
-		builder.WithURL(c.URL)
-	}
-	if c.AuthURL == "" {
-		c.AuthURL = connection.DefaultAuthURL
-	}
-	builder.WithAuthURL(c.AuthURL)
-
-	builder.WithInsecure(c.Insecure)
-
-	conn, err = builder.Build()
-	if err != nil {
-		return nil, err
-	}
-
-	accessTk, refreshTk, err := conn.RefreshTokens(context.TODO())
-	if err != nil {
-		return nil, err
-	}
-
-	accessTkChanged := accessTk != c.AccessToken
-	refreshTkChanged := refreshTk != c.RefreshToken
-
-	if accessTkChanged {
-		c.AccessToken = accessTk
-	}
-	if refreshTkChanged {
-		c.RefreshToken = refreshTk
-	}
-
-	if !accessTkChanged && refreshTkChanged {
-		return conn, nil
-	}
-
-	if err != nil {
-		return nil, fmt.Errorf("Unable to save config file: %w", err)
-	}
-
-	return conn, nil
-}
-
-func Location() (path string, err error) {
+func (c *File) Location() (path string, err error) {
 	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {

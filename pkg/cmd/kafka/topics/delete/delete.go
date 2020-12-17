@@ -7,6 +7,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 
 	"github.com/spf13/cobra"
@@ -19,7 +20,8 @@ type Options struct {
 	topicName string
 	insecure  bool
 
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 // NewDeleteTopicCommand gets a new command for deleting kafka topic.
@@ -45,17 +47,18 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func deleteTopic(opts *Options) error {
-	cfg, err := opts.Config()
-	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
+	topicOpts := &topics.Options{
+		Connection: opts.Connection,
+		Config:     opts.Config,
+		Insecure:   opts.insecure,
 	}
 
 	fmt.Fprintf(os.Stderr, "Deleting topic %v\n", topicName)
-	err = topics.ValidateCredentials(&cfg)
+	err := topics.ValidateCredentials(topicOpts)
 	if err != nil {
 		return fmt.Errorf("Error creating credentials for topic: %w", err)
 	}
-	err = topics.DeleteKafkaTopic(topicName, &cfg, insecure)
+	err = topics.DeleteKafkaTopic(opts.topicName, topicOpts)
 	if err != nil {
 		return fmt.Errorf("Error deleting topic: %w", err)
 	}

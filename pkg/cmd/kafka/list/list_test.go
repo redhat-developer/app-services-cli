@@ -7,6 +7,10 @@ import (
 	"testing"
 )
 
+// var mockFactory = &factory.Factory{
+// 	Config: func() ()
+// }
+
 func TestNewListCommand(t *testing.T) {
 	tests := []struct {
 		name    string

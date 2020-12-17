@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 
 	"github.com/spf13/cobra"
@@ -25,13 +26,15 @@ type Options struct {
 
 	outputFormat string
 
-	Config func() (config.Config, error)
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 // NewCreateCommand creates a new command for creating kafkas.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
+		Config:     f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -62,12 +65,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *Options) error {
-	cfg, err := opts.Config()
+	cfg, err := opts.Config.Load()
 	if err != nil {
 		return fmt.Errorf("Error loading config: %w", err)
 	}
 
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
@@ -99,7 +102,7 @@ func runCreate(opts *Options) error {
 	}
 
 	cfg.Services.Kafka = kafkaCfg
-	if err := cfg.Save(); err != nil {
+	if err := opts.Config.Save(cfg); err != nil {
 		return fmt.Errorf("Unable to automatically use Kafka instance: %w", err)
 	}
 
