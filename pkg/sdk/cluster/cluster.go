@@ -121,7 +121,7 @@ func ConnectToCluster(connection pkgConnection.IConnection,
 
 }
 
-func CreateCredentials(connection pkgConnection.IConnection) *managedservices.TokenResponse {
+func CreateCredentials(connection pkgConnection.IConnection) *managedservices.ServiceAccount {
 	client := connection.NewMASClient()
 
 	t := time.Now()
@@ -134,7 +134,7 @@ func CreateCredentials(connection pkgConnection.IConnection) *managedservices.To
 	}
 
 	jsonResponse, _ := json.Marshal(response)
-	var credentials managedservices.TokenResponse
+	var credentials managedservices.ServiceAccount
 	err = json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "Invalid JSON response from server\n", err)
@@ -145,7 +145,7 @@ func CreateCredentials(connection pkgConnection.IConnection) *managedservices.To
 	return &credentials
 }
 
-func CreateSecret(credentials *managedservices.TokenResponse,
+func CreateSecret(credentials *managedservices.ServiceAccount,
 	currentNamespace string,
 	clientset *kubernetes.Clientset,
 	secretName string) *apiv1.Secret {
