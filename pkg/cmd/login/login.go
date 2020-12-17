@@ -73,7 +73,7 @@ var urlAliases = map[string]string{
 	"development": devURL,
 }
 
-type LoginOptions struct {
+type Options struct {
 	Config config.IConfig
 
 	url                   string
@@ -85,7 +85,7 @@ type LoginOptions struct {
 
 // NewLoginCmd gets the command that's log the user in
 func NewLoginCmd(f *factory.Factory) *cobra.Command {
-	opts := &LoginOptions{
+	opts := &Options{
 		Config: f.Config,
 	}
 
@@ -108,7 +108,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 }
 
 // nolint
-func runLogin(opts *LoginOptions) error {
+func runLogin(opts *Options) error {
 	// If the value of the `--url` is any of the aliases then replace it with the corresponding
 	// real URL:
 	unparsedGatewayURL, ok := urlAliases[opts.url]

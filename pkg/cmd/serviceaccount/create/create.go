@@ -62,7 +62,7 @@ type Options struct {
 // NewCreateCommand creates a new command to create service accounts
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
+		Config:     f.Config,
 		Connection: f.Connection,
 	}
 

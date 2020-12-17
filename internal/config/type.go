@@ -4,6 +4,7 @@ type IConfig interface {
 	Load() (*Config, error)
 	Save(config *Config) error
 	Remove() error
+	Location() (string, error)
 }
 
 type Config struct {

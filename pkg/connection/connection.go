@@ -42,7 +42,6 @@ type Connection struct {
 type IConnection interface {
 	RefreshTokens(ctx context.Context) (string, string, error)
 	Logout(ctx context.Context) error
-	HTTPClient() *http.Client
 	NewMASClient() *managedservices.APIClient
 }
 
@@ -74,17 +73,13 @@ func (c *Connection) Logout(ctx context.Context) error {
 	return nil
 }
 
-func (c *Connection) HTTPClient() *http.Client {
-	return c.client
-}
-
 func (c *Connection) NewMASClient() *managedservices.APIClient {
 	masCfg := managedservices.NewConfiguration()
 
 	masCfg.Scheme = c.apiURL.Scheme
 	masCfg.Host = c.apiURL.Host
 
-	masCfg.HTTPClient = c.HTTPClient()
+	masCfg.HTTPClient = c.client
 
 	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", c.Token.AccessToken))
 

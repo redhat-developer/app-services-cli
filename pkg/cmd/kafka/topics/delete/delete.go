@@ -13,9 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var topicName string
-var insecure bool
-
 type Options struct {
 	topicName string
 	insecure  bool
@@ -53,7 +50,7 @@ func deleteTopic(opts *Options) error {
 		Insecure:   opts.insecure,
 	}
 
-	fmt.Fprintf(os.Stderr, "Deleting topic %v\n", topicName)
+	fmt.Fprintf(os.Stderr, "Deleting topic %v\n", opts.topicName)
 	err := topics.ValidateCredentials(topicOpts)
 	if err != nil {
 		return fmt.Errorf("Error creating credentials for topic: %w", err)
@@ -63,7 +60,7 @@ func deleteTopic(opts *Options) error {
 		return fmt.Errorf("Error deleting topic: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v deleted\n", topicName)
+	fmt.Fprintf(os.Stderr, "Topic %v deleted\n", opts.topicName)
 
 	return nil
 }

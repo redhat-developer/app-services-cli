@@ -14,14 +14,14 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
-type LogoutOptions struct {
+type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
 }
 
 // NewLogoutCommand gets the command that's logs the current logged in user
 func NewLogoutCommand(f *factory.Factory) *cobra.Command {
-	opts := &LogoutOptions{
+	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
 	}
@@ -37,7 +37,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runLogout(opts *LogoutOptions) error {
+func runLogout(opts *Options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return fmt.Errorf("Error loading config: %w", err)

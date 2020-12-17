@@ -11,9 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var output string
-var insecure bool
-
 type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)

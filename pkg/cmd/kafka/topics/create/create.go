@@ -14,8 +14,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var partitions, replicas int32
-
 const (
 	Partitions = "partitions"
 	Replicas   = "replicas"
@@ -30,9 +28,6 @@ type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
 }
-
-var topicName string
-var insecure bool
 
 // NewCreateTopicCommand gets a new command for creating kafka topic.
 func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
