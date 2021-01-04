@@ -80,10 +80,10 @@ func runDescribe(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	response, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
+	response, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
 
-	if err != nil {
-		return fmt.Errorf("Error getting Kafka instance: %w", err)
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Error getting Kafka instance: %w", apiErr)
 	}
 
 	sdkkafka.TransformResponse(&response)

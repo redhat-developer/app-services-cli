@@ -19,18 +19,51 @@ Method | HTTP request | Description
 
 ## CreateKafka
 
-> KafkaRequest CreateKafka(ctx, async, kafkaRequestPayload)
+> KafkaRequest CreateKafka(ctx).Async(async).KafkaRequestPayload(kafkaRequestPayload).Execute()
 
 Create a new kafka Request
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    async := true // bool | Perform the action in an asynchronous manner
+    kafkaRequestPayload := *openapiclient.NewKafkaRequestPayload("Name_example") // KafkaRequestPayload | Kafka data
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.CreateKafka(context.Background()).Async(async).KafkaRequestPayload(kafkaRequestPayload).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateKafka``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `CreateKafka`: KafkaRequest
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.CreateKafka`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateKafkaRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**async** | **bool**| Perform the action in an asynchronous manner | 
-**kafkaRequestPayload** | [**KafkaRequestPayload**](KafkaRequestPayload.md)| Kafka data | 
+ **async** | **bool** | Perform the action in an asynchronous manner | 
+ **kafkaRequestPayload** | [**KafkaRequestPayload**](KafkaRequestPayload.md) | Kafka data | 
 
 ### Return type
 
@@ -52,17 +85,49 @@ Name | Type | Description  | Notes
 
 ## CreateServiceAccount
 
-> ServiceAccount CreateServiceAccount(ctx, serviceAccountRequest)
+> ServiceAccount CreateServiceAccount(ctx).ServiceAccountRequest(serviceAccountRequest).Execute()
 
 Create a service account
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    serviceAccountRequest := *openapiclient.NewServiceAccountRequest("Name_example") // ServiceAccountRequest | service account request
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.CreateServiceAccount(context.Background()).ServiceAccountRequest(serviceAccountRequest).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateServiceAccount``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `CreateServiceAccount`: ServiceAccount
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.CreateServiceAccount`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateServiceAccountRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**serviceAccountRequest** | [**ServiceAccountRequest**](ServiceAccountRequest.md)| service account request | 
+ **serviceAccountRequest** | [**ServiceAccountRequest**](ServiceAccountRequest.md) | service account request | 
 
 ### Return type
 
@@ -84,17 +149,53 @@ Name | Type | Description  | Notes
 
 ## DeleteKafkaById
 
-> Error DeleteKafkaById(ctx, id)
+> Error DeleteKafkaById(ctx, id).Execute()
 
 Delete a kafka request by id
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | The id of record
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.DeleteKafkaById(context.Background(), id).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteKafkaById``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `DeleteKafkaById`: Error
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.DeleteKafkaById`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| The id of record | 
+**id** | **string** | The id of record | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteKafkaByIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -116,17 +217,53 @@ Name | Type | Description  | Notes
 
 ## DeleteServiceAccount
 
-> Error DeleteServiceAccount(ctx, id)
+> Error DeleteServiceAccount(ctx, id).Execute()
 
 Delete service account
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | The id of record
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.DeleteServiceAccount(context.Background(), id).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteServiceAccount``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `DeleteServiceAccount`: Error
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.DeleteServiceAccount`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| The id of record | 
+**id** | **string** | The id of record | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteServiceAccountRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -148,17 +285,53 @@ Name | Type | Description  | Notes
 
 ## GetKafkaById
 
-> KafkaRequest GetKafkaById(ctx, id)
+> KafkaRequest GetKafkaById(ctx, id).Execute()
 
 Get a kafka request by id
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | The id of record
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.GetKafkaById(context.Background(), id).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetKafkaById``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetKafkaById`: KafkaRequest
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetKafkaById`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| The id of record | 
+**id** | **string** | The id of record | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetKafkaByIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -180,29 +353,57 @@ Name | Type | Description  | Notes
 
 ## ListCloudProviderRegions
 
-> CloudRegionList ListCloudProviderRegions(ctx, id, optional)
+> CloudRegionList ListCloudProviderRegions(ctx, id).Page(page).Size(size).Execute()
 
 Retrieves the list of supported regions of the supported cloud provider.
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | The id of record
+    page := "1" // string | Page index (optional)
+    size := "100" // string | Number of items in each page (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ListCloudProviderRegions(context.Background(), id).Page(page).Size(size).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListCloudProviderRegions``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListCloudProviderRegions`: CloudRegionList
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ListCloudProviderRegions`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| The id of record | 
- **optional** | ***ListCloudProviderRegionsOpts** | optional parameters | nil if no parameters
+**id** | **string** | The id of record | 
 
-### Optional Parameters
+### Other Parameters
 
-Optional parameters are passed through a pointer to a ListCloudProviderRegionsOpts struct
+Other parameters are passed through a pointer to a apiListCloudProviderRegionsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **page** | **optional.String**| Page index | 
- **size** | **optional.String**| Number of items in each page | 
+ **page** | **string** | Page index | 
+ **size** | **string** | Number of items in each page | 
 
 ### Return type
 
@@ -224,27 +425,51 @@ Name | Type | Description  | Notes
 
 ## ListCloudProviders
 
-> CloudProviderList ListCloudProviders(ctx, optional)
+> CloudProviderList ListCloudProviders(ctx).Page(page).Size(size).Execute()
 
 Retrieves the list of supported cloud providers.
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    page := "1" // string | Page index (optional)
+    size := "100" // string | Number of items in each page (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ListCloudProviders(context.Background()).Page(page).Size(size).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListCloudProviders``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListCloudProviders`: CloudProviderList
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ListCloudProviders`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListCloudProvidersRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***ListCloudProvidersOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-
-Optional parameters are passed through a pointer to a ListCloudProvidersOpts struct
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **page** | **optional.String**| Page index | 
- **size** | **optional.String**| Number of items in each page | 
+ **page** | **string** | Page index | 
+ **size** | **string** | Number of items in each page | 
 
 ### Return type
 
@@ -266,27 +491,55 @@ Name | Type | Description  | Notes
 
 ## ListKafkas
 
-> KafkaRequestList ListKafkas(ctx, optional)
+> KafkaRequestList ListKafkas(ctx).Page(page).Size(size).OrderBy(orderBy).Search(search).Execute()
 
 Returns a list of Kafka requests
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    page := "1" // string | Page index (optional)
+    size := "100" // string | Number of items in each page (optional)
+    orderBy := "name asc" // string | Specifies the order by criteria. The syntax of this parameter is similar to the syntax of the _order by_ clause of an SQL statement. Each query can be ordered by any of the kafkaRequests fields. For example, in order to retrieve all kafkas ordered by their name:  ```sql name asc ```  Or in order to retrieve all kafkas ordered by their name _and_ created date:  ```sql name asc, created_at asc ```  If the parameter isn't provided, or if the value is empty, then the results will be ordered by name. (optional)
+    search := "name = my-kafka and cloud_provider = aws" // string | Search criteria.  The syntax of this parameter is similar to the syntax of the _where_ clause of an SQL statement. Allowed fields in the search are: cloud_provider, name, owner, region and status. Allowed comparators are `<>` and `=` For example, to retrieve kafka request with name equal `my-kafka` and region equal `aws`, the value should be:  ``` name = my-kafka and cloud_provider = aws ```  If the parameter isn't provided, or if the value is empty, then all the kafkas that the user has permission to see will be returned. Note. If the query is invalid, an error will be returned  (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ListKafkas(context.Background()).Page(page).Size(size).OrderBy(orderBy).Search(search).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListKafkas``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListKafkas`: KafkaRequestList
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ListKafkas`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListKafkasRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***ListKafkasOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-
-Optional parameters are passed through a pointer to a ListKafkasOpts struct
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **page** | **optional.String**| Page index | 
- **size** | **optional.String**| Number of items in each page | 
+ **page** | **string** | Page index | 
+ **size** | **string** | Number of items in each page | 
+ **orderBy** | **string** | Specifies the order by criteria. The syntax of this parameter is similar to the syntax of the _order by_ clause of an SQL statement. Each query can be ordered by any of the kafkaRequests fields. For example, in order to retrieve all kafkas ordered by their name:  &#x60;&#x60;&#x60;sql name asc &#x60;&#x60;&#x60;  Or in order to retrieve all kafkas ordered by their name _and_ created date:  &#x60;&#x60;&#x60;sql name asc, created_at asc &#x60;&#x60;&#x60;  If the parameter isn&#39;t provided, or if the value is empty, then the results will be ordered by name. | 
+ **search** | **string** | Search criteria.  The syntax of this parameter is similar to the syntax of the _where_ clause of an SQL statement. Allowed fields in the search are: cloud_provider, name, owner, region and status. Allowed comparators are &#x60;&lt;&gt;&#x60; and &#x60;&#x3D;&#x60; For example, to retrieve kafka request with name equal &#x60;my-kafka&#x60; and region equal &#x60;aws&#x60;, the value should be:  &#x60;&#x60;&#x60; name &#x3D; my-kafka and cloud_provider &#x3D; aws &#x60;&#x60;&#x60;  If the parameter isn&#39;t provided, or if the value is empty, then all the kafkas that the user has permission to see will be returned. Note. If the query is invalid, an error will be returned  | 
 
 ### Return type
 
@@ -308,13 +561,44 @@ Name | Type | Description  | Notes
 
 ## ListServiceAccounts
 
-> ServiceAccountList ListServiceAccounts(ctx, )
+> ServiceAccountList ListServiceAccounts(ctx).Execute()
 
 List service accounts
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ListServiceAccounts(context.Background()).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListServiceAccounts``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListServiceAccounts`: ServiceAccountList
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ListServiceAccounts`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListServiceAccountsRequest struct via the builder pattern
+
 
 ### Return type
 
@@ -336,17 +620,53 @@ This endpoint does not need any parameter.
 
 ## ResetServiceAccountCreds
 
-> ServiceAccount ResetServiceAccountCreds(ctx, id)
+> ServiceAccount ResetServiceAccountCreds(ctx, id).Execute()
 
 reset credentials for the service account
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | The id of record
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ResetServiceAccountCreds(context.Background(), id).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ResetServiceAccountCreds``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ResetServiceAccountCreds`: ServiceAccount
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ResetServiceAccountCreds`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| The id of record | 
+**id** | **string** | The id of record | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiResetServiceAccountCredsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 

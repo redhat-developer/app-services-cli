@@ -154,6 +154,58 @@ paths:
         schema:
           type: string
         style: form
+      - description: |-
+          Specifies the order by criteria. The syntax of this parameter is
+          similar to the syntax of the _order by_ clause of an SQL statement.
+          Each query can be ordered by any of the kafkaRequests fields.
+          For example, in order to retrieve all kafkas ordered by their name:
+
+          ```sql
+          name asc
+          ```
+
+          Or in order to retrieve all kafkas ordered by their name _and_ created date:
+
+          ```sql
+          name asc, created_at asc
+          ```
+
+          If the parameter isn't provided, or if the value is empty, then
+          the results will be ordered by name.
+        examples:
+          orderBy:
+            value: name asc
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          Search criteria.
+
+          The syntax of this parameter is similar to the syntax of the _where_ clause of an
+          SQL statement. Allowed fields in the search are: cloud_provider, name, owner, region and status. Allowed comparators are `<>` and `=`
+          For example, to retrieve kafka request with name equal `my-kafka` and region equal `aws`, the value should be:
+
+          ```
+          name = my-kafka and cloud_provider = aws
+          ```
+
+          If the parameter isn't provided, or if the value is empty, then all the kafkas
+          that the user has permission to see will be returned.
+          Note. If the query is invalid, an error will be returned
+        examples:
+          search:
+            value: name = my-kafka and cloud_provider = aws
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -161,6 +213,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/KafkaRequestList'
           description: A list of Kafka requests
+        "400":
+          content:
+            application/json:
+              examples:
+                InvalidQueryExample:
+                  $ref: '#/components/examples/400InvalidQueryExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
         "401":
           content:
             application/json:
@@ -628,6 +689,17 @@ components:
         reason: Synchronous action (creating kafka requests) is unsupported, use async=true
           parameter
         operation_id: 1iWIimqGcrDuL61aUxIZqBTqNRa
+    "400InvalidQueryExample":
+      value:
+        id: "203"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/23
+        code: MGD-SERV-API-23
+        reason: 'Failed to parse search query: Unable to list kafka requests for api_kafka_service:
+          MGD-SERV-API-23: Failed to parse search query: Unsupported column name for
+          search: ''id''. Supported column names are: region, name, cloud_provider,
+          name, status. Query invalid: id = 123'
+        operation_id: 1lWDGuybIrEnxrAem724gqkkiDv
     "404Example":
       value:
         id: "404"
@@ -716,6 +788,60 @@ components:
       explode: true
       in: query
       name: size
+      required: false
+      schema:
+        type: string
+      style: form
+    orderBy:
+      description: |-
+        Specifies the order by criteria. The syntax of this parameter is
+        similar to the syntax of the _order by_ clause of an SQL statement.
+        Each query can be ordered by any of the kafkaRequests fields.
+        For example, in order to retrieve all kafkas ordered by their name:
+
+        ```sql
+        name asc
+        ```
+
+        Or in order to retrieve all kafkas ordered by their name _and_ created date:
+
+        ```sql
+        name asc, created_at asc
+        ```
+
+        If the parameter isn't provided, or if the value is empty, then
+        the results will be ordered by name.
+      examples:
+        orderBy:
+          value: name asc
+      explode: true
+      in: query
+      name: orderBy
+      required: false
+      schema:
+        type: string
+      style: form
+    search:
+      description: |
+        Search criteria.
+
+        The syntax of this parameter is similar to the syntax of the _where_ clause of an
+        SQL statement. Allowed fields in the search are: cloud_provider, name, owner, region and status. Allowed comparators are `<>` and `=`
+        For example, to retrieve kafka request with name equal `my-kafka` and region equal `aws`, the value should be:
+
+        ```
+        name = my-kafka and cloud_provider = aws
+        ```
+
+        If the parameter isn't provided, or if the value is empty, then all the kafkas
+        that the user has permission to see will be returned.
+        Note. If the query is invalid, an error will be returned
+      examples:
+        search:
+          value: name = my-kafka and cloud_provider = aws
+      explode: true
+      in: query
+      name: search
       required: false
       schema:
         type: string
@@ -872,14 +998,17 @@ components:
           type: string
         operation_id:
           type: string
+      type: object
     ErrorList_allOf:
       properties:
         items:
           items:
             $ref: '#/components/schemas/Error'
           type: array
+      type: object
     KafkaRequest_allOf:
-      example: '{"$ref":"#/components/examples/KafkaRequestExample"}'
+      example:
+        $ref: '#/components/examples/KafkaRequestExample'
       properties:
         status:
           type: string
@@ -901,32 +1030,55 @@ components:
         updated_at:
           format: date-time
           type: string
+      type: object
     KafkaRequestList_allOf:
-      example: '{"kind":"KafkaRequestList","page":"1","size":"1","total":"1","item":{"$ref":"#/components/examples/KafkaRequestExample"}}'
+      example:
+        kind: KafkaRequestList
+        page: "1"
+        size: "1"
+        total: "1"
+        item:
+          $ref: '#/components/examples/KafkaRequestExample'
       properties:
         items:
           items:
             allOf:
             - $ref: '#/components/schemas/KafkaRequest'
           type: array
+      type: object
     CloudProviderList_allOf:
-      example: '{"kind":"CloudProviderList","page":"1","size":"1","total":"1","item":{"$ref":"#/components/examples/CloudProviderExample"}}'
+      example:
+        kind: CloudProviderList
+        page: "1"
+        size: "1"
+        total: "1"
+        item:
+          $ref: '#/components/examples/CloudProviderExample'
       properties:
         items:
           items:
             allOf:
             - $ref: '#/components/schemas/CloudProvider'
           type: array
+      type: object
     CloudRegionList_allOf:
-      example: '{"kind":"CloudRegionList","page":"1","size":"1","total":"1","item":{"$ref":"#/components/examples/CloudRegionExample"}}'
+      example:
+        kind: CloudRegionList
+        page: "1"
+        size: "1"
+        total: "1"
+        item:
+          $ref: '#/components/examples/CloudRegionExample'
       properties:
         items:
           items:
             allOf:
             - $ref: '#/components/schemas/CloudRegion'
           type: array
+      type: object
     ServiceAccount_allOf:
-      example: '{"$ref":"#/components/examples/ServiceAccountExample"}'
+      example:
+        $ref: '#/components/examples/ServiceAccountExample'
       properties:
         id:
           description: server generated unique id of the service account
@@ -939,6 +1091,7 @@ components:
           type: string
         clientSecret:
           type: string
+      type: object
     ServiceAccountListItem_allOf:
       properties:
         id:
@@ -949,8 +1102,12 @@ components:
         name:
           type: string
         description: {}
+      type: object
     ServiceAccountList_allOf:
-      example: '{"kind":"ServiceAccountList","items":{"$ref":"#/components/examples/ServiceAccountListItemExample"}}'
+      example:
+        kind: ServiceAccountList
+        items:
+          $ref: '#/components/examples/ServiceAccountListItemExample'
       properties:
         kind:
           type: string
@@ -959,6 +1116,7 @@ components:
             allOf:
             - $ref: '#/components/schemas/ServiceAccountListItem'
           type: array
+      type: object
   securitySchemes:
     Bearer:
       bearerFormat: JWT

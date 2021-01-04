@@ -66,9 +66,9 @@ func runStatus(opts *Options) error {
 
 	client := connection.NewMASClient()
 
-	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
-	if err != nil {
-		return fmt.Errorf("Error retrieving Kafka instance: %w", err)
+	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Error retrieving Kafka instance: %w", apiErr)
 	}
 
 	type kafkaStatus struct {
@@ -78,9 +78,9 @@ func runStatus(opts *Options) error {
 	}
 
 	statusInfo := &kafkaStatus{
-		ID:     res.Id,
-		Name:   res.Name,
-		Status: res.Status,
+		ID:     *res.Id,
+		Name:   *res.Name,
+		Status: *res.Status,
 	}
 
 	printer := tableprinter.New(os.Stdout)

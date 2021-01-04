@@ -63,13 +63,13 @@ openapi/pull:
 
 # validate the openapi schema
 openapi/validate:
-	openapi-generator validate -i openapi/managed-services-api.yaml
+	openapi-generator-cli validate -i openapi/managed-services-api.yaml
 .PHONY: openapi/validate
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator generate -i openapi/managed-services-api.yaml -g go --package-name managedservices --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
-	openapi-generator validate -i openapi/managed-services-api.yaml
+	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name managedservices -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
+	openapi-generator-cli validate -i openapi/managed-services-api.yaml
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
 
