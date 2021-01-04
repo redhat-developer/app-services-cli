@@ -60,14 +60,14 @@ func runUse(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	res, _, err := client.DefaultApi.GetKafkaById(context.Background(), opts.id)
-	if err != nil {
-		return fmt.Errorf("Unable to retrieve Kafka instance \"%v\": %w", opts.id, err)
+	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Unable to retrieve Kafka instance \"%v\": %w", opts.id, apiErr)
 	}
 
 	// build Kafka config object from the response
 	var kafkaConfig config.KafkaConfig = config.KafkaConfig{
-		ClusterID: res.Id,
+		ClusterID: *res.Id,
 	}
 
 	cfg.Services.Kafka = &kafkaConfig
@@ -75,7 +75,7 @@ func runUse(opts *options) error {
 		return fmt.Errorf("Unable to update config: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"\n", res.Id)
+	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"\n", *res.Id)
 
 	return nil
 }

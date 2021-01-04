@@ -56,18 +56,18 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 	}
 
 	managedservices := connection.NewMASClient()
-	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID)
-	if err != nil {
-		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", err)
+	kafkaInstance, _, apiErr := managedservices.DefaultApi.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID).Execute()
+	if apiErr.Error() != "" {
+		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", apiErr)
 	}
 
-	if kafkaInstance.BootstrapServerHost == "" {
+	if *kafkaInstance.BootstrapServerHost == "" {
 		return nil, nil, fmt.Errorf("Kafka instance is missing a Bootstrap Server Host")
 	}
 
 	sdkkafka.TransformResponse(&kafkaInstance)
 
-	conn, err := dialer.Dial("tcp", kafkaInstance.BootstrapServerHost)
+	conn, err := dialer.Dial("tcp", *kafkaInstance.BootstrapServerHost)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -101,14 +101,17 @@ func ValidateCredentials(opts *Options) error {
 	}
 	client := connection.NewMASClient()
 	fmt.Fprint(os.Stderr, "\nNo Service credentials. \nCreating service account for CLI\n")
-	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: "RHOAS-CLI Service Account"}
-	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *svcAcctPayload)
-	if err != nil {
+	svcAcctDescription := "RHOAS-CLI Service Account"
+	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
+	a := client.DefaultApi.CreateServiceAccount(context.Background())
+	a = a.ServiceAccountRequest(*svcAcctPayload)
+	response, _, apiErr := a.Execute()
+	if apiErr.Error() != "" {
 		return err
 	}
 
-	cfg.ServiceAuth.ClientID = response.ClientID
-	cfg.ServiceAuth.ClientSecret = response.ClientSecret
+	cfg.ServiceAuth.ClientID = *response.ClientID
+	cfg.ServiceAuth.ClientSecret = *response.ClientSecret
 	if err = opts.Config.Save(cfg); err != nil {
 		return err
 	}

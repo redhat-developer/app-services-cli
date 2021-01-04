@@ -17,10 +17,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
-
-	"github.com/antihax/optional"
 )
 
 type options struct {
@@ -69,13 +66,13 @@ func runList(opts *options) error {
 
 	client := connection.NewMASClient()
 
-	options := managedservices.ListKafkasOpts{
-		Page: optional.NewString(strconv.Itoa(opts.page)),
-		Size: optional.NewString(strconv.Itoa(opts.limit))}
-	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
+	a := client.DefaultApi.ListKafkas(context.Background())
+	a = a.Page(strconv.Itoa(opts.page))
+	a = a.Size(strconv.Itoa(opts.limit))
+	response, _, apiErr := a.Execute()
 
-	if err != nil {
-		return fmt.Errorf("Error retrieving Kafka instances: %w", err)
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Error retrieving Kafka instances: %w", apiErr)
 	}
 
 	if response.Size == 0 {

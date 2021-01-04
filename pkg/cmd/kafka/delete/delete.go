@@ -107,10 +107,10 @@ func runDelete(opts *options) error {
 	}
 
 	fmt.Fprintf(os.Stderr, "Deleting Kafka instance with ID '%v'.\n", kafkaID)
-	_, _, err = client.DefaultApi.DeleteKafkaById(context.Background(), kafkaID)
+	_, _, apiErr := client.DefaultApi.DeleteKafkaById(context.Background(), kafkaID).Execute()
 
-	if err != nil {
-		return fmt.Errorf("Error deleting Kafka instance: %w", err)
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Error deleting Kafka instance: %w", apiErr)
 	}
 
 	fmt.Fprint(os.Stderr, "\nKafka instance has successfully been deleted.\n")

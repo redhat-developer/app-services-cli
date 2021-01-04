@@ -44,7 +44,7 @@ func main() {
 
 		e, ok := errModel.(managedservices.Error)
 		if ok {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", e.Reason)
+			fmt.Fprintf(os.Stderr, "Error: %v\n", *e.Reason)
 			os.Exit(1)
 		}
 	}

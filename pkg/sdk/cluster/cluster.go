@@ -95,7 +95,7 @@ func ConnectToCluster(connection pkgConnection.IConnection,
 	kafkaCfg := cfg.Services.Kafka
 
 	managedservices := connection.NewMASClient()
-	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID)
+	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID).Execute()
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v\n", kafkaCfg.ClusterID, err)
@@ -107,7 +107,7 @@ func ConnectToCluster(connection pkgConnection.IConnection,
 		return
 	}
 
-	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(kafkaInstance.Name), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
+	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(*kafkaInstance.Name), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
 	if shouldContinue := utils.ShowQuestion("Do you want to continue?"); shouldContinue == false {
 		return
 	}
@@ -126,16 +126,18 @@ func CreateCredentials(connection pkgConnection.IConnection) *managedservices.Se
 
 	t := time.Now()
 	serviceAcct := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
-	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *serviceAcct)
+	a := client.DefaultApi.CreateServiceAccount(context.Background())
+	a = a.ServiceAccountRequest(*serviceAcct)
+	res, _, apiErr := a.Execute()
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "\nError creating Kafka Credentials: %v\n", err)
+	if apiErr.Error() != "" {
+		fmt.Fprintf(os.Stderr, "\nError creating Kafka Credentials: %v\n", apiErr)
 		return nil
 	}
 
-	jsonResponse, _ := json.Marshal(response)
+	jsonResponse, _ := json.Marshal(res)
 	var credentials managedservices.ServiceAccount
-	err = json.Unmarshal(jsonResponse, &credentials)
+	err := json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "Invalid JSON response from server\n", err)
 		return nil
@@ -156,8 +158,8 @@ func CreateSecret(credentials *managedservices.ServiceAccount,
 		},
 		// Type of CredentialsSecret
 		StringData: map[string]string{
-			"clientID":     credentials.ClientID,
-			"clientSecret": credentials.ClientSecret,
+			"clientID":     *credentials.ClientID,
+			"clientSecret": *credentials.ClientSecret,
 		},
 	}
 
@@ -180,7 +182,7 @@ func CreateSecret(credentials *managedservices.ServiceAccount,
 }
 
 func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *managedservices.KafkaRequest, namespace string, secretName string) {
-	crName := secretName + "-" + kafkaInstance.Name
+	crName := secretName + "-" + *kafkaInstance.Name
 	crInstance := &connection.ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
@@ -189,7 +191,7 @@ func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *managedservices.Ka
 		TypeMeta: MKCRMeta,
 		Spec: connection.ManagedKafkaConnectionSpec{
 			BootstrapServer: connection.BootstrapServerSpec{
-				Host: kafkaInstance.BootstrapServerHost,
+				Host: *kafkaInstance.BootstrapServerHost,
 			},
 			Credentials: connection.CredentialsSpec{
 				Kind:       connection.ClientCredentials,
@@ -245,11 +247,10 @@ func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
 
 func useKafka(cliconfig *config.Config, connection pkgConnection.IConnection) *config.Config {
 	client := connection.NewMASClient()
-	options := managedservices.ListKafkasOpts{}
-	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
+	response, _, apiErr := client.DefaultApi.ListKafkas(context.Background()).Execute()
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", err)
+	if apiErr.Error() != "" {
+		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", apiErr)
 		os.Exit(1)
 	}
 
@@ -260,7 +261,7 @@ func useKafka(cliconfig *config.Config, connection pkgConnection.IConnection) *c
 
 	kafkas := []string{}
 	for index := 0; index < len(response.Items); index++ {
-		kafkas = append(kafkas, response.Items[index].Name)
+		kafkas = append(kafkas, *response.Items[index].Name)
 	}
 
 	prompt := promptui.Select{
@@ -271,7 +272,7 @@ func useKafka(cliconfig *config.Config, connection pkgConnection.IConnection) *c
 	index, _, err := prompt.Run()
 	if err == nil {
 		selectedKafka := response.Items[index]
-		var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: selectedKafka.Id}
+		var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: *selectedKafka.Id}
 		cliconfig.Services.Kafka = &kafkaConfig
 
 		return cliconfig

@@ -148,15 +148,17 @@ func runCreate(opts *Options) error {
 		return fmt.Errorf("Directory '%v' does not exist", fileDir)
 	}
 
-	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: opts.name, Description: opts.description}
-	response, _, err := client.DefaultApi.CreateServiceAccount(context.Background(), *svcAcctPayload)
+	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
+	a := client.DefaultApi.CreateServiceAccount(context.Background())
+	a = a.ServiceAccountRequest(*svcAcctPayload)
+	response, _, apiErr := a.Execute()
 
-	if err != nil {
-		return fmt.Errorf("Could not create service account: %w", err)
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Could not create service account: %w", apiErr)
 	}
 
 	fmt.Fprintf(os.Stderr, "Writing credentials to %v\n", fileName)
-	fileContent := fmt.Sprintf(fileFormat, response.ClientID, response.ClientSecret)
+	fileContent := fmt.Sprintf(fileFormat, *response.ClientID, *response.ClientSecret)
 
 	dataToWrite := []byte(fileContent)
 

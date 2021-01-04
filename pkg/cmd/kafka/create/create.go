@@ -23,6 +23,7 @@ type Options struct {
 	name     string
 	provider string
 	region   string
+	multiAZ  bool
 
 	outputFormat string
 
@@ -35,6 +36,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
+
+		multiAZ: true,
 	}
 
 	cmd := &cobra.Command{
@@ -79,11 +82,14 @@ func runCreate(opts *Options) error {
 
 	fmt.Fprintln(os.Stderr, "Creating Kafka instance")
 
-	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: opts.region, CloudProvider: opts.provider, MultiAz: true}
-	response, _, err := client.DefaultApi.CreateKafka(context.Background(), true, kafkaRequest)
+	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: &opts.region, CloudProvider: &opts.provider, MultiAz: &opts.multiAZ}
+	a := client.DefaultApi.CreateKafka(context.Background())
+	a = a.KafkaRequestPayload(kafkaRequest)
+	a = a.Async(true)
+	response, _, apiErr := a.Execute()
 
-	if err != nil {
-		return fmt.Errorf("Error while requesting new Kafka instance: %w", err)
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Error while requesting new Kafka instance: %w", apiErr)
 	}
 
 	fmt.Fprintf(os.Stderr, "Created new Kafka instance:\n")
@@ -98,7 +104,7 @@ func runCreate(opts *Options) error {
 	}
 
 	kafkaCfg := &config.KafkaConfig{
-		ClusterID: response.Id,
+		ClusterID: *response.Id,
 	}
 
 	cfg.Services.Kafka = kafkaCfg
