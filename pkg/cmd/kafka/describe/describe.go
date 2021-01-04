@@ -7,8 +7,10 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -18,13 +20,17 @@ type options struct {
 	id           string
 	outputFormat string
 
-	cfg *config.Config
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
 // or by using the kafka instance set in the config, if any
-func NewDescribeCommand() *cobra.Command {
-	opts := &options{}
+func NewDescribeCommand(f *factory.Factory) *cobra.Command {
+	opts := &options{
+		Config:     f.Config,
+		Connection: f.Connection,
+	}
 
 	cmd := &cobra.Command{
 		Use:   "describe",
@@ -40,14 +46,13 @@ func NewDescribeCommand() *cobra.Command {
 				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
 			}
 
-			cfg, err := config.Load()
-			if err != nil {
-				return fmt.Errorf("Error loading config: %w", err)
-			}
-			opts.cfg = cfg
-
 			if opts.id != "" {
 				return runDescribe(opts)
+			}
+
+			cfg, err := opts.Config.Load()
+			if err != nil {
+				return fmt.Errorf("Error loading config: %w", err)
 			}
 
 			var kafkaConfig *config.KafkaConfig
@@ -68,7 +73,7 @@ func NewDescribeCommand() *cobra.Command {
 }
 
 func runDescribe(opts *options) error {
-	connection, err := opts.cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}

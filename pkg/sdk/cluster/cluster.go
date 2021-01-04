@@ -11,8 +11,8 @@ import (
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/utils"
@@ -39,7 +39,8 @@ var MKCRMeta = metav1.TypeMeta{
 	APIVersion: "rhoas.redhat.com/v1",
 }
 
-func ConnectToCluster(connection *pkgConnection.Connection,
+func ConnectToCluster(connection pkgConnection.IConnection,
+	config config.IConfig,
 	secretName string,
 	kubeConfigCustomLocation string,
 	forceSelect bool) {
@@ -78,20 +79,20 @@ func ConnectToCluster(connection *pkgConnection.Connection,
 	}
 
 	currentNamespace, _, _ := kubeClientconfig.Namespace()
-	clicfg, err := config.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not load config: %v\n", err)
 		return
 	}
 
-	if !clicfg.HasKafka() || forceSelect {
-		clicfg = useKafka(clicfg, connection)
-		if clicfg == nil {
+	if cfg.Services.Kafka == nil || forceSelect {
+		cfg = useKafka(cfg, connection)
+		if cfg == nil {
 			return
 		}
 	}
 
-	kafkaCfg := clicfg.Services.Kafka
+	kafkaCfg := cfg.Services.Kafka
 
 	managedservices := connection.NewMASClient()
 	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID)
@@ -120,7 +121,7 @@ func ConnectToCluster(connection *pkgConnection.Connection,
 
 }
 
-func CreateCredentials(connection *pkgConnection.Connection) *managedservices.TokenResponse {
+func CreateCredentials(connection pkgConnection.IConnection) *managedservices.TokenResponse {
 	client := connection.NewMASClient()
 
 	t := time.Now()
@@ -242,7 +243,7 @@ func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
 	return true
 }
 
-func useKafka(cliconfig *config.Config, connection *pkgConnection.Connection) *config.Config {
+func useKafka(cliconfig *config.Config, connection pkgConnection.IConnection) *config.Config {
 	client := connection.NewMASClient()
 	options := managedservices.ListKafkasOpts{}
 	response, _, err := client.DefaultApi.ListKafkas(context.Background(), &options)
@@ -271,7 +272,7 @@ func useKafka(cliconfig *config.Config, connection *pkgConnection.Connection) *c
 	if err == nil {
 		selectedKafka := response.Items[index]
 		var kafkaConfig config.KafkaConfig = config.KafkaConfig{ClusterID: selectedKafka.Id}
-		cliconfig.Services.SetKafka(&kafkaConfig)
+		cliconfig.Services.Kafka = &kafkaConfig
 
 		return cliconfig
 	}

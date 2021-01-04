@@ -3,6 +3,7 @@ package topics
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/list"
@@ -14,7 +15,7 @@ const (
 )
 
 // NewTopicsCommand gives commands that manages Kafka topics.
-func NewTopicsCommand() *cobra.Command {
+func NewTopicsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "topics",
 		Short: "Manage topics",
@@ -22,9 +23,9 @@ func NewTopicsCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		create.NewCreateTopicCommand(),
-		list.NewListTopicCommand(),
-		delete.NewDeleteTopicCommand(),
+		create.NewCreateTopicCommand(f),
+		list.NewListTopicCommand(f),
+		delete.NewDeleteTopicCommand(f),
 	)
 
 	return cmd

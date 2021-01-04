@@ -10,8 +10,10 @@ import (
 	"github.com/landoop/tableprinter"
 	"github.com/spf13/cobra"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"gopkg.in/yaml.v2"
 
@@ -25,13 +27,18 @@ type options struct {
 	outputFormat string
 	page         int
 	limit        int
+
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
 // NewListCommand creates a new command for listing kafkas.
-func NewListCommand() *cobra.Command {
+func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		page:  0,
-		limit: 100,
+		page:       0,
+		limit:      100,
+		Config:     f.Config,
+		Connection: f.Connection,
 	}
 
 	cmd := &cobra.Command{
@@ -55,12 +62,7 @@ func NewListCommand() *cobra.Command {
 }
 
 func runList(opts *options) error {
-	cfg, err := config.Load()
-	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
-	}
-
-	connection, err := cfg.Connection()
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}

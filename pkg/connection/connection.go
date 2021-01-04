@@ -39,6 +39,12 @@ type Connection struct {
 	apiURL     *url.URL
 }
 
+type IConnection interface {
+	RefreshTokens(ctx context.Context) (string, string, error)
+	Logout(ctx context.Context) error
+	NewMASClient() *managedservices.APIClient
+}
+
 func (c *Connection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
 	refreshedTk, err := c.authClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {
@@ -67,17 +73,13 @@ func (c *Connection) Logout(ctx context.Context) error {
 	return nil
 }
 
-func (c *Connection) HTTPClient() *http.Client {
-	return c.client
-}
-
 func (c *Connection) NewMASClient() *managedservices.APIClient {
 	masCfg := managedservices.NewConfiguration()
 
 	masCfg.Scheme = c.apiURL.Scheme
 	masCfg.Host = c.apiURL.Host
 
-	masCfg.HTTPClient = c.HTTPClient()
+	masCfg.HTTPClient = c.client
 
 	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", c.Token.AccessToken))
 

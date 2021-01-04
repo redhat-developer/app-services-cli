@@ -8,8 +8,10 @@ import (
 	"path"
 
 	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/spf13/cobra"
 )
 
@@ -45,20 +47,24 @@ var (
 	`)
 )
 
-type options struct {
+type Options struct {
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
+
 	output      string
 	force       bool
 	name        string
 	description string
 	scopes      []string
 	filename    string
-
-	cfg *config.Config
 }
 
 // NewCreateCommand creates a new command to create service accounts
-func NewCreateCommand() *cobra.Command {
-	opts := &options{}
+func NewCreateCommand(f *factory.Factory) *cobra.Command {
+	opts := &Options{
+		Config:     f.Config,
+		Connection: f.Connection,
+	}
 
 	cmd := &cobra.Command{
 		Use:   "create",
@@ -88,12 +94,6 @@ func NewCreateCommand() *cobra.Command {
 				return fmt.Errorf("Invalid output format '%v'", opts.output)
 			}
 
-			cfg, err := config.Load()
-			if err != nil {
-				return fmt.Errorf("Error loading config: %w", err)
-			}
-			opts.cfg = cfg
-
 			return runCreate(opts)
 		},
 	}
@@ -112,9 +112,8 @@ func NewCreateCommand() *cobra.Command {
 	return cmd
 }
 
-func runCreate(opts *options) error {
-	cfg := opts.cfg
-	connection, err := cfg.Connection()
+func runCreate(opts *Options) error {
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}

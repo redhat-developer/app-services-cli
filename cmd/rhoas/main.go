@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
@@ -19,9 +20,11 @@ var (
 )
 
 func main() {
-	cobra.OnInitialize(initConfig)
+	cmdFactory := factory.New(version.CLI_VERSION)
+	initConfig(cmdFactory)
 
-	rootCmd := root.NewRootCommand(version.CLI_VERSION)
+	rootCmd := root.NewRootCommand(cmdFactory, version.CLI_VERSION)
+
 	rootCmd.SilenceErrors = true
 	rootCmd.InitDefaultHelpCmd()
 
@@ -50,25 +53,6 @@ func main() {
 	os.Exit(1)
 }
 
-func initConfig() {
-	cfgFile, err := config.Load()
-	if cfgFile != nil {
-		return
-	}
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-
-	cfgFile = &config.Config{}
-	if err := config.Save(cfgFile); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-	cfgPath, _ := config.Location()
-	fmt.Fprintf(os.Stderr, "Saved config to %v\n", cfgPath)
-}
-
 /**
 * Generates documentation files
  */
@@ -82,6 +66,23 @@ func generateDocumentation(rootCommand *cobra.Command) {
 
 	err := doc.GenMarkdownTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)
 	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func initConfig(f *factory.Factory) {
+	cfgFile, err := f.Config.Load()
+	if cfgFile != nil {
+		return
+	}
+	if !os.IsNotExist(err) {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	cfgFile = &config.Config{}
+	if err := f.Config.Save(cfgFile); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

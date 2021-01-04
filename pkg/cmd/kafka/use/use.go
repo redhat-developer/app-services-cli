@@ -9,17 +9,23 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
 type options struct {
 	id string
 
-	cfg *config.Config
+	Config     config.IConfig
+	Connection func() (connection.IConnection, error)
 }
 
-func NewUseCommand() *cobra.Command {
-	opts := &options{}
+func NewUseCommand(f *factory.Factory) *cobra.Command {
+	opts := &options{
+		Config:     f.Config,
+		Connection: f.Connection,
+	}
 
 	cmd := &cobra.Command{
 		Use:   "use",
@@ -31,12 +37,6 @@ func NewUseCommand() *cobra.Command {
 		),
 		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			cfg, err := config.Load()
-			if err != nil {
-				return fmt.Errorf("Error loading config: %w", err)
-			}
-			opts.cfg = cfg
-
 			return runUse(opts)
 		},
 	}
@@ -48,8 +48,12 @@ func NewUseCommand() *cobra.Command {
 }
 
 func runUse(opts *options) error {
-	cfg := *opts.cfg
-	connection, err := cfg.Connection()
+	cfg, err := opts.Config.Load()
+	if err != nil {
+		return fmt.Errorf("Error loading config: %w", err)
+	}
+
+	connection, err := opts.Connection()
 	if err != nil {
 		return fmt.Errorf("Can't create connection: %w", err)
 	}
@@ -66,8 +70,8 @@ func runUse(opts *options) error {
 		ClusterID: res.Id,
 	}
 
-	cfg.Services.SetKafka(&kafkaConfig)
-	if err := config.Save(&cfg); err != nil {
+	cfg.Services.Kafka = &kafkaConfig
+	if err := opts.Config.Save(cfg); err != nil {
 		return fmt.Errorf("Unable to update config: %w", err)
 	}
 

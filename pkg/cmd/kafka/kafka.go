@@ -5,6 +5,7 @@ package kafka
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/describe"
@@ -14,7 +15,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
 )
 
-func NewKafkaCommand() *cobra.Command {
+func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "kafka",
 		Short: "Manage your Kafka instances",
@@ -23,13 +24,13 @@ func NewKafkaCommand() *cobra.Command {
 
 	// add sub-commands
 	cmd.AddCommand(
-		create.NewCreateCommand(),
-		describe.NewDescribeCommand(),
-		delete.NewDeleteCommand(),
-		list.NewListCommand(),
-		use.NewUseCommand(),
-		status.NewStatusCommand(),
-		topics.NewTopicsCommand(),
+		create.NewCreateCommand(f),
+		describe.NewDescribeCommand(f),
+		delete.NewDeleteCommand(f),
+		list.NewListCommand(f),
+		use.NewUseCommand(f),
+		status.NewStatusCommand(f),
+		topics.NewTopicsCommand(f),
 	)
 	return cmd
 }
