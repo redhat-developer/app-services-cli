@@ -21,7 +21,7 @@ var (
 
 func main() {
 	cmdFactory := factory.New(version.CLI_VERSION)
-	initConfig(cmdFactory.Config)
+	initConfig(cmdFactory)
 
 	rootCmd := root.NewRootCommand(cmdFactory, version.CLI_VERSION)
 
@@ -71,8 +71,8 @@ func generateDocumentation(rootCommand *cobra.Command) {
 	}
 }
 
-func initConfig(cfg config.IConfig) {
-	cfgFile, err := cfg.Load()
+func initConfig(f *factory.Factory) {
+	cfgFile, err := f.Config.Load()
 	if cfgFile != nil {
 		return
 	}
@@ -82,7 +82,7 @@ func initConfig(cfg config.IConfig) {
 	}
 
 	cfgFile = &config.Config{}
-	if err := cfg.Save(cfgFile); err != nil {
+	if err := f.Config.Save(cfgFile); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

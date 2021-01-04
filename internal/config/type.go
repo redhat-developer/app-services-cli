@@ -1,5 +1,7 @@
 package config
 
+// IConfig is an interface which describes the functions
+// needed to read/write from a config
 type IConfig interface {
 	Load() (*Config, error)
 	Save(config *Config) error
@@ -7,6 +9,7 @@ type IConfig interface {
 	Location() (string, error)
 }
 
+// Config is a type which describes the properties which can be in the config
 type Config struct {
 	AccessToken  string           `json:"access_token" doc:"Bearer access token."`
 	RefreshToken string           `json:"refresh_token" doc:"Offline or refresh token."`

@@ -10,13 +10,14 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-// New creates a new config type
+// NewFile creates a new config type
 func NewFile() IConfig {
 	cfg := &File{}
 
 	return cfg
 }
 
+// File is a type which describes a config file
 type File struct{}
 
 // Load loads the configuration from the configuration file. If the configuration file doesn't exist
@@ -80,6 +81,7 @@ func (c *File) Remove() error {
 	return nil
 }
 
+// Location gets the path to the config file
 func (c *File) Location() (path string, err error) {
 	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
 		path = rhoasConfig

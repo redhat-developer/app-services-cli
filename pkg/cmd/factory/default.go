@@ -7,6 +7,9 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
+// New creates a new command factory
+// The command factory is available to all command packages
+// giving centralized access to the config and API connection
 func New(cliVersion string) *Factory {
 	cfgFile := config.NewFile()
 
@@ -63,6 +66,7 @@ func New(cliVersion string) *Factory {
 			return conn, nil
 		}
 
+		// TODO: Warning log on error
 		_ = cfgFile.Save(cfg)
 
 		return conn, nil
