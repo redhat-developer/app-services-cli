@@ -70,11 +70,11 @@ func createTopic(opts *Options) error {
 	}
 	err := topics.ValidateCredentials(topicOpts)
 	if err != nil {
-		return fmt.Errorf("Error creating credentials for topic: %w", err)
+		return fmt.Errorf("Unable to create credentials for topic: %w", err)
 	}
 	err = topics.CreateKafkaTopic(topicConfigs, topicOpts)
 	if err != nil {
-		return fmt.Errorf("Error creating topic: %w", err)
+		return fmt.Errorf("Unable to create topic: %w", err)
 	}
 
 	fmt.Fprintf(os.Stderr, "Topic %v created\n", opts.topicName)

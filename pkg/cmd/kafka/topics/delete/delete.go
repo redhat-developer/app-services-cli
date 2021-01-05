@@ -53,11 +53,11 @@ func deleteTopic(opts *Options) error {
 	fmt.Fprintf(os.Stderr, "Deleting topic %v\n", opts.topicName)
 	err := topics.ValidateCredentials(topicOpts)
 	if err != nil {
-		return fmt.Errorf("Error creating credentials for topic: %w", err)
+		return fmt.Errorf("Unable to create credentials for topic: %w", err)
 	}
 	err = topics.DeleteKafkaTopic(opts.topicName, topicOpts)
 	if err != nil {
-		return fmt.Errorf("Error deleting topic: %w", err)
+		return fmt.Errorf("Unable to delete topic: %w", err)
 	}
 
 	fmt.Fprintf(os.Stderr, "Topic %v deleted\n", opts.topicName)

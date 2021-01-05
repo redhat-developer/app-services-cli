@@ -49,7 +49,7 @@ func listTopic(opts *Options) error {
 
 	err := topics.ValidateCredentials(topicOpts)
 	if err != nil {
-		return fmt.Errorf("Error creating credentials for list: %w", err)
+		return fmt.Errorf("Unable to create credentials: %w", err)
 	}
 	fmt.Fprintln(os.Stderr, "Topics:")
 	err = topics.ListKafkaTopics(topicOpts)

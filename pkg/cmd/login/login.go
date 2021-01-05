@@ -215,7 +215,7 @@ func runLogin(opts *Options) error {
 
 		cfg, err := opts.Config.Load()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Could not load config: %v\n", err)
+			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
 
@@ -228,7 +228,7 @@ func runLogin(opts *Options) error {
 		cfg.RefreshToken = oauth2Token.RefreshToken
 
 		if err = opts.Config.Save(cfg); err != nil {
-			fmt.Fprintf(os.Stderr, "Could not save config: %v\n", err)
+			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
 
@@ -262,7 +262,7 @@ func runLogin(opts *Options) error {
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error starting server: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Unable to start server: %v\n", err)
 		}
 	}()
 	<-parentCtx.Done()

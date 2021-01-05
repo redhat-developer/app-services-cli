@@ -115,7 +115,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 func runCreate(opts *Options) error {
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	fmt.Fprintf(os.Stderr, "Creating service account with the following permissions: %v\n", opts.scopes)
@@ -169,7 +169,7 @@ func runCreate(opts *Options) error {
 
 	err = ioutil.WriteFile(fileName, dataToWrite, 0600)
 	if err != nil {
-		return fmt.Errorf("Could not save file: %w", err)
+		return err
 	}
 
 	fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v\n", fileName)

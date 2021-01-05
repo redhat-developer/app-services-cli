@@ -61,7 +61,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 func runList(opts *options) error {
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	client := connection.NewMASClient()
@@ -72,7 +72,7 @@ func runList(opts *options) error {
 	response, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Error retrieving Kafka instances: %w", apiErr)
+		return fmt.Errorf("Unable to list Kafka instances: %w", apiErr)
 	}
 
 	if response.Size == 0 {

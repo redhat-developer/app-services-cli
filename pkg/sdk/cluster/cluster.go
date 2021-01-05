@@ -250,7 +250,7 @@ func useKafka(cliconfig *config.Config, connection pkgConnection.IConnection) *c
 	response, _, apiErr := client.DefaultApi.ListKafkas(context.Background()).Execute()
 
 	if apiErr.Error() != "" {
-		fmt.Fprintf(os.Stderr, "Error retrieving Kafka clusters: %v\n", apiErr)
+		fmt.Fprintf(os.Stderr, "Unable to get Kafka clusters: %v\n", apiErr)
 		os.Exit(1)
 	}
 

@@ -47,8 +47,8 @@ func runInfo() error {
 
 	if !fileExists(kubeconfig) {
 		return fmt.Errorf(`
-		Command uses oc or kubectl login context file. 
-		Please make sure that you have configured access to your cluster and selected the right namespace`)
+Command uses oc or kubectl login context file. 
+Please make sure that you have configured access to your cluster and selected the right namespace`)
 	}
 
 	kubeClientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(

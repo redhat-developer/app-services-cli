@@ -99,15 +99,11 @@ func (b *Builder) Build() (connection *Connection, err error) {
 // the connection, and an error if something fails when trying to create it.
 func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err error) {
 	if b.clientID == "" {
-		return nil, fmt.Errorf(
-			"Missing client ID",
-		)
+		return nil, AuthErrorf("Missing client ID")
 	}
 
 	if b.accessToken == "" && b.refreshToken == "" {
-		return nil, fmt.Errorf(
-			"You are not logged in",
-		)
+		return nil, notLoggedInError()
 	}
 
 	tkn := token.Token{
@@ -120,7 +116,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 		return nil, err
 	}
 	if !tokenIsValid {
-		return nil, fmt.Errorf("Invalid token. Please log in again")
+		return nil, sessionExpiredError()
 	}
 
 	scopes := b.scopes
@@ -140,13 +136,13 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 	}
 	apiURL, err := url.Parse(rawAPIURL)
 	if err != nil {
-		err = fmt.Errorf("can't parse API URL '%s': %w", rawAPIURL, err)
+		err = AuthErrorf("unable to parse API URL '%s': %w", rawAPIURL, err)
 		return
 	}
 
 	authURL, err := url.Parse(b.authURL)
 	if err != nil {
-		err = fmt.Errorf("can't parse Auth URL '%s': %w", DefaultAuthURL, err)
+		err = AuthErrorf("unable to parse Auth URL '%s': %w", DefaultAuthURL, err)
 		return
 	}
 

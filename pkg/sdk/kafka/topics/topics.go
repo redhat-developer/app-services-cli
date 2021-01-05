@@ -28,7 +28,7 @@ type Options struct {
 func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err error) {
 	cfg, err := opts.Config.Load()
 	if err != nil {
-		return nil, nil, fmt.Errorf("Could not load config: %w", err)
+		return nil, nil, err
 	}
 
 	if cfg.Services.Kafka == nil || cfg.Services.Kafka.ClusterID == "" {
@@ -52,7 +52,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return nil, nil, fmt.Errorf("Could not create connection: %w", err)
+		return nil, nil, err
 	}
 
 	managedservices := connection.NewMASClient()
@@ -88,7 +88,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 func ValidateCredentials(opts *Options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
-		return fmt.Errorf("Could not load config: %w", err)
+		return err
 	}
 
 	if cfg.ServiceAuth.ClientID != "" && cfg.ServiceAuth.ClientSecret != "" {
@@ -97,7 +97,7 @@ func ValidateCredentials(opts *Options) error {
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 	client := connection.NewMASClient()
 	fmt.Fprint(os.Stderr, "\nNo Service credentials. \nCreating service account for CLI\n")

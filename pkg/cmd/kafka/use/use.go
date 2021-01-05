@@ -50,12 +50,12 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 func runUse(opts *options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
+		return err
 	}
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	client := connection.NewMASClient()
@@ -72,7 +72,7 @@ func runUse(opts *options) error {
 
 	cfg.Services.Kafka = &kafkaConfig
 	if err := opts.Config.Save(cfg); err != nil {
-		return fmt.Errorf("Unable to update config: %w", err)
+		return fmt.Errorf("Unable to use Kafka instance: %w", err)
 	}
 
 	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"\n", *res.Id)

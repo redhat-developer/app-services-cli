@@ -6,7 +6,6 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.2.4
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.7.0
-	github.com/antihax/optional v1.0.0
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
