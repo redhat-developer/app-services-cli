@@ -1,7 +1,6 @@
 package token
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -56,7 +55,7 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
 	if err != nil {
-		err = fmt.Errorf("can't parse token: %w", err)
+		err = Errorf(err.Error())
 		return
 	}
 	return token, nil
@@ -65,7 +64,7 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 func MapClaims(token *jwt.Token) (jwt.MapClaims, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		err := fmt.Errorf("expected map claims bug got %T", claims)
+		err := Errorf("expected map claims but got %T", claims)
 		return nil, err
 	}
 
@@ -83,7 +82,7 @@ func GetExpiry(token *jwt.Token, now time.Time) (expires bool,
 	if ok {
 		exp, ok = claim.(float64)
 		if !ok {
-			err = fmt.Errorf("expected floating point 'exp' but got %T", claim)
+			err = Errorf("expected floating point 'exp' but got %T", claim)
 			return
 		}
 	}

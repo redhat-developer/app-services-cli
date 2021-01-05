@@ -35,7 +35,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := opts.Config.Load()
 			if err != nil {
-				return fmt.Errorf("Error loading config: %w", err)
+				return err
 			}
 
 			if opts.id != "" {
@@ -61,14 +61,14 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 func runStatus(opts *Options) error {
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	client := connection.NewMASClient()
 
 	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Error retrieving Kafka instance: %w", apiErr)
+		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
 	}
 
 	type kafkaStatus struct {

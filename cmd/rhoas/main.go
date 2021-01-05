@@ -49,7 +49,7 @@ func main() {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	fmt.Fprintln(os.Stderr, err)
 	os.Exit(1)
 }
 

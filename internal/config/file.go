@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -32,17 +31,17 @@ func (c *File) Load() (*Config, error) {
 		return nil, err
 	}
 	if err != nil {
-		return nil, fmt.Errorf("can't check if config file '%s' exists: %w", file, err)
+		return nil, Errorf("unable to check if config file exists: %w", err)
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, fmt.Errorf("can't read config file '%s': %w", file, err)
+		return nil, Errorf("unable to read config file: %w", err)
 	}
 	var cfg Config
 	err = json.Unmarshal(data, &cfg)
 	if err != nil {
-		return nil, fmt.Errorf("can't parse config file '%s': %w", file, err)
+		return nil, Errorf("unable to parse config: %w", err)
 	}
 	return &cfg, nil
 }
@@ -55,11 +54,11 @@ func (c *File) Save(cfg *Config) error {
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
-		return fmt.Errorf("can't marshal config: %w", err)
+		return Errorf("unable to marshal config: %w", err)
 	}
 	err = ioutil.WriteFile(file, data, 0600)
 	if err != nil {
-		return fmt.Errorf("can't write file '%s': %w", file, err)
+		return Errorf(err.Error())
 	}
 	return nil
 }

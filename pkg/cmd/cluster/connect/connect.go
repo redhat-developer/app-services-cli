@@ -1,8 +1,6 @@
 package connect
 
 import (
-	"fmt"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
@@ -64,7 +62,7 @@ Using --forceSelect will ignore current command context make interactive prompt 
 func runBind(opts *Options) error {
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	cluster.ConnectToCluster(connection, opts.Config, opts.secretName, opts.kubeconfigLocation, opts.forceSelect)

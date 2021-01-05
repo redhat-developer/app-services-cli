@@ -40,12 +40,12 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 func runLogout(opts *Options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
+		return err
 	}
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Could not create connection: %w", err)
+		return err
 	}
 
 	err = connection.Logout(context.TODO())
@@ -61,7 +61,7 @@ func runLogout(opts *Options) error {
 
 	err = opts.Config.Save(cfg)
 	if err != nil {
-		return fmt.Errorf("Could not save config file: %w", err)
+		return err
 	}
 
 	return nil

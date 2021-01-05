@@ -70,12 +70,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 func runCreate(opts *Options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
+		return err
 	}
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	client := connection.NewMASClient()
@@ -89,10 +89,8 @@ func runCreate(opts *Options) error {
 	response, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Error while requesting new Kafka instance: %w", apiErr)
+		return fmt.Errorf("Unable to create Kafka instance: %w", apiErr)
 	}
-
-	fmt.Fprintf(os.Stderr, "Created new Kafka instance:\n")
 
 	switch opts.outputFormat {
 	case "json":
@@ -109,7 +107,7 @@ func runCreate(opts *Options) error {
 
 	cfg.Services.Kafka = kafkaCfg
 	if err := opts.Config.Save(cfg); err != nil {
-		return fmt.Errorf("Unable to automatically use Kafka instance: %w", err)
+		return fmt.Errorf("Unable to use Kafka instance: %w", err)
 	}
 
 	return nil

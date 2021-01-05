@@ -48,7 +48,7 @@ type IConnection interface {
 func (c *Connection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
 	refreshedTk, err := c.authClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {
-		return "", "", err
+		return "", "", &AuthError{err, ""}
 	}
 
 	if refreshedTk.AccessToken != c.Token.AccessToken {
@@ -64,7 +64,7 @@ func (c *Connection) RefreshTokens(ctx context.Context) (accessToken string, ref
 func (c *Connection) Logout(ctx context.Context) error {
 	err := c.authClient.Logout(ctx, c.clientID, "", "redhat-external", c.Token.RefreshToken)
 	if err != nil {
-		return err
+		return &AuthError{err, ""}
 	}
 
 	c.Token.AccessToken = ""

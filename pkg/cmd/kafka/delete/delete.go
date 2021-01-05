@@ -40,7 +40,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := opts.Config.Load()
 			if err != nil {
-				return fmt.Errorf("Error loading config: %w", err)
+				return err
 			}
 
 			if opts.id != "" {
@@ -66,12 +66,12 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 func runDelete(opts *options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
-		return fmt.Errorf("Error loading config: %w", err)
+		return err
 	}
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return fmt.Errorf("Can't create connection: %w", err)
+		return err
 	}
 
 	client := connection.NewMASClient()
@@ -110,7 +110,7 @@ func runDelete(opts *options) error {
 	_, _, apiErr := client.DefaultApi.DeleteKafkaById(context.Background(), kafkaID).Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Error deleting Kafka instance: %w", apiErr)
+		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)
 	}
 
 	fmt.Fprint(os.Stderr, "\nKafka instance has successfully been deleted.\n")
@@ -122,11 +122,11 @@ func runDelete(opts *options) error {
 	}
 
 	// the Kafka that was deleted is set as the user's current cluster
-	// since it was deleted it should be removed from the confgi
+	// since it was deleted it should be removed from the config
 	cfg.Services.Kafka = nil
 	err = opts.Config.Save(cfg)
 	if err != nil {
-		return fmt.Errorf("Could not save config: %w", err)
+		return err
 	}
 
 	return nil
