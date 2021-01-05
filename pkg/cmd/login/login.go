@@ -128,6 +128,7 @@ func runLogin(opts *Options) error {
 	httpClient := &http.Client{Transport: tr}
 
 	parentCtx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	ctx := oidc.ClientContext(parentCtx, httpClient)
 	provider, err := oidc.NewProvider(ctx, opts.authURL)
 	if err != nil {
@@ -243,8 +244,8 @@ func runLogin(opts *Options) error {
 		} else {
 			fmt.Fprintf(os.Stderr, "\nYou are now logged in as %v\n", userName)
 		}
+
 		cancel()
-		return
 	})
 
 	if opts.printURL {
