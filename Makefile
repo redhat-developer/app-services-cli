@@ -1,6 +1,10 @@
 .DEFAULT_GOAL := help
 SHELL = bash
 
+RHOAS_VERSION ?= $(shell git describe --tags 2>/dev/null || git rev-parse --short HEAD)
+
+GO_LDFLAGS := -X github.com/bf2fc6cc711aee1a0c2a/cli/internal/build.Version=$(RHOAS_VERSION) $(GO_LDFLAGS)
+
 BUILDFLAGS :=
 
 ifdef DEBUG
@@ -40,11 +44,11 @@ lint:
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
 binary:
-	go build $(BUILDFLAGS)-o ${binary} ./cmd/rhoas
+	go build $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" -o ${binary} ./cmd/rhoas
 .PHONY: binary
 
 install:
-	go install ./cmd/rhoas
+	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
 
 # Runs the integration tests.

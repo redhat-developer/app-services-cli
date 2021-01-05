@@ -147,8 +147,7 @@ Releases can be triggered directing using Github Releases.
 Before performing release, do the following:
 
 1. Run `./scripts/pullapi.sh` script to make sure that CLI is using latest version of the Managed Services API.
-2. Change `./pkg/version.go` that will correspond to the new version.
-3. Push all required changes to main branch
+2. Push all required changes to main branch
 
 After that, go to Github Releases and create the new release.
 

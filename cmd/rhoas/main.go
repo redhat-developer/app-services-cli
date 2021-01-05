@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )
@@ -20,10 +20,11 @@ var (
 )
 
 func main() {
-	cmdFactory := factory.New(version.CLI_VERSION)
+	buildVersion := build.Version
+	cmdFactory := factory.New(build.Version)
 	initConfig(cmdFactory)
 
-	rootCmd := root.NewRootCommand(cmdFactory, version.CLI_VERSION)
+	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
 
 	rootCmd.SilenceErrors = true
 	rootCmd.InitDefaultHelpCmd()
