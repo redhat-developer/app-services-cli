@@ -77,6 +77,8 @@ openapi/validate:
 openapi/generate:
 	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name managedservices -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
 	openapi-generator-cli validate -i openapi/managed-services-api.yaml
+	# generate mock
+	moq -out ./pkg/api/managedservices/default_api_mock.go ./pkg/api/managedservices DefaultApi
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
 

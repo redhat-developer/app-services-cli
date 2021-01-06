@@ -2,7 +2,7 @@ package config
 
 // IConfig is an interface which describes the functions
 // needed to read/write from a config
-//go:generate moq -out config_mock.go . IConfig
+//go:generate moq -out ./config_mock.go . IConfig
 type IConfig interface {
 	Load() (*Config, error)
 	Save(config *Config) error

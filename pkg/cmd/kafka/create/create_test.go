@@ -10,7 +10,7 @@ import (
 	"net/http"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/mockutil"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"

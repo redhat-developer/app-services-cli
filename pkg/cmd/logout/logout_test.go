@@ -4,10 +4,11 @@ package logout
 
 import (
 	"bytes"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"testing"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/mockutil"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 
