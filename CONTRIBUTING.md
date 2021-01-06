@@ -41,6 +41,10 @@ Builds an executable binary `rhoas` of the CLI in the project root. Executable o
 
 Formats source code.
 
+### `make generate`
+
+Generates code based on comments in code. This is primarily used to generate interface stubs using [moq](https://github.com/matryer/moq).
+
 ### Testing
 
 If you have the Go extension for VS Code, you can generate test stubs for a file, package or function. See [Go#Test](https://code.visualstudio.com/docs/languages/go#_test)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -29,6 +30,9 @@ type Options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+
+	Out io.Writer
+	Err io.Writer
 }
 
 // NewCreateCommand creates a new command for creating kafkas.
@@ -52,6 +56,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			if err := kafka.ValidateName(opts.name); err != nil {
 				return err
 			}
+
+			opts.Out = cmd.OutOrStdout()
+			opts.Err = cmd.ErrOrStderr()
 
 			return runCreate(opts)
 		},
@@ -95,10 +102,10 @@ func runCreate(opts *Options) error {
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
-		fmt.Println(string(data))
+		fmt.Fprintln(opts.Out, string(data))
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
-		fmt.Println(string(data))
+		fmt.Fprintln(opts.Out, string(data))
 	}
 
 	kafkaCfg := &config.KafkaConfig{

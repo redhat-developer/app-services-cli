@@ -1,10 +1,10 @@
 package mockutil
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"context"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
 func NewConfigMock(cfg *config.Config) config.IConfig {
@@ -26,7 +26,7 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 	}
 }
 
-func NewConnectionMock(conn *connection.Connection) connection.IConnection {
+func NewConnectionMock(conn *connection.Connection, apiClient *managedservices.APIClient) connection.IConnection {
 	return &connection.IConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
@@ -49,9 +49,15 @@ func NewConnectionMock(conn *connection.Connection) connection.IConnection {
 			return nil
 		},
 		NewMASClientFunc: func() *managedservices.APIClient {
-			return nil
+			return apiClient
 		},
 	}
+}
 
-	return &mockedConnection
+func NewKafkaRequestTypeMock(name string) managedservices.KafkaRequest {
+	var kafkaReq managedservices.KafkaRequest
+	kafkaReq.SetId("1")
+	kafkaReq.SetName(name)
+
+	return kafkaReq
 }
