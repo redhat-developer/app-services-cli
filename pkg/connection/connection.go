@@ -39,6 +39,7 @@ type Connection struct {
 	apiURL     *url.URL
 }
 
+//go:generate moq -out connection_mock.go . IConnection
 type IConnection interface {
 	RefreshTokens(ctx context.Context) (string, string, error)
 	Logout(ctx context.Context) error

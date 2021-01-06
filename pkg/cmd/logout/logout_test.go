@@ -4,18 +4,21 @@ package logout
 
 import (
 	"bytes"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"testing"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/mockutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/mock"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
 func TestNewLogoutCommand(t *testing.T) {
 	type args struct {
-		f *factory.Factory
+		cfg        *config.Config
+		connection *connection.Connection
 	}
 	tests := []struct {
 		name             string
@@ -28,39 +31,31 @@ func TestNewLogoutCommand(t *testing.T) {
 			wantAccessToken:  "",
 			wantRefreshToken: "",
 			args: args{
-				f: &factory.Factory{
-					Config: &mock.Config{
-						Cfg: &config.Config{
-							AccessToken:  "valid",
-							RefreshToken: "valid",
-						},
-					},
-					Connection: func() (connection.IConnection, error) {
-						return &mock.Connection{
-							AccessToken:  "valid",
-							RefreshToken: "valid",
-						}, nil
+				cfg: &config.Config{
+					AccessToken:  "valid",
+					RefreshToken: "valid",
+				},
+				connection: &connection.Connection{
+					Token: &token.Token{
+						AccessToken:  "valid",
+						RefreshToken: "valid",
 					},
 				},
 			},
 		},
 		{
-			name:             "Log out fails when tokens are expired",
+			name:             "Log out is unsuccessful when tokens are expired",
 			wantAccessToken:  "expired",
 			wantRefreshToken: "expired",
 			args: args{
-				f: &factory.Factory{
-					Config: &mock.Config{
-						Cfg: &config.Config{
-							AccessToken:  "expired",
-							RefreshToken: "expired",
-						},
-					},
-					Connection: func() (connection.IConnection, error) {
-						return &mock.Connection{
-							AccessToken:  "expired",
-							RefreshToken: "expired",
-						}, nil
+				cfg: &config.Config{
+					AccessToken:  "expired",
+					RefreshToken: "expired",
+				},
+				connection: &connection.Connection{
+					Token: &token.Token{
+						AccessToken:  "expired",
+						RefreshToken: "expired",
 					},
 				},
 			},
@@ -69,13 +64,19 @@ func TestNewLogoutCommand(t *testing.T) {
 	for _, tt := range tests {
 		// nolint
 		t.Run(tt.name, func(t *testing.T) {
-			cmd := NewLogoutCommand(tt.args.f)
+			factory := &factory.Factory{
+				Config: mockutil.NewConfigMock(tt.args.cfg),
+				Connection: func() (connection.IConnection, error) {
+					return mockutil.NewConnectionMock(tt.args.connection), nil
+				},
+			}
+
+			cmd := NewLogoutCommand(factory)
 			b := bytes.NewBufferString("")
 			cmd.SetOut(b)
-
 			_ = cmd.Execute()
 
-			cfg, _ := tt.args.f.Config.Load()
+			cfg, _ := factory.Config.Load()
 			if cfg.AccessToken != tt.wantAccessToken && cfg.RefreshToken != tt.wantRefreshToken {
 				t.Errorf("Expected access token and refresh tokens to be cleared in config")
 			}

@@ -38,8 +38,11 @@ help:
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
 lint:
-	golangci-lint run cmd/... pkg/...
+	golangci-lint run cmd/... pkg/... internal/...
 .PHONY: lint
+
+generate:
+	go generate ./...
 
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
