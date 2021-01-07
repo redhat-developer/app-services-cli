@@ -38,8 +38,11 @@ help:
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
 lint:
-	golangci-lint run cmd/... pkg/...
+	golangci-lint run cmd/... pkg/... internal/...
 .PHONY: lint
+
+generate:
+	go generate ./...
 
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
@@ -74,6 +77,8 @@ openapi/validate:
 openapi/generate:
 	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name managedservices -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
 	openapi-generator-cli validate -i openapi/managed-services-api.yaml
+	# generate mock
+	moq -out ./pkg/api/managedservices/default_api_mock.go ./pkg/api/managedservices DefaultApi
 	gofmt -w ${managedservices_client_dir}
 .PHONY: openapi/generate
 
