@@ -2,12 +2,12 @@ package delete
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 
 	"github.com/spf13/cobra"
@@ -19,12 +19,14 @@ type Options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 }
 
 // NewDeleteTopicCommand gets a new command for deleting kafka topic.
 func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config: f.Config,
+		Logger: f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -44,14 +46,20 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func deleteTopic(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	topicOpts := &topics.Options{
 		Connection: opts.Connection,
 		Config:     opts.Config,
 		Insecure:   opts.insecure,
+		Logger:     opts.Logger,
 	}
 
-	fmt.Fprintf(os.Stderr, "Deleting topic %v\n", opts.topicName)
-	err := topics.ValidateCredentials(topicOpts)
+	logger.Infof("Deleting topic %v", opts.topicName)
+	err = topics.ValidateCredentials(topicOpts)
 	if err != nil {
 		return fmt.Errorf("Unable to create credentials for topic: %w", err)
 	}
@@ -60,7 +68,7 @@ func deleteTopic(opts *Options) error {
 		return fmt.Errorf("Unable to delete topic: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v deleted\n", opts.topicName)
+	logger.Infof("Topic %v deleted", opts.topicName)
 
 	return nil
 }

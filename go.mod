@@ -10,7 +10,6 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/fatih/color v1.10.0
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/go-cmp v0.5.2 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20200805134727-ea32388e35c1
@@ -23,7 +22,6 @@ require (
 	github.com/segmentio/kafka-go v0.4.8
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/pflag v1.0.5
-	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
 	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6

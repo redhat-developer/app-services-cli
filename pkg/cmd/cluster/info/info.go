@@ -31,14 +31,19 @@ func NewInfoCommand(f *factory.Factory) *cobra.Command {
 		Short: "Prints information about your OpenShift cluster connection",
 		Long:  `Prints information about your OpenShift cluster connection`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			return runInfo()
+			return runInfo(f)
 		},
 	}
 
 	return cmd
 }
 
-func runInfo() error {
+func runInfo(f *factory.Factory) error {
+	logger, err := f.Logger()
+	if err != nil {
+		return err
+	}
+
 	var kubeconfig string
 
 	if home := homedir.HomeDir(); home != "" {
@@ -77,7 +82,7 @@ Please make sure that you have configured access to your cluster and selected th
 	} else {
 		operatorStatus = color.HiRedString("Not installed")
 	}
-	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(currentNamespace), operatorStatus)
+	logger.Info(statusMsg, color.HiGreenString(currentNamespace), operatorStatus)
 
 	return nil
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
@@ -50,6 +51,7 @@ var (
 type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 
 	output      string
 	force       bool
@@ -64,6 +66,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -113,12 +116,17 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	connection, err := opts.Connection()
 	if err != nil {
 		return err
 	}
 
-	fmt.Fprintf(os.Stderr, "Creating service account with the following permissions: %v\n", opts.scopes)
+	logger.Infof("Creating service account with the following permissions: %v", opts.scopes)
 
 	client := connection.NewMASClient()
 
@@ -157,14 +165,13 @@ func runCreate(opts *Options) error {
 		return fmt.Errorf("Could not create service account: %w", apiErr)
 	}
 
-	fmt.Fprintf(os.Stderr, "Writing credentials to %v\n", fileName)
+	logger.Infof("Writing credentials to %v\n", fileName)
 	fileContent := fmt.Sprintf(fileFormat, *response.ClientID, *response.ClientSecret)
 
 	dataToWrite := []byte(fileContent)
 
 	if pathExists(fileName) && !opts.force {
-		fmt.Fprintf(os.Stderr, "File '%v' already exist. Use --force flag to overwrite the file, or use the --output-file flag to choose a custom location\n", fileName)
-		return nil
+		return fmt.Errorf("file '%v' already exist. Use --force flag to overwrite the file, or use the --output-file flag to choose a custom location", fileName)
 	}
 
 	err = ioutil.WriteFile(fileName, dataToWrite, 0600)
@@ -172,7 +179,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	fmt.Fprintf(os.Stderr, "Successfully saved credentials to %v\n", fileName)
+	logger.Infof("Successfully saved credentials to %v", fileName)
 
 	return nil
 }

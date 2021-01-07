@@ -2,12 +2,12 @@ package create
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	topicflags "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 	"github.com/segmentio/kafka-go"
@@ -27,12 +27,14 @@ type Options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 }
 
 // NewCreateTopicCommand gets a new command for creating kafka topic.
 func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config: f.Config,
+		Logger: f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -55,10 +57,16 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func createTopic(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	topicOpts := &topics.Options{
 		Connection: opts.Connection,
 		Config:     opts.Config,
 		Insecure:   opts.insecure,
+		Logger:     opts.Logger,
 	}
 
 	topicConfigs := []kafka.TopicConfig{
@@ -68,7 +76,7 @@ func createTopic(opts *Options) error {
 			ReplicationFactor: int(opts.replicas),
 		},
 	}
-	err := topics.ValidateCredentials(topicOpts)
+	err = topics.ValidateCredentials(topicOpts)
 	if err != nil {
 		return fmt.Errorf("Unable to create credentials for topic: %w", err)
 	}
@@ -77,7 +85,7 @@ func createTopic(opts *Options) error {
 		return fmt.Errorf("Unable to create topic: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Topic %v created\n", opts.topicName)
+	logger.Infof("Topic %v created", opts.topicName)
 
 	return nil
 }

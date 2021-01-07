@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"io/ioutil"
 	"testing"
 
@@ -37,6 +38,16 @@ func TestNewCreateCommand(t *testing.T) {
 				name:         "test-kafka",
 				outputFormat: "json",
 				f: &factory.Factory{
+					Logger: func() (logging.Logger, error) {
+						loggerBuilder := logging.NewStdLoggerBuilder()
+						loggerBuilder = loggerBuilder.Debug(true)
+						logger, err := loggerBuilder.Build()
+						if err != nil {
+							return nil, err
+						}
+
+						return logger, nil
+					},
 					Config: mockutil.NewConfigMock(&config.Config{
 						AccessToken:  "valid",
 						RefreshToken: "valid",
@@ -77,6 +88,16 @@ func TestNewCreateCommand(t *testing.T) {
 				name:         "test-kafka",
 				outputFormat: "yaml",
 				f: &factory.Factory{
+					Logger: func() (logging.Logger, error) {
+						loggerBuilder := logging.NewStdLoggerBuilder()
+						loggerBuilder = loggerBuilder.Debug(true)
+						logger, err := loggerBuilder.Build()
+						if err != nil {
+							return nil, err
+						}
+
+						return logger, nil
+					},
 					Config: mockutil.NewConfigMock(&config.Config{
 						AccessToken:  "valid",
 						RefreshToken: "valid",
@@ -118,6 +139,16 @@ func TestNewCreateCommand(t *testing.T) {
 				name:         "test-kafka",
 				outputFormat: "xml",
 				f: &factory.Factory{
+					Logger: func() (logging.Logger, error) {
+						loggerBuilder := logging.NewStdLoggerBuilder()
+						loggerBuilder = loggerBuilder.Debug(true)
+						logger, err := loggerBuilder.Build()
+						if err != nil {
+							return nil, err
+						}
+
+						return logger, nil
+					},
 					Config: mockutil.NewConfigMock(&config.Config{
 						AccessToken:  "valid",
 						RefreshToken: "valid",

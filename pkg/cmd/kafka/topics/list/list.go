@@ -2,11 +2,11 @@ package list
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 	"github.com/spf13/cobra"
 )
@@ -14,6 +14,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 
 	output   string
 	insecure bool
@@ -24,6 +25,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -41,17 +43,23 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func listTopic(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	topicOpts := &topics.Options{
 		Connection: opts.Connection,
 		Config:     opts.Config,
 		Insecure:   opts.insecure,
+		Logger:     opts.Logger,
 	}
 
-	err := topics.ValidateCredentials(topicOpts)
+	err = topics.ValidateCredentials(topicOpts)
 	if err != nil {
 		return fmt.Errorf("Unable to create credentials: %w", err)
 	}
-	fmt.Fprintln(os.Stderr, "Topics:")
+	logger.Info("Topics:")
 	err = topics.ListKafkaTopics(topicOpts)
 	if err != nil {
 		return fmt.Errorf("Failed to perform list operation: %w", err)

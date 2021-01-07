@@ -5,11 +5,11 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -22,7 +22,9 @@ import (
 type Options struct {
 	Connection func() (connection.IConnection, error)
 	Config     config.IConfig
-	Insecure   bool
+	Logger     func() (logging.Logger, error)
+
+	Insecure bool
 }
 
 func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err error) {
@@ -86,6 +88,11 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 }
 
 func ValidateCredentials(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -100,7 +107,8 @@ func ValidateCredentials(opts *Options) error {
 		return err
 	}
 	client := connection.NewMASClient()
-	fmt.Fprint(os.Stderr, "\nNo Service credentials. \nCreating service account for CLI\n")
+	logger.Info("")
+	logger.Info("No Service credentials. \nCreating service account for CLI")
 	svcAcctDescription := "RHOAS-CLI Service Account"
 	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
 	a := client.DefaultApi.CreateServiceAccount(context.Background())
@@ -143,6 +151,11 @@ func DeleteKafkaTopic(topic string, opts *Options) error {
 }
 
 func ListKafkaTopics(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	conn, controllerConn, err := brokerConnect(opts)
 	if err != nil {
 		return err
@@ -159,7 +172,7 @@ func ListKafkaTopics(opts *Options) error {
 	for i := range partitions {
 		topicPartition := &partitions[i]
 		replicas := strconv.Itoa(len(topicPartition.Replicas))
-		fmt.Fprintf(os.Stderr, "Name: %v (Replicas: %v)\n",
+		logger.Infof("Name: %v (Replicas: %v)\n",
 			color.HiGreenString(topicPartition.Topic),
 			color.HiRedString(replicas))
 	}

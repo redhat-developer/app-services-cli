@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 
 	"github.com/spf13/cobra"
@@ -30,6 +30,7 @@ type Options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 
 	Out io.Writer
 	Err io.Writer
@@ -40,6 +41,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 
 		multiAZ: true,
 	}
@@ -75,6 +77,11 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -87,7 +94,7 @@ func runCreate(opts *Options) error {
 
 	client := connection.NewMASClient()
 
-	fmt.Fprintln(os.Stderr, "Creating Kafka instance")
+	logger.Debug("Creating Kafka instance")
 
 	kafkaRequest := managedservices.KafkaRequestPayload{Name: opts.name, Region: &opts.region, CloudProvider: &opts.provider, MultiAz: &opts.multiAZ}
 	a := client.DefaultApi.CreateKafka(context.Background())

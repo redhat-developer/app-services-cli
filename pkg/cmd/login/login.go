@@ -247,10 +247,11 @@ func runLogin(opts *Options) error {
 		accessTkn, _ := token.Parse(resp.OAuth2Token.AccessToken)
 		tknClaims, _ := token.MapClaims(accessTkn)
 		userName, ok := tknClaims["preferred_username"]
+		logger.Info("")
 		if !ok {
-			logger.Info("\nYou are now logged in")
+			logger.Info("You are now logged in")
 		} else {
-			logger.Infof("\nYou are now logged in as %v", userName)
+			logger.Infof("You are now logged in as %v", userName)
 		}
 
 		cancel()

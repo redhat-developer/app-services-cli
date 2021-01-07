@@ -5,18 +5,19 @@ package logout
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
 type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 }
 
 // NewLogoutCommand gets the command that's logs the current logged in user
@@ -24,6 +25,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -38,6 +40,11 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runLogout(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -54,7 +61,7 @@ func runLogout(opts *Options) error {
 		return fmt.Errorf("Unable to log out: %w", err)
 	}
 
-	fmt.Fprintln(os.Stderr, "Successfully logged out")
+	logger.Info("Successfully logged out")
 
 	cfg.AccessToken = ""
 	cfg.RefreshToken = ""
