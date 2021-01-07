@@ -7,7 +7,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/landoop/tableprinter"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -102,13 +103,12 @@ func runList(opts *options) error {
 	switch outputFormat {
 	case "json":
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
-		fmt.Print(string(data))
+		_ = dump.JSON(os.Stdout, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
-		fmt.Print(string(data))
+		_ = dump.YAML(os.Stdout, data)
 	default:
-		printer := tableprinter.New(os.Stdout)
-		printer.Print(kafkaList.Items)
+		dump.Table(os.Stdout, kafkaList.Items)
 		logger.Info("")
 	}
 
