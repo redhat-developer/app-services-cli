@@ -14,8 +14,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-
-	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -75,6 +74,7 @@ var urlAliases = map[string]string{
 
 type Options struct {
 	Config config.IConfig
+	Logger func() (logging.Logger, error)
 
 	url                   string
 	authURL               string
@@ -87,6 +87,7 @@ type Options struct {
 func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config: f.Config,
+		Logger: f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -109,6 +110,11 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 // nolint
 func runLogin(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	// If the value of the `--url` is any of the aliases then replace it with the corresponding
 	// real URL:
 	unparsedGatewayURL, ok := urlAliases[opts.url]
@@ -166,6 +172,7 @@ func runLogin(opts *Options) error {
 	}
 	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
 	authCodeURL := oauthCfg.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
+	logger.Debugf("Created Authorization URL: %v", authCodeURL)
 
 	sm := http.NewServeMux()
 	server := http.Server{
@@ -178,6 +185,7 @@ func runLogin(opts *Options) error {
 	})
 
 	sm.HandleFunc("/sso-redhat-callback", func(w http.ResponseWriter, r *http.Request) {
+		logger.Debug("Redirected to callback URL")
 		if r.URL.Query().Get("state") != state {
 			http.Error(w, "state did not match", http.StatusBadRequest)
 			return
@@ -216,7 +224,7 @@ func runLogin(opts *Options) error {
 
 		cfg, err := opts.Config.Load()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			logger.Error(err)
 			os.Exit(1)
 		}
 
@@ -229,7 +237,7 @@ func runLogin(opts *Options) error {
 		cfg.RefreshToken = oauth2Token.RefreshToken
 
 		if err = opts.Config.Save(cfg); err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			logger.Error(err)
 			os.Exit(1)
 		}
 
@@ -240,19 +248,18 @@ func runLogin(opts *Options) error {
 		tknClaims, _ := token.MapClaims(accessTkn)
 		userName, ok := tknClaims["preferred_username"]
 		if !ok {
-			fmt.Fprintln(os.Stderr, "\nYou are now logged in")
+			logger.Info("\nYou are now logged in")
 		} else {
-			fmt.Fprintf(os.Stderr, "\nYou are now logged in as %v\n", userName)
+			logger.Infof("\nYou are now logged in as %v", userName)
 		}
 
 		cancel()
 	})
 
 	if opts.printURL {
-		fmt.Println(heredoc.Docf(`
-		Login URL: 
-		
-		%v`, authCodeURL))
+		logger.Info("Open the following URL in your browser to login:")
+		logger.Info("")
+		fmt.Println(authCodeURL)
 	} else {
 		openBrowserExec, _ := browser.GetOpenBrowserCommand(authCodeURL)
 		err = openBrowserExec.Run()
@@ -263,7 +270,7 @@ func runLogin(opts *Options) error {
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
-			fmt.Fprintf(os.Stderr, "Unable to start server: %v\n", err)
+			logger.Errorf("Unable to start server: %v\n", err)
 		}
 	}()
 	<-parentCtx.Done()
