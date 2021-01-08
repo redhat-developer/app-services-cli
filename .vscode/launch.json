@@ -52,7 +52,7 @@
       ]
     },
     {
-      "name": "Describe Kafka",
+      "name": "Describe Kafka JSON",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -60,7 +60,23 @@
       "env": {},
       "args": [
         "kafka",
-        "describe"
+        "describe",
+        "-o",
+        "json"
+      ]
+    },
+    {
+      "name": "Describe Kafka YML",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "kafka",
+        "describe",
+        "-o",
+        "yml"
       ]
     },
     {

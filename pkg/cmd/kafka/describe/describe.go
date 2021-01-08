@@ -1,10 +1,10 @@
 package describe
 
 import (
-	"os"
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/MakeNowJust/heredoc"
 

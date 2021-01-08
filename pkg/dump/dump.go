@@ -1,12 +1,15 @@
+// Package dump contains functions used to dump documents to JSON, YAML and Table formats
 package dump
 
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/landoop/tableprinter"
 	"io"
 	"os"
 	"os/exec"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+	"github.com/landoop/tableprinter"
 
 	"gitlab.com/c0b/go-ordered-json"
 	"gopkg.in/yaml.v2"
@@ -37,7 +40,7 @@ func YAML(stream io.Writer, body []byte) error {
 	if len(body) == 0 {
 		return nil
 	}
-	data := ordered.NewOrderedMap()
+	data := make(map[interface{}]interface{})
 	err := yaml.Unmarshal(body, data)
 	if err != nil {
 		return dumpBytes(stream, body)
@@ -45,6 +48,7 @@ func YAML(stream io.Writer, body []byte) error {
 	if haveYQ() {
 		return dumpYQ(stream, body)
 	}
+
 	return dumpYAML(stream, data)
 }
 
@@ -82,9 +86,9 @@ func dumpYQ(stream io.Writer, data []byte) error {
 	return yq.Run()
 }
 
-func dumpJSON(stream io.Writer, data *ordered.OrderedMap) error {
+func dumpJSON(stream io.Writer, data interface{}) error {
 	encoder := json.NewEncoder(stream)
-	encoder.SetIndent("", "  ")
+	encoder.SetIndent("", cmdutil.DefaultJSONIndent)
 	return encoder.Encode(data)
 }
 
