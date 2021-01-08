@@ -79,6 +79,7 @@ type Options struct {
 	url                   string
 	authURL               string
 	clientID              string
+	scopes                []string
 	insecureSkipTLSVerify bool
 	printURL              bool
 }
@@ -104,6 +105,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, "OpenID client identifier.")
 	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the login URL to the console so you can control which browser to open it in. Useful if you need to log in with a user that is different to the one logged in on your default web browser.")
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, "OpenID scope. If this option is used it will override the default scopes. Can be repeated multiple times to specify multiple scopes.")
 
 	return cmd
 }
@@ -154,7 +156,7 @@ func runLogin(opts *Options) error {
 		ClientID:    opts.clientID,
 		Endpoint:    provider.Endpoint(),
 		RedirectURL: redirectURL.String(),
-		Scopes:      []string{oidc.ScopeOpenID},
+		Scopes:      opts.scopes,
 	}
 
 	oidcCfg := &oidc.Config{
@@ -232,7 +234,7 @@ func runLogin(opts *Options) error {
 		cfg.ClientID = opts.clientID
 		cfg.AuthURL = opts.authURL
 		cfg.URL = gatewayURL.String()
-		cfg.Scopes = oauthCfg.Scopes
+		cfg.Scopes = opts.scopes
 		cfg.AccessToken = oauth2Token.AccessToken
 		cfg.RefreshToken = oauth2Token.RefreshToken
 
