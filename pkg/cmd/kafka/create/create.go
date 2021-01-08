@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"io"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -109,10 +110,10 @@ func runCreate(opts *Options) error {
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
-		fmt.Fprintln(opts.Out, string(data))
+		_ = dump.JSON(opts.Out, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
-		fmt.Fprintln(opts.Out, string(data))
+		_ = dump.YAML(opts.Out, data)
 	}
 
 	kafkaCfg := &config.KafkaConfig{

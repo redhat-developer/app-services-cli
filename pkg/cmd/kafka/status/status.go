@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/landoop/tableprinter"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
 	"github.com/spf13/cobra"
 
@@ -83,8 +83,7 @@ func runStatus(opts *Options) error {
 		Status: *res.Status,
 	}
 
-	printer := tableprinter.New(os.Stdout)
-	printer.Print(statusInfo)
+	dump.Table(os.Stdout, statusInfo)
 
 	return nil
 }
