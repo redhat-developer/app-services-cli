@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"sync"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -40,17 +39,11 @@ type KeycloakConnection struct {
 	keycloak   gocloak.GoCloak
 	apiURL     *url.URL
 	logger     logging.Logger
-	tokenMutex *sync.Mutex
 }
 
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
-	// ensure this method is not executed concurrently,
-	// as multiple attributes of the connection are updated
-	c.tokenMutex.Lock()
-	defer c.tokenMutex.Unlock()
-
 	c.logger.Debug("Refreshing access tokens")
 	refreshedTk, err := c.keycloak.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {
@@ -72,11 +65,6 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken str
 // Invalidating and removing the access and refresh tokens
 // The user will have to log in again to access the API
 func (c *KeycloakConnection) Logout(ctx context.Context) error {
-	// ensure this method is not executed concurrently,
-	// as multiple attributes of the connection are updated
-	c.tokenMutex.Lock()
-	defer c.tokenMutex.Unlock()
-
 	err := c.keycloak.Logout(ctx, c.clientID, "", "redhat-external", c.Token.RefreshToken)
 	if err != nil {
 		return &AuthError{err, ""}

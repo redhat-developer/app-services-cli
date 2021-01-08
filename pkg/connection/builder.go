@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
-	"sync"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 
@@ -211,7 +210,6 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		keycloak:   keycloak,
 		Token:      &tkn,
 		logger:     b.logger,
-		tokenMutex: &sync.Mutex{},
 	}
 
 	return connection, nil
