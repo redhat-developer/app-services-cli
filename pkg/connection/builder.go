@@ -5,10 +5,12 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"sync"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 
 	"github.com/Nerzal/gocloak/v7"
 
@@ -208,6 +210,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 		authClient: authClient,
 		Token:      &tkn,
 		logger:     b.logger,
+		tokenMutex: &sync.Mutex{},
 	}
 
 	return connection, nil

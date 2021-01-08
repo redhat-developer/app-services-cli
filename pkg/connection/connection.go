@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sync"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -39,6 +40,7 @@ type Connection struct {
 	authClient gocloak.GoCloak
 	apiURL     *url.URL
 	logger     logging.Logger
+	tokenMutex *sync.Mutex
 }
 
 //go:generate moq -out connection_mock.go . IConnection
@@ -49,6 +51,11 @@ type IConnection interface {
 }
 
 func (c *Connection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
+	// ensure this method is not executed concurrently,
+	// as multiple attributes of the connection are updated
+	c.tokenMutex.Lock()
+	defer c.tokenMutex.Unlock()
+
 	c.logger.Debug("Refreshing access tokens")
 	refreshedTk, err := c.authClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {
