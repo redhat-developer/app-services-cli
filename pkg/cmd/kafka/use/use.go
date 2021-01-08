@@ -3,7 +3,6 @@ package use
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/MakeNowJust/heredoc"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
 type options struct {
@@ -19,12 +19,14 @@ type options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -48,6 +50,11 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runUse(opts *options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -75,7 +82,7 @@ func runUse(opts *options) error {
 		return fmt.Errorf("Unable to use Kafka instance: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Using Kafka instance \"%v\"\n", *res.Id)
+	logger.Infof("Using Kafka instance \"%v\"\n", *res.Id)
 
 	return nil
 }

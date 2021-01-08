@@ -4,6 +4,7 @@ package logout
 
 import (
 	"bytes"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"testing"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -69,6 +70,16 @@ func TestNewLogoutCommand(t *testing.T) {
 				Config: mockutil.NewConfigMock(tt.args.cfg),
 				Connection: func() (connection.IConnection, error) {
 					return mockutil.NewConnectionMock(tt.args.connection, nil), nil
+				},
+				Logger: func() (logging.Logger, error) {
+					loggerBuilder := logging.NewStdLoggerBuilder()
+					loggerBuilder = loggerBuilder.Debug(true)
+					logger, err := loggerBuilder.Build()
+					if err != nil {
+						return nil, err
+					}
+
+					return logger, nil
 				},
 			}
 

@@ -3,7 +3,8 @@ package delete
 import (
 	"context"
 	"fmt"
-	"os"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/MakeNowJust/heredoc"
 
@@ -19,6 +20,7 @@ type options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 }
 
 // NewDeleteCommand command for deleting kafkas.
@@ -26,6 +28,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -64,6 +67,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -102,18 +110,19 @@ func runDelete(opts *options) error {
 	}
 
 	if confirmedKafkaID != kafkaID {
-		fmt.Fprintln(os.Stderr, "The ID you entered does not match the ID of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
+		logger.Info("The ID you entered does not match the ID of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
 		return nil
 	}
 
-	fmt.Fprintf(os.Stderr, "Deleting Kafka instance with ID '%v'.\n", kafkaID)
+	logger.Infof("Deleting Kafka instance with ID '%v'.\n", kafkaID)
 	_, _, apiErr := client.DefaultApi.DeleteKafkaById(context.Background(), kafkaID).Execute()
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)
 	}
 
-	fmt.Fprint(os.Stderr, "\nKafka instance has successfully been deleted.\n")
+	logger.Info("")
+	logger.Info("Kafka instance has successfully been deleted")
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

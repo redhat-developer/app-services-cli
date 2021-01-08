@@ -14,6 +14,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"gopkg.in/yaml.v2"
 
@@ -27,6 +28,7 @@ type options struct {
 
 	Config     config.IConfig
 	Connection func() (connection.IConnection, error)
+	Logger     func() (logging.Logger, error)
 }
 
 // NewListCommand creates a new command for listing kafkas.
@@ -36,6 +38,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		limit:      100,
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -59,6 +62,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	connection, err := opts.Connection()
 	if err != nil {
 		return err
@@ -76,7 +84,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 {
-		fmt.Fprintln(os.Stderr, "No Kafka instances found.")
+		logger.Info("No Kafka instances found.")
 		return nil
 	}
 
@@ -87,7 +95,7 @@ func runList(opts *options) error {
 	outputFormat := opts.outputFormat
 
 	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
-		fmt.Fprintf(os.Stderr, "Could not unmarshal Kakfa items into table, defaulting to JSON: %v\n", err)
+		logger.Infof("Could not unmarshal Kakfa items into table, defaulting to JSON: %v", err)
 		outputFormat = "json"
 	}
 
@@ -101,7 +109,7 @@ func runList(opts *options) error {
 	default:
 		printer := tableprinter.New(os.Stdout)
 		printer.Print(kafkaList.Items)
-		fmt.Fprint(os.Stderr, "\n")
+		logger.Info("")
 	}
 
 	return nil

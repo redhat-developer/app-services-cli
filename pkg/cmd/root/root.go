@@ -1,7 +1,9 @@
 package root
 
 import (
+	"flag"
 	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/arguments"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/docs"
@@ -11,6 +13,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/logout"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command {
@@ -18,14 +21,20 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 		Use:   "rhoas <command> <subcommand> [flags]",
 		Short: "rhoas cli",
 		Long:  "Work with your Managed Services",
+
 		Example: heredoc.Doc(`
+			$ rhas login
+			$ rhoas serviceaccount
 			$ rhoas kafka create
-			$ rhoas kafka list
-			$ rhoas kafka use
 		`),
 	}
 
 	cmd.Version = version
+
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+
+	fs := cmd.PersistentFlags()
+	arguments.AddDebugFlag(fs)
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(cmdFactory))
