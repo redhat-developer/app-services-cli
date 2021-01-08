@@ -20,7 +20,7 @@ import (
 )
 
 type Options struct {
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Config     config.IConfig
 	Logger     func() (logging.Logger, error)
 
@@ -57,7 +57,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 		return nil, nil, err
 	}
 
-	managedservices := connection.NewMASClient()
+	managedservices := connection.NewAPIClient()
 	kafkaInstance, _, apiErr := managedservices.DefaultApi.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID).Execute()
 	if apiErr.Error() != "" {
 		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", apiErr)
@@ -106,7 +106,7 @@ func ValidateCredentials(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 	logger.Info("")
 	logger.Info("No Service credentials. \nCreating service account for CLI")
 	svcAcctDescription := "RHOAS-CLI Service Account"

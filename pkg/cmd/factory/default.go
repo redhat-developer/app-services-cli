@@ -12,11 +12,30 @@ import (
 // New creates a new command factory
 // The command factory is available to all command packages
 // giving centralized access to the config and API connection
+// nolint:funlen
 func New(cliVersion string) *Factory {
 	var logger logging.Logger
 	cfgFile := config.NewFile()
 
-	connectionFunc := func() (connection.IConnection, error) {
+	loggerFunc := func() (logging.Logger, error) {
+		if logger != nil {
+			return logger, nil
+		}
+
+		loggerBuilder := logging.NewStdLoggerBuilder()
+		debugEnabled := debug.Enabled()
+		loggerBuilder = loggerBuilder.Debug(debugEnabled)
+
+		logger, err := loggerBuilder.Build()
+
+		if err != nil {
+			return nil, err
+		}
+
+		return logger, nil
+	}
+
+	connectionFunc := func() (connection.Connection, error) {
 		cfg, err := cfgFile.Load()
 		if err != nil {
 			return nil, err
@@ -46,6 +65,12 @@ func New(cliVersion string) *Factory {
 
 		builder.WithInsecure(cfg.Insecure)
 
+		// create a logger if it has not already been created
+		logger, err = loggerFunc()
+		if err != nil {
+			return nil, err
+		}
+
 		conn, err := builder.Build()
 		if err != nil {
 			return nil, err
@@ -74,22 +99,6 @@ func New(cliVersion string) *Factory {
 		_ = cfgFile.Save(cfg)
 
 		return conn, nil
-	}
-
-	loggerFunc := func() (logging.Logger, error) {
-		if logger != nil {
-			return logger, nil
-		}
-
-		loggerBuilder := logging.NewStdLoggerBuilder()
-		debugEnabled := debug.Enabled()
-		loggerBuilder = loggerBuilder.Debug(debugEnabled)
-		logger, err := loggerBuilder.Build()
-		if err != nil {
-			return nil, err
-		}
-
-		return logger, nil
 	}
 
 	return &Factory{

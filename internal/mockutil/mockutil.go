@@ -2,6 +2,7 @@ package mockutil
 
 import (
 	"context"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -26,8 +27,8 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 	}
 }
 
-func NewConnectionMock(conn *connection.Connection, apiClient *managedservices.APIClient) connection.IConnection {
-	return &connection.IConnectionMock{
+func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *managedservices.APIClient) connection.Connection {
+	return &connection.ConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
 				return "", "", connection.ErrNotLoggedIn
@@ -48,7 +49,7 @@ func NewConnectionMock(conn *connection.Connection, apiClient *managedservices.A
 
 			return nil
 		},
-		NewMASClientFunc: func() *managedservices.APIClient {
+		NewAPIClientFunc: func() *managedservices.APIClient {
 			return apiClient
 		},
 	}

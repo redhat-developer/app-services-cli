@@ -12,7 +12,7 @@ type Factory struct {
 	// Interface to read/write to the config
 	Config config.IConfig
 	// Creates a connection to the API
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	// Returns a logger to create leveled logs in the application
 	Logger func() (logging.Logger, error)
 }

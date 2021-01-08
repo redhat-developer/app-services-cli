@@ -9,23 +9,28 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
+
 	"github.com/Nerzal/gocloak/v7"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
 // Builder contains the configuration and logic needed to connect to `api.openshift.com`.
 // Don't create instances of this type directly, use the NewBulder function instead
 type Builder struct {
-	trustedCAs       *x509.CertPool
-	insecure         bool
-	accessToken      string
-	refreshToken     string
-	clientID         string
-	scopes           []string
-	apiURL           string
-	authURL          string
-	transportWrapper TransportWrapper
+	trustedCAs        *x509.CertPool
+	insecure          bool
+	disableKeepAlives bool
+	accessToken       string
+	refreshToken      string
+	clientID          string
+	scopes            []string
+	apiURL            string
+	authURL           string
+	logger            logging.Logger
+	transportWrapper  TransportWrapper
 }
 
 // TransportWrapper is a wrapper for a transport of type http.RoundTripper.
@@ -64,6 +69,11 @@ func (b *Builder) WithTransportWrapper(transportWrapper TransportWrapper) *Build
 	return b
 }
 
+func (b *Builder) WithLogger(logger logging.Logger) *Builder {
+	b.logger = logger
+	return b
+}
+
 func (b *Builder) WithURL(url string) *Builder {
 	b.apiURL = url
 	return b
@@ -84,20 +94,28 @@ func (b *Builder) WithScopes(scopes ...string) *Builder {
 	return b
 }
 
+// DisableKeepAlives disables HTTP keep-alives with the server. This is unrelated to similarly
+// named TCP keep-alives.
+func (b *Builder) DisableKeepAlives(flag bool) *Builder {
+	b.disableKeepAlives = flag
+	return b
+}
+
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
 //
 // This operation is potentially lengthy, as it may require network communications. Consider using a
 // context and the BuildContext method.
-func (b *Builder) Build() (connection *Connection, err error) {
+func (b *Builder) Build() (connection *KeycloakConnection, err error) {
 	return b.BuildContext(context.Background())
 }
 
 // BuildContext uses the configuration stored in the builder to create a new connection. The builder
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
-func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err error) {
+// nolint:funlen
+func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnection, err error) {
 	if b.clientID == "" {
 		return nil, AuthErrorf("Missing client ID")
 	}
@@ -126,6 +144,17 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 		scopes = make([]string, len(b.scopes))
 		for i := range b.scopes {
 			scopes[i] = b.scopes[i]
+		}
+	}
+
+	if b.logger == nil {
+		loggerBuilder := logging.NewStdLoggerBuilder()
+		debugEnabled := debug.Enabled()
+		loggerBuilder = loggerBuilder.Debug(debugEnabled)
+
+		b.logger, err = loggerBuilder.Build()
+		if err != nil {
+			return nil, err
 		}
 	}
 
@@ -165,21 +194,22 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
 
-	authClient := gocloak.NewClient(baseAuthURL)
-	restyClient := *authClient.RestyClient()
+	keycloak := gocloak.NewClient(baseAuthURL)
+	restyClient := *keycloak.RestyClient()
 	// #nosec 402
 	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
-	authClient.SetRestyClient(&restyClient)
+	keycloak.SetRestyClient(&restyClient)
 
-	connection = &Connection{
+	connection = &KeycloakConnection{
 		insecure:   b.insecure,
 		trustedCAs: b.trustedCAs,
 		clientID:   b.clientID,
 		scopes:     scopes,
 		apiURL:     apiURL,
 		client:     client,
-		authClient: authClient,
+		keycloak:   keycloak,
 		Token:      &tkn,
+		logger:     b.logger,
 	}
 
 	return connection, nil
@@ -193,7 +223,8 @@ func (b *Builder) createTransport() (transport http.RoundTripper) {
 			InsecureSkipVerify: b.insecure,
 			RootCAs:            b.trustedCAs,
 		},
-		Proxy: http.ProxyFromEnvironment,
+		Proxy:             http.ProxyFromEnvironment,
+		DisableKeepAlives: b.disableKeepAlives,
 	}
 
 	// Wrap the transport with the round trippers provided by the user:
