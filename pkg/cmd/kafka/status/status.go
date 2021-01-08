@@ -18,7 +18,7 @@ type Options struct {
 	id string
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
@@ -64,7 +64,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
 	if apiErr.Error() != "" {

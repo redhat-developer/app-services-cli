@@ -20,7 +20,7 @@ import (
 func TestNewLogoutCommand(t *testing.T) {
 	type args struct {
 		cfg        *config.Config
-		connection *connection.Connection
+		connection *connection.KeycloakConnection
 	}
 	tests := []struct {
 		name             string
@@ -37,7 +37,7 @@ func TestNewLogoutCommand(t *testing.T) {
 					AccessToken:  "valid",
 					RefreshToken: "valid",
 				},
-				connection: &connection.Connection{
+				connection: &connection.KeycloakConnection{
 					Token: &token.Token{
 						AccessToken:  "valid",
 						RefreshToken: "valid",
@@ -54,7 +54,7 @@ func TestNewLogoutCommand(t *testing.T) {
 					AccessToken:  "expired",
 					RefreshToken: "expired",
 				},
-				connection: &connection.Connection{
+				connection: &connection.KeycloakConnection{
 					Token: &token.Token{
 						AccessToken:  "expired",
 						RefreshToken: "expired",
@@ -68,7 +68,7 @@ func TestNewLogoutCommand(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			factory := &factory.Factory{
 				Config: mockutil.NewConfigMock(tt.args.cfg),
-				Connection: func() (connection.IConnection, error) {
+				Connection: func() (connection.Connection, error) {
 					return mockutil.NewConnectionMock(tt.args.connection, nil), nil
 				},
 				Logger: func() (logging.Logger, error) {

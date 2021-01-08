@@ -26,7 +26,7 @@ type Options struct {
 	replicas   int32
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 }
 

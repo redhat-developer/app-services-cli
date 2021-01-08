@@ -108,14 +108,15 @@ func (b *Builder) DisableKeepAlives(flag bool) *Builder {
 //
 // This operation is potentially lengthy, as it may require network communications. Consider using a
 // context and the BuildContext method.
-func (b *Builder) Build() (connection *Connection, err error) {
+func (b *Builder) Build() (connection *KeycloakConnection, err error) {
 	return b.BuildContext(context.Background())
 }
 
 // BuildContext uses the configuration stored in the builder to create a new connection. The builder
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
-func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err error) {
+// nolint:funlen
+func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnection, err error) {
 	if b.clientID == "" {
 		return nil, AuthErrorf("Missing client ID")
 	}
@@ -194,20 +195,20 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
 
-	authClient := gocloak.NewClient(baseAuthURL)
-	restyClient := *authClient.RestyClient()
+	keycloak := gocloak.NewClient(baseAuthURL)
+	restyClient := *keycloak.RestyClient()
 	// #nosec 402
 	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
-	authClient.SetRestyClient(&restyClient)
+	keycloak.SetRestyClient(&restyClient)
 
-	connection = &Connection{
+	connection = &KeycloakConnection{
 		insecure:   b.insecure,
 		trustedCAs: b.trustedCAs,
 		clientID:   b.clientID,
 		scopes:     scopes,
 		apiURL:     apiURL,
 		client:     client,
-		authClient: authClient,
+		keycloak:   keycloak,
 		Token:      &tkn,
 		logger:     b.logger,
 		tokenMutex: &sync.Mutex{},

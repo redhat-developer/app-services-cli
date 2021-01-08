@@ -39,7 +39,7 @@ var MKCRMeta = metav1.TypeMeta{
 	APIVersion: "rhoas.redhat.com/v1",
 }
 
-func ConnectToCluster(connection pkgConnection.IConnection,
+func ConnectToCluster(connection pkgConnection.Connection,
 	config config.IConfig,
 	secretName string,
 	kubeConfigCustomLocation string,
@@ -94,7 +94,7 @@ func ConnectToCluster(connection pkgConnection.IConnection,
 
 	kafkaCfg := cfg.Services.Kafka
 
-	managedservices := connection.NewMASClient()
+	managedservices := connection.NewAPIClient()
 	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID).Execute()
 
 	if err != nil {
@@ -121,8 +121,8 @@ func ConnectToCluster(connection pkgConnection.IConnection,
 
 }
 
-func CreateCredentials(connection pkgConnection.IConnection) *managedservices.ServiceAccount {
-	client := connection.NewMASClient()
+func CreateCredentials(connection pkgConnection.Connection) *managedservices.ServiceAccount {
+	client := connection.NewAPIClient()
 
 	t := time.Now()
 	serviceAcct := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
@@ -245,8 +245,8 @@ func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
 	return true
 }
 
-func useKafka(cliconfig *config.Config, connection pkgConnection.IConnection) *config.Config {
-	client := connection.NewMASClient()
+func useKafka(cliconfig *config.Config, connection pkgConnection.Connection) *config.Config {
+	client := connection.NewAPIClient()
 	response, _, apiErr := client.DefaultApi.ListKafkas(context.Background()).Execute()
 
 	if apiErr.Error() != "" {

@@ -18,7 +18,7 @@ type options struct {
 	id string
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 }
 
@@ -65,7 +65,7 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
 	if apiErr.Error() != "" {

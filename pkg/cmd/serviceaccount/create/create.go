@@ -50,7 +50,7 @@ var (
 
 type Options struct {
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 
 	output      string
@@ -128,7 +128,7 @@ func runCreate(opts *Options) error {
 
 	logger.Infof("Creating service account with the following permissions: %v", opts.scopes)
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	var fileFormat string
 	var fileName string

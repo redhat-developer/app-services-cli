@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"io"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -30,7 +31,7 @@ type Options struct {
 	outputFormat string
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 
 	Out io.Writer
@@ -93,7 +94,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	logger.Debug("Creating Kafka instance")
 

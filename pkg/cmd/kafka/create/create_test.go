@@ -52,7 +52,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.IConnection, error) {
+					Connection: func() (connection.Connection, error) {
 						mockDefaultAPI := &managedservices.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
 							req := managedservices.ApiCreateKafkaRequest{
@@ -70,7 +70,7 @@ func TestNewCreateCommand(t *testing.T) {
 							DefaultApi: mockDefaultAPI,
 						}
 
-						mockConnection := mockutil.NewConnectionMock(&connection.Connection{
+						mockConnection := mockutil.NewConnectionMock(&connection.KeycloakConnection{
 							Token: &token.Token{
 								AccessToken:  "valid",
 								RefreshToken: "valid",
@@ -102,7 +102,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.IConnection, error) {
+					Connection: func() (connection.Connection, error) {
 						mockDefaultAPI := &managedservices.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
 							req := managedservices.ApiCreateKafkaRequest{
@@ -120,7 +120,7 @@ func TestNewCreateCommand(t *testing.T) {
 							DefaultApi: mockDefaultAPI,
 						}
 
-						mockConnection := mockutil.NewConnectionMock(&connection.Connection{
+						mockConnection := mockutil.NewConnectionMock(&connection.KeycloakConnection{
 							Token: &token.Token{
 								AccessToken:  "valid",
 								RefreshToken: "valid",
@@ -153,7 +153,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.IConnection, error) {
+					Connection: func() (connection.Connection, error) {
 						mockDefaultAPI := &managedservices.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
 							req := managedservices.ApiCreateKafkaRequest{
@@ -171,7 +171,7 @@ func TestNewCreateCommand(t *testing.T) {
 							DefaultApi: mockDefaultAPI,
 						}
 
-						mockConnection := mockutil.NewConnectionMock(&connection.Connection{
+						mockConnection := mockutil.NewConnectionMock(&connection.KeycloakConnection{
 							Token: &token.Token{
 								AccessToken:  "valid",
 								RefreshToken: "valid",

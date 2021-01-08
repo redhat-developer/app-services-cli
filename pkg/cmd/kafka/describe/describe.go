@@ -23,7 +23,7 @@ type options struct {
 	outputFormat string
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 }
 
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
@@ -80,7 +80,7 @@ func runDescribe(opts *options) error {
 		return err
 	}
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	response, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
 

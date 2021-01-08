@@ -35,7 +35,7 @@ func New(cliVersion string) *Factory {
 		return logger, nil
 	}
 
-	connectionFunc := func() (connection.IConnection, error) {
+	connectionFunc := func() (connection.Connection, error) {
 		cfg, err := cfgFile.Load()
 		if err != nil {
 			return nil, err

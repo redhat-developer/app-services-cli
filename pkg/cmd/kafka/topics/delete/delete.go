@@ -18,7 +18,7 @@ type Options struct {
 	insecure  bool
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 }
 

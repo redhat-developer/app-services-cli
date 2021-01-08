@@ -9,37 +9,37 @@ import (
 	"sync"
 )
 
-// Ensure, that IConnectionMock does implement IConnection.
+// Ensure, that ConnectionMock does implement Connection.
 // If this is not the case, regenerate this file with moq.
-var _ IConnection = &IConnectionMock{}
+var _ Connection = &ConnectionMock{}
 
-// IConnectionMock is a mock implementation of IConnection.
+// ConnectionMock is a mock implementation of Connection.
 //
 //     func TestSomethingThatUsesIConnection(t *testing.T) {
 //
-//         // make and configure a mocked IConnection
-//         mockedIConnection := &IConnectionMock{
+//         // make and configure a mocked Connection
+//         mockedIConnection := &ConnectionMock{
 //             LogoutFunc: func(ctx context.Context) error {
 // 	               panic("mock out the Logout method")
 //             },
-//             NewMASClientFunc: func() *managedservices.APIClient {
-// 	               panic("mock out the NewMASClient method")
+//             NewAPIClientFunc: func() *managedservices.APIClient {
+// 	               panic("mock out the NewAPIClient method")
 //             },
 //             RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 // 	               panic("mock out the RefreshTokens method")
 //             },
 //         }
 //
-//         // use mockedIConnection in code that requires IConnection
+//         // use mockedIConnection in code that requires Connection
 //         // and then make assertions.
 //
 //     }
-type IConnectionMock struct {
+type ConnectionMock struct {
 	// LogoutFunc mocks the Logout method.
 	LogoutFunc func(ctx context.Context) error
 
-	// NewMASClientFunc mocks the NewMASClient method.
-	NewMASClientFunc func() *managedservices.APIClient
+	// NewAPIClientFunc mocks the NewAPIClient method.
+	NewAPIClientFunc func() *managedservices.APIClient
 
 	// RefreshTokensFunc mocks the RefreshTokens method.
 	RefreshTokensFunc func(ctx context.Context) (string, string, error)
@@ -51,8 +51,8 @@ type IConnectionMock struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 		}
-		// NewMASClient holds details about calls to the NewMASClient method.
-		NewMASClient []struct {
+		// NewAPIClient holds details about calls to the NewAPIClient method.
+		NewAPIClient []struct {
 		}
 		// RefreshTokens holds details about calls to the RefreshTokens method.
 		RefreshTokens []struct {
@@ -61,14 +61,14 @@ type IConnectionMock struct {
 		}
 	}
 	lockLogout        sync.RWMutex
-	lockNewMASClient  sync.RWMutex
+	lockNewAPIClient  sync.RWMutex
 	lockRefreshTokens sync.RWMutex
 }
 
 // Logout calls LogoutFunc.
-func (mock *IConnectionMock) Logout(ctx context.Context) error {
+func (mock *ConnectionMock) Logout(ctx context.Context) error {
 	if mock.LogoutFunc == nil {
-		panic("IConnectionMock.LogoutFunc: method is nil but IConnection.Logout was just called")
+		panic("ConnectionMock.LogoutFunc: method is nil but Connection.Logout was just called")
 	}
 	callInfo := struct {
 		Ctx context.Context
@@ -84,7 +84,7 @@ func (mock *IConnectionMock) Logout(ctx context.Context) error {
 // LogoutCalls gets all the calls that were made to Logout.
 // Check the length with:
 //     len(mockedIConnection.LogoutCalls())
-func (mock *IConnectionMock) LogoutCalls() []struct {
+func (mock *ConnectionMock) LogoutCalls() []struct {
 	Ctx context.Context
 } {
 	var calls []struct {
@@ -96,36 +96,36 @@ func (mock *IConnectionMock) LogoutCalls() []struct {
 	return calls
 }
 
-// NewMASClient calls NewMASClientFunc.
-func (mock *IConnectionMock) NewMASClient() *managedservices.APIClient {
-	if mock.NewMASClientFunc == nil {
-		panic("IConnectionMock.NewMASClientFunc: method is nil but IConnection.NewMASClient was just called")
+// NewAPIClient calls NewAPIClientFunc.
+func (mock *ConnectionMock) NewAPIClient() *managedservices.APIClient {
+	if mock.NewAPIClientFunc == nil {
+		panic("ConnectionMock.NewAPIClientFunc: method is nil but Connection.NewAPIClient was just called")
 	}
 	callInfo := struct {
 	}{}
-	mock.lockNewMASClient.Lock()
-	mock.calls.NewMASClient = append(mock.calls.NewMASClient, callInfo)
-	mock.lockNewMASClient.Unlock()
-	return mock.NewMASClientFunc()
+	mock.lockNewAPIClient.Lock()
+	mock.calls.NewAPIClient = append(mock.calls.NewAPIClient, callInfo)
+	mock.lockNewAPIClient.Unlock()
+	return mock.NewAPIClientFunc()
 }
 
-// NewMASClientCalls gets all the calls that were made to NewMASClient.
+// NewAPIClientCalls gets all the calls that were made to NewAPIClient.
 // Check the length with:
-//     len(mockedIConnection.NewMASClientCalls())
-func (mock *IConnectionMock) NewMASClientCalls() []struct {
+//     len(mockedIConnection.NewAPIClientCalls())
+func (mock *ConnectionMock) NewAPIClientCalls() []struct {
 } {
 	var calls []struct {
 	}
-	mock.lockNewMASClient.RLock()
-	calls = mock.calls.NewMASClient
-	mock.lockNewMASClient.RUnlock()
+	mock.lockNewAPIClient.RLock()
+	calls = mock.calls.NewAPIClient
+	mock.lockNewAPIClient.RUnlock()
 	return calls
 }
 
 // RefreshTokens calls RefreshTokensFunc.
-func (mock *IConnectionMock) RefreshTokens(ctx context.Context) (string, string, error) {
+func (mock *ConnectionMock) RefreshTokens(ctx context.Context) (string, string, error) {
 	if mock.RefreshTokensFunc == nil {
-		panic("IConnectionMock.RefreshTokensFunc: method is nil but IConnection.RefreshTokens was just called")
+		panic("ConnectionMock.RefreshTokensFunc: method is nil but Connection.RefreshTokens was just called")
 	}
 	callInfo := struct {
 		Ctx context.Context
@@ -141,7 +141,7 @@ func (mock *IConnectionMock) RefreshTokens(ctx context.Context) (string, string,
 // RefreshTokensCalls gets all the calls that were made to RefreshTokens.
 // Check the length with:
 //     len(mockedIConnection.RefreshTokensCalls())
-func (mock *IConnectionMock) RefreshTokensCalls() []struct {
+func (mock *ConnectionMock) RefreshTokensCalls() []struct {
 	Ctx context.Context
 } {
 	var calls []struct {

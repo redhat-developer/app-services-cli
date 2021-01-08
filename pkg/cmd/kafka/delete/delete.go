@@ -19,7 +19,7 @@ type options struct {
 	id string
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 }
 
@@ -82,7 +82,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	kafkaID := opts.id
 

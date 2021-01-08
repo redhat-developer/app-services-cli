@@ -28,7 +28,7 @@ type options struct {
 	limit        int
 
 	Config     config.IConfig
-	Connection func() (connection.IConnection, error)
+	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 }
 
@@ -73,7 +73,7 @@ func runList(opts *options) error {
 		return err
 	}
 
-	client := connection.NewMASClient()
+	client := connection.NewAPIClient()
 
 	a := client.DefaultApi.ListKafkas(context.Background())
 	a = a.Page(strconv.Itoa(opts.page))
