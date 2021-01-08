@@ -8,6 +8,7 @@ import (
 	"net/url"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/Nerzal/gocloak/v7"
 
@@ -37,6 +38,7 @@ type Connection struct {
 	scopes     []string
 	authClient gocloak.GoCloak
 	apiURL     *url.URL
+	logger     logging.Logger
 }
 
 //go:generate moq -out connection_mock.go . IConnection
@@ -47,10 +49,12 @@ type IConnection interface {
 }
 
 func (c *Connection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
+	c.logger.Debug("Refreshing access tokens")
 	refreshedTk, err := c.authClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {
 		return "", "", &AuthError{err, ""}
 	}
+	c.logger.Debug("Access tokens successfully refreshed")
 
 	if refreshedTk.AccessToken != c.Token.AccessToken {
 		c.Token.AccessToken = refreshedTk.AccessToken

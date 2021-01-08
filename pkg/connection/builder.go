@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -12,20 +13,23 @@ import (
 	"github.com/Nerzal/gocloak/v7"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
 // Builder contains the configuration and logic needed to connect to `api.openshift.com`.
 // Don't create instances of this type directly, use the NewBulder function instead
 type Builder struct {
-	trustedCAs       *x509.CertPool
-	insecure         bool
-	accessToken      string
-	refreshToken     string
-	clientID         string
-	scopes           []string
-	apiURL           string
-	authURL          string
-	transportWrapper TransportWrapper
+	trustedCAs        *x509.CertPool
+	insecure          bool
+	disableKeepAlives bool
+	accessToken       string
+	refreshToken      string
+	clientID          string
+	scopes            []string
+	apiURL            string
+	authURL           string
+	logger            logging.Logger
+	transportWrapper  TransportWrapper
 }
 
 // TransportWrapper is a wrapper for a transport of type http.RoundTripper.
@@ -64,6 +68,11 @@ func (b *Builder) WithTransportWrapper(transportWrapper TransportWrapper) *Build
 	return b
 }
 
+func (b *Builder) WithLogger(logger logging.Logger) *Builder {
+	b.logger = logger
+	return b
+}
+
 func (b *Builder) WithURL(url string) *Builder {
 	b.apiURL = url
 	return b
@@ -81,6 +90,13 @@ func (b *Builder) WithClientID(clientID string) *Builder {
 
 func (b *Builder) WithScopes(scopes ...string) *Builder {
 	b.scopes = append(b.scopes, scopes...)
+	return b
+}
+
+// DisableKeepAlives disables HTTP keep-alives with the server. This is unrelated to similarly
+// named TCP keep-alives.
+func (b *Builder) DisableKeepAlives(flag bool) *Builder {
+	b.disableKeepAlives = flag
 	return b
 }
 
@@ -126,6 +142,17 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 		scopes = make([]string, len(b.scopes))
 		for i := range b.scopes {
 			scopes[i] = b.scopes[i]
+		}
+	}
+
+	if b.logger == nil {
+		loggerBuilder := logging.NewStdLoggerBuilder()
+		debugEnabled := debug.Enabled()
+		loggerBuilder = loggerBuilder.Debug(debugEnabled)
+
+		b.logger, err = loggerBuilder.Build()
+		if err != nil {
+			return nil, err
 		}
 	}
 
@@ -180,6 +207,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *Connection, err
 		client:     client,
 		authClient: authClient,
 		Token:      &tkn,
+		logger:     b.logger,
 	}
 
 	return connection, nil
@@ -193,7 +221,8 @@ func (b *Builder) createTransport() (transport http.RoundTripper) {
 			InsecureSkipVerify: b.insecure,
 			RootCAs:            b.trustedCAs,
 		},
-		Proxy: http.ProxyFromEnvironment,
+		Proxy:             http.ProxyFromEnvironment,
+		DisableKeepAlives: b.disableKeepAlives,
 	}
 
 	// Wrap the transport with the round trippers provided by the user:
