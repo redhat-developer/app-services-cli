@@ -1,6 +1,10 @@
 package kafka
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+)
 
 func TestValidateName(t *testing.T) {
 	type args struct {
@@ -87,6 +91,63 @@ func TestValidateName(t *testing.T) {
 			// nolint
 			if err := ValidateName(tt.args.name); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestTransformResponse(t *testing.T) {
+	hostWithSSLPort := "my-kafka-url:443"
+	hostWithNoPort := "my-kafka-url"
+
+	type args struct {
+		kafkaInstance *managedservices.KafkaRequest
+	}
+	tests := []struct {
+		name                    string
+		args                    args
+		wantBootstrapServerHost string
+	}{
+		{
+			name: "bootstrapServerHost should be transformed to empty string when nil",
+			args: args{
+				kafkaInstance: &managedservices.KafkaRequest{
+					BootstrapServerHost: nil,
+				},
+			},
+			wantBootstrapServerHost: "",
+		},
+		{
+			name: "bootstrapServerHost should be the same when SSL port already exists",
+			args: args{
+				kafkaInstance: &managedservices.KafkaRequest{
+					BootstrapServerHost: &hostWithSSLPort,
+				},
+			},
+			wantBootstrapServerHost: hostWithSSLPort,
+		},
+		{
+			name: "bootstrapServerHost should get SSL port when none exists",
+			args: args{
+				kafkaInstance: &managedservices.KafkaRequest{
+					BootstrapServerHost: &hostWithNoPort,
+				},
+			},
+			wantBootstrapServerHost: hostWithSSLPort,
+		},
+	}
+	for _, tt := range tests {
+		// nolint
+		t.Run(tt.name, func(t *testing.T) {
+			transformedInstance := TransformResponse(tt.args.kafkaInstance)
+
+			if transformedInstance == nil {
+				t.Errorf("Expected KafkaRequest type, but got nil")
+			}
+
+			transformedHost := transformedInstance.GetBootstrapServerHost()
+			if tt.wantBootstrapServerHost != transformedHost {
+				t.Errorf("Expected bootstrapServerHost: %v, got %v", tt.wantBootstrapServerHost, transformedHost)
 			}
 		})
 	}
