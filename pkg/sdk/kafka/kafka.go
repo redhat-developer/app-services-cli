@@ -41,8 +41,10 @@ func ValidateName(name string) error {
 // TransformResponse modifies fields from the KafkaRequest payload object
 // The main transformation is appending ":443" to the Bootstrap Server URL
 func TransformResponse(kafkaInstance *managedservices.KafkaRequest) {
-	if !strings.HasSuffix(*kafkaInstance.BootstrapServerHost, ":443") {
-		hostURL := fmt.Sprintf("%v:443", *kafkaInstance.BootstrapServerHost)
-		kafkaInstance.BootstrapServerHost = &hostURL
+	bootstrapHost := kafkaInstance.GetBootstrapServerHost()
+
+	if !strings.HasSuffix(bootstrapHost, ":443") {
+		hostURL := fmt.Sprintf("%v:443", bootstrapHost)
+		kafkaInstance.SetBootstrapServerHost(hostURL)
 	}
 }
