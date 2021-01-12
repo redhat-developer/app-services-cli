@@ -18,9 +18,11 @@ import (
 
 func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "rhoas <command> <subcommand> [flags]",
-		Short: "rhoas cli",
-		Long:  "Work with your Managed Services",
+		SilenceUsage:  true,
+		SilenceErrors: true,
+		Use:           "rhoas <command> <subcommand> [flags]",
+		Short:         "rhoas cli",
+		Long:          "Work with your Managed Services",
 
 		Example: heredoc.Doc(`
 			$ rhas login

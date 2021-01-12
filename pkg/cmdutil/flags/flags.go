@@ -8,6 +8,10 @@ import (
 	"github.com/spf13/pflag"
 )
 
+var (
+	AllowedListFormats = []string{"table", "json", "yml", "yaml"}
+)
+
 // MustGetDefinedString attempts to get a non-empty string flag from the provided flag set or panic
 func MustGetDefinedString(flagName string, flags *pflag.FlagSet) string {
 	flagVal := MustGetString(flagName, flags)
@@ -52,6 +56,17 @@ func MustGetBool(flagName string, flags *pflag.FlagSet) bool {
 		os.Exit(1)
 	}
 	return flagVal
+}
+
+// IsValidInput checks if the input value is in the range of valid values
+func IsValidInput(input string, validValues ...string) bool {
+	for _, b := range validValues {
+		if input == b {
+			return true
+		}
+	}
+
+	return false
 }
 
 func undefinedValueMessage(flagName string) string {
