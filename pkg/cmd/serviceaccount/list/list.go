@@ -26,13 +26,16 @@ type Options struct {
 	output string
 }
 
+// table contains the properties used to
+// populate the list of service accounts into a table
 type table struct {
-	ID       string `json:"id" header:"ID"`
-	Name     string `json:"name" header:"Name"`
-	ClientID string `json:"clientID" header:"Client ID"`
+	ID          string `json:"id" header:"ID"`
+	Name        string `json:"name" header:"Name"`
+	ClientID    string `json:"clientID" header:"Client ID"`
+	Description string `json:"description,omitempty" header:"Description"`
 }
 
-// NewCreateCommand creates a new command to list service accounts
+// NewListCommand creates a new command to list service accounts
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
@@ -42,20 +45,27 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "List all service accounts",
+		Short: "List service accounts",
+		Long:  "List all service accounts belonging to your organization",
 		Example: heredoc.Doc(`
 			$ rhoas serviceaccount list
 			$ rhoas serviceaccount list -o json
 		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			logger, err := opts.Logger()
+			if err != nil {
+				return err
+			}
+
 			if !flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
+				logger.Debugf("Unknown flag value '%v' for --output. Using table format instead", opts.output)
 				opts.output = "table"
 			}
 			return runList(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "table", "Format to display the service accounts")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "table", fmt.Sprintf("Format to display the service accounts. Available options: %+q", flagutil.AllowedListFormats))
 
 	return cmd
 }
@@ -74,35 +84,40 @@ func runList(opts *Options) (err error) {
 	client := connection.NewAPIClient()
 
 	a := client.DefaultApi.ListServiceAccounts(context.Background())
-	serviceaccounts, _, apiErr := a.Execute()
+	res, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to list service accounts: %w", apiErr)
 	}
 
-	if len(*serviceaccounts.Items) == 0 {
-		logger.Info("No service accounts")
+	serviceaccounts := res.GetItems()
+	if len(serviceaccounts) == 0 {
+		logger.Info("No service accounts were found.")
 		return nil
 	}
 
-	jsonResponse, _ := json.Marshal(serviceaccounts.Items)
 	var tableList []table
+	if opts.output == "table" {
+		jsonResponse, _ := json.Marshal(serviceaccounts)
 
-	if err = json.Unmarshal(jsonResponse, &tableList); err != nil {
-		logger.Infof("Could not unmarshal service accounts into table, defaulting to JSON instead: %v", err)
-		return nil
+		if err = json.Unmarshal(jsonResponse, &tableList); err != nil {
+			logger.Infof("Could not unmarshal service accounts into table, defaulting to JSON instead: %v", err)
+			opts.output = "json"
+		}
 	}
 
 	switch opts.output {
 	case "json":
-		data, _ := json.MarshalIndent(serviceaccounts, "", cmdutil.DefaultJSONIndent)
+		logger.Debug("Outputting service accounts to JSON")
+		data, _ := json.MarshalIndent(res, "", cmdutil.DefaultJSONIndent)
 		_ = dump.JSON(os.Stdout, data)
 	case "yaml", "yml":
-		data, _ := yaml.Marshal(serviceaccounts)
+		logger.Debug("Outputting service accounts to YAML")
+		data, _ := yaml.Marshal(res)
 		_ = dump.YAML(os.Stdout, data)
 	default:
+		logger.Debug("Outputting service accounts to table")
 		dump.Table(os.Stdout, tableList)
-		logger.Info("")
 	}
 
 	return nil

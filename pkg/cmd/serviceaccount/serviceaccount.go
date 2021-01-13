@@ -2,8 +2,9 @@ package serviceaccount
 
 import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/list"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/create"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/delete"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/list"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,7 @@ func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 	cmd.AddCommand(
 		create.NewCreateCommand(f),
 		list.NewListCommand(f),
+		delete.NewDeleteCommand(f),
 	)
 
 	return cmd
