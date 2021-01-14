@@ -5,6 +5,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/list"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/resetcredentials"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +22,7 @@ func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 		create.NewCreateCommand(f),
 		list.NewListCommand(f),
 		delete.NewDeleteCommand(f),
+		resetcredentials.NewResetCredentialsCommand(f),
 	)
 
 	return cmd

@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	AllowedListFormats = []string{"table", "json", "yml", "yaml"}
+	AllowedListFormats                 = []string{"table", "json", "yml", "yaml"}
+	CredentialsOutputFormats = []string{"env", "properties", "json", "kafka", "kube"}
 )
 
 // MustGetDefinedString attempts to get a non-empty string flag from the provided flag set or panic

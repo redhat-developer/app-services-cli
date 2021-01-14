@@ -55,7 +55,7 @@ func runDelete(opts *Options) (err error) {
 	}
 
 	if opts.force {
-		logger.Debugf("Force deleting service account with ID %v", opts.id)
+		logger.Debug("Force deleting service account with ID", opts.id)
 		return deleteServiceAccount(opts)
 	}
 
