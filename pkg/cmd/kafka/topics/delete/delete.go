@@ -46,6 +46,11 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func deleteTopic(opts *Options) error {
+	_, err := opts.Connection()
+	if err != nil {
+		return err
+	}
+
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
