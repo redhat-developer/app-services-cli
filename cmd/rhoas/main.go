@@ -26,7 +26,6 @@ func main() {
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
 
-	rootCmd.SilenceErrors = true
 	rootCmd.InitDefaultHelpCmd()
 
 	if generateDocs {

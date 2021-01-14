@@ -88,7 +88,7 @@ func runDelete(opts *options) error {
 
 	var confirmDeleteAction bool
 	var promptConfirmAction = &survey.Confirm{
-		Message: "Once a Kafka instance is deleted it is gone forever and cannot be recovered, are you sure you want to proceed?",
+		Message: "Once a Kafka instance is deleted it cannot be recovered, are you sure you want to proceed?",
 	}
 
 	err = survey.AskOne(promptConfirmAction, &confirmDeleteAction)

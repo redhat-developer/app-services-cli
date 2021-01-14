@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -49,13 +50,18 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken str
 	if err != nil {
 		return "", "", &AuthError{err, ""}
 	}
-	c.logger.Debug("Access tokens successfully refreshed")
 
 	if refreshedTk.AccessToken != c.Token.AccessToken {
 		c.Token.AccessToken = refreshedTk.AccessToken
 	}
 	if refreshedTk.RefreshToken != c.Token.RefreshToken {
 		c.Token.RefreshToken = refreshedTk.RefreshToken
+	}
+
+	c.logger.Debug("Access tokens successfully refreshed.")
+	if c.logger.DebugEnabled() {
+		b, _ := json.Marshal(c.Token)
+		c.logger.Debug(string(b))
 	}
 
 	return refreshedTk.AccessToken, refreshedTk.RefreshToken, nil

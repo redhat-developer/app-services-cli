@@ -15,6 +15,7 @@ import (
 // nolint:funlen
 func New(cliVersion string) *Factory {
 	var logger logging.Logger
+	var conn connection.Connection
 	cfgFile := config.NewFile()
 
 	loggerFunc := func() (logging.Logger, error) {
@@ -36,6 +37,10 @@ func New(cliVersion string) *Factory {
 	}
 
 	connectionFunc := func() (connection.Connection, error) {
+		if conn != nil {
+			return conn, nil
+		}
+
 		cfg, err := cfgFile.Load()
 		if err != nil {
 			return nil, err
@@ -71,7 +76,7 @@ func New(cliVersion string) *Factory {
 			return nil, err
 		}
 
-		conn, err := builder.Build()
+		conn, err = builder.Build()
 		if err != nil {
 			return nil, err
 		}
@@ -95,8 +100,10 @@ func New(cliVersion string) *Factory {
 			return conn, nil
 		}
 
-		// TODO: Warning log on error
-		_ = cfgFile.Save(cfg)
+		err = cfgFile.Save(cfg)
+		if err != nil {
+			logger.Debug("Could not save refreshed tokens to config: ", err)
+		}
 
 		return conn, nil
 	}
