@@ -33,8 +33,9 @@ type Options struct {
 // NewCreateTopicCommand gets a new command for creating kafka topic.
 func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
-		Logger: f.Logger,
+		Connection: f.Connection,
+		Config:     f.Config,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
