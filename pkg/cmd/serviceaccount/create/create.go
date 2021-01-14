@@ -112,7 +112,7 @@ func runCreate(opts *Options) error {
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(fileLoc)
 	if err == nil && !opts.overwrite {
-		return fmt.Errorf("file '%v' already exists. Use --force-ovewrite to overwrite the file, or --file-location flag to choose a custom location", fileLoc)
+		return fmt.Errorf("file '%v' already exists. Use --force-overwrite to overwrite the file, or --file-location flag to choose a custom location", fileLoc)
 	}
 
 	// create the service account
