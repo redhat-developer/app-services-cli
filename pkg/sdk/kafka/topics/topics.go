@@ -69,7 +69,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 
 	sdkkafka.TransformResponse(&kafkaInstance)
 
-	conn, err := dialer.Dial("tcp", *kafkaInstance.BootstrapServerHost)
+	conn, err := dialer.Dial("tcp", kafkaInstance.GetBootstrapServerHost())
 	if err != nil {
 		return nil, nil, err
 	}
