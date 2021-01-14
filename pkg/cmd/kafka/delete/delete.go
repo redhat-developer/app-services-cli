@@ -34,7 +34,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
 		Short: "Delete a Kafka instance",
-		Long:  "Permanently delete a Kafka instance",
+		Long:  "Permanently deletes a Kafka instance",
 		Example: heredoc.Doc(`
 			$ rhoas kafka delete
 			$ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
@@ -84,7 +84,13 @@ func runDelete(opts *options) error {
 
 	client := connection.NewAPIClient()
 
-	kafkaID := opts.id
+	response, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+
+	if apiErr.Error() != "" {
+		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
+	}
+
+	kafkaName := response.GetName()
 
 	var confirmDeleteAction bool
 	var promptConfirmAction = &survey.Confirm{
@@ -99,34 +105,33 @@ func runDelete(opts *options) error {
 		return nil
 	}
 
-	var promptConfirmID = &survey.Input{
-		Message: "Please confirm the ID of the Kafka instance you wish to permanently delete:",
+	var promptConfirmName = &survey.Input{
+		Message: "Please confirm the name of the Kafka instance you wish to permanently delete:",
 	}
 
-	var confirmedKafkaID string
-	err = survey.AskOne(promptConfirmID, &confirmedKafkaID)
+	var confirmedKafkaName string
+	err = survey.AskOne(promptConfirmName, &confirmedKafkaName)
 	if err != nil {
 		return err
 	}
 
-	if confirmedKafkaID != kafkaID {
-		logger.Info("The ID you entered does not match the ID of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
+	if confirmedKafkaName != kafkaName {
+		logger.Info("The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
 		return nil
 	}
 
-	logger.Infof("Deleting Kafka instance with ID '%v'.\n", kafkaID)
-	_, _, apiErr := client.DefaultApi.DeleteKafkaById(context.Background(), kafkaID).Execute()
+	logger.Debug("Deleting Kafka instance", kafkaName)
+	_, _, apiErr = client.DefaultApi.DeleteKafkaById(context.Background(), opts.id).Execute()
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)
 	}
 
-	logger.Info("")
 	logger.Info("Kafka instance has successfully been deleted")
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done
-	if currentKafka.ClusterID != kafkaID {
+	if currentKafka.ClusterID != kafkaName {
 		return nil
 	}
 
