@@ -29,6 +29,7 @@ type KafkaRequest struct {
 	BootstrapServerHost *string    `json:"bootstrapServerHost,omitempty"`
 	CreatedAt           *time.Time `json:"created_at,omitempty"`
 	UpdatedAt           *time.Time `json:"updated_at,omitempty"`
+	FailedReason        *string    `json:"failed_reason,omitempty"`
 }
 
 // NewKafkaRequest instantiates a new KafkaRequest object
@@ -432,6 +433,38 @@ func (o *KafkaRequest) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
+// GetFailedReason returns the FailedReason field value if set, zero value otherwise.
+func (o *KafkaRequest) GetFailedReason() string {
+	if o == nil || o.FailedReason == nil {
+		var ret string
+		return ret
+	}
+	return *o.FailedReason
+}
+
+// GetFailedReasonOk returns a tuple with the FailedReason field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *KafkaRequest) GetFailedReasonOk() (*string, bool) {
+	if o == nil || o.FailedReason == nil {
+		return nil, false
+	}
+	return o.FailedReason, true
+}
+
+// HasFailedReason returns a boolean if a field has been set.
+func (o *KafkaRequest) HasFailedReason() bool {
+	if o != nil && o.FailedReason != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailedReason gets a reference to the given string and assigns it to the FailedReason field.
+func (o *KafkaRequest) SetFailedReason(v string) {
+	o.FailedReason = &v
+}
+
 func (o KafkaRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Id != nil {
@@ -469,6 +502,9 @@ func (o KafkaRequest) MarshalJSON() ([]byte, error) {
 	}
 	if o.UpdatedAt != nil {
 		toSerialize["updated_at"] = o.UpdatedAt
+	}
+	if o.FailedReason != nil {
+		toSerialize["failed_reason"] = o.FailedReason
 	}
 	return json.Marshal(toSerialize)
 }
