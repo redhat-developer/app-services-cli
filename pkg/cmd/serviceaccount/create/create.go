@@ -74,8 +74,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account")
 	cmd.Flags().StringArrayVar(&opts.scopes, "scopes", []string{"kafka-all"},
 		"Number of supported scopes (permissions) for this service account")
-	cmd.Flags().BoolVar(&opts.overwrite, "force-overwrite", false, "Force overwrite a file if it already exists")
-	cmd.Flags().StringVar(&opts.filename, "output-file", "", "Sets a custom file location to save the credentials")
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials")
 
 	_ = cmd.MarkFlagRequired("output")
 	_ = cmd.MarkFlagRequired("name")
@@ -108,11 +108,11 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	// If the credentials file already exists, and the --force-overwrite flag is not set then return an error
+	// If the credentials file already exists, and the --overwrite flag is not set then return an error
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(fileLoc)
 	if err == nil && !opts.overwrite {
-		return fmt.Errorf("file '%v' already exists. Use --force-ovewrite to overwrite the file, or --output-file flag to choose a custom location", fileLoc)
+		return fmt.Errorf("file '%v' already exists. Use --force-ovewrite to overwrite the file, or --file-location flag to choose a custom location", fileLoc)
 	}
 
 	// create the service account

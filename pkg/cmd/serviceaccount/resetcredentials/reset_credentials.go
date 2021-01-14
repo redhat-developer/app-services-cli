@@ -60,8 +60,8 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "env", "Format of the config [env, kafka, properties, json, kube]")
 	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete")
 	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Forcefully reset credentials for the service account")
-	cmd.Flags().BoolVar(&opts.overwrite, "force-overwrite", false, "Force overwrite a file if it already exists")
-	cmd.Flags().StringVar(&opts.filename, "output-file", "", "Sets a custom file location to save the credentials")
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials")
 
 	_ = cmd.MarkFlagRequired("id")
 	_ = cmd.MarkFlagRequired("output")
@@ -90,10 +90,10 @@ func runResetCredentials(opts *Options) (err error) {
 		return err
 	}
 
-	// If the credentials file already exists, and the --force-overwrite flag is not set then return an error
+	// If the credentials file already exists, and the --overwrite flag is not set then return an error
 	// indicating that the user should explicitly request overwriting of the file
 	if _, err = os.Stat(fileLoc); err == nil && !opts.overwrite {
-		return fmt.Errorf("file '%v' already exists. Use --force-overwrite to overwrite the file, or --output-file to choose a custom location", fileLoc)
+		return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location to choose a custom location", fileLoc)
 	}
 
 	var serviceacct *managedservices.ServiceAccount
