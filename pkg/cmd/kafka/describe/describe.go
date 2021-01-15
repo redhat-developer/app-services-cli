@@ -88,7 +88,7 @@ func runDescribe(opts *options) error {
 		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
 	}
 
-	sdkkafka.TransformResponse(&response)
+	sdkkafka.TransformKafkaRequest(&response)
 
 	switch opts.outputFormat {
 	case "json":

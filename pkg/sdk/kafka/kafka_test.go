@@ -96,7 +96,7 @@ func TestValidateName(t *testing.T) {
 	}
 }
 
-func TestTransformResponse(t *testing.T) {
+func TestTransformRequest(t *testing.T) {
 	hostWithSSLPort := "my-kafka-url:443"
 	hostWithNoPort := "my-kafka-url"
 
@@ -139,7 +139,7 @@ func TestTransformResponse(t *testing.T) {
 	for _, tt := range tests {
 		// nolint
 		t.Run(tt.name, func(t *testing.T) {
-			transformedInstance := TransformResponse(tt.args.kafkaInstance)
+			transformedInstance := TransformKafkaRequest(tt.args.kafkaInstance)
 
 			if transformedInstance == nil {
 				t.Errorf("Expected KafkaRequest type, but got nil")
@@ -148,6 +148,78 @@ func TestTransformResponse(t *testing.T) {
 			transformedHost := transformedInstance.GetBootstrapServerHost()
 			if tt.wantBootstrapServerHost != transformedHost {
 				t.Errorf("Expected bootstrapServerHost: %v, got %v", tt.wantBootstrapServerHost, transformedHost)
+			}
+		})
+	}
+}
+
+func TestTransformKafkaRequestListItems(t *testing.T) {
+	hostWithSSLPort := "my-kafka-url:443"
+	hostWithNoPort := "my-kafka-url"
+	emptyHost := ""
+
+	type args struct {
+		items []managedservices.KafkaRequest
+	}
+	tests := []struct {
+		name string
+		args args
+		want []managedservices.KafkaRequest
+	}{
+		{
+			name: "Should return empty list when no kafkas",
+			args: args{
+				items: []managedservices.KafkaRequest{},
+			},
+			want: []managedservices.KafkaRequest{},
+		},
+		{
+			name: "Should update all bootstrapServerHost ports",
+			args: args{
+				items: []managedservices.KafkaRequest{
+					{
+						BootstrapServerHost: &emptyHost,
+					},
+					{
+						BootstrapServerHost: &hostWithNoPort,
+					},
+					{
+						BootstrapServerHost: &hostWithSSLPort,
+					},
+				},
+			},
+			want: []managedservices.KafkaRequest{
+				{
+					BootstrapServerHost: &emptyHost,
+				},
+				{
+					BootstrapServerHost: &hostWithSSLPort,
+				},
+				{
+					BootstrapServerHost: &hostWithSSLPort,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		// nolint
+		t.Run(tt.name, func(t *testing.T) {
+			gotItems := TransformKafkaRequestListItems(tt.args.items)
+
+			if len(gotItems) != len(tt.want) {
+				t.Fatalf("Expected number of items to be %v, got %v", len(gotItems), len(tt.want))
+				return
+			}
+
+			for j, wantKafka := range tt.want {
+				gotKafka := gotItems[j]
+
+				gotBootstrapHost := gotKafka.GetBootstrapServerHost()
+				wantBootstrapHost := wantKafka.GetBootstrapServerHost()
+
+				if gotBootstrapHost != wantBootstrapHost {
+					t.Fatalf("Expected BootstrapServerHost = %v, got %v", wantBootstrapHost, gotBootstrapHost)
+				}
 			}
 		})
 	}
