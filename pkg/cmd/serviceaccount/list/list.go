@@ -58,14 +58,14 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
-				logger.Debugf("Unknown flag value '%v' for --output. Using table format instead", opts.output)
-				opts.output = "table"
+				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
+				opts.output = "plain"
 			}
 			return runList(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "table", fmt.Sprintf("Format to display the service accounts. Available options: %+q", flagutil.AllowedListFormats))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("The output format. Options: +%q", flagutil.AllowedListFormats)
 
 	return cmd
 }

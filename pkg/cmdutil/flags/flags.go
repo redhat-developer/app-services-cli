@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	AllowedListFormats       = []string{"table", "json", "yml", "yaml"}
+	AllowedListFormats       = []string{"plain", "json", "yml", "yaml"}
 	CredentialsOutputFormats = []string{"env", "properties", "json", "kafka", "kube"}
 )
 

@@ -8,6 +8,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
+	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/spf13/cobra"
 )
 
@@ -33,11 +34,19 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Short: "List topics",
 		Long:  "List all topics in the current selected Managed Kafka cluster",
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			logger, err := opts.Logger()
+			if err != nil {
+				return err
+			}
+			if flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
+				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
+				opts.output = "plain"
+			}
 			return listTopic(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "Output", "o", "plain-text", "The output format as 'plain-text', 'json', or 'yaml'")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("The output format. Options: +%q", flagutil.AllowedListFormats)
 	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	return cmd
 }
