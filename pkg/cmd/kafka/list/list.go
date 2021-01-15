@@ -7,6 +7,8 @@ import (
 	"os"
 	"strconv"
 
+	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
 	"github.com/spf13/cobra"
@@ -48,15 +50,21 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Long:  "List all Kafka instances",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" && opts.outputFormat != "table" {
-				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
+			logger, err := opts.Logger()
+			if err != nil {
+				return err
+			}
+
+			if !flagutil.IsValidInput(opts.outputFormat, flagutil.AllowedListFormats...) {
+				logger.Infof("Unknown flag value '%v' for --output. Using plain format instead", opts.outputFormat)
+				opts.outputFormat = "plain"
 			}
 
 			return runList(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", "Format to display the Kafka instances. Choose from: \"json\", \"yaml\", \"yml\", \"table\"")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q", flagutil.AllowedListFormats))
 	cmd.Flags().IntVarP(&opts.page, "page", "", 0, "Page that should be returned from server")
 	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, "Limit of items that should be returned from server")
 	return cmd

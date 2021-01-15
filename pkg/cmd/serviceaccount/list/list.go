@@ -61,11 +61,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
 				opts.output = "plain"
 			}
+
 			return runList(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("The output format. Options: +%q", flagutil.AllowedListFormats)
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q", flagutil.AllowedListFormats))
 
 	return cmd
 }
@@ -97,7 +98,7 @@ func runList(opts *Options) (err error) {
 	}
 
 	var tableList []table
-	if opts.output == "table" {
+	if opts.output == "plain" {
 		jsonResponse, _ := json.Marshal(serviceaccounts)
 
 		if err = json.Unmarshal(jsonResponse, &tableList); err != nil {
