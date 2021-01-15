@@ -18,8 +18,7 @@ type Options struct {
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 
-	id    string
-	force bool
+	id string
 }
 
 // NewDeleteCommand creates a new command to delete a service account
