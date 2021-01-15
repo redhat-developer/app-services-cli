@@ -15,7 +15,7 @@ rhoas kafka list [flags]
 ....
   -h, --help            help for list
       --limit int       Limit of items that should be returned from server (default 100)
-  -o, --output string   Format to display the Kafka instances. Choose from: "json", "yaml", "yml", "table" (default "table")
+  -o, --output string   Output format of the results. Options: +["plain" "json" "yml" "yaml"] (default "plain")
       --page int        Page that should be returned from server
 ....
 

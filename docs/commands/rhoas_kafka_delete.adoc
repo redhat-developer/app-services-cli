@@ -4,7 +4,7 @@ Delete a Kafka instance
 
 === Synopsis
 
-Permanently delete a Kafka instance
+Permanently deletes a Kafka instance
 
 ....
 rhoas kafka delete [flags]
