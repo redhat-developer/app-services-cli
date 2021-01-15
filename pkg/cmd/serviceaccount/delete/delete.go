@@ -42,7 +42,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete")
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Forcefully delete a service account")
 	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
@@ -52,11 +51,6 @@ func runDelete(opts *Options) (err error) {
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
-	}
-
-	if opts.force {
-		logger.Debug("Force deleting service account with ID", opts.id)
-		return deleteServiceAccount(opts)
 	}
 
 	var confirmDelete bool
