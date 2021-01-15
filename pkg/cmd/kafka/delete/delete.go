@@ -127,7 +127,7 @@ func runDelete(opts *options) error {
 		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)
 	}
 
-	logger.Info("Kafka instance has successfully been deleted")
+	logger.Infof("Kafka instance '%v' has successfully been deleted", kafkaName)
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done
