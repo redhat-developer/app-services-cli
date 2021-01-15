@@ -94,7 +94,7 @@ func runDelete(opts *options) error {
 
 	var confirmDeleteAction bool
 	var promptConfirmAction = &survey.Confirm{
-		Message: "Once a Kafka instance is deleted it cannot be recovered, are you sure you want to proceed?",
+		Message: fmt.Sprintf("Are you sure you want to delete the Kafka instance '%v'?", kafkaName),
 	}
 
 	err = survey.AskOne(promptConfirmAction, &confirmDeleteAction)
@@ -106,7 +106,7 @@ func runDelete(opts *options) error {
 	}
 
 	var promptConfirmName = &survey.Input{
-		Message: "Please confirm the name of the Kafka instance you wish to permanently delete:",
+		Message: "Confirm the name of the instance you want to permanently delete:",
 	}
 
 	var confirmedKafkaName string
