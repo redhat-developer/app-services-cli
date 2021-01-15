@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+	sdkKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 
 	"github.com/spf13/cobra"
 
@@ -67,20 +68,24 @@ func runStatus(opts *Options) error {
 	client := connection.NewAPIClient()
 
 	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+	sdkKafka.TransformResponse(&res)
+
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
 	}
 
 	type kafkaStatus struct {
-		ID     string `header:"ID"`
-		Name   string `header:"Name"`
-		Status string `header:"Status"`
+		ID            string `header:"ID"`
+		Name          string `header:"Name"`
+		Status        string `header:"Status"`
+		BootstrapHost string `header:"Bootstrap Server Host"`
 	}
 
 	statusInfo := &kafkaStatus{
-		ID:     *res.Id,
-		Name:   *res.Name,
-		Status: *res.Status,
+		ID:            *res.Id,
+		Name:          *res.Name,
+		Status:        *res.Status,
+		BootstrapHost: *res.BootstrapServerHost,
 	}
 
 	dump.Table(os.Stdout, statusInfo)
