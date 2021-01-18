@@ -6,6 +6,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
@@ -14,6 +15,8 @@ import (
 // giving centralized access to the config and API connection
 // nolint:funlen
 func New(cliVersion string) *Factory {
+	io := iostreams.System()
+
 	var logger logging.Logger
 	var conn connection.Connection
 	cfgFile := config.NewFile()
@@ -24,6 +27,8 @@ func New(cliVersion string) *Factory {
 		}
 
 		loggerBuilder := logging.NewStdLoggerBuilder()
+		loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
+
 		debugEnabled := debug.Enabled()
 		loggerBuilder = loggerBuilder.Debug(debugEnabled)
 
@@ -109,6 +114,7 @@ func New(cliVersion string) *Factory {
 	}
 
 	return &Factory{
+		IOStreams:  io,
 		Config:     cfgFile,
 		Connection: connectionFunc,
 		Logger:     loggerFunc,

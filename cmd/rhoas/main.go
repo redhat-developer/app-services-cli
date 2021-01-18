@@ -22,6 +22,8 @@ var (
 func main() {
 	buildVersion := build.Version
 	cmdFactory := factory.New(build.Version)
+	stderr := cmdFactory.IOStreams.ErrOut
+
 	initConfig(cmdFactory)
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
@@ -44,7 +46,7 @@ func main() {
 
 		e, ok := errModel.(managedservices.Error)
 		if ok {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", *e.Reason)
+			fmt.Fprintf(stderr, "Error: %v\n", *e.Reason)
 			os.Exit(1)
 		}
 	}
