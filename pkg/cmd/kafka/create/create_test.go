@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"io/ioutil"
 	"testing"
@@ -187,15 +188,20 @@ func TestNewCreateCommand(t *testing.T) {
 	for _, tt := range tests {
 		// nolint
 		t.Run(tt.name, func(t *testing.T) {
-			cmd := NewCreateCommand(tt.args.f)
+
 			b := bytes.NewBufferString("")
-			cmd.SetOut(b)
+			tt.args.f.IOStreams = &iostreams.IOStreams{
+				Out: b,
+			}
+
+			cmd := NewCreateCommand(tt.args.f)
 			cmd.SetArgs([]string{
 				"--name",
 				tt.args.name,
 				"--output",
 				tt.args.outputFormat,
 			})
+
 			err := cmd.Execute()
 			if !tt.wantErr && err != nil {
 				t.Fatal("Expected error but got nil")

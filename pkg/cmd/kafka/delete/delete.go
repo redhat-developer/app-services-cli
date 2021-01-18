@@ -131,7 +131,7 @@ func runDelete(opts *options) error {
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done
-	if currentKafka.ClusterID != kafkaName {
+	if currentKafka.ClusterID != response.GetId() {
 		return nil
 	}
 
