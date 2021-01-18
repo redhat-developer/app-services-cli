@@ -67,7 +67,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 		return nil, nil, fmt.Errorf("Kafka instance is missing a Bootstrap Server Host")
 	}
 
-	sdkkafka.TransformResponse(&kafkaInstance)
+	sdkkafka.TransformKafkaRequest(&kafkaInstance)
 
 	conn, err := dialer.Dial("tcp", kafkaInstance.GetBootstrapServerHost())
 	if err != nil {

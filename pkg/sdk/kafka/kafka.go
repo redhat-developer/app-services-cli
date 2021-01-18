@@ -38,19 +38,31 @@ func ValidateName(name string) error {
 	return errInvalidName
 }
 
-// TransformResponse modifies fields from the KafkaRequest payload object
+// TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformResponse(kafkaInstance *managedservices.KafkaRequest) *managedservices.KafkaRequest {
-	bootstrapHost := kafkaInstance.GetBootstrapServerHost()
+func TransformKafkaRequestListItems(items []managedservices.KafkaRequest) []managedservices.KafkaRequest {
+	for i := range items {
+		kafka := items[i]
+		kafka = *TransformKafkaRequest(&kafka)
+		items[i] = kafka
+	}
+
+	return items
+}
+
+// TransformKafkaRequest modifies fields from the KafkaRequest payload object
+// The main transformation is appending ":443" to the Bootstrap Server URL
+func TransformKafkaRequest(kafka *managedservices.KafkaRequest) *managedservices.KafkaRequest {
+	bootstrapHost := kafka.GetBootstrapServerHost()
 
 	if bootstrapHost == "" {
-		return kafkaInstance
+		return kafka
 	}
 
 	if !strings.HasSuffix(bootstrapHost, ":443") {
 		hostURL := fmt.Sprintf("%v:443", bootstrapHost)
-		kafkaInstance.SetBootstrapServerHost(hostURL)
+		kafka.SetBootstrapServerHost(hostURL)
 	}
 
-	return kafkaInstance
+	return kafka
 }

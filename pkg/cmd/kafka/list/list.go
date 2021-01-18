@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"os"
 	"strconv"
 
@@ -21,7 +22,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+	sdkKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 )
 
 type options struct {
@@ -87,6 +88,10 @@ func runList(opts *options) error {
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 	response, _, apiErr := a.Execute()
+	// modify the items to add a :443 port to the bootstrap URL
+	kafkaItems := response.GetItems()
+	kafkaItems = sdkKafka.TransformKafkaRequestListItems(kafkaItems)
+	response.SetItems(kafkaItems)
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to list Kafka instances: %w", apiErr)
