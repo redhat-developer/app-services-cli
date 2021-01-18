@@ -44,10 +44,12 @@ type Options struct {
 	Logger     func() (logging.Logger, error)
 }
 
-// default Kafka instance values
-var defaultMultiAZ = true
-var defaultRegion = "us-east-1"
-var defaultProvider = "aws"
+const (
+	// default Kafka instance values
+	defaultMultiAZ  = true
+	defaultRegion   = "us-east-1"
+	defaultProvider = "aws"
+)
 
 // NewCreateCommand creates a new command for creating kafkas.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
