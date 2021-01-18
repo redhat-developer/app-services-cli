@@ -1,0 +1,1 @@
+./rhoas kafka create 0<&-

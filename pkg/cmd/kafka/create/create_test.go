@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"io/ioutil"
 	"testing"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"net/http"
 
@@ -26,6 +27,7 @@ func TestNewCreateCommand(t *testing.T) {
 		f            *factory.Factory
 		name         string
 		outputFormat string
+		isTTY        bool
 	}
 	tests := []struct {
 		name       string
@@ -34,10 +36,63 @@ func TestNewCreateCommand(t *testing.T) {
 		wantFormat string
 	}{
 		{
+			name:    "Throw error when stdin is closed and no --name flag value is passed",
+			wantErr: true,
+			args: args{
+				name:         "",
+				isTTY:        false,
+				outputFormat: "json",
+				f: &factory.Factory{
+					Logger: func() (logging.Logger, error) {
+						loggerBuilder := logging.NewStdLoggerBuilder()
+						loggerBuilder = loggerBuilder.Debug(true)
+						logger, err := loggerBuilder.Build()
+						if err != nil {
+							return nil, err
+						}
+
+						return logger, nil
+					},
+					Config: mockutil.NewConfigMock(&config.Config{
+						AccessToken:  "valid",
+						RefreshToken: "valid",
+					}),
+					Connection: func() (connection.Connection, error) {
+						mockDefaultAPI := &managedservices.DefaultApiMock{}
+						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
+							req := managedservices.ApiCreateKafkaRequest{
+								ApiService: mockDefaultAPI,
+							}
+
+							return req
+						}
+						mockDefaultAPI.CreateKafkaExecuteFunc = func(r managedservices.ApiCreateKafkaRequest) (managedservices.KafkaRequest, *http.Response, managedservices.GenericOpenAPIError) {
+							kafkaReq := mockutil.NewKafkaRequestTypeMock("test-kafka")
+							var genericError managedservices.GenericOpenAPIError
+							return kafkaReq, nil, genericError
+						}
+						apiClient := &managedservices.APIClient{
+							DefaultApi: mockDefaultAPI,
+						}
+
+						mockConnection := mockutil.NewConnectionMock(&connection.KeycloakConnection{
+							Token: &token.Token{
+								AccessToken:  "valid",
+								RefreshToken: "valid",
+							},
+						}, apiClient)
+
+						return mockConnection, nil
+					},
+				},
+			},
+		},
+		{
 			name: "Create Kafka request and output as JSON",
 			args: args{
 				name:         "test-kafka",
 				outputFormat: "json",
+				isTTY:        true,
 				f: &factory.Factory{
 					Logger: func() (logging.Logger, error) {
 						loggerBuilder := logging.NewStdLoggerBuilder()
@@ -86,7 +141,8 @@ func TestNewCreateCommand(t *testing.T) {
 		{
 			name: "Create Kafka request and output as YAML",
 			args: args{
-				name:         "test-kafka",
+				isTTY:        true,
+				name:         "test",
 				outputFormat: "yaml",
 				f: &factory.Factory{
 					Logger: func() (logging.Logger, error) {
@@ -137,6 +193,7 @@ func TestNewCreateCommand(t *testing.T) {
 			name:    "Throw an error when invalid output format is passed",
 			wantErr: true,
 			args: args{
+				isTTY:        true,
 				name:         "test-kafka",
 				outputFormat: "xml",
 				f: &factory.Factory{
@@ -205,6 +262,13 @@ func TestNewCreateCommand(t *testing.T) {
 			err := cmd.Execute()
 			if !tt.wantErr && err != nil {
 				t.Fatal("Expected error but got nil")
+				return
+			}
+
+			if tt.args.name == "" && !tt.args.isTTY && (tt.wantErr == (err == nil)) {
+				t.Fatalf("wantErr = %v, err = %v", tt.wantErr, err)
+				return
+			} else if !tt.args.isTTY && tt.args.name == "" {
 				return
 			}
 
