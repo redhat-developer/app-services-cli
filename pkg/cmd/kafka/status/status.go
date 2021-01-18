@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
-	sdkKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
+	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/spf13/cobra"
 
@@ -68,7 +68,7 @@ func runStatus(opts *Options) error {
 	client := connection.NewAPIClient()
 
 	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
-	sdkKafka.TransformResponse(&res)
+	pkgKafka.TransformKafkaRequest(&res)
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)

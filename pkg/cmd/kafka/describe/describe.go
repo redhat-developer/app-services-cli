@@ -13,7 +13,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
-	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
+	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -88,7 +88,7 @@ func runDescribe(opts *options) error {
 		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
 	}
 
-	sdkkafka.TransformKafkaRequest(&response)
+	pkgKafka.TransformKafkaRequest(&response)
 
 	switch opts.outputFormat {
 	case "json":

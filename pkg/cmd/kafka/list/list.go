@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"os"
 	"strconv"
 
@@ -22,8 +21,32 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	sdkKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
+	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 )
+
+// Cluster is the details of a Kafka instance
+type cluster struct {
+	ID                  string `json:"id" header:"ID"`
+	Name                string `json:"name" header:"Name"`
+	Owner               string `json:"owner" header:"Owner"`
+	Kind                string `json:"kind"`
+	Href                string `json:"href"`
+	Status              string `json:"status" header:"Status"`
+	CloudProvider       string `json:"cloud_provider" header:"Cloud Provider"`
+	Region              string `json:"region" header:"Region"`
+	BootstrapServerHost string `json:"bootstrapServerHost"`
+	CreatedAt           string `json:"created_at"`
+	UpdatedAt           string `json:"updated_at"`
+}
+
+// clusterList contains a list of Kafka instances
+type clusterList struct {
+	Kind  string    `json:"kind"`
+	Page  int       `json:"page"`
+	Size  int       `json:"size"`
+	Total int       `json:"total"`
+	Items []cluster `json:"items"`
+}
 
 type options struct {
 	outputFormat string
@@ -90,7 +113,7 @@ func runList(opts *options) error {
 	response, _, apiErr := a.Execute()
 	// modify the items to add a :443 port to the bootstrap URL
 	kafkaItems := response.GetItems()
-	kafkaItems = sdkKafka.TransformKafkaRequestListItems(kafkaItems)
+	kafkaItems = pkgKafka.TransformKafkaRequestListItems(kafkaItems)
 	response.SetItems(kafkaItems)
 
 	if apiErr.Error() != "" {
@@ -104,9 +127,9 @@ func runList(opts *options) error {
 
 	jsonResponse, _ := json.Marshal(response)
 
-	var kafkaList kafka.ClusterList
-
 	outputFormat := opts.outputFormat
+
+	var kafkaList clusterList
 
 	if err = json.Unmarshal(jsonResponse, &kafkaList); err != nil {
 		logger.Infof("Could not unmarshal Kakfa list into table, defaulting to JSON: %v", err)

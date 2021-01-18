@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-	sdkkafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
@@ -67,7 +67,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 		return nil, nil, fmt.Errorf("Kafka instance is missing a Bootstrap Server Host")
 	}
 
-	sdkkafka.TransformKafkaRequest(&kafkaInstance)
+	pkgKafka.TransformKafkaRequest(&kafkaInstance)
 
 	conn, err := dialer.Dial("tcp", kafkaInstance.GetBootstrapServerHost())
 	if err != nil {
