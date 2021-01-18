@@ -129,7 +129,7 @@ func runCreate(opts *Options) error {
 		return fmt.Errorf("Unable to create Kafka instance: %w", apiErr)
 	}
 
-	logger.Info("Kafka instance created")
+	logger.Info("Kafka instance created:")
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
@@ -172,7 +172,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 
 	promptName := &survey.Input{
 		Message: "Name:",
-		Help:    "The name of your Kafka instance",
+		Help:    "The name of the Kafka instance",
 	}
 
 	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(sdkKafka.ValidateName))
