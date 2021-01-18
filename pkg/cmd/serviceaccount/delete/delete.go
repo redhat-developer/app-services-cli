@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/MakeNowJust/heredoc"
@@ -57,7 +58,8 @@ func runDelete(opts *Options) (err error) {
 		Message: "Are you sure you want to delete this service account?",
 	}
 
-	if err := survey.AskOne(promptConfirmDelete, &confirmDelete); err != nil {
+	err = survey.AskOne(promptConfirmDelete, &confirmDelete)
+	if err = cmdutil.CheckSurveyError(err); err != nil {
 		return err
 	}
 
