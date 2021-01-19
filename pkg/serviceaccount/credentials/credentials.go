@@ -57,7 +57,7 @@ func AbsolutePath(outputFormat string, customLocation string) (filePath string) 
 		switch outputFormat {
 		case "env":
 			filePath = ".env"
-		case "properties":
+		case "properties", "kafka":
 			filePath = "kafka.properties"
 		case "json":
 			filePath = "credentials.json"
