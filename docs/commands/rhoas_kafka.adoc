@@ -21,7 +21,7 @@ Manage your Kafka instances
 === SEE ALSO
 
 * link:rhoas.adoc[rhoas] - rhoas cli
-* link:rhoas_kafka_create.adoc[rhoas kafka create] - Create a new Kafka
+* link:rhoas_kafka_create.adoc[rhoas kafka create] - Create a Kafka
 instance
 * link:rhoas_kafka_delete.adoc[rhoas kafka delete] - Delete a Kafka
 instance

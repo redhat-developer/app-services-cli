@@ -1,19 +1,26 @@
 == rhoas kafka create
 
-Create a new Kafka instance
+Create a Kafka instance
 
 ....
 rhoas kafka create [flags]
+....
+
+=== Examples
+
+....
+$ rhoas kafka create
+$ rhoas kafka create --name "my-kafka-cluster"
 ....
 
 === Options
 
 ....
   -h, --help              help for create
-  -n, --name string       Name of the new Kafka instance
+  -n, --name string       Name of the Kafka instance
   -o, --output string     Format to display the Kafka instance. Choose from: "json", "yaml", "yml" (default "json")
-      --provider string   Cloud provider ID (default "aws")
-      --region string     Cloud Provider Region ID (default "us-east-1")
+      --provider string   Cloud provider ID
+      --region string     Cloud provider Region ID
 ....
 
 === Options inherited from parent commands

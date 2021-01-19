@@ -2,8 +2,9 @@ package cmdutil
 
 import (
 	"errors"
-	"github.com/AlecAivazis/survey/v2/terminal"
 	"os"
+
+	"github.com/AlecAivazis/survey/v2/terminal"
 )
 
 // CheckSurveyError checks the error from AlecAivazis/survey
