@@ -15,7 +15,7 @@ rhoas kafka topics list [flags]
 ....
   -h, --help            help for list
       --insecure        Enables insecure communication with the server. This disables verification of TLS certificates and host names.
-  -o, --output string   Output format of the results. Options: +["plain" "json" "yml" "yaml"] (default "plain")
+  -o, --output string   Output format of the results. Choose from ["plain" "json" "yml" "yaml"] (default "plain")
 ....
 
 === Options inherited from parent commands

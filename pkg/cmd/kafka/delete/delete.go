@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
@@ -111,7 +112,7 @@ func runDelete(opts *options) error {
 
 	var confirmedKafkaName string
 	err = survey.AskOne(promptConfirmName, &confirmedKafkaName)
-	if err != nil {
+	if err = cmdutil.CheckSurveyError(err); err != nil {
 		return err
 	}
 
@@ -131,7 +132,7 @@ func runDelete(opts *options) error {
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done
-	if currentKafka.ClusterID != kafkaName {
+	if currentKafka == nil || currentKafka.ClusterID != response.GetId() {
 		return nil
 	}
 

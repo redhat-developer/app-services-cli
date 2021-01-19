@@ -24,7 +24,12 @@ var (
 )
 
 // ValidateName validates the proposed name of a Kafka instance
-func ValidateName(name string) error {
+func ValidateName(val interface{}) error {
+	name, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("could not case %v to string", val)
+	}
+
 	if len(name) < 1 || len(name) > 32 {
 		return fmt.Errorf("Kafka instance name must be between 1 and 32 characters")
 	}
