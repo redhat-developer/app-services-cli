@@ -69,7 +69,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return fmt.Errorf("--name required when not running interactively")
-			} else if opts.name == "" {
+			} else if opts.name == "" && opts.provider == "" && opts.region == "" {
 				opts.interactive = true
 			}
 
@@ -81,9 +81,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the new Kafka instance")
-	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, defaultProvider, "Cloud provider ID")
-	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, defaultRegion, "Cloud Provider Region ID")
+	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the Kafka instance")
+	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", "Cloud provider ID")
+	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", "Cloud provider Region ID")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
 
 	return cmd
@@ -117,7 +117,19 @@ func runCreate(opts *Options) error {
 		}
 
 	} else {
-		payload = &managedservices.KafkaRequestPayload{Name: opts.name, Region: &opts.region, CloudProvider: &opts.provider, MultiAz: &opts.multiAZ}
+		if opts.provider == "" {
+			opts.provider = defaultProvider
+		}
+		if opts.region == "" {
+			opts.region = defaultRegion
+		}
+
+		payload = &managedservices.KafkaRequestPayload{
+			Name:          opts.name,
+			Region:        &opts.region,
+			CloudProvider: &opts.provider,
+			MultiAz:       &opts.multiAZ,
+		}
 	}
 
 	logger.Info("Creating Kafka instance")
@@ -153,7 +165,7 @@ func runCreate(opts *Options) error {
 	return nil
 }
 
-// Show an prompt to allow the user to interactively insert the data for their Kafka
+// Show a prompt to allow the user to interactively insert the data for their Kafka
 func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPayload, err error) {
 	connection, err := opts.Connection()
 	if err != nil {
