@@ -9,8 +9,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudprovider/cloudproviderutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudregion/cloudregionutil"
 
-	sdkKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
-
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
@@ -194,7 +192,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 		Help:    "The name of the Kafka instance",
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(sdkKafka.ValidateName))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName))
 	if err = cmdutil.CheckSurveyError(err); err != nil {
 		return nil, err
 	}
