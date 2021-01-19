@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudprovider/cloudproviderutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudregion/cloudregionutil"
 
@@ -64,8 +65,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create a new Kafka instance",
-		Args:  cobra.ExactArgs(0),
+		Short: "Create a Kafka instance",
+		Example: heredoc.Doc(`
+			$ rhoas kafka create
+			$ rhoas kafka create --name "my-kafka-cluster"
+		`),
+		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return fmt.Errorf("--name required when not running interactively")
