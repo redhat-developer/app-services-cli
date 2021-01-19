@@ -9,8 +9,8 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -57,7 +57,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
 			}
 
-			if err := kafka.ValidateName(opts.name); err != nil {
+			if err := pkgKafka.ValidateName(opts.name); err != nil {
 				return err
 			}
 
