@@ -28,7 +28,6 @@ type Options struct {
 	overwrite   bool
 	name        string
 	description string
-	scopes      []string
 	filename    string
 }
 
@@ -72,8 +71,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "env", "Format of the config [env, kafka, properties, json, kube]")
 	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account")
 	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account")
-	cmd.Flags().StringArrayVar(&opts.scopes, "scopes", []string{"kafka-all"},
-		"Number of supported scopes (permissions) for this service account")
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")
 	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials")
 
@@ -93,8 +90,6 @@ func runCreate(opts *Options) error {
 	if err != nil {
 		return err
 	}
-
-	logger.Debug("Creating service account with the following permissions:", opts.scopes)
 
 	client := connection.NewAPIClient()
 
