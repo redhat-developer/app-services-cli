@@ -10,7 +10,7 @@ import (
 
 var (
 	AllowedListFormats       = []string{"plain", "json", "yml", "yaml"}
-	CredentialsOutputFormats = []string{"env", "json", "properties", "kafka", "kube"}
+	CredentialsOutputFormats = []string{"env", "json", "properties", "kube"}
 )
 
 // MustGetDefinedString attempts to get a non-empty string flag from the provided flag set or panic
