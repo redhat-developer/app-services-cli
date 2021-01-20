@@ -55,7 +55,7 @@ func runDelete(opts *Options) (err error) {
 
 	var confirmDelete bool
 	promptConfirmDelete := &survey.Confirm{
-		Message: "Are you sure you want to delete this service account?",
+		Message: fmt.Sprintf("Are you sure you want to delete the service account with ID '%v'?", opts.id),
 	}
 
 	err = survey.AskOne(promptConfirmDelete, &confirmDelete)
