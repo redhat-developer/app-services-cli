@@ -107,9 +107,8 @@ func getFileFormat(output string) (format string) {
 // ChooseFileLocation starts an interactive prompt to get the path to the credentials file
 // a while loop will be entered as it can take multiple attempts to find a suitable location
 // if the file already exists
-func ChooseFileLocation(outputFormat string, filename string, overwrite bool) (filePath string, err error) {
+func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (string, bool, error) {
 	chooseFileLocation := true
-	filePath = filename
 
 	defaultPath := AbsolutePath(outputFormat, filePath)
 
@@ -121,26 +120,26 @@ func ChooseFileLocation(outputFormat string, filename string, overwrite bool) (f
 			Default: defaultPath,
 		}
 		if filePath == "" {
-			err = survey.AskOne(fileNamePrompt, &filePath, survey.WithValidator(survey.Required))
+			err := survey.AskOne(fileNamePrompt, &filePath, survey.WithValidator(survey.Required))
 			if err != nil {
-				return "", err
+				return "", overwrite, err
 			}
 		}
 
 		// check if the file selected already exists
 		// if so ask the user to confirm if they would like to have it overwritten
-		_, err = os.Stat(filePath)
+		_, err := os.Stat(filePath)
 		// file does not exist, we will create it
 		if os.IsNotExist(err) {
-			return filePath, nil
+			return filePath, overwrite, nil
 		}
 		// another error occurred
 		if err != nil {
-			return "", err
+			return "", overwrite, err
 		}
 
 		if overwrite {
-			return filePath, nil
+			return filePath, overwrite, nil
 		}
 
 		overwriteFilePrompt := &survey.Confirm{
@@ -149,11 +148,11 @@ func ChooseFileLocation(outputFormat string, filename string, overwrite bool) (f
 
 		err = survey.AskOne(overwriteFilePrompt, &overwrite)
 		if err != nil {
-			return "", err
+			return "", overwrite, err
 		}
 
 		if overwrite {
-			return filePath, nil
+			return filePath, overwrite, nil
 		}
 
 		filePath = ""
@@ -163,14 +162,14 @@ func ChooseFileLocation(outputFormat string, filename string, overwrite bool) (f
 		}
 		err = survey.AskOne(diffLocationPrompt, &chooseFileLocation)
 		if err != nil {
-			return "", err
+			return "", overwrite, err
 		}
 		defaultPath = ""
 	}
 
 	if filePath == "" {
-		return "", fmt.Errorf("You must specify a file to save the service account credentials")
+		return "", overwrite, fmt.Errorf("You must specify a file to save the service account credentials")
 	}
 
-	return "", nil
+	return "", overwrite, nil
 }

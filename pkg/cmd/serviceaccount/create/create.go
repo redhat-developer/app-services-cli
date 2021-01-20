@@ -114,24 +114,24 @@ func runCreate(opts *Options) error {
 
 	if opts.interactive {
 		// run the create command interactively
-		serviceAccountPayload, err = promptRequestPayload(opts)
+		err = runInteractivePrompt(opts)
 		if err = cmdutil.CheckSurveyError(err); err != nil {
 			return err
 		}
 	} else {
 		// obtain the absolute path to where credentials will be saved
 		opts.filename = credentials.AbsolutePath(opts.output, opts.filename)
-
-		// If the credentials file already exists, and the --overwrite flag is not set then return an error
-		// indicating that the user should explicitly request overwriting of the file
-		_, err = os.Stat(opts.filename)
-		if err == nil && !opts.overwrite {
-			return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
-		}
-
-		// create the service account
-		serviceAccountPayload = &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 	}
+
+	// If the credentials file already exists, and the --overwrite flag is not set then return an error
+	// indicating that the user should explicitly request overwriting of the file
+	_, err = os.Stat(opts.filename)
+	if err == nil && !opts.overwrite {
+		return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
+	}
+
+	// create the service account
+	serviceAccountPayload = &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
 	a := client.DefaultApi.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
@@ -164,15 +164,15 @@ func runCreate(opts *Options) error {
 	return nil
 }
 
-func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccountRequest, err error) {
+func runInteractivePrompt(opts *Options) (err error) {
 	_, err = opts.Connection()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	logger, err := opts.Logger()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	logger.Debug("Beginning interactive prompt")
@@ -181,7 +181,7 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 
 	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// if the --output flag was not used, ask in the prompt
@@ -197,30 +197,21 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 
 		err = survey.AskOne(outputPrompt, &opts.output)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 
-	opts.filename, err = credentials.ChooseFileLocation(opts.output, opts.filename, opts.overwrite)
+	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.output, opts.filename, opts.overwrite)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	promptDescription := &survey.Multiline{Message: "Description (optional):"}
 
 	err = survey.AskOne(promptDescription, &opts.description)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	serviceacct := &managedservices.ServiceAccountRequest{
-		Name:        opts.name,
-		Description: &opts.description,
-	}
-
-	if opts.overwrite {
-		return serviceacct, nil
-	}
-
-	return serviceacct, err
+	return nil
 }
