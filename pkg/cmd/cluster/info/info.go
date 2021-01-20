@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
 
 	"github.com/fatih/color"
 

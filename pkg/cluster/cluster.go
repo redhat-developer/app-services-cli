@@ -8,16 +8,15 @@ import (
 	"path/filepath"
 	"time"
 
-	apiv1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/utils"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
+
+	apiv1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -156,7 +155,7 @@ func CreateSecret(credentials *serviceapi.ServiceAccount,
 		ObjectMeta: metav1.ObjectMeta{
 			Name: secretName,
 		},
-		// Type of CredentialsSecret
+
 		StringData: map[string]string{
 			"clientID":     *credentials.ClientID,
 			"clientSecret": *credentials.ClientSecret,
@@ -183,20 +182,24 @@ func CreateSecret(credentials *serviceapi.ServiceAccount,
 
 func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRequest, namespace string, secretName string) {
 	crName := secretName + "-" + *kafkaInstance.Name
-	crInstance := &connection.ManagedKafkaConnection{
+	instanceID := *kafkaInstance.Id
+
+	crInstance := &ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
 			Namespace: namespace,
 		},
 		TypeMeta: MKCRMeta,
-		Spec: connection.ManagedKafkaConnectionSpec{
-			BootstrapServer: connection.BootstrapServerSpec{
+		Spec: ManagedKafkaConnectionSpec{
+			KafkaID: instanceID,
+		},
+		Status: ManagedKafkaConnectionStatus{
+			Message: "CREATED_BY_CLI: No lifecycle enabled",
+			Updated: "",
+			BootstrapServer: BootstrapServerSpec{
 				Host: *kafkaInstance.BootstrapServerHost,
 			},
-			Credentials: connection.CredentialsSpec{
-				Kind:       connection.ClientCredentials,
-				SecretName: secretName,
-			},
+			SecretName: secretName,
 		},
 	}
 
