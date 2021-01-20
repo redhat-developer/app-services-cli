@@ -123,6 +123,10 @@ func runResetCredentials(opts *Options) (err error) {
 	if err = survey.AskOne(promptConfirmDelete, &confirmReset); err != nil {
 		return err
 	}
+	if !confirmReset {
+		logger.Debug("You have chosen to not reset the service account credentials")
+		return nil
+	}
 
 	serviceacct, err = resetCredentials(opts)
 	if err != nil {
@@ -212,7 +216,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		}
 	}
 
-	opts.filename, err = credentials.ChooseFileLocation(opts.output, opts.filename, opts.overwrite)
+	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.output, opts.filename, opts.overwrite)
 	if err != nil {
 		return err
 	}
