@@ -172,26 +172,11 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 		return nil, err
 	}
 
-	answers := struct {
-		Name        string
-		Description string
-	}{}
-
 	logger.Debug("Beginning interactive prompt")
 
-	qs := []*survey.Question{
-		{
-			Name:     "name",
-			Prompt:   &survey.Input{Message: "Name:", Help: "Give your service account an easily identifiable name"},
-			Validate: survey.Required,
-		},
-		{
-			Name:   "description",
-			Prompt: &survey.Multiline{Message: "Description"},
-		},
-	}
+	promptName := &survey.Input{Message: "Name:", Help: "Give your service account an easily identifiable name"}
 
-	err = survey.Ask(qs, &answers)
+	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required))
 	if err = cmdutil.CheckSurveyError(err); err != nil {
 		return nil, err
 	}
@@ -201,10 +186,10 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 		logger.Debug("--output flag is not set, prompting user to choose a value")
 
 		outputPrompt := &survey.Select{
-			Message: "Credentials output format",
+			Message: "Credentials output format:",
 			Help:    "Output format to save the service account credentials",
 			Options: flagutil.CredentialsOutputFormats,
-			Default: "json",
+			Default: "env",
 		}
 
 		err = survey.AskOne(outputPrompt, &opts.output)
@@ -218,9 +203,16 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 		return nil, err
 	}
 
+	promptDescription := &survey.Multiline{Message: "Description (optional):"}
+
+	err = survey.AskOne(promptDescription, &opts.description)
+	if err = cmdutil.CheckSurveyError(err); err != nil {
+		return nil, err
+	}
+
 	serviceacct := &managedservices.ServiceAccountRequest{
-		Name:        answers.Name,
-		Description: &answers.Description,
+		Name:        opts.name,
+		Description: &opts.description,
 	}
 
 	if opts.overwrite {
@@ -252,7 +244,7 @@ func chooseFileLocation(opts *Options) (filePath string, err error) {
 
 		// choose location
 		fileNamePrompt := &survey.Input{
-			Message: "Credentials file location",
+			Message: "Credentials file location:",
 			Help:    "Enter the path to the file where the service account credentials will be saved to",
 			Default: defaultPath,
 		}
