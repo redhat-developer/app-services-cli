@@ -35,7 +35,7 @@ Secret name: %v
 
 var MKCRMeta = metav1.TypeMeta{
 	Kind:       "ManagedKafkaConnection",
-	APIVersion: "rhoas.redhat.com/v1",
+	APIVersion: "rhoas.redhat.com/v1alpha1",
 }
 
 func ConnectToCluster(connection pkgConnection.Connection,
