@@ -74,13 +74,16 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				if opts.output == "" {
 					return fmt.Errorf("--output is a required flag")
 				}
+			}
+
+			if opts.output != "" {
 				// check that a valid --output flag value is used
 				validOutput := flagutil.IsValidInput(opts.output, flagutil.CredentialsOutputFormats...)
 				if !validOutput {
 					return fmt.Errorf("Invalid value for --output. Valid values: %q", flagutil.CredentialsOutputFormats)
 				}
-			}
 
+			}
 			return runCreate(opts)
 		},
 	}
