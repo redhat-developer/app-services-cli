@@ -4,7 +4,6 @@ go 1.15
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.2.4
-	github.com/Azure/go-autorest/autorest/date v0.2.0
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.7.0
 	github.com/coreos/go-oidc v2.2.1+incompatible

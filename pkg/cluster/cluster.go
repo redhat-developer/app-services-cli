@@ -194,8 +194,7 @@ func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRe
 			KafkaID: instanceID,
 		},
 		Status: ManagedKafkaConnectionStatus{
-			Message: "CREATED_BY_CLI: No lifecycle enabled",
-			Updated: "",
+			CreatedBy: "RHOASCLI",
 			BootstrapServer: BootstrapServerSpec{
 				Host: *kafkaInstance.BootstrapServerHost,
 			},

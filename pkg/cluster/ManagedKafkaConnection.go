@@ -30,6 +30,7 @@ type CredentialsSpec struct {
 
 // ManagedKafkaConnectionStatus defines the observed state of ManagedKafkaConnection
 type ManagedKafkaConnectionStatus struct {
+	CreatedBy       string              `json:"createdBy,omitempty"`
 	Message         string              `json:"message,omitempty"`
 	Updated         string              `json:"updated,omitempty"`
 	BootstrapServer BootstrapServerSpec `json:"bootstrapServer"`
