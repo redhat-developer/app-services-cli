@@ -57,7 +57,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "env", "Format of the config [env, kafka, properties, json, kube]")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "env", fmt.Sprintf("Format of the credentials file: %q", flagutil.CredentialsOutputFormats))
 	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete")
 	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Forcefully reset credentials for the service account")
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")

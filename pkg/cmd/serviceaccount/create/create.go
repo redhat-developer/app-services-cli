@@ -88,7 +88,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", "Format of the config [env, kafka, properties, json, kube]")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q", flagutil.CredentialsOutputFormats))
 	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account")
 	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account")
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")
