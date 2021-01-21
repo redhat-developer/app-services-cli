@@ -38,7 +38,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
+			if !flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
 				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
 				opts.output = "plain"
 			}
