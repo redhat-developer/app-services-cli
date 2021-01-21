@@ -157,6 +157,17 @@ After that, go to Github Releases and create the new release.
 
 > Note: The project follows [semantic versioning](https://semver.org/)
 
+### Generate a changelog
+
+To generate a changelog, run:
+
+```
+make generate/changelog
+```
+
+This will generate a changelog based off the commits and tags. The Changelog will be generated in `CHANGELOG.md`.
+Update the GitHub release description with the changelog.
+
 ### Releasing snapshot version
 
 For testing purposes we should always release snapshot version that will not be used by end users.
