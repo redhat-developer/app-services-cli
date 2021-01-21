@@ -93,8 +93,8 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Login to Managed Application Services",
-		Long:  "Login to Managed Application Services in order to manage your services",
+		Short: "Log in to RHOAS",
+		Long:  "Log in to the RHOAS CLI",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogin(opts)
 		},
