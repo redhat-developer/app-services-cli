@@ -13,7 +13,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
@@ -57,8 +57,8 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 		return nil, nil, err
 	}
 
-	managedservices := connection.NewAPIClient()
-	kafkaInstance, _, apiErr := managedservices.DefaultApi.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID).Execute()
+	api := connection.API()
+	kafkaInstance, _, apiErr := api.Kafka.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID).Execute()
 	if apiErr.Error() != "" {
 		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", apiErr)
 	}
@@ -106,12 +106,13 @@ func ValidateCredentials(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	client := connection.NewAPIClient()
+	api := connection.API()
+
 	logger.Info("")
 	logger.Info("No Service credentials. \nCreating service account for CLI")
 	svcAcctDescription := "RHOAS-CLI Service Account"
-	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
-	a := client.DefaultApi.CreateServiceAccount(context.Background())
+	svcAcctPayload := &serviceapi.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
+	a := api.Kafka.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*svcAcctPayload)
 	response, _, apiErr := a.Execute()
 	if apiErr.Error() != "" {

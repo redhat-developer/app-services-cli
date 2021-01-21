@@ -14,7 +14,7 @@ endif
 # The details of the application:
 binary:=rhoas
 
-managedservices_client_dir=./pkg/api/managedservices
+serviceapi_dir=./pkg/api/serviceapi/client
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -75,11 +75,11 @@ openapi/validate:
 
 # generate the openapi schema
 openapi/generate:
-	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name managedservices -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${managedservices_client_dir}
+	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name client -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${serviceapi_dir}
 	openapi-generator-cli validate -i openapi/managed-services-api.yaml
 	# generate mock
-	moq -out ./pkg/api/managedservices/default_api_mock.go ./pkg/api/managedservices DefaultApi
-	gofmt -w ${managedservices_client_dir}
+	moq -out ${serviceapi_dir}/default_api_mock.go ${serviceapi_dir} DefaultApi
+	gofmt -w ${serviceapi_dir}
 .PHONY: openapi/generate
 
 mock-api/start: mock-api/server/start mock-api/client/start

@@ -3,11 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	serviceapiclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
@@ -40,11 +41,11 @@ func main() {
 	}
 
 	// Attempt to unwrap the descriptive API error message
-	var apiError managedservices.GenericOpenAPIError
+	var apiError serviceapiclient.GenericOpenAPIError
 	if ok := errors.As(err, &apiError); ok {
 		errModel := apiError.Model()
 
-		e, ok := errModel.(managedservices.Error)
+		e, ok := errModel.(serviceapiclient.Error)
 		if ok {
 			fmt.Fprintf(stderr, "Error: %v\n", *e.Reason)
 			os.Exit(1)

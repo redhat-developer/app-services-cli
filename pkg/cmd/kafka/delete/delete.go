@@ -83,9 +83,9 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
-	response, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+	response, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
@@ -122,7 +122,7 @@ func runDelete(opts *options) error {
 	}
 
 	logger.Debug("Deleting Kafka instance", kafkaName)
-	_, _, apiErr = client.DefaultApi.DeleteKafkaById(context.Background(), opts.id).Execute()
+	_, _, apiErr = api.Kafka.DeleteKafkaById(context.Background(), opts.id).Execute()
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)

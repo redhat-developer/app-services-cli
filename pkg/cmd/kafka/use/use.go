@@ -65,9 +65,9 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
-	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+	res, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to retrieve Kafka instance \"%v\": %w", opts.id, apiErr)
 	}

@@ -21,7 +21,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -108,9 +108,9 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
-	var payload *managedservices.KafkaRequestPayload
+	var payload *serviceapi.KafkaRequestPayload
 	if opts.interactive {
 		logger.Debug("Creating Kafka instance in interactive mode")
 
@@ -127,7 +127,7 @@ func runCreate(opts *Options) error {
 			opts.region = defaultRegion
 		}
 
-		payload = &managedservices.KafkaRequestPayload{
+		payload = &serviceapi.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
@@ -137,7 +137,7 @@ func runCreate(opts *Options) error {
 
 	logger.Info("Creating Kafka instance")
 
-	a := client.DefaultApi.CreateKafka(context.Background())
+	a := api.Kafka.CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, _, apiErr := a.Execute()
@@ -169,13 +169,13 @@ func runCreate(opts *Options) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *Options) (payload *serviceapi.KafkaRequestPayload, err error) {
 	connection, err := opts.Connection()
 	if err != nil {
 		return nil, err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
 	// set type to store the answers from the prompt with defaults
 	answers := struct {
@@ -198,7 +198,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, _, apiErr := client.DefaultApi.ListCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, _, apiErr := api.Kafka.ListCloudProviders(context.Background()).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}
@@ -220,7 +220,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 	selectedCloudProvider := cloudproviderutil.FindByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, apiErr := client.DefaultApi.ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
+	cloudRegionResponse, _, apiErr := api.Kafka.ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}
@@ -239,7 +239,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 		return nil, err
 	}
 
-	payload = &managedservices.KafkaRequestPayload{
+	payload = &serviceapi.KafkaRequestPayload{
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,

@@ -82,8 +82,9 @@ func deleteServiceAccount(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
-	a := client.DefaultApi.DeleteServiceAccount(context.Background(), opts.id)
+	api := connection.API()
+
+	a := api.Kafka.DeleteServiceAccount(context.Background(), opts.id)
 	_, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {

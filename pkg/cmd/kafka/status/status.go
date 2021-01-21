@@ -65,9 +65,9 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
-	res, _, apiErr := client.DefaultApi.GetKafkaById(context.Background(), opts.id).Execute()
+	res, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
 	pkgKafka.TransformKafkaRequest(&res)
 
 	if apiErr.Error() != "" {

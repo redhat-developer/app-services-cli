@@ -3,7 +3,7 @@ package kafka
 import (
 	"testing"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 )
 
 func TestValidateName(t *testing.T) {
@@ -101,7 +101,7 @@ func TestTransformRequest(t *testing.T) {
 	hostWithNoPort := "my-kafka-url"
 
 	type args struct {
-		kafkaInstance *managedservices.KafkaRequest
+		kafkaInstance *serviceapi.KafkaRequest
 	}
 	tests := []struct {
 		name                    string
@@ -111,7 +111,7 @@ func TestTransformRequest(t *testing.T) {
 		{
 			name: "bootstrapServerHost should be transformed to empty string when nil",
 			args: args{
-				kafkaInstance: &managedservices.KafkaRequest{
+				kafkaInstance: &serviceapi.KafkaRequest{
 					BootstrapServerHost: nil,
 				},
 			},
@@ -120,7 +120,7 @@ func TestTransformRequest(t *testing.T) {
 		{
 			name: "bootstrapServerHost should be the same when SSL port already exists",
 			args: args{
-				kafkaInstance: &managedservices.KafkaRequest{
+				kafkaInstance: &serviceapi.KafkaRequest{
 					BootstrapServerHost: &hostWithSSLPort,
 				},
 			},
@@ -129,7 +129,7 @@ func TestTransformRequest(t *testing.T) {
 		{
 			name: "bootstrapServerHost should get SSL port when none exists",
 			args: args{
-				kafkaInstance: &managedservices.KafkaRequest{
+				kafkaInstance: &serviceapi.KafkaRequest{
 					BootstrapServerHost: &hostWithNoPort,
 				},
 			},
@@ -159,24 +159,24 @@ func TestTransformKafkaRequestListItems(t *testing.T) {
 	emptyHost := ""
 
 	type args struct {
-		items []managedservices.KafkaRequest
+		items []serviceapi.KafkaRequest
 	}
 	tests := []struct {
 		name string
 		args args
-		want []managedservices.KafkaRequest
+		want []serviceapi.KafkaRequest
 	}{
 		{
 			name: "Should return empty list when no kafkas",
 			args: args{
-				items: []managedservices.KafkaRequest{},
+				items: []serviceapi.KafkaRequest{},
 			},
-			want: []managedservices.KafkaRequest{},
+			want: []serviceapi.KafkaRequest{},
 		},
 		{
 			name: "Should update all bootstrapServerHost ports",
 			args: args{
-				items: []managedservices.KafkaRequest{
+				items: []serviceapi.KafkaRequest{
 					{
 						BootstrapServerHost: &emptyHost,
 					},
@@ -188,7 +188,7 @@ func TestTransformKafkaRequestListItems(t *testing.T) {
 					},
 				},
 			},
-			want: []managedservices.KafkaRequest{
+			want: []serviceapi.KafkaRequest{
 				{
 					BootstrapServerHost: &emptyHost,
 				},

@@ -4,11 +4,13 @@ import (
 	"context"
 	"crypto/x509"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/Nerzal/gocloak/v7"
@@ -82,20 +84,13 @@ func (c *KeycloakConnection) Logout(ctx context.Context) error {
 	return nil
 }
 
-// NewAPIClient creates a new Managed Services API Client
-// The current access token is passed as a Bearer token in the request
-// to authorize the request
-func (c *KeycloakConnection) NewAPIClient() *managedservices.APIClient {
-	masCfg := managedservices.NewConfiguration()
+// API Creates a new API type which is a single type for multiple APIs
+func (c *KeycloakConnection) API() *api.API {
+	kafkaAPIClient := serviceapi.New(c.apiURL, c.client, c.Token.AccessToken)
 
-	masCfg.Scheme = c.apiURL.Scheme
-	masCfg.Host = c.apiURL.Host
+	a := &api.API{
+		Kafka: kafkaAPIClient.DefaultApi,
+	}
 
-	masCfg.HTTPClient = c.client
-
-	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", c.Token.AccessToken))
-
-	masClient := managedservices.NewAPIClient(masCfg)
-
-	return masClient
+	return a
 }

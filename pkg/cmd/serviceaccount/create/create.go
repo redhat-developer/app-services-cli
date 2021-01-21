@@ -15,7 +15,7 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -108,10 +108,6 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
-
-	var serviceAccountPayload *managedservices.ServiceAccountRequest
-
 	if opts.interactive {
 		// run the create command interactively
 		err = runInteractivePrompt(opts)
@@ -131,9 +127,10 @@ func runCreate(opts *Options) error {
 	}
 
 	// create the service account
-	serviceAccountPayload = &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
+	serviceAccountPayload := &serviceapi.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
-	a := client.DefaultApi.CreateServiceAccount(context.Background())
+	api := connection.API()
+	a := api.Kafka.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, apiErr := a.Execute()
 
