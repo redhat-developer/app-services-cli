@@ -88,7 +88,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", "Format of the config [env, kafka, properties, json, kube]")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q", flagutil.CredentialsOutputFormats))
 	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account")
 	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account")
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")
@@ -114,24 +114,24 @@ func runCreate(opts *Options) error {
 
 	if opts.interactive {
 		// run the create command interactively
-		serviceAccountPayload, err = promptRequestPayload(opts)
-		if err != nil {
+		err = runInteractivePrompt(opts)
+		if err = cmdutil.CheckSurveyError(err); err != nil {
 			return err
 		}
 	} else {
 		// obtain the absolute path to where credentials will be saved
 		opts.filename = credentials.AbsolutePath(opts.output, opts.filename)
-
-		// If the credentials file already exists, and the --overwrite flag is not set then return an error
-		// indicating that the user should explicitly request overwriting of the file
-		_, err = os.Stat(opts.filename)
-		if err == nil && !opts.overwrite {
-			return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
-		}
-
-		// create the service account
-		serviceAccountPayload = &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 	}
+
+	// If the credentials file already exists, and the --overwrite flag is not set then return an error
+	// indicating that the user should explicitly request overwriting of the file
+	_, err = os.Stat(opts.filename)
+	if err == nil && !opts.overwrite {
+		return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
+	}
+
+	// create the service account
+	serviceAccountPayload = &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
 	a := client.DefaultApi.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
@@ -164,15 +164,15 @@ func runCreate(opts *Options) error {
 	return nil
 }
 
-func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccountRequest, err error) {
+func runInteractivePrompt(opts *Options) (err error) {
 	_, err = opts.Connection()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	logger, err := opts.Logger()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	logger.Debug("Beginning interactive prompt")
@@ -180,8 +180,8 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 	promptName := &survey.Input{Message: "Name:", Help: "Give your service account an easily identifiable name"}
 
 	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required))
-	if err = cmdutil.CheckSurveyError(err); err != nil {
-		return nil, err
+	if err != nil {
+		return err
 	}
 
 	// if the --output flag was not used, ask in the prompt
@@ -196,113 +196,22 @@ func promptRequestPayload(opts *Options) (payload *managedservices.ServiceAccoun
 		}
 
 		err = survey.AskOne(outputPrompt, &opts.output)
-		if err = cmdutil.CheckSurveyError(err); err != nil {
-			return nil, err
+		if err != nil {
+			return err
 		}
 	}
 
-	opts.filename, err = chooseFileLocation(opts)
+	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.output, opts.filename, opts.overwrite)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	promptDescription := &survey.Multiline{Message: "Description (optional):"}
 
 	err = survey.AskOne(promptDescription, &opts.description)
-	if err = cmdutil.CheckSurveyError(err); err != nil {
-		return nil, err
-	}
-
-	serviceacct := &managedservices.ServiceAccountRequest{
-		Name:        opts.name,
-		Description: &opts.description,
-	}
-
-	if opts.overwrite {
-		return serviceacct, nil
-	}
-
-	return serviceacct, err
-}
-
-// start an interactive prompt to get the path to the credentials file
-// a while loop will be entered as it can take multiple attempts to find a suitable location
-// if the file already exists
-func chooseFileLocation(opts *Options) (filePath string, err error) {
-	chooseFileLocation := true
-	filePath = opts.filename
-
-	defaultPath := credentials.AbsolutePath(opts.output, filePath)
-
-	logger, err := opts.Logger()
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	var attempts = 0
-	for chooseFileLocation {
-		attempts++
-		logger.Debug("Choosing location to save service account credentials")
-		logger.Debug("Attempt number", attempts)
-
-		// choose location
-		fileNamePrompt := &survey.Input{
-			Message: "Credentials file location:",
-			Help:    "Enter the path to the file where the service account credentials will be saved to",
-			Default: defaultPath,
-		}
-		if filePath == "" {
-			err = survey.AskOne(fileNamePrompt, &filePath, survey.WithValidator(survey.Required))
-			if err = cmdutil.CheckSurveyError(err); err != nil {
-				return "", err
-			}
-		}
-
-		// check if the file selected already exists
-		// if so ask the user to confirm if they would like to have it overwritten
-		_, err = os.Stat(filePath)
-		// file does not exist, we will create it
-		if os.IsNotExist(err) {
-			return filePath, nil
-		}
-		// another error occurred
-		if err != nil {
-			return "", err
-		}
-
-		if opts.overwrite {
-			return filePath, nil
-		}
-
-		overwriteFilePrompt := &survey.Confirm{
-			Message: fmt.Sprintf("The file '%v' already exists. Do you want to overwrite it?", filePath),
-		}
-
-		err = survey.AskOne(overwriteFilePrompt, &opts.overwrite)
-
-		if err = cmdutil.CheckSurveyError(err); err != nil {
-			return "", err
-		}
-
-		if opts.overwrite {
-			return filePath, nil
-		}
-
-		filePath = ""
-
-		diffLocationPrompt := &survey.Confirm{
-			Message: "Would you like to specify a different file location?",
-		}
-		err = survey.AskOne(diffLocationPrompt, &chooseFileLocation)
-		if err = cmdutil.CheckSurveyError(err); err != nil {
-			return "", err
-		}
-		defaultPath = ""
-	}
-
-	if filePath == "" {
-		return "", fmt.Errorf("You must specify a file to save the service account credentials")
-	}
-
-	return "", nil
+	return nil
 }
