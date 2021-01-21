@@ -82,10 +82,10 @@ func runStatus(opts *Options) error {
 	}
 
 	statusInfo := &kafkaStatus{
-		ID:            *res.Id,
-		Name:          *res.Name,
-		Status:        *res.Status,
-		BootstrapHost: *res.BootstrapServerHost,
+		ID:            res.GetId(),
+		Name:          res.GetName(),
+		Status:        res.GetStatus(),
+		BootstrapHost: res.GetBootstrapServerHost(),
 	}
 
 	dump.Table(os.Stdout, statusInfo)
