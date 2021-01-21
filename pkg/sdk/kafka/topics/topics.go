@@ -63,7 +63,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", apiErr)
 	}
 
-	if *kafkaInstance.BootstrapServerHost == "" {
+	if kafkaInstance.GetBootstrapServerHost() == "" {
 		return nil, nil, fmt.Errorf("Kafka instance is missing a Bootstrap Server Host")
 	}
 
