@@ -82,7 +82,7 @@ Please make sure that you have configured access to your cluster and selected th
 	} else {
 		operatorStatus = color.HiRedString("Not installed")
 	}
-	logger.Info(statusMsg, color.HiGreenString(currentNamespace), operatorStatus)
+	logger.Info(fmt.Sprintf(statusMsg, color.HiGreenString(currentNamespace), operatorStatus))
 
 	return nil
 }

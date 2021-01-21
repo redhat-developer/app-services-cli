@@ -96,13 +96,8 @@ func ConnectToCluster(connection pkgConnection.Connection,
 	api := connection.API()
 	kafkaInstance, _, err := api.Kafka.GetKafkaById(context.TODO(), kafkaCfg.ClusterID).Execute()
 
-	if err != nil {
+	if err.Error() != "" {
 		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v\n", kafkaCfg.ClusterID, err)
-		return
-	}
-
-	if err != nil {
-		fmt.Fprint(os.Stderr, "Invalid configuration file\n", err)
 		return
 	}
 
@@ -228,7 +223,7 @@ func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRe
 * Checks if we can fetch managedkafkaconnections
  */
 func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
-	crAPIURL := "/apis/rhoas.redhat.com/v1/namespaces/" + namespace + "/managedkafkaconnections"
+	crAPIURL := "/apis/rhoas.redhat.com/v1alpha1/namespaces/" + namespace + "managedkafkaconnections"
 	data := clientset.RESTClient().
 		Get().
 		AbsPath(crAPIURL).

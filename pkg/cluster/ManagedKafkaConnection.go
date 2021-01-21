@@ -1,6 +1,5 @@
 package cluster
 
-// Content based on https://github.com/bf2fc6cc711aee1a0c2a/operator/blob/master/api/v1/managedkafkaconnection_types.go
 // We should use dependency once repo is public
 
 import (
