@@ -21,7 +21,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -108,7 +108,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
 	var payload *managedservices.KafkaRequestPayload
 	if opts.interactive {
@@ -137,7 +137,7 @@ func runCreate(opts *Options) error {
 
 	logger.Info("Creating Kafka instance")
 
-	a := client.DefaultApi.CreateKafka(context.Background())
+	a := api.Kafka.CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, _, apiErr := a.Execute()
@@ -175,7 +175,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 		return nil, err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
 	// set type to store the answers from the prompt with defaults
 	answers := struct {
@@ -198,7 +198,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, _, apiErr := client.DefaultApi.ListCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, _, apiErr := api.Kafka.ListCloudProviders(context.Background()).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}
@@ -220,7 +220,7 @@ func promptKafkaPayload(opts *Options) (payload *managedservices.KafkaRequestPay
 	selectedCloudProvider := cloudproviderutil.FindByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, apiErr := client.DefaultApi.ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
+	cloudRegionResponse, _, apiErr := api.Kafka.ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}

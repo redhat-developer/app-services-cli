@@ -18,6 +18,4 @@ type Factory struct {
 	Connection func() (connection.Connection, error)
 	// Returns a logger to create leveled logs in the application
 	Logger func() (logging.Logger, error)
-
-	API func() (connection.APIFactory, error)
 }

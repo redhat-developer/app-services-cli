@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/x509"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 
-	msclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
@@ -83,21 +84,13 @@ func (c *KeycloakConnection) Logout(ctx context.Context) error {
 	return nil
 }
 
-func (c *KeycloakConnection) API() APIFactory {
-	masCfg := msclient.NewConfiguration()
+// API Creates a new API type which is a single type for multiple APIs
+func (c *KeycloakConnection) API() *api.API {
+	kafkaAPIClient := managedservices.New(c.apiURL, c.client, c.Token.AccessToken)
 
-	masCfg.Scheme = c.apiURL.Scheme
-	masCfg.Host = c.apiURL.Host
-
-	masCfg.HTTPClient = c.client
-
-	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", c.Token.AccessToken))
-
-	masClient := msclient.NewAPIClient(masCfg)
-
-	f := APIFactory{
-		Kafka: masClient.DefaultApi,
+	a := &api.API{
+		Kafka: kafkaAPIClient.DefaultApi,
 	}
 
-	return f
+	return a
 }

@@ -3,7 +3,7 @@ package kafka
 import (
 	"testing"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 )
 
 func TestValidateName(t *testing.T) {

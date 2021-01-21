@@ -5,7 +5,7 @@ package connection
 
 import (
 	"context"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
 	"sync"
 )
 
@@ -15,44 +15,44 @@ var _ Connection = &ConnectionMock{}
 
 // ConnectionMock is a mock implementation of Connection.
 //
-//     func TestSomethingThatUsesIConnection(t *testing.T) {
+//     func TestSomethingThatUsesConnection(t *testing.T) {
 //
 //         // make and configure a mocked Connection
-//         mockedIConnection := &ConnectionMock{
+//         mockedConnection := &ConnectionMock{
+//             APIFunc: func() *api.API {
+// 	               panic("mock out the API method")
+//             },
 //             LogoutFunc: func(ctx context.Context) error {
 // 	               panic("mock out the Logout method")
-//             },
-//             NewAPIClientFunc: func() *managedservices.APIClient {
-// 	               panic("mock out the NewAPIClient method")
 //             },
 //             RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 // 	               panic("mock out the RefreshTokens method")
 //             },
 //         }
 //
-//         // use mockedIConnection in code that requires Connection
+//         // use mockedConnection in code that requires Connection
 //         // and then make assertions.
 //
 //     }
 type ConnectionMock struct {
+	// APIFunc mocks the API method.
+	APIFunc func() *api.API
+
 	// LogoutFunc mocks the Logout method.
 	LogoutFunc func(ctx context.Context) error
-
-	// NewAPIClientFunc mocks the NewAPIClient method.
-	NewAPIClientFunc func() *managedservices.APIClient
 
 	// RefreshTokensFunc mocks the RefreshTokens method.
 	RefreshTokensFunc func(ctx context.Context) (string, string, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// API holds details about calls to the API method.
+		API []struct {
+		}
 		// Logout holds details about calls to the Logout method.
 		Logout []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-		}
-		// NewAPIClient holds details about calls to the NewAPIClient method.
-		NewAPIClient []struct {
 		}
 		// RefreshTokens holds details about calls to the RefreshTokens method.
 		RefreshTokens []struct {
@@ -60,9 +60,35 @@ type ConnectionMock struct {
 			Ctx context.Context
 		}
 	}
+	lockAPI           sync.RWMutex
 	lockLogout        sync.RWMutex
-	lockNewAPIClient  sync.RWMutex
 	lockRefreshTokens sync.RWMutex
+}
+
+// API calls APIFunc.
+func (mock *ConnectionMock) API() *api.API {
+	if mock.APIFunc == nil {
+		panic("ConnectionMock.APIFunc: method is nil but Connection.API was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockAPI.Lock()
+	mock.calls.API = append(mock.calls.API, callInfo)
+	mock.lockAPI.Unlock()
+	return mock.APIFunc()
+}
+
+// APICalls gets all the calls that were made to API.
+// Check the length with:
+//     len(mockedConnection.APICalls())
+func (mock *ConnectionMock) APICalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockAPI.RLock()
+	calls = mock.calls.API
+	mock.lockAPI.RUnlock()
+	return calls
 }
 
 // Logout calls LogoutFunc.
@@ -83,7 +109,7 @@ func (mock *ConnectionMock) Logout(ctx context.Context) error {
 
 // LogoutCalls gets all the calls that were made to Logout.
 // Check the length with:
-//     len(mockedIConnection.LogoutCalls())
+//     len(mockedConnection.LogoutCalls())
 func (mock *ConnectionMock) LogoutCalls() []struct {
 	Ctx context.Context
 } {
@@ -93,32 +119,6 @@ func (mock *ConnectionMock) LogoutCalls() []struct {
 	mock.lockLogout.RLock()
 	calls = mock.calls.Logout
 	mock.lockLogout.RUnlock()
-	return calls
-}
-
-// NewAPIClient calls NewAPIClientFunc.
-func (mock *ConnectionMock) NewAPIClient() *managedservices.APIClient {
-	if mock.NewAPIClientFunc == nil {
-		panic("ConnectionMock.NewAPIClientFunc: method is nil but Connection.NewAPIClient was just called")
-	}
-	callInfo := struct {
-	}{}
-	mock.lockNewAPIClient.Lock()
-	mock.calls.NewAPIClient = append(mock.calls.NewAPIClient, callInfo)
-	mock.lockNewAPIClient.Unlock()
-	return mock.NewAPIClientFunc()
-}
-
-// NewAPIClientCalls gets all the calls that were made to NewAPIClient.
-// Check the length with:
-//     len(mockedIConnection.NewAPIClientCalls())
-func (mock *ConnectionMock) NewAPIClientCalls() []struct {
-} {
-	var calls []struct {
-	}
-	mock.lockNewAPIClient.RLock()
-	calls = mock.calls.NewAPIClient
-	mock.lockNewAPIClient.RUnlock()
 	return calls
 }
 
@@ -140,7 +140,7 @@ func (mock *ConnectionMock) RefreshTokens(ctx context.Context) (string, string, 
 
 // RefreshTokensCalls gets all the calls that were made to RefreshTokens.
 // Check the length with:
-//     len(mockedIConnection.RefreshTokensCalls())
+//     len(mockedConnection.RefreshTokensCalls())
 func (mock *ConnectionMock) RefreshTokensCalls() []struct {
 	Ctx context.Context
 } {

@@ -14,7 +14,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"

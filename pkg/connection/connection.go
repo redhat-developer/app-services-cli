@@ -3,7 +3,7 @@ package connection
 import (
 	"context"
 
-	msclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
 )
 
 // Connection is an interface which defines methods for interacting
@@ -14,10 +14,6 @@ type Connection interface {
 	RefreshTokens(ctx context.Context) (string, string, error)
 	// Method to perform a logout request to the authentication server
 	Logout(ctx context.Context) error
-	// Method to create a new Managed Services API Client
-	API() APIFactory
-}
-
-type APIFactory struct {
-	Kafka msclient.DefaultApi
+	// Method to create the API clients
+	API() *api.API
 }

@@ -15,7 +15,7 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -166,8 +166,8 @@ func resetCredentials(opts *Options) (*managedservices.ServiceAccount, error) {
 		return nil, err
 	}
 
-	client := connection.NewAPIClient()
-	a := client.DefaultApi.ResetServiceAccountCreds(context.Background(), opts.id)
+	api := connection.API()
+	a := api.Kafka.ResetServiceAccountCreds(context.Background(), opts.id)
 
 	logger.Debug("Resetting credentials for service account with ID", opts.id)
 	serviceacct, _, apiErr := a.Execute()

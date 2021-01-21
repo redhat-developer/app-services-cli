@@ -12,7 +12,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/utils"
@@ -94,8 +94,8 @@ func ConnectToCluster(connection pkgConnection.Connection,
 
 	kafkaCfg := cfg.Services.Kafka
 
-	managedservices := connection.NewAPIClient()
-	kafkaInstance, _, err := managedservices.DefaultApi.GetKafkaById(context.TODO(), kafkaCfg.ClusterID).Execute()
+	api := connection.API()
+	kafkaInstance, _, err := api.Kafka.GetKafkaById(context.TODO(), kafkaCfg.ClusterID).Execute()
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v\n", kafkaCfg.ClusterID, err)
@@ -122,11 +122,11 @@ func ConnectToCluster(connection pkgConnection.Connection,
 }
 
 func CreateCredentials(connection pkgConnection.Connection) *managedservices.ServiceAccount {
-	client := connection.NewAPIClient()
+	api := connection.API()
 
 	t := time.Now()
 	serviceAcct := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
-	a := client.DefaultApi.CreateServiceAccount(context.Background())
+	a := api.Kafka.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAcct)
 	res, _, apiErr := a.Execute()
 
@@ -246,8 +246,9 @@ func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
 }
 
 func useKafka(cliconfig *config.Config, connection pkgConnection.Connection) *config.Config {
-	client := connection.NewAPIClient()
-	response, _, apiErr := client.DefaultApi.ListKafkas(context.Background()).Execute()
+	api := connection.API()
+
+	response, _, apiErr := api.Kafka.ListKafkas(context.Background()).Execute()
 
 	if apiErr.Error() != "" {
 		fmt.Fprintf(os.Stderr, "Unable to get Kafka clusters: %v\n", apiErr)

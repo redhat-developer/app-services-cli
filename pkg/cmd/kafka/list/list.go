@@ -105,9 +105,9 @@ func runList(opts *options) error {
 		return err
 	}
 
-	client := connection.NewAPIClient()
+	api := connection.API()
 
-	a := client.DefaultApi.ListKafkas(context.Background())
+	a := api.Kafka.ListKafkas(context.Background())
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 	response, _, apiErr := a.Execute()

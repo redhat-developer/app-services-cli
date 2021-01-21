@@ -1,7 +1,7 @@
 package cloudproviderutil
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices"
+	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
 )
 
 // GetEnabledNames returns a list of cloud provider names from the enabled cloud providers
