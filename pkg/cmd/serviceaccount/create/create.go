@@ -15,7 +15,7 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -108,9 +108,6 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	api := connection.API()
-
-	var serviceAccountPayload *managedservices.ServiceAccountRequest
 
 	if opts.interactive {
 		// run the create command interactively
@@ -123,16 +120,20 @@ func runCreate(opts *Options) error {
 		opts.filename = credentials.AbsolutePath(opts.output, opts.filename)
 	}
 
-	// If the credentials file already exists, and the --overwrite flag is not set then return an error
-	// indicating that the user should explicitly request overwriting of the file
-	_, err = os.Stat(opts.filename)
-	if err == nil && !opts.overwrite {
-		return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
+		// If the credentials file already exists, and the --overwrite flag is not set then return an error
+		// indicating that the user should explicitly request overwriting of the file
+		_, err = os.Stat(opts.filename)
+		if err == nil && !opts.overwrite {
+			return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
+		}
+
 	}
 
 	// create the service account
-	serviceAccountPayload = &managedservices.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
+	// services := serviceapi.
+	serviceAccountPayload := &serviceapi.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
+	api := connection.API()
 	a := api.Kafka.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, apiErr := a.Execute()
@@ -209,6 +210,32 @@ func runInteractivePrompt(opts *Options) (err error) {
 	promptDescription := &survey.Multiline{Message: "Description (optional):"}
 
 	err = survey.AskOne(promptDescription, &opts.description)
+	if err = cmdutil.CheckSurveyError(err); err != nil {
+		return nil, err
+	}
+
+	serviceacct := &serviceapi.ServiceAccountRequest{
+		Name:        opts.name,
+		Description: &opts.description,
+	}
+
+	if opts.overwrite {
+		return serviceacct, nil
+	}
+
+	return serviceacct, err
+}
+
+// start an interactive prompt to get the path to the credentials file
+// a while loop will be entered as it can take multiple attempts to find a suitable location
+// if the file already exists
+func chooseFileLocation(opts *Options) (filePath string, err error) {
+	chooseFileLocation := true
+	filePath = opts.filename
+
+	defaultPath := credentials.AbsolutePath(opts.output, filePath)
+
+	logger, err := opts.Logger()
 	if err != nil {
 		return err
 	}

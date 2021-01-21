@@ -59,7 +59,7 @@ Runs integration tests
 
 ## Managed Services API
 
-The CLI communicates with the Managed Services API. For this there is a generated API client in `./pkg/api/managedservices/client`. 
+The CLI communicates with the Managed Services API. For this there is a generated API client in `./pkg/api/serviceapi/client`. 
 
 ### Updating the API client
 
@@ -75,7 +75,7 @@ Validates the Managed Services OpenAPI specification file.
 
 #### `make openapi/generate`
 
-Generates a Golang API client in `./pkg/api/managedservices/client`.
+Generates a Golang API client in `./pkg/api/serviceapi/client`.
 
 ## Mock API
 

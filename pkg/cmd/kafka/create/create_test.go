@@ -14,7 +14,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -58,20 +58,20 @@ func TestNewCreateCommand(t *testing.T) {
 						RefreshToken: "valid",
 					}),
 					Connection: func() (connection.Connection, error) {
-						mockDefaultAPI := &managedservices.DefaultApiMock{}
-						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
-							req := managedservices.ApiCreateKafkaRequest{
+						mockDefaultAPI := &serviceapi.DefaultApiMock{}
+						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) serviceapi.ApiCreateKafkaRequest {
+							req := serviceapi.ApiCreateKafkaRequest{
 								ApiService: mockDefaultAPI,
 							}
 
 							return req
 						}
-						mockDefaultAPI.CreateKafkaExecuteFunc = func(r managedservices.ApiCreateKafkaRequest) (managedservices.KafkaRequest, *http.Response, managedservices.GenericOpenAPIError) {
+						mockDefaultAPI.CreateKafkaExecuteFunc = func(r serviceapi.ApiCreateKafkaRequest) (serviceapi.KafkaRequest, *http.Response, serviceapi.GenericOpenAPIError) {
 							kafkaReq := mockutil.NewKafkaRequestTypeMock("test-kafka")
-							var genericError managedservices.GenericOpenAPIError
+							var genericError serviceapi.GenericOpenAPIError
 							return kafkaReq, nil, genericError
 						}
-						apiClient := &managedservices.APIClient{
+						apiClient := &serviceapi.APIClient{
 							DefaultApi: mockDefaultAPI,
 						}
 
@@ -109,20 +109,20 @@ func TestNewCreateCommand(t *testing.T) {
 						RefreshToken: "valid",
 					}),
 					Connection: func() (connection.Connection, error) {
-						mockDefaultAPI := &managedservices.DefaultApiMock{}
-						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
-							req := managedservices.ApiCreateKafkaRequest{
+						mockDefaultAPI := &serviceapi.DefaultApiMock{}
+						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) serviceapi.ApiCreateKafkaRequest {
+							req := serviceapi.ApiCreateKafkaRequest{
 								ApiService: mockDefaultAPI,
 							}
 
 							return req
 						}
-						mockDefaultAPI.CreateKafkaExecuteFunc = func(r managedservices.ApiCreateKafkaRequest) (managedservices.KafkaRequest, *http.Response, managedservices.GenericOpenAPIError) {
+						mockDefaultAPI.CreateKafkaExecuteFunc = func(r serviceapi.ApiCreateKafkaRequest) (serviceapi.KafkaRequest, *http.Response, serviceapi.GenericOpenAPIError) {
 							kafkaReq := mockutil.NewKafkaRequestTypeMock("test-kafka")
-							var genericError managedservices.GenericOpenAPIError
+							var genericError serviceapi.GenericOpenAPIError
 							return kafkaReq, nil, genericError
 						}
-						apiClient := &managedservices.APIClient{
+						apiClient := &serviceapi.APIClient{
 							DefaultApi: mockDefaultAPI,
 						}
 
@@ -160,20 +160,20 @@ func TestNewCreateCommand(t *testing.T) {
 						RefreshToken: "valid",
 					}),
 					Connection: func() (connection.Connection, error) {
-						mockDefaultAPI := &managedservices.DefaultApiMock{}
-						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
-							req := managedservices.ApiCreateKafkaRequest{
+						mockDefaultAPI := &serviceapi.DefaultApiMock{}
+						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) serviceapi.ApiCreateKafkaRequest {
+							req := serviceapi.ApiCreateKafkaRequest{
 								ApiService: mockDefaultAPI,
 							}
 
 							return req
 						}
-						mockDefaultAPI.CreateKafkaExecuteFunc = func(r managedservices.ApiCreateKafkaRequest) (managedservices.KafkaRequest, *http.Response, managedservices.GenericOpenAPIError) {
+						mockDefaultAPI.CreateKafkaExecuteFunc = func(r serviceapi.ApiCreateKafkaRequest) (serviceapi.KafkaRequest, *http.Response, serviceapi.GenericOpenAPIError) {
 							kafkaReq := mockutil.NewKafkaRequestTypeMock("test-kafka")
-							var genericError managedservices.GenericOpenAPIError
+							var genericError serviceapi.GenericOpenAPIError
 							return kafkaReq, nil, genericError
 						}
-						apiClient := &managedservices.APIClient{
+						apiClient := &serviceapi.APIClient{
 							DefaultApi: mockDefaultAPI,
 						}
 
@@ -212,20 +212,20 @@ func TestNewCreateCommand(t *testing.T) {
 						RefreshToken: "valid",
 					}),
 					Connection: func() (connection.Connection, error) {
-						mockDefaultAPI := &managedservices.DefaultApiMock{}
-						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) managedservices.ApiCreateKafkaRequest {
-							req := managedservices.ApiCreateKafkaRequest{
+						mockDefaultAPI := &serviceapi.DefaultApiMock{}
+						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) serviceapi.ApiCreateKafkaRequest {
+							req := serviceapi.ApiCreateKafkaRequest{
 								ApiService: mockDefaultAPI,
 							}
 
 							return req
 						}
-						mockDefaultAPI.CreateKafkaExecuteFunc = func(r managedservices.ApiCreateKafkaRequest) (managedservices.KafkaRequest, *http.Response, managedservices.GenericOpenAPIError) {
+						mockDefaultAPI.CreateKafkaExecuteFunc = func(r serviceapi.ApiCreateKafkaRequest) (serviceapi.KafkaRequest, *http.Response, serviceapi.GenericOpenAPIError) {
 							kafkaReq := mockutil.NewKafkaRequestTypeMock("")
-							var genericError managedservices.GenericOpenAPIError
+							var genericError serviceapi.GenericOpenAPIError
 							return kafkaReq, nil, genericError
 						}
-						apiClient := &managedservices.APIClient{
+						apiClient := &serviceapi.APIClient{
 							DefaultApi: mockDefaultAPI,
 						}
 
@@ -274,7 +274,7 @@ func TestNewCreateCommand(t *testing.T) {
 
 			out, _ := ioutil.ReadAll(b)
 
-			var kafkaRequest managedservices.KafkaRequest
+			var kafkaRequest serviceapi.KafkaRequest
 			switch tt.args.outputFormat {
 			case "json":
 				err := json.Unmarshal(out, &kafkaRequest)

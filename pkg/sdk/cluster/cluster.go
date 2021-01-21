@@ -12,7 +12,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/utils"
@@ -121,11 +121,11 @@ func ConnectToCluster(connection pkgConnection.Connection,
 
 }
 
-func CreateCredentials(connection pkgConnection.Connection) *managedservices.ServiceAccount {
+func CreateCredentials(connection pkgConnection.Connection) *serviceapi.ServiceAccount {
 	api := connection.API()
 
 	t := time.Now()
-	serviceAcct := &managedservices.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
+	serviceAcct := &serviceapi.ServiceAccountRequest{Name: fmt.Sprintf("srvc-acct-%v", t.String())}
 	a := api.Kafka.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAcct)
 	res, _, apiErr := a.Execute()
@@ -136,7 +136,7 @@ func CreateCredentials(connection pkgConnection.Connection) *managedservices.Ser
 	}
 
 	jsonResponse, _ := json.Marshal(res)
-	var credentials managedservices.ServiceAccount
+	var credentials serviceapi.ServiceAccount
 	err := json.Unmarshal(jsonResponse, &credentials)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "Invalid JSON response from server\n", err)
@@ -147,7 +147,7 @@ func CreateCredentials(connection pkgConnection.Connection) *managedservices.Ser
 	return &credentials
 }
 
-func CreateSecret(credentials *managedservices.ServiceAccount,
+func CreateSecret(credentials *serviceapi.ServiceAccount,
 	currentNamespace string,
 	clientset *kubernetes.Clientset,
 	secretName string) *apiv1.Secret {
@@ -181,7 +181,7 @@ func CreateSecret(credentials *managedservices.ServiceAccount,
 	return secret
 }
 
-func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *managedservices.KafkaRequest, namespace string, secretName string) {
+func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRequest, namespace string, secretName string) {
 	crName := secretName + "-" + *kafkaInstance.Name
 	crInstance := &connection.ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{

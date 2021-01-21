@@ -13,7 +13,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
@@ -111,7 +111,7 @@ func ValidateCredentials(opts *Options) error {
 	logger.Info("")
 	logger.Info("No Service credentials. \nCreating service account for CLI")
 	svcAcctDescription := "RHOAS-CLI Service Account"
-	svcAcctPayload := &managedservices.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
+	svcAcctPayload := &serviceapi.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
 	a := api.Kafka.CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*svcAcctPayload)
 	response, _, apiErr := a.Execute()

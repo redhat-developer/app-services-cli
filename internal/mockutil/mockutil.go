@@ -4,7 +4,8 @@ import (
 	"context"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
@@ -27,7 +28,7 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 	}
 }
 
-func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *managedservices.APIClient) connection.Connection {
+func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *serviceapi.APIClient) connection.Connection {
 	return &connection.ConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
@@ -49,14 +50,18 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *managedse
 
 			return nil
 		},
-		NewAPIClientFunc: func() *managedservices.APIClient {
-			return apiClient
+		APIFunc: func() *api.API {
+			a := &api.API{
+				Kafka: apiClient.DefaultApi,
+			}
+
+			return a
 		},
 	}
 }
 
-func NewKafkaRequestTypeMock(name string) managedservices.KafkaRequest {
-	var kafkaReq managedservices.KafkaRequest
+func NewKafkaRequestTypeMock(name string) serviceapi.KafkaRequest {
+	var kafkaReq serviceapi.KafkaRequest
 	kafkaReq.SetId("1")
 	kafkaReq.SetName(name)
 

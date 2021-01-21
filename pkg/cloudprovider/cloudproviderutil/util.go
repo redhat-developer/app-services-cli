@@ -1,11 +1,11 @@
 package cloudproviderutil
 
 import (
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 )
 
 // GetEnabledNames returns a list of cloud provider names from the enabled cloud providers
-func GetEnabledNames(cloudProviders []managedservices.CloudProvider) []string {
+func GetEnabledNames(cloudProviders []serviceapi.CloudProvider) []string {
 	var cloudProviderNames = []string{}
 	for _, provider := range cloudProviders {
 		if provider.GetEnabled() {
@@ -16,7 +16,7 @@ func GetEnabledNames(cloudProviders []managedservices.CloudProvider) []string {
 }
 
 // FindByName finds and returns a cloud provider item from the list by its name
-func FindByName(cloudProviders []managedservices.CloudProvider, name string) *managedservices.CloudProvider {
+func FindByName(cloudProviders []serviceapi.CloudProvider, name string) *serviceapi.CloudProvider {
 	for _, p := range cloudProviders {
 		if p.GetName() == name {
 			return &p

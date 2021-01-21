@@ -1,9 +1,10 @@
 package api
 
 import (
-	msclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapiclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 )
 
+// API is a type which defines a number of APIs
 type API struct {
-	Kafka msclient.DefaultApi
+	Kafka serviceapiclient.DefaultApi
 }

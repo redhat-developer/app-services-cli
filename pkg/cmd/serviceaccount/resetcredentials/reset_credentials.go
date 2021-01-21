@@ -15,7 +15,7 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -113,7 +113,7 @@ func runResetCredentials(opts *Options) (err error) {
 		}
 	}
 
-	var serviceacct *managedservices.ServiceAccount
+	var serviceacct *serviceapi.ServiceAccount
 	// prompt the user to confirm their wish to proceed with this action
 	var confirmReset bool
 	promptConfirmDelete := &survey.Confirm{
@@ -155,7 +155,7 @@ func runResetCredentials(opts *Options) (err error) {
 	return nil
 }
 
-func resetCredentials(opts *Options) (*managedservices.ServiceAccount, error) {
+func resetCredentials(opts *Options) (*serviceapi.ServiceAccount, error) {
 	connection, err := opts.Connection()
 	if err != nil {
 		return nil, err

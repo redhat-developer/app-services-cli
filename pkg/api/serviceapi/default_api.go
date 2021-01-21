@@ -1,11 +1,11 @@
-package managedservices
+package serviceapi
 
 import (
 	"fmt"
 	"net/http"
 	"net/url"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 )
 
 // New creates a new Kafka API client

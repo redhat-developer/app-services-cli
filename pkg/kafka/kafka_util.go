@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	managedservices "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/managedservices/client"
+	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 
 	"github.com/MakeNowJust/heredoc"
 )
@@ -45,7 +45,7 @@ func ValidateName(val interface{}) error {
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformKafkaRequestListItems(items []managedservices.KafkaRequest) []managedservices.KafkaRequest {
+func TransformKafkaRequestListItems(items []serviceapi.KafkaRequest) []serviceapi.KafkaRequest {
 	for i := range items {
 		kafka := items[i]
 		kafka = *TransformKafkaRequest(&kafka)
@@ -57,7 +57,7 @@ func TransformKafkaRequestListItems(items []managedservices.KafkaRequest) []mana
 
 // TransformKafkaRequest modifies fields from the KafkaRequest payload object
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformKafkaRequest(kafka *managedservices.KafkaRequest) *managedservices.KafkaRequest {
+func TransformKafkaRequest(kafka *serviceapi.KafkaRequest) *serviceapi.KafkaRequest {
 	bootstrapHost := kafka.GetBootstrapServerHost()
 
 	if bootstrapHost == "" {
