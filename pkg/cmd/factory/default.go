@@ -113,6 +113,13 @@ func New(cliVersion string) *Factory {
 		return conn, nil
 	}
 
+	apiFunc := func () (connection.APIFactory, error) {
+		conn, err := connectionFunc()
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return &Factory{
 		IOStreams:  io,
 		Config:     cfgFile,
