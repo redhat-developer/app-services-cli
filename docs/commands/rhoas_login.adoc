@@ -1,10 +1,10 @@
 == rhoas login
 
-Login to Managed Application Services
+Log in to RHOAS
 
 === Synopsis
 
-Login to Managed Application Services in order to manage your services
+Log in to the RHOAS CLI
 
 ....
 rhoas login [flags]
