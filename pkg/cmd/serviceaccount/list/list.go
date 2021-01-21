@@ -79,7 +79,7 @@ func runList(opts *Options) (err error) {
 
 	connection, err := opts.Connection()
 	if err != nil {
-		return nil
+		return err
 	}
 
 	api := connection.API()

@@ -108,7 +108,6 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-
 	if opts.interactive {
 		// run the create command interactively
 		err = runInteractivePrompt(opts)
@@ -120,17 +119,14 @@ func runCreate(opts *Options) error {
 		opts.filename = credentials.AbsolutePath(opts.output, opts.filename)
 	}
 
-		// If the credentials file already exists, and the --overwrite flag is not set then return an error
-		// indicating that the user should explicitly request overwriting of the file
-		_, err = os.Stat(opts.filename)
-		if err == nil && !opts.overwrite {
-			return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
-		}
-
+	// If the credentials file already exists, and the --overwrite flag is not set then return an error
+	// indicating that the user should explicitly request overwriting of the file
+	_, err = os.Stat(opts.filename)
+	if err == nil && !opts.overwrite {
+		return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
 	}
 
 	// create the service account
-	// services := serviceapi.
 	serviceAccountPayload := &serviceapi.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
 	api := connection.API()
@@ -210,32 +206,6 @@ func runInteractivePrompt(opts *Options) (err error) {
 	promptDescription := &survey.Multiline{Message: "Description (optional):"}
 
 	err = survey.AskOne(promptDescription, &opts.description)
-	if err = cmdutil.CheckSurveyError(err); err != nil {
-		return nil, err
-	}
-
-	serviceacct := &serviceapi.ServiceAccountRequest{
-		Name:        opts.name,
-		Description: &opts.description,
-	}
-
-	if opts.overwrite {
-		return serviceacct, nil
-	}
-
-	return serviceacct, err
-}
-
-// start an interactive prompt to get the path to the credentials file
-// a while loop will be entered as it can take multiple attempts to find a suitable location
-// if the file already exists
-func chooseFileLocation(opts *Options) (filePath string, err error) {
-	chooseFileLocation := true
-	filePath = opts.filename
-
-	defaultPath := credentials.AbsolutePath(opts.output, filePath)
-
-	logger, err := opts.Logger()
 	if err != nil {
 		return err
 	}

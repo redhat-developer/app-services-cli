@@ -113,7 +113,6 @@ func runResetCredentials(opts *Options) (err error) {
 		}
 	}
 
-	var serviceacct *serviceapi.ServiceAccount
 	// prompt the user to confirm their wish to proceed with this action
 	var confirmReset bool
 	promptConfirmDelete := &survey.Confirm{
@@ -128,7 +127,7 @@ func runResetCredentials(opts *Options) (err error) {
 		return nil
 	}
 
-	serviceacct, err = resetCredentials(opts)
+	serviceacct, err := resetCredentials(opts)
 	if err != nil {
 		return err
 	}
