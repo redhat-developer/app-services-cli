@@ -187,9 +187,16 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		return
 	}
 
+	// Add the bearer token to every request
+	tr := &AddAuthHeaderRoundTripper{
+		r:           transport,
+		accessToken: &tkn.AccessToken,
+		logger:      b.logger,
+	}
+
 	client := &http.Client{
 		Jar:       jar,
-		Transport: transport,
+		Transport: tr,
 	}
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
@@ -238,4 +245,19 @@ func (b *Builder) createTransport() (transport http.RoundTripper) {
 func (b *Builder) createCookieJar() (jar http.CookieJar, err error) {
 	jar, err = cookiejar.New(nil)
 	return
+}
+
+type AddAuthHeaderRoundTripper struct {
+	r           http.RoundTripper
+	accessToken *string
+	logger      logging.Logger
+}
+
+// RoundTrip adds a bearer token to every request
+func (rt *AddAuthHeaderRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	rt.logger.Debug("Adding bearer token to request")
+
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", *rt.accessToken))
+
+	return rt.r.RoundTrip(req)
 }

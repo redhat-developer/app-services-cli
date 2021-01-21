@@ -1,7 +1,6 @@
 package serviceapi
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 
@@ -16,8 +15,6 @@ func New(apiURL *url.URL, httpClient *http.Client, accessToken string) *client.A
 	masCfg.Host = apiURL.Host
 
 	masCfg.HTTPClient = httpClient
-
-	masCfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 
 	apiClient := client.NewAPIClient(masCfg)
 
