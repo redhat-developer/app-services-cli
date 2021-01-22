@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
@@ -52,8 +53,10 @@ func main() {
 		}
 	}
 
-	fmt.Fprintln(os.Stderr, err)
-	os.Exit(1)
+	if err = cmdutil.CheckSurveyError(err); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
 
 /**
