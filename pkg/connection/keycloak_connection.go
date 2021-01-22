@@ -3,9 +3,9 @@ package connection
 import (
 	"context"
 	"crypto/x509"
-	"encoding/json"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
 
@@ -48,6 +48,11 @@ type KeycloakConnection struct {
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
 	c.logger.Debug("Refreshing access tokens")
+
+	if !c.tokenNeedsRefresh() {
+		return c.Token.AccessToken, c.Token.RefreshToken, nil
+	}
+
 	refreshedTk, err := c.keycloak.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", "redhat-external")
 	if err != nil {
 		return "", "", &AuthError{err, ""}
@@ -61,10 +66,6 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken str
 	}
 
 	c.logger.Debug("Access tokens successfully refreshed.")
-	if c.logger.DebugEnabled() {
-		b, _ := json.Marshal(c.Token)
-		c.logger.Debug(string(b))
-	}
 
 	return refreshedTk.AccessToken, refreshedTk.RefreshToken, nil
 }
@@ -93,4 +94,19 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	return a
+}
+
+func (c *KeycloakConnection) tokenNeedsRefresh() bool {
+	t := time.Now()
+	expires, left, err := token.GetExpiry(c.Token.AccessToken, t)
+	if err != nil {
+		c.logger.Debug("Error while checking token expiry:", err)
+	}
+
+	if !expires || left > 5*time.Second {
+		c.logger.Debug("Token is still valid.", "Expires in", left)
+		return false
+	}
+
+	return true
 }
