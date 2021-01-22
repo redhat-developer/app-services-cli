@@ -1,6 +1,5 @@
-package connection
+package cluster
 
-// Content based on https://github.com/bf2fc6cc711aee1a0c2a/operator/blob/master/api/v1/managedkafkaconnection_types.go
 // We should use dependency once repo is public
 
 import (
@@ -12,8 +11,8 @@ import (
 
 // ManagedKafkaConnectionSpec contains credentials and connection parameters to Managed Kafka
 type ManagedKafkaConnectionSpec struct {
-	BootstrapServer BootstrapServerSpec `json:"bootstrapServer"`
-	Credentials     CredentialsSpec     `json:"credentials"`
+	KafkaID     string          `json:"kafkaId,omitempty"`
+	Credentials CredentialsSpec `json:"credentials"`
 }
 
 // BootstrapServerSpec contains server host information that can be used to connecto the Managed Kafka
@@ -22,24 +21,20 @@ type BootstrapServerSpec struct {
 	Host string `json:"host,omitempty"`
 }
 
-// CredentialType
-type CredentialType string
-
-const (
-	// ClientCredentials ... enumeration for types of credentials
-	ClientCredentials CredentialType = "ClientCredentialsSecret"
-)
-
 // CredentialsSpec specification containing various formats of credentials
 type CredentialsSpec struct {
-	// Type of the credential format. For example "ClientCredentials"
-	Kind CredentialType `json:"kind,omitempty"`
 	// Reference to secret name that needs to be fetched
-	SecretName string `json:"secretName,omitempty"`
+	SecretName string `json:"serviceAccountSecretName,omitempty"`
 }
 
 // ManagedKafkaConnectionStatus defines the observed state of ManagedKafkaConnection
 type ManagedKafkaConnectionStatus struct {
+	CreatedBy       string              `json:"createdBy,omitempty"`
+	Message         string              `json:"message,omitempty"`
+	Updated         string              `json:"updated,omitempty"`
+	BootstrapServer BootstrapServerSpec `json:"bootstrapServer"`
+	// Reference to secret name that needs to be fetched
+	SecretName string `json:"serviceAccountSecretName,omitempty"`
 }
 
 // Not working  // +kubebuilder:printcolumn:name="service.binding/host",type="string",JSONPath=".metadata.annotations",description="status of the kind"

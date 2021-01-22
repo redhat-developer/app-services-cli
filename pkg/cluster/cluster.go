@@ -8,16 +8,15 @@ import (
 	"path/filepath"
 	"time"
 
-	apiv1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	pkgConnection "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/operator/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/utils"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
+
+	apiv1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -36,7 +35,7 @@ Secret name: %v
 
 var MKCRMeta = metav1.TypeMeta{
 	Kind:       "ManagedKafkaConnection",
-	APIVersion: "rhoas.redhat.com/v1",
+	APIVersion: "rhoas.redhat.com/v1alpha1",
 }
 
 func ConnectToCluster(connection pkgConnection.Connection,
@@ -97,13 +96,8 @@ func ConnectToCluster(connection pkgConnection.Connection,
 	api := connection.API()
 	kafkaInstance, _, err := api.Kafka.GetKafkaById(context.TODO(), kafkaCfg.ClusterID).Execute()
 
-	if err != nil {
+	if err.Error() != "" {
 		fmt.Fprintf(os.Stderr, "Could not get Kafka instance with ID '%v': %v\n", kafkaCfg.ClusterID, err)
-		return
-	}
-
-	if err != nil {
-		fmt.Fprint(os.Stderr, "Invalid configuration file\n", err)
 		return
 	}
 
@@ -156,7 +150,7 @@ func CreateSecret(credentials *serviceapi.ServiceAccount,
 		ObjectMeta: metav1.ObjectMeta{
 			Name: secretName,
 		},
-		// Type of CredentialsSecret
+
 		StringData: map[string]string{
 			"clientID":     *credentials.ClientID,
 			"clientSecret": *credentials.ClientSecret,
@@ -183,20 +177,23 @@ func CreateSecret(credentials *serviceapi.ServiceAccount,
 
 func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRequest, namespace string, secretName string) {
 	crName := secretName + "-" + *kafkaInstance.Name
-	crInstance := &connection.ManagedKafkaConnection{
+	instanceID := *kafkaInstance.Id
+
+	crInstance := &ManagedKafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
 			Namespace: namespace,
 		},
 		TypeMeta: MKCRMeta,
-		Spec: connection.ManagedKafkaConnectionSpec{
-			BootstrapServer: connection.BootstrapServerSpec{
+		Spec: ManagedKafkaConnectionSpec{
+			KafkaID: instanceID,
+		},
+		Status: ManagedKafkaConnectionStatus{
+			CreatedBy: "RHOASCLI",
+			BootstrapServer: BootstrapServerSpec{
 				Host: *kafkaInstance.BootstrapServerHost,
 			},
-			Credentials: connection.CredentialsSpec{
-				Kind:       connection.ClientCredentials,
-				SecretName: secretName,
-			},
+			SecretName: secretName,
 		},
 	}
 
@@ -206,7 +203,7 @@ func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRe
 		return
 	}
 
-	crAPIURL := "/apis/rhoas.redhat.com/v1/namespaces/" + namespace + "/managedkafkaconnections"
+	crAPIURL := "/apis/rhoas.redhat.com/v1alpha1/namespaces/" + namespace + "/managedkafkaconnections"
 	data := clientset.RESTClient().
 		Post().
 		AbsPath(crAPIURL).
@@ -226,7 +223,7 @@ func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRe
 * Checks if we can fetch managedkafkaconnections
  */
 func IsCRDInstalled(clientset *kubernetes.Clientset, namespace string) bool {
-	crAPIURL := "/apis/rhoas.redhat.com/v1/namespaces/" + namespace + "/managedkafkaconnections"
+	crAPIURL := "/apis/rhoas.redhat.com/v1alpha1/namespaces/" + namespace + "managedkafkaconnections"
 	data := clientset.RESTClient().
 		Get().
 		AbsPath(crAPIURL).

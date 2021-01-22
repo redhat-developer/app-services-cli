@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
 
 	"github.com/fatih/color"
 
@@ -82,7 +82,7 @@ Please make sure that you have configured access to your cluster and selected th
 	} else {
 		operatorStatus = color.HiRedString("Not installed")
 	}
-	logger.Info(statusMsg, color.HiGreenString(currentNamespace), operatorStatus)
+	logger.Info(fmt.Sprintf(statusMsg, color.HiGreenString(currentNamespace), operatorStatus))
 
 	return nil
 }

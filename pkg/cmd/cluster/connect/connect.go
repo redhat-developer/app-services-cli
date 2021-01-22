@@ -1,9 +1,9 @@
 package connect
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/cluster"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/spf13/cobra"
