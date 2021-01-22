@@ -121,6 +121,18 @@
         "-o",
         "yaml"
       ]
+    },
+    {
+      "name": "cluster connect",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "cluster",
+        "connect"
+      ]
     }
   ]
 }

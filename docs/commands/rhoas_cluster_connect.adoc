@@ -20,8 +20,8 @@ details please visit: https://github.com/bf2fc6cc711aee1a0c2a/operator
 . Secret only (–secret-only) creates only secret (no extra operator
 installation is required)
 
-Using –forceSelect will ignore current command context make interactive
-prompt for selecting service instance you want to use.
+Using –interactive-select will ignore current command context make
+interactive prompt for selecting service instance you want to use.
 
 ....
 rhoas cluster connect [flags]
@@ -31,10 +31,10 @@ rhoas cluster connect [flags]
 
 ....
   -h, --help                 help for connect
+      --interactive-select   Allows to select services before performing binding
       --kubeconfig string    Location of the .kube/config file
       --secret-name string   Name of the secret that will be used to hold Kafka credentials (default "kafka-credentials")
       --secret-only          Apply only secret and without CR. Can be used without installing RHOAS operator on cluster
-      --skip-context         Allows to select services before performing binding
 ....
 
 === Options inherited from parent commands
