@@ -203,7 +203,7 @@ func CreateCR(clientset *kubernetes.Clientset, kafkaInstance *serviceapi.KafkaRe
 		return
 	}
 
-	crAPIURL := "/apis/rhoas.redhat.com/v1/namespaces/" + namespace + "/managedkafkaconnections"
+	crAPIURL := "/apis/rhoas.redhat.com/v1alpha1/namespaces/" + namespace + "/managedkafkaconnections"
 	data := clientset.RESTClient().
 		Post().
 		AbsPath(crAPIURL).
