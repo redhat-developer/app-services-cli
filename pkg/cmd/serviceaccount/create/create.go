@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
-
 	"github.com/AlecAivazis/survey/v2"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
@@ -111,7 +109,7 @@ func runCreate(opts *Options) error {
 	if opts.interactive {
 		// run the create command interactively
 		err = runInteractivePrompt(opts)
-		if err = cmdutil.CheckSurveyError(err); err != nil {
+		if err != nil {
 			return err
 		}
 	} else {

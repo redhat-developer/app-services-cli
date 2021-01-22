@@ -3,7 +3,6 @@ package delete
 import (
 	"context"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
@@ -112,7 +111,7 @@ func runDelete(opts *options) error {
 
 	var confirmedKafkaName string
 	err = survey.AskOne(promptConfirmName, &confirmedKafkaName)
-	if err = cmdutil.CheckSurveyError(err); err != nil {
+	if err != nil {
 		return err
 	}
 

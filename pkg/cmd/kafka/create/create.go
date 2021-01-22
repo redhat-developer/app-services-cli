@@ -193,7 +193,7 @@ func promptKafkaPayload(opts *Options) (payload *serviceapi.KafkaRequestPayload,
 	}
 
 	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName))
-	if err = cmdutil.CheckSurveyError(err); err != nil {
+	if err != nil {
 		return nil, err
 	}
 
@@ -212,7 +212,7 @@ func promptKafkaPayload(opts *Options) (payload *serviceapi.KafkaRequestPayload,
 	}
 
 	err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
-	if err = cmdutil.CheckSurveyError(err); err != nil {
+	if err != nil {
 		return nil, err
 	}
 
@@ -235,7 +235,7 @@ func promptKafkaPayload(opts *Options) (payload *serviceapi.KafkaRequestPayload,
 	}
 
 	err = survey.AskOne(regionPrompt, &answers.Region)
-	if err = cmdutil.CheckSurveyError(err); err != nil {
+	if err != nil {
 		return nil, err
 	}
 

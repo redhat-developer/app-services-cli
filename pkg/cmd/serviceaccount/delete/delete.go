@@ -3,7 +3,6 @@ package delete
 import (
 	"context"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/MakeNowJust/heredoc"
@@ -59,7 +58,7 @@ func runDelete(opts *Options) (err error) {
 	}
 
 	err = survey.AskOne(promptConfirmDelete, &confirmDelete)
-	if err = cmdutil.CheckSurveyError(err); err != nil {
+	if err != nil {
 		return err
 	}
 
