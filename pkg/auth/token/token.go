@@ -17,12 +17,7 @@ func (c *Token) IsValid() (tokenIsValid bool, err error) {
 	if c.AccessToken != "" {
 		var expires bool
 		var left time.Duration
-		var accessToken *jwt.Token
-		accessToken, err = Parse(c.AccessToken)
-		if err != nil {
-			return
-		}
-		expires, left, err = GetExpiry(accessToken, now)
+		expires, left, err = GetExpiry(c.AccessToken, now)
 		if err != nil {
 			return
 		}
@@ -34,12 +29,7 @@ func (c *Token) IsValid() (tokenIsValid bool, err error) {
 	if c.RefreshToken != "" {
 		var expires bool
 		var left time.Duration
-		var refreshToken *jwt.Token
-		refreshToken, err = Parse(c.RefreshToken)
-		if err != nil {
-			return
-		}
-		expires, left, err = GetExpiry(refreshToken, now)
+		expires, left, err = GetExpiry(c.RefreshToken, now)
 		if err != nil {
 			return
 		}
@@ -71,8 +61,14 @@ func MapClaims(token *jwt.Token) (jwt.MapClaims, error) {
 	return claims, nil
 }
 
-func GetExpiry(token *jwt.Token, now time.Time) (expires bool,
+func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	left time.Duration, err error) {
+
+	token, err := Parse(tokenStr)
+	if err != nil {
+		return false, 0, err
+	}
+
 	claims, err := MapClaims(token)
 	if err != nil {
 		return false, 0, err
