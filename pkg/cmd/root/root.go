@@ -2,11 +2,11 @@ package root
 
 import (
 	"flag"
+
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/arguments"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/docs"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login"
@@ -25,8 +25,8 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 		Long:          "Work with your Managed Services",
 
 		Example: heredoc.Doc(`
-			$ rhas login
-			$ rhoas serviceaccount
+			$ rhoas login
+			$ rhoas serviceaccount list
 			$ rhoas kafka create
 		`),
 	}
@@ -43,7 +43,6 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	cmd.AddCommand(logout.NewLogoutCommand(cmdFactory))
 	cmd.AddCommand(kafka.NewKafkaCommand(cmdFactory))
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(cmdFactory))
-	cmd.AddCommand(docs.NewDocsCommand())
 	cmd.AddCommand(cluster.NewClusterCommand(cmdFactory))
 	cmd.AddCommand(completion.CompletionCmd)
 

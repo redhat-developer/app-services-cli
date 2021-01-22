@@ -9,8 +9,8 @@ Work with your Managed Services
 === Examples
 
 ....
-$ rhas login
-$ rhoas serviceaccount
+$ rhoas login
+$ rhoas serviceaccount list
 $ rhoas kafka create
 ....
 
@@ -27,7 +27,6 @@ $ rhoas kafka create
 OpenShift Cluster
 * link:rhoas_completion.adoc[rhoas completion] - Generate completion
 script
-* link:rhoas_docs.adoc[rhoas docs] - Open documentation in browser
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
 * link:rhoas_login.adoc[rhoas login] - Log in to RHOAS
 * link:rhoas_logout.adoc[rhoas logout] - Logout from connected Managed
