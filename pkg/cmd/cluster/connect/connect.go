@@ -2,10 +2,12 @@ package connect
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -16,12 +18,12 @@ type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
+	IO         *iostreams.IOStreams
 
 	secretOnly         bool
 	kubeconfigLocation string
 	secretName         string
-	// TODO: Rename to interactive
-	forceSelect bool
+	interactiveSelect  bool
 }
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
@@ -29,6 +31,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
 	cmd := &cobra.Command{
@@ -48,16 +51,19 @@ For more details please visit:
 https://github.com/bf2fc6cc711aee1a0c2a/operator
 2) Secret only (--secret-only) creates only secret (no extra operator installation is required)
 
-Using --forceSelect will ignore current command context make interactive prompt for selecting service instance you want to use.
-
+Using --interactive-select will ignore current command context make interactive prompt for selecting service instance you want to use.
 `,
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			if !opts.IO.CanPrompt() && opts.interactiveSelect {
+				return fmt.Errorf("Cannot use --interactive-select when not running interactively")
+			}
+
 			return runBind(opts)
 		},
 	}
 
 	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, "Apply only secret and without CR. Can be used without installing RHOAS operator on cluster")
-	cmd.Flags().BoolVarP(&opts.forceSelect, "skip-context", "", false, "Allows to select services before performing binding")
+	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, "Allows to select services before performing binding")
 	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
 	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", "Location of the .kube/config file")
 
@@ -80,7 +86,7 @@ func runBind(opts *Options) error {
 		return err
 	}
 
-	err = clusterConn.Connect(context.Background(), opts.secretName, opts.forceSelect)
+	err = clusterConn.Connect(context.Background(), opts.secretName, opts.interactiveSelect)
 	if err != nil {
 		return err
 	}
