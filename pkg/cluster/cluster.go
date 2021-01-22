@@ -101,6 +101,11 @@ func ConnectToCluster(connection pkgConnection.Connection,
 		return
 	}
 
+	if kafkaInstance.BootstrapServerHost == nil || *kafkaInstance.BootstrapServerHost == "" {
+		fmt.Fprintf(os.Stderr, "Kafka instance is missing required BootstrapServerHost variable")
+		return
+	}
+
 	fmt.Fprintf(os.Stderr, statusMsg, color.HiGreenString(*kafkaInstance.Name), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
 	if shouldContinue := utils.ShowQuestion("Do you want to continue?"); shouldContinue == false {
 		return
