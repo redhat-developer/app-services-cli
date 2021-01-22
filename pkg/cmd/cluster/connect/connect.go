@@ -1,9 +1,12 @@
 package connect
 
 import (
+	"context"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/spf13/cobra"
@@ -12,6 +15,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
+	Logger     func() (logging.Logger, error)
 
 	secretOnly         bool
 	kubeconfigLocation string
@@ -24,6 +28,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -65,7 +70,20 @@ func runBind(opts *Options) error {
 		return err
 	}
 
-	cluster.ConnectToCluster(connection, opts.Config, opts.secretName, opts.kubeconfigLocation, opts.forceSelect)
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfigLocation)
+	if err != nil {
+		return err
+	}
+
+	err = clusterConn.Connect(context.Background(), opts.secretName, opts.forceSelect)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

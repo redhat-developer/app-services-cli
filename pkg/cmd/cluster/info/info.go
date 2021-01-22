@@ -1,20 +1,19 @@
 package info
 
 import (
+	"context"
 	"fmt"
 	"os"
-	"path/filepath"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/fatih/color"
 
 	"github.com/spf13/cobra"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
-	"k8s.io/client-go/util/homedir"
 
 	// Get all auth schemes
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
@@ -25,63 +24,65 @@ Namespace: %v
 Managed Application Services Operator: %v 
 `
 
+type Options struct {
+	Config     config.IConfig
+	Connection func() (connection.Connection, error)
+	Logger     func() (logging.Logger, error)
+}
+
 func NewInfoCommand(f *factory.Factory) *cobra.Command {
+	opts := &Options{
+		Config:     f.Config,
+		Connection: f.Connection,
+		Logger:     f.Logger,
+	}
+
 	cmd := &cobra.Command{
 		Use:   "info",
 		Short: "Prints information about your OpenShift cluster connection",
 		Long:  `Prints information about your OpenShift cluster connection`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			return runInfo(f)
+			return runInfo(opts)
 		},
 	}
 
 	return cmd
 }
 
-func runInfo(f *factory.Factory) error {
-	logger, err := f.Logger()
+func runInfo(opts *Options) error {
+	connection, err := opts.Connection()
 	if err != nil {
 		return err
 	}
 
-	var kubeconfig string
-
-	if home := homedir.HomeDir(); home != "" {
-		kubeconfig = filepath.Join(home, ".kube", "config")
-	}
-
-	if !fileExists(kubeconfig) {
-		return fmt.Errorf(`
-Command uses oc or kubectl login context file. 
-Please make sure that you have configured access to your cluster and selected the right namespace`)
-	}
-
-	kubeClientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
-		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: ""}})
-
-	// use the current context in kubeconfig
-	restConfig, err := kubeClientconfig.ClientConfig()
+	logger, err := opts.Logger()
 	if err != nil {
-		return fmt.Errorf("Failed to load kube config file: %w", err)
+		return err
 	}
 
-	// create the clientset
-	clientset, err := kubernetes.NewForConfig(restConfig)
-
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, "")
 	if err != nil {
-		return fmt.Errorf("Failed to load kube config file: %w", err)
+		return err
 	}
-
-	currentNamespace, _, _ := kubeClientconfig.Namespace()
 
 	var operatorStatus string
 	// Add versioning in future
-	if cluster.IsCRDInstalled(clientset, currentNamespace) {
+	isCRDInstalled, err := clusterConn.IsKafkaConnectionCRDInstalled(context.Background())
+	if isCRDInstalled && err != nil {
+		logger.Debug(err)
+	}
+
+	if isCRDInstalled {
 		operatorStatus = color.HiGreenString("Installed")
 	} else {
 		operatorStatus = color.HiRedString("Not installed")
 	}
+
+	currentNamespace, err := clusterConn.CurrentNamespace()
+	if err != nil {
+		return err
+	}
+
 	logger.Info(fmt.Sprintf(statusMsg, color.HiGreenString(currentNamespace), operatorStatus))
 
 	return nil
