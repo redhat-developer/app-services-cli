@@ -1,15 +1,16 @@
 == rhoas cluster connect
 
-connect currently selected Kafka to your OpenShift cluster
+Connect your services to a Kubernetes or OpenShift
 
 === Synopsis
 
-Connect command links your own OpenShift cluster with Managed Services.
+Connect your services to your Kubernetes or OpenShift cluster. The
+kubeconfig file is used to connect with the cluster and identify the
+context.
 
-Connect command will use current Kubernetes context (namespace/project
-you have selected) created by oc or kubectl command line. Command will
-create new service account and mount it as secret into your cluster,
-giving you ability to mount credentials directly to your application.
+A service account is created and mounted as a secret into your cluster.
+This gives you the ability to mount credentials directly to your
+application.
 
 Command work in two modes:
 
@@ -25,6 +26,13 @@ interactive prompt for selecting service instance you want to use.
 
 ....
 rhoas cluster connect [flags]
+....
+
+=== Examples
+
+....
+# connect the current Kafka instance to your cluster
+$ rhoas cluster connect
 ....
 
 === Options
@@ -45,6 +53,6 @@ rhoas cluster connect [flags]
 
 === SEE ALSO
 
-* link:rhoas_cluster.adoc[rhoas cluster] - Managed your services in
-OpenShift Cluster
+* link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
+your Kubernetes or OpenShift Cluster
 

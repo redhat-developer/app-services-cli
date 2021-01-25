@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -36,23 +37,28 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "connect",
-		Short: "connect currently selected Kafka to your OpenShift cluster",
-		Long: `Connect command links your own OpenShift cluster with Managed Services.
+		Short: "Connect your services to a Kubernetes or OpenShift",
+		Long: heredoc.Doc(`
+			Connect your services to your Kubernetes or OpenShift cluster.
+			The kubeconfig file is used to connect with the cluster and identify the context.
 
-Connect command will use current Kubernetes context (namespace/project you have selected) created by oc or kubectl command line.
-Command will create new service account and mount it as secret into your cluster, giving you ability to mount credentials directly
-to your application. 
+			A service account is created and mounted as a secret into your cluster. 
+			This gives you the ability to mount credentials directly to your application.
 
-Command work in two modes:
+			Command work in two modes:
 
-1) Using RHOAS operator installed on cluster.
-You can  or utilize service-binding-operator to automatically bind your instance.
-For more details please visit:
-https://github.com/bf2fc6cc711aee1a0c2a/operator
-2) Secret only (--secret-only) creates only secret (no extra operator installation is required)
+			1) Using RHOAS operator installed on cluster.
+			You can  or utilize service-binding-operator to automatically bind your instance.
+			For more details please visit:
+			https://github.com/bf2fc6cc711aee1a0c2a/operator
+			2) Secret only (--secret-only) creates only secret (no extra operator installation is required)
 
-Using --interactive-select will ignore current command context make interactive prompt for selecting service instance you want to use.
-`,
+			Using --interactive-select will ignore current command context make interactive prompt for selecting service instance you want to use.
+		`),
+		Example: heredoc.Doc(`
+			# connect the current Kafka instance to your cluster
+			$ rhoas cluster connect
+		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.interactiveSelect {
 				return fmt.Errorf("Cannot use --interactive-select when not running interactively")

@@ -1,13 +1,28 @@
 == rhoas cluster info
 
-Prints information about your OpenShift cluster connection
+View information about the current Kubernetes or OpenShift cluster.
 
 === Synopsis
 
-Prints information about your OpenShift cluster connection
+View information about the current Kubernetes or OpenShift cluster using
+your kubeconfig file.
+
+The information shown is useful for connecting your service to the
+OpenShift cluster.
+
+For this command to work you must be logged into a Kubernetes or
+OpenShift cluster. The command uses the kubeconfig file to identify the
+cluster context.
 
 ....
 rhoas cluster info [flags]
+....
+
+=== Examples
+
+....
+# print information about the current cluster
+$ rhoas cluster info
 ....
 
 === Options
@@ -24,6 +39,6 @@ rhoas cluster info [flags]
 
 === SEE ALSO
 
-* link:rhoas_cluster.adoc[rhoas cluster] - Managed your services in
-OpenShift Cluster
+* link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
+your Kubernetes or OpenShift Cluster
 

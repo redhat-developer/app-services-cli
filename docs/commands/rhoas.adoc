@@ -31,8 +31,8 @@ $ rhoas cluster connect
 
 === SEE ALSO
 
-* link:rhoas_cluster.adoc[rhoas cluster] - Managed your services in
-OpenShift Cluster
+* link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
+your Kubernetes or OpenShift Cluster
 * link:rhoas_completion.adoc[rhoas completion] - Generate completion
 script
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
