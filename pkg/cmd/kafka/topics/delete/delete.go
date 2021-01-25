@@ -32,7 +32,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
 		Short: "Delete topic",
-		Long:  "Delete topic from the current selected Managed Kafka cluster",
+		Long:  "Delete topic from the current Kafka instance",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return deleteTopic(opts)
 		},

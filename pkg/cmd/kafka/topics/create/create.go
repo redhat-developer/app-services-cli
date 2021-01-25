@@ -41,7 +41,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a topic in a Kafka instance",
-		Long:  "Create topic in the current selected Managed Kafka cluster",
+		Long:  "Create topic in the current Kafka instance",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return createTopic(opts)
 		},

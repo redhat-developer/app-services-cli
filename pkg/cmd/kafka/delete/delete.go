@@ -40,7 +40,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			You can only delete Kafka instances that you created.
 		`),
 		Example: heredoc.Doc(`
-			# delete the Kafka instance which is currently selected (rhoas kafka use to change it)
+			# delete the current Kafka instance
 			$ rhoas kafka delete
 
 			# delete a Kafka instance with a specific ID
@@ -68,7 +68,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the currently selected Kafka instance will be used")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used")
 
 	return cmd
 }

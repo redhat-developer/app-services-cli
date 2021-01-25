@@ -7,9 +7,9 @@ Set the current Kafka instance
 Select a Kafka instance and set it in the config as the current Kafka
 instance.
 
-Once a Kafka instance is in use, it becomes the ``current'' instance.
-When an ID is not specified in other Kafka commands, the currently
-selected Kafka instance is used.
+Once a Kafka instance is used, it becomes the ``current'' instance. When
+an ID is not specified in other Kafka commands, the current Kafka
+instance is used.
 
 ....
 rhoas kafka use [flags]

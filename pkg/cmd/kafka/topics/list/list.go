@@ -32,7 +32,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List topics",
-		Long:  "List all topics in the current selected Managed Kafka cluster",
+		Long:  "List all topics in the current Kafka instance",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			logger, err := opts.Logger()
 			if err != nil {

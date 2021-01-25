@@ -4,7 +4,7 @@ Create a topic in a Kafka instance
 
 === Synopsis
 
-Create topic in the current selected Managed Kafka cluster
+Create topic in the current Kafka instance
 
 ....
 rhoas kafka topics create [flags]

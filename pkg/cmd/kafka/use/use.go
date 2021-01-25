@@ -35,8 +35,8 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Long: heredoc.Doc(`
 			Select a Kafka instance and set it in the config as the current Kafka instance.
 
-			Once a Kafka instance is in use, it becomes the "current" instance. 
-			When an ID is not specified in other Kafka commands, the currently selected Kafka instance is used.
+			Once a Kafka instance is used, it becomes the "current" instance. 
+			When an ID is not specified in other Kafka commands, the current Kafka instance is used.
 		`),
 		Example: heredoc.Doc(`
 			# use the Kafka instance that has an ID of "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"

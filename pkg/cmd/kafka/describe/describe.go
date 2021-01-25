@@ -47,7 +47,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			The result can be output either as JSON or YAML.
 		`),
 		Example: heredoc.Doc(`
-			# view the currently selected instance
+			# view the current Kafka instance instance
 			$ rhoas kafka describe
 
 			# view a specific instance by passing the --id flag
@@ -84,7 +84,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to describe. If not set, the currently selected Kafka instance will be used")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to describe. If not set, the current Kafka instance will be used")
 
 	return cmd
 }

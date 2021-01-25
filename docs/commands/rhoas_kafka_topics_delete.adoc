@@ -4,7 +4,7 @@ Delete topic
 
 === Synopsis
 
-Delete topic from the current selected Managed Kafka cluster
+Delete topic from the current Kafka instance
 
 ....
 rhoas kafka topics delete [flags]

@@ -4,7 +4,7 @@ List topics
 
 === Synopsis
 
-List all topics in the current selected Managed Kafka cluster
+List all topics in the current Kafka instance
 
 ....
 rhoas kafka topics list [flags]
