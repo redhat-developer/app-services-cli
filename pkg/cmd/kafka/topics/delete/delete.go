@@ -31,14 +31,14 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Delete topic",
-		Long:  "Delete topic from the current selected Managed Kafka cluster",
+		Short: "Delete Kafka topic",
+		Long:  "Delete a topic from the current Kafka instance",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return deleteTopic(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.topicName, flags.FlagName, "n", "", "Topic name (required)")
+	cmd.Flags().StringVarP(&opts.topicName, flags.FlagName, "n", "", "Topic name")
 	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 
 	_ = cmd.MarkFlagRequired(flags.FlagName)

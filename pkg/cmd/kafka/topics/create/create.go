@@ -40,20 +40,20 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create topic",
-		Long:  "Create topic in the current selected Managed Kafka cluster",
+		Short: "Create a Kafka topic",
+		Long:  "Create topic in the current Kafka instance",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return createTopic(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.topicName, topicflags.FlagName, "n", "", "Topic name (required)")
-	_ = cmd.MarkFlagRequired(topicflags.FlagName)
+	cmd.Flags().StringVarP(&opts.topicName, topicflags.FlagName, "n", "", "Topic name")
 	cmd.Flags().Int32VarP(&opts.partitions, Partitions, "p", 1, "Set number of partitions")
 	cmd.Flags().Int32VarP(&opts.replicas, Replicas, "r", 1, "Set number of replicas")
 	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 
-	// TODO define file format etc
+	_ = cmd.MarkFlagRequired(topicflags.FlagName)
+
 	return cmd
 }
 

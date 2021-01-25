@@ -1,17 +1,25 @@
 == rhoas
 
-rhoas cli
+RHOAS CLI
 
 === Synopsis
 
-Work with your Managed Services
+Manage your application services directly from the command-line.
 
 === Examples
 
 ....
+# authenticate securely through your web browser
 $ rhoas login
-$ rhoas serviceaccount list
-$ rhoas kafka create
+
+# create a Kafka instance
+$ rhoas kafka create --name "my-kafka-cluster"
+
+# create a service account with SASL/PLAIN credentials
+$ rhoas serviceaccount create -o json
+
+# connect your Kubernetes/OpenShift cluster to a service
+$ rhoas cluster connect
 ....
 
 === Options
@@ -23,14 +31,13 @@ $ rhoas kafka create
 
 === SEE ALSO
 
-* link:rhoas_cluster.adoc[rhoas cluster] - Managed your services in
-OpenShift Cluster
+* link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
+your Kubernetes or OpenShift Cluster
 * link:rhoas_completion.adoc[rhoas completion] - Generate completion
 script
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
-* link:rhoas_login.adoc[rhoas login] - Log in to RHOAS
-* link:rhoas_logout.adoc[rhoas logout] - Logout from connected Managed
-Application Services cluster
-* link:rhoas_serviceaccount.adoc[rhoas serviceaccount] - Manage your
-service accounts
+* link:rhoas_login.adoc[rhoas login] - Log in to RHOAS.
+* link:rhoas_logout.adoc[rhoas logout] - Log out from RHOAS
+* link:rhoas_serviceaccount.adoc[rhoas serviceaccount] - Create, list,
+delete and update service accounts
 

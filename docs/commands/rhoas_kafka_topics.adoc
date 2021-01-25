@@ -1,10 +1,23 @@
 == rhoas kafka topics
 
-Manage topics
+Create, list and delete Kafka topics
 
 === Synopsis
 
-Manage Kafka topics for the current selected Managed Kafka instance
+Create, list and delete topics for a Kafka instance.
+
+=== Examples
+
+....
+# create a topic in the current Kafka instance
+$ rhoas kafka topics create --name "my-example-topic"
+
+# list all topics for a Kafka instance
+$ rhoas kafka topics list
+
+# delete a topic for the current Kafka instance
+$ rhoas kafka topics delete --name "my-example-topic"
+....
 
 === Options
 
@@ -22,8 +35,9 @@ Manage Kafka topics for the current selected Managed Kafka instance
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
 * link:rhoas_kafka_topics_create.adoc[rhoas kafka topics create] - Create
-topic
+a Kafka topic
 * link:rhoas_kafka_topics_delete.adoc[rhoas kafka topics delete] - Delete
-topic
-* link:rhoas_kafka_topics_list.adoc[rhoas kafka topics list] - List topics
+Kafka topic
+* link:rhoas_kafka_topics_list.adoc[rhoas kafka topics list] - List Kafka
+topics
 

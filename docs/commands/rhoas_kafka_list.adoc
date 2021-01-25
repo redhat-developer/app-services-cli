@@ -4,10 +4,27 @@ List all Kafka instances
 
 === Synopsis
 
-List all Kafka instances
+List all Kafka instances.
+
+This command will provide a high level view of all Kafka instances. The
+fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
+Use the describe command to view all fields for a specific instance.
+
+The instances are displayed by default in a table, but can also be
+displayed as JSON or YAML.
 
 ....
 rhoas kafka list [flags]
+....
+
+=== Examples
+
+....
+# list all Kafka instances using the default (plain) output format
+$ rhoas kafka list
+
+# list all Kafka instances using JSON as the output format
+$ rhoas kafka list -o json
 ....
 
 === Options

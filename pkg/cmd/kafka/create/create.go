@@ -64,9 +64,22 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a Kafka instance",
+		Long: heredoc.Doc(`
+			Create a Kafka instance with custom configuration values, otherwise use default values.
+
+			Configuration options available: name, cloud provider, region.
+
+		  The created instance can be viewed from the command-line and the web UI.
+		`),
 		Example: heredoc.Doc(`
+			# start an interactive prompt to fill out the configuration values for the instance
 			$ rhoas kafka create
+
+			# create a Kafka instance with flags. Optional fields will be populated with default values
 			$ rhoas kafka create --name "my-kafka-cluster"
+
+			# create a Kafka instance and output the result in YAML
+			$ rhoas kafka create -o yaml
 		`),
 		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {

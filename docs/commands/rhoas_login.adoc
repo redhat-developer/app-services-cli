@@ -1,13 +1,26 @@
 == rhoas login
 
-Log in to RHOAS
+Log in to RHOAS.
 
 === Synopsis
 
-Log in to the RHOAS CLI
+Log in securely to RHOAS using your web browser.
+
+Your web browser will open automatically where you can securely enter
+your credentials.
 
 ....
 rhoas login [flags]
+....
+
+=== Examples
+
+....
+# start an authentication request and open your browser to fill in your credentials
+$ rhoas login
+
+# print the authentication URL instead of automatically opening the browser
+$ rhoas login --print-sso-url
 ....
 
 === Options
@@ -30,5 +43,5 @@ rhoas login [flags]
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - rhoas cli
+* link:rhoas.adoc[rhoas] - RHOAS CLI
 

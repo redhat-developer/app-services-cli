@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
@@ -93,8 +94,19 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Log in to RHOAS",
-		Long:  "Log in to the RHOAS CLI",
+		Short: "Log in to RHOAS.",
+		Long: heredoc.Doc(`
+			Log in securely to RHOAS using your web browser.
+
+			Your web browser will open automatically where you can securely enter your credentials.
+		`),
+		Example: heredoc.Doc(`
+			# start an authentication request and open your browser to fill in your credentials
+			$ rhoas login
+
+			# print the authentication URL instead of automatically opening the browser
+			$ rhoas login --print-sso-url
+		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogin(opts)
 		},

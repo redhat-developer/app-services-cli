@@ -36,11 +36,26 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "describe",
-		Short: "Get details of single Kafka instance",
-		Long:  "Get details of single Kafka instance, either by loading the currently selected Kafka instance or a custom one with the `--id` flag",
+		Short: "View all configuration values of a Kafka instance",
+		Long: heredoc.Doc(`
+			View all configuration fields and their values for a Kafka instance.
+
+			Pass the --id flag to specify which instance you would like to view.
+
+			If the --id flag is not passed then the selected Kafka instance will be used, if available.
+
+			The result can be output either as JSON or YAML.
+		`),
 		Example: heredoc.Doc(`
+			# view the current Kafka instance instance
 			$ rhoas kafka describe
-			$ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
+
+			# view a specific instance by passing the --id flag
+			$ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+
+			# customise the output format
+			$ rhoas kafka describe -o yaml
+			`,
 		),
 		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -69,7 +84,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to describe. If not set, the currently selected Kafka instance will be used")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to describe. If not set, the current Kafka instance will be used")
 
 	return cmd
 }

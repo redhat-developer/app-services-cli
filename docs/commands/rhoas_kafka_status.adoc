@@ -1,13 +1,26 @@
 == rhoas kafka status
 
-Get status of current Kafka instance
+View status of a Kafka instance
 
 === Synopsis
 
-Gets the status of the current Kafka instance context
+View the status of a Kafka instance.
+
+The values shown as part of the status are: ID, Name, Status, Bootstrap
+Server Host
 
 ....
 rhoas kafka status [flags]
+....
+
+=== Examples
+
+....
+# view the status of the current Kafka instance
+$ rhoas kafka status
+
+# view the status of a Kafka instance using its ID
+$ rhoas kafka status --id "1nYlgkt87xelHT1wnOdEyGhFhaO"
 ....
 
 === Options

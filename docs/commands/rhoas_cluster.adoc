@@ -1,10 +1,21 @@
 == rhoas cluster
 
-Managed your services in OpenShift Cluster
+View and perform operations on your Kubernetes or OpenShift Cluster
 
 === Synopsis
 
-Managed your services in OpenShift Cluster
+View information about your Kubernetes or OpenShift cluster and perform
+operations related to your application services.
+
+=== Examples
+
+....
+# view information about your cluster
+$ rhoas cluster info
+
+# connect a service to your cluster
+$ rhoas cluster connect
+....
 
 === Options
 
@@ -20,9 +31,9 @@ Managed your services in OpenShift Cluster
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - rhoas cli
-* link:rhoas_cluster_connect.adoc[rhoas cluster connect] - connect
-currently selected Kafka to your OpenShift cluster
-* link:rhoas_cluster_info.adoc[rhoas cluster info] - Prints information
-about your OpenShift cluster connection
+* link:rhoas.adoc[rhoas] - RHOAS CLI
+* link:rhoas_cluster_connect.adoc[rhoas cluster connect] - Connect your
+services to a Kubernetes or OpenShift
+* link:rhoas_cluster_info.adoc[rhoas cluster info] - View information
+about the current Kubernetes or OpenShift cluster.
 

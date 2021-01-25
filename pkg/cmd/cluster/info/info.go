@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
@@ -38,8 +39,19 @@ func NewInfoCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "info",
-		Short: "Prints information about your OpenShift cluster connection",
-		Long:  `Prints information about your OpenShift cluster connection`,
+		Short: "View information about the current Kubernetes or OpenShift cluster.",
+		Long: heredoc.Doc(`
+			View information about the current Kubernetes or OpenShift cluster using your kubeconfig file.
+
+			The information shown is useful for connecting your service to the OpenShift cluster.
+
+			For this command to work you must be logged into a Kubernetes or OpenShift cluster. The command
+			uses the kubeconfig file to identify the cluster context.
+		`),
+		Example: heredoc.Doc(`
+			# print information about the current cluster
+			$ rhoas cluster info
+		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runInfo(opts)
 		},

@@ -1,10 +1,15 @@
 == rhoas kafka use
 
-Set the current Kafka instance context
+Set the current Kafka instance
 
 === Synopsis
 
-Sets a Kafka instance in context by its unique identifier
+Select a Kafka instance and set it in the config as the current Kafka
+instance.
+
+Once a Kafka instance is used, it is saved as the current instance. When
+an ID is not specified in other Kafka commands, the current Kafka
+instance is used.
 
 ....
 rhoas kafka use [flags]
@@ -13,7 +18,7 @@ rhoas kafka use [flags]
 === Examples
 
 ....
-$ rhoas kafka use
+# use the Kafka instance that has an ID of "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
 $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 ....
 
@@ -21,7 +26,7 @@ $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
   -h, --help        help for use
-      --id string   ID of the Kafka instance you want to use
+      --id string   ID of the Kafka instance to use
 ....
 
 === Options inherited from parent commands

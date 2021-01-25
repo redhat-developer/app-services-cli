@@ -1,10 +1,10 @@
 == rhoas kafka topics list
 
-List topics
+List Kafka topics
 
 === Synopsis
 
-List all topics in the current selected Managed Kafka cluster
+List all topics in the current Kafka instance
 
 ....
 rhoas kafka topics list [flags]
@@ -26,5 +26,6 @@ rhoas kafka topics list [flags]
 
 === SEE ALSO
 
-* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Manage topics
+* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Create, list and
+delete Kafka topics
 

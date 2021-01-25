@@ -46,9 +46,14 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List service accounts",
-		Long:  "List all service accounts belonging to your organization",
+		Long: heredoc.Doc(`
+			List all service accounts as a table, JSON, or YAML
+		`),
 		Example: heredoc.Doc(`
+			# list all service accounts
 			$ rhoas serviceaccount list
+
+			# list all service accounts as JSON
 			$ rhoas serviceaccount list -o json
 		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
