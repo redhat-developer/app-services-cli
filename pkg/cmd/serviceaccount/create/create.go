@@ -48,7 +48,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Use:   "create",
 		Short: "Create a service account",
 		Long: heredoc.Doc(`
-			Create a service account with SASL/PLAIN credentials which are saved to a file.
+			Create a service account with credentials which are saved to a file.
 			
 			The credentials generated as part of a service account can be by applications 
 			and tools to authenticate and interact with services.

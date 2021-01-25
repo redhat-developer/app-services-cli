@@ -17,8 +17,6 @@ func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 		Short: "Create, list, delete and update service accounts",
 		Long: heredoc.Doc(`
 			Use these commands to create, delete, and list service accounts. You can also reset the credentials for service account.
-
-			Service accounts include SASL/PLAIN credentials which can then be used to authenticate applications and tools with your services.
 		`),
 		Example: heredoc.Doc(`
 			# create a service account

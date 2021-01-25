@@ -30,7 +30,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 			# create a Kafka instance
 			$ rhoas kafka create --name "my-kafka-cluster"
 
-			# create a service account with SASL/PLAIN credentials
+			# create a service account and save credentials to a JSON file
 			$ rhoas serviceaccount create -o json
 
 			# connect your Kubernetes/OpenShift cluster to a service
