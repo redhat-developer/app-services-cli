@@ -1,6 +1,6 @@
 == rhoas kafka topics create
 
-Create a topic in a Kafka instance
+Create a Kafka topic
 
 === Synopsis
 
@@ -15,7 +15,7 @@ rhoas kafka topics create [flags]
 ....
   -h, --help               help for create
       --insecure           Enables insecure communication with the server. This disables verification of TLS certificates and host names.
-  -n, --name string        Topic name (required)
+  -n, --name string        Topic name
   -p, --partitions int32   Set number of partitions (default 1)
   -r, --replicas int32     Set number of replicas (default 1)
 ....

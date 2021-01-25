@@ -1,6 +1,6 @@
 == rhoas kafka topics list
 
-List topics
+List Kafka topics
 
 === Synopsis
 
