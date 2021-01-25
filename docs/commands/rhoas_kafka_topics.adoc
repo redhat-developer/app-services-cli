@@ -33,7 +33,8 @@ $ rhoas kafka topics delete --name "my-example-topic"
 
 === SEE ALSO
 
-* link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
+* link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use and manage your
+Kafka instances
 * link:rhoas_kafka_topics_create.adoc[rhoas kafka topics create] - Create
 a Kafka topic
 * link:rhoas_kafka_topics_delete.adoc[rhoas kafka topics delete] - Delete
