@@ -1,6 +1,6 @@
 == rhoas login
 
-Log in to RHOAS.
+Log in to RHOAS
 
 === Synopsis
 

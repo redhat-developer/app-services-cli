@@ -94,7 +94,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Log in to RHOAS.",
+		Short: "Log in to RHOAS",
 		Long: heredoc.Doc(`
 			Log in securely to RHOAS using your web browser.
 
