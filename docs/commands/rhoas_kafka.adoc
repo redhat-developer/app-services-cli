@@ -34,4 +34,3 @@ Kafka instance
 delete Kafka topics
 * link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Kafka
 instance
-

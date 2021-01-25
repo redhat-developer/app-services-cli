@@ -40,4 +40,3 @@ a Kafka topic
 Kafka topic
 * link:rhoas_kafka_topics_list.adoc[rhoas kafka topics list] - List Kafka
 topics
-

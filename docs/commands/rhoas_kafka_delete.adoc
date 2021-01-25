@@ -36,4 +36,3 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 === SEE ALSO
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
-

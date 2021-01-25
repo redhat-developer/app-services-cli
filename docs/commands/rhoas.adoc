@@ -40,4 +40,3 @@ script
 * link:rhoas_logout.adoc[rhoas logout] - Log out from RHOAS
 * link:rhoas_serviceaccount.adoc[rhoas serviceaccount] - Create, list,
 delete and update service accounts
-

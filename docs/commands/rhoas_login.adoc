@@ -44,4 +44,3 @@ $ rhoas login --print-sso-url
 === SEE ALSO
 
 * link:rhoas.adoc[rhoas] - RHOAS CLI
-
