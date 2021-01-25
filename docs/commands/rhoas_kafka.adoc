@@ -1,10 +1,23 @@
 == rhoas kafka
 
-Manage your Kafka instances
+Create, view, use and manage your Kafka instances
 
 === Synopsis
 
-Manage your Kafka instances
+Perform various operations on your Kafka instances.
+
+=== Examples
+
+....
+# create a Kafka instance
+$ rhoas kafka create
+
+# list Kafka instances
+$ rhoas kafka list
+
+# create a Kafka topic
+$ rhoas kafka topics create --name "my-kafka-topic"
+....
 
 === Options
 
