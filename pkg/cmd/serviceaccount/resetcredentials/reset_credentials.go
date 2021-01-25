@@ -47,10 +47,10 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		Use:   "reset-credentials",
 		Short: "Reset service account credentials",
 		Long: heredoc.Doc(`
-			Reset the SASL/PLAIN credentials for a service account.
+			Reset the credentials for a service account.
 
-			This command will generate a new SASL/PLAIN password for a service account.
-			Once the credentials have been reset, any applications or tools that use the SASL/PLAIN
+			This command will generate a new password for a service account.
+			Once the credentials have been reset, any applications or tools that use the
 			credentials will need to be updated with the new password for it to work again.
 		`),
 		Example: heredoc.Doc(`

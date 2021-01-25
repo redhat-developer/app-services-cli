@@ -43,7 +43,7 @@ var (
 	`)
 )
 
-// Credentials is a type which represents the SASL/Plain credentials
+// Credentials is a type which represents the credentials
 // for a service account
 type Credentials struct {
 	ClientID     string `json:"client_id,omitempty"`
