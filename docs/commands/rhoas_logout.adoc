@@ -1,10 +1,11 @@
 == rhoas logout
 
-Logout from connected Managed Application Services cluster
+Log out from RHOAS
 
 === Synopsis
 
-Logout from connected Managed Application Services cluster
+Log out from RHOAS. To interact with your services you will need to log
+in again.
 
 ....
 rhoas logout [flags]
@@ -24,5 +25,5 @@ rhoas logout [flags]
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - rhoas cli
+* link:rhoas.adoc[rhoas] - RHOAS CLI
 

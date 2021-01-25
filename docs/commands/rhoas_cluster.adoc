@@ -20,7 +20,7 @@ Managed your services in OpenShift Cluster
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - rhoas cli
+* link:rhoas.adoc[rhoas] - RHOAS CLI
 * link:rhoas_cluster_connect.adoc[rhoas cluster connect] - connect
 currently selected Kafka to your OpenShift cluster
 * link:rhoas_cluster_info.adoc[rhoas cluster info] - Prints information

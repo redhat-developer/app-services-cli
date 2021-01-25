@@ -2,6 +2,16 @@
 
 Create a Kafka instance
 
+=== Synopsis
+
+Create a Kafka instance with custom configuration values, otherwise use
+default values.
+
+Configuration options available: name, cloud provider, region.
+
+The created instance can be viewed and used by every user in your
+organization, from the command-line and the web UI.
+
 ....
 rhoas kafka create [flags]
 ....
@@ -9,8 +19,14 @@ rhoas kafka create [flags]
 === Examples
 
 ....
+# start an interactive prompt to fill out the configuration values for the instance
 $ rhoas kafka create
+
+# create a Kafka instance with flags. Optional fields will be populated with default values
 $ rhoas kafka create --name "my-kafka-cluster"
+
+# create a Kafka instance and output the result in YAML
+$ rhoas kafka create -o yaml
 ....
 
 === Options

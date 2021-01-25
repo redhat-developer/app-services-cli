@@ -4,7 +4,9 @@ Delete a Kafka instance
 
 === Synopsis
 
-Permanently deletes a Kafka instance
+Permanently delete a Kafka instance.
+
+You can only delete Kafka instances that you created.
 
 ....
 rhoas kafka delete [flags]
@@ -13,7 +15,10 @@ rhoas kafka delete [flags]
 === Examples
 
 ....
+# delete the Kafka instance which is currently selected (rhoas kafka use to change it)
 $ rhoas kafka delete
+
+# delete a Kafka instance with a specific ID
 $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 ....
 

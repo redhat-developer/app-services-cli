@@ -20,17 +20,18 @@ Manage your Kafka instances
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - rhoas cli
+* link:rhoas.adoc[rhoas] - RHOAS CLI
 * link:rhoas_kafka_create.adoc[rhoas kafka create] - Create a Kafka
 instance
 * link:rhoas_kafka_delete.adoc[rhoas kafka delete] - Delete a Kafka
 instance
-* link:rhoas_kafka_describe.adoc[rhoas kafka describe] - Get details of
-single Kafka instance
+* link:rhoas_kafka_describe.adoc[rhoas kafka describe] - View all
+configuration values of a Kafka instance
 * link:rhoas_kafka_list.adoc[rhoas kafka list] - List all Kafka instances
-* link:rhoas_kafka_status.adoc[rhoas kafka status] - Get status of current
+* link:rhoas_kafka_status.adoc[rhoas kafka status] - View status of a
 Kafka instance
-* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Manage topics
+* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Create, list and
+delete Kafka topics
 * link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Kafka
-instance context
+instance
 

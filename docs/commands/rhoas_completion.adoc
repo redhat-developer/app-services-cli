@@ -55,5 +55,5 @@ rhoas completion [bash|zsh|fish|powershell]
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - rhoas cli
+* link:rhoas.adoc[rhoas] - RHOAS CLI
 
