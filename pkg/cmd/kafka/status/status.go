@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
@@ -30,9 +31,20 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "status",
-		Short: "Get status of current Kafka instance",
-		Long:  "Gets the status of the current Kafka instance context",
-		Args:  cobra.ExactArgs(0),
+		Short: "View status of a Kafka instance",
+		Long: heredoc.Doc(`
+			View the status of a Kafka instance.
+
+			The values shown as part of the status are: ID, Name, Status, Bootstrap Server Host
+		`),
+		Example: heredoc.Doc(`
+			# view the status of the current Kafka instance
+			$ rhoas kafka status
+
+			# view the status of a Kafka instance using its ID
+			$ rhoas kafka status --id "1nYlgkt87xelHT1wnOdEyGhFhaO"
+		`),
+		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := opts.Config.Load()
 			if err != nil {

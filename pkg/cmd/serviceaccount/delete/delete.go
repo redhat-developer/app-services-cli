@@ -32,7 +32,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
 		Short: "Delete a service account",
+		Long: heredoc.Doc(`
+			Permanently delete a service account from your organization.
+		`),
 		Example: heredoc.Doc(`
+			# delete the service account with ID
 			$ rhoas serviceaccount delete --id 173c1ad9-932d-4007-ae0f-4da74f4d2ccd
 		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {

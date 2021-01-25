@@ -34,9 +34,16 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
 		Short: "Delete a Kafka instance",
-		Long:  "Permanently deletes a Kafka instance",
+		Long: heredoc.Doc(`
+			Permanently delete a Kafka instance.
+
+			You can only delete Kafka instances that you created.
+		`),
 		Example: heredoc.Doc(`
+			# delete the Kafka instance which is currently selected (rhoas kafka use to change it)
 			$ rhoas kafka delete
+
+			# delete a Kafka instance with a specific ID
 			$ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 		`),
 		Args: cobra.ExactArgs(0),

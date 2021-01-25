@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/MakeNowJust/heredoc"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
@@ -71,8 +72,23 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List all Kafka instances",
-		Long:  "List all Kafka instances",
-		Args:  cobra.ExactArgs(0),
+		Long: heredoc.Doc(`
+			List all Kafka instances in your organization.
+			
+			This command will provide a high level view of all Kafka instances in your organization.
+			The fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
+			Use the describe command to view all fields for a specific instance.
+
+			The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+		`),
+		Example: heredoc.Doc(`
+			# list all Kafka instances using the default (plain) output format
+			$ rhoas kafka list
+
+			# list all Kafka instances using JSON as the output format
+			$ rhoas kafka list -o json
+		`),
+		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			logger, err := opts.Logger()
 			if err != nil {

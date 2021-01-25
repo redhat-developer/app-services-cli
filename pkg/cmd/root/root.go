@@ -21,13 +21,20 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Use:           "rhoas <command> <subcommand> [flags]",
-		Short:         "rhoas cli",
-		Long:          "Work with your Managed Services",
-
+		Short:         "RHOAS CLI",
+		Long:          "Manage your application services directly from the command-line.",
 		Example: heredoc.Doc(`
+			# authenticate securely through your web browser
 			$ rhoas login
-			$ rhoas serviceaccount list
-			$ rhoas kafka create
+
+			# create a Kafka instance
+			$ rhoas kafka create --name "my-kafka-cluster"
+
+			# create a service account with SASL/PLAIN credentials
+			$ rhoas serviceaccount create -o json
+
+			# connect your Kubernetes/OpenShift cluster to a service
+			$ rhoas cluster connect
 		`),
 	}
 

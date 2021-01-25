@@ -45,10 +45,19 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "reset-credentials",
-		Short: "Reset credentials for a service account",
-		Long:  "Generate new SASL/PLAIN credentials for a service account and revoke the old credentials",
+		Short: "Reset service account credentials",
+		Long: heredoc.Doc(`
+			Reset the SASL/PLAIN credentials for a service account.
+
+			This command will generate a new SASL/PLAIN password for a service account.
+			Once the credentials have been reset, any applications or tools that use the SASL/PLAIN
+			credentials will need to be updated with the new password for it to work again.
+		`),
 		Example: heredoc.Doc(`
+			# start an interactive prompt to reset credentials
 			$ rhoas serviceaccount reset-credentials
+
+			# reset credentials for the service account specified and save the credentials to a JSON file
 			$ rhoas serviceaccount reset-credentials --id 173c1ad9-932d-4007-ae0f-4da74f4d2ccd -o json
 		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
@@ -78,7 +87,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q", flagutil.CredentialsOutputFormats))
 	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete")
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a file if it already exists")
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a credentials file if it already exists")
 	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials")
 
 	return cmd
