@@ -3,7 +3,6 @@ package info
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
