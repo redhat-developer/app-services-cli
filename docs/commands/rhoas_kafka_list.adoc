@@ -45,4 +45,3 @@ $ rhoas kafka list -o json
 === SEE ALSO
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
-

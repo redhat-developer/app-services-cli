@@ -36,8 +36,7 @@ your Kubernetes or OpenShift Cluster
 * link:rhoas_completion.adoc[rhoas completion] - Generate completion
 script
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
-* link:rhoas_login.adoc[rhoas login] - Log in to RHOAS.
+* link:rhoas_login.adoc[rhoas login] - Log in to RHOAS
 * link:rhoas_logout.adoc[rhoas logout] - Log out from RHOAS
 * link:rhoas_serviceaccount.adoc[rhoas serviceaccount] - Create, list,
 delete and update service accounts
-

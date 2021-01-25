@@ -28,4 +28,3 @@ rhoas kafka topics delete [flags]
 
 * link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Create, list and
 delete Kafka topics
-

@@ -36,4 +36,3 @@ $ rhoas cluster connect
 services to a Kubernetes or OpenShift
 * link:rhoas_cluster_info.adoc[rhoas cluster info] - View information
 about the current Kubernetes or OpenShift cluster.
-

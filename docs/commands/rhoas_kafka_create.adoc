@@ -47,4 +47,3 @@ $ rhoas kafka create -o yaml
 === SEE ALSO
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Manage your Kafka instances
-

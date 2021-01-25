@@ -1,6 +1,6 @@
 == rhoas login
 
-Log in to RHOAS.
+Log in to RHOAS
 
 === Synopsis
 
@@ -44,4 +44,3 @@ $ rhoas login --print-sso-url
 === SEE ALSO
 
 * link:rhoas.adoc[rhoas] - RHOAS CLI
-

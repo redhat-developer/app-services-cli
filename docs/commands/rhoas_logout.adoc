@@ -26,4 +26,3 @@ rhoas logout [flags]
 === SEE ALSO
 
 * link:rhoas.adoc[rhoas] - RHOAS CLI
-

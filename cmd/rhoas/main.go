@@ -68,6 +68,8 @@ func generateDocumentation(rootCommand *cobra.Command) {
 		return ""
 	}
 
+	rootCommand.DisableAutoGenTag = true
+
 	linkHandler := func(s string) string { return s }
 
 	err := doc.GenMarkdownTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)

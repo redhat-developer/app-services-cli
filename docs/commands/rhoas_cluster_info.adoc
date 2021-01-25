@@ -41,4 +41,3 @@ $ rhoas cluster info
 
 * link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
 your Kubernetes or OpenShift Cluster
-
