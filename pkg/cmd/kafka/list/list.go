@@ -73,9 +73,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Use:   "list",
 		Short: "List all Kafka instances",
 		Long: heredoc.Doc(`
-			List all Kafka instances in your organization.
+			List all Kafka instances.
 			
-			This command will provide a high level view of all Kafka instances in your organization.
+			This command will provide a high level view of all Kafka instances.
 			The fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
 			Use the describe command to view all fields for a specific instance.
 

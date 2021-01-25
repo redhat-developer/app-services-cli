@@ -4,12 +4,11 @@ List all Kafka instances
 
 === Synopsis
 
-List all Kafka instances in your organization.
+List all Kafka instances.
 
-This command will provide a high level view of all Kafka instances in
-your organization. The fields displayed are: ID, Name, Owner, Status,
-Cloud Provider, Region. Use the describe command to view all fields for
-a specific instance.
+This command will provide a high level view of all Kafka instances. The
+fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
+Use the describe command to view all fields for a specific instance.
 
 The instances are displayed by default in a table, but can also be
 displayed as JSON or YAML.

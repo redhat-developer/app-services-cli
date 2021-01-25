@@ -51,7 +51,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			Create a service account with SASL/PLAIN credentials which are saved to a file.
 			
 			The credentials generated as part of a service account can be by applications 
-			and tools to authenticate and interact with services in your organization.
+			and tools to authenticate and interact with services.
 			
 			You must specify an output format to which the credentials will be stored as.
 				- env (default: Store credentials in an env file as environment variables

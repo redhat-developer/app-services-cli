@@ -6,8 +6,6 @@ Delete a Kafka instance
 
 Permanently delete a Kafka instance.
 
-You can only delete Kafka instances that you created.
-
 ....
 rhoas kafka delete [flags]
 ....

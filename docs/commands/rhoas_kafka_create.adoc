@@ -9,8 +9,7 @@ default values.
 
 Configuration options available: name, cloud provider, region.
 
-The created instance can be viewed and used by every user in your
-organization, from the command-line and the web UI.
+The created instance can be viewed from the command-line and the web UI.
 
 ....
 rhoas kafka create [flags]

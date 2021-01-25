@@ -33,7 +33,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Use:   "delete",
 		Short: "Delete a service account",
 		Long: heredoc.Doc(`
-			Permanently delete a service account from your organization.
+			Permanently delete a service account.
 		`),
 		Example: heredoc.Doc(`
 			# delete the service account with ID

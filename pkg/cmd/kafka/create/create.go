@@ -69,7 +69,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 			Configuration options available: name, cloud provider, region.
 
-		  The created instance can be viewed and used by every user in your organization, from the command-line and the web UI.
+		  The created instance can be viewed from the command-line and the web UI.
 		`),
 		Example: heredoc.Doc(`
 			# start an interactive prompt to fill out the configuration values for the instance
