@@ -10,8 +10,8 @@ operations related to your application services.
 === Examples
 
 ....
-# view information about your cluster
-$ rhoas cluster info
+# view the status of the cluster
+$ rhoas cluster status
 
 # connect a service to your cluster
 $ rhoas cluster connect
@@ -34,5 +34,5 @@ $ rhoas cluster connect
 * link:rhoas.adoc[rhoas] - RHOAS CLI
 * link:rhoas_cluster_connect.adoc[rhoas cluster connect] - Connect your
 services to a Kubernetes or OpenShift
-* link:rhoas_cluster_info.adoc[rhoas cluster info] - View information
-about the current Kubernetes or OpenShift cluster.
+* link:rhoas_cluster_status.adoc[rhoas cluster status] - View status of
+the current Kubernetes or OpenShift cluster.

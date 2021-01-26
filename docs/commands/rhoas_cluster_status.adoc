@@ -1,0 +1,43 @@
+== rhoas cluster status
+
+View status of the current Kubernetes or OpenShift cluster.
+
+=== Synopsis
+
+View status of the current Kubernetes or OpenShift cluster using your
+kubeconfig file.
+
+The information shown is useful for connecting your service to the
+OpenShift cluster.
+
+For this command to work you must be logged into a Kubernetes or
+OpenShift cluster. The command uses the kubeconfig file to identify the
+cluster context.
+
+....
+rhoas cluster status [flags]
+....
+
+=== Examples
+
+....
+# print status of the current cluster
+$ rhoas cluster status
+....
+
+=== Options
+
+....
+  -h, --help   help for status
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+....
+
+=== SEE ALSO
+
+* link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
+your Kubernetes or OpenShift Cluster

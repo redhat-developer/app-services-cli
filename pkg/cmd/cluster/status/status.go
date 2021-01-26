@@ -1,4 +1,4 @@
-package info
+package status
 
 import (
 	"context"
@@ -30,7 +30,7 @@ type Options struct {
 	Logger     func() (logging.Logger, error)
 }
 
-func NewInfoCommand(f *factory.Factory) *cobra.Command {
+func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -38,10 +38,10 @@ func NewInfoCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "info",
-		Short: "View information about the current Kubernetes or OpenShift cluster.",
+		Use:   "status",
+		Short: "View status of the current Kubernetes or OpenShift cluster.",
 		Long: heredoc.Doc(`
-			View information about the current Kubernetes or OpenShift cluster using your kubeconfig file.
+			View status of the current Kubernetes or OpenShift cluster using your kubeconfig file.
 
 			The information shown is useful for connecting your service to the OpenShift cluster.
 
@@ -49,18 +49,18 @@ func NewInfoCommand(f *factory.Factory) *cobra.Command {
 			uses the kubeconfig file to identify the cluster context.
 		`),
 		Example: heredoc.Doc(`
-			# print information about the current cluster
-			$ rhoas cluster info
+			# print status of the current cluster
+			$ rhoas cluster status
 		`),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			return runInfo(opts)
+			return runStatus(opts)
 		},
 	}
 
 	return cmd
 }
 
-func runInfo(opts *Options) error {
+func runStatus(opts *Options) error {
 	connection, err := opts.Connection()
 	if err != nil {
 		return err
