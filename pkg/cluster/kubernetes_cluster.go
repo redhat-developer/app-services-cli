@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"os"
 	"path/filepath"
 	"time"
-
-	"github.com/fatih/color"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
@@ -125,7 +124,7 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 	}
 
 	// print status
-	c.logger.Infof(statusMsg, color.HiGreenString(kafkaInstance.GetName()), color.HiGreenString(currentNamespace), color.HiGreenString(secretName))
+	c.logger.Infof(statusMsg, color.Info(kafkaInstance.GetName()), color.Info(currentNamespace), color.Info(secretName))
 
 	var shouldContinue bool
 	confirm := &survey.Confirm{
@@ -253,7 +252,7 @@ func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *serviceapicl
 
 	_, err = c.clientset.CoreV1().Secrets(namespace).Get(ctx, secretName, metav1.GetOptions{})
 	if err == nil {
-		return fmt.Errorf("Secret '%v' already exists. Please choose a different name with --secret-name", secretName)
+		return fmt.Errorf("Secret %v already exists. Please choose a different name with --secret-name", color.Info(secretName))
 	}
 
 	createdSecret, err := c.clientset.CoreV1().Secrets(namespace).Create(context.TODO(), secret, metav1.CreateOptions{})
@@ -261,7 +260,7 @@ func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *serviceapicl
 		return fmt.Errorf("Could not create secret: %w", err)
 	}
 
-	c.logger.Infof("Secret '%v' created", createdSecret.Name)
+	c.logger.Infof("Secret %v created", color.Info(createdSecret.Name))
 
 	return nil
 }

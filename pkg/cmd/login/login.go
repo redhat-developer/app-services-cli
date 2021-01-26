@@ -15,6 +15,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
@@ -141,7 +142,7 @@ func runLogin(opts *Options) error {
 		return err
 	}
 	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		return fmt.Errorf("Scheme missing from URL '%v'. Please add either 'https' or 'https'.", unparsedGatewayURL)
+		return fmt.Errorf("Scheme missing from URL %v. Please add either 'https' or 'https'.", color.Info(unparsedGatewayURL))
 	}
 
 	tr := createTransport(opts.insecureSkipTLSVerify)
@@ -265,7 +266,8 @@ func runLogin(opts *Options) error {
 		if !ok {
 			logger.Info("You are now logged in")
 		} else {
-			logger.Infof("You are now logged in as %v", userName)
+			rawUsername := fmt.Sprintf("%v", userName)
+			logger.Infof("You are now logged in as %v", color.Info(rawUsername))
 		}
 
 		cancel()

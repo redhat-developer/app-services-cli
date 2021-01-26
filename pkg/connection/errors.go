@@ -1,15 +1,17 @@
 package connection
 
 import (
-	"errors"
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 )
 
 var (
+	loginCmd = color.CodeSnippet("rhoas login")
 	// ErrNotLoggedIn defines when a user is not authenticated
-	ErrNotLoggedIn = errors.New("Not logged in. Run `rhoas login` to authenticate")
+	ErrNotLoggedIn = fmt.Errorf("Not logged in. Run %v to authenticate", loginCmd)
 	// ErrSessionExpired defines when a user's session has expired
-	ErrSessionExpired = errors.New("Session expired. Run `rhoas login` to authenticate")
+	ErrSessionExpired = fmt.Errorf("Session expired. Run %v to authenticate", loginCmd)
 )
 
 // AuthError defines an Authentication error

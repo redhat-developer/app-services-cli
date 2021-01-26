@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"os"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -132,7 +133,7 @@ func runCreate(opts *Options) error {
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(opts.filename)
 	if err == nil && !opts.overwrite {
-		return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", opts.filename)
+		return fmt.Errorf("file %v already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", color.Info(opts.filename))
 	}
 
 	// create the service account
@@ -147,7 +148,7 @@ func runCreate(opts *Options) error {
 		return fmt.Errorf("Could not create service account: %w", apiErr)
 	}
 
-	logger.Infof("Service account '%v' created", serviceacct.GetName())
+	logger.Infof("Service account %v created", color.Info(serviceacct.GetName()))
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientID(),

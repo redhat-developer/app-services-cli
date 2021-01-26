@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"os"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -116,14 +117,14 @@ func runResetCredentials(opts *Options) (err error) {
 		// If the credentials file already exists, and the --overwrite flag is not set then return an error
 		// indicating that the user should explicitly request overwriting of the file
 		if _, err = os.Stat(opts.filename); err == nil && !opts.overwrite {
-			return fmt.Errorf("file '%v' already exists. Use --overwrite to overwrite the file, or --file-location to choose a custom location", opts.filename)
+			return fmt.Errorf("file %v already exists. Use --overwrite to overwrite the file, or --file-location to choose a custom location", color.Info(opts.filename))
 		}
 	}
 
 	// prompt the user to confirm their wish to proceed with this action
 	var confirmReset bool
 	promptConfirmDelete := &survey.Confirm{
-		Message: fmt.Sprintf("Are you sure you want to reset the credentials for the service account with ID '%v'?", opts.id),
+		Message: fmt.Sprintf("Are you sure you want to reset the credentials for the service account with ID %v?", color.Info(opts.id)),
 	}
 
 	if err = survey.AskOne(promptConfirmDelete, &confirmReset); err != nil {
