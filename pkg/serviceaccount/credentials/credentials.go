@@ -2,6 +2,7 @@ package credentials
 
 import (
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -143,7 +144,7 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 		}
 
 		overwriteFilePrompt := &survey.Confirm{
-			Message: fmt.Sprintf("The file '%v' already exists. Do you want to overwrite it?", filePath),
+			Message: fmt.Sprintf("file %v already exists. Do you want to overwrite it?", color.Info(filePath)),
 		}
 
 		err = survey.AskOne(overwriteFilePrompt, &overwrite)

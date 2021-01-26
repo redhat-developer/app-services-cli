@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/MakeNowJust/heredoc"
@@ -99,7 +100,7 @@ func runDelete(opts *options) error {
 
 	var confirmDeleteAction bool
 	var promptConfirmAction = &survey.Confirm{
-		Message: fmt.Sprintf("Are you sure you want to delete the Kafka instance '%v'?", kafkaName),
+		Message: fmt.Sprintf("Are you sure you want to delete the Kafka instance %v?", color.Info(kafkaName)),
 	}
 
 	err = survey.AskOne(promptConfirmAction, &confirmDeleteAction)
@@ -132,7 +133,7 @@ func runDelete(opts *options) error {
 		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)
 	}
 
-	logger.Infof("Kafka instance '%v' has successfully been deleted", kafkaName)
+	logger.Infof("Kafka instance %v has successfully been deleted", color.Info(kafkaName))
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

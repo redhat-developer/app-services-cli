@@ -8,6 +8,7 @@ import (
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
@@ -58,7 +59,7 @@ func runDelete(opts *Options) (err error) {
 
 	var confirmDelete bool
 	promptConfirmDelete := &survey.Confirm{
-		Message: fmt.Sprintf("Are you sure you want to delete the service account with ID '%v'?", opts.id),
+		Message: fmt.Sprintf("Are you sure you want to delete the service account with ID %v?", color.Info(opts.id)),
 	}
 
 	err = survey.AskOne(promptConfirmDelete, &confirmDelete)

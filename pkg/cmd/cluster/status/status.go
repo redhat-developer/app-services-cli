@@ -3,6 +3,7 @@ package status
 import (
 	"context"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -10,8 +11,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-
-	"github.com/fatih/color"
 
 	"github.com/spf13/cobra"
 
@@ -84,9 +83,9 @@ func runStatus(opts *Options) error {
 	}
 
 	if isCRDInstalled {
-		operatorStatus = color.HiGreenString("Installed")
+		operatorStatus = color.Success("Installed")
 	} else {
-		operatorStatus = color.HiRedString("Not installed")
+		operatorStatus = color.Error("Not installed")
 	}
 
 	currentNamespace, err := clusterConn.CurrentNamespace()
@@ -94,7 +93,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	logger.Info(fmt.Sprintf(statusMsg, color.HiGreenString(currentNamespace), operatorStatus))
+	logger.Info(fmt.Sprintf(statusMsg, color.Info(currentNamespace), operatorStatus))
 
 	return nil
 }

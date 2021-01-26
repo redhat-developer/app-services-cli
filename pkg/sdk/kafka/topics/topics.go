@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
-	"github.com/fatih/color"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
 )
@@ -174,8 +174,8 @@ func ListKafkaTopics(opts *Options) error {
 		topicPartition := &partitions[i]
 		replicas := strconv.Itoa(len(topicPartition.Replicas))
 		logger.Infof("Name: %v (Replicas: %v)\n",
-			color.HiGreenString(topicPartition.Topic),
-			color.HiRedString(replicas))
+			color.Success(topicPartition.Topic),
+			color.Info(replicas))
 	}
 
 	return nil
