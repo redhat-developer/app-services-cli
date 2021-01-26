@@ -38,7 +38,7 @@ type options struct {
 // possible values for the field argument
 const (
 	idFieldCmd           = "id"
-	bootstrapURLFieldCmd = "bootstrap-server-host"
+	bootstrapURLFieldCmd = "bootstrap-url"
 	statusFieldCmd       = "status"
 	nameFieldCmd         = "name"
 )
@@ -66,7 +66,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			Pass one of "%v", "%v", "%v" or "%v" as an argument to request 
 			that single field instead of printing the full instance object.
 		`, nameFieldCmd, idFieldCmd, bootstrapURLFieldCmd, statusFieldCmd),
-		Example: heredoc.Doc(`
+		Example: heredoc.Docf(`
 			# view the current Kafka instance instance
 			$ rhoas kafka describe
 
@@ -77,8 +77,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			$ rhoas kafka describe -o yaml
 
 			# retrieve the bootstrap server url
-			$ rhoas kafka describe bootstrap-server-host
-			`,
+			$ rhoas kafka describe %v
+			`, bootstrapURLFieldCmd,
 		),
 		Args:      cobra.RangeArgs(0, 1),
 		ValidArgs: []string{idFieldCmd, bootstrapURLFieldCmd, statusFieldCmd, nameFieldCmd},

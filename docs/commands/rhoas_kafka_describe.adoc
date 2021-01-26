@@ -10,8 +10,8 @@ Pass the –id flag to specify which instance you would like to view. If
 the –id flag is not passed then the selected Kafka instance will be
 used, if available. The result can be output either as JSON or YAML.
 
-Pass one of ``name'', ``id'', ``bootstrap-server-host'' or ``status'' as
-an argument to request that single field instead of printing the full
+Pass one of ``name'', ``id'', ``bootstrap-url'' or ``status'' as an
+argument to request that single field instead of printing the full
 instance object.
 
 ....
@@ -31,7 +31,7 @@ $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 $ rhoas kafka describe -o yaml
 
 # retrieve the bootstrap server url
-$ rhoas kafka describe bootstrap-server-host
+$ rhoas kafka describe bootstrap-url
 ....
 
 === Options
