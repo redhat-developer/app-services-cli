@@ -40,23 +40,22 @@ const (
 	defaultClientID = "rhoas-cli-prod"
 )
 
-const PostLoginPage = `
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap" rel="stylesheet">
-<style>
-.content {
-	font-family: 'Red Hat Display', sans-serif;
-	margin: auto;
-  width: 50%;
-	padding: 10px;
-	margin-top: 350px;
-	text-align: center;
-}
-</style> 
-
-<div class="content">
-<h1>Logged in to RHOAS. Return to your terminal to begin.</h1>
+// HTML template to show on the redirect page
+const RedirectURLTemplate = `
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.70.2/patternfly.css">
+  <title>Welcome to RHOAS</title>
+</head>
+<body>
+	<div class="pf-c-empty-state">
+  <div class="pf-c-empty-state__content">
+    <i class="fas fa-key pf-c-empty-state__icon" aria-hidden="true"></i>
+    <h1 class="pf-c-title pf-m-lg">Welcome to RHOAS</h1>
+    <div class="pf-c-empty-state__body">You have successfully logged in to the RHOAS CLI as <span style="font-weight:700">%v</span>. You may now close this tab and return to the command-line.</div>
+  </div>
 </div>
+</body>
 `
 
 // When the value of the `--url` option is one of the keys of this map it will be replaced by the
@@ -256,26 +255,25 @@ func runLogin(opts *Options) error {
 			os.Exit(1)
 		}
 
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintln(w, PostLoginPage)
-
 		accessTkn, _ := token.Parse(resp.OAuth2Token.AccessToken)
 		tknClaims, _ := token.MapClaims(accessTkn)
 		userName, ok := tknClaims["preferred_username"]
-		logger.Info("")
-		if !ok {
-			logger.Info("You are now logged in")
-		} else {
-			rawUsername := fmt.Sprintf("%v", userName)
-			logger.Infof("You are now logged in as %v", color.Info(rawUsername))
+		var rawUsername string = "unknown"
+		if ok {
+			rawUsername = fmt.Sprintf("%v", userName)
 		}
+
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(w, RedirectURLTemplate, rawUsername)
+
+		logger.Infof("You are now logged in as %v", color.Info(rawUsername))
+		logger.Info("")
 
 		cancel()
 	})
 
 	if opts.printURL {
-		logger.Info("Open the following URL in your browser to login:")
-		logger.Info("")
+		logger.Info("Open the following URL in your browser to login:\n\n")
 		fmt.Println(authCodeURL)
 	} else {
 		openBrowserExec, _ := browser.GetOpenBrowserCommand(authCodeURL)
