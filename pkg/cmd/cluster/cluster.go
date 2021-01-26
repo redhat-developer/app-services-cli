@@ -3,7 +3,7 @@ package cluster
 import (
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster/connect"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster/info"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster/status"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/spf13/cobra"
 )
@@ -18,8 +18,8 @@ func NewClusterCommand(f *factory.Factory) *cobra.Command {
 			and perform operations related to your application services.
 		`),
 		Example: heredoc.Doc(`
-			# view information about your cluster
-			$ rhoas cluster info
+			# view the status of the cluster
+			$ rhoas cluster status
 
 			# connect a service to your cluster
 			$ rhoas cluster connect
@@ -28,7 +28,7 @@ func NewClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		info.NewInfoCommand(f),
+		status.NewStatusCommand(f),
 		connect.NewConnectCommand(f),
 	)
 
