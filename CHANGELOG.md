@@ -1,4 +1,33 @@
-#  (2021-01-21)
+#  (2021-01-26)
+
+
+
+# [0.14.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.13.2...0.14.0) (2021-01-26)
+
+
+### Bug Fixes
+
+* **cluster info:** rename command info to status ([#289](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/289)) ([25a7eb2](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/25a7eb2b44249dfe45ebcfbf51a7b7b8f34369ac)), closes [#282](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/282)
+* remove unused function ([#275](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/275)) ([5896729](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/58967297f3f9fc4f9ab2009387f00bb1b244c74c))
+* **connection:** only refresh tokens when needed ([#274](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/274)) ([1c1056e](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/1c1056e1f7e55fefd77e774db1e8c04e0c2b3705))
+* BootstrapServerHost nil pointer ([#269](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/269)) ([e8eda42](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/e8eda42b7d313f4bcae0b76909cb3c95b515e43a))
+* refactor cluster connect to use new format of the CRD's ([#247](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/247)) ([8e59246](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/8e59246fdb9fa78c0c3aa0cc5409c0efc084da47))
+* **docs:** remove the docs command ([#267](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/267)) ([ed00c08](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/ed00c0840859082dba5a7de1929b3d214b700ca9))
+
+
+### Features
+
+* **login page:** use Patternfly empty state template ([#292](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/292)) ([cc10856](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/cc10856494a69161eff4a180904c28d7364799f4))
+* standardise colors for printing to console ([#291](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/291)) ([2c7f7f0](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/2c7f7f02ceca25f748a1f42fed70395aa48a7cc9))
+
+
+
+## [0.13.2](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.13.1...0.13.2) (2021-01-21)
+
+
+### Bug Fixes
+
+* pointer error when bootstrap host is empty ([#266](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/266)) ([7281b8b](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/7281b8b3088af61787f73177648fec40fe938008))
 
 
 
