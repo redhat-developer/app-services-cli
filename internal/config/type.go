@@ -38,3 +38,8 @@ type ServiceConfigMap struct {
 type KafkaConfig struct {
 	ClusterID string `json:"clusterId"`
 }
+
+func (c *Config) HasKafka() bool {
+	return c.Services.Kafka != nil &&
+		c.Services.Kafka.ClusterID != ""
+}
