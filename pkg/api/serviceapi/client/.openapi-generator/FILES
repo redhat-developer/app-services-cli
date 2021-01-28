@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -23,6 +22,9 @@ docs/KafkaRequestList.md
 docs/KafkaRequestListAllOf.md
 docs/KafkaRequestPayload.md
 docs/List.md
+docs/Metric.md
+docs/MetricsList.md
+docs/MetricsListAllOf.md
 docs/ObjectReference.md
 docs/ServiceAccount.md
 docs/ServiceAccountAllOf.md
@@ -31,6 +33,7 @@ docs/ServiceAccountListAllOf.md
 docs/ServiceAccountListItem.md
 docs/ServiceAccountListItemAllOf.md
 docs/ServiceAccountRequest.md
+docs/Values.md
 git_push.sh
 model_cloud_provider.go
 model_cloud_provider_list.go
@@ -48,6 +51,9 @@ model_kafka_request_list.go
 model_kafka_request_list_all_of.go
 model_kafka_request_payload.go
 model_list.go
+model_metric.go
+model_metrics_list.go
+model_metrics_list_all_of.go
 model_object_reference.go
 model_service_account.go
 model_service_account_all_of.go
@@ -56,5 +62,6 @@ model_service_account_list_all_of.go
 model_service_account_list_item.go
 model_service_account_list_item_all_of.go
 model_service_account_request.go
+model_values.go
 response.go
 utils.go

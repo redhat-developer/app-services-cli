@@ -15,6 +15,7 @@ endif
 binary:=rhoas
 
 serviceapi_dir=./pkg/api/serviceapi/client
+strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -64,23 +65,50 @@ test/unit: install
 	go test ./pkg/...
 .PHONY: test/unit
 
-openapi/pull:
-	wget -O ./openapi/managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
+openapi/pull: openapi/strimzi-admin/pull openapi/kas/pull
 .PHONY: openapi/pull
 
-# validate the openapi schema
-openapi/validate:
-	openapi-generator-cli validate -i openapi/managed-services-api.yaml
+openapi/validate: openapi/strimzi-admin/validate openapi/kas/validate
 .PHONY: openapi/validate
 
+openapi/generate: openapi/strimzi-admin/generate openapi/kas/generate
+.PHONY: openapi/validate
+
+openapi/strimzi-admin/pull:
+	wget -O ./openapi/strimzi-admin.yaml https://raw.githubusercontent.com/strimzi/strimzi-admin/e45b7410c36a96866a417e7adb8646f05d8293b9/rest/src/main/resources/openapi-specs/rest.yaml
+.PHONY: openapi/strimzi-admin/pull
+
+# validate the openapi schema
+openapi/strimzi-admin/validate:
+	openapi-generator-cli validate -i openapi/strimzi-admin.yaml
+.PHONY: openapi/strimzi-admin/validate
+
 # generate the openapi schema
-openapi/generate:
+openapi/strimzi-admin/generate:
+	openapi-generator-cli generate -i openapi/strimzi-admin.yaml -g go --package-name strimziadminclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${strimzi_admin_api_dir}
+	openapi-generator-cli validate -i openapi/strimzi-admin.yaml
+	# generate mock
+	moq -out ${strimzi_admin_api_dir}/default_api_mock.go ${strimzi_admin_api_dir} DefaultApi
+	gofmt -w ${strimzi_admin_api_dir}
+.PHONY: openapi/strimzi-admin/generate
+
+openapi/kas/pull:
+	wget -O ./openapi/managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
+.PHONY: openapi/kas/pull
+
+# validate the openapi schema
+openapi/kas/validate:
+	openapi-generator-cli validate -i openapi/managed-services-api.yaml
+.PHONY: openapi/kas/validate
+
+# generate the openapi schema
+openapi/kas/generate:
 	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name client -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${serviceapi_dir}
 	openapi-generator-cli validate -i openapi/managed-services-api.yaml
 	# generate mock
 	moq -out ${serviceapi_dir}/default_api_mock.go ${serviceapi_dir} DefaultApi
 	gofmt -w ${serviceapi_dir}
-.PHONY: openapi/generate
+.PHONY: openapi/kas/generate
 
 mock-api/start: mock-api/server/start mock-api/client/start
 .PHONY: mock-api/start

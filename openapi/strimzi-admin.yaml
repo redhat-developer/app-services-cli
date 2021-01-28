@@ -1,0 +1,348 @@
+openapi: 3.0.0
+info:
+  title: Strimzi Kubernetes REST API
+  version: 0.1.0
+  description: An API to provide k8s REST endpoints for query
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+paths:
+  /topics:
+    get:
+      parameters:
+        -
+          name: limit
+          description: Maximum number of topics to return
+          schema:
+            format: int32
+            type: integer
+          in: query
+          required: false
+        -
+          name: filter
+          description: Filter to apply when returning the list of topics
+          schema:
+            type: string
+          in: query
+        -
+          name: offset
+          description: The page offset when returning  the limit of requested topics.
+          schema:
+            format: int32
+            type: integer
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicsList'
+          description: List of topics matching the users query paramters.
+        '400':
+          content:
+            application/json: {}
+          description: Unable to retreive topics.
+        '401':
+          content:
+            application/json: {}
+          description: 'Unauthorized, unable to retrive topics.'
+        '500':
+          description: Internal server error.
+      operationId: getTopicsList
+      summary: List of topics
+      description: >-
+        Returns a list of all of the available topics, or the list of topics that meet the users URL
+        Query Parameters.
+    post:
+      requestBody:
+        description: Topic to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicSettings'
+            examples:
+              NewTopic:
+                value:
+                  name: Pets
+                  numPartitions: 2
+                  replicationFactor: 4
+                  config:
+                    -
+                      key: min.insync.replicas
+                      value: '1'
+                    -
+                      key: max.message.bytes
+                      value: '1050000'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+          description: Topic created successfully.
+        '400':
+          description: Unable to create topic.
+        '401':
+          description: 'Unauthorized, Unable to create topic.'
+        '500':
+          description: Internal server error.
+      operationId: createTopic
+      summary: Creates a new topic
+      description: Creates a new topic for Kafka.
+  '/topics/{topicId}':
+    get:
+      parameters:
+        -
+          name: topicId
+          description: The id of the topic
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+          description: Kakfa topic details.
+        '401':
+          description: 'Unauthorized, unable to retrieve topics.'
+        '404':
+          description: Topic not found.
+        '500':
+          description: Internal server error.
+      operationId: getTopic
+      summary: Topic associated with the topic id
+      description: Topic
+    delete:
+      parameters:
+        -
+          name: topicId
+          description: Topic id to delete
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Topic deleted successfully.
+        '401':
+          description: 'Unathorized, unable to delete topic.'
+        '404':
+          description: Topic not found.
+        '500':
+          description: Internal server error.
+      operationId: deleteTopic
+      summary: Deletes a  topic
+      description: Deletes the topic with the specified id.
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicSettings'
+        required: true
+      parameters:
+        -
+          name: topicId
+          description: topic id to update
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+          description: Topic updated successfully.
+        '400':
+          description: Unable to update topic.
+        '401':
+          description: 'Unauthroized, unable to update topic.'
+        '404':
+          description: Topic not found.
+        '500':
+          description: Internal server request.
+      operationId: updateTopic
+      summary: Updates the topic with the specified id.
+      description: updates the topic with the new data.
+components:
+  schemas:
+    Topic:
+      title: Root Type for NewTopic
+      description: Kafka Topic (A feed where records are stored and published)
+      type: object
+      properties:
+        name:
+          description: The name of the topic.
+          type: string
+        config:
+          description: Topic configuration entry.
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigEntry'
+        id:
+          description: Uniquie ID for the topic.
+          type: integer
+        partitions:
+          description: Partitions for this topic.
+          type: array
+          items:
+            $ref: '#/components/schemas/Partition'
+      example:
+        name: Pets
+        config:
+          -
+            key: min.insync.replicas
+            value: '1'
+          -
+            key: max.message.bytes
+            value: '1050000'
+        id: 53
+        partitions:
+          -
+            id: 28
+            replicas:
+              -
+                id: 35
+              -
+                id: 5
+            isr:
+              -
+                id: 44
+              -
+                id: 83
+            leader:
+              id: 22
+          -
+            id: 68
+            replicas:
+              -
+                id: 81
+              -
+                id: 22
+            isr:
+              -
+                id: 75
+              -
+                id: 65
+            leader:
+              id: 58
+    Partition:
+      description: Kafka topic partition
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          description: Uniquie id for the partition
+          type: integer
+        replicas:
+          description: List of replicas for the partition
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+        isr:
+          description: List isync-replicas for this partition.
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+        leader:
+          $ref: '#/components/schemas/Node'
+          description: Node that is the leader for this partition.
+      example:
+        id: 87
+        replicas:
+          -
+            id: 28
+          -
+            id: 18
+        isr:
+          -
+            id: 22
+          -
+            id: 66
+        leader:
+          id: 62
+    Node:
+      description: Kafka server / broker.
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          description: Uniquie id for the kafka node.
+          type: integer
+      example:
+        id: 51
+    ConfigEntry:
+      description: Key value pair indicating possible configuration options for a topic.
+      type: object
+      properties:
+        key:
+          description: The key indicating what configuration entry you would like to set for the topic.
+          type: string
+        value:
+          description: Value to indicate the setting on the topic configuration entry.
+          type: string
+      example:
+        key: min.insync.replicas
+        value: '1'
+    TopicsList:
+      description: A list of topics.
+      required:
+        - topics
+        - offset
+        - limit
+        - count
+      type: object
+      properties:
+        topics:
+          description: List of topics
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+        offset:
+          description: The page offset
+          type: integer
+        limit:
+          description: number of entries per page
+          type: integer
+        count:
+          description: Total number of topics
+          type: integer
+    TopicSettings:
+      title: Root Type for NewTopic
+      description: Kafka Topic (A feed where records are stored and published)
+      type: object
+      properties:
+        name:
+          description: The name of the topic.
+          type: string
+        numPartitions:
+          description: Number of partitions for this topic.
+          type: integer
+        replicationFactor:
+          description: Number of replications for the topic.
+          type: integer
+        config:
+          description: Topic configuration entry.
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigEntry'
+      example:
+        id: 10081
+        name: topic1
+        numPartitions: 2
+        replicationFactor: 1
+        config:
+          -
+            key: min.insync.replicas
+            value: '1'
+          -
+            key: max.message.bytes
+            value: '1050000'

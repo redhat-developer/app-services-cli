@@ -341,6 +341,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: The requested resource doesn't exist
+        "409":
+          content:
+            application/json:
+              examples:
+                "409NameConflictExample":
+                  $ref: '#/components/examples/409NameConflictExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: A conflict has been detected in the creation of this resource
         "500":
           content:
             application/json:
@@ -636,6 +645,88 @@ paths:
       security:
       - Bearer: []
       summary: reset credentials for the service account
+  /api/managed-services-api/v1/kafkas/{id}/metrics:
+    get:
+      operationId: getMetricsByKafkaId
+      parameters:
+      - description: The id of record
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The length of time in minutes over which to return the metrics.
+        examples:
+          duration:
+            value: 5
+        explode: true
+        in: query
+        name: duration
+        required: true
+        schema:
+          default: 5
+          format: int64
+          maximum: 4320
+          minimum: 1
+          type: integer
+        style: form
+      - description: The interval in seconds between data points.
+        examples:
+          interval:
+            value: 30
+        explode: true
+        in: query
+        name: interval
+        required: true
+        schema:
+          default: 30
+          format: int64
+          maximum: 10800
+          minimum: 1
+          type: integer
+        style: form
+      - description: List of metrics to fetch. Fetch all metrics when empty. List
+          entries are kafka internal metric names.
+        explode: true
+        in: query
+        name: filters
+        required: false
+        schema:
+          default: []
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsList'
+          description: A JSON array of prometheus metrics objects from observatorium
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Auth token is invalid
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      security:
+      - Bearer: []
+      summary: Get metrics by kafka id.
 components:
   examples:
     USRegionExample:
@@ -769,6 +860,14 @@ components:
         code: MGD-SERV-API-5
         reason: User 'foo-bar' has reached a maximum number of 6 allowed instances.
         operation_id: 1lY3UiEkxnXBpVPeI2oNejd3XB
+    "409NameConflictExample":
+      value:
+        id: "36"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/36
+        code: MGD-SERV-API-36
+        reason: Kafka cluster name is already used
+        operation_id: 6kY0UiEkzkXCzWPeI2oYehd3ED
     "500Example":
       value:
         id: "9"
@@ -798,6 +897,51 @@ components:
       schema:
         type: string
       style: simple
+    duration:
+      description: The length of time in minutes over which to return the metrics.
+      examples:
+        duration:
+          value: 5
+      explode: true
+      in: query
+      name: duration
+      required: true
+      schema:
+        default: 5
+        format: int64
+        maximum: 4320
+        minimum: 1
+        type: integer
+      style: form
+    interval:
+      description: The interval in seconds between data points.
+      examples:
+        interval:
+          value: 30
+      explode: true
+      in: query
+      name: interval
+      required: true
+      schema:
+        default: 30
+        format: int64
+        maximum: 10800
+        minimum: 1
+        type: integer
+      style: form
+    filters:
+      description: List of metrics to fetch. Fetch all metrics when empty. List entries
+        are kafka internal metric names.
+      explode: true
+      in: query
+      name: filters
+      required: false
+      schema:
+        default: []
+        items:
+          type: string
+        type: array
+      style: form
     page:
       description: Page index
       examples:
@@ -1031,6 +1175,31 @@ components:
     ServiceAccountList:
       allOf:
       - $ref: '#/components/schemas/ServiceAccountList_allOf'
+    MetricsList:
+      allOf:
+      - $ref: '#/components/schemas/MetricsList_allOf'
+    Metric:
+      properties:
+        metric:
+          additionalProperties:
+            type: string
+          type: object
+        values:
+          items:
+            $ref: '#/components/schemas/values'
+          type: array
+      type: object
+    values:
+      properties:
+        Timestamp:
+          format: int64
+          type: integer
+        Value:
+          format: double
+          type: number
+      required:
+      - Value
+      type: object
     Error_allOf:
       properties:
         code:
@@ -1158,6 +1327,33 @@ components:
           items:
             allOf:
             - $ref: '#/components/schemas/ServiceAccountListItem'
+          type: array
+      type: object
+    MetricsList_allOf:
+      example:
+        kind: Metrics
+        id: 1nbpS70HduPe4l0to8jSg2CLzfu
+        items:
+          metric:
+            __name__: kafka_server_brokertopicmetrics_bytes_in_total
+            strimzi_io_cluster: kafka-service
+            topic: __consumer_offsets
+          values:
+          - Timestamp: 1611670230000
+            Value: 84154
+          - Timestamp: 1611670260000
+            Value: 85888
+          - Timestamp: 1611670290000
+            Value: 87622
+      properties:
+        kind:
+          type: string
+        id:
+          type: string
+        items:
+          items:
+            allOf:
+            - $ref: '#/components/schemas/Metric'
           type: array
       type: object
   securitySchemes:

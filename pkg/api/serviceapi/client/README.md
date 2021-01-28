@@ -83,6 +83,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**DeleteKafkaById**](docs/DefaultApi.md#deletekafkabyid) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 *DefaultApi* | [**DeleteServiceAccount**](docs/DefaultApi.md#deleteserviceaccount) | **Delete** /api/managed-services-api/v1/serviceaccounts/{id} | Delete service account
 *DefaultApi* | [**GetKafkaById**](docs/DefaultApi.md#getkafkabyid) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
+*DefaultApi* | [**GetMetricsByKafkaId**](docs/DefaultApi.md#getmetricsbykafkaid) | **Get** /api/managed-services-api/v1/kafkas/{id}/metrics | Get metrics by kafka id.
 *DefaultApi* | [**ListCloudProviderRegions**](docs/DefaultApi.md#listcloudproviderregions) | **Get** /api/managed-services-api/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
 *DefaultApi* | [**ListCloudProviders**](docs/DefaultApi.md#listcloudproviders) | **Get** /api/managed-services-api/v1/cloud_providers | Retrieves the list of supported cloud providers.
 *DefaultApi* | [**ListKafkas**](docs/DefaultApi.md#listkafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
@@ -108,6 +109,9 @@ Class | Method | HTTP request | Description
  - [KafkaRequestListAllOf](docs/KafkaRequestListAllOf.md)
  - [KafkaRequestPayload](docs/KafkaRequestPayload.md)
  - [List](docs/List.md)
+ - [Metric](docs/Metric.md)
+ - [MetricsList](docs/MetricsList.md)
+ - [MetricsListAllOf](docs/MetricsListAllOf.md)
  - [ObjectReference](docs/ObjectReference.md)
  - [ServiceAccount](docs/ServiceAccount.md)
  - [ServiceAccountAllOf](docs/ServiceAccountAllOf.md)
@@ -116,6 +120,7 @@ Class | Method | HTTP request | Description
  - [ServiceAccountListItem](docs/ServiceAccountListItem.md)
  - [ServiceAccountListItemAllOf](docs/ServiceAccountListItemAllOf.md)
  - [ServiceAccountRequest](docs/ServiceAccountRequest.md)
+ - [Values](docs/Values.md)
 
 
 ## Documentation For Authorization
