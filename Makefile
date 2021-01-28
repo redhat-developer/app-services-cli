@@ -14,7 +14,7 @@ endif
 # The details of the application:
 binary:=rhoas
 
-kasapi_dir=./pkg/api/kafka-service/client
+kasapi_dir=./pkg/api/kas/client
 strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 
 # Enable Go modules:

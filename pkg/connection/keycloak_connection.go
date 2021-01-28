@@ -9,7 +9,8 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	strimziadmin "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
@@ -87,10 +88,12 @@ func (c *KeycloakConnection) Logout(ctx context.Context) error {
 
 // API Creates a new API type which is a single type for multiple APIs
 func (c *KeycloakConnection) API() *api.API {
-	kafkaAPIClient := serviceapi.New(c.apiURL, c.client, c.Token.AccessToken)
+	kafkaAPIClient := kas.New(c.apiURL, c.client)
+	strimziAPIClient := strimziadmin.New(c.apiURL, c.client)
 
 	a := &api.API{
-		Kafka: kafkaAPIClient.DefaultApi,
+		Kafka:        kafkaAPIClient.DefaultApi,
+		StrimziAdmin: strimziAPIClient.DefaultApi,
 	}
 
 	return a

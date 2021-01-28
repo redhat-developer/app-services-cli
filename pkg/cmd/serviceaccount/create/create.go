@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/AlecAivazis/survey/v2"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
@@ -14,7 +16,6 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -137,7 +138,7 @@ func runCreate(opts *Options) error {
 	}
 
 	// create the service account
-	serviceAccountPayload := &serviceapi.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
+	serviceAccountPayload := &kasclient.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
 	api := connection.API()
 	a := api.Kafka.CreateServiceAccount(context.Background())

@@ -57,40 +57,41 @@ Runs unit tests
 
 Runs integration tests
 
-## Managed Services API
+## Kafka Service Fleet Manager API (KAS)
 
-The CLI communicates with the Managed Services API. For this there is a generated API client in `./pkg/api/serviceapi/client`. 
+- The CLI communicates with the Kafka Service Fleet Manager (KAS) API. For this there is a generated API client in `./pkg/api/kas/client`. 
+- The CLI uses the Strimzi API for topic management. The client is located in `./pkg/api/strimzi-admin/client`
 
 ### Updating the API client
 
-Please ensure you have the latest generated version. Follow the steps below to update the Managed Services API version.
+Please ensure you have the latest generated version. Follow the steps below to update all API clients.
 
 #### `make openapi/pull`
 
-Saves the latest version of the Managed Services OpenAPI specification file to the `./openapi` directory.
+Saves the latest OpenAPI specification files to the `./openapi` directory.
 
 #### `make openapi/validate`
 
-Validates the Managed Services OpenAPI specification file.
+Validates the OpenAPI specification files.
 
 #### `make openapi/generate`
 
-Generates a Golang API client in `./pkg/api/serviceapi/client`.
+Generates a Golang API client in `./pkg/api/kas/client` and `./pkg/api/strimzi-admin/client`.
 
 ## Mock API
 
-The repo has a local mocked version of the Managed Services API in `./mas-mock`.
+The repo has a local mocked version of the KAS API in `./mas-mock`.
 To work and test CLI locally please follow the mock readme and then login into cli using dev profile:
 
 > rhoas login --url=http://locahost:8080
 
-> The mock API can become outdated from the current state of the Managed Services API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
+> The mock API can become outdated from the current state of the KAS API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
 
 ## Mock Authentication
 
 The repo has a local Keycloak instance which replicates the production environment. To start the server run `make mock-api/start`.
 
-You will need to update the `config.AuthURL` variable to `http;//localhost:8080/auth/realms/redhat-external`.
+You will need to update the `config.AuthURL` variable to `http://localhost:8080/auth/realms/redhat-external`.
 
 ```shell
 rhoas login
@@ -98,7 +99,7 @@ rhoas login
 
 ### `make mock-api/start`
 
-Starts the mocked Managed Services API server at [`http://localhost:8000`](http://localhost:8000).
+Starts the mocked KAS API server at [`http://localhost:8000`](http://localhost:8000).
 
 This will also start a local Keycloak instance at [`http://localhost:8000`](http://localhost:8000) for authentication from the CLI.
 When Keycloak is up and running, log in as an admin (username: `admin`, password: `admin`).
@@ -150,7 +151,7 @@ After running the command, the documentation should be updated with the command 
 Releases can be triggered directing using Github Releases. 
 Before performing release, do the following:
 
-1. Run `./scripts/pullapi.sh` script to make sure that CLI is using latest version of the Managed Services API.
+1. Run `./scripts/pullapi.sh` script to make sure that CLI is using latest version of the KAS API.
 2. Push all required changes to main branch
 
 After that, go to Github Releases and create the new release.

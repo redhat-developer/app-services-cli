@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -9,7 +10,10 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+<<<<<<< HEAD
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi"
+=======
+>>>>>>> 3f3c177 (refactor(api): restructure kas API package)
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
@@ -41,9 +45,22 @@ func main() {
 		return
 	}
 
+<<<<<<< HEAD
 	if e, ok := serviceapi.GetAPIError(err); ok {
 		fmt.Fprintf(stderr, "Error: %v\n", e.GetReason())
 		os.Exit(1)
+=======
+	// Attempt to unwrap the descriptive API error message
+	var apiError kasclient.GenericOpenAPIError
+	if ok := errors.As(err, &apiError); ok {
+		errModel := apiError.Model()
+
+		e, ok := errModel.(kasclient.Error)
+		if ok {
+			fmt.Fprintf(stderr, "Error: %v\n", *e.Reason)
+			os.Exit(1)
+		}
+>>>>>>> 3f3c177 (refactor(api): restructure kas API package)
 	}
 
 	if err = cmdutil.CheckSurveyError(err); err != nil {
