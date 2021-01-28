@@ -48,7 +48,7 @@ type Options struct {
 
 const (
 	// default Kafka instance values
-	defaultMultiAZ  = false
+	defaultMultiAZ  = true
 	defaultRegion   = "us-east-1"
 	defaultProvider = "aws"
 )
