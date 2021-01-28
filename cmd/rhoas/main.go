@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"os"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
@@ -11,6 +14,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
 	"github.com/spf13/cobra"
@@ -24,7 +28,11 @@ var (
 func main() {
 	buildVersion := build.Version
 	cmdFactory := factory.New(build.Version)
-	stderr := cmdFactory.IOStreams.ErrOut
+	logger, err := cmdFactory.Logger()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	initConfig(cmdFactory)
 
@@ -36,13 +44,16 @@ func main() {
 		generateDocumentation(rootCmd)
 	}
 
-	err := rootCmd.Execute()
-	if err == nil {
+	if err = rootCmd.Execute(); err == nil {
 		return
 	}
 
 	if e, ok := kas.GetAPIError(err); ok {
-		fmt.Fprintf(stderr, "Error: %v\n", e.GetReason())
+		logger.Error("Error:", e.GetReason())
+		if debug.Enabled() {
+			errJSON, _ := json.Marshal(e)
+			_ = dump.JSON(cmdFactory.IOStreams.ErrOut, errJSON)
+		}
 		os.Exit(1)
 	}
 

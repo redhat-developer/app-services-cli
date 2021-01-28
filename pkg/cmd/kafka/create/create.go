@@ -4,7 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudprovider/cloudproviderutil"
@@ -45,7 +48,7 @@ type Options struct {
 
 const (
 	// default Kafka instance values
-	defaultMultiAZ  = true
+	defaultMultiAZ  = false
 	defaultRegion   = "us-east-1"
 	defaultProvider = "aws"
 )
@@ -154,6 +157,10 @@ func runCreate(opts *Options) error {
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, _, apiErr := a.Execute()
+	
+	if kas.IsErr(apiErr, kas.ErrorDuplicateKafkaClusterName) {
+		return fmt.Errorf("Error: could not create Kafka instance %v: name already exists", color.Info(opts.name))
+	}
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to create Kafka instance: %w", apiErr)

@@ -94,6 +94,19 @@
         "--insecure"
       ]
     },
+     {
+      "name": "List topics",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "kafka",
+        "topics",
+        "list"
+      ]
+    },
     {
       "name": "List service accounts (JSON)",
       "type": "go",

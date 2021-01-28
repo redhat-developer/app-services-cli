@@ -1,6 +1,7 @@
 package status
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"context"
 	"fmt"
 	"io"
@@ -63,8 +64,9 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			// nolint:govet
 			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka, kafkaCfg.ClusterID)
 			if err != nil {
-				if kas.IsNotFoundError(err) {
-					logger.Infof("Kafka instance with ID %v not found.", color.Info(kafkaCfg.ClusterID))
+				if kas.IsErr(err, kas.ErrorNotFound) {
+					err = kafka.ErrorNotFound(kafkaCfg.ClusterID)
+					logger.Info(err)
 					logger.Info("Run", color.CodeSnippet("rhoas kafka use --id=<kafka-instance-id>"), "to use another Kafka instance.")
 				}
 			} else {
@@ -158,16 +160,19 @@ func createDivider(n int) string {
 }
 
 func getKafkaStatus(ctx context.Context, api kasclient.DefaultApi, id string) (status *KafkaStatus, err error) {
-	kafka, _, apiErr := api.GetKafkaById(ctx, id).Execute()
+	kafkaResponse, _, apiErr := api.GetKafkaById(ctx, id).Execute()
+	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+		return nil, kafka.ErrorNotFound(id)
+	}
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}
 
 	status = &KafkaStatus{
-		ID:                  kafka.GetId(),
-		Name:                kafka.GetName(),
-		Status:              kafka.GetStatus(),
-		BootstrapServerHost: kafka.GetBootstrapServerHost(),
+		ID:                  kafkaResponse.GetId(),
+		Name:                kafkaResponse.GetName(),
+		Status:              kafkaResponse.GetStatus(),
+		BootstrapServerHost: kafkaResponse.GetBootstrapServerHost(),
 	}
 
 	return status, err
