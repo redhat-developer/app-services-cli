@@ -3,9 +3,13 @@ package status
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
@@ -18,6 +22,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	kafkaSvcName = "kafka"
+)
+
+var validServices = []string{kafkaSvcName}
+
 type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -25,6 +35,7 @@ type Options struct {
 	Connection func() (connection.Connection, error)
 
 	outputFormat string
+	services     []string
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
@@ -33,25 +44,45 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		services:   validServices,
 	}
 
 	cmd := &cobra.Command{
-		Use:   "status",
-		Short: "Create, view, use and manage your Kafka instances",
-		Long: heredoc.Doc(`
-			Perform various operations on your Kafka instances.
-		`),
+		Use:   "status [args]",
+		Short: "View the status of all currently used services",
+		Long: heredoc.Docf(`
+			View status information of your currently used services.
+			Choose to view the status of all services with %v or specific services with %v
+
+			To use a different service run %v. Example: %v.
+			Services available: %v
+		`, color.CodeSnippet("rhoas status"),
+			color.CodeSnippet("rhoas status <service>"),
+			color.CodeSnippet("rhoas <service> use"),
+			color.CodeSnippet("rhoas kafka use --id=1nh3qkcXuBGMlbIPDqhNbswIZCB"),
+			color.Info(fmt.Sprintf("%v", validServices))),
 		Example: heredoc.Doc(`
-			# create a Kafka instance
-			$ rhoas kafka create
+			# view the status of all services
+			$ rhoas status
 
-			# list Kafka instances
-			$ rhoas kafka list
+			# view the status of the used Kafka
+			$ rhoas status kafka
 
-			# create a Kafka topic
-			$ rhoas kafka topics create --name "my-kafka-topic"
+			# view the status of your services in JSON
+			$ rhoas status -o json
 		`),
+		ValidArgs: []string{kafkaSvcName},
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				for _, s := range args {
+					if !flags.IsValidInput(s, validServices...) {
+						return fmt.Errorf("Invalid service '%v' specified", s)
+					}
+				}
+
+				opts.services = args
+			}
+
 			return runStatus(opts)
 		},
 	}
@@ -66,11 +97,7 @@ func runStatus(opts *Options) error {
 		Config:     opts.Config,
 		Connection: opts.Connection,
 		Logger:     opts.Logger,
-	}
-
-	status, ok, err := pkgStatus.Get(context.Background(), pkgOpts)
-	if err != nil {
-		return err
+		Services:   opts.services,
 	}
 
 	logger, err := opts.Logger()
@@ -78,8 +105,17 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
+	if len(opts.services) > 0 {
+		logger.Debug("Requesting status of the following services:", opts.services)
+	}
+
+	status, ok, err := pkgStatus.Get(context.Background(), pkgOpts)
+	if err != nil {
+		return err
+	}
+
 	if !ok {
-		logger.Info("No services are currently being used")
+		logger.Info("\nNo services are currently used.")
 		return nil
 	}
 
