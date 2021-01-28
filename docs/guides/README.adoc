@@ -5,6 +5,7 @@
 == link:getting-started.adoc[Installing the CLI]
 === link:getting-started.adoc#linux[Linux]
 === link:getting-started.adoc#macos[macOS]
+=== link:getting-started.adoc#fedorarhelcentos[Fedora/RHEL/CentOS]
 == link:configuring-the-cli.adoc[Configuring the CLI]
 === link:configuring-the-cli.adoc#enabling-tab-completion[Enabling tab completion]
 === link:configuring-the-cli.adoc#linux[Linux]
