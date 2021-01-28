@@ -2,10 +2,10 @@ package mockutil
 
 import (
 	"context"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
-	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 )
 
@@ -28,7 +28,7 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 	}
 }
 
-func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *serviceapi.APIClient) connection.Connection {
+func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kasclient.APIClient) connection.Connection {
 	return &connection.ConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
@@ -60,8 +60,8 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *serviceap
 	}
 }
 
-func NewKafkaRequestTypeMock(name string) serviceapi.KafkaRequest {
-	var kafkaReq serviceapi.KafkaRequest
+func NewKafkaRequestTypeMock(name string) kasclient.KafkaRequest {
+	var kafkaReq kasclient.KafkaRequest
 	kafkaReq.SetId("1")
 	kafkaReq.SetName(name)
 

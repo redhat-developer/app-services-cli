@@ -10,8 +10,8 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi"
-	serviceapiclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
+	kas "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/openconfig/goyang/pkg/indent"
@@ -63,7 +63,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			// nolint:govet
 			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka, kafkaCfg.ClusterID)
 			if err != nil {
-				if serviceapi.IsNotFoundError(err) {
+				if kas.IsNotFoundError(err) {
 					logger.Infof("Kafka instance with ID %v not found.", color.Info(kafkaCfg.ClusterID))
 					logger.Info("Run", color.CodeSnippet("rhoas kafka use --id=<kafka-instance-id>"), "to use another Kafka instance.")
 				}
@@ -157,7 +157,7 @@ func createDivider(n int) string {
 	return b
 }
 
-func getKafkaStatus(ctx context.Context, api serviceapiclient.DefaultApi, id string) (status *KafkaStatus, err error) {
+func getKafkaStatus(ctx context.Context, api kasclient.DefaultApi, id string) (status *KafkaStatus, err error) {
 	kafka, _, apiErr := api.GetKafkaById(ctx, id).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr

@@ -4,10 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
@@ -21,7 +23,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
-	serviceapiclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
@@ -184,7 +185,7 @@ func (c *Kubernetes) IsKafkaConnectionCRDInstalled(ctx context.Context) (bool, e
 }
 
 // createKafkaConnectionCustomResource creates a new "ManagedKafkaConnection" CR
-func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, kafkaInstance *serviceapiclient.KafkaRequest, secretName string) error {
+func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, kafkaInstance *kasclient.KafkaRequest, secretName string) error {
 	crName := fmt.Sprintf("%v-%v", secretName, kafkaInstance.GetName())
 	kafkaID := kafkaInstance.GetId()
 
@@ -232,7 +233,7 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *serviceapiclient.ServiceAccount, secretName string) error {
+func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *kasclient.ServiceAccount, secretName string) error {
 	// Create secret type
 	secret := &apiv1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -266,11 +267,11 @@ func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *serviceapicl
 }
 
 // createServiceAccount creates a service account with a random name
-func (c *Kubernetes) createServiceAccount(ctx context.Context) (*serviceapiclient.ServiceAccount, error) {
+func (c *Kubernetes) createServiceAccount(ctx context.Context) (*kasclient.ServiceAccount, error) {
 	t := time.Now()
 
 	api := c.connection.API()
-	serviceAcct := &serviceapiclient.ServiceAccountRequest{Name: fmt.Sprintf("svc-acct-%v", t.String())}
+	serviceAcct := &kasclient.ServiceAccountRequest{Name: fmt.Sprintf("svc-acct-%v", t.String())}
 	req := api.Kafka.CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
 	res, _, apiErr := req.Execute()

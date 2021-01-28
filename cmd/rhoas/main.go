@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -9,7 +10,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
@@ -41,7 +41,7 @@ func main() {
 		return
 	}
 
-	if e, ok := serviceapi.GetAPIError(err); ok {
+	if e, ok := kas.GetAPIError(err); ok {
 		fmt.Fprintf(stderr, "Error: %v\n", e.GetReason())
 		os.Exit(1)
 	}

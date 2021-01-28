@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudprovider/cloudproviderutil"
@@ -21,7 +22,6 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	serviceapi "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -123,7 +123,7 @@ func runCreate(opts *Options) error {
 
 	api := connection.API()
 
-	var payload *serviceapi.KafkaRequestPayload
+	var payload *kasclient.KafkaRequestPayload
 	if opts.interactive {
 		logger.Debug("Creating Kafka instance in interactive mode")
 
@@ -140,7 +140,7 @@ func runCreate(opts *Options) error {
 			opts.region = defaultRegion
 		}
 
-		payload = &serviceapi.KafkaRequestPayload{
+		payload = &kasclient.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
@@ -182,7 +182,7 @@ func runCreate(opts *Options) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *Options) (payload *serviceapi.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, err error) {
 	connection, err := opts.Connection()
 	if err != nil {
 		return nil, err
@@ -252,7 +252,7 @@ func promptKafkaPayload(opts *Options) (payload *serviceapi.KafkaRequestPayload,
 		return nil, err
 	}
 
-	payload = &serviceapi.KafkaRequestPayload{
+	payload = &kasclient.KafkaRequestPayload{
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
