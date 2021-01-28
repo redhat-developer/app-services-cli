@@ -12,73 +12,73 @@ const (
 	ErrCodePrefix = "MGD-SERV-API"
 
 	// Forbidden occurs when a user is not allowed to access the service
-	ErrorForbidden       ServiceErrorCode = 4
+	ErrorForbidden ServiceErrorCode = 4
 
 	// Forbidden occurs when a user or organisation has reached maximum number of allowed instances
-	ErrorMaxAllowedInstanceReached       ServiceErrorCode = 5
+	ErrorMaxAllowedInstanceReached ServiceErrorCode = 5
 
 	// Conflict occurs when a database constraint is violated
-	ErrorConflict       ServiceErrorCode = 6
+	ErrorConflict ServiceErrorCode = 6
 
 	// NotFound occurs when a record is not found in the database
-	ErrorNotFound       ServiceErrorCode = 7
+	ErrorNotFound ServiceErrorCode = 7
 
 	// Validation occurs when an object fails validation
-	ErrorValidation       ServiceErrorCode = 8
+	ErrorValidation ServiceErrorCode = 8
 
 	// General occurs when an error fails to match any other error code
-	ErrorGeneral       ServiceErrorCode = 9
+	ErrorGeneral ServiceErrorCode = 9
 
 	// NotImplemented occurs when an API REST method is not implemented in a handler
-	ErrorNotImplemented       ServiceErrorCode = 10
+	ErrorNotImplemented ServiceErrorCode = 10
 
 	// Unauthorized occurs when the requester is not authorized to perform the specified action
-	ErrorUnauthorized       ServiceErrorCode = 11
+	ErrorUnauthorized ServiceErrorCode = 11
 
 	// Unauthenticated occurs when the provided credentials cannot be validated
-	ErrorUnauthenticated       ServiceErrorCode = 15
+	ErrorUnauthenticated ServiceErrorCode = 15
 
 	// MalformedRequest occurs when the request body cannot be read
-	ErrorMalformedRequest       ServiceErrorCode = 17
+	ErrorMalformedRequest ServiceErrorCode = 17
 
 	// Bad Request
-	ErrorBadRequest       ServiceErrorCode = 21
+	ErrorBadRequest ServiceErrorCode = 21
 
 	// Invalid Search Query
-	ErrorFailedToParseSearch       ServiceErrorCode = 23
+	ErrorFailedToParseSearch ServiceErrorCode = 23
 
 	// Failed to create service account
-	ErrorFailedToCreateServiceAccount       ServiceErrorCode = 110
+	ErrorFailedToCreateServiceAccount ServiceErrorCode = 110
 
 	// Failed to get service account
-	ErrorFailedToGetServiceAccount       ServiceErrorCode = 111
+	ErrorFailedToGetServiceAccount ServiceErrorCode = 111
 
 	// Failed to delete service account
-	ErrorFailedToDeleteServiceAccount       ServiceErrorCode = 112
+	ErrorFailedToDeleteServiceAccount ServiceErrorCode = 112
 
 	// Provider not supported
-	ErrorProviderNotSupported       ServiceErrorCode = 30
+	ErrorProviderNotSupported ServiceErrorCode = 30
 
 	// Region not supported
-	ErrorRegionNotSupported       ServiceErrorCode = 31
+	ErrorRegionNotSupported ServiceErrorCode = 31
 
 	// Invalid kafka cluster name
-	ErrorMalformedKafkaClusterName       ServiceErrorCode = 32
+	ErrorMalformedKafkaClusterName ServiceErrorCode = 32
 
 	// Minimum field length validation
-	ErrorMinimumFieldLength       ServiceErrorCode = 33
+	ErrorMinimumFieldLength ServiceErrorCode = 33
 
 	// Maximum field length validation
-	ErrorMaximumFieldLength       ServiceErrorCode = 34
+	ErrorMaximumFieldLength ServiceErrorCode = 34
 
 	// Only MultiAZ is supported
-	ErrorOnlyMultiAZSupported       ServiceErrorCode = 35
+	ErrorOnlyMultiAZSupported ServiceErrorCode = 35
 
 	// Kafka cluster name must be unique
-	ErrorDuplicateKafkaClusterName       ServiceErrorCode = 36
+	ErrorDuplicateKafkaClusterName ServiceErrorCode = 36
 
 	// Failure to send an error response (i.e. unable to send error response as the error can't be converted to JSON.)
-	ErrorUnableToSendErrorResponse       ServiceErrorCode = 1000
+	ErrorUnableToSendErrorResponse ServiceErrorCode = 1000
 )
 
 type Error struct {

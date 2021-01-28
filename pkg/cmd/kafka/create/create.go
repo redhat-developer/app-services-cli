@@ -157,7 +157,7 @@ func runCreate(opts *Options) error {
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, _, apiErr := a.Execute()
-	
+
 	if kas.IsErr(apiErr, kas.ErrorDuplicateKafkaClusterName) {
 		return fmt.Errorf("Error: could not create Kafka instance %v: name already exists", color.Info(opts.name))
 	}

@@ -1,9 +1,9 @@
 package status
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"context"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"io"
 	"reflect"
 	"text/tabwriter"

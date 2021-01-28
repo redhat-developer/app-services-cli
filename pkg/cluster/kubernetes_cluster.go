@@ -1,10 +1,10 @@
 package cluster
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
 	"path/filepath"
@@ -119,7 +119,7 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 	if kas.IsErr(err, kas.ErrorNotFound) {
 		return kafka.ErrorNotFound(cfg.Services.Kafka.ClusterID)
 	}
-	
+
 	if err.Error() != "" {
 		return err
 	}

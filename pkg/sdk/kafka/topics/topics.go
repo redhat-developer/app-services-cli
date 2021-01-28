@@ -1,10 +1,10 @@
 package topics
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"context"
 	"crypto/tls"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"net"
 	"strconv"
@@ -63,7 +63,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
 		return nil, nil, pkgKafka.ErrorNotFound(cfg.Services.Kafka.ClusterID)
 	}
-	
+
 	if apiErr.Error() != "" {
 		return nil, nil, fmt.Errorf("Could not get Kafka instance: %w", apiErr)
 	}

@@ -1,10 +1,10 @@
 package delete
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"context"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
