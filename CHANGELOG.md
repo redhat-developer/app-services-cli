@@ -1,4 +1,13 @@
-#  (2021-01-26)
+#  (2021-01-28)
+
+
+
+## [0.14.1](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.14.0...0.14.1) (2021-01-28)
+
+
+### Bug Fixes
+
+* print only single topics ([#300](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/300)) ([be76612](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/be76612d027594f3a80f6013a3cbeaaf5a4332e7))
 
 
 
