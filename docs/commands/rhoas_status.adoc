@@ -1,0 +1,47 @@
+== rhoas status
+
+View the status of all currently used services
+
+=== Synopsis
+
+View status information of your currently used services. Choose to view
+the status of all services with [95mrhoas status[0m or specific
+services with [95mrhoas status [0m
+
+To use a different service run [95mrhoas use[0m. Example: [95mrhoas
+kafka use –id=1nh3qkcXuBGMlbIPDqhNbswIZCB[0m. Services available:
+[96m[kafka][0m
+
+....
+rhoas status [args] [flags]
+....
+
+=== Examples
+
+....
+# view the status of all services
+$ rhoas status
+
+# view the status of the used Kafka
+$ rhoas status kafka
+
+# view the status of your services in JSON
+$ rhoas status -o json
+....
+
+=== Options
+
+....
+  -h, --help            help for status
+  -o, --output string   Format to display the Kafka instance. Choose from: "json", "yaml", "yml"
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+....
+
+=== SEE ALSO
+
+* link:rhoas.adoc[rhoas] - RHOAS CLI
