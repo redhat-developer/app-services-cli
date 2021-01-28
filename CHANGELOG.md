@@ -2,6 +2,20 @@
 
 
 
+# [0.15.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.14.1...0.15.0) (2021-01-28)
+
+
+### Bug Fixes
+
+* handle "MGD-SERV-API-36" error code ([#305](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/305)) ([8ca3f1a](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/8ca3f1a08e83f4186b323a27463cb156ed758bbd))
+
+
+### Features
+
+* **status:** add root-level status command ([#301](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/301)) ([ce30137](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/ce30137448fbaafe7b21b358fcf457b11861fea5))
+
+
+
 ## [0.14.1](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.14.0...0.14.1) (2021-01-28)
 
 
