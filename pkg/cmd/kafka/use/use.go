@@ -4,6 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+
 	"github.com/MakeNowJust/heredoc"
 
 	"github.com/spf13/cobra"
@@ -73,6 +77,10 @@ func runUse(opts *options) error {
 	api := connection.API()
 
 	res, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
+	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+		return kafka.ErrorNotFound(opts.id)
+	}
+
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to retrieve Kafka instance \"%v\": %w", opts.id, apiErr)
 	}
@@ -87,7 +95,7 @@ func runUse(opts *options) error {
 		return fmt.Errorf("Unable to use Kafka instance: %w", err)
 	}
 
-	logger.Infof("Using Kafka instance \"%v\"\n", *res.Id)
+	logger.Infof("Now using Kafka instance %v.", color.Info(res.GetName()))
 
 	return nil
 }

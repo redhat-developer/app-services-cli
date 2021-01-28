@@ -9,10 +9,12 @@ import (
 	"github.com/MakeNowJust/heredoc"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -98,6 +100,9 @@ func runDescribe(opts *options) error {
 	api := connection.API()
 
 	response, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
+	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+		return kafka.ErrorNotFound(opts.id)
+	}
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
