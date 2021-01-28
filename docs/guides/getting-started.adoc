@@ -1,16 +1,16 @@
 === Installing the CLI
 
-The latest version of the RHOAS CLI is available on Google Drive. Eventually this will be possible through your platform distribution method like Brew and DNF.
+NOTE: In the following guides replace `VERSION` with the release version of the CLI.
 
 ==== Linux
 
-1. Download the latest release from the link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases page].
+1. Download the binary for your CPU architecture from link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases].
 
 2. Extract the CLI binary into a directory on your `PATH`:
 +
 [source,shell]
 ----
-sudo tar -C /usr/local/bin -xzf cli_0.7.1_linux_64bit-x86.tar.gz
+sudo tar -C /usr/local/bin -xzf rhoas_${VERSION}_linux_amd64.tar.gz
 ----
 +
 TIP: Run `echo $PATH` to see the directories on your path.
@@ -20,18 +20,18 @@ TIP: Run `echo $PATH` to see the directories on your path.
 [source,shell]
 ----
 $ rhoas --version
-rhoas version 0.7.1
+rhoas version ${VERSION}
 ----
 
 ==== macOS
 
-1. Download the latest release from the link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases page].
+1. Download the binary for your CPU architecture from link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases].
 
 2. Extract the CLI binary into a directory on your `PATH`:
 +
 [source,shell]
 ----
-sudo tar -C /usr/local/bin -xzf cli_0.7.1_macos_64bit-x86.tar.gz
+sudo tar -C /usr/local/bin -xzf rhoas_${VERSION}_macOS_amd64.tar.gz
 ----
 +
 TIP: Run `echo $PATH` to see the directories on your path.
@@ -41,7 +41,25 @@ TIP: Run `echo $PATH` to see the directories on your path.
 [source,shell]
 ----
 $ rhoas --version
-rhoas version 0.7.1
+rhoas version ${VERSION}
+----
+
+==== Fedora/RHEL/CentOS
+
+1. Download the latest `.rpm` for your CPU architecture from link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases].
+2. Install the RPM package:
++
+[source,shell]
+----
+sudo rpm -i rhoas_${VERSION}_linux_amd64.rpm
+----
++
+3. The CLI is now installed and ready to use. To verify this, run a command:
++
+[source,shell]
+----
+$ rhoas --version
+rhoas version ${VERSION}
 ----
 
 ==== Next steps

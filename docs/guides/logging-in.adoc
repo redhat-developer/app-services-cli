@@ -12,12 +12,16 @@ You can log in to the `rhoas` CLI to access your managed application services.
 +
 [source,shell]
 ----
-$ rhoas login
-Logging in...
-Successfully logged in to RHOAS
+rhoas login
 ----
 2. You will be automatically redirected to your browser at https://sso.redhat.com where you will enter your credentials. If you are already logged in this step will be skipped.
 3. You will be redirected and can return to the CLI where you will have been successfully logged in.
++
+[source,shell]
+----
+$ rhoas login
+You are now logged in as developer
+----
 
 ==== Next steps
 

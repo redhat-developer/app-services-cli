@@ -49,10 +49,10 @@ To view a list of Kafka instances in your organization use the `rhoas kafka list
 [source,shell]
 ----
 $ rhoas kafka list
-  ID (2)                        NAME         OWNER                   STATUS     CLOUD PROVIDER   REGION     
- ----------------------------- ------------ ----------------------- ---------- ---------------- ----------- 
-  1lVcpo1c9kx6a9rbablGBY8RiD8   ajay-test    apratap_kafka_devexp    complete   aws              us-east-1  
-  1lVumk6qWk3ZRQfCssZNNTGvR6Q   endaskafka   ephelan_kafka_devexp    complete   aws              us-east-1  
+  ID (2)                        NAME              OWNER      STATUS     CLOUD PROVIDER   REGION     
+ ----------------------------- --------------- ------------ ---------- ---------------- ----------- 
+  1lVcpo1c9kx6a9rbablGBY8RiD8   my-test-kafka   developer2   complete   aws              us-east-1  
+  1lVumk6qWk3ZRQfCssZNNTGvR6Q   my-kafka        developer    complete   aws              us-east-1  
 ----
 
 === Describing a Kafka instance
@@ -86,7 +86,7 @@ The `rhoas kafka use` command can be used to switch the current Kafka instance c
 
 [source,shell]
 ----
-$ rhoas kafka use --id
+$ rhoas kafka use --id 1lVcpo1c9kx6a9rbablGBY8RiD8
 {
     "id": "1lVcpo1c9kx6a9rbablGBY8RiD8",
     "kind": "Kafka",
@@ -129,7 +129,7 @@ The `rhoas kafka delete` command allows you to delete a Kafka topic.
 
 [source,shell]
 ----
-$ rhoas kafka topics delete --name "my-first-topic"
+$ rhoas kafka topics delete --name "my-first"
 TODO
 ----
 
@@ -140,29 +140,27 @@ To permanently delete the current Kafka instance use the `rhoas kafka delete` co
 [source,shell]
 ----
 $ rhoas kafka delete
-? Once a Kafka instance is deleted it is gone forever and cannot be recovered, are you sure you want to proceed? Yes
-? Please confirm the ID of the Kafka instance you wish to permanently delete: 1lVumk6qWk3ZRQfCssZNNTGvR6Q
-Deleting Kafka instance with ID '1lVumk6qWk3ZRQfCssZNNTGvR6Q'.
-
-Kafka instance has successfully been deleted.
+? Are you sure you want to delete the Kafka instance my-kafka-instance? Yes
+? Confirm the name of the instance you want to permanently delete: my-kafka-instance
+Kafka instance my-kafka-instance has successfully been deleted
 ----
 
 TIP: You can pass the `--id` flag to delete a different Kafka instance.
 
 === Creating a Service Account
 
-You can use the `rhoas serviceaccount create` command to create a new service account with SASL/PLAIN credentials.
+You can use the `rhoas serviceaccount create` command to create a new service account with credentials.
 The credentials are exported to a file on your computer and can be used to authenticate your application with managed services.
 
 [source,shell]
 ----
 $ rhoas serviceaccount create --name "my-service-acct" -o json
-Creating service account with the following permissions: [kafka-all]
-Writing credentials to credentials.json
-Successfully saved credentials to credentials.json
+
+Service account my-service-account created
+Credentials saved to /home/developer/my-project/credentials.yaml
 ----
 
-Your service account SASL/PLAIN credentials will be saved to a JSON file for use later.
+Your service account credentials will be saved to a JSON file for use later.
 
 [source,shell]
 ----
