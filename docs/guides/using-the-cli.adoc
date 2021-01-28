@@ -28,19 +28,21 @@ Created new Kafka instance:
 
 NOTE: A Kafka instance will automatically be "used" when created.
 
-=== Viewing the status of a Kafka instance
+=== Viewing the status of your current services
 
-Use the `rhoas kafka status` command to view the status of the current Kafka instance.
+Use the `rhoas status` command to view the status of all current services.
 
 [source,shell]
 ----
 $ rhoas kafka status
-  ID                            NAME         STATUS    
- ----------------------------- ------------ ---------- 
-  1lVumk6qWk3ZRQfCssZNNTGvR6Q   endaskafka   complete 
-----
 
-TIP: You can pass the `--id` flag to view the status of a different Kafka instance.
+  Kafka
+  ------------------------------------------------------------------------------------
+  ID:                     1nh3qkcXuBGMlbIPDqhNbswIZCB
+  Name:                   my-kafka-instance
+  Status:                 ready
+  Bootstrap URL:          my-kafka-instance--nh-qkcxubgmlbipdqhnbswizcb.kafka.devshift.org:443
+----
 
 === Viewing a list of Kafka instances
 
