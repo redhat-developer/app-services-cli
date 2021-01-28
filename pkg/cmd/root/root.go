@@ -3,6 +3,8 @@ package root
 import (
 	"flag"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/status"
+
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/arguments"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster"
@@ -51,6 +53,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	cmd.AddCommand(kafka.NewKafkaCommand(cmdFactory))
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(cmdFactory))
 	cmd.AddCommand(cluster.NewClusterCommand(cmdFactory))
+	cmd.AddCommand(status.NewStatusCommand(cmdFactory))
 	cmd.AddCommand(completion.CompletionCmd)
 
 	return cmd

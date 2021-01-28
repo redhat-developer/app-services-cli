@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -10,7 +9,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	serviceapiclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
@@ -42,16 +41,9 @@ func main() {
 		return
 	}
 
-	// Attempt to unwrap the descriptive API error message
-	var apiError serviceapiclient.GenericOpenAPIError
-	if ok := errors.As(err, &apiError); ok {
-		errModel := apiError.Model()
-
-		e, ok := errModel.(serviceapiclient.Error)
-		if ok {
-			fmt.Fprintf(stderr, "Error: %v\n", *e.Reason)
-			os.Exit(1)
-		}
+	if e, ok := serviceapi.GetAPIError(err); ok {
+		fmt.Fprintf(stderr, "Error: %v\n", e.GetReason())
+		os.Exit(1)
 	}
 
 	if err = cmdutil.CheckSurveyError(err); err != nil {

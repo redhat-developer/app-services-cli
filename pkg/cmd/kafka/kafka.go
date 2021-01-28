@@ -11,7 +11,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/describe"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/status"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
 )
@@ -42,7 +41,6 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		delete.NewDeleteCommand(f),
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
-		status.NewStatusCommand(f),
 		topics.NewTopicsCommand(f),
 	)
 	return cmd

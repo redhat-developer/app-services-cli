@@ -41,3 +41,5 @@ Kafka instances
 * link:rhoas_logout.adoc[rhoas logout] - Log out from RHOAS
 * link:rhoas_serviceaccount.adoc[rhoas serviceaccount] - Create, list,
 delete and update service accounts
+* link:rhoas_status.adoc[rhoas status] - View the status of all currently
+used services
