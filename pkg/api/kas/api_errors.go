@@ -1,9 +1,9 @@
-package serviceapi
+package kas
 
 import (
 	"errors"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/serviceapi/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 )
 
 const (
@@ -22,12 +22,12 @@ func (e *Error) Unwrap() error {
 	return e.Err
 }
 
-func GetAPIError(err error) (e client.Error, ok bool) {
-	var apiError client.GenericOpenAPIError
+func GetAPIError(err error) (e kasclient.Error, ok bool) {
+	var apiError kasclient.GenericOpenAPIError
 	if ok = errors.As(err, &apiError); ok {
 		errModel := apiError.Model()
 
-		e, ok = errModel.(client.Error)
+		e, ok = errModel.(kasclient.Error)
 	}
 
 	return e, ok
