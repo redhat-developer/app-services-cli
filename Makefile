@@ -14,7 +14,7 @@ endif
 # The details of the application:
 binary:=rhoas
 
-serviceapi_dir=./pkg/api/serviceapi/client
+kasapi_dir=./pkg/api/kafka-service/client
 strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 
 # Enable Go modules:
@@ -93,21 +93,21 @@ openapi/strimzi-admin/generate:
 .PHONY: openapi/strimzi-admin/generate
 
 openapi/kas/pull:
-	wget -O ./openapi/managed-services-api.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
+	wget -O ./openapi/kafka-service.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
 .PHONY: openapi/kas/pull
 
 # validate the openapi schema
 openapi/kas/validate:
-	openapi-generator-cli validate -i openapi/managed-services-api.yaml
+	openapi-generator-cli validate -i openapi/kafka-service.yaml
 .PHONY: openapi/kas/validate
 
 # generate the openapi schema
 openapi/kas/generate:
-	openapi-generator-cli generate -i openapi/managed-services-api.yaml -g go --package-name client -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${serviceapi_dir}
-	openapi-generator-cli validate -i openapi/managed-services-api.yaml
+	openapi-generator-cli generate -i openapi/kafka-service.yaml -g go --package-name kasclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${kasapi_dir}
+	openapi-generator-cli validate -i openapi/kafka-service.yaml
 	# generate mock
-	moq -out ${serviceapi_dir}/default_api_mock.go ${serviceapi_dir} DefaultApi
-	gofmt -w ${serviceapi_dir}
+	moq -out ${kasapi_dir}/default_api_mock.go ${kasapi_dir} DefaultApi
+	gofmt -w ${kasapi_dir}
 .PHONY: openapi/kas/generate
 
 mock-api/start: mock-api/server/start mock-api/client/start
