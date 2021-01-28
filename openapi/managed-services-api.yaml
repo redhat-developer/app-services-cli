@@ -189,6 +189,15 @@ paths:
                 404Example:
                   $ref: '#/components/examples/404Example'
           description: The requested resource doesn't exist
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                409NameConflictExample:
+                  $ref: '#/components/examples/409NameConflictExample'
+          description: A conflict has been detected in the creation of this resource 
         "500":
           content:
             application/json:
@@ -476,6 +485,42 @@ paths:
         - Bearer: []
       operationId: resetServiceAccountCreds
       summary: reset credentials for the service account
+  /api/managed-services-api/v1/kafkas/{id}/metrics:
+    get:
+      summary: Get metrics by kafka id.
+      operationId: getMetricsByKafkaId
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: A JSON array of prometheus metrics objects from observatorium
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsList'
+        '401':
+          description: Auth token is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
+        '500':
+          description: Unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/duration"
+        - $ref: "#/components/parameters/interval"
+        - $ref: "#/components/parameters/filters"
 components:
   schemas:
     ObjectReference:
@@ -727,6 +772,56 @@ components:
               items:
                 allOf:
                   - $ref: "#/components/schemas/ServiceAccountListItem"
+    MetricsList:
+      allOf:
+        - type: object
+          example:
+            kind: "Metrics"
+            id: "1nbpS70HduPe4l0to8jSg2CLzfu"
+            items:
+              metric:
+                __name__: kafka_server_brokertopicmetrics_bytes_in_total
+                strimzi_io_cluster: kafka-service
+                topic: __consumer_offsets
+              values:
+                - Timestamp: 1611670230000
+                  Value: 84154
+                - Timestamp: 1611670260000
+                  Value: 85888
+                - Timestamp: 1611670290000
+                  Value: 87622
+          properties:
+            kind:
+              type: string
+            id:
+              type: string
+            items:
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/Metric"
+    Metric:
+      type: object
+      properties:
+        metric:
+          type: object
+          additionalProperties:
+            type: string
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/values'
+    values:
+      type: object
+      properties:
+        Timestamp:
+          type: integer
+          format: int64
+        Value:
+          type: number
+          format: double
+      required:
+        - Value
   parameters:
     id:
       name: id
@@ -735,6 +830,43 @@ components:
         type: string
       in: path
       required: true
+    duration:
+      name: duration
+      in: query
+      description:  The length of time in minutes over which to return the metrics.
+      required: true
+      schema:
+        type: integer
+        format: int64
+        default: 5
+        minimum: 1
+        maximum: 4320
+      examples:
+        duration:
+          value: 5
+    interval:
+      name: interval
+      in: query
+      description: The interval in seconds between data points.
+      required: true
+      schema:
+        type: integer
+        format: int64
+        default: 30
+        minimum: 1
+        maximum: 10800
+      examples:
+        interval:
+          value: 30
+    filters:
+      name: filters
+      in: query
+      description: List of metrics to fetch. Fetch all metrics when empty. List entries are kafka internal metric names.
+      schema:
+        type: array
+        items:
+          type: string
+        default: []
     page:
       name: page
       in: query
@@ -793,7 +925,7 @@ components:
         Allowed joins are `AND` and `OR`, however there is a limit of max 10 joins in the search query.
 
         Examples:
-        
+
         To retrieve kafka request with name equal `my-kafka` and region equal `aws`, the value should be:
 
         ```
@@ -808,7 +940,7 @@ components:
 
         If the parameter isn't provided, or if the value is empty, then all the kafkas
         that the user has permission to see will be returned.
-        
+
         Note. If the query is invalid, an error will be returned
       explode: true
       name: search
@@ -954,6 +1086,14 @@ components:
         code: "MGD-SERV-API-5"
         reason: "User 'foo-bar' has reached a maximum number of 6 allowed instances."
         operation_id: "1lY3UiEkxnXBpVPeI2oNejd3XB"
+    409NameConflictExample:
+      value:
+        id: "36"
+        kind: "Error"
+        href: "/api/managed-services-api/v1/errors/36"
+        code: "MGD-SERV-API-36"
+        reason: "Kafka cluster name is already used"
+        operation_id: "6kY0UiEkzkXCzWPeI2oYehd3ED"     
     500Example:
       value:
         id: "9"

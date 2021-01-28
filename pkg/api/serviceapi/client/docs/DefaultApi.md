@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 [**DeleteServiceAccount**](DefaultApi.md#DeleteServiceAccount) | **Delete** /api/managed-services-api/v1/serviceaccounts/{id} | Delete service account
 [**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
+[**GetMetricsByKafkaId**](DefaultApi.md#GetMetricsByKafkaId) | **Get** /api/managed-services-api/v1/kafkas/{id}/metrics | Get metrics by kafka id.
 [**ListCloudProviderRegions**](DefaultApi.md#ListCloudProviderRegions) | **Get** /api/managed-services-api/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
 [**ListCloudProviders**](DefaultApi.md#ListCloudProviders) | **Get** /api/managed-services-api/v1/cloud_providers | Retrieves the list of supported cloud providers.
 [**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
@@ -336,6 +337,80 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**KafkaRequest**](KafkaRequest.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetMetricsByKafkaId
+
+> MetricsList GetMetricsByKafkaId(ctx, id).Duration(duration).Interval(interval).Filters(filters).Execute()
+
+Get metrics by kafka id.
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | The id of record
+    duration := int64(5) // int64 | The length of time in minutes over which to return the metrics. (default to 5)
+    interval := int64(30) // int64 | The interval in seconds between data points. (default to 30)
+    filters := []string{"Inner_example"} // []string | List of metrics to fetch. Fetch all metrics when empty. List entries are kafka internal metric names. (optional) (default to [])
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.GetMetricsByKafkaId(context.Background(), id).Duration(duration).Interval(interval).Filters(filters).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetMetricsByKafkaId``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetMetricsByKafkaId`: MetricsList
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetMetricsByKafkaId`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | The id of record | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetMetricsByKafkaIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **duration** | **int64** | The length of time in minutes over which to return the metrics. | [default to 5]
+ **interval** | **int64** | The interval in seconds between data points. | [default to 30]
+ **filters** | **[]string** | List of metrics to fetch. Fetch all metrics when empty. List entries are kafka internal metric names. | [default to []]
+
+### Return type
+
+[**MetricsList**](MetricsList.md)
 
 ### Authorization
 

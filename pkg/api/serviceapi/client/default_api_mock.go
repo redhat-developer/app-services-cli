@@ -49,6 +49,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //             GetKafkaByIdExecuteFunc: func(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the GetKafkaByIdExecute method")
 //             },
+//             GetMetricsByKafkaIdFunc: func(ctx context.Context, id string) ApiGetMetricsByKafkaIdRequest {
+// 	               panic("mock out the GetMetricsByKafkaId method")
+//             },
+//             GetMetricsByKafkaIdExecuteFunc: func(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the GetMetricsByKafkaIdExecute method")
+//             },
 //             ListCloudProviderRegionsFunc: func(ctx context.Context, id string) ApiListCloudProviderRegionsRequest {
 // 	               panic("mock out the ListCloudProviderRegions method")
 //             },
@@ -115,6 +121,12 @@ type DefaultApiMock struct {
 
 	// GetKafkaByIdExecuteFunc mocks the GetKafkaByIdExecute method.
 	GetKafkaByIdExecuteFunc func(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, GenericOpenAPIError)
+
+	// GetMetricsByKafkaIdFunc mocks the GetMetricsByKafkaId method.
+	GetMetricsByKafkaIdFunc func(ctx context.Context, id string) ApiGetMetricsByKafkaIdRequest
+
+	// GetMetricsByKafkaIdExecuteFunc mocks the GetMetricsByKafkaIdExecute method.
+	GetMetricsByKafkaIdExecuteFunc func(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *http.Response, GenericOpenAPIError)
 
 	// ListCloudProviderRegionsFunc mocks the ListCloudProviderRegions method.
 	ListCloudProviderRegionsFunc func(ctx context.Context, id string) ApiListCloudProviderRegionsRequest
@@ -204,6 +216,18 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiGetKafkaByIdRequest
 		}
+		// GetMetricsByKafkaId holds details about calls to the GetMetricsByKafkaId method.
+		GetMetricsByKafkaId []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+		}
+		// GetMetricsByKafkaIdExecute holds details about calls to the GetMetricsByKafkaIdExecute method.
+		GetMetricsByKafkaIdExecute []struct {
+			// R is the r argument value.
+			R ApiGetMetricsByKafkaIdRequest
+		}
 		// ListCloudProviderRegions holds details about calls to the ListCloudProviderRegions method.
 		ListCloudProviderRegions []struct {
 			// Ctx is the ctx argument value.
@@ -269,6 +293,8 @@ type DefaultApiMock struct {
 	lockDeleteServiceAccountExecute     sync.RWMutex
 	lockGetKafkaById                    sync.RWMutex
 	lockGetKafkaByIdExecute             sync.RWMutex
+	lockGetMetricsByKafkaId             sync.RWMutex
+	lockGetMetricsByKafkaIdExecute      sync.RWMutex
 	lockListCloudProviderRegions        sync.RWMutex
 	lockListCloudProviderRegionsExecute sync.RWMutex
 	lockListCloudProviders              sync.RWMutex
@@ -600,6 +626,72 @@ func (mock *DefaultApiMock) GetKafkaByIdExecuteCalls() []struct {
 	mock.lockGetKafkaByIdExecute.RLock()
 	calls = mock.calls.GetKafkaByIdExecute
 	mock.lockGetKafkaByIdExecute.RUnlock()
+	return calls
+}
+
+// GetMetricsByKafkaId calls GetMetricsByKafkaIdFunc.
+func (mock *DefaultApiMock) GetMetricsByKafkaId(ctx context.Context, id string) ApiGetMetricsByKafkaIdRequest {
+	if mock.GetMetricsByKafkaIdFunc == nil {
+		panic("DefaultApiMock.GetMetricsByKafkaIdFunc: method is nil but DefaultApi.GetMetricsByKafkaId was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+	}{
+		Ctx: ctx,
+		ID:  id,
+	}
+	mock.lockGetMetricsByKafkaId.Lock()
+	mock.calls.GetMetricsByKafkaId = append(mock.calls.GetMetricsByKafkaId, callInfo)
+	mock.lockGetMetricsByKafkaId.Unlock()
+	return mock.GetMetricsByKafkaIdFunc(ctx, id)
+}
+
+// GetMetricsByKafkaIdCalls gets all the calls that were made to GetMetricsByKafkaId.
+// Check the length with:
+//     len(mockedDefaultApi.GetMetricsByKafkaIdCalls())
+func (mock *DefaultApiMock) GetMetricsByKafkaIdCalls() []struct {
+	Ctx context.Context
+	ID  string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+	}
+	mock.lockGetMetricsByKafkaId.RLock()
+	calls = mock.calls.GetMetricsByKafkaId
+	mock.lockGetMetricsByKafkaId.RUnlock()
+	return calls
+}
+
+// GetMetricsByKafkaIdExecute calls GetMetricsByKafkaIdExecuteFunc.
+func (mock *DefaultApiMock) GetMetricsByKafkaIdExecute(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *http.Response, GenericOpenAPIError) {
+	if mock.GetMetricsByKafkaIdExecuteFunc == nil {
+		panic("DefaultApiMock.GetMetricsByKafkaIdExecuteFunc: method is nil but DefaultApi.GetMetricsByKafkaIdExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetMetricsByKafkaIdRequest
+	}{
+		R: r,
+	}
+	mock.lockGetMetricsByKafkaIdExecute.Lock()
+	mock.calls.GetMetricsByKafkaIdExecute = append(mock.calls.GetMetricsByKafkaIdExecute, callInfo)
+	mock.lockGetMetricsByKafkaIdExecute.Unlock()
+	return mock.GetMetricsByKafkaIdExecuteFunc(r)
+}
+
+// GetMetricsByKafkaIdExecuteCalls gets all the calls that were made to GetMetricsByKafkaIdExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetMetricsByKafkaIdExecuteCalls())
+func (mock *DefaultApiMock) GetMetricsByKafkaIdExecuteCalls() []struct {
+	R ApiGetMetricsByKafkaIdRequest
+} {
+	var calls []struct {
+		R ApiGetMetricsByKafkaIdRequest
+	}
+	mock.lockGetMetricsByKafkaIdExecute.RLock()
+	calls = mock.calls.GetMetricsByKafkaIdExecute
+	mock.lockGetMetricsByKafkaIdExecute.RUnlock()
 	return calls
 }
 
