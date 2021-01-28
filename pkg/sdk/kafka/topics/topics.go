@@ -170,8 +170,14 @@ func ListKafkaTopics(opts *Options) error {
 		return err
 	}
 
-	for i := range partitions {
-		topicPartition := &partitions[i]
+	uniquePartitions := make(map[string]kafka.Partition)
+
+	for idx := range partitions {
+		uniquePartitions[partitions[idx].Topic] = partitions[idx]
+	}
+
+	for idx := range uniquePartitions {
+		topicPartition := uniquePartitions[idx]
 		replicas := strconv.Itoa(len(topicPartition.Replicas))
 		logger.Infof("Name: %v (Replicas: %v)\n",
 			color.Success(topicPartition.Topic),
