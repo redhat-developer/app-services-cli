@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
+
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
@@ -141,7 +142,7 @@ func runCreate(opts *Options) error {
 	serviceAccountPayload := &kasclient.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
 	api := connection.API()
-	a := api.Kafka.CreateServiceAccount(context.Background())
+	a := api.Kafka().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, apiErr := a.Execute()
 

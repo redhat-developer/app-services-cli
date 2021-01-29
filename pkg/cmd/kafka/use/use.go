@@ -76,7 +76,7 @@ func runUse(opts *options) error {
 
 	api := connection.API()
 
-	res, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
+	res, _, apiErr := api.Kafka().GetKafkaById(context.Background(), opts.id).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
 		return kafka.ErrorNotFound(opts.id)
 	}

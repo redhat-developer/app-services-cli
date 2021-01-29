@@ -5,8 +5,8 @@ import (
 	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
 )
 
-// API is a type which defines a number of APIs
+// API is a type which defines a number of API creator functions
 type API struct {
-	Kafka        kasclient.DefaultApi
-	StrimziAdmin strimziadminclient.DefaultApi
+	Kafka      func() kasclient.DefaultApi
+	TopicAdmin func(kafkaID string) strimziadminclient.DefaultApi
 }

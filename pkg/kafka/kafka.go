@@ -3,7 +3,8 @@ package kafka
 import (
 	"context"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -13,7 +14,7 @@ import (
 func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kasclient.KafkaRequest, error) {
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka.ListKafkas(context.Background()).Execute()
+	response, _, apiErr := api.Kafka().ListKafkas(context.Background()).Execute()
 
 	if apiErr.Error() != "" {
 		return nil, fmt.Errorf("Unable to list Kafka instances: %w", apiErr)

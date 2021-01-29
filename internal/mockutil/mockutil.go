@@ -52,7 +52,9 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kasclient
 		},
 		APIFunc: func() *api.API {
 			a := &api.API{
-				Kafka: apiClient.DefaultApi,
+				Kafka: func() kasclient.DefaultApi {
+					return apiClient.DefaultApi
+				},
 			}
 
 			return a
