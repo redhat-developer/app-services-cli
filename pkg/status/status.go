@@ -62,7 +62,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 		kafkaCfg := cfg.Services.Kafka
 		if cfg.HasKafka() {
 			// nolint:govet
-			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka, kafkaCfg.ClusterID)
+			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka(), kafkaCfg.ClusterID)
 			if err != nil {
 				if kas.IsErr(err, kas.ErrorNotFound) {
 					err = kafka.ErrorNotFound(kafkaCfg.ClusterID)

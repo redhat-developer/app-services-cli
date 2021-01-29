@@ -99,7 +99,7 @@ func runDescribe(opts *options) error {
 
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
+	response, _, apiErr := api.Kafka().GetKafkaById(context.Background(), opts.id).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
 		return kafka.ErrorNotFound(opts.id)
 	}

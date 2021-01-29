@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
+
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
@@ -175,7 +176,7 @@ func resetCredentials(opts *Options) (*kasclient.ServiceAccount, error) {
 	}
 
 	api := connection.API()
-	a := api.Kafka.ResetServiceAccountCreds(context.Background(), opts.id)
+	a := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id)
 
 	logger.Debug("Resetting credentials for service account with ID", opts.id)
 	serviceacct, _, apiErr := a.Execute()

@@ -89,7 +89,7 @@ func runList(opts *Options) (err error) {
 
 	api := connection.API()
 
-	a := api.Kafka.ListServiceAccounts(context.Background())
+	a := api.Kafka().ListServiceAccounts(context.Background())
 	res, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {

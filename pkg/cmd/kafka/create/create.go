@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/MakeNowJust/heredoc"
@@ -153,7 +153,7 @@ func runCreate(opts *Options) error {
 
 	logger.Info("Creating Kafka instance")
 
-	a := api.Kafka.CreateKafka(context.Background())
+	a := api.Kafka().CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, _, apiErr := a.Execute()
@@ -218,7 +218,7 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, _, apiErr := api.Kafka.ListCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, _, apiErr := api.Kafka().ListCloudProviders(context.Background()).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}
@@ -240,7 +240,7 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	selectedCloudProvider := cloudproviderutil.FindByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, apiErr := api.Kafka.ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
+	cloudRegionResponse, _, apiErr := api.Kafka().ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
 	if apiErr.Error() != "" {
 		return nil, apiErr
 	}

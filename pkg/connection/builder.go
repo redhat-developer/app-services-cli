@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"fmt"
 	"net/http"
-	"net/http/cookiejar"
 	"net/url"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
@@ -175,28 +174,14 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		return
 	}
 
-	// Create the cookie jar:
-	jar, err := b.createCookieJar()
-	if err != nil {
-		return
-	}
-
 	// Create the transport:
 	transport := b.createTransport()
 	if err != nil {
 		return
 	}
 
-	// Add the bearer token to every request
-	tr := &AddAuthHeaderRoundTripper{
-		r:           transport,
-		accessToken: &tkn.AccessToken,
-		logger:      b.logger,
-	}
-
 	client := &http.Client{
-		Jar:       jar,
-		Transport: tr,
+		Transport: transport,
 	}
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
@@ -208,15 +193,15 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	keycloak.SetRestyClient(&restyClient)
 
 	connection = &KeycloakConnection{
-		insecure:   b.insecure,
-		trustedCAs: b.trustedCAs,
-		clientID:   b.clientID,
-		scopes:     scopes,
-		apiURL:     apiURL,
-		client:     client,
-		keycloak:   keycloak,
-		Token:      &tkn,
-		logger:     b.logger,
+		insecure:          b.insecure,
+		trustedCAs:        b.trustedCAs,
+		clientID:          b.clientID,
+		scopes:            scopes,
+		apiURL:            apiURL,
+		defaultHTTPClient: client,
+		keycloak:          keycloak,
+		Token:             &tkn,
+		logger:            b.logger,
 	}
 
 	return connection, nil
@@ -240,24 +225,4 @@ func (b *Builder) createTransport() (transport http.RoundTripper) {
 	}
 
 	return
-}
-
-func (b *Builder) createCookieJar() (jar http.CookieJar, err error) {
-	jar, err = cookiejar.New(nil)
-	return
-}
-
-type AddAuthHeaderRoundTripper struct {
-	r           http.RoundTripper
-	accessToken *string
-	logger      logging.Logger
-}
-
-// RoundTrip adds a bearer token to every request
-func (rt *AddAuthHeaderRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	rt.logger.Debug("Adding bearer token to request")
-
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", *rt.accessToken))
-
-	return rt.r.RoundTrip(req)
 }

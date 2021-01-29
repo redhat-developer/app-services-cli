@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
@@ -115,7 +116,7 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 	}
 
 	api := c.connection.API()
-	kafkaInstance, _, err := api.Kafka.GetKafkaById(ctx, cfg.Services.Kafka.ClusterID).Execute()
+	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, cfg.Services.Kafka.ClusterID).Execute()
 	if kas.IsErr(err, kas.ErrorNotFound) {
 		return kafka.ErrorNotFound(cfg.Services.Kafka.ClusterID)
 	}
@@ -277,7 +278,7 @@ func (c *Kubernetes) createServiceAccount(ctx context.Context) (*kasclient.Servi
 
 	api := c.connection.API()
 	serviceAcct := &kasclient.ServiceAccountRequest{Name: fmt.Sprintf("svc-acct-%v", t.String())}
-	req := api.Kafka.CreateServiceAccount(ctx)
+	req := api.Kafka().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
 	res, _, apiErr := req.Execute()
 

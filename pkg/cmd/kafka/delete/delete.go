@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"fmt"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
@@ -92,7 +93,7 @@ func runDelete(opts *options) error {
 
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka.GetKafkaById(context.Background(), opts.id).Execute()
+	response, _, apiErr := api.Kafka().GetKafkaById(context.Background(), opts.id).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
 		return kafka.ErrorNotFound(opts.id)
 	}
@@ -132,7 +133,7 @@ func runDelete(opts *options) error {
 	}
 
 	logger.Debug("Deleting Kafka instance", kafkaName)
-	_, _, apiErr = api.Kafka.DeleteKafkaById(context.Background(), opts.id).Execute()
+	_, _, apiErr = api.Kafka().DeleteKafkaById(context.Background(), opts.id).Execute()
 
 	if apiErr.Error() != "" {
 		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)

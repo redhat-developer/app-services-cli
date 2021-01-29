@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"net"
 	"strconv"
 	"time"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -59,7 +60,7 @@ func brokerConnect(opts *Options) (broker *kafka.Conn, ctl *kafka.Conn, err erro
 	}
 
 	api := connection.API()
-	kafkaInstance, _, apiErr := api.Kafka.GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID).Execute()
+	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(context.TODO(), cfg.Services.Kafka.ClusterID).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
 		return nil, nil, pkgKafka.ErrorNotFound(cfg.Services.Kafka.ClusterID)
 	}
@@ -117,7 +118,7 @@ func ValidateCredentials(opts *Options) error {
 	logger.Info("No Service credentials. \nCreating service account for CLI")
 	svcAcctDescription := "RHOAS-CLI Service Account"
 	svcAcctPayload := &kasclient.ServiceAccountRequest{Name: "RHOAS-CLI", Description: &svcAcctDescription}
-	a := api.Kafka.CreateServiceAccount(context.Background())
+	a := api.Kafka().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*svcAcctPayload)
 	response, _, apiErr := a.Execute()
 	if apiErr.Error() != "" {
