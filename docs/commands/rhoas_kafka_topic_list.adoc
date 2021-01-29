@@ -1,4 +1,4 @@
-== rhoas kafka topics list
+== rhoas kafka topic list
 
 List Kafka topics
 
@@ -7,7 +7,7 @@ List Kafka topics
 List all topics in the current Kafka instance
 
 ....
-rhoas kafka topics list [flags]
+rhoas kafka topic list [flags]
 ....
 
 === Options
@@ -26,5 +26,5 @@ rhoas kafka topics list [flags]
 
 === SEE ALSO
 
-* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Create, list and
-delete Kafka topics
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list and delete
+Kafka topics

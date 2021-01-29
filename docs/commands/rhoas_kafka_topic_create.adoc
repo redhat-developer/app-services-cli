@@ -1,4 +1,4 @@
-== rhoas kafka topics create
+== rhoas kafka topic create
 
 Create a Kafka topic
 
@@ -7,7 +7,7 @@ Create a Kafka topic
 Create topic in the current Kafka instance
 
 ....
-rhoas kafka topics create [flags]
+rhoas kafka topic create [flags]
 ....
 
 === Options
@@ -28,5 +28,5 @@ rhoas kafka topics create [flags]
 
 === SEE ALSO
 
-* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Create, list and
-delete Kafka topics
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list and delete
+Kafka topics

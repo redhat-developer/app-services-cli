@@ -16,7 +16,7 @@ $ rhoas kafka create
 $ rhoas kafka list
 
 # create a Kafka topic
-$ rhoas kafka topics create --name "my-kafka-topic"
+$ rhoas kafka topic create --name "my-kafka-topic"
 ....
 
 === Options
@@ -41,7 +41,7 @@ instance
 * link:rhoas_kafka_describe.adoc[rhoas kafka describe] - View all
 configuration values of a Kafka instance
 * link:rhoas_kafka_list.adoc[rhoas kafka list] - List all Kafka instances
-* link:rhoas_kafka_topics.adoc[rhoas kafka topics] - Create, list and
-delete Kafka topics
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list and delete
+Kafka topics
 * link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Kafka
 instance
