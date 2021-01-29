@@ -88,7 +88,7 @@
       "env": {},
       "args": [
         "kafka",
-        "topics",
+        "topic",
         "create",
         "--name=my-topic",
         "--insecure"
@@ -103,7 +103,7 @@
       "env": {},
       "args": [
         "kafka",
-        "topics",
+        "topic",
         "list"
       ]
     },

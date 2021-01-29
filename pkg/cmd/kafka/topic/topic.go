@@ -5,9 +5,9 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/delete"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics/list"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/create"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/delete"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/list"
 )
 
 const (
@@ -15,23 +15,23 @@ const (
 	Operation = "operation"
 )
 
-// NewTopicsCommand gives commands that manages Kafka topics.
-func NewTopicsCommand(f *factory.Factory) *cobra.Command {
+// NewTopicCommand gives commands that manages Kafka topics.
+func NewTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "topics",
+		Use:   "topic",
 		Short: "Create, list and delete Kafka topics",
 		Long: heredoc.Doc(`
 			Create, list and delete topics for a Kafka instance.
 		`),
 		Example: heredoc.Doc(`
 			# create a topic in the current Kafka instance
-			$ rhoas kafka topics create --name "my-example-topic"
+			$ rhoas kafka topic create --name "my-example-topic"
 
 			# list all topics for a Kafka instance
-			$ rhoas kafka topics list
+			$ rhoas kafka topic list
 
 			# delete a topic for the current Kafka instance
-			$ rhoas kafka topics delete --name "my-example-topic"
+			$ rhoas kafka topic delete --name "my-example-topic"
 		`),
 	}
 

@@ -11,7 +11,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/describe"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topics"
+	topics "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
 )
 
@@ -30,7 +30,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 			$ rhoas kafka list
 
 			# create a Kafka topic
-			$ rhoas kafka topics create --name "my-kafka-topic"
+			$ rhoas kafka topic create --name "my-kafka-topic"
 		`),
 	}
 
@@ -41,7 +41,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		delete.NewDeleteCommand(f),
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
-		topics.NewTopicsCommand(f),
+		topics.NewTopicCommand(f),
 	)
 	return cmd
 }

@@ -107,21 +107,21 @@ $ rhoas kafka use --id 1lVcpo1c9kx6a9rbablGBY8RiD8
 
 === Creating a Kafka topic
 
-You can create a topic for the current Kafka instance with the `rhoas kafka topics create` command.
+You can create a topic for the current Kafka instance with the `rhoas kafka topic create` command.
 
 [source,shell]
 ----
-$ rhoas kafka topics create --name "my-first-topic"
+$ rhoas kafka topic create --name "my-first-topic"
 TODO
 ----
 
 === Listing Kafka topics
 
-To list the topics for the current Kafka instance use the `rhoas kafka topics list` command.
+To list the topics for the current Kafka instance use the `rhoas kafka topic list` command.
 
 [source,shell]
 ----
-$ rhoas kafka topics list
+$ rhoas kafka topic list
 TODO
 ----
 
@@ -131,7 +131,7 @@ The `rhoas kafka delete` command allows you to delete a Kafka topic.
 
 [source,shell]
 ----
-$ rhoas kafka topics delete --name "my-first"
+$ rhoas kafka topic delete --name "my-first"
 TODO
 ----
 
