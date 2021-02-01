@@ -74,21 +74,21 @@ ctx = context.WithValue(context.Background(), sw.ContextOperationServerVariables
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://api.openshift.com/api/managed-services-strimzi-ui/v1/api*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**CreateTopic**](docs/DefaultApi.md#createtopic) | **Post** /topics | Creates a new topic
-*DefaultApi* | [**DeleteTopic**](docs/DefaultApi.md#deletetopic) | **Delete** /topics/{topicId} | Deletes a  topic
-*DefaultApi* | [**GetTopic**](docs/DefaultApi.md#gettopic) | **Get** /topics/{topicId} | Topic associated with the topic id
+*DefaultApi* | [**DeleteTopic**](docs/DefaultApi.md#deletetopic) | **Delete** /topics/{topicName} | Deletes a  topic
+*DefaultApi* | [**GetTopic**](docs/DefaultApi.md#gettopic) | **Get** /topics/{topicName} | Retrieves the topic with the specified name.
 *DefaultApi* | [**GetTopicsList**](docs/DefaultApi.md#gettopicslist) | **Get** /topics | List of topics
-*DefaultApi* | [**UpdateTopic**](docs/DefaultApi.md#updatetopic) | **Patch** /topics/{topicId} | Updates the topic with the specified id.
+*DefaultApi* | [**UpdateTopic**](docs/DefaultApi.md#updatetopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 
 ## Documentation For Models
 
  - [ConfigEntry](docs/ConfigEntry.md)
- - [Node](docs/Node.md)
+ - [NewTopicInput](docs/NewTopicInput.md)
  - [Partition](docs/Partition.md)
  - [Topic](docs/Topic.md)
  - [TopicSettings](docs/TopicSettings.md)

@@ -4,10 +4,21 @@ Create a Kafka topic
 
 === Synopsis
 
-Create topic in the current Kafka instance
+Create topic in the current Kafka instance.
+
+This command lets you create a topic, set a desired number of
+partitions, replicas and retention period or else use the default
+values.
 
 ....
 rhoas kafka topic create [flags]
+....
+
+=== Examples
+
+....
+# create a topic
+$ rhoas kafka topic create topic-1
 ....
 
 === Options

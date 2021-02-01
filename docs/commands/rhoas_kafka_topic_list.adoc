@@ -4,17 +4,32 @@ List Kafka topics
 
 === Synopsis
 
-List all topics in the current Kafka instance
+List all topics in a Kafka instance
 
 ....
 rhoas kafka topic list [flags]
 ....
 
+=== Examples
+
+....
+# list all topics
+$ rhoas kafka topic list
+
+# list all topics as JSON
+$ rhoas kafka topic list -o json
+....
+
 === Options
 
 ....
+<<<<<<< HEAD
       --insecure        Enables insecure communication with the server. This disables verification of TLS certificates and host names.
   -o, --output string   Output format of the results. Choose from ["plain" "json" "yml" "yaml"]. (default "plain")
+=======
+  -h, --help            help for list
+  -o, --output string   Output format of the results. Choose from ["json" "yml" "yaml"]
+>>>>>>> c3543c8 (feat(kafka topic): add topic management commands)
 ....
 
 === Options inherited from parent commands
@@ -26,5 +41,10 @@ rhoas kafka topic list [flags]
 
 === SEE ALSO
 
+<<<<<<< HEAD
 * link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list, and
 delete Kafka topics
+=======
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, describe,
+update, list and delete Kafka topics
+>>>>>>> c3543c8 (feat(kafka topic): add topic management commands)

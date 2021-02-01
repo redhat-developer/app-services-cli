@@ -28,7 +28,7 @@ type DefaultApi interface {
 
 	/*
 	 * CreateTopic Creates a new topic
-	 * Creates a new topic for Kafka.
+	 * Creates a new topic in Kafka.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 * @return ApiCreateTopicRequest
 	 */
@@ -42,12 +42,12 @@ type DefaultApi interface {
 
 	/*
 	 * DeleteTopic Deletes a  topic
-	 * Deletes the topic with the specified id.
+	 * Deletes the topic with the specified name.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param topicId Topic id to delete
+	 * @param topicName The topic name to retrieve.
 	 * @return ApiDeleteTopicRequest
 	 */
-	DeleteTopic(ctx _context.Context, topicId string) ApiDeleteTopicRequest
+	DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest
 
 	/*
 	 * DeleteTopicExecute executes the request
@@ -55,13 +55,13 @@ type DefaultApi interface {
 	DeleteTopicExecute(r ApiDeleteTopicRequest) (*_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * GetTopic Topic associated with the topic id
+	 * GetTopic Retrieves the topic with the specified name.
 	 * Topic
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param topicId The id of the topic
+	 * @param topicName The topic name to retrieve.
 	 * @return ApiGetTopicRequest
 	 */
-	GetTopic(ctx _context.Context, topicId string) ApiGetTopicRequest
+	GetTopic(ctx _context.Context, topicName string) ApiGetTopicRequest
 
 	/*
 	 * GetTopicExecute executes the request
@@ -84,13 +84,13 @@ type DefaultApi interface {
 	GetTopicsListExecute(r ApiGetTopicsListRequest) (TopicsList, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * UpdateTopic Updates the topic with the specified id.
+	 * UpdateTopic Updates the topic with the specified name.
 	 * updates the topic with the new data.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param topicId topic id to update
+	 * @param topicName The topic name which is its unique id.
 	 * @return ApiUpdateTopicRequest
 	 */
-	UpdateTopic(ctx _context.Context, topicId string) ApiUpdateTopicRequest
+	UpdateTopic(ctx _context.Context, topicName string) ApiUpdateTopicRequest
 
 	/*
 	 * UpdateTopicExecute executes the request
@@ -105,11 +105,11 @@ type DefaultApiService service
 type ApiCreateTopicRequest struct {
 	ctx           _context.Context
 	ApiService    DefaultApi
-	topicSettings *TopicSettings
+	newTopicInput *NewTopicInput
 }
 
-func (r ApiCreateTopicRequest) TopicSettings(topicSettings TopicSettings) ApiCreateTopicRequest {
-	r.topicSettings = &topicSettings
+func (r ApiCreateTopicRequest) NewTopicInput(newTopicInput NewTopicInput) ApiCreateTopicRequest {
+	r.newTopicInput = &newTopicInput
 	return r
 }
 
@@ -119,7 +119,7 @@ func (r ApiCreateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 
 /*
  * CreateTopic Creates a new topic
- * Creates a new topic for Kafka.
+ * Creates a new topic in Kafka.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @return ApiCreateTopicRequest
  */
@@ -156,8 +156,8 @@ func (a *DefaultApiService) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-	if r.topicSettings == nil {
-		executionError.error = "topicSettings is required and must be specified"
+	if r.newTopicInput == nil {
+		executionError.error = "newTopicInput is required and must be specified"
 		return localVarReturnValue, nil, executionError
 	}
 
@@ -179,7 +179,7 @@ func (a *DefaultApiService) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, 
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.topicSettings
+	localVarPostBody = r.newTopicInput
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		executionError.error = err.Error()
@@ -223,7 +223,7 @@ func (a *DefaultApiService) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, 
 type ApiDeleteTopicRequest struct {
 	ctx        _context.Context
 	ApiService DefaultApi
-	topicId    string
+	topicName  string
 }
 
 func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
@@ -232,16 +232,16 @@ func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIErro
 
 /*
  * DeleteTopic Deletes a  topic
- * Deletes the topic with the specified id.
+ * Deletes the topic with the specified name.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param topicId Topic id to delete
+ * @param topicName The topic name to retrieve.
  * @return ApiDeleteTopicRequest
  */
-func (a *DefaultApiService) DeleteTopic(ctx _context.Context, topicId string) ApiDeleteTopicRequest {
+func (a *DefaultApiService) DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest {
 	return ApiDeleteTopicRequest{
 		ApiService: a,
 		ctx:        ctx,
-		topicId:    topicId,
+		topicName:  topicName,
 	}
 }
 
@@ -264,8 +264,8 @@ func (a *DefaultApiService) DeleteTopicExecute(r ApiDeleteTopicRequest) (*_netht
 		return nil, executionError
 	}
 
-	localVarPath := localBasePath + "/topics/{topicId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"topicId"+"}", _neturl.PathEscape(parameterToString(r.topicId, "")), -1)
+	localVarPath := localBasePath + "/topics/{topicName}"
+	localVarPath = strings.Replace(localVarPath, "{"+"topicName"+"}", _neturl.PathEscape(parameterToString(r.topicName, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -322,7 +322,7 @@ func (a *DefaultApiService) DeleteTopicExecute(r ApiDeleteTopicRequest) (*_netht
 type ApiGetTopicRequest struct {
 	ctx        _context.Context
 	ApiService DefaultApi
-	topicId    string
+	topicName  string
 }
 
 func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPIError) {
@@ -330,17 +330,17 @@ func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPI
 }
 
 /*
- * GetTopic Topic associated with the topic id
+ * GetTopic Retrieves the topic with the specified name.
  * Topic
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param topicId The id of the topic
+ * @param topicName The topic name to retrieve.
  * @return ApiGetTopicRequest
  */
-func (a *DefaultApiService) GetTopic(ctx _context.Context, topicId string) ApiGetTopicRequest {
+func (a *DefaultApiService) GetTopic(ctx _context.Context, topicName string) ApiGetTopicRequest {
 	return ApiGetTopicRequest{
 		ApiService: a,
 		ctx:        ctx,
-		topicId:    topicId,
+		topicName:  topicName,
 	}
 }
 
@@ -365,8 +365,8 @@ func (a *DefaultApiService) GetTopicExecute(r ApiGetTopicRequest) (Topic, *_neth
 		return localVarReturnValue, nil, executionError
 	}
 
-	localVarPath := localBasePath + "/topics/{topicId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"topicId"+"}", _neturl.PathEscape(parameterToString(r.topicId, "")), -1)
+	localVarPath := localBasePath + "/topics/{topicName}"
+	localVarPath = strings.Replace(localVarPath, "{"+"topicName"+"}", _neturl.PathEscape(parameterToString(r.topicName, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -563,7 +563,7 @@ func (a *DefaultApiService) GetTopicsListExecute(r ApiGetTopicsListRequest) (Top
 type ApiUpdateTopicRequest struct {
 	ctx           _context.Context
 	ApiService    DefaultApi
-	topicId       string
+	topicName     string
 	topicSettings *TopicSettings
 }
 
@@ -577,17 +577,17 @@ func (r ApiUpdateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 }
 
 /*
- * UpdateTopic Updates the topic with the specified id.
+ * UpdateTopic Updates the topic with the specified name.
  * updates the topic with the new data.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param topicId topic id to update
+ * @param topicName The topic name which is its unique id.
  * @return ApiUpdateTopicRequest
  */
-func (a *DefaultApiService) UpdateTopic(ctx _context.Context, topicId string) ApiUpdateTopicRequest {
+func (a *DefaultApiService) UpdateTopic(ctx _context.Context, topicName string) ApiUpdateTopicRequest {
 	return ApiUpdateTopicRequest{
 		ApiService: a,
 		ctx:        ctx,
-		topicId:    topicId,
+		topicName:  topicName,
 	}
 }
 
@@ -612,8 +612,8 @@ func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, 
 		return localVarReturnValue, nil, executionError
 	}
 
-	localVarPath := localBasePath + "/topics/{topicId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"topicId"+"}", _neturl.PathEscape(parameterToString(r.topicId, "")), -1)
+	localVarPath := localBasePath + "/topics/{topicName}"
+	localVarPath = strings.Replace(localVarPath, "{"+"topicName"+"}", _neturl.PathEscape(parameterToString(r.topicName, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

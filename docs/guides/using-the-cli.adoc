@@ -107,7 +107,7 @@ $ rhoas kafka use --id 1lVcpo1c9kx6a9rbablGBY8RiD8
 
 === Creating a Kafka topic
 
-You can create a topic for the current Kafka instance with the `rhoas kafka topic create` command.
+You can create a topic in the current Kafka instance with the `rhoas kafka topic create` command.
 
 [source,shell]
 ----

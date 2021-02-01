@@ -90,11 +90,24 @@
         "kafka",
         "topic",
         "create",
-        "--name=my-topic",
-        "--insecure"
+        "--name=my-topic"
       ]
     },
-     {
+    {
+      "name": "Describe topic",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "kafka",
+        "topic",
+        "describe",
+        "my-to"
+      ]
+    },
+    {
       "name": "List topics",
       "type": "go",
       "request": "launch",

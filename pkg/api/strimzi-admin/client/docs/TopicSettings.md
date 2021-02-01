@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | Pointer to **string** | The name of the topic. | [optional] 
 **NumPartitions** | Pointer to **int32** | Number of partitions for this topic. | [optional] 
 **ReplicationFactor** | Pointer to **int32** | Number of replications for the topic. | [optional] 
 **Config** | Pointer to [**[]ConfigEntry**](ConfigEntry.md) | Topic configuration entry. | [optional] 
@@ -27,31 +26,6 @@ will change when the set of required properties is changed
 NewTopicSettingsWithDefaults instantiates a new TopicSettings object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetName
-
-`func (o *TopicSettings) GetName() string`
-
-GetName returns the Name field if non-nil, zero value otherwise.
-
-### GetNameOk
-
-`func (o *TopicSettings) GetNameOk() (*string, bool)`
-
-GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetName
-
-`func (o *TopicSettings) SetName(v string)`
-
-SetName sets Name field to given value.
-
-### HasName
-
-`func (o *TopicSettings) HasName() bool`
-
-HasName returns a boolean if a field has been set.
 
 ### GetNumPartitions
 

@@ -1,20 +1,32 @@
 == rhoas kafka topic delete
 
-Delete Kafka topic
+Delete a Kafka topic
 
 === Synopsis
 
-Delete a topic from the current Kafka instance
+Delete a topic in the current Kafka instance
 
 ....
 rhoas kafka topic delete [flags]
 ....
 
+=== Examples
+
+....
+# delete Kafka topic "topic-1"
+$ rhoas kafka delete topic-1
+....
+
 === Options
 
 ....
+<<<<<<< HEAD
       --insecure      Enables insecure communication with the server. This disables verification of TLS certificates and host names.
   -n, --name string   Topic name.
+=======
+  -f, --force   Skip confirmation to force delete this topic
+  -h, --help    help for delete
+>>>>>>> c3543c8 (feat(kafka topic): add topic management commands)
 ....
 
 === Options inherited from parent commands
@@ -26,5 +38,10 @@ rhoas kafka topic delete [flags]
 
 === SEE ALSO
 
+<<<<<<< HEAD
 * link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list, and
 delete Kafka topics
+=======
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, describe,
+update, list and delete Kafka topics
+>>>>>>> c3543c8 (feat(kafka topic): add topic management commands)

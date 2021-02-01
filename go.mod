@@ -24,7 +24,6 @@ require (
 	github.com/openconfig/goyang v0.2.4
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2
 	github.com/pquerna/cachecontrol v0.0.0-20200921180117-858c6e7e6b7e // indirect
-	github.com/segmentio/kafka-go v0.4.8
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/pflag v1.0.5
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a

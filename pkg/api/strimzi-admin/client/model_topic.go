@@ -20,8 +20,6 @@ type Topic struct {
 	Name *string `json:"name,omitempty"`
 	// Topic configuration entry.
 	Config *[]ConfigEntry `json:"config,omitempty"`
-	// Uniquie ID for the topic.
-	Id *int32 `json:"id,omitempty"`
 	// Partitions for this topic.
 	Partitions *[]Partition `json:"partitions,omitempty"`
 }
@@ -107,38 +105,6 @@ func (o *Topic) SetConfig(v []ConfigEntry) {
 	o.Config = &v
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
-func (o *Topic) GetId() int32 {
-	if o == nil || o.Id == nil {
-		var ret int32
-		return ret
-	}
-	return *o.Id
-}
-
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Topic) GetIdOk() (*int32, bool) {
-	if o == nil || o.Id == nil {
-		return nil, false
-	}
-	return o.Id, true
-}
-
-// HasId returns a boolean if a field has been set.
-func (o *Topic) HasId() bool {
-	if o != nil && o.Id != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given int32 and assigns it to the Id field.
-func (o *Topic) SetId(v int32) {
-	o.Id = &v
-}
-
 // GetPartitions returns the Partitions field value if set, zero value otherwise.
 func (o *Topic) GetPartitions() []Partition {
 	if o == nil || o.Partitions == nil {
@@ -178,9 +144,6 @@ func (o Topic) MarshalJSON() ([]byte, error) {
 	}
 	if o.Config != nil {
 		toSerialize["config"] = o.Config
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
 	}
 	if o.Partitions != nil {
 		toSerialize["partitions"] = o.Partitions

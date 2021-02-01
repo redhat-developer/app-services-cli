@@ -1,17 +1,21 @@
-package delete
+package describe
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-
-	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
+	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
@@ -22,9 +26,9 @@ import (
 )
 
 type Options struct {
-	topicName string
-	kafkaID   string
-	force     bool
+	topicName    string
+	kafkaID      string
+	outputFormat string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -32,8 +36,8 @@ type Options struct {
 	Logger     func() (logging.Logger, error)
 }
 
-// NewDeleteTopicCommand gets a new command for deleting a kafka topic.
-func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
+// NewDescribeTopicCommand gets a new command for describing a kafka topic.
+func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Connection: f.Connection,
 		Config:     f.Config,
@@ -42,15 +46,15 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "delete",
-		Short: "Delete a Kafka topic",
-		Long:  "Delete a topic in the current Kafka instance",
+		Use:   "describe",
+		Short: "Describe a Kafka topic",
+		Long:  "Print detailed configuration information for a Kafka topic",
 		Example: heredoc.Doc(`
-			# delete Kafka topic "topic-1"
-			$ rhoas kafka delete topic-1
+			# describe Kafka topic "topic-1"
+			$ rhoas kafka describe topic-1
 		`),
 		Args: cobra.ExactArgs(1),
-		// Dynamic completion of the topic name
+		// dynamic completion of topic names
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
 
@@ -68,12 +72,12 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, opts.kafkaID, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if !opts.IO.CanPrompt() {
-				return fmt.Errorf("Cannot delete Kafka topics when not running interactively")
-			}
-
 			if len(args) > 0 {
 				opts.topicName = args[0]
+			}
+
+			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
+				return err
 			}
 
 			if opts.kafkaID != "" {
@@ -95,18 +99,14 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to force delete this topic")
+	fs := cmd.Flags()
+	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.AllowedOutputFormats)
 
 	return cmd
 }
 
 func runCmd(opts *Options) error {
 	conn, err := opts.Connection()
-	if err != nil {
-		return err
-	}
-
-	logger, err := opts.Logger()
 	if err != nil {
 		return err
 	}
@@ -122,26 +122,9 @@ func runCmd(opts *Options) error {
 		return apiErr
 	}
 
-	if !opts.force {
-		var promptConfirmName = &survey.Input{
-			Message: "Confirm the name of the topic you want to delete:",
-		}
-
-		var userConfirmedName string
-
-		if err := survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
-			return err
-		}
-
-		if userConfirmedName != opts.topicName {
-			logger.Infof("The topic name entered (%v) does not match the name of the topic you tried to delete (%v)", userConfirmedName, opts.topicName)
-			return nil
-		}
-	}
-
-	// perform delete topic API request
-	httpRes, topicErr := api.TopicAdmin(opts.kafkaID).
-		DeleteTopic(ctx, opts.topicName).
+	// fetch the topic
+	topicResponse, httpRes, topicErr := api.TopicAdmin(opts.kafkaID).
+		GetTopic(ctx, opts.topicName).
 		Execute()
 
 	if topicErr.Error() != "" {
@@ -149,7 +132,7 @@ func runCmd(opts *Options) error {
 		case 404:
 			return fmt.Errorf("topic '%v' not found in Kafka instance '%v'", opts.topicName, kafkaInstance.GetName())
 		case 401:
-			return fmt.Errorf("you are unauthorized to delete this topic")
+			return fmt.Errorf("you are unauthorized to view this topic")
 		case 500:
 			return fmt.Errorf("internal server error: %w", topicErr)
 		case 503:
@@ -159,7 +142,14 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	logger.Infof("Topic %v in Kafka instance %v has been deleted", color.Info(opts.topicName), color.Info(kafkaInstance.GetName()))
+	switch opts.outputFormat {
+	case "json":
+		data, _ := json.Marshal(topicResponse)
+		_ = dump.JSON(opts.IO.Out, data)
+	case "yaml", "yml":
+		data, _ := yaml.Marshal(topicResponse)
+		_ = dump.YAML(opts.IO.Out, data)
+	}
 
 	return nil
 }

@@ -8,6 +8,7 @@ import (
 	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -24,6 +25,7 @@ type options struct {
 	id    string
 	force bool
 
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
@@ -35,6 +37,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
 	localizer.LoadMessageFiles("cmd/kafka/delete")
@@ -46,6 +49,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Example: localizer.MustLocalizeFromID("kafka.delete.cmd.example"),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			if !opts.IO.CanPrompt() {
+				return fmt.Errorf("Cannot delete Kafka instances when not running interactively")
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err

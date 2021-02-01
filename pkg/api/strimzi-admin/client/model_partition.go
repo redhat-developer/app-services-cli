@@ -19,10 +19,11 @@ type Partition struct {
 	// Uniquie id for the partition
 	Id int32 `json:"id"`
 	// List of replicas for the partition
-	Replicas *[]Node `json:"replicas,omitempty"`
+	Replicas *[]map[string]interface{} `json:"replicas,omitempty"`
 	// List isync-replicas for this partition.
-	Isr    *[]Node `json:"isr,omitempty"`
-	Leader *Node   `json:"leader,omitempty"`
+	Isr *[]map[string]interface{} `json:"isr,omitempty"`
+	// Kafka server / broker.
+	Leader *map[string]interface{} `json:"leader,omitempty"`
 }
 
 // NewPartition instantiates a new Partition object
@@ -68,9 +69,9 @@ func (o *Partition) SetId(v int32) {
 }
 
 // GetReplicas returns the Replicas field value if set, zero value otherwise.
-func (o *Partition) GetReplicas() []Node {
+func (o *Partition) GetReplicas() []map[string]interface{} {
 	if o == nil || o.Replicas == nil {
-		var ret []Node
+		var ret []map[string]interface{}
 		return ret
 	}
 	return *o.Replicas
@@ -78,7 +79,7 @@ func (o *Partition) GetReplicas() []Node {
 
 // GetReplicasOk returns a tuple with the Replicas field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Partition) GetReplicasOk() (*[]Node, bool) {
+func (o *Partition) GetReplicasOk() (*[]map[string]interface{}, bool) {
 	if o == nil || o.Replicas == nil {
 		return nil, false
 	}
@@ -94,15 +95,15 @@ func (o *Partition) HasReplicas() bool {
 	return false
 }
 
-// SetReplicas gets a reference to the given []Node and assigns it to the Replicas field.
-func (o *Partition) SetReplicas(v []Node) {
+// SetReplicas gets a reference to the given []map[string]interface{} and assigns it to the Replicas field.
+func (o *Partition) SetReplicas(v []map[string]interface{}) {
 	o.Replicas = &v
 }
 
 // GetIsr returns the Isr field value if set, zero value otherwise.
-func (o *Partition) GetIsr() []Node {
+func (o *Partition) GetIsr() []map[string]interface{} {
 	if o == nil || o.Isr == nil {
-		var ret []Node
+		var ret []map[string]interface{}
 		return ret
 	}
 	return *o.Isr
@@ -110,7 +111,7 @@ func (o *Partition) GetIsr() []Node {
 
 // GetIsrOk returns a tuple with the Isr field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Partition) GetIsrOk() (*[]Node, bool) {
+func (o *Partition) GetIsrOk() (*[]map[string]interface{}, bool) {
 	if o == nil || o.Isr == nil {
 		return nil, false
 	}
@@ -126,15 +127,15 @@ func (o *Partition) HasIsr() bool {
 	return false
 }
 
-// SetIsr gets a reference to the given []Node and assigns it to the Isr field.
-func (o *Partition) SetIsr(v []Node) {
+// SetIsr gets a reference to the given []map[string]interface{} and assigns it to the Isr field.
+func (o *Partition) SetIsr(v []map[string]interface{}) {
 	o.Isr = &v
 }
 
 // GetLeader returns the Leader field value if set, zero value otherwise.
-func (o *Partition) GetLeader() Node {
+func (o *Partition) GetLeader() map[string]interface{} {
 	if o == nil || o.Leader == nil {
-		var ret Node
+		var ret map[string]interface{}
 		return ret
 	}
 	return *o.Leader
@@ -142,7 +143,7 @@ func (o *Partition) GetLeader() Node {
 
 // GetLeaderOk returns a tuple with the Leader field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Partition) GetLeaderOk() (*Node, bool) {
+func (o *Partition) GetLeaderOk() (*map[string]interface{}, bool) {
 	if o == nil || o.Leader == nil {
 		return nil, false
 	}
@@ -158,8 +159,8 @@ func (o *Partition) HasLeader() bool {
 	return false
 }
 
-// SetLeader gets a reference to the given Node and assigns it to the Leader field.
-func (o *Partition) SetLeader(v Node) {
+// SetLeader gets a reference to the given map[string]interface{} and assigns it to the Leader field.
+func (o *Partition) SetLeader(v map[string]interface{}) {
 	o.Leader = &v
 }
 

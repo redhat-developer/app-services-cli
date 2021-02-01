@@ -25,13 +25,13 @@ var _ DefaultApi = &DefaultApiMock{}
 //             CreateTopicExecuteFunc: func(r ApiCreateTopicRequest) (Topic, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the CreateTopicExecute method")
 //             },
-//             DeleteTopicFunc: func(ctx context.Context, topicId string) ApiDeleteTopicRequest {
+//             DeleteTopicFunc: func(ctx context.Context, topicName string) ApiDeleteTopicRequest {
 // 	               panic("mock out the DeleteTopic method")
 //             },
 //             DeleteTopicExecuteFunc: func(r ApiDeleteTopicRequest) (*http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the DeleteTopicExecute method")
 //             },
-//             GetTopicFunc: func(ctx context.Context, topicId string) ApiGetTopicRequest {
+//             GetTopicFunc: func(ctx context.Context, topicName string) ApiGetTopicRequest {
 // 	               panic("mock out the GetTopic method")
 //             },
 //             GetTopicExecuteFunc: func(r ApiGetTopicRequest) (Topic, *http.Response, GenericOpenAPIError) {
@@ -43,7 +43,7 @@ var _ DefaultApi = &DefaultApiMock{}
 //             GetTopicsListExecuteFunc: func(r ApiGetTopicsListRequest) (TopicsList, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the GetTopicsListExecute method")
 //             },
-//             UpdateTopicFunc: func(ctx context.Context, topicId string) ApiUpdateTopicRequest {
+//             UpdateTopicFunc: func(ctx context.Context, topicName string) ApiUpdateTopicRequest {
 // 	               panic("mock out the UpdateTopic method")
 //             },
 //             UpdateTopicExecuteFunc: func(r ApiUpdateTopicRequest) (Topic, *http.Response, GenericOpenAPIError) {
@@ -63,13 +63,13 @@ type DefaultApiMock struct {
 	CreateTopicExecuteFunc func(r ApiCreateTopicRequest) (Topic, *http.Response, GenericOpenAPIError)
 
 	// DeleteTopicFunc mocks the DeleteTopic method.
-	DeleteTopicFunc func(ctx context.Context, topicId string) ApiDeleteTopicRequest
+	DeleteTopicFunc func(ctx context.Context, topicName string) ApiDeleteTopicRequest
 
 	// DeleteTopicExecuteFunc mocks the DeleteTopicExecute method.
 	DeleteTopicExecuteFunc func(r ApiDeleteTopicRequest) (*http.Response, GenericOpenAPIError)
 
 	// GetTopicFunc mocks the GetTopic method.
-	GetTopicFunc func(ctx context.Context, topicId string) ApiGetTopicRequest
+	GetTopicFunc func(ctx context.Context, topicName string) ApiGetTopicRequest
 
 	// GetTopicExecuteFunc mocks the GetTopicExecute method.
 	GetTopicExecuteFunc func(r ApiGetTopicRequest) (Topic, *http.Response, GenericOpenAPIError)
@@ -81,7 +81,7 @@ type DefaultApiMock struct {
 	GetTopicsListExecuteFunc func(r ApiGetTopicsListRequest) (TopicsList, *http.Response, GenericOpenAPIError)
 
 	// UpdateTopicFunc mocks the UpdateTopic method.
-	UpdateTopicFunc func(ctx context.Context, topicId string) ApiUpdateTopicRequest
+	UpdateTopicFunc func(ctx context.Context, topicName string) ApiUpdateTopicRequest
 
 	// UpdateTopicExecuteFunc mocks the UpdateTopicExecute method.
 	UpdateTopicExecuteFunc func(r ApiUpdateTopicRequest) (Topic, *http.Response, GenericOpenAPIError)
@@ -102,8 +102,8 @@ type DefaultApiMock struct {
 		DeleteTopic []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-			// TopicId is the topicId argument value.
-			TopicId string
+			// TopicName is the topicName argument value.
+			TopicName string
 		}
 		// DeleteTopicExecute holds details about calls to the DeleteTopicExecute method.
 		DeleteTopicExecute []struct {
@@ -114,8 +114,8 @@ type DefaultApiMock struct {
 		GetTopic []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-			// TopicId is the topicId argument value.
-			TopicId string
+			// TopicName is the topicName argument value.
+			TopicName string
 		}
 		// GetTopicExecute holds details about calls to the GetTopicExecute method.
 		GetTopicExecute []struct {
@@ -136,8 +136,8 @@ type DefaultApiMock struct {
 		UpdateTopic []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-			// TopicId is the topicId argument value.
-			TopicId string
+			// TopicName is the topicName argument value.
+			TopicName string
 		}
 		// UpdateTopicExecute holds details about calls to the UpdateTopicExecute method.
 		UpdateTopicExecute []struct {
@@ -220,33 +220,33 @@ func (mock *DefaultApiMock) CreateTopicExecuteCalls() []struct {
 }
 
 // DeleteTopic calls DeleteTopicFunc.
-func (mock *DefaultApiMock) DeleteTopic(ctx context.Context, topicId string) ApiDeleteTopicRequest {
+func (mock *DefaultApiMock) DeleteTopic(ctx context.Context, topicName string) ApiDeleteTopicRequest {
 	if mock.DeleteTopicFunc == nil {
 		panic("DefaultApiMock.DeleteTopicFunc: method is nil but DefaultApi.DeleteTopic was just called")
 	}
 	callInfo := struct {
-		Ctx     context.Context
-		TopicId string
+		Ctx       context.Context
+		TopicName string
 	}{
-		Ctx:     ctx,
-		TopicId: topicId,
+		Ctx:       ctx,
+		TopicName: topicName,
 	}
 	mock.lockDeleteTopic.Lock()
 	mock.calls.DeleteTopic = append(mock.calls.DeleteTopic, callInfo)
 	mock.lockDeleteTopic.Unlock()
-	return mock.DeleteTopicFunc(ctx, topicId)
+	return mock.DeleteTopicFunc(ctx, topicName)
 }
 
 // DeleteTopicCalls gets all the calls that were made to DeleteTopic.
 // Check the length with:
 //     len(mockedDefaultApi.DeleteTopicCalls())
 func (mock *DefaultApiMock) DeleteTopicCalls() []struct {
-	Ctx     context.Context
-	TopicId string
+	Ctx       context.Context
+	TopicName string
 } {
 	var calls []struct {
-		Ctx     context.Context
-		TopicId string
+		Ctx       context.Context
+		TopicName string
 	}
 	mock.lockDeleteTopic.RLock()
 	calls = mock.calls.DeleteTopic
@@ -286,33 +286,33 @@ func (mock *DefaultApiMock) DeleteTopicExecuteCalls() []struct {
 }
 
 // GetTopic calls GetTopicFunc.
-func (mock *DefaultApiMock) GetTopic(ctx context.Context, topicId string) ApiGetTopicRequest {
+func (mock *DefaultApiMock) GetTopic(ctx context.Context, topicName string) ApiGetTopicRequest {
 	if mock.GetTopicFunc == nil {
 		panic("DefaultApiMock.GetTopicFunc: method is nil but DefaultApi.GetTopic was just called")
 	}
 	callInfo := struct {
-		Ctx     context.Context
-		TopicId string
+		Ctx       context.Context
+		TopicName string
 	}{
-		Ctx:     ctx,
-		TopicId: topicId,
+		Ctx:       ctx,
+		TopicName: topicName,
 	}
 	mock.lockGetTopic.Lock()
 	mock.calls.GetTopic = append(mock.calls.GetTopic, callInfo)
 	mock.lockGetTopic.Unlock()
-	return mock.GetTopicFunc(ctx, topicId)
+	return mock.GetTopicFunc(ctx, topicName)
 }
 
 // GetTopicCalls gets all the calls that were made to GetTopic.
 // Check the length with:
 //     len(mockedDefaultApi.GetTopicCalls())
 func (mock *DefaultApiMock) GetTopicCalls() []struct {
-	Ctx     context.Context
-	TopicId string
+	Ctx       context.Context
+	TopicName string
 } {
 	var calls []struct {
-		Ctx     context.Context
-		TopicId string
+		Ctx       context.Context
+		TopicName string
 	}
 	mock.lockGetTopic.RLock()
 	calls = mock.calls.GetTopic
@@ -414,33 +414,33 @@ func (mock *DefaultApiMock) GetTopicsListExecuteCalls() []struct {
 }
 
 // UpdateTopic calls UpdateTopicFunc.
-func (mock *DefaultApiMock) UpdateTopic(ctx context.Context, topicId string) ApiUpdateTopicRequest {
+func (mock *DefaultApiMock) UpdateTopic(ctx context.Context, topicName string) ApiUpdateTopicRequest {
 	if mock.UpdateTopicFunc == nil {
 		panic("DefaultApiMock.UpdateTopicFunc: method is nil but DefaultApi.UpdateTopic was just called")
 	}
 	callInfo := struct {
-		Ctx     context.Context
-		TopicId string
+		Ctx       context.Context
+		TopicName string
 	}{
-		Ctx:     ctx,
-		TopicId: topicId,
+		Ctx:       ctx,
+		TopicName: topicName,
 	}
 	mock.lockUpdateTopic.Lock()
 	mock.calls.UpdateTopic = append(mock.calls.UpdateTopic, callInfo)
 	mock.lockUpdateTopic.Unlock()
-	return mock.UpdateTopicFunc(ctx, topicId)
+	return mock.UpdateTopicFunc(ctx, topicName)
 }
 
 // UpdateTopicCalls gets all the calls that were made to UpdateTopic.
 // Check the length with:
 //     len(mockedDefaultApi.UpdateTopicCalls())
 func (mock *DefaultApiMock) UpdateTopicCalls() []struct {
-	Ctx     context.Context
-	TopicId string
+	Ctx       context.Context
+	TopicName string
 } {
 	var calls []struct {
-		Ctx     context.Context
-		TopicId string
+		Ctx       context.Context
+		TopicName string
 	}
 	mock.lockUpdateTopic.RLock()
 	calls = mock.calls.UpdateTopic
