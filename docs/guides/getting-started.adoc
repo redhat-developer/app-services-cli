@@ -10,7 +10,8 @@ NOTE: In the following guides replace `VERSION` with the release version of the 
 +
 [source,shell]
 ----
-sudo tar -C /usr/local/bin -xzf rhoas_${VERSION}_linux_amd64.tar.gz
+tar xfv rhoas_${VERSION}_linux_amd64.tar.gz
+sudo cp rhoas_${VERSION}_linux_amd64/bin/rhoas /usr/local/bin
 ----
 +
 TIP: Run `echo $PATH` to see the directories on your path.
@@ -31,7 +32,8 @@ rhoas version ${VERSION}
 +
 [source,shell]
 ----
-sudo tar -C /usr/local/bin -xzf rhoas_${VERSION}_macOS_amd64.tar.gz
+tar xzf rhoas_${VERSION}_macOS_amd64.tar.gz
+sudo cp rhoas_${VERSION}_macOS_amd64/bin/rhoas /usr/local/bin
 ----
 +
 TIP: Run `echo $PATH` to see the directories on your path.
