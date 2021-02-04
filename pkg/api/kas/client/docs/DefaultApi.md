@@ -150,7 +150,7 @@ Name | Type | Description  | Notes
 
 ## DeleteKafkaById
 
-> Error DeleteKafkaById(ctx, id).Execute()
+> Error DeleteKafkaById(ctx, id).Async(async).Execute()
 
 Delete a kafka request by id
 
@@ -168,10 +168,11 @@ import (
 
 func main() {
     id := "id_example" // string | The id of record
+    async := true // bool | Perform the action in an asynchronous manner
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.DeleteKafkaById(context.Background(), id).Execute()
+    resp, r, err := api_client.DefaultApi.DeleteKafkaById(context.Background(), id).Async(async).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteKafkaById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -197,6 +198,7 @@ Other parameters are passed through a pointer to a apiDeleteKafkaByIdRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **async** | **bool** | Perform the action in an asynchronous manner | 
 
 ### Return type
 

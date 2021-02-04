@@ -25,6 +25,14 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Perform the action in an asynchronous manner
+        explode: true
+        in: query
+        name: async
+        required: true
+        schema:
+          type: boolean
+        style: form
       responses:
         "204":
           content:
@@ -32,6 +40,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Deleted
+        "400":
+          content:
+            application/json:
+              examples:
+                "400DeletionExample":
+                  $ref: '#/components/examples/400DeletionExample'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Validation errors occurred
         "401":
           content:
             application/json:
@@ -802,6 +819,14 @@ components:
         name: my-app-sa
         description: service account for my app
         clientID: SA-121212
+    "400DeletionExample":
+      value:
+        id: "103"
+        kind: Error
+        href: /api/managed-services-api/v1/errors/103
+        code: MGD-SERV-API-103
+        reason: Synchronous action is not supported, use async=true parameter
+        operation_id: 1iWIimqGcrDuL61aUxIZqBTqNRa
     "400CreationExample":
       value:
         id: "103"

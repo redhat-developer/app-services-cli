@@ -69,6 +69,13 @@ paths:
       summary: Get a kafka request by id
     delete:
       operationId: deleteKafkaById
+      parameters:
+        - in: query
+          name: async
+          description: Perform the action in an asynchronous manner
+          schema:
+            type: boolean
+          required: true
       responses:
         "204":
           content:
@@ -78,6 +85,15 @@ paths:
               example:
               #No Content
           description: Deleted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                400DeletionExample:
+                  $ref: '#/components/examples/400DeletionExample'
+          description: Validation errors occurred
         "401":
           content:
             application/json:
@@ -1031,6 +1047,14 @@ components:
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
+    400DeletionExample:
+      value:
+        id: "103"
+        kind: "Error"
+        href: "/api/managed-services-api/v1/errors/103"
+        code: "MGD-SERV-API-103"
+        reason: "Synchronous action is not supported, use async=true parameter"
+        operation_id: "1iWIimqGcrDuL61aUxIZqBTqNRa"
     400CreationExample:
       value:
         id: "103"
