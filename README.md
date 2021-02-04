@@ -4,7 +4,7 @@ Repository for the RHOAS CLI.
 
 ## Guides
 
-See our [Guides](.docs/guides) section for installation and usage instructions.
+See our [Guides](./docs/guides) section for installation and usage instructions.
 
 ## Commands
 
