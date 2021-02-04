@@ -24,7 +24,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 		SilenceErrors: true,
 		Use:           "rhoas <command> <subcommand> [flags]",
 		Short:         "RHOAS CLI",
-		Long:          "Manage your application services directly from the command-line.",
+		Long:          "Manage your application services directly from the command line.",
 		Example: heredoc.Doc(`
 			# authenticate securely through your web browser
 			$ rhoas login
@@ -46,6 +46,10 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 
 	fs := cmd.PersistentFlags()
 	arguments.AddDebugFlag(fs)
+
+	// this flag comes out of the box, but has its own basic usage text, so this overrides that
+	var help bool
+	fs.BoolVarP(&help, "help", "h", false, "Show help for a command")
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(cmdFactory))

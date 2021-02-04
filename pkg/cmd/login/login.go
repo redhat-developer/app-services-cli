@@ -96,12 +96,12 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		Use:   "login",
 		Short: "Log in to RHOAS",
 		Long: heredoc.Doc(`
-			Log in securely to RHOAS using your web browser.
+			Log in securely to RHOAS through a web browser.
 
-			Your web browser will open automatically where you can securely enter your credentials.
+			This command opens your web browser, where you can enter your credentials.
 		`),
 		Example: heredoc.Doc(`
-			# start an authentication request and open your browser to fill in your credentials
+			# securely log in to RHOAS by using a web browser
 			$ rhoas login
 
 			# print the authentication URL instead of automatically opening the browser
@@ -112,12 +112,12 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "url", stagingURL, "URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands.")
-	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
-	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, "OpenID client identifier.")
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "SSO Authentication server")
-	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the login URL to the console so you can control which browser to open it in. Useful if you need to log in with a user that is different to the one logged in on your default web browser.")
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, "OpenID scope. If this option is used it will override the default scopes. Can be repeated multiple times to specify multiple scopes.")
+	cmd.Flags().StringVar(&opts.url, "api-gateway", stagingURL, "URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development")
+	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names")
+	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, "OpenID client identifier")
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "The URL of the SSO Authentication server")
+	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser")
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, "Override the default OpenID scope. Can be repeated multiple times to specify multiple scopes")
 
 	return cmd
 }

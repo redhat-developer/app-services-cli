@@ -3,7 +3,6 @@
 package kafka
 
 import (
-	"github.com/MakeNowJust/heredoc"
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
@@ -18,20 +17,7 @@ import (
 func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "kafka",
-		Short: "Create, view, use and manage your Kafka instances",
-		Long: heredoc.Doc(`
-			Perform various operations on your Kafka instances.
-		`),
-		Example: heredoc.Doc(`
-			# create a Kafka instance
-			$ rhoas kafka create
-
-			# list Kafka instances
-			$ rhoas kafka list
-
-			# create a Kafka topic
-			$ rhoas kafka topic create --name "my-kafka-topic"
-		`),
+		Short: "Create, view, use, and manage your Kafka instances",
 	}
 
 	// add sub-commands
@@ -43,5 +29,6 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		use.NewUseCommand(f),
 		topics.NewTopicCommand(f),
 	)
+
 	return cmd
 }
