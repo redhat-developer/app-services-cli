@@ -1,10 +1,10 @@
 
 echo "Synchronizing managed-services-api"
 
-wget --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
-mv managed-services-api.yaml ./openapi/managed-services-api.yaml
+wget --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/kafka-service.yaml
+mv kafka-service.yaml ./openapi/kafka-service.yaml
 
 ## Copy api to mock
-cp ./openapi/managed-services-api.yaml ./mas-mock/managed-services-api.yaml
+cp ./openapi/kafka-service.yaml ./mas-mock/kafka-service.yaml
 
 echo "Finished synchronization with managed-services-api"
