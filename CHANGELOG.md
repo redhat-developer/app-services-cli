@@ -1,4 +1,14 @@
-#  (2021-01-28)
+#  (2021-02-04)
+
+
+
+## [0.15.1](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.15.0...0.15.1) (2021-02-04)
+
+
+### Bug Fixes
+
+* **kafka delete:** add async=true to ensure Kafka can be deleted ([#314](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/314)) ([87eddb6](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/87eddb6f4e3f55d454c573d898c312753b1a99e7))
+* **kafka topic:** change topic command to singular form ([#308](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/308)) ([3d36326](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/3d363266f83760bbe6e6b14850aa7a6d56283069))
 
 
 
