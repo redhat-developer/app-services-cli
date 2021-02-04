@@ -104,21 +104,10 @@ func runDelete(opts *options) error {
 
 	kafkaName := response.GetName()
 
-	var confirmDeleteAction bool
-	var promptConfirmAction = &survey.Confirm{
-		Message: fmt.Sprintf("Are you sure you want to delete the Kafka instance %v?", color.Info(kafkaName)),
-	}
-
-	err = survey.AskOne(promptConfirmAction, &confirmDeleteAction)
-	if err != nil {
-		return err
-	}
-	if !confirmDeleteAction {
-		return nil
-	}
+	logger.Info("Deleting Kafka instance", color.Info(kafkaName), "\n")
 
 	var promptConfirmName = &survey.Input{
-		Message: "Confirm the name of the instance you want to permanently delete:",
+		Message: "Confirm the name of the instance you want to delete:",
 	}
 
 	var confirmedKafkaName string
