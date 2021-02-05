@@ -51,7 +51,7 @@ type KeycloakConnection struct {
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
 	c.logger.Debug("Refreshing access tokens")
 
-	if !c.tokenNeedsRefresh() {
+	if c.Token.AccessToken != "" && !c.tokenNeedsRefresh() {
 		return c.Token.AccessToken, c.Token.RefreshToken, nil
 	}
 
