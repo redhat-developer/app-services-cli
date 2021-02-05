@@ -70,6 +70,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Long: heredoc.Doc(`
 			Create a Kafka instance with custom configuration values, otherwise use default values.
 
+			The created instance is set in the config as the current Kafka instance.
+
 			Configuration options available: name, cloud provider, region.
 
 		  The created instance can be viewed from the command-line and the web UI.
