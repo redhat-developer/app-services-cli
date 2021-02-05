@@ -5,7 +5,7 @@ Create a Kafka instance
 === Synopsis
 
 Create a Kafka instance with custom configuration values, otherwise use
-default values.
+default values. The created instance is then set in the config as the current Kafka instance.
 
 Configuration options available: name, cloud provider, region.
 
