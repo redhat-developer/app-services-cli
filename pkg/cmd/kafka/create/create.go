@@ -68,11 +68,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Use:   "create",
 		Short: "Create a Kafka instance",
 		Long: heredoc.Doc(`
-			Create a Kafka instance with custom configuration values, otherwise use default values.
+			Create a Kafka instance.
 
 			The created instance is set in the config as the current Kafka instance.
-
-			Configuration options available: name, cloud provider, region.
 
 		  The created instance can be viewed from the command-line and the web UI.
 		`),
@@ -80,16 +78,19 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			# start an interactive prompt to fill out the configuration values for the instance
 			$ rhoas kafka create
 
-			# create a Kafka instance with flags. Optional fields will be populated with default values
-			$ rhoas kafka create --name "my-kafka-cluster"
+			# create a Kafka instance
+			$ rhoas kafka create my-kafka-instance
 
 			# create a Kafka instance and output the result in YAML
 			$ rhoas kafka create -o yaml
 		`),
-		Args: cobra.ExactArgs(0),
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				opts.name = args[0]
+			}
+
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return fmt.Errorf("--name required when not running interactively")
+				return fmt.Errorf("name required when not running interactively. Run 'rhoas kafka create <instance-name>' to create a Kafka instance")
 			} else if opts.name == "" && opts.provider == "" && opts.region == "" {
 				opts.interactive = true
 			}
@@ -102,7 +103,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.name, flags.FlagName, "n", "", "Name of the Kafka instance")
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", "Cloud provider ID")
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", "Cloud provider Region ID")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")

@@ -8,7 +8,7 @@ Use the `rhoas kafka create` command to create a new Kafka instance.
 
 [source,shell]
 ----
-$ rhoas kafka create --name "my-kafka"
+$ rhoas kafka create my-kafka
 Creating Kafka instance
 Created new Kafka instance:
 {
