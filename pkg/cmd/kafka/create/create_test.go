@@ -253,7 +253,6 @@ func TestNewCreateCommand(t *testing.T) {
 
 			cmd := NewCreateCommand(tt.args.f)
 			cmd.SetArgs([]string{
-				"--name",
 				tt.args.name,
 				"--output",
 				tt.args.outputFormat,
