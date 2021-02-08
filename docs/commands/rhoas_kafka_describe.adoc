@@ -1,17 +1,17 @@
 == rhoas kafka describe
 
-View all configuration values of a Kafka instance
+View configuration details of a Kafka instance
 
 === Synopsis
 
-View all configuration fields and their values for a Kafka instance.
+View configuration fields and their values for a Kafka instance.
 
-Pass the –id flag to specify which instance you would like to view.
+Pass the ``–id'' flag to specify which instance you would like to view.
 
-If the –id flag is not passed then the selected Kafka instance will be
-used, if available.
+If the ``–id'' flag is not passed then the selected Kafka instance will
+be used, if available.
 
-The result can be output either as JSON or YAML.
+You can view the output as either as JSON or YAML.
 
 ....
 rhoas kafka describe [flags]
@@ -34,8 +34,8 @@ $ rhoas kafka describe -o yaml
 
 ....
   -h, --help            help for describe
-      --id string       ID of the Kafka instance you want to describe. If not set, the current Kafka instance will be used
-  -o, --output string   Format to display the Kafka instance. Choose from: "json", "yaml", "yml" (default "json")
+      --id string       ID of the Kafka instance you want to describe. If not set, the current Kafka instance will be used.
+  -o, --output string   Format to display the Kafka instance. Choose from: "json", "yaml", "yml". (default "json")
 ....
 
 === Options inherited from parent commands

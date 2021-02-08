@@ -30,7 +30,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 			$ rhoas login
 
 			# create a Kafka instance
-			$ rhoas kafka create --name "my-kafka-cluster"
+			$ rhoas kafka create my-kafka-cluster
 
 			# create a service account and save credentials to a JSON file
 			$ rhoas serviceaccount create -o json

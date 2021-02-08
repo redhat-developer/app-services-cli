@@ -36,7 +36,7 @@
       "args": [
         "kafka",
         "create",
-        "--name=my-kafka-instance"
+        "my-kafka-instance"
       ]
     },
     {

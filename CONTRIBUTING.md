@@ -19,7 +19,7 @@ The following will need to be installed on your device in order to contribute to
 You can run the CLI commands files directly with `go run`. All commands and subcommands are in the `./pkg/cmd` folder.
 
 ```shell
-go run ./cmd/rhoas kafka create --name=test --provider=aws --region=us-east-1
+go run ./cmd/rhoas kafka create "test" --provider=aws --region=us-east-1
 ```
 
 ### Development commands
