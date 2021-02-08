@@ -23,6 +23,7 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 === Options
 
 ....
+  -f, --force       Force delete this Kafka instance, bypassing verification
   -h, --help        help for delete
       --id string   ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used
 ....
