@@ -71,8 +71,8 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used")
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to force delete this Kafka instance")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.")
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to forcibly delete this Kafka instance.")
 
 	return cmd
 }
