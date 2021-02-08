@@ -1,0 +1,7 @@
+[RequiredFlagNonInteractiveError]
+description = "Flag is required when not running interactively"
+one = "--{{.Flag}} required when not running interactively"
+
+[InvalidFlagValueError]
+description = "Invalid flag value"
+one = 'invalid value "{{.Value}}" for --{{.Flag}}'

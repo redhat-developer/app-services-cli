@@ -1,0 +1,3 @@
+[CmdShortDescription]
+description = "Short description for command"
+one = "Create a Kafka instance"

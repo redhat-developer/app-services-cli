@@ -3,7 +3,12 @@ package create
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	flagi18n "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/locales/common/flags"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
@@ -84,19 +89,34 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			# create a Kafka instance and output the result in YAML
 			$ rhoas kafka create -o yaml
 		`),
+		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.name = args[0]
 			}
 
+			localizer.LoadMessageFile("common", "flags")
+
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return fmt.Errorf("name required when not running interactively. Run 'rhoas kafka create <instance-name>' to create a Kafka instance")
+				return errors.New(localizer.MustLocalize(&localizer.Config{
+					MessageID: flagi18n.RequiredNonInteractiveError,
+					TemplateData: map[string]interface{}{
+						"Flag": "name",
+					},
+				}))
+
 			} else if opts.name == "" && opts.provider == "" && opts.region == "" {
 				opts.interactive = true
 			}
 
 			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
-				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
+				return errors.New(localizer.MustLocalize(&localizer.Config{
+					MessageID: flagi18n.InvalidValueError,
+					TemplateData: map[string]interface{}{
+						"Value": opts.outputFormat,
+						"Flag":  "output",
+					},
+				}))
 			}
 
 			return runCreate(opts)
