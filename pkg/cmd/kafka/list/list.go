@@ -82,7 +82,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
 		`),
 		Example: heredoc.Doc(`
-			# list all Kafka instances using the default (plain) output format
+			# list all Kafka instances using the default output format
 			$ rhoas kafka list
 
 			# list all Kafka instances using JSON as the output format
@@ -104,9 +104,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q", flagutil.AllowedListFormats))
-	cmd.Flags().IntVarP(&opts.page, "page", "", 0, "Page that should be returned from server")
-	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, "Limit of items that should be returned from server")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q.", flagutil.AllowedListFormats))
+	cmd.Flags().IntVarP(&opts.page, "page", "", 0, "The current page of results.")
+	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, "Maximum number of Kafka instances to be returned.")
 	return cmd
 }
 

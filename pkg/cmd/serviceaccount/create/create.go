@@ -51,16 +51,16 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Use:   "create",
 		Short: "Create a service account",
 		Long: heredoc.Doc(`
-			Create a service account with credentials which are saved to a file.
+			Create a service account with credentials that are saved to a file.
 			
-			The credentials generated as part of a service account can be by applications 
-			and tools to authenticate and interact with services.
+			Applications and tools use these service account credentials to authenticate 
+			and interact with your application services.
 			
-			You must specify an output format to which the credentials will be stored as.
-				- env (default: Store credentials in an env file as environment variables
+			You must specify an output format into which the credentials will be stored.
+				- env (default): Store credentials in an env file as environment variables
 				- json: Store credentials in a JSON file
-				- kube: Store credentials as a Kubernetes secret file (the secret is not created for you)
-				- properties: Store credentials in a properties file, mainly used in Java-related technologies.
+				- kube: Store credentials in YAML as a Kubernetes Secret (the Kubernetes Secret is not created for you)
+				- properties: Store credentials in a properties file, which is typically used in Java-related technologies.
 		`),
 		Example: heredoc.Doc(`
 			# create a service account through an interactive prompt
@@ -69,7 +69,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			# create a service account and save the credentials in a Kubernetes secret file format
 			$ rhoas serviceaccount create --output kube
 
-			# create a service account and forcefully overwrite the credentials file if it exists already
+			# create a service account and forcibly overwrite the credentials file if it exists already
 			$ rhoas serviceaccount create --overwrite
 
 			# create a service account and save credentials to a custom file location
@@ -100,11 +100,11 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q", flagutil.CredentialsOutputFormats))
-	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account")
-	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account")
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a credentials file if it already exists")
-	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q.", flagutil.CredentialsOutputFormats))
+	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account.")
+	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account.")
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Forcibly overwrite a credentials file if it already exists.")
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials.")
 
 	return cmd
 }

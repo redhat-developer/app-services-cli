@@ -37,23 +37,21 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "connect",
-		Short: "Connect your services to a Kubernetes or OpenShift",
+		Short: "Connect your services to Kubernetes or OpenShift",
 		Long: heredoc.Doc(`
-			Connect your services to your Kubernetes or OpenShift cluster.
-			The kubeconfig file is used to connect with the cluster and identify the context.
+			Connect your application services to your Kubernetes or OpenShift cluster.
+			The kubeconfig file is used to connect to the cluster and identify the context.
 
 			A service account is created and mounted as a secret into your cluster. 
-			This gives you the ability to mount credentials directly to your application.
+			This enables you to mount credentials directly to your application.
 
-			Command work in two modes:
+			This command works in two modes:
 
-			1) Using RHOAS operator installed on cluster.
-			You can  or utilize service-binding-operator to automatically bind your instance.
-			For more details please visit:
-			https://github.com/bf2fc6cc711aee1a0c2a/operator
-			2) Secret only (--secret-only) creates only secret (no extra operator installation is required)
+				* If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
 
-			Using --interactive-select will ignore current command context make interactive prompt for selecting service instance you want to use.
+				* Create the secret only. This mode does not require the Operator to be installed.
+
+			You can interactively select the service instance by using the "--interactive-select" flag.
 		`),
 		Example: heredoc.Doc(`
 			# connect the current Kafka instance to your cluster
@@ -68,10 +66,10 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, "Apply only secret and without CR. Can be used without installing RHOAS operator on cluster")
-	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, "Allows to select services before performing binding")
-	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", "Name of the secret that will be used to hold Kafka credentials")
-	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", "Location of the .kube/config file")
+	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, "Creates the secret, but doesn't bind the instance. Use this flag if the RHOAS Operator is not installed in the Kubernetes or OpenShift cluster.")
+	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, "Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster.")
+	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", "Name of the secret that holds the Kafka credentials.")
+	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", "Location of the kubeconfig file.")
 
 	return cmd
 }

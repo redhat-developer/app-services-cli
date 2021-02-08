@@ -16,11 +16,11 @@ func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 		Use:   "serviceaccount",
 		Short: "Create, list, delete and update service accounts",
 		Long: heredoc.Doc(`
-			Use these commands to create, delete, and list service accounts. You can also reset the credentials for service account.
+			Use these commands to create, list and delete service accounts. You can also reset the credentials for the service account.
 		`),
 		Example: heredoc.Doc(`
 			# create a service account
-			$ rhoas serviceaccount creare
+			$ rhoas serviceaccount create
 
 			# list service accounts
 			$ rhoas serviceaccount list

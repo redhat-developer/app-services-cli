@@ -17,22 +17,17 @@ $ rhoas cluster status
 $ rhoas cluster connect
 ....
 
-=== Options
-
-....
-  -h, --help   help for cluster
-....
-
 === Options inherited from parent commands
 
 ....
   -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
 ....
 
 === SEE ALSO
 
 * link:rhoas.adoc[rhoas] - RHOAS CLI
 * link:rhoas_cluster_connect.adoc[rhoas cluster connect] - Connect your
-services to a Kubernetes or OpenShift
+services to Kubernetes or OpenShift
 * link:rhoas_cluster_status.adoc[rhoas cluster status] - View status of
 the current Kubernetes or OpenShift cluster.

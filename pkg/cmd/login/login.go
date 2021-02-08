@@ -112,18 +112,18 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "api-gateway", stagingURL, "URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development")
-	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names")
+	cmd.Flags().StringVar(&opts.url, "api-gateway", stagingURL, "URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development.")
+	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, "OpenID client identifier")
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "The URL of the SSO Authentication server")
-	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser")
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, "Override the default OpenID scope. Can be repeated multiple times to specify multiple scopes")
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "The URL of the SSO Authentication server.")
+	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.")
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, "Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope.")
 
 	return cmd
 }
 
-// nolint
-func runLogin(opts *Options) error {
+// nolint:funlen
+func runLogin(opts *Options) (err error) {
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func runLogin(opts *Options) error {
 		return err
 	}
 	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		return fmt.Errorf("Scheme missing from URL %v. Please add either 'https' or 'https'.", color.Info(unparsedGatewayURL))
+		return fmt.Errorf("scheme missing from URL %v. Please add either 'https' or 'https'", color.Info(unparsedGatewayURL))
 	}
 
 	tr := createTransport(opts.insecureSkipTLSVerify)
@@ -210,6 +210,7 @@ func runLogin(opts *Options) error {
 			oauth2.SetAuthURLParam("grant_type", "authorization_code"),
 		}
 
+		// nolint:govet
 		oauth2Token, err := oauthCfg.Exchange(ctx, r.URL.Query().Get("code"), oauthExchangeOpts...)
 		if err != nil {
 			http.Error(w, "Failed to exchange token: "+err.Error(), http.StatusInternalServerError)

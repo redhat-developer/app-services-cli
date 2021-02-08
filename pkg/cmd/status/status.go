@@ -87,7 +87,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\".")
 
 	return cmd
 }

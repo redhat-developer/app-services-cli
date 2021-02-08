@@ -38,7 +38,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.topicName, flags.FlagName, "n", "", "Topic name")
+	cmd.Flags().StringVarP(&opts.topicName, flags.FlagName, "n", "", "Topic name.")
 	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 
 	_ = cmd.MarkFlagRequired(flags.FlagName)

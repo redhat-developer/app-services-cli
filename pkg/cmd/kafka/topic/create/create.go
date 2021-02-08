@@ -47,9 +47,9 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.topicName, topicflags.FlagName, "n", "", "Topic name")
-	cmd.Flags().Int32VarP(&opts.partitions, Partitions, "p", 1, "Set number of partitions")
-	cmd.Flags().Int32VarP(&opts.replicas, Replicas, "r", 1, "Set number of replicas")
+	cmd.Flags().StringVarP(&opts.topicName, topicflags.FlagName, "n", "", "Topic name.")
+	cmd.Flags().Int32VarP(&opts.partitions, Partitions, "p", 1, "Set number of partitions.")
+	cmd.Flags().Int32VarP(&opts.replicas, Replicas, "r", 1, "Set number of replicas.")
 	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 
 	_ = cmd.MarkFlagRequired(topicflags.FlagName)
