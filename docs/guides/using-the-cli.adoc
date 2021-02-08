@@ -111,8 +111,72 @@ You can create a topic in the current Kafka instance with the `rhoas kafka topic
 
 [source,shell]
 ----
-$ rhoas kafka topic create --name "my-first-topic"
-TODO
+$ rhoas kafka topic create topic-1
+Topic topic-1 created in Kafka instance my-kafka-instance:
+{
+  "config": [
+    {
+      "key": "retention.ms",
+      "value": "-1"
+    }
+  ],
+  "name": "topic-1",
+  "partitions": [
+    {
+      "id": 1,
+      "leader": {
+        "id": 1
+      },
+      "replicas": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  ]
+}
+----
+
+=== Describing a Kafka topic
+
+To view the details of a topic, run the `rhoas kafka topic describe` command.
+
+[source,shell]
+----
+❯ ./rhoas kafka topic describe topic-1
+{
+  "config": [
+    {
+      "key": "retention.ms",
+      "value": "-1"
+    }
+  ],
+  "name": "topic-1",
+  "partitions": [
+    ...
+  ]
+}
+----
+
+=== Updating a Kafka topic
+
+You can update the number of partitions, number of replicas and retention period for an existing Kafka topic with `rhoas kafka topic update`:
+
+[source,shell]
+----
+$ rhoas kafka topic update topic-3 --retention-ms 36000 --partitions 3 --replicas 2
+Topic topic-1 updated in Kafka instance serviceapi:
+{
+  "config": [
+    {
+      "key": "retention.ms",
+      "value": "36000"
+    }
+  ],
+  "name": "topic-1",
+  "partitions": [
+    ...
+  ]
 ----
 
 === Listing Kafka topics
@@ -122,7 +186,11 @@ To list the topics for the current Kafka instance use the `rhoas kafka topic lis
 [source,shell]
 ----
 $ rhoas kafka topic list
-TODO
+  NAME      PARTITIONS  
+ --------- ------------ 
+  topic-1            2  
+  topic-2            2  
+  topic-3            1  
 ----
 
 === Deleting a Kafka topic
@@ -131,8 +199,9 @@ The `rhoas kafka delete` command allows you to delete a Kafka topic.
 
 [source,shell]
 ----
-$ rhoas kafka topic delete --name "my-first"
-TODO
+$ ./rhoas kafka topic delete topic-3
+? Confirm the name of the topic you want to delete: topic-3
+Topic topic-3 in Kafka instance my-kafka-instance has been deleted
 ----
 
 === Deleting a Kafka instance

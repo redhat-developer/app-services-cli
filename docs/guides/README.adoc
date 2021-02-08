@@ -18,6 +18,8 @@
 === link:using-the-cli.adoc#describing-a-kafka-instance[Describing a Kafka instance]
 === link:using-the-cli.adoc#using-a-kafka-instance[Using a Kafka instance]
 === link:using-the-cli.adoc#creating-a-kafka-topic[Creating a Kafka topic]
+=== link:using-the-cli.adoc#describing-a-kafka-topic[Describing a Kafka topic]
+=== link:using-the-cli.adoc#updating-a-kafka-topic[Updating a Kafka topic]
 === link:using-the-cli.adoc#listing-kafka-topics[Listing Kafka topics]
 === link:using-the-cli.adoc#deleting-a-kafka-topic[Delete a Kafka topic]
 === link:using-the-cli.adoc#deleting-a-kafka-instance[Deleting a Kafka instance]
