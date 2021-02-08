@@ -19,7 +19,8 @@ type Options struct {
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 
-	id string
+	id    string
+	force bool
 }
 
 // NewDeleteCommand creates a new command to delete a service account
@@ -46,6 +47,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete")
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to force delete this service account")
 	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
@@ -57,19 +59,21 @@ func runDelete(opts *Options) (err error) {
 		return err
 	}
 
-	var confirmDelete bool
-	promptConfirmDelete := &survey.Confirm{
-		Message: fmt.Sprintf("Are you sure you want to delete the service account with ID %v?", color.Info(opts.id)),
-	}
+	if !opts.force {
+		var confirmDelete bool
+		promptConfirmDelete := &survey.Confirm{
+			Message: fmt.Sprintf("Are you sure you want to delete the service account with ID %v?", color.Info(opts.id)),
+		}
 
-	err = survey.AskOne(promptConfirmDelete, &confirmDelete)
-	if err != nil {
-		return err
-	}
+		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
+		if err != nil {
+			return err
+		}
 
-	if !confirmDelete {
-		logger.Debug("Service account delete action was not confirmed. Exiting silently")
-		return nil
+		if !confirmDelete {
+			logger.Debug("Service account delete action was not confirmed. Exiting silently")
+			return nil
+		}
 	}
 
 	return deleteServiceAccount(opts)

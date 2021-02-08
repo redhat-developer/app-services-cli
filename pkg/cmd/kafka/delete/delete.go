@@ -20,7 +20,8 @@ import (
 )
 
 type options struct {
-	id string
+	id    string
+	force bool
 
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
@@ -71,6 +72,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used")
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to force delete this Kafka instance")
 
 	return cmd
 }
@@ -106,19 +108,21 @@ func runDelete(opts *options) error {
 
 	logger.Info("Deleting Kafka instance", color.Info(kafkaName), "\n")
 
-	var promptConfirmName = &survey.Input{
-		Message: "Confirm the name of the instance you want to delete:",
-	}
+	if !opts.force {
+		var promptConfirmName = &survey.Input{
+			Message: "Confirm the name of the instance you want to delete:",
+		}
 
-	var confirmedKafkaName string
-	err = survey.AskOne(promptConfirmName, &confirmedKafkaName)
-	if err != nil {
-		return err
-	}
+		var confirmedKafkaName string
+		err = survey.AskOne(promptConfirmName, &confirmedKafkaName)
+		if err != nil {
+			return err
+		}
 
-	if confirmedKafkaName != kafkaName {
-		logger.Info("The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
-		return nil
+		if confirmedKafkaName != kafkaName {
+			logger.Info("The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
+			return nil
+		}
 	}
 
 	logger.Debug("Deleting Kafka instance", kafkaName)
