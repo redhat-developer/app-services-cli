@@ -1,10 +1,15 @@
 package localizer
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/BurntSushi/toml"
+	"io"
+	"io/ioutil"
+	"os"
 	"strings"
 
-	"github.com/BurntSushi/toml"
+	"github.com/markbates/pkger"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 )
@@ -12,6 +17,9 @@ import (
 var lang = language.English
 var bundle *i18n.Bundle = i18n.NewBundle(lang)
 var loc = i18n.NewLocalizer(bundle, lang.String())
+
+// file format for locale files
+const format = "toml"
 
 // Config is the basic configuration needed
 // to localize a message
@@ -35,7 +43,21 @@ type Config struct {
 	PluralCount int
 }
 
-// MustLocalise returns a localized a message
+// IncludeAssets walks the /internal/locales directory
+// and allows the static assets found to be embedded into the binary
+// by github.com/markbates/pkger
+func IncludeAssets() error {
+	return pkger.Walk("/locales", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
+// MustLocalise returns a localized a message,
+// and panics if it was not found
 func MustLocalize(config *Config) string {
 	pluralCount := config.PluralCount
 	if config.PluralCount == 0 {
@@ -49,7 +71,32 @@ func MustLocalize(config *Config) string {
 	})
 }
 
-func LoadMessageFile(paths ...string) {
+// LoadMessageFile loads the message file int context
+// Using github.com/nicksnyder/go-i18n/v2/i18n
+// pathTree to File is an array of the parent directories
+// For example: ["kafka", "topic", "create"] will resolve to /locales/kafka/topic/create/active.en.toml
+func LoadMessageFile(pathTree ...string) {
+	assetPath := fmt.Sprintf("/locales/%v/active.%v", strings.Join(pathTree, "/"), getLangFormat())
+	// open the static i18n file
+	f, err := pkger.Open(assetPath)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	b := bytes.NewBufferString("")
+	// copy to contents of the file to a buffer string
+	if _, err := io.Copy(b, f); err != nil {
+		panic(err)
+	}
+	// read the contents of the file to a byte array
+	out, _ := ioutil.ReadAll(b)
+	// load the contents into context
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	bundle.MustLoadMessageFile(fmt.Sprintf("./internal/localizer/locales/%v/active.%v.toml", strings.Join(paths, "/"), lang.String()))
+	bundle.MustParseMessageFileBytes(out, "en.toml")
+}
+
+// get the file extension for the current language
+// Example: "en.toml", "de.yaml"
+func getLangFormat() string {
+	return fmt.Sprintf("%v.%v", lang.String(), format)
 }

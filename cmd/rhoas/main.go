@@ -11,6 +11,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 
@@ -33,6 +34,9 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+
+	//nolint:errcheck
+	localizer.IncludeAssets()
 
 	initConfig(cmdFactory)
 

@@ -47,13 +47,18 @@ generate:
 
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
-binary:
+binary: pkger
 	go build $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" -o ${binary} ./cmd/rhoas
 .PHONY: binary
 
-install:
+install: pkger
 	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
+
+# pkger packages static assets into the binary file
+pkger:
+	pkger -o cmd/rhoas
+.PHONY: pkger
 
 # Runs the integration tests.
 test/integration: install

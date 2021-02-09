@@ -1,12 +1,11 @@
 package create
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/locales/common/flaglocale"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-
-	flagi18n "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/locales/common/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
@@ -95,11 +94,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.name = args[0]
 			}
 
+			// load localised messages
 			localizer.LoadMessageFile("common", "flags")
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: flagi18n.RequiredNonInteractiveError,
+					MessageID: flaglocale.RequiredNonInteractiveError,
 					TemplateData: map[string]interface{}{
 						"Flag": "name",
 					},
@@ -111,7 +111,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
 				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: flagi18n.InvalidValueError,
+					MessageID: flaglocale.InvalidValueError,
 					TemplateData: map[string]interface{}{
 						"Value": opts.outputFormat,
 						"Flag":  "output",
