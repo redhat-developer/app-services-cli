@@ -32,6 +32,7 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
+	@echo "mkae pkger								bundle static assets"
 
 	@echo "$(fake)"
 .PHONY: help
@@ -54,6 +55,11 @@ binary:
 install:
 	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
+
+# pkger packages static assets into the binary file
+pkger:
+	pkger -o cmd/rhoas
+.PHONY: pkger
 
 # Runs the integration tests.
 test/integration: install
@@ -130,6 +136,10 @@ format:
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 
+# Symlink common git hookd into .git directory
+githooks:
+	ln -fs $$(pwd)/githooks/pre-commit .git/hooks
+.PHONY: githooks
 
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas

@@ -1,0 +1,13 @@
+#!/usr/bin/sh
+#
+
+# get diff of locales directory
+git diff --name-only --diff-filter=AMDR --cached --quiet "./locales"
+diff=$?
+
+# Run pkger when locales directory has changed
+if [ $diff -ne 0 ]; then
+	# Embed static binariees
+	echo "$diff file(s) changed in ./locales directory. Run 'make pkger' to package changes into binary"
+	exit 1
+fi
