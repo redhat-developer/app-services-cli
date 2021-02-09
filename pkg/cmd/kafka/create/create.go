@@ -96,7 +96,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// load localised messages
-			localizer.LoadMessageFile("common", "flags")
+			localizer.LoadMessageFiles("common/flags")
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return errors.New(localizer.MustLocalize(&localizer.Config{

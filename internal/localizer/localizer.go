@@ -3,11 +3,11 @@ package localizer
 import (
 	"bytes"
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"io"
 	"io/ioutil"
 	"os"
-	"strings"
+
+	"github.com/BurntSushi/toml"
 
 	"github.com/markbates/pkger"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -71,28 +71,30 @@ func MustLocalize(config *Config) string {
 	})
 }
 
-// LoadMessageFile loads the message file int context
+// LoadMessageFiles loads the message file int context
 // Using github.com/nicksnyder/go-i18n/v2/i18n
 // pathTree to File is an array of the parent directories
-// For example: ["kafka", "topic", "create"] will resolve to /locales/kafka/topic/create/active.en.toml
-func LoadMessageFile(pathTree ...string) {
-	assetPath := fmt.Sprintf("/locales/%v/active.%v", strings.Join(pathTree, "/"), getLangFormat())
-	// open the static i18n file
-	f, err := pkger.Open(assetPath)
-	if err != nil {
-		panic(err)
+// For example: ["kafka/topic/create"] resolves to /locales/kafka/topic/create/active.en.toml
+func LoadMessageFiles(dirs ...string) {
+	for _, path := range dirs {
+		pathToFile := fmt.Sprintf("/locales/%v/active.%v", path, getLangFormat())
+		// open the static i18n file
+		f, err := pkger.Open(pathToFile)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+		b := bytes.NewBufferString("")
+		// copy to contents of the file to a buffer string
+		if _, err := io.Copy(b, f); err != nil {
+			panic(err)
+		}
+		// read the contents of the file to a byte array
+		out, _ := ioutil.ReadAll(b)
+		// load the contents into context
+		bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+		bundle.MustParseMessageFileBytes(out, "en.toml")
 	}
-	defer f.Close()
-	b := bytes.NewBufferString("")
-	// copy to contents of the file to a buffer string
-	if _, err := io.Copy(b, f); err != nil {
-		panic(err)
-	}
-	// read the contents of the file to a byte array
-	out, _ := ioutil.ReadAll(b)
-	// load the contents into context
-	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	bundle.MustParseMessageFileBytes(out, "en.toml")
 }
 
 // get the file extension for the current language
