@@ -6,15 +6,17 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/common/flaglocale"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
+	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+
+	flagmsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/common/flag"
+	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudprovider/cloudproviderutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cloudregion/cloudregionutil"
 
@@ -69,36 +71,26 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		multiAZ: defaultMultiAZ,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka", "cmd/kafka/create", "cmd/common/flags")
+
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Create a Kafka instance",
-		Long: heredoc.Doc(`
-			Create a Kafka instance on a particular cloud provider and region.
-
-		  After creating the Kafka instance you can view it by running "rhoas kafka describe".
-		`),
-		Example: heredoc.Doc(`
-			# start an interactive prompt to fill out the configuration values for the instance
-			$ rhoas kafka create
-
-			# create a Kafka instance
-			$ rhoas kafka create my-kafka-instance
-
-			# create a Kafka instance and output the result in YAML
-			$ rhoas kafka create -o yaml
-		`),
-		Args: cobra.RangeArgs(0, 1),
+		Use:     localizer.MustLocalizeFromID("kafka.create.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.create.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.create.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.create.cmd.example"),
+		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.name = args[0]
 			}
 
-			// load localised messages
-			localizer.LoadMessageFiles("common/flags")
+			if err := kafka.ValidateName(opts.name); err != nil {
+				return err
+			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: flaglocale.RequiredNonInteractiveError,
+					MessageID: flagmsg.RequiredNonInteractiveError,
 					TemplateData: map[string]interface{}{
 						"Flag": "name",
 					},
@@ -108,23 +100,18 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
-				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: flaglocale.InvalidValueError,
-					TemplateData: map[string]interface{}{
-						"Value": opts.outputFormat,
-						"Flag":  "output",
-					},
-				}))
+			validOutputFormats := flagutil.ValidOutputFormats
+			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			return runCreate(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", "Cloud provider ID.")
-	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", "Cloud provider Region ID.")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format in which to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\".")
+	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", localizer.MustLocalizeFromID("kafka.create.flag.cloudProvider.description"))
+	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", localizer.MustLocalizeFromID("kafka.create.flag.cloudRegion.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalizeFromID("kafka.common.flag.output.description"))
 
 	return cmd
 }
@@ -149,7 +136,7 @@ func runCreate(opts *Options) error {
 
 	var payload *kasclient.KafkaRequestPayload
 	if opts.interactive {
-		logger.Debug("Creating Kafka instance in interactive mode")
+		logger.Debug()
 
 		payload, err = promptKafkaPayload(opts)
 		if err != nil {
@@ -172,22 +159,29 @@ func runCreate(opts *Options) error {
 		}
 	}
 
-	logger.Info("Creating Kafka instance")
+	logger.Debug(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.create.log.debug.creatingKafka",
+		TemplateData: map[string]interface{}{
+			"Name": opts.name,
+		},
+	}))
 
 	a := api.Kafka().CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, _, apiErr := a.Execute()
 
-	if kas.IsErr(apiErr, kas.ErrorDuplicateKafkaClusterName) {
-		return fmt.Errorf("Error: could not create Kafka instance %v: name already exists", color.Info(opts.name))
-	}
-
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to create Kafka instance: %w", apiErr)
+		return apiErr
 	}
 
-	logger.Info("Kafka instance created:")
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.create.info.successMessage",
+		TemplateData: map[string]interface{}{
+			"Name": response.GetName(),
+		},
+	}))
+
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
@@ -203,7 +197,7 @@ func runCreate(opts *Options) error {
 
 	cfg.Services.Kafka = kafkaCfg
 	if err := opts.Config.Save(cfg); err != nil {
-		return fmt.Errorf("Unable to use Kafka instance: %w", err)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID(kafkamsg.CouldNotUseKafkaError), err)
 	}
 
 	return nil
@@ -229,8 +223,8 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	}
 
 	promptName := &survey.Input{
-		Message: "Name:",
-		Help:    "The name of the Kafka instance",
+		Message: localizer.MustLocalizeFromID("kafka.create.input.name.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.create.input.name.help"),
 	}
 
 	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName))
@@ -248,7 +242,7 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	cloudProviderNames := cloudproviderutil.GetEnabledNames(cloudProviders)
 
 	cloudProviderPrompt := &survey.Select{
-		Message: "Cloud Provider:",
+		Message: localizer.MustLocalizeFromID("kafka.create.input.cloudProvider.message"),
 		Options: cloudProviderNames,
 	}
 
@@ -270,9 +264,9 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	regionIDs := cloudregionutil.GetEnabledIDs(regions)
 
 	regionPrompt := &survey.Select{
-		Message: "Cloud Region:",
+		Message: localizer.MustLocalizeFromID("kafka.create.input.cloudRegion.message"),
 		Options: regionIDs,
-		Help:    "Geographical region where the Kafka instance will be deployed",
+		Help:    localizer.MustLocalizeFromID("kafka.create.input.cloudRegion.help"),
 	}
 
 	err = survey.AskOne(regionPrompt, &answers.Region)

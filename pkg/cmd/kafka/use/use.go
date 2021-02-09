@@ -5,14 +5,12 @@ import (
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
-
-	"github.com/MakeNowJust/heredoc"
 
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -33,27 +31,20 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/use")
+
 	cmd := &cobra.Command{
-		Use:   "use",
-		Short: "Set the current Kafka instance",
-		Long: heredoc.Doc(`
-			Select a Kafka instance and set it as the current Kafka instance.
-
-			When you set the Kafka instance to be used, it is set as the current instance for all 'rhoas kafka' commands.
-
-			When an ID is not specified in other Kafka commands, the current Kafka instance is used.
-		`),
-		Example: heredoc.Doc(`
-			# set a kafka instance to be the current instance
-			$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
-		),
-		Args: cobra.ExactArgs(0),
+		Use:     localizer.MustLocalizeFromID("kafka.use.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.use.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.use.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.use.cmd.example"),
+		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runUse(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance to use.")
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.use.flag.id"))
 	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
@@ -83,7 +74,7 @@ func runUse(opts *options) error {
 	}
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to retrieve Kafka instance \"%v\": %w", opts.id, apiErr)
+		return apiErr
 	}
 
 	// build Kafka config object from the response
@@ -93,10 +84,21 @@ func runUse(opts *options) error {
 
 	cfg.Services.Kafka = &kafkaConfig
 	if err := opts.Config.Save(cfg); err != nil {
-		return fmt.Errorf("Unable to use Kafka instance: %w", err)
+		saveErrMsg := localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.use.error.saveError",
+			TemplateData: map[string]interface{}{
+				"Name": res.GetName(),
+			},
+		})
+		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	logger.Infof("Now using Kafka instance %v.", color.Info(res.GetName()))
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.use.log.info.useSuccess",
+		TemplateData: map[string]interface{}{
+			"Name": res.GetName(),
+		},
+	}))
 
 	return nil
 }

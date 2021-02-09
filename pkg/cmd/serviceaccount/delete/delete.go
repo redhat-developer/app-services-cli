@@ -5,16 +5,17 @@ import (
 	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
@@ -29,28 +30,23 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
-	cmd := &cobra.Command{
-		Use:   "delete",
-		Short: "Delete a service account",
-		Long: heredoc.Doc(`
-			Permanently delete a service account.
+	localizer.LoadMessageFiles("cmd/serviceaccount/delete")
 
-			Applications and tools which use the service account 
-			credentials will stop working and should be updated.
-		`),
-		Example: heredoc.Doc(`
-			# delete a service account
-			$ rhoas serviceaccount delete --id 173c1ad9-932d-4007-ae0f-4da74f4d2ccd
-		`),
+	cmd := &cobra.Command{
+		Use:     localizer.MustLocalizeFromID("serviceAccount.delete.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("serviceAccount.delete.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("serviceAccount.delete.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("serviceAccount.delete.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runDelete(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete.")
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to forcibly delete this service account.")
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("serviceAccount.delete.flag.id.description"))
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("serviceAccount.delete.flag.force.description"))
 
 	_ = cmd.MarkFlagRequired("id")
 
@@ -66,7 +62,12 @@ func runDelete(opts *Options) (err error) {
 	if !opts.force {
 		var confirmDelete bool
 		promptConfirmDelete := &survey.Confirm{
-			Message: fmt.Sprintf("Are you sure you want to delete the service account with ID %v?", color.Info(opts.id)),
+			Message: localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.delete.input.confirmDelete.message",
+				TemplateData: map[string]interface{}{
+					"ID": opts.id,
+				},
+			}),
 		}
 
 		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
@@ -75,7 +76,7 @@ func runDelete(opts *Options) (err error) {
 		}
 
 		if !confirmDelete {
-			logger.Debug("Service account delete action was not confirmed. Exiting silently")
+			logger.Debug(localizer.MustLocalizeFromID("serviceAccount.delete.log.debug.deleteNotConfirmed"))
 			return nil
 		}
 	}
@@ -100,10 +101,10 @@ func deleteServiceAccount(opts *Options) error {
 	_, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to delete service account: %w", apiErr)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.delete.error.unableToDelete"), apiErr)
 	}
 
-	logger.Info("Service account deleted")
+	logger.Info(localizer.MustLocalizeFromID("serviceAccount.delete.log.info.deleteSuccess"))
 
 	return nil
 }

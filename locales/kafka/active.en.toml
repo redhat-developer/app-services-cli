@@ -1,0 +1,23 @@
+[kafka.common.error.couldNotUseKafka]
+description = 'Error message when a Kafka instance could not be set to the current instance'
+one = 'could not set the current Kafka instance: {{.ErrorMessage}}'
+
+[kafka.common.error.noKafkaSelected]
+description = 'Error message when no Kafka is set'
+one = 'no Kafka instance selected. Use the "--id" flag or set the current instance with the "rhoas kafka use" command'
+
+[kafka.common.error.notFoundErrorById]
+one = 'Kafka instance with ID "{{.ID}}" not found'
+
+[kafka.validation.error.invalidName]
+one = '''
+Invalid Kafka instance name. Valid names must satisfy the following conditions:
+
+  - must be between 1 and 32 characters
+  - must only consist of lower case, alphanumeric characters and '-'
+  - must start with an alphabetic character
+  - must end with an alphanumeric character
+'''
+
+[kafka.validation.name.error.lengthError]
+one = 'Kafka instance name must be between 1 and 32 characters'

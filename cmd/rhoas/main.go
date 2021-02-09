@@ -62,7 +62,7 @@ func main() {
 	}
 
 	if err = cmdutil.CheckSurveyError(err); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		logger.Error("Error:", err)
 		os.Exit(1)
 	}
 }

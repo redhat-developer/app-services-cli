@@ -25,7 +25,7 @@ func (e *AuthError) Error() string {
 	if e.Reason != "" {
 		reason = ": " + e.Reason
 	}
-	return fmt.Sprintf("AuthError: %v%v", e.Err, reason)
+	return fmt.Sprintf("%v%v", e.Err, reason)
 }
 
 func (e *AuthError) Unwrap() error {

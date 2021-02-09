@@ -71,10 +71,16 @@ func MustLocalize(config *Config) string {
 	})
 }
 
+func MustLocalizeFromID(messageID string) string {
+	return MustLocalize(&Config{
+		MessageID: messageID,
+	})
+}
+
 // LoadMessageFiles loads the message file int context
 // Using github.com/nicksnyder/go-i18n/v2/i18n
 // pathTree to File is an array of the parent directories
-// For example: ["kafka/topic/create"] resolves to /locales/kafka/topic/create/active.en.toml
+// For example: ["cmd/kafka/topic/create"] resolves to /locales/cmd/kafka/topic/create/active.en.toml
 func LoadMessageFiles(dirs ...string) {
 	for _, path := range dirs {
 		pathToFile := fmt.Sprintf("/locales/%v/active.%v", path, getLangFormat())

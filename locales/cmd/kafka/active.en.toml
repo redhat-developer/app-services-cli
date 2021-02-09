@@ -1,0 +1,12 @@
+[kafka.cmd.use]
+description = "Use is the one-line usage message"
+one = "kafka"
+
+[kafka.cmd.shortDescription]
+description = "Short description for command"
+one = "Create, view, use, and manage your Apache Kafka instances"
+
+[kafka.common.flag.output.description]
+description = "Description for --output flag"
+one = 'Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml"'
+other = 'Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"'

@@ -101,6 +101,49 @@ module.exports = {
     });
   },
 
+  listCloudProviders: async (_c, _req, res) => {
+    return res.status(200).json({
+      "kind": "CloudProviderList",
+      "page": 1,
+      "size": 7,
+      "total": 7,
+      "items": [
+        {
+          "kind": "CloudProvider",
+          "id": "aws",
+          "display_name": "Amazon Web Services",
+          "name": "aws",
+          "enabled": true
+        },
+        {
+          "kind": "CloudProvider",
+          "id": "azure",
+          "display_name": "Microsoft Azure",
+          "name": "azure",
+          "enabled": false
+        },
+      ]
+    })
+  },
+
+  listCloudProviderRegions: async (_c, _req, res) => {
+    return res.status(200).json(
+      {
+        "kind": "CloudRegionList",
+        "page": 1,
+        "size": 17,
+        "total": 17,
+        "items": [
+          {
+            "kind": "CloudRegion",
+            "id": "eu-west-2",
+            "display_name": "EU, London",
+            "enabled": true
+          }
+        ]
+      })
+  },
+
   // Handling auth
   notFound: async (c, req, res) => res.status(404).json({ err: "not found" }),
   unauthorizedHandler: async (c, req, res) =>

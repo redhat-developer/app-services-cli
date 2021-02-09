@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
 
@@ -49,7 +50,9 @@ type KeycloakConnection struct {
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
-	c.logger.Debug("Refreshing access tokens")
+	localizer.LoadMessageFiles("connection/keycloak_connection")
+
+	c.logger.Debug(localizer.MustLocalizeFromID("connection.refreshTokens.log.debug.refreshingTokens"))
 
 	if c.Token.AccessToken != "" && !c.tokenNeedsRefresh() {
 		return c.Token.AccessToken, c.Token.RefreshToken, nil
@@ -67,7 +70,7 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken str
 		c.Token.RefreshToken = refreshedTk.RefreshToken
 	}
 
-	c.logger.Debug("Access tokens successfully refreshed.")
+	c.logger.Debug(localizer.MustLocalizeFromID("connection.refreshTokens.log.debug.tokensRefreshed"))
 
 	return refreshedTk.AccessToken, refreshedTk.RefreshToken, nil
 }
@@ -132,14 +135,26 @@ func (c *KeycloakConnection) API() *api.API {
 }
 
 func (c *KeycloakConnection) tokenNeedsRefresh() bool {
+	localizer.LoadMessageFiles("connection/keycloak_connection")
+
 	t := time.Now()
 	expires, left, err := token.GetExpiry(c.Token.AccessToken, t)
 	if err != nil {
-		c.logger.Debug("Error while checking token expiry:", err)
+		c.logger.Debug(localizer.MustLocalize(&localizer.Config{
+			MessageID: "connection.tokenNeedsRefresh.log.debug.expiryCheckError",
+			TemplateData: map[string]interface{}{
+				"Reason": err.Error(),
+			},
+		}))
 	}
 
 	if !expires || left > 5*time.Minute {
-		c.logger.Debug("Token is still valid.", "Expires in", left)
+		c.logger.Debug(localizer.MustLocalize(&localizer.Config{
+			MessageID: "connection.tokenNeedsRefresh.log.debug.tokenIsStillValid",
+			TemplateData: map[string]interface{}{
+				"TimeLeft": left,
+			},
+		}))
 		return false
 	}
 

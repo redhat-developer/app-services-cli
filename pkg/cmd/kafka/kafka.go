@@ -5,6 +5,7 @@ package kafka
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
@@ -15,9 +16,11 @@ import (
 )
 
 func NewKafkaCommand(f *factory.Factory) *cobra.Command {
+	localizer.LoadMessageFiles("cmd/kafka")
+
 	cmd := &cobra.Command{
-		Use:   "kafka",
-		Short: "Create, view, use, and manage your Kafka instances",
+		Use:   localizer.MustLocalizeFromID("kafka.cmd.use"),
+		Short: localizer.MustLocalizeFromID("kafka.cmd.shortDescription"),
 	}
 
 	// add sub-commands

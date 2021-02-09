@@ -1,0 +1,61 @@
+[serviceAccount.cmd.use]
+one = 'serviceaccount'
+
+[serviceAccount.cmd.shortDescription]
+one = 'Create, list, delete and update service accounts'
+
+[serviceAccount.cmd.longDescription]
+one = 'Use these commands to create, list and delete service accounts. You can also reset the credentials for a service account.'
+
+[serviceAccount.common.flag.output.description]
+description = "Description for --output flag"
+one = 'Format in which to display the service account. Choose from: "json", "yml", "yaml"'
+other = 'Format in which to display the service account. Choose from: "json", "yml", "yaml"'
+
+[serviceAccount.common.error.credentialsFileAlreadyExists]
+description = 'Error message for when a credentials file alredy exists at a location'
+one = 'file {{.FilePath}} already exists. Use --overwrite to overwrite the file, or the --file-location flag to choose a different location'
+
+[serviceAccount.common.error.couldNotSaveCredentialsFile]
+description = 'Error message when service account credentials could not be saved'
+one = 'could not save credentials to file'
+
+[serviceAccount.common.log.info.credentialsSaved]
+description = 'Credentials file saved message'
+one = 'Credentials saved to {{.FilePath}}'
+
+[serviceAccount.common.input.credentialsFileLocation.message]
+description = 'Input message for credentials file location'
+one = "Credentials file location:"
+
+[serviceAccount.common.input.credentialsFileLocation.help]
+description = 'Input help for credentials file location'
+one = 'Enter the path to the file where the service account credentials will be saved to'
+
+[serviceAccount.common.input.confirmOverwrite.message]
+description = 'Input mesage for overwrite credentials input'
+one = 'File {{.FilePath}} already exists. Do you want to overwrite it?'
+
+[serviceAccount.common.input.specifyDifferentLocation.message]
+description = 'Input mesage for specify credentials location confirmation'
+one = 'Would you like to specify a different file location?'
+
+[serviceAccount.common.error.mustSpecifyFile]
+description = 'Error message when location not specified'
+one = 'you must specify a file to save the service account credentials'
+
+[serviceAccount.common.flag.fileFormat.description]
+description = 'Description for the --file-format flag'
+one = 'Format in which to save the service account credentials. Choose from: "env", "json", "properties", "kubernetes-secret"'
+
+[serviceAccount.common.flag.overwrite.description]
+description = 'Description for --overwrite flag'
+one = 'Forcibly overwrite a credentials file if it already exists.'
+
+[serviceAccount.common.flag.fileLocation.description]
+description = 'Description for --file-location flag'
+one = 'Sets a custom file location to save the credentials.'
+
+[serviceAccount.common.log.debug.interactive.fileFormatNotSet]
+description = 'debug message'
+one = '--file-format flag is not set, prompting user to enter a value'

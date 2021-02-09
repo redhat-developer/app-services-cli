@@ -3,9 +3,9 @@ package root
 import (
 	"flag"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/status"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/arguments"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion"
@@ -19,25 +19,15 @@ import (
 )
 
 func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command {
+	localizer.LoadMessageFiles("cmd/root")
+
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,
-		Use:           "rhoas <command> <subcommand> [flags]",
-		Short:         "RHOAS CLI",
-		Long:          "Manage your application services directly from the command line.",
-		Example: heredoc.Doc(`
-			# authenticate securely through your web browser
-			$ rhoas login
-
-			# create a Kafka instance
-			$ rhoas kafka create my-kafka-cluster
-
-			# create a service account and save credentials to a JSON file
-			$ rhoas serviceaccount create -o json
-
-			# connect your Kubernetes/OpenShift cluster to a service
-			$ rhoas cluster connect
-		`),
+		Use:           localizer.MustLocalizeFromID("root.cmd.use"),
+		Short:         localizer.MustLocalizeFromID("root.cmd.shortDescription"),
+		Long:          localizer.MustLocalizeFromID("root.cmd.longDescription"),
+		Example:       localizer.MustLocalizeFromID("root.cmd.example"),
 	}
 
 	cmd.Version = version
@@ -49,7 +39,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
-	fs.BoolVarP(&help, "help", "h", false, "Show help for a command")
+	fs.BoolVarP(&help, "help", "h", false, localizer.MustLocalizeFromID("root.cmd.flag.help.description"))
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(cmdFactory))

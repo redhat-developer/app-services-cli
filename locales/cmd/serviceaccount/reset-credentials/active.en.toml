@@ -1,0 +1,77 @@
+[serviceAccount.resetCredentials.cmd.use]
+description = "Use is the one-line usage message"
+one = "reset-credentials"
+
+[serviceAccount.resetCredentials.cmd.shortDescription]
+description = "Short description for command"
+one = "Reset service account credentials"
+
+[serviceAccount.resetCredentials.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Reset the credentials for a service account.
+This command will generate a new password for a service account.
+After the credentials have been reset, any applications or tools that use the
+credentials must be updated to use the new password.
+
+You must specify an output format into which the credentials will be stored.
+  - env (default): Store credentials in an env file as environment variables
+  - json: Store credentials in a JSON file
+  - kubernetes-secret: Store credentials in YAML as a Kubernetes Secret (the Kubernetes Secret is not created for you)
+  - properties: Store credentials in a properties file, which is typically used in Java-related technologies.
+'''
+
+[serviceAccount.resetCredentials.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# start an interactive prompt to reset credentials
+$ rhoas serviceaccount reset-credentials
+
+# reset credentials for the service account specified and save the credentials to a JSON file
+$ rhoas serviceaccount reset-credentials --id 173c1ad9-932d-4007-ae0f-4da74f4d2ccd -o json
+'''
+
+[serviceAccount.resetCredentials.flag.id.description]
+description = 'Description for --id flag'
+one = 'The unique ID of the service account for which you want to reset the credentials.'
+
+[serviceAccount.resetCredentials.error.couldNotCreate]
+description = 'Error message when service account could not be created'
+one = 'could not create service account'
+
+[serviceAccount.resetCredentials.log.info.createdSuccessfully]
+one = 'Service account "{{.Name}}" created successfully with ID "{{.ID}}".'
+
+[serviceAccount.resetCredentials.input.id.message]
+one = "Service Account ID:"
+
+[serviceAccount.resetCredentials.input.name.help]
+description = 'help for the ID input'
+one = "What is the ID of the service account?"
+
+[serviceAccount.resetCredentials.log.debug.interactive.fileFormatNotUsed]
+description = 'debug message'
+one = '--file-format flag is not set, prompting user to enter a value'
+
+[serviceAccount.resetCredentials.input.fileFormat.message]
+description = 'Title for credentials format input'
+one = 'Credentials file format:'
+
+[serviceAccount.resetCredentials.input.fileFormat.help]
+description = 'Help for credentials format input'
+one = 'File format in which to save the service account credentials:'
+
+[serviceAccount.resetCredentials.input.confirmReset.message]
+one = 'Are you sure you want to reset the credentials for service account "{{.Name}}"?'
+
+[serviceAccount.resetCredentials.log.debug.cancelledReset]
+one = 'You have chosen to not reset the service account credentials.'
+
+[serviceAccount.resetCredentials.error.resetError]
+one = 'could not reset credentials for service account "{{.Name}}"'
+
+[serviceAccount.resetCredentials.log.info.resetSuccess]
+one = 'Credentials reset for service account "{{.Name}}"'
+
+[serviceAccount.resetCredentials.log.debug.resettingCredentials]
+one = 'Resetting credentials for service account "{{.Name}}"'

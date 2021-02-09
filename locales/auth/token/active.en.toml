@@ -1,0 +1,9 @@
+[auth.token.parse.error.parseError]
+one = 'unable not parse token'
+
+[auth.token.mapClaims.error.claimsError]
+one = 'expected map claims but got "{{.Claims}}"'
+
+[auth.token.getExpiry.error.expectedExpiryClaimError]
+one = 'expected floating point "exp" but got "{{Claim}}"'
+

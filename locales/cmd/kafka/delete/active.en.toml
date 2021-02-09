@@ -1,0 +1,54 @@
+[kafka.delete.cmd.use]
+description = "Use is the one-line usage message"
+one = "delete"
+
+[kafka.delete.cmd.shortDescription]
+description = "Short description for command"
+one = "Delete a Kafka instance"
+
+[kafka.delete.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Permanently delete a Kafka instance, including all topics.
+
+When this command is run, you will be asked to confirm the name of the instance you want to delete.
+Otherwise you can pass "--force" to forcibly delete the instance.
+'''
+
+[kafka.delete.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# delete the current Kafka instance
+$ rhoas kafka delete
+
+# delete a Kafka instance with a specific ID
+$ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+'''
+
+[kafka.delete.flag.id]
+description = 'Description for the --id flag'
+one = 'Unique ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.'
+
+[kafka.delete.flag.force]
+description = 'Description for the --force flag'
+one = 'Skip confirmation to forcibly delete this Kafka instance.'
+
+[kafka.delete.log.info.deleting]
+description = 'Info message when deleting Kafka'
+one = 'Deleting Kafka instance "{{.Name}}"'
+
+[kafka.delete.input.confirmName.message]
+description = 'Input title for Kafka name confirmation'
+one = 'Confirm the name of the instance you want to delete:'
+
+[kafka.delete.log.info.incorrectNameConfirmation]
+description = 'Info message when user incorrectly confirms the name'
+one = 'The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it correct and try again.'
+
+[kafka.delete.log.debug.deletingKafka]
+description = 'Debug message when deleting Kafka'
+one = 'Deleting Kafka instance'
+
+[kafka.delete.log.info.deleteSuccess]
+description = 'Info message when instance was deleted'
+one = 'Kafka instance "{{.Name}}" has successfully been deleted'

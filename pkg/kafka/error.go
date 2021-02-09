@@ -1,19 +1,28 @@
 package kafka
 
 import (
+	"errors"
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
 type Error struct {
-	Reason string
+	Err error
 }
 
 func (e *Error) Error() string {
-	return e.Reason
+	return fmt.Sprintf("%v", e.Err)
 }
 
 func ErrorNotFound(id string) *Error {
+	localizer.LoadMessageFiles("kafka")
 	return &Error{
-		Reason: fmt.Sprintf("Kafka instance with ID '%v' not found", id),
+		Err: errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundErrorById",
+			TemplateData: map[string]interface{}{
+				"ID": id,
+			},
+		})),
 	}
 }

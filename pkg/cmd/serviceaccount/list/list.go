@@ -4,15 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -22,13 +24,14 @@ type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
+	IO         *iostreams.IOStreams
 
 	output string
 }
 
-// table contains the properties used to
-// populate the list of service accounts into a table
-type table struct {
+// svcAcctRow contains the properties used to
+// populate the list of service accounts into a table row
+type svcAcctRow struct {
 	ID          string `json:"id" header:"ID"`
 	Name        string `json:"name" header:"Name"`
 	ClientID    string `json:"clientID" header:"Client ID"`
@@ -41,41 +44,26 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
+	localizer.LoadMessageFiles("cmd/serviceaccount", "cmd/serviceaccount/list")
+
 	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "List service accounts",
-		Long: heredoc.Doc(`
-		List all service accounts.
-
-		This command will provide a high level view of all service accounts.
-
-		The service accounts are displayed by default in a table, but can also be
-		displayed as JSON or YAML.
-		`),
-		Example: heredoc.Doc(`
-			# list all service accounts
-			$ rhoas serviceaccount list
-
-			# list all service accounts as JSON
-			$ rhoas serviceaccount list -o json
-		`),
+		Use:     localizer.MustLocalizeFromID("serviceAccount.list.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("serviceAccount.list.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("serviceAccount.list.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("serviceAccount.list.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			logger, err := opts.Logger()
-			if err != nil {
-				return err
-			}
-
-			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
-				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
+			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
+				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
 			}
 
 			return runList(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Output format of the results. Choose from %q.", flagutil.AllowedListFormats))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.output.description"))
 
 	return cmd
 }
@@ -97,38 +85,43 @@ func runList(opts *Options) (err error) {
 	res, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to list service accounts: %w", apiErr)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.list.error.unableToList"), apiErr)
 	}
 
 	serviceaccounts := res.GetItems()
 	if len(serviceaccounts) == 0 {
-		logger.Info("No service accounts were found.")
+		logger.Info(localizer.MustLocalizeFromID("serviceAccount.list.log.info.noneFound"))
 		return nil
 	}
 
-	var tableList []table
-	if opts.output == "" {
-		jsonResponse, _ := json.Marshal(serviceaccounts)
-
-		if err = json.Unmarshal(jsonResponse, &tableList); err != nil {
-			logger.Infof("Could not unmarshal service accounts into table, defaulting to JSON instead: %v", err)
-			opts.output = "json"
-		}
-	}
-
+	ioOut := opts.IO.Out
 	switch opts.output {
 	case "json":
-		logger.Debug("Outputting service accounts to JSON")
 		data, _ := json.MarshalIndent(res, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(os.Stdout, data)
+		_ = dump.JSON(ioOut, data)
 	case "yaml", "yml":
-		logger.Debug("Outputting service accounts to YAML")
 		data, _ := yaml.Marshal(res)
-		_ = dump.YAML(os.Stdout, data)
+		_ = dump.YAML(ioOut, data)
 	default:
-		logger.Debug("Outputting service accounts to table")
-		dump.Table(os.Stdout, tableList)
+		rows := mapResponseItemsToRows(serviceaccounts)
+		dump.Table(ioOut, rows)
 	}
 
 	return nil
+}
+
+func mapResponseItemsToRows(svcAccts []kasclient.ServiceAccountListItem) []svcAcctRow {
+	rows := []svcAcctRow{}
+
+	for _, sa := range svcAccts {
+		row := svcAcctRow{
+			ID:       sa.GetId(),
+			Name:     sa.GetName(),
+			ClientID: sa.GetClientID(),
+		}
+
+		rows = append(rows, row)
+	}
+
+	return rows
 }

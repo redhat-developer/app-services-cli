@@ -11,11 +11,10 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
@@ -45,14 +44,14 @@ const RedirectURLTemplate = `
 <!DOCTYPE html>
 <head>
 	<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.70.2/patternfly.css">
-  <title>Welcome to RHOAS</title>
+  <title>%v</title>
 </head>
 <body>
 	<div class="pf-c-empty-state">
   <div class="pf-c-empty-state__content">
     <i class="fas fa-key pf-c-empty-state__icon" aria-hidden="true"></i>
-    <h1 class="pf-c-title pf-m-lg">Welcome to RHOAS</h1>
-    <div class="pf-c-empty-state__body">You have successfully logged in to the RHOAS CLI as <span style="font-weight:700">%v</span>. You may now close this tab and return to the command-line.</div>
+    <h1 class="pf-c-title pf-m-lg">%v</h1>
+    <div class="pf-c-empty-state__body">%v</div>
   </div>
 </div>
 </body>
@@ -92,32 +91,24 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		Logger: f.Logger,
 	}
 
+	localizer.LoadMessageFiles("cmd/login")
+
 	cmd := &cobra.Command{
-		Use:   "login",
-		Short: "Log in to RHOAS",
-		Long: heredoc.Doc(`
-			Log in securely to RHOAS through a web browser.
-
-			This command opens your web browser, where you can enter your credentials.
-		`),
-		Example: heredoc.Doc(`
-			# securely log in to RHOAS by using a web browser
-			$ rhoas login
-
-			# print the authentication URL instead of automatically opening the browser
-			$ rhoas login --print-sso-url
-		`),
+		Use:     localizer.MustLocalizeFromID("login.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("login.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("login.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("login.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogin(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "api-gateway", stagingURL, "URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development.")
-	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
-	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, "OpenID client identifier")
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, "The URL of the SSO Authentication server.")
-	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.")
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, "Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope.")
+	cmd.Flags().StringVar(&opts.url, "api-gateway", stagingURL, localizer.MustLocalizeFromID("login.flag.apiGateway"))
+	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, localizer.MustLocalizeFromID("login.flag.insecure"))
+	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, localizer.MustLocalizeFromID("login.flag.clientId"))
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, localizer.MustLocalizeFromID("login.flag.authUrl"))
+	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, localizer.MustLocalizeFromID("login.flag.printSsoUrl"))
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, localizer.MustLocalizeFromID("login.flag.scope"))
 
 	return cmd
 }
@@ -141,7 +132,12 @@ func runLogin(opts *Options) (err error) {
 		return err
 	}
 	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		return fmt.Errorf("scheme missing from URL %v. Please add either 'https' or 'https'", color.Info(unparsedGatewayURL))
+		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+			MessageID: "login.error.schemeMissingFromUrl",
+			TemplateData: map[string]interface{}{
+				"URL": gatewayURL.String(),
+			},
+		}))
 	}
 
 	tr := createTransport(opts.insecureSkipTLSVerify)
@@ -186,7 +182,12 @@ func runLogin(opts *Options) (err error) {
 	}
 	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
 	authCodeURL := oauthCfg.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
-	logger.Debugf("Created Authorization URL: %v", authCodeURL)
+	logger.Debug(localizer.MustLocalize(&localizer.Config{
+		MessageID: "login.log.debug.createdAuthorizationUrl",
+		TemplateData: map[string]interface{}{
+			"URL": authCodeURL,
+		},
+	}))
 
 	sm := http.NewServeMux()
 	server := http.Server{
@@ -199,7 +200,13 @@ func runLogin(opts *Options) (err error) {
 	})
 
 	sm.HandleFunc("/sso-redhat-callback", func(w http.ResponseWriter, r *http.Request) {
-		logger.Debug("Redirected to callback URL")
+		logger.Debug("Redirected to callback URL", server.Addr, r.URL.String())
+		logger.Debug(localizer.MustLocalize(&localizer.Config{
+			MessageID: "login.log.debug.redirectedToCallbackUrl",
+			TemplateData: map[string]interface{}{
+				"URL": fmt.Sprintf("%v%v", server.Addr, r.URL.String()),
+			},
+		}))
 		if r.URL.Query().Get("state") != state {
 			http.Error(w, "state did not match", http.StatusBadRequest)
 			return
@@ -246,7 +253,7 @@ func runLogin(opts *Options) (err error) {
 		cfg.Insecure = opts.insecureSkipTLSVerify
 		cfg.ClientID = opts.clientID
 		cfg.AuthURL = opts.authURL
-		cfg.URL = gatewayURL.String()
+		cfg.APIGateway = gatewayURL.String()
 		cfg.Scopes = opts.scopes
 		cfg.AccessToken = oauth2Token.AccessToken
 		cfg.RefreshToken = oauth2Token.RefreshToken
@@ -265,28 +272,53 @@ func runLogin(opts *Options) (err error) {
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, RedirectURLTemplate, rawUsername)
 
-		logger.Infof("You are now logged in as %v", color.Info(rawUsername))
+		pageTitle := localizer.MustLocalizeFromID("login.redirectPage.title")
+		pageBody := localizer.MustLocalize(&localizer.Config{
+			MessageID: "login.redirectPage.body",
+			TemplateData: map[string]interface{}{
+				"Username": rawUsername,
+			},
+		})
+		redirectPage := fmt.Sprintf(RedirectURLTemplate, pageTitle, pageTitle, pageBody)
+
+		fmt.Fprint(w, redirectPage)
+
+		logger.Info("")
+		logger.Info(localizer.MustLocalize(&localizer.Config{
+			MessageID: "login.log.info.loginSuccess",
+			TemplateData: map[string]interface{}{
+				"Username": rawUsername,
+			},
+		}))
 		logger.Info("")
 
 		cancel()
 	})
 
 	if opts.printURL {
-		logger.Info("Open the following URL in your browser to login:\n\n")
+		logger.Info(localizer.MustLocalizeFromID("login.log.info.openSSOUrl"))
+		logger.Info("")
 		fmt.Println(authCodeURL)
+		logger.Info("")
 	} else {
-		openBrowserExec, _ := browser.GetOpenBrowserCommand(authCodeURL)
-		err = openBrowserExec.Run()
+		openBrowserExec, err := browser.GetOpenBrowserCommand(authCodeURL)
 		if err != nil {
+			return err
+		}
+		if err = openBrowserExec.Run(); err != nil {
 			return err
 		}
 	}
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
-			logger.Errorf("Unable to start server: %v\n", err)
+		if err := server.ListenAndServe(); err == nil {
+			logger.Error(localizer.MustLocalize(&localizer.Config{
+				MessageID: "login.log.error.unableToStartServer",
+				TemplateData: map[string]interface{}{
+					"Error": err,
+				},
+			}))
 		}
 	}()
 	<-parentCtx.Done()

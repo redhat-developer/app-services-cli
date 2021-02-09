@@ -65,8 +65,8 @@ func New(cliVersion string) *Factory {
 		if cfg.Scopes != nil {
 			builder.WithScopes(cfg.Scopes...)
 		}
-		if cfg.URL != "" {
-			builder.WithURL(cfg.URL)
+		if cfg.APIGateway != "" {
+			builder.WithURL(cfg.APIGateway)
 		}
 		if cfg.AuthURL == "" {
 			cfg.AuthURL = connection.DefaultAuthURL

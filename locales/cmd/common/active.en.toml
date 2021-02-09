@@ -1,0 +1,7 @@
+[kafka.common.error.couldNotUseKafka]
+description = 'Error message when a Kafka instance could not be set to the current instance'
+one = 'could not set the current Kafka instance: {{.ErrorMessage}}'
+
+[common.log.debug.startingInteractivePrompt]
+description = 'Debug message when starting an interactive prompt'
+one = 'Starting interactive prompt'
