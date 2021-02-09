@@ -53,8 +53,8 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 			Reset the credentials for a service account.
 
 			This command will generate a new password for a service account.
-			Once the credentials have been reset, any applications or tools that use the
-			credentials will need to be updated with the new password for it to work again.
+			After the credentials have been reset, any applications or tools that use the
+			credentials must be updated to use the new password.
 		`),
 		Example: heredoc.Doc(`
 			# start an interactive prompt to reset credentials
@@ -88,10 +88,10 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q", flagutil.CredentialsOutputFormats))
-	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account to delete")
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Force overwrite a credentials file if it already exists")
-	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q.", flagutil.CredentialsOutputFormats))
+	cmd.Flags().StringVar(&opts.id, "id", "", "The unique ID of the service account for which you want to reset.")
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Forcibly overwrite a credentials file if it already exists.")
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Set a custom file location to save the credentials.")
 
 	return cmd
 }

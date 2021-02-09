@@ -31,7 +31,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "logout",
 		Short: "Log out from RHOAS",
-		Long:  "Log out from RHOAS. To interact with your services you will need to log in again.",
+		Long:  "Log out from RHOAS. To manage your services again, log in using 'rhoas login'",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogout(opts)
 		},

@@ -27,6 +27,8 @@ type Options struct {
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
+
+	kubeconfig string
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
@@ -40,12 +42,11 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Use:   "status",
 		Short: "View status of the current Kubernetes or OpenShift cluster.",
 		Long: heredoc.Doc(`
-			View status of the current Kubernetes or OpenShift cluster using your kubeconfig file.
+			View information about the current Kubernetes or OpenShift cluster. 
+			You can use this information to connect your application service to the cluster.
 
-			The information shown is useful for connecting your service to the OpenShift cluster.
-
-			For this command to work you must be logged into a Kubernetes or OpenShift cluster. The command
-			uses the kubeconfig file to identify the cluster context.
+			Before using this command, you must be logged into a Kubernetes or OpenShift 
+			cluster. The command uses your kubeconfig file to identify the cluster context.
 		`),
 		Example: heredoc.Doc(`
 			# print status of the current cluster
@@ -55,6 +56,8 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 			return runStatus(opts)
 		},
 	}
+
+	cmd.Flags().StringVarP(&opts.kubeconfig, "kubeconfig", "", "", "Location of the kubeconfig file.")
 
 	return cmd
 }
@@ -70,7 +73,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, "")
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfig)
 	if err != nil {
 		return err
 	}

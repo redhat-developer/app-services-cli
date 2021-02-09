@@ -1,10 +1,10 @@
 == rhoas kafka topic
 
-Create, list and delete Kafka topics
+Create, list, and delete Kafka topics
 
 === Synopsis
 
-Create, list and delete topics for a Kafka instance.
+Create, list, and delete topics for a Kafka instance.
 
 === Examples
 
@@ -19,21 +19,16 @@ $ rhoas kafka topic list
 $ rhoas kafka topic delete --name "my-example-topic"
 ....
 
-=== Options
-
-....
-  -h, --help   help for topic
-....
-
 === Options inherited from parent commands
 
 ....
   -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
 ....
 
 === SEE ALSO
 
-* link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use and manage your
+* link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use, and manage your
 Kafka instances
 * link:rhoas_kafka_topic_create.adoc[rhoas kafka topic create] - Create a
 Kafka topic

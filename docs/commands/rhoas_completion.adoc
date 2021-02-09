@@ -41,16 +41,11 @@ $ rhoas completion fish > ~/.config/fish/completions/rhoas.fish
 rhoas completion [bash|zsh|fish|powershell]
 ....
 
-=== Options
-
-....
-  -h, --help   help for completion
-....
-
 === Options inherited from parent commands
 
 ....
   -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
 ....
 
 === SEE ALSO

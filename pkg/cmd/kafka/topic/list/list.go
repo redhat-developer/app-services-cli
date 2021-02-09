@@ -46,7 +46,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q", flagutil.AllowedListFormats))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q.", flagutil.AllowedListFormats))
 	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
 	return cmd
 }

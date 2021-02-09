@@ -37,13 +37,14 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Use:   "use",
 		Short: "Set the current Kafka instance",
 		Long: heredoc.Doc(`
-			Select a Kafka instance and set it in the config as the current Kafka instance.
+			Select a Kafka instance and set it as the current Kafka instance.
 
-			Once a Kafka instance is used, it is saved as the current instance.
+			When you set the Kafka instance to be used, it is set as the current instance for all 'rhoas kafka' commands.
+
 			When an ID is not specified in other Kafka commands, the current Kafka instance is used.
 		`),
 		Example: heredoc.Doc(`
-			# use the Kafka instance that has an ID of "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
+			# set a kafka instance to be the current instance
 			$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg`,
 		),
 		Args: cobra.ExactArgs(0),
@@ -52,7 +53,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance to use")
+	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance to use.")
 	_ = cmd.MarkFlagRequired("id")
 
 	return cmd

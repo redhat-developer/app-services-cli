@@ -19,9 +19,9 @@ const (
 func NewTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "topic",
-		Short: "Create, list and delete Kafka topics",
+		Short: "Create, list, and delete Kafka topics",
 		Long: heredoc.Doc(`
-			Create, list and delete topics for a Kafka instance.
+			Create, list, and delete topics for a Kafka instance.
 		`),
 		Example: heredoc.Doc(`
 			# create a topic in the current Kafka instance

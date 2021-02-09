@@ -13,18 +13,18 @@ rhoas kafka topic list [flags]
 === Options
 
 ....
-  -h, --help            help for list
       --insecure        Enables insecure communication with the server. This disables verification of TLS certificates and host names.
-  -o, --output string   Output format of the results. Choose from ["plain" "json" "yml" "yaml"] (default "plain")
+  -o, --output string   Output format of the results. Choose from ["plain" "json" "yml" "yaml"]. (default "plain")
 ....
 
 === Options inherited from parent commands
 
 ....
   -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
 ....
 
 === SEE ALSO
 
-* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list and delete
-Kafka topics
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list, and
+delete Kafka topics

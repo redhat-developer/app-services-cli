@@ -4,10 +4,10 @@ Log in to RHOAS
 
 === Synopsis
 
-Log in securely to RHOAS using your web browser.
+Log in securely to RHOAS through a web browser.
 
-Your web browser will open automatically where you can securely enter
-your credentials.
+This command opens your web browser, where you can enter your
+credentials.
 
 ....
 rhoas login [flags]
@@ -16,7 +16,7 @@ rhoas login [flags]
 === Examples
 
 ....
-# start an authentication request and open your browser to fill in your credentials
+# securely log in to RHOAS by using a web browser
 $ rhoas login
 
 # print the authentication URL instead of automatically opening the browser
@@ -26,19 +26,19 @@ $ rhoas login --print-sso-url
 === Options
 
 ....
-      --auth-url string     SSO Authentication server (default "https://sso.redhat.com/auth/realms/redhat-external")
-      --client-id string    OpenID client identifier. (default "rhoas-cli-prod")
-  -h, --help                help for login
-      --insecure            Enables insecure communication with the server. This disables verification of TLS certificates and host names.
-      --print-sso-url       Prints the login URL to the console so you can control which browser to open it in. Useful if you need to log in with a user that is different to the one logged in on your default web browser.
-      --scope stringArray   OpenID scope. If this option is used it will override the default scopes. Can be repeated multiple times to specify multiple scopes. (default [openid])
-      --url string          URL of the API gateway. The value can be the complete URL or an alias. The valid aliases are 'production', 'staging', 'integration', 'development' and their shorthands. (default "https://api.stage.openshift.com")
+      --api-gateway string   URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development. (default "https://api.stage.openshift.com")
+      --auth-url string      The URL of the SSO Authentication server. (default "https://sso.redhat.com/auth/realms/redhat-external")
+      --client-id string     OpenID client identifier (default "rhoas-cli-prod")
+      --insecure             Enables insecure communication with the server. This disables verification of TLS certificates and host names.
+      --print-sso-url        Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.
+      --scope stringArray    Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope. (default [openid])
 ....
 
 === Options inherited from parent commands
 
 ....
   -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
 ....
 
 === SEE ALSO

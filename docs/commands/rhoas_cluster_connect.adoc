@@ -1,28 +1,26 @@
 == rhoas cluster connect
 
-Connect your services to a Kubernetes or OpenShift
+Connect your services to Kubernetes or OpenShift
 
 === Synopsis
 
-Connect your services to your Kubernetes or OpenShift cluster. The
-kubeconfig file is used to connect with the cluster and identify the
-context.
+Connect your application services to your Kubernetes or OpenShift
+cluster. The kubeconfig file is used to connect to the cluster and
+identify the context.
 
 A service account is created and mounted as a secret into your cluster.
-This gives you the ability to mount credentials directly to your
-application.
+This enables you to mount credentials directly to your application.
 
-Command work in two modes:
+This command works in two modes:
 
-[arabic]
-. Using RHOAS operator installed on cluster. You can or utilize
-service-binding-operator to automatically bind your instance. For more
-details please visit: https://github.com/bf2fc6cc711aee1a0c2a/operator
-. Secret only (–secret-only) creates only secret (no extra operator
-installation is required)
+....
+* If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
 
-Using –interactive-select will ignore current command context make
-interactive prompt for selecting service instance you want to use.
+* Create the secret only. This mode does not require the Operator to be installed.
+....
+
+You can interactively select the service instance by using the
+``–interactive-select'' flag.
 
 ....
 rhoas cluster connect [flags]
@@ -38,17 +36,17 @@ $ rhoas cluster connect
 === Options
 
 ....
-  -h, --help                 help for connect
-      --interactive-select   Allows to select services before performing binding
-      --kubeconfig string    Location of the .kube/config file
-      --secret-name string   Name of the secret that will be used to hold Kafka credentials (default "kafka-credentials")
-      --secret-only          Apply only secret and without CR. Can be used without installing RHOAS operator on cluster
+      --interactive-select   Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster.
+      --kubeconfig string    Location of the kubeconfig file.
+      --secret-name string   Name of the secret that holds the Kafka credentials. (default "kafka-credentials")
+      --secret-only          Creates the secret, but doesn't bind the instance. Use this flag if the RHOAS Operator is not installed in the Kubernetes or OpenShift cluster.
 ....
 
 === Options inherited from parent commands
 
 ....
   -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
 ....
 
 === SEE ALSO

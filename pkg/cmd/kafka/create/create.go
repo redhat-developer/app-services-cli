@@ -73,11 +73,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Use:   "create",
 		Short: "Create a Kafka instance",
 		Long: heredoc.Doc(`
-			Create a Kafka instance.
+			Create a Kafka instance on a particular cloud provider and region.
 
-			The created instance is set in the config as the current Kafka instance.
-
-		  The created instance can be viewed from the command-line and the web UI.
+		  After creating the Kafka instance you can view it by running "rhoas kafka describe".
 		`),
 		Example: heredoc.Doc(`
 			# start an interactive prompt to fill out the configuration values for the instance
@@ -124,9 +122,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", "Cloud provider ID")
-	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", "Cloud provider Region ID")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\"")
+	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", "Cloud provider ID.")
+	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", "Cloud provider Region ID.")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format in which to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\".")
 
 	return cmd
 }

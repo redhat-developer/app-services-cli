@@ -47,7 +47,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Use:   "list",
 		Short: "List service accounts",
 		Long: heredoc.Doc(`
-			List all service accounts as a table, JSON, or YAML
+		List all service accounts.
+
+		This command will provide a high level view of all service accounts.
+
+		The service accounts are displayed by default in a table, but can also be
+		displayed as JSON or YAML.
 		`),
 		Example: heredoc.Doc(`
 			# list all service accounts
@@ -62,16 +67,15 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
+			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.AllowedListFormats...) {
 				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
-				opts.output = "plain"
 			}
 
 			return runList(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q", flagutil.AllowedListFormats))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Output format of the results. Choose from %q.", flagutil.AllowedListFormats))
 
 	return cmd
 }
@@ -103,7 +107,7 @@ func runList(opts *Options) (err error) {
 	}
 
 	var tableList []table
-	if opts.output == "plain" {
+	if opts.output == "" {
 		jsonResponse, _ := json.Marshal(serviceaccounts)
 
 		if err = json.Unmarshal(jsonResponse, &tableList); err != nil {
