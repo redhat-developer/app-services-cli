@@ -24,6 +24,11 @@ go run ./cmd/rhoas kafka create "test" --provider=aws --region=us-east-1
 
 ### Development commands
 
+#### `make githooks`
+
+Run `make githooks` to install important Githooks
+This will symlink the files from `./githooks` to `.git/hooks`
+
 #### `make lint`
 
 Runs a linter on the Go source code. Configuration can be found in `.golangci.yaml`.
@@ -40,6 +45,10 @@ Builds an executable binary `rhoas` of the CLI in the project root. Executable o
 #### `make format`
 
 Formats source code.
+
+#### `make pkger`
+
+Packages static assets into the binary
 
 ### `make generate`
 

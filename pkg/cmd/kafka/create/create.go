@@ -1,11 +1,12 @@
 package create
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/locales/common/flaglocale"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/common/flaglocale"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 

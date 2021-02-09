@@ -1,3 +1,0 @@
-[InvalidFlagValueError]
-description = "Invalid flag value"
-one = 'ungültiger wert "{{.Value}}" für --{{.Flag}}'

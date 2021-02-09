@@ -32,6 +32,7 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
+	@echo "mkae pkger								bundle static assets"
 
 	@echo "$(fake)"
 .PHONY: help
@@ -47,11 +48,11 @@ generate:
 
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
-binary: pkger
+binary:
 	go build $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" -o ${binary} ./cmd/rhoas
 .PHONY: binary
 
-install: pkger
+install:
 	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
 
@@ -135,6 +136,10 @@ format:
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 
+# Symlink common git hookd into .git directory
+githooks:
+	ln -fs $$(pwd)/githooks/pre-commit .git/hooks
+.PHONY: githooks
 
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas
