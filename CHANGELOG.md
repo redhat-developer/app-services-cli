@@ -1,4 +1,20 @@
-#  (2021-02-04)
+#  (2021-02-10)
+
+
+
+# [0.16.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.15.1...0.16.0) (2021-02-10)
+
+
+### Bug Fixes
+
+* add ability to force delete ([#329](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/329)) ([fb53f6b](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/fb53f6b6825e7358136b114a3be5b1021add7bb2))
+* refresh token if no access token is provided ([#326](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/326)) ([c931bd2](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/c931bd2bfc4fa6ab5bea44cf4c06d8ef11c44edc))
+* **kafka delete:** confirm name only to delete ([#321](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/321)) ([a51a7db](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/a51a7db426d6c3c0e28b0b89a833c11e928cae67))
+
+
+### Features
+
+* **kafka create:** use a positional argument for Kafka create ([#330](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/330)) ([3a0e30f](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/3a0e30f96e56784cc2745c5a12c554ad982e5972))
 
 
 
