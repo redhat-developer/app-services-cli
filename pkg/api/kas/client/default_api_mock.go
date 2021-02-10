@@ -19,6 +19,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //
 //         // make and configure a mocked DefaultApi
 //         mockedDefaultApi := &DefaultApiMock{
+//             CreateConnectorFunc: func(ctx context.Context, id string) ApiCreateConnectorRequest {
+// 	               panic("mock out the CreateConnector method")
+//             },
+//             CreateConnectorExecuteFunc: func(r ApiCreateConnectorRequest) (Connector, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the CreateConnectorExecute method")
+//             },
 //             CreateKafkaFunc: func(ctx context.Context) ApiCreateKafkaRequest {
 // 	               panic("mock out the CreateKafka method")
 //             },
@@ -30,6 +36,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //             },
 //             CreateServiceAccountExecuteFunc: func(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the CreateServiceAccountExecute method")
+//             },
+//             DeleteConnectorFunc: func(ctx context.Context, id string) ApiDeleteConnectorRequest {
+// 	               panic("mock out the DeleteConnector method")
+//             },
+//             DeleteConnectorExecuteFunc: func(r ApiDeleteConnectorRequest) (Error, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the DeleteConnectorExecute method")
 //             },
 //             DeleteKafkaByIdFunc: func(ctx context.Context, id string) ApiDeleteKafkaByIdRequest {
 // 	               panic("mock out the DeleteKafkaById method")
@@ -43,6 +55,18 @@ var _ DefaultApi = &DefaultApiMock{}
 //             DeleteServiceAccountExecuteFunc: func(r ApiDeleteServiceAccountRequest) (Error, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the DeleteServiceAccountExecute method")
 //             },
+//             GetConnectorFunc: func(ctx context.Context, id string, cid string) ApiGetConnectorRequest {
+// 	               panic("mock out the GetConnector method")
+//             },
+//             GetConnectorExecuteFunc: func(r ApiGetConnectorRequest) (Connector, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the GetConnectorExecute method")
+//             },
+//             GetConnectorTypeByIDFunc: func(ctx context.Context, id string) ApiGetConnectorTypeByIDRequest {
+// 	               panic("mock out the GetConnectorTypeByID method")
+//             },
+//             GetConnectorTypeByIDExecuteFunc: func(r ApiGetConnectorTypeByIDRequest) (ConnectorType, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the GetConnectorTypeByIDExecute method")
+//             },
 //             GetKafkaByIdFunc: func(ctx context.Context, id string) ApiGetKafkaByIdRequest {
 // 	               panic("mock out the GetKafkaById method")
 //             },
@@ -55,6 +79,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //             GetMetricsByKafkaIdExecuteFunc: func(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the GetMetricsByKafkaIdExecute method")
 //             },
+//             GetServiceAccountByIdFunc: func(ctx context.Context, id string) ApiGetServiceAccountByIdRequest {
+// 	               panic("mock out the GetServiceAccountById method")
+//             },
+//             GetServiceAccountByIdExecuteFunc: func(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the GetServiceAccountByIdExecute method")
+//             },
 //             ListCloudProviderRegionsFunc: func(ctx context.Context, id string) ApiListCloudProviderRegionsRequest {
 // 	               panic("mock out the ListCloudProviderRegions method")
 //             },
@@ -66,6 +96,18 @@ var _ DefaultApi = &DefaultApiMock{}
 //             },
 //             ListCloudProvidersExecuteFunc: func(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the ListCloudProvidersExecute method")
+//             },
+//             ListConnectorTypesFunc: func(ctx context.Context) ApiListConnectorTypesRequest {
+// 	               panic("mock out the ListConnectorTypes method")
+//             },
+//             ListConnectorTypesExecuteFunc: func(r ApiListConnectorTypesRequest) (ConnectorTypeList, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the ListConnectorTypesExecute method")
+//             },
+//             ListConnectorsFunc: func(ctx context.Context, id string) ApiListConnectorsRequest {
+// 	               panic("mock out the ListConnectors method")
+//             },
+//             ListConnectorsExecuteFunc: func(r ApiListConnectorsRequest) (ConnectorList, *http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the ListConnectorsExecute method")
 //             },
 //             ListKafkasFunc: func(ctx context.Context) ApiListKafkasRequest {
 // 	               panic("mock out the ListKafkas method")
@@ -92,6 +134,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //
 //     }
 type DefaultApiMock struct {
+	// CreateConnectorFunc mocks the CreateConnector method.
+	CreateConnectorFunc func(ctx context.Context, id string) ApiCreateConnectorRequest
+
+	// CreateConnectorExecuteFunc mocks the CreateConnectorExecute method.
+	CreateConnectorExecuteFunc func(r ApiCreateConnectorRequest) (Connector, *http.Response, GenericOpenAPIError)
+
 	// CreateKafkaFunc mocks the CreateKafka method.
 	CreateKafkaFunc func(ctx context.Context) ApiCreateKafkaRequest
 
@@ -103,6 +151,12 @@ type DefaultApiMock struct {
 
 	// CreateServiceAccountExecuteFunc mocks the CreateServiceAccountExecute method.
 	CreateServiceAccountExecuteFunc func(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, GenericOpenAPIError)
+
+	// DeleteConnectorFunc mocks the DeleteConnector method.
+	DeleteConnectorFunc func(ctx context.Context, id string) ApiDeleteConnectorRequest
+
+	// DeleteConnectorExecuteFunc mocks the DeleteConnectorExecute method.
+	DeleteConnectorExecuteFunc func(r ApiDeleteConnectorRequest) (Error, *http.Response, GenericOpenAPIError)
 
 	// DeleteKafkaByIdFunc mocks the DeleteKafkaById method.
 	DeleteKafkaByIdFunc func(ctx context.Context, id string) ApiDeleteKafkaByIdRequest
@@ -116,6 +170,18 @@ type DefaultApiMock struct {
 	// DeleteServiceAccountExecuteFunc mocks the DeleteServiceAccountExecute method.
 	DeleteServiceAccountExecuteFunc func(r ApiDeleteServiceAccountRequest) (Error, *http.Response, GenericOpenAPIError)
 
+	// GetConnectorFunc mocks the GetConnector method.
+	GetConnectorFunc func(ctx context.Context, id string, cid string) ApiGetConnectorRequest
+
+	// GetConnectorExecuteFunc mocks the GetConnectorExecute method.
+	GetConnectorExecuteFunc func(r ApiGetConnectorRequest) (Connector, *http.Response, GenericOpenAPIError)
+
+	// GetConnectorTypeByIDFunc mocks the GetConnectorTypeByID method.
+	GetConnectorTypeByIDFunc func(ctx context.Context, id string) ApiGetConnectorTypeByIDRequest
+
+	// GetConnectorTypeByIDExecuteFunc mocks the GetConnectorTypeByIDExecute method.
+	GetConnectorTypeByIDExecuteFunc func(r ApiGetConnectorTypeByIDRequest) (ConnectorType, *http.Response, GenericOpenAPIError)
+
 	// GetKafkaByIdFunc mocks the GetKafkaById method.
 	GetKafkaByIdFunc func(ctx context.Context, id string) ApiGetKafkaByIdRequest
 
@@ -128,6 +194,12 @@ type DefaultApiMock struct {
 	// GetMetricsByKafkaIdExecuteFunc mocks the GetMetricsByKafkaIdExecute method.
 	GetMetricsByKafkaIdExecuteFunc func(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *http.Response, GenericOpenAPIError)
 
+	// GetServiceAccountByIdFunc mocks the GetServiceAccountById method.
+	GetServiceAccountByIdFunc func(ctx context.Context, id string) ApiGetServiceAccountByIdRequest
+
+	// GetServiceAccountByIdExecuteFunc mocks the GetServiceAccountByIdExecute method.
+	GetServiceAccountByIdExecuteFunc func(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, GenericOpenAPIError)
+
 	// ListCloudProviderRegionsFunc mocks the ListCloudProviderRegions method.
 	ListCloudProviderRegionsFunc func(ctx context.Context, id string) ApiListCloudProviderRegionsRequest
 
@@ -139,6 +211,18 @@ type DefaultApiMock struct {
 
 	// ListCloudProvidersExecuteFunc mocks the ListCloudProvidersExecute method.
 	ListCloudProvidersExecuteFunc func(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, GenericOpenAPIError)
+
+	// ListConnectorTypesFunc mocks the ListConnectorTypes method.
+	ListConnectorTypesFunc func(ctx context.Context) ApiListConnectorTypesRequest
+
+	// ListConnectorTypesExecuteFunc mocks the ListConnectorTypesExecute method.
+	ListConnectorTypesExecuteFunc func(r ApiListConnectorTypesRequest) (ConnectorTypeList, *http.Response, GenericOpenAPIError)
+
+	// ListConnectorsFunc mocks the ListConnectors method.
+	ListConnectorsFunc func(ctx context.Context, id string) ApiListConnectorsRequest
+
+	// ListConnectorsExecuteFunc mocks the ListConnectorsExecute method.
+	ListConnectorsExecuteFunc func(r ApiListConnectorsRequest) (ConnectorList, *http.Response, GenericOpenAPIError)
 
 	// ListKafkasFunc mocks the ListKafkas method.
 	ListKafkasFunc func(ctx context.Context) ApiListKafkasRequest
@@ -160,6 +244,18 @@ type DefaultApiMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// CreateConnector holds details about calls to the CreateConnector method.
+		CreateConnector []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+		}
+		// CreateConnectorExecute holds details about calls to the CreateConnectorExecute method.
+		CreateConnectorExecute []struct {
+			// R is the r argument value.
+			R ApiCreateConnectorRequest
+		}
 		// CreateKafka holds details about calls to the CreateKafka method.
 		CreateKafka []struct {
 			// Ctx is the ctx argument value.
@@ -179,6 +275,18 @@ type DefaultApiMock struct {
 		CreateServiceAccountExecute []struct {
 			// R is the r argument value.
 			R ApiCreateServiceAccountRequest
+		}
+		// DeleteConnector holds details about calls to the DeleteConnector method.
+		DeleteConnector []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+		}
+		// DeleteConnectorExecute holds details about calls to the DeleteConnectorExecute method.
+		DeleteConnectorExecute []struct {
+			// R is the r argument value.
+			R ApiDeleteConnectorRequest
 		}
 		// DeleteKafkaById holds details about calls to the DeleteKafkaById method.
 		DeleteKafkaById []struct {
@@ -204,6 +312,32 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiDeleteServiceAccountRequest
 		}
+		// GetConnector holds details about calls to the GetConnector method.
+		GetConnector []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+			// Cid is the cid argument value.
+			Cid string
+		}
+		// GetConnectorExecute holds details about calls to the GetConnectorExecute method.
+		GetConnectorExecute []struct {
+			// R is the r argument value.
+			R ApiGetConnectorRequest
+		}
+		// GetConnectorTypeByID holds details about calls to the GetConnectorTypeByID method.
+		GetConnectorTypeByID []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+		}
+		// GetConnectorTypeByIDExecute holds details about calls to the GetConnectorTypeByIDExecute method.
+		GetConnectorTypeByIDExecute []struct {
+			// R is the r argument value.
+			R ApiGetConnectorTypeByIDRequest
+		}
 		// GetKafkaById holds details about calls to the GetKafkaById method.
 		GetKafkaById []struct {
 			// Ctx is the ctx argument value.
@@ -228,6 +362,18 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiGetMetricsByKafkaIdRequest
 		}
+		// GetServiceAccountById holds details about calls to the GetServiceAccountById method.
+		GetServiceAccountById []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+		}
+		// GetServiceAccountByIdExecute holds details about calls to the GetServiceAccountByIdExecute method.
+		GetServiceAccountByIdExecute []struct {
+			// R is the r argument value.
+			R ApiGetServiceAccountByIdRequest
+		}
 		// ListCloudProviderRegions holds details about calls to the ListCloudProviderRegions method.
 		ListCloudProviderRegions []struct {
 			// Ctx is the ctx argument value.
@@ -249,6 +395,28 @@ type DefaultApiMock struct {
 		ListCloudProvidersExecute []struct {
 			// R is the r argument value.
 			R ApiListCloudProvidersRequest
+		}
+		// ListConnectorTypes holds details about calls to the ListConnectorTypes method.
+		ListConnectorTypes []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// ListConnectorTypesExecute holds details about calls to the ListConnectorTypesExecute method.
+		ListConnectorTypesExecute []struct {
+			// R is the r argument value.
+			R ApiListConnectorTypesRequest
+		}
+		// ListConnectors holds details about calls to the ListConnectors method.
+		ListConnectors []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID string
+		}
+		// ListConnectorsExecute holds details about calls to the ListConnectorsExecute method.
+		ListConnectorsExecute []struct {
+			// R is the r argument value.
+			R ApiListConnectorsRequest
 		}
 		// ListKafkas holds details about calls to the ListKafkas method.
 		ListKafkas []struct {
@@ -283,28 +451,108 @@ type DefaultApiMock struct {
 			R ApiResetServiceAccountCredsRequest
 		}
 	}
+	lockCreateConnector                 sync.RWMutex
+	lockCreateConnectorExecute          sync.RWMutex
 	lockCreateKafka                     sync.RWMutex
 	lockCreateKafkaExecute              sync.RWMutex
 	lockCreateServiceAccount            sync.RWMutex
 	lockCreateServiceAccountExecute     sync.RWMutex
+	lockDeleteConnector                 sync.RWMutex
+	lockDeleteConnectorExecute          sync.RWMutex
 	lockDeleteKafkaById                 sync.RWMutex
 	lockDeleteKafkaByIdExecute          sync.RWMutex
 	lockDeleteServiceAccount            sync.RWMutex
 	lockDeleteServiceAccountExecute     sync.RWMutex
+	lockGetConnector                    sync.RWMutex
+	lockGetConnectorExecute             sync.RWMutex
+	lockGetConnectorTypeByID            sync.RWMutex
+	lockGetConnectorTypeByIDExecute     sync.RWMutex
 	lockGetKafkaById                    sync.RWMutex
 	lockGetKafkaByIdExecute             sync.RWMutex
 	lockGetMetricsByKafkaId             sync.RWMutex
 	lockGetMetricsByKafkaIdExecute      sync.RWMutex
+	lockGetServiceAccountById           sync.RWMutex
+	lockGetServiceAccountByIdExecute    sync.RWMutex
 	lockListCloudProviderRegions        sync.RWMutex
 	lockListCloudProviderRegionsExecute sync.RWMutex
 	lockListCloudProviders              sync.RWMutex
 	lockListCloudProvidersExecute       sync.RWMutex
+	lockListConnectorTypes              sync.RWMutex
+	lockListConnectorTypesExecute       sync.RWMutex
+	lockListConnectors                  sync.RWMutex
+	lockListConnectorsExecute           sync.RWMutex
 	lockListKafkas                      sync.RWMutex
 	lockListKafkasExecute               sync.RWMutex
 	lockListServiceAccounts             sync.RWMutex
 	lockListServiceAccountsExecute      sync.RWMutex
 	lockResetServiceAccountCreds        sync.RWMutex
 	lockResetServiceAccountCredsExecute sync.RWMutex
+}
+
+// CreateConnector calls CreateConnectorFunc.
+func (mock *DefaultApiMock) CreateConnector(ctx context.Context, id string) ApiCreateConnectorRequest {
+	if mock.CreateConnectorFunc == nil {
+		panic("DefaultApiMock.CreateConnectorFunc: method is nil but DefaultApi.CreateConnector was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+	}{
+		Ctx: ctx,
+		ID:  id,
+	}
+	mock.lockCreateConnector.Lock()
+	mock.calls.CreateConnector = append(mock.calls.CreateConnector, callInfo)
+	mock.lockCreateConnector.Unlock()
+	return mock.CreateConnectorFunc(ctx, id)
+}
+
+// CreateConnectorCalls gets all the calls that were made to CreateConnector.
+// Check the length with:
+//     len(mockedDefaultApi.CreateConnectorCalls())
+func (mock *DefaultApiMock) CreateConnectorCalls() []struct {
+	Ctx context.Context
+	ID  string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+	}
+	mock.lockCreateConnector.RLock()
+	calls = mock.calls.CreateConnector
+	mock.lockCreateConnector.RUnlock()
+	return calls
+}
+
+// CreateConnectorExecute calls CreateConnectorExecuteFunc.
+func (mock *DefaultApiMock) CreateConnectorExecute(r ApiCreateConnectorRequest) (Connector, *http.Response, GenericOpenAPIError) {
+	if mock.CreateConnectorExecuteFunc == nil {
+		panic("DefaultApiMock.CreateConnectorExecuteFunc: method is nil but DefaultApi.CreateConnectorExecute was just called")
+	}
+	callInfo := struct {
+		R ApiCreateConnectorRequest
+	}{
+		R: r,
+	}
+	mock.lockCreateConnectorExecute.Lock()
+	mock.calls.CreateConnectorExecute = append(mock.calls.CreateConnectorExecute, callInfo)
+	mock.lockCreateConnectorExecute.Unlock()
+	return mock.CreateConnectorExecuteFunc(r)
+}
+
+// CreateConnectorExecuteCalls gets all the calls that were made to CreateConnectorExecute.
+// Check the length with:
+//     len(mockedDefaultApi.CreateConnectorExecuteCalls())
+func (mock *DefaultApiMock) CreateConnectorExecuteCalls() []struct {
+	R ApiCreateConnectorRequest
+} {
+	var calls []struct {
+		R ApiCreateConnectorRequest
+	}
+	mock.lockCreateConnectorExecute.RLock()
+	calls = mock.calls.CreateConnectorExecute
+	mock.lockCreateConnectorExecute.RUnlock()
+	return calls
 }
 
 // CreateKafka calls CreateKafkaFunc.
@@ -428,6 +676,72 @@ func (mock *DefaultApiMock) CreateServiceAccountExecuteCalls() []struct {
 	mock.lockCreateServiceAccountExecute.RLock()
 	calls = mock.calls.CreateServiceAccountExecute
 	mock.lockCreateServiceAccountExecute.RUnlock()
+	return calls
+}
+
+// DeleteConnector calls DeleteConnectorFunc.
+func (mock *DefaultApiMock) DeleteConnector(ctx context.Context, id string) ApiDeleteConnectorRequest {
+	if mock.DeleteConnectorFunc == nil {
+		panic("DefaultApiMock.DeleteConnectorFunc: method is nil but DefaultApi.DeleteConnector was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+	}{
+		Ctx: ctx,
+		ID:  id,
+	}
+	mock.lockDeleteConnector.Lock()
+	mock.calls.DeleteConnector = append(mock.calls.DeleteConnector, callInfo)
+	mock.lockDeleteConnector.Unlock()
+	return mock.DeleteConnectorFunc(ctx, id)
+}
+
+// DeleteConnectorCalls gets all the calls that were made to DeleteConnector.
+// Check the length with:
+//     len(mockedDefaultApi.DeleteConnectorCalls())
+func (mock *DefaultApiMock) DeleteConnectorCalls() []struct {
+	Ctx context.Context
+	ID  string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+	}
+	mock.lockDeleteConnector.RLock()
+	calls = mock.calls.DeleteConnector
+	mock.lockDeleteConnector.RUnlock()
+	return calls
+}
+
+// DeleteConnectorExecute calls DeleteConnectorExecuteFunc.
+func (mock *DefaultApiMock) DeleteConnectorExecute(r ApiDeleteConnectorRequest) (Error, *http.Response, GenericOpenAPIError) {
+	if mock.DeleteConnectorExecuteFunc == nil {
+		panic("DefaultApiMock.DeleteConnectorExecuteFunc: method is nil but DefaultApi.DeleteConnectorExecute was just called")
+	}
+	callInfo := struct {
+		R ApiDeleteConnectorRequest
+	}{
+		R: r,
+	}
+	mock.lockDeleteConnectorExecute.Lock()
+	mock.calls.DeleteConnectorExecute = append(mock.calls.DeleteConnectorExecute, callInfo)
+	mock.lockDeleteConnectorExecute.Unlock()
+	return mock.DeleteConnectorExecuteFunc(r)
+}
+
+// DeleteConnectorExecuteCalls gets all the calls that were made to DeleteConnectorExecute.
+// Check the length with:
+//     len(mockedDefaultApi.DeleteConnectorExecuteCalls())
+func (mock *DefaultApiMock) DeleteConnectorExecuteCalls() []struct {
+	R ApiDeleteConnectorRequest
+} {
+	var calls []struct {
+		R ApiDeleteConnectorRequest
+	}
+	mock.lockDeleteConnectorExecute.RLock()
+	calls = mock.calls.DeleteConnectorExecute
+	mock.lockDeleteConnectorExecute.RUnlock()
 	return calls
 }
 
@@ -563,6 +877,142 @@ func (mock *DefaultApiMock) DeleteServiceAccountExecuteCalls() []struct {
 	return calls
 }
 
+// GetConnector calls GetConnectorFunc.
+func (mock *DefaultApiMock) GetConnector(ctx context.Context, id string, cid string) ApiGetConnectorRequest {
+	if mock.GetConnectorFunc == nil {
+		panic("DefaultApiMock.GetConnectorFunc: method is nil but DefaultApi.GetConnector was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+		Cid string
+	}{
+		Ctx: ctx,
+		ID:  id,
+		Cid: cid,
+	}
+	mock.lockGetConnector.Lock()
+	mock.calls.GetConnector = append(mock.calls.GetConnector, callInfo)
+	mock.lockGetConnector.Unlock()
+	return mock.GetConnectorFunc(ctx, id, cid)
+}
+
+// GetConnectorCalls gets all the calls that were made to GetConnector.
+// Check the length with:
+//     len(mockedDefaultApi.GetConnectorCalls())
+func (mock *DefaultApiMock) GetConnectorCalls() []struct {
+	Ctx context.Context
+	ID  string
+	Cid string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+		Cid string
+	}
+	mock.lockGetConnector.RLock()
+	calls = mock.calls.GetConnector
+	mock.lockGetConnector.RUnlock()
+	return calls
+}
+
+// GetConnectorExecute calls GetConnectorExecuteFunc.
+func (mock *DefaultApiMock) GetConnectorExecute(r ApiGetConnectorRequest) (Connector, *http.Response, GenericOpenAPIError) {
+	if mock.GetConnectorExecuteFunc == nil {
+		panic("DefaultApiMock.GetConnectorExecuteFunc: method is nil but DefaultApi.GetConnectorExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetConnectorRequest
+	}{
+		R: r,
+	}
+	mock.lockGetConnectorExecute.Lock()
+	mock.calls.GetConnectorExecute = append(mock.calls.GetConnectorExecute, callInfo)
+	mock.lockGetConnectorExecute.Unlock()
+	return mock.GetConnectorExecuteFunc(r)
+}
+
+// GetConnectorExecuteCalls gets all the calls that were made to GetConnectorExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetConnectorExecuteCalls())
+func (mock *DefaultApiMock) GetConnectorExecuteCalls() []struct {
+	R ApiGetConnectorRequest
+} {
+	var calls []struct {
+		R ApiGetConnectorRequest
+	}
+	mock.lockGetConnectorExecute.RLock()
+	calls = mock.calls.GetConnectorExecute
+	mock.lockGetConnectorExecute.RUnlock()
+	return calls
+}
+
+// GetConnectorTypeByID calls GetConnectorTypeByIDFunc.
+func (mock *DefaultApiMock) GetConnectorTypeByID(ctx context.Context, id string) ApiGetConnectorTypeByIDRequest {
+	if mock.GetConnectorTypeByIDFunc == nil {
+		panic("DefaultApiMock.GetConnectorTypeByIDFunc: method is nil but DefaultApi.GetConnectorTypeByID was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+	}{
+		Ctx: ctx,
+		ID:  id,
+	}
+	mock.lockGetConnectorTypeByID.Lock()
+	mock.calls.GetConnectorTypeByID = append(mock.calls.GetConnectorTypeByID, callInfo)
+	mock.lockGetConnectorTypeByID.Unlock()
+	return mock.GetConnectorTypeByIDFunc(ctx, id)
+}
+
+// GetConnectorTypeByIDCalls gets all the calls that were made to GetConnectorTypeByID.
+// Check the length with:
+//     len(mockedDefaultApi.GetConnectorTypeByIDCalls())
+func (mock *DefaultApiMock) GetConnectorTypeByIDCalls() []struct {
+	Ctx context.Context
+	ID  string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+	}
+	mock.lockGetConnectorTypeByID.RLock()
+	calls = mock.calls.GetConnectorTypeByID
+	mock.lockGetConnectorTypeByID.RUnlock()
+	return calls
+}
+
+// GetConnectorTypeByIDExecute calls GetConnectorTypeByIDExecuteFunc.
+func (mock *DefaultApiMock) GetConnectorTypeByIDExecute(r ApiGetConnectorTypeByIDRequest) (ConnectorType, *http.Response, GenericOpenAPIError) {
+	if mock.GetConnectorTypeByIDExecuteFunc == nil {
+		panic("DefaultApiMock.GetConnectorTypeByIDExecuteFunc: method is nil but DefaultApi.GetConnectorTypeByIDExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetConnectorTypeByIDRequest
+	}{
+		R: r,
+	}
+	mock.lockGetConnectorTypeByIDExecute.Lock()
+	mock.calls.GetConnectorTypeByIDExecute = append(mock.calls.GetConnectorTypeByIDExecute, callInfo)
+	mock.lockGetConnectorTypeByIDExecute.Unlock()
+	return mock.GetConnectorTypeByIDExecuteFunc(r)
+}
+
+// GetConnectorTypeByIDExecuteCalls gets all the calls that were made to GetConnectorTypeByIDExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetConnectorTypeByIDExecuteCalls())
+func (mock *DefaultApiMock) GetConnectorTypeByIDExecuteCalls() []struct {
+	R ApiGetConnectorTypeByIDRequest
+} {
+	var calls []struct {
+		R ApiGetConnectorTypeByIDRequest
+	}
+	mock.lockGetConnectorTypeByIDExecute.RLock()
+	calls = mock.calls.GetConnectorTypeByIDExecute
+	mock.lockGetConnectorTypeByIDExecute.RUnlock()
+	return calls
+}
+
 // GetKafkaById calls GetKafkaByIdFunc.
 func (mock *DefaultApiMock) GetKafkaById(ctx context.Context, id string) ApiGetKafkaByIdRequest {
 	if mock.GetKafkaByIdFunc == nil {
@@ -695,6 +1145,72 @@ func (mock *DefaultApiMock) GetMetricsByKafkaIdExecuteCalls() []struct {
 	return calls
 }
 
+// GetServiceAccountById calls GetServiceAccountByIdFunc.
+func (mock *DefaultApiMock) GetServiceAccountById(ctx context.Context, id string) ApiGetServiceAccountByIdRequest {
+	if mock.GetServiceAccountByIdFunc == nil {
+		panic("DefaultApiMock.GetServiceAccountByIdFunc: method is nil but DefaultApi.GetServiceAccountById was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+	}{
+		Ctx: ctx,
+		ID:  id,
+	}
+	mock.lockGetServiceAccountById.Lock()
+	mock.calls.GetServiceAccountById = append(mock.calls.GetServiceAccountById, callInfo)
+	mock.lockGetServiceAccountById.Unlock()
+	return mock.GetServiceAccountByIdFunc(ctx, id)
+}
+
+// GetServiceAccountByIdCalls gets all the calls that were made to GetServiceAccountById.
+// Check the length with:
+//     len(mockedDefaultApi.GetServiceAccountByIdCalls())
+func (mock *DefaultApiMock) GetServiceAccountByIdCalls() []struct {
+	Ctx context.Context
+	ID  string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+	}
+	mock.lockGetServiceAccountById.RLock()
+	calls = mock.calls.GetServiceAccountById
+	mock.lockGetServiceAccountById.RUnlock()
+	return calls
+}
+
+// GetServiceAccountByIdExecute calls GetServiceAccountByIdExecuteFunc.
+func (mock *DefaultApiMock) GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+	if mock.GetServiceAccountByIdExecuteFunc == nil {
+		panic("DefaultApiMock.GetServiceAccountByIdExecuteFunc: method is nil but DefaultApi.GetServiceAccountByIdExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetServiceAccountByIdRequest
+	}{
+		R: r,
+	}
+	mock.lockGetServiceAccountByIdExecute.Lock()
+	mock.calls.GetServiceAccountByIdExecute = append(mock.calls.GetServiceAccountByIdExecute, callInfo)
+	mock.lockGetServiceAccountByIdExecute.Unlock()
+	return mock.GetServiceAccountByIdExecuteFunc(r)
+}
+
+// GetServiceAccountByIdExecuteCalls gets all the calls that were made to GetServiceAccountByIdExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetServiceAccountByIdExecuteCalls())
+func (mock *DefaultApiMock) GetServiceAccountByIdExecuteCalls() []struct {
+	R ApiGetServiceAccountByIdRequest
+} {
+	var calls []struct {
+		R ApiGetServiceAccountByIdRequest
+	}
+	mock.lockGetServiceAccountByIdExecute.RLock()
+	calls = mock.calls.GetServiceAccountByIdExecute
+	mock.lockGetServiceAccountByIdExecute.RUnlock()
+	return calls
+}
+
 // ListCloudProviderRegions calls ListCloudProviderRegionsFunc.
 func (mock *DefaultApiMock) ListCloudProviderRegions(ctx context.Context, id string) ApiListCloudProviderRegionsRequest {
 	if mock.ListCloudProviderRegionsFunc == nil {
@@ -820,6 +1336,134 @@ func (mock *DefaultApiMock) ListCloudProvidersExecuteCalls() []struct {
 	mock.lockListCloudProvidersExecute.RLock()
 	calls = mock.calls.ListCloudProvidersExecute
 	mock.lockListCloudProvidersExecute.RUnlock()
+	return calls
+}
+
+// ListConnectorTypes calls ListConnectorTypesFunc.
+func (mock *DefaultApiMock) ListConnectorTypes(ctx context.Context) ApiListConnectorTypesRequest {
+	if mock.ListConnectorTypesFunc == nil {
+		panic("DefaultApiMock.ListConnectorTypesFunc: method is nil but DefaultApi.ListConnectorTypes was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockListConnectorTypes.Lock()
+	mock.calls.ListConnectorTypes = append(mock.calls.ListConnectorTypes, callInfo)
+	mock.lockListConnectorTypes.Unlock()
+	return mock.ListConnectorTypesFunc(ctx)
+}
+
+// ListConnectorTypesCalls gets all the calls that were made to ListConnectorTypes.
+// Check the length with:
+//     len(mockedDefaultApi.ListConnectorTypesCalls())
+func (mock *DefaultApiMock) ListConnectorTypesCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockListConnectorTypes.RLock()
+	calls = mock.calls.ListConnectorTypes
+	mock.lockListConnectorTypes.RUnlock()
+	return calls
+}
+
+// ListConnectorTypesExecute calls ListConnectorTypesExecuteFunc.
+func (mock *DefaultApiMock) ListConnectorTypesExecute(r ApiListConnectorTypesRequest) (ConnectorTypeList, *http.Response, GenericOpenAPIError) {
+	if mock.ListConnectorTypesExecuteFunc == nil {
+		panic("DefaultApiMock.ListConnectorTypesExecuteFunc: method is nil but DefaultApi.ListConnectorTypesExecute was just called")
+	}
+	callInfo := struct {
+		R ApiListConnectorTypesRequest
+	}{
+		R: r,
+	}
+	mock.lockListConnectorTypesExecute.Lock()
+	mock.calls.ListConnectorTypesExecute = append(mock.calls.ListConnectorTypesExecute, callInfo)
+	mock.lockListConnectorTypesExecute.Unlock()
+	return mock.ListConnectorTypesExecuteFunc(r)
+}
+
+// ListConnectorTypesExecuteCalls gets all the calls that were made to ListConnectorTypesExecute.
+// Check the length with:
+//     len(mockedDefaultApi.ListConnectorTypesExecuteCalls())
+func (mock *DefaultApiMock) ListConnectorTypesExecuteCalls() []struct {
+	R ApiListConnectorTypesRequest
+} {
+	var calls []struct {
+		R ApiListConnectorTypesRequest
+	}
+	mock.lockListConnectorTypesExecute.RLock()
+	calls = mock.calls.ListConnectorTypesExecute
+	mock.lockListConnectorTypesExecute.RUnlock()
+	return calls
+}
+
+// ListConnectors calls ListConnectorsFunc.
+func (mock *DefaultApiMock) ListConnectors(ctx context.Context, id string) ApiListConnectorsRequest {
+	if mock.ListConnectorsFunc == nil {
+		panic("DefaultApiMock.ListConnectorsFunc: method is nil but DefaultApi.ListConnectors was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		ID  string
+	}{
+		Ctx: ctx,
+		ID:  id,
+	}
+	mock.lockListConnectors.Lock()
+	mock.calls.ListConnectors = append(mock.calls.ListConnectors, callInfo)
+	mock.lockListConnectors.Unlock()
+	return mock.ListConnectorsFunc(ctx, id)
+}
+
+// ListConnectorsCalls gets all the calls that were made to ListConnectors.
+// Check the length with:
+//     len(mockedDefaultApi.ListConnectorsCalls())
+func (mock *DefaultApiMock) ListConnectorsCalls() []struct {
+	Ctx context.Context
+	ID  string
+} {
+	var calls []struct {
+		Ctx context.Context
+		ID  string
+	}
+	mock.lockListConnectors.RLock()
+	calls = mock.calls.ListConnectors
+	mock.lockListConnectors.RUnlock()
+	return calls
+}
+
+// ListConnectorsExecute calls ListConnectorsExecuteFunc.
+func (mock *DefaultApiMock) ListConnectorsExecute(r ApiListConnectorsRequest) (ConnectorList, *http.Response, GenericOpenAPIError) {
+	if mock.ListConnectorsExecuteFunc == nil {
+		panic("DefaultApiMock.ListConnectorsExecuteFunc: method is nil but DefaultApi.ListConnectorsExecute was just called")
+	}
+	callInfo := struct {
+		R ApiListConnectorsRequest
+	}{
+		R: r,
+	}
+	mock.lockListConnectorsExecute.Lock()
+	mock.calls.ListConnectorsExecute = append(mock.calls.ListConnectorsExecute, callInfo)
+	mock.lockListConnectorsExecute.Unlock()
+	return mock.ListConnectorsExecuteFunc(r)
+}
+
+// ListConnectorsExecuteCalls gets all the calls that were made to ListConnectorsExecute.
+// Check the length with:
+//     len(mockedDefaultApi.ListConnectorsExecuteCalls())
+func (mock *DefaultApiMock) ListConnectorsExecuteCalls() []struct {
+	R ApiListConnectorsRequest
+} {
+	var calls []struct {
+		R ApiListConnectorsRequest
+	}
+	mock.lockListConnectorsExecute.RLock()
+	calls = mock.calls.ListConnectorsExecute
+	mock.lockListConnectorsExecute.RUnlock()
 	return calls
 }
 

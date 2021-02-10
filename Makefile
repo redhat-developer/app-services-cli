@@ -99,7 +99,7 @@ openapi/strimzi-admin/generate:
 .PHONY: openapi/strimzi-admin/generate
 
 openapi/kas/pull:
-	wget -O ./openapi/kafka-service.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/kafka-service.yaml
+	wget -O ./openapi/kafka-service.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/managed-services-api/-/raw/master/openapi/managed-services-api.yaml
 .PHONY: openapi/kas/pull
 
 # validate the openapi schema

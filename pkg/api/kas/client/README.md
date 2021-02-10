@@ -78,14 +78,21 @@ All URIs are relative to *https://api.openshift.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**CreateConnector**](docs/DefaultApi.md#createconnector) | **Post** /api/managed-services-api/v1/kafkas/{id}/connector-deployments | Create a new connector
 *DefaultApi* | [**CreateKafka**](docs/DefaultApi.md#createkafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
 *DefaultApi* | [**CreateServiceAccount**](docs/DefaultApi.md#createserviceaccount) | **Post** /api/managed-services-api/v1/serviceaccounts | Create a service account
+*DefaultApi* | [**DeleteConnector**](docs/DefaultApi.md#deleteconnector) | **Delete** /api/managed-services-api/v1/kafkas/{id}/connector-deployments/{cid} | Delete a connector
 *DefaultApi* | [**DeleteKafkaById**](docs/DefaultApi.md#deletekafkabyid) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
 *DefaultApi* | [**DeleteServiceAccount**](docs/DefaultApi.md#deleteserviceaccount) | **Delete** /api/managed-services-api/v1/serviceaccounts/{id} | Delete service account
+*DefaultApi* | [**GetConnector**](docs/DefaultApi.md#getconnector) | **Get** /api/managed-services-api/v1/kafkas/{id}/connector-deployments/{cid} | Get a connector deployment
+*DefaultApi* | [**GetConnectorTypeByID**](docs/DefaultApi.md#getconnectortypebyid) | **Get** /api/managed-services-api/v1/connector-types/{id} | Get a connector type by name and version
 *DefaultApi* | [**GetKafkaById**](docs/DefaultApi.md#getkafkabyid) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
 *DefaultApi* | [**GetMetricsByKafkaId**](docs/DefaultApi.md#getmetricsbykafkaid) | **Get** /api/managed-services-api/v1/kafkas/{id}/metrics | Get metrics by kafka id.
+*DefaultApi* | [**GetServiceAccountById**](docs/DefaultApi.md#getserviceaccountbyid) | **Get** /api/managed-services-api/v1/serviceaccounts/{id} | get service account by id
 *DefaultApi* | [**ListCloudProviderRegions**](docs/DefaultApi.md#listcloudproviderregions) | **Get** /api/managed-services-api/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
 *DefaultApi* | [**ListCloudProviders**](docs/DefaultApi.md#listcloudproviders) | **Get** /api/managed-services-api/v1/cloud_providers | Retrieves the list of supported cloud providers.
+*DefaultApi* | [**ListConnectorTypes**](docs/DefaultApi.md#listconnectortypes) | **Get** /api/managed-services-api/v1/connector-types | Returns a list of connector types
+*DefaultApi* | [**ListConnectors**](docs/DefaultApi.md#listconnectors) | **Get** /api/managed-services-api/v1/kafkas/{id}/connector-deployments | Returns a list of connector types
 *DefaultApi* | [**ListKafkas**](docs/DefaultApi.md#listkafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
 *DefaultApi* | [**ListServiceAccounts**](docs/DefaultApi.md#listserviceaccounts) | **Get** /api/managed-services-api/v1/serviceaccounts | List service accounts
 *DefaultApi* | [**ResetServiceAccountCreds**](docs/DefaultApi.md#resetserviceaccountcreds) | **Post** /api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials | reset credentials for the service account
@@ -99,6 +106,22 @@ Class | Method | HTTP request | Description
  - [CloudRegion](docs/CloudRegion.md)
  - [CloudRegionList](docs/CloudRegionList.md)
  - [CloudRegionListAllOf](docs/CloudRegionListAllOf.md)
+ - [Connector](docs/Connector.md)
+ - [ConnectorAllOf](docs/ConnectorAllOf.md)
+ - [ConnectorAllOfDeploymentLocation](docs/ConnectorAllOfDeploymentLocation.md)
+ - [ConnectorAllOfMetadata](docs/ConnectorAllOfMetadata.md)
+ - [ConnectorList](docs/ConnectorList.md)
+ - [ConnectorListAllOf](docs/ConnectorListAllOf.md)
+ - [ConnectorType](docs/ConnectorType.md)
+ - [ConnectorTypeAllOf](docs/ConnectorTypeAllOf.md)
+ - [ConnectorTypeList](docs/ConnectorTypeList.md)
+ - [ConnectorTypeListAllOf](docs/ConnectorTypeListAllOf.md)
+ - [DataPlaneClusterUpdateStatusRequest](docs/DataPlaneClusterUpdateStatusRequest.md)
+ - [DataPlaneClusterUpdateStatusRequestConditions](docs/DataPlaneClusterUpdateStatusRequestConditions.md)
+ - [DataPlaneClusterUpdateStatusRequestNodeInfo](docs/DataPlaneClusterUpdateStatusRequestNodeInfo.md)
+ - [DataPlaneClusterUpdateStatusRequestResizeInfo](docs/DataPlaneClusterUpdateStatusRequestResizeInfo.md)
+ - [DataPlaneClusterUpdateStatusRequestResizeInfoDelta](docs/DataPlaneClusterUpdateStatusRequestResizeInfoDelta.md)
+ - [DataPlaneClusterUpdateStatusRequestTotal](docs/DataPlaneClusterUpdateStatusRequestTotal.md)
  - [Error](docs/Error.md)
  - [ErrorAllOf](docs/ErrorAllOf.md)
  - [ErrorList](docs/ErrorList.md)
