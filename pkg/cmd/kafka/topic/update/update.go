@@ -166,7 +166,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	fs := cmd.Flags()
-	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.AllowedOutputFormats)
+	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.ValidOutputFormats)
 	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", "The number of partitions in the topic")
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", "The period of time in milliseconds the broker will retain a partition log before deleting it")
 	cmd.Flags().StringVar(&opts.replicaCountStr, "replicas", "", "The replication factor for the topic")

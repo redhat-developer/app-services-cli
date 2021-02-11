@@ -67,7 +67,7 @@ paths:
           description: Unable to connect to the Kafka cluster.
       summary: List of topics
     post:
-      description: Creates a new topic in Kafka.
+      description: Creates a new topic for Kafka.
       operationId: createTopic
       requestBody:
         content:
@@ -76,13 +76,14 @@ paths:
               NewTopicInput:
                 value:
                   name: Pets
-                  numPartitions: 2
-                  replicationFactor: 4
-                  config:
-                  - key: min.insync.replicas
-                    value: "1"
-                  - key: max.message.bytes
-                    value: "1050000"
+                  settings:
+                    numPartitions: 3
+                    replicationFactor: 4
+                    config:
+                    - key: min.insync.replicas
+                      value: "1"
+                    - key: max.message.bytes
+                      value: "1050000"
             schema:
               $ref: '#/components/schemas/NewTopicInput'
         description: Topic to create.
@@ -194,6 +195,13 @@ paths:
         "503":
           description: Unable to connect to the Kafka cluster.
       summary: Updates the topic with the specified name.
+  /metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          description: Metrics
+      summary: Admin server metrics
 components:
   schemas:
     Topic:

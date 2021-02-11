@@ -100,7 +100,7 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	fs := cmd.Flags()
-	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.AllowedOutputFormats)
+	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.ValidOutputFormats)
 
 	return cmd
 }

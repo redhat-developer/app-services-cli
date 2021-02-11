@@ -82,6 +82,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**DeleteTopic**](docs/DefaultApi.md#deletetopic) | **Delete** /topics/{topicName} | Deletes a  topic
 *DefaultApi* | [**GetTopic**](docs/DefaultApi.md#gettopic) | **Get** /topics/{topicName} | Retrieves the topic with the specified name.
 *DefaultApi* | [**GetTopicsList**](docs/DefaultApi.md#gettopicslist) | **Get** /topics | List of topics
+*DefaultApi* | [**Metrics**](docs/DefaultApi.md#metrics) | **Get** /metrics | Admin server metrics
 *DefaultApi* | [**UpdateTopic**](docs/DefaultApi.md#updatetopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 

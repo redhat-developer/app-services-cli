@@ -56,9 +56,7 @@ paths:
           description: Unable to connect to the Kafka cluster.
       operationId: getTopicsList
       summary: List of topics
-      description: >-
-        Returns a list of all of the available topics, or the list of topics that meet the users URL
-        Query Parameters.
+      description: "Returns a list of all of the available topics, or the list of topics that meet the users URL Query Parameters."
     post:
       requestBody:
         description: Topic to create.
@@ -70,13 +68,14 @@ paths:
               NewTopicInput:
                 value:
                   name: Pets
-                  numPartitions: 2
-                  replicationFactor: 4
-                  config:
-                    - key: min.insync.replicas
-                      value: "1"
-                    - key: max.message.bytes
-                      value: "1050000"
+                  settings:
+                    numPartitions: 3
+                    replicationFactor: 4
+                    config:
+                      - key: min.insync.replicas
+                        value: "1"
+                      - key: max.message.bytes
+                        value: "1050000"
         required: true
       responses:
         "201":
@@ -97,7 +96,7 @@ paths:
           description: Unable to connect to the Kafka cluster.
       operationId: createTopic
       summary: Creates a new topic
-      description: Creates a new topic in Kafka.
+      description: Creates a new topic for Kafka.
   "/topics/{topicName}":
     get:
       parameters:
@@ -188,6 +187,13 @@ paths:
           type: string
         in: path
         required: true
+  /metrics:
+    get:
+      responses:
+        "200":
+          description: Metrics
+      operationId: metrics
+      summary: Admin server metrics
 components:
   schemas:
     Topic:
@@ -370,9 +376,7 @@ components:
           type: string
         settings:
           $ref: "#/components/schemas/TopicSettings"
-          description: >-
-            The settings that are applicable to this topic.  This includes partitions,
-            configuration information, and number of replicas.
+          description: "The settings that are applicable to this topic.  This includes partitions, configuration information, and number of replicas."
       example:
         name: Pets
         settings:

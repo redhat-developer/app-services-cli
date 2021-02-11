@@ -28,7 +28,7 @@ type DefaultApi interface {
 
 	/*
 	 * CreateTopic Creates a new topic
-	 * Creates a new topic in Kafka.
+	 * Creates a new topic for Kafka.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 * @return ApiCreateTopicRequest
 	 */
@@ -84,6 +84,18 @@ type DefaultApi interface {
 	GetTopicsListExecute(r ApiGetTopicsListRequest) (TopicsList, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
+	 * Metrics Admin server metrics
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiMetricsRequest
+	 */
+	Metrics(ctx _context.Context) ApiMetricsRequest
+
+	/*
+	 * MetricsExecute executes the request
+	 */
+	MetricsExecute(r ApiMetricsRequest) (*_nethttp.Response, GenericOpenAPIError)
+
+	/*
 	 * UpdateTopic Updates the topic with the specified name.
 	 * updates the topic with the new data.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -119,7 +131,7 @@ func (r ApiCreateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 
 /*
  * CreateTopic Creates a new topic
- * Creates a new topic in Kafka.
+ * Creates a new topic for Kafka.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @return ApiCreateTopicRequest
  */
@@ -558,6 +570,100 @@ func (a *DefaultApiService) GetTopicsListExecute(r ApiGetTopicsListRequest) (Top
 	}
 
 	return localVarReturnValue, localVarHTTPResponse, executionError
+}
+
+type ApiMetricsRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+}
+
+func (r ApiMetricsRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.MetricsExecute(r)
+}
+
+/*
+ * Metrics Admin server metrics
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiMetricsRequest
+ */
+func (a *DefaultApiService) Metrics(ctx _context.Context) ApiMetricsRequest {
+	return ApiMetricsRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *DefaultApiService) MetricsExecute(r ApiMetricsRequest) (*_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.Metrics")
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarPath := localBasePath + "/metrics"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, executionError
 }
 
 type ApiUpdateTopicRequest struct {

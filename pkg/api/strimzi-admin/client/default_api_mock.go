@@ -43,6 +43,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //             GetTopicsListExecuteFunc: func(r ApiGetTopicsListRequest) (TopicsList, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the GetTopicsListExecute method")
 //             },
+//             MetricsFunc: func(ctx context.Context) ApiMetricsRequest {
+// 	               panic("mock out the Metrics method")
+//             },
+//             MetricsExecuteFunc: func(r ApiMetricsRequest) (*http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the MetricsExecute method")
+//             },
 //             UpdateTopicFunc: func(ctx context.Context, topicName string) ApiUpdateTopicRequest {
 // 	               panic("mock out the UpdateTopic method")
 //             },
@@ -79,6 +85,12 @@ type DefaultApiMock struct {
 
 	// GetTopicsListExecuteFunc mocks the GetTopicsListExecute method.
 	GetTopicsListExecuteFunc func(r ApiGetTopicsListRequest) (TopicsList, *http.Response, GenericOpenAPIError)
+
+	// MetricsFunc mocks the Metrics method.
+	MetricsFunc func(ctx context.Context) ApiMetricsRequest
+
+	// MetricsExecuteFunc mocks the MetricsExecute method.
+	MetricsExecuteFunc func(r ApiMetricsRequest) (*http.Response, GenericOpenAPIError)
 
 	// UpdateTopicFunc mocks the UpdateTopic method.
 	UpdateTopicFunc func(ctx context.Context, topicName string) ApiUpdateTopicRequest
@@ -132,6 +144,16 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiGetTopicsListRequest
 		}
+		// Metrics holds details about calls to the Metrics method.
+		Metrics []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// MetricsExecute holds details about calls to the MetricsExecute method.
+		MetricsExecute []struct {
+			// R is the r argument value.
+			R ApiMetricsRequest
+		}
 		// UpdateTopic holds details about calls to the UpdateTopic method.
 		UpdateTopic []struct {
 			// Ctx is the ctx argument value.
@@ -153,6 +175,8 @@ type DefaultApiMock struct {
 	lockGetTopicExecute      sync.RWMutex
 	lockGetTopicsList        sync.RWMutex
 	lockGetTopicsListExecute sync.RWMutex
+	lockMetrics              sync.RWMutex
+	lockMetricsExecute       sync.RWMutex
 	lockUpdateTopic          sync.RWMutex
 	lockUpdateTopicExecute   sync.RWMutex
 }
@@ -410,6 +434,68 @@ func (mock *DefaultApiMock) GetTopicsListExecuteCalls() []struct {
 	mock.lockGetTopicsListExecute.RLock()
 	calls = mock.calls.GetTopicsListExecute
 	mock.lockGetTopicsListExecute.RUnlock()
+	return calls
+}
+
+// Metrics calls MetricsFunc.
+func (mock *DefaultApiMock) Metrics(ctx context.Context) ApiMetricsRequest {
+	if mock.MetricsFunc == nil {
+		panic("DefaultApiMock.MetricsFunc: method is nil but DefaultApi.Metrics was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockMetrics.Lock()
+	mock.calls.Metrics = append(mock.calls.Metrics, callInfo)
+	mock.lockMetrics.Unlock()
+	return mock.MetricsFunc(ctx)
+}
+
+// MetricsCalls gets all the calls that were made to Metrics.
+// Check the length with:
+//     len(mockedDefaultApi.MetricsCalls())
+func (mock *DefaultApiMock) MetricsCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockMetrics.RLock()
+	calls = mock.calls.Metrics
+	mock.lockMetrics.RUnlock()
+	return calls
+}
+
+// MetricsExecute calls MetricsExecuteFunc.
+func (mock *DefaultApiMock) MetricsExecute(r ApiMetricsRequest) (*http.Response, GenericOpenAPIError) {
+	if mock.MetricsExecuteFunc == nil {
+		panic("DefaultApiMock.MetricsExecuteFunc: method is nil but DefaultApi.MetricsExecute was just called")
+	}
+	callInfo := struct {
+		R ApiMetricsRequest
+	}{
+		R: r,
+	}
+	mock.lockMetricsExecute.Lock()
+	mock.calls.MetricsExecute = append(mock.calls.MetricsExecute, callInfo)
+	mock.lockMetricsExecute.Unlock()
+	return mock.MetricsExecuteFunc(r)
+}
+
+// MetricsExecuteCalls gets all the calls that were made to MetricsExecute.
+// Check the length with:
+//     len(mockedDefaultApi.MetricsExecuteCalls())
+func (mock *DefaultApiMock) MetricsExecuteCalls() []struct {
+	R ApiMetricsRequest
+} {
+	var calls []struct {
+		R ApiMetricsRequest
+	}
+	mock.lockMetricsExecute.RLock()
+	calls = mock.calls.MetricsExecute
+	mock.lockMetricsExecute.RUnlock()
 	return calls
 }
 
