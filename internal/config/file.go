@@ -2,16 +2,20 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/mitchellh/go-homedir"
 )
 
 // NewFile creates a new config type
 func NewFile() IConfig {
 	cfg := &File{}
+
+	localizer.LoadMessageFiles("config")
 
 	return cfg
 }
@@ -31,17 +35,17 @@ func (c *File) Load() (*Config, error) {
 		return nil, err
 	}
 	if err != nil {
-		return nil, Errorf("unable to check if config file exists: %w", err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.statError"), err)
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, Errorf("unable to read config file: %w", err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.readError"), err)
 	}
 	var cfg Config
 	err = json.Unmarshal(data, &cfg)
 	if err != nil {
-		return nil, Errorf("unable to parse config: %w", err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.parseError"), err)
 	}
 	return &cfg, nil
 }
@@ -54,11 +58,11 @@ func (c *File) Save(cfg *Config) error {
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
-		return Errorf("unable to marshal config: %w", err)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.save.error.marshalError"), err)
 	}
 	err = ioutil.WriteFile(file, data, 0600)
 	if err != nil {
-		return Errorf(err.Error())
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.save.error.writeError"), err)
 	}
 	return nil
 }

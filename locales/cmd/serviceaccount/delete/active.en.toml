@@ -1,0 +1,46 @@
+[serviceAccount.delete.cmd.use]
+description = "Use is the one-line usage message"
+one = "delete"
+
+[serviceAccount.delete.cmd.shortDescription]
+description = "Short description for command"
+one = "Delete a service account"
+
+[serviceAccount.delete.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Permanently delete a service account.
+
+Applications and tools which use the service account 
+credentials will stop working and should be updated.
+'''
+
+[serviceAccount.delete.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# delete a service account
+$ rhoas serviceaccount delete --id 173c1ad9-932d-4007-ae0f-4da74f4d2ccd
+'''
+
+[serviceAccount.delete.flag.id.description]
+description = 'Description for the --id flag'
+one = 'The unique ID of the service account to delete'
+
+[serviceAccount.delete.flag.force.description]
+description = 'Description for the --id flag'
+one = 'Forcibly delete this service account.'
+
+[serviceAccount.delete.input.confirmDelete.message]
+description = 'Message for input'
+one = 'Applications and tools which use this service account will stop working unless updated. Are you sure you want to delete the service account with ID "{{.ID}}"?'
+
+[serviceAccount.delete.log.debug.deleteNotConfirmed]
+description = 'Info message when user chose not to delete service account'
+one = 'Service account delete action was not confirmed. Exiting silently'
+
+[serviceAccount.delete.error.unableToDelete]
+description = 'Unable to delete error message'
+one = 'Unable to delete service account'
+
+[serviceAccount.delete.log.info.deleteSuccess]
+one = 'Service account deleted'

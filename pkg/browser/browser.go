@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 	"runtime"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
 func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {
@@ -14,8 +16,13 @@ func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {
 		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url), nil
 	case "darwin":
 		return exec.Command("open", url), nil
-	// TODO: Add more operating systems
 	default:
-		return nil, fmt.Errorf("Unsupported operating system: %s", runtime.GOOS)
+		localizer.LoadMessageFiles("browser")
+		return nil, fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+			MessageID: "browser.getOpenBrowserCommand.error.unsupportedOperatingSystem",
+			TemplateData: map[string]interface{}{
+				"OS": runtime.GOOS,
+			},
+		}))
 	}
 }

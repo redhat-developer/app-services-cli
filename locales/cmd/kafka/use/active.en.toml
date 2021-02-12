@@ -1,0 +1,36 @@
+[kafka.use.cmd.use]
+description = "Use is the one-line usage message"
+one = "use"
+
+[kafka.use.cmd.shortDescription]
+description = "Short description for command"
+one = "Set the current Kafka instance"
+
+[kafka.use.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Select a Kafka instance and set it as the current Kafka instance.
+
+When you set the Kafka instance to be used, it is set as the current instance for all "rhoas kafka" commands.
+
+When an ID is not specified in other Kafka commands, the current Kafka instance is used.
+'''
+
+[kafka.use.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# set a kafka instance to be the current instance
+$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
+'''
+
+[kafka.use.flag.id]
+description = 'Description for the --id flag'
+one = 'Unique ID of the Kafka instance you want to set as the current instance.'
+
+[kafka.use.error.saveError]
+description = 'Error message when current Kafka could not be saved in config'
+one = 'could not set "{{.Name}}" as the current Kafka instance'
+
+[kafka.use.log.info.useSuccess]
+description = 'Info message when current Kafka was set' 
+one = 'Kafka instance "{{.Name}}" has been set as the current instance.'

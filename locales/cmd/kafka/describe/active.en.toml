@@ -1,0 +1,36 @@
+[kafka.describe.cmd.use]
+description = "Use is the one-line usage message"
+one = "describe"
+
+[kafka.describe.cmd.shortDescription]
+description = "Short description for command"
+one = "View configuration details of a Kafka instance"
+
+[kafka.describe.cmd.longDescription]
+description = "Long description for command"
+one = '''
+View configuration fields and their values for a Kafka instance.
+
+Pass the "--id" flag to specify which instance you would like to view.
+
+If the "--id" flag is not passed then the selected Kafka instance will be used, if available.
+
+You can view the output as either as JSON or YAML.
+'''
+
+[kafka.describe.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# view the current Kafka instance instance
+$ rhoas kafka describe
+
+# view a specific instance by passing the --id flag
+$ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+
+# customise the output format
+$ rhoas kafka describe -o yaml
+'''
+
+[kafka.describe.flag.id]
+description = 'Description for the --id flag'
+one = 'Unique ID of the Kafka instance you want to view. If not set, the current Kafka instance will be used.'

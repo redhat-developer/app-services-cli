@@ -3,12 +3,17 @@ package describe
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"os"
 
-	"github.com/MakeNowJust/heredoc"
+	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
+
+	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -36,33 +41,18 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/describe")
+
 	cmd := &cobra.Command{
-		Use:   "describe",
-		Short: "View configuration details of a Kafka instance",
-		Long: heredoc.Doc(`
-			View configuration fields and their values for a Kafka instance.
-
-			Pass the "--id" flag to specify which instance you would like to view.
-
-			If the "--id" flag is not passed then the selected Kafka instance will be used, if available.
-
-			You can view the output as either as JSON or YAML.
-		`),
-		Example: heredoc.Doc(`
-			# view the current Kafka instance instance
-			$ rhoas kafka describe
-
-			# view a specific instance by passing the --id flag
-			$ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
-
-			# customise the output format
-			$ rhoas kafka describe -o yaml
-			`,
-		),
-		Args: cobra.ExactArgs(0),
+		Use:     localizer.MustLocalizeFromID("kafka.describe.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.describe.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.describe.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.describe.cmd.example"),
+		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.outputFormat != "json" && opts.outputFormat != "yaml" && opts.outputFormat != "yml" {
-				return fmt.Errorf("Invalid output format '%v'", opts.outputFormat)
+			validOutputFormats := flagutil.ValidOutputFormats
+			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			if opts.id != "" {
@@ -76,7 +66,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
+				return errors.New(localizer.MustLocalizeFromID(kafkamsg.NoKafkaSelectedError))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -85,8 +75,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", "Format to display the Kafka instance. Choose from: \"json\", \"yaml\", \"yml\".")
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to describe. If not set, the current Kafka instance will be used.")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalizeFromID("kafka.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.describe.flag.id"))
 
 	return cmd
 }
@@ -105,7 +95,7 @@ func runDescribe(opts *options) error {
 	}
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
+		return apiErr
 	}
 
 	pkgKafka.TransformKafkaRequest(&response)

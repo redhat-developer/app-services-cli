@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -28,10 +29,12 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
+	localizer.LoadMessageFiles("cmd/logout")
+
 	cmd := &cobra.Command{
-		Use:   "logout",
-		Short: "Log out from RHOAS",
-		Long:  "Log out from RHOAS. To manage your services again, log in using 'rhoas login'",
+		Use:   localizer.MustLocalizeFromID("logout.cmd.use"),
+		Short: localizer.MustLocalizeFromID("logout.cmd.shortDescription"),
+		Long:  localizer.MustLocalizeFromID("logout.cmd.longDescription"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogout(opts)
 		},
@@ -58,10 +61,10 @@ func runLogout(opts *Options) error {
 	err = connection.Logout(context.TODO())
 
 	if err != nil {
-		return fmt.Errorf("Unable to log out: %w", err)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("logout.error.unableToLogout"), err)
 	}
 
-	logger.Info("Successfully logged out")
+	logger.Info(localizer.MustLocalizeFromID("logout.log.info.logoutSuccess"))
 
 	cfg.AccessToken = ""
 	cfg.RefreshToken = ""

@@ -2,18 +2,19 @@ package delete
 
 import (
 	"context"
+	"errors"
 	"fmt"
+
+	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-
-	"github.com/MakeNowJust/heredoc"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/spf13/cobra"
@@ -36,23 +37,14 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/delete")
+
 	cmd := &cobra.Command{
-		Use:   "delete",
-		Short: "Delete a Kafka instance",
-		Long: heredoc.Doc(`
-			Permanently delete a Kafka instance, including all topics.
-
-			When this command is run, you will be asked to confirm the name of the instance you want to delete.
-			Otherwise you can pass "--force" to forcefully delete the instance.
-		`),
-		Example: heredoc.Doc(`
-			# delete the current Kafka instance
-			$ rhoas kafka delete
-
-			# delete a Kafka instance with a specific ID
-			$ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
-		`),
-		Args: cobra.ExactArgs(0),
+		Use:     localizer.MustLocalizeFromID("kafka.delete.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.delete.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.delete.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.delete.cmd.example"),
+		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := opts.Config.Load()
 			if err != nil {
@@ -65,7 +57,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
+				return errors.New(localizer.MustLocalizeFromID(kafkamsg.NoKafkaSelectedError))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -74,8 +66,8 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", "ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.")
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, "Skip confirmation to forcibly delete this Kafka instance.")
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.delete.flag.id"))
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("kafka.delete.flag.force"))
 
 	return cmd
 }
@@ -104,16 +96,16 @@ func runDelete(opts *options) error {
 	}
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to get Kafka instance: %w", apiErr)
+		return apiErr
 	}
 
 	kafkaName := response.GetName()
 
-	logger.Info("Deleting Kafka instance", color.Info(kafkaName), "\n")
+	logger.Info(localizer.MustLocalizeFromID("kafka.delete.log.info.deleting"), "\n")
 
 	if !opts.force {
-		var promptConfirmName = &survey.Input{
-			Message: "Confirm the name of the instance you want to delete:",
+		promptConfirmName := &survey.Input{
+			Message: localizer.MustLocalizeFromID("kafka.delete.input.confirmName.message"),
 		}
 
 		var confirmedKafkaName string
@@ -123,21 +115,26 @@ func runDelete(opts *options) error {
 		}
 
 		if confirmedKafkaName != kafkaName {
-			logger.Info("The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it correct and try again.")
+			logger.Info(localizer.MustLocalizeFromID("kafka.delete.log.info.incorrectNameConfirmation"))
 			return nil
 		}
 	}
 
-	logger.Debug("Deleting Kafka instance", kafkaName)
+	logger.Debug(localizer.MustLocalizeFromID("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
 	a := api.Kafka().DeleteKafkaById(context.Background(), opts.id)
 	a = a.Async(true)
 	_, _, apiErr = a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Unable to delete Kafka instance: %w", apiErr)
+		return apiErr
 	}
 
-	logger.Infof("Kafka instance %v has successfully been deleted", color.Info(kafkaName))
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.delete.log.info.deleteSuccess",
+		TemplateData: map[string]interface{}{
+			"Name": kafkaName,
+		},
+	}))
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

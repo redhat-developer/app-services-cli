@@ -3,34 +3,34 @@ package kafka
 import (
 	"errors"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"regexp"
 	"strings"
 
-	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 )
 
 var (
 	validNameRegexp = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
-	errInvalidName  = errors.New(heredoc.Doc(`
-	Invalid Kafka instance name. Valid names must satisfy the following conditions:
-
-	- must be between 1 and 32 characters
-	- must only consist of lower case, alphanumeric characters and '-'
-	- must start with an alphabetic character
-	- must end with an alphanumeric character
-	`))
 )
 
 // ValidateName validates the proposed name of a Kafka instance
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)
+
+	localizer.LoadMessageFiles("common", "kafka")
 	if !ok {
-		return fmt.Errorf("could not case %v to string", val)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": val,
+				"Type":  "string",
+			},
+		}))
 	}
 
 	if len(name) < 1 || len(name) > 32 {
-		return fmt.Errorf("Kafka instance name must be between 1 and 32 characters")
+		return fmt.Errorf(localizer.MustLocalizeFromID("kafka.validation.name.error.lengthError"))
 	}
 
 	matched := validNameRegexp.MatchString(name)
@@ -39,7 +39,7 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return errInvalidName
+	return errors.New(localizer.MustLocalizeFromID("kafka.validation.error.invalidName"))
 }
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances

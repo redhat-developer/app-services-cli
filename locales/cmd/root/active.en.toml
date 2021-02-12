@@ -1,0 +1,26 @@
+[root.cmd.use]
+one = 'rhoas <command> <subcommand> [flags]'
+
+[root.cmd.shortDescription]
+one = 'RHOAS CLI'
+
+[root.cmd.longDescription]
+one = 'Manage your application services directly from the command line.'
+
+[root.cmd.example]
+one = '''
+# authenticate securely through your web browser
+$ rhoas login
+
+# create a Kafka instance
+$ rhoas kafka create my-kafka-cluster
+
+# create a service account and save credentials to a JSON file
+$ rhoas serviceaccount create -o json
+
+# connect your Kubernetes/OpenShift cluster to a service
+$ rhoas cluster connect
+'''
+
+[root.cmd.flag.help.description]
+one = 'Show help for a command'

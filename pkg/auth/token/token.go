@@ -1,8 +1,11 @@
 package token
 
 import (
+	"errors"
+	"fmt"
 	"time"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -45,7 +48,8 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
 	if err != nil {
-		err = Errorf(err.Error())
+		localizer.LoadMessageFiles("auth/token")
+		err = fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("auth.token.parse.error.parseError"), err)
 		return
 	}
 	return token, nil
@@ -54,7 +58,13 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 func MapClaims(token *jwt.Token) (jwt.MapClaims, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		err := Errorf("expected map claims but got %T", claims)
+		localizer.LoadMessageFiles("auth/token")
+		err := errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "auth.token.mapClaims.error.claimsError",
+			TemplateData: map[string]interface{}{
+				"Claims": claims,
+			},
+		}))
 		return nil, err
 	}
 
@@ -76,9 +86,15 @@ func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	var exp float64
 	claim, ok := claims["exp"]
 	if ok {
+		localizer.LoadMessageFiles("auth/token")
 		exp, ok = claim.(float64)
 		if !ok {
-			err = Errorf("expected floating point 'exp' but got %T", claim)
+			err = errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "auth.token.getExpiry.error.expectedExpiryClaimError",
+				TemplateData: map[string]interface{}{
+					"Claim": claim,
+				},
+			}))
 			return
 		}
 	}

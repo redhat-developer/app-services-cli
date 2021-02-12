@@ -2,21 +2,20 @@ package create
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	flagmsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/common/flag"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/AlecAivazis/survey/v2"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/serviceaccount/credentials"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -29,7 +28,7 @@ type Options struct {
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 
-	output      string
+	fileFormat  string
 	overwrite   bool
 	name        string
 	description string
@@ -47,64 +46,55 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
+	localizer.LoadMessageFiles("cmd/common", "cmd/common/flags", "cmd/serviceaccount", "cmd/serviceaccount/create")
+
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Create a service account",
-		Long: heredoc.Doc(`
-			Create a service account with credentials that are saved to a file.
-			
-			Applications and tools use these service account credentials to authenticate 
-			and interact with your application services.
-			
-			You must specify an output format into which the credentials will be stored.
-				- env (default): Store credentials in an env file as environment variables
-				- json: Store credentials in a JSON file
-				- kube: Store credentials in YAML as a Kubernetes Secret (the Kubernetes Secret is not created for you)
-				- properties: Store credentials in a properties file, which is typically used in Java-related technologies.
-		`),
-		Example: heredoc.Doc(`
-			# create a service account through an interactive prompt
-			$ rhoas serviceaccount create
-
-			# create a service account and save the credentials in a Kubernetes secret file format
-			$ rhoas serviceaccount create --output kube
-
-			# create a service account and forcibly overwrite the credentials file if it exists already
-			$ rhoas serviceaccount create --overwrite
-
-			# create a service account and save credentials to a custom file location
-			$ rhoas serviceaccount create --file-location=./service-acct-credentials.json
-		`),
+		Use:     localizer.MustLocalizeFromID("serviceAccount.create.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("serviceAccount.create.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("serviceAccount.create.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("serviceAccount.create.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return fmt.Errorf("--name required when not running interactively")
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: flagmsg.RequiredNonInteractiveError,
+					TemplateData: map[string]interface{}{
+						"Flag": "name",
+					},
+				}))
 			} else if opts.name == "" && opts.description == "" {
 				opts.interactive = true
 			}
 
-			if !opts.interactive {
-				if opts.output == "" {
-					return fmt.Errorf("--output is a required flag")
-				}
+			if !opts.interactive && opts.fileFormat == "" {
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: flagmsg.RequiredFlagError,
+					TemplateData: map[string]interface{}{
+						"Flag": "file-format",
+					},
+				}))
 			}
 
-			if opts.output != "" {
-				// check that a valid --output flag value is used
-				validOutput := flagutil.IsValidInput(opts.output, flagutil.CredentialsOutputFormats...)
-				if !validOutput {
-					return fmt.Errorf("Invalid value for --output. Valid values: %q", flagutil.CredentialsOutputFormats)
-				}
-
+			// check that a valid --file-format flag value is used
+			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
+			if !validOutput && opts.fileFormat != "" {
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: flagmsg.InvalidValueError,
+					TemplateData: map[string]interface{}{
+						"Flag":  "file-format",
+						"Value": opts.fileFormat,
+					},
+				}))
 			}
+
 			return runCreate(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", fmt.Sprintf("Format of the credentials file: %q.", flagutil.CredentialsOutputFormats))
-	cmd.Flags().StringVar(&opts.name, "name", "", "Name of the service account.")
-	cmd.Flags().StringVar(&opts.description, "description", "", "Description for the service account.")
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, "Forcibly overwrite a credentials file if it already exists.")
-	cmd.Flags().StringVar(&opts.filename, "file-location", "", "Sets a custom file location to save the credentials.")
+	cmd.Flags().StringVar(&opts.name, "name", "", localizer.MustLocalizeFromID("serviceAccount.create.flag.name.description"))
+	cmd.Flags().StringVar(&opts.description, "description", "", localizer.MustLocalizeFromID("serviceAccount.create.flag.description.description"))
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, localizer.MustLocalizeFromID("serviceAccount.common.flag.overwrite.description"))
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.fileLocation.description"))
+	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.fileFormat.description"))
 
 	return cmd
 }
@@ -128,14 +118,19 @@ func runCreate(opts *Options) error {
 		}
 	} else {
 		// obtain the absolute path to where credentials will be saved
-		opts.filename = credentials.AbsolutePath(opts.output, opts.filename)
+		opts.filename = credentials.AbsolutePath(opts.fileFormat, opts.filename)
 	}
 
 	// If the credentials file already exists, and the --overwrite flag is not set then return an error
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(opts.filename)
 	if err == nil && !opts.overwrite {
-		return fmt.Errorf("file %v already exists. Use --overwrite to overwrite the file, or --file-location flag to choose a custom location", color.Info(opts.filename))
+		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+			MessageID: "serviceAccount.common.error.credentialsFileAlreadyExists",
+			TemplateData: map[string]interface{}{
+				"FilePath": opts.filename,
+			},
+		}))
 	}
 
 	// create the service account
@@ -147,28 +142,34 @@ func runCreate(opts *Options) error {
 	serviceacct, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("Could not create service account: %w", apiErr)
+		return fmt.Errorf("%v: %v", localizer.MustLocalizeFromID("serviceAccount.create.error.couldNotCreate"), apiErr)
 	}
 
-	logger.Infof("Service account %v created", color.Info(serviceacct.GetName()))
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "serviceAccount.create.log.info.createdSuccessfully",
+		TemplateData: map[string]interface{}{
+			"ID":   serviceacct.GetId(),
+			"Name": serviceacct.GetName(),
+		},
+	}))
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientID(),
 		ClientSecret: serviceacct.GetClientSecret(),
 	}
 
-	if logger.DebugEnabled() {
-		b, _ := json.Marshal(creds)
-		logger.Debug("Credentials created:", string(b))
-	}
-
 	// save the credentials to a file
-	err = credentials.Write(opts.output, opts.filename, creds)
+	err = credentials.Write(opts.fileFormat, opts.filename, creds)
 	if err != nil {
-		return fmt.Errorf("Could not save credentials to file: %w", err)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.couldNotSaveCredentialsFile"), apiErr)
 	}
 
-	logger.Info("Credentials saved to", opts.filename)
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "serviceAccount.common.log.info.credentialsSaved",
+		TemplateData: map[string]interface{}{
+			"FilePath": opts.filename,
+		},
+	}))
 
 	return nil
 }
@@ -184,38 +185,41 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug("Beginning interactive prompt")
+	logger.Debug(localizer.MustLocalizeFromID("cmd/common.log.debug.startingInteractivePrompt"))
 
-	promptName := &survey.Input{Message: "Name:", Help: "Give your service account an easily identifiable name"}
+	promptName := &survey.Input{
+		Message: localizer.MustLocalizeFromID("serviceAccount.create.input.name.message"),
+		Help:    localizer.MustLocalizeFromID("serviceAccount.create.input.name.help"),
+	}
 
 	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required))
 	if err != nil {
 		return err
 	}
 
-	// if the --output flag was not used, ask in the prompt
-	if opts.output == "" {
-		logger.Debug("--output flag is not set, prompting user to choose a value")
+	// if the --file-format flag was not used, ask in the prompt
+	if opts.fileFormat == "" {
+		logger.Debug(localizer.MustLocalizeFromID("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
 
-		outputPrompt := &survey.Select{
-			Message: "Credentials output format:",
-			Help:    "Output format to save the service account credentials",
+		fileFormatPrompt := &survey.Select{
+			Message: localizer.MustLocalizeFromID("serviceAccount.create.input.fileFormat.message"),
+			Help:    localizer.MustLocalizeFromID("serviceAccount.create.input.fileFormat.help"),
 			Options: flagutil.CredentialsOutputFormats,
 			Default: "env",
 		}
 
-		err = survey.AskOne(outputPrompt, &opts.output)
+		err = survey.AskOne(fileFormatPrompt, &opts.fileFormat)
 		if err != nil {
 			return err
 		}
 	}
 
-	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.output, opts.filename, opts.overwrite)
+	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.fileFormat, opts.filename, opts.overwrite)
 	if err != nil {
 		return err
 	}
 
-	promptDescription := &survey.Multiline{Message: "Description (optional):"}
+	promptDescription := &survey.Multiline{Message: localizer.MustLocalizeFromID("serviceAccount.create.input.description.message")}
 
 	err = survey.AskOne(promptDescription, &opts.description)
 	if err != nil {

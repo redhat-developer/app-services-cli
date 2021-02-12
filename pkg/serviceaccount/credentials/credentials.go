@@ -2,10 +2,12 @@ package credentials
 
 import (
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/AlecAivazis/survey/v2"
 
@@ -64,7 +66,7 @@ func AbsolutePath(outputFormat string, customLocation string) (filePath string) 
 			filePath = "credentials.properties"
 		case "json":
 			filePath = "credentials.json"
-		case "kube":
+		case "kubernetes-secret":
 			filePath = "credentials.yaml"
 		}
 	}
@@ -113,11 +115,13 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 
 	defaultPath := AbsolutePath(outputFormat, filePath)
 
+	localizer.LoadMessageFiles("cmd/serviceaccount")
+
 	for chooseFileLocation {
 		// choose location
 		fileNamePrompt := &survey.Input{
-			Message: "Credentials file location:",
-			Help:    "Enter the path to the file where the service account credentials will be saved to",
+			Message: localizer.MustLocalizeFromID("serviceAccount.common.input.credentialsFileLocation.message"),
+			Help:    localizer.MustLocalizeFromID("serviceAccount.common.input.credentialsFileLocation.help"),
 			Default: defaultPath,
 		}
 		if filePath == "" {
@@ -144,7 +148,12 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 		}
 
 		overwriteFilePrompt := &survey.Confirm{
-			Message: fmt.Sprintf("file %v already exists. Do you want to overwrite it?", color.Info(filePath)),
+			Message: localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.common.input.confirmOverwrite.message",
+				TemplateData: map[string]interface{}{
+					"FilePath": color.CodeSnippet(filePath),
+				},
+			}),
 		}
 
 		err = survey.AskOne(overwriteFilePrompt, &overwrite)
@@ -159,7 +168,7 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 		filePath = ""
 
 		diffLocationPrompt := &survey.Confirm{
-			Message: "Would you like to specify a different file location?",
+			Message: localizer.MustLocalizeFromID("serviceAccount.common.input.specifyDifferentLocation.message"),
 		}
 		err = survey.AskOne(diffLocationPrompt, &chooseFileLocation)
 		if err != nil {
@@ -169,7 +178,7 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 	}
 
 	if filePath == "" {
-		return "", overwrite, fmt.Errorf("You must specify a file to save the service account credentials")
+		return "", overwrite, fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.mustSpecifyFile"))
 	}
 
 	return "", overwrite, nil

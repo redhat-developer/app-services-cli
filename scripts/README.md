@@ -4,7 +4,7 @@ This folder contains scripts for automating often-used, multiple step tasks.
 
 ## ./pandoc.sh
 
-[./pandoc.sh](./pandoc.sh) converts the Markdown command-line reference documentation to Asciidoc.
+[./pandoc.sh](./pandoc.sh) converts the Markdown command line reference documentation to Asciidoc.
 
 ## ./pullapi.sh
 

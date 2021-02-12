@@ -1,7 +1,7 @@
 package serviceaccount
 
 import (
-	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/delete"
@@ -12,26 +12,13 @@ import (
 
 // NewServiceAccountCommand creates a new command sub-group to manage service accounts
 func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
+	localizer.LoadMessageFiles("cmd/serviceaccount")
+
 	cmd := &cobra.Command{
-		Use:   "serviceaccount",
-		Short: "Create, list, delete and update service accounts",
-		Long: heredoc.Doc(`
-			Use these commands to create, list and delete service accounts. You can also reset the credentials for the service account.
-		`),
-		Example: heredoc.Doc(`
-			# create a service account
-			$ rhoas serviceaccount create
-
-			# list service accounts
-			$ rhoas serviceaccount list
-
-			# delete a service account
-			$ rhoas serviceaccount delete --id "173c1ad9-932d-4007-ae0f-4da74f4d2ccd"
-
-			# reset credentials on a service account
-			$ rhoas serviceaccount reset-credentials
-		`),
-		Args: cobra.ExactArgs(1),
+		Use:   localizer.MustLocalizeFromID("serviceAccount.cmd.use"),
+		Short: localizer.MustLocalizeFromID("serviceAccount.cmd.shortDescription"),
+		Long:  localizer.MustLocalizeFromID("serviceAccount.cmd.longDescription"),
+		Args:  cobra.ExactArgs(1),
 	}
 
 	cmd.AddCommand(

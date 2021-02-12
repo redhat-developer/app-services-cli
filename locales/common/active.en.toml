@@ -1,0 +1,2 @@
+[common.error.castError]
+one = 'could not cast "{{.Value}}" to {{.Type}}'
