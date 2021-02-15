@@ -12,8 +12,8 @@ one = 'Log out from RHOAS. To manage your services again, log in using "rhoas lo
 
 [logout.error.unableToLogout]
 description = 'Log out error message'
-one = 'Unable to log out:'
+one = 'unable to log out:'
 
 [logout.log.info.logoutSuccess]
 description = 'Log out success message'
-one = 'Successfully logged out"'
+one = 'Successfully logged out'

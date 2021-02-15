@@ -74,7 +74,7 @@ one = 'You are now logged in as "{{.Username}}"'
 
 [login.log.info.openSSOUrl]
 description = 'Info message for opening auth URL instructions'
-one = '"Open the following URL in your browser to log in'
+one = 'Open the following URL in your browser to log in'
 
 [login.log.error.unableToStartServer]
 description = 'Error message for when unable to start server'

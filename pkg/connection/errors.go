@@ -1,17 +1,24 @@
 package connection
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
+func init() {
+	localizer.LoadMessageFiles("connection")
+
+	ErrNotLoggedIn = errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInError"))
+	ErrSessionExpired = errors.New(localizer.MustLocalizeFromID("connection.error.sessionExpiredError"))
+}
+
 var (
-	loginCmd = color.CodeSnippet("rhoas login")
 	// ErrNotLoggedIn defines when a user is not authenticated
-	ErrNotLoggedIn = fmt.Errorf("Not logged in. Run %v to authenticate", loginCmd)
+	ErrNotLoggedIn error
 	// ErrSessionExpired defines when a user's session has expired
-	ErrSessionExpired = fmt.Errorf("Session expired. Run %v to authenticate", loginCmd)
+	ErrSessionExpired error
 )
 
 // AuthError defines an Authentication error

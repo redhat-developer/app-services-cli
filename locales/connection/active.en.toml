@@ -1,0 +1,5 @@
+[connection.error.notLoggedInError]
+one = 'not logged in. Run "rhoas login" to authenticate'
+
+[connection.error.sessionExpiredError]
+one = 'session expired. Run "rhoas login" to authenticate'

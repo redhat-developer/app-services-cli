@@ -15,6 +15,10 @@ type Token struct {
 	RefreshToken string `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
 }
 
+func init() {
+	localizer.LoadMessageFiles("auth/token")
+}
+
 func (c *Token) IsValid() (tokenIsValid bool, err error) {
 	now := time.Now()
 	if c.AccessToken != "" {
@@ -48,7 +52,6 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
 	if err != nil {
-		localizer.LoadMessageFiles("auth/token")
 		err = fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("auth.token.parse.error.parseError"), err)
 		return
 	}
@@ -58,7 +61,6 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 func MapClaims(token *jwt.Token) (jwt.MapClaims, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		localizer.LoadMessageFiles("auth/token")
 		err := errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "auth.token.mapClaims.error.claimsError",
 			TemplateData: map[string]interface{}{
@@ -86,7 +88,6 @@ func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	var exp float64
 	claim, ok := claims["exp"]
 	if ok {
-		localizer.LoadMessageFiles("auth/token")
 		exp, ok = claim.(float64)
 		if !ok {
 			err = errors.New(localizer.MustLocalize(&localizer.Config{

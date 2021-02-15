@@ -64,7 +64,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID:   "kafka.topic.common.flag.output.description",
 		PluralCount: 2,
 	}))

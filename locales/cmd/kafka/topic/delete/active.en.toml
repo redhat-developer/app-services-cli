@@ -25,7 +25,7 @@ one = '--force flag is required to delete a topic when not running interactively
 one = 'Confirm the name of the topic you want to delete:'
 
 [kafka.topic.delete.error.mismatchedNameConfirmation]
-one = 'topic name entered ({{.ConfirmedName}}) does not match the name of the topic you tried to delete ({{.ActualName}})'
+one = 'topic name entered "{{.ConfirmedName}}" does not match the name of the topic you tried to delete "{{.ActualName}}"'
 
 [kafka.topic.delete.log.info.topicDeleted]
 one = 'Topic "{{.TopicName}} has been deleted from the Kafka instance "{{.InstanceName}}"'

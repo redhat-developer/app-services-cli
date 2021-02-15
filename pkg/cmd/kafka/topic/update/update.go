@@ -11,7 +11,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka/topic"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
@@ -60,15 +59,14 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/topic/common", "cmd/kafka/topic/update")
+
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update a Kafka topic",
-		Long:  "Update a topic in the current Kafka instance",
-		Example: heredoc.Doc(`
-			# update the number of replicas for a topic
-			$ rhoas kafka topic update topic-1 --replication-factor 3
-		`),
-		Args: cobra.ExactArgs(1),
+		Use:     localizer.MustLocalizeFromID("kafka.topic.update.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.topic.update.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.topic.update.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.topic.update.cmd.example"),
+		Args:    cobra.ExactArgs(1),
 		// Dynamic completion of the topic name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
@@ -91,8 +89,13 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				opts.topicName = args[0]
 			}
 
+			logger, err := opts.Logger()
+			if err != nil {
+				return err
+			}
+
 			if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.replicaCountStr == "" {
-				return fmt.Errorf("nothing to update")
+				logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
 			}
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
@@ -156,7 +159,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
+				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -168,9 +171,9 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
-	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions"))
-	cmd.Flags().StringVar(&opts.replicaCountStr, "replicas", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas"))
-	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs"))
+	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
+	cmd.Flags().StringVar(&opts.replicaCountStr, "replicas", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas.description"))
+	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
 
 	return cmd
 }
@@ -228,7 +231,7 @@ func runCmd(opts *Options) error {
 		if int(partitionCount) < currentPartitionCount {
 
 			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.update.error.topicNotFoundError",
+				MessageID: "kafka.topic.update.error.cannotDecreasePartitionCountError",
 				TemplateData: map[string]interface{}{
 					"From": currentPartitionCount,
 					"To":   partitionCount,
@@ -237,8 +240,9 @@ func runCmd(opts *Options) error {
 		}
 		if int(partitionCount) == currentPartitionCount {
 			logger.Infof(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.update.error.samePartitionCount",
+				MessageID: "kafka.topic.update.log.info.samePartitionCount",
 				TemplateData: map[string]interface{}{
+					"Name":  opts.topicName,
 					"Count": currentPartitionCount,
 				},
 			}))

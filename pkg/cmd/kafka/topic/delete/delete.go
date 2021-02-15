@@ -44,10 +44,10 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	localizer.LoadMessageFiles("cmd/kafka/topic/delete", "cmd/kafka/topic/common", "cmd/kafka/common")
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.topic.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.topic.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.topic.cmd.long"),
-		Example: localizer.MustLocalizeFromID("kafka.topic.cmd.example"),
+		Use:     localizer.MustLocalizeFromID("kafka.topic.delete.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.topic.delete.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.topic.delete.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.topic.delete.cmd.example"),
 		Args:    cobra.ExactArgs(1),
 		// Dynamic completion of the topic name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -130,30 +130,26 @@ func runCmd(opts *Options) error {
 		var promptConfirmName = &survey.Input{
 			Message: localizer.MustLocalizeFromID("kafka.topic.delete.input.name.message"),
 		}
-
 		var userConfirmedName string
-
 		if err := survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
 			return err
 		}
 
 		if userConfirmedName != opts.topicName {
-			logger.Info(&localizer.Config{
+			logger.Info(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.delete.error.mismatchedNameConfirmation",
 				TemplateData: map[string]interface{}{
 					"ConfirmedName": userConfirmedName,
 					"ActualName":    opts.topicName,
 				},
-			})
+			}))
 			return nil
 		}
 	}
 
 	// perform delete topic API request
-	httpRes, topicErr := api.TopicAdmin(opts.kafkaID).
-		DeleteTopic(ctx, opts.topicName).
+	httpRes, topicErr := api.TopicAdmin(opts.kafkaID).DeleteTopic(ctx, opts.topicName).
 		Execute()
-
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 404:

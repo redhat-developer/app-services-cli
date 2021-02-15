@@ -3,18 +3,14 @@ description = "Description for --output flag"
 one = 'Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml"'
 other = 'Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"'
 
-[kafka.topic.common.flag.output.partitions]
+[kafka.topic.common.flag.partitions.description]
 one = 'The number of partitions in the topic'
 
-[kafka.topic.common.flag.output.replicas]
+[kafka.topic.common.flag.replicas.description]
 one = 'The replication factor for the topic'
 
-[kafka.topic.common.flag.output.retentionMs]
+[kafka.topic.common.flag.retentionMs.description]
 one = 'The period of time in milliseconds the broker will retain a partition log before deleting it' 
-
-[kafka.topic.common.error.unauthorizedError]
-one = 'you are unauthorized to {{.Operation}} this topic'
-other = 'you are unauthorized to view these topics'
 
 [kafka.topic.common.error.noKafkaSelected]
 one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'

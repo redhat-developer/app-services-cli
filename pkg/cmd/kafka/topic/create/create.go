@@ -63,7 +63,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Example: localizer.MustLocalizeFromID("kafka.topic.create.cmd.example"),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if len(args) == 0 {
-				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.create.cmd.error.topicNameIsRequired"))
+				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.create.error.topicNameIsRequired"))
 			}
 			opts.topicName = args[0]
 
@@ -109,9 +109,9 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
-	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions"))
-	cmd.Flags().Int32Var(&opts.replicas, "replicas", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas"))
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs"))
+	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
+	cmd.Flags().Int32Var(&opts.replicas, "replicas", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas.description"))
+	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
 
 	return cmd
 }
@@ -155,6 +155,9 @@ func runCmd(opts *Options) error {
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
 
 	response, httpRes, topicErr := createTopicReq.Execute()
+
+	httpRes.StatusCode = 401
+
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 401:

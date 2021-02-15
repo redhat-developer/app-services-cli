@@ -1,8 +1,8 @@
 package factory
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"context"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
@@ -66,8 +66,8 @@ func New(cliVersion string) *Factory {
 		if cfg.Scopes != nil {
 			builder.WithScopes(cfg.Scopes...)
 		}
-		if cfg.APIGateway != "" {
-			builder.WithURL(cfg.APIGateway)
+		if cfg.APIUrl != "" {
+			builder.WithURL(cfg.APIUrl)
 		}
 		if cfg.AuthURL == "" {
 			cfg.AuthURL = connection.DefaultAuthURL

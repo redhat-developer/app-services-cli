@@ -16,10 +16,7 @@ $ rhoas kafka topic update topic-1 --replication-factor
 '''
 
 [kafka.topic.update.error.conflictError]
-one = 'topic "{{.TopicName}} already exists in Kafka instance "{{.InstanceName}}"'
-
-[kafka.topic.update.log.info.topicUpdated]
-one = 'Topic "{{.TopicName}}" updated in Kafka instance "{{.InstanceName}}"'
+one = 'topic "{{.TopicName}}" already exists in Kafka instance "{{.InstanceName}}"'
 
 [kafka.topic.update.error.topicNotFoundError]
 one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'

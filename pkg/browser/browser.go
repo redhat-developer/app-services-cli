@@ -8,6 +8,10 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
+func init() {
+	localizer.LoadMessageFiles("browser")
+}
+
 func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {
 	switch runtime.GOOS {
 	case "linux":
@@ -17,7 +21,6 @@ func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {
 	case "darwin":
 		return exec.Command("open", url), nil
 	default:
-		localizer.LoadMessageFiles("browser")
 		return nil, fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 			MessageID: "browser.getOpenBrowserCommand.error.unsupportedOperatingSystem",
 			TemplateData: map[string]interface{}{

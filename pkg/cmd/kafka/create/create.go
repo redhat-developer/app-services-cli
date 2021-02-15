@@ -79,10 +79,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.name = args[0]
-			}
 
-			if err := kafka.ValidateName(opts.name); err != nil {
-				return err
+				if err := kafka.ValidateName(opts.name); err != nil {
+					return err
+				}
 			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {

@@ -2,7 +2,13 @@ package flag
 
 import (
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
+
+func init() {
+	localizer.LoadMessageFiles("cmd/common/flags")
+}
 
 type Error struct {
 	Err error
@@ -19,7 +25,7 @@ func (e *Error) Unwrap() error {
 func InvalidValueError(flag string, val interface{}, validOptions ...string) *Error {
 	var chooseFromStr string
 	if len(validOptions) > 0 {
-		chooseFromStr = ", valid options are "
+		chooseFromStr = localizer.MustLocalizeFromID("flag.error.invalidValue.options")
 		for i, option := range validOptions {
 			chooseFromStr += fmt.Sprintf(`"%v"`, option)
 			if (i + 1) < len(validOptions) {
@@ -27,5 +33,11 @@ func InvalidValueError(flag string, val interface{}, validOptions ...string) *Er
 			}
 		}
 	}
-	return &Error{Err: fmt.Errorf(`invalid value "%v" for --%v%v`, val, flag, chooseFromStr)}
+	return &Error{Err: fmt.Errorf("%v%v", localizer.MustLocalize(&localizer.Config{
+		MessageID: "flag.error.invalidValue.base",
+		TemplateData: map[string]interface{}{
+			"Flag":  flag,
+			"Value": val,
+		},
+	}), chooseFromStr)}
 }

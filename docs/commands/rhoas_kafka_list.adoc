@@ -1,0 +1,38 @@
+== rhoas kafka list
+
+List all Apache Kafka instances
+
+=== Synopsis
+
+List all Apache Kafka instances.
+
+This command will provide a high level view of all Kafka instances. The
+fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
+Use the describe command to view all fields for a specific instance.
+
+The instances are displayed by default in a table, but can also be
+displayed as JSON or YAML.
+
+....
+rhoas kafka list [flags]
+....
+
+=== Options
+
+....
+      --limit int       The maximum number of Kafka instances to be returned (default 100)
+  -o, --output string   Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"
+      --page int        The current page in the list of Kafka instances.
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use, and manage your
+Apache Kafka instances

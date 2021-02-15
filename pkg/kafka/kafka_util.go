@@ -14,11 +14,14 @@ var (
 	validNameRegexp = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
 )
 
+func init() {
+	localizer.LoadMessageFiles("common", "kafka")
+}
+
 // ValidateName validates the proposed name of a Kafka instance
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)
 
-	localizer.LoadMessageFiles("common", "kafka")
 	if !ok {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "common.error.castError",

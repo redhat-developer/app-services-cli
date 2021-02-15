@@ -8,3 +8,8 @@ one = 'no Kafka instance is currently set, use the "--id" flag or set the curren
 
 [kafka.common.error.notFoundErrorById]
 one = 'Kafka instance with ID "{{.ID}}" not found'
+
+[kafka.common.flag.output.description]
+description = "Description for --output flag"
+one = 'Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml"'
+other = 'Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"'

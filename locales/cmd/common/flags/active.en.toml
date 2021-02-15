@@ -2,9 +2,12 @@
 description = "Flag is required when not running interactively"
 one = "--{{.Flag}} required when not running interactively"
 
-[flag.error.invalidValue]
+[flag.error.invalidValue.base]
 description = "Invalid flag value"
 one = 'invalid value "{{.Value}}" for --{{.Flag}}'
+
+[flag.error.invalidValue.options]
+one = ', valid options are: '
 
 [flag.error.requiredFlag]
 description = 'Required flag error message'

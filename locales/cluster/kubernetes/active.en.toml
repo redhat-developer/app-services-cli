@@ -1,0 +1,39 @@
+[cluster.kubernetes.log.info.statusMessage]
+one = 'Linking your cluster with Managed Kafka'
+
+[cluster.kubernetes.statusInfo]
+one = '''
+Kafka instance: %v
+Namespace: %v
+Secret name: %v
+'''
+
+[cluster.kubernetes.error.missingConfigError]
+one = 'missing kubeconfig file'
+
+[cluster.kubernetes.error.loadConfigError]
+one = 'failed to load kubeconfig'
+
+[cluster.kubernetes.connect.input.confirm.message]
+one = 'Do you want to continue?'
+
+[cluster.kubernetes.connect.log.debug.cancellingConnect]
+one = 'Cancelling cluster connection'
+
+[cluster.kubernetes.createKafkaCR.error.marshalError]
+one = 'Could not marshal ManagedKafkaConnection to JSON object'
+
+[cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
+one = 'ManagedKafkaConnection resource "{{.Name}}" has been created'
+
+[cluster.kubernetes.createKafkaCR.error.createError]
+one = 'could not create secret'
+
+[cluster.kubernetes.error.secretAlreadyExistsError]
+one = 'secret already exists'
+
+[cluster.kubernetes.createSecret.log.info.createSuccess]
+one = 'Secret "{{.Name}}" created successfully'
+
+[cluster.kubernetes.createServiceAccount.error.createError]
+one = 'could not create service account'
