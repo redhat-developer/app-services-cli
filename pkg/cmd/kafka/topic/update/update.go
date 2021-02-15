@@ -3,10 +3,11 @@ package update
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
@@ -14,7 +15,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka/topic"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
-	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
@@ -92,7 +92,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.replicaCountStr == "" {
-				return fmt.Errorf(`nothing to update`)
+				return fmt.Errorf("nothing to update")
 			}
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
@@ -165,11 +165,12 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	fs := cmd.Flags()
-	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.ValidOutputFormats)
-	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", "The number of partitions in the topic")
-	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", "The period of time in milliseconds the broker will retain a partition log before deleting it")
-	cmd.Flags().StringVar(&opts.replicaCountStr, "replicas", "", "The replication factor for the topic")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.common.flag.output.description",
+	}))
+	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions"))
+	cmd.Flags().StringVar(&opts.replicaCountStr, "replicas", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas"))
+	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs"))
 
 	return cmd
 }
@@ -192,7 +193,12 @@ func runCmd(opts *Options) error {
 	// Check if the Kafka instance exists
 	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return fmt.Errorf("Kafka instance with ID '%v' not found", opts.kafkaID)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundByIdError",
+			TemplateData: map[string]interface{}{
+				"ID": opts.kafkaID,
+			},
+		}))
 	} else if apiErr.Error() != "" {
 		return apiErr
 	}
@@ -202,7 +208,13 @@ func runCmd(opts *Options) error {
 
 	topicToUpdate, httpRes, _ := api.TopicAdmin(opts.kafkaID).GetTopic(ctx, opts.topicName).Execute()
 	if httpRes.StatusCode == 404 {
-		return fmt.Errorf("topic '%v' not found in Kafka instance '%v'", opts.topicName, kafkaInstance.GetName())
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.update.error.topicNotFoundError",
+			TemplateData: map[string]interface{}{
+				"TopicName":    opts.topicName,
+				"InstanceName": kafkaInstance.GetName(),
+			},
+		}))
 	}
 
 	currentPartitionCount := len(topicToUpdate.GetPartitions())
@@ -214,10 +226,23 @@ func runCmd(opts *Options) error {
 	// Only set partitions if the flag was set
 	if opts.partitionsStr != "" {
 		if int(partitionCount) < currentPartitionCount {
-			return fmt.Errorf("number of topic partitions cannot be decreased from %v to %v", currentPartitionCount, partitionCount)
+
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.update.error.topicNotFoundError",
+				TemplateData: map[string]interface{}{
+					"From": currentPartitionCount,
+					"To":   partitionCount,
+				},
+			}))
 		}
 		if int(partitionCount) == currentPartitionCount {
-			logger.Infof("The number of partitions set (%v) is the same as the current number of partitions", partitionCount)
+			logger.Infof(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.update.error.samePartitionCount",
+				TemplateData: map[string]interface{}{
+					"Count": currentPartitionCount,
+				},
+			}))
+
 		} else {
 			needsUpdate = true
 			topicSettings.NumPartitions = &partitionCount
@@ -237,7 +262,7 @@ func runCmd(opts *Options) error {
 	}
 
 	if !needsUpdate {
-		logger.Info("No topic values have been changed, nothing to update")
+		logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
 		return nil
 	}
 
@@ -248,23 +273,44 @@ func runCmd(opts *Options) error {
 	// handle error
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
-		case 401:
-			return fmt.Errorf("you are unauthorized to update this topic")
 		case 404:
-			return fmt.Errorf("topic '%v' not found in Kafka instance '%v'", opts.topicName, kafkaInstance.GetName())
-		case 409:
-			return fmt.Errorf("topic '%v' already exists in Kafka instance '%v'", opts.topicName, kafkaInstance.GetName())
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.notFoundError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    opts.topicName,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
+		case 401:
+			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "update",
+				},
+			}))
 		case 500:
-			return fmt.Errorf("internal server error: %w", topicErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
 		case 503:
-			return fmt.Errorf("unable to connect to Kafka instance '%v': %w", kafkaInstance.GetName(), topicErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
+				TemplateData: map[string]interface{}{
+					"Name": kafkaInstance.GetName(),
+				},
+			}), topicErr)
 		default:
 			return topicErr
 		}
 	}
 
 	// the topic was updated, print it to stdout
-	logger.Infof("Topic %v updated in Kafka instance %v:", color.Info(response.GetName()), color.Info((kafkaInstance.GetName())))
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.update.log.info.topicUpdated",
+		TemplateData: map[string]interface{}{
+			"TopicName":    opts.topicName,
+			"InstanceName": kafkaInstance.GetName(),
+		},
+	}))
+
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.Marshal(response)

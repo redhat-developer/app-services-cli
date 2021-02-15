@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
@@ -40,7 +38,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/delete")
+	localizer.LoadMessageFiles("cmd/common/flags", "cmd/kafka/common", "cmd/kafka/delete")
 
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.delete.cmd.use"),
@@ -50,7 +48,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() {
-				return fmt.Errorf("Cannot delete Kafka instances when not running interactively")
+				return fmt.Errorf(localizer.MustLocalizeFromID("flag.error.requiredWhenNonInteractive"))
 			}
 
 			cfg, err := opts.Config.Load()
@@ -64,7 +62,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(localizer.MustLocalizeFromID(kafkamsg.NoKafkaSelectedError))
+				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.noKafkaSelected"))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID

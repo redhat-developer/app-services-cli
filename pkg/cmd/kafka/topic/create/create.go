@@ -3,10 +3,11 @@ package create
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
-	"github.com/MakeNowJust/heredoc"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka/topic"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
@@ -53,22 +54,16 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Create a Kafka topic",
-		Long: heredoc.Doc(`
-			Create topic in the current Kafka instance.
+	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/topic/common", "cmd/kafka/topic/create")
 
-			This command lets you create a topic, set a desired number of 
-			partitions, replicas and retention period or else use the default values.
-		`),
-		Example: heredoc.Doc(`
-			# create a topic
-			$ rhoas kafka topic create topic-1
-		`),
+	cmd := &cobra.Command{
+		Use:     localizer.MustLocalizeFromID("kafka.topic.create.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.topic.create.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.topic.create.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.topic.create.cmd.example"),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if len(args) == 0 {
-				return fmt.Errorf(`Topic name is required. Run "rhoas kafka topic create <topic-name>"`)
+				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.create.cmd.error.topicNameIsRequired"))
 			}
 			opts.topicName = args[0]
 
@@ -102,7 +97,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf("No Kafka instance selected. Use the '--id' flag or set one in context with the 'use' command")
+				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -111,11 +106,12 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	fs := cmd.Flags()
-	flag.AddOutput(fs, &opts.outputFormat, "json", []string{"ks"})
-	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, "The number of partitions in the topic")
-	cmd.Flags().Int32Var(&opts.replicas, "replicas", 1, "The replication factor for the topic")
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, "The period of time in milliseconds the broker will retain a partition log before deleting it")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.common.flag.output.description",
+	}))
+	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions"))
+	cmd.Flags().Int32Var(&opts.replicas, "replicas", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas"))
+	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs"))
 
 	return cmd
 }
@@ -136,7 +132,12 @@ func runCmd(opts *Options) error {
 
 	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return fmt.Errorf("Kafka instance with ID '%v' not found", opts.kafkaID)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundByIdError",
+			TemplateData: map[string]interface{}{
+				"ID": opts.kafkaID,
+			},
+		}))
 	} else if apiErr.Error() != "" {
 		return apiErr
 	}
@@ -157,19 +158,42 @@ func runCmd(opts *Options) error {
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 401:
-			return fmt.Errorf("you are unauthorized to create this topic")
+			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "create",
+				},
+			}))
 		case 409:
-			return fmt.Errorf("topic '%v' already exists in Kafka instance '%v'", opts.topicName, kafkaInstance.GetName())
+			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.create.error.conflictError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    opts.topicName,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
 		case 500:
-			return fmt.Errorf("internal server error: %w", topicErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
 		case 503:
-			return fmt.Errorf("unable to connect to Kafka instance '%v': %w", kafkaInstance.GetName(), topicErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
+				TemplateData: map[string]interface{}{
+					"Name": kafkaInstance.GetName(),
+				},
+			}), topicErr)
 		default:
 			return topicErr
 		}
 	}
 
-	logger.Infof("Topic %v created in Kafka instance %v:", color.Info(response.GetName()), color.Info((kafkaInstance.GetName())))
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.create.log.info.topicCreated",
+		TemplateData: map[string]interface{}{
+			"TopicName":    response.GetName(),
+			"InstanceName": kafkaInstance.GetName(),
+		},
+	}))
+
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.Marshal(response)

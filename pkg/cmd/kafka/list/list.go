@@ -6,8 +6,6 @@ import (
 	"os"
 	"strconv"
 
-	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
-
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 
@@ -55,7 +53,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka", "cmd/kafka/list")
+	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/list")
 
 	cmd := &cobra.Command{
 		Use:   localizer.MustLocalizeFromID("kafka.list.cmd.use"),
@@ -72,7 +70,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
-		MessageID:   kafkamsg.OutputFlagDescription,
+		MessageID:   "kafka.common.flag.output.description",
 		PluralCount: 2,
 	}))
 	cmd.Flags().IntVarP(&opts.page, "page", "", 0, localizer.MustLocalizeFromID("kafka.list.flag.page"))

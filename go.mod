@@ -14,7 +14,6 @@ require (
 	github.com/google/go-cmp v0.5.2 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20200805134727-ea32388e35c1
-	github.com/manifoldco/promptui v0.8.0
 	github.com/markbates/pkger v0.17.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.9 // indirect

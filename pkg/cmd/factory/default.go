@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"context"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -107,7 +108,7 @@ func New(cliVersion string) *Factory {
 
 		err = cfgFile.Save(cfg)
 		if err != nil {
-			logger.Debug("Could not save refreshed tokens to config: ", err)
+			logger.Debug(localizer.MustLocalizeFromID("common.log.debug.couldNotSaveRefreshTokenToConfig"), err)
 		}
 
 		return conn, nil

@@ -1,0 +1,31 @@
+[kafka.topic.delete.cmd.use]
+one = 'delete'
+
+[kafka.topic.delete.cmd.shortDescription]
+one = 'delete a Kafka topic'
+
+[kafka.topic.delete.cmd.longDescription]
+one = '''
+Delete a topic in the current Apache Kafka instance.
+'''
+
+[kafka.topic.delete.cmd.example]
+one = '''
+# delete a topic
+$ rhoas kafka topic delete topic-1
+'''
+
+[kafka.topic.delete.flag.force.description]
+one = 'Skip confirmation to forcibly delete a topic'
+
+[kafka.topic.delete.error.forceFlagRequired]
+one = '--force flag is required to delete a topic when not running interactively'
+
+[kafka.topic.delete.input.name.message]
+one = 'Confirm the name of the topic you want to delete:'
+
+[kafka.topic.delete.error.mismatchedNameConfirmation]
+one = 'topic name entered ({{.ConfirmedName}}) does not match the name of the topic you tried to delete ({{.ActualName}})'
+
+[kafka.topic.delete.log.info.topicDeleted]
+one = 'Topic "{{.TopicName}} has been deleted from the Kafka instance "{{.InstanceName}}"'

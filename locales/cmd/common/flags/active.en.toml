@@ -9,3 +9,7 @@ one = 'invalid value "{{.Value}}" for --{{.Flag}}'
 [flag.error.requiredFlag]
 description = 'Required flag error message'
 one = '--{{.Flag}} is a required flag'
+
+[flag.error.invalidArgumentError]
+description = 'Generic error for an invalid flag. This is a copy of the Cobra error message'
+one = 'invalid argument "${{.Argument}}" for "{{.Flag}}" flag: '

@@ -3,14 +3,13 @@ package describe
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
-	"github.com/MakeNowJust/heredoc"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
-	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
@@ -45,15 +44,14 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/topic/common", "cmd/kafka/topic/describe", "cmd/kafka/common")
+
 	cmd := &cobra.Command{
-		Use:   "describe",
-		Short: "Describe a Kafka topic",
-		Long:  "Print detailed configuration information for a Kafka topic",
-		Example: heredoc.Doc(`
-			# describe Kafka topic "topic-1"
-			$ rhoas kafka describe topic-1
-		`),
-		Args: cobra.ExactArgs(1),
+		Use:     localizer.MustLocalizeFromID("kafka.topic.cmd.describe.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.topic.cmd.describe.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.topic.cmd.describe.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.topic.cmd.describe.example"),
+		Args:    cobra.ExactArgs(1),
 		// dynamic completion of topic names
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
@@ -76,8 +74,10 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 				opts.topicName = args[0]
 			}
 
-			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
-				return err
+			if opts.outputFormat != "" {
+				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
+					return err
+				}
 			}
 
 			if opts.kafkaID != "" {
@@ -90,7 +90,7 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf("No Kafka instance selected. To use a Kafka instance run %v", color.CodeSnippet("rhoas kafka use"))
+				return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -99,8 +99,9 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	fs := cmd.Flags()
-	flag.AddOutput(fs, &opts.outputFormat, "json", flagutil.ValidOutputFormats)
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.common.flag.output.description",
+	}))
 
 	return cmd
 }
@@ -117,7 +118,12 @@ func runCmd(opts *Options) error {
 	// check if the Kafka instance exists
 	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return fmt.Errorf("Kafka instance with ID '%v' not found", opts.kafkaID)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundErrorById",
+			TemplateData: map[string]interface{}{
+				"ID": opts.kafkaID,
+			},
+		}))
 	} else if apiErr.Error() != "" {
 		return apiErr
 	}
@@ -130,13 +136,29 @@ func runCmd(opts *Options) error {
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 404:
-			return fmt.Errorf("topic '%v' not found in Kafka instance '%v'", opts.topicName, kafkaInstance.GetName())
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.notFoundError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    opts.topicName,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
 		case 401:
-			return fmt.Errorf("you are unauthorized to view this topic")
+			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "view",
+				},
+			}))
 		case 500:
-			return fmt.Errorf("internal server error: %w", topicErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
 		case 503:
-			return fmt.Errorf("unable to connect to Kafka instance '%v': %w", kafkaInstance.GetName(), topicErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
+				TemplateData: map[string]interface{}{
+					"Name": kafkaInstance.GetName(),
+				},
+			}), topicErr)
 		default:
 			return topicErr
 		}

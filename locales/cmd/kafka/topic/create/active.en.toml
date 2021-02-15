@@ -1,0 +1,28 @@
+[kafka.topic.create.cmd.use]
+one = 'create'
+
+[kafka.topic.create.cmd.shortDescription]
+one = 'Create a Kafka topic'
+
+[kafka.topic.create.cmd.longDescription]
+one = '''
+Create a topic in the current Apache Kafka instance.
+
+This command lets you create a topic, set a desired number of 
+partitions, replicas and retention period or else use the default values.
+'''
+
+[kafka.topic.create.cmd.example]
+one = '''
+# create a topic
+$ rhoas kafka topic create topic-1
+'''
+
+[kafka.topic.create.error.topicNameIsRequired]
+one = 'Topic name is required. Run "rhoas kafka topic create <topic-name>"'
+
+[kafka.topic.create.error.conflictError]
+one = 'topic "{{.TopicName}} already exists in Kafka instance "{{.InstanceName}}"'
+
+[kafka.topic.create.log.info.topicCreated]
+one = 'Topic "{{.TopicName}}" created in Kafka instance "{{.InstanceName}}"'

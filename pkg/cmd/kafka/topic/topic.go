@@ -1,7 +1,7 @@
 package topics
 
 import (
-	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
@@ -19,12 +19,12 @@ const (
 
 // NewTopicCommand gives commands that manages Kafka topics.
 func NewTopicCommand(f *factory.Factory) *cobra.Command {
+	localizer.LoadMessageFiles("kafka/topic")
+
 	cmd := &cobra.Command{
-		Use:   "topic",
-		Short: "Create, describe, update, list and delete Kafka topics",
-		Long: heredoc.Doc(`
-			Create, describe, update, list and delete topics for a Kafka instance.
-		`),
+		Use:   localizer.MustLocalizeFromID("kafka.topic.cmd.use"),
+		Short: localizer.MustLocalizeFromID("kafka.topic.cmd.shortDescription"),
+		Long:  localizer.MustLocalizeFromID("kafka.topic.cmd.longDescription"),
 	}
 
 	cmd.AddCommand(

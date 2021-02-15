@@ -1,0 +1,37 @@
+[kafka.topic.update.cmd.use]
+one = 'update'
+
+[kafka.topic.update.cmd.shortDescription]
+one = 'Update a Kafka topic'
+
+[kafka.topic.update.cmd.longDescription]
+one = '''
+Update a topic in the current Apache Kafka instance.
+'''
+
+[kafka.topic.update.cmd.example]
+one = '''
+# update the number of replicas for a topic
+$ rhoas kafka topic update topic-1 --replication-factor 
+'''
+
+[kafka.topic.update.error.conflictError]
+one = 'topic "{{.TopicName}} already exists in Kafka instance "{{.InstanceName}}"'
+
+[kafka.topic.update.log.info.topicUpdated]
+one = 'Topic "{{.TopicName}}" updated in Kafka instance "{{.InstanceName}}"'
+
+[kafka.topic.update.error.topicNotFoundError]
+one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'
+
+[kafka.topic.update.error.cannotDecreasePartitionCountError]
+one = 'the number of topic partitions cannot be decreased from {{.From}} to {{.To}}'
+
+[kafka.topic.update.log.info.samePartitionCount]
+one = 'Topic "{{.Name}}" already has {{.Count}} partitions.'
+
+[kafka.topic.update.log.info.nothingToUpdate]
+one = 'No topic values have been changed, nothing to update'
+
+[kafka.topic.update.log.info.topicUpdated]
+one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}} has been updated'

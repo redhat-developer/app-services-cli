@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	flagmsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/common/flag"
-
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -56,7 +54,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: flagmsg.RequiredNonInteractiveError,
+					MessageID: "flag.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
 						"Flag": "name",
 					},
@@ -67,7 +65,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 			if !opts.interactive && opts.fileFormat == "" {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: flagmsg.RequiredFlagError,
+					MessageID: "flag.error.requiredFlag",
 					TemplateData: map[string]interface{}{
 						"Flag": "file-format",
 					},
@@ -78,7 +76,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			if !validOutput && opts.fileFormat != "" {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: flagmsg.InvalidValueError,
+					MessageID: "flag.error.invalidValue",
 					TemplateData: map[string]interface{}{
 						"Flag":  "file-format",
 						"Value": opts.fileFormat,
