@@ -234,7 +234,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug(localizer.MustLocalizeFromID("cmd/common.log.debug.startingInteractivePrompt"))
+	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
 
 	promptID := &survey.Input{
 		Message: localizer.MustLocalizeFromID("serviceAccount.resetCredentials.input.id.message"),

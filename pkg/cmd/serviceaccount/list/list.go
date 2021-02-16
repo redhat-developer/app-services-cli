@@ -32,10 +32,9 @@ type Options struct {
 // svcAcctRow contains the properties used to
 // populate the list of service accounts into a table row
 type svcAcctRow struct {
-	ID          string `json:"id" header:"ID"`
-	Name        string `json:"name" header:"Name"`
-	ClientID    string `json:"clientID" header:"Client ID"`
-	Description string `json:"description,omitempty" header:"Description"`
+	ID       string `json:"id" header:"ID"`
+	Name     string `json:"name" header:"Name"`
+	ClientID string `json:"clientID" header:"Client ID"`
 }
 
 // NewListCommand creates a new command to list service accounts
