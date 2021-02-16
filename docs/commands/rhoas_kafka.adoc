@@ -20,7 +20,5 @@ instance
 configuration details of a Kafka instance
 * link:rhoas_kafka_list.adoc[rhoas kafka list] - List all Apache Kafka
 instances
-* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, describe,
-update, list and delete Kafka topics
 * link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Kafka
 instance
