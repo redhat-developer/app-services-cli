@@ -1,13 +1,14 @@
 == rhoas kafka create
 
-Create a Kafka instance
+Create an Apache Kafka instance
 
 === Synopsis
 
-Create a Kafka instance on a particular cloud provider and region.
+Create an Apache Kafka instance on a particular cloud provider and
+region.
 
-After creating the Kafka instance you can view it by running ``rhoas
-kafka describe''.
+After creating the instance you can view it by running ``rhoas kafka
+describe''.
 
 ....
 rhoas kafka create [flags]

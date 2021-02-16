@@ -1,10 +1,10 @@
 == rhoas kafka describe
 
-View configuration details of a Kafka instance
+View configuration details of an Apache Kafka instance
 
 === Synopsis
 
-View configuration fields and their values for a Kafka instance.
+View configuration fields and their values for an Apache Kafka instance.
 
 Pass the ``–id'' flag to specify which instance you would like to view.
 

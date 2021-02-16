@@ -34,7 +34,7 @@ one = 'Unique ID of the Kafka instance you want to list. If not set, the current
 
 [kafka.list.flag.page]
 description = 'Description for the --page flag'
-one = 'The current page in the list of Kafka instances.'
+one = 'Display the Kafka instances from the specified page number.'
 
 [kafka.list.flag.limit]
 description = 'Description for the --limit flag'

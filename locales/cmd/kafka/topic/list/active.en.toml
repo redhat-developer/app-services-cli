@@ -2,7 +2,7 @@
 one = 'list'
 
 [kafka.topic.list.cmd.shortDescription]
-one = 'List Kafka topics'
+one = 'List all topics'
 
 [kafka.topic.list.cmd.longDescription]
 one = '''

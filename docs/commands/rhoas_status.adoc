@@ -1,6 +1,6 @@
 == rhoas status
 
-View the status of all currently used services.
+View the status of all currently used services
 
 === Synopsis
 

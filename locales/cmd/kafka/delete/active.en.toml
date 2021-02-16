@@ -4,12 +4,12 @@ one = "delete"
 
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
-one = "Delete a Kafka instance"
+one = "Delete an Apache Kafka instance"
 
 [kafka.delete.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Permanently delete a Kafka instance, including all topics.
+Permanently delete an Apache Kafka instance, including all topics.
 
 When this command is run, you will be asked to confirm the name of the instance you want to delete.
 Otherwise you can pass "--force" to forcibly delete the instance.

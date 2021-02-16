@@ -2,7 +2,7 @@
 one = 'status [args]'
 
 [status.cmd.shortDescription]
-one = 'View the status of all currently used services.'
+one = 'View the status of all currently used services'
 
 [status.cmd.longDescription]
 one = '''
