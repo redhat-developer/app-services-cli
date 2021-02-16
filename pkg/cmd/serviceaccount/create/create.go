@@ -183,7 +183,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug(localizer.MustLocalizeFromID("cmd/common.log.debug.startingInteractivePrompt"))
+	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
 		Message: localizer.MustLocalizeFromID("serviceAccount.create.input.name.message"),

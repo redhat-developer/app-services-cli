@@ -32,7 +32,7 @@ one = 'Forcibly delete this service account.'
 
 [serviceAccount.delete.input.confirmDelete.message]
 description = 'Message for input'
-one = 'Applications and tools which use this service account will stop working unless updated. Are you sure you want to delete the service account with ID "{{.ID}}"?'
+one = 'Are you sure you want to delete the service account with ID "{{.ID}}"?'
 
 [serviceAccount.delete.log.debug.deleteNotConfirmed]
 description = 'Info message when user chose not to delete service account'
@@ -40,7 +40,7 @@ one = 'Service account delete action was not confirmed. Exiting silently'
 
 [serviceAccount.delete.error.unableToDelete]
 description = 'Unable to delete error message'
-one = 'Unable to delete service account'
+one = 'unable to delete service account'
 
 [serviceAccount.delete.log.info.deleteSuccess]
-one = 'Service account deleted'
+one = 'Service account deleted successfully.'
