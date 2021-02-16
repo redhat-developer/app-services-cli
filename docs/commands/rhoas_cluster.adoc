@@ -1,21 +1,6 @@
 == rhoas cluster
 
-View and perform operations on your Kubernetes or OpenShift Cluster
-
-=== Synopsis
-
-View information about your Kubernetes or OpenShift cluster and perform
-operations related to your application services.
-
-=== Examples
-
-....
-# view the status of the cluster
-$ rhoas cluster status
-
-# connect a service to your cluster
-$ rhoas cluster connect
-....
+View and perform operations on your Kubernetes or OpenShift cluster
 
 === Options inherited from parent commands
 
@@ -30,4 +15,4 @@ $ rhoas cluster connect
 * link:rhoas_cluster_connect.adoc[rhoas cluster connect] - Connect your
 services to Kubernetes or OpenShift
 * link:rhoas_cluster_status.adoc[rhoas cluster status] - View status of
-the current Kubernetes or OpenShift cluster.
+the current Kubernetes or OpenShift cluster

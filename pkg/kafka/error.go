@@ -16,7 +16,7 @@ func (e *Error) Error() string {
 }
 
 func ErrorNotFound(id string) *Error {
-	localizer.LoadMessageFiles("kafka")
+	localizer.LoadMessageFiles("kafka/common")
 	return &Error{
 		Err: errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.common.error.notFoundErrorById",

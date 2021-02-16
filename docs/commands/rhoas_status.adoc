@@ -1,16 +1,14 @@
 == rhoas status
 
-View the status of all currently used services
+View the status of all currently used services.
 
 === Synopsis
 
 View status information of your currently used services. Choose to view
-the status of all services with [95mrhoas status[0m or specific
-services with [95mrhoas status [0m
+the status of all services with ``rhoas status'' or specific services
+with ``rhoas status [service]''
 
-To use a different service run [95mrhoas use[0m. Example: [95mrhoas
-kafka use –id=1nh3qkcXuBGMlbIPDqhNbswIZCB[0m. Services available:
-[96m[kafka][0m
+To use a different service run ``rhoas use [args] [flags]''.
 
 ....
 rhoas status [args] [flags]
@@ -32,7 +30,7 @@ $ rhoas status -o json
 === Options
 
 ....
-  -o, --output string   Format to display the Kafka instance. Choose from: "json", "yaml", "yml".
+  -o, --output string   Format in which to display the status of your services. Choose from: "json", "yml", "yaml"
 ....
 
 === Options inherited from parent commands

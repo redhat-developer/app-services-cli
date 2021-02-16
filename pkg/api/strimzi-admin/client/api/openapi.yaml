@@ -7,7 +7,12 @@ info:
   title: Strimzi Kubernetes REST API
   version: 0.1.0
 servers:
-- url: /
+- description: Main (production) server
+  url: https://api.openshift.com/api/managed-services-strimzi-ui/v1/api
+- description: Staging server
+  url: https://api.stage.openshift.com/api/managed-services-strimzi-ui/v1/api
+- description: localhost
+  url: http://localhost:8000/api/managed-services-strimzi-ui/v1/api
 paths:
   /topics:
     get:
@@ -58,6 +63,8 @@ paths:
           description: Unauthorized, unable to retrive topics.
         "500":
           description: Internal server error.
+        "503":
+          description: Unable to connect to the Kafka cluster.
       summary: List of topics
     post:
       description: Creates a new topic for Kafka.
@@ -66,18 +73,19 @@ paths:
         content:
           application/json:
             examples:
-              NewTopic:
+              NewTopicInput:
                 value:
                   name: Pets
-                  numPartitions: 2
-                  replicationFactor: 4
-                  config:
-                  - key: min.insync.replicas
-                    value: "1"
-                  - key: max.message.bytes
-                    value: "1050000"
+                  settings:
+                    numPartitions: 3
+                    replicationFactor: 4
+                    config:
+                    - key: min.insync.replicas
+                      value: "1"
+                    - key: max.message.bytes
+                      value: "1050000"
             schema:
-              $ref: '#/components/schemas/TopicSettings'
+              $ref: '#/components/schemas/NewTopicInput'
         description: Topic to create.
         required: true
       responses:
@@ -91,18 +99,22 @@ paths:
           description: Unable to create topic.
         "401":
           description: Unauthorized, Unable to create topic.
+        "409":
+          description: Entry already exisits
         "500":
           description: Internal server error.
+        "503":
+          description: Unable to connect to the Kafka cluster.
       summary: Creates a new topic
-  /topics/{topicId}:
+  /topics/{topicName}:
     delete:
-      description: Deletes the topic with the specified id.
+      description: Deletes the topic with the specified name.
       operationId: deleteTopic
       parameters:
-      - description: Topic id to delete
+      - description: The topic name to retrieve.
         explode: false
         in: path
-        name: topicId
+        name: topicName
         required: true
         schema:
           type: string
@@ -116,15 +128,17 @@ paths:
           description: Topic not found.
         "500":
           description: Internal server error.
+        "503":
+          description: Unable to connect to the Kafka cluster.
       summary: Deletes a  topic
     get:
       description: Topic
       operationId: getTopic
       parameters:
-      - description: The id of the topic
+      - description: The topic name to retrieve.
         explode: false
         in: path
-        name: topicId
+        name: topicName
         required: true
         schema:
           type: string
@@ -142,15 +156,17 @@ paths:
           description: Topic not found.
         "500":
           description: Internal server error.
-      summary: Topic associated with the topic id
+        "503":
+          description: Unable to connect to the Kafka cluster.
+      summary: Retrieves the topic with the specified name.
     patch:
       description: updates the topic with the new data.
       operationId: updateTopic
       parameters:
-      - description: topic id to update
+      - description: The topic name which is its unique id.
         explode: false
         in: path
-        name: topicId
+        name: topicName
         required: true
         schema:
           type: string
@@ -175,8 +191,17 @@ paths:
         "404":
           description: Topic not found.
         "500":
-          description: Internal server request.
-      summary: Updates the topic with the specified id.
+          description: Internal server error.
+        "503":
+          description: Unable to connect to the Kafka cluster.
+      summary: Updates the topic with the specified name.
+  /metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          description: Metrics
+      summary: Admin server metrics
 components:
   schemas:
     Topic:
@@ -188,7 +213,6 @@ components:
           value: "1"
         - key: max.message.bytes
           value: "1050000"
-        id: 53
         partitions:
         - id: 28
           replicas:
@@ -217,15 +241,12 @@ components:
           items:
             $ref: '#/components/schemas/ConfigEntry'
           type: array
-        id:
-          description: Uniquie ID for the topic.
-          type: integer
         partitions:
           description: Partitions for this topic.
           items:
             $ref: '#/components/schemas/Partition'
           type: array
-      title: Root Type for NewTopic
+      title: Root Type for NewTopicInput
       type: object
     Partition:
       description: Kafka topic partition
@@ -254,18 +275,8 @@ components:
             $ref: '#/components/schemas/Node'
           type: array
         leader:
-          $ref: '#/components/schemas/Node'
-      required:
-      - id
-      type: object
-    Node:
-      description: Kafka server / broker.
-      example:
-        id: 51
-      properties:
-        id:
-          description: Uniquie id for the kafka node.
-          type: integer
+          description: Kafka server / broker.
+          type: object
       required:
       - id
       type: object
@@ -287,7 +298,6 @@ components:
     TopicsList:
       description: A list of topics.
       example:
-        offset: 0
         topics:
         - name: Pets
           config:
@@ -295,7 +305,6 @@ components:
             value: "1"
           - key: max.message.bytes
             value: "1050000"
-          id: 53
           partitions:
           - id: 28
             replicas:
@@ -315,34 +324,9 @@ components:
             - id: 65
             leader:
               id: 58
-        - name: Pets
-          config:
-          - key: min.insync.replicas
-            value: "1"
-          - key: max.message.bytes
-            value: "1050000"
-          id: 53
-          partitions:
-          - id: 28
-            replicas:
-            - id: 35
-            - id: 5
-            isr:
-            - id: 44
-            - id: 83
-            leader:
-              id: 22
-          - id: 68
-            replicas:
-            - id: 81
-            - id: 22
-            isr:
-            - id: 75
-            - id: 65
-            leader:
-              id: 58
-        limit: 6
-        count: 1
+        offset: 25
+        limit: 90
+        count: 94
       properties:
         topics:
           description: List of topics
@@ -367,8 +351,6 @@ components:
     TopicSettings:
       description: Kafka Topic (A feed where records are stored and published)
       example:
-        id: 10081
-        name: topic1
         numPartitions: 2
         replicationFactor: 1
         config:
@@ -377,9 +359,6 @@ components:
         - key: max.message.bytes
           value: "1050000"
       properties:
-        name:
-          description: The name of the topic.
-          type: string
         numPartitions:
           description: Number of partitions for this topic.
           type: integer
@@ -391,5 +370,29 @@ components:
           items:
             $ref: '#/components/schemas/ConfigEntry'
           type: array
-      title: Root Type for NewTopic
+      title: Root Type for NewTopicInput
+      type: object
+    Node:
+      description: Kafka server / broker.
+      type: object
+    NewTopicInput:
+      description: Input object to create a new topic.
+      example:
+        name: Pets
+        settings:
+          numPartitions: 3
+          replicationFactor: 4
+          config:
+          - key: min.insync.replicas
+            value: "1"
+          - key: max.message.bytes
+            value: "1050000"
+      properties:
+        name:
+          description: The topic name, this value must be unique.
+          type: string
+        settings:
+          $ref: '#/components/schemas/TopicSettings'
+      required:
+      - name
       type: object

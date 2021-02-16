@@ -10,8 +10,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 
-	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
@@ -41,7 +39,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/describe")
+	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/describe")
 
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.describe.cmd.use"),
@@ -66,7 +64,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(localizer.MustLocalizeFromID(kafkamsg.NoKafkaSelectedError))
+				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.noKafkaSelected"))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID

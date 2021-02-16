@@ -94,17 +94,17 @@ func runList(opts *Options) (err error) {
 		return nil
 	}
 
-	ioOut := opts.IO.Out
+	outStream := opts.IO.Out
 	switch opts.output {
 	case "json":
 		data, _ := json.MarshalIndent(res, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(ioOut, data)
+		_ = dump.JSON(outStream, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(res)
-		_ = dump.YAML(ioOut, data)
+		_ = dump.YAML(outStream, data)
 	default:
 		rows := mapResponseItemsToRows(serviceaccounts)
-		dump.Table(ioOut, rows)
+		dump.Table(outStream, rows)
 	}
 
 	return nil

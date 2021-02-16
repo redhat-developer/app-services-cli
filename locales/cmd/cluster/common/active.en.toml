@@ -1,0 +1,2 @@
+[cluster.common.flag.kubeconfig.description]
+one = 'Location of the kubeconfig file.'

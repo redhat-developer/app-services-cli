@@ -6,7 +6,6 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | Pointer to **string** | The name of the topic. | [optional] 
 **Config** | Pointer to [**[]ConfigEntry**](ConfigEntry.md) | Topic configuration entry. | [optional] 
-**Id** | Pointer to **int32** | Uniquie ID for the topic. | [optional] 
 **Partitions** | Pointer to [**[]Partition**](Partition.md) | Partitions for this topic. | [optional] 
 
 ## Methods
@@ -77,31 +76,6 @@ SetConfig sets Config field to given value.
 `func (o *Topic) HasConfig() bool`
 
 HasConfig returns a boolean if a field has been set.
-
-### GetId
-
-`func (o *Topic) GetId() int32`
-
-GetId returns the Id field if non-nil, zero value otherwise.
-
-### GetIdOk
-
-`func (o *Topic) GetIdOk() (*int32, bool)`
-
-GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetId
-
-`func (o *Topic) SetId(v int32)`
-
-SetId sets Id field to given value.
-
-### HasId
-
-`func (o *Topic) HasId() bool`
-
-HasId returns a boolean if a field has been set.
 
 ### GetPartitions
 

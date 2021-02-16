@@ -1,0 +1,32 @@
+[cluster.status.cmd.use]
+one = 'status'
+
+[cluster.status.cmd.shortDescription]
+one = 'View status of the current Kubernetes or OpenShift cluster'
+
+[cluster.status.cmd.longDescription]
+one = '''
+View information about the current Kubernetes or OpenShift cluster. 
+You can use this information to connect your application service to the cluster.
+
+Before using this command, you must be logged into a Kubernetes or OpenShift 
+cluster. The command uses your kubeconfig file to identify the cluster context.
+'''
+
+[cluster.status.cmd.example]
+one = '''
+# print status of the current cluster
+$ rhoas cluster status
+'''
+
+[cluster.common.operatorInstalledMessage]
+one = 'Installed'
+
+[cluster.common.operatorNotInstalledMessage]
+one = 'Not installed'
+
+[cluster.status.statusMessage]
+one = '''
+Namespace: {{.Namespace}}
+Managed Application Services Operator: {{.OperatorStatus}}
+'''

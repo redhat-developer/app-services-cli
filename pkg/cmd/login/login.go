@@ -253,7 +253,7 @@ func runLogin(opts *Options) (err error) {
 		cfg.Insecure = opts.insecureSkipTLSVerify
 		cfg.ClientID = opts.clientID
 		cfg.AuthURL = opts.authURL
-		cfg.APIGateway = gatewayURL.String()
+		cfg.APIUrl = gatewayURL.String()
 		cfg.Scopes = opts.scopes
 		cfg.AccessToken = oauth2Token.AccessToken
 		cfg.RefreshToken = oauth2Token.RefreshToken

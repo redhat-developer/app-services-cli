@@ -10,9 +10,6 @@ import (
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
-	flagmsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/common/flag"
-	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
@@ -71,7 +68,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		multiAZ: defaultMultiAZ,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka", "cmd/kafka/create", "cmd/common/flags")
+	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/create", "cmd/common/flags")
 
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.create.cmd.use"),
@@ -82,15 +79,15 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.name = args[0]
-			}
 
-			if err := kafka.ValidateName(opts.name); err != nil {
-				return err
+				if err := kafka.ValidateName(opts.name); err != nil {
+					return err
+				}
 			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: flagmsg.RequiredNonInteractiveError,
+					MessageID: "kafka.common.error.noKafkaSelected",
 					TemplateData: map[string]interface{}{
 						"Flag": "name",
 					},
@@ -197,7 +194,7 @@ func runCreate(opts *Options) error {
 
 	cfg.Services.Kafka = kafkaCfg
 	if err := opts.Config.Save(cfg); err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID(kafkamsg.CouldNotUseKafkaError), err)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotUseKafka"), err)
 	}
 
 	return nil

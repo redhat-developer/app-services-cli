@@ -105,8 +105,16 @@ func NewConfiguration() *Configuration {
 		Debug:         false,
 		Servers: ServerConfigurations{
 			{
-				URL:         "/",
-				Description: "No description provided",
+				URL:         "https://api.openshift.com/api/managed-services-strimzi-ui/v1/api",
+				Description: "Main (production) server",
+			},
+			{
+				URL:         "https://api.stage.openshift.com/api/managed-services-strimzi-ui/v1/api",
+				Description: "Staging server",
+			},
+			{
+				URL:         "http://localhost:8000/api/managed-services-strimzi-ui/v1/api",
+				Description: "localhost",
 			},
 		},
 		OperationServers: map[string]ServerConfigurations{},

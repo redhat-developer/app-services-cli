@@ -7,7 +7,7 @@ Set the current Kafka instance
 Select a Kafka instance and set it as the current Kafka instance.
 
 When you set the Kafka instance to be used, it is set as the current
-instance for all `rhoas kafka' commands.
+instance for all ``rhoas kafka'' commands.
 
 When an ID is not specified in other Kafka commands, the current Kafka
 instance is used.
@@ -20,13 +20,13 @@ rhoas kafka use [flags]
 
 ....
 # set a kafka instance to be the current instance
-$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
 ....
 
 === Options
 
 ....
-      --id string   ID of the Kafka instance to use.
+      --id string   Unique ID of the Kafka instance you want to set as the current instance.
 ....
 
 === Options inherited from parent commands
@@ -39,4 +39,4 @@ $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 === SEE ALSO
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use, and manage your
-Kafka instances
+Apache Kafka instances

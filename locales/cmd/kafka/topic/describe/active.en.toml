@@ -1,0 +1,16 @@
+[kafka.topic.describe.cmd.use]
+one = 'describe'
+
+[kafka.topic.describe.cmd.shortDescription]
+one = 'Describe a Kafka topic'
+
+[kafka.topic.describe.cmd.longDescription]
+one = '''
+Print detailed configuration information for a Kafka topic"
+'''
+
+[kafka.topic.describe.cmd.example]
+one = '''
+# describe a topic
+$ rhoas kafka topic describe topic-1
+'''

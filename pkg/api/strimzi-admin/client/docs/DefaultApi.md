@@ -1,20 +1,21 @@
 # \DefaultApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://api.openshift.com/api/managed-services-strimzi-ui/v1/api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateTopic**](DefaultApi.md#CreateTopic) | **Post** /topics | Creates a new topic
-[**DeleteTopic**](DefaultApi.md#DeleteTopic) | **Delete** /topics/{topicId} | Deletes a  topic
-[**GetTopic**](DefaultApi.md#GetTopic) | **Get** /topics/{topicId} | Topic associated with the topic id
+[**DeleteTopic**](DefaultApi.md#DeleteTopic) | **Delete** /topics/{topicName} | Deletes a  topic
+[**GetTopic**](DefaultApi.md#GetTopic) | **Get** /topics/{topicName} | Retrieves the topic with the specified name.
 [**GetTopicsList**](DefaultApi.md#GetTopicsList) | **Get** /topics | List of topics
-[**UpdateTopic**](DefaultApi.md#UpdateTopic) | **Patch** /topics/{topicId} | Updates the topic with the specified id.
+[**Metrics**](DefaultApi.md#Metrics) | **Get** /metrics | Admin server metrics
+[**UpdateTopic**](DefaultApi.md#UpdateTopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 
 
 ## CreateTopic
 
-> Topic CreateTopic(ctx).TopicSettings(topicSettings).Execute()
+> Topic CreateTopic(ctx).NewTopicInput(newTopicInput).Execute()
 
 Creates a new topic
 
@@ -33,11 +34,11 @@ import (
 )
 
 func main() {
-    topicSettings := *openapiclient.NewTopicSettings() // TopicSettings | Topic to create.
+    newTopicInput := *openapiclient.NewNewTopicInput("Name_example") // NewTopicInput | Topic to create.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.CreateTopic(context.Background()).TopicSettings(topicSettings).Execute()
+    resp, r, err := api_client.DefaultApi.CreateTopic(context.Background()).NewTopicInput(newTopicInput).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -58,7 +59,7 @@ Other parameters are passed through a pointer to a apiCreateTopicRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **topicSettings** | [**TopicSettings**](TopicSettings.md) | Topic to create. | 
+ **newTopicInput** | [**NewTopicInput**](NewTopicInput.md) | Topic to create. | 
 
 ### Return type
 
@@ -80,7 +81,7 @@ No authorization required
 
 ## DeleteTopic
 
-> DeleteTopic(ctx, topicId).Execute()
+> DeleteTopic(ctx, topicName).Execute()
 
 Deletes a  topic
 
@@ -99,11 +100,11 @@ import (
 )
 
 func main() {
-    topicId := "topicId_example" // string | Topic id to delete
+    topicName := "topicName_example" // string | The topic name to retrieve.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.DeleteTopic(context.Background(), topicId).Execute()
+    resp, r, err := api_client.DefaultApi.DeleteTopic(context.Background(), topicName).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -117,7 +118,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**topicId** | **string** | Topic id to delete | 
+**topicName** | **string** | The topic name to retrieve. | 
 
 ### Other Parameters
 
@@ -148,9 +149,9 @@ No authorization required
 
 ## GetTopic
 
-> Topic GetTopic(ctx, topicId).Execute()
+> Topic GetTopic(ctx, topicName).Execute()
 
-Topic associated with the topic id
+Retrieves the topic with the specified name.
 
 
 
@@ -167,11 +168,11 @@ import (
 )
 
 func main() {
-    topicId := "topicId_example" // string | The id of the topic
+    topicName := "topicName_example" // string | The topic name to retrieve.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.GetTopic(context.Background(), topicId).Execute()
+    resp, r, err := api_client.DefaultApi.GetTopic(context.Background(), topicName).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -187,7 +188,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**topicId** | **string** | The id of the topic | 
+**topicName** | **string** | The topic name to retrieve. | 
 
 ### Other Parameters
 
@@ -286,11 +287,68 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## Metrics
+
+> Metrics(ctx).Execute()
+
+Admin server metrics
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.Metrics(context.Background()).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.Metrics``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMetricsRequest struct via the builder pattern
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## UpdateTopic
 
-> Topic UpdateTopic(ctx, topicId).TopicSettings(topicSettings).Execute()
+> Topic UpdateTopic(ctx, topicName).TopicSettings(topicSettings).Execute()
 
-Updates the topic with the specified id.
+Updates the topic with the specified name.
 
 
 
@@ -307,12 +365,12 @@ import (
 )
 
 func main() {
-    topicId := "topicId_example" // string | topic id to update
+    topicName := "topicName_example" // string | The topic name which is its unique id.
     topicSettings := *openapiclient.NewTopicSettings() // TopicSettings | 
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.UpdateTopic(context.Background(), topicId).TopicSettings(topicSettings).Execute()
+    resp, r, err := api_client.DefaultApi.UpdateTopic(context.Background(), topicName).TopicSettings(topicSettings).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.UpdateTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -328,7 +386,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**topicId** | **string** | topic id to update | 
+**topicName** | **string** | The topic name which is its unique id. | 
 
 ### Other Parameters
 

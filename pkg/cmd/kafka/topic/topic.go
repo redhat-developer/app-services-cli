@@ -1,13 +1,15 @@
 package topics
 
 import (
-	"github.com/MakeNowJust/heredoc"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/spf13/cobra"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/create"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/delete"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/describe"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/list"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/update"
 )
 
 const (
@@ -17,28 +19,20 @@ const (
 
 // NewTopicCommand gives commands that manages Kafka topics.
 func NewTopicCommand(f *factory.Factory) *cobra.Command {
+	localizer.LoadMessageFiles("cmd/kafka/topic")
+
 	cmd := &cobra.Command{
-		Use:   "topic",
-		Short: "Create, list, and delete Kafka topics",
-		Long: heredoc.Doc(`
-			Create, list, and delete topics for a Kafka instance.
-		`),
-		Example: heredoc.Doc(`
-			# create a topic in the current Kafka instance
-			$ rhoas kafka topic create --name "my-example-topic"
-
-			# list all topics for a Kafka instance
-			$ rhoas kafka topic list
-
-			# delete a topic for the current Kafka instance
-			$ rhoas kafka topic delete --name "my-example-topic"
-		`),
+		Use:   localizer.MustLocalizeFromID("kafka.topic.cmd.use"),
+		Short: localizer.MustLocalizeFromID("kafka.topic.cmd.shortDescription"),
+		Long:  localizer.MustLocalizeFromID("kafka.topic.cmd.longDescription"),
 	}
 
 	cmd.AddCommand(
 		create.NewCreateTopicCommand(f),
 		list.NewListTopicCommand(f),
 		delete.NewDeleteTopicCommand(f),
+		describe.NewDescribeTopicCommand(f),
+		update.NewUpdateTopicCommand(f),
 	)
 
 	return cmd

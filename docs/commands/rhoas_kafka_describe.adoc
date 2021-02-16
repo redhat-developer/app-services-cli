@@ -33,8 +33,8 @@ $ rhoas kafka describe -o yaml
 === Options
 
 ....
-      --id string       ID of the Kafka instance you want to describe. If not set, the current Kafka instance will be used.
-  -o, --output string   Format to display the Kafka instance. Choose from: "json", "yaml", "yml". (default "json")
+      --id string       Unique ID of the Kafka instance you want to view. If not set, the current Kafka instance will be used.
+  -o, --output string   Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml" (default "json")
 ....
 
 === Options inherited from parent commands
@@ -47,4 +47,4 @@ $ rhoas kafka describe -o yaml
 === SEE ALSO
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use, and manage your
-Kafka instances
+Apache Kafka instances

@@ -1,0 +1,37 @@
+[cluster.connect.cmd.use]
+one = 'connect'
+
+[cluster.connect.cmd.shortDescription]
+one = 'Connect your services to Kubernetes or OpenShift'
+
+[cluster.connect.cmd.longDescription]
+one = '''
+Connect your application services to your Kubernetes or OpenShift cluster.
+The kubeconfig file is used to connect to the cluster and identify the context.
+
+A service account is created and mounted as a secret into your cluster. 
+This enables you to mount credentials directly to your application.
+
+This command works in two modes:
+
+  * If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
+
+  * Create the secret only. This mode does not require the Operator to be installed.
+
+You can interactively select the service instance by using the "--interactive-select" flag
+'''
+
+[cluster.connect.cmd.example]
+one = '''
+# connect the current Kafka instance to your cluster
+$ rhoas cluster connect
+'''
+
+[cluster.connect.flag.secretOnly.description]
+one = "Creates the secret, but doesn't bind the instance. Use this flag if the RHOAS Operator is not installed in the Kubernetes or OpenShift cluster."
+
+[cluster.connect.flag.interactiveSelect.description]
+one = "Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster."
+
+[cluster.connect.flag.secretName.description]
+one = 'Name of the secret that holds the Kafka credentials.'

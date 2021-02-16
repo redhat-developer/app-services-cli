@@ -1,52 +1,106 @@
 package delete
 
 import (
+	"context"
+	"errors"
 	"fmt"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
 	topicName string
-	insecure  bool
+	kafkaID   string
+	force     bool
 
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 }
 
-// NewDeleteTopicCommand gets a new command for deleting kafka topic.
+// NewDeleteTopicCommand gets a new command for deleting a kafka topic.
 func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
-		Logger: f.Logger,
+		Connection: f.Connection,
+		Config:     f.Config,
+		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/topic/delete", "cmd/kafka/topic/common", "cmd/kafka/common")
+
 	cmd := &cobra.Command{
-		Use:   "delete",
-		Short: "Delete Kafka topic",
-		Long:  "Delete a topic from the current Kafka instance",
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			return deleteTopic(opts)
+		Use:     localizer.MustLocalizeFromID("kafka.topic.delete.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.topic.delete.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.topic.delete.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.topic.delete.cmd.example"),
+		Args:    cobra.ExactArgs(1),
+		// Dynamic completion of the topic name
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			validNames := []string{}
+
+			cfg, err := opts.Config.Load()
+			if err != nil {
+				return validNames, cobra.ShellCompDirectiveError
+			}
+
+			if !cfg.HasKafka() {
+				return validNames, cobra.ShellCompDirectiveError
+			}
+
+			opts.kafkaID = cfg.Services.Kafka.ClusterID
+
+			return cmdutil.FilterValidTopicNameArgs(f, opts.kafkaID, toComplete)
+		},
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			if !opts.IO.CanPrompt() && !opts.force {
+				return errors.New(localizer.MustLocalizeFromID("kafka.topic.error.forceFlagRequired"))
+			}
+
+			if len(args) > 0 {
+				opts.topicName = args[0]
+			}
+
+			if opts.kafkaID != "" {
+				return runCmd(opts)
+			}
+
+			cfg, err := opts.Config.Load()
+			if err != nil {
+				return err
+			}
+
+			if !cfg.HasKafka() {
+				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.common.error.noKafkaSelected"))
+			}
+
+			opts.kafkaID = cfg.Services.Kafka.ClusterID
+
+			return runCmd(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.topicName, flags.FlagName, "n", "", "Topic name.")
-	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("kafka.topic.delete.flag.force.description"))
 
-	_ = cmd.MarkFlagRequired(flags.FlagName)
 	return cmd
 }
 
-func deleteTopic(opts *Options) error {
-	_, err := opts.Connection()
+func runCmd(opts *Options) error {
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
@@ -56,24 +110,84 @@ func deleteTopic(opts *Options) error {
 		return err
 	}
 
-	topicOpts := &topics.Options{
-		Connection: opts.Connection,
-		Config:     opts.Config,
-		Insecure:   opts.insecure,
-		Logger:     opts.Logger,
+	api := conn.API()
+	ctx := context.Background()
+
+	// check if the Kafka instance exists
+	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
+	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundErrorById",
+			TemplateData: map[string]interface{}{
+				"ID": opts.kafkaID,
+			},
+		}))
+	} else if apiErr.Error() != "" {
+		return apiErr
 	}
 
-	logger.Infof("Deleting topic %v", opts.topicName)
-	err = topics.ValidateCredentials(topicOpts)
-	if err != nil {
-		return fmt.Errorf("Unable to create credentials for topic: %w", err)
-	}
-	err = topics.DeleteKafkaTopic(opts.topicName, topicOpts)
-	if err != nil {
-		return fmt.Errorf("Unable to delete topic: %w", err)
+	if !opts.force {
+		var promptConfirmName = &survey.Input{
+			Message: localizer.MustLocalizeFromID("kafka.topic.delete.input.name.message"),
+		}
+		var userConfirmedName string
+		if err := survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
+			return err
+		}
+
+		if userConfirmedName != opts.topicName {
+			logger.Info(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.delete.error.mismatchedNameConfirmation",
+				TemplateData: map[string]interface{}{
+					"ConfirmedName": userConfirmedName,
+					"ActualName":    opts.topicName,
+				},
+			}))
+			return nil
+		}
 	}
 
-	logger.Infof("Topic %v deleted", opts.topicName)
+	// perform delete topic API request
+	httpRes, topicErr := api.TopicAdmin(opts.kafkaID).DeleteTopic(ctx, opts.topicName).
+		Execute()
+	if topicErr.Error() != "" {
+		switch httpRes.StatusCode {
+		case 404:
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.notFoundError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    opts.topicName,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
+		case 401:
+			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "delete",
+				},
+			}))
+		case 500:
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+		case 503:
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
+				TemplateData: map[string]interface{}{
+					"Name": kafkaInstance.GetName(),
+				},
+			}), topicErr)
+		default:
+			return topicErr
+		}
+	}
+
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.delete.log.info.topicDeleted",
+		TemplateData: map[string]interface{}{
+			"TopicName":    opts.topicName,
+			"InstanceName": kafkaInstance.GetName(),
+		},
+	}))
 
 	return nil
 }

@@ -7,14 +7,14 @@ client.go
 configuration.go
 docs/ConfigEntry.md
 docs/DefaultApi.md
-docs/Node.md
+docs/NewTopicInput.md
 docs/Partition.md
 docs/Topic.md
 docs/TopicSettings.md
 docs/TopicsList.md
 git_push.sh
 model_config_entry.go
-model_node.go
+model_new_topic_input.go
 model_partition.go
 model_topic.go
 model_topic_settings.go

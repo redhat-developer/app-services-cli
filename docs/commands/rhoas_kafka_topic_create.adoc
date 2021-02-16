@@ -4,19 +4,30 @@ Create a Kafka topic
 
 === Synopsis
 
-Create topic in the current Kafka instance
+Create a topic in the current Apache Kafka instance.
+
+This command lets you create a topic, set a desired number of
+partitions, replicas and retention period or else use the default
+values.
 
 ....
 rhoas kafka topic create [flags]
 ....
 
+=== Examples
+
+....
+# create a topic
+$ rhoas kafka topic create topic-1
+....
+
 === Options
 
 ....
-      --insecure           Enables insecure communication with the server. This disables verification of TLS certificates and host names.
-  -n, --name string        Topic name.
-  -p, --partitions int32   Set number of partitions. (default 1)
-  -r, --replicas int32     Set number of replicas. (default 1)
+  -o, --output string      Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
+      --partitions int32   The number of partitions in the topic (default 1)
+      --replicas int32     The replication factor for the topic (default 1)
+      --retention-ms int   The period of time in milliseconds the broker will retain a partition log before deleting it (default -1)
 ....
 
 === Options inherited from parent commands
@@ -28,5 +39,5 @@ rhoas kafka topic create [flags]
 
 === SEE ALSO
 
-* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, list, and
-delete Kafka topics
+* link:rhoas_kafka_topic.adoc[rhoas kafka topic] - Create, describe,
+update, list and delete Kafka topics

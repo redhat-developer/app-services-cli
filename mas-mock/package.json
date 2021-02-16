@@ -9,12 +9,13 @@
     "start": "node ./src/index.js",
     "refresh": "../scripts/pullapi.sh",
     "test": "jest",
-    "api": "openapi-editor --file ../openapi/kafka-service.yaml --port 10000"
+    "api:kafka-service": "openapi-editor --file ../openapi/kafka-service.yaml --port 10000",
+    "api:topic-admin": "openapi-editor --file ../openapi/strimzi-admin.yaml --port 10001"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "openapi-backend": "^3.6.0"
+    "openapi-backend": "^3.7.0"
   },
   "devDependencies": {
     "axios": "^0.18.1",

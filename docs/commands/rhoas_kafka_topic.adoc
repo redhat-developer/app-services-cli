@@ -1,23 +1,11 @@
 == rhoas kafka topic
 
-Create, list, and delete Kafka topics
+Create, describe, update, list and delete Kafka topics
 
 === Synopsis
 
-Create, list, and delete topics for a Kafka instance.
-
-=== Examples
-
-....
-# create a topic in the current Kafka instance
-$ rhoas kafka topic create --name "my-example-topic"
-
-# list all topics for a Kafka instance
-$ rhoas kafka topic list
-
-# delete a topic for the current Kafka instance
-$ rhoas kafka topic delete --name "my-example-topic"
-....
+Create, describe, update, list and delete topics for the current Kafka
+instance.
 
 === Options inherited from parent commands
 
@@ -29,10 +17,14 @@ $ rhoas kafka topic delete --name "my-example-topic"
 === SEE ALSO
 
 * link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use, and manage your
-Kafka instances
+Apache Kafka instances
 * link:rhoas_kafka_topic_create.adoc[rhoas kafka topic create] - Create a
 Kafka topic
-* link:rhoas_kafka_topic_delete.adoc[rhoas kafka topic delete] - Delete
+* link:rhoas_kafka_topic_delete.adoc[rhoas kafka topic delete] - delete a
 Kafka topic
+* link:rhoas_kafka_topic_describe.adoc[rhoas kafka topic describe] -
+Describe a Kafka topic
 * link:rhoas_kafka_topic_list.adoc[rhoas kafka topic list] - List Kafka
 topics
+* link:rhoas_kafka_topic_update.adoc[rhoas kafka topic update] - Update a
+Kafka topic

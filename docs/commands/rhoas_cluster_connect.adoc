@@ -13,14 +13,13 @@ This enables you to mount credentials directly to your application.
 
 This command works in two modes:
 
-....
-* If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
-
-* Create the secret only. This mode does not require the Operator to be installed.
-....
+* If the RHOAS Operator is installed in the cluster, you can use it to
+bind your instance automatically.
+* Create the secret only. This mode does not require the Operator to be
+installed.
 
 You can interactively select the service instance by using the
-``–interactive-select'' flag.
+``–interactive-select'' flag
 
 ....
 rhoas cluster connect [flags]
@@ -52,4 +51,4 @@ $ rhoas cluster connect
 === SEE ALSO
 
 * link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
-your Kubernetes or OpenShift Cluster
+your Kubernetes or OpenShift cluster

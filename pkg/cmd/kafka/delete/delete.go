@@ -5,9 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	kafkamsg "github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer/msg/kafka"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -24,6 +23,7 @@ type options struct {
 	id    string
 	force bool
 
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
@@ -35,9 +35,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/delete")
+	localizer.LoadMessageFiles("cmd/common/flags", "cmd/kafka/common", "cmd/kafka/delete")
 
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.delete.cmd.use"),
@@ -46,6 +47,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Example: localizer.MustLocalizeFromID("kafka.delete.cmd.example"),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			if !opts.IO.CanPrompt() {
+				return fmt.Errorf(localizer.MustLocalizeFromID("flag.error.requiredWhenNonInteractive"))
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
@@ -57,7 +62,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(localizer.MustLocalizeFromID(kafkamsg.NoKafkaSelectedError))
+				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.noKafkaSelected"))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID

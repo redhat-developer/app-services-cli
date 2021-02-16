@@ -1,0 +1,179 @@
+[
+  {
+    "name": "topic-1",
+    "config": [
+      {
+        "key": "min.insync.replicas",
+        "value": "1"
+      },
+      {
+        "key": "max.message.bytes",
+        "value": "1050000"
+      }
+    ],
+    "partitions": [
+      {
+        "id": 28,
+        "replicas": [
+          {
+            "id": 35
+          },
+          {
+            "id": 5
+          }
+        ],
+        "isr": [
+          {
+            "id": 44
+          },
+          {
+            "id": 83
+          }
+        ],
+        "leader": {
+          "id": 22
+        }
+      },
+      {
+        "id": 68,
+        "replicas": [
+          {
+            "id": 81
+          },
+          {
+            "id": 22
+          }
+        ],
+        "isr": [
+          {
+            "id": 75
+          },
+          {
+            "id": 65
+          }
+        ],
+        "leader": {
+          "id": 58
+        }
+      }
+    ]
+  },
+  {
+    "name": "topic-2",
+    "config": [
+      {
+        "key": "min.insync.replicas",
+        "value": "1"
+      },
+      {
+        "key": "max.message.bytes",
+        "value": "1050000"
+      }
+    ],
+    "partitions": [
+      {
+        "id": 28,
+        "replicas": [
+          {
+            "id": 35
+          },
+          {
+            "id": 5
+          }
+        ],
+        "isr": [
+          {
+            "id": 44
+          },
+          {
+            "id": 83
+          }
+        ],
+        "leader": {
+          "id": 22
+        }
+      },
+      {
+        "id": 68,
+        "replicas": [
+          {
+            "id": 81
+          },
+          {
+            "id": 22
+          }
+        ],
+        "isr": [
+          {
+            "id": 75
+          },
+          {
+            "id": 65
+          }
+        ],
+        "leader": {
+          "id": 58
+        }
+      }
+    ]
+  },
+  {
+    "name": "topic-3",
+    "config": [
+      {
+        "key": "min.insync.replicas",
+        "value": "1"
+      },
+      {
+        "key": "max.message.bytes",
+        "value": "1050000"
+      }
+    ],
+    "partitions": [
+      {
+        "id": 28,
+        "replicas": [
+          {
+            "id": 35
+          },
+          {
+            "id": 5
+          }
+        ],
+        "isr": [
+          {
+            "id": 44
+          },
+          {
+            "id": 83
+          }
+        ],
+        "leader": {
+          "id": 22
+        }
+      },
+      {
+        "id": 68,
+        "replicas": [
+          {
+            "id": 81
+          },
+          {
+            "id": 22
+          }
+        ],
+        "isr": [
+          {
+            "id": 75
+          },
+          {
+            "id": 65
+          }
+        ],
+        "leader": {
+          "id": 58
+        }
+      }
+    ]
+  }
+]

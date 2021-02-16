@@ -1,24 +1,40 @@
 package list
 
 import (
-	"fmt"
+	"context"
+	"encoding/json"
+	"errors"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/sdk/kafka/topics"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
 	Config     config.IConfig
+	IO         *iostreams.IOStreams
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 
-	output   string
-	insecure bool
+	kafkaID string
+	output  string
+}
+
+type topicRow struct {
+	Name            string `json:"name,omitempty" header:"Name"`
+	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
 }
 
 // NewListTopicCommand gets a new command for getting kafkas.
@@ -27,32 +43,37 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
+	localizer.LoadMessageFiles("cmd/kafka/topic/common", "cmd/kafka/topic/list", "cmd/kafka/common")
+
 	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "List Kafka topics",
-		Long:  "List all topics in the current Kafka instance",
+		Use:     localizer.MustLocalizeFromID("kafka.topic.list.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("kafka.topic.list.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("kafka.topic.list.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("kafka.topic.list.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			logger, err := opts.Logger()
-			if err != nil {
-				return err
+			if opts.output != "" {
+				if err := flag.ValidateOutput(opts.output); err != nil {
+					return err
+				}
 			}
-			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
-				logger.Infof("Unknown flag value '%v' for --output. Using table format instead", opts.output)
-				opts.output = "plain"
-			}
-			return listTopic(opts)
+
+			return runCmd(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "plain", fmt.Sprintf("Output format of the results. Choose from %q.", flagutil.ValidOutputFormats))
-	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Enables insecure communication with the server. This disables verification of TLS certificates and host names.")
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalize(&localizer.Config{
+		MessageID:   "kafka.topic.common.flag.output.description",
+		PluralCount: 2,
+	}))
+
 	return cmd
 }
 
-func listTopic(opts *Options) error {
-	_, err := opts.Connection()
+func runCmd(opts *Options) error {
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
@@ -62,22 +83,67 @@ func listTopic(opts *Options) error {
 		return err
 	}
 
-	topicOpts := &topics.Options{
-		Connection: opts.Connection,
-		Config:     opts.Config,
-		Insecure:   opts.insecure,
-		Logger:     opts.Logger,
+	api := conn.API()
+
+	ctx := context.Background()
+	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
+
+	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundByIdError",
+			TemplateData: map[string]interface{}{
+				"ID": opts.kafkaID,
+			},
+		}))
+	} else if apiErr.Error() != "" {
+		return apiErr
 	}
 
-	err = topics.ValidateCredentials(topicOpts)
-	if err != nil {
-		return fmt.Errorf("Unable to create credentials: %w", err)
+	a := api.TopicAdmin(opts.kafkaID).GetTopicsList(context.Background())
+	topicData, _, topicErr := a.Execute()
+
+	if topicErr.Error() != "" {
+		return topicErr
 	}
-	logger.Info("Topics:")
-	err = topics.ListKafkaTopics(topicOpts)
-	if err != nil {
-		return fmt.Errorf("Failed to perform list operation: %w", err)
+
+	if topicData.GetCount() == 0 {
+		logger.Info(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.list.log.info.noTopics",
+			TemplateData: map[string]interface{}{
+				"InstanceName": kafkaInstance.GetName(),
+			},
+		}))
+
+		return nil
+	}
+
+	stdout := opts.IO.Out
+	switch opts.output {
+	case "json":
+		data, _ := json.Marshal(topicData)
+		_ = dump.JSON(stdout, data)
+	case "yaml", "yml":
+		data, _ := yaml.Marshal(topicData)
+		_ = dump.YAML(stdout, data)
+	default:
+		topics := topicData.GetTopics()
+		rows := mapTopicResultsToTableFormat(topics)
+		dump.Table(stdout, rows)
 	}
 
 	return err
+}
+
+func mapTopicResultsToTableFormat(topics []strimziadminclient.Topic) []topicRow {
+	var rows []topicRow = []topicRow{}
+
+	for _, t := range topics {
+		row := topicRow{
+			Name:            t.GetName(),
+			PartitionsCount: len(t.GetPartitions()),
+		}
+		rows = append(rows, row)
+	}
+
+	return rows
 }

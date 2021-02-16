@@ -2,9 +2,8 @@ package connect
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
-	"github.com/MakeNowJust/heredoc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -12,6 +11,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/spf13/cobra"
 )
 
@@ -35,41 +35,31 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
+	localizer.LoadMessageFiles("cmd/cluster/common", "cmd/cluster/connect", "cmd/common/flags")
+
 	cmd := &cobra.Command{
-		Use:   "connect",
-		Short: "Connect your services to Kubernetes or OpenShift",
-		Long: heredoc.Doc(`
-			Connect your application services to your Kubernetes or OpenShift cluster.
-			The kubeconfig file is used to connect to the cluster and identify the context.
-
-			A service account is created and mounted as a secret into your cluster. 
-			This enables you to mount credentials directly to your application.
-
-			This command works in two modes:
-
-				* If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
-
-				* Create the secret only. This mode does not require the Operator to be installed.
-
-			You can interactively select the service instance by using the "--interactive-select" flag.
-		`),
-		Example: heredoc.Doc(`
-			# connect the current Kafka instance to your cluster
-			$ rhoas cluster connect
-		`),
+		Use:     localizer.MustLocalizeFromID("cluster.connect.cmd.use"),
+		Short:   localizer.MustLocalizeFromID("cluster.connect.cmd.shortDescription"),
+		Long:    localizer.MustLocalizeFromID("cluster.connect.cmd.longDescription"),
+		Example: localizer.MustLocalizeFromID("cluster.connect.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.interactiveSelect {
-				return fmt.Errorf("Cannot use --interactive-select when not running interactively")
+				return errors.New(localizer.MustLocalize(&localizer.Config{
+					MessageID: "flag.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Flag": "interactive-select",
+					},
+				}))
 			}
 
 			return runBind(opts)
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, "Creates the secret, but doesn't bind the instance. Use this flag if the RHOAS Operator is not installed in the Kubernetes or OpenShift cluster.")
-	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, "Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster.")
-	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", "Name of the secret that holds the Kafka credentials.")
-	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", "Location of the kubeconfig file.")
+	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, localizer.MustLocalizeFromID("cluster.connect.flag.secretOnly.description"))
+	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, localizer.MustLocalizeFromID("cluster.connect.flag.interactiveSelect.description"))
+	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", localizer.MustLocalizeFromID("cluster.connect.flag.secretName.description"))
+	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", localizer.MustLocalizeFromID("cluster.common.flag.kubeconfig.description"))
 
 	return cmd
 }

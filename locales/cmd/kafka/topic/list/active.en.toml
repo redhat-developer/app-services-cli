@@ -1,0 +1,22 @@
+[kafka.topic.list.cmd.use]
+one = 'list'
+
+[kafka.topic.list.cmd.shortDescription]
+one = 'List Kafka topics'
+
+[kafka.topic.list.cmd.longDescription]
+one = '''
+List all topics in the current Apache Kafka instance.
+'''
+
+[kafka.topic.list.cmd.example]
+one = '''
+# list all topics
+$ rhoas kafka topic list
+
+# list all topics as JSON
+$ rhoas kafka topic list -o json
+'''
+
+[kafka.topic.list.log.info.noTopics]
+one = 'Kafka instance "{{.InstanceName}}" has no topics. Run "rhoas kafka topic create <topic-name>" to create one'

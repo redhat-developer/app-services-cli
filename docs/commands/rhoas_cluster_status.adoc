@@ -1,6 +1,6 @@
 == rhoas cluster status
 
-View status of the current Kubernetes or OpenShift cluster.
+View status of the current Kubernetes or OpenShift cluster
 
 === Synopsis
 
@@ -39,4 +39,4 @@ $ rhoas cluster status
 === SEE ALSO
 
 * link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
-your Kubernetes or OpenShift Cluster
+your Kubernetes or OpenShift cluster

@@ -4,8 +4,8 @@ Log out from RHOAS
 
 === Synopsis
 
-Log out from RHOAS. To manage your services again, log in using `rhoas
-login'
+Log out from RHOAS. To manage your services again, log in using ``rhoas
+login''.
 
 ....
 rhoas logout [flags]
