@@ -1,10 +1,10 @@
 == rhoas kafka delete
 
-Delete a Kafka instance
+Delete an Apache Kafka instance
 
 === Synopsis
 
-Permanently delete a Kafka instance, including all topics.
+Permanently delete an Apache Kafka instance, including all topics.
 
 When this command is run, you will be asked to confirm the name of the
 instance you want to delete. Otherwise you can pass ``–force'' to

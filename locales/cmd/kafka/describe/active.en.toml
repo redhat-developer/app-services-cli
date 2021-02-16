@@ -4,12 +4,12 @@ one = "describe"
 
 [kafka.describe.cmd.shortDescription]
 description = "Short description for command"
-one = "View configuration details of a Kafka instance"
+one = "View configuration details of an Apache Kafka instance"
 
 [kafka.describe.cmd.longDescription]
 description = "Long description for command"
 one = '''
-View configuration fields and their values for a Kafka instance.
+View configuration fields and their values for an Apache Kafka instance.
 
 Pass the "--id" flag to specify which instance you would like to view.
 

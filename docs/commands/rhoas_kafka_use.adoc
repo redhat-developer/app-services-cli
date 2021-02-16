@@ -1,10 +1,10 @@
 == rhoas kafka use
 
-Set the current Kafka instance
+Set the current Apache Kafka instance
 
 === Synopsis
 
-Select a Kafka instance and set it as the current Kafka instance.
+Select an Apache Kafka instance and set it as the current instance.
 
 When you set the Kafka instance to be used, it is set as the current
 instance for all ``rhoas kafka'' commands.

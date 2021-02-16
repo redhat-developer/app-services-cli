@@ -2,7 +2,7 @@
 one = 'delete'
 
 [kafka.topic.delete.cmd.shortDescription]
-one = 'delete a Kafka topic'
+one = 'Delete a topic'
 
 [kafka.topic.delete.cmd.longDescription]
 one = '''

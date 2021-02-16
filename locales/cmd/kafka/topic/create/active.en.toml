@@ -2,7 +2,7 @@
 one = 'create'
 
 [kafka.topic.create.cmd.shortDescription]
-one = 'Create a Kafka topic'
+one = 'Create a topic'
 
 [kafka.topic.create.cmd.longDescription]
 one = '''

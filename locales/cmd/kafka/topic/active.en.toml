@@ -2,7 +2,7 @@
 one = 'topic'
 
 [kafka.topic.cmd.shortDescription]
-one = 'Create, describe, update, list and delete Kafka topics'
+one = 'Create, describe, update, list and delete topics'
 
 [kafka.topic.cmd.longDescription]
 one = 'Create, describe, update, list and delete topics for the current Kafka instance.'

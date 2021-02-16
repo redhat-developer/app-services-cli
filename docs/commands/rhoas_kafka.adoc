@@ -12,13 +12,13 @@ Create, view, use, and manage your Apache Kafka instances
 === SEE ALSO
 
 * link:rhoas.adoc[rhoas] - RHOAS CLI
-* link:rhoas_kafka_create.adoc[rhoas kafka create] - Create a Kafka
-instance
-* link:rhoas_kafka_delete.adoc[rhoas kafka delete] - Delete a Kafka
-instance
+* link:rhoas_kafka_create.adoc[rhoas kafka create] - Create an Apache
+Kafka instance
+* link:rhoas_kafka_delete.adoc[rhoas kafka delete] - Delete an Apache
+Kafka instance
 * link:rhoas_kafka_describe.adoc[rhoas kafka describe] - View
-configuration details of a Kafka instance
+configuration details of an Apache Kafka instance
 * link:rhoas_kafka_list.adoc[rhoas kafka list] - List all Apache Kafka
 instances
-* link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Kafka
-instance
+* link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Apache
+Kafka instance

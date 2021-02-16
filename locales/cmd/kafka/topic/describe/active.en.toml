@@ -2,7 +2,7 @@
 one = 'describe'
 
 [kafka.topic.describe.cmd.shortDescription]
-one = 'Describe a Kafka topic'
+one = 'Describe a topic'
 
 [kafka.topic.describe.cmd.longDescription]
 one = '''

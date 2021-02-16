@@ -2,7 +2,7 @@
 
 Review the following sections to learn how to complete tasks using the CLI.
 
-=== Creating a Kafka instance
+=== Creating an Apache Kafka instance
 
 Use the `rhoas kafka create` command to create a new Kafka instance.
 
@@ -44,7 +44,7 @@ $ rhoas kafka status
   Bootstrap URL:          my-kafka-instance--nh-qkcxubgmlbipdqhnbswizcb.kafka.devshift.org:443
 ----
 
-=== Viewing a list of Kafka instances
+=== Viewing a list of Apache Kafka instances
 
 To view a list of Kafka instances in your organization use the `rhoas kafka list` command.
 
@@ -57,7 +57,7 @@ $ rhoas kafka list
   1lVumk6qWk3ZRQfCssZNNTGvR6Q   my-kafka        developer    complete   aws              us-east-1  
 ----
 
-=== Describing a Kafka instance
+=== Describing an Apache Kafka instance
 
 To display all information on-demand about the current Kafka instance, run `rhoas kafka describe`.
 
@@ -82,7 +82,7 @@ $ rhoas kafka describe
 
 TIP: You can pass the `--id` flag to describe a different Kafka instance.
 
-=== Using a Kafka instance
+=== Using an Apache Kafka instance
 
 The `rhoas kafka use` command can be used to switch the current Kafka instance context.
 
@@ -107,7 +107,7 @@ $ rhoas kafka use --id 1lVcpo1c9kx6a9rbablGBY8RiD8
 
 === Creating a Kafka topic
 
-You can create a topic in the current Kafka instance with the `rhoas kafka topic create` command.
+You can create a topic in the current Apache Kafka instance with the `rhoas kafka topic create` command.
 
 [source,shell]
 ----
@@ -160,7 +160,7 @@ To view the details of a topic, run the `rhoas kafka topic describe` command.
 
 === Updating a Kafka topic
 
-You can update the number of partitions, number of replicas and retention period for an existing Kafka topic with `rhoas kafka topic update`:
+You can update the number of partitions, number of replicas and retention period for an existing topic with `rhoas kafka topic update`:
 
 [source,shell]
 ----
@@ -181,7 +181,7 @@ Topic topic-1 updated in Kafka instance serviceapi:
 
 === Listing Kafka topics
 
-To list the topics for the current Kafka instance use the `rhoas kafka topic list` command.
+To list the topics in the current Apache Kafka instance use the `rhoas kafka topic list` command.
 
 [source,shell]
 ----

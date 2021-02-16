@@ -4,14 +4,14 @@ one = "create"
 
 [kafka.create.cmd.shortDescription]
 description = "Short description for command"
-one = "Create a Kafka instance"
+one = "Create an Apache Kafka instance"
 
 [kafka.create.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Create a Kafka instance on a particular cloud provider and region.
+Create an Apache Kafka instance on a particular cloud provider and region.
 
-After creating the Kafka instance you can view it by running "rhoas kafka describe".
+After creating the instance you can view it by running "rhoas kafka describe".
 '''
 
 [kafka.create.cmd.example]
