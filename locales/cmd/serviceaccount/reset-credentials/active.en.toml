@@ -45,7 +45,7 @@ one = 'Service account "{{.Name}}" created successfully with ID "{{.ID}}".'
 [serviceAccount.resetCredentials.input.id.message]
 one = "Service Account ID:"
 
-[serviceAccount.resetCredentials.input.name.help]
+[serviceAccount.resetCredentials.input.id.help]
 description = 'help for the ID input'
 one = "What is the ID of the service account?"
 
@@ -62,7 +62,7 @@ description = 'Help for credentials format input'
 one = 'File format in which to save the service account credentials:'
 
 [serviceAccount.resetCredentials.input.confirmReset.message]
-one = 'Are you sure you want to reset the credentials for service account "{{.Name}}"?'
+one = 'Are you sure you want to reset the credentials for service account "{{.ID}}"?'
 
 [serviceAccount.resetCredentials.log.debug.cancelledReset]
 one = 'You have chosen to not reset the service account credentials.'

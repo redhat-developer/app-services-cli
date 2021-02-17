@@ -1,4 +1,4 @@
-package topics
+package topic
 
 import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"

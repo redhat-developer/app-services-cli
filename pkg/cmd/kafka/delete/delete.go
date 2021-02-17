@@ -106,7 +106,12 @@ func runDelete(opts *options) error {
 
 	kafkaName := response.GetName()
 
-	logger.Info(localizer.MustLocalizeFromID("kafka.delete.log.info.deleting"), "\n")
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.delete.log.info.deleting",
+		TemplateData: map[string]interface{}{
+			"Name": kafkaName,
+		},
+	}), "\n")
 
 	if !opts.force {
 		promptConfirmName := &survey.Input{

@@ -10,3 +10,7 @@ Invalid Kafka instance name. Valid names must satisfy the following conditions:
 
 [kafka.validation.name.error.lengthError]
 one = 'Kafka instance name must be between 1 and 32 characters'
+
+
+[kafka.common.error.notFoundErrorById]
+one = 'Kafka instance with ID "{{.ID}}" not found'

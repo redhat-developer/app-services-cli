@@ -43,7 +43,7 @@ one = 'Confirm the name of the instance you want to delete:'
 
 [kafka.delete.log.info.incorrectNameConfirmation]
 description = 'Info message when user incorrectly confirms the name'
-one = 'The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it correct and try again.'
+one = 'The name you entered does not match the name of the Kafka instance that you are trying to delete. Please check that it is correct and try again.'
 
 [kafka.delete.log.debug.deletingKafka]
 description = 'Debug message when deleting Kafka'
