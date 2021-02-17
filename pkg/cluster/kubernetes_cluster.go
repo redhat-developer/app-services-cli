@@ -226,21 +226,20 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 		Spec: ManagedKafkaConnectionSpec{
 			KafkaID: kafkaID,
 		},
-	}
-
-	statusUpdate := ManagedKafkaConnectionStatus{
-		CreatedBy: "RHOASCLI",
-		BootstrapServer: BootstrapServerSpec{
-			Host: *kafkaInstance.BootstrapServerHost,
+		Status: ManagedKafkaConnectionStatus{
+			CreatedBy: "RHOASCLI",
+			BootstrapServer: BootstrapServerSpec{
+				Host: *kafkaInstance.BootstrapServerHost,
+			},
+			SecretName: secretName,
 		},
-		SecretName: secretName,
 	}
 
 	crJSON, err := json.Marshal(kafkaConnectionCR)
 	if err != nil {
 		return fmt.Errorf("%v: %w", "cluster.kubernetes.createKafkaCR.error.marshalError", err)
 	}
-
+	fmt.Print("Creating resource")
 	data := c.clientset.RESTClient().
 		Post().
 		AbsPath(c.getKafkaConnectionsAPIURL(namespace)).
@@ -251,13 +250,10 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 		return data.Error()
 	}
 
-	crJSON, err = json.Marshal(statusUpdate)
-	if err != nil {
-		return fmt.Errorf("%v: %w", "cluster.kubernetes.createKafkaCR.error.marshalError", err)
-	}
+	fmt.Print("Patching Status")
 
 	data = c.clientset.RESTClient().
-		Post().
+		Put().
 		AbsPath(c.getKafkaConnectionsAPIURL(namespace) + "/" + crName + "/status").
 		Body(crJSON).
 		Do(ctx)
