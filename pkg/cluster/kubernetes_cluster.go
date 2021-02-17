@@ -107,7 +107,9 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 		if err != nil {
 			return err
 		}
-		cfg.Services.Kafka.ClusterID = selectedKafka.GetId()
+		cfg.Services.Kafka = &config.KafkaConfig{
+			ClusterID: selectedKafka.GetId(),
+		}
 		_ = c.config.Save(cfg)
 	}
 
