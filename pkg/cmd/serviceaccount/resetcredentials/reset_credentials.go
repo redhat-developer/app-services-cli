@@ -141,7 +141,7 @@ func runResetCredentials(opts *Options) (err error) {
 		Message: localizer.MustLocalize(&localizer.Config{
 			MessageID: "serviceAccount.resetCredentials.input.confirmReset.message",
 			TemplateData: map[string]interface{}{
-				"Name": serviceAcctName,
+				"ID": opts.id,
 			},
 		}),
 	}

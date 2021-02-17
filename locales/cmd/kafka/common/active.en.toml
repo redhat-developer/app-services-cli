@@ -6,9 +6,6 @@ one = 'could not set the current Kafka instance: {{.ErrorMessage}}'
 description = 'Error message when no Kafka is set'
 one = 'no Kafka instance is currently set, use the "--id" flag or set the current instance with the "rhoas kafka use" command'
 
-[kafka.common.error.notFoundErrorById]
-one = 'Kafka instance with ID "{{.ID}}" not found'
-
 [kafka.common.flag.output.description]
 description = "Description for --output flag"
 one = 'Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml"'
