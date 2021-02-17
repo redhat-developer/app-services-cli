@@ -11,8 +11,9 @@ import (
 
 // ManagedKafkaConnectionSpec contains credentials and connection parameters to Managed Kafka
 type ManagedKafkaConnectionSpec struct {
-	KafkaID     string          `json:"kafkaId,omitempty"`
-	Credentials CredentialsSpec `json:"credentials"`
+	AccessTokenSecretName string          `json:"accessTokenSecretName,omitempty"`
+	KafkaID               string          `json:"kafkaId,omitempty"`
+	Credentials           CredentialsSpec `json:"credentials"`
 }
 
 // BootstrapServerSpec contains server host information that can be used to connecto the Managed Kafka

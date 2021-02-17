@@ -214,13 +214,14 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 		Spec: ManagedKafkaConnectionSpec{
 			KafkaID: kafkaID,
 		},
-		Status: ManagedKafkaConnectionStatus{
-			CreatedBy: "RHOASCLI",
-			BootstrapServer: BootstrapServerSpec{
-				Host: *kafkaInstance.BootstrapServerHost,
-			},
-			SecretName: secretName,
+	}
+
+	statusUpdate := ManagedKafkaConnectionStatus{
+		CreatedBy: "RHOASCLI",
+		BootstrapServer: BootstrapServerSpec{
+			Host: *kafkaInstance.BootstrapServerHost,
 		},
+		SecretName: secretName,
 	}
 
 	crJSON, err := json.Marshal(kafkaConnectionCR)
@@ -231,6 +232,21 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 	data := c.clientset.RESTClient().
 		Post().
 		AbsPath(c.getKafkaConnectionsAPIURL(namespace)).
+		Body(crJSON).
+		Do(ctx)
+
+	if data.Error() != nil {
+		return data.Error()
+	}
+
+	crJSON, err = json.Marshal(statusUpdate)
+	if err != nil {
+		return fmt.Errorf("%v: %w", "cluster.kubernetes.createKafkaCR.error.marshalError", err)
+	}
+
+	data = c.clientset.RESTClient().
+		Post().
+		AbsPath(c.getKafkaConnectionsAPIURL(namespace) + "/" + crName + "/status").
 		Body(crJSON).
 		Do(ctx)
 
@@ -257,8 +273,8 @@ func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *kasclient.Se
 		},
 
 		StringData: map[string]string{
-			"clientID":     serviceAcct.GetClientID(),
-			"clientSecret": serviceAcct.GetClientSecret(),
+			"client-id":     serviceAcct.GetClientID(),
+			"client-secret": serviceAcct.GetClientSecret(),
 		},
 	}
 
