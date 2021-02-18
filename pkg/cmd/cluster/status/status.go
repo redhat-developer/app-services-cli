@@ -88,13 +88,15 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	fmt.Println(localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.status.statusMessage",
-		TemplateData: map[string]interface{}{
-			"Namespace":      color.Info(currentNamespace),
-			"OperatorStatus": operatorStatus,
-		},
-	}))
+	fmt.Println(
+		opts.IO.Out,
+		localizer.MustLocalize(&localizer.Config{
+			MessageID: "cluster.status.statusMessage",
+			TemplateData: map[string]interface{}{
+				"Namespace":      color.Info(currentNamespace),
+				"OperatorStatus": operatorStatus,
+			},
+		}))
 
 	return nil
 }

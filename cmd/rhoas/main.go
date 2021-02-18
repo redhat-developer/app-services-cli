@@ -31,7 +31,7 @@ func main() {
 	cmdFactory := factory.New(build.Version)
 	logger, err := cmdFactory.Logger()
 	if err != nil {
-		logger.Error(err)
+		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
 
