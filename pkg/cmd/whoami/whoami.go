@@ -7,20 +7,23 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
-	Config config.IConfig
-	Logger func() (logging.Logger, error)
+	Config     config.IConfig
+	Connection func() (connection.Connection, error)
+	IO         *iostreams.IOStreams
 }
 
 func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Config: f.Config,
-		Logger: f.Logger,
+		Config:     f.Config,
+		Connection: f.Connection,
+		IO:         f.IOStreams,
 	}
 
 	localizer.LoadMessageFiles("cmd/whoami")
@@ -31,37 +34,32 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 		Long:    localizer.MustLocalizeFromID("whoami.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("whoami.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			return getCurrentUser(opts)
+			return runCmd(opts)
 		},
 	}
 
 	return cmd
 }
 
-func getCurrentUser(opts *Options) (err error) {
-	logger, err := opts.Logger()
+func runCmd(opts *Options) (err error) {
+
+	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
 	}
 
-	cfg, err := opts.Config.Load()
+	_, err = opts.Connection()
 	if err != nil {
-		logger.Error(err)
 		return err
 	}
 
 	accessTkn, _ := token.Parse(cfg.AccessToken)
 
-	if accessTkn == nil {
-		logger.Info(localizer.MustLocalizeFromID("whoami.error.notLoggedInError"))
-		return nil
-	}
-
 	tknClaims, _ := token.MapClaims(accessTkn)
 
 	userName, _ := tknClaims["preferred_username"]
 
-	logger.Info(fmt.Sprintf("%v", userName))
+	fmt.Fprintln(opts.IO.Out, userName)
 
 	return nil
 }

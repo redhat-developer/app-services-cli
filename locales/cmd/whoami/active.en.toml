@@ -20,7 +20,3 @@ one = '''
 # print current user name
 $ rhoas whoami
 '''
-
-[whoami.error.notLoggedInError]
-description = 'Text to display if no user is logged in'
-one = 'not logged in. Run "rhoas login" to authenticate'
