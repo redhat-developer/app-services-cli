@@ -1,0 +1,26 @@
+[whoami.cmd.use]
+description = "Use is the one-line usage message"
+one = "whoami"
+
+[whoami.cmd.shortDescription]
+description = "Short description for command"
+one = "Print current user name"
+
+[whoami.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Print the user name of currently active user.
+
+This command prints the username associated with the user currently logged in.
+'''
+
+[whoami.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# print current user name
+$ rhoas whoami
+'''
+
+[whoami.error.notLoggedInError]
+description = 'Text to display if no user is logged in'
+one = 'not logged in. Run "rhoas login" to authenticate'

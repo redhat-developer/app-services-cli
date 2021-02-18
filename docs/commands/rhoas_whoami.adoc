@@ -1,0 +1,32 @@
+== rhoas whoami
+
+Print current user name
+
+=== Synopsis
+
+Print the user name of currently active user.
+
+This command prints the username associated with the user currently
+logged in.
+
+....
+rhoas whoami [flags]
+....
+
+=== Examples
+
+....
+# print current user name
+$ rhoas whoami
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas.adoc[rhoas] - RHOAS CLI
