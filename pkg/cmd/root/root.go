@@ -49,7 +49,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(cmdFactory))
 	cmd.AddCommand(cluster.NewClusterCommand(cmdFactory))
 	cmd.AddCommand(status.NewStatusCommand(cmdFactory))
-	cmd.AddCommand(completion.CompletionCmd)
+	cmd.AddCommand(completion.NewCompletionCommand(cmdFactory))
 	cmd.AddCommand(whoami.NewWhoAmICmd(cmdFactory))
 
 	return cmd
