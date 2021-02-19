@@ -21,10 +21,9 @@ type Options struct {
 	Logger     func() (logging.Logger, error)
 	IO         *iostreams.IOStreams
 
-	secretOnly         bool
 	kubeconfigLocation string
-	secretName         string
 	interactiveSelect  bool
+	accessToken        string
 }
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
@@ -50,15 +49,21 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 				}))
 			}
 
+			if opts.accessToken == "" && !opts.interactiveSelect {
+				return errors.New(localizer.MustLocalize(&localizer.Config{
+					MessageID: "flag.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Flag": "token",
+					},
+				}))
+			}
 			return runBind(opts)
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.secretOnly, "secret-only", "", false, localizer.MustLocalizeFromID("cluster.connect.flag.secretOnly.description"))
 	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, localizer.MustLocalizeFromID("cluster.connect.flag.interactiveSelect.description"))
-	cmd.Flags().StringVarP(&opts.secretName, "secret-name", "", "kafka-credentials", localizer.MustLocalizeFromID("cluster.connect.flag.secretName.description"))
 	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", localizer.MustLocalizeFromID("cluster.common.flag.kubeconfig.description"))
-
+	cmd.Flags().StringVarP(&opts.accessToken, "token", "", "", localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"))
 	return cmd
 }
 
@@ -78,7 +83,7 @@ func runBind(opts *Options) error {
 		return err
 	}
 
-	err = clusterConn.Connect(context.Background(), opts.secretName, opts.interactiveSelect)
+	err = clusterConn.Connect(context.Background(), opts.interactiveSelect, opts.accessToken)
 	if err != nil {
 		return err
 	}
