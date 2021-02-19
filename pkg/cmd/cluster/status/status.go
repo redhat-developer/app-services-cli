@@ -96,7 +96,8 @@ func runStatus(opts *Options) error {
 				"Namespace":      color.Info(currentNamespace),
 				"OperatorStatus": operatorStatus,
 			},
-		}))
+		}),
+	)
 
 	return nil
 }
