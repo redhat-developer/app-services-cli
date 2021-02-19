@@ -191,8 +191,8 @@ func (c *KubernetesCluster) useInteractiveMode(cfg *config.Config, forceSelect b
 		_ = c.config.Save(cfg)
 	}
 	if apiToken == "" || forceSelect {
-		apiTokenInput := &survey.Confirm{
-			Message: localizer.MustLocalizeFromID("cluster.kubernetes.connect.token.message"),
+		apiTokenInput := &survey.Input{
+			Message: localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"),
 		}
 		err := survey.AskOne(apiTokenInput, &apiToken)
 		if err != nil {
