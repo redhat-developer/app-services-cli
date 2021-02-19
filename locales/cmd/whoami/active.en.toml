@@ -4,12 +4,12 @@ one = "whoami"
 
 [whoami.cmd.shortDescription]
 description = "Short description for command"
-one = "Print current user name"
+one = "Print current username"
 
 [whoami.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Print the user name of currently active user.
+Print the username of the currently active user.
 
 This command prints the username associated with the user currently logged in.
 '''
@@ -17,6 +17,6 @@ This command prints the username associated with the user currently logged in.
 [whoami.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# print current user name
+# print current username
 $ rhoas whoami
 '''

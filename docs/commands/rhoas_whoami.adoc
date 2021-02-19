@@ -1,10 +1,10 @@
 == rhoas whoami
 
-Print current user name
+Print current username
 
 === Synopsis
 
-Print the user name of currently active user.
+Print the username of the currently active user.
 
 This command prints the username associated with the user currently
 logged in.
@@ -16,7 +16,7 @@ rhoas whoami [flags]
 === Examples
 
 ....
-# print current user name
+# print current username
 $ rhoas whoami
 ....
 

@@ -43,4 +43,4 @@ Apache Kafka instances
 delete and update service accounts
 * link:rhoas_status.adoc[rhoas status] - View the status of all currently
 used services
-* link:rhoas_whoami.adoc[rhoas whoami] - Print current user name
+* link:rhoas_whoami.adoc[rhoas whoami] - Print current username
