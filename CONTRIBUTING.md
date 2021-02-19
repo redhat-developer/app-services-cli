@@ -147,25 +147,33 @@ make docs/generate
 
 #### `make docs/generate`
 
-After running the command, the documentation should be updated with the command using markdown and then transformed to ascidocs
+After running the command, the documentation should be updated with the command using markdown and then transformed to Asciidocs.
 
 ## Best practices
 
-- Write clear and meaningful Git commit mesages following the [Conventional Commits specification](https://www.conventionalcommits.org)
+- [Command Line Interface Guidelines](https://clig.dev/) is a great resource for writing command-line interfaces.
+- Write clear and meaningful Git commit messages following the [Conventional Commits specification](https://www.conventionalcommits.org)
 - Provide clear documentation comments.
 - Make sure you include a clear and detailed PR description, linking to the related issue when it exists.
+- Check out [CodeReviewComments](https://github.com/golang/go/wiki/CodeReviewComments) when writing and reviewing Go code.
 
 ## Releases
 
 Releases can be triggered directing using Github Releases. 
 Before performing release, do the following:
 
-1. Run `./scripts/pullapi.sh` script to make sure that CLI is using latest version of the KAS API.
-2. Push all required changes to main branch
-
 After that, go to Github Releases and create the new release.
 
 > Note: The project follows [semantic versioning](https://semver.org/)
+
+GoReleaser will create and upload a release asset in a number of formats for Linux, macOS and Windows. The GitHub release will be set to draft automatically. Once all assets are uploaded (this could take a while) you must manually change it from a draft when all assets are ready.
+
+To make the release assets available to download outside of this private organization, we must clone the releases to [bf3fc6c](https://github.com/bf3fc6c/cli).
+
+To do this, follow the instructions on the repository README with the following environment variables:
+
+- `CLONE_FROM_ORG`: bf2fc6cc711aee1a0c2a
+- `CLONE_FROM_REPO`: cli
 
 ### Generate a changelog
 
