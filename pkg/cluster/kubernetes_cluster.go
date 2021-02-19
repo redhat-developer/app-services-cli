@@ -225,7 +225,7 @@ func (c *KubernetesCluster) IsKafkaConnectionCRDInstalled(ctx context.Context) (
 
 // createKafkaConnectionCustomResource creates a new "ManagedKafkaConnection" CR
 func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, kafkaInstance *kasclient.KafkaRequest) error {
-	id, _ := uuid.NewV4()
+	id, _ := uuid.NewV1()
 	crName := fmt.Sprintf("%v-%v", kafkaInstance.GetName(), id.String())
 	kafkaID := kafkaInstance.GetId()
 

@@ -20,12 +20,6 @@ one = 'failed to load kubeconfig'
 [cluster.kubernetes.connect.input.confirm.message]
 one = 'Do you want to continue?'
 
-[cluster.common.flag.offline.token.description]
-one = '''
-Please provide offline token that will be used by operator.
-You can get token on https://cloud.redhat.com/openshift/token
-'''
-
 [cluster.kubernetes.connect.log.debug.cancellingConnect]
 one = 'Cancelling cluster connection'
 

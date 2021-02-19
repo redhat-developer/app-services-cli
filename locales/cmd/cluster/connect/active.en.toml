@@ -32,7 +32,3 @@ one = "Interactively select the service instance that will be bound to your Kube
 
 [cluster.connect.flag.secretName.description]
 one = 'Name of the secret that holds the Kafka credentials.'
-
-
-[cluster.common.flag.offline.token.description]
-one = ''
