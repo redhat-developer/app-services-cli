@@ -4,9 +4,11 @@ package dump
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/landoop/tableprinter"
@@ -45,7 +47,7 @@ func YAML(stream io.Writer, body []byte) error {
 	if err != nil {
 		return dumpBytes(stream, body)
 	}
-	if haveYQ() {
+	if haveYQ(4) {
 		return dumpYQ(stream, body)
 	}
 
@@ -102,7 +104,29 @@ func haveJQ() bool {
 	return err == nil
 }
 
-func haveYQ() bool {
+// detect if YQ is on the user's path.
+// minVersion requires a minimum version of YQ to be installed.
+func haveYQ(minVersion int) bool {
 	_, err := exec.LookPath("yq")
-	return err == nil
+	if err != nil {
+		return false
+	}
+
+	versionOutput, err := exec.Command("yq", "--version").Output()
+	if err != nil {
+		return false
+	}
+
+	versionStr := strings.TrimSpace(strings.TrimLeft(string(versionOutput), "yq version"))
+	if versionStr == "" {
+		return false
+	}
+
+	// if the version number starts with the minimum version number
+	// YQ can be used
+	if strings.HasPrefix(versionStr, fmt.Sprintf("%v.", minVersion)) {
+		return true
+	}
+
+	return false
 }
