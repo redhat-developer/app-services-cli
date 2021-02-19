@@ -5,7 +5,7 @@ release:
   draft: true
   name_template: "{{.Version}}"
 
-before:\
+before:
   hooks:
     - go mod download
     - go mod tidy
