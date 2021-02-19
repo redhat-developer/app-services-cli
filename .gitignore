@@ -2,8 +2,8 @@
 vendor
 dist
 /rhoas
-vendor
 node_modules
+.idea
 
 # These are ignored because they are the common extension 
 # formats for credentials which can get included during development
