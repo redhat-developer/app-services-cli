@@ -31,7 +31,7 @@ func main() {
 	cmdFactory := factory.New(build.Version)
 	logger, err := cmdFactory.Logger()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
 
@@ -93,13 +93,13 @@ func initConfig(f *factory.Factory) {
 		return
 	}
 	if !os.IsNotExist(err) {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintln(f.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
 
 	cfgFile = &config.Config{}
 	if err := f.Config.Save(cfgFile); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintln(f.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
 }

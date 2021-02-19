@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"os"
 
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 
@@ -27,6 +27,7 @@ type options struct {
 	id           string
 	outputFormat string
 
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 }
@@ -37,6 +38,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
+		IO:         f.IOStreams,
 	}
 
 	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/describe")
@@ -101,10 +103,10 @@ func runDescribe(opts *options) error {
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(os.Stdout, data)
+		_ = dump.JSON(opts.IO.Out, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(os.Stdout, data)
+		_ = dump.YAML(opts.IO.Out, data)
 	}
 
 	return nil

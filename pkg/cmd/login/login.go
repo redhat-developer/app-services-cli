@@ -15,6 +15,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
@@ -75,6 +76,7 @@ var urlAliases = map[string]string{
 type Options struct {
 	Config config.IConfig
 	Logger func() (logging.Logger, error)
+	IO     *iostreams.IOStreams
 
 	url                   string
 	authURL               string
@@ -299,7 +301,7 @@ func runLogin(opts *Options) (err error) {
 	if opts.printURL {
 		logger.Info(localizer.MustLocalizeFromID("login.log.info.openSSOUrl"))
 		logger.Info("")
-		fmt.Println(authCodeURL)
+		fmt.Println(opts.IO.Out, authCodeURL)
 		logger.Info("")
 	} else {
 		openBrowserExec, err := browser.GetOpenBrowserCommand(authCodeURL)

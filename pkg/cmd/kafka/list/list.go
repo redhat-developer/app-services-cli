@@ -3,11 +3,11 @@ package list
 import (
 	"context"
 	"encoding/json"
-	"os"
 	"strconv"
 
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
@@ -38,6 +38,7 @@ type options struct {
 	page         int
 	limit        int
 
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
@@ -51,6 +52,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
 	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/list")
@@ -109,13 +111,13 @@ func runList(opts *options) error {
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.Marshal(response)
-		_ = dump.JSON(os.Stdout, data)
+		_ = dump.JSON(opts.IO.Out, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(os.Stdout, data)
+		_ = dump.YAML(opts.IO.Out, data)
 	default:
 		rows := mapResponseItemsToRows(response.GetItems())
-		dump.Table(os.Stdout, rows)
+		dump.Table(opts.IO.Out, rows)
 		logger.Info("")
 	}
 
