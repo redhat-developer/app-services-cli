@@ -1,13 +1,15 @@
 == rhoas login
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 Log in to RHOAS
 
 === Synopsis
 
 Log in securely to RHOAS through a web browser.
 
-This command opens your web browser, where you can enter your
-credentials.
+This command opens your web browser, where you can enter your credentials.
+
 
 ....
 rhoas login [flags]
@@ -21,6 +23,7 @@ $ rhoas login
 
 # print the authentication URL instead of automatically opening the browser
 $ rhoas login --print-sso-url
+
 ....
 
 === Options
@@ -43,4 +46,5 @@ $ rhoas login --print-sso-url
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - RHOAS CLI
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+

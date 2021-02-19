@@ -1,16 +1,17 @@
 == rhoas cluster status
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 View status of the current Kubernetes or OpenShift cluster
 
 === Synopsis
 
-View information about the current Kubernetes or OpenShift cluster. You
-can use this information to connect your application service to the
-cluster.
+View information about the current Kubernetes or OpenShift cluster. 
+You can use this information to connect your application service to the cluster.
 
-Before using this command, you must be logged into a Kubernetes or
-OpenShift cluster. The command uses your kubeconfig file to identify the
-cluster context.
+Before using this command, you must be logged into a Kubernetes or OpenShift 
+cluster. The command uses your kubeconfig file to identify the cluster context.
+
 
 ....
 rhoas cluster status [flags]
@@ -21,6 +22,7 @@ rhoas cluster status [flags]
 ....
 # print status of the current cluster
 $ rhoas cluster status
+
 ....
 
 === Options
@@ -38,5 +40,5 @@ $ rhoas cluster status
 
 === SEE ALSO
 
-* link:rhoas_cluster.adoc[rhoas cluster] - View and perform operations on
-your Kubernetes or OpenShift cluster
+* link:rhoas_cluster{relfilesuffix}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
+
