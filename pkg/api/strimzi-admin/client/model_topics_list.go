@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */
@@ -17,7 +17,7 @@ import (
 // TopicsList A list of topics.
 type TopicsList struct {
 	// List of topics
-	Topics []Topic `json:"topics"`
+	Items []Topic `json:"items"`
 	// The page offset
 	Offset int32 `json:"offset"`
 	// number of entries per page
@@ -30,9 +30,9 @@ type TopicsList struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTopicsList(topics []Topic, offset int32, limit int32, count int32) *TopicsList {
+func NewTopicsList(items []Topic, offset int32, limit int32, count int32) *TopicsList {
 	this := TopicsList{}
-	this.Topics = topics
+	this.Items = items
 	this.Offset = offset
 	this.Limit = limit
 	this.Count = count
@@ -47,28 +47,28 @@ func NewTopicsListWithDefaults() *TopicsList {
 	return &this
 }
 
-// GetTopics returns the Topics field value
-func (o *TopicsList) GetTopics() []Topic {
+// GetItems returns the Items field value
+func (o *TopicsList) GetItems() []Topic {
 	if o == nil {
 		var ret []Topic
 		return ret
 	}
 
-	return o.Topics
+	return o.Items
 }
 
-// GetTopicsOk returns a tuple with the Topics field value
+// GetItemsOk returns a tuple with the Items field value
 // and a boolean to check if the value has been set.
-func (o *TopicsList) GetTopicsOk() (*[]Topic, bool) {
+func (o *TopicsList) GetItemsOk() (*[]Topic, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Topics, true
+	return &o.Items, true
 }
 
-// SetTopics sets field value
-func (o *TopicsList) SetTopics(v []Topic) {
-	o.Topics = v
+// SetItems sets field value
+func (o *TopicsList) SetItems(v []Topic) {
+	o.Items = v
 }
 
 // GetOffset returns the Offset field value
@@ -146,7 +146,7 @@ func (o *TopicsList) SetCount(v int32) {
 func (o TopicsList) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["topics"] = o.Topics
+		toSerialize["items"] = o.Items
 	}
 	if true {
 		toSerialize["offset"] = o.Offset

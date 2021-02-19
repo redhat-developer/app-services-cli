@@ -127,7 +127,7 @@
         "kafka",
         "topic",
         "describe",
-        "my-to"
+        "my-topic"
       ]
     },
     {

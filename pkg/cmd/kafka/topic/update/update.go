@@ -15,7 +15,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
@@ -31,17 +30,15 @@ import (
 
 var (
 	partitionCount    int32
-	replicaCount      int32
 	retentionPeriodMs int
 )
 
 type Options struct {
-	topicName       string
-	partitionsStr   string
-	retentionMsStr  string
-	replicaCountStr string
-	kafkaID         string
-	outputFormat    string
+	topicName      string
+	partitionsStr  string
+	retentionMsStr string
+	kafkaID        string
+	outputFormat   string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -69,6 +66,11 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
 
+			var searchName string
+			if len(args) > 0 {
+				searchName = args[0]
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return validNames, cobra.ShellCompDirectiveError
@@ -78,9 +80,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				return validNames, cobra.ShellCompDirectiveError
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
-
-			return cmdutil.FilterValidTopicNameArgs(f, opts.kafkaID, toComplete)
+			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if len(args) > 0 {
@@ -92,7 +92,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.replicaCountStr == "" {
+			if opts.retentionMsStr == "" && opts.partitionsStr == "" {
 				logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
 			}
 
@@ -116,22 +116,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				partitionCount = int32(p)
 
 				if err = topic.ValidatePartitionsN(partitionCount); err != nil {
-					return err
-				}
-			}
-
-			// check if the replica flag is set
-			// and if so try to convert the value from string to int32
-			if opts.replicaCountStr != "" {
-				// convert the value from "replicas" to int32
-				// nolint:govet
-				p, err := strconv.ParseInt(opts.replicaCountStr, 10, 32)
-				if err != nil {
-					return flag.InvalidArgumentError("--replicas", opts.replicaCountStr, err)
-				}
-				replicaCount = int32(p)
-
-				if err = topic.ValidateReplicationFactorN(replicaCount); err != nil {
 					return err
 				}
 			}
@@ -170,7 +154,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
 	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
-	cmd.Flags().StringVar(&opts.replicaCountStr, "replicas", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas.description"))
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
 
 	return cmd
@@ -187,27 +170,15 @@ func runCmd(opts *Options) error {
 	if err != nil {
 		return err
 	}
-
-	api := conn.API()
-	ctx := context.Background()
-
-	// Check if the Kafka instance exists
-	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.common.error.notFoundByIdError",
-			TemplateData: map[string]interface{}{
-				"ID": opts.kafkaID,
-			},
-		}))
-	} else if apiErr.Error() != "" {
-		return apiErr
+	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	if err != nil {
+		return err
 	}
 
 	// track if any values have changed
 	var needsUpdate bool
 
-	topicToUpdate, httpRes, _ := api.TopicAdmin(opts.kafkaID).GetTopic(ctx, opts.topicName).Execute()
+	topicToUpdate, httpRes, _ := api.GetTopic(context.Background(), opts.topicName).Execute()
 	if httpRes.StatusCode == 404 {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.topic.update.error.topicNotFoundError",
@@ -220,7 +191,7 @@ func runCmd(opts *Options) error {
 
 	currentPartitionCount := len(topicToUpdate.GetPartitions())
 
-	updateTopicReq := api.TopicAdmin(opts.kafkaID).UpdateTopic(ctx, opts.topicName)
+	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
 
 	topicSettings := &strimziadminclient.TopicSettings{}
 
@@ -249,12 +220,6 @@ func runCmd(opts *Options) error {
 			needsUpdate = true
 			topicSettings.NumPartitions = &partitionCount
 		}
-	}
-
-	// Update replica count
-	if opts.replicaCountStr != "" {
-		needsUpdate = true
-		topicSettings.ReplicationFactor = &replicaCount
 	}
 
 	if opts.retentionMsStr != "" {
@@ -291,7 +256,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",

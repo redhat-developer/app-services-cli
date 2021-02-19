@@ -28,4 +28,4 @@ one = 'Confirm the name of the topic you want to delete:'
 one = 'topic name entered "{{.ConfirmedName}}" does not match the name of the topic you tried to delete "{{.ActualName}}"'
 
 [kafka.topic.delete.log.info.topicDeleted]
-one = 'Topic "{{.TopicName}} has been deleted from the Kafka instance "{{.InstanceName}}"'
+one = 'Topic "{{.TopicName}}" has been deleted from the Kafka instance "{{.InstanceName}}"'

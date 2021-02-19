@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */
@@ -18,8 +18,6 @@ import (
 type TopicSettings struct {
 	// Number of partitions for this topic.
 	NumPartitions *int32 `json:"numPartitions,omitempty"`
-	// Number of replications for the topic.
-	ReplicationFactor *int32 `json:"replicationFactor,omitempty"`
 	// Topic configuration entry.
 	Config *[]ConfigEntry `json:"config,omitempty"`
 }
@@ -73,38 +71,6 @@ func (o *TopicSettings) SetNumPartitions(v int32) {
 	o.NumPartitions = &v
 }
 
-// GetReplicationFactor returns the ReplicationFactor field value if set, zero value otherwise.
-func (o *TopicSettings) GetReplicationFactor() int32 {
-	if o == nil || o.ReplicationFactor == nil {
-		var ret int32
-		return ret
-	}
-	return *o.ReplicationFactor
-}
-
-// GetReplicationFactorOk returns a tuple with the ReplicationFactor field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *TopicSettings) GetReplicationFactorOk() (*int32, bool) {
-	if o == nil || o.ReplicationFactor == nil {
-		return nil, false
-	}
-	return o.ReplicationFactor, true
-}
-
-// HasReplicationFactor returns a boolean if a field has been set.
-func (o *TopicSettings) HasReplicationFactor() bool {
-	if o != nil && o.ReplicationFactor != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetReplicationFactor gets a reference to the given int32 and assigns it to the ReplicationFactor field.
-func (o *TopicSettings) SetReplicationFactor(v int32) {
-	o.ReplicationFactor = &v
-}
-
 // GetConfig returns the Config field value if set, zero value otherwise.
 func (o *TopicSettings) GetConfig() []ConfigEntry {
 	if o == nil || o.Config == nil {
@@ -141,9 +107,6 @@ func (o TopicSettings) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.NumPartitions != nil {
 		toSerialize["numPartitions"] = o.NumPartitions
-	}
-	if o.ReplicationFactor != nil {
-		toSerialize["replicationFactor"] = o.ReplicationFactor
 	}
 	if o.Config != nil {
 		toSerialize["config"] = o.Config

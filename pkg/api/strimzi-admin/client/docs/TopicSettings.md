@@ -5,7 +5,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **NumPartitions** | Pointer to **int32** | Number of partitions for this topic. | [optional] 
-**ReplicationFactor** | Pointer to **int32** | Number of replications for the topic. | [optional] 
 **Config** | Pointer to [**[]ConfigEntry**](ConfigEntry.md) | Topic configuration entry. | [optional] 
 
 ## Methods
@@ -51,31 +50,6 @@ SetNumPartitions sets NumPartitions field to given value.
 `func (o *TopicSettings) HasNumPartitions() bool`
 
 HasNumPartitions returns a boolean if a field has been set.
-
-### GetReplicationFactor
-
-`func (o *TopicSettings) GetReplicationFactor() int32`
-
-GetReplicationFactor returns the ReplicationFactor field if non-nil, zero value otherwise.
-
-### GetReplicationFactorOk
-
-`func (o *TopicSettings) GetReplicationFactorOk() (*int32, bool)`
-
-GetReplicationFactorOk returns a tuple with the ReplicationFactor field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetReplicationFactor
-
-`func (o *TopicSettings) SetReplicationFactor(v int32)`
-
-SetReplicationFactor sets ReplicationFactor field to given value.
-
-### HasReplicationFactor
-
-`func (o *TopicSettings) HasReplicationFactor() bool`
-
-HasReplicationFactor returns a boolean if a field has been set.
 
 ### GetConfig
 

@@ -25,11 +25,29 @@ var _ DefaultApi = &DefaultApiMock{}
 //             CreateTopicExecuteFunc: func(r ApiCreateTopicRequest) (Topic, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the CreateTopicExecute method")
 //             },
+//             DeleteGroupFunc: func(ctx context.Context, groupName string) ApiDeleteGroupRequest {
+// 	               panic("mock out the DeleteGroup method")
+//             },
+//             DeleteGroupExecuteFunc: func(r ApiDeleteGroupRequest) (*http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the DeleteGroupExecute method")
+//             },
 //             DeleteTopicFunc: func(ctx context.Context, topicName string) ApiDeleteTopicRequest {
 // 	               panic("mock out the DeleteTopic method")
 //             },
 //             DeleteTopicExecuteFunc: func(r ApiDeleteTopicRequest) (*http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the DeleteTopicExecute method")
+//             },
+//             GetGroupFunc: func(ctx context.Context, groupName string) ApiGetGroupRequest {
+// 	               panic("mock out the GetGroup method")
+//             },
+//             GetGroupExecuteFunc: func(r ApiGetGroupRequest) (*http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the GetGroupExecute method")
+//             },
+//             GetGroupsListFunc: func(ctx context.Context) ApiGetGroupsListRequest {
+// 	               panic("mock out the GetGroupsList method")
+//             },
+//             GetGroupsListExecuteFunc: func(r ApiGetGroupsListRequest) (*http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the GetGroupsListExecute method")
 //             },
 //             GetTopicFunc: func(ctx context.Context, topicName string) ApiGetTopicRequest {
 // 	               panic("mock out the GetTopic method")
@@ -48,6 +66,12 @@ var _ DefaultApi = &DefaultApiMock{}
 //             },
 //             MetricsExecuteFunc: func(r ApiMetricsRequest) (*http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the MetricsExecute method")
+//             },
+//             OpenApiFunc: func(ctx context.Context) ApiOpenApiRequest {
+// 	               panic("mock out the OpenApi method")
+//             },
+//             OpenApiExecuteFunc: func(r ApiOpenApiRequest) (*http.Response, GenericOpenAPIError) {
+// 	               panic("mock out the OpenApiExecute method")
 //             },
 //             UpdateTopicFunc: func(ctx context.Context, topicName string) ApiUpdateTopicRequest {
 // 	               panic("mock out the UpdateTopic method")
@@ -68,11 +92,29 @@ type DefaultApiMock struct {
 	// CreateTopicExecuteFunc mocks the CreateTopicExecute method.
 	CreateTopicExecuteFunc func(r ApiCreateTopicRequest) (Topic, *http.Response, GenericOpenAPIError)
 
+	// DeleteGroupFunc mocks the DeleteGroup method.
+	DeleteGroupFunc func(ctx context.Context, groupName string) ApiDeleteGroupRequest
+
+	// DeleteGroupExecuteFunc mocks the DeleteGroupExecute method.
+	DeleteGroupExecuteFunc func(r ApiDeleteGroupRequest) (*http.Response, GenericOpenAPIError)
+
 	// DeleteTopicFunc mocks the DeleteTopic method.
 	DeleteTopicFunc func(ctx context.Context, topicName string) ApiDeleteTopicRequest
 
 	// DeleteTopicExecuteFunc mocks the DeleteTopicExecute method.
 	DeleteTopicExecuteFunc func(r ApiDeleteTopicRequest) (*http.Response, GenericOpenAPIError)
+
+	// GetGroupFunc mocks the GetGroup method.
+	GetGroupFunc func(ctx context.Context, groupName string) ApiGetGroupRequest
+
+	// GetGroupExecuteFunc mocks the GetGroupExecute method.
+	GetGroupExecuteFunc func(r ApiGetGroupRequest) (*http.Response, GenericOpenAPIError)
+
+	// GetGroupsListFunc mocks the GetGroupsList method.
+	GetGroupsListFunc func(ctx context.Context) ApiGetGroupsListRequest
+
+	// GetGroupsListExecuteFunc mocks the GetGroupsListExecute method.
+	GetGroupsListExecuteFunc func(r ApiGetGroupsListRequest) (*http.Response, GenericOpenAPIError)
 
 	// GetTopicFunc mocks the GetTopic method.
 	GetTopicFunc func(ctx context.Context, topicName string) ApiGetTopicRequest
@@ -92,6 +134,12 @@ type DefaultApiMock struct {
 	// MetricsExecuteFunc mocks the MetricsExecute method.
 	MetricsExecuteFunc func(r ApiMetricsRequest) (*http.Response, GenericOpenAPIError)
 
+	// OpenApiFunc mocks the OpenApi method.
+	OpenApiFunc func(ctx context.Context) ApiOpenApiRequest
+
+	// OpenApiExecuteFunc mocks the OpenApiExecute method.
+	OpenApiExecuteFunc func(r ApiOpenApiRequest) (*http.Response, GenericOpenAPIError)
+
 	// UpdateTopicFunc mocks the UpdateTopic method.
 	UpdateTopicFunc func(ctx context.Context, topicName string) ApiUpdateTopicRequest
 
@@ -110,6 +158,18 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiCreateTopicRequest
 		}
+		// DeleteGroup holds details about calls to the DeleteGroup method.
+		DeleteGroup []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// GroupName is the groupName argument value.
+			GroupName string
+		}
+		// DeleteGroupExecute holds details about calls to the DeleteGroupExecute method.
+		DeleteGroupExecute []struct {
+			// R is the r argument value.
+			R ApiDeleteGroupRequest
+		}
 		// DeleteTopic holds details about calls to the DeleteTopic method.
 		DeleteTopic []struct {
 			// Ctx is the ctx argument value.
@@ -121,6 +181,28 @@ type DefaultApiMock struct {
 		DeleteTopicExecute []struct {
 			// R is the r argument value.
 			R ApiDeleteTopicRequest
+		}
+		// GetGroup holds details about calls to the GetGroup method.
+		GetGroup []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// GroupName is the groupName argument value.
+			GroupName string
+		}
+		// GetGroupExecute holds details about calls to the GetGroupExecute method.
+		GetGroupExecute []struct {
+			// R is the r argument value.
+			R ApiGetGroupRequest
+		}
+		// GetGroupsList holds details about calls to the GetGroupsList method.
+		GetGroupsList []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// GetGroupsListExecute holds details about calls to the GetGroupsListExecute method.
+		GetGroupsListExecute []struct {
+			// R is the r argument value.
+			R ApiGetGroupsListRequest
 		}
 		// GetTopic holds details about calls to the GetTopic method.
 		GetTopic []struct {
@@ -154,6 +236,16 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiMetricsRequest
 		}
+		// OpenApi holds details about calls to the OpenApi method.
+		OpenApi []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// OpenApiExecute holds details about calls to the OpenApiExecute method.
+		OpenApiExecute []struct {
+			// R is the r argument value.
+			R ApiOpenApiRequest
+		}
 		// UpdateTopic holds details about calls to the UpdateTopic method.
 		UpdateTopic []struct {
 			// Ctx is the ctx argument value.
@@ -169,14 +261,22 @@ type DefaultApiMock struct {
 	}
 	lockCreateTopic          sync.RWMutex
 	lockCreateTopicExecute   sync.RWMutex
+	lockDeleteGroup          sync.RWMutex
+	lockDeleteGroupExecute   sync.RWMutex
 	lockDeleteTopic          sync.RWMutex
 	lockDeleteTopicExecute   sync.RWMutex
+	lockGetGroup             sync.RWMutex
+	lockGetGroupExecute      sync.RWMutex
+	lockGetGroupsList        sync.RWMutex
+	lockGetGroupsListExecute sync.RWMutex
 	lockGetTopic             sync.RWMutex
 	lockGetTopicExecute      sync.RWMutex
 	lockGetTopicsList        sync.RWMutex
 	lockGetTopicsListExecute sync.RWMutex
 	lockMetrics              sync.RWMutex
 	lockMetricsExecute       sync.RWMutex
+	lockOpenApi              sync.RWMutex
+	lockOpenApiExecute       sync.RWMutex
 	lockUpdateTopic          sync.RWMutex
 	lockUpdateTopicExecute   sync.RWMutex
 }
@@ -243,6 +343,72 @@ func (mock *DefaultApiMock) CreateTopicExecuteCalls() []struct {
 	return calls
 }
 
+// DeleteGroup calls DeleteGroupFunc.
+func (mock *DefaultApiMock) DeleteGroup(ctx context.Context, groupName string) ApiDeleteGroupRequest {
+	if mock.DeleteGroupFunc == nil {
+		panic("DefaultApiMock.DeleteGroupFunc: method is nil but DefaultApi.DeleteGroup was just called")
+	}
+	callInfo := struct {
+		Ctx       context.Context
+		GroupName string
+	}{
+		Ctx:       ctx,
+		GroupName: groupName,
+	}
+	mock.lockDeleteGroup.Lock()
+	mock.calls.DeleteGroup = append(mock.calls.DeleteGroup, callInfo)
+	mock.lockDeleteGroup.Unlock()
+	return mock.DeleteGroupFunc(ctx, groupName)
+}
+
+// DeleteGroupCalls gets all the calls that were made to DeleteGroup.
+// Check the length with:
+//     len(mockedDefaultApi.DeleteGroupCalls())
+func (mock *DefaultApiMock) DeleteGroupCalls() []struct {
+	Ctx       context.Context
+	GroupName string
+} {
+	var calls []struct {
+		Ctx       context.Context
+		GroupName string
+	}
+	mock.lockDeleteGroup.RLock()
+	calls = mock.calls.DeleteGroup
+	mock.lockDeleteGroup.RUnlock()
+	return calls
+}
+
+// DeleteGroupExecute calls DeleteGroupExecuteFunc.
+func (mock *DefaultApiMock) DeleteGroupExecute(r ApiDeleteGroupRequest) (*http.Response, GenericOpenAPIError) {
+	if mock.DeleteGroupExecuteFunc == nil {
+		panic("DefaultApiMock.DeleteGroupExecuteFunc: method is nil but DefaultApi.DeleteGroupExecute was just called")
+	}
+	callInfo := struct {
+		R ApiDeleteGroupRequest
+	}{
+		R: r,
+	}
+	mock.lockDeleteGroupExecute.Lock()
+	mock.calls.DeleteGroupExecute = append(mock.calls.DeleteGroupExecute, callInfo)
+	mock.lockDeleteGroupExecute.Unlock()
+	return mock.DeleteGroupExecuteFunc(r)
+}
+
+// DeleteGroupExecuteCalls gets all the calls that were made to DeleteGroupExecute.
+// Check the length with:
+//     len(mockedDefaultApi.DeleteGroupExecuteCalls())
+func (mock *DefaultApiMock) DeleteGroupExecuteCalls() []struct {
+	R ApiDeleteGroupRequest
+} {
+	var calls []struct {
+		R ApiDeleteGroupRequest
+	}
+	mock.lockDeleteGroupExecute.RLock()
+	calls = mock.calls.DeleteGroupExecute
+	mock.lockDeleteGroupExecute.RUnlock()
+	return calls
+}
+
 // DeleteTopic calls DeleteTopicFunc.
 func (mock *DefaultApiMock) DeleteTopic(ctx context.Context, topicName string) ApiDeleteTopicRequest {
 	if mock.DeleteTopicFunc == nil {
@@ -306,6 +472,134 @@ func (mock *DefaultApiMock) DeleteTopicExecuteCalls() []struct {
 	mock.lockDeleteTopicExecute.RLock()
 	calls = mock.calls.DeleteTopicExecute
 	mock.lockDeleteTopicExecute.RUnlock()
+	return calls
+}
+
+// GetGroup calls GetGroupFunc.
+func (mock *DefaultApiMock) GetGroup(ctx context.Context, groupName string) ApiGetGroupRequest {
+	if mock.GetGroupFunc == nil {
+		panic("DefaultApiMock.GetGroupFunc: method is nil but DefaultApi.GetGroup was just called")
+	}
+	callInfo := struct {
+		Ctx       context.Context
+		GroupName string
+	}{
+		Ctx:       ctx,
+		GroupName: groupName,
+	}
+	mock.lockGetGroup.Lock()
+	mock.calls.GetGroup = append(mock.calls.GetGroup, callInfo)
+	mock.lockGetGroup.Unlock()
+	return mock.GetGroupFunc(ctx, groupName)
+}
+
+// GetGroupCalls gets all the calls that were made to GetGroup.
+// Check the length with:
+//     len(mockedDefaultApi.GetGroupCalls())
+func (mock *DefaultApiMock) GetGroupCalls() []struct {
+	Ctx       context.Context
+	GroupName string
+} {
+	var calls []struct {
+		Ctx       context.Context
+		GroupName string
+	}
+	mock.lockGetGroup.RLock()
+	calls = mock.calls.GetGroup
+	mock.lockGetGroup.RUnlock()
+	return calls
+}
+
+// GetGroupExecute calls GetGroupExecuteFunc.
+func (mock *DefaultApiMock) GetGroupExecute(r ApiGetGroupRequest) (*http.Response, GenericOpenAPIError) {
+	if mock.GetGroupExecuteFunc == nil {
+		panic("DefaultApiMock.GetGroupExecuteFunc: method is nil but DefaultApi.GetGroupExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetGroupRequest
+	}{
+		R: r,
+	}
+	mock.lockGetGroupExecute.Lock()
+	mock.calls.GetGroupExecute = append(mock.calls.GetGroupExecute, callInfo)
+	mock.lockGetGroupExecute.Unlock()
+	return mock.GetGroupExecuteFunc(r)
+}
+
+// GetGroupExecuteCalls gets all the calls that were made to GetGroupExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetGroupExecuteCalls())
+func (mock *DefaultApiMock) GetGroupExecuteCalls() []struct {
+	R ApiGetGroupRequest
+} {
+	var calls []struct {
+		R ApiGetGroupRequest
+	}
+	mock.lockGetGroupExecute.RLock()
+	calls = mock.calls.GetGroupExecute
+	mock.lockGetGroupExecute.RUnlock()
+	return calls
+}
+
+// GetGroupsList calls GetGroupsListFunc.
+func (mock *DefaultApiMock) GetGroupsList(ctx context.Context) ApiGetGroupsListRequest {
+	if mock.GetGroupsListFunc == nil {
+		panic("DefaultApiMock.GetGroupsListFunc: method is nil but DefaultApi.GetGroupsList was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockGetGroupsList.Lock()
+	mock.calls.GetGroupsList = append(mock.calls.GetGroupsList, callInfo)
+	mock.lockGetGroupsList.Unlock()
+	return mock.GetGroupsListFunc(ctx)
+}
+
+// GetGroupsListCalls gets all the calls that were made to GetGroupsList.
+// Check the length with:
+//     len(mockedDefaultApi.GetGroupsListCalls())
+func (mock *DefaultApiMock) GetGroupsListCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockGetGroupsList.RLock()
+	calls = mock.calls.GetGroupsList
+	mock.lockGetGroupsList.RUnlock()
+	return calls
+}
+
+// GetGroupsListExecute calls GetGroupsListExecuteFunc.
+func (mock *DefaultApiMock) GetGroupsListExecute(r ApiGetGroupsListRequest) (*http.Response, GenericOpenAPIError) {
+	if mock.GetGroupsListExecuteFunc == nil {
+		panic("DefaultApiMock.GetGroupsListExecuteFunc: method is nil but DefaultApi.GetGroupsListExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetGroupsListRequest
+	}{
+		R: r,
+	}
+	mock.lockGetGroupsListExecute.Lock()
+	mock.calls.GetGroupsListExecute = append(mock.calls.GetGroupsListExecute, callInfo)
+	mock.lockGetGroupsListExecute.Unlock()
+	return mock.GetGroupsListExecuteFunc(r)
+}
+
+// GetGroupsListExecuteCalls gets all the calls that were made to GetGroupsListExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetGroupsListExecuteCalls())
+func (mock *DefaultApiMock) GetGroupsListExecuteCalls() []struct {
+	R ApiGetGroupsListRequest
+} {
+	var calls []struct {
+		R ApiGetGroupsListRequest
+	}
+	mock.lockGetGroupsListExecute.RLock()
+	calls = mock.calls.GetGroupsListExecute
+	mock.lockGetGroupsListExecute.RUnlock()
 	return calls
 }
 
@@ -496,6 +790,68 @@ func (mock *DefaultApiMock) MetricsExecuteCalls() []struct {
 	mock.lockMetricsExecute.RLock()
 	calls = mock.calls.MetricsExecute
 	mock.lockMetricsExecute.RUnlock()
+	return calls
+}
+
+// OpenApi calls OpenApiFunc.
+func (mock *DefaultApiMock) OpenApi(ctx context.Context) ApiOpenApiRequest {
+	if mock.OpenApiFunc == nil {
+		panic("DefaultApiMock.OpenApiFunc: method is nil but DefaultApi.OpenApi was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockOpenApi.Lock()
+	mock.calls.OpenApi = append(mock.calls.OpenApi, callInfo)
+	mock.lockOpenApi.Unlock()
+	return mock.OpenApiFunc(ctx)
+}
+
+// OpenApiCalls gets all the calls that were made to OpenApi.
+// Check the length with:
+//     len(mockedDefaultApi.OpenApiCalls())
+func (mock *DefaultApiMock) OpenApiCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockOpenApi.RLock()
+	calls = mock.calls.OpenApi
+	mock.lockOpenApi.RUnlock()
+	return calls
+}
+
+// OpenApiExecute calls OpenApiExecuteFunc.
+func (mock *DefaultApiMock) OpenApiExecute(r ApiOpenApiRequest) (*http.Response, GenericOpenAPIError) {
+	if mock.OpenApiExecuteFunc == nil {
+		panic("DefaultApiMock.OpenApiExecuteFunc: method is nil but DefaultApi.OpenApiExecute was just called")
+	}
+	callInfo := struct {
+		R ApiOpenApiRequest
+	}{
+		R: r,
+	}
+	mock.lockOpenApiExecute.Lock()
+	mock.calls.OpenApiExecute = append(mock.calls.OpenApiExecute, callInfo)
+	mock.lockOpenApiExecute.Unlock()
+	return mock.OpenApiExecuteFunc(r)
+}
+
+// OpenApiExecuteCalls gets all the calls that were made to OpenApiExecute.
+// Check the length with:
+//     len(mockedDefaultApi.OpenApiExecuteCalls())
+func (mock *DefaultApiMock) OpenApiExecuteCalls() []struct {
+	R ApiOpenApiRequest
+} {
+	var calls []struct {
+		R ApiOpenApiRequest
+	}
+	mock.lockOpenApiExecute.RLock()
+	calls = mock.calls.OpenApiExecute
+	mock.lockOpenApiExecute.RUnlock()
 	return calls
 }
 
