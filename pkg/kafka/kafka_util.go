@@ -18,6 +18,7 @@ func init() {
 	localizer.LoadMessageFiles("common", "kafka")
 }
 
+// validate
 // ValidateName validates the proposed name of a Kafka instance
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)

@@ -27,11 +27,12 @@ one = '''
 $ rhoas cluster connect
 '''
 
-[cluster.connect.flag.secretOnly.description]
-one = "Creates the secret, but doesn't bind the instance. Use this flag if the RHOAS Operator is not installed in the Kubernetes or OpenShift cluster."
-
 [cluster.connect.flag.interactiveSelect.description]
 one = "Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster."
 
 [cluster.connect.flag.secretName.description]
 one = 'Name of the secret that holds the Kafka credentials.'
+
+
+[cluster.common.flag.offline.token.description]
+one = ''

@@ -14,3 +14,4 @@ node_modules
 /*.yml
 /*.env
 /*.properties
+.idea/
