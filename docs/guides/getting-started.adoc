@@ -2,43 +2,25 @@
 
 NOTE: In the following guides replace `VERSION` with the release version of the CLI.
 
-==== Linux
+==== Linux/macOS
 
-1. Download the binary for your CPU architecture from link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases].
-
-2. Extract the CLI binary into a directory on your `PATH`:
+1. Extract the CLI binary into a directory on your `PATH`:
 +
 [source,shell]
 ----
-tar xfv rhoas_${VERSION}_linux_amd64.tar.gz
-sudo cp rhoas_${VERSION}_linux_amd64/bin/rhoas /usr/local/bin
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh
 ----
 +
 TIP: Run `echo $PATH` to see the directories on your path.
-
-3. The CLI is now installed! To verify this, run a command:
++
+This will install to `$HOME/bin` by default. You can override this by passing a custom path:
 +
 [source,shell]
 ----
-$ rhoas --version
-rhoas version ${VERSION}
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh -s "/your/custom/path"
 ----
 
-==== macOS
-
-1. Download the binary for your CPU architecture from link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases].
-
-2. Extract the CLI binary into a directory on your `PATH`:
-+
-[source,shell]
-----
-tar xzf rhoas_${VERSION}_macOS_amd64.tar.gz
-sudo cp rhoas_${VERSION}_macOS_amd64/bin/rhoas /usr/local/bin
-----
-+
-TIP: Run `echo $PATH` to see the directories on your path.
-
-3. The CLI is now installed and ready to use. To verify this, run a command:
+2. The CLI is now installed! To verify this, run a command:
 +
 [source,shell]
 ----
@@ -61,7 +43,7 @@ sudo rpm -i rhoas_${VERSION}_linux_amd64.rpm
 [source,shell]
 ----
 $ rhoas --version
-rhoas version ${VERSION}
+rhoas version <latest-version>
 ----
 
 ==== Next steps
