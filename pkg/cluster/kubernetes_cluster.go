@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"time"
 
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/dgrijalva/jwt-go"
+	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
@@ -108,26 +108,9 @@ func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiTo
 		return err
 	}
 
-	if cfg.Services.Kafka == nil || forceSelect {
-		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(c.connection, c.logger)
-		if err != nil {
-			return err
-		}
-		cfg.Services.Kafka = &config.KafkaConfig{
-			ClusterID: selectedKafka.GetId(),
-		}
-		_ = c.config.Save(cfg)
-	}
-
-	if apiToken == "" || forceSelect {
-		apiTokenInput := &survey.Confirm{
-			Message: localizer.MustLocalizeFromID("cluster.kubernetes.connect.token.message"),
-		}
-		err = survey.AskOne(apiTokenInput, &apiToken)
-		if err != nil {
-			return err
-		}
+	err = c.useInteractiveMode(cfg, forceSelect, apiToken)
+	if err != nil {
+		return err
 	}
 
 	api := c.connection.API()
@@ -193,6 +176,34 @@ func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiTo
 	}
 
 	return nil
+}
+
+func (c *KubernetesCluster) useInteractiveMode(cfg *config.Config, forceSelect bool, apiToken string) error {
+	if cfg.Services.Kafka == nil || forceSelect {
+		// nolint
+		selectedKafka, err := kafka.InteractiveSelect(c.connection, c.logger)
+		if err != nil {
+			return err
+		}
+		cfg.Services.Kafka = &config.KafkaConfig{
+			ClusterID: selectedKafka.GetId(),
+		}
+		_ = c.config.Save(cfg)
+	}
+	if apiToken == "" || forceSelect {
+		apiTokenInput := &survey.Confirm{
+			Message: localizer.MustLocalizeFromID("cluster.kubernetes.connect.token.message"),
+		}
+		err := survey.AskOne(apiTokenInput, &apiToken)
+		if err != nil {
+			return err
+		}
+
+	}
+	parser := new(jwt.Parser)
+	_, _, err := parser.ParseUnverified(apiToken, jwt.MapClaims{})
+
+	return err
 }
 
 // IsKafkaConnectionCRDInstalled checks the cluster to see if a ManagedKafkaConnection CRD is installed
