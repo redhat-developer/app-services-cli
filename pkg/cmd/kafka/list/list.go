@@ -99,7 +99,17 @@ func runList(opts *options) error {
 	a := api.Kafka().ListKafkas(context.Background())
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
-	a = a.Search(buildQuery(opts.search))
+
+	if opts.search != "" {
+		logger.Debug(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.list.log.debug.filteringKafkaList",
+			TemplateData: map[string]interface{}{
+				"Search": buildQuery(opts.search),
+			},
+		}))
+		a = a.Search(buildQuery(opts.search))
+	}
+
 	response, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
@@ -148,14 +158,10 @@ func mapResponseItemsToRows(kafkas []kasclient.KafkaRequest) []kafkaRow {
 
 func buildQuery(search string) string {
 
-	var queryString string
-
-	if search != "" {
-		queryString = fmt.Sprintf(
-			"name like %%%[1]v%% or owner like %%%[1]v%% or cloud_provider like %%%[1]v%% or region like %%%[1]v%% or status like %%%[1]v%%",
-			search,
-		)
-	}
+	queryString := fmt.Sprintf(
+		"name like %%%[1]v%% or owner like %%%[1]v%% or cloud_provider like %%%[1]v%% or region like %%%[1]v%% or status like %%%[1]v%%",
+		search,
+	)
 
 	return queryString
 
