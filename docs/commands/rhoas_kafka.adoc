@@ -1,5 +1,7 @@
 == rhoas kafka
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 Create, view, use, and manage your Apache Kafka instances
 
 === Options inherited from parent commands
@@ -11,14 +13,10 @@ Create, view, use, and manage your Apache Kafka instances
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - RHOAS CLI
-* link:rhoas_kafka_create.adoc[rhoas kafka create] - Create an Apache
-Kafka instance
-* link:rhoas_kafka_delete.adoc[rhoas kafka delete] - Delete an Apache
-Kafka instance
-* link:rhoas_kafka_describe.adoc[rhoas kafka describe] - View
-configuration details of an Apache Kafka instance
-* link:rhoas_kafka_list.adoc[rhoas kafka list] - List all Apache Kafka
-instances
-* link:rhoas_kafka_use.adoc[rhoas kafka use] - Set the current Apache
-Kafka instance
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_kafka_create{relfilesuffix}[rhoas kafka create]	 - Create an Apache Kafka instance
+* link:rhoas_kafka_delete{relfilesuffix}[rhoas kafka delete]	 - Delete an Apache Kafka instance
+* link:rhoas_kafka_describe{relfilesuffix}[rhoas kafka describe]	 - View configuration details of an Apache Kafka instance
+* link:rhoas_kafka_list{relfilesuffix}[rhoas kafka list]	 - List all Apache Kafka instances
+* link:rhoas_kafka_use{relfilesuffix}[rhoas kafka use]	 - Set the current Apache Kafka instance
+

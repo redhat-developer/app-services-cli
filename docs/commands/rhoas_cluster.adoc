@@ -1,5 +1,7 @@
 == rhoas cluster
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 View and perform operations on your Kubernetes or OpenShift cluster
 
 === Options inherited from parent commands
@@ -11,8 +13,7 @@ View and perform operations on your Kubernetes or OpenShift cluster
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - RHOAS CLI
-* link:rhoas_cluster_connect.adoc[rhoas cluster connect] - Connect your
-services to Kubernetes or OpenShift
-* link:rhoas_cluster_status.adoc[rhoas cluster status] - View status of
-the current Kubernetes or OpenShift cluster
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_cluster_connect{relfilesuffix}[rhoas cluster connect]	 - Connect your services to Kubernetes or OpenShift
+* link:rhoas_cluster_status{relfilesuffix}[rhoas cluster status]	 - View status of the current Kubernetes or OpenShift cluster
+

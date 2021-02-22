@@ -1,17 +1,19 @@
 == rhoas kafka describe
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 View configuration details of an Apache Kafka instance
 
 === Synopsis
 
 View configuration fields and their values for an Apache Kafka instance.
 
-Pass the ``–id'' flag to specify which instance you would like to view.
+Pass the "--id" flag to specify which instance you would like to view.
 
-If the ``–id'' flag is not passed then the selected Kafka instance will
-be used, if available.
+If the "--id" flag is not passed then the selected Kafka instance will be used, if available.
 
 You can view the output as either as JSON or YAML.
+
 
 ....
 rhoas kafka describe [flags]
@@ -28,6 +30,7 @@ $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 # customise the output format
 $ rhoas kafka describe -o yaml
+
 ....
 
 === Options
@@ -46,5 +49,5 @@ $ rhoas kafka describe -o yaml
 
 === SEE ALSO
 
-* link:rhoas_kafka.adoc[rhoas kafka] - Create, view, use, and manage your
-Apache Kafka instances
+* link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+

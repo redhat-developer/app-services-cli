@@ -1,11 +1,12 @@
 == rhoas logout
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 Log out from RHOAS
 
 === Synopsis
 
-Log out from RHOAS. To manage your services again, log in using ``rhoas
-login''.
+Log out from RHOAS. To manage your services again, log in using "rhoas login".
 
 ....
 rhoas logout [flags]
@@ -20,4 +21,5 @@ rhoas logout [flags]
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - RHOAS CLI
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+

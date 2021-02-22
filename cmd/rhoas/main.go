@@ -3,10 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"os"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/doc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
@@ -19,7 +19,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
 	"github.com/spf13/cobra"
-	"github.com/spf13/cobra/doc"
 )
 
 var (
@@ -54,6 +53,7 @@ func main() {
 
 	if generateDocs {
 		generateDocumentation(rootCmd)
+		os.Exit(0)
 	}
 
 	if err = rootCmd.Execute(); err == nil {
@@ -88,7 +88,7 @@ func generateDocumentation(rootCommand *cobra.Command) {
 
 	linkHandler := func(s string) string { return s }
 
-	err := doc.GenMarkdownTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)
+	err := doc.GenAsciidocTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

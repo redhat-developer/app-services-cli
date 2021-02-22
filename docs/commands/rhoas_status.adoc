@@ -1,14 +1,16 @@
 == rhoas status
 
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
 View the status of all currently used services
 
 === Synopsis
 
-View status information of your currently used services. Choose to view
-the status of all services with ``rhoas status'' or specific services
-with ``rhoas status [service]''
+View status information of your currently used services.
+Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
 
-To use a different service run ``rhoas use [args] [flags]''.
+To use a different service run "rhoas <service> use [args] [flags]".
+
 
 ....
 rhoas status [args] [flags]
@@ -25,6 +27,7 @@ $ rhoas status kafka
 
 # view the status of your services in JSON
 $ rhoas status -o json
+
 ....
 
 === Options
@@ -42,4 +45,5 @@ $ rhoas status -o json
 
 === SEE ALSO
 
-* link:rhoas.adoc[rhoas] - RHOAS CLI
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+
