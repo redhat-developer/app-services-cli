@@ -160,7 +160,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiTo
 		return err
 	}
 
-	err = c.createServiceAccountSecret(ctx, serviceAcct)
+	err = c.createServiceAccountSecret(serviceAcct)
 	if err != nil {
 		return err
 	}
@@ -321,7 +321,7 @@ func (c *KubernetesCluster) createTokenSecret(ctx context.Context, apiToken stri
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesCluster) createServiceAccountSecret(ctx context.Context, serviceAcct *kasclient.ServiceAccount) error {
+func (c *KubernetesCluster) createServiceAccountSecret(serviceAcct *kasclient.ServiceAccount) error {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return err
