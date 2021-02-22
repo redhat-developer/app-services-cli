@@ -2,6 +2,15 @@
 
 
 
+## [0.17.1](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.17.0...0.17.1) (2021-02-22)
+
+
+### Bug Fixes
+
+* **login:** fix nil-pointer error ([#373](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/373)) ([8820492](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/8820492056c6000af7130d5fd64da9f78b23719e))
+
+
+
 # [0.17.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.16.0...0.17.0) (2021-02-19)
 
 
