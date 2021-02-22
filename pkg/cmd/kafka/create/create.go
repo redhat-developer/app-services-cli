@@ -68,8 +68,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		multiAZ: defaultMultiAZ,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/create", "cmd/common/flags")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.create.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("kafka.create.cmd.shortDescription"),

@@ -15,10 +15,6 @@ type Token struct {
 	RefreshToken string `json:"refresh_token,omitempty" doc:"Offline or refresh token."`
 }
 
-func init() {
-	localizer.LoadMessageFiles("auth/token")
-}
-
 func (c *Token) IsValid() (tokenIsValid bool, err error) {
 	now := time.Now()
 	if c.AccessToken != "" {

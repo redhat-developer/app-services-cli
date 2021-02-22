@@ -8,10 +8,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
-func init() {
-	localizer.LoadMessageFiles("browser")
-}
-
 func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {
 	switch runtime.GOOS {
 	case "linux":

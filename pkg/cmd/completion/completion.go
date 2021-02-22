@@ -16,8 +16,6 @@ func NewCompletionCommand(f *factory.Factory) *cobra.Command {
 		IO: f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/completion")
-
 	cmd := &cobra.Command{
 		Use:                   localizer.MustLocalizeFromID("completion.cmd.use"),
 		Short:                 localizer.MustLocalizeFromID("completion.cmd.shortDescription"),

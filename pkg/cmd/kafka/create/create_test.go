@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"io/ioutil"
 	"testing"
+
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -14,6 +15,7 @@ import (
 	"net/http"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
@@ -23,6 +25,7 @@ import (
 
 // nolint:funlen
 func TestNewCreateCommand(t *testing.T) {
+	_ = localizer.IncludeAssetsAndLoadMessageFiles()
 	type args struct {
 		f            *factory.Factory
 		name         string

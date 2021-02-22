@@ -11,10 +11,6 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-func init() {
-	localizer.LoadMessageFiles("config")
-}
-
 // NewFile creates a new config type
 func NewFile() IConfig {
 	cfg := &File{}

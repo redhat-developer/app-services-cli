@@ -54,8 +54,6 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/common", "cmd/kafka/topic/common", "cmd/kafka/topic/create")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.topic.create.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("kafka.topic.create.cmd.shortDescription"),

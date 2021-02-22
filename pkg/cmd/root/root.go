@@ -20,8 +20,6 @@ import (
 )
 
 func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command {
-	localizer.LoadMessageFiles("cmd/root")
-
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,

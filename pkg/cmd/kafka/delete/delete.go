@@ -38,8 +38,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/common/flags", "cmd/kafka/common", "cmd/kafka/delete")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.delete.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("kafka.delete.cmd.shortDescription"),

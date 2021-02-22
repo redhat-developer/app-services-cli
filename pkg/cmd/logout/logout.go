@@ -29,8 +29,6 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
-	localizer.LoadMessageFiles("cmd/logout")
-
 	cmd := &cobra.Command{
 		Use:   localizer.MustLocalizeFromID("logout.cmd.use"),
 		Short: localizer.MustLocalizeFromID("logout.cmd.shortDescription"),

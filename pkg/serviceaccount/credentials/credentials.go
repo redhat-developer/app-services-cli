@@ -115,8 +115,6 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 
 	defaultPath := AbsolutePath(outputFormat, filePath)
 
-	localizer.LoadMessageFiles("cmd/serviceaccount")
-
 	for chooseFileLocation {
 		// choose location
 		fileNamePrompt := &survey.Input{

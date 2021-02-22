@@ -4,11 +4,13 @@ package logout
 
 import (
 	"bytes"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"testing"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -18,6 +20,7 @@ import (
 )
 
 func TestNewLogoutCommand(t *testing.T) {
+	_ = localizer.IncludeAssetsAndLoadMessageFiles()
 	type args struct {
 		cfg        *config.Config
 		connection *connection.KeycloakConnection

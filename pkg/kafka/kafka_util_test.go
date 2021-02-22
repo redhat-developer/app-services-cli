@@ -1,11 +1,15 @@
 package kafka
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"testing"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 )
 
 func TestValidateName(t *testing.T) {
+	_ = localizer.IncludeAssetsAndLoadMessageFiles()
+
 	type args struct {
 		name string
 	}
@@ -96,6 +100,7 @@ func TestValidateName(t *testing.T) {
 }
 
 func TestTransformRequest(t *testing.T) {
+	_ = localizer.IncludeAssetsAndLoadMessageFiles()
 	hostWithSSLPort := "my-kafka-url:443"
 	hostWithNoPort := "my-kafka-url"
 
@@ -153,6 +158,7 @@ func TestTransformRequest(t *testing.T) {
 }
 
 func TestTransformKafkaRequestListItems(t *testing.T) {
+	_ = localizer.IncludeAssetsAndLoadMessageFiles()
 	hostWithSSLPort := "my-kafka-url:443"
 	hostWithNoPort := "my-kafka-url"
 	emptyHost := ""

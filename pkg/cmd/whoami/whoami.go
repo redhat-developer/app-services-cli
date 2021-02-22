@@ -26,8 +26,6 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/whoami")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("whoami.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("whoami.cmd.shortDescription"),

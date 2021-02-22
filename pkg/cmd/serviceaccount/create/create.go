@@ -44,8 +44,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
-	localizer.LoadMessageFiles("cmd/common", "cmd/common/flags", "cmd/serviceaccount", "cmd/serviceaccount/create")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("serviceAccount.create.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("serviceAccount.create.cmd.shortDescription"),

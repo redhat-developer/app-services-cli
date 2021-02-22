@@ -43,8 +43,6 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
-	localizer.LoadMessageFiles("cmd/common", "cmd/serviceaccount", "cmd/serviceaccount/reset-credentials")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("serviceAccount.resetCredentials.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("serviceAccount.resetCredentials.cmd.shortDescription"),

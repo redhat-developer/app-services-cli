@@ -35,8 +35,6 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/cluster/common", "cmd/cluster/connect", "cmd/common/flags")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("cluster.connect.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("cluster.connect.cmd.shortDescription"),
