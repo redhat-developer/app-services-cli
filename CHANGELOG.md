@@ -1,4 +1,22 @@
-#  (2021-02-10)
+#  (2021-02-22)
+
+
+
+# [0.17.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.16.0...0.17.0) (2021-02-19)
+
+
+### Bug Fixes
+
+* i18n errors ([#353](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/353)) ([654cfb7](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/654cfb778655dbbaf1a8c2ddfead5a14814dd400))
+* invalid YAML ([8f4fff8](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/8f4fff80f0fc8cde516ae4c72ac4f31c655aa75c))
+* service account i18n ([#344](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/344)) ([a7d631e](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/a7d631ea22558457fc7b4392a4a952eb8f9a557d))
+* use yq only if version >= 4 ([#367](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/367)) ([79f2afa](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/79f2afab8c6cc256da8cd2e21c87a5980cbe13b6))
+
+
+### Features
+
+* **kafka topic:** add topic commands ([#309](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/309)) ([9e399f5](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/9e399f588eb144b7695261df992f388ad5ca17a2))
+* **whoami:** add whoami command ([#356](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/356)) ([421b165](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/421b165b1092f8e3d6096a5eb337433ff543b87c)), closes [#339](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/339)
 
 
 
