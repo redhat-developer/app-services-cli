@@ -2,6 +2,15 @@
 
 
 
+## [0.17.2](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.17.1...0.17.2) (2021-02-22)
+
+
+### Bug Fixes
+
+* **i18n:** fix error where locale file not being loaded ([#374](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/374)) ([ce40d2a](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/ce40d2ada03f9a99a01a32fc7be5738ae2c72def))
+
+
+
 ## [0.17.1](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.17.0...0.17.1) (2021-02-22)
 
 
