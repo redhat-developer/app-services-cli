@@ -33,7 +33,6 @@ help:
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
 	@echo "mkae pkger									bundle static assets"
-	@echo "make pkger/check 					Check for changes to the static assets"
 
 	@echo "$(fake)"
 .PHONY: help

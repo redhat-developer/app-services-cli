@@ -48,7 +48,7 @@ Formats source code.
 
 #### `make pkger`
 
-Packages static assets into the binary
+Packages static assets into the binary.
 
 ### `make generate`
 
