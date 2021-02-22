@@ -109,7 +109,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiTo
 		return err
 	}
 
-	err = c.useInteractiveMode(cfg, forceSelect, apiToken)
+	apiToken, err = c.useInteractiveMode(cfg, forceSelect, apiToken)
 	if err != nil {
 		return err
 	}
@@ -179,12 +179,12 @@ func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiTo
 	return nil
 }
 
-func (c *KubernetesCluster) useInteractiveMode(cfg *config.Config, forceSelect bool, apiToken string) error {
+func (c *KubernetesCluster) useInteractiveMode(cfg *config.Config, forceSelect bool, apiToken string) (string, error) {
 	if cfg.Services.Kafka == nil || forceSelect {
 		// nolint
 		selectedKafka, err := kafka.InteractiveSelect(c.connection, c.logger)
 		if err != nil {
-			return err
+			return "", err
 		}
 		cfg.Services.Kafka = &config.KafkaConfig{
 			ClusterID: selectedKafka.GetId(),
@@ -197,14 +197,14 @@ func (c *KubernetesCluster) useInteractiveMode(cfg *config.Config, forceSelect b
 		}
 		err := survey.AskOne(apiTokenInput, &apiToken)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 	}
 	parser := new(jwt.Parser)
 	_, _, err := parser.ParseUnverified(apiToken, jwt.MapClaims{})
 
-	return err
+	return apiToken, err
 }
 
 // IsKafkaConnectionCRDInstalled checks the cluster to see if a ManagedKafkaConnection CRD is installed
