@@ -11,6 +11,14 @@ Invalid Kafka instance name. Valid names must satisfy the following conditions:
 [kafka.validation.name.error.lengthError]
 one = 'Kafka instance name must be between 1 and 32 characters'
 
+[kafka.validation.error.invalidSearchValue]
+description = 'Error message when invalid search input is provided'
+one = '''
+Illegal search value "{{.Search}}", search input must satisfy the following conditions:
+
+  - must be of 1 or more characters
+  - must only consist of alphanumeric characters, '-', '_' and '%'
+'''
 
 [kafka.common.error.notFoundErrorById]
 one = 'Kafka instance with ID "{{.ID}}" not found'

@@ -9,6 +9,7 @@ import (
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
@@ -101,6 +102,11 @@ func runList(opts *options) error {
 	a = a.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != "" {
+
+		if err = kafka.ValidateSearchInput(opts.search); err != nil {
+			return err
+		}
+
 		logger.Debug(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.list.log.debug.filteringKafkaList",
 			TemplateData: map[string]interface{}{
