@@ -91,6 +91,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config: f.Config,
 		Logger: f.Logger,
+		IO:     f.IOStreams,
 	}
 
 	localizer.LoadMessageFiles("cmd/login")
@@ -299,9 +300,8 @@ func runLogin(opts *Options) (err error) {
 	})
 
 	if opts.printURL {
-		logger.Info(localizer.MustLocalizeFromID("login.log.info.openSSOUrl"))
-		logger.Info("")
-		fmt.Println(opts.IO.Out, authCodeURL)
+		logger.Info(localizer.MustLocalizeFromID("login.log.info.openSSOUrl"), "\n")
+		fmt.Fprintln(opts.IO.Out, authCodeURL)
 		logger.Info("")
 	} else {
 		openBrowserExec, err := browser.GetOpenBrowserCommand(authCodeURL)
