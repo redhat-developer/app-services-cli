@@ -20,13 +20,6 @@ type Config struct {
 	ClientID     string           `json:"client_id" doc:"OpenID client identifier."`
 	Insecure     bool             `json:"insecure" doc:"Enables insecure communication with the server. This disables verification of TLS certificates and host names."`
 	Scopes       []string         `json:"scopes" doc:"OpenID scope. If this option is used it will replace completely the default scopes. Can be repeated multiple times to specify multiple scopes."`
-	ServiceAuth  ServiceAuth      `json:"serviceAuth"`
-}
-
-// ServiceAuth for cli authentication within enabled services
-type ServiceAuth struct {
-	ClientID     string `json:"clientID"`
-	ClientSecret string `json:"clientSecret"`
 }
 
 // ServiceConfigMap is a map of configs for the managed application services
