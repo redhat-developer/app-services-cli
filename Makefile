@@ -32,7 +32,8 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
-	@echo "mkae pkger								bundle static assets"
+	@echo "mkae pkger									bundle static assets"
+	@echo "make pkger/check 					Check for changes to the static assets"
 
 	@echo "$(fake)"
 .PHONY: help
@@ -60,6 +61,10 @@ install:
 pkger:
 	pkger -o cmd/rhoas
 .PHONY: pkger
+
+pkger/check:
+	./scripts/check-pkger.sh
+.PHONY: pkger/check
 
 # Runs the integration tests.
 test/integration: install
