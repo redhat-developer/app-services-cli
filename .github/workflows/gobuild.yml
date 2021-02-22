@@ -23,8 +23,6 @@ jobs:
         only-new-issues: true
         args: --timeout 2m0s
         # args: --issues-exit-code=0
-    - name: Compile static assets
-      run: make pkger/check
     - name: Build
       run: make binary
     - name: Unit tests
