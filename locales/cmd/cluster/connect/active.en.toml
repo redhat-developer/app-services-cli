@@ -8,17 +8,22 @@ one = 'Connect your services to Kubernetes or OpenShift'
 one = '''
 Connect your application services to your Kubernetes or OpenShift cluster.
 The kubeconfig file is used to connect to the cluster and identify the context.
+Alternatively you can use KUBECONFIG env variable to read your config.
 
-A service account is created and mounted as a secret into your cluster. 
-This enables you to mount credentials directly to your application.
+NOTE: This command require RHOAS operator running on your cluster:
 
-This command works in two modes:
+This command will:
 
-  * If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
+1. Create a service account and mount it as a secret into your cluster. 
+If cluster have service account it will be refreshed.
 
-  * Create the secret only. This mode does not require the Operator to be installed.
+1. Create a offline token and mount it as a secret into your cluster. 
+If cluster have service account it will be refreshed.
 
-You can interactively select the service instance by using the "--interactive-select" flag
+2. Creates Managed Kafka Request object that can be used to create ServiceBinding object using 
+Service binding operator
+https://github.com/redhat-developer/service-binding-operator
+
 '''
 
 [cluster.connect.cmd.example]
@@ -26,9 +31,6 @@ one = '''
 # connect the current Kafka instance to your cluster
 $ rhoas cluster connect
 '''
-
-[cluster.connect.flag.interactiveSelect.description]
-one = "Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster."
 
 [cluster.connect.flag.secretName.description]
 one = 'Name of the secret that holds the Kafka credentials.'

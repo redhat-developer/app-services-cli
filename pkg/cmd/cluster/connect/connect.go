@@ -40,16 +40,8 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		Long:    localizer.MustLocalizeFromID("cluster.connect.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("cluster.connect.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if !opts.IO.CanPrompt() && opts.interactiveSelect {
-				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: "flag.error.requiredWhenNonInteractive",
-					TemplateData: map[string]interface{}{
-						"Flag": "interactive-select",
-					},
-				}))
-			}
 
-			if opts.accessToken == "" && !opts.interactiveSelect {
+			if opts.accessToken == "" && !opts.IO.CanPrompt() {
 				return errors.New(localizer.MustLocalize(&localizer.Config{
 					MessageID: "flag.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
@@ -61,7 +53,6 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.interactiveSelect, "interactive-select", "", false, localizer.MustLocalizeFromID("cluster.connect.flag.interactiveSelect.description"))
 	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", localizer.MustLocalizeFromID("cluster.common.flag.kubeconfig.description"))
 	cmd.Flags().StringVarP(&opts.accessToken, "token", "", "", localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"))
 	return cmd

@@ -54,11 +54,12 @@ var serviceAccountSecretName = "rhoas-cli-serviceaccounts"
 // NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
 func NewKubernetesClusterConnection(connection connection.Connection, config config.IConfig, logger logging.Logger, kubeconfig string) (Cluster, error) {
 	if kubeconfig == "" {
+		kubeconfig = os.Getenv("KUBECONFIG")
+	}
+
+	if kubeconfig == "" {
 		home, _ := homedir.Dir()
 		kubeconfig = filepath.Join(home, ".kube", "config")
-	}
-	if kubeconfig == "" {
-		kubeconfig = os.Getenv("KUBECONFIG")
 	}
 
 	_, err := os.Stat(kubeconfig)
