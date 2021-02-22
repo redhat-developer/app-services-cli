@@ -45,7 +45,7 @@ description = 'Description for the --search flag'
 one = 'Text search to filter the Kafka instances by name, owner, cloud_provider, region and status'
 
 [kafka.list.log.debug.filteringKafkaList]
-description = 'Debugging message when filtering the list of Kafka instances'
+description = 'Debug message when filtering the list of Kafka instances'
 one = 'Filtering Kafka instances with the query "{{.Search}}"'
 
 [kafka.list.log.info.noKafkaInstances]
