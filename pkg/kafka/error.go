@@ -7,10 +7,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
-func init() {
-	localizer.LoadMessageFiles("kafka")
-}
-
 type Error struct {
 	Err error
 }

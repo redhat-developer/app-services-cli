@@ -37,8 +37,6 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/cluster/common", "cmd/cluster/status")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("cluster.status.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("cluster.status.cmd.shortDescription"),

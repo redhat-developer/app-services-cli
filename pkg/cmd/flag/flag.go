@@ -6,10 +6,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
-func init() {
-	localizer.LoadMessageFiles("cmd/common/flags")
-}
-
 type Error struct {
 	Err error
 }

@@ -47,16 +47,6 @@ var MKCRMeta = metav1.TypeMeta{
 	APIVersion: "rhoas.redhat.com/v1alpha1",
 }
 
-var (
-	SecretAlreadyExistsError error
-)
-
-func init() {
-	localizer.LoadMessageFiles("cluster/kubernetes")
-
-	SecretAlreadyExistsError = errors.New(localizer.MustLocalizeFromID("cluster.kubernetes.error.secretAlreadyExistsError"))
-}
-
 // NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
 func NewKubernetesClusterConnection(connection connection.Connection, config config.IConfig, logger logging.Logger, kubeconfig string) (Cluster, error) {
 	if kubeconfig == "" {
@@ -279,7 +269,7 @@ func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *kasclient.Se
 
 	_, err = c.clientset.CoreV1().Secrets(namespace).Get(ctx, secretName, metav1.GetOptions{})
 	if err == nil {
-		return SecretAlreadyExistsError
+		return errors.New(localizer.MustLocalizeFromID("cluster.kubernetes.error.secretAlreadyExistsError"))
 	}
 
 	createdSecret, err := c.clientset.CoreV1().Secrets(namespace).Create(context.TODO(), secret, metav1.CreateOptions{})

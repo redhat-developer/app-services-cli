@@ -46,8 +46,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/serviceaccount", "cmd/serviceaccount/list")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("serviceAccount.list.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("serviceAccount.list.cmd.shortDescription"),

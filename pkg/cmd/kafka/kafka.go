@@ -16,8 +16,6 @@ import (
 )
 
 func NewKafkaCommand(f *factory.Factory) *cobra.Command {
-	localizer.LoadMessageFiles("cmd/kafka")
-
 	cmd := &cobra.Command{
 		Use:   localizer.MustLocalizeFromID("kafka.cmd.use"),
 		Short: localizer.MustLocalizeFromID("kafka.cmd.shortDescription"),

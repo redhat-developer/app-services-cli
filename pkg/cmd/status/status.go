@@ -47,8 +47,6 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		services:   validServices,
 	}
 
-	localizer.LoadMessageFiles("cmd/status")
-
 	cmd := &cobra.Command{
 		Use:       localizer.MustLocalizeFromID("status.cmd.use"),
 		Short:     localizer.MustLocalizeFromID("status.cmd.shortDescription"),

@@ -33,8 +33,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/serviceaccount/delete")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("serviceAccount.delete.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("serviceAccount.delete.cmd.shortDescription"),

@@ -44,8 +44,6 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/topic/common", "cmd/kafka/topic/describe", "cmd/kafka/common")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.topic.describe.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("kafka.topic.describe.cmd.shortDescription"),

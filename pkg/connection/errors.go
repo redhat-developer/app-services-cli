@@ -7,20 +7,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
-func init() {
-	localizer.LoadMessageFiles("connection")
-
-	ErrNotLoggedIn = errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInError"))
-	ErrSessionExpired = errors.New(localizer.MustLocalizeFromID("connection.error.sessionExpiredError"))
-}
-
-var (
-	// ErrNotLoggedIn defines when a user is not authenticated
-	ErrNotLoggedIn error
-	// ErrSessionExpired defines when a user's session has expired
-	ErrSessionExpired error
-)
-
 // AuthError defines an Authentication error
 type AuthError struct {
 	Err    error
@@ -45,9 +31,9 @@ func AuthErrorf(format string, a ...interface{}) *AuthError {
 }
 
 func notLoggedInError() *AuthError {
-	return &AuthError{ErrNotLoggedIn, ""}
+	return &AuthError{errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInError")), ""}
 }
 
 func sessionExpiredError() *AuthError {
-	return &AuthError{ErrSessionExpired, ""}
+	return &AuthError{errors.New(localizer.MustLocalizeFromID("connection.error.sessionExpiredError")), ""}
 }

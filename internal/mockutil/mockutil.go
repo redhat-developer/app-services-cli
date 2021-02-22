@@ -2,7 +2,9 @@ package mockutil
 
 import (
 	"context"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"errors"
+
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
@@ -32,20 +34,20 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kasclient
 	return &connection.ConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
-				return "", "", connection.ErrNotLoggedIn
+				return "", "", errors.New("")
 			}
 			if conn.Token.RefreshToken == "expired" {
-				return "", "", connection.ErrSessionExpired
+				return "", "", errors.New("")
 			}
 
 			return "valid", "valid", nil
 		},
 		LogoutFunc: func(ctx context.Context) error {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
-				return connection.ErrNotLoggedIn
+				return errors.New("")
 			}
 			if conn.Token.AccessToken == "expired" && conn.Token.RefreshToken == "expired" {
-				return connection.ErrSessionExpired
+				return errors.New("")
 			}
 
 			return nil

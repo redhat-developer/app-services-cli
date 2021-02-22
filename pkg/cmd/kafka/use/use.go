@@ -31,8 +31,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/use")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.use.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("kafka.use.cmd.shortDescription"),

@@ -94,8 +94,6 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		IO:     f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/login")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("login.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("login.cmd.shortDescription"),

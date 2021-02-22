@@ -46,8 +46,6 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 	}
 
-	localizer.LoadMessageFiles("cmd/kafka/topic/common", "cmd/kafka/topic/list", "cmd/kafka/common")
-
 	cmd := &cobra.Command{
 		Use:     localizer.MustLocalizeFromID("kafka.topic.list.cmd.use"),
 		Short:   localizer.MustLocalizeFromID("kafka.topic.list.cmd.shortDescription"),

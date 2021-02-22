@@ -50,8 +50,6 @@ type KeycloakConnection struct {
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (accessToken string, refreshToken string, err error) {
-	localizer.LoadMessageFiles("connection/keycloak_connection")
-
 	c.logger.Debug(localizer.MustLocalizeFromID("connection.refreshTokens.log.debug.refreshingTokens"))
 
 	if c.Token.AccessToken != "" && !c.tokenNeedsRefresh() {
@@ -135,8 +133,6 @@ func (c *KeycloakConnection) API() *api.API {
 }
 
 func (c *KeycloakConnection) tokenNeedsRefresh() bool {
-	localizer.LoadMessageFiles("connection/keycloak_connection")
-
 	t := time.Now()
 	expires, left, err := token.GetExpiry(c.Token.AccessToken, t)
 	if err != nil {

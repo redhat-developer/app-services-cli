@@ -26,7 +26,18 @@ var (
 	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 )
 
+// load all locale files
+func initLocales() {
+	err := localizer.IncludeAssetsAndLoadMessageFiles()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
 func main() {
+	initLocales()
+
 	buildVersion := build.Version
 	cmdFactory := factory.New(build.Version)
 	logger, err := cmdFactory.Logger()
@@ -34,9 +45,6 @@ func main() {
 		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
-
-	//nolint:errcheck
-	localizer.IncludeAssets()
 
 	initConfig(cmdFactory)
 
