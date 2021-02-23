@@ -69,6 +69,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
+			if err := kafka.ValidateSearchInput(opts.search); err != nil {
+				return err
+			}
+
 			return runList(opts)
 		},
 	}
@@ -102,10 +106,6 @@ func runList(opts *options) error {
 	a = a.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != "" {
-
-		if err = kafka.ValidateSearchInput(opts.search); err != nil {
-			return err
-		}
 
 		logger.Debug(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.list.log.debug.filteringKafkaList",

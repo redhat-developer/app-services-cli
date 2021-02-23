@@ -71,6 +71,7 @@ func TransformKafkaRequest(kafka *kasclient.KafkaRequest) *kasclient.KafkaReques
 	return kafka
 }
 
+// ValidateSearchInput validates the text provided to filter the Kafka instances
 func ValidateSearchInput(val interface{}) error {
 	search, ok := val.(string)
 

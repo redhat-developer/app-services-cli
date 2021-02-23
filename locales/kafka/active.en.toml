@@ -14,7 +14,7 @@ one = 'Kafka instance name must be between 1 and 32 characters'
 [kafka.validation.error.invalidSearchValue]
 description = 'Error message when invalid search input is provided'
 one = '''
-Illegal search value "{{.Search}}", search input must satisfy the following conditions:
+illegal search value "{{.Search}}", search input must satisfy the following conditions:
 
   - must be of 1 or more characters
   - must only consist of alphanumeric characters, '-', '_' and '%'
