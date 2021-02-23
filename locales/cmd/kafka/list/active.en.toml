@@ -40,6 +40,14 @@ one = 'Display the Kafka instances from the specified page number.'
 description = 'Description for the --limit flag'
 one = 'The maximum number of Kafka instances to be returned'
 
+[kafka.list.flag.search]
+description = 'Description for the --search flag'
+one = 'Text search to filter the Kafka instances by name, owner, cloud_provider, region and status'
+
+[kafka.list.log.debug.filteringKafkaList]
+description = 'Debug message when filtering the list of Kafka instances'
+one = 'Filtering Kafka instances with the query "{{.Search}}"'
+
 [kafka.list.log.info.noKafkaInstances]
 description = 'Info message when no Kafkas were found'
 one = 'No Kafka instances were found.'

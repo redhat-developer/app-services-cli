@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	validNameRegexp = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
+	validNameRegexp   = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
+	validSearchRegexp = regexp.MustCompile(`^([a-zA-Z0-9-_%]*[a-zA-Z0-9-_%])?$`)
 )
 
 // ValidateName validates the proposed name of a Kafka instance
@@ -68,4 +69,32 @@ func TransformKafkaRequest(kafka *kasclient.KafkaRequest) *kasclient.KafkaReques
 	}
 
 	return kafka
+}
+
+// ValidateSearchInput validates the text provided to filter the Kafka instances
+func ValidateSearchInput(val interface{}) error {
+	search, ok := val.(string)
+
+	if !ok {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": val,
+				"Type":  "string",
+			},
+		}))
+	}
+
+	matched := validSearchRegexp.MatchString(search)
+
+	if matched {
+		return nil
+	}
+
+	return errors.New(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.validation.error.invalidSearchValue",
+		TemplateData: map[string]interface{}{
+			"Search": search,
+		},
+	}))
 }

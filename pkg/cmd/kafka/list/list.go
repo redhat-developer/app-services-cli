@@ -3,11 +3,13 @@ package list
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 
@@ -37,6 +39,7 @@ type options struct {
 	outputFormat string
 	page         int
 	limit        int
+	search       string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -49,6 +52,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		page:       0,
 		limit:      100,
+		search:     "",
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -65,6 +69,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
+			if err := kafka.ValidateSearchInput(opts.search); err != nil {
+				return err
+			}
+
 			return runList(opts)
 		},
 	}
@@ -75,6 +83,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}))
 	cmd.Flags().IntVarP(&opts.page, "page", "", 0, localizer.MustLocalizeFromID("kafka.list.flag.page"))
 	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, localizer.MustLocalizeFromID("kafka.list.flag.limit"))
+	cmd.Flags().StringVarP(&opts.search, "search", "", "", localizer.MustLocalizeFromID("kafka.list.flag.search"))
 
 	return cmd
 }
@@ -95,6 +104,18 @@ func runList(opts *options) error {
 	a := api.Kafka().ListKafkas(context.Background())
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
+
+	if opts.search != "" {
+
+		logger.Debug(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.list.log.debug.filteringKafkaList",
+			TemplateData: map[string]interface{}{
+				"Search": buildQuery(opts.search),
+			},
+		}))
+		a = a.Search(buildQuery(opts.search))
+	}
+
 	response, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
@@ -139,4 +160,15 @@ func mapResponseItemsToRows(kafkas []kasclient.KafkaRequest) []kafkaRow {
 	}
 
 	return rows
+}
+
+func buildQuery(search string) string {
+
+	queryString := fmt.Sprintf(
+		"name like %%%[1]v%% or owner like %%%[1]v%% or cloud_provider like %%%[1]v%% or region like %%%[1]v%% or status like %%%[1]v%%",
+		search,
+	)
+
+	return queryString
+
 }
