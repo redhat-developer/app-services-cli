@@ -3,6 +3,6 @@ one = 'Location of the kubeconfig file.'
 
 [cluster.common.flag.offline.token.description]
 one = '''
-Please provide offline token that will be used by operator.
+Provide an offline token to be used by the operator.
 You can get token on https://cloud.redhat.com/openshift/token
 '''
