@@ -32,5 +32,5 @@ Managed Application Services Operator: {{.OperatorStatus}}
 
 Command requires Managed Services Connection operator.
 Operator can be installed from OperatorHub.
-You can find operator by typing rhoas in search.
+You can find operator by typing "rhoas" in search.
 '''

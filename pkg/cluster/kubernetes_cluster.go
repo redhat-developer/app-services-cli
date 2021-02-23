@@ -31,7 +31,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
-// Kubernetes is a type which represents a Kubernetes cluster
+// KubernetesCluster is a type which represents a Kubernetes cluster
 type KubernetesCluster struct {
 	connection   connection.Connection
 	config       config.IConfig
