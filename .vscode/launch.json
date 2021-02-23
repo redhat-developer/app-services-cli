@@ -52,7 +52,7 @@
       ]
     },
      {
-      "name": "Delete kafka",
+      "name": "Delete current Kafka",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -60,8 +60,7 @@
       "env": {},
       "args": [
         "kafka",
-        "delete",
-        "enda-test"
+        "delete"
       ]
     },
     {
