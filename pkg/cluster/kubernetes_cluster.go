@@ -4,11 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"k8s.io/client-go/dynamic"
+	"k8s.io/client-go/rest"
+	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
@@ -21,6 +24,10 @@ import (
 	"github.com/gofrs/uuid"
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -38,6 +45,7 @@ type KubernetesCluster struct {
 	logger       logging.Logger
 	clientset    *kubernetes.Clientset
 	clientconfig clientcmd.ClientConfig
+	restConfig   *rest.Config
 }
 
 var MKCRMeta = metav1.TypeMeta{
@@ -54,6 +62,14 @@ var serviceAccountSecretName = "rhoas-cli-serviceaccounts"
 func init() {
 	localizer.LoadMessageFiles("cluster/kubernetes")
 }
+
+var (
+	runtimeMSARGVR = schema.GroupVersionResource{
+		Group:    "rhoas.redhat.com",
+		Version:  "v1alpha1",
+		Resource: "managedserviceaccountrequests",
+	}
+)
 
 // NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
 func NewKubernetesClusterConnection(connection connection.Connection, config config.IConfig, logger logging.Logger, kubeconfig string) (Cluster, error) {
@@ -93,6 +109,7 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 		logger,
 		clientset,
 		clientconfig,
+		kubeClientConfig,
 	}
 
 	return k8sCluster, nil
@@ -158,21 +175,21 @@ func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiTo
 		return nil
 	}
 
-	serviceAcct, err := c.createServiceAccount(ctx)
-	if err != nil {
-		return err
-	}
-
-	err = c.createServiceAccountSecret(ctx, serviceAcct)
-	if err != nil {
-		return err
-	}
-
 	// Token with auth for operator to pick
 	err = c.createTokenSecret(ctx, apiToken)
 	if err != nil {
 		return err
 	}
+
+	_, err = c.createServiceAccount(ctx)
+	if err != nil {
+		return err
+	}
+
+	// err = c.createServiceAccountSecret(ctx, serviceAcct)
+	// if err != nil {
+	// 	return err
+	// }
 
 	err = c.createKafkaConnectionCustomResource(ctx, &kafkaInstance)
 	if err != nil {
@@ -369,18 +386,99 @@ func (c *KubernetesCluster) createServiceAccountSecret(ctx context.Context, serv
 // createServiceAccount creates a service account with a random name
 func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kasclient.ServiceAccount, error) {
 	t := time.Now()
-
-	api := c.connection.API()
-	serviceAcct := &kasclient.ServiceAccountRequest{Name: fmt.Sprintf("svc-acct-%v", t.String())}
-	req := api.Kafka().CreateServiceAccount(ctx)
-	req = req.ServiceAccountRequest(*serviceAcct)
-	res, _, apiErr := req.Execute()
-
-	if apiErr.Error() != "" {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.createServiceAccount.error.createError"), apiErr)
+	client, err := dynamic.NewForConfig(c.restConfig)
+	if nil != err {
+		return nil, err
 	}
 
-	return &res, nil
+	namespace, err := c.CurrentNamespace()
+
+	if nil != err {
+		return nil, err
+	}
+
+	name := fmt.Sprintf("svc-acct-%v", t.Nanosecond())
+	res := client.Resource(runtimeMSARGVR)
+	msar := NewMSAR(name)
+	_, err = res.Namespace(namespace).Create(context.TODO(), msar, metav1.CreateOptions{})
+
+	if nil != err {
+		return nil, err
+	}
+
+	w, err := res.Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{})
+
+	if nil != err {
+		fmt.Printf("ERROR!!! %v", err)
+		return nil, fmt.Errorf("%+v", err)
+	}
+
+	for {
+		select {
+		case event := <-w.ResultChan():
+			if event.Type == watch.Modified {
+				unstructuredObj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(event.Object)
+
+				objName, _, _ := unstructured.NestedString(unstructuredObj, "spec", "serviceAccountName")
+				if objName != name {
+					continue
+				}
+				if err != nil {
+					return nil, err
+				}
+
+				conditions, found, err := unstructured.NestedSlice(unstructuredObj, "status", "conditions")
+
+				if err != nil {
+					return nil, err
+				}
+
+				if found {
+					for _, condition := range conditions {
+						typedCondition := condition.(map[string]interface{})
+						if typedCondition["type"].(string) == "Finished" {
+							if typedCondition["status"].(string) == "False" {
+								fmt.Printf("False %v", typedCondition)
+								w.Stop()
+								return nil, fmt.Errorf("Error Creating: %v", typedCondition["message"])
+							}
+							if typedCondition["status"].(string) == "True" {
+								fmt.Printf("True %v", typedCondition)
+								w.Stop()
+								return nil, nil
+							}
+						}
+
+					}
+					w.Stop()
+				}
+
+			}
+
+		case <-time.After(30 * time.Second):
+			w.Stop()
+			return nil, fmt.Errorf("timeout: %v", name)
+		}
+	}
+
+}
+
+func NewMSAR(name string) *unstructured.Unstructured {
+	return &unstructured.Unstructured{
+		Object: map[string]interface{}{
+			"kind":       "ManagedServiceAccountRequest",
+			"apiVersion": "rhoas.redhat.com/v1alpha1",
+			"metadata": map[string]interface{}{
+				"name": name,
+			},
+			"spec": map[string]interface{}{
+				"accessTokenSecretName":     tokenSecretName,
+				"serviceAccountDescription": "test-description",
+				"serviceAccountName":        name,
+				"serviceAccountSecretName":  serviceAccountSecretName,
+			},
+		},
+	}
 }
 
 func (c *KubernetesCluster) getKafkaConnectionsAPIURL(namespace string) string {
