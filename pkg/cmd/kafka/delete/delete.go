@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
@@ -21,6 +23,7 @@ import (
 
 type options struct {
 	id    string
+	name  string
 	force bool
 
 	IO         *iostreams.IOStreams
@@ -43,8 +46,15 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.delete.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.delete.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.delete.cmd.example"),
-		Args:    cobra.ExactArgs(0),
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		Args:    cobra.RangeArgs(0, 1),
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			var searchName string
+			if len(args) > 0 {
+				searchName = args[0]
+			}
+			return cmdutil.FilterValidKafkas(f, searchName)
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 					MessageID: "flag.error.requiredWhenNonInteractive",
@@ -54,13 +64,21 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				}))
 			}
 
+			if len(args) > 0 {
+				opts.name = args[0]
+			}
+
+			if opts.name != "" && opts.id != "" {
+				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.idAndNameCannotBeUsed"))
+			}
+
+			if opts.id != "" || opts.name != "" {
+				return runDelete(opts)
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
-			}
-
-			if opts.id != "" {
-				return runDelete(opts)
 			}
 
 			var kafkaConfig *config.KafkaConfig
@@ -98,13 +116,18 @@ func runDelete(opts *options) error {
 
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka().GetKafkaById(context.Background(), opts.id).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return kafka.ErrorNotFound(opts.id)
-	}
-
-	if apiErr.Error() != "" {
-		return apiErr
+	var response *kasclient.KafkaRequest
+	ctx := context.Background()
+	if opts.name != "" {
+		response, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		if err.Error() != "" {
+			return err
+		}
+	} else {
+		response, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		if err.Error() != "" {
+			return err
+		}
 	}
 
 	kafkaName := response.GetName()
@@ -133,10 +156,11 @@ func runDelete(opts *options) error {
 		}
 	}
 
+	// delete the Kafka
 	logger.Debug(localizer.MustLocalizeFromID("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
-	a := api.Kafka().DeleteKafkaById(context.Background(), opts.id)
+	a := api.Kafka().DeleteKafkaById(context.Background(), response.GetId())
 	a = a.Async(true)
-	_, _, apiErr = a.Execute()
+	_, _, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
 		return apiErr

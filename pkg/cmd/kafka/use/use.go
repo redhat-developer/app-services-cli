@@ -1,10 +1,14 @@
 package use
 
 import (
+	"errors"
 	"context"
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/spf13/cobra"
@@ -17,7 +21,8 @@ import (
 )
 
 type options struct {
-	id string
+	id   string
+	name string
 
 	Config     config.IConfig
 	Connection func() (connection.Connection, error)
@@ -36,14 +41,30 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.use.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.use.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.use.cmd.example"),
-		Args:    cobra.ExactArgs(0),
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		Args:    cobra.RangeArgs(0, 1),
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			var searchName string
+			if len(args) > 0 {
+				searchName = args[0]
+			}
+			return cmdutil.FilterValidKafkas(f, searchName)
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				opts.name = args[0]
+			} else if opts.id == "" {
+				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.idFlagRequired"))
+			}
+
+			if opts.name != "" && opts.id != "" {
+				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.idAndNameCannotBeUsed"))
+			}
+
 			return runUse(opts)
 		},
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.use.flag.id"))
-	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
 }
@@ -66,13 +87,18 @@ func runUse(opts *options) error {
 
 	api := connection.API()
 
-	res, _, apiErr := api.Kafka().GetKafkaById(context.Background(), opts.id).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return kafka.ErrorNotFound(opts.id)
-	}
-
-	if apiErr.Error() != "" {
-		return apiErr
+	var res *kasclient.KafkaRequest
+	ctx := context.Background()
+	if opts.name != "" {
+		res, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		if err.Error() != "" {
+			return err
+		}
+	} else {
+		res, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		if err.Error() != "" {
+			return err
+		}
 	}
 
 	// build Kafka config object from the response
