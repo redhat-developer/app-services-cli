@@ -30,7 +30,9 @@ one = '''
 Namespace: {{.Namespace}}
 Managed Application Services Operator: {{.OperatorStatus}}
 
-Command requires Managed Services Connection operator.
-Operator can be installed from OperatorHub.
+Command requires configuration using kubeconfig for kubernetes cluster running RHOAS operator.
+Operator can be installed using OperatorHub.
 You can find operator by typing "rhoas" in search.
+
+For more information please refer to https://operatorhub.io/how-to-install-an-operator
 '''

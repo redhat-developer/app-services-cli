@@ -6,9 +6,11 @@ In case of problems please execute rhoas cluster info to check if your cluster i
 
 [cluster.kubernetes.statusInfo]
 one = '''
-Kafka instance: {{.InstanceName}}
-Namespace: {{.Namespace}}
-Secret name: {{.SecretName}}
+Connection Details:
+
+Apache Kafka instance:  {{.InstanceName}}
+Kubernetes Namespace:   {{.Namespace}}
+Service Account Secret: {{.ServiceAccountSecretName}}
 '''
 
 [cluster.kubernetes.error.missingConfigError]
@@ -29,18 +31,20 @@ one = 'Could not marshal ManagedKafkaConnection to JSON object'
 [cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
 one = 'ManagedKafkaConnection resource "{{.Name}}" has been created'
 
-[cluster.kubernetes.createKafkaCR.error.createError]
-one = 'could not create secret'
+[cluster.kubernetes.serviceaccountsecret.error.createError]
+one = 'Could not create Service Account secret'
 
-
-[cluster.kubernetes.serviceaccountsecret.removed]
-one = 'Removed existing service account secret'
-
-[cluster.kubernetes.tokensecret.removed]
-one = 'Removed existing access token secret'
+[cluster.kubernetes.tokensecret.log.info.found]
+one = 'Access token already exist on the specified namespace'
 
 [cluster.kubernetes.createSecret.log.info.createSuccess]
 one = 'Secret "{{.Name}}" created successfully'
 
 [cluster.kubernetes.createServiceAccount.error.createError]
 one = 'could not create service account'
+
+[cluster.kubernetes.serviceaccountsecret.log.info.exist]
+one = 'Service account secret already exist.'
+
+[cluster.kubernetes.checkIfConnectionExist.existError]
+one = 'ManagedKafkaConnection already exist'

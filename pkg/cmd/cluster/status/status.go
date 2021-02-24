@@ -86,7 +86,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	fmt.Println(
+	fmt.Fprintln(
 		opts.IO.Out,
 		localizer.MustLocalize(&localizer.Config{
 			MessageID: "cluster.status.statusMessage",
