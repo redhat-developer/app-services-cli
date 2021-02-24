@@ -14,9 +14,9 @@ To load completions:
 	
 	# To load completions for each session, execute once:
 	Linux:
-		$ rhoas completion bash > /etc/bash_completion.d/rhoas
-	MacOS:
-		$ rhoas completion bash > /usr/local/etc/bash_completion.d/rhoas
+		$ rhoas completion bash | sudo tee /etc/bash_completion.d/rhoas
+	macOS:
+		$ rhoas completion bash | sudo tee /usr/local/etc/bash_completion.d/rhoas
 	
 	Zsh:
 	
