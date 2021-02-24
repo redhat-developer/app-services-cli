@@ -4,7 +4,7 @@ NOTE: In the following guides replace `VERSION` with the release version of the 
 
 ==== Linux/macOS
 
-1. Extract the CLI binary into a `/usr/local/bin`:
+1. Extract the CLI binary into `/usr/local/bin`:
 +
 [source,shell]
 ----
@@ -17,13 +17,14 @@ You can override this by passing a custom path as an argument:
 ----
 curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s "/your/custom/path"
 ----
-+
+
 2. The CLI is now installed! To verify this, run a command:
 +
 [source,shell]
 ----
 $ rhoas --version
 rhoas version <latest-version>
+----
 
 ==== Fedora/RHEL/CentOS
 
