@@ -1,11 +1,14 @@
 [cluster.kubernetes.log.info.statusMessage]
-one = 'Linking your cluster with Managed Kafka'
+one = '''
+This command will link your cluster with Managed Services by creating custom resources and secrets.
+In case of problems please execute rhoas cluster info to check if your cluster is properly configured
+'''
 
 [cluster.kubernetes.statusInfo]
 one = '''
-Kafka instance: %v
-Namespace: %v
-Secret name: %v
+Kafka instance: {{.InstanceName}}
+Namespace: {{.Namespace}}
+Secret name: {{.SecretName}}
 '''
 
 [cluster.kubernetes.error.missingConfigError]
@@ -29,8 +32,12 @@ one = 'ManagedKafkaConnection resource "{{.Name}}" has been created'
 [cluster.kubernetes.createKafkaCR.error.createError]
 one = 'could not create secret'
 
-[cluster.kubernetes.error.secretAlreadyExistsError]
-one = 'secret already exists'
+
+[cluster.kubernetes.serviceaccountsecret.removed]
+one = 'Removed existing service account secret'
+
+[cluster.kubernetes.tokensecret.removed]
+one = 'Removed existing access token secret'
 
 [cluster.kubernetes.createSecret.log.info.createSuccess]
 one = 'Secret "{{.Name}}" created successfully'
