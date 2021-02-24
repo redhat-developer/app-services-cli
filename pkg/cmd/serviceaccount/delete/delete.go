@@ -39,6 +39,15 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Long:    localizer.MustLocalizeFromID("serviceAccount.delete.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("serviceAccount.delete.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			if !opts.IO.CanPrompt() && !opts.force {
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: "flag.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Flag": "force",
+					},
+				}))
+			}
+
 			return runDelete(opts)
 		},
 	}
