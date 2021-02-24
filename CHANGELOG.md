@@ -1,17 +1,14 @@
 #  (2021-02-24)
 
 
+
+# [0.18.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.18.0-alpha1...0.18.0) (2021-02-24)
+
+
 ### Bug Fixes
 
 * do not throw error when --force is passed ([#391](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/391)) ([d77df46](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/d77df461146a8652b903772e7a88b1520e3f19be))
-
-
-
-# [0.18.0-alpha1](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.17.3-alpha1...0.18.0-alpha1) (2021-02-23)
-
-
-### Bug Fixes
-
+* Improvements to the CLI to aling with binding format ([#351](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/351)) ([305dc5f](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/305dc5f6a5afb5ab8b14cd9079d70e60a0094b6b))
 * ci: install pkger ([#378](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/378)) ([3a930d3](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/3a930d307798bd7d49bd0fe6dda6b33b90d5e473))
 * remove ServiceAuth from Config type ([#369](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/369)) ([9ff56e8](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/9ff56e8c9bc5a631e1a0aa3cc318611cfc2c2a24)), closes [#348](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/348)
 
