@@ -45,8 +45,13 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Example: localizer.MustLocalizeFromID("kafka.delete.cmd.example"),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if !opts.IO.CanPrompt() {
-				return fmt.Errorf(localizer.MustLocalizeFromID("flag.error.requiredWhenNonInteractive"))
+			if !opts.IO.CanPrompt() && !opts.force {
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: "flag.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Flag": "force",
+					},
+				}))
 			}
 
 			cfg, err := opts.Config.Load()

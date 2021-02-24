@@ -66,7 +66,12 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.force {
-				return errors.New(localizer.MustLocalizeFromID("kafka.topic.error.forceFlagRequired"))
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: "flag.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Flag": "force",
+					},
+				}))
 			}
 
 			if len(args) > 0 {
