@@ -8,18 +8,16 @@ NOTE: In the following guides replace `VERSION` with the release version of the 
 +
 [source,shell]
 ----
-curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | sudo bash
 ----
 +
-TIP: Run `echo $PATH` to see the directories on your path.
-+
-This will install to `$HOME/bin` by default. You can override this by passing a custom path:
+This will install to `usr/local/bin` by default. You can override this by passing a custom path:
 +
 [source,shell]
 ----
 curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s "/your/custom/path"
 ----
-
++
 2. The CLI is now installed! To verify this, run a command:
 +
 [source,shell]
