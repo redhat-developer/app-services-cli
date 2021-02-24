@@ -8,17 +8,19 @@ Connect your services to Kubernetes or OpenShift
 
 Connect your application services to your Kubernetes or OpenShift cluster.
 The kubeconfig file is used to connect to the cluster and identify the context.
+Alternatively, you can use the KUBECONFIG environment variable to read your configuration.
 
-A service account is created and mounted as a secret into your cluster. 
-This enables you to mount credentials directly to your application.
+NOTE: This command requires the RHOAS operator to be running on your cluster.
 
-This command works in two modes:
+This command will:
 
-  * If the RHOAS Operator is installed in the cluster, you can use it to bind your instance automatically.
+1. Create a service account and mount it as a secret into your cluster. 
+If the cluster has a service account, it will be refreshed.
 
-  * Create the secret only. This mode does not require the Operator to be installed.
+2. Create a Managed Kafka Request object that can be used to create a ServiceBinding object using 
+the Service Binding operator.
+https://github.com/redhat-developer/service-binding-operator
 
-You can interactively select the service instance by using the "--interactive-select" flag
 
 
 ....
@@ -36,10 +38,10 @@ $ rhoas cluster connect
 === Options
 
 ....
-      --interactive-select   Interactively select the service instance that will be bound to your Kubernetes or OpenShift cluster.
-      --kubeconfig string    Location of the kubeconfig file.
-      --secret-name string   Name of the secret that holds the Kafka credentials. (default "kafka-credentials")
-      --secret-only          Creates the secret, but doesn't bind the instance. Use this flag if the RHOAS Operator is not installed in the Kubernetes or OpenShift cluster.
+      --kubeconfig string   Location of the kubeconfig file.
+      --token string        Provide an offline token to be used by the operator.
+                            To get a token, visit https://cloud.redhat.com/openshift/token.
+                            
 ....
 
 === Options inherited from parent commands

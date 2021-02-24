@@ -9,45 +9,21 @@ After you install the `rhoas` CLI, you can enable tab completion to automaticall
 
 ===== Linux
 
-The following steps enable tab completion for Bash.
-
-1. Save the Bash completion code to a file.
-+
 [source,shell]
 ----
-rhoas completion bash > rhoas_bash_completion
+rhoas completion bash | sudo tee /etc/bash_completion.d/rhoas
 ----
 
-2. Copy the file to `/etc/bash_completion.d/`.
-+
-[source,shell]
-----
-sudo cp rhoas_bash_completion /etc/bash_completion.d
-----
-+ 
-You can also save the file to a local directory and source it from your `.bashrc` file instead.
+Tab completion is enabled when you open a new terminal window.
 
 ===== macOS
 
-The following steps enable tab completion for Bash.
-
-1. Save the Bash completion code to a file.
-+
 [source,shell]
 ----
-rhoas completion bash > rhoas_bash_completion
+rhoas completion bash | sudo tee /usr/local/etc/bash_completion.d/
 ----
-
-2. Copy the file to `/etc/bash_completion.d/`.
-+
-[source,shell]
-----
-sudo cp rhoas_bash_completion /usr/local/etc/bash_completion.d/
-----
-+ 
-You can also save the file to a local directory and source it from your `.bashrc` file instead.
-
-Tab completion is enabled when you open a new terminal.
+ 
+Tab completion is enabled when you open a new terminal window.
 
 ==== Next steps
 
