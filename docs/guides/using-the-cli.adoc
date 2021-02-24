@@ -82,6 +82,9 @@ $ rhoas kafka describe
 
 TIP: You can pass the `--id` flag to describe a different Kafka instance.
 
+TIP: Run `rhoas kafka use <name>` to use a Kafka instance by its name.
+
+
 === Using an Apache Kafka instance
 
 The `rhoas kafka use` command can be used to switch the current Kafka instance context.
@@ -104,6 +107,8 @@ $ rhoas kafka use --id 1lVcpo1c9kx6a9rbablGBY8RiD8
     "updated_at": "2020-12-11T11:25:05.234173Z"
 }
 ----
+
+TIP: Run `rhoas kafka use <name>` to use a Kafka instance by its name.
 
 === Creating a Kafka topic
 
@@ -217,6 +222,9 @@ Kafka instance my-kafka-instance has successfully been deleted
 ----
 
 TIP: You can pass the `--id` flag to delete a different Kafka instance.
+
+TIP: Run `rhoas kafka use <name>` to use a Kafka instance by its name.
+
 
 === Creating a Service Account
 

@@ -34,12 +34,12 @@ $ rhoas cluster connect
 
 === SEE ALSO
 
-* link:rhoas_cluster{relfilesuffix}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 * link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Generate completion script
 * link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 * link:rhoas_login{relfilesuffix}[rhoas login]	 - Log in to RHOAS
 * link:rhoas_logout{relfilesuffix}[rhoas logout]	 - Log out from RHOAS
 * link:rhoas_serviceaccount{relfilesuffix}[rhoas serviceaccount]	 - Create, list, delete and update service accounts
+* link:rhoas_status{relfilesuffix}[rhoas status]	 - View status of the current Kubernetes or OpenShift cluster
 * link:rhoas_status{relfilesuffix}[rhoas status]	 - View the status of all currently used services
 * link:rhoas_whoami{relfilesuffix}[rhoas whoami]	 - Print current username
 

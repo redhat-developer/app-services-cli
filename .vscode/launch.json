@@ -51,6 +51,18 @@
         "list"
       ]
     },
+     {
+      "name": "Delete current Kafka",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "kafka",
+        "delete"
+      ]
+    },
     {
       "name": "Describe Kafka JSON",
       "type": "go",

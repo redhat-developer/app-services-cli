@@ -22,3 +22,6 @@ illegal search value "{{.Search}}", search input must satisfy the following cond
 
 [kafka.common.error.notFoundErrorById]
 one = 'Kafka instance with ID "{{.ID}}" not found'
+
+[kafka.common.error.notFoundErrorByName]
+one = 'Kafka instance with name "{{.Name}}" not found'

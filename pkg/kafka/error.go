@@ -25,3 +25,14 @@ func ErrorNotFound(id string) *Error {
 		})),
 	}
 }
+
+func ErrorNotFoundByName(name string) *Error {
+	return &Error{
+		Err: errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.common.error.notFoundErrorByName",
+			TemplateData: map[string]interface{}{
+				"Name": name,
+			},
+		})),
+	}
+}
