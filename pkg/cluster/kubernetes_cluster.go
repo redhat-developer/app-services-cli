@@ -3,21 +3,22 @@ package cluster
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/dgrijalva/jwt-go"
+	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
-
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+	"github.com/gofrs/uuid"
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -26,18 +27,15 @@ import (
 	"github.com/mitchellh/go-homedir"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
-// Kubernetes is a type which represents a Kubernetes cluster
-type Kubernetes struct {
-	connection connection.Connection
-	config     config.IConfig
-	logger     logging.Logger
-
+// KubernetesCluster is a type which represents a Kubernetes cluster
+type KubernetesCluster struct {
+	connection   connection.Connection
+	config       config.IConfig
+	logger       logging.Logger
 	clientset    *kubernetes.Clientset
 	clientconfig clientcmd.ClientConfig
 }
@@ -47,8 +45,18 @@ var MKCRMeta = metav1.TypeMeta{
 	APIVersion: "rhoas.redhat.com/v1alpha1",
 }
 
+/* #nosec */
+var tokenSecretName = "rhoas-cli-api-token"
+
+/* #nosec */
+var serviceAccountSecretName = "rhoas-cli-serviceaccounts"
+
 // NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
 func NewKubernetesClusterConnection(connection connection.Connection, config config.IConfig, logger logging.Logger, kubeconfig string) (Cluster, error) {
+	if kubeconfig == "" {
+		kubeconfig = os.Getenv("KUBECONFIG")
+	}
+
 	if kubeconfig == "" {
 		home, _ := homedir.Dir()
 		kubeconfig = filepath.Join(home, ".kube", "config")
@@ -59,24 +67,24 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.configNotFoundError"), err)
 	}
 
+	kubeClientConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
+	}
+
+	// create the clientset for using Rest Client
+	clientset, err := kubernetes.NewForConfig(kubeClientConfig)
+
+	// Used for namespaces and general queries
 	clientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
 		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: ""}})
 
-	// use the current context in kubeconfig
-	restConfig, err := clientconfig.ClientConfig()
 	if err != nil {
 		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
-	// create the clientset
-	clientset, err := kubernetes.NewForConfig(restConfig)
-
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	k8sCluster := &Kubernetes{
+	k8sCluster := &KubernetesCluster{
 		connection,
 		config,
 		logger,
@@ -88,27 +96,22 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 }
 
 // CurrentNamespace returns the currently set namespace
-func (c *Kubernetes) CurrentNamespace() (string, error) {
+func (c *KubernetesCluster) CurrentNamespace() (string, error) {
 	namespace, _, err := c.clientconfig.Namespace()
 
 	return namespace, err
 }
 
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect bool) error {
+func (c *KubernetesCluster) Connect(ctx context.Context, forceSelect bool, apiToken string) error {
 	cfg, err := c.config.Load()
 	if err != nil {
 		return err
 	}
 
-	if cfg.Services.Kafka == nil || forceSelect {
-		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(c.connection, c.logger)
-		if err != nil {
-			return err
-		}
-		cfg.Services.Kafka.ClusterID = selectedKafka.GetId()
-		_ = c.config.Save(cfg)
+	apiToken, err = c.useInteractiveMode(cfg, forceSelect, apiToken)
+	if err != nil {
+		return err
 	}
 
 	api := c.connection.API()
@@ -127,14 +130,14 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 	}
 
 	// print status
-	c.logger.Info("cluster.kubernetes.log.info.statusMessage")
+	c.logger.Info(localizer.MustLocalize(&localizer.Config{MessageID: "cluster.kubernetes.log.info.statusMessage"}))
 
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
 		MessageID: "cluster.kubernetes.statusInfo",
 		TemplateData: map[string]interface{}{
 			"InstanceName": color.Info(kafkaInstance.GetName()),
 			"Namespace":    color.Info(currentNamespace),
-			"SecretName":   color.Info(secretName),
+			"SecretName":   color.Info(serviceAccountSecretName),
 		},
 	}))
 
@@ -157,12 +160,18 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 		return err
 	}
 
-	err = c.createSecret(ctx, serviceAcct, secretName)
+	err = c.createServiceAccountSecret(serviceAcct)
 	if err != nil {
 		return err
 	}
 
-	err = c.createKafkaConnectionCustomResource(ctx, &kafkaInstance, secretName)
+	// Token with auth for operator to pick
+	err = c.createTokenSecret(ctx, apiToken)
+	if err != nil {
+		return err
+	}
+
+	err = c.createKafkaConnectionCustomResource(ctx, &kafkaInstance)
 	if err != nil {
 		return err
 	}
@@ -170,8 +179,36 @@ func (c *Kubernetes) Connect(ctx context.Context, secretName string, forceSelect
 	return nil
 }
 
+func (c *KubernetesCluster) useInteractiveMode(cfg *config.Config, forceSelect bool, apiToken string) (string, error) {
+	if cfg.Services.Kafka == nil || forceSelect {
+		// nolint
+		selectedKafka, err := kafka.InteractiveSelect(c.connection, c.logger)
+		if err != nil {
+			return "", err
+		}
+		cfg.Services.Kafka = &config.KafkaConfig{
+			ClusterID: selectedKafka.GetId(),
+		}
+		_ = c.config.Save(cfg)
+	}
+	if apiToken == "" || forceSelect {
+		apiTokenInput := &survey.Input{
+			Message: localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"),
+		}
+		err := survey.AskOne(apiTokenInput, &apiToken)
+		if err != nil {
+			return "", err
+		}
+
+	}
+	parser := new(jwt.Parser)
+	_, _, err := parser.ParseUnverified(apiToken, jwt.MapClaims{})
+
+	return apiToken, err
+}
+
 // IsKafkaConnectionCRDInstalled checks the cluster to see if a ManagedKafkaConnection CRD is installed
-func (c *Kubernetes) IsKafkaConnectionCRDInstalled(ctx context.Context) (bool, error) {
+func (c *KubernetesCluster) IsKafkaConnectionCRDInstalled(ctx context.Context) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -196,8 +233,9 @@ func (c *Kubernetes) IsKafkaConnectionCRDInstalled(ctx context.Context) (bool, e
 }
 
 // createKafkaConnectionCustomResource creates a new "ManagedKafkaConnection" CR
-func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, kafkaInstance *kasclient.KafkaRequest, secretName string) error {
-	crName := fmt.Sprintf("%v-%v", secretName, kafkaInstance.GetName())
+func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, kafkaInstance *kasclient.KafkaRequest) error {
+	id, _ := uuid.NewV1()
+	crName := fmt.Sprintf("%v-%v", kafkaInstance.GetName(), id.String())
 	kafkaID := kafkaInstance.GetId()
 
 	namespace, err := c.CurrentNamespace()
@@ -212,14 +250,11 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 		},
 		TypeMeta: MKCRMeta,
 		Spec: ManagedKafkaConnectionSpec{
-			KafkaID: kafkaID,
-		},
-		Status: ManagedKafkaConnectionStatus{
-			CreatedBy: "RHOASCLI",
-			BootstrapServer: BootstrapServerSpec{
-				Host: *kafkaInstance.BootstrapServerHost,
+			KafkaID:               kafkaID,
+			AccessTokenSecretName: tokenSecretName,
+			Credentials: CredentialsSpec{
+				SecretName: serviceAccountSecretName,
 			},
-			SecretName: secretName,
 		},
 	}
 
@@ -248,28 +283,64 @@ func (c *Kubernetes) createKafkaConnectionCustomResource(ctx context.Context, ka
 	return nil
 }
 
-// createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *kasclient.ServiceAccount, secretName string) error {
-	// Create secret type
-	secret := &apiv1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: secretName,
-		},
-
-		StringData: map[string]string{
-			"clientID":     serviceAcct.GetClientID(),
-			"clientSecret": serviceAcct.GetClientSecret(),
-		},
-	}
-
+func (c *KubernetesCluster) createTokenSecret(ctx context.Context, apiToken string) error {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return err
 	}
 
-	_, err = c.clientset.CoreV1().Secrets(namespace).Get(ctx, secretName, metav1.GetOptions{})
+	err = c.clientset.CoreV1().Secrets(namespace).Delete(context.TODO(), tokenSecretName, metav1.DeleteOptions{})
 	if err == nil {
-		return errors.New(localizer.MustLocalizeFromID("cluster.kubernetes.error.secretAlreadyExistsError"))
+		c.logger.Info(localizer.MustLocalizeFromID("cluster.kubernetes.tokensecret.removed"))
+	}
+
+	// Create secret type
+	secret := &apiv1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      tokenSecretName,
+			Namespace: namespace,
+		},
+		StringData: map[string]string{
+			"value": apiToken,
+		},
+	}
+
+	_, err = c.clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
+	if err != nil {
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.creatTokenSecret.createError"), err)
+	}
+
+	c.logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "cluster.kubernetes.createSecret.log.info.createSuccess",
+		TemplateData: map[string]interface{}{
+			"Name": tokenSecretName,
+		},
+	}))
+
+	return nil
+}
+
+// createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
+func (c *KubernetesCluster) createServiceAccountSecret(serviceAcct *kasclient.ServiceAccount) error {
+	namespace, err := c.CurrentNamespace()
+	if err != nil {
+		return err
+	}
+	// Create secret type
+	secret := &apiv1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      serviceAccountSecretName,
+			Namespace: namespace,
+		},
+		StringData: map[string]string{
+			"client-id":     serviceAcct.GetClientID(),
+			"client-secret": serviceAcct.GetClientSecret(),
+		},
+	}
+
+	err = c.clientset.CoreV1().Secrets(namespace).Delete(context.TODO(), serviceAccountSecretName, metav1.DeleteOptions{})
+	if err == nil {
+		c.logger.Info(localizer.MustLocalizeFromID("cluster.kubernetes.serviceaccountsecret.removed"))
 	}
 
 	createdSecret, err := c.clientset.CoreV1().Secrets(namespace).Create(context.TODO(), secret, metav1.CreateOptions{})
@@ -288,7 +359,7 @@ func (c *Kubernetes) createSecret(ctx context.Context, serviceAcct *kasclient.Se
 }
 
 // createServiceAccount creates a service account with a random name
-func (c *Kubernetes) createServiceAccount(ctx context.Context) (*kasclient.ServiceAccount, error) {
+func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kasclient.ServiceAccount, error) {
 	t := time.Now()
 
 	api := c.connection.API()
@@ -304,6 +375,6 @@ func (c *Kubernetes) createServiceAccount(ctx context.Context) (*kasclient.Servi
 	return &res, nil
 }
 
-func (c *Kubernetes) getKafkaConnectionsAPIURL(namespace string) string {
+func (c *KubernetesCluster) getKafkaConnectionsAPIURL(namespace string) string {
 	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/managedkafkaconnections", namespace)
 }

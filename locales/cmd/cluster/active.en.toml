@@ -1,5 +1,5 @@
-[cluster.status.cmd.use]
+[cluster.cmd.use]
 one = 'cluster'
 
-[cluster.status.cmd.shortDescription]
+[cluster.cmd.shortDescription]
 one = 'View and perform operations on your Kubernetes or OpenShift cluster'
