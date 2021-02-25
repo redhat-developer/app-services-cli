@@ -280,6 +280,9 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 		case event := <-w.ResultChan():
 			if event.Type == watch.Modified {
 				unstructuredObj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(event.Object)
+				if err != nil {
+					return err
+				}
 				conditions, found, err := unstructured.NestedSlice(unstructuredObj, "status", "conditions")
 
 				if err != nil {
@@ -291,7 +294,6 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 						typedCondition := condition.(map[string]interface{})
 						if typedCondition["type"].(string) == "Finished" {
 							if typedCondition["status"].(string) == "False" {
-								fmt.Printf("False %v", typedCondition)
 								w.Stop()
 								return fmt.Errorf("Error when creating ManagedKafkaConnection: %v", typedCondition["message"])
 							}
