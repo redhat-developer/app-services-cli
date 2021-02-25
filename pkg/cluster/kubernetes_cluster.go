@@ -92,6 +92,10 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 	// create the clientset for using Rest Client
 	clientset, err := kubernetes.NewForConfig(kubeClientConfig)
 
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
+	}
+
 	// Used for namespaces and general queries
 	clientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
@@ -275,6 +279,17 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 		return err
 	}
 
+	c.logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "cluster.kubernetes.createKafkaCR.log.info.wait",
+		TemplateData: map[string]interface{}{
+			"Name":      crName,
+			"Namespace": namespace,
+			"Group":     MKCGroup,
+			"Version":   MKCVersion,
+			"Kind":      MKCRMeta.Kind,
+		},
+	}))
+
 	for {
 		select {
 		case event := <-w.ResultChan():
@@ -310,22 +325,9 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 
 		case <-time.After(30 * time.Second):
 			w.Stop()
-			return fmt.Errorf("ERROR: Process of watching ManagedKafkaConnection timed out. Please check resource on your machine.")
+			return fmt.Errorf("ERROR: Process of watching ManagedKafkaConnection timed out. Please check resource on your machine. ")
 		}
 	}
-
-	c.logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.kubernetes.createKafkaCR.log.info.wait",
-		TemplateData: map[string]interface{}{
-			"Name":      crName,
-			"Namespace": namespace,
-			"Group":     MKCGroup,
-			"Version":   MKCVersion,
-			"Kind":      MKCRMeta.Kind,
-		},
-	}))
-
-	return nil
 }
 
 func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, opts *CommandConnectOptions) error {
