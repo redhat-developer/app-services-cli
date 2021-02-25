@@ -31,16 +31,21 @@ import (
 
 // KubernetesCluster is a type which represents a Kubernetes cluster
 type KubernetesCluster struct {
-	connection   connection.Connection
-	config       config.IConfig
-	logger       logging.Logger
+	connection connection.Connection
+	config     config.IConfig
+	logger     logging.Logger
+
 	clientset    *kubernetes.Clientset
 	clientconfig clientcmd.ClientConfig
+	// restConfig   *rest.Config
 }
+
+var MKCGroup = "rhoas.redhat.com"
+var MKCVersion = "v1alpha1"
 
 var MKCRMeta = metav1.TypeMeta{
 	Kind:       "ManagedKafkaConnection",
-	APIVersion: "rhoas.redhat.com/v1alpha1",
+	APIVersion: MKCGroup + "/" + MKCVersion,
 }
 
 /* #nosec */
@@ -105,7 +110,11 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 	api := c.connection.API()
 	kafkaInstance, _, apiError := api.Kafka().GetKafkaById(ctx, cmdOptions.SelectedKafka).Execute()
 	if kas.IsErr(apiError, kas.ErrorNotFound) {
-		return kafka.ErrorNotFound( cmdOptions.SelectedKafka)
+		return kafka.ErrorNotFound(cmdOptions.SelectedKafka)
+	}
+
+	if apiError.Error() != "" {
+		return errors.New(apiError.Error())
 	}
 
 	currentNamespace, err := c.getCurrentNamespace(cmdOptions)
@@ -119,9 +128,9 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
 		MessageID: "cluster.kubernetes.statusInfo",
 		TemplateData: map[string]interface{}{
-			"InstanceName": color.Info(kafkaInstance.GetName()),
-			"Namespace":    color.Info(currentNamespace),
-			"ServiceAccountSecretName":   color.Info(serviceAccountSecretName),
+			"InstanceName":             color.Info(kafkaInstance.GetName()),
+			"Namespace":                color.Info(currentNamespace),
+			"ServiceAccountSecretName": color.Info(serviceAccountSecretName),
 		},
 	}))
 
@@ -141,7 +150,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 		}
 	}
 
-	err =  c.checkIfConnectionsExist(ctx,currentNamespace, &kafkaInstance)
+	err = c.checkIfConnectionsExist(ctx, currentNamespace, &kafkaInstance)
 	if err != nil {
 		return err
 	}
@@ -157,7 +166,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 		return err
 	}
 
-	err = c.createKafkaConnectionCustomResource(ctx,currentNamespace, &kafkaInstance)
+	err = c.createKafkaConnectionCustomResource(ctx, currentNamespace, &kafkaInstance)
 	if err != nil {
 		return err
 	}
@@ -200,7 +209,7 @@ func (c *KubernetesCluster) IsKafkaConnectionCRDInstalled(ctx context.Context) (
 }
 
 // createKafkaConnectionCustomResource creates a new "ManagedKafkaConnection" CR
-func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, namespace string,  kafkaInstance *kasclient.KafkaRequest) error {
+func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, namespace string, kafkaInstance *kasclient.KafkaRequest) error {
 	crName := kafkaInstance.GetName()
 	kafkaID := kafkaInstance.GetId()
 
@@ -241,6 +250,17 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 		},
 	}))
 
+	c.logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "cluster.kubernetes.createKafkaCR.log.info.wait",
+		TemplateData: map[string]interface{}{
+			"Name":      crName,
+			"Namespace": namespace,
+			"Group":     MKCGroup,
+			"Version":   MKCVersion,
+			"Kind":      MKCRMeta.Kind,
+		},
+	}))
+
 	return nil
 }
 
@@ -275,7 +295,6 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 		return err
 	}
 
-
 	// Create secret type
 	secret := &apiv1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -289,11 +308,16 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 
 	_, err = c.clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.createSecret.log.info.createSuccess"), err)
+		return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+			MessageID: "cluster.kubernetes.createTokenSecret.log.info.createFailed",
+			TemplateData: map[string]interface{}{
+				"Name": tokenSecretName,
+			},
+		}), err)
 	}
 
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.kubernetes.createSecret.log.info.createSuccess",
+		MessageID: "cluster.kubernetes.createTokenSecret.log.info.createSuccess",
 		TemplateData: map[string]interface{}{
 			"Name": tokenSecretName,
 		},
@@ -336,7 +360,7 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 	}
 
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.kubernetes.createSecret.log.info.createSuccess",
+		MessageID: "cluster.kubernetes.createSASecret.log.info.createSuccess",
 		TemplateData: map[string]interface{}{
 			"Name": createdSecret.Name,
 		},
@@ -379,7 +403,7 @@ func (c *KubernetesCluster) checkIfConnectionsExist(ctx context.Context, namespa
 	}
 
 	if data.Error() == nil {
-		 return fmt.Errorf("%v: %s", localizer.MustLocalizeFromID("cluster.kubernetes.checkIfConnectionExist.existError"), k.GetName())
+		return fmt.Errorf("%v: %s", localizer.MustLocalizeFromID("cluster.kubernetes.checkIfConnectionExist.existError"), k.GetName())
 	}
 
 	return nil
