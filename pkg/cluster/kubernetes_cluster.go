@@ -9,6 +9,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/fields"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/dynamic"
+
 	"github.com/dgrijalva/jwt-go"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -36,9 +43,9 @@ type KubernetesCluster struct {
 	config     config.IConfig
 	logger     logging.Logger
 
-	clientset    *kubernetes.Clientset
-	clientconfig clientcmd.ClientConfig
-	// restConfig   *rest.Config
+	clientset     *kubernetes.Clientset
+	clientconfig  clientcmd.ClientConfig
+	dynamicClient dynamic.Interface
 }
 
 var MKCGroup = "rhoas.redhat.com"
@@ -47,6 +54,12 @@ var MKCVersion = "v1alpha1"
 var MKCRMeta = metav1.TypeMeta{
 	Kind:       "ManagedKafkaConnection",
 	APIVersion: MKCGroup + "/" + MKCVersion,
+}
+
+var MKCResource = schema.GroupVersionResource{
+	Group:    MKCGroup,
+	Version:  MKCVersion,
+	Resource: "managedkafkaconnections",
 }
 
 /* #nosec */
@@ -84,6 +97,8 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
 		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: ""}})
 
+	dynamicClient, err := dynamic.NewForConfig(kubeClientConfig)
+
 	if err != nil {
 		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
 	}
@@ -94,6 +109,7 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 		logger,
 		clientset,
 		clientconfig,
+		dynamicClient,
 	}
 
 	return k8sCluster, nil
@@ -250,6 +266,51 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 			"Name": crName,
 		},
 	}))
+
+	w, err := c.dynamicClient.Resource(MKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	for {
+		select {
+		case event := <-w.ResultChan():
+			if event.Type == watch.Modified {
+				unstructuredObj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(event.Object)
+				conditions, found, err := unstructured.NestedSlice(unstructuredObj, "status", "conditions")
+
+				if err != nil {
+					return err
+				}
+
+				if found {
+					for _, condition := range conditions {
+						typedCondition := condition.(map[string]interface{})
+						if typedCondition["type"].(string) == "Finished" {
+							if typedCondition["status"].(string) == "False" {
+								fmt.Printf("False %v", typedCondition)
+								w.Stop()
+								return fmt.Errorf("Error when creating ManagedKafkaConnection: %v", typedCondition["message"])
+							}
+							if typedCondition["status"].(string) == "True" {
+								fmt.Printf("ManagedKafkaConnection %v successfully processed by operator", crName)
+								w.Stop()
+								return nil
+							}
+						}
+					}
+					w.Stop()
+				}
+			}
+
+		case <-time.After(30 * time.Second):
+			w.Stop()
+			return fmt.Errorf("ERROR: Process of watching ManagedKafkaConnection timed out. Please check resource on your machine.")
+		}
+	}
 
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
 		MessageID: "cluster.kubernetes.createKafkaCR.log.info.wait",
