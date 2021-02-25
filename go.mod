@@ -19,7 +19,6 @@ require (
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
-	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/openconfig/goyang v0.2.4
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2

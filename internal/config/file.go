@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/mitchellh/go-homedir"
 )
 
 // NewFile creates a new config type
@@ -87,7 +86,7 @@ func (c *File) Location() (path string, err error) {
 	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {
-		home, err := homedir.Dir()
+		home, err := os.UserHomeDir()
 		if err != nil {
 			return "", err
 		}

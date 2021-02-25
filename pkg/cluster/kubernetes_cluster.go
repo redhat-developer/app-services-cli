@@ -24,8 +24,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/mitchellh/go-homedir"
-
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -58,7 +56,7 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 	}
 
 	if kubeconfig == "" {
-		home, _ := homedir.Dir()
+		home, _ := os.UserHomeDir()
 		kubeconfig = filepath.Join(home, ".kube", "config")
 	}
 
