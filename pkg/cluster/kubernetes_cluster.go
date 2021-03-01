@@ -5,15 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"os"
 	"path/filepath"
 	"time"
 
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/fields"
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/dynamic"
 
 	"github.com/dgrijalva/jwt-go"
@@ -43,33 +39,25 @@ type KubernetesCluster struct {
 	config     config.IConfig
 	logger     logging.Logger
 
-	clientset     *kubernetes.Clientset
-	clientconfig  clientcmd.ClientConfig
-	dynamicClient dynamic.Interface
+	clientset          *kubernetes.Clientset
+	clientconfig       clientcmd.ClientConfig
+	dynamicClient      dynamic.Interface
+	io                 *iostreams.IOStreams
+	kubeconfigLocation string
 }
 
-var MKCGroup = "rhoas.redhat.com"
-var MKCVersion = "v1alpha1"
-
-var MKCRMeta = metav1.TypeMeta{
-	Kind:       "ManagedKafkaConnection",
-	APIVersion: MKCGroup + "/" + MKCVersion,
-}
-
-var MKCResource = schema.GroupVersionResource{
-	Group:    MKCGroup,
-	Version:  MKCVersion,
-	Resource: "managedkafkaconnections",
-}
-
-/* #nosec */
+/*  #nosec */
 var tokenSecretName = "rh-managed-services-accesstoken-cli"
 
-/* #nosec */
+/*  #nosec */
 var serviceAccountSecretName = "rh-managed-services-service-account"
 
 // NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
-func NewKubernetesClusterConnection(connection connection.Connection, config config.IConfig, logger logging.Logger, kubeconfig string) (Cluster, error) {
+func NewKubernetesClusterConnection(connection connection.Connection,
+	config config.IConfig,
+	logger logging.Logger,
+	kubeconfig string,
+	io *iostreams.IOStreams) (Cluster, error) {
 	if kubeconfig == "" {
 		kubeconfig = os.Getenv("KUBECONFIG")
 	}
@@ -114,6 +102,8 @@ func NewKubernetesClusterConnection(connection connection.Connection, config con
 		clientset,
 		clientconfig,
 		dynamicClient,
+		io,
+		kubeconfig,
 	}
 
 	return k8sCluster, nil
@@ -127,7 +117,7 @@ func (c *KubernetesCluster) CurrentNamespace() (string, error) {
 }
 
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConnectOptions) error {
+func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments) error {
 	api := c.connection.API()
 	kafkaInstance, _, apiError := api.Kafka().GetKafkaById(ctx, cmdOptions.SelectedKafka).Execute()
 	if kas.IsErr(apiError, kas.ErrorNotFound) {
@@ -138,9 +128,15 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 		return errors.New(apiError.Error())
 	}
 
-	currentNamespace, err := c.getCurrentNamespace(cmdOptions)
-	if err != nil {
-		return err
+	var currentNamespace string
+	var err error
+	if cmdOptions.Namespace != "" {
+		currentNamespace = cmdOptions.Namespace
+	} else {
+		currentNamespace, err = c.CurrentNamespace()
+		if err != nil {
+			return err
+		}
 	}
 
 	// print status
@@ -155,7 +151,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 		},
 	}))
 
-	if cmdOptions.Force == false {
+	if cmdOptions.ForceCreationWithoutAsk == false {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
 			Message: localizer.MustLocalizeFromID("cluster.kubernetes.connect.input.confirm.message"),
@@ -171,7 +167,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 		}
 	}
 
-	err = c.checkIfConnectionsExist(ctx, currentNamespace, &kafkaInstance)
+	err = CheckIfConnectionsExist(ctx, c, currentNamespace, &kafkaInstance)
 	if err != nil {
 		return err
 	}
@@ -193,40 +189,6 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *CommandConn
 	}
 
 	return nil
-}
-
-func (c *KubernetesCluster) getCurrentNamespace(cmdOptions *CommandConnectOptions) (string, error) {
-
-	if cmdOptions.Namespace != "" {
-		return cmdOptions.Namespace, nil
-	}
-
-	return c.CurrentNamespace()
-}
-
-// IsKafkaConnectionCRDInstalled checks the cluster to see if a ManagedKafkaConnection CRD is installed
-func (c *KubernetesCluster) IsKafkaConnectionCRDInstalled(ctx context.Context) (bool, error) {
-	namespace, err := c.CurrentNamespace()
-	if err != nil {
-		return false, err
-	}
-
-	data := c.clientset.
-		RESTClient().
-		Get().
-		AbsPath(getKafkaConnectionsAPIURL(namespace)).
-		Do(ctx)
-
-	if data.Error() == nil {
-		return true, nil
-	}
-
-	var status int
-	if data.StatusCode(&status); status == 404 {
-		return false, nil
-	}
-
-	return true, data.Error()
 }
 
 // createKafkaConnectionCustomResource creates a new "ManagedKafkaConnection" CR
@@ -261,14 +223,19 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 	return watchForManagedKafkaStatus(c, crName, namespace)
 }
 
-func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, opts *CommandConnectOptions) error {
+// IsRhoasOperatorAvailableOnCluster checks the cluster to see if a ManagedKafkaConnection CRD is installed
+func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error) {
+	return IsMKCInstalledOnCluster(ctx, c)
+}
+
+func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, opts *ConnectArguments) error {
 	_, err := c.clientset.CoreV1().Secrets(namespace).Get(context.TODO(), tokenSecretName, metav1.GetOptions{})
 	if err == nil {
 		c.logger.Info(localizer.MustLocalizeFromID("cluster.kubernetes.tokensecret.log.info.found"), tokenSecretName)
 		return nil
 	}
 
-	if opts.OfflineAccessToken == "" && !opts.IO.CanPrompt() {
+	if opts.OfflineAccessToken == "" && !c.io.CanPrompt() {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "flag.error.requiredWhenNonInteractive",
 			TemplateData: map[string]interface{}{
@@ -381,115 +348,4 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kasclien
 	}
 
 	return &res, nil
-}
-
-func (c *KubernetesCluster) checkIfConnectionsExist(ctx context.Context, namespace string, k *kasclient.KafkaRequest) error {
-	data := c.clientset.
-		RESTClient().
-		Get().
-		AbsPath(getKafkaConnectionsAPIURL(namespace), k.GetName()).
-		Do(ctx)
-
-	var status int
-	if data.StatusCode(&status); status == 404 {
-		return nil
-	}
-
-	if data.Error() == nil {
-		return fmt.Errorf("%v: %s", localizer.MustLocalizeFromID("cluster.kubernetes.checkIfConnectionExist.existError"), k.GetName())
-	}
-
-	return nil
-}
-
-func getKafkaConnectionsAPIURL(namespace string) string {
-	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/managedkafkaconnections", namespace)
-}
-
-func watchForManagedKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
-	c.logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait",
-		TemplateData: map[string]interface{}{
-			"Name":      crName,
-			"Namespace": namespace,
-			"Group":     MKCGroup,
-			"Version":   MKCVersion,
-			"Kind":      MKCRMeta.Kind,
-		},
-	}))
-
-	w, err := c.dynamicClient.Resource(MKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
-		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
-	})
-
-	if err != nil {
-		return err
-	}
-
-	for {
-		select {
-		case event := <-w.ResultChan():
-			if event.Type == watch.Modified {
-				unstructuredObj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(event.Object)
-				if err != nil {
-					return err
-				}
-				conditions, found, err := unstructured.NestedSlice(unstructuredObj, "status", "conditions")
-
-				if err != nil {
-					return err
-				}
-
-				if found {
-					for _, condition := range conditions {
-						typedCondition, ok := condition.(map[string]interface{})
-						if !ok {
-							return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForManagedKafkaStatus.error.format"), typedCondition)
-						}
-						if typedCondition["type"].(string) == "Finished" {
-							if typedCondition["status"].(string) == "False" {
-								w.Stop()
-								return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForManagedKafkaStatus.error.status"), typedCondition["message"])
-							}
-							if typedCondition["status"].(string) == "True" {
-								c.logger.Info(localizer.MustLocalize(&localizer.Config{
-									MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.log.info.success",
-									TemplateData: map[string]interface{}{
-										"Name":      crName,
-										"Namespace": namespace,
-									},
-								}))
-								w.Stop()
-								return nil
-							}
-						}
-					}
-					w.Stop()
-				}
-			}
-
-		case <-time.After(30 * time.Second):
-			w.Stop()
-			return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForManagedKafkaStatus.error.timeout"))
-		}
-	}
-}
-
-func createMKCObject(crName string, namespace string, kafkaID string) *ManagedKafkaConnection {
-	kafkaConnectionCR := &ManagedKafkaConnection{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      crName,
-			Namespace: namespace,
-		},
-		TypeMeta: MKCRMeta,
-		Spec: ManagedKafkaConnectionSpec{
-			KafkaID:               kafkaID,
-			AccessTokenSecretName: tokenSecretName,
-			Credentials: CredentialsSpec{
-				SecretName: serviceAccountSecretName,
-			},
-		},
-	}
-
-	return kafkaConnectionCR
 }
