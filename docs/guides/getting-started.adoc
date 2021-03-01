@@ -4,18 +4,25 @@ NOTE: In the following guides replace `VERSION` with the release version of the 
 
 ==== Linux/macOS
 
-1. Extract the CLI binary into `/usr/local/bin`:
+1. Download the latest CLI binary into `/usr/local/bin` (default):
 +
 [source,shell]
 ----
 curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | sudo bash
 ----
 +
-You can override this by passing a custom path as an argument:
+You can download a specific version of the CLI by passing an argument:
 +
 [source,shell]
 ----
-curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s "/your/custom/path"
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | sudo bash -s $VERSION
+----
++
+You can set also set custom download location for the binary:
++
+[source,shell]
+----
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s "" "/your/custom/path"
 ----
 
 2. The CLI is now installed! To verify this, run a command:
@@ -26,22 +33,38 @@ $ rhoas --version
 rhoas version <latest-version>
 ----
 
-==== Fedora/RHEL/CentOS
+==== Fedora
 
-1. Download the latest `.rpm` for your CPU architecture from link:https://github.com/bf2fc6cc711aee1a0c2a/cli/releases[Releases].
-2. Install the RPM package:
-+
+You can install the RPM on Fedora using DNF:
+
 [source,shell]
 ----
-sudo rpm -i rhoas_${VERSION}_linux_amd64.rpm
+sudo dnf install -y https://github.com/bf3fc6c/cli/releases/download/${VERSION}/rhoas_${VERSION}_linux_amd64.rpm
 ----
-+
-3. The CLI is now installed and ready to use. To verify this, run a command:
-+
+
+The CLI is now installed and ready to use. To verify this, run a command:
+
 [source,shell]
 ----
 $ rhoas --version
-rhoas version <latest-version>
+rhoas version ${VERSION}
+----
+
+==== RHEL/Centos
+
+You can install the RPM on RHEL and CentOS using Yum:
+
+[source,shell]
+----
+sudo yum install -y https://github.com/bf3fc6c/cli/releases/download/${VERSION}/rhoas_${VERSION}_linux_amd64.rpm
+----
+
+The CLI is now installed and ready to use. To verify this, run a command:
+
+[source,shell]
+----
+$ rhoas --version
+rhoas version ${VERSION}
 ----
 
 ==== Next steps
