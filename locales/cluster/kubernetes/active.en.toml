@@ -6,9 +6,11 @@ In case of problems please execute rhoas cluster info to check if your cluster i
 
 [cluster.kubernetes.statusInfo]
 one = '''
-Kafka instance: {{.InstanceName}}
-Namespace: {{.Namespace}}
-Secret name: {{.SecretName}}
+Connection Details:
+
+Apache Kafka instance:  {{.InstanceName}}
+Kubernetes Namespace:   {{.Namespace}}
+Service Account Secret: {{.ServiceAccountSecretName}}
 '''
 
 [cluster.kubernetes.error.missingConfigError]
@@ -29,18 +31,73 @@ one = 'Could not marshal ManagedKafkaConnection to JSON object'
 [cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
 one = 'ManagedKafkaConnection resource "{{.Name}}" has been created'
 
-[cluster.kubernetes.createKafkaCR.error.createError]
-one = 'could not create secret'
+[cluster.kubernetes.watchForManagedKafkaStatus.error.format]
+one = '''Invalid result from operator. Status object is not compatible with expected result from CLI.
+'''
 
+[cluster.kubernetes.watchForManagedKafkaStatus.error.status]
+one = '''Error when processing ManagedKafkaConnection: %v
+'''
 
-[cluster.kubernetes.serviceaccountsecret.removed]
-one = 'Removed existing service account secret'
+[cluster.kubernetes.watchForManagedKafkaStatus.log.info.success]
+one = '''
+ManagedKafkaConnection successfully installed on your cluster.
+To view it execute:
 
-[cluster.kubernetes.tokensecret.removed]
-one = 'Removed existing access token secret'
+oc get mkc o=yaml -n {{.Namespace}} {{.Name}}
 
-[cluster.kubernetes.createSecret.log.info.createSuccess]
-one = 'Secret "{{.Name}}" created successfully'
+'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.error.timeout]
+one = '''Process of watching ManagedKafkaConnection timed out'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait]
+one = '''
+Waiting for status from ManagedKafkaConnection resource.
+Created ManagedKafkaConnection can be already injected to your application
+by creating Service Binding (requires ServiceBindingOperator):
+
+apiVersion: binding.operators.coreos.com/v1alpha1
+kind: ServiceBinding
+metadata:
+  name: {{.Name}}-binding
+  namespace: {{.Namespace}}
+spec:
+  application:
+    group: apps
+    name: name-of-your-application
+    resource: deployments
+    version: v1
+
+  services:
+  - group: {{.Group}}
+    version: {{.Version}}
+    kind: {{.Kind}}
+    name: {{.Name}}
+
+For OpenShift you can also create service binding by using odo cli or directly in the UI topology view.
+'''
+
+[cluster.kubernetes.serviceaccountsecret.error.createError]
+one = 'Could not create Service Account secret'
+
+[cluster.kubernetes.tokensecret.log.info.found]
+one = 'Access token already exist on the specified namespace'
+
+[cluster.kubernetes.createTokenSecret.log.info.createSuccess]
+one = 'Token Secret "{{.Name}}" created successfully'
+
+[cluster.kubernetes.createSASecret.log.info.createSuccess]
+one = 'Service Account Secret "{{.Name}}" created successfully'
+
+[cluster.kubernetes.createTokenSecret.log.info.createFailed]
+one = 'Creation of the "{{.Name}}" secret failed:'
 
 [cluster.kubernetes.createServiceAccount.error.createError]
 one = 'could not create service account'
+
+[cluster.kubernetes.serviceaccountsecret.log.info.exist]
+one = 'Service account secret already exist.'
+
+[cluster.kubernetes.checkIfConnectionExist.existError]
+one = 'ManagedKafkaConnection already exist'

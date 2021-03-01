@@ -63,14 +63,14 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfig)
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfig, opts.IO)
 	if err != nil {
 		return err
 	}
 
 	var operatorStatus string
 	// Add versioning in future
-	isCRDInstalled, err := clusterConn.IsKafkaConnectionCRDInstalled(context.Background())
+	isCRDInstalled, err := clusterConn.IsRhoasOperatorAvailableOnCluster(context.Background())
 	if isCRDInstalled && err != nil {
 		logger.Debug(err)
 	}
@@ -86,7 +86,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	fmt.Println(
+	fmt.Fprintln(
 		opts.IO.Out,
 		localizer.MustLocalize(&localizer.Config{
 			MessageID: "cluster.status.statusMessage",
