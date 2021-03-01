@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/markbates/pkger"
 	"encoding/json"
 	"fmt"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
@@ -26,16 +27,26 @@ var (
 )
 
 // load all locale files
-func initLocales() {
+func loadStaticFiles() error {
 	err := localizer.IncludeAssetsAndLoadMessageFiles()
+	if err != nil {
+		return err
+	}
+
+	return pkger.Walk("/static", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+func main() {
+	err := loadStaticFiles()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-}
-
-func main() {
-	initLocales()
 
 	buildVersion := build.Version
 	cmdFactory := factory.New(build.Version)

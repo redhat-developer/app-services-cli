@@ -84,7 +84,8 @@ func runCmd(opts *Options) error {
 	api := conn.API()
 
 	ctx := context.Background()
-	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
+	kafkaInstance, h, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
+	_ = h
 
 	if kas.IsErr(apiErr, kas.ErrorNotFound) {
 		return errors.New(localizer.MustLocalize(&localizer.Config{

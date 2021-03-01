@@ -153,8 +153,7 @@ func runCmd(opts *Options) error {
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
 
 	response, httpRes, topicErr := createTopicReq.Execute()
-
-	httpRes.StatusCode = 401
+	fmt.Println(httpRes.Request.URL.String())
 
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {

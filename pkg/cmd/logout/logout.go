@@ -46,11 +46,6 @@ func runLogout(opts *Options) error {
 		return err
 	}
 
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection()
 	if err != nil {
 		return err
@@ -63,14 +58,6 @@ func runLogout(opts *Options) error {
 	}
 
 	logger.Info(localizer.MustLocalizeFromID("logout.log.info.logoutSuccess"))
-
-	cfg.AccessToken = ""
-	cfg.RefreshToken = ""
-
-	err = opts.Config.Save(cfg)
-	if err != nil {
-		return err
-	}
 
 	return nil
 }
