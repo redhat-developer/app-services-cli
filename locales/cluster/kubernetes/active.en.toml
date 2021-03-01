@@ -31,7 +31,27 @@ one = 'Could not marshal ManagedKafkaConnection to JSON object'
 [cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
 one = 'ManagedKafkaConnection resource "{{.Name}}" has been created'
 
-[cluster.kubernetes.createKafkaCR.log.info.wait]
+[cluster.kubernetes.watchForManagedKafkaStatus.error.format]
+one = '''Invalid result from operator. Status object is not compatible with expected result from CLI.
+'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.error.status]
+one = '''Error when processing ManagedKafkaConnection: %v
+'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.log.info.success]
+one = '''
+ManagedKafkaConnection successfully installed on your cluster.
+To view it execute:
+
+oc get mkc o=yaml -n {{.Namespace}} {{.Name}}
+
+'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.error.timeout]
+one = '''Process of watching ManagedKafkaConnection timed out'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait]
 one = '''
 Waiting for status from ManagedKafkaConnection resource.
 Created ManagedKafkaConnection can be already injected to your application
