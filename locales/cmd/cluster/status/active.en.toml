@@ -30,7 +30,7 @@ one = '''
 Namespace: {{.Namespace}}
 Managed Application Services Operator: {{.OperatorStatus}}
 
-Command requires configuration using kubeconfig for kubernetes cluster running RHOAS operator.
+Command requires configuration using kubeconfig for Kubernetes cluster running RHOAS operator.
 Operator can be installed using OperatorHub.
 You can find operator by typing "rhoas" in search.
 
