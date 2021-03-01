@@ -15,7 +15,7 @@ You can download a specific version of the CLI by passing an argument:
 +
 [source,shell]
 ----
-curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s $VERSION
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | sudo bash -s $VERSION
 ----
 +
 You can set also set custom download location for the binary:
