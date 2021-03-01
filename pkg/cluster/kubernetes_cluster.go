@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -178,9 +179,9 @@ func (c *KubernetesCluster) getCurrentNamespace(cmdOptions *CommandConnectOption
 
 	if cmdOptions.Namespace != "" {
 		return cmdOptions.Namespace, nil
-	} else {
-		return c.CurrentNamespace()
 	}
+
+	return c.CurrentNamespace()
 }
 
 // IsKafkaConnectionCRDInstalled checks the cluster to see if a ManagedKafkaConnection CRD is installed
@@ -284,8 +285,8 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 		apiTokenInput := &survey.Input{
 			Message: localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"),
 		}
-		err := survey.AskOne(apiTokenInput, &opts.OfflineAccessToken)
-		if err != nil {
+		surveyErr := survey.AskOne(apiTokenInput, &opts.OfflineAccessToken)
+		if surveyErr != nil {
 			return err
 		}
 	}
