@@ -28,7 +28,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 				return errors.New(localizer.MustLocalize(&localizer.Config{
 					MessageID: "flag.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
-						"Flag": "ignore-config",
+						"Flag": "ignore-context",
 					},
 				}))
 			}
@@ -40,7 +40,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.OfflineAccessToken, "token", "", "", localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"))
 	cmd.Flags().StringVarP(&opts.Namespace, "namespace", "n", "", localizer.MustLocalizeFromID("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.Force, "force", "f", false, localizer.MustLocalizeFromID("cluster.common.flag.force.description"))
-	cmd.Flags().BoolVarP(&opts.IgnoreConfig, "ignore-config", "", false, localizer.MustLocalizeFromID("cluster.common.flag.ignore.config.description"))
+	cmd.Flags().BoolVarP(&opts.IgnoreConfig, "ignore-context", "", false, localizer.MustLocalizeFromID("cluster.common.flag.ignore.config.description"))
 
 	return cmd
 }
