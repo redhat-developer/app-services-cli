@@ -13,5 +13,5 @@ one = 'Forcibly create a binding without confirmation.'
 [cluster.common.flag.namespace.description]
 one = 'Custom Kubernetes namespace (if not set current namespace will be used)'
 
-[cluster.common.flag.ignore.config.description]
+[cluster.common.flag.ignoreContext.description]
 one = 'Ignore currently selected services and ask to select each service separately'
