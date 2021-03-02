@@ -2,10 +2,10 @@
 one = 'serviceaccount'
 
 [serviceAccount.cmd.shortDescription]
-one = 'Create, list, delete and update service accounts'
+one = 'Create, list, describe, delete and update service accounts'
 
 [serviceAccount.cmd.longDescription]
-one = 'Use these commands to create, list and delete service accounts. You can also reset the credentials for a service account.'
+one = 'Use these commands to create, list, describe, delete and update service accounts. You can also reset the credentials for a service account.'
 
 [serviceAccount.common.flag.output.description]
 description = "Description for --output flag"
