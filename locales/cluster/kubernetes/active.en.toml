@@ -60,7 +60,7 @@ by creating Service Binding (requires ServiceBindingOperator):
 apiVersion: binding.operators.coreos.com/v1alpha1
 kind: ServiceBinding
 metadata:
-  name: {{.Name}}-binding
+  name: kafka-config
   namespace: {{.Namespace}}
 spec:
   application:
@@ -68,7 +68,8 @@ spec:
     name: name-of-your-application
     resource: deployments
     version: v1
-
+    
+  bindAsFiles: true
   services:
   - group: {{.Group}}
     version: {{.Version}}
