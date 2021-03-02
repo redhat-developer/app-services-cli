@@ -1,0 +1,32 @@
+[serviceAccount.describe.cmd.use]
+description = "Use is the one-line usage message"
+one = "describe"
+
+[serviceAccount.describe.cmd.shortDescription]
+description = "Short description for command"
+one = "View configuration details of a service account"
+
+[serviceAccount.describe.cmd.longDescription]
+description = "Long description for command"
+one = '''
+View configuration fields and their values for a service account.
+
+Pass the "--id" flag to specify which service account you would like to view.
+
+You can view the output as either as JSON or YAML.
+'''
+
+[serviceAccount.describe.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# view a specific service account
+$ rhoas describe --id=8a06e685-f827-44bc-b0a7-250bc8abe52e --output yml
+'''
+
+[serviceAccount.describe.flag.id.description]
+description = 'Description for the --id flag'
+one = 'The unique ID of the service account to view'
+
+['serviceAccount.describe.error.unableToDescribe']
+description = 'Error message when unable to fetch service account configuration'
+one = 'unable to fetch service account info'
