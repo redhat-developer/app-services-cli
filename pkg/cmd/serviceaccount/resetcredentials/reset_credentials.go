@@ -212,10 +212,24 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 		},
 	}))
 
-	serviceacct, _, apiErr := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
+	serviceacct, httpRes, apiErr := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
 
 	if apiErr.Error() != "" {
-		return nil, apiErr
+		switch httpRes.StatusCode {
+		case 401:
+			return nil, fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.invalidToken"))
+		case 403:
+			return nil, fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "update",
+				},
+			}), apiErr)
+		case 500:
+			return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+		default:
+			return nil, apiErr
+		}
 	}
 
 	return &serviceacct, nil

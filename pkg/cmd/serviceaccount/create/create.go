@@ -135,10 +135,24 @@ func runCreate(opts *Options) error {
 	api := connection.API()
 	a := api.Kafka().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
-	serviceacct, _, apiErr := a.Execute()
+	serviceacct, httpRes, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("%v: %v", localizer.MustLocalizeFromID("serviceAccount.create.error.couldNotCreate"), apiErr)
+		switch httpRes.StatusCode {
+		case 401:
+			return fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.invalidToken"))
+		case 403:
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "create",
+				},
+			}), apiErr)
+		case 500:
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceaccount.common.error.internalServerError"), apiErr)
+		default:
+			return apiErr
+		}
 	}
 
 	logger.Info(localizer.MustLocalize(&localizer.Config{

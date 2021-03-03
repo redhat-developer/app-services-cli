@@ -24,6 +24,13 @@ one = 'could not save credentials to file'
 description = 'Error message when service account is not found'
 one = 'service account with ID "{{.ID}}" not found'
 
+[serviceAccount.common.error.internalServerError]
+one = 'internal server error'
+
+[serviceAccount.common.error.forbidden]
+one = 'you are forbidden to {{.Operation}} this service account'
+other = 'you are forbidden to {{.Operation}} these service accounts'
+
 [serviceAccount.common.log.info.credentialsSaved]
 description = 'Credentials file saved message'
 one = 'Credentials saved to {{.FilePath}}'

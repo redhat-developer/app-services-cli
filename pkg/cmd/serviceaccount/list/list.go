@@ -79,10 +79,25 @@ func runList(opts *Options) (err error) {
 	api := connection.API()
 
 	a := api.Kafka().ListServiceAccounts(context.Background())
-	res, _, apiErr := a.Execute()
+	res, httpRes, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.list.error.unableToList"), apiErr)
+		switch httpRes.StatusCode {
+		case 401:
+			return fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.invalidToken"))
+		case 403:
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID:   "serviceAccount.common.error.unauthorized",
+				PluralCount: 2,
+				TemplateData: map[string]interface{}{
+					"Operation": "view",
+				},
+			}), apiErr)
+		case 500:
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+		default:
+			return apiErr
+		}
 	}
 
 	serviceaccounts := res.GetItems()
