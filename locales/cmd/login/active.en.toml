@@ -58,11 +58,11 @@ one = 'Welcome to RHOAS'
 
 [login.redirectPage.body]
 description = 'Title for the RHOAS login redirect webpage'
-one = 'You are now logged in as <span style="font-weight:700">{{.Username}}</span>. You may now close this tab and return to the command line.'
+one = 'You are now logged in as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.masRedirectPage.body]
 description = 'Title for the MAS-SSO login redirect webpage'
-one = 'You are now logged in to MAS-SSO as <span style="font-weight:700">{{.Username}}</span>. You may now close this tab and return to the command line.'
+one = 'You are now logged in to MAS-SSO as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.error.schemeMissingFromUrl]
 description = 'Error message for when scheme is missing from the Auth URL'
