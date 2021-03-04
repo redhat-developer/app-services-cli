@@ -127,11 +127,9 @@ func deleteServiceAccount(opts *Options) error {
 
 	if apiErr.Error() != "" {
 		switch httpRes.StatusCode {
-		case 401:
-			return fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.invalidToken"))
 		case 403:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.error.unauthorized",
+				MessageID: "serviceAccount.common.error.forbidden",
 				TemplateData: map[string]interface{}{
 					"Operation": "delete",
 				},

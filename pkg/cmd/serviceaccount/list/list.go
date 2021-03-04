@@ -83,14 +83,12 @@ func runList(opts *Options) (err error) {
 
 	if apiErr.Error() != "" {
 		switch httpRes.StatusCode {
-		case 401:
-			return fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.invalidToken"))
 		case 403:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID:   "serviceAccount.common.error.unauthorized",
+				MessageID:   "serviceAccount.common.error.forbidden",
 				PluralCount: 2,
 				TemplateData: map[string]interface{}{
-					"Operation": "view",
+					"Operation": "list",
 				},
 			}), apiErr)
 		case 500:
