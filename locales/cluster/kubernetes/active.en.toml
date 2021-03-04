@@ -1,7 +1,7 @@
 [cluster.kubernetes.log.info.statusMessage]
 one = '''
 This command will link your cluster with Managed Services by creating custom resources and secrets.
-In case of problems please execute rhoas cluster info to check if your cluster is properly configured
+In case of problems please execute "rhoas cluster status" to check if your cluster is properly configured
 '''
 
 [cluster.kubernetes.statusInfo]
