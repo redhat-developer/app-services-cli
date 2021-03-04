@@ -6,6 +6,8 @@ package cluster
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,7 +16,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"time"
 )
 
 var MKCGroup = "rhoas.redhat.com"
@@ -82,6 +83,10 @@ func getKafkaConnectionsAPIURL(namespace string) string {
 func watchForManagedKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
 		MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait",
+	}))
+
+	fmt.Fprint(c.io.Out, localizer.MustLocalize(&localizer.Config{
+		MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.binding",
 		TemplateData: map[string]interface{}{
 			"Name":      crName,
 			"Namespace": namespace,
