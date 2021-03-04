@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/markbates/pkger"
 	"encoding/json"
 	"fmt"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/doc"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
+	"github.com/markbates/pkger"
 	"os"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
