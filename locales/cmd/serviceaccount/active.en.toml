@@ -20,6 +20,10 @@ one = 'file {{.FilePath}} already exists. Use --overwrite to overwrite the file,
 description = 'Error message when service account credentials could not be saved'
 one = 'could not save credentials to file'
 
+[serviceAccount.common.error.notFoundError]
+description = 'Error message when service account is not found'
+one = 'service account with id "{{.ID}}" not found'
+
 [serviceAccount.common.log.info.credentialsSaved]
 description = 'Credentials file saved message'
 one = 'Credentials saved to {{.FilePath}}'
