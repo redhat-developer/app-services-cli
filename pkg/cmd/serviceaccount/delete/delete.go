@@ -123,10 +123,22 @@ func deleteServiceAccount(opts *Options) error {
 	api := connection.API()
 
 	a := api.Kafka().DeleteServiceAccount(context.Background(), opts.id)
-	_, _, apiErr := a.Execute()
+	_, httpRes, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.delete.error.unableToDelete"), apiErr)
+		switch httpRes.StatusCode {
+		case 403:
+			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.common.error.forbidden",
+				TemplateData: map[string]interface{}{
+					"Operation": "delete",
+				},
+			}), apiErr)
+		case 500:
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+		default:
+			return apiErr
+		}
 	}
 
 	logger.Info(localizer.MustLocalizeFromID("serviceAccount.delete.log.info.deleteSuccess"))
