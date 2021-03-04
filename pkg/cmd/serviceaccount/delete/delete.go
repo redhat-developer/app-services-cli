@@ -137,7 +137,7 @@ func deleteServiceAccount(opts *Options) error {
 				},
 			}), apiErr)
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceaccount.common.error.internalServerError"), apiErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
 		default:
 			return apiErr
 		}
