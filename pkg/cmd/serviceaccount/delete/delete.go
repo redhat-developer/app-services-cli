@@ -66,6 +66,24 @@ func runDelete(opts *Options) (err error) {
 		return err
 	}
 
+	connection, err := opts.Connection()
+	if err != nil {
+		return err
+	}
+
+	api := connection.API()
+	a := api.Kafka().GetServiceAccountById(context.Background(), opts.id)
+	_, httpRes, _ := a.Execute()
+
+	if httpRes.StatusCode == 404 {
+		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+			MessageID: "serviceAccount.common.error.notFoundError",
+			TemplateData: map[string]interface{}{
+				"ID": opts.id,
+			},
+		}))
+	}
+
 	if !opts.force {
 		var confirmDelete bool
 		promptConfirmDelete := &survey.Confirm{
