@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -28,9 +29,7 @@ const (
 
 	// SSO defaults
 	DefaultAuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
-	DefaultRealm   = "redhat-external"
 	// MAS SSO defaults
-	DefaultMASRealm   = "mas-sso-staging"
 	DefaultMasAuthURL = "https://keycloak-edge-redhat-rhoam-user-sso.apps.mas-sso-stage.1gzl.s1.devshift.org/auth/realms/mas-sso-staging"
 )
 
@@ -51,6 +50,8 @@ type KeycloakConnection struct {
 	keycloakClient    gocloak.GoCloak
 	masKeycloakClient gocloak.GoCloak
 	apiURL            *url.URL
+	defaultRealm      string
+	masRealm          string
 	logger            logging.Logger
 	Config            config.IConfig
 }
@@ -69,7 +70,7 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 	var cfgChanged bool
 	if c.Token.NeedsRefresh() {
 		// nolint:govet
-		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", DefaultRealm)
+		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
 		if err != nil {
 			return &AuthError{err, ""}
 		}
@@ -88,7 +89,7 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 
 	if c.MASToken.NeedsRefresh() {
 		// nolint:govet
-		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", DefaultMASRealm)
+		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
 		if err != nil {
 			return &AuthError{err, ""}
 		}
@@ -120,12 +121,12 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 // Invalidating and removing the access and refresh tokens
 // The user will have to log in again to access the API
 func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
-	err = c.keycloakClient.Logout(ctx, c.clientID, "", DefaultRealm, c.Token.RefreshToken)
+	err = c.keycloakClient.Logout(ctx, c.clientID, "", c.defaultRealm, c.Token.RefreshToken)
 	if err != nil {
 		return &AuthError{err, ""}
 	}
 
-	err = c.masKeycloakClient.Logout(ctx, c.clientID, "", DefaultMASRealm, c.MASToken.RefreshToken)
+	err = c.masKeycloakClient.Logout(ctx, c.clientID, "", c.masRealm, c.MASToken.RefreshToken)
 	if err != nil {
 		return &AuthError{err, ""}
 	}
@@ -223,9 +224,21 @@ func (c *KeycloakConnection) createStrimziAdminAPIClient(kafkaID string) *strimz
 
 	cfg.AddDefaultHeader("X-Kafka-ID", kafkaID)
 	cfg.AddDefaultHeader("Authorization", c.MASToken.AccessToken)
-	fmt.Println(c.MASToken.AccessToken)
 
 	apiClient := strimziadminclient.NewAPIClient(cfg)
 
 	return apiClient
+}
+
+// get the realm from the Keycloak URL
+func getKeycloakRealm(url *url.URL) (realm string, ok bool) {
+	parts := strings.Split(url.Path, "/")
+	for i, part := range parts {
+		if part == "realms" {
+			realm = parts[i+1]
+			ok = true
+		}
+	}
+
+	return realm, ok
 }

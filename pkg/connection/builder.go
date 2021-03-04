@@ -138,6 +138,7 @@ func (b *Builder) Build() (connection *KeycloakConnection, err error) {
 // BuildContext uses the configuration stored in the builder to create a new connection. The builder
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
+// TODO: Localize error messages
 // nolint:funlen
 func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnection, err error) {
 	if b.clientID == "" {
@@ -228,6 +229,11 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
 
+	kcRealm, ok := getKeycloakRealm(authURL)
+	if !ok {
+		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.authURL)
+	}
+
 	keycloak := gocloak.NewClient(baseAuthURL)
 	restyClient := *keycloak.RestyClient()
 	// #nosec 402
@@ -237,6 +243,12 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	baseMasAuthURL := fmt.Sprintf("%v://%v", masAuthURL.Scheme, masAuthURL.Host)
 	masKc := gocloak.NewClient(baseMasAuthURL)
 	masRestyClient := *keycloak.RestyClient()
+
+	masKcRealm, ok := getKeycloakRealm(masAuthURL)
+	if !ok {
+		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.masAuthURL)
+	}
+
 	// #nosec 402
 	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
 	masKc.SetRestyClient(&masRestyClient)
@@ -252,6 +264,8 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		masKeycloakClient: masKc,
 		Token:             &tkn,
 		MASToken:          &masTk,
+		defaultRealm:      kcRealm,
+		masRealm:          masKcRealm,
 		logger:            b.logger,
 		Config:            b.config,
 	}
