@@ -22,7 +22,7 @@ one = 'could not save credentials to file'
 
 [serviceAccount.common.error.notFoundError]
 description = 'Error message when service account is not found'
-one = 'service account with id "{{.ID}}" not found'
+one = 'service account with ID "{{.ID}}" not found'
 
 [serviceAccount.common.log.info.credentialsSaved]
 description = 'Credentials file saved message'
