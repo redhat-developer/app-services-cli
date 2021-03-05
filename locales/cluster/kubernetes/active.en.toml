@@ -54,9 +54,19 @@ one = '''Process of watching ManagedKafkaConnection timed out'''
 [cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait]
 one = '''
 Waiting for status from ManagedKafkaConnection resource.
-Created ManagedKafkaConnection can be already injected to your application
-by creating Service Binding (requires ServiceBindingOperator):
+Created ManagedKafkaConnection can be already injected to your application:
+You can bind credentials to your application using:
+- odo cli 
+- OpenShift topology view
+- manually using kubectl 
 
+To bind you need to have Service Binding Operator installed:
+https://github.com/redhat-developer/service-binding-operator
+'''
+
+[cluster.kubernetes.watchForManagedKafkaStatus.binding]
+one = '''
+cat <<EOF | kubectl apply -f - 
 apiVersion: binding.operators.coreos.com/v1alpha1
 kind: ServiceBinding
 metadata:
@@ -75,9 +85,10 @@ spec:
     version: {{.Version}}
     kind: {{.Kind}}
     name: {{.Name}}
-
-For OpenShift you can also create service binding by using odo cli or directly in the UI topology view.
+EOF
 '''
+
+
 
 [cluster.kubernetes.serviceaccountsecret.error.createError]
 one = 'Could not create Service Account secret'
