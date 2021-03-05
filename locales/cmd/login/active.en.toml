@@ -40,6 +40,10 @@ one = 'OpenID client identifier'
 description = 'Description for the --auth-url flag'
 one = "The URL of the SSO Authentication server."
 
+[login.flag.masAuthUrl]
+description = 'Description for the --auth-url flag'
+one = "The URL of the MAS-SSO Authentication server."
+
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'
 one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser."
@@ -54,7 +58,11 @@ one = 'Welcome to RHOAS'
 
 [login.redirectPage.body]
 description = 'Title for the RHOAS login redirect webpage'
-one = 'You are now logged in to the RHOAS CLI as <span style="font-weight:700">{{.Username}}</span>. You may now close this tab and return to the command line.'
+one = 'You are now logged in as <span style="font-weight:700">{{.Username}}</span>.'
+
+[login.masRedirectPage.body]
+description = 'Title for the MAS-SSO login redirect webpage'
+one = 'You are now logged in to MAS-SSO as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.error.schemeMissingFromUrl]
 description = 'Error message for when scheme is missing from the Auth URL'
@@ -62,7 +70,7 @@ one = 'scheme missing from URL "{{.URL}}". Please add either "https" or "https"'
 
 [login.log.debug.createdAuthorizationUrl]
 description = 'Debug message to show the authorization URL'
-one = "Created Authorization URL: {{.URL}}"
+one = "Opening Authorization URL: {{.URL}}"
 
 [login.log.debug.redirectedToCallbackUrl]
 description = 'Debug message when redirected to callback URL'

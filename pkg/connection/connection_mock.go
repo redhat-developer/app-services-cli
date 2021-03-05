@@ -25,7 +25,7 @@ var _ Connection = &ConnectionMock{}
 //             LogoutFunc: func(ctx context.Context) error {
 // 	               panic("mock out the Logout method")
 //             },
-//             RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
+//             RefreshTokensFunc: func(ctx context.Context) error {
 // 	               panic("mock out the RefreshTokens method")
 //             },
 //         }
@@ -42,7 +42,7 @@ type ConnectionMock struct {
 	LogoutFunc func(ctx context.Context) error
 
 	// RefreshTokensFunc mocks the RefreshTokens method.
-	RefreshTokensFunc func(ctx context.Context) (string, string, error)
+	RefreshTokensFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -123,7 +123,7 @@ func (mock *ConnectionMock) LogoutCalls() []struct {
 }
 
 // RefreshTokens calls RefreshTokensFunc.
-func (mock *ConnectionMock) RefreshTokens(ctx context.Context) (string, string, error) {
+func (mock *ConnectionMock) RefreshTokens(ctx context.Context) error {
 	if mock.RefreshTokensFunc == nil {
 		panic("ConnectionMock.RefreshTokensFunc: method is nil but Connection.RefreshTokens was just called")
 	}

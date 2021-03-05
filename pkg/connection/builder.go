@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 
 	"github.com/Nerzal/gocloak/v7"
@@ -24,10 +25,14 @@ type Builder struct {
 	disableKeepAlives bool
 	accessToken       string
 	refreshToken      string
+	masAccessToken    string
+	masRefreshToken   string
 	clientID          string
 	scopes            []string
 	apiURL            string
 	authURL           string
+	masAuthURL        string
+	config            config.IConfig
 	logger            logging.Logger
 	transportWrapper  TransportWrapper
 }
@@ -50,6 +55,16 @@ func (b *Builder) WithAccessToken(accessToken string) *Builder {
 
 func (b *Builder) WithRefreshToken(refreshToken string) *Builder {
 	b.refreshToken = refreshToken
+	return b
+}
+
+func (b *Builder) WithMASAccessToken(accessToken string) *Builder {
+	b.masAccessToken = accessToken
+	return b
+}
+
+func (b *Builder) WithMASRefreshToken(refreshToken string) *Builder {
+	b.masRefreshToken = refreshToken
 	return b
 }
 
@@ -83,6 +98,11 @@ func (b *Builder) WithAuthURL(authURL string) *Builder {
 	return b
 }
 
+func (b *Builder) WithMASAuthURL(authURL string) *Builder {
+	b.masAuthURL = authURL
+	return b
+}
+
 func (b *Builder) WithClientID(clientID string) *Builder {
 	b.clientID = clientID
 	return b
@@ -100,6 +120,11 @@ func (b *Builder) DisableKeepAlives(flag bool) *Builder {
 	return b
 }
 
+func (b *Builder) WithConfig(cfg config.IConfig) *Builder {
+	b.config = cfg
+	return b
+}
+
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
@@ -113,19 +138,42 @@ func (b *Builder) Build() (connection *KeycloakConnection, err error) {
 // BuildContext uses the configuration stored in the builder to create a new connection. The builder
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
+// TODO: Localize error messages
 // nolint:funlen
 func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnection, err error) {
 	if b.clientID == "" {
 		return nil, AuthErrorf("Missing client ID")
 	}
 
-	if b.accessToken == "" && b.refreshToken == "" {
+	if (b.accessToken == "" && b.refreshToken == "") || (b.masAccessToken == "" && b.masRefreshToken == "") {
 		return nil, notLoggedInError()
+	}
+
+	if b.config == nil {
+		return nil, fmt.Errorf("Missing IConfig")
+	}
+
+	if b.logger == nil {
+		loggerBuilder := logging.NewStdLoggerBuilder()
+		debugEnabled := debug.Enabled()
+		loggerBuilder = loggerBuilder.Debug(debugEnabled)
+
+		b.logger, err = loggerBuilder.Build()
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	tkn := token.Token{
 		AccessToken:  b.accessToken,
 		RefreshToken: b.refreshToken,
+		Logger:       b.logger,
+	}
+
+	masTk := token.Token{
+		AccessToken:  b.masAccessToken,
+		RefreshToken: b.masRefreshToken,
+		Logger:       b.logger,
 	}
 
 	tokenIsValid, err := tkn.IsValid()
@@ -146,17 +194,6 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		}
 	}
 
-	if b.logger == nil {
-		loggerBuilder := logging.NewStdLoggerBuilder()
-		debugEnabled := debug.Enabled()
-		loggerBuilder = loggerBuilder.Debug(debugEnabled)
-
-		b.logger, err = loggerBuilder.Build()
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	// Set the default URL, if needed:
 	rawAPIURL := b.apiURL
 	if rawAPIURL == "" {
@@ -170,7 +207,13 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 
 	authURL, err := url.Parse(b.authURL)
 	if err != nil {
-		err = AuthErrorf("unable to parse Auth URL '%s': %w", DefaultAuthURL, err)
+		err = AuthErrorf("unable to parse Auth URL '%s': %w", b.authURL, err)
+		return
+	}
+
+	masAuthURL, err := url.Parse(b.masAuthURL)
+	if err != nil {
+		err = AuthErrorf("unable to parse Auth URL '%s': %w", b.masAuthURL, err)
 		return
 	}
 
@@ -186,11 +229,29 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
 
+	kcRealm, ok := getKeycloakRealm(authURL)
+	if !ok {
+		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.authURL)
+	}
+
 	keycloak := gocloak.NewClient(baseAuthURL)
 	restyClient := *keycloak.RestyClient()
 	// #nosec 402
 	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
 	keycloak.SetRestyClient(&restyClient)
+
+	baseMasAuthURL := fmt.Sprintf("%v://%v", masAuthURL.Scheme, masAuthURL.Host)
+	masKc := gocloak.NewClient(baseMasAuthURL)
+	masRestyClient := *keycloak.RestyClient()
+
+	masKcRealm, ok := getKeycloakRealm(masAuthURL)
+	if !ok {
+		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.masAuthURL)
+	}
+
+	// #nosec 402
+	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
+	masKc.SetRestyClient(&masRestyClient)
 
 	connection = &KeycloakConnection{
 		insecure:          b.insecure,
@@ -199,9 +260,14 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		scopes:            scopes,
 		apiURL:            apiURL,
 		defaultHTTPClient: client,
-		keycloak:          keycloak,
+		keycloakClient:    keycloak,
+		masKeycloakClient: masKc,
 		Token:             &tkn,
+		MASToken:          &masTk,
+		defaultRealm:      kcRealm,
+		masRealm:          masKcRealm,
 		logger:            b.logger,
+		Config:            b.config,
 	}
 
 	return connection, nil

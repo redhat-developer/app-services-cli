@@ -32,15 +32,15 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 
 func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kasclient.APIClient) connection.Connection {
 	return &connection.ConnectionMock{
-		RefreshTokensFunc: func(ctx context.Context) (string, string, error) {
+		RefreshTokensFunc: func(ctx context.Context) error {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
-				return "", "", errors.New("")
+				return errors.New("")
 			}
 			if conn.Token.RefreshToken == "expired" {
-				return "", "", errors.New("")
+				return errors.New("")
 			}
 
-			return "valid", "valid", nil
+			return nil
 		},
 		LogoutFunc: func(ctx context.Context) error {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
@@ -48,6 +48,20 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kasclient
 			}
 			if conn.Token.AccessToken == "expired" && conn.Token.RefreshToken == "expired" {
 				return errors.New("")
+			}
+
+			cfg, err := conn.Config.Load()
+			if err != nil {
+				return err
+			}
+
+			cfg.AccessToken = ""
+			cfg.RefreshToken = ""
+			cfg.MasAccessToken = ""
+			cfg.MasRefreshToken = ""
+
+			if err = conn.Config.Save(cfg); err != nil {
+				return err
 			}
 
 			return nil

@@ -2,7 +2,6 @@ package factory
 
 import (
 	"context"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
@@ -60,6 +59,12 @@ func New(cliVersion string) *Factory {
 		if cfg.RefreshToken != "" {
 			builder.WithRefreshToken(cfg.RefreshToken)
 		}
+		if cfg.MasAccessToken != "" {
+			builder.WithMASAccessToken(cfg.MasAccessToken)
+		}
+		if cfg.MasRefreshToken != "" {
+			builder.WithMASRefreshToken(cfg.MasRefreshToken)
+		}
 		if cfg.ClientID != "" {
 			builder.WithClientID(cfg.ClientID)
 		}
@@ -74,7 +79,14 @@ func New(cliVersion string) *Factory {
 		}
 		builder.WithAuthURL(cfg.AuthURL)
 
+		if cfg.MasAuthURL == "" {
+			cfg.MasAuthURL = connection.DefaultMasAuthURL
+		}
+		builder.WithMASAuthURL(cfg.MasAuthURL)
+
 		builder.WithInsecure(cfg.Insecure)
+
+		builder.WithConfig(cfgFile)
 
 		// create a logger if it has not already been created
 		logger, err = loggerFunc()
@@ -87,28 +99,9 @@ func New(cliVersion string) *Factory {
 			return nil, err
 		}
 
-		accessTk, refreshTk, err := conn.RefreshTokens(context.TODO())
+		err = conn.RefreshTokens(context.TODO())
 		if err != nil {
 			return nil, err
-		}
-
-		accessTkChanged := accessTk != cfg.AccessToken
-		refreshTkChanged := refreshTk != cfg.RefreshToken
-
-		if accessTkChanged {
-			cfg.AccessToken = accessTk
-		}
-		if refreshTkChanged {
-			cfg.RefreshToken = refreshTk
-		}
-
-		if !accessTkChanged && refreshTkChanged {
-			return conn, nil
-		}
-
-		err = cfgFile.Save(cfg)
-		if err != nil {
-			logger.Debug(localizer.MustLocalizeFromID("common.log.debug.couldNotSaveRefreshTokenToConfig"), err)
 		}
 
 		return conn, nil

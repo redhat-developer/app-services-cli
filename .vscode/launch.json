@@ -16,6 +16,17 @@
       ]
     },
     {
+      "name": "Whoami",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "whoami"
+      ]
+    },
+    {
       "name": "Logout",
       "type": "go",
       "request": "launch",
@@ -51,7 +62,7 @@
         "list"
       ]
     },
-     {
+    {
       "name": "Delete current Kafka",
       "type": "go",
       "request": "launch",
@@ -102,7 +113,7 @@
         "kafka",
         "topic",
         "create",
-        "--name=my-topic"
+        "my-topic"
       ]
     },
     {

@@ -154,8 +154,6 @@ func runCmd(opts *Options) error {
 
 	response, httpRes, topicErr := createTopicReq.Execute()
 
-	httpRes.StatusCode = 401
-
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 401:
