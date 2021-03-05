@@ -403,6 +403,9 @@ components:
         - key: max.message.bytes
           value: "1050000"
       properties:
+        replicationFactor:
+          description: Replication factor for this topic
+          type: integer
         numPartitions:
           description: Number of partitions for this topic.
           type: integer

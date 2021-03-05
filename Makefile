@@ -1,4 +1,4 @@
-].DEFAULT_GOAL := help
+.DEFAULT_GOAL := help
 SHELL = bash
 
 RHOAS_VERSION ?= $(shell git describe --tags 2>/dev/null || git rev-parse --short HEAD)

@@ -72,41 +72,37 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 
 	// track if we need to update the config with new token values
 	var cfgChanged bool
-	if c.Token.NeedsRefresh() {
-		// nolint:govet
-		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
-		if err != nil {
-			return &AuthError{err, ""}
-		}
-
-		if refreshedTk.AccessToken != c.Token.AccessToken {
-			c.Token.AccessToken = refreshedTk.AccessToken
-			cfg.AccessToken = refreshedTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedTk.RefreshToken != c.Token.RefreshToken {
-			c.Token.RefreshToken = refreshedTk.RefreshToken
-			cfg.RefreshToken = refreshedTk.RefreshToken
-			cfgChanged = true
-		}
+	// nolint:govet
+	refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
+	if err != nil {
+		return &AuthError{err, ""}
 	}
 
-	if c.MASToken.NeedsRefresh() {
-		// nolint:govet
-		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
-		if err != nil {
-			return &AuthError{err, ""}
-		}
-		if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
-			c.MASToken.AccessToken = refreshedMasTk.AccessToken
-			cfg.MasAccessToken = refreshedMasTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
-			c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
-			cfg.MasRefreshToken = refreshedMasTk.RefreshToken
-			cfgChanged = true
-		}
+	if refreshedTk.AccessToken != c.Token.AccessToken {
+		c.Token.AccessToken = refreshedTk.AccessToken
+		cfg.AccessToken = refreshedTk.AccessToken
+		cfgChanged = true
+	}
+	if refreshedTk.RefreshToken != c.Token.RefreshToken {
+		c.Token.RefreshToken = refreshedTk.RefreshToken
+		cfg.RefreshToken = refreshedTk.RefreshToken
+		cfgChanged = true
+	}
+
+	// nolint:govet
+	refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
+	if err != nil {
+		return &AuthError{err, ""}
+	}
+	if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
+		c.MASToken.AccessToken = refreshedMasTk.AccessToken
+		cfg.MasAccessToken = refreshedMasTk.AccessToken
+		cfgChanged = true
+	}
+	if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
+		c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
+		cfg.MasRefreshToken = refreshedMasTk.RefreshToken
+		cfgChanged = true
 	}
 
 	if !cfgChanged {
@@ -158,9 +154,9 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 }
 
 // API Creates a new API type which is a single type for multiple APIs
+// nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
 	var cachedKafkaServiceAPI kasclient.DefaultApi
-
 	var cachedKafkaID string
 	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
 	var cachedKafkaRequest *kasclient.KafkaRequest

@@ -15,12 +15,6 @@ one = '''
 $ rhoas kafka topic update topic-1 --replication-factor 
 '''
 
-[kafka.topic.update.error.conflictError]
-one = 'topic "{{.TopicName}}" already exists in Kafka instance "{{.InstanceName}}"'
-
-[kafka.topic.update.error.topicNotFoundError]
-one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'
-
 [kafka.topic.update.error.cannotDecreasePartitionCountError]
 one = 'the number of topic partitions cannot be decreased from {{.From}} to {{.To}}'
 
@@ -28,7 +22,7 @@ one = 'the number of topic partitions cannot be decreased from {{.From}} to {{.T
 one = 'Topic "{{.Name}}" already has {{.Count}} partitions.'
 
 [kafka.topic.update.log.info.nothingToUpdate]
-one = 'No topic values have been changed, nothing to update'
+one = 'Nothing to update'
 
 [kafka.topic.update.log.info.topicUpdated]
 one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}} has been updated'

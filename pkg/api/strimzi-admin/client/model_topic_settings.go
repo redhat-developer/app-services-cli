@@ -16,6 +16,8 @@ import (
 
 // TopicSettings Kafka Topic (A feed where records are stored and published)
 type TopicSettings struct {
+	// Replication factor for this topic
+	ReplicationFactor *int32 `json:"replicationFactor,omitempty"`
 	// Number of partitions for this topic.
 	NumPartitions *int32 `json:"numPartitions,omitempty"`
 	// Topic configuration entry.
@@ -37,6 +39,38 @@ func NewTopicSettings() *TopicSettings {
 func NewTopicSettingsWithDefaults() *TopicSettings {
 	this := TopicSettings{}
 	return &this
+}
+
+// GetReplicationFactor returns the ReplicationFactor field value if set, zero value otherwise.
+func (o *TopicSettings) GetReplicationFactor() int32 {
+	if o == nil || o.ReplicationFactor == nil {
+		var ret int32
+		return ret
+	}
+	return *o.ReplicationFactor
+}
+
+// GetReplicationFactorOk returns a tuple with the ReplicationFactor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TopicSettings) GetReplicationFactorOk() (*int32, bool) {
+	if o == nil || o.ReplicationFactor == nil {
+		return nil, false
+	}
+	return o.ReplicationFactor, true
+}
+
+// HasReplicationFactor returns a boolean if a field has been set.
+func (o *TopicSettings) HasReplicationFactor() bool {
+	if o != nil && o.ReplicationFactor != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetReplicationFactor gets a reference to the given int32 and assigns it to the ReplicationFactor field.
+func (o *TopicSettings) SetReplicationFactor(v int32) {
+	o.ReplicationFactor = &v
 }
 
 // GetNumPartitions returns the NumPartitions field value if set, zero value otherwise.
@@ -105,6 +139,9 @@ func (o *TopicSettings) SetConfig(v []ConfigEntry) {
 
 func (o TopicSettings) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.ReplicationFactor != nil {
+		toSerialize["replicationFactor"] = o.ReplicationFactor
+	}
 	if o.NumPartitions != nil {
 		toSerialize["numPartitions"] = o.NumPartitions
 	}

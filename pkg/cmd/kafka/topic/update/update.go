@@ -94,6 +94,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			if opts.retentionMsStr == "" && opts.partitionsStr == "" {
 				logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
+				return nil
 			}
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
@@ -153,7 +154,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
-	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
+	// cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
 
 	return cmd
@@ -181,7 +182,7 @@ func runCmd(opts *Options) error {
 	topicToUpdate, httpRes, _ := api.GetTopic(context.Background(), opts.topicName).Execute()
 	if httpRes.StatusCode == 404 {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.update.error.topicNotFoundError",
+			MessageID: "kafka.topic.common.error.topicNotFoundError",
 			TemplateData: map[string]interface{}{
 				"TopicName":    opts.topicName,
 				"InstanceName": kafkaInstance.GetName(),
@@ -215,7 +216,6 @@ func runCmd(opts *Options) error {
 					"Count": currentPartitionCount,
 				},
 			}))
-
 		} else {
 			needsUpdate = true
 			topicSettings.NumPartitions = &partitionCount

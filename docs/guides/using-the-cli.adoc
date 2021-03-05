@@ -91,7 +91,7 @@ The `rhoas kafka use` command can be used to switch the current Kafka instance c
 
 [source,shell]
 ----
-$ rhoas kafka use --id 1lVcpo1c9kx6a9rbablGBY8RiD8
+$ rhoas kafka use my-kafka-instance
 {
     "id": "1lVcpo1c9kx6a9rbablGBY8RiD8",
     "kind": "Kafka",
@@ -117,7 +117,7 @@ You can create a topic in the current Apache Kafka instance with the `rhoas kafk
 [source,shell]
 ----
 $ rhoas kafka topic create topic-1
-Topic topic-1 created in Kafka instance my-kafka-instance:
+Topic "topic-1" created in Kafka instance "my-kafka-instance":
 {
   "config": [
     {
@@ -148,7 +148,7 @@ To view the details of a topic, run the `rhoas kafka topic describe` command.
 
 [source,shell]
 ----
-❯ ./rhoas kafka topic describe topic-1
+$ rhoas kafka topic describe topic-1
 {
   "config": [
     {
@@ -165,11 +165,11 @@ To view the details of a topic, run the `rhoas kafka topic describe` command.
 
 === Updating a Kafka topic
 
-You can update the number of partitions, number of replicas and retention period for an existing topic with `rhoas kafka topic update`:
+You can update the retention period for an existing topic with `rhoas kafka topic update`:
 
 [source,shell]
 ----
-$ rhoas kafka topic update topic-3 --retention-ms 36000 --partitions 3 --replicas 2
+$ rhoas kafka topic update topic-3 --retention-ms 36000
 Topic topic-1 updated in Kafka instance serviceapi:
 {
   "config": [

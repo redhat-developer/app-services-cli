@@ -120,6 +120,19 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
+	// perform delete topic API request
+	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).
+		Execute()
+	if httpRes.StatusCode == 404 {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.error.topicNotFoundError",
+			TemplateData: map[string]interface{}{
+				"TopicName":    opts.topicName,
+				"InstanceName": kafkaInstance.GetName(),
+			},
+		}))
+	}
+
 	if !opts.force {
 		var promptConfirmName = &survey.Input{
 			Message: localizer.MustLocalizeFromID("kafka.topic.delete.input.name.message"),
@@ -142,8 +155,10 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	httpRes, topicErr := api.DeleteTopic(context.Background(), opts.topicName).
+	httpRes, topicErr = api.DeleteTopic(context.Background(), opts.topicName).
 		Execute()
+	fmt.Println(httpRes.StatusCode)
+	fmt.Println(httpRes.Request.URL.String())
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 404:

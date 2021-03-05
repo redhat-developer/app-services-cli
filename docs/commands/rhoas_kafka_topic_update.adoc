@@ -25,8 +25,6 @@ $ rhoas kafka topic update topic-1 --replication-factor
 
 ....
   -o, --output string         Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
-      --partitions string     The number of partitions in the topic
-      --replicas string       The replication factor for the topic
       --retention-ms string   The period of time in milliseconds the broker will retain a partition log before deleting it
 ....
 

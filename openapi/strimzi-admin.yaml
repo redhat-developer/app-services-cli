@@ -379,6 +379,9 @@ components:
       description: Kafka Topic (A feed where records are stored and published)
       type: object
       properties:
+        replicationFactor:
+          description: Replication factor for this topic
+          type: integer
         numPartitions:
           description: Number of partitions for this topic.
           type: integer
