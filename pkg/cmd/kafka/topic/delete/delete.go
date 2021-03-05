@@ -104,6 +104,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
+// nolint:funlen
 func runCmd(opts *Options) error {
 	conn, err := opts.Connection()
 	if err != nil {
@@ -157,8 +158,6 @@ func runCmd(opts *Options) error {
 	// perform delete topic API request
 	httpRes, topicErr = api.DeleteTopic(context.Background(), opts.topicName).
 		Execute()
-	fmt.Println(httpRes.StatusCode)
-	fmt.Println(httpRes.Request.URL.String())
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 404:
