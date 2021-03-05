@@ -117,6 +117,21 @@
       ]
     },
     {
+      "name": "Delete topic",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "kafka",
+        "topic",
+        "delete",
+        "enda-test",
+        "-f"
+      ]
+    },
+    {
       "name": "Describe topic",
       "type": "go",
       "request": "launch",
@@ -127,7 +142,7 @@
         "kafka",
         "topic",
         "describe",
-        "my-to"
+        "my-topic"
       ]
     },
     {

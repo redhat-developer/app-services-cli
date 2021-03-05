@@ -11,7 +11,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"gopkg.in/yaml.v2"
@@ -54,6 +53,11 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
 
+			var searchName string
+			if len(args) > 0 {
+				searchName = args[0]
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return validNames, cobra.ShellCompDirectiveError
@@ -63,9 +67,7 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 				return validNames, cobra.ShellCompDirectiveError
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
-
-			return cmdutil.FilterValidTopicNameArgs(f, opts.kafkaID, toComplete)
+			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if len(args) > 0 {
@@ -110,25 +112,14 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	api := conn.API()
-	ctx := context.Background()
-
-	// check if the Kafka instance exists
-	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.common.error.notFoundErrorById",
-			TemplateData: map[string]interface{}{
-				"ID": opts.kafkaID,
-			},
-		}))
-	} else if apiErr.Error() != "" {
-		return apiErr
+	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	if err != nil {
+		return err
 	}
 
 	// fetch the topic
-	topicResponse, httpRes, topicErr := api.TopicAdmin(opts.kafkaID).
-		GetTopic(ctx, opts.topicName).
+	topicResponse, httpRes, topicErr := api.
+		GetTopic(context.Background(), opts.topicName).
 		Execute()
 
 	if topicErr.Error() != "" {
@@ -149,7 +140,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",

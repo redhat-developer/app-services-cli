@@ -12,7 +12,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
@@ -34,7 +33,6 @@ const (
 type Options struct {
 	topicName    string
 	partitions   int32
-	replicas     int32
 	retentionMs  int
 	kafkaID      string
 	outputFormat string
@@ -77,10 +75,6 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if err = topic.ValidateReplicationFactorN(opts.replicas); err != nil {
-				return err
-			}
-
 			if err = topic.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
 				return err
 			}
@@ -108,7 +102,6 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
 	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
-	cmd.Flags().Int32Var(&opts.replicas, "replicas", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.replicas.description"))
 	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
 
 	return cmd
@@ -125,27 +118,19 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	api := conn.API()
 	ctx := context.Background()
-
-	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.common.error.notFoundByIdError",
-			TemplateData: map[string]interface{}{
-				"ID": opts.kafkaID,
-			},
-		}))
-	} else if apiErr.Error() != "" {
-		return apiErr
+	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	if err != nil {
+		return err
 	}
 
-	createTopicReq := api.TopicAdmin(opts.kafkaID).CreateTopic(ctx)
+	createTopicReq := api.CreateTopic(ctx)
 
+	var replicas int32 = 3
 	topicInput := strimziadminclient.NewTopicInput{
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
-			ReplicationFactor: &opts.replicas,
+			ReplicationFactor: &replicas,
 			NumPartitions:     &opts.partitions,
 			Config:            topic.CreateConfig(opts.retentionMs),
 		},
@@ -153,7 +138,6 @@ func runCmd(opts *Options) error {
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
 
 	response, httpRes, topicErr := createTopicReq.Execute()
-
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 401:
@@ -172,7 +156,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",

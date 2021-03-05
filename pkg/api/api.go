@@ -8,5 +8,5 @@ import (
 // API is a type which defines a number of API creator functions
 type API struct {
 	Kafka      func() kasclient.DefaultApi
-	TopicAdmin func(kafkaID string) strimziadminclient.DefaultApi
+	TopicAdmin func(kafkaID string) (strimziadminclient.DefaultApi, *kasclient.KafkaRequest, error)
 }

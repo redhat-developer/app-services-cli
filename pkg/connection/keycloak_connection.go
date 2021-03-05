@@ -3,12 +3,16 @@ package connection
 import (
 	"context"
 	"crypto/x509"
+	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
@@ -68,41 +72,37 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 
 	// track if we need to update the config with new token values
 	var cfgChanged bool
-	if c.Token.NeedsRefresh() {
-		// nolint:govet
-		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
-		if err != nil {
-			return &AuthError{err, ""}
-		}
-
-		if refreshedTk.AccessToken != c.Token.AccessToken {
-			c.Token.AccessToken = refreshedTk.AccessToken
-			cfg.AccessToken = refreshedTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedTk.RefreshToken != c.Token.RefreshToken {
-			c.Token.RefreshToken = refreshedTk.RefreshToken
-			cfg.RefreshToken = refreshedTk.RefreshToken
-			cfgChanged = true
-		}
+	// nolint:govet
+	refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
+	if err != nil {
+		return &AuthError{err, ""}
 	}
 
-	if c.MASToken.NeedsRefresh() {
-		// nolint:govet
-		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
-		if err != nil {
-			return &AuthError{err, ""}
-		}
-		if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
-			c.MASToken.AccessToken = refreshedMasTk.AccessToken
-			cfg.MasAccessToken = refreshedMasTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
-			c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
-			cfg.MasRefreshToken = refreshedMasTk.RefreshToken
-			cfgChanged = true
-		}
+	if refreshedTk.AccessToken != c.Token.AccessToken {
+		c.Token.AccessToken = refreshedTk.AccessToken
+		cfg.AccessToken = refreshedTk.AccessToken
+		cfgChanged = true
+	}
+	if refreshedTk.RefreshToken != c.Token.RefreshToken {
+		c.Token.RefreshToken = refreshedTk.RefreshToken
+		cfg.RefreshToken = refreshedTk.RefreshToken
+		cfgChanged = true
+	}
+
+	// nolint:govet
+	refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
+	if err != nil {
+		return &AuthError{err, ""}
+	}
+	if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
+		c.MASToken.AccessToken = refreshedMasTk.AccessToken
+		cfg.MasAccessToken = refreshedMasTk.AccessToken
+		cfgChanged = true
+	}
+	if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
+		c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
+		cfg.MasRefreshToken = refreshedMasTk.RefreshToken
+		cfgChanged = true
 	}
 
 	if !cfgChanged {
@@ -154,11 +154,13 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 }
 
 // API Creates a new API type which is a single type for multiple APIs
+// nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
 	var cachedKafkaServiceAPI kasclient.DefaultApi
-
-	var cachedStrimziKafkaID string
-	var cachedStrimziAdminAPI strimziadminclient.DefaultApi
+	var cachedKafkaID string
+	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
+	var cachedKafkaRequest *kasclient.KafkaRequest
+	var cachedKafkaAdminErr error
 
 	kafkaAPIFunc := func() kasclient.DefaultApi {
 		if cachedKafkaServiceAPI != nil {
@@ -173,27 +175,80 @@ func (c *KeycloakConnection) API() *api.API {
 		return cachedKafkaServiceAPI
 	}
 
-	strimzAdminAPIFunc := func(kafkaID string) strimziadminclient.DefaultApi {
+	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kasclient.KafkaRequest, error) {
 		// if the api client is already created, and the same Kafka ID is used
 		// return the cached client
-		if cachedStrimziAdminAPI != nil && kafkaID == cachedStrimziKafkaID {
-			return cachedStrimziAdminAPI
+		if cachedKafkaAdminAPI != nil && kafkaID == cachedKafkaID {
+			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 		}
 
+		api := kafkaAPIFunc()
+
+		kafkaInstance, resp, apiErr := api.GetKafkaById(context.Background(), kafkaID).Execute()
+		defer resp.Body.Close()
+		if kas.IsErr(apiErr, kas.ErrorNotFound) {
+			cachedKafkaAdminAPI = nil
+			cachedKafkaRequest = nil
+			cachedKafkaAdminErr = errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.common.error.notFoundByIdError",
+				TemplateData: map[string]interface{}{
+					"ID": kafkaID,
+				},
+			}))
+
+			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+		} else if apiErr.Error() != "" {
+			cachedKafkaAdminAPI = nil
+			cachedKafkaRequest = nil
+			cachedKafkaAdminErr = fmt.Errorf("%v", apiErr)
+
+			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+		}
+
+		cachedKafkaRequest = &kafkaInstance
 		// cache the Kafka ID
-		cachedStrimziKafkaID = kafkaID
+		cachedKafkaID = kafkaID
+
+		kafkaStatus := kafkaInstance.GetStatus()
+		if kafkaStatus != "ready" {
+			cachedKafkaAdminAPI = nil
+			cachedKafkaRequest = nil
+			cachedKafkaAdminErr = errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.common.error.notReadyError",
+				TemplateData: map[string]interface{}{
+					"Name": kafkaInstance.GetName(),
+				},
+			}))
+
+			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+		}
+
+		bootstrapURL := kafkaInstance.GetBootstrapServerHost()
+		if bootstrapURL == "" {
+			cachedKafkaAdminAPI = nil
+			cachedKafkaRequest = nil
+			cachedKafkaAdminErr = fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "connection.error.missingBootstrapURL",
+				TemplateData: map[string]interface{}{
+					"Name": kafkaInstance.GetName(),
+				},
+			}))
+
+			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+		}
 
 		// create the client
-		apiClient := c.createStrimziAdminAPIClient(kafkaID)
+		apiClient := c.createKafkaAdminAPI(bootstrapURL)
 
-		cachedStrimziAdminAPI = apiClient.DefaultApi
+		cachedKafkaAdminAPI = apiClient.DefaultApi
+		cachedKafkaAdminErr = nil
 
-		return cachedStrimziAdminAPI
+		return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 	}
 
 	return &api.API{
 		Kafka:      kafkaAPIFunc,
-		TopicAdmin: strimzAdminAPIFunc,
+		TopicAdmin: kafkaAdminAPIFunc,
 	}
 }
 
@@ -213,16 +268,18 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kasclient.APIClient {
 	return apiClient
 }
 
-// Create a new Strimzi Admin API client
-func (c *KeycloakConnection) createStrimziAdminAPIClient(kafkaID string) *strimziadminclient.APIClient {
+// Create a new KafkaAdmin API client
+func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziadminclient.APIClient {
 	cfg := strimziadminclient.NewConfiguration()
 
-	cfg.Scheme = c.apiURL.Scheme
-	cfg.Host = c.apiURL.Host
+	host, _, _ := net.SplitHostPort(bootstrapURL)
+
+	cfg.Scheme = "https"
+	cfg.Host = fmt.Sprintf("admin-server-%v", host)
+	c.logger.Debugf("Making request to %v://%v", cfg.Scheme, cfg.Host)
 
 	cfg.HTTPClient = c.defaultHTTPClient
 
-	cfg.AddDefaultHeader("X-Kafka-ID", kafkaID)
 	cfg.AddDefaultHeader("Authorization", c.MASToken.AccessToken)
 
 	apiClient := strimziadminclient.NewAPIClient(cfg)

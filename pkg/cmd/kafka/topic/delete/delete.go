@@ -10,7 +10,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
@@ -51,6 +50,11 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
 
+			var searchName string
+			if len(args) > 0 {
+				searchName = args[0]
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return validNames, cobra.ShellCompDirectiveError
@@ -60,9 +64,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 				return validNames, cobra.ShellCompDirectiveError
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
-
-			return cmdutil.FilterValidTopicNameArgs(f, opts.kafkaID, toComplete)
+			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.force {
@@ -113,20 +115,22 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	api := conn.API()
-	ctx := context.Background()
+	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	if err != nil {
+		return err
+	}
 
-	// check if the Kafka instance exists
-	kafkaInstance, _, apiErr := api.Kafka().GetKafkaById(ctx, opts.kafkaID).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+	// perform delete topic API request
+	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).
+		Execute()
+	if httpRes.StatusCode == 404 {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.common.error.notFoundErrorById",
+			MessageID: "kafka.topic.common.error.topicNotFoundError",
 			TemplateData: map[string]interface{}{
-				"ID": opts.kafkaID,
+				"TopicName":    opts.topicName,
+				"InstanceName": kafkaInstance.GetName(),
 			},
 		}))
-	} else if apiErr.Error() != "" {
-		return apiErr
 	}
 
 	if !opts.force {
@@ -151,8 +155,10 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	httpRes, topicErr := api.TopicAdmin(opts.kafkaID).DeleteTopic(ctx, opts.topicName).
+	httpRes, topicErr = api.DeleteTopic(context.Background(), opts.topicName).
 		Execute()
+	fmt.Println(httpRes.StatusCode)
+	fmt.Println(httpRes.Request.URL.String())
 	if topicErr.Error() != "" {
 		switch httpRes.StatusCode {
 		case 404:
@@ -171,7 +177,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",

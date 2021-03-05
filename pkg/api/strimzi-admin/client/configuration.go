@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */
@@ -105,16 +105,8 @@ func NewConfiguration() *Configuration {
 		Debug:         false,
 		Servers: ServerConfigurations{
 			{
-				URL:         "https://api.openshift.com/api/managed-services-strimzi-ui/v1/api",
+				URL:         "/rest",
 				Description: "Main (production) server",
-			},
-			{
-				URL:         "https://api.stage.openshift.com/api/managed-services-strimzi-ui/v1/api",
-				Description: "Staging server",
-			},
-			{
-				URL:         "http://localhost:8000/api/managed-services-strimzi-ui/v1/api",
-				Description: "localhost",
 			},
 		},
 		OperationServers: map[string]ServerConfigurations{},

@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */
@@ -16,10 +16,10 @@ import (
 
 // TopicSettings Kafka Topic (A feed where records are stored and published)
 type TopicSettings struct {
+	// Replication factor for this topic
+	ReplicationFactor *int32 `json:"replicationFactor,omitempty"`
 	// Number of partitions for this topic.
 	NumPartitions *int32 `json:"numPartitions,omitempty"`
-	// Number of replications for the topic.
-	ReplicationFactor *int32 `json:"replicationFactor,omitempty"`
 	// Topic configuration entry.
 	Config *[]ConfigEntry `json:"config,omitempty"`
 }
@@ -39,38 +39,6 @@ func NewTopicSettings() *TopicSettings {
 func NewTopicSettingsWithDefaults() *TopicSettings {
 	this := TopicSettings{}
 	return &this
-}
-
-// GetNumPartitions returns the NumPartitions field value if set, zero value otherwise.
-func (o *TopicSettings) GetNumPartitions() int32 {
-	if o == nil || o.NumPartitions == nil {
-		var ret int32
-		return ret
-	}
-	return *o.NumPartitions
-}
-
-// GetNumPartitionsOk returns a tuple with the NumPartitions field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *TopicSettings) GetNumPartitionsOk() (*int32, bool) {
-	if o == nil || o.NumPartitions == nil {
-		return nil, false
-	}
-	return o.NumPartitions, true
-}
-
-// HasNumPartitions returns a boolean if a field has been set.
-func (o *TopicSettings) HasNumPartitions() bool {
-	if o != nil && o.NumPartitions != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetNumPartitions gets a reference to the given int32 and assigns it to the NumPartitions field.
-func (o *TopicSettings) SetNumPartitions(v int32) {
-	o.NumPartitions = &v
 }
 
 // GetReplicationFactor returns the ReplicationFactor field value if set, zero value otherwise.
@@ -103,6 +71,38 @@ func (o *TopicSettings) HasReplicationFactor() bool {
 // SetReplicationFactor gets a reference to the given int32 and assigns it to the ReplicationFactor field.
 func (o *TopicSettings) SetReplicationFactor(v int32) {
 	o.ReplicationFactor = &v
+}
+
+// GetNumPartitions returns the NumPartitions field value if set, zero value otherwise.
+func (o *TopicSettings) GetNumPartitions() int32 {
+	if o == nil || o.NumPartitions == nil {
+		var ret int32
+		return ret
+	}
+	return *o.NumPartitions
+}
+
+// GetNumPartitionsOk returns a tuple with the NumPartitions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TopicSettings) GetNumPartitionsOk() (*int32, bool) {
+	if o == nil || o.NumPartitions == nil {
+		return nil, false
+	}
+	return o.NumPartitions, true
+}
+
+// HasNumPartitions returns a boolean if a field has been set.
+func (o *TopicSettings) HasNumPartitions() bool {
+	if o != nil && o.NumPartitions != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNumPartitions gets a reference to the given int32 and assigns it to the NumPartitions field.
+func (o *TopicSettings) SetNumPartitions(v int32) {
+	o.NumPartitions = &v
 }
 
 // GetConfig returns the Config field value if set, zero value otherwise.
@@ -139,11 +139,11 @@ func (o *TopicSettings) SetConfig(v []ConfigEntry) {
 
 func (o TopicSettings) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.NumPartitions != nil {
-		toSerialize["numPartitions"] = o.NumPartitions
-	}
 	if o.ReplicationFactor != nil {
 		toSerialize["replicationFactor"] = o.ReplicationFactor
+	}
+	if o.NumPartitions != nil {
+		toSerialize["numPartitions"] = o.NumPartitions
 	}
 	if o.Config != nil {
 		toSerialize["config"] = o.Config

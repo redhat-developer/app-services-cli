@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */
@@ -40,7 +40,7 @@ var (
 	xmlCheck  = regexp.MustCompile(`(?i:(?:application|text)/xml)`)
 )
 
-// APIClient manages communication with the Strimzi Kubernetes REST API API v0.1.0
+// APIClient manages communication with the Kafka Admon REST API API v0.1.0
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration

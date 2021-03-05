@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Topics** | [**[]Topic**](Topic.md) | List of topics | 
+**Items** | [**[]Topic**](Topic.md) | List of topics | 
 **Offset** | **int32** | The page offset | 
 **Limit** | **int32** | number of entries per page | 
 **Count** | **int32** | Total number of topics | 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewTopicsList
 
-`func NewTopicsList(topics []Topic, offset int32, limit int32, count int32, ) *TopicsList`
+`func NewTopicsList(items []Topic, offset int32, limit int32, count int32, ) *TopicsList`
 
 NewTopicsList instantiates a new TopicsList object
 This constructor will assign default values to properties that have it defined,
@@ -28,24 +28,24 @@ NewTopicsListWithDefaults instantiates a new TopicsList object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetTopics
+### GetItems
 
-`func (o *TopicsList) GetTopics() []Topic`
+`func (o *TopicsList) GetItems() []Topic`
 
-GetTopics returns the Topics field if non-nil, zero value otherwise.
+GetItems returns the Items field if non-nil, zero value otherwise.
 
-### GetTopicsOk
+### GetItemsOk
 
-`func (o *TopicsList) GetTopicsOk() (*[]Topic, bool)`
+`func (o *TopicsList) GetItemsOk() (*[]Topic, bool)`
 
-GetTopicsOk returns a tuple with the Topics field if it's non-nil, zero value otherwise
+GetItemsOk returns a tuple with the Items field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTopics
+### SetItems
 
-`func (o *TopicsList) SetTopics(v []Topic)`
+`func (o *TopicsList) SetItems(v []Topic)`
 
-SetTopics sets Topics field to given value.
+SetItems sets Items field to given value.
 
 
 ### GetOffset

@@ -1,18 +1,14 @@
 openapi: 3.0.0
 info:
-  description: An API to provide k8s REST endpoints for query
+  description: An API to provide REST endpoints for query Kafka for admin operations
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  title: Strimzi Kubernetes REST API
+  title: Kafka Admon REST API
   version: 0.1.0
 servers:
 - description: Main (production) server
-  url: https://api.openshift.com/api/managed-services-strimzi-ui/v1/api
-- description: Staging server
-  url: https://api.stage.openshift.com/api/managed-services-strimzi-ui/v1/api
-- description: localhost
-  url: http://localhost:8000/api/managed-services-strimzi-ui/v1/api
+  url: /rest
 paths:
   /topics:
     get:
@@ -75,7 +71,7 @@ paths:
             examples:
               NewTopicInput:
                 value:
-                  name: Pets
+                  name: my-topic
                   settings:
                     numPartitions: 3
                     replicationFactor: 4
@@ -111,7 +107,7 @@ paths:
       description: Deletes the topic with the specified name.
       operationId: deleteTopic
       parameters:
-      - description: The topic name to retrieve.
+      - description: The topic name to delete.
         explode: false
         in: path
         name: topicName
@@ -202,36 +198,85 @@ paths:
         "200":
           description: Metrics
       summary: Admin server metrics
+  /groups:
+    get:
+      operationId: getGroupsList
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+  /groups/{groupName}:
+    delete:
+      operationId: deleteGroup
+      parameters:
+      - description: Consumer group identificator
+        explode: false
+        in: path
+        name: groupName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+    get:
+      operationId: getGroup
+      parameters:
+      - description: Consumer group identificator
+        explode: false
+        in: path
+        name: groupName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+  /api:
+    get:
+      operationId: openApi
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OpenAPI spec
 components:
   schemas:
     Topic:
       description: Kafka Topic (A feed where records are stored and published)
       example:
-        name: Pets
+        name: my-topic
         config:
         - key: min.insync.replicas
           value: "1"
         - key: max.message.bytes
           value: "1050000"
         partitions:
-        - id: 28
+        - id: 0
           replicas:
-          - id: 35
-          - id: 5
+          - id: 0
+          - id: 1
           isr:
-          - id: 44
-          - id: 83
+          - id: 0
+          - id: 1
           leader:
-            id: 22
-        - id: 68
+            id: 0
+        - id: 1
           replicas:
-          - id: 81
-          - id: 22
+          - id: 0
+          - id: 1
           isr:
-          - id: 75
-          - id: 65
+          - id: 0
+          - id: 1
           leader:
-            id: 58
+            id: 1
       properties:
         name:
           description: The name of the topic.
@@ -251,15 +296,15 @@ components:
     Partition:
       description: Kafka topic partition
       example:
-        id: 87
+        id: 0
         replicas:
-        - id: 28
-        - id: 18
+        - id: 0
+        - id: 1
         isr:
-        - id: 22
-        - id: 66
+        - id: 0
+        - id: 1
         leader:
-          id: 62
+          id: 1
       properties:
         id:
           description: Uniquie id for the partition
@@ -298,37 +343,37 @@ components:
     TopicsList:
       description: A list of topics.
       example:
-        topics:
-        - name: Pets
+        items:
+        - name: my-topic
           config:
           - key: min.insync.replicas
             value: "1"
           - key: max.message.bytes
             value: "1050000"
           partitions:
-          - id: 28
+          - id: 0
             replicas:
-            - id: 35
-            - id: 5
+            - id: 0
+            - id: 1
             isr:
-            - id: 44
-            - id: 83
+            - id: 0
+            - id: 1
             leader:
-              id: 22
-          - id: 68
+              id: 0
+          - id: 1
             replicas:
-            - id: 81
-            - id: 22
+            - id: 0
+            - id: 1
             isr:
-            - id: 75
-            - id: 65
+            - id: 0
+            - id: 1
             leader:
-              id: 58
+              id: 1
         offset: 25
         limit: 90
         count: 94
       properties:
-        topics:
+        items:
           description: List of topics
           items:
             $ref: '#/components/schemas/Topic'
@@ -344,26 +389,25 @@ components:
           type: integer
       required:
       - count
+      - items
       - limit
       - offset
-      - topics
       type: object
     TopicSettings:
       description: Kafka Topic (A feed where records are stored and published)
       example:
         numPartitions: 2
-        replicationFactor: 1
         config:
         - key: min.insync.replicas
           value: "1"
         - key: max.message.bytes
           value: "1050000"
       properties:
+        replicationFactor:
+          description: Replication factor for this topic
+          type: integer
         numPartitions:
           description: Number of partitions for this topic.
-          type: integer
-        replicationFactor:
-          description: Number of replications for the topic.
           type: integer
         config:
           description: Topic configuration entry.
@@ -378,10 +422,9 @@ components:
     NewTopicInput:
       description: Input object to create a new topic.
       example:
-        name: Pets
+        name: my-topic
         settings:
           numPartitions: 3
-          replicationFactor: 4
           config:
           - key: min.insync.replicas
             value: "1"

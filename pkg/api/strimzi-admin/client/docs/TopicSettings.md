@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**ReplicationFactor** | Pointer to **int32** | Replication factor for this topic | [optional] 
 **NumPartitions** | Pointer to **int32** | Number of partitions for this topic. | [optional] 
-**ReplicationFactor** | Pointer to **int32** | Number of replications for the topic. | [optional] 
 **Config** | Pointer to [**[]ConfigEntry**](ConfigEntry.md) | Topic configuration entry. | [optional] 
 
 ## Methods
@@ -26,31 +26,6 @@ will change when the set of required properties is changed
 NewTopicSettingsWithDefaults instantiates a new TopicSettings object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetNumPartitions
-
-`func (o *TopicSettings) GetNumPartitions() int32`
-
-GetNumPartitions returns the NumPartitions field if non-nil, zero value otherwise.
-
-### GetNumPartitionsOk
-
-`func (o *TopicSettings) GetNumPartitionsOk() (*int32, bool)`
-
-GetNumPartitionsOk returns a tuple with the NumPartitions field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetNumPartitions
-
-`func (o *TopicSettings) SetNumPartitions(v int32)`
-
-SetNumPartitions sets NumPartitions field to given value.
-
-### HasNumPartitions
-
-`func (o *TopicSettings) HasNumPartitions() bool`
-
-HasNumPartitions returns a boolean if a field has been set.
 
 ### GetReplicationFactor
 
@@ -76,6 +51,31 @@ SetReplicationFactor sets ReplicationFactor field to given value.
 `func (o *TopicSettings) HasReplicationFactor() bool`
 
 HasReplicationFactor returns a boolean if a field has been set.
+
+### GetNumPartitions
+
+`func (o *TopicSettings) GetNumPartitions() int32`
+
+GetNumPartitions returns the NumPartitions field if non-nil, zero value otherwise.
+
+### GetNumPartitionsOk
+
+`func (o *TopicSettings) GetNumPartitionsOk() (*int32, bool)`
+
+GetNumPartitionsOk returns a tuple with the NumPartitions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNumPartitions
+
+`func (o *TopicSettings) SetNumPartitions(v int32)`
+
+SetNumPartitions sets NumPartitions field to given value.
+
+### HasNumPartitions
+
+`func (o *TopicSettings) HasNumPartitions() bool`
+
+HasNumPartitions returns a boolean if a field has been set.
 
 ### GetConfig
 

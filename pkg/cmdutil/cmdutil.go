@@ -33,8 +33,11 @@ func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete str
 		return validNames, cobra.ShellCompDirectiveError
 	}
 
-	api := conn.API()
-	topicRes, _, apiErr := api.TopicAdmin(kafkaID).GetTopicsList(context.Background()).Filter(toComplete).Execute()
+	api, _, err := conn.API().TopicAdmin(kafkaID)
+	if err != nil {
+		return validNames, cobra.ShellCompDirectiveError
+	}
+	topicRes, _, apiErr := api.GetTopicsList(context.Background()).Filter(toComplete).Execute()
 	if apiErr.Error() != "" {
 		return validNames, cobra.ShellCompDirectiveError
 	}
@@ -43,7 +46,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete str
 		return validNames, cobra.ShellCompDirectiveError
 	}
 
-	items := topicRes.GetTopics()
+	items := topicRes.GetItems()
 	for _, topic := range items {
 		validNames = append(validNames, topic.GetName())
 	}

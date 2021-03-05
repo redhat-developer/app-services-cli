@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */

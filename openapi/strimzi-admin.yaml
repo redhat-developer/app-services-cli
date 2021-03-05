@@ -1,18 +1,14 @@
 openapi: 3.0.0
 info:
-  title: Strimzi Kubernetes REST API
+  title: Kafka Admon REST API
   version: 0.1.0
-  description: An API to provide k8s REST endpoints for query
+  description: An API to provide REST endpoints for query Kafka for admin operations
   license:
     name: Apache 2.0
     url: "https://www.apache.org/licenses/LICENSE-2.0"
 servers:
-  - url: "https://api.openshift.com/api/managed-services-strimzi-ui/v1/api"
+  - url: "/rest"
     description: Main (production) server
-  - url: "https://api.stage.openshift.com/api/managed-services-strimzi-ui/v1/api"
-    description: Staging server
-  - url: "http://localhost:8000/api/managed-services-strimzi-ui/v1/api"
-    description: localhost
 paths:
   /topics:
     get:
@@ -56,7 +52,9 @@ paths:
           description: Unable to connect to the Kafka cluster.
       operationId: getTopicsList
       summary: List of topics
-      description: "Returns a list of all of the available topics, or the list of topics that meet the users URL Query Parameters."
+      description: >-
+        Returns a list of all of the available topics, or the list of topics that meet the users URL
+        Query Parameters.
     post:
       requestBody:
         description: Topic to create.
@@ -67,7 +65,7 @@ paths:
             examples:
               NewTopicInput:
                 value:
-                  name: Pets
+                  name: my-topic
                   settings:
                     numPartitions: 3
                     replicationFactor: 4
@@ -127,7 +125,7 @@ paths:
     delete:
       parameters:
         - name: topicName
-          description: The topic name to retrieve.
+          description: The topic name to delete.
           schema:
             type: string
           in: path
@@ -194,6 +192,44 @@ paths:
           description: Metrics
       operationId: metrics
       summary: Admin server metrics
+  /groups:
+    get:
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+      operationId: getGroupsList
+  "/groups/{groupName}":
+    get:
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+      operationId: getGroup
+    delete:
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+      operationId: deleteGroup
+    parameters:
+      - name: groupName
+        description: Consumer group identificator
+        schema:
+          type: string
+        in: path
+        required: true
+  /api:
+    get:
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OpenAPI spec
+      operationId: openApi
 components:
   schemas:
     Topic:
@@ -215,31 +251,31 @@ components:
           items:
             $ref: "#/components/schemas/Partition"
       example:
-        name: Pets
+        name: my-topic
         config:
           - key: min.insync.replicas
             value: "1"
           - key: max.message.bytes
             value: "1050000"
         partitions:
-          - id: 28
+          - id: 0
             replicas:
-              - id: 35
-              - id: 5
+              - id: 0
+              - id: 1
             isr:
-              - id: 44
-              - id: 83
+              - id: 0
+              - id: 1
             leader:
-              id: 22
-          - id: 68
+              id: 0
+          - id: 1
             replicas:
-              - id: 81
-              - id: 22
+              - id: 0
+              - id: 1
             isr:
-              - id: 75
-              - id: 65
+              - id: 0
+              - id: 1
             leader:
-              id: 58
+              id: 1
     Partition:
       description: Kafka topic partition
       required:
@@ -263,15 +299,15 @@ components:
           $ref: "#/components/schemas/Node"
           description: Node that is the leader for this partition.
       example:
-        id: 87
+        id: 0
         replicas:
-          - id: 28
-          - id: 18
+          - id: 0
+          - id: 1
         isr:
-          - id: 22
-          - id: 66
+          - id: 0
+          - id: 1
         leader:
-          id: 62
+          id: 1
     ConfigEntry:
       description: Key value pair indicating possible configuration options for a topic.
       type: object
@@ -288,13 +324,13 @@ components:
     TopicsList:
       description: A list of topics.
       required:
-        - topics
+        - items
         - offset
         - limit
         - count
       type: object
       properties:
-        topics:
+        items:
           description: List of topics
           type: array
           items:
@@ -309,32 +345,32 @@ components:
           description: Total number of topics
           type: integer
       example:
-        topics:
-          - name: Pets
+        items:
+          - name: my-topic
             config:
               - key: min.insync.replicas
                 value: "1"
               - key: max.message.bytes
                 value: "1050000"
             partitions:
-              - id: 28
+              - id: 0
                 replicas:
-                  - id: 35
-                  - id: 5
+                  - id: 0
+                  - id: 1
                 isr:
-                  - id: 44
-                  - id: 83
+                  - id: 0
+                  - id: 1
                 leader:
-                  id: 22
-              - id: 68
+                  id: 0
+              - id: 1
                 replicas:
-                  - id: 81
-                  - id: 22
+                  - id: 0
+                  - id: 1
                 isr:
-                  - id: 75
-                  - id: 65
+                  - id: 0
+                  - id: 1
                 leader:
-                  id: 58
+                  id: 1
         offset: 25
         limit: 90
         count: 94
@@ -343,11 +379,11 @@ components:
       description: Kafka Topic (A feed where records are stored and published)
       type: object
       properties:
+        replicationFactor:
+          description: Replication factor for this topic
+          type: integer
         numPartitions:
           description: Number of partitions for this topic.
-          type: integer
-        replicationFactor:
-          description: Number of replications for the topic.
           type: integer
         config:
           description: Topic configuration entry.
@@ -356,7 +392,6 @@ components:
             $ref: "#/components/schemas/ConfigEntry"
       example:
         numPartitions: 2
-        replicationFactor: 1
         config:
           - key: min.insync.replicas
             value: "1"
@@ -376,12 +411,13 @@ components:
           type: string
         settings:
           $ref: "#/components/schemas/TopicSettings"
-          description: "The settings that are applicable to this topic.  This includes partitions, configuration information, and number of replicas."
+          description: >-
+            The settings that are applicable to this topic.  This includes partitions,
+            configuration information, and number of replicas.
       example:
-        name: Pets
+        name: my-topic
         settings:
           numPartitions: 3
-          replicationFactor: 4
           config:
             - key: min.insync.replicas
               value: "1"

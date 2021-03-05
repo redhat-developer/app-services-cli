@@ -1,7 +1,7 @@
 /*
- * Strimzi Kubernetes REST API
+ * Kafka Admon REST API
  *
- * An API to provide k8s REST endpoints for query
+ * An API to provide REST endpoints for query Kafka for admin operations
  *
  * API version: 0.1.0
  */
@@ -41,10 +41,23 @@ type DefaultApi interface {
 	CreateTopicExecute(r ApiCreateTopicRequest) (Topic, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
+	 * DeleteGroup Method for DeleteGroup
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param groupName Consumer group identificator
+	 * @return ApiDeleteGroupRequest
+	 */
+	DeleteGroup(ctx _context.Context, groupName string) ApiDeleteGroupRequest
+
+	/*
+	 * DeleteGroupExecute executes the request
+	 */
+	DeleteGroupExecute(r ApiDeleteGroupRequest) (*_nethttp.Response, GenericOpenAPIError)
+
+	/*
 	 * DeleteTopic Deletes a  topic
 	 * Deletes the topic with the specified name.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param topicName The topic name to retrieve.
+	 * @param topicName The topic name to delete.
 	 * @return ApiDeleteTopicRequest
 	 */
 	DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest
@@ -53,6 +66,31 @@ type DefaultApi interface {
 	 * DeleteTopicExecute executes the request
 	 */
 	DeleteTopicExecute(r ApiDeleteTopicRequest) (*_nethttp.Response, GenericOpenAPIError)
+
+	/*
+	 * GetGroup Method for GetGroup
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param groupName Consumer group identificator
+	 * @return ApiGetGroupRequest
+	 */
+	GetGroup(ctx _context.Context, groupName string) ApiGetGroupRequest
+
+	/*
+	 * GetGroupExecute executes the request
+	 */
+	GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Response, GenericOpenAPIError)
+
+	/*
+	 * GetGroupsList Method for GetGroupsList
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiGetGroupsListRequest
+	 */
+	GetGroupsList(ctx _context.Context) ApiGetGroupsListRequest
+
+	/*
+	 * GetGroupsListExecute executes the request
+	 */
+	GetGroupsListExecute(r ApiGetGroupsListRequest) (*_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * GetTopic Retrieves the topic with the specified name.
@@ -94,6 +132,18 @@ type DefaultApi interface {
 	 * MetricsExecute executes the request
 	 */
 	MetricsExecute(r ApiMetricsRequest) (*_nethttp.Response, GenericOpenAPIError)
+
+	/*
+	 * OpenApi Method for OpenApi
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiOpenApiRequest
+	 */
+	OpenApi(ctx _context.Context) ApiOpenApiRequest
+
+	/*
+	 * OpenApiExecute executes the request
+	 */
+	OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * UpdateTopic Updates the topic with the specified name.
@@ -232,6 +282,104 @@ func (a *DefaultApiService) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, 
 	return localVarReturnValue, localVarHTTPResponse, executionError
 }
 
+type ApiDeleteGroupRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+	groupName  string
+}
+
+func (r ApiDeleteGroupRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.DeleteGroupExecute(r)
+}
+
+/*
+ * DeleteGroup Method for DeleteGroup
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param groupName Consumer group identificator
+ * @return ApiDeleteGroupRequest
+ */
+func (a *DefaultApiService) DeleteGroup(ctx _context.Context, groupName string) ApiDeleteGroupRequest {
+	return ApiDeleteGroupRequest{
+		ApiService: a,
+		ctx:        ctx,
+		groupName:  groupName,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *DefaultApiService) DeleteGroupExecute(r ApiDeleteGroupRequest) (*_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodDelete
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteGroup")
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarPath := localBasePath + "/groups/{groupName}"
+	localVarPath = strings.Replace(localVarPath, "{"+"groupName"+"}", _neturl.PathEscape(parameterToString(r.groupName, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, executionError
+}
+
 type ApiDeleteTopicRequest struct {
 	ctx        _context.Context
 	ApiService DefaultApi
@@ -246,7 +394,7 @@ func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIErro
  * DeleteTopic Deletes a  topic
  * Deletes the topic with the specified name.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param topicName The topic name to retrieve.
+ * @param topicName The topic name to delete.
  * @return ApiDeleteTopicRequest
  */
 func (a *DefaultApiService) DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest {
@@ -294,6 +442,198 @@ func (a *DefaultApiService) DeleteTopicExecute(r ApiDeleteTopicRequest) (*_netht
 
 	// to determine the Accept header
 	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, executionError
+}
+
+type ApiGetGroupRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+	groupName  string
+}
+
+func (r ApiGetGroupRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.GetGroupExecute(r)
+}
+
+/*
+ * GetGroup Method for GetGroup
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param groupName Consumer group identificator
+ * @return ApiGetGroupRequest
+ */
+func (a *DefaultApiService) GetGroup(ctx _context.Context, groupName string) ApiGetGroupRequest {
+	return ApiGetGroupRequest{
+		ApiService: a,
+		ctx:        ctx,
+		groupName:  groupName,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *DefaultApiService) GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetGroup")
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarPath := localBasePath + "/groups/{groupName}"
+	localVarPath = strings.Replace(localVarPath, "{"+"groupName"+"}", _neturl.PathEscape(parameterToString(r.groupName, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, executionError
+}
+
+type ApiGetGroupsListRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+}
+
+func (r ApiGetGroupsListRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.GetGroupsListExecute(r)
+}
+
+/*
+ * GetGroupsList Method for GetGroupsList
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiGetGroupsListRequest
+ */
+func (a *DefaultApiService) GetGroupsList(ctx _context.Context) ApiGetGroupsListRequest {
+	return ApiGetGroupsListRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *DefaultApiService) GetGroupsListExecute(r ApiGetGroupsListRequest) (*_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetGroupsList")
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarPath := localBasePath + "/groups"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -629,6 +969,100 @@ func (a *DefaultApiService) MetricsExecute(r ApiMetricsRequest) (*_nethttp.Respo
 
 	// to determine the Accept header
 	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, executionError
+}
+
+type ApiOpenApiRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+}
+
+func (r ApiOpenApiRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.OpenApiExecute(r)
+}
+
+/*
+ * OpenApi Method for OpenApi
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiOpenApiRequest
+ */
+func (a *DefaultApiService) OpenApi(ctx _context.Context) ApiOpenApiRequest {
+	return ApiOpenApiRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *DefaultApiService) OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.OpenApi")
+	if err != nil {
+		executionError.error = err.Error()
+		return nil, executionError
+	}
+
+	localVarPath := localBasePath + "/api"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)

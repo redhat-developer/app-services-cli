@@ -9,3 +9,6 @@ one = 'Error while checking token expiry: {{.Reason}}'
 
 [connection.tokenNeedsRefresh.log.debug.tokenIsStillValid]
 one = 'Token is still valid. Expires in {{.TimeLeft}}'
+
+[connection.error.missingBootstrapURL]
+one = 'bootstrap URL is missing for Kafka instance "{{.Name}}"'
