@@ -175,6 +175,13 @@ func runCmd(opts *Options) error {
 					"Operation": "delete",
 				},
 			}))
+		case 403:
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.forbidden",
+				TemplateData: map[string]interface{}{
+					"Operation": "delete",
+				},
+			}))
 		case 500:
 			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:

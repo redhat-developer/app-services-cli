@@ -104,7 +104,16 @@ func runCmd(opts *Options) error {
 		switch httpRes.StatusCode {
 		case 401:
 			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.common.error.unauthorized",
+				MessageID:   "kafka.topic.common.error.unauthorized",
+				PluralCount: 2,
+				TemplateData: map[string]interface{}{
+					"Operation": "list",
+				},
+			}))
+		case 403:
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID:   "kafka.topic.common.error.forbidden",
+				PluralCount: 2,
 				TemplateData: map[string]interface{}{
 					"Operation": "list",
 				},

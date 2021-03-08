@@ -8,7 +8,13 @@ info:
   version: 0.1.0
 servers:
 - description: Main (production) server
-  url: /rest
+  url: https://api.openshift.com
+- description: Staging server
+  url: https://api.stage.openshift.com
+- description: localhost
+  url: http://localhost:8001
+- description: localhost
+  url: http://localhost:8000
 paths:
   /topics:
     get:
@@ -373,11 +379,6 @@ components:
         limit: 90
         count: 94
       properties:
-        items:
-          description: List of topics
-          items:
-            $ref: '#/components/schemas/Topic'
-          type: array
         offset:
           description: The page offset
           type: integer
@@ -387,6 +388,11 @@ components:
         count:
           description: Total number of topics
           type: integer
+        items:
+          description: List of topics
+          items:
+            $ref: '#/components/schemas/Topic'
+          type: array
       required:
       - count
       - items

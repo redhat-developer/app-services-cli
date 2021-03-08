@@ -126,11 +126,11 @@ func runCmd(opts *Options) error {
 
 	createTopicReq := api.CreateTopic(ctx)
 
-	var replicas int32 = 3
+	// var replicas int32 = 3
 	topicInput := strimziadminclient.NewTopicInput{
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
-			ReplicationFactor: &replicas,
+			// ReplicationFactor: &replicas,
 			NumPartitions:     &opts.partitions,
 			Config:            topic.CreateConfig(opts.retentionMs),
 		},
@@ -143,6 +143,13 @@ func runCmd(opts *Options) error {
 		case 401:
 			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "create",
+				},
+			}))
+		case 403:
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.forbidden",
 				TemplateData: map[string]interface{}{
 					"Operation": "create",
 				},
