@@ -29,3 +29,17 @@ jobs:
           key: ${{ secrets.YOUR_PRIVATE_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  msi:
+    needs: goreleaser
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout
+      - name: Download executable file
+        id: download_exe
+        shell: bash
+        run: |
+          curl -s "${GITHUB_REF#refs/tags}" -i 'windows_amd64.zip'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
