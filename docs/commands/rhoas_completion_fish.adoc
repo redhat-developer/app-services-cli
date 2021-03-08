@@ -1,0 +1,28 @@
+== rhoas completion fish
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Generate completion script for fish shell
+
+=== Synopsis
+
+Generate completion script for fish shell.
+
+Run `rhoas completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+
+
+....
+rhoas completion fish
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs shell completion for the given shell (bash, zsh or fish)
+
