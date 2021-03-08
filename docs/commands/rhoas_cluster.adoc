@@ -4,6 +4,20 @@ ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 View and perform operations on your Kubernetes or OpenShift cluster
 
+=== Examples
+
+....
+# connect with cluster without including currently selected services
+$ rhoas cluster connect --ignore-context
+
+# connect with cluster using specified token
+$ rhoas cluster connect --token=value
+
+# connect with cluster and save script to create service binding
+$ rhoas cluster connect --force > create_service_binding.sh
+
+....
+
 === Options inherited from parent commands
 
 ....
