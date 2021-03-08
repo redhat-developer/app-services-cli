@@ -35,7 +35,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout
+        uses: actions/checkout@v2
       - name: Download executable file
         id: download_exe
         shell: bash
