@@ -32,7 +32,7 @@ help:
 	@echo "make openapi/pull					pull openapi definition"
 	@echo "make openapi/generate     	generate openapi modules"
 	@echo "make openapi/validate     	validate openapi schema"
-	@echo "mkae pkger									bundle static assets"
+	@echo "make pkger									bundle static assets"
 
 	@echo "$(fake)"
 .PHONY: help
@@ -144,6 +144,10 @@ format:
 githooks:
 	ln -fs $$(pwd)/githooks/pre-commit .git/hooks
 .PHONY: githooks
+
+docs/check: docs/generate
+	./scripts/check-docs.sh
+.PHONY: docs/check
 
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas
