@@ -3,6 +3,7 @@ module github.com/bf2fc6cc711aee1a0c2a/cli
 go 1.15
 
 require (
+	cloud.google.com/go v0.75.0 // indirect
 	github.com/AlecAivazis/survey/v2 v2.2.4
 	github.com/BurntSushi/toml v0.3.1
 	github.com/MakeNowJust/heredoc v1.0.0
@@ -11,7 +12,6 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/fatih/color v1.10.0
-	github.com/google/go-cmp v0.5.2 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20200805134727-ea32388e35c1
 	github.com/markbates/pkger v0.17.1
@@ -26,11 +26,10 @@ require (
 	github.com/spf13/pflag v1.0.5
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
-	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
-	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6
+	golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
 	golang.org/x/text v0.3.5
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/protobuf v1.25.1-0.20201020201750-d3470999428b // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.19.4

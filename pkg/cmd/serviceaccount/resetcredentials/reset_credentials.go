@@ -117,20 +117,20 @@ func runResetCredentials(opts *Options) (err error) {
 		if err != nil {
 			return err
 		}
-	} else {
-		// obtain the absolute path to where credentials will be saved
-		opts.filename = credentials.AbsolutePath(opts.fileFormat, opts.filename)
+	} else if opts.filename == "" {
+		// obtain the default absolute path to where credentials will be saved
+		opts.filename = credentials.GetDefaultPath(opts.fileFormat)
+	}
 
-		// If the credentials file already exists, and the --overwrite flag is not set then return an error
-		// indicating that the user should explicitly request overwriting of the file
-		if _, err = os.Stat(opts.filename); err == nil && !opts.overwrite {
-			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.error.credentialsFileAlreadyExists",
-				TemplateData: map[string]interface{}{
-					"FilePath": opts.filename,
-				},
-			}))
-		}
+	// If the credentials file already exists, and the --overwrite flag is not set then return an error
+	// indicating that the user should explicitly request overwriting of the file
+	if _, err = os.Stat(opts.filename); err == nil && !opts.overwrite {
+		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+			MessageID: "serviceAccount.common.error.credentialsFileAlreadyExists",
+			TemplateData: map[string]interface{}{
+				"FilePath": opts.filename,
+			},
+		}))
 	}
 
 	// prompt the user to confirm their wish to proceed with this action

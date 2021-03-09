@@ -112,9 +112,9 @@ func runCreate(opts *Options) error {
 		if err != nil {
 			return err
 		}
-	} else {
+	} else if opts.filename == "" {
 		// obtain the absolute path to where credentials will be saved
-		opts.filename = credentials.AbsolutePath(opts.fileFormat, opts.filename)
+		opts.filename = credentials.GetDefaultPath(opts.fileFormat)
 	}
 
 	// If the credentials file already exists, and the --overwrite flag is not set then return an error
