@@ -85,7 +85,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 
 				if opts.partitionsStr != "" {
 					// nolint:govet
-					partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+					partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
 					if err != nil {
 						return err
 					}
@@ -129,7 +129,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			if opts.partitionsStr != "" {
 				// nolint:govet
-				partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+				partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
 				if err != nil {
 					return err
 				}
@@ -312,7 +312,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 		if opts.partitionsStr != "" {
 			// nolint:govet
-			partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+			partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
 			if err != nil {
 				return err
 			}

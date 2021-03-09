@@ -121,7 +121,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			// check if the partition flag is set
 			if opts.partitionsStr != "" {
 				// nolint:govet
-				partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+				partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
 				if err != nil {
 					return err
 				}
@@ -360,7 +360,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		}
 
 		if opts.retentionMsStr != "" {
-			retentionPeriodMs, err := topic.ConvertRetentionMsToInt(opts.partitionsStr)
+			retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
 			if err != nil {
 				return err
 			}
