@@ -131,8 +131,8 @@ func runCmd(opts *Options) error {
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
 			ReplicationFactor: &replicas,
-			NumPartitions: &opts.partitions,
-			Config:        topic.CreateConfig(opts.retentionMs),
+			NumPartitions:     &opts.partitions,
+			Config:            topic.CreateConfig(opts.retentionMs),
 		},
 	}
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
