@@ -101,6 +101,10 @@ func runCmd(opts *Options) error {
 	topicData, httpRes, topicErr := a.Execute()
 
 	if topicErr.Error() != "" {
+		if httpRes == nil {
+			return topicErr
+		}
+
 		switch httpRes.StatusCode {
 		case 401:
 			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
