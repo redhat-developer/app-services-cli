@@ -78,13 +78,16 @@ func GetDefaultPath(outputFormat string) (filePath string) {
 
 // Write saves the credentials to a file
 // in the specified output format
-func Write(output string, fileName string, credentials *Credentials) error {
+func Write(output string, filepath string, credentials *Credentials) error {
 	fileTemplate := getFileFormat(output)
 	fileBody := fmt.Sprintf(fileTemplate, credentials.ClientID, credentials.ClientSecret)
 
 	fileData := []byte(fileBody)
 
-	return ioutil.WriteFile(fileName, fileData, 0600)
+	// replace any env vars in the file path
+	trueFilePath := os.ExpandEnv(filepath)
+
+	return ioutil.WriteFile(trueFilePath, fileData, 0600)
 }
 
 func getFileFormat(output string) (format string) {
