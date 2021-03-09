@@ -82,8 +82,6 @@ func Write(output string, fileName string, credentials *Credentials) error {
 	fileTemplate := getFileFormat(output)
 	fileBody := fmt.Sprintf(fileTemplate, credentials.ClientID, credentials.ClientSecret)
 
-	fmt.Println(fileName)
-
 	fileData := []byte(fileBody)
 
 	return ioutil.WriteFile(fileName, fileData, 0600)
