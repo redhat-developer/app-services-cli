@@ -279,8 +279,7 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziad
 	apiURL.Scheme = "https"
 	apiURL.Path = "/rest"
 
-	// cfg.Host = fmt.Sprintf("admin-server-%v", host)
-	// serverURL := fmt.Sprintf("%v://%v", cfg.Scheme, cfg.Host)
+	cfg.Host = fmt.Sprintf("admin-server-%v", host)
 	c.logger.Debugf("Making request to %v", apiURL.String())
 
 	cfg.HTTPClient = c.defaultHTTPClient
