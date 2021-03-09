@@ -98,6 +98,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			if !opts.interactive {
 				opts.topicName = args[0]
 
+				// nolint:govet
 				logger, err := opts.Logger()
 				if err != nil {
 					return err
@@ -119,6 +120,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			// check if the partition flag is set
 			if opts.partitionsStr != "" {
+				// nolint:govet
 				partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
 				if err != nil {
 					return err

@@ -45,7 +45,7 @@ func ConvertPartitionsToInt(partitionStr string) (int32, error) {
 	return int32(patitionsInt), nil
 }
 
-// onvert the value from "retention-ms" to int
+// convert the value from "retention-ms" to int
 func ConvertRetentionMsToInt(retentionMsStr string) (int, error) {
 	retentionMsInt, err := strconv.Atoi(retentionMsStr)
 
