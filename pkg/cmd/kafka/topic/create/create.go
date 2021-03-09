@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
@@ -30,12 +31,18 @@ const (
 	Replicas   = "replicas"
 )
 
+var (
+	partitionCount    int32
+	retentionPeriodMs int
+)
+
 type Options struct {
-	topicName    string
-	partitions   int32
-	retentionMs  int
-	kafkaID      string
-	outputFormat string
+	topicName      string
+	partitionsStr  string
+	retentionMsStr string
+	kafkaID        string
+	outputFormat   string
+	interactive    bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -58,25 +65,77 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Long:    localizer.MustLocalizeFromID("kafka.topic.create.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.topic.create.cmd.example"),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if len(args) == 0 {
-				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.create.error.topicNameIsRequired"))
+			if !opts.IO.CanPrompt() && len(args) == 0 {
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: "argument.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Argument": "Name",
+					},
+				}))
+			} else if len(args) == 0 {
+				opts.interactive = true
 			}
-			opts.topicName = args[0]
+
+			if !opts.interactive {
+				opts.topicName = args[0]
+
+				if err = topic.ValidateName(opts.topicName); err != nil {
+					return err
+				}
+
+				if opts.partitionsStr != "" {
+					partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+					if err != nil {
+						return err
+					}
+
+					if err = topic.ValidatePartitionsN(partitionCount); err != nil {
+						return err
+					}
+				} else {
+					partitionCount = 1
+				}
+
+				if opts.retentionMsStr != "" {
+					retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
+					if err != nil {
+						return err
+					}
+
+					if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+						return err
+					}
+				} else {
+					retentionPeriodMs = -1
+				}
+			}
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
 				return err
 			}
 
-			if err = topic.ValidateName(opts.topicName); err != nil {
-				return err
+			if opts.retentionMsStr != "" {
+				// convert the value from "--retention-ms" to int
+				// nolint:govet
+				retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
+				if err != nil {
+					return err
+				}
+
+				if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+					return err
+				}
 			}
 
-			if err = topic.ValidatePartitionsN(opts.partitions); err != nil {
-				return err
-			}
+			if opts.partitionsStr != "" {
+				partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+				if err != nil {
+					return err
+				}
 
-			if err = topic.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
-				return err
+				if err = topic.ValidatePartitionsN(partitionCount); err != nil {
+					return err
+				}
 			}
 
 			if opts.kafkaID != "" {
@@ -101,13 +160,22 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
-	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
+	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
+	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
 
 	return cmd
 }
 
 func runCmd(opts *Options) error {
+
+	if opts.interactive {
+		// run the create command interactively
+		err := runInteractivePrompt(opts)
+		if err != nil {
+			return err
+		}
+	}
+
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -131,8 +199,8 @@ func runCmd(opts *Options) error {
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
 			ReplicationFactor: &replicas,
-			NumPartitions:     &opts.partitions,
-			Config:            topic.CreateConfig(opts.retentionMs),
+			NumPartitions:     &partitionCount,
+			Config:            topic.CreateConfig(retentionPeriodMs),
 		},
 	}
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
@@ -195,6 +263,89 @@ func runCmd(opts *Options) error {
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
 		_ = dump.YAML(opts.IO.Out, data)
+	}
+
+	return nil
+}
+
+func runInteractivePrompt(opts *Options) (err error) {
+
+	_, err = opts.Connection()
+	if err != nil {
+		return err
+	}
+
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
+	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
+
+	promptName := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.name.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.name.help"),
+	}
+
+	err = survey.AskOne(promptName, &opts.topicName, survey.WithValidator(survey.Required))
+	if err != nil {
+		return err
+	}
+
+	if err = topic.ValidateName(opts.topicName); err != nil {
+		return err
+	}
+
+	if opts.partitionsStr == "" {
+		logger.Debug(localizer.MustLocalizeFromID("kafka.topic.common.log.debug.interactive.partitionsNotSet"))
+
+		partitionsPrompt := &survey.Input{
+			Message: localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.message"),
+			Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.help"),
+		}
+
+		err = survey.AskOne(partitionsPrompt, &opts.partitionsStr)
+		if err != nil {
+			return err
+		}
+
+		if opts.partitionsStr != "" {
+			partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
+			if err != nil {
+				return err
+			}
+
+			if err = topic.ValidatePartitionsN(partitionCount); err != nil {
+				return err
+			}
+		}
+	}
+
+	if opts.retentionMsStr == "" {
+		logger.Debug(localizer.MustLocalizeFromID("kafka.topic.common.log.debug.interactive.retentionMsNotSet"))
+
+		retentionPrompt := &survey.Input{
+			Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
+			Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.help"),
+		}
+
+		err = survey.AskOne(retentionPrompt, &opts.retentionMsStr)
+		if err != nil {
+			return err
+		}
+
+		if opts.retentionMsStr != "" {
+			// convert the value from "--retention-ms" to int
+			// nolint:govet
+			retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
+			if err != nil {
+				return err
+			}
+
+			if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -39,6 +39,7 @@ type Options struct {
 	retentionMsStr string
 	kafkaID        string
 	outputFormat   string
+	interactive    bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -61,7 +62,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.topic.update.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.topic.update.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.topic.update.cmd.example"),
-		Args:    cobra.ExactArgs(1),
+		Args:    cobra.RangeArgs(0, 1),
 		// Dynamic completion of the topic name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
@@ -83,52 +84,55 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if len(args) > 0 {
+			if !opts.IO.CanPrompt() && len(args) == 0 {
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: "argument.error.requiredWhenNonInteractive",
+					TemplateData: map[string]interface{}{
+						"Argument": "Name",
+					},
+				}))
+			} else if len(args) == 0 {
+				opts.interactive = true
+			}
+
+			if !opts.interactive {
 				opts.topicName = args[0]
-			}
 
-			logger, err := opts.Logger()
-			if err != nil {
-				return err
-			}
+				logger, err := opts.Logger()
+				if err != nil {
+					return err
+				}
 
-			if opts.retentionMsStr == "" && opts.partitionsStr == "" {
-				logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
-				return nil
+				if opts.retentionMsStr == "" && opts.partitionsStr == "" {
+					logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
+					return nil
+				}
+
+				if err = topic.ValidateName(opts.topicName); err != nil {
+					return err
+				}
 			}
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
 				return err
 			}
 
-			if err = topic.ValidateName(opts.topicName); err != nil {
-				return err
-			}
-
 			// check if the partition flag is set
-			// and if so try to convert the value from string to int32
 			if opts.partitionsStr != "" {
-				// convert the value from "partitions" to int32
-				// nolint:govet
-				p, err := strconv.ParseInt(opts.partitionsStr, 10, 32)
+				partitionCount, err := topic.ConvertPartitionsToInt(opts.partitionsStr)
 				if err != nil {
-					return flag.InvalidArgumentError("--partitions", opts.partitionsStr, err)
+					return err
 				}
-				partitionCount = int32(p)
 
 				if err = topic.ValidatePartitionsN(partitionCount); err != nil {
 					return err
 				}
 			}
 
-			// check if the retention flag is set
-			// and if so try to convert the value from string to int
 			if opts.retentionMsStr != "" {
-				// convert the value from "--retention-ms" to int
-				// nolint:govet
-				retentionPeriodMs, err = strconv.Atoi(opts.retentionMsStr)
+				retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
 				if err != nil {
-					return flag.InvalidArgumentError("--retention-ms", opts.retentionMsStr, err)
+					return err
 				}
 
 				if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
@@ -162,6 +166,15 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCmd(opts *Options) error {
+
+	if opts.interactive {
+		// run the update command interactively
+		err := runInteractivePrompt(opts)
+		if err != nil {
+			return err
+		}
+	}
+
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -302,6 +315,58 @@ func runCmd(opts *Options) error {
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(response)
 		_ = dump.YAML(opts.IO.Out, data)
+	}
+
+	return nil
+}
+
+func runInteractivePrompt(opts *Options) (err error) {
+
+	_, err = opts.Connection()
+	if err != nil {
+		return err
+	}
+
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
+	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
+
+	promptName := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.name.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.name.help"),
+	}
+
+	err = survey.AskOne(promptName, &opts.topicName, survey.WithValidator(survey.Required))
+	if err != nil {
+		return err
+	}
+
+	if opts.retentionMsStr == "" {
+		logger.Debug(localizer.MustLocalizeFromID("kafka.topic.common.log.debug.interactive.retentionMsNotSet"))
+
+		retentionPrompt := &survey.Input{
+			Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
+			Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.help"),
+		}
+
+		err = survey.AskOne(retentionPrompt, &opts.retentionMsStr)
+		if err != nil {
+			return err
+		}
+
+		if opts.retentionMsStr != "" {
+			retentionPeriodMs, err := topic.ConvertRetentionMsToInt(opts.partitionsStr)
+			if err != nil {
+				return err
+			}
+
+			if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil

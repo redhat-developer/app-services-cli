@@ -27,9 +27,9 @@ $ rhoas kafka topic create topic-1
 === Options
 
 ....
-  -o, --output string      Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
-      --partitions int32   The number of partitions in the topic (default 1)
-      --retention-ms int   The period of time in milliseconds the broker will retain a partition log before deleting it (default -1)
+  -o, --output string         Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
+      --partitions string     The number of partitions in the topic
+      --retention-ms string   The period of time in milliseconds the broker will retain a partition log before deleting it
 ....
 
 === Options inherited from parent commands
