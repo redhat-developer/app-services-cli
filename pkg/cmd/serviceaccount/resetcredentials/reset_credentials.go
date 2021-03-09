@@ -32,6 +32,7 @@ type Options struct {
 	filename   string
 
 	interactive bool
+	force       bool
 }
 
 // NewResetCredentialsCommand creates a new command to delete a service account
@@ -88,6 +89,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, localizer.MustLocalizeFromID("serviceAccount.common.flag.overwrite.description"))
 	cmd.Flags().StringVar(&opts.filename, "file-location", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.fileLocation.description"))
 	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.fileFormat.description"))
+	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("serviceAccount.resetCredentials.flag.force.description"))
 
 	return cmd
 }
@@ -133,23 +135,25 @@ func runResetCredentials(opts *Options) (err error) {
 		}))
 	}
 
-	// prompt the user to confirm their wish to proceed with this action
-	var confirmReset bool
-	promptConfirmDelete := &survey.Confirm{
-		Message: localizer.MustLocalize(&localizer.Config{
-			MessageID: "serviceAccount.resetCredentials.input.confirmReset.message",
-			TemplateData: map[string]interface{}{
-				"ID": opts.id,
-			},
-		}),
-	}
+	if !opts.force {
+		// prompt the user to confirm their wish to proceed with this action
+		var confirmReset bool
+		promptConfirmDelete := &survey.Confirm{
+			Message: localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.resetCredentials.input.confirmReset.message",
+				TemplateData: map[string]interface{}{
+					"ID": opts.id,
+				},
+			}),
+		}
 
-	if err = survey.AskOne(promptConfirmDelete, &confirmReset); err != nil {
-		return err
-	}
-	if !confirmReset {
-		logger.Debug(localizer.MustLocalizeFromID("serviceAccount.resetCredentials.log.debug.cancelledReset"))
-		return nil
+		if err = survey.AskOne(promptConfirmDelete, &confirmReset); err != nil {
+			return err
+		}
+		if !confirmReset {
+			logger.Debug(localizer.MustLocalizeFromID("serviceAccount.resetCredentials.log.debug.cancelledReset"))
+			return nil
+		}
 	}
 
 	updatedServiceAccount, err := resetCredentials(serviceAcctName, opts)
