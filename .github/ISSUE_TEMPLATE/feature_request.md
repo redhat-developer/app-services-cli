@@ -16,4 +16,4 @@ How will it benefit the CLI and its users?
 
 ### Additional context
 
-Add any other context like screenshots or mockups are helpful, if applicable.
+Add any other context like screenshots or mockups, if applicable.
