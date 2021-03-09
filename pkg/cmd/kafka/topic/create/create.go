@@ -126,11 +126,11 @@ func runCmd(opts *Options) error {
 
 	createTopicReq := api.CreateTopic(ctx)
 
-	// var replicas int32 = 3
+	var replicas int32 = 3
 	topicInput := strimziadminclient.NewTopicInput{
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
-			// ReplicationFactor: &replicas,
+			ReplicationFactor: &replicas,
 			NumPartitions: &opts.partitions,
 			Config:        topic.CreateConfig(opts.retentionMs),
 		},
