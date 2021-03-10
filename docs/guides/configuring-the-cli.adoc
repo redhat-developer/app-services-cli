@@ -15,13 +15,13 @@ NOTE: Run `echo $0` to find what shell you are currently running.
 ====== Installing Bash completions on Linux
 
 1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place it in a special Bash completions directory.
+2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
 3. Open a new terminal window for the changes to be applied.
 
 ====== Installing Bash completions on macOS
 
 1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place it in a special Bash completions directory.
+2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
 3. Open a new terminal window for the changes to be applied.
 
 ===== Zsh

@@ -2,11 +2,11 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Generate completion script for Zsh shell
+Generate command completion script for Zsh shell
 
 === Synopsis
 
-Generate completion script for Zsh shell.
+Generate command completion script for Zsh shell.
 
 1. Run `rhoas completion zsh > "${fpath[1]}/_rhoas"` to install the completion script.
 2. Unless already installed, run `echo "autoload -U compinit; compinit" >> ~/.zshrc` to enable shell completions for Zsh.
@@ -26,5 +26,5 @@ rhoas completion zsh
 
 === SEE ALSO
 
-* link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs shell completion for the given shell (bash, zsh or fish)
+* link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
 

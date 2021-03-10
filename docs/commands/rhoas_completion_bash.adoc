@@ -2,21 +2,21 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Generate completion script for Bash shell
+Generate command completion script for Bash shell
 
 === Synopsis
 
-Generate completion script for Bash shell.
+Generate command completion script for Bash shell.
 
 Installing on Linux:
 
 1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place it in a special Bash completions directory.
+2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
 
 Installing on macOS:
 
 1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place it in a special Bash completions directory.
+2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
 
 
 ....
@@ -32,5 +32,5 @@ rhoas completion bash
 
 === SEE ALSO
 
-* link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs shell completion for the given shell (bash, zsh or fish)
+* link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
 
