@@ -1,29 +1,28 @@
-=== Installing the CLI
+=== Installing rhoas
+
+The following section describes how to install `rhoas` on different platforms.
 
 NOTE: In the following guides replace `VERSION` with the release version of the CLI.
 
-==== Linux/macOS
+==== Installing rhoas on Linux and macOS
 
-1. Download the latest CLI binary into `/usr/local/bin` (default):
+1. To install the latest release of `rhoas`, you can run the following script:
 +
 [source,shell]
 ----
-curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | sudo bash
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash
 ----
++ 
+CAUTION: Always inspect a script before running it.
 +
-You can download a specific version of the CLI by passing an argument:
-+
-[source,shell]
-----
-curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | sudo bash -s $VERSION
-----
-+
-You can set also set custom download location for the binary:
+You can install a specific version of the CLI to install by passing an argument:
 +
 [source,shell]
 ----
-curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s "" "/your/custom/path"
+curl -o- https://raw.githubusercontent.com/bf3fc6c/cli/main/scripts/install.sh | bash -s $VERSION
 ----
++
+NOTE: On Linux, `rhoas` will be installed to `$HOME/.local/bin`, and on macOS it will be installed to `$HOME/bin`. These should already be on your `PATH`, but if not please add them so that you can run `rhoas` from any directory.
 
 2. The CLI is now installed! To verify this, run a command:
 +
@@ -33,7 +32,7 @@ $ rhoas --version
 rhoas version <latest-version>
 ----
 
-==== Fedora
+==== Installing rhoas on Fedora
 
 You can install the RPM on Fedora using DNF:
 
@@ -50,7 +49,7 @@ $ rhoas --version
 rhoas version ${VERSION}
 ----
 
-==== RHEL/Centos
+==== Installing rhoas on RHEL and Centos
 
 You can install the RPM on RHEL and CentOS using Yum:
 
@@ -66,6 +65,20 @@ The CLI is now installed and ready to use. To verify this, run a command:
 $ rhoas --version
 rhoas version ${VERSION}
 ----
+
+==== Installing rhoas on Windows
+
+1. Download the latest Windows Zip release from link:https://github.com/bf3fc6c/cli/releases[Releases].
+2. Create a folder at `C:\rhoas`.
+3. Extract the `rhoas.exe` file from the Zip folder.
+4. Move the `rhoas.exe` file to `C:\rhoas`.
+
+==== Setting the `PATH` variable for Windows 10
+
+1. Click **Search** and type `env` or `environment`.
+2. Select **Edit environment variables for your account**.
+3. Select **Path** from the **Variable** section and click **Edit**.
+4. Click **New** and type `C:\rhoas` into the field or click **Browse** and select the directory, and click **OK**.
 
 ==== Next steps
 
