@@ -53,22 +53,17 @@ type Credentials struct {
 	ClientSecret string `json:"client_secret,omitempty"`
 }
 
-// AbsolutePath returns the absolute path for the credentials file
-// returning a default location based on the output format if customLocation
-// is empty
-func AbsolutePath(outputFormat string, customLocation string) (filePath string) {
-	filePath = customLocation
-	if filePath == "" {
-		switch outputFormat {
-		case "env":
-			filePath = ".env"
-		case "properties":
-			filePath = "credentials.properties"
-		case "json":
-			filePath = "credentials.json"
-		case "kubernetes-secret":
-			filePath = "credentials.yaml"
-		}
+// GetDefaultPath returns the default absolute path for the credentials file
+func GetDefaultPath(outputFormat string) (filePath string) {
+	switch outputFormat {
+	case "env":
+		filePath = ".env"
+	case "properties":
+		filePath = "credentials.properties"
+	case "json":
+		filePath = "credentials.json"
+	case "kubernetes-secret":
+		filePath = "credentials.yaml"
 	}
 
 	pwd, err := os.Getwd()
@@ -83,13 +78,16 @@ func AbsolutePath(outputFormat string, customLocation string) (filePath string) 
 
 // Write saves the credentials to a file
 // in the specified output format
-func Write(output string, fileName string, credentials *Credentials) error {
+func Write(output string, filepath string, credentials *Credentials) error {
 	fileTemplate := getFileFormat(output)
 	fileBody := fmt.Sprintf(fileTemplate, credentials.ClientID, credentials.ClientSecret)
 
 	fileData := []byte(fileBody)
 
-	return ioutil.WriteFile(fileName, fileData, 0600)
+	// replace any env vars in the file path
+	trueFilePath := os.ExpandEnv(filepath)
+
+	return ioutil.WriteFile(trueFilePath, fileData, 0600)
 }
 
 func getFileFormat(output string) (format string) {
@@ -113,7 +111,7 @@ func getFileFormat(output string) (format string) {
 func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (string, bool, error) {
 	chooseFileLocation := true
 
-	defaultPath := AbsolutePath(outputFormat, filePath)
+	defaultPath := GetDefaultPath(outputFormat)
 
 	for chooseFileLocation {
 		// choose location
@@ -179,5 +177,6 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 		return "", overwrite, fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.mustSpecifyFile"))
 	}
 
-	return "", overwrite, nil
+	fmt.Println(filePath)
+	return filePath, overwrite, nil
 }
