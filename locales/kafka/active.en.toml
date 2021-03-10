@@ -20,10 +20,10 @@ illegal search value "{{.Search}}", search input must satisfy the following cond
   - must only consist of alphanumeric characters, '-', '_' and '%'
 '''
 
-[kafka.common.error.notFoundErrorById]
+[kafka.common.error.notFoundByIdError]
 one = 'Kafka instance with ID "{{.ID}}" not found'
 
-[kafka.common.error.notFoundErrorByName]
+[kafka.common.error.notFoundByNameError]
 one = 'Kafka instance "{{.Name}}" not found'
 
 [kafka.common.error.notReadyError]

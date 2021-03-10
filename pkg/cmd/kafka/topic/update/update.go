@@ -239,6 +239,10 @@ func runCmd(opts *Options) error {
 	response, httpRes, topicErr := updateTopicReq.Execute()
 	// handle error
 	if topicErr.Error() != "" {
+		if httpRes == nil {
+			return topicErr
+		}
+
 		switch httpRes.StatusCode {
 		case 404:
 			return errors.New(localizer.MustLocalize(&localizer.Config{
@@ -251,6 +255,13 @@ func runCmd(opts *Options) error {
 		case 401:
 			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unauthorized",
+				TemplateData: map[string]interface{}{
+					"Operation": "update",
+				},
+			}))
+		case 403:
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.forbidden",
 				TemplateData: map[string]interface{}{
 					"Operation": "update",
 				},

@@ -18,7 +18,7 @@ func (e *Error) Error() string {
 func ErrorNotFound(id string) *Error {
 	return &Error{
 		Err: errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.common.error.notFoundErrorById",
+			MessageID: "kafka.common.error.notFoundByIdError",
 			TemplateData: map[string]interface{}{
 				"ID": id,
 			},
@@ -29,7 +29,7 @@ func ErrorNotFound(id string) *Error {
 func ErrorNotFoundByName(name string) *Error {
 	return &Error{
 		Err: errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.common.error.notFoundErrorByName",
+			MessageID: "kafka.common.error.notFoundByNameError",
 			TemplateData: map[string]interface{}{
 				"Name": name,
 			},

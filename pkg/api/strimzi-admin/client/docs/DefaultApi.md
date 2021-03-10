@@ -1,6 +1,6 @@
 # \DefaultApi
 
-All URIs are relative to *http://localhost/rest*
+All URIs are relative to *https://api.openshift.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

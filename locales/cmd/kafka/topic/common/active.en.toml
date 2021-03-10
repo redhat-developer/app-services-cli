@@ -19,6 +19,10 @@ one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the
 one = 'you are unauthorized to {{.Operation}} this topic'
 other = 'you are unauthorized to {{.Operation}} these topics'
 
+[kafka.topic.common.error.forbidden]
+one = 'you are forbidden to {{.Operation}} this topic'
+other = 'you are forbidden to {{.Operation}} these topics'
+
 [kafka.topic.common.error.internalServerError]
 one = 'internal server error'
 

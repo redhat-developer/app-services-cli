@@ -7,8 +7,14 @@ info:
     name: Apache 2.0
     url: "https://www.apache.org/licenses/LICENSE-2.0"
 servers:
-  - url: "/rest"
+  - url: "https://api.openshift.com"
     description: Main (production) server
+  - url: "https://api.stage.openshift.com"
+    description: Staging server
+  - url: "http://localhost:8001"
+    description: localhost
+  - url: "http://localhost:8000"
+    description: localhost
 paths:
   /topics:
     get:
@@ -330,11 +336,6 @@ components:
         - count
       type: object
       properties:
-        items:
-          description: List of topics
-          type: array
-          items:
-            $ref: "#/components/schemas/Topic"
         offset:
           description: The page offset
           type: integer
@@ -344,6 +345,11 @@ components:
         count:
           description: Total number of topics
           type: integer
+        items:
+          description: List of topics
+          type: array
+          items:
+            $ref: "#/components/schemas/Topic"
       example:
         items:
           - name: my-topic

@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Items** | [**[]Topic**](Topic.md) | List of topics | 
 **Offset** | **int32** | The page offset | 
 **Limit** | **int32** | number of entries per page | 
 **Count** | **int32** | Total number of topics | 
+**Items** | [**[]Topic**](Topic.md) | List of topics | 
 
 ## Methods
 
 ### NewTopicsList
 
-`func NewTopicsList(items []Topic, offset int32, limit int32, count int32, ) *TopicsList`
+`func NewTopicsList(offset int32, limit int32, count int32, items []Topic, ) *TopicsList`
 
 NewTopicsList instantiates a new TopicsList object
 This constructor will assign default values to properties that have it defined,
@@ -27,26 +27,6 @@ will change when the set of required properties is changed
 NewTopicsListWithDefaults instantiates a new TopicsList object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetItems
-
-`func (o *TopicsList) GetItems() []Topic`
-
-GetItems returns the Items field if non-nil, zero value otherwise.
-
-### GetItemsOk
-
-`func (o *TopicsList) GetItemsOk() (*[]Topic, bool)`
-
-GetItemsOk returns a tuple with the Items field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetItems
-
-`func (o *TopicsList) SetItems(v []Topic)`
-
-SetItems sets Items field to given value.
-
 
 ### GetOffset
 
@@ -106,6 +86,26 @@ and a boolean to check if the value has been set.
 `func (o *TopicsList) SetCount(v int32)`
 
 SetCount sets Count field to given value.
+
+
+### GetItems
+
+`func (o *TopicsList) GetItems() []Topic`
+
+GetItems returns the Items field if non-nil, zero value otherwise.
+
+### GetItemsOk
+
+`func (o *TopicsList) GetItemsOk() (*[]Topic, bool)`
+
+GetItemsOk returns a tuple with the Items field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetItems
+
+`func (o *TopicsList) SetItems(v []Topic)`
+
+SetItems sets Items field to given value.
 
 
 
