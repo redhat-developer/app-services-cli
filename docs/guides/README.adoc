@@ -2,14 +2,11 @@
 
 :toc:
 
-== link:getting-started.adoc[Installing the CLI]
-=== link:getting-started.adoc#linux[Linux]
-=== link:getting-started.adoc#macos[macOS]
-=== link:getting-started.adoc#fedorarhelcentos[Fedora/RHEL/CentOS]
-== link:configuring-the-cli.adoc[Configuring the CLI]
-=== link:configuring-the-cli.adoc#enabling-tab-completion[Enabling tab completion]
-=== link:configuring-the-cli.adoc#linux[Linux]
-=== link:configuring-the-cli.adoc#macos[macOS]
+== link:getting-started.adoc#installing-rhoas-on-linux-and-macos[Installing rhoas on Linux and macOS]
+== link:getting-started.adoc#installing-rhoas-on-fedora[Installing rhoas on Fedora]
+== link:getting-started.adoc#installing-rhoas-on-rhel-and-centos[Installing rhoas on RHEL and CentOS]
+== link:getting-started.adoc#installing-rhoas-on-windows[Installing rhoas on Windows]
+=== link:getting-started.adoc#setting-the-path-variable-for-windows-10[Setting the `PATH` variable for Windows 10]
 == link:logging-in.adoc[Logging in]
 == link:using-the-cli.adoc[Using the CLI]
 === link:using-the-cli.adoc#creating-a-kafka-instance[Creating a Kafka instance]

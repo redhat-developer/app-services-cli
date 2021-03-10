@@ -2,9 +2,10 @@
 
 ==== Enabling tab completion
 
-After you install the `rhoas` CLI, you can enable tab completion to automatically complete `rhoas` commands or suggest options when you pres Tab.
+After you install the `rhoas` CLI, you can enable tab completion to automatically complete `rhoas` commands or suggest options when you press <TAB><TAB>.
 
 ===== Prerequisites
+
 * You must have link:getting-started.adoc[installed the `rhoas` CLI].
 
 ===== Linux
