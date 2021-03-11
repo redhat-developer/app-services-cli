@@ -36,6 +36,7 @@ $ rhoas login --print-sso-url
       --mas-auth-url string   The URL of the MAS-SSO Authentication server. (default "https://keycloak-edge-redhat-rhoam-user-sso.apps.mas-sso-stage.1gzl.s1.devshift.org/auth/realms/mas-sso-staging")
       --print-sso-url         Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.
       --scope stringArray     Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope. (default [openid])
+  -t, --token string          Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token.
 ....
 
 === Options inherited from parent commands

@@ -44,6 +44,9 @@ one = "The URL of the SSO Authentication server."
 description = 'Description for the --auth-url flag'
 one = "The URL of the MAS-SSO Authentication server."
 
+[login.flag.token]
+one = "Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token."
+
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'
 one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser."
@@ -79,6 +82,10 @@ one = 'Redirected to callback URL: {{.URL}}'
 [login.log.info.loginSuccess]
 description = 'Log in success message'
 one = 'You are now logged in as "{{.Username}}"'
+
+[login.log.info.loginSuccessNoUsername]
+description = 'Log in success message'
+one = 'You are now logged in'
 
 [login.log.info.openSSOUrl]
 description = 'Info message for opening auth URL instructions'
