@@ -1,30 +1,39 @@
 === Configuring the CLI
 
+==== Prerequisites
+
+* You must have link:getting-started.adoc[installed the `rhoas` CLI].
+
 ==== Enabling tab completion
 
 After you install the `rhoas` CLI, you can enable tab completion to automatically complete `rhoas` commands or suggest options when you press <TAB><TAB>.
 
-===== Prerequisites
+NOTE: Run `echo $0` to find what shell you are currently running. 
 
-* You must have link:getting-started.adoc[installed the `rhoas` CLI].
+===== Bash
 
-===== Linux
+====== Installing Bash completions on Linux
 
-[source,shell]
-----
-rhoas completion bash | sudo tee /etc/bash_completion.d/rhoas
-----
+1. Run `rhoas completion bash > rhoas_completions` to create the script file.
+2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
+3. Open a new terminal window for the changes to be applied.
 
-Tab completion is enabled when you open a new terminal window.
+====== Installing Bash completions on macOS
 
-===== macOS
+1. Run `rhoas completion bash > rhoas_completions` to create the script file.
+2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
+3. Open a new terminal window for the changes to be applied.
 
-[source,shell]
-----
-rhoas completion bash | sudo tee /usr/local/etc/bash_completion.d/
-----
- 
-Tab completion is enabled when you open a new terminal window.
+===== Zsh
+
+1. Run `rhoas completion zsh > "${fpath[1]}/_rhoas"` to install the completion script.
+2. Unless already installed, run `echo "autoload -U compinit; compinit" >> ~/.zshrc` to enable shell completions for Zsh.
+3. Open a new terminal window for the changes to be applied.
+
+===== Fish
+
+1. Run `rhoas completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+2. Open a new terminal window for the changes to be applied.
 
 ==== Next steps
 
