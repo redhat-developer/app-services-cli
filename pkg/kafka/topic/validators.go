@@ -2,7 +2,10 @@ package topic
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
+
+	"strconv"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
@@ -54,8 +57,10 @@ func ValidateName(val interface{}) error {
 
 // ValidatePartitionsN performs validation on the number of partitions v
 func ValidatePartitionsN(v interface{}) error {
-	partitions, ok := v.(int32)
-	if !ok {
+	partitionsStr := fmt.Sprintf("%v", v)
+
+	partitions, err := strconv.Atoi(partitionsStr)
+	if err != nil {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "common.error.castError",
 			TemplateData: map[string]interface{}{
@@ -107,8 +112,10 @@ func ValidateReplicationFactorN(v interface{}) error {
 // ValidateMessageRetentionPeriod validates the value (ms) of the retention period
 // the valid values can range from [-1,...]
 func ValidateMessageRetentionPeriod(v interface{}) error {
-	retentionPeriodMs, ok := v.(int)
-	if !ok {
+	retentionPeriodMsStr := fmt.Sprintf("%v", v)
+
+	retentionPeriodMs, err := strconv.Atoi(retentionPeriodMsStr)
+	if err != nil {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "common.error.castError",
 			TemplateData: map[string]interface{}{

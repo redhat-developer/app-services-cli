@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -30,7 +31,7 @@ import (
 
 var (
 	partitionCount    int32
-	retentionPeriodMs int
+	retentionPeriodMs int = math.MinInt32
 )
 
 type Options struct {
@@ -62,15 +63,12 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.topic.update.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.topic.update.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.topic.update.cmd.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.ExactArgs(1),
 		// Dynamic completion of the topic name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}
 
-			var searchName string
-			if len(args) > 0 {
-				searchName = args[0]
-			}
+			var searchName string = args[0]
 
 			cfg, err := opts.Config.Load()
 			if err != nil {
@@ -84,19 +82,20 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if !opts.IO.CanPrompt() && len(args) == 0 {
+			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 					MessageID: "argument.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
 						"Argument": "Name",
 					},
 				}))
-			} else if len(args) == 0 {
+			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" {
 				opts.interactive = true
 			}
 
+			opts.topicName = args[0]
+
 			if !opts.interactive {
-				opts.topicName = args[0]
 
 				// nolint:govet
 				logger, err := opts.Logger()
@@ -161,7 +160,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
 	// cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
-	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
+	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
 
 	return cmd
 }
@@ -244,6 +243,12 @@ func runCmd(opts *Options) error {
 	}
 
 	if opts.retentionMsStr != "" {
+		needsUpdate = true
+		topicConfig := topic.CreateConfig(retentionPeriodMs)
+		topicSettings.SetConfig(*topicConfig)
+	}
+
+	if opts.retentionMsStr == "" && retentionPeriodMs != math.MinInt32 {
 		needsUpdate = true
 		topicConfig := topic.CreateConfig(retentionPeriodMs)
 		topicSettings.SetConfig(*topicConfig)
@@ -336,39 +341,14 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
 
-	promptName := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.name.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.name.help"),
+	retentionPrompt := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
 	}
 
-	err = survey.AskOne(promptName, &opts.topicName, survey.WithValidator(survey.Required))
+	err = survey.AskOne(retentionPrompt, &retentionPeriodMs, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
-	}
-
-	if opts.retentionMsStr == "" {
-		logger.Debug(localizer.MustLocalizeFromID("kafka.topic.common.log.debug.interactive.retentionMsNotSet"))
-
-		retentionPrompt := &survey.Input{
-			Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
-			Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.help"),
-		}
-
-		err = survey.AskOne(retentionPrompt, &opts.retentionMsStr)
-		if err != nil {
-			return err
-		}
-
-		if opts.retentionMsStr != "" {
-			retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
-			if err != nil {
-				return err
-			}
-
-			if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
-				return err
-			}
-		}
 	}
 
 	return nil

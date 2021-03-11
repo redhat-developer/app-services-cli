@@ -3,13 +3,15 @@ description = "Description for --output flag"
 one = 'Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml"'
 other = 'Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"'
 
-[kafka.topic.common.flag.partitions.description]
+[kafka.topic.common.input.partitions.description]
+description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'
 
 [kafka.topic.common.flag.replicas.description]
 one = 'The replication factor for the topic'
 
-[kafka.topic.common.flag.retentionMs.description]
+[kafka.topic.common.input.retentionMs.description]
+description = 'Description for the Retention input'
 one = 'The period of time in milliseconds the broker will retain a partition log before deleting it' 
 
 [kafka.topic.common.error.noKafkaSelected]
@@ -49,21 +51,10 @@ one = 'invalid replication factor {{.ReplicationFactor}}, minimum replication fa
 
 [kafka.topic.common.validation.retentionPeriod.error.invalid]
 one = 'invalid retention period {{.RetentionPeriod}}, minimum value is -1'
-[kafka.topic.common.log.debug.interactive.outputFormatNotSet]
-description = 'debug message'
-one = '--output flag is not set, prompting user to enter a value'
-
-[kafka.topic.common.log.debug.interactive.partitionsNotSet]
-description = 'debug message'
-one = '--partitions flag is not set, prompting user to enter a value'
-
-[kafka.topic.common.log.debug.interactive.retentionMsNotSet]
-description = 'debug message'
-one = '--retention-ms flag is not set, prompting user to enter a value'
 
 [kafka.topic.common.input.name.message]
 description = 'title for the Name input'
-one = "Name:"
+one = 'Name:'
 
 [kafka.topic.common.input.name.help]
 description = 'help for the Name input'
@@ -71,24 +62,20 @@ one = "Name for the Kafka topic"
 
 [kafka.topic.common.input.partitions.message]
 description = 'title for the Partitions input'
-one = "Partitions:"
+one = 'Number of Partitions:'
 
 [kafka.topic.common.input.partitions.help]
 description = 'help for the Partitions input'
-one = "The number of partitions in the topic"
+one = 'The number of partitions in the topic'
 
-[kafka.topic.common.input.partitions.invalid]
+[kafka.topic.common.input.partitions.error.invalid]
 description = 'Error message when an invalid partition value is entered'
-one = "invalid value for partition: {{.Partition}}"
+one = 'invalid value for partition: {{.Partition}}'
 
 [kafka.topic.common.input.retentionMs.message]
 description = 'title for the Retention input'
-one = "Retention (milliseconds):"
+one = 'Retention Period (milliseconds):'
 
-[kafka.topic.common.input.retentionMs.help]
-description = 'help for the Retention input'
-one = "The period of time in milliseconds the broker will retain a partition log before deleting it"
-
-[kafka.topic.common.input.retentionMs.invalid]
+[kafka.topic.common.input.retentionMs.error.invalid]
 description = 'Error message when an invalid retention period is entered'
-one = "invalid value for retention period: {{.RetentionMs}}"
+one = 'invalid value for retention period: {{.RetentionMs}}'

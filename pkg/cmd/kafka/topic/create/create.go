@@ -31,18 +31,13 @@ const (
 	Replicas   = "replicas"
 )
 
-var (
-	partitionCount    int32
-	retentionPeriodMs int
-)
-
 type Options struct {
-	topicName      string
-	partitionsStr  string
-	retentionMsStr string
-	kafkaID        string
-	outputFormat   string
-	interactive    bool
+	topicName    string
+	partitions   int32
+	retentionMs  int
+	kafkaID      string
+	outputFormat string
+	interactive  bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -64,6 +59,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.topic.create.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.topic.create.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.topic.create.cmd.example"),
+		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && len(args) == 0 {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
@@ -76,6 +72,10 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
+			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
+				return err
+			}
+
 			if !opts.interactive {
 				opts.topicName = args[0]
 
@@ -83,58 +83,11 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if opts.partitionsStr != "" {
-					// nolint:govet
-					partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
-					if err != nil {
-						return err
-					}
-
-					if err = topic.ValidatePartitionsN(partitionCount); err != nil {
-						return err
-					}
-				} else {
-					partitionCount = 1
-				}
-
-				if opts.retentionMsStr != "" {
-					retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
-					if err != nil {
-						return err
-					}
-
-					if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
-						return err
-					}
-				} else {
-					retentionPeriodMs = -1
-				}
-			}
-
-			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
-				return err
-			}
-
-			if opts.retentionMsStr != "" {
-				// nolint:govet
-				retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
-				if err != nil {
+				if err = topic.ValidatePartitionsN(opts.partitions); err != nil {
 					return err
 				}
 
-				if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
-					return err
-				}
-			}
-
-			if opts.partitionsStr != "" {
-				// nolint:govet
-				partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
-				if err != nil {
-					return err
-				}
-
-				if err = topic.ValidatePartitionsN(partitionCount); err != nil {
+				if err = topic.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
 					return err
 				}
 			}
@@ -161,8 +114,8 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
-	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.partitions.description"))
-	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.flag.retentionMs.description"))
+	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.description"))
+	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
 
 	return cmd
 }
@@ -200,8 +153,8 @@ func runCmd(opts *Options) error {
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
 			ReplicationFactor: &replicas,
-			NumPartitions:     &partitionCount,
-			Config:            topic.CreateConfig(retentionPeriodMs),
+			NumPartitions:     &opts.partitions,
+			Config:            topic.CreateConfig(opts.retentionMs),
 		},
 	}
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
@@ -288,65 +241,31 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &opts.topicName, survey.WithValidator(survey.Required))
+	err = survey.AskOne(promptName, &opts.topicName, survey.WithValidator(survey.Required), survey.WithValidator(topic.ValidateName))
 	if err != nil {
 		return err
 	}
 
-	if err = topic.ValidateName(opts.topicName); err != nil {
+	partitionsPrompt := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.help"),
+		Default: "1",
+	}
+
+	err = survey.AskOne(partitionsPrompt, &opts.partitions, survey.WithValidator(topic.ValidatePartitionsN))
+	if err != nil {
 		return err
 	}
 
-	if opts.partitionsStr == "" {
-		logger.Debug(localizer.MustLocalizeFromID("kafka.topic.common.log.debug.interactive.partitionsNotSet"))
-
-		partitionsPrompt := &survey.Input{
-			Message: localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.message"),
-			Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.help"),
-		}
-
-		err = survey.AskOne(partitionsPrompt, &opts.partitionsStr)
-		if err != nil {
-			return err
-		}
-
-		if opts.partitionsStr != "" {
-			// nolint:govet
-			partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
-			if err != nil {
-				return err
-			}
-
-			if err = topic.ValidatePartitionsN(partitionCount); err != nil {
-				return err
-			}
-		}
+	retentionPrompt := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
+		Default: "-1",
 	}
 
-	if opts.retentionMsStr == "" {
-		logger.Debug(localizer.MustLocalizeFromID("kafka.topic.common.log.debug.interactive.retentionMsNotSet"))
-
-		retentionPrompt := &survey.Input{
-			Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
-			Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.help"),
-		}
-
-		err = survey.AskOne(retentionPrompt, &opts.retentionMsStr)
-		if err != nil {
-			return err
-		}
-
-		if opts.retentionMsStr != "" {
-			// nolint:govet
-			retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
-			if err != nil {
-				return err
-			}
-
-			if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
-				return err
-			}
-		}
+	err = survey.AskOne(retentionPrompt, &opts.retentionMs, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
+	if err != nil {
+		return err
 	}
 
 	return nil

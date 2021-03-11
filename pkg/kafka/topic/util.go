@@ -35,7 +35,7 @@ func ConvertPartitionsToInt(partitionStr string) (int32, error) {
 
 	if err != nil {
 		return 0, errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.input.partitions.invalid",
+			MessageID: "kafka.topic.common.input.partitions.error.invalid",
 			TemplateData: map[string]interface{}{
 				"Partition": partitionStr,
 			},
@@ -51,7 +51,7 @@ func ConvertRetentionMsToInt(retentionMsStr string) (int, error) {
 
 	if err != nil {
 		return 0, errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.input.retentionMs.invalid",
+			MessageID: "kafka.topic.common.input.retentionMs.error.invalid",
 			TemplateData: map[string]interface{}{
 				"RetentionMs": retentionMsStr,
 			},
