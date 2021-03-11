@@ -1,6 +1,6 @@
 ---
 name: "Feedback"
-about: Give us general feedback about the rhoas CLI
+about: Give us general feedback about the RHOAS CLI
 title: ''
 labels: feedback
 assignees: ''
@@ -13,4 +13,3 @@ assignees: ''
 ## Are there features you'd like to see added?
 
 ## Anything else?
-
