@@ -1,40 +1,100 @@
-=== Configuring the CLI
+[id="proc-configuring-rhoas_{context}"]
+= Configuring rhoas
 
-==== Prerequisites
+[role="_abstract"]
+After you install the `rhoas` CLI,
+you can enable command completion to automatically complete `rhoas` commands or suggest options when you press *Tab*.
 
+NOTE: The procedure for enabling command completion depends on the shell you are using.
+To determine which shell you are using, run the `echo $0` command.
+
+ifdef::enterprise[]
+You can enable command completion for each of the following shells:
+
+* xref:_enabling_command_completion_on_bash[Bash]
+* xref:_enabling_command_completion_on_zsh[Zsh]
+* xref:_enabling_command_completion_on_fish[Fish]
+endif::[]
+
+.Prerequisites
+
+ifndef::enterprise[]
 * You must have link:getting-started.adoc[installed the `rhoas` CLI].
+endif::[]
+ifdef::enterprise[]
+* You must have xref:proc-installing-rhoas_{context}[installed the `rhoas` CLI].
+endif::[]
 
-==== Enabling tab completion
+== Enabling command completion on Bash
 
-After you install the `rhoas` CLI, you can enable tab completion to automatically complete `rhoas` commands or suggest options when you press <TAB><TAB>.
+.Procedure
 
-NOTE: Run `echo $0` to find what shell you are currently running. 
+. Create the `rhoas_completions` script file.
++
+[source,shell]
+----
+$ rhoas completion bash > rhoas_completions
+----
 
-===== Bash
+. Move the script file to a special Bash completions directory.
++
+--
+.Linux
+[source,shell]
+----
+$ sudo mv rhoas_completions /etc/bash_completion.d/rhoas
+----
 
-====== Installing Bash completions on Linux
+.macOS
+[source,shell]
+----
+$ sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas
+----
+--
 
-1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
-3. Open a new terminal window for the changes to be applied.
+. Open a new terminal window.
++
+Command completion is enabled.
 
-====== Installing Bash completions on macOS
+== Enabling command completion on Zsh
 
-1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
-3. Open a new terminal window for the changes to be applied.
+.Procedure
 
-===== Zsh
+. Install the command completion script.
++
+[source,shell]
+----
+$ rhoas completion zsh > "${fpath[1]}/_rhoas"
+----
 
-1. Run `rhoas completion zsh > "${fpath[1]}/_rhoas"` to install the completion script.
-2. Unless already installed, run `echo "autoload -U compinit; compinit" >> ~/.zshrc` to enable shell completions for Zsh.
-3. Open a new terminal window for the changes to be applied.
+. Unless already installed, enable command completions.
++
+[source,shell]
+----
+$ echo "autoload -U compinit; compinit" >> ~/.zshrc
+----
 
-===== Fish
+. Open a new terminal window.
++
+Command completion is enabled.
 
-1. Run `rhoas completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
-2. Open a new terminal window for the changes to be applied.
+== Enabling command completion on Fish
 
-==== Next steps
+.Procedure
+
+. Install fish completions.
++
+[source,shell]
+----
+$ rhoas completion -s fish > ~/.config/fish/completion/gh.fish
+----
+
+. Open a new terminal window.
++
+Command completion is enabled.
+
+ifndef::enterprise[]
+== Next steps
 
 link:logging-in.adoc[Logging in]
+endif::[]
