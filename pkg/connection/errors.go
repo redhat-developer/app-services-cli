@@ -9,11 +9,11 @@ import (
 
 // AuthError defines an Authentication error
 type AuthError struct {
-	Err    error
+	Err error
 }
 
 type MasAuthError struct {
-	Err    error
+	Err error
 }
 
 func (e *AuthError) Error() string {
