@@ -179,7 +179,10 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	topicToUpdate, httpRes, _ := api.GetTopic(context.Background(), opts.topicName).Execute()
+	topicToUpdate, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).Execute()
+	if httpRes == nil {
+		return topicErr
+	}
 	if httpRes.StatusCode == 404 {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.topic.common.error.topicNotFoundError",

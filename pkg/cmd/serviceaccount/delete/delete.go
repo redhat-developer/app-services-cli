@@ -73,7 +73,11 @@ func runDelete(opts *Options) (err error) {
 
 	api := connection.API()
 	a := api.Kafka().GetServiceAccountById(context.Background(), opts.id)
-	_, httpRes, _ := a.Execute()
+	_, httpRes, apiErr := a.Execute()
+
+	if httpRes == nil {
+		return apiErr
+	}
 
 	if httpRes.StatusCode == 404 {
 		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
@@ -126,6 +130,10 @@ func deleteServiceAccount(opts *Options) error {
 	_, httpRes, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
+		if httpRes == nil {
+			return apiErr
+		}
+
 		switch httpRes.StatusCode {
 		case 403:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
