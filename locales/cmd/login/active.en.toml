@@ -87,3 +87,15 @@ one = 'Open the following URL in your browser to log in:'
 [login.log.error.unableToStartServer]
 description = 'Error message for when unable to start server'
 one = 'unable to start server: {{.Error}}'
+
+[login.log.info.loggingIn]
+one = 'Logging in...'
+
+[login.log.info.loggedIn]
+one = 'Logged in successfully'
+
+[login.log.info.loggingInMAS]
+one = 'Logging in to MAS-SSO...'
+
+[login.log.info.loggedInMAS]
+one = 'Logged in successfully to MAS-SSO'

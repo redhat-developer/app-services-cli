@@ -37,14 +37,18 @@ type SSOConfig struct {
 // https://tools.ietf.org/html/rfc6749#section-4.1
 func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) (err error) {
 	// log in to SSO
+	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingIn"))
 	if err = a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
+	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedIn"))
 
+	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingInMAS"))
 	// log in to MAS-SSO
 	if err = a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
+	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedInMAS"))
 
 	return nil
 }
