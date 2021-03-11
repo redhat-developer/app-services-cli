@@ -1,8 +1,10 @@
 package topic
 
 import (
-	"fmt"
+	"errors"
 	"regexp"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
 const (
@@ -16,13 +18,24 @@ const (
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)
 	if !ok {
-		return fmt.Errorf("could not cast %v to string", val)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": val,
+				"Type":  "string",
+			},
+		}))
 	}
 
 	if len(name) < 1 {
-		return fmt.Errorf("topic name is required")
+		return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.validation.name.error.required"))
 	} else if len(name) > maxNameLength {
-		return fmt.Errorf("topic name cannot exceed %v characters", maxNameLength)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.validation.name.error.lengthError",
+			TemplateData: map[string]interface{}{
+				"MaxNameLen": maxNameLength,
+			},
+		}))
 	}
 
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
@@ -31,18 +44,35 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf("invalid topic name \"%v\", only letters (Aa-Zz), numbers, '_' and '-' are accepted", name)
+	return errors.New(localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.topic.common.validation.name.error.invalidChars",
+		TemplateData: map[string]interface{}{
+			"Name": name,
+		},
+	}))
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
 func ValidatePartitionsN(v interface{}) error {
 	partitions, ok := v.(int32)
 	if !ok {
-		return fmt.Errorf("could not cast %v to int32", v)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": v,
+				"Type":  "int32",
+			},
+		}))
 	}
 
 	if partitions < minPartitions {
-		return fmt.Errorf("invalid partition count %v, minimum partition count is %v", partitions, minPartitions)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.validation.partitions.error.invalid",
+			TemplateData: map[string]interface{}{
+				"Partitions":    partitions,
+				"MinPartitions": minPartitions,
+			},
+		}))
 	}
 
 	return nil
@@ -52,11 +82,23 @@ func ValidatePartitionsN(v interface{}) error {
 func ValidateReplicationFactorN(v interface{}) error {
 	replicas, ok := v.(int32)
 	if !ok {
-		return fmt.Errorf("could not cast %v to int32", v)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": v,
+				"Type":  "int32",
+			},
+		}))
 	}
 
 	if replicas < minReplicationFactor {
-		return fmt.Errorf("invalid replication factor %v, minimum replication factor is %v", replicas, minReplicationFactor)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.validation.replicationFactor.error.invalid",
+			TemplateData: map[string]interface{}{
+				"ReplicationFactor":    replicas,
+				"MinReplicationFactor": minReplicationFactor,
+			},
+		}))
 	}
 
 	return nil
@@ -67,11 +109,22 @@ func ValidateReplicationFactorN(v interface{}) error {
 func ValidateMessageRetentionPeriod(v interface{}) error {
 	retentionPeriodMs, ok := v.(int)
 	if !ok {
-		return fmt.Errorf("could not cast %v to int", v)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": v,
+				"Type":  "int",
+			},
+		}))
 	}
 
 	if retentionPeriodMs < -1 {
-		return fmt.Errorf("invalid retention period %v, minimum value is -1", retentionPeriodMs)
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.validation.retentionPeriod.error.invalid",
+			TemplateData: map[string]interface{}{
+				"RetentionPeriod": retentionPeriodMs,
+			},
+		}))
 	}
 
 	return nil

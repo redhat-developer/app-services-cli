@@ -31,3 +31,21 @@ one = 'unable to connect to Kafka instance "{{.Name}}"'
 
 [kafka.topic.common.error.notFoundError]
 one = 'topic "{{.TopicName}}" not found in Kafka instance "{{.InstanceName}}"'
+
+[kafka.topic.common.validation.name.error.required]
+one = 'topic name is required'
+
+[kafka.topic.common.validation.name.error.lengthError]
+one = 'topic name cannot exceed {{.MaxNameLen}} characters'
+
+[kafka.topic.common.validation.name.error.invalidChars]
+one = 'invalid topic name "{{.Name}}", only letters (Aa-Zz), numbers, "_" and "-" are accepted'
+
+[kafka.topic.common.validation.partitions.error.invalid]
+one = 'invalid partition count {{.Partitions}}, minimum partition count is {{.MinPartitions}}'
+
+[kafka.topic.common.validation.replicationFactor.error.invalid]
+one = 'invalid replication factor {{.ReplicationFactor}}, minimum replication factor is {{.MinReplicationFactor}}'
+
+[kafka.topic.common.validation.retentionPeriod.error.invalid]
+one = 'invalid retention period {{.RetentionPeriod}}, minimum value is -1'
