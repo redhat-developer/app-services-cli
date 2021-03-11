@@ -3,7 +3,6 @@ package create
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
@@ -84,10 +83,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: "kafka.common.error.noKafkaSelected",
+				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+					MessageID: "argument.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
-						"Flag": "name",
+						"Argument": "Name",
 					},
 				}))
 
