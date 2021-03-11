@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -32,7 +33,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Logger     func() (logging.Logger, error)
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 
 	outputFormat string
 	services     []string
@@ -84,9 +85,14 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *Options) error {
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil
+	}
+
 	pkgOpts := &pkgStatus.Options{
 		Config:     opts.Config,
-		Connection: opts.Connection,
+		Connection: connection,
 		Logger:     opts.Logger,
 		Services:   opts.services,
 	}

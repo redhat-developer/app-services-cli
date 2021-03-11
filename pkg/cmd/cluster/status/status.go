@@ -22,7 +22,7 @@ import (
 
 type Options struct {
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	IO         *iostreams.IOStreams
 
@@ -53,7 +53,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *Options) error {
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

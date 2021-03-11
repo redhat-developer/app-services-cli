@@ -8,6 +8,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -21,7 +22,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	pkgKafka "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
@@ -46,7 +46,7 @@ type Options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 }
 
@@ -122,7 +122,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -200,7 +200,7 @@ func runCreate(opts *Options) error {
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
 func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, err error) {
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}

@@ -15,7 +15,7 @@ import (
 
 type Options struct {
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
 }
 
@@ -40,13 +40,12 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *Options) (err error) {
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
 	}
 
-	_, err = opts.Connection()
+	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

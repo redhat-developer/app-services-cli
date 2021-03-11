@@ -23,7 +23,7 @@ type Options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 }
 
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
@@ -58,8 +58,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDescribe(opts *Options) error {
-
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

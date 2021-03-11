@@ -7,6 +7,7 @@ import (
 
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
@@ -17,7 +18,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ type options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 }
 
@@ -109,7 +109,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

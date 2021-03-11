@@ -8,6 +8,7 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka/topic"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
@@ -19,7 +20,6 @@ import (
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/spf13/cobra"
@@ -39,7 +39,7 @@ type Options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 }
 
@@ -108,7 +108,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *Options) error {
-	conn, err := opts.Connection()
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}

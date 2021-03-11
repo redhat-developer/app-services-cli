@@ -6,6 +6,7 @@ import (
 	"os"
 
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
 	"github.com/AlecAivazis/survey/v2"
 	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
@@ -15,7 +16,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -23,7 +23,7 @@ import (
 type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 
 	id         string
@@ -96,7 +96,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runResetCredentials(opts *Options) (err error) {
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -196,7 +196,7 @@ func runResetCredentials(opts *Options) (err error) {
 }
 
 func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, error) {
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +238,7 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 }
 
 func runInteractivePrompt(opts *Options) (err error) {
-	_, err = opts.Connection()
+	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
