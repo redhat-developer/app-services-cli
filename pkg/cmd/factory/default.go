@@ -94,7 +94,7 @@ func New(cliVersion string) *Factory {
 			return nil, err
 		}
 
-		builder.WithOpts(connectionCfg)
+		builder.WithConnectionConfig(connectionCfg)
 
 		conn, err = builder.Build()
 		if err != nil {

@@ -58,7 +58,7 @@ type KeycloakConnection struct {
 	masRealm          string
 	logger            logging.Logger
 	Config            config.IConfig
-	connectionOpts    *Config
+	connectionConfig  *Config
 }
 
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
@@ -73,7 +73,7 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 
 	// track if we need to update the config with new token values
 	var cfgChanged bool
-	if c.connectionOpts.RequireAuth {
+	if c.connectionConfig.RequireAuth {
 		// nolint:govet
 		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
 		if err != nil {
@@ -92,7 +92,7 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 		}
 	}
 
-	if c.connectionOpts.RequireMASAuth {
+	if c.connectionConfig.RequireMASAuth {
 		// nolint:govet
 		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
 		if err != nil {
