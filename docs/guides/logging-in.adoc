@@ -1,6 +1,6 @@
 === Logging in to the CLI
 
-You can log in to the `rhoas` CLI to access your managed application services.
+You can log in to the `rhoas` CLI to access your cloud application services.
 
 ==== Prerequisites
 * You must have a valid account to access Red Hat OpenShift Application Services.

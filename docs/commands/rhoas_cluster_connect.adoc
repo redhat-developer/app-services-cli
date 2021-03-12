@@ -17,7 +17,7 @@ This command will:
 1. Create a service account and mount it as a secret into your cluster. 
 If the cluster has a service account, it will be refreshed.
 
-2. Create a Managed Kafka Request object that can be used to create a ServiceBinding object using 
+2. Create a Kafka Request object that can be used to create a ServiceBinding object using 
 the Service Binding operator.
 https://github.com/redhat-developer/service-binding-operator
 
