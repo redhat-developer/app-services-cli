@@ -1,0 +1,49 @@
+name: Daily check for updates to KAS Fleet Manager OpenAPI
+
+on: 
+  push:
+    branches:
+      - pull-from-gh
+  # schedule:
+  #   - cron: "0 0 * * *"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout kas-fleet-manager
+        uses: actions/checkout@v2.3.4
+        with:
+          repository: bf2fc6cc711aee1a0c2a/kas-fleet-manager
+          token: "${{secrets.GITHUB_TOKEN}}"
+          path: kas-fleet-manager
+          ref: main
+      - run: ls $GITHUB_WORKSPACE
+      # - name: Checkout repo
+      #   uses: actions/checkout@v2.3.4
+      #   env:
+      #     path: bf2/cli
+      #   with:
+      #     repository: bf2fc6cc711aee1a0c2a/cli
+      #   run: |
+      #     echo $GITHUB_WORKSPACE
+          
+      #     git clone https://$GITHUB_TOKEN:x-oauth-basic@github.com/bf2fc6cc711aee1a0c2a/cli.git
+      #     mv kas-fleet-manager/openapi/kas-fleet-manager.yaml ./cli/openapi/kafka-service.yaml
+      #     cd cli
+      #     if [[ $(git status --porcelain) ]]; then
+      #       git checkout -b update-kas-fleet-manager
+      #       git add .
+      #       git commit -m "chore(openapi): update kas-fleet-manager API spec"
+      #     fi
+      # - name: Create Pull Request
+      #   id: cpr
+      #   uses: peter-evans/create-pull-request@v3.8.2
+      #   run: |
+      #     cd cli
+      #   with:
+      #     commit-message: Update kas-fleet-manager API spec
+      #     branch: kas-fleet-manager-api
+      #     title: '[TEST] Update KAS Fleet Manager OpenAPI spec'
+      #     body: |
+      #       Update API spec
