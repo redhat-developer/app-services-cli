@@ -89,7 +89,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, localizer.MustLocalizeFromID("serviceAccount.common.flag.overwrite.description"))
 	cmd.Flags().StringVar(&opts.filename, "file-location", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.fileLocation.description"))
 	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.fileFormat.description"))
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("serviceAccount.resetCredentials.flag.force.description"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, localizer.MustLocalizeFromID("serviceAccount.resetCredentials.flag.yes.description"))
 
 	return cmd
 }

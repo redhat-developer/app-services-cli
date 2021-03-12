@@ -43,7 +43,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 					MessageID: "flag.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
-						"Flag": "force",
+						"Flag": "yes",
 					},
 				}))
 			}
@@ -53,7 +53,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("serviceAccount.delete.flag.id.description"))
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("serviceAccount.delete.flag.force.description"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, localizer.MustLocalizeFromID("serviceAccount.delete.flag.yes.description"))
 
 	_ = cmd.MarkFlagRequired("id")
 

@@ -7,7 +7,7 @@ Provide an offline token to be used by the operator.
 To get a token, visit https://cloud.redhat.com/openshift/token.
 '''
 
-[cluster.common.flag.force.description]
+[cluster.common.flag.yes.description]
 one = 'Forcibly create a binding without confirmation.'
 
 [cluster.common.flag.namespace.description]

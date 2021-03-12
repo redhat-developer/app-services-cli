@@ -15,11 +15,8 @@ one = '''
 $ rhoas kafka topic delete topic-1
 '''
 
-[kafka.topic.delete.flag.force.description]
+[kafka.topic.delete.flag.yes.description]
 one = 'Skip confirmation to forcibly delete a topic'
-
-[kafka.topic.delete.error.forceFlagRequired]
-one = '--force flag is required to delete a topic when not running interactively'
 
 [kafka.topic.delete.input.name.message]
 one = 'Confirm the name of the topic you want to delete:'
