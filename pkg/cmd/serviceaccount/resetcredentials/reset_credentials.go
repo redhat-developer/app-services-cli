@@ -219,6 +219,10 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 	serviceacct, httpRes, apiErr := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
 
 	if apiErr.Error() != "" {
+		if httpRes == nil {
+			return nil, apiErr
+		}
+
 		switch httpRes.StatusCode {
 		case 403:
 			return nil, fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{

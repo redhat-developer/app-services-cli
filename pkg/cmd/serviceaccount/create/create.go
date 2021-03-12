@@ -138,6 +138,10 @@ func runCreate(opts *Options) error {
 	serviceacct, httpRes, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
+		if httpRes == nil {
+			return apiErr
+		}
+
 		switch httpRes.StatusCode {
 		case 403:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{

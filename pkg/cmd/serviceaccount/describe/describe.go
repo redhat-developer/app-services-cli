@@ -69,6 +69,10 @@ func runDescribe(opts *Options) error {
 	res, httpRes, apiErr := a.Execute()
 
 	if apiErr.Error() != "" {
+		if httpRes == nil {
+			return apiErr
+		}
+
 		switch httpRes.StatusCode {
 		case 404:
 			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{

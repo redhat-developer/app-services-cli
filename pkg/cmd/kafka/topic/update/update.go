@@ -179,15 +179,21 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	topicToUpdate, httpRes, _ := api.GetTopic(context.Background(), opts.topicName).Execute()
-	if httpRes.StatusCode == 404 {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.error.topicNotFoundError",
-			TemplateData: map[string]interface{}{
-				"TopicName":    opts.topicName,
-				"InstanceName": kafkaInstance.GetName(),
-			},
-		}))
+	topicToUpdate, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).Execute()
+
+	if topicErr.Error() != "" {
+		if httpRes == nil {
+			return topicErr
+		}
+		if httpRes.StatusCode == 404 {
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.topicNotFoundError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    opts.topicName,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
+		}
 	}
 
 	currentPartitionCount := len(topicToUpdate.GetPartitions())
