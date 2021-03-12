@@ -224,7 +224,7 @@ func runCmd(opts *Options) error {
 
 func runInteractivePrompt(opts *Options) (err error) {
 
-	_, err = opts.Connection()
+	_, err = opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
