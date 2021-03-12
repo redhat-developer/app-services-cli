@@ -36,7 +36,7 @@ one = '''Invalid result from operator. Status object is not compatible with expe
 '''
 
 [cluster.kubernetes.watchForKafkaStatus.error.status]
-one = '''Error when processingKafkaConnection: %v
+one = '''Error when processing KafkaConnection: %v
 '''
 
 [cluster.kubernetes.watchForKafkaStatus.log.info.success]
