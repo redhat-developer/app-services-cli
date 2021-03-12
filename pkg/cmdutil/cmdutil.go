@@ -8,6 +8,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +29,7 @@ func CheckSurveyError(err error) error {
 func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	validNames := []string{}
 
-	conn, err := f.Connection()
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}
@@ -59,7 +60,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete str
 func FilterValidKafkas(f *factory.Factory, searchName string) ([]string, cobra.ShellCompDirective) {
 	validNames := []string{}
 
-	conn, err := f.Connection()
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}

@@ -22,7 +22,7 @@ import (
 
 type Options struct {
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	IO         *iostreams.IOStreams
 
@@ -71,7 +71,7 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

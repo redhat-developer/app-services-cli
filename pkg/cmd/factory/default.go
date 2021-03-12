@@ -41,7 +41,7 @@ func New(cliVersion string) *Factory {
 		return logger, nil
 	}
 
-	connectionFunc := func() (connection.Connection, error) {
+	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
 		if conn != nil {
 			return conn, nil
 		}
@@ -93,6 +93,8 @@ func New(cliVersion string) *Factory {
 		if err != nil {
 			return nil, err
 		}
+
+		builder.WithConnectionConfig(connectionCfg)
 
 		conn, err = builder.Build()
 		if err != nil {

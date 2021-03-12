@@ -9,16 +9,23 @@ import (
 
 // AuthError defines an Authentication error
 type AuthError struct {
-	Err    error
-	Reason string
+	Err error
+}
+
+type MasAuthError struct {
+	Err error
 }
 
 func (e *AuthError) Error() string {
-	var reason string
-	if e.Reason != "" {
-		reason = ": " + e.Reason
-	}
-	return fmt.Sprintf("%v%v", e.Err, reason)
+	return fmt.Sprintf("%v", e.Err)
+}
+
+func (e *MasAuthError) Unwrap() error {
+	return e.Err
+}
+
+func (e *MasAuthError) Error() string {
+	return fmt.Sprintf("%v", e.Err)
 }
 
 func (e *AuthError) Unwrap() error {
@@ -27,13 +34,17 @@ func (e *AuthError) Unwrap() error {
 
 func AuthErrorf(format string, a ...interface{}) *AuthError {
 	err := fmt.Errorf(format, a...)
-	return &AuthError{err, ""}
+	return &AuthError{err}
 }
 
-func notLoggedInError() *AuthError {
-	return &AuthError{errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInError")), ""}
+func notLoggedInError() error {
+	return errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInError"))
 }
 
-func sessionExpiredError() *AuthError {
-	return &AuthError{errors.New(localizer.MustLocalizeFromID("connection.error.sessionExpiredError")), ""}
+func notLoggedInMASError() error {
+	return errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInMASError"))
+}
+
+func sessionExpiredError() error {
+	return errors.New(localizer.MustLocalizeFromID("connection.error.sessionExpiredError"))
 }

@@ -17,7 +17,7 @@ import (
 type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 
 	id    string
@@ -66,7 +66,7 @@ func runDelete(opts *Options) (err error) {
 		return err
 	}
 
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -110,7 +110,7 @@ func runDelete(opts *Options) (err error) {
 }
 
 func deleteServiceAccount(opts *Options) error {
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

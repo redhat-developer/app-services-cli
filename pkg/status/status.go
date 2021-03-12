@@ -3,17 +3,18 @@ package status
 import (
 	"context"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 	"io"
 	"reflect"
 	"text/tabwriter"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	kas "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/openconfig/goyang/pkg/indent"
 )
@@ -34,7 +35,7 @@ type KafkaStatus struct {
 type Options struct {
 	Config     config.IConfig
 	Logger     func() (logging.Logger, error)
-	Connection func() (connection.Connection, error)
+	Connection connection.Connection
 
 	// request specific services
 	Services []string
@@ -46,17 +47,13 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 	if err != nil {
 		return nil, false, err
 	}
-	connection, err := opts.Connection()
-	if err != nil {
-		return nil, false, err
-	}
 	logger, err := opts.Logger()
 	if err != nil {
 		return nil, false, err
 	}
 
 	status = &Status{}
-	api := connection.API()
+	api := opts.Connection.API()
 
 	if stringInSlice("kafka", opts.Services) {
 		kafkaCfg := cfg.Services.Kafka

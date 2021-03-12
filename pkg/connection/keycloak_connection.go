@@ -58,6 +58,7 @@ type KeycloakConnection struct {
 	masRealm          string
 	logger            logging.Logger
 	Config            config.IConfig
+	connectionConfig  *Config
 }
 
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
@@ -72,37 +73,41 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 
 	// track if we need to update the config with new token values
 	var cfgChanged bool
-	// nolint:govet
-	refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
-	if err != nil {
-		return &AuthError{err, ""}
+	if c.connectionConfig.RequireAuth {
+		// nolint:govet
+		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
+		if err != nil {
+			return &AuthError{err}
+		}
+
+		if refreshedTk.AccessToken != c.Token.AccessToken {
+			c.Token.AccessToken = refreshedTk.AccessToken
+			cfg.AccessToken = refreshedTk.AccessToken
+			cfgChanged = true
+		}
+		if refreshedTk.RefreshToken != c.Token.RefreshToken {
+			c.Token.RefreshToken = refreshedTk.RefreshToken
+			cfg.RefreshToken = refreshedTk.RefreshToken
+			cfgChanged = true
+		}
 	}
 
-	if refreshedTk.AccessToken != c.Token.AccessToken {
-		c.Token.AccessToken = refreshedTk.AccessToken
-		cfg.AccessToken = refreshedTk.AccessToken
-		cfgChanged = true
-	}
-	if refreshedTk.RefreshToken != c.Token.RefreshToken {
-		c.Token.RefreshToken = refreshedTk.RefreshToken
-		cfg.RefreshToken = refreshedTk.RefreshToken
-		cfgChanged = true
-	}
-
-	// nolint:govet
-	refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
-	if err != nil {
-		return &AuthError{err, ""}
-	}
-	if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
-		c.MASToken.AccessToken = refreshedMasTk.AccessToken
-		cfg.MasAccessToken = refreshedMasTk.AccessToken
-		cfgChanged = true
-	}
-	if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
-		c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
-		cfg.MasRefreshToken = refreshedMasTk.RefreshToken
-		cfgChanged = true
+	if c.connectionConfig.RequireMASAuth {
+		// nolint:govet
+		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
+		if err != nil {
+			return &MasAuthError{err}
+		}
+		if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
+			c.MASToken.AccessToken = refreshedMasTk.AccessToken
+			cfg.MasAccessToken = refreshedMasTk.AccessToken
+			cfgChanged = true
+		}
+		if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
+			c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
+			cfg.MasRefreshToken = refreshedMasTk.RefreshToken
+			cfgChanged = true
+		}
 	}
 
 	if !cfgChanged {
@@ -123,12 +128,12 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 	err = c.keycloakClient.Logout(ctx, c.clientID, "", c.defaultRealm, c.Token.RefreshToken)
 	if err != nil {
-		return &AuthError{err, ""}
+		return &AuthError{err}
 	}
 
 	err = c.masKeycloakClient.Logout(ctx, c.clientID, "", c.masRealm, c.MASToken.RefreshToken)
 	if err != nil {
-		return &AuthError{err, ""}
+		return &AuthError{err}
 	}
 
 	c.Token.AccessToken = ""

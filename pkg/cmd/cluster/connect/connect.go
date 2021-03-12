@@ -3,6 +3,7 @@ package connect
 import (
 	"context"
 	"errors"
+
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cluster"
@@ -16,7 +17,7 @@ import (
 
 type Options struct {
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
 	Logger     func() (logging.Logger, error)
 	IO         *iostreams.IOStreams
 
@@ -65,7 +66,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runBind(opts *Options) error {
-	connection, err := opts.Connection()
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}

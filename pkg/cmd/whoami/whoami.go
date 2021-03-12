@@ -9,14 +9,16 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
 	Config     config.IConfig
-	Connection func() (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
+	Logger     func() (logging.Logger, error)
 }
 
 func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
@@ -24,6 +26,7 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
+		Logger:     f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -40,13 +43,17 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *Options) (err error) {
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
 	}
 
-	_, err = opts.Connection()
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
+	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -55,9 +62,13 @@ func runCmd(opts *Options) (err error) {
 
 	tknClaims, _ := token.MapClaims(accessTkn)
 
-	userName, _ := tknClaims["preferred_username"]
+	userName, ok := tknClaims["preferred_username"]
 
-	fmt.Fprintln(opts.IO.Out, userName)
+	if ok {
+		fmt.Fprintln(opts.IO.Out, userName)
+	} else {
+		logger.Info(localizer.MustLocalizeFromID("whoami.log.info.tokenHasNoUsername"))
+	}
 
 	return nil
 }

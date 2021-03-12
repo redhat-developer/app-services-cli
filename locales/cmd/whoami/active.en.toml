@@ -20,3 +20,6 @@ one = '''
 # print current username
 $ rhoas whoami
 '''
+
+[whoami.log.info.tokenHasNoUsername]
+one = 'Token has no username'

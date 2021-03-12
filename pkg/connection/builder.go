@@ -35,6 +35,7 @@ type Builder struct {
 	config            config.IConfig
 	logger            logging.Logger
 	transportWrapper  TransportWrapper
+	connectionConfig  *Config
 }
 
 // TransportWrapper is a wrapper for a transport of type http.RoundTripper.
@@ -125,6 +126,12 @@ func (b *Builder) WithConfig(cfg config.IConfig) *Builder {
 	return b
 }
 
+// WithConnectionConfig contains config for the connection instance
+func (b *Builder) WithConnectionConfig(cfg *Config) *Builder {
+	b.connectionConfig = cfg
+	return b
+}
+
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
@@ -145,8 +152,12 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		return nil, AuthErrorf("Missing client ID")
 	}
 
-	if (b.accessToken == "" && b.refreshToken == "") || (b.masAccessToken == "" && b.masRefreshToken == "") {
-		return nil, notLoggedInError()
+	if b.connectionConfig.RequireAuth && b.accessToken == "" && b.refreshToken == "" {
+		return nil, &AuthError{notLoggedInError()}
+	}
+
+	if b.connectionConfig.RequireMASAuth && b.masAccessToken == "" && b.masRefreshToken == "" {
+		return nil, &MasAuthError{notLoggedInMASError()}
 	}
 
 	if b.config == nil {
@@ -268,6 +279,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		masRealm:          masKcRealm,
 		logger:            b.logger,
 		Config:            b.config,
+		connectionConfig:  b.connectionConfig,
 	}
 
 	return connection, nil

@@ -60,7 +60,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.Connection, error) {
+					Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
 						mockDefaultAPI := &kasclient.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) kasclient.ApiCreateKafkaRequest {
 							req := kasclient.ApiCreateKafkaRequest{
@@ -111,7 +111,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.Connection, error) {
+					Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
 						mockDefaultAPI := &kasclient.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) kasclient.ApiCreateKafkaRequest {
 							req := kasclient.ApiCreateKafkaRequest{
@@ -162,7 +162,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.Connection, error) {
+					Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
 						mockDefaultAPI := &kasclient.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) kasclient.ApiCreateKafkaRequest {
 							req := kasclient.ApiCreateKafkaRequest{
@@ -214,7 +214,7 @@ func TestNewCreateCommand(t *testing.T) {
 						AccessToken:  "valid",
 						RefreshToken: "valid",
 					}),
-					Connection: func() (connection.Connection, error) {
+					Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
 						mockDefaultAPI := &kasclient.DefaultApiMock{}
 						mockDefaultAPI.CreateKafkaFunc = func(ctx context.Context) kasclient.ApiCreateKafkaRequest {
 							req := kasclient.ApiCreateKafkaRequest{
