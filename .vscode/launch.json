@@ -128,7 +128,7 @@
         "topic",
         "delete",
         "enda-test",
-        "-f"
+        "-y"
       ]
     },
     {

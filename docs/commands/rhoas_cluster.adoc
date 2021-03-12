@@ -14,7 +14,7 @@ $ rhoas cluster connect --ignore-context
 $ rhoas cluster connect --token=value
 
 # connect with cluster and save script to create service binding
-$ rhoas cluster connect --force > create_service_binding.sh
+$ rhoas cluster connect --yes > create_service_binding.sh
 
 ....
 

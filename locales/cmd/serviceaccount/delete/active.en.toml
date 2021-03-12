@@ -26,9 +26,9 @@ $ rhoas serviceaccount delete --id 173c1ad9-932d-4007-ae0f-4da74f4d2ccd
 description = 'Description for the --id flag'
 one = 'The unique ID of the service account to delete'
 
-[serviceAccount.delete.flag.force.description]
-description = 'Description for the --id flag'
-one = 'Forcibly delete this service account.'
+[serviceAccount.delete.flag.yes.description]
+description = 'Description for the --yes flag'
+one = 'Skip confirmation to forcibly delete this service account.'
 
 [serviceAccount.delete.input.confirmDelete.message]
 description = 'Message for input'

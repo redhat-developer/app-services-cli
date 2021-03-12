@@ -71,7 +71,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 					MessageID: "flag.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
-						"Flag": "force",
+						"Flag": "yes",
 					},
 				}))
 			}
@@ -99,7 +99,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.force, "force", "f", false, localizer.MustLocalizeFromID("kafka.topic.delete.flag.force.description"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, localizer.MustLocalizeFromID("kafka.topic.delete.flag.yes.description"))
 
 	return cmd
 }

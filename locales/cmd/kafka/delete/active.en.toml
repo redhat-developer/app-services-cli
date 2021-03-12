@@ -12,7 +12,7 @@ one = '''
 Permanently delete an Apache Kafka instance, including all topics.
 
 When this command is run, you will be asked to confirm the name of the instance you want to delete.
-Otherwise you can pass "--force" to forcibly delete the instance.
+Otherwise you can pass "--yes" to skip confirmation and forcibly delete the instance.
 '''
 
 [kafka.delete.cmd.example]
@@ -29,8 +29,8 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 description = 'Description for the --id flag'
 one = 'Unique ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.'
 
-[kafka.delete.flag.force]
-description = 'Description for the --force flag'
+[kafka.delete.flag.yes]
+description = 'Description for the --yes flag'
 one = 'Skip confirmation to forcibly delete this Kafka instance.'
 
 [kafka.delete.log.info.deleting]

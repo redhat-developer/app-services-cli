@@ -35,7 +35,7 @@ $ rhoas serviceaccount reset-credentials --id 173c1ad9-932d-4007-ae0f-4da74f4d2c
 description = 'Description for --id flag'
 one = 'The unique ID of the service account for which you want to reset the credentials.'
 
-[serviceAccount.resetCredentials.flag.force.description]
+[serviceAccount.resetCredentials.flag.yes.description]
 one = 'Skip confirmation to forcibly reset service account credentials'
 
 [serviceAccount.resetCredentials.error.couldNotCreate]
