@@ -9,16 +9,16 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// ManagedKafkaConnectionSpec contains credentials and connection parameters to Managed Kafka
-type ManagedKafkaConnectionSpec struct {
+// KafkaConnectionSpec contains credentials and connection parameters to  Kafka
+type KafkaConnectionSpec struct {
 	AccessTokenSecretName string          `json:"accessTokenSecretName,omitempty"`
 	KafkaID               string          `json:"kafkaId,omitempty"`
 	Credentials           CredentialsSpec `json:"credentials"`
 }
 
-// BootstrapServerSpec contains server host information that can be used to connecto the Managed Kafka
+// BootstrapServerSpec contains server host information that can be used to connecto the  Kafka
 type BootstrapServerSpec struct {
-	// Host full host to Managed Kafka Service including port
+	// Host full host to  Kafka Service including port
 	Host string `json:"host,omitempty"`
 }
 
@@ -28,8 +28,8 @@ type CredentialsSpec struct {
 	SecretName string `json:"serviceAccountSecretName,omitempty"`
 }
 
-// ManagedKafkaConnectionStatus defines the observed state of ManagedKafkaConnection
-type ManagedKafkaConnectionStatus struct {
+// KafkaConnectionStatus defines the observed state of KafkaConnection
+type KafkaConnectionStatus struct {
 	CreatedBy       string              `json:"createdBy,omitempty"`
 	Message         string              `json:"message,omitempty"`
 	Updated         string              `json:"updated,omitempty"`
@@ -45,21 +45,21 @@ type ManagedKafkaConnectionStatus struct {
 // +kubebuilder:resource:scope=Cluster
 // +k8s:openapi-gen=true
 
-// ManagedKafkaConnection schema
-type ManagedKafkaConnection struct {
+// KafkaConnection schema
+type KafkaConnection struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ManagedKafkaConnectionSpec   `json:"spec,omitempty"`
-	Status ManagedKafkaConnectionStatus `json:"status,omitempty"`
+	Spec   KafkaConnectionSpec   `json:"spec,omitempty"`
+	Status KafkaConnectionStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +k8s:openapi-gen=true
 
-// ManagedKafkaConnectionList contains a list of ManagedKafkaConnection
-type ManagedKafkaConnectionList struct {
+// KafkaConnectionList contains a list of KafkaConnection
+type KafkaConnectionList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []ManagedKafkaConnection `json:"items"`
+	Items           []KafkaConnection `json:"items"`
 }

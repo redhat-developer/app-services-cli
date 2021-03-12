@@ -28,7 +28,7 @@ one = 'Not installed'
 [cluster.status.statusMessage]
 one = '''
 Namespace: {{.Namespace}}
-Managed Application Services Operator: {{.OperatorStatus}}
+RHOAS Operator: {{.OperatorStatus}}
 
 Command requires configuration using kubeconfig for Kubernetes cluster running RHOAS operator.
 Operator can be installed using OperatorHub.

@@ -22,17 +22,17 @@ var MKCGroup = "rhoas.redhat.com"
 var MKCVersion = "v1alpha1"
 
 var MKCRMeta = metav1.TypeMeta{
-	Kind:       "ManagedKafkaConnection",
+	Kind:       "KafkaConnection",
 	APIVersion: MKCGroup + "/" + MKCVersion,
 }
 
 var MKCResource = schema.GroupVersionResource{
 	Group:    MKCGroup,
 	Version:  MKCVersion,
-	Resource: "managedkafkaconnections",
+	Resource: "kafkaconnections",
 }
 
-// checks the cluster to see if a ManagedKafkaConnection CRD is installed
+// checks the cluster to see if a KafkaConnection CRD is installed
 func IsMKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
@@ -77,16 +77,16 @@ func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespac
 }
 
 func getKafkaConnectionsAPIURL(namespace string) string {
-	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/managedkafkaconnections", namespace)
+	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
 }
 
-func watchForManagedKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
+func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait",
+		MessageID: "cluster.kubernetes.watchForKafkaStatus.log.info.wait",
 	}))
 
 	fmt.Fprint(c.io.Out, localizer.MustLocalize(&localizer.Config{
-		MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.binding",
+		MessageID: "cluster.kubernetes.watchForKafkaStatus.binding",
 		TemplateData: map[string]interface{}{
 			"Name":      crName,
 			"Namespace": namespace,
@@ -122,16 +122,16 @@ func watchForManagedKafkaStatus(c *KubernetesCluster, crName string, namespace s
 					for _, condition := range conditions {
 						typedCondition, ok := condition.(map[string]interface{})
 						if !ok {
-							return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForManagedKafkaStatus.error.format"), typedCondition)
+							return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForKafkaStatus.error.format"), typedCondition)
 						}
 						if typedCondition["type"].(string) == "Finished" {
 							if typedCondition["status"].(string) == "False" {
 								w.Stop()
-								return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForManagedKafkaStatus.error.status"), typedCondition["message"])
+								return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForKafkaStatus.error.status"), typedCondition["message"])
 							}
 							if typedCondition["status"].(string) == "True" {
 								c.logger.Info(localizer.MustLocalize(&localizer.Config{
-									MessageID: "cluster.kubernetes.watchForManagedKafkaStatus.log.info.success",
+									MessageID: "cluster.kubernetes.watchForKafkaStatus.log.info.success",
 									TemplateData: map[string]interface{}{
 										"Name":      crName,
 										"Namespace": namespace,
@@ -148,19 +148,19 @@ func watchForManagedKafkaStatus(c *KubernetesCluster, crName string, namespace s
 
 		case <-time.After(30 * time.Second):
 			w.Stop()
-			return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForManagedKafkaStatus.error.timeout"))
+			return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForKafkaStatus.error.timeout"))
 		}
 	}
 }
 
-func createMKCObject(crName string, namespace string, kafkaID string) *ManagedKafkaConnection {
-	kafkaConnectionCR := &ManagedKafkaConnection{
+func createMKCObject(crName string, namespace string, kafkaID string) *KafkaConnection {
+	kafkaConnectionCR := &KafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
 			Namespace: namespace,
 		},
 		TypeMeta: MKCRMeta,
-		Spec: ManagedKafkaConnectionSpec{
+		Spec: KafkaConnectionSpec{
 			KafkaID:               kafkaID,
 			AccessTokenSecretName: tokenSecretName,
 			Credentials: CredentialsSpec{

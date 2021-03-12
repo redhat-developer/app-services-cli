@@ -23,7 +23,7 @@ export GO111MODULE=on
 # Prints a list of useful targets.
 help:
 	@echo ""
-	@echo "OpenShift Managed Services CLI"
+	@echo "RHOAS CLI"
 	@echo ""
 	@echo "make lint                 	run golangci-lint"
 	@echo "make binary               	compile binaries"
