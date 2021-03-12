@@ -1,6 +1,6 @@
 [cluster.kubernetes.log.info.statusMessage]
 one = '''
-This command will link your cluster with Managed Services by creating custom resources and secrets.
+This command will link your cluster with Cloud Services by creating custom resources and secrets.
 In case of problems please execute "rhoas cluster status" to check if your cluster is properly configured
 '''
 
@@ -26,35 +26,35 @@ one = 'Do you want to continue?'
 one = 'Cancelling cluster connection'
 
 [cluster.kubernetes.createKafkaCR.error.marshalError]
-one = 'Could not marshal ManagedKafkaConnection to JSON object'
+one = 'Could not marshal KafkaConnection to JSON object'
 
 [cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
-one = 'ManagedKafkaConnection resource "{{.Name}}" has been created'
+one = 'KafkaConnection resource "{{.Name}}" has been created'
 
-[cluster.kubernetes.watchForManagedKafkaStatus.error.format]
+[cluster.kubernetes.watchForKafkaStatus.error.format]
 one = '''Invalid result from operator. Status object is not compatible with expected result from CLI.
 '''
 
-[cluster.kubernetes.watchForManagedKafkaStatus.error.status]
-one = '''Error when processing ManagedKafkaConnection: %v
+[cluster.kubernetes.watchForKafkaStatus.error.status]
+one = '''Error when processing KafkaConnection: %v
 '''
 
-[cluster.kubernetes.watchForManagedKafkaStatus.log.info.success]
+[cluster.kubernetes.watchForKafkaStatus.log.info.success]
 one = '''
-ManagedKafkaConnection successfully installed on your cluster.
+KafkaConnection successfully installed on your cluster.
 To view it execute:
 
 oc get mkc -o=yaml -n {{.Namespace}} {{.Name}}
 
 '''
 
-[cluster.kubernetes.watchForManagedKafkaStatus.error.timeout]
-one = '''Process of watching ManagedKafkaConnection timed out'''
+[cluster.kubernetes.watchForKafkaStatus.error.timeout]
+one = '''Process of watching KafkaConnection timed out'''
 
-[cluster.kubernetes.watchForManagedKafkaStatus.log.info.wait]
+[cluster.kubernetes.watchForKafkaStatus.log.info.wait]
 one = '''
-Waiting for status from ManagedKafkaConnection resource.
-Created ManagedKafkaConnection can be already injected to your application:
+Waiting for status from KafkaConnection resource.
+Created KafkaConnection can be already injected to your application:
 You can bind credentials to your application using:
 - odo cli 
 - OpenShift topology view
@@ -64,7 +64,7 @@ To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
 '''
 
-[cluster.kubernetes.watchForManagedKafkaStatus.binding]
+[cluster.kubernetes.watchForKafkaStatus.binding]
 one = '''
 cat <<EOF | kubectl apply -f - 
 apiVersion: binding.operators.coreos.com/v1alpha1
@@ -112,4 +112,4 @@ one = 'could not create service account'
 one = 'Service account secret already exist.'
 
 [cluster.kubernetes.checkIfConnectionExist.existError]
-one = 'ManagedKafkaConnection already exist'
+one = 'KafkaConnection already exist'

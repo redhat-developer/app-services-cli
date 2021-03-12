@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
 	"k8s.io/client-go/dynamic"
 
@@ -47,10 +48,10 @@ type KubernetesCluster struct {
 }
 
 /*  #nosec */
-var tokenSecretName = "rh-managed-services-accesstoken-cli"
+var tokenSecretName = "rh-cloud-services-accesstoken-cli"
 
 /*  #nosec */
-var serviceAccountSecretName = "rh-managed-services-service-account"
+var serviceAccountSecretName = "rh-cloud-services-service-account"
 
 // NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
 func NewKubernetesClusterConnection(connection connection.Connection,
@@ -191,7 +192,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	return nil
 }
 
-// createKafkaConnectionCustomResource creates a new "ManagedKafkaConnection" CR
+// createKafkaConnectionCustomResource creates a new "KafkaConnection" CR
 func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, namespace string, kafkaInstance *kasclient.KafkaRequest) error {
 	crName := kafkaInstance.GetName()
 	kafkaID := kafkaInstance.GetId()
@@ -220,10 +221,10 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 		},
 	}))
 
-	return watchForManagedKafkaStatus(c, crName, namespace)
+	return watchForKafkaStatus(c, crName, namespace)
 }
 
-// IsRhoasOperatorAvailableOnCluster checks the cluster to see if a ManagedKafkaConnection CRD is installed
+// IsRhoasOperatorAvailableOnCluster checks the cluster to see if a KafkaConnection CRD is installed
 func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error) {
 	return IsMKCInstalledOnCluster(ctx, c)
 }

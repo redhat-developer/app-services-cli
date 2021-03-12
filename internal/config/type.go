@@ -25,12 +25,12 @@ type Config struct {
 	Scopes          []string         `json:"scopes,omitempty" doc:"OpenID scope. If this option is used it will replace completely the default scopes. Can be repeated multiple times to specify multiple scopes."`
 }
 
-// ServiceConfigMap is a map of configs for the managed application services
+// ServiceConfigMap is a map of configs for the application services
 type ServiceConfigMap struct {
 	Kafka *KafkaConfig `json:"kafka"`
 }
 
-// KafkaConfig is the config for the managed Kafka service
+// KafkaConfig is the config for the Kafka service
 type KafkaConfig struct {
 	ClusterID string `json:"clusterId"`
 }
