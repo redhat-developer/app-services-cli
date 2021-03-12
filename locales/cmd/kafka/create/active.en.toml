@@ -62,3 +62,6 @@ one = "Cloud Region:"
 [kafka.create.input.cloudRegion.help]
 description = 'Help text for Cloud Region'
 one = "Geographical region where the Kafka instance will be deployed"
+
+[kafka.create.argument.name.error.requiredWhenNonInteractive]
+one = 'name is required. Run "rhoas kafka create <name>"'

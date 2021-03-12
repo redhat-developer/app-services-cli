@@ -84,13 +84,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return errors.New(localizer.MustLocalize(&localizer.Config{
-					MessageID: "kafka.common.error.noKafkaSelected",
-					TemplateData: map[string]interface{}{
-						"Flag": "name",
-					},
-				}))
-
+				return errors.New(localizer.MustLocalizeFromID("kafka.create.argument.name.error.requiredWhenNonInteractive"))
 			} else if opts.name == "" && opts.provider == "" && opts.region == "" {
 				opts.interactive = true
 			}
