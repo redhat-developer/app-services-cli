@@ -124,17 +124,20 @@ func runCmd(opts *Options) error {
 	// perform delete topic API request
 	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).
 		Execute()
-	if httpRes == nil {
-		return topicErr
-	}
-	if httpRes.StatusCode == 404 {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.error.topicNotFoundError",
-			TemplateData: map[string]interface{}{
-				"TopicName":    opts.topicName,
-				"InstanceName": kafkaInstance.GetName(),
-			},
-		}))
+
+	if topicErr.Error() != "" {
+		if httpRes == nil {
+			return topicErr
+		}
+		if httpRes.StatusCode == 404 {
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.common.error.topicNotFoundError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    opts.topicName,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
+		}
 	}
 
 	if !opts.force {

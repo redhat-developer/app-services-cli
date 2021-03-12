@@ -75,17 +75,19 @@ func runDelete(opts *Options) (err error) {
 	a := api.Kafka().GetServiceAccountById(context.Background(), opts.id)
 	_, httpRes, apiErr := a.Execute()
 
-	if httpRes == nil {
-		return apiErr
-	}
+	if apiErr.Error() != "" {
+		if httpRes == nil {
+			return apiErr
+		}
 
-	if httpRes.StatusCode == 404 {
-		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-			MessageID: "serviceAccount.common.error.notFoundError",
-			TemplateData: map[string]interface{}{
-				"ID": opts.id,
-			},
-		}))
+		if httpRes.StatusCode == 404 {
+			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+				MessageID: "serviceAccount.common.error.notFoundError",
+				TemplateData: map[string]interface{}{
+					"ID": opts.id,
+				},
+			}))
+		}
 	}
 
 	if !opts.force {
