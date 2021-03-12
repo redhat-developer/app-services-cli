@@ -28,7 +28,7 @@ func CreateRetentionConfigEntry(retentionMs int) *strimziadminclient.ConfigEntry
 	}
 }
 
-// convert the value from "partitions" to int32
+// ConvertPartitionsToInt converts the value from "partitions" to int32
 func ConvertPartitionsToInt(partitionStr string) (int32, error) {
 
 	patitionsInt, err := strconv.ParseInt(partitionStr, 10, 32)
@@ -45,7 +45,7 @@ func ConvertPartitionsToInt(partitionStr string) (int32, error) {
 	return int32(patitionsInt), nil
 }
 
-// convert the value from "retention-ms" to int
+// ConvertRetentionMsToInt converts the value from "retention-ms" to int
 func ConvertRetentionMsToInt(retentionMsStr string) (int, error) {
 	retentionMsInt, err := strconv.Atoi(retentionMsStr)
 

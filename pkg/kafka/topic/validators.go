@@ -114,6 +114,10 @@ func ValidateReplicationFactorN(v interface{}) error {
 func ValidateMessageRetentionPeriod(v interface{}) error {
 	retentionPeriodMsStr := fmt.Sprintf("%v", v)
 
+	if retentionPeriodMsStr == "" {
+		return nil
+	}
+
 	retentionPeriodMs, err := strconv.Atoi(retentionPeriodMsStr)
 	if err != nil {
 		return errors.New(localizer.MustLocalize(&localizer.Config{

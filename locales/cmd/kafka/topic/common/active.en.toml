@@ -70,7 +70,7 @@ one = 'The number of partitions in the topic'
 
 [kafka.topic.common.input.partitions.error.invalid]
 description = 'Error message when an invalid partition value is entered'
-one = 'invalid value for partition: {{.Partition}}'
+one = 'invalid value for partitions: {{.Partition}}'
 
 [kafka.topic.common.input.retentionMs.message]
 description = 'title for the Retention input'

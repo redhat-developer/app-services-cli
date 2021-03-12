@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"math"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -31,7 +30,7 @@ import (
 
 var (
 	partitionCount    int32
-	retentionPeriodMs int = math.MinInt32
+	retentionPeriodMs int
 )
 
 type Options struct {
@@ -174,6 +173,13 @@ func runCmd(opts *Options) error {
 		if err != nil {
 			return err
 		}
+
+		if opts.retentionMsStr != "" {
+			retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
@@ -243,12 +249,6 @@ func runCmd(opts *Options) error {
 	}
 
 	if opts.retentionMsStr != "" {
-		needsUpdate = true
-		topicConfig := topic.CreateConfig(retentionPeriodMs)
-		topicSettings.SetConfig(*topicConfig)
-	}
-
-	if opts.retentionMsStr == "" && retentionPeriodMs != math.MinInt32 {
 		needsUpdate = true
 		topicConfig := topic.CreateConfig(retentionPeriodMs)
 		topicSettings.SetConfig(*topicConfig)
@@ -346,7 +346,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
 	}
 
-	err = survey.AskOne(retentionPrompt, &retentionPeriodMs, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionPrompt, &opts.retentionMsStr, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
 	}
