@@ -120,6 +120,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
+// nolint:funlen
 func runCmd(opts *Options) error {
 
 	if opts.interactive {
