@@ -13,6 +13,6 @@ one = ', valid options are: '
 description = 'Required flag error message'
 one = '--{{.Flag}} is a required flag'
 
-[flag.error.invalidArgumentError]
-description = 'Generic error for an invalid flag. This is a copy of the Cobra error message'
-one = 'invalid argument "${{.Argument}}" for "{{.Flag}}" flag: '
+[argument.error.requiredWhenNonInteractive]
+description = "Argument is required when not running interactively"
+one = "{{.Argument}} required when not running interactively"
