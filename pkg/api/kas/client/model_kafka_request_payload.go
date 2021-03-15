@@ -1,7 +1,7 @@
 /*
- * Managed Service API
+ * Kafka Service Fleet Manager
  *
- * Managed Service API
+ * Kafka Service Fleet Manager is a Rest API to manage kafka instances and connectors.
  *
  * API version: 0.0.1
  */

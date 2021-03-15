@@ -1,7 +1,7 @@
 /*
- * Managed Service API
+ * Kafka Service Fleet Manager
  *
- * Managed Service API
+ * Kafka Service Fleet Manager is a Rest API to manage kafka instances and connectors.
  *
  * API version: 0.0.1
  */
@@ -40,7 +40,7 @@ var (
 	xmlCheck  = regexp.MustCompile(`(?i:(?:application|text)/xml)`)
 )
 
-// APIClient manages communication with the Managed Service API API v0.0.1
+// APIClient manages communication with the Kafka Service Fleet Manager API v0.0.1
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
