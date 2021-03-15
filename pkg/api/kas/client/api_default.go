@@ -1,7 +1,7 @@
 /*
- * Managed Service API
+ * Kafka Service Fleet Manager
  *
- * Managed Service API
+ * Kafka Service Fleet Manager is a Rest API to manage kafka instances and connectors.
  *
  * API version: 0.0.1
  */
@@ -28,20 +28,6 @@ var (
 type DefaultApi interface {
 
 	/*
-	 * CreateConnector Create a new connector
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The id of record
-	 * @return ApiCreateConnectorRequest
-	 */
-	CreateConnector(ctx _context.Context, id string) ApiCreateConnectorRequest
-
-	/*
-	 * CreateConnectorExecute executes the request
-	 * @return Connector
-	 */
-	CreateConnectorExecute(r ApiCreateConnectorRequest) (Connector, *_nethttp.Response, GenericOpenAPIError)
-
-	/*
 	 * CreateKafka Create a new kafka Request
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 * @return ApiCreateKafkaRequest
@@ -66,20 +52,6 @@ type DefaultApi interface {
 	 * @return ServiceAccount
 	 */
 	CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError)
-
-	/*
-	 * DeleteConnector Delete a connector
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The id of record
-	 * @return ApiDeleteConnectorRequest
-	 */
-	DeleteConnector(ctx _context.Context, id string) ApiDeleteConnectorRequest
-
-	/*
-	 * DeleteConnectorExecute executes the request
-	 * @return Error
-	 */
-	DeleteConnectorExecute(r ApiDeleteConnectorRequest) (Error, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * DeleteKafkaById Delete a kafka request by id
@@ -110,35 +82,6 @@ type DefaultApi interface {
 	DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * GetConnector Get a connector deployment
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The id of record
-	 * @param cid The id of the connector
-	 * @return ApiGetConnectorRequest
-	 */
-	GetConnector(ctx _context.Context, id string, cid string) ApiGetConnectorRequest
-
-	/*
-	 * GetConnectorExecute executes the request
-	 * @return Connector
-	 */
-	GetConnectorExecute(r ApiGetConnectorRequest) (Connector, *_nethttp.Response, GenericOpenAPIError)
-
-	/*
-	 * GetConnectorTypeByID Get a connector type by name and version
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The id of record
-	 * @return ApiGetConnectorTypeByIDRequest
-	 */
-	GetConnectorTypeByID(ctx _context.Context, id string) ApiGetConnectorTypeByIDRequest
-
-	/*
-	 * GetConnectorTypeByIDExecute executes the request
-	 * @return ConnectorType
-	 */
-	GetConnectorTypeByIDExecute(r ApiGetConnectorTypeByIDRequest) (ConnectorType, *_nethttp.Response, GenericOpenAPIError)
-
-	/*
 	 * GetKafkaById Get a kafka request by id
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 * @param id The id of record
@@ -153,18 +96,32 @@ type DefaultApi interface {
 	GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * GetMetricsByKafkaId Get metrics by kafka id.
+	 * GetMetricsByInstantQuery Get metrics with instant query by kafka id.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 * @param id The id of record
-	 * @return ApiGetMetricsByKafkaIdRequest
+	 * @return ApiGetMetricsByInstantQueryRequest
 	 */
-	GetMetricsByKafkaId(ctx _context.Context, id string) ApiGetMetricsByKafkaIdRequest
+	GetMetricsByInstantQuery(ctx _context.Context, id string) ApiGetMetricsByInstantQueryRequest
 
 	/*
-	 * GetMetricsByKafkaIdExecute executes the request
-	 * @return MetricsList
+	 * GetMetricsByInstantQueryExecute executes the request
+	 * @return MetricsInstantQueryList
 	 */
-	GetMetricsByKafkaIdExecute(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *_nethttp.Response, GenericOpenAPIError)
+	GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *_nethttp.Response, GenericOpenAPIError)
+
+	/*
+	 * GetMetricsByRangeQuery Get metrics with timeseries range query by kafka id.
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param id The id of record
+	 * @return ApiGetMetricsByRangeQueryRequest
+	 */
+	GetMetricsByRangeQuery(ctx _context.Context, id string) ApiGetMetricsByRangeQueryRequest
+
+	/*
+	 * GetMetricsByRangeQueryExecute executes the request
+	 * @return MetricsRangeQueryList
+	 */
+	GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * GetServiceAccountById get service account by id
@@ -206,33 +163,6 @@ type DefaultApi interface {
 	 * @return CloudProviderList
 	 */
 	ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *_nethttp.Response, GenericOpenAPIError)
-
-	/*
-	 * ListConnectorTypes Returns a list of connector types
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @return ApiListConnectorTypesRequest
-	 */
-	ListConnectorTypes(ctx _context.Context) ApiListConnectorTypesRequest
-
-	/*
-	 * ListConnectorTypesExecute executes the request
-	 * @return ConnectorTypeList
-	 */
-	ListConnectorTypesExecute(r ApiListConnectorTypesRequest) (ConnectorTypeList, *_nethttp.Response, GenericOpenAPIError)
-
-	/*
-	 * ListConnectors Returns a list of connector types
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The id of record
-	 * @return ApiListConnectorsRequest
-	 */
-	ListConnectors(ctx _context.Context, id string) ApiListConnectorsRequest
-
-	/*
-	 * ListConnectorsExecute executes the request
-	 * @return ConnectorList
-	 */
-	ListConnectorsExecute(r ApiListConnectorsRequest) (ConnectorList, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * ListKafkas Returns a list of Kafka requests
@@ -277,176 +207,6 @@ type DefaultApi interface {
 
 // DefaultApiService DefaultApi service
 type DefaultApiService service
-
-type ApiCreateConnectorRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
-	id         string
-	async      *bool
-	connector  *Connector
-}
-
-func (r ApiCreateConnectorRequest) Async(async bool) ApiCreateConnectorRequest {
-	r.async = &async
-	return r
-}
-func (r ApiCreateConnectorRequest) Connector(connector Connector) ApiCreateConnectorRequest {
-	r.connector = &connector
-	return r
-}
-
-func (r ApiCreateConnectorRequest) Execute() (Connector, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.CreateConnectorExecute(r)
-}
-
-/*
- * CreateConnector Create a new connector
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The id of record
- * @return ApiCreateConnectorRequest
- */
-func (a *DefaultApiService) CreateConnector(ctx _context.Context, id string) ApiCreateConnectorRequest {
-	return ApiCreateConnectorRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return Connector
- */
-func (a *DefaultApiService) CreateConnectorExecute(r ApiCreateConnectorRequest) (Connector, *_nethttp.Response, GenericOpenAPIError) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
-		localVarReturnValue  Connector
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.CreateConnector")
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/connector-deployments"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-	if r.async == nil {
-		executionError.error = "async is required and must be specified"
-		return localVarReturnValue, nil, executionError
-	}
-	if r.connector == nil {
-		executionError.error = "connector is required and must be specified"
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarQueryParams.Add("async", parameterToString(*r.async, ""))
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.connector
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 400 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, executionError
-}
 
 type ApiCreateKafkaRequest struct {
 	ctx                 _context.Context
@@ -747,144 +507,6 @@ func (a *DefaultApiService) CreateServiceAccountExecute(r ApiCreateServiceAccoun
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, executionError
-}
-
-type ApiDeleteConnectorRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
-	id         string
-}
-
-func (r ApiDeleteConnectorRequest) Execute() (Error, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.DeleteConnectorExecute(r)
-}
-
-/*
- * DeleteConnector Delete a connector
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The id of record
- * @return ApiDeleteConnectorRequest
- */
-func (a *DefaultApiService) DeleteConnector(ctx _context.Context, id string) ApiDeleteConnectorRequest {
-	return ApiDeleteConnectorRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return Error
- */
-func (a *DefaultApiService) DeleteConnectorExecute(r ApiDeleteConnectorRequest) (Error, *_nethttp.Response, GenericOpenAPIError) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodDelete
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
-		localVarReturnValue  Error
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteConnector")
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/connector-deployments/{cid}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
 			var v Error
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1225,286 +847,6 @@ func (a *DefaultApiService) DeleteServiceAccountExecute(r ApiDeleteServiceAccoun
 	return localVarReturnValue, localVarHTTPResponse, executionError
 }
 
-type ApiGetConnectorRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
-	id         string
-	cid        string
-}
-
-func (r ApiGetConnectorRequest) Execute() (Connector, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.GetConnectorExecute(r)
-}
-
-/*
- * GetConnector Get a connector deployment
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The id of record
- * @param cid The id of the connector
- * @return ApiGetConnectorRequest
- */
-func (a *DefaultApiService) GetConnector(ctx _context.Context, id string, cid string) ApiGetConnectorRequest {
-	return ApiGetConnectorRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		cid:        cid,
-	}
-}
-
-/*
- * Execute executes the request
- * @return Connector
- */
-func (a *DefaultApiService) GetConnectorExecute(r ApiGetConnectorRequest) (Connector, *_nethttp.Response, GenericOpenAPIError) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
-		localVarReturnValue  Connector
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetConnector")
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/connector-deployments/{cid}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"cid"+"}", _neturl.PathEscape(parameterToString(r.cid, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, executionError
-}
-
-type ApiGetConnectorTypeByIDRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
-	id         string
-}
-
-func (r ApiGetConnectorTypeByIDRequest) Execute() (ConnectorType, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.GetConnectorTypeByIDExecute(r)
-}
-
-/*
- * GetConnectorTypeByID Get a connector type by name and version
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The id of record
- * @return ApiGetConnectorTypeByIDRequest
- */
-func (a *DefaultApiService) GetConnectorTypeByID(ctx _context.Context, id string) ApiGetConnectorTypeByIDRequest {
-	return ApiGetConnectorTypeByIDRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return ConnectorType
- */
-func (a *DefaultApiService) GetConnectorTypeByIDExecute(r ApiGetConnectorTypeByIDRequest) (ConnectorType, *_nethttp.Response, GenericOpenAPIError) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
-		localVarReturnValue  ConnectorType
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetConnectorTypeByID")
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarPath := localBasePath + "/api/managed-services-api/v1/connector-types/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, executionError
-}
-
 type ApiGetKafkaByIdRequest struct {
 	ctx        _context.Context
 	ApiService DefaultApi
@@ -1653,40 +995,30 @@ func (a *DefaultApiService) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (Kafka
 	return localVarReturnValue, localVarHTTPResponse, executionError
 }
 
-type ApiGetMetricsByKafkaIdRequest struct {
+type ApiGetMetricsByInstantQueryRequest struct {
 	ctx        _context.Context
 	ApiService DefaultApi
 	id         string
-	duration   *int64
-	interval   *int64
 	filters    *[]string
 }
 
-func (r ApiGetMetricsByKafkaIdRequest) Duration(duration int64) ApiGetMetricsByKafkaIdRequest {
-	r.duration = &duration
-	return r
-}
-func (r ApiGetMetricsByKafkaIdRequest) Interval(interval int64) ApiGetMetricsByKafkaIdRequest {
-	r.interval = &interval
-	return r
-}
-func (r ApiGetMetricsByKafkaIdRequest) Filters(filters []string) ApiGetMetricsByKafkaIdRequest {
+func (r ApiGetMetricsByInstantQueryRequest) Filters(filters []string) ApiGetMetricsByInstantQueryRequest {
 	r.filters = &filters
 	return r
 }
 
-func (r ApiGetMetricsByKafkaIdRequest) Execute() (MetricsList, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.GetMetricsByKafkaIdExecute(r)
+func (r ApiGetMetricsByInstantQueryRequest) Execute() (MetricsInstantQueryList, *_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.GetMetricsByInstantQueryExecute(r)
 }
 
 /*
- * GetMetricsByKafkaId Get metrics by kafka id.
+ * GetMetricsByInstantQuery Get metrics with instant query by kafka id.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id The id of record
- * @return ApiGetMetricsByKafkaIdRequest
+ * @return ApiGetMetricsByInstantQueryRequest
  */
-func (a *DefaultApiService) GetMetricsByKafkaId(ctx _context.Context, id string) ApiGetMetricsByKafkaIdRequest {
-	return ApiGetMetricsByKafkaIdRequest{
+func (a *DefaultApiService) GetMetricsByInstantQuery(ctx _context.Context, id string) ApiGetMetricsByInstantQueryRequest {
+	return ApiGetMetricsByInstantQueryRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -1695,9 +1027,9 @@ func (a *DefaultApiService) GetMetricsByKafkaId(ctx _context.Context, id string)
 
 /*
  * Execute executes the request
- * @return MetricsList
+ * @return MetricsInstantQueryList
  */
-func (a *DefaultApiService) GetMetricsByKafkaIdExecute(r ApiGetMetricsByKafkaIdRequest) (MetricsList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *_nethttp.Response, GenericOpenAPIError) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -1705,16 +1037,171 @@ func (a *DefaultApiService) GetMetricsByKafkaIdExecute(r ApiGetMetricsByKafkaIdR
 		localVarFileName     string
 		localVarFileBytes    []byte
 		executionError       GenericOpenAPIError
-		localVarReturnValue  MetricsList
+		localVarReturnValue  MetricsInstantQueryList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetMetricsByKafkaId")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetMetricsByInstantQuery")
 	if err != nil {
 		executionError.error = err.Error()
 		return localVarReturnValue, nil, executionError
 	}
 
-	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/metrics"
+	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/metrics/query"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	if r.filters != nil {
+		t := *r.filters
+		if reflect.TypeOf(t).Kind() == reflect.Slice {
+			s := reflect.ValueOf(t)
+			for i := 0; i < s.Len(); i++ {
+				localVarQueryParams.Add("filters", parameterToString(s.Index(i), "multi"))
+			}
+		} else {
+			localVarQueryParams.Add("filters", parameterToString(t, "multi"))
+		}
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, executionError
+}
+
+type ApiGetMetricsByRangeQueryRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+	id         string
+	duration   *int64
+	interval   *int64
+	filters    *[]string
+}
+
+func (r ApiGetMetricsByRangeQueryRequest) Duration(duration int64) ApiGetMetricsByRangeQueryRequest {
+	r.duration = &duration
+	return r
+}
+func (r ApiGetMetricsByRangeQueryRequest) Interval(interval int64) ApiGetMetricsByRangeQueryRequest {
+	r.interval = &interval
+	return r
+}
+func (r ApiGetMetricsByRangeQueryRequest) Filters(filters []string) ApiGetMetricsByRangeQueryRequest {
+	r.filters = &filters
+	return r
+}
+
+func (r ApiGetMetricsByRangeQueryRequest) Execute() (MetricsRangeQueryList, *_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.GetMetricsByRangeQueryExecute(r)
+}
+
+/*
+ * GetMetricsByRangeQuery Get metrics with timeseries range query by kafka id.
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param id The id of record
+ * @return ApiGetMetricsByRangeQueryRequest
+ */
+func (a *DefaultApiService) GetMetricsByRangeQuery(ctx _context.Context, id string) ApiGetMetricsByRangeQueryRequest {
+	return ApiGetMetricsByRangeQueryRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return MetricsRangeQueryList
+ */
+func (a *DefaultApiService) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+		localVarReturnValue  MetricsRangeQueryList
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetMetricsByRangeQuery")
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, nil, executionError
+	}
+
+	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/metrics/query_range"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -2142,292 +1629,6 @@ func (a *DefaultApiService) ListCloudProvidersExecute(r ApiListCloudProvidersReq
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/cloud_providers"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
-	}
-	if r.size != nil {
-		localVarQueryParams.Add("size", parameterToString(*r.size, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, executionError
-}
-
-type ApiListConnectorTypesRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
-	page       *string
-	size       *string
-}
-
-func (r ApiListConnectorTypesRequest) Page(page string) ApiListConnectorTypesRequest {
-	r.page = &page
-	return r
-}
-func (r ApiListConnectorTypesRequest) Size(size string) ApiListConnectorTypesRequest {
-	r.size = &size
-	return r
-}
-
-func (r ApiListConnectorTypesRequest) Execute() (ConnectorTypeList, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.ListConnectorTypesExecute(r)
-}
-
-/*
- * ListConnectorTypes Returns a list of connector types
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @return ApiListConnectorTypesRequest
- */
-func (a *DefaultApiService) ListConnectorTypes(ctx _context.Context) ApiListConnectorTypesRequest {
-	return ApiListConnectorTypesRequest{
-		ApiService: a,
-		ctx:        ctx,
-	}
-}
-
-/*
- * Execute executes the request
- * @return ConnectorTypeList
- */
-func (a *DefaultApiService) ListConnectorTypesExecute(r ApiListConnectorTypesRequest) (ConnectorTypeList, *_nethttp.Response, GenericOpenAPIError) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
-		localVarReturnValue  ConnectorTypeList
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ListConnectorTypes")
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarPath := localBasePath + "/api/managed-services-api/v1/connector-types"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
-	}
-	if r.size != nil {
-		localVarQueryParams.Add("size", parameterToString(*r.size, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, executionError
-}
-
-type ApiListConnectorsRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
-	id         string
-	page       *string
-	size       *string
-}
-
-func (r ApiListConnectorsRequest) Page(page string) ApiListConnectorsRequest {
-	r.page = &page
-	return r
-}
-func (r ApiListConnectorsRequest) Size(size string) ApiListConnectorsRequest {
-	r.size = &size
-	return r
-}
-
-func (r ApiListConnectorsRequest) Execute() (ConnectorList, *_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.ListConnectorsExecute(r)
-}
-
-/*
- * ListConnectors Returns a list of connector types
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The id of record
- * @return ApiListConnectorsRequest
- */
-func (a *DefaultApiService) ListConnectors(ctx _context.Context, id string) ApiListConnectorsRequest {
-	return ApiListConnectorsRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return ConnectorList
- */
-func (a *DefaultApiService) ListConnectorsExecute(r ApiListConnectorsRequest) (ConnectorList, *_nethttp.Response, GenericOpenAPIError) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
-		localVarReturnValue  ConnectorList
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ListConnectors")
-	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
-	}
-
-	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/connector-deployments"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

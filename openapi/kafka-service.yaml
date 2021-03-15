@@ -1,8 +1,9 @@
+# All endpoints defined here will be discoverable by all users. If there is a need to keep some endpoints "private", add them to the "managed-services-api-private.yaml" file
 openapi: 3.0.0
 info:
-  title: Managed Service API
+  title: Kafka Service Fleet Manager
   version: 0.0.1
-  description: Managed Service API
+  description: Kafka Service Fleet Manager is a Rest API to manage kafka instances and connectors.
 servers:
   - url: https://api.openshift.com
     description: Main (production) server
@@ -518,10 +519,13 @@ paths:
         - Bearer: []
       operationId: resetServiceAccountCreds
       summary: reset credentials for the service account
-  /api/managed-services-api/v1/kafkas/{id}/metrics:
+  #
+  # These are the user-facing related endpoints
+  #
+  /api/managed-services-api/v1/kafkas/{id}/metrics/query_range:
     get:
-      summary: Get metrics by kafka id.
-      operationId: getMetricsByKafkaId
+      summary: Get metrics with timeseries range query by kafka id.
+      operationId: GetMetricsByRangeQuery
       security:
         - Bearer: []
       responses:
@@ -530,7 +534,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetricsList'
+                $ref: '#/components/schemas/MetricsRangeQueryList'
         '401':
           description: Auth token is invalid
           content:
@@ -554,21 +558,21 @@ paths:
         - $ref: "#/components/parameters/duration"
         - $ref: "#/components/parameters/interval"
         - $ref: "#/components/parameters/filters"
-
-
-  #
-  # These are the connector related APIs
-  #
-  '/api/managed-services-api/v1/connector-types/{id}':
+  /api/managed-services-api/v1/kafkas/{id}/metrics/query:
     get:
+      summary: Get metrics with instant query by kafka id.
+      operationId: GetMetricsByInstantQuery
+      security:
+        - Bearer: []
       responses:
         '200':
+          description: A JSON array of prometheus metrics objects from observatorium
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConnectorType'
-          description: The connector type matching the request
+                $ref: '#/components/schemas/MetricsInstantQueryList'
         '401':
+          description: Auth token is invalid
           content:
             application/json:
               schema:
@@ -576,54 +580,8 @@ paths:
               examples:
                 401Example:
                   $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                404Example:
-                  $ref: '#/components/examples/404Example'
-          description: No matching connector type exists
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                500Example:
-                  $ref: '#/components/examples/500Example'
           description: Unexpected error occurred
-      security:
-        - Bearer: [ ]
-      operationId: getConnectorTypeByID
-      summary: Get a connector type by name and version
-    parameters:
-      - $ref: "#/components/parameters/id"
-
-  /api/managed-services-api/v1/connector-types:
-    get:
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConnectorTypeList'
-          description: A list of connector types
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                401Example:
-                  $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        '500':
           content:
             application/json:
               schema:
@@ -631,206 +589,9 @@ paths:
               examples:
                 500Example:
                   $ref: '#/components/examples/500Example'
-          description: Unexpected error occurred
-      security:
-        - Bearer: [ ]
-      operationId: listConnectorTypes
-      summary: Returns a list of connector types
-  /api/managed-services-api/v1/kafkas/{id}/connector-deployments:
-    post:
-      operationId: createConnector
-      parameters:
-        - in: query
-          name: async
-          description: Perform the action in an asynchronous manner
-          schema:
-            type: boolean
-          required: true
-      requestBody:
-        description: Connector data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Connector'
-        required: true
-      responses:
-        "202":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Connector'
-          description: Accepted
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                400CreationExample:
-                  $ref: '#/components/examples/400CreationExample'
-          description: Validation errors occurred
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                401Example:
-                  $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                404Example:
-                  $ref: '#/components/examples/404Example'
-          description: The requested resource doesn't exist
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                500Example:
-                  $ref: '#/components/examples/500Example'
-          description: An unexpected error occurred creating the connector
-      security:
-        - Bearer: [ ]
-      summary: Create a new connector
-    get:
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConnectorList'
-          description: A list of connector deployments
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                401Example:
-                  $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                500Example:
-                  $ref: '#/components/examples/500Example'
-          description: Unexpected error occurred
-      security:
-        - Bearer: [ ]
-      operationId: listConnectors
-      summary: Returns a list of connector types
-    parameters:
-      - $ref: "#/components/parameters/id"
-  '/api/managed-services-api/v1/kafkas/{id}/connector-deployments/{cid}':
-    get:
       parameters:
         - $ref: "#/components/parameters/id"
-        - name: cid
-          description: The id of the connector
-          schema:
-            type: string
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Connector'
-          description: The connector deployment matching the request
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                401Example:
-                  $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                404Example:
-                  $ref: '#/components/examples/404Example'
-          description: No matching connector type exists
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                500Example:
-                  $ref: '#/components/examples/500Example'
-          description: Unexpected error occurred
-      security:
-        - Bearer: [ ]
-      operationId: getConnector
-      summary: Get a connector deployment
-    delete:
-      parameters:
-        - name: id
-          description: Id of the connector
-          schema:
-            type: string
-          in: path
-          required: true
-      responses:
-        '204':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-          description: Deleted
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                401Example:
-                  $ref: '#/components/examples/401Example'
-          description: Auth token is invalid
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                404DeleteExample:
-                  $ref: '#/components/examples/404DeleteExample'
-          description: No kafka request with specified id exists
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                500DeleteExample:
-                  $ref: '#/components/examples/500DeleteExample'
-          description: Unexpected error occurred
-      security:
-        - Bearer: [ ]
-      operationId: deleteConnector
-      summary: Delete a connector
-    parameters:
-      - $ref: "#/components/parameters/id"
-
+        - $ref: "#/components/parameters/filters"
 
 
 components:
@@ -1084,24 +845,15 @@ components:
               items:
                 allOf:
                   - $ref: "#/components/schemas/ServiceAccountListItem"
-    MetricsList:
+    # user-facing metrics related #
+    MetricsRangeQueryList:
       allOf:
         - type: object
           example:
-            kind: "Metrics"
+            kind: "MetricsRangeQueryList"
             id: "1nbpS70HduPe4l0to8jSg2CLzfu"
             items:
-              metric:
-                __name__: kafka_server_brokertopicmetrics_bytes_in_total
-                strimzi_io_cluster: kafka-service
-                topic: __consumer_offsets
-              values:
-                - Timestamp: 1611670230000
-                  Value: 84154
-                - Timestamp: 1611670260000
-                  Value: 85888
-                - Timestamp: 1611670290000
-                  Value: 87622
+              $ref: '#/components/examples/MetricsRangeQueryExample'
           properties:
             kind:
               type: string
@@ -1111,8 +863,8 @@ components:
               type: array
               items:
                 allOf:
-                  - $ref: "#/components/schemas/Metric"
-    Metric:
+                  - $ref: "#/components/schemas/RangeQuery"
+    RangeQuery:
       type: object
       properties:
         metric:
@@ -1134,172 +886,41 @@ components:
           format: double
       required:
         - Value
-
-
-    #
-    # Connector related types
-    #
-    ConnectorType:
-      description: >-
-        Represents a connector type supported by the API
-      required:
-        - name
-        - openAPIV3Schema
-        - version
+    MetricsInstantQueryList:
       allOf:
-        - $ref: '#/components/schemas/ObjectReference'
         - type: object
+          example:
+            kind: "MetricsInstantQueryList"
+            id: "1nbpS70HduPe4l0to8jSg2CLzfu"
+            items:
+              $ref: '#/components/examples/MetricsInstantQueryExample'
           properties:
-            name:
-              description: Name of the connector type.
+            kind:
               type: string
-            version:
-              description: Version of the connector type.
+            id:
               type: string
-            description:
-              description: A description of the connector.
-              type: string
-            json_schema:
-              description: >-
-                A json schema that can be used to validate a connectors
-                connector_spec field.
-              type: object # todo: replace with better type
-
-    ConnectorTypeList:
-      allOf:
-        - $ref: '#/components/schemas/List'
-        - type: object
-          properties:
             items:
               type: array
               items:
                 allOf:
-                  - $ref: '#/components/schemas/ConnectorType'
-    ConnectorList:
-      allOf:
-        - $ref: '#/components/schemas/List'
-        - type: object
-          properties:
-            items:
-              type: array
-              items:
-                allOf:
-                  - $ref: '#/components/schemas/Connector'
-    Connector:
-      description: A connector holds the configuration to connect a Kafka topic to another system.
-      allOf:
-        - $ref: '#/components/schemas/ObjectReference'
-        - type: object
-          properties:
-
-            metadata:
-              type: object
-              properties:
-                kafka_id:
-                  type: string
-                owner:
-                  type: string
-                name:
-                  type: string
-                created_at:
-                  format: date-time
-                  type: string
-                updated_at:
-                  format: date-time
-                  type: string
-
-            deployment_location:
-              type: object
-              properties:
-                cloud_provider:
-                  type: string
-                multi_az:
-                  type: boolean
-                region:
-                  type: string
-
-            connector_type_id:
-              type: string
-            connector_spec:
-              type: object
-            status:
-              type: string
-
-    DataPlaneClusterUpdateStatusRequest:
-      # TODO are there any fields that should be required?
-      # TODO are there any fields that should be nullable? (this is, a pointer in the resulting generated Go code)
-      description: "Schema for the request to update a data plane cluster's status"
+                  - $ref: "#/components/schemas/InstantQuery"
+    InstantQuery:
       type: object
       properties:
-        conditions:
-          description: "The cluster data plane conditions"
-          type: array
-          items:
-            type: object
-            properties:
-              type:
-                type: string
-              reason:
-                type: string
-              message:
-                type: string
-              status:
-                type: string
-              lastTransitionTime:
-                type: string
-                #format: date-time # enable this?? or just set it as pure plain string?
-        total:
+        metric:
           type: object
-          properties:
-            ingressEgressThroughputPerSec:
-              type: string #an example is "40Gi", a k8s quantity. Should we have some special format at openapi level?" this example also happens on other fields
-            connections:
-              type: integer # an example is 10000. Should we have some special format at openapi level? this example also happens on other fields
-            dataRetentionSize:
-              type: string
-            partitions:
-              type: integer
-        remaining:
-          type: object
-          properties:
-            # TODO 'total', 'remaining' attributes share the same properties so should we refactor it to a common schema?
-            ingressEgressThroughputPerSec:
-              type: string #an example is "40Gi", a k8s quantity. Should we have some special format at openapi level?" this example also happens on other fields
-            connections:
-              type: integer # an example is 10000. Should we have some special format at openapi level? this example also happens on other fields
-            dataRetentionSize:
-              type: string
-            partitions:
-              type: integer
-        nodeInfo:
-          type: object
-          properties:
-            ceiling:
-              type: integer
-            floor:
-              type: integer
-            current:
-              type: integer
-            currentWorkLoadMinimum:
-              type: integer
-        resizeInfo:
-          type: object
-          properties:
-            nodeDelta:
-              type: integer
-            delta:
-              type: object
-              properties:
-                ingressEgressThroughputPerSec:
-                  type: string #an example is "40Gi", a k8s quantity. Should we have some special format at openapi level?" this example also happens on other fields
-                connections:
-                  type: integer # an example is 10000. Should we have some special format at openapi level? this example also happens on other fields
-                dataRetentionSize:
-                  type: string
-                maxPartitions:
-                  type: integer
-      example:
-        $ref: "#/components/examples/DataPlaneClusterUpdateStatusRequestExample"
+          additionalProperties:
+            type: string
+        Timestamp:
+          type: integer
+          format: int64
+        Value:
+          type: number
+          format: double
+      required:
+        - Value
+
+
   parameters:
     id:
       name: id
@@ -1517,8 +1138,27 @@ components:
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
-    DataPlaneClusterUpdateStatusRequestExample:
-      value: {} # TODO fill this
+    MetricsRangeQueryExample:
+      value:
+        metric:
+          __name__: kafka_server_brokertopicmetrics_bytes_in_total
+          strimzi_io_cluster: kafka-service
+          topic: __consumer_offsets
+        values:
+          - Timestamp: 1611670230000
+            Value: 84154
+          - Timestamp: 1611670260000
+            Value: 85888
+          - Timestamp: 1611670290000
+            Value: 87622
+    MetricsInstantQueryExample:
+      value:
+        metric:
+          __name__: kafka_server_brokertopicmetrics_bytes_in_total
+          strimzi_io_cluster: kafka-service
+          topic: __consumer_offsets
+        Timestamp: 1611670230000
+        Value: 84154
     400DeletionExample:
       value:
         id: "103"
