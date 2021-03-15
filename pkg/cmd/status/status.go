@@ -87,7 +87,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 func runStatus(opts *Options) error {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	pkgOpts := &pkgStatus.Options{
