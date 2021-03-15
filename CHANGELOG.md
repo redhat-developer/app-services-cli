@@ -1,4 +1,43 @@
-#  (2021-02-24)
+#  (2021-03-15)
+
+
+
+# [0.20.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.20.0-alpha3...0.20.0) (2021-03-15)
+
+
+### Features
+
+* **kafka topic:** interactive mode for create/update topic ([#436](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/436)) ([498d646](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/498d64604da96fcd9963301b59b5e220d624cb56))
+* replace --force with --yes ([3290dde](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/3290dde233de0131d495ac422de9cf308ae581e8))
+* **login:** add the ability to log in using an offline token ([#450](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/450)) ([c6246d4](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/c6246d4c3db63fa0158412d50dcee1fd56ec0399))
+
+
+### Bug Fixes
+
+* lint error ([#421](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/421)) ([907fbf4](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/907fbf44a78a11de232294140a1cc0229a49e57b))
+* make binding executable directly in the bash ([#419](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/419)) ([00d98ad](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/00d98ad292cbd8836bc31cb3d6b1356d2b9bdf98))
+* **auth:** add dual-login to RH-SSO and MAS-SSO ([#404](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/404)) ([690587f](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/690587fbe1700f8080a17bf455f34aa7b68ee0b2))
+* rename command from info to status in description ([#417](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/417)) ([76231fa](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/76231faa39b6a8e1e90ae8d5d5917690c8819c3f))
+* **serviceaccount create:** allow absolute paths when passing custom file location ([#438](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/438)) ([aae6618](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/aae66189fd0f73436f7497b0b2a76c91fffa3b35))
+* appropriate error message when TTY is unavailable for kafka create ([#449](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/449)) ([ad2ad9e](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/ad2ad9ea64a51088575d5c8656f5e4a6695e703f))
+* check http response for nil pointer error ([#451](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/451)) ([73b8aaa](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/73b8aaae96e0e52ded7f16f2db9d3fea12f3e078))
+* removing Managed parts from the CLI ([#448](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/448)) ([865fdab](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/865fdab4996a4d6b23aaaab1180ee9d3c6c479be))
+
+
+
+# [0.19.0](https://github.com/bf2fc6cc711aee1a0c2a/cli/compare/0.19.0-alpha2...0.19.0) (2021-03-02)
+
+
+### Bug Fixes
+
+* Add  bindAsFiles by default and enforce proper name for right mo… ([#410](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/410)) ([c2605dd](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/c2605ddf61c936306aba3670f4e8bf187ac814d6))
+* invalid oc command for connect operation ([#405](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/405)) ([ef3453b](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/ef3453b3823b2a1f9cb38896c67c765e9d0d305e))
+
+
+### Features
+
+* **serviceaccount describe:** add describe command ([#406](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/406)) ([da63580](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/da63580f1675ce125c9b641cf7e59128e10365cf))
+* **kafka:** dynamic kafka name completions ([#389](https://github.com/bf2fc6cc711aee1a0c2a/cli/issues/389)) ([77366be](https://github.com/bf2fc6cc711aee1a0c2a/cli/commit/77366be8c64a95b19a2dbac152f3934d79449d30))
 
 
 
