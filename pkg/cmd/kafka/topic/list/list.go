@@ -35,6 +35,8 @@ type Options struct {
 type topicRow struct {
 	Name            string `json:"name,omitempty" header:"Name"`
 	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
+	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time"`
+	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size"`
 }
 
 // NewListTopicCommand gets a new command for getting kafkas.
@@ -168,9 +170,22 @@ func mapTopicResultsToTableFormat(topics []strimziadminclient.Topic) []topicRow 
 	var rows []topicRow = []topicRow{}
 
 	for _, t := range topics {
+		var RetentionTime, RetentionSize string
+
+		for _, config := range t.GetConfig() {
+			if *config.Key == "retention.ms" {
+				RetentionTime = *config.Value
+			}
+			if *config.Key == "retention.bytes" {
+				RetentionSize = *config.Value
+			}
+		}
+
 		row := topicRow{
 			Name:            t.GetName(),
 			PartitionsCount: len(t.GetPartitions()),
+			RetentionTime:   RetentionTime,
+			RetentionSize:   RetentionSize,
 		}
 		rows = append(rows, row)
 	}
