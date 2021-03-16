@@ -238,5 +238,12 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
+	logger.Info(localizer.MustLocalize(&localizer.Config{
+		MessageID: "serviceAccount.create.log.info.creating",
+		TemplateData: map[string]interface{}{
+			"Name": opts.name,
+		},
+	}))
+
 	return nil
 }
