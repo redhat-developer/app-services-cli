@@ -49,6 +49,9 @@ one = 'Description for the service account.'
 description = 'Error message when service account could not be created'
 one = 'could not create service account'
 
+[serviceAccount.create.log.info.creating]
+one = 'Creating service account "{{.Name}}"'
+
 [serviceAccount.create.log.info.createdSuccessfully]
 one = 'Service account "{{.Name}}" created successfully with ID "{{.ID}}".'
 
