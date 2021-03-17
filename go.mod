@@ -8,6 +8,7 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.7.0
+	github.com/ProtonMail/go-appdir v1.1.0
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
