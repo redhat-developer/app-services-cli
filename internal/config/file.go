@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+
+	"github.com/ProtonMail/go-appdir"
 )
 
 // NewFile creates a new config type
@@ -86,11 +87,7 @@ func (c *File) Location() (path string, err error) {
 	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {
-		home, err := os.UserHomeDir()
-		if err != nil {
-			return "", err
-		}
-		path = filepath.Join(home, ".rhoascli.json")
+		path = appdir.New(".rhoascli.json").UserConfig()
 	}
 	return path, nil
 }
