@@ -170,7 +170,7 @@ You can update the retention period for an existing topic with `rhoas kafka topi
 [source,shell]
 ----
 $ rhoas kafka topic update topic-3 --retention-ms 36000
-Topic topic-1 updated in Kafka instance serviceapi:
+Topic "topic-1" in Kafka instance "serviceapi" has been updated
 {
   "config": [
     {
@@ -191,22 +191,22 @@ To list the topics in the current Apache Kafka instance use the `rhoas kafka top
 [source,shell]
 ----
 $ rhoas kafka topic list
-  NAME      PARTITIONS  
- --------- ------------ 
-  topic-1            2  
-  topic-2            2  
-  topic-3            1  
+  NAME             PARTITIONS   RETENTION TIME   RETENTION SIZE  
+ ---------------- ------------ ---------------- ---------------- 
+  topic-1                   3   -1               -1              
+  topic-2                   3   604800000        -1              
+  topic-3                   1   -1               -1
 ----
 
 === Deleting a Kafka topic
 
-The `rhoas kafka delete` command allows you to delete a Kafka topic.
+The `rhoas kafka topic delete` command allows you to delete a Kafka topic.
 
 [source,shell]
 ----
-$ ./rhoas kafka topic delete topic-3
+$ rhoas kafka topic delete topic-3
 ? Confirm the name of the topic you want to delete: topic-3
-Topic topic-3 in Kafka instance my-kafka-instance has been deleted
+Topic "topic-3" has been deleted from the Kafka instance "my-kafka-instance"
 ----
 
 === Deleting a Kafka instance

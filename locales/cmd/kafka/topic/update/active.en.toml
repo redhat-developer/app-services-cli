@@ -25,4 +25,4 @@ one = 'Topic "{{.Name}}" already has {{.Count}} partitions.'
 one = 'Nothing to update'
 
 [kafka.topic.update.log.info.topicUpdated]
-one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}} has been updated'
+one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}}" has been updated'

@@ -19,7 +19,7 @@ $ rhoas kafka topic create topic-1
 '''
 
 [kafka.topic.create.error.topicNameIsRequired]
-one = 'Topic name is required. Run "rhoas kafka topic create <topic-name>"'
+one = 'topic name is required. Run "rhoas kafka topic create <topic-name>"'
 
 [kafka.topic.create.error.conflictError]
 one = 'topic "{{.TopicName}}" already exists in Kafka instance "{{.InstanceName}}"'
