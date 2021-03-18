@@ -29,7 +29,7 @@ $ rhoas kafka list -o json
 
 [serviceAccount.list.error.unableToList]
 description = 'Error message when unable to list service accounts'
-one = 'Unable to list service accounts'
+one = 'unable to list service accounts'
 
 [serviceAccount.list.log.info.noneFound]
 description = 'Info message when no service accounts were found'

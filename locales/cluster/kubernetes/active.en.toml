@@ -26,17 +26,17 @@ one = 'Do you want to continue?'
 one = 'Cancelling cluster connection'
 
 [cluster.kubernetes.createKafkaCR.error.marshalError]
-one = 'Could not marshal KafkaConnection to JSON object'
+one = 'could not marshal KafkaConnection to JSON object'
 
 [cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
 one = 'KafkaConnection resource "{{.Name}}" has been created'
 
 [cluster.kubernetes.watchForKafkaStatus.error.format]
-one = '''Invalid result from operator. Status object is not compatible with expected result from CLI.
+one = '''invalid result from operator. Status object is not compatible with expected result from CLI.
 '''
 
 [cluster.kubernetes.watchForKafkaStatus.error.status]
-one = '''Error when processing KafkaConnection: %v
+one = '''error when processing KafkaConnection: %v
 '''
 
 [cluster.kubernetes.watchForKafkaStatus.log.info.success]
@@ -49,7 +49,7 @@ oc get mkc -o=yaml -n {{.Namespace}} {{.Name}}
 '''
 
 [cluster.kubernetes.watchForKafkaStatus.error.timeout]
-one = '''Process of watching KafkaConnection timed out'''
+one = '''process of watching KafkaConnection timed out'''
 
 [cluster.kubernetes.watchForKafkaStatus.log.info.wait]
 one = '''
@@ -91,7 +91,7 @@ EOF
 
 
 [cluster.kubernetes.serviceaccountsecret.error.createError]
-one = 'Could not create Service Account secret'
+one = 'could not create Service Account secret'
 
 [cluster.kubernetes.tokensecret.log.info.found]
 one = 'Access token already exist on the specified namespace'

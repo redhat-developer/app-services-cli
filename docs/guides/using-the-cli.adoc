@@ -191,11 +191,11 @@ To list the topics in the current Apache Kafka instance use the `rhoas kafka top
 [source,shell]
 ----
 $ rhoas kafka topic list
-  NAME      PARTITIONS  
- --------- ------------ 
-  topic-1            2  
-  topic-2            2  
-  topic-3            1  
+  NAME             PARTITIONS   RETENTION TIME   RETENTION SIZE  
+ ---------------- ------------ ---------------- ---------------- 
+  topic-1                   3   -1               -1              
+  topic-2                   3   604800000        -1              
+  topic-3                   1   -1               -1
 ----
 
 === Deleting a Kafka topic
