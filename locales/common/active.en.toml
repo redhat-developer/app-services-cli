@@ -3,3 +3,6 @@ one = 'could not cast "{{.Value}}" to {{.Type}}'
 
 [common.log.debug.couldNotSaveRefreshTokenToConfig]
 one = 'Could not save refreshed tokens to config:'
+
+[common.error.unsupportedOperatingSystem]
+one = 'unsupported operating system "{{.OS}}"'
