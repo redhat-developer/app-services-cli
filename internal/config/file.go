@@ -85,7 +85,7 @@ func (c *File) Location() (path string, err error) {
 	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {
-		path, err = GetUserConfig(".rhoascli.json")
+		path, err = getUserConfig(".rhoascli.json")
 		if err != nil {
 			return "", err
 		}

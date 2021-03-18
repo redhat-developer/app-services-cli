@@ -9,8 +9,8 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 )
 
-// GetUserConfig gets the path to store user-specific configurations
-func GetUserConfig(name string) (string, error) {
+// gets the path to store user-specific configurations
+func getUserConfig(name string) (string, error) {
 	currentOs := runtime.GOOS
 	switch currentOs {
 	case "windows":
