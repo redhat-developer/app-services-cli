@@ -2,6 +2,7 @@ package root
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/status"
@@ -15,6 +16,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/logout"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount"
+	cliversion "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -30,6 +32,13 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	}
 
 	cmd.Version = version
+
+	cmd.SetVersionTemplate(fmt.Sprintln(localizer.MustLocalize(&localizer.Config{
+		MessageID: "version.cmd.outputText",
+		TemplateData: map[string]interface{}{
+			"Version": version,
+		},
+	})))
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
@@ -49,6 +58,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	cmd.AddCommand(status.NewStatusCommand(cmdFactory))
 	cmd.AddCommand(completion.NewCompletionCommand(cmdFactory))
 	cmd.AddCommand(whoami.NewWhoAmICmd(cmdFactory))
+	cmd.AddCommand(cliversion.NewVersionCmd(cmdFactory))
 
 	return cmd
 }
