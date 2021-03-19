@@ -2,6 +2,7 @@ package root
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/status"
@@ -31,6 +32,13 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	}
 
 	cmd.Version = version
+
+	cmd.SetVersionTemplate(fmt.Sprintln(localizer.MustLocalize(&localizer.Config{
+		MessageID: "version.cmd.outputText",
+		TemplateData: map[string]interface{}{
+			"Version": version,
+		},
+	})))
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
