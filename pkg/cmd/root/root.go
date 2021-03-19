@@ -15,6 +15,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/login"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/logout"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount"
+	cliversion "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -49,6 +50,7 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 	cmd.AddCommand(status.NewStatusCommand(cmdFactory))
 	cmd.AddCommand(completion.NewCompletionCommand(cmdFactory))
 	cmd.AddCommand(whoami.NewWhoAmICmd(cmdFactory))
+	cmd.AddCommand(cliversion.NewVersionCmd(cmdFactory))
 
 	return cmd
 }
