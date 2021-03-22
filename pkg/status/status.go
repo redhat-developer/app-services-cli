@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strings"
 	"text/tabwriter"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
-
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -66,7 +65,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 				if kas.IsErr(err, kas.ErrorNotFound) {
 					err = kafka.ErrorNotFound(kafkaCfg.ClusterID)
 					logger.Info(err)
-					logger.Info("Run", color.CodeSnippet("rhoas kafka use --id=<kafka-instance-id>"), "to use another Kafka instance.")
+					logger.Info(localizer.MustLocalizeFromID("status.log.info.selectAnotherKafka"))
 				}
 			} else {
 				status.Kafka = kafkaStatus
@@ -122,10 +121,12 @@ func printServiceStatus(w io.Writer, name string, v reflect.Value) {
 		// get the title to use for the field
 		title := getTitle(&fieldType)
 
-		// print the row and take note of its character length
-		len, _ := fmt.Fprintf(tw, "%v:\t\t%v\n", title, fieldValue)
-		if len > maxRowLen {
-			maxRowLen = len
+		if !getOmitEmpty(&fieldType) || !fieldValue.IsZero() {
+			// print the row and take note of its character length
+			len, _ := fmt.Fprintf(tw, "%v:\t\t%v\n", title, fieldValue)
+			if len > maxRowLen {
+				maxRowLen = len
+			}
 		}
 	}
 	// print the service header
@@ -146,6 +147,17 @@ func getTitle(f *reflect.StructField) string {
 	}
 
 	return tag
+}
+
+// check if omitempty is set
+func getOmitEmpty(f *reflect.StructField) bool {
+	var omitempty bool
+	tag := f.Tag.Get("json")
+	if tag != "" {
+		omitempty = strings.Contains(tag, "omitempty")
+	}
+
+	return omitempty
 }
 
 // create a divider for the top of the table of n length
