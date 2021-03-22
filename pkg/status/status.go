@@ -13,6 +13,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	kas "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
@@ -30,6 +31,7 @@ type KafkaStatus struct {
 	Name                string `json:"name,omitempty"`
 	Status              string `json:"status,omitempty"`
 	BootstrapServerHost string `json:"bootstrap_server_host,omitempty" title:"Bootstrap URL"`
+	FailedReason        string `json:"failed_reason,omitempty" title:"Failed Reason"`
 }
 
 type Options struct {
@@ -71,7 +73,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 				ok = true
 			}
 		} else {
-			logger.Debug("No Kafka instance is currently used, skipping status check")
+			logger.Debug(localizer.MustLocalizeFromID("status.log.debug.noKafkaSelected"))
 		}
 	}
 
@@ -170,6 +172,10 @@ func getKafkaStatus(ctx context.Context, api kasclient.DefaultApi, id string) (s
 		Name:                kafkaResponse.GetName(),
 		Status:              kafkaResponse.GetStatus(),
 		BootstrapServerHost: kafkaResponse.GetBootstrapServerHost(),
+	}
+
+	if kafkaResponse.GetStatus() == "failed" {
+		status.FailedReason = kafkaResponse.GetFailedReason()
 	}
 
 	return status, err

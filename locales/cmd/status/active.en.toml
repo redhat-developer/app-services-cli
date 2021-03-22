@@ -35,3 +35,6 @@ one = 'Requesting status of the following services:'
 
 [status.log.info.noStatusesAreUsed]
 one = 'No services are currently being used. To set a service in context, run "rhoas <service> use [args]".'
+
+[status.log.debug.noKafkaSelected]
+one = 'No Kafka instance is currently used, skipping status check'
