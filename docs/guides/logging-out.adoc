@@ -1,7 +1,13 @@
-=== Logging out of the CLI
+[id="proc-logging-out-rhoas_{context}"]
+= Logging out of rhoas
 
-You can log out from the `rhoas` CLI using the `rhoas logout` command.
+[role="_abstract"]
+You can log out from the `rhoas` CLI by using the `rhoas logout` command.
 
+.Procedure
+
+* Log out of `rhoas`.
++
 [source,shell]
 -----
 $ rhoas logout

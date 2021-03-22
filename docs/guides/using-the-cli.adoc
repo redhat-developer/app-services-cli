@@ -1,123 +1,174 @@
-== Using the CLI
+[id="proc-using-rhoas_{context}"]
+= Using rhoas
 
-Review the following sections to learn how to complete tasks using the CLI.
+[role="_abstract"]
+As a developer of applications and services,
+you can use `rhoas` to create Kafka instances and connect your applications and services to these instances.
 
-=== Creating an Apache Kafka instance
+The following procedures demonstrate a basic workflow to get started quickly:
 
-Use the `rhoas kafka create` command to create a new Kafka instance.
+* xref:_creating_a_kafka_instance[Create a Kafka instance]
 
+* xref:_creating_a_service_account[Create a service account]
+
+* xref:_creating_a_kafka_topic[Create a Kafka topic]
+
+* xref:_commands_for_managing_kafka[Use `rhoas` to manage your Kafka instances, service accounts, and Kafka topics]
+
+== Creating a Kafka instance
+
+A Kafka instance includes a Kafka cluster, bootstrap server, and other required configurations for connecting to Kafka producer and consumer services.
+
+.Prerequisites
+
+* You are logged in to `rhoas`.
+
+.Procedure
+
+. Enter the following command to create a Kafka instance with default values.
++
+--
+This example creates a Kafka instance called `my-kafka`.
+
+.Creating a Kafka instance
 [source,shell]
 ----
 $ rhoas kafka create my-kafka
-Creating Kafka instance
-Created new Kafka instance:
+Kafka instance "my-kafka" created successfully
 {
-    "id": "1lVumk6qWk3ZRQfCssZNNTGvR6Q",
-    "kind": "Kafka",
-    "href": "/api/managed-services-api/v1/kafkas/1lVumk6qWk3ZRQfCssZNNTGvR6Q",
-    "status": "accepted",
-    "cloud_provider": "aws",
-    "multi_az": true,
-    "region": "us-east-1",
-    "owner": "developer",
-    "name": "my-kafka",
-    "created_at": "2020-12-11T13:52:20.216679345Z",
-    "updated_at": "2020-12-11T13:52:20.216679345Z"
+  "cloud_provider": "aws",
+  "created_at": "2021-03-17T18:33:50.000799005Z",
+  "href": "/api/managed-services-api/v1/kafkas/1ptcsACdx7HVzacKZBA6HRRa1oW",
+  "id": "1ptcsACdx7HVzacKZBA6HRRa1oW",
+  "kind": "Kafka",
+  "multi_az": true,
+  "name": "my-kafka",
+  "owner": "developer",
+  "region": "us-east-1",
+  "status": "accepted",
+  "updated_at": "2021-03-17T18:33:50.000799005Z"
 }
 ----
 
-NOTE: A Kafka instance will automatically be "used" when created.
+[NOTE]
+====
+If you do not want to use the default values,
+enter the following command: `rhoas kafka create`.
+You will be prompted to enter the `Name`, `Cloud Provider`, and `Cloud Region` for the Kafka instance.
+====
+--
 
-=== Viewing the status of your current services
+. Enter the following command to verify that the Kafka instance is ready to use.
++
+--
+This command shows that the Kafka instance is ready to use,
+because the `Status` field is `ready`.
 
-Use the `rhoas status` command to view the status of all current services.
-
+.Reviewing details of a Kafka instance
 [source,shell]
 ----
-$ rhoas kafka status
+$ rhoas status kafka
 
   Kafka
-  ------------------------------------------------------------------------------------
-  ID:                     1nh3qkcXuBGMlbIPDqhNbswIZCB
-  Name:                   my-kafka-instance
+  -----------------------------------------------------------------------------------
+  ID:                     1ptdfZRHmLKwqW6A3YKM2MawgDh
+  Name:                   my-kafka
   Status:                 ready
-  Bootstrap URL:          my-kafka-instance--nh-qkcxubgmlbipdqhnbswizcb.kafka.devshift.org:443
+  Bootstrap URL:          my-kafka--ptdfzrhmlkwqw-a-ykm-mawgdh.kafka.devshift.org:443
 ----
 
-=== Viewing a list of Apache Kafka instances
+[NOTE]
+====
+When you created the Kafka instance, it was set as the current instance automatically.
+If you have multiple Kafka instances,
+you can switch to a different instance by using the `rhoas kafka use` command.
+====
+--
 
-To view a list of Kafka instances in your organization use the `rhoas kafka list` command.
+== Creating a service account
 
+To connect your applications or services to a Kafka instance, you must first create a service account with credentials.
+The credentials are exported to a file on your computer,
+which you can use to authenticate your application with your Kafka instance.
+
+.Prerequisites
+
+* You have created a Kafka instance, and it has a `ready` status.
+
+.Procedure
+
+. Enter the following command to create a service account.
++
+--
+This example creates a service account called `my-service-acct` and saves the credentials in a JSON file.
+
+.Creating a service account
 [source,shell]
 ----
-$ rhoas kafka list
-  ID (2)                        NAME              OWNER      STATUS     CLOUD PROVIDER   REGION     
- ----------------------------- --------------- ------------ ---------- ---------------- ----------- 
-  1lVcpo1c9kx6a9rbablGBY8RiD8   my-test-kafka   developer2   complete   aws              us-east-1  
-  1lVumk6qWk3ZRQfCssZNNTGvR6Q   my-kafka        developer    complete   aws              us-east-1  
+$ rhoas serviceaccount create --name "my-service-acct" --file-format json
+
+Service account my-service-account created
+Credentials saved to /home/developer/my-project/credentials.json
 ----
 
-=== Describing an Apache Kafka instance
+Your service account credentials are created and saved to a JSON file.
 
-To display all information on-demand about the current Kafka instance, run `rhoas kafka describe`.
+[NOTE]
+====
+When creating a service account, you can choose the file format and location to save the credentials.
+For more information, see the `rhoas serviceaccount create` command help.
+====
+--
 
+. To verify your service account credentials,
+view the `credentials.json` file that you created.
++
+--
+.Verifying service account credentials
 [source,shell]
 ----
-$ rhoas kafka describe
+$ cat credentials.json
 {
-    "id": "1lVumk6qWk3ZRQfCssZNNTGvR6Q",
-    "kind": "Kafka",
-    "href": "/api/managed-services-api/v1/kafkas/1lVumk6qWk3ZRQfCssZNNTGvR6Q",
-    "status": "accepted",
-    "cloud_provider": "aws",
-    "multi_az": true,
-    "region": "us-east-1",
-    "owner": "developer",
-    "name": "my-kafka",
-    "bootstrapServerHost": "my-kafka--lvumk-qwk-zrqfcssznntgvr-q.apps.ms-bv8dm6nbd3jo.cx74.s1.devshift.org",
-    "created_at": "2020-12-11T13:52:20.216679345Z",
-    "updated_at": "2020-12-11T13:52:20.216679345Z"
+	"user":"srvc-acct-eb575691-b94a-41f1-ab97-50ade0cd1094",
+	"password":"facf3df1-3c8d-4253-aa87-8c95ca5e1225"
 }
 ----
 
-TIP: You can pass the `--id` flag to describe a different Kafka instance.
+You'll use these credentials and the bootstrap server URL to connect your applications and services to your Kafka instance.
+--
 
-TIP: Run `rhoas kafka use <name>` to use a Kafka instance by its name.
+== Creating a Kafka topic
 
+After creating a Kafka instance, you can create Kafka topics to start producing and consuming messages in your services.
 
-=== Using an Apache Kafka instance
+.Prerequisites
 
-The `rhoas kafka use` command can be used to switch the current Kafka instance context.
+* You have created a Kafka instance, and it has a `ready` status.
 
+.Procedure
+
+. Verify that you are using the Kafka instance that you created.
++
+--
+This example switches to the `my-kafka` instance that was previously created.
+
+.Selecting a Kafka instance to use
 [source,shell]
 ----
-$ rhoas kafka use my-kafka-instance
-{
-    "id": "1lVcpo1c9kx6a9rbablGBY8RiD8",
-    "kind": "Kafka",
-    "href": "/api/managed-services-api/v1/kafkas/1lVcpo1c9kx6a9rbablGBY8RiD8",
-    "status": "complete",
-    "cloud_provider": "aws",
-    "multi_az": true,
-    "region": "us-east-1",
-    "owner": "developer2",
-    "name": "my-kafka-instance",
-    "bootstrapServerHost": "my-kafka-instance--lvcpo-c-kx-a-rbablgby-rida.apps.ms-bv8dm6nbd3jo.cx74.s1.devshift.org",
-    "created_at": "2020-12-11T11:24:44.115583Z",
-    "updated_at": "2020-12-11T11:25:05.234173Z"
-}
+$ rhoas kafka use my-kafka
+Kafka instance "my-kafka" has been set as the current instance.
 ----
+--
 
-TIP: Run `rhoas kafka use <name>` to use a Kafka instance by its name.
+. Create a Kafka topic with default values.
++
+--
+This example creates the `my-topic` Kafka topic.
 
-=== Creating a Kafka topic
-
-You can create a topic in the current Apache Kafka instance with the `rhoas kafka topic create` command.
-
+.Creating a Kafka topic with default values
 [source,shell]
 ----
-$ rhoas kafka topic create topic-1
-Topic "topic-1" created in Kafka instance "my-kafka-instance":
+$ rhoas kafka topic create my-topic
 {
   "config": [
     {
@@ -125,7 +176,7 @@ Topic "topic-1" created in Kafka instance "my-kafka-instance":
       "value": "-1"
     }
   ],
-  "name": "topic-1",
+  "name": "my-topic",
   "partitions": [
     {
       "id": 1,
@@ -142,114 +193,72 @@ Topic "topic-1" created in Kafka instance "my-kafka-instance":
 }
 ----
 
-=== Describing a Kafka topic
+[NOTE]
+====
+If you do not want to use the default values,
+you can specify the number of partitions (`--partitions`) and message retention time (`--retention-ms`).
+For more information, see the `rhoas kafka topic create` help.
+====
+--
 
-To view the details of a topic, run the `rhoas kafka topic describe` command.
+. If necessary, you can edit or delete the topic by using the `rhoas kafka topic update` and `rhoas kafka topic delete` commands.
 
-[source,shell]
-----
-$ rhoas kafka topic describe topic-1
-{
-  "config": [
-    {
-      "key": "retention.ms",
-      "value": "-1"
-    }
-  ],
-  "name": "topic-1",
-  "partitions": [
-    ...
-  ]
-}
-----
+== Commands for managing Kafka
 
-=== Updating a Kafka topic
+The following list shows the `rhoas` commands you can use to manage your Kafka instances, service accounts, and topics.
+For more information about any of the commands,
+view the command help (for example, `rhoas kafka list -h`).
 
-You can update the retention period for an existing topic with `rhoas kafka topic update`:
+* View a list of all Kafka instances in your organization:
++
+`rhoas kafka list`
 
-[source,shell]
-----
-$ rhoas kafka topic update topic-3 --retention-ms 36000
-Topic "topic-1" in Kafka instance "serviceapi" has been updated
-{
-  "config": [
-    {
-      "key": "retention.ms",
-      "value": "36000"
-    }
-  ],
-  "name": "topic-1",
-  "partitions": [
-    ...
-  ]
-----
+* View configuration details for a particular Kafka instance:
++
+`rhoas kafka describe`
 
-=== Listing Kafka topics
+* Switch to a different Kafka instance:
++
+`rhoas kafka use`
 
-To list the topics in the current Apache Kafka instance use the `rhoas kafka topic list` command.
+* Delete a Kafka instance:
++
+`rhoas kafka delete`
 
-[source,shell]
-----
-$ rhoas kafka topic list
-  NAME             PARTITIONS   RETENTION TIME   RETENTION SIZE  
- ---------------- ------------ ---------------- ---------------- 
-  topic-1                   3   -1               -1              
-  topic-2                   3   604800000        -1              
-  topic-3                   1   -1               -1
-----
+* View a list of Kafka topics:
++
+`rhoas kafka topic list`
 
-=== Deleting a Kafka topic
+* View configuration details for a particular Kafka topic:
++
+`rhoas kafka topic describe`
 
-The `rhoas kafka topic delete` command allows you to delete a Kafka topic.
+* Update the message retention time for a Kafka topic:
++
+`rhoas kafka topic update`
 
-[source,shell]
-----
-$ rhoas kafka topic delete topic-3
-? Confirm the name of the topic you want to delete: topic-3
-Topic "topic-3" has been deleted from the Kafka instance "my-kafka-instance"
-----
+* Delete a Kafka topic:
++
+`rhoas kafka topic delete`
 
-=== Deleting a Kafka instance
+* View a list of service accounts in your organization:
++
+`rhoas serviceaccount list`
 
-To permanently delete the current Kafka instance use the `rhoas kafka delete` command.
+* View configuration details for a particular service account:
++
+`rhoas serviceaccount describe`
 
-[source,shell]
-----
-$ rhoas kafka delete
-? Are you sure you want to delete the Kafka instance my-kafka-instance? Yes
-? Confirm the name of the instance you want to permanently delete: my-kafka-instance
-Kafka instance my-kafka-instance has successfully been deleted
-----
+* Generate a new password for a service account:
++
+`rhoas serviceaccount reset-credentials`
 
-TIP: You can pass the `--id` flag to delete a different Kafka instance.
+* Delete a service account:
++
+`rhoas serviceaccount delete`
 
-TIP: Run `rhoas kafka use <name>` to use a Kafka instance by its name.
-
-
-=== Creating a Service Account
-
-You can use the `rhoas serviceaccount create` command to create a new service account with credentials.
-The credentials are exported to a file on your computer and can be used to authenticate your application with managed services.
-
-[source,shell]
-----
-$ rhoas serviceaccount create --name "my-service-acct" -o json
-
-Service account my-service-account created
-Credentials saved to /home/developer/my-project/credentials.yaml
-----
-
-Your service account credentials will be saved to a JSON file for use later.
-
-[source,shell]
-----
-$ cat credentials.json
-{ 
-	"user":"srvc-acct-eb575691-b94a-41f1-ab97-50ade0cd1094", 
-	"password":"facf3df1-3c8d-4253-aa87-8c95ca5e1225" 
-}
-----
-
-==== Next steps
+ifndef::enterprise[]
+== Next steps
 
 link:logging-out.adoc[Logging out]
+endif::[]
