@@ -148,9 +148,10 @@ func runLogin(opts *Options) (err error) {
 		masSsoCfg := &login.SSOConfig{
 			AuthURL:      opts.masAuthURL,
 			RedirectPath: "mas-sso-callback",
+			SkipAuth:     opts.skipMasSSOLogin,
 		}
 
-		if err = loginExec.Execute(context.Background(), ssoCfg, masSsoCfg, opts.skipMasSSOLogin); err != nil {
+		if err = loginExec.Execute(context.Background(), ssoCfg, masSsoCfg); err != nil {
 			return err
 		}
 	}

@@ -30,27 +30,43 @@ type AuthorizationCodeGrant struct {
 type SSOConfig struct {
 	AuthURL      string
 	RedirectPath string
+	SkipAuth     bool
 }
 
 // Execute runs an Authorization Code flow login
 // enabling the user to log in to SSO and MAS-SSO in succession
 // https://tools.ietf.org/html/rfc6749#section-4.1
-func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig, skipMasSSOLogin bool) (err error) {
+func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) error {
 	// log in to SSO
 	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingIn"))
-	if err = a.loginSSO(ctx, ssoCfg); err != nil {
+	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
 	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedIn"))
 
-	if !skipMasSSOLogin {
-		a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingInMAS"))
-		// log in to MAS-SSO
-		if err = a.loginMAS(ctx, masSSOCfg); err != nil {
+	if masSSOCfg.SkipAuth {
+
+		cfg, err := a.Config.Load()
+		if err != nil {
 			return err
 		}
-		a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedInMAS"))
+
+		cfg.MasAccessToken = ""
+		cfg.MasRefreshToken = ""
+
+		if err = a.Config.Save(cfg); err != nil {
+			return err
+		}
+
+		return nil
 	}
+
+	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingInMAS"))
+	// log in to MAS-SSO
+	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
+		return err
+	}
+	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedInMAS"))
 
 	return nil
 }
