@@ -55,6 +55,10 @@ one = "Prints the console login URL, which you can use to log in to RHOAS from a
 description = 'Description for the --scope flag'
 one = 'Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope.'
 
+[login.flag.skipMasSSOLogin]
+description = 'Description for the --skip-mas-login flag'
+one = 'Skip logging in to MAS-SSO'
+
 [login.redirectPage.title]
 description = 'Title for the RHOAS login redirect webpage'
 one = 'Welcome to RHOAS'
