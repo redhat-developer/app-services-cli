@@ -17,6 +17,7 @@ require (
 	github.com/markbates/pkger v0.17.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/mattn/go-tty v0.0.3
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/openconfig/goyang v0.2.4

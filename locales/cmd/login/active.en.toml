@@ -102,7 +102,7 @@ one = 'Logging in...'
 one = 'Logged in successfully'
 
 [login.log.info.loggingInMAS]
-one = 'Logging in to MAS-SSO...'
+one = 'Logging in to MAS-SSO (Press any key to cancel) ...'
 
 [login.log.info.loggedInMAS]
 one = 'Logged in successfully to MAS-SSO'

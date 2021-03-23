@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -13,6 +14,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/coreos/go-oidc"
+	"github.com/mattn/go-tty"
 	"github.com/phayes/freeport"
 	"golang.org/x/oauth2"
 )
@@ -32,6 +34,15 @@ type SSOConfig struct {
 	RedirectPath string
 }
 
+func getInput(input chan string) {
+	tty, _ := tty.Open()
+	defer tty.Close()
+
+	r, _ := tty.ReadRune()
+	input <- string(r)
+
+}
+
 // Execute runs an Authorization Code flow login
 // enabling the user to log in to SSO and MAS-SSO in succession
 // https://tools.ietf.org/html/rfc6749#section-4.1
@@ -45,10 +56,19 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 
 	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingInMAS"))
 	// log in to MAS-SSO
-	if err = a.loginMAS(ctx, masSSOCfg); err != nil {
-		return err
+
+	input := make(chan string, 1)
+	go getInput(input)
+
+	select {
+	case <-input:
+		fmt.Println("skipping mas sso login")
+	case <-time.After(10000 * time.Millisecond):
+		if err = a.loginMAS(ctx, masSSOCfg); err != nil {
+			return err
+		}
+		a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedInMAS"))
 	}
-	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedInMAS"))
 
 	return nil
 }
