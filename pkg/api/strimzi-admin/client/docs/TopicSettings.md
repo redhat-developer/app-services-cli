@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ReplicationFactor** | Pointer to **int32** | Replication factor for this topic | [optional] 
 **NumPartitions** | Pointer to **int32** | Number of partitions for this topic. | [optional] 
 **Config** | Pointer to [**[]ConfigEntry**](ConfigEntry.md) | Topic configuration entry. | [optional] 
 
@@ -26,31 +25,6 @@ will change when the set of required properties is changed
 NewTopicSettingsWithDefaults instantiates a new TopicSettings object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetReplicationFactor
-
-`func (o *TopicSettings) GetReplicationFactor() int32`
-
-GetReplicationFactor returns the ReplicationFactor field if non-nil, zero value otherwise.
-
-### GetReplicationFactorOk
-
-`func (o *TopicSettings) GetReplicationFactorOk() (*int32, bool)`
-
-GetReplicationFactorOk returns a tuple with the ReplicationFactor field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetReplicationFactor
-
-`func (o *TopicSettings) SetReplicationFactor(v int32)`
-
-SetReplicationFactor sets ReplicationFactor field to given value.
-
-### HasReplicationFactor
-
-`func (o *TopicSettings) HasReplicationFactor() bool`
-
-HasReplicationFactor returns a boolean if a field has been set.
 
 ### GetNumPartitions
 
