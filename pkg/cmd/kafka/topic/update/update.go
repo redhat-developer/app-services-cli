@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
@@ -263,6 +264,12 @@ func runCmd(opts *Options) error {
 
 	// update the topic
 	response, httpRes, topicErr := updateTopicReq.Execute()
+	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
+	if err != nil {
+		logger.Debug("Could not read response body")
+	} else {
+		logger.Debug("Response Body:", string(bodyBytes))
+	}
 	// handle error
 	if topicErr.Error() != "" {
 		if httpRes == nil {

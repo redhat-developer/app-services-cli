@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
@@ -117,10 +118,21 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
 	// fetch the topic
 	topicResponse, httpRes, topicErr := api.
 		GetTopic(context.Background(), opts.topicName).
 		Execute()
+	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
+	if err != nil {
+		logger.Debug("Could not read response body")
+	} else {
+		logger.Debug("Response Body:", string(bodyBytes))
+	}
 
 	if topicErr.Error() != "" {
 		if httpRes == nil {
