@@ -190,7 +190,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
