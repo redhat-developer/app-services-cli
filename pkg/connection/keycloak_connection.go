@@ -131,9 +131,11 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 		return &AuthError{err}
 	}
 
-	err = c.masKeycloakClient.Logout(ctx, c.clientID, "", c.masRealm, c.MASToken.RefreshToken)
-	if err != nil {
-		return &AuthError{err}
+	if c.MASToken.RefreshToken != "" {
+		err = c.masKeycloakClient.Logout(ctx, c.clientID, "", c.masRealm, c.MASToken.RefreshToken)
+		if err != nil {
+			return &AuthError{err}
+		}
 	}
 
 	c.Token.AccessToken = ""

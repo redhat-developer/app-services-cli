@@ -61,6 +61,7 @@ type Options struct {
 	insecureSkipTLSVerify bool
 	printURL              bool
 	offlineToken          string
+	skipMasSSOLogin       bool
 }
 
 // NewLoginCmd gets the command that's log the user in
@@ -93,6 +94,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, localizer.MustLocalizeFromID("login.flag.printSsoUrl"))
 	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, localizer.MustLocalizeFromID("login.flag.scope"))
 	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", localizer.MustLocalizeFromID("login.flag.token"))
+	cmd.Flags().BoolVar(&opts.skipMasSSOLogin, "skip-mas-login", false, localizer.MustLocalizeFromID("login.flag.skipMasSSOLogin"))
 
 	return cmd
 }
@@ -146,6 +148,7 @@ func runLogin(opts *Options) (err error) {
 		masSsoCfg := &login.SSOConfig{
 			AuthURL:      opts.masAuthURL,
 			RedirectPath: "mas-sso-callback",
+			SkipAuth:     opts.skipMasSSOLogin,
 		}
 
 		if err = loginExec.Execute(context.Background(), ssoCfg, masSsoCfg); err != nil {
