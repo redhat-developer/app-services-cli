@@ -291,7 +291,7 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziad
 
 	cfg.HTTPClient = c.defaultHTTPClient
 	cfg.Host = apiURL.Host
-	cfg.AddDefaultHeader("Authorization", c.MASToken.AccessToken)
+	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.MASToken.AccessToken))
 
 	cfg.Servers = strimziadminclient.ServerConfigurations{
 		{
