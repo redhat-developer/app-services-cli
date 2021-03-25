@@ -35,6 +35,9 @@ one = 'Cloud Provider ID'
 description = 'Description for the --region flag'
 one = 'Cloud Provider Region ID'
 
+[kafka.create.flag.autoUse.description]
+one = 'Set the new Kafka instance to the current instance'
+
 [kafka.create.log.debug.creatingKafka]
 description = 'Debug message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}'
@@ -65,3 +68,9 @@ one = "Geographical region where the Kafka instance will be deployed"
 
 [kafka.create.argument.name.error.requiredWhenNonInteractive]
 one = 'name is required. Run "rhoas kafka create <name>"'
+
+[kafka.create.debug.autoUseSetMessage]
+one = 'Auto-use Kafka is set, updating the current Kafka instance'
+
+[kafka.create.debug.autoUseNotSetMessage]
+one = 'Auto-use Kafka is not set, skipping updating the current Kafka instance'

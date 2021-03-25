@@ -41,6 +41,7 @@ type Options struct {
 	multiAZ  bool
 
 	outputFormat string
+	autoUse      bool
 
 	interactive bool
 
@@ -101,6 +102,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", localizer.MustLocalizeFromID("kafka.create.flag.cloudProvider.description"))
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", localizer.MustLocalizeFromID("kafka.create.flag.cloudRegion.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalizeFromID("kafka.common.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.autoUse, "use", true, localizer.MustLocalizeFromID("kafka.create.flag.autoUse.description"))
 
 	return cmd
 }
@@ -184,9 +186,14 @@ func runCreate(opts *Options) error {
 		ClusterID: *response.Id,
 	}
 
-	cfg.Services.Kafka = kafkaCfg
-	if err := opts.Config.Save(cfg); err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotUseKafka"), err)
+	if opts.autoUse {
+		logger.Debug(localizer.MustLocalizeFromID("kafka.create.debug.autoUseSetMessage"))
+		cfg.Services.Kafka = kafkaCfg
+		if err := opts.Config.Save(cfg); err != nil {
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotUseKafka"), err)
+		}
+	} else {
+		logger.Debug(localizer.MustLocalizeFromID("kafka.create.debug.autoUseNotSetMessage"))
 	}
 
 	return nil
