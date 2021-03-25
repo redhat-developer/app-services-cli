@@ -2,6 +2,8 @@ package factory
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
@@ -13,6 +15,22 @@ import (
 // New creates a new command factory
 // The command factory is available to all command packages
 // giving centralized access to the config and API connection
+
+type LoggingRoundTripper struct {
+	Proxied http.RoundTripper
+}
+
+func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
+	resp, err := c.Proxied.RoundTrip(r)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(*resp)
+
+	return resp, nil
+}
+
 // nolint:funlen
 func New(cliVersion string) *Factory {
 	io := iostreams.System()
@@ -87,6 +105,8 @@ func New(cliVersion string) *Factory {
 		builder.WithInsecure(cfg.Insecure)
 
 		builder.WithConfig(cfgFile)
+
+		// builder.WithTransportWrapper(LoggingRoundTripper)
 
 		// create a logger if it has not already been created
 		logger, err = loggerFunc()
