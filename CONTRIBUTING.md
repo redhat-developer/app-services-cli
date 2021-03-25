@@ -181,17 +181,6 @@ To do this, follow the instructions on the repository README with the following 
 - `CLONE_FROM_ORG`: bf2fc6cc711aee1a0c2a
 - `CLONE_FROM_REPO`: cli
 
-### Generate a changelog
-
-To generate a changelog, run:
-
-```
-make generate/changelog
-```
-
-This will generate a changelog based off the commits and tags. The Changelog will be generated in `CHANGELOG.md`.
-Update the GitHub release description with the changelog.
-
 ### Releasing snapshot version
 
 For testing purposes we should always release snapshot version that will not be used by end users.

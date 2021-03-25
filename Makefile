@@ -154,7 +154,3 @@ docs/check: docs/generate
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas
 .PHONY: docs/generate
-
-changelog/generate:
-	./scripts/generate-changelog.sh
-.PHONY: changelog/generate
