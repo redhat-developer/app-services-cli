@@ -230,7 +230,12 @@ func runCmd(opts *Options) error {
 
 func runInteractivePrompt(opts *Options) (err error) {
 
-	_, err = opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return err
+	}
+
+	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
@@ -247,7 +252,14 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &opts.topicName, survey.WithValidator(survey.Required), survey.WithValidator(topic.ValidateName))
+	err = survey.AskOne(
+		promptName,
+		&opts.topicName,
+		survey.WithValidator(survey.Required),
+		survey.WithValidator(topic.ValidateName),
+		survey.WithValidator(topic.ValidateNameIsAvailable(api, kafkaInstance.GetName())),
+	)
+
 	if err != nil {
 		return err
 	}

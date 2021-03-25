@@ -1,6 +1,7 @@
 package topic
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"regexp"
@@ -8,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
 )
 
 const (
@@ -139,4 +141,25 @@ func ValidateMessageRetentionPeriod(v interface{}) error {
 	}
 
 	return nil
+}
+
+// ValidateNameIsAvailable checks if a topic with the given name already exists
+func ValidateNameIsAvailable(api strimziadminclient.DefaultApi, instance string) func(v interface{}) error {
+	return func(v interface{}) error {
+		name, _ := v.(string)
+
+		_, httpRes, _ := api.GetTopic(context.Background(), name).Execute()
+
+		if httpRes != nil && httpRes.StatusCode == 200 {
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.topic.create.error.conflictError",
+				TemplateData: map[string]interface{}{
+					"TopicName":    name,
+					"InstanceName": instance,
+				},
+			}))
+		}
+
+		return nil
+	}
 }
