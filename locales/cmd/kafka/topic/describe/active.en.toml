@@ -6,7 +6,7 @@ one = 'Describe a topic'
 
 [kafka.topic.describe.cmd.longDescription]
 one = '''
-Print detailed configuration information for a Kafka topic"
+Print detailed configuration information for a Kafka topic.
 '''
 
 [kafka.topic.describe.cmd.example]
