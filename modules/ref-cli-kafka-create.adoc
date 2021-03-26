@@ -1,0 +1,51 @@
+== rhoas kafka create
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Create an Apache Kafka instance
+
+=== Synopsis
+
+Create an Apache Kafka instance on a particular cloud provider and region.
+
+After creating the instance you can view it by running "rhoas kafka describe".
+
+
+....
+rhoas kafka create [flags]
+....
+
+=== Examples
+
+....
+# start an interactive prompt to fill out the configuration values for the instance
+$ rhoas kafka create
+
+# create a Kafka instance
+$ rhoas kafka create my-kafka-instance
+
+# create a Kafka instance and output the result in YAML
+$ rhoas kafka create -o yaml
+
+....
+
+=== Options
+
+....
+  -o, --output string     Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml" (default "json")
+      --provider string   Cloud Provider ID
+      --region string     Cloud Provider Region ID
+      --use               Set the new Kafka instance to the current instance (default true)
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+

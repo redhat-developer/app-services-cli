@@ -1,0 +1,45 @@
+== rhoas kafka topic create
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Create a topic
+
+=== Synopsis
+
+Create a topic in the current Apache Kafka instance.
+
+This command lets you create a topic, set a desired number of 
+partitions, replicas and retention period or else use the default values.
+
+
+....
+rhoas kafka topic create [flags]
+....
+
+=== Examples
+
+....
+# create a topic
+$ rhoas kafka topic create topic-1
+
+....
+
+=== Options
+
+....
+  -o, --output string      Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
+      --partitions int32   The number of partitions in the topic (default 1)
+      --retention-ms int   The period of time in milliseconds the broker will retain a partition log before deleting it (default -1)
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_kafka_topic{relfilesuffix}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+

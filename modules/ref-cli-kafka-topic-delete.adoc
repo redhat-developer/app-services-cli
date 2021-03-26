@@ -1,0 +1,40 @@
+== rhoas kafka topic delete
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Delete a topic
+
+=== Synopsis
+
+Delete a topic in the current Apache Kafka instance.
+
+
+....
+rhoas kafka topic delete [flags]
+....
+
+=== Examples
+
+....
+# delete a topic
+$ rhoas kafka topic delete topic-1
+
+....
+
+=== Options
+
+....
+  -y, --yes   Skip confirmation to forcibly delete a topic
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_kafka_topic{relfilesuffix}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+

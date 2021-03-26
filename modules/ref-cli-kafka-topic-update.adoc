@@ -1,0 +1,41 @@
+== rhoas kafka topic update
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Update a Kafka topic
+
+=== Synopsis
+
+Update a topic in the current Apache Kafka instance.
+
+
+....
+rhoas kafka topic update [flags]
+....
+
+=== Examples
+
+....
+# update the number of replicas for a topic
+$ rhoas kafka topic update topic-1 --replication-factor 
+
+....
+
+=== Options
+
+....
+  -o, --output string         Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
+      --retention-ms string   The period of time in milliseconds the broker will retain a partition log before deleting it
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_kafka_topic{relfilesuffix}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+

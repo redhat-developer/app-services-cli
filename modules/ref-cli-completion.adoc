@@ -1,0 +1,35 @@
+== rhoas completion
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Outputs command completion for the given shell (bash, zsh, or fish)
+
+=== Synopsis
+
+Outputs command completion for the given shell (bash, zsh, or fish).
+
+To find what shell you are currently running, run `echo $0`.
+
+Run `rhoas completion [bash|zsh|fish] -h` for instructions on installing command completions for your shell.
+
+When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
+
+
+....
+rhoas completion [flags]
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_completion_bash{relfilesuffix}[rhoas completion bash]	 - Generate command completion script for Bash shell
+* link:rhoas_completion_fish{relfilesuffix}[rhoas completion fish]	 - Generate command completion script for fish shell
+* link:rhoas_completion_zsh{relfilesuffix}[rhoas completion zsh]	 - Generate command completion script for Zsh shell
+

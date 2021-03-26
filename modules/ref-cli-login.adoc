@@ -1,0 +1,53 @@
+== rhoas login
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Log in to RHOAS
+
+=== Synopsis
+
+Log in securely to RHOAS through a web browser.
+
+This command opens your web browser, where you can enter your credentials.
+
+
+....
+rhoas login [flags]
+....
+
+=== Examples
+
+....
+# securely log in to RHOAS by using a web browser
+$ rhoas login
+
+# print the authentication URL instead of automatically opening the browser
+$ rhoas login --print-sso-url
+
+....
+
+=== Options
+
+....
+      --api-gateway string    URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development. (default "https://api.stage.openshift.com")
+      --auth-url string       The URL of the SSO Authentication server. (default "https://sso.redhat.com/auth/realms/redhat-external")
+      --client-id string      OpenID client identifier (default "rhoas-cli-prod")
+      --insecure              Enables insecure communication with the server. This disables verification of TLS certificates and host names.
+      --mas-auth-url string   The URL of the MAS-SSO Authentication server. (default "https://keycloak-edge-redhat-rhoam-user-sso.apps.mas-sso-stage.1gzl.s1.devshift.org/auth/realms/mas-sso-staging")
+      --print-sso-url         Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.
+      --scope stringArray     Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope. (default [openid])
+      --skip-mas-login        Skip logging in to MAS-SSO
+  -t, --token string          Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token.
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+
