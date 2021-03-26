@@ -153,7 +153,11 @@ make docs/generate
 
 #### `make docs/generate`
 
-After running the command, the documentation should be updated with the command using markdown and then transformed to Asciidocs.
+After running the command, the documentation should be generated in AsciiDoc format.
+
+#### `make docs/generate-modular-docs`
+
+After running the command, the `dist` directory will contain the documentation conforming to the modular docs specification.
 
 ## Best practices
 

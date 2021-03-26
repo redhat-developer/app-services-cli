@@ -154,3 +154,7 @@ docs/check: docs/generate
 docs/generate:
 	GENERATE_DOCS=true go run ./cmd/rhoas
 .PHONY: docs/generate
+
+docs/generate-modular-docs: docs/generate
+	SRC_DIR=$$(pwd)/docs/commands DEST_DIR=$$(pwd)/dist go run ./cmd/modular-docs
+.PHONY: docs/generate-modular-docs
