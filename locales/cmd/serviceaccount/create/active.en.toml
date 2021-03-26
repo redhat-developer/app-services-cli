@@ -72,4 +72,4 @@ one = 'File format in which to save the service account credentials:'
 
 [serviceAccount.create.input.description.message]
 description = 'Message for service account description'
-one = 'Description (optional):'
+one = 'Description [optional]:'

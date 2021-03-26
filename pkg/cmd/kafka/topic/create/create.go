@@ -264,8 +264,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	partitionsPrompt := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.help"),
+		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.partitions.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.description"),
 		Default: "1",
 	}
 
@@ -275,7 +275,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	retentionPrompt := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
+		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionMs.message"),
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
 		Default: fmt.Sprintf("%v", defaultRetentionPeriodMS),
 	}

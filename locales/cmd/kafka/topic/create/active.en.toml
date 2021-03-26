@@ -26,3 +26,11 @@ one = 'topic "{{.TopicName}}" already exists in Kafka instance "{{.InstanceName}
 
 [kafka.topic.create.log.info.topicCreated]
 one = 'Topic "{{.TopicName}}" created in Kafka instance "{{.InstanceName}}":'
+
+[kafka.topic.create.input.retentionMs.message]
+description = 'Message for the Retention input'
+one = 'Retention Period (ms):'
+
+[kafka.topic.create.input.partitions.message]
+description = 'Message for the Partitions input'
+one = 'Number of Partitions:'

@@ -348,8 +348,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
 
 	retentionPrompt := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
+		Message: localizer.MustLocalizeFromID("kafka.topic.update.input.retentionMs.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.update.input.retentionMs.help"),
 	}
 
 	err = survey.AskOne(retentionPrompt, &opts.retentionMsStr, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
