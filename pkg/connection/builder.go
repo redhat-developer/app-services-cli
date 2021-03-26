@@ -43,21 +43,6 @@ type Builder struct {
 // request and response.
 type TransportWrapper func(http.RoundTripper) http.RoundTripper
 
-type LoggingRoundTripper struct {
-	Proxied http.RoundTripper
-}
-
-func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
-	resp, err := c.Proxied.RoundTrip(r)
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println(*resp)
-
-	return resp, nil
-}
-
 // NewBuilder create an builder that knows how to create connections with the default
 // configuration.
 func NewBuilder() *Builder {
@@ -250,7 +235,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	}
 
 	client := &http.Client{
-		Transport: LoggingRoundTripper{transport},
+		Transport: transport,
 	}
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
