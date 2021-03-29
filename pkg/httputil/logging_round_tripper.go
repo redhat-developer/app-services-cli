@@ -1,4 +1,4 @@
-// Package httputil contains functions to help log http responses in debug mode
+// Package httputil contains functions that act as middleware for api interactions
 package httputil
 
 import (
@@ -12,6 +12,7 @@ type LoggingRoundTripper struct {
 	Logger  logging.Logger
 }
 
+// RoundTrip logs the http response in debug mode
 func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	resp, err := c.Proxied.RoundTrip(r)
 	if err != nil {
