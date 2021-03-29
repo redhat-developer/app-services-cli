@@ -16,6 +16,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -72,13 +73,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			if !validOutput && opts.fileFormat != "" {
-				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: "flag.error.invalidValue",
-					TemplateData: map[string]interface{}{
-						"Flag":  "file-format",
-						"Value": opts.fileFormat,
-					},
-				}))
+				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			}
 
 			return runResetCredentials(opts)

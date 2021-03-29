@@ -18,6 +18,7 @@ func (e *Error) Unwrap() error {
 	return e.Err
 }
 
+// InvalidValueError returns an error when an invalid flag value is provided
 func InvalidValueError(flag string, val interface{}, validOptions ...string) *Error {
 	var chooseFromStr string
 	if len(validOptions) > 0 {
