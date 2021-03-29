@@ -104,7 +104,7 @@ func runCmd(opts *Options) error {
 	topicData, httpRes, topicErr := a.Execute()
 	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
 	if err != nil {
-		logger.Debug("Couls not read response body")
+		logger.Debug("Could not read response body")
 	} else {
 		logger.Debug("Response Body:", string(bodyBytes))
 	}

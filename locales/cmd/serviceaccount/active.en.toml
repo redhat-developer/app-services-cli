@@ -57,7 +57,7 @@ one = 'you must specify a file to save the service account credentials'
 
 [serviceAccount.common.flag.fileFormat.description]
 description = 'Description for the --file-format flag'
-one = 'Format in which to save the service account credentials. Choose from: "env", "json", "properties", "kubernetes-secret"'
+one = 'Format in which to save the service account credentials. Choose from: "env", "json", "properties"'
 
 [serviceAccount.common.flag.overwrite.description]
 description = 'Description for --overwrite flag'

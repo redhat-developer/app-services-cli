@@ -3,7 +3,7 @@ package flags
 
 var (
 	ValidOutputFormats       = []string{"json", "yml", "yaml"}
-	CredentialsOutputFormats = []string{"env", "json", "properties", "kubernetes-secret"}
+	CredentialsOutputFormats = []string{"env", "json", "properties"}
 )
 
 // IsValidInput checks if the input value is in the range of valid values

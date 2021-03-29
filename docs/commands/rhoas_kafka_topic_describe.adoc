@@ -6,7 +6,7 @@ Describe a topic
 
 === Synopsis
 
-Print detailed configuration information for a Kafka topic"
+Print detailed configuration information for a Kafka topic.
 
 
 ....
