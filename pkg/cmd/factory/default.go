@@ -2,12 +2,12 @@ package factory
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/httputil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
@@ -15,49 +15,6 @@ import (
 // New creates a new command factory
 // The command factory is available to all command packages
 // giving centralized access to the config and API connection
-
-type LoggingRoundTripper struct {
-	Proxied http.RoundTripper
-}
-
-func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
-	resp, err := c.Proxied.RoundTrip(r)
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println(*resp)
-
-	return resp, nil
-}
-
-// (c LoggingRoundTripper) RoundTrip := func (r *http.Request) (*http.Response, error) {
-// 	resp, err := c.Proxied.RoundTrip(r)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	fmt.Println(*resp)
-
-// 	return resp, nil
-// }
-
-// func RoundTripperWithLogger(a logging.Logger) func (c LoggingRoundTripper) func(r *http.Request) (*http.Response, error) {
-// 	return func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
-// 		resp, err := c.Proxied.RoundTrip(r)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-
-// 		fmt.Println(*resp)
-
-// 		return resp, nil
-// 	}
-// }
-
-func transportWrapper(a http.RoundTripper) http.RoundTripper {
-	return &LoggingRoundTripper{a}
-}
 
 // nolint:funlen
 func New(cliVersion string) *Factory {
@@ -86,12 +43,6 @@ func New(cliVersion string) *Factory {
 
 		return logger, nil
 	}
-
-	// wrapperWithLogger := func(a logging.Logger) func(b http.RoundTripper) http.RoundTripper {
-	// 	return func(b http.RoundTripper) http.RoundTripper {
-	// 		return b
-	// 	}
-	// }
 
 	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
 		if conn != nil {
@@ -140,13 +91,20 @@ func New(cliVersion string) *Factory {
 
 		builder.WithConfig(cfgFile)
 
-		builder.WithTransportWrapper(transportWrapper)
-
 		// create a logger if it has not already been created
 		logger, err = loggerFunc()
 		if err != nil {
 			return nil, err
 		}
+
+		transportWrapper := func(a http.RoundTripper) http.RoundTripper {
+			return &httputil.LoggingRoundTripper{
+				Proxied: a,
+				Logger:  logger,
+			}
+		}
+
+		builder.WithTransportWrapper(transportWrapper)
 
 		builder.WithConnectionConfig(connectionCfg)
 

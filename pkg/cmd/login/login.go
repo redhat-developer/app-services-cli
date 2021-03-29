@@ -15,6 +15,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/httputil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 
@@ -128,7 +129,12 @@ func runLogin(opts *Options) (err error) {
 
 	if opts.offlineToken == "" {
 		tr := createTransport(opts.insecureSkipTLSVerify)
-		httpClient := &http.Client{Transport: tr}
+		httpClient := &http.Client{
+			Transport: httputil.LoggingRoundTripper{
+				Proxied: tr,
+				Logger:  logger,
+			},
+		}
 
 		loginExec := &login.AuthorizationCodeGrant{
 			HTTPClient: httpClient,
