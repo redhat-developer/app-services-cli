@@ -279,13 +279,24 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kasclient.APIClient {
 func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziadminclient.APIClient {
 	cfg := strimziadminclient.NewConfiguration()
 
-	host, _, _ := net.SplitHostPort(bootstrapURL)
+	host, port, _ := net.SplitHostPort(bootstrapURL)
+	var apiURL *url.URL
 
-	apiHost := fmt.Sprintf("admin-server-%v", host)
-	apiURL, _ := url.Parse(apiHost)
-	apiURL.Scheme = "https"
-	apiURL.Path = "/rest"
-	apiURL.Host = fmt.Sprintf("admin-server-%v", host)
+	if host == "localhost" {
+		apiURL = &url.URL{
+			Scheme: "http",
+			Host:   fmt.Sprintf("localhost:%v", port),
+			Path:   "/rest",
+		}
+		apiURL.Scheme = "http"
+		apiURL.Path = "/rest"
+	} else {
+		apiHost := fmt.Sprintf("admin-server-%v", host)
+		apiURL, _ = url.Parse(apiHost)
+		apiURL.Scheme = "https"
+		apiURL.Path = "/rest"
+		apiURL.Host = fmt.Sprintf("admin-server-%v", host)
+	}
 
 	c.logger.Debugf("Making request to %v", apiURL.String())
 
