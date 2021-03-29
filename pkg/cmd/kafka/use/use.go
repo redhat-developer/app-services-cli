@@ -20,9 +20,10 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
-type options struct {
-	id   string
-	name string
+type Options struct {
+	id          string
+	name        string
+	interactive bool
 
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -30,7 +31,7 @@ type options struct {
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
-	opts := &options{
+	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -53,7 +54,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 			if len(args) > 0 {
 				opts.name = args[0]
 			} else if opts.id == "" {
-				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.idFlagRequired"))
+				opts.interactive = true
 			}
 
 			if opts.name != "" && opts.id != "" {
@@ -69,7 +70,16 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runUse(opts *options) error {
+func runUse(opts *Options) error {
+
+	if opts.interactive {
+		// run the create command interactively
+		err := runInteractivePrompt(opts)
+		if err != nil {
+			return err
+		}
+	}
+
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
@@ -123,6 +133,29 @@ func runUse(opts *options) error {
 			"Name": res.GetName(),
 		},
 	}))
+
+	return nil
+}
+
+func runInteractivePrompt(opts *Options) error {
+	logger, err := opts.Logger()
+	if err != nil {
+		return err
+	}
+
+	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return err
+	}
+
+	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
+
+	selectedKafka, err := kafka.InteractiveSelect(connection, logger)
+	if err != nil {
+		return err
+	}
+
+	opts.name = *selectedKafka.Name
 
 	return nil
 }

@@ -11,11 +11,20 @@ description = "Description for --output flag"
 one = 'Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml"'
 other = 'Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"'
 
-[kafka.common.error.idFlagRequired]
-one = '--id flag is required when name argument is not provided'
-
 [kafka.common.error.idAndNameCannotBeUsed]
 one = 'name argument and --id flag cannot be used at the same time'
+
+[kafka.common.error.couldNotFetchKafkas]
+description = 'Error message when list of Kafka instances could not be fetched'
+one = 'unable to list Kafka instances'
+
+[kafka.common.input.instanceName.message]
+description = 'title for the Partitions input'
+one = 'Select Kafka instance to connect:'
+
+[kafka.common.log.info.noKafkaInstances]
+description = 'Info message when no Kafka instances were found'
+one = 'No Kafka instances were found.'
 
 [kafka.topic.common.error.topicNotFoundError]
 one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'
