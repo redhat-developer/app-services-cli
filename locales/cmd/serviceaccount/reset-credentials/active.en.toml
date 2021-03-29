@@ -17,7 +17,6 @@ credentials must be updated to use the new password.
 You must specify an output format into which the credentials will be stored.
   - env (default): Store credentials in an env file as environment variables
   - json: Store credentials in a JSON file
-  - kubernetes-secret: Store credentials in YAML as a Kubernetes Secret (the Kubernetes Secret is not created for you)
   - properties: Store credentials in a properties file, which is typically used in Java-related technologies.
 '''
 

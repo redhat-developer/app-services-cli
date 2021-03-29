@@ -33,17 +33,6 @@ var (
 		"clientID":"%v", 
 		"clientSecret":"%v" 
 	}`)
-
-	templateSecret = heredoc.Doc(`
-	kind: Secret
-	apiVersion: v1
-	metadata:
-	  name: "rhoas-service-account-secret"
-	stringData:
-	  clientID: "%v"
-	  clientSecret: "%v"
-	type: Opaque
-	`)
 )
 
 // Credentials is a type which represents the credentials
@@ -62,8 +51,6 @@ func GetDefaultPath(outputFormat string) (filePath string) {
 		filePath = "credentials.properties"
 	case "json":
 		filePath = "credentials.json"
-	case "kubernetes-secret":
-		filePath = "credentials.yaml"
 	}
 
 	pwd, err := os.Getwd()
@@ -98,8 +85,6 @@ func getFileFormat(output string) (format string) {
 		format = templateProperties
 	case "json":
 		format = templateJSON
-	case "kube":
-		format = templateSecret
 	}
 
 	return format
