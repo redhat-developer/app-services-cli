@@ -70,3 +70,18 @@ one = 'Sets a custom file location to save the credentials.'
 [serviceAccount.common.log.debug.interactive.fileFormatNotSet]
 description = 'debug message'
 one = '--file-format flag is not set, prompting user to enter a value'
+
+[serviceAccount.common.validation.name.error.required]
+one = 'service account name is required'
+
+[serviceAccount.common.validation.name.error.lengthError]
+one = 'service account name cannot exceed {{.MaxNameLen}} characters'
+
+[serviceAccount.common.validation.name.error.invalidChars]
+one = 'invalid service account name "{{.Name}}"; only lowercase letters (a-z), numbers, and "-" are accepted'
+
+[serviceAccount.common.validation.description.error.invalidChars]
+one = 'invalid service account description "{{.Description}}"; only lowercase letters (a-z) and numbers are accepted'
+
+[serviceAccount.common.validation.description.error.lengthError]
+one = 'service account description cannot exceed {{.MaxNameLen}} characters'

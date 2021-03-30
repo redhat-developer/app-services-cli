@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/serviceaccount/validation"
+
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 
@@ -50,7 +52,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("serviceAccount.create.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("serviceAccount.create.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("serviceAccount.create.cmd.example"),
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		Args:    cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 					MessageID: "flag.error.requiredWhenNonInteractive",
@@ -62,13 +65,22 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			if !opts.interactive && opts.fileFormat == "" {
-				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: "flag.error.requiredFlag",
-					TemplateData: map[string]interface{}{
-						"Flag": "file-format",
-					},
-				}))
+			if !opts.interactive {
+				if opts.fileFormat == "" {
+					return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+						MessageID: "flag.error.requiredFlag",
+						TemplateData: map[string]interface{}{
+							"Flag": "file-format",
+						},
+					}))
+				}
+
+				if err = validation.ValidateName(opts.name); err != nil {
+					return err
+				}
+				if err = validation.ValidateDescription(opts.description); err != nil {
+					return err
+				}
 			}
 
 			// check that a valid --file-format flag value is used
@@ -199,7 +211,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    localizer.MustLocalizeFromID("serviceAccount.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required))
+	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateName))
 	if err != nil {
 		return err
 	}
@@ -228,7 +240,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	promptDescription := &survey.Multiline{Message: localizer.MustLocalizeFromID("serviceAccount.create.input.description.message")}
 
-	err = survey.AskOne(promptDescription, &opts.description)
+	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validation.ValidateDescription))
 	if err != nil {
 		return err
 	}
