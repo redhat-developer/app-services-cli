@@ -169,30 +169,38 @@ After running the command, the `dist` directory will contain the documentation c
 
 ## Releases
 
-Releases can be triggered directing using Github Releases. 
-Before performing release, do the following:
+This project follows [Semantic Versioning](https://semver.org/). Before creating a release, identify if it will be a major, minor, or patch release. In the following example, we will create a patch release `0.20.1`.
 
-After that, go to Github Releases and create the new release.
+> NOTE: When creating a release it is good practice to create a pre-release first to monitor the integration tests to ensure everything works as it should.
 
-> Note: The project follows [semantic versioning](https://semver.org/)
+### Create snapshot
 
-GoReleaser will create and upload a release asset in a number of formats for Linux, macOS and Windows. The GitHub release will be set to draft automatically. Once all assets are uploaded (this could take a while) you must manually change it from a draft when all assets are ready.
-
-To make the release assets available to download outside of this private organization, we must clone the releases to [bf3fc6c](https://github.com/bf3fc6c/cli).
-
-To do this, follow the instructions on the repository README with the following environment variables:
-
-- `CLONE_FROM_ORG`: bf2fc6cc711aee1a0c2a
-- `CLONE_FROM_REPO`: cli
-
-### Releasing snapshot version
-
-For testing purposes we should always release snapshot version that will not be used by end users.
-To release snapshot version please execute:
+For testing purposes we should always release a local snapshot version for testing (requires [GoReleaser](https://goreleaser.com/))
 
 ```shell
 goreleaser --snapshot --rm-dist
 ```
+
+### Creating the release
+
+Execute `git tag 0.20.1` to create the release tag. Then execute `git push origin 0.20.1` to push to the tag to your remote (GitHub).
+Once pushed, a [GitHub Action](https://github.com/bf2fc6cc711aee1a0c2a/cli/actions/workflows/release.yml) will create a release on GitHub and upload the binaries.
+
+### Generate a changelog
+
+> NOTE: This step is not required for pre-releases.
+
+[git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
+
+Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases/tag/latest).
+
+### Make the release public
+
+> NOTE: This step is not required for pre-releases.
+
+Because the bf2 GitHub organization is private, we must clone the release to a public repository [bf3fc6c/cli](https://github.com/bf3fc6c/cli/releases).
+
+Once all assets have been upload to the release on GitHub, run `./scripts/clone-release.sh` to clone the release to bf3fc6c/cli.
 
 ### Working with mocked Kafka
 
