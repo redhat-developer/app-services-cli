@@ -122,7 +122,7 @@ openapi/kas/generate:
 	gofmt -w ${kasapi_dir}
 .PHONY: openapi/kas/generate
 
-mock-api/start: mock-api/server/start mock-api/client/start
+mock-api/start: mock-api/client/start
 .PHONY: mock-api/start
 
 mock-api/server/start:
