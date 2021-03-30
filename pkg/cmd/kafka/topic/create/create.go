@@ -28,8 +28,7 @@ import (
 )
 
 const (
-	Partitions = "partitions"
-	Replicas   = "replicas"
+	defaultRetentionPeriodMS = 604800000
 )
 
 type Options struct {
@@ -116,7 +115,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
 	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.description"))
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", -1, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
+	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
 
 	return cmd
 }
@@ -278,7 +277,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	retentionPrompt := &survey.Input{
 		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.message"),
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
-		Default: "-1",
+		Default: fmt.Sprintf("%v", defaultRetentionPeriodMS),
 	}
 
 	err = survey.AskOne(retentionPrompt, &opts.retentionMs, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
