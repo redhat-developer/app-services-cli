@@ -12,7 +12,7 @@ one = 'The replication factor for the topic'
 
 [kafka.topic.common.input.retentionMs.description]
 description = 'Description for the Retention input'
-one = 'The period of time in milliseconds the broker will retain a partition log before deleting it' 
+one = 'The period of time in milliseconds the broker will retain a partition log before deleting it'
 
 [kafka.topic.common.error.noKafkaSelected]
 one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
@@ -60,21 +60,9 @@ one = 'Name:'
 description = 'help for the Name input'
 one = "Name for the Kafka topic"
 
-[kafka.topic.common.input.partitions.message]
-description = 'title for the Partitions input'
-one = 'Number of Partitions:'
-
-[kafka.topic.common.input.partitions.help]
-description = 'help for the Partitions input'
-one = 'The number of partitions in the topic'
-
 [kafka.topic.common.input.partitions.error.invalid]
 description = 'Error message when an invalid partition value is entered'
 one = 'invalid value for partitions: {{.Partition}}'
-
-[kafka.topic.common.input.retentionMs.message]
-description = 'title for the Retention input'
-one = 'Retention Period (milliseconds):'
 
 [kafka.topic.common.input.retentionMs.error.invalid]
 description = 'Error message when an invalid retention period is entered'
