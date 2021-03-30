@@ -47,25 +47,58 @@ module.exports = {
 
   getKafkaById: async (c, req, res) => {
     res.status(200).json({
-      id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
-      kind: "kafka",
-      href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
-      status: "complete",
-      cloud_provider: "aws",
-      multi_az: false,
-      region: "us-east-1",
-      owner: "api_kafka_service",
-      name: "serviceapi",
-      bootstrapServerHost:
-        "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org",
-      created_at: "2020-10-05T12:51:24.053142Z",
-      updated_at: "2020-10-05T12:56:36.362208Z",
+      "id": "1qCXzgiGqva0D5bXIB0Gn9g23Ni",
+      "kind": "Kafka",
+      "href": "/api/managed-services-api/v1/kafkas/1qCXzgiGqva0D5bXIB0Gn9g23Ni",
+      "status": "ready",
+      "cloud_provider": "aws",
+      "multi_az": true,
+      "region": "us-east-1",
+      "owner": "kafka_devexp",
+      "name": "mock2-test",
+      "bootstrapServerHost": "localhost:8000",
+      "created_at": "2021-03-24T11:20:09.990461Z",
+      "updated_at": "2021-03-24T11:23:13.469101Z"
     });
   },
 
   listKafkas: async (c, req, res) => {
-    const { status, mock } = c.api.mockResponseForOperation(c.operation.operationId);
-    return res.status(status).json(mock);
+    return res.status(200).json({
+      "kind": "KafkaRequestList",
+      "page": 1,
+      "size": 2,
+      "total": 2,
+      "items": [
+        {
+          "id": "1qCXzgiGqva0D5bXIB0Gn9g23Ni",
+          "kind": "Kafka",
+          "href": "/api/managed-services-api/v1/kafkas/1qCXzgiGqva0D5bXIB0Gn9g23Ni",
+          "status": "ready",
+          "cloud_provider": "aws",
+          "multi_az": true,
+          "region": "us-east-1",
+          "owner": "kafka_devexp",
+          "name": "mock2-test",
+          "bootstrapServerHost": "localhost:8000",
+          "created_at": "2021-03-24T11:20:09.990461Z",
+          "updated_at": "2021-03-24T11:23:13.469101Z"
+        },
+        {
+          "id": "1qA44seeSR71w5WgnGx3Lc0GGpY",
+          "kind": "Kafka",
+          "href": "/api/managed-services-api/v1/kafkas/1qA44seeSR71w5WgnGx3Lc0GGpY",
+          "status": "ready",
+          "cloud_provider": "aws",
+          "multi_az": true,
+          "region": "us-east-1",
+          "owner": "kafka_devexp",
+          "name": "mock1-test",
+          "bootstrapServerHost": "localhost:8080",
+          "created_at": "2021-03-23T14:14:32.086876Z",
+          "updated_at": "2021-03-23T17:08:27.893415Z"
+        },
+      ]
+    })
   },
 
   listCloudProviders: async (_c, _req, res) => {

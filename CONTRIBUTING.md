@@ -108,12 +108,7 @@ rhoas login
 
 ### `make mock-api/start`
 
-Starts the mocked KAS API server at [`http://localhost:8000`](http://localhost:8000).
-
-This will also start a local Keycloak instance at [`http://localhost:8000`](http://localhost:8000) for authentication from the CLI.
-When Keycloak is up and running, log in as an admin (username: `admin`, password: `admin`).
-Next, you will need to import the custom realm and client for the RHOAS CLI by running `make mock-api/keycloak/import-realm`.
-Once complete you should see the `rhoas-cli-prod` client in a `sso-external` realm from the Keycloak admin panel.
+Starts the mock KAS Fleet Manager API and Kafka Admin API at [`http://localhost:8000`](http://localhost:8000).
 
 ### `make mock-api/keycloak/import-realm`
 
