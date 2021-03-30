@@ -5,14 +5,15 @@ All URIs are relative to *https://api.openshift.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateTopic**](DefaultApi.md#CreateTopic) | **Post** /topics | Creates a new topic
-[**DeleteGroup**](DefaultApi.md#DeleteGroup) | **Delete** /groups/{groupName} | 
+[**DeleteConsumerGroupById**](DefaultApi.md#DeleteConsumerGroupById) | **Delete** /consumer-groups/{consumerGroupId} | Delete a consumer group.
 [**DeleteTopic**](DefaultApi.md#DeleteTopic) | **Delete** /topics/{topicName} | Deletes a  topic
-[**GetGroup**](DefaultApi.md#GetGroup) | **Get** /groups/{groupName} | 
-[**GetGroupsList**](DefaultApi.md#GetGroupsList) | **Get** /groups | 
+[**GetConsumerGroupById**](DefaultApi.md#GetConsumerGroupById) | **Get** /consumer-groups/{consumerGroupId} | Get a single consumer group by its unique ID.
+[**GetConsumerGroupList**](DefaultApi.md#GetConsumerGroupList) | **Get** /consumer-groups | List of consumer groups in the Kafka instance.
 [**GetTopic**](DefaultApi.md#GetTopic) | **Get** /topics/{topicName} | Retrieves the topic with the specified name.
 [**GetTopicsList**](DefaultApi.md#GetTopicsList) | **Get** /topics | List of topics
 [**Metrics**](DefaultApi.md#Metrics) | **Get** /metrics | Admin server metrics
 [**OpenApi**](DefaultApi.md#OpenApi) | **Get** /api | 
+[**ResetConsumerGroupOffset**](DefaultApi.md#ResetConsumerGroupOffset) | **Post** /consumer-groups/{consumerGroupId}/reset-offset | Reset the offset for a consumer group.
 [**UpdateTopic**](DefaultApi.md#UpdateTopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 
@@ -83,9 +84,11 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## DeleteGroup
+## DeleteConsumerGroupById
 
-> DeleteGroup(ctx, groupName).Execute()
+> DeleteConsumerGroupById(ctx, consumerGroupId).Execute()
+
+Delete a consumer group.
 
 
 
@@ -102,13 +105,13 @@ import (
 )
 
 func main() {
-    groupName := "groupName_example" // string | Consumer group identificator
+    consumerGroupId := "consumerGroupId_example" // string | The unique name of the topic.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.DeleteGroup(context.Background(), groupName).Execute()
+    resp, r, err := api_client.DefaultApi.DeleteConsumerGroupById(context.Background(), consumerGroupId).Execute()
     if err.Error() != "" {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteGroup``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteConsumerGroupById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
 }
@@ -120,11 +123,11 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**groupName** | **string** | Consumer group identificator | 
+**consumerGroupId** | **string** | The unique name of the topic. | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDeleteGroupRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDeleteConsumerGroupByIdRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -217,11 +220,11 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## GetGroup
+## GetConsumerGroupById
 
-> GetGroup(ctx, groupName).Execute()
+> ConsumerGroup GetConsumerGroupById(ctx, consumerGroupId).Topic(topic).Execute()
 
-
+Get a single consumer group by its unique ID.
 
 ### Example
 
@@ -236,15 +239,18 @@ import (
 )
 
 func main() {
-    groupName := "groupName_example" // string | Consumer group identificator
+    consumerGroupId := "consumerGroupId_example" // string | The unique ID of the consumer group
+    topic := "topic_example" // string | Filter consumer groups for a specific topic (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.GetGroup(context.Background(), groupName).Execute()
+    resp, r, err := api_client.DefaultApi.GetConsumerGroupById(context.Background(), consumerGroupId).Topic(topic).Execute()
     if err.Error() != "" {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetGroup``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetConsumerGroupById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
+    // response from `GetConsumerGroupById`: ConsumerGroup
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetConsumerGroupById`: %v\n", resp)
 }
 ```
 
@@ -254,20 +260,21 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**groupName** | **string** | Consumer group identificator | 
+**consumerGroupId** | **string** | The unique ID of the consumer group | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetGroupRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetConsumerGroupByIdRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **topic** | **string** | Filter consumer groups for a specific topic | 
 
 ### Return type
 
- (empty response body)
+[**ConsumerGroup**](ConsumerGroup.md)
 
 ### Authorization
 
@@ -283,9 +290,11 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## GetGroupsList
+## GetConsumerGroupList
 
-> GetGroupsList(ctx).Execute()
+> ConsumerGroupList GetConsumerGroupList(ctx).Limit(limit).Offset(offset).Topic(topic).Execute()
+
+List of consumer groups in the Kafka instance.
 
 
 
@@ -302,29 +311,40 @@ import (
 )
 
 func main() {
+    limit := int32(56) // int32 | Maximum number of consumer groups to returnd (optional)
+    offset := int32(56) // int32 | The page offset when returning the list of consumer groups (optional)
+    topic := "topic_example" // string | Filter to apply when returning the list of consumer groups (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.GetGroupsList(context.Background()).Execute()
+    resp, r, err := api_client.DefaultApi.GetConsumerGroupList(context.Background()).Limit(limit).Offset(offset).Topic(topic).Execute()
     if err.Error() != "" {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetGroupsList``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetConsumerGroupList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
+    // response from `GetConsumerGroupList`: ConsumerGroupList
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetConsumerGroupList`: %v\n", resp)
 }
 ```
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetGroupsListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetConsumerGroupListRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **limit** | **int32** | Maximum number of consumer groups to returnd | 
+ **offset** | **int32** | The page offset when returning the list of consumer groups | 
+ **topic** | **string** | Filter to apply when returning the list of consumer groups | 
 
 ### Return type
 
- (empty response body)
+[**ConsumerGroupList**](ConsumerGroupList.md)
 
 ### Authorization
 
@@ -412,7 +432,7 @@ No authorization required
 
 ## GetTopicsList
 
-> TopicsList GetTopicsList(ctx).Limit(limit).Filter(filter).Offset(offset).Execute()
+> TopicsList GetTopicsList(ctx).Limit(limit).Filter(filter).Offset(offset).Order(order).Execute()
 
 List of topics
 
@@ -434,10 +454,11 @@ func main() {
     limit := int32(56) // int32 | Maximum number of topics to return (optional)
     filter := "filter_example" // string | Filter to apply when returning the list of topics (optional)
     offset := int32(56) // int32 | The page offset when returning  the limit of requested topics. (optional)
+    order := "order_example" // string | Order of the items sorting. If \"asc\" is set as a value, ascending order is used, descending otherwise. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.GetTopicsList(context.Background()).Limit(limit).Filter(filter).Offset(offset).Execute()
+    resp, r, err := api_client.DefaultApi.GetTopicsList(context.Background()).Limit(limit).Filter(filter).Offset(offset).Order(order).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTopicsList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -461,6 +482,7 @@ Name | Type | Description  | Notes
  **limit** | **int32** | Maximum number of topics to return | 
  **filter** | **string** | Filter to apply when returning the list of topics | 
  **offset** | **int32** | The page offset when returning  the limit of requested topics. | 
+ **order** | **string** | Order of the items sorting. If \&quot;asc\&quot; is set as a value, ascending order is used, descending otherwise. | 
 
 ### Return type
 
@@ -594,6 +616,76 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## ResetConsumerGroupOffset
+
+> ConsumerGroup ResetConsumerGroupOffset(ctx, consumerGroupId).Execute()
+
+Reset the offset for a consumer group.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    consumerGroupId := "consumerGroupId_example" // string | The ID of the consumer group.
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ResetConsumerGroupOffset(context.Background(), consumerGroupId).Execute()
+    if err.Error() != "" {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ResetConsumerGroupOffset``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ResetConsumerGroupOffset`: ConsumerGroup
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ResetConsumerGroupOffset`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**consumerGroupId** | **string** | The ID of the consumer group. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiResetConsumerGroupOffsetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**ConsumerGroup**](ConsumerGroup.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## UpdateTopic
 
 > Topic UpdateTopic(ctx, topicName).TopicSettings(topicSettings).Execute()
@@ -616,7 +708,7 @@ import (
 
 func main() {
     topicName := "topicName_example" // string | The topic name which is its unique id.
-    topicSettings := *openapiclient.NewTopicSettings() // TopicSettings | 
+    topicSettings := *openapiclient.NewTopicSettings(int32(123)) // TopicSettings | 
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

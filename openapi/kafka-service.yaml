@@ -22,48 +22,48 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/KafkaRequest'
+                $ref: "#/components/schemas/KafkaRequest"
               examples:
                 KafkaRequestGetResponseExample:
-                  $ref: '#/components/examples/KafkaRequestExample'
+                  $ref: "#/components/examples/KafkaRequestExample"
                 KafkaRequestGetResponseWithFailedCreationStatusExample:
-                  $ref: '#/components/examples/KafkaRequestFailedCreationStatusExample'
+                  $ref: "#/components/examples/KafkaRequestFailedCreationStatusExample"
           description: Kafka request found by id
         "401":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
           description: Auth token is invalid
         "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 403Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
           description: User not authorized to access the service.
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 404Example:
-                  $ref: '#/components/examples/404Example'
+                  $ref: "#/components/examples/404Example"
           description: No kafka request with specified id exists
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
           description: Unexpected error occurred
       security:
         - Bearer: []
@@ -82,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
               #No Content
           description: Deleted
@@ -90,46 +90,46 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 400DeletionExample:
-                  $ref: '#/components/examples/400DeletionExample'
+                  $ref: "#/components/examples/400DeletionExample"
           description: Validation errors occurred
         "401":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
           description: Auth token is invalid
         "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 403Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
           description: User not authorized to access the service.
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 404DeleteExample:
-                  $ref: '#/components/examples/404DeleteExample'
+                  $ref: "#/components/examples/404DeleteExample"
           description: No kafka request with specified id exists
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500DeleteExample:
-                  $ref: '#/components/examples/500DeleteExample'
+                  $ref: "#/components/examples/500DeleteExample"
           description: Unexpected error occurred
       summary: Delete a kafka request by id
       security:
@@ -151,78 +151,78 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/KafkaRequestPayload'
+              $ref: "#/components/schemas/KafkaRequestPayload"
             examples:
               USRegion:
-                $ref: '#/components/examples/USRegionExample'
+                $ref: "#/components/examples/USRegionExample"
               EURegion:
-                $ref: '#/components/examples/EURegionExample'
+                $ref: "#/components/examples/EURegionExample"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/KafkaRequest'
+                $ref: "#/components/schemas/KafkaRequest"
               examples:
                 KafkaRequestPostResponseExample:
-                  $ref: '#/components/examples/KafkaRequestExample'
+                  $ref: "#/components/examples/KafkaRequestExample"
           description: Accepted
         "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 400CreationExample:
-                  $ref: '#/components/examples/400CreationExample'
+                  $ref: "#/components/examples/400CreationExample"
           description: Validation errors occurred
         "401":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
           description: Auth token is invalid
         "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 403Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
                 403MaxAllowedInstanceReachedExample:
-                  $ref: '#/components/examples/403MaxAllowedInstanceReachedExample'
+                  $ref: "#/components/examples/403MaxAllowedInstanceReachedExample"
           description: User forbidden either because the user is not authorized to access the service or because the maximum number of instances that can be created by this user has been reached.
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 404Example:
-                  $ref: '#/components/examples/404Example'
+                  $ref: "#/components/examples/404Example"
           description: The requested resource doesn't exist
         "409":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 409NameConflictExample:
-                  $ref: '#/components/examples/409NameConflictExample'
+                  $ref: "#/components/examples/409NameConflictExample"
           description: A conflict has been detected in the creation of this resource
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
           description: An unexpected error occurred creating the Kafka Request
       security:
         - Bearer: []
@@ -238,48 +238,48 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/KafkaRequestList'
+                $ref: "#/components/schemas/KafkaRequestList"
         "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 InvalidQueryExample:
-                  $ref: '#/components/examples/400InvalidQueryExample'
+                  $ref: "#/components/examples/400InvalidQueryExample"
         "401":
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
         "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 403Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
           description: User not authorized to access the service.
         "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
       parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
-        - $ref: '#/components/parameters/orderBy'
-        - $ref: '#/components/parameters/search'
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/orderBy"
+        - $ref: "#/components/parameters/search"
   /api/managed-services-api/v1/cloud_providers:
     get:
       summary: Retrieves the list of supported cloud providers.
@@ -287,33 +287,33 @@ paths:
       security:
         - Bearer: []
       responses:
-        '200':
+        "200":
           description: Retrieved list of supported cloud providers
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CloudProviderList'
-        '401':
+                $ref: "#/components/schemas/CloudProviderList"
+        "401":
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
-        '500':
+                  $ref: "#/components/examples/401Example"
+        "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
       parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
   /api/managed-services-api/v1/cloud_providers/{id}/regions:
     get:
       summary: Retrieves the list of supported regions of the supported cloud provider.
@@ -321,69 +321,69 @@ paths:
       security:
         - Bearer: []
       responses:
-        '200':
+        "200":
           description: Retrieved list of supported cloud providers regions
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CloudRegionList'
-        '401':
+                $ref: "#/components/schemas/CloudRegionList"
+        "401":
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
-        '500':
+                  $ref: "#/components/examples/401Example"
+        "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
   /api/managed-services-api/v1/serviceaccounts:
     get:
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceAccountList'
+                $ref: "#/components/schemas/ServiceAccountList"
           description: List of service accounts
-        '401':
+        "401":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
           description: Auth token is invalid
-        '403':
+        "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 403Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
           description: User not authorized to access the service
-        '500':
+        "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
           description: Unexpected error occurred
       security:
         - Bearer: []
@@ -395,65 +395,65 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ServiceAccountRequest'
+              $ref: "#/components/schemas/ServiceAccountRequest"
             examples:
               sa:
-                $ref: '#/components/examples/ServiceAccountRequestExample'
+                $ref: "#/components/examples/ServiceAccountRequestExample"
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceAccount'
+                $ref: "#/components/schemas/ServiceAccount"
               examples:
                 serviceaccount:
-                  $ref: '#/components/examples/ServiceAccountExample'
+                  $ref: "#/components/examples/ServiceAccountExample"
           description: service account created
-        '401':
+        "401":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
           description: Auth token is invalid
-        '403':
+        "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 403Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
           description: list of service account
-        '500':
+        "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
           description: Unexpected error occurred
       security:
         - Bearer: []
       operationId: createServiceAccount
       summary: Create a service account
-  '/api/managed-services-api/v1/serviceaccounts/{id}':
+  "/api/managed-services-api/v1/serviceaccounts/{id}":
     get:
       parameters:
         - $ref: "#/components/parameters/id"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceAccount'
+                $ref: "#/components/schemas/ServiceAccount"
               examples:
                 sa:
-                  $ref: '#/components/examples/ServiceAccountByIdExample'
+                  $ref: "#/components/examples/ServiceAccountByIdExample"
           description: get service account by id
       security:
         - Bearer: []
@@ -465,55 +465,55 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
       responses:
-        '204':
+        "204":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
           description: deleted
-        '401':
+        "401":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
+                  $ref: "#/components/examples/401Example"
           description: auth token is invalid
-        '403':
+        "403":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/403Example'
+                  $ref: "#/components/examples/403Example"
           description: User not authorized to access the service
-        '500':
+        "500":
           content:
             application/json:
               schema: {}
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
           description: Unexpected error occurred
       security:
         - Bearer: []
       operationId: deleteServiceAccount
       summary: Delete service account
-  '/api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials':
+  "/api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials":
     post:
       parameters:
         - $ref: "#/components/parameters/id"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceAccount'
+                $ref: "#/components/schemas/ServiceAccount"
               examples:
                 sa-reset:
-                  $ref: '#/components/examples/ServiceAccountExample'
+                  $ref: "#/components/examples/ServiceAccountExample"
           description: reset credentials
       security:
         - Bearer: []
@@ -529,30 +529,30 @@ paths:
       security:
         - Bearer: []
       responses:
-        '200':
+        "200":
           description: A JSON array of prometheus metrics objects from observatorium
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetricsRangeQueryList'
-        '401':
+                $ref: "#/components/schemas/MetricsRangeQueryList"
+        "401":
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
-        '500':
+                  $ref: "#/components/examples/401Example"
+        "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/duration"
@@ -565,34 +565,33 @@ paths:
       security:
         - Bearer: []
       responses:
-        '200':
+        "200":
           description: A JSON array of prometheus metrics objects from observatorium
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetricsInstantQueryList'
-        '401':
+                $ref: "#/components/schemas/MetricsInstantQueryList"
+        "401":
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 401Example:
-                  $ref: '#/components/examples/401Example'
-        '500':
+                  $ref: "#/components/examples/401Example"
+        "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 500Example:
-                  $ref: '#/components/examples/500Example'
+                  $ref: "#/components/examples/500Example"
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/filters"
-
 
 components:
   schemas:
@@ -681,7 +680,7 @@ components:
             size: "1"
             total: "1"
             item:
-              $ref: '#/components/examples/KafkaRequestExample'
+              $ref: "#/components/examples/KafkaRequestExample"
           properties:
             items:
               type: array
@@ -701,7 +700,7 @@ components:
           description: Set this to true to configure the Kafka cluster to be multiAZ
           type: boolean
         name:
-          description: 'The name of the Kafka cluster. It must consist of lower-case alphanumeric characters or ''-'', start with an alphabetic character, and end with an alphanumeric character, and can not be longer than 32 characters.'
+          description: "The name of the Kafka cluster. It must consist of lower-case alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character, and can not be longer than 32 characters."
           type: string
         region:
           description: The region where the Kafka cluster will be created in
@@ -716,7 +715,7 @@ components:
             size: "1"
             total: "1"
             item:
-              $ref: '#/components/examples/CloudProviderExample'
+              $ref: "#/components/examples/CloudProviderExample"
           properties:
             items:
               type: array
@@ -733,7 +732,7 @@ components:
             size: "1"
             total: "1"
             item:
-              $ref: '#/components/examples/CloudRegionExample'
+              $ref: "#/components/examples/CloudRegionExample"
           properties:
             items:
               type: array
@@ -741,57 +740,57 @@ components:
                 allOf:
                   - $ref: "#/components/schemas/CloudRegion"
     CloudProvider:
-      description: 'Cloud provider.'
+      description: "Cloud provider."
       properties:
         kind:
-          description: 'Indicates the type of this object. Will be ''CloudProvider'' link.'
+          description: "Indicates the type of this object. Will be 'CloudProvider' link."
           type: string
         id:
-          description: 'Unique identifier of the object.'
+          description: "Unique identifier of the object."
           type: string
         display_name:
-          description: 'Name of the cloud provider for display purposes.'
+          description: "Name of the cloud provider for display purposes."
           type: string
         name:
-          description: 'Human friendly identifier of the cloud provider, for example `aws`.'
+          description: "Human friendly identifier of the cloud provider, for example `aws`."
           type: string
         enabled:
-          description: 'Whether the cloud provider is enabled for deploying an OSD cluster.'
+          description: "Whether the cloud provider is enabled for deploying an OSD cluster."
           type: boolean
       required:
         - enabled
     CloudRegion:
-      description: 'Description of a region of a cloud provider.'
+      description: "Description of a region of a cloud provider."
       properties:
         kind:
-          description: 'Indicates the type of this object. Will be ''CloudRegion''.'
+          description: "Indicates the type of this object. Will be 'CloudRegion'."
           type: string
         id:
-          description: 'Unique identifier of the object.'
+          description: "Unique identifier of the object."
           type: string
         display_name:
-          description: 'Name of the region for display purposes, for example `N. Virginia`.'
+          description: "Name of the region for display purposes, for example `N. Virginia`."
           type: string
         enabled:
-          description: 'Whether the region is enabled for deploying an OSD cluster.'
+          description: "Whether the region is enabled for deploying an OSD cluster."
           type: boolean
           default: false
       required:
         - enabled
     ServiceAccount:
-      description: 'Service Account created in MAS-SSO for the Kafka Cluster for authentication'
+      description: "Service Account created in MAS-SSO for the Kafka Cluster for authentication"
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
         - type: object
           properties:
             id:
-              description: 'server generated unique id of the service account'
+              description: "server generated unique id of the service account"
               type: string
             name:
-              description: ''
+              description: ""
               type: string
             description:
-              description: ''
+              description: ""
               type: string
             clientID:
               type: string
@@ -800,43 +799,43 @@ components:
           example:
             $ref: "#/components/examples/ServiceAccountExample"
     ServiceAccountRequest:
-      description: 'Schema for the request to create a service account'
+      description: "Schema for the request to create a service account"
       required:
         - name
       type: object
       properties:
         name:
-          description: 'The name of the service account'
+          description: "The name of the service account"
           type: string
         description:
-          description: 'A description for the service account'
+          description: "A description for the service account"
           type: string
       example:
         $ref: "#/components/examples/ServiceAccountRequestExample"
     ServiceAccountListItem:
-      description: ''
+      description: ""
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
         - type: object
           properties:
             id:
-              description: 'server generated unique id of the service account'
+              description: "server generated unique id of the service account"
               type: string
             clientID:
-              description: ''
+              description: ""
               type: string
             name:
-              description: ''
+              description: ""
               type: string
             description:
-              description: ''
+              description: ""
     ServiceAccountList:
       allOf:
         - type: object
           example:
             kind: "ServiceAccountList"
             items:
-              $ref: '#/components/examples/ServiceAccountListItemExample'
+              $ref: "#/components/examples/ServiceAccountListItemExample"
           properties:
             kind:
               type: string
@@ -853,7 +852,7 @@ components:
             kind: "MetricsRangeQueryList"
             id: "1nbpS70HduPe4l0to8jSg2CLzfu"
             items:
-              $ref: '#/components/examples/MetricsRangeQueryExample'
+              $ref: "#/components/examples/MetricsRangeQueryExample"
           properties:
             kind:
               type: string
@@ -874,7 +873,7 @@ components:
         values:
           type: array
           items:
-            $ref: '#/components/schemas/values'
+            $ref: "#/components/schemas/values"
     values:
       type: object
       properties:
@@ -893,7 +892,7 @@ components:
             kind: "MetricsInstantQueryList"
             id: "1nbpS70HduPe4l0to8jSg2CLzfu"
             items:
-              $ref: '#/components/examples/MetricsInstantQueryExample'
+              $ref: "#/components/examples/MetricsInstantQueryExample"
           properties:
             kind:
               type: string
@@ -920,7 +919,6 @@ components:
       required:
         - Value
 
-
   parameters:
     id:
       name: id
@@ -932,7 +930,7 @@ components:
     duration:
       name: duration
       in: query
-      description:  The length of time in minutes over which to return the metrics.
+      description: The length of time in minutes over which to return the metrics.
       required: true
       schema:
         type: integer
@@ -1076,7 +1074,7 @@ components:
         cloud_provider: "aws"
         multi_az: true
         region: "us-east-1"
-        owner:  "api_kafka_service"
+        owner: "api_kafka_service"
         name: "serviceapi"
         bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org"
         created_at: "2020-10-05T12:51:24.053142Z"
@@ -1090,7 +1088,7 @@ components:
         cloud_provider: "aws"
         multi_az: true
         region: "us-east-1"
-        owner:  "api_kafka_service"
+        owner: "api_kafka_service"
         name: "serviceapi"
         bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org"
         created_at: "2020-10-05T12:51:24.053142Z"
@@ -1244,7 +1242,8 @@ components:
         kind: "Error"
         href: "/api/managed-services-api/v1/errors/9"
         code: "MGD-SERV-API-9"
-        reason: "error deleting syncset: OCM-EX-9: failed to delete syncset: ext-serviceapi-1ix03lndlmq0qfc7sita5sljv8e
+        reason:
+          "error deleting syncset: OCM-EX-9: failed to delete syncset: ext-serviceapi-1ix03lndlmq0qfc7sita5sljv8e
           for cluster id: 1g5d88q0lrcdv4g7alb7slfgnj3dhbsj%!(EXTRA *errors.Error=identifier
           is '404', code is 'CLUSTERS-MGMT-404' and operation identifier is '1g5or50viu07oealuehrkc26dgftj1ac':
           Cluster '1g5d88q0lrcdv4g7alb7slfgnj3dhbsj' not found)"

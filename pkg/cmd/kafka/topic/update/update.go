@@ -245,7 +245,7 @@ func runCmd(opts *Options) error {
 			}))
 		} else {
 			needsUpdate = true
-			topicSettings.NumPartitions = &partitionCount
+			topicSettings.NumPartitions = partitionCount
 		}
 	}
 

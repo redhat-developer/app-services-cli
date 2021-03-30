@@ -1,5 +1,5 @@
 /*
- * Kafka Admon REST API
+ * Kafka Admin REST API
  *
  * An API to provide REST endpoints for query Kafka for admin operations
  *
@@ -41,17 +41,18 @@ type DefaultApi interface {
 	CreateTopicExecute(r ApiCreateTopicRequest) (Topic, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * DeleteGroup Method for DeleteGroup
+	 * DeleteConsumerGroupById Delete a consumer group.
+	 * Delete a consumer group, along with its consumers.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param groupName Consumer group identificator
-	 * @return ApiDeleteGroupRequest
+	 * @param consumerGroupId The unique name of the topic.
+	 * @return ApiDeleteConsumerGroupByIdRequest
 	 */
-	DeleteGroup(ctx _context.Context, groupName string) ApiDeleteGroupRequest
+	DeleteConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest
 
 	/*
-	 * DeleteGroupExecute executes the request
+	 * DeleteConsumerGroupByIdExecute executes the request
 	 */
-	DeleteGroupExecute(r ApiDeleteGroupRequest) (*_nethttp.Response, GenericOpenAPIError)
+	DeleteConsumerGroupByIdExecute(r ApiDeleteConsumerGroupByIdRequest) (*_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * DeleteTopic Deletes a  topic
@@ -68,29 +69,32 @@ type DefaultApi interface {
 	DeleteTopicExecute(r ApiDeleteTopicRequest) (*_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * GetGroup Method for GetGroup
+	 * GetConsumerGroupById Get a single consumer group by its unique ID.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param groupName Consumer group identificator
-	 * @return ApiGetGroupRequest
+	 * @param consumerGroupId The unique ID of the consumer group
+	 * @return ApiGetConsumerGroupByIdRequest
 	 */
-	GetGroup(ctx _context.Context, groupName string) ApiGetGroupRequest
+	GetConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest
 
 	/*
-	 * GetGroupExecute executes the request
+	 * GetConsumerGroupByIdExecute executes the request
+	 * @return ConsumerGroup
 	 */
-	GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Response, GenericOpenAPIError)
+	GetConsumerGroupByIdExecute(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
-	 * GetGroupsList Method for GetGroupsList
+	 * GetConsumerGroupList List of consumer groups in the Kafka instance.
+	 * Returns a list of all consumer groups for a particular Kafka instance.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @return ApiGetGroupsListRequest
+	 * @return ApiGetConsumerGroupListRequest
 	 */
-	GetGroupsList(ctx _context.Context) ApiGetGroupsListRequest
+	GetConsumerGroupList(ctx _context.Context) ApiGetConsumerGroupListRequest
 
 	/*
-	 * GetGroupsListExecute executes the request
+	 * GetConsumerGroupListExecute executes the request
+	 * @return ConsumerGroupList
 	 */
-	GetGroupsListExecute(r ApiGetGroupsListRequest) (*_nethttp.Response, GenericOpenAPIError)
+	GetConsumerGroupListExecute(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *_nethttp.Response, GenericOpenAPIError)
 
 	/*
 	 * GetTopic Retrieves the topic with the specified name.
@@ -146,6 +150,21 @@ type DefaultApi interface {
 	OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Response, GenericOpenAPIError)
 
 	/*
+	 * ResetConsumerGroupOffset Reset the offset for a consumer group.
+	 * Reset the offset for a particular consumer group.
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param consumerGroupId The ID of the consumer group.
+	 * @return ApiResetConsumerGroupOffsetRequest
+	 */
+	ResetConsumerGroupOffset(ctx _context.Context, consumerGroupId string) ApiResetConsumerGroupOffsetRequest
+
+	/*
+	 * ResetConsumerGroupOffsetExecute executes the request
+	 * @return ConsumerGroup
+	 */
+	ResetConsumerGroupOffsetExecute(r ApiResetConsumerGroupOffsetRequest) (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError)
+
+	/*
 	 * UpdateTopic Updates the topic with the specified name.
 	 * updates the topic with the new data.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -165,8 +184,8 @@ type DefaultApi interface {
 type DefaultApiService service
 
 type ApiCreateTopicRequest struct {
-	ctx           _context.Context
-	ApiService    DefaultApi
+	ctx _context.Context
+	ApiService DefaultApi
 	newTopicInput *NewTopicInput
 }
 
@@ -188,7 +207,7 @@ func (r ApiCreateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 func (a *DefaultApiService) CreateTopic(ctx _context.Context) ApiCreateTopicRequest {
 	return ApiCreateTopicRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
@@ -282,34 +301,36 @@ func (a *DefaultApiService) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, 
 	return localVarReturnValue, localVarHTTPResponse, executionError
 }
 
-type ApiDeleteGroupRequest struct {
-	ctx        _context.Context
+type ApiDeleteConsumerGroupByIdRequest struct {
+	ctx _context.Context
 	ApiService DefaultApi
-	groupName  string
+	consumerGroupId string
 }
 
-func (r ApiDeleteGroupRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.DeleteGroupExecute(r)
+
+func (r ApiDeleteConsumerGroupByIdRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.DeleteConsumerGroupByIdExecute(r)
 }
 
 /*
- * DeleteGroup Method for DeleteGroup
+ * DeleteConsumerGroupById Delete a consumer group.
+ * Delete a consumer group, along with its consumers.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupName Consumer group identificator
- * @return ApiDeleteGroupRequest
+ * @param consumerGroupId The unique name of the topic.
+ * @return ApiDeleteConsumerGroupByIdRequest
  */
-func (a *DefaultApiService) DeleteGroup(ctx _context.Context, groupName string) ApiDeleteGroupRequest {
-	return ApiDeleteGroupRequest{
+func (a *DefaultApiService) DeleteConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
+	return ApiDeleteConsumerGroupByIdRequest{
 		ApiService: a,
-		ctx:        ctx,
-		groupName:  groupName,
+		ctx: ctx,
+		consumerGroupId: consumerGroupId,
 	}
 }
 
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) DeleteGroupExecute(r ApiDeleteGroupRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) DeleteConsumerGroupByIdExecute(r ApiDeleteConsumerGroupByIdRequest) (*_nethttp.Response, GenericOpenAPIError) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
@@ -319,14 +340,14 @@ func (a *DefaultApiService) DeleteGroupExecute(r ApiDeleteGroupRequest) (*_netht
 		executionError       GenericOpenAPIError
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteGroup")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteConsumerGroupById")
 	if err != nil {
 		executionError.error = err.Error()
 		return nil, executionError
 	}
 
-	localVarPath := localBasePath + "/groups/{groupName}"
-	localVarPath = strings.Replace(localVarPath, "{"+"groupName"+"}", _neturl.PathEscape(parameterToString(r.groupName, "")), -1)
+	localVarPath := localBasePath + "/consumer-groups/{consumerGroupId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"consumerGroupId"+"}", _neturl.PathEscape(parameterToString(r.consumerGroupId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -381,10 +402,11 @@ func (a *DefaultApiService) DeleteGroupExecute(r ApiDeleteGroupRequest) (*_netht
 }
 
 type ApiDeleteTopicRequest struct {
-	ctx        _context.Context
+	ctx _context.Context
 	ApiService DefaultApi
-	topicName  string
+	topicName string
 }
+
 
 func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.DeleteTopicExecute(r)
@@ -400,8 +422,8 @@ func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIErro
 func (a *DefaultApiService) DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest {
 	return ApiDeleteTopicRequest{
 		ApiService: a,
-		ctx:        ctx,
-		topicName:  topicName,
+		ctx: ctx,
+		topicName: topicName,
 	}
 }
 
@@ -479,34 +501,41 @@ func (a *DefaultApiService) DeleteTopicExecute(r ApiDeleteTopicRequest) (*_netht
 	return localVarHTTPResponse, executionError
 }
 
-type ApiGetGroupRequest struct {
-	ctx        _context.Context
+type ApiGetConsumerGroupByIdRequest struct {
+	ctx _context.Context
 	ApiService DefaultApi
-	groupName  string
+	consumerGroupId string
+	topic *string
 }
 
-func (r ApiGetGroupRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.GetGroupExecute(r)
+func (r ApiGetConsumerGroupByIdRequest) Topic(topic string) ApiGetConsumerGroupByIdRequest {
+	r.topic = &topic
+	return r
+}
+
+func (r ApiGetConsumerGroupByIdRequest) Execute() (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.GetConsumerGroupByIdExecute(r)
 }
 
 /*
- * GetGroup Method for GetGroup
+ * GetConsumerGroupById Get a single consumer group by its unique ID.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupName Consumer group identificator
- * @return ApiGetGroupRequest
+ * @param consumerGroupId The unique ID of the consumer group
+ * @return ApiGetConsumerGroupByIdRequest
  */
-func (a *DefaultApiService) GetGroup(ctx _context.Context, groupName string) ApiGetGroupRequest {
-	return ApiGetGroupRequest{
+func (a *DefaultApiService) GetConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest {
+	return ApiGetConsumerGroupByIdRequest{
 		ApiService: a,
-		ctx:        ctx,
-		groupName:  groupName,
+		ctx: ctx,
+		consumerGroupId: consumerGroupId,
 	}
 }
 
 /*
  * Execute executes the request
+ * @return ConsumerGroup
  */
-func (a *DefaultApiService) GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetConsumerGroupByIdExecute(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -514,21 +543,25 @@ func (a *DefaultApiService) GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Res
 		localVarFileName     string
 		localVarFileBytes    []byte
 		executionError       GenericOpenAPIError
+		localVarReturnValue  ConsumerGroup
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetGroup")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetConsumerGroupById")
 	if err != nil {
 		executionError.error = err.Error()
-		return nil, executionError
+		return localVarReturnValue, nil, executionError
 	}
 
-	localVarPath := localBasePath + "/groups/{groupName}"
-	localVarPath = strings.Replace(localVarPath, "{"+"groupName"+"}", _neturl.PathEscape(parameterToString(r.groupName, "")), -1)
+	localVarPath := localBasePath + "/consumer-groups/{consumerGroupId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"consumerGroupId"+"}", _neturl.PathEscape(parameterToString(r.consumerGroupId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
+	if r.topic != nil {
+		localVarQueryParams.Add("topic", parameterToString(*r.topic, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -549,13 +582,13 @@ func (a *DefaultApiService) GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Res
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		executionError.error = err.Error()
-		return nil, executionError
+		return localVarReturnValue, nil, executionError
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, executionError
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
@@ -563,7 +596,7 @@ func (a *DefaultApiService) GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Res
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, executionError
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -571,37 +604,64 @@ func (a *DefaultApiService) GetGroupExecute(r ApiGetGroupRequest) (*_nethttp.Res
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		return localVarHTTPResponse, newErr
+		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, executionError
 }
 
-type ApiGetGroupsListRequest struct {
-	ctx        _context.Context
+type ApiGetConsumerGroupListRequest struct {
+	ctx _context.Context
 	ApiService DefaultApi
+	limit *int32
+	offset *int32
+	topic *string
 }
 
-func (r ApiGetGroupsListRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
-	return r.ApiService.GetGroupsListExecute(r)
+func (r ApiGetConsumerGroupListRequest) Limit(limit int32) ApiGetConsumerGroupListRequest {
+	r.limit = &limit
+	return r
+}
+func (r ApiGetConsumerGroupListRequest) Offset(offset int32) ApiGetConsumerGroupListRequest {
+	r.offset = &offset
+	return r
+}
+func (r ApiGetConsumerGroupListRequest) Topic(topic string) ApiGetConsumerGroupListRequest {
+	r.topic = &topic
+	return r
+}
+
+func (r ApiGetConsumerGroupListRequest) Execute() (ConsumerGroupList, *_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.GetConsumerGroupListExecute(r)
 }
 
 /*
- * GetGroupsList Method for GetGroupsList
+ * GetConsumerGroupList List of consumer groups in the Kafka instance.
+ * Returns a list of all consumer groups for a particular Kafka instance.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @return ApiGetGroupsListRequest
+ * @return ApiGetConsumerGroupListRequest
  */
-func (a *DefaultApiService) GetGroupsList(ctx _context.Context) ApiGetGroupsListRequest {
-	return ApiGetGroupsListRequest{
+func (a *DefaultApiService) GetConsumerGroupList(ctx _context.Context) ApiGetConsumerGroupListRequest {
+	return ApiGetConsumerGroupListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 /*
  * Execute executes the request
+ * @return ConsumerGroupList
  */
-func (a *DefaultApiService) GetGroupsListExecute(r ApiGetGroupsListRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetConsumerGroupListExecute(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *_nethttp.Response, GenericOpenAPIError) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -609,20 +669,30 @@ func (a *DefaultApiService) GetGroupsListExecute(r ApiGetGroupsListRequest) (*_n
 		localVarFileName     string
 		localVarFileBytes    []byte
 		executionError       GenericOpenAPIError
+		localVarReturnValue  ConsumerGroupList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetGroupsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetConsumerGroupList")
 	if err != nil {
 		executionError.error = err.Error()
-		return nil, executionError
+		return localVarReturnValue, nil, executionError
 	}
 
-	localVarPath := localBasePath + "/groups"
+	localVarPath := localBasePath + "/consumer-groups"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
+	if r.limit != nil {
+		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+	}
+	if r.offset != nil {
+		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
+	}
+	if r.topic != nil {
+		localVarQueryParams.Add("topic", parameterToString(*r.topic, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -643,13 +713,13 @@ func (a *DefaultApiService) GetGroupsListExecute(r ApiGetGroupsListRequest) (*_n
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		executionError.error = err.Error()
-		return nil, executionError
+		return localVarReturnValue, nil, executionError
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, executionError
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
@@ -657,7 +727,7 @@ func (a *DefaultApiService) GetGroupsListExecute(r ApiGetGroupsListRequest) (*_n
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, executionError
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -665,17 +735,27 @@ func (a *DefaultApiService) GetGroupsListExecute(r ApiGetGroupsListRequest) (*_n
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		return localVarHTTPResponse, newErr
+		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, executionError
 }
 
 type ApiGetTopicRequest struct {
-	ctx        _context.Context
+	ctx _context.Context
 	ApiService DefaultApi
-	topicName  string
+	topicName string
 }
+
 
 func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.GetTopicExecute(r)
@@ -691,8 +771,8 @@ func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPI
 func (a *DefaultApiService) GetTopic(ctx _context.Context, topicName string) ApiGetTopicRequest {
 	return ApiGetTopicRequest{
 		ApiService: a,
-		ctx:        ctx,
-		topicName:  topicName,
+		ctx: ctx,
+		topicName: topicName,
 	}
 }
 
@@ -782,11 +862,12 @@ func (a *DefaultApiService) GetTopicExecute(r ApiGetTopicRequest) (Topic, *_neth
 }
 
 type ApiGetTopicsListRequest struct {
-	ctx        _context.Context
+	ctx _context.Context
 	ApiService DefaultApi
-	limit      *int32
-	filter     *string
-	offset     *int32
+	limit *int32
+	filter *string
+	offset *int32
+	order *string
 }
 
 func (r ApiGetTopicsListRequest) Limit(limit int32) ApiGetTopicsListRequest {
@@ -799,6 +880,10 @@ func (r ApiGetTopicsListRequest) Filter(filter string) ApiGetTopicsListRequest {
 }
 func (r ApiGetTopicsListRequest) Offset(offset int32) ApiGetTopicsListRequest {
 	r.offset = &offset
+	return r
+}
+func (r ApiGetTopicsListRequest) Order(order string) ApiGetTopicsListRequest {
+	r.order = &order
 	return r
 }
 
@@ -815,7 +900,7 @@ func (r ApiGetTopicsListRequest) Execute() (TopicsList, *_nethttp.Response, Gene
 func (a *DefaultApiService) GetTopicsList(ctx _context.Context) ApiGetTopicsListRequest {
 	return ApiGetTopicsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
@@ -854,6 +939,9 @@ func (a *DefaultApiService) GetTopicsListExecute(r ApiGetTopicsListRequest) (Top
 	}
 	if r.offset != nil {
 		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
+	}
+	if r.order != nil {
+		localVarQueryParams.Add("order", parameterToString(*r.order, ""))
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -913,9 +1001,10 @@ func (a *DefaultApiService) GetTopicsListExecute(r ApiGetTopicsListRequest) (Top
 }
 
 type ApiMetricsRequest struct {
-	ctx        _context.Context
+	ctx _context.Context
 	ApiService DefaultApi
 }
+
 
 func (r ApiMetricsRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.MetricsExecute(r)
@@ -929,7 +1018,7 @@ func (r ApiMetricsRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 func (a *DefaultApiService) Metrics(ctx _context.Context) ApiMetricsRequest {
 	return ApiMetricsRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
@@ -1007,9 +1096,10 @@ func (a *DefaultApiService) MetricsExecute(r ApiMetricsRequest) (*_nethttp.Respo
 }
 
 type ApiOpenApiRequest struct {
-	ctx        _context.Context
+	ctx _context.Context
 	ApiService DefaultApi
 }
+
 
 func (r ApiOpenApiRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.OpenApiExecute(r)
@@ -1023,7 +1113,7 @@ func (r ApiOpenApiRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 func (a *DefaultApiService) OpenApi(ctx _context.Context) ApiOpenApiRequest {
 	return ApiOpenApiRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
@@ -1100,10 +1190,121 @@ func (a *DefaultApiService) OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Respo
 	return localVarHTTPResponse, executionError
 }
 
+type ApiResetConsumerGroupOffsetRequest struct {
+	ctx _context.Context
+	ApiService DefaultApi
+	consumerGroupId string
+}
+
+
+func (r ApiResetConsumerGroupOffsetRequest) Execute() (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError) {
+	return r.ApiService.ResetConsumerGroupOffsetExecute(r)
+}
+
+/*
+ * ResetConsumerGroupOffset Reset the offset for a consumer group.
+ * Reset the offset for a particular consumer group.
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param consumerGroupId The ID of the consumer group.
+ * @return ApiResetConsumerGroupOffsetRequest
+ */
+func (a *DefaultApiService) ResetConsumerGroupOffset(ctx _context.Context, consumerGroupId string) ApiResetConsumerGroupOffsetRequest {
+	return ApiResetConsumerGroupOffsetRequest{
+		ApiService: a,
+		ctx: ctx,
+		consumerGroupId: consumerGroupId,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return ConsumerGroup
+ */
+func (a *DefaultApiService) ResetConsumerGroupOffsetExecute(r ApiResetConsumerGroupOffsetRequest) (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		executionError       GenericOpenAPIError
+		localVarReturnValue  ConsumerGroup
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ResetConsumerGroupOffset")
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, nil, executionError
+	}
+
+	localVarPath := localBasePath + "/consumer-groups/{consumerGroupId}/reset-offset"
+	localVarPath = strings.Replace(localVarPath, "{"+"consumerGroupId"+"}", _neturl.PathEscape(parameterToString(r.consumerGroupId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, nil, executionError
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, localVarHTTPResponse, executionError
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		executionError.error = err.Error()
+		return localVarReturnValue, localVarHTTPResponse, executionError
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, executionError
+}
+
 type ApiUpdateTopicRequest struct {
-	ctx           _context.Context
-	ApiService    DefaultApi
-	topicName     string
+	ctx _context.Context
+	ApiService DefaultApi
+	topicName string
 	topicSettings *TopicSettings
 }
 
@@ -1126,8 +1327,8 @@ func (r ApiUpdateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 func (a *DefaultApiService) UpdateTopic(ctx _context.Context, topicName string) ApiUpdateTopicRequest {
 	return ApiUpdateTopicRequest{
 		ApiService: a,
-		ctx:        ctx,
-		topicName:  topicName,
+		ctx: ctx,
+		topicName: topicName,
 	}
 }
 

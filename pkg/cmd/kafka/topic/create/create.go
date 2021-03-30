@@ -153,7 +153,7 @@ func runCmd(opts *Options) error {
 	topicInput := strimziadminclient.NewTopicInput{
 		Name: opts.topicName,
 		Settings: &strimziadminclient.TopicSettings{
-			NumPartitions: &opts.partitions,
+			NumPartitions: opts.partitions,
 			Config:        topic.CreateConfig(opts.retentionMs),
 		},
 	}

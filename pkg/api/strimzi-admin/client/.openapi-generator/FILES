@@ -6,6 +6,9 @@ api_default.go
 client.go
 configuration.go
 docs/ConfigEntry.md
+docs/Consumer.md
+docs/ConsumerGroup.md
+docs/ConsumerGroupList.md
 docs/DefaultApi.md
 docs/NewTopicInput.md
 docs/Partition.md
@@ -14,6 +17,9 @@ docs/TopicSettings.md
 docs/TopicsList.md
 git_push.sh
 model_config_entry.go
+model_consumer.go
+model_consumer_group.go
+model_consumer_group_list.go
 model_new_topic_input.go
 model_partition.go
 model_topic.go

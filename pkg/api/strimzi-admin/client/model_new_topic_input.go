@@ -1,5 +1,5 @@
 /*
- * Kafka Admon REST API
+ * Kafka Admin REST API
  *
  * An API to provide REST endpoints for query Kafka for admin operations
  *
@@ -17,7 +17,7 @@ import (
 // NewTopicInput Input object to create a new topic.
 type NewTopicInput struct {
 	// The topic name, this value must be unique.
-	Name     string         `json:"name"`
+	Name string `json:"name"`
 	Settings *TopicSettings `json:"settings,omitempty"`
 }
 
@@ -25,7 +25,7 @@ type NewTopicInput struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewNewTopicInput(name string) *NewTopicInput {
+func NewNewTopicInput(name string, ) *NewTopicInput {
 	this := NewTopicInput{}
 	this.Name = name
 	return &this
@@ -41,7 +41,7 @@ func NewNewTopicInputWithDefaults() *NewTopicInput {
 
 // GetName returns the Name field value
 func (o *NewTopicInput) GetName() string {
-	if o == nil {
+	if o == nil  {
 		var ret string
 		return ret
 	}
@@ -52,7 +52,7 @@ func (o *NewTopicInput) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *NewTopicInput) GetNameOk() (*string, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Name, true
@@ -141,3 +141,5 @@ func (v *NullableNewTopicInput) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

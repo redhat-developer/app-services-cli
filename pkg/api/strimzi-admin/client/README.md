@@ -79,20 +79,24 @@ All URIs are relative to *https://api.openshift.com*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**CreateTopic**](docs/DefaultApi.md#createtopic) | **Post** /topics | Creates a new topic
-*DefaultApi* | [**DeleteGroup**](docs/DefaultApi.md#deletegroup) | **Delete** /groups/{groupName} | 
+*DefaultApi* | [**DeleteConsumerGroupById**](docs/DefaultApi.md#deleteconsumergroupbyid) | **Delete** /consumer-groups/{consumerGroupId} | Delete a consumer group.
 *DefaultApi* | [**DeleteTopic**](docs/DefaultApi.md#deletetopic) | **Delete** /topics/{topicName} | Deletes a  topic
-*DefaultApi* | [**GetGroup**](docs/DefaultApi.md#getgroup) | **Get** /groups/{groupName} | 
-*DefaultApi* | [**GetGroupsList**](docs/DefaultApi.md#getgroupslist) | **Get** /groups | 
+*DefaultApi* | [**GetConsumerGroupById**](docs/DefaultApi.md#getconsumergroupbyid) | **Get** /consumer-groups/{consumerGroupId} | Get a single consumer group by its unique ID.
+*DefaultApi* | [**GetConsumerGroupList**](docs/DefaultApi.md#getconsumergrouplist) | **Get** /consumer-groups | List of consumer groups in the Kafka instance.
 *DefaultApi* | [**GetTopic**](docs/DefaultApi.md#gettopic) | **Get** /topics/{topicName} | Retrieves the topic with the specified name.
 *DefaultApi* | [**GetTopicsList**](docs/DefaultApi.md#gettopicslist) | **Get** /topics | List of topics
 *DefaultApi* | [**Metrics**](docs/DefaultApi.md#metrics) | **Get** /metrics | Admin server metrics
 *DefaultApi* | [**OpenApi**](docs/DefaultApi.md#openapi) | **Get** /api | 
+*DefaultApi* | [**ResetConsumerGroupOffset**](docs/DefaultApi.md#resetconsumergroupoffset) | **Post** /consumer-groups/{consumerGroupId}/reset-offset | Reset the offset for a consumer group.
 *DefaultApi* | [**UpdateTopic**](docs/DefaultApi.md#updatetopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 
 ## Documentation For Models
 
  - [ConfigEntry](docs/ConfigEntry.md)
+ - [Consumer](docs/Consumer.md)
+ - [ConsumerGroup](docs/ConsumerGroup.md)
+ - [ConsumerGroupList](docs/ConsumerGroupList.md)
  - [NewTopicInput](docs/NewTopicInput.md)
  - [Partition](docs/Partition.md)
  - [Topic](docs/Topic.md)

@@ -1,5 +1,5 @@
 /*
- * Kafka Admon REST API
+ * Kafka Admin REST API
  *
  * An API to provide REST endpoints for query Kafka for admin operations
  *
@@ -17,7 +17,7 @@ import (
 // TopicSettings Kafka Topic (A feed where records are stored and published)
 type TopicSettings struct {
 	// Number of partitions for this topic.
-	NumPartitions *int32 `json:"numPartitions,omitempty"`
+	NumPartitions int32 `json:"numPartitions"`
 	// Topic configuration entry.
 	Config *[]ConfigEntry `json:"config,omitempty"`
 }
@@ -26,8 +26,9 @@ type TopicSettings struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTopicSettings() *TopicSettings {
+func NewTopicSettings(numPartitions int32, ) *TopicSettings {
 	this := TopicSettings{}
+	this.NumPartitions = numPartitions
 	return &this
 }
 
@@ -39,36 +40,28 @@ func NewTopicSettingsWithDefaults() *TopicSettings {
 	return &this
 }
 
-// GetNumPartitions returns the NumPartitions field value if set, zero value otherwise.
+// GetNumPartitions returns the NumPartitions field value
 func (o *TopicSettings) GetNumPartitions() int32 {
-	if o == nil || o.NumPartitions == nil {
+	if o == nil  {
 		var ret int32
 		return ret
 	}
-	return *o.NumPartitions
+
+	return o.NumPartitions
 }
 
-// GetNumPartitionsOk returns a tuple with the NumPartitions field value if set, nil otherwise
+// GetNumPartitionsOk returns a tuple with the NumPartitions field value
 // and a boolean to check if the value has been set.
 func (o *TopicSettings) GetNumPartitionsOk() (*int32, bool) {
-	if o == nil || o.NumPartitions == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.NumPartitions, true
+	return &o.NumPartitions, true
 }
 
-// HasNumPartitions returns a boolean if a field has been set.
-func (o *TopicSettings) HasNumPartitions() bool {
-	if o != nil && o.NumPartitions != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetNumPartitions gets a reference to the given int32 and assigns it to the NumPartitions field.
+// SetNumPartitions sets field value
 func (o *TopicSettings) SetNumPartitions(v int32) {
-	o.NumPartitions = &v
+	o.NumPartitions = v
 }
 
 // GetConfig returns the Config field value if set, zero value otherwise.
@@ -105,7 +98,7 @@ func (o *TopicSettings) SetConfig(v []ConfigEntry) {
 
 func (o TopicSettings) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.NumPartitions != nil {
+	if true {
 		toSerialize["numPartitions"] = o.NumPartitions
 	}
 	if o.Config != nil {
@@ -149,3 +142,5 @@ func (v *NullableTopicSettings) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
