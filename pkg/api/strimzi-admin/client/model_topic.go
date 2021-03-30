@@ -1,5 +1,5 @@
 /*
- * Kafka Admon REST API
+ * Kafka Admin REST API
  *
  * An API to provide REST endpoints for query Kafka for admin operations
  *
@@ -186,3 +186,5 @@ func (v *NullableTopic) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

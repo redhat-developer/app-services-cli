@@ -4,7 +4,7 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  title: Kafka Admon REST API
+  title: Kafka Admin REST API
   version: 0.1.0
 servers:
 - description: Main (production) server
@@ -47,6 +47,15 @@ paths:
         schema:
           format: int32
           type: integer
+        style: form
+      - description: Order of the items sorting. If "asc" is set as a value, ascending
+          order is used, descending otherwise.
+        explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          type: string
         style: form
       responses:
         "200":
@@ -204,47 +213,6 @@ paths:
         "200":
           description: Metrics
       summary: Admin server metrics
-  /groups:
-    get:
-      operationId: getGroupsList
-      responses:
-        "200":
-          content:
-            application/json: {}
-          description: OK
-  /groups/{groupName}:
-    delete:
-      operationId: deleteGroup
-      parameters:
-      - description: Consumer group identificator
-        explode: false
-        in: path
-        name: groupName
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json: {}
-          description: OK
-    get:
-      operationId: getGroup
-      parameters:
-      - description: Consumer group identificator
-        explode: false
-        in: path
-        name: groupName
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json: {}
-          description: OK
   /api:
     get:
       operationId: openApi
@@ -253,6 +221,194 @@ paths:
           content:
             application/json: {}
           description: OpenAPI spec
+  /consumer-groups/{consumerGroupId}:
+    delete:
+      description: Delete a consumer group, along with its consumers.
+      operationId: deleteConsumerGroupById
+      parameters:
+      - description: The unique name of the topic.
+        explode: false
+        in: path
+        name: consumerGroupId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The consumer group was deleted successfully.
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized, request has not been applied because it lacks
+            valid authentication credentials.
+        "403":
+          content:
+            application/json: {}
+          description: Forbidden to delete this consumer group.
+        "404":
+          content:
+            application/json: {}
+          description: The consumer group does not exist.
+        "423":
+          content:
+            application/json: {}
+          description: User cannot delete consumer group with active members.
+        "500":
+          content:
+            application/json: {}
+          description: Internal Server Error.
+        "503":
+          content:
+            application/json: {}
+          description: Unable to connect to the Kafka cluster.
+      summary: Delete a consumer group.
+    get:
+      operationId: getConsumerGroupById
+      parameters:
+      - description: The unique ID of the consumer group
+        explode: false
+        in: path
+        name: consumerGroupId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Filter consumer groups for a specific topic
+        explode: true
+        in: query
+        name: topic
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerGroup'
+          description: Consumer group details.
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized, request has not been applied because it lacks
+            valid authentication credentials.
+        "403":
+          content:
+            application/json: {}
+          description: User is forbidden this view this consumer group.
+        "404":
+          content:
+            application/json: {}
+          description: Consumer group not found.
+        "500":
+          content:
+            application/json: {}
+          description: Internal server error.
+        "503":
+          content:
+            application/json: {}
+          description: Unable to connect to the Kafka cluster.
+      summary: Get a single consumer group by its unique ID.
+  /consumer-groups/{consumerGroupId}/reset-offset:
+    post:
+      description: Reset the offset for a particular consumer group.
+      operationId: resetConsumerGroupOffset
+      parameters:
+      - description: The ID of the consumer group.
+        explode: false
+        in: path
+        name: consumerGroupId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerGroup'
+          description: The consumer group offsets have been reset.
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized, request has not been applied because it lacks
+            valid authentication credentials.
+        "403":
+          content:
+            application/json: {}
+          description: Forbidden to delete this consumer group.
+        "500":
+          content:
+            application/json: {}
+          description: Internal Server Error.
+        "503":
+          content:
+            application/json: {}
+          description: Unable to connect to the Kafka cluster.
+      summary: Reset the offset for a consumer group.
+  /consumer-groups:
+    get:
+      description: Returns a list of all consumer groups for a particular Kafka instance.
+      operationId: getConsumerGroupList
+      parameters:
+      - description: Maximum number of consumer groups to returnd
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The page offset when returning the list of consumer groups
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Filter to apply when returning the list of consumer groups
+        explode: true
+        in: query
+        name: topic
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerGroupList'
+          description: List of consumer groups matching the request parameters.
+        "400":
+          content:
+            application/json: {}
+          description: The server cannot or will not process the request due to something
+            that is perceived to be a client error such as malformed request syntax.
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized, request has not been applied because it lacks
+            valid authentication credentials.
+        "403":
+          content:
+            application/json: {}
+          description: User is forbidden to retrieve the list of consumer groups.
+        "500":
+          content:
+            application/json: {}
+          description: An internal server error occurred.
+        "503":
+          content:
+            application/json: {}
+          description: Unable to connect to the Kafka cluster.
+      summary: List of consumer groups in the Kafka instance.
+    summary: API endpoints for consumer groups under a Kafka topic
 components:
   schemas:
     Topic:
@@ -417,6 +573,8 @@ components:
           items:
             $ref: '#/components/schemas/ConfigEntry'
           type: array
+      required:
+      - numPartitions
       title: Root Type for NewTopicInput
       type: object
     Node:
@@ -441,4 +599,139 @@ components:
           $ref: '#/components/schemas/TopicSettings'
       required:
       - name
+      type: object
+    ConsumerGroup:
+      description: A group of Kafka consumers
+      example:
+        id: consumer_group_1
+        consumers:
+        - groupId: consumer_group_1
+          topic: topic-1
+          partition: 0
+          memberId: consumer_group_member1
+          offset: 5
+          lag: 0
+          logEndOffset: 5
+        - groupId: consumer_group_1
+          topic: topic-1
+          partition: 1
+          memberId: consumer_group_member2
+          offset: 3
+          lag: 0
+          logEndOffset: 3
+        - groupId: consumer_group_1
+          topic: topic-1
+          partition: 2
+          memberId: consumer_group_member3
+          offset: 6
+          lag: 1
+          logEndOffset: 5
+      properties:
+        id:
+          description: Unique identifier for the consumer group
+          type: string
+        consumers:
+          description: The list of consumers associated with this consumer group
+          items:
+            $ref: '#/components/schemas/Consumer'
+          type: array
+      required:
+      - consumers
+      - id
+      type: object
+    Consumer:
+      description: A Kafka consumer is responsible for reading records from one or
+        more topics and one or more partitions of a topic.
+      example:
+        groupId: consumer_group_1
+        topic: topic-1
+        partition: 0
+        memberId: consumer_group_1-0
+        offset: 5
+        lag: 0
+        logEndOffset: 5
+      properties:
+        groupId:
+          description: Unique identifier for the consumer group to which this consumer
+            belongs.
+          type: string
+        topic:
+          description: The unique topic name to which this consumer belongs
+          type: string
+        partition:
+          description: The partition number to which this consumer group is assigned
+            to.
+          type: integer
+        offset:
+          description: Offset denotes the position of the consumer in a partition.
+          type: number
+        logEndOffset:
+          description: The log end offset is the offset of the last message written
+            to a log.
+          type: number
+        lag:
+          description: Offset Lag is the delta between the last produced message and
+            the last consumer's committed offset.
+          type: integer
+        memberId:
+          description: The member ID is a unique identifier given to a consumer by
+            the coordinator upon initially joining the group.
+          type: string
+      required:
+      - groupId
+      - lag
+      - offset
+      - partition
+      - topic
+      type: object
+    ConsumerGroupList:
+      description: A list of consumer groups
+      example:
+        count: 1
+        limit: 10
+        offset: 0
+        items:
+        - id: consumer_group_1
+          consumers:
+          - groupId: consumer_group_1
+            topic: topic-1
+            partition: 0
+            memberId: consumer_group_member1
+            offset: 5
+            lag: 0
+            logEndOffset: 5
+          - groupId: consumer_group_1
+            topic: topic-1
+            partition: 1
+            memberId: consumer_group_member2
+            offset: 3
+            lag: 0
+            logEndOffset: 3
+          - groupId: consumer_group_1
+            topic: topic-1
+            partition: 2
+            memberId: consumer_group_member3
+            offset: 6
+            lag: 1
+            logEndOffset: 5
+      properties:
+        items:
+          description: Consumer group list items
+          items:
+            $ref: '#/components/schemas/ConsumerGroup'
+          type: array
+        count:
+          description: The total number of consumer groups.
+          type: number
+        limit:
+          description: The number of consumer groups per page.
+          type: number
+        offset:
+          description: The page offset
+          type: integer
+      required:
+      - count
+      - items
+      - limit
+      - offset
       type: object

@@ -1,5 +1,5 @@
 /*
- * Kafka Admon REST API
+ * Kafka Admin REST API
  *
  * An API to provide REST endpoints for query Kafka for admin operations
  *
@@ -30,7 +30,7 @@ type Partition struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPartition(id int32) *Partition {
+func NewPartition(id int32, ) *Partition {
 	this := Partition{}
 	this.Id = id
 	return &this
@@ -46,7 +46,7 @@ func NewPartitionWithDefaults() *Partition {
 
 // GetId returns the Id field value
 func (o *Partition) GetId() int32 {
-	if o == nil {
+	if o == nil  {
 		var ret int32
 		return ret
 	}
@@ -57,7 +57,7 @@ func (o *Partition) GetId() int32 {
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Partition) GetIdOk() (*int32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Id, true
@@ -216,3 +216,5 @@ func (v *NullablePartition) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

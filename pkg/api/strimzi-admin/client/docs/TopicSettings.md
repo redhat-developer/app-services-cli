@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**NumPartitions** | Pointer to **int32** | Number of partitions for this topic. | [optional] 
+**NumPartitions** | **int32** | Number of partitions for this topic. | 
 **Config** | Pointer to [**[]ConfigEntry**](ConfigEntry.md) | Topic configuration entry. | [optional] 
 
 ## Methods
 
 ### NewTopicSettings
 
-`func NewTopicSettings() *TopicSettings`
+`func NewTopicSettings(numPartitions int32, ) *TopicSettings`
 
 NewTopicSettings instantiates a new TopicSettings object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetNumPartitions sets NumPartitions field to given value.
 
-### HasNumPartitions
-
-`func (o *TopicSettings) HasNumPartitions() bool`
-
-HasNumPartitions returns a boolean if a field has been set.
 
 ### GetConfig
 
