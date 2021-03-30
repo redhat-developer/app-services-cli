@@ -7,6 +7,7 @@ import (
 
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 
@@ -25,6 +26,7 @@ type Options struct {
 	name        string
 	interactive bool
 
+	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
@@ -35,6 +37,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		IO:         f.IOStreams,
 	}
 
 	cmd := &cobra.Command{
@@ -54,6 +57,9 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 			if len(args) > 0 {
 				opts.name = args[0]
 			} else if opts.id == "" {
+				if !opts.IO.CanPrompt() {
+					return errors.New(localizer.MustLocalizeFromID("kafka.use.error.idOrNameRequired"))
+				}
 				opts.interactive = true
 			}
 
