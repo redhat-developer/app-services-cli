@@ -192,7 +192,7 @@ Once pushed, a [GitHub Action](https://github.com/bf2fc6cc711aee1a0c2a/cli/actio
 
 [git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
 
-Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases.
+Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases/tag/latest).
 
 ### Make the release public
 
