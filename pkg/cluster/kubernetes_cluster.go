@@ -339,7 +339,7 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kasclien
 	t := time.Now()
 
 	api := c.connection.API()
-	serviceAcct := &kasclient.ServiceAccountRequest{Name: fmt.Sprintf("svc-acct-%v", t.String())}
+	serviceAcct := &kasclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
 	req := api.Kafka().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
 	res, _, apiErr := req.Execute()
