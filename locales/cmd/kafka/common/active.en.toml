@@ -19,7 +19,6 @@ description = 'Error message when list of Kafka instances could not be fetched'
 one = 'unable to list Kafka instances'
 
 [kafka.common.input.instanceName.message]
-description = 'title for the Partitions input'
 one = 'Select Kafka instance to connect:'
 
 [kafka.common.log.info.noKafkaInstances]

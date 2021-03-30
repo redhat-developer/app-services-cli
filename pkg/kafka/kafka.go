@@ -12,10 +12,14 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
 
+const (
+	queryLimit = "1000"
+)
+
 func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kasclient.KafkaRequest, error) {
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka().ListKafkas(context.Background()).Execute()
+	response, _, apiErr := api.Kafka().ListKafkas(context.Background()).Size(queryLimit).Execute()
 
 	if apiErr.Error() != "" {
 		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotFetchKafkas"), apiErr)

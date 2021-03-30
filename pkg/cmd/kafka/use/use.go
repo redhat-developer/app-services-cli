@@ -73,7 +73,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 func runUse(opts *Options) error {
 
 	if opts.interactive {
-		// run the create command interactively
+		// run the use command interactively
 		err := runInteractivePrompt(opts)
 		if err != nil {
 			return err
@@ -155,7 +155,7 @@ func runInteractivePrompt(opts *Options) error {
 		return err
 	}
 
-	opts.name = *selectedKafka.Name
+	opts.name = selectedKafka.GetName()
 
 	return nil
 }
