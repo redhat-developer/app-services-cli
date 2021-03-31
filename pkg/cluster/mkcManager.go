@@ -146,7 +146,7 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 				}
 			}
 
-		case <-time.After(30 * time.Second):
+		case <-time.After(60 * time.Second):
 			w.Stop()
 			return fmt.Errorf(localizer.MustLocalizeFromID("cluster.kubernetes.watchForKafkaStatus.error.timeout"))
 		}
