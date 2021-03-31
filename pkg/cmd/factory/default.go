@@ -2,10 +2,12 @@ package factory
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/httputil"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 )
@@ -13,6 +15,7 @@ import (
 // New creates a new command factory
 // The command factory is available to all command packages
 // giving centralized access to the config and API connection
+
 // nolint:funlen
 func New(cliVersion string) *Factory {
 	io := iostreams.System()
@@ -93,6 +96,15 @@ func New(cliVersion string) *Factory {
 		if err != nil {
 			return nil, err
 		}
+
+		transportWrapper := func(a http.RoundTripper) http.RoundTripper {
+			return &httputil.LoggingRoundTripper{
+				Proxied: a,
+				Logger:  logger,
+			}
+		}
+
+		builder.WithTransportWrapper(transportWrapper)
 
 		builder.WithConnectionConfig(connectionCfg)
 
