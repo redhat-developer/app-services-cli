@@ -123,7 +123,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 {
-		logger.Info(localizer.MustLocalizeFromID("kafka.list.log.info.noKafkaInstances"))
+		logger.Info(localizer.MustLocalizeFromID("kafka.common.log.info.noKafkaInstances"))
 		return nil
 	}
 

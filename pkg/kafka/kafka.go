@@ -7,21 +7,26 @@ import (
 	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+)
+
+const (
+	queryLimit = "1000"
 )
 
 func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kasclient.KafkaRequest, error) {
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka().ListKafkas(context.Background()).Execute()
+	response, _, apiErr := api.Kafka().ListKafkas(context.Background()).Size(queryLimit).Execute()
 
 	if apiErr.Error() != "" {
-		return nil, fmt.Errorf("Unable to list Kafka instances: %w", apiErr)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotFetchKafkas"), apiErr)
 	}
 
 	if response.Size == 0 {
-		logger.Info("No Kafka instances")
+		logger.Info(localizer.MustLocalizeFromID("kafka.common.log.info.noKafkaInstances"))
 		return nil, nil
 	}
 
@@ -31,8 +36,9 @@ func InteractiveSelect(connection connection.Connection, logger logging.Logger) 
 	}
 
 	prompt := &survey.Select{
-		Message: "Select Kafka cluster to connect",
-		Options: kafkas,
+		Message:  localizer.MustLocalizeFromID("kafka.common.input.instanceName.message"),
+		Options:  kafkas,
+		PageSize: 10,
 	}
 
 	var selectedKafkaIndex int

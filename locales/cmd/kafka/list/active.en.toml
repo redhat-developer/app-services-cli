@@ -47,7 +47,3 @@ one = 'Text search to filter the Kafka instances by name, owner, cloud_provider,
 [kafka.list.log.debug.filteringKafkaList]
 description = 'Debug message when filtering the list of Kafka instances'
 one = 'Filtering Kafka instances with the query "{{.Search}}"'
-
-[kafka.list.log.info.noKafkaInstances]
-description = 'Info message when no Kafkas were found'
-one = 'No Kafka instances were found.'

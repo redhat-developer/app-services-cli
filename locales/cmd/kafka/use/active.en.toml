@@ -31,6 +31,9 @@ one = 'Unique ID of the Kafka instance you want to set as the current instance.'
 description = 'Error message when current Kafka could not be saved in config'
 one = 'could not set "{{.Name}}" as the current Kafka instance'
 
+[kafka.use.error.idOrNameRequired]
+one= '--id flag or name required when not running interactively'
+
 [kafka.use.log.info.useSuccess]
 description = 'Info message when current Kafka was set' 
 one = 'Kafka instance "{{.Name}}" has been set as the current instance.'
