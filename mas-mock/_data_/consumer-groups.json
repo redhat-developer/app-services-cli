@@ -1,0 +1,48 @@
+[
+  {
+    "id": "consumer_group_1",
+    "consumers": [
+      {
+        "groupId": "consumer_group_1",
+        "topic": "topic-1",
+        "partition": 0,
+        "memberId": "consumer_group_member1",
+        "offset": 5,
+        "lag": 0,
+        "logEndOffset": 5
+      },
+      {
+        "groupId": "consumer_group_1",
+        "topic": "topic-1",
+        "partition": 1,
+        "memberId": "consumer_group_member2",
+        "offset": 3,
+        "lag": 0,
+        "logEndOffset": 3
+      }
+    ]
+  },
+  {
+    "id": "consumer_group_2",
+    "consumers": [
+      {
+        "groupId": "consumer_group_2",
+        "topic": "topic-2",
+        "partition": 0,
+        "memberId": "consumer_group_2_member2",
+        "offset": 5,
+        "lag": 0,
+        "logEndOffset": 5
+      },
+      {
+        "groupId": "consumer_group_2",
+        "topic": "topic-1",
+        "partition": 1,
+        "memberId": "consumer_group_2_member2",
+        "offset": 3,
+        "lag": 0,
+        "logEndOffset": 3
+      }
+    ]
+  }
+]

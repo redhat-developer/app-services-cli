@@ -1,6 +1,56 @@
-var topics = require('../_data_/topics.json')
+var topics = require('../../_data_/topics.json')
+var consumerGroups = require('../../_data_/consumer-groups.json')
 
 module.exports = {
+  getConsumerGroupList: async (c, req, res) => {
+    return res.status(200).json({
+      limit: parseInt(req.query.limit, 10) || 100,
+      offset: 0,
+      count: consumerGroups?.length,
+      items: consumerGroups
+    })
+  },
+  getConsumerGroupById: async (c, req, res) => {
+    const group = getConsumerGroup(c.request.params.consumerGroupId)
+    if (!group) {
+      return res.status(404).json({ err: "not found" })
+    }
+    return res.status(200).json(group)
+  },
+  deleteConsumerGroupById: async (c, req, res) => {
+    const id = c.request.params.consumerGroupId;
+
+    const group = getConsumerGroup(id)
+    if (!group) {
+      return res.status(404).json({ err: "not found" })
+    }
+    consumerGroups = consumerGroups.filter(t => t.id !== id);
+
+    return res.status(204).json({ message: 'deleted' })
+  },
+  resetConsumerGroupOffset: async (c, req, res) => {
+    const id = c.request.params.consumerGroupId;
+
+    const group = getConsumerGroup(id)
+    if (!group) {
+      return res.status(404).json({ err: "not found" })
+    }
+    if (group.consumers && group.consumers.length) {
+      for (let i = 0; i < group.consumers.length; i++) {
+        group.consumers[i] = {
+          ...group.consumers[i],
+          offset: 0,
+          lag: 0,
+          logEndOffset: 0
+        }
+      }
+    }
+    consumerGroups = consumerGroups.filter(t => t.id !== id);
+    consumerGroups.push(group);
+
+    return res.status(200).json(group);
+
+  },
   createTopic: async (c, req, res) => {
     const topicBody = c.request.body;
 
@@ -28,7 +78,7 @@ module.exports = {
       limit: parseInt(req.query.limit, 10) || 100,
       offset: 0,
       count: topics?.length,
-      topics: topics
+      items: topics
     });
   },
 
@@ -88,10 +138,12 @@ module.exports = {
     res.status(401).json({ err: "unauthorized" }),
 };
 
-function getTopic(name) {
-  const topic = topics.find(t => t.name === name);
+function getConsumerGroup(id) {
+  return consumerGroups.find(c => c.id === id);
+}
 
-  return topic
+function getTopic(name) {
+  return topics.find(t => t.name === name);
 }
 
 const createPartitions = (numberOfPartitions, numberOfReplicas) => {

@@ -1,7 +1,7 @@
 const OpenAPIBackend = require("openapi-backend").default;
 const express = require("express");
-const kafkaHandlers = require("./kafka-service-handlers");
-const topicHandlers = require("./strimzi-api-handlers");
+const kafkaHandlers = require("./handlers/kas-fleet-manager");
+const topicHandlers = require("./handlers/kafka-admin");
 const path = require('path');
 var cors = require('cors');
 
@@ -39,8 +39,8 @@ topicAPI.init();
 api.use((req, res) => {
   if (req.url.startsWith("/api/managed-services-api/v1")) {
     return kafkaAPI.handleRequest(req, req, res)
-  } else if (req.url.startsWith("/api/managed-services-strimzi-ui/v1/api")) {
-    req.url = req.url.replace("/api/managed-services-strimzi-ui/v1/api", "")
+  } else if (req.url.startsWith("/rest")) {
+    req.url = req.url.replace("/rest", "");
     return topicAPI.handleRequest(req, req, res);
   }
   res.status(405).status({err: "Method not allowed"})
