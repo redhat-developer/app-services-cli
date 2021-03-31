@@ -1,4 +1,4 @@
-var consumerGroups = require('../../_data_/topics.json')
+var topics = require('../../_data_/topics.json')
 var consumerGroups = require('../../_data_/consumer-groups.json')
 
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
       config: topicBody.settings.config,
       partitions: createPartitions(topicBody.settings.numPartitions, topicBody.settings.replicationFactor)
     }
-    consumerGroups.push(topic)
+    topics.push(topic)
     return res.status(200).json(topic)
   },
 
@@ -77,8 +77,8 @@ module.exports = {
     return res.status(200).json({
       limit: parseInt(req.query.limit, 10) || 100,
       offset: 0,
-      count: consumerGroups?.length,
-      topics: consumerGroups
+      count: topics?.length,
+      items: topics
     });
   },
 
@@ -97,7 +97,7 @@ module.exports = {
     if (!topic) {
       return res.status(404).json({ err: "not found" })
     }
-    consumerGroups = consumerGroups.filter(t => t.name !== topicName);
+    topics = topics.filter(t => t.name !== topicName);
 
     return res.status(200).json({ message: 'deleted' })
   },
@@ -143,7 +143,7 @@ function getConsumerGroup(id) {
 }
 
 function getTopic(name) {
-  return consumerGroups.find(t => t.name === name);
+  return topics.find(t => t.name === name);
 }
 
 const createPartitions = (numberOfPartitions, numberOfReplicas) => {
