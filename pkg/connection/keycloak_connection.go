@@ -34,7 +34,7 @@ const (
 	// SSO defaults
 	DefaultAuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
 	// MAS SSO defaults
-	DefaultMasAuthURL = "https://keycloak-edge-redhat-rhoam-user-sso.apps.mas-sso-stage.1gzl.s1.devshift.org/auth/realms/mas-sso-staging"
+	DefaultMasAuthURL = "https://keycloak-mas-sso-stage.apps.app-sre-stage-0.k3s7.p1.openshiftapps.com/auth/realms/rhoas"
 )
 
 var DefaultScopes = []string{
