@@ -186,7 +186,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TopicSettings'
+              $ref: '#/components/schemas/UpdateTopicInput'
         required: true
       responses:
         "200":
@@ -453,6 +453,8 @@ components:
           items:
             $ref: '#/components/schemas/Partition'
           type: array
+      required:
+      - numPartitions
       title: Root Type for NewTopicInput
       type: object
     Partition:
@@ -599,6 +601,7 @@ components:
           $ref: '#/components/schemas/TopicSettings'
       required:
       - name
+      - settings
       type: object
     ConsumerGroup:
       description: A group of Kafka consumers
@@ -734,4 +737,20 @@ components:
       - items
       - limit
       - offset
+      type: object
+    UpdateTopicInput:
+      description: Kafka Topic (A feed where records are stored and published)
+      example:
+        config:
+        - key: min.insync.replicas
+          value: "1"
+        - key: max.message.bytes
+          value: "1050000"
+      properties:
+        config:
+          description: Topic configuration entry.
+          items:
+            $ref: '#/components/schemas/ConfigEntry'
+          type: array
+      title: Root Type for UpdateTopicInput
       type: object

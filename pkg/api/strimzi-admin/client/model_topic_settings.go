@@ -26,7 +26,7 @@ type TopicSettings struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTopicSettings(numPartitions int32, ) *TopicSettings {
+func NewTopicSettings(numPartitions int32) *TopicSettings {
 	this := TopicSettings{}
 	this.NumPartitions = numPartitions
 	return &this
@@ -42,7 +42,7 @@ func NewTopicSettingsWithDefaults() *TopicSettings {
 
 // GetNumPartitions returns the NumPartitions field value
 func (o *TopicSettings) GetNumPartitions() int32 {
-	if o == nil  {
+	if o == nil {
 		var ret int32
 		return ret
 	}
@@ -53,7 +53,7 @@ func (o *TopicSettings) GetNumPartitions() int32 {
 // GetNumPartitionsOk returns a tuple with the NumPartitions field value
 // and a boolean to check if the value has been set.
 func (o *TopicSettings) GetNumPartitionsOk() (*int32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.NumPartitions, true
@@ -142,5 +142,3 @@ func (v *NullableTopicSettings) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

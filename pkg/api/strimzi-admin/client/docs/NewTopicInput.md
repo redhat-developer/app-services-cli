@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | The topic name, this value must be unique. | 
-**Settings** | Pointer to [**TopicSettings**](TopicSettings.md) |  | [optional] 
+**Settings** | [**TopicSettings**](TopicSettings.md) |  | 
 
 ## Methods
 
 ### NewNewTopicInput
 
-`func NewNewTopicInput(name string, ) *NewTopicInput`
+`func NewNewTopicInput(name string, settings TopicSettings, ) *NewTopicInput`
 
 NewNewTopicInput instantiates a new NewTopicInput object
 This constructor will assign default values to properties that have it defined,
@@ -65,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetSettings sets Settings field to given value.
 
-### HasSettings
-
-`func (o *NewTopicInput) HasSettings() bool`
-
-HasSettings returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

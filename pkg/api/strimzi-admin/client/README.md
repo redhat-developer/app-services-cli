@@ -102,6 +102,7 @@ Class | Method | HTTP request | Description
  - [Topic](docs/Topic.md)
  - [TopicSettings](docs/TopicSettings.md)
  - [TopicsList](docs/TopicsList.md)
+ - [UpdateTopicInput](docs/UpdateTopicInput.md)
 
 
 ## Documentation For Authorization

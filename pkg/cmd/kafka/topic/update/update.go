@@ -199,7 +199,7 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	topicToUpdate, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).Execute()
+	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).Execute()
 
 	if topicErr.Error() != "" {
 		if httpRes == nil {
@@ -216,37 +216,9 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	currentPartitionCount := len(topicToUpdate.GetPartitions())
-
 	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
 
-	topicSettings := &strimziadminclient.TopicSettings{}
-
-	// Only set partitions if the flag was set
-	if opts.partitionsStr != "" {
-		if int(partitionCount) < currentPartitionCount {
-
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.update.error.cannotDecreasePartitionCountError",
-				TemplateData: map[string]interface{}{
-					"From": currentPartitionCount,
-					"To":   partitionCount,
-				},
-			}))
-		}
-		if int(partitionCount) == currentPartitionCount {
-			logger.Infof(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.update.log.info.samePartitionCount",
-				TemplateData: map[string]interface{}{
-					"Name":  opts.topicName,
-					"Count": currentPartitionCount,
-				},
-			}))
-		} else {
-			needsUpdate = true
-			topicSettings.NumPartitions = partitionCount
-		}
-	}
+	topicSettings := &strimziadminclient.UpdateTopicInput{}
 
 	if opts.retentionMsStr != "" {
 		needsUpdate = true
@@ -259,7 +231,7 @@ func runCmd(opts *Options) error {
 		return nil
 	}
 
-	updateTopicReq = updateTopicReq.TopicSettings(*topicSettings)
+	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
 
 	// update the topic
 	response, httpRes, topicErr := updateTopicReq.Execute()

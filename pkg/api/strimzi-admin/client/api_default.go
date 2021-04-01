@@ -184,8 +184,8 @@ type DefaultApi interface {
 type DefaultApiService service
 
 type ApiCreateTopicRequest struct {
-	ctx _context.Context
-	ApiService DefaultApi
+	ctx           _context.Context
+	ApiService    DefaultApi
 	newTopicInput *NewTopicInput
 }
 
@@ -207,7 +207,7 @@ func (r ApiCreateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 func (a *DefaultApiService) CreateTopic(ctx _context.Context) ApiCreateTopicRequest {
 	return ApiCreateTopicRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -302,11 +302,10 @@ func (a *DefaultApiService) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, 
 }
 
 type ApiDeleteConsumerGroupByIdRequest struct {
-	ctx _context.Context
-	ApiService DefaultApi
+	ctx             _context.Context
+	ApiService      DefaultApi
 	consumerGroupId string
 }
-
 
 func (r ApiDeleteConsumerGroupByIdRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.DeleteConsumerGroupByIdExecute(r)
@@ -321,8 +320,8 @@ func (r ApiDeleteConsumerGroupByIdRequest) Execute() (*_nethttp.Response, Generi
  */
 func (a *DefaultApiService) DeleteConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
 	return ApiDeleteConsumerGroupByIdRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		consumerGroupId: consumerGroupId,
 	}
 }
@@ -402,11 +401,10 @@ func (a *DefaultApiService) DeleteConsumerGroupByIdExecute(r ApiDeleteConsumerGr
 }
 
 type ApiDeleteTopicRequest struct {
-	ctx _context.Context
+	ctx        _context.Context
 	ApiService DefaultApi
-	topicName string
+	topicName  string
 }
-
 
 func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.DeleteTopicExecute(r)
@@ -422,8 +420,8 @@ func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, GenericOpenAPIErro
 func (a *DefaultApiService) DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest {
 	return ApiDeleteTopicRequest{
 		ApiService: a,
-		ctx: ctx,
-		topicName: topicName,
+		ctx:        ctx,
+		topicName:  topicName,
 	}
 }
 
@@ -502,10 +500,10 @@ func (a *DefaultApiService) DeleteTopicExecute(r ApiDeleteTopicRequest) (*_netht
 }
 
 type ApiGetConsumerGroupByIdRequest struct {
-	ctx _context.Context
-	ApiService DefaultApi
+	ctx             _context.Context
+	ApiService      DefaultApi
 	consumerGroupId string
-	topic *string
+	topic           *string
 }
 
 func (r ApiGetConsumerGroupByIdRequest) Topic(topic string) ApiGetConsumerGroupByIdRequest {
@@ -525,8 +523,8 @@ func (r ApiGetConsumerGroupByIdRequest) Execute() (ConsumerGroup, *_nethttp.Resp
  */
 func (a *DefaultApiService) GetConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest {
 	return ApiGetConsumerGroupByIdRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		consumerGroupId: consumerGroupId,
 	}
 }
@@ -620,11 +618,11 @@ func (a *DefaultApiService) GetConsumerGroupByIdExecute(r ApiGetConsumerGroupByI
 }
 
 type ApiGetConsumerGroupListRequest struct {
-	ctx _context.Context
+	ctx        _context.Context
 	ApiService DefaultApi
-	limit *int32
-	offset *int32
-	topic *string
+	limit      *int32
+	offset     *int32
+	topic      *string
 }
 
 func (r ApiGetConsumerGroupListRequest) Limit(limit int32) ApiGetConsumerGroupListRequest {
@@ -653,7 +651,7 @@ func (r ApiGetConsumerGroupListRequest) Execute() (ConsumerGroupList, *_nethttp.
 func (a *DefaultApiService) GetConsumerGroupList(ctx _context.Context) ApiGetConsumerGroupListRequest {
 	return ApiGetConsumerGroupListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -751,11 +749,10 @@ func (a *DefaultApiService) GetConsumerGroupListExecute(r ApiGetConsumerGroupLis
 }
 
 type ApiGetTopicRequest struct {
-	ctx _context.Context
+	ctx        _context.Context
 	ApiService DefaultApi
-	topicName string
+	topicName  string
 }
-
 
 func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.GetTopicExecute(r)
@@ -771,8 +768,8 @@ func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPI
 func (a *DefaultApiService) GetTopic(ctx _context.Context, topicName string) ApiGetTopicRequest {
 	return ApiGetTopicRequest{
 		ApiService: a,
-		ctx: ctx,
-		topicName: topicName,
+		ctx:        ctx,
+		topicName:  topicName,
 	}
 }
 
@@ -862,12 +859,12 @@ func (a *DefaultApiService) GetTopicExecute(r ApiGetTopicRequest) (Topic, *_neth
 }
 
 type ApiGetTopicsListRequest struct {
-	ctx _context.Context
+	ctx        _context.Context
 	ApiService DefaultApi
-	limit *int32
-	filter *string
-	offset *int32
-	order *string
+	limit      *int32
+	filter     *string
+	offset     *int32
+	order      *string
 }
 
 func (r ApiGetTopicsListRequest) Limit(limit int32) ApiGetTopicsListRequest {
@@ -900,7 +897,7 @@ func (r ApiGetTopicsListRequest) Execute() (TopicsList, *_nethttp.Response, Gene
 func (a *DefaultApiService) GetTopicsList(ctx _context.Context) ApiGetTopicsListRequest {
 	return ApiGetTopicsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -1001,10 +998,9 @@ func (a *DefaultApiService) GetTopicsListExecute(r ApiGetTopicsListRequest) (Top
 }
 
 type ApiMetricsRequest struct {
-	ctx _context.Context
+	ctx        _context.Context
 	ApiService DefaultApi
 }
-
 
 func (r ApiMetricsRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.MetricsExecute(r)
@@ -1018,7 +1014,7 @@ func (r ApiMetricsRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 func (a *DefaultApiService) Metrics(ctx _context.Context) ApiMetricsRequest {
 	return ApiMetricsRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -1096,10 +1092,9 @@ func (a *DefaultApiService) MetricsExecute(r ApiMetricsRequest) (*_nethttp.Respo
 }
 
 type ApiOpenApiRequest struct {
-	ctx _context.Context
+	ctx        _context.Context
 	ApiService DefaultApi
 }
-
 
 func (r ApiOpenApiRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.OpenApiExecute(r)
@@ -1113,7 +1108,7 @@ func (r ApiOpenApiRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
 func (a *DefaultApiService) OpenApi(ctx _context.Context) ApiOpenApiRequest {
 	return ApiOpenApiRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -1191,11 +1186,10 @@ func (a *DefaultApiService) OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Respo
 }
 
 type ApiResetConsumerGroupOffsetRequest struct {
-	ctx _context.Context
-	ApiService DefaultApi
+	ctx             _context.Context
+	ApiService      DefaultApi
 	consumerGroupId string
 }
-
 
 func (r ApiResetConsumerGroupOffsetRequest) Execute() (ConsumerGroup, *_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.ResetConsumerGroupOffsetExecute(r)
@@ -1210,8 +1204,8 @@ func (r ApiResetConsumerGroupOffsetRequest) Execute() (ConsumerGroup, *_nethttp.
  */
 func (a *DefaultApiService) ResetConsumerGroupOffset(ctx _context.Context, consumerGroupId string) ApiResetConsumerGroupOffsetRequest {
 	return ApiResetConsumerGroupOffsetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		consumerGroupId: consumerGroupId,
 	}
 }
@@ -1302,14 +1296,14 @@ func (a *DefaultApiService) ResetConsumerGroupOffsetExecute(r ApiResetConsumerGr
 }
 
 type ApiUpdateTopicRequest struct {
-	ctx _context.Context
-	ApiService DefaultApi
-	topicName string
-	topicSettings *TopicSettings
+	ctx              _context.Context
+	ApiService       DefaultApi
+	topicName        string
+	updateTopicInput *UpdateTopicInput
 }
 
-func (r ApiUpdateTopicRequest) TopicSettings(topicSettings TopicSettings) ApiUpdateTopicRequest {
-	r.topicSettings = &topicSettings
+func (r ApiUpdateTopicRequest) UpdateTopicInput(updateTopicInput UpdateTopicInput) ApiUpdateTopicRequest {
+	r.updateTopicInput = &updateTopicInput
 	return r
 }
 
@@ -1327,8 +1321,8 @@ func (r ApiUpdateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpen
 func (a *DefaultApiService) UpdateTopic(ctx _context.Context, topicName string) ApiUpdateTopicRequest {
 	return ApiUpdateTopicRequest{
 		ApiService: a,
-		ctx: ctx,
-		topicName: topicName,
+		ctx:        ctx,
+		topicName:  topicName,
 	}
 }
 
@@ -1359,8 +1353,8 @@ func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-	if r.topicSettings == nil {
-		executionError.error = "topicSettings is required and must be specified"
+	if r.updateTopicInput == nil {
+		executionError.error = "updateTopicInput is required and must be specified"
 		return localVarReturnValue, nil, executionError
 	}
 
@@ -1382,7 +1376,7 @@ func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, 
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.topicSettings
+	localVarPostBody = r.updateTopicInput
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		executionError.error = err.Error()

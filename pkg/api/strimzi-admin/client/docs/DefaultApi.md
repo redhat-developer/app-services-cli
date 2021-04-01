@@ -39,7 +39,7 @@ import (
 )
 
 func main() {
-    newTopicInput := *openapiclient.NewNewTopicInput("Name_example") // NewTopicInput | Topic to create.
+    newTopicInput := *openapiclient.NewNewTopicInput("Name_example", *openapiclient.NewTopicSettings(int32(123))) // NewTopicInput | Topic to create.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -688,7 +688,7 @@ No authorization required
 
 ## UpdateTopic
 
-> Topic UpdateTopic(ctx, topicName).TopicSettings(topicSettings).Execute()
+> Topic UpdateTopic(ctx, topicName).UpdateTopicInput(updateTopicInput).Execute()
 
 Updates the topic with the specified name.
 
@@ -708,11 +708,11 @@ import (
 
 func main() {
     topicName := "topicName_example" // string | The topic name which is its unique id.
-    topicSettings := *openapiclient.NewTopicSettings(int32(123)) // TopicSettings | 
+    updateTopicInput := *openapiclient.NewUpdateTopicInput() // UpdateTopicInput | 
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.UpdateTopic(context.Background(), topicName).TopicSettings(topicSettings).Execute()
+    resp, r, err := api_client.DefaultApi.UpdateTopic(context.Background(), topicName).UpdateTopicInput(updateTopicInput).Execute()
     if err.Error() != "" {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.UpdateTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -738,7 +738,7 @@ Other parameters are passed through a pointer to a apiUpdateTopicRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **topicSettings** | [**TopicSettings**](TopicSettings.md) |  | 
+ **updateTopicInput** | [**UpdateTopicInput**](UpdateTopicInput.md) |  | 
 
 ### Return type
 

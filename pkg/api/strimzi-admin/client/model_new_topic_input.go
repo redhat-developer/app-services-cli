@@ -17,17 +17,18 @@ import (
 // NewTopicInput Input object to create a new topic.
 type NewTopicInput struct {
 	// The topic name, this value must be unique.
-	Name string `json:"name"`
-	Settings *TopicSettings `json:"settings,omitempty"`
+	Name     string        `json:"name"`
+	Settings TopicSettings `json:"settings"`
 }
 
 // NewNewTopicInput instantiates a new NewTopicInput object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewNewTopicInput(name string, ) *NewTopicInput {
+func NewNewTopicInput(name string, settings TopicSettings) *NewTopicInput {
 	this := NewTopicInput{}
 	this.Name = name
+	this.Settings = settings
 	return &this
 }
 
@@ -41,7 +42,7 @@ func NewNewTopicInputWithDefaults() *NewTopicInput {
 
 // GetName returns the Name field value
 func (o *NewTopicInput) GetName() string {
-	if o == nil  {
+	if o == nil {
 		var ret string
 		return ret
 	}
@@ -52,7 +53,7 @@ func (o *NewTopicInput) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *NewTopicInput) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -63,36 +64,28 @@ func (o *NewTopicInput) SetName(v string) {
 	o.Name = v
 }
 
-// GetSettings returns the Settings field value if set, zero value otherwise.
+// GetSettings returns the Settings field value
 func (o *NewTopicInput) GetSettings() TopicSettings {
-	if o == nil || o.Settings == nil {
+	if o == nil {
 		var ret TopicSettings
 		return ret
 	}
-	return *o.Settings
+
+	return o.Settings
 }
 
-// GetSettingsOk returns a tuple with the Settings field value if set, nil otherwise
+// GetSettingsOk returns a tuple with the Settings field value
 // and a boolean to check if the value has been set.
 func (o *NewTopicInput) GetSettingsOk() (*TopicSettings, bool) {
-	if o == nil || o.Settings == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Settings, true
+	return &o.Settings, true
 }
 
-// HasSettings returns a boolean if a field has been set.
-func (o *NewTopicInput) HasSettings() bool {
-	if o != nil && o.Settings != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetSettings gets a reference to the given TopicSettings and assigns it to the Settings field.
+// SetSettings sets field value
 func (o *NewTopicInput) SetSettings(v TopicSettings) {
-	o.Settings = &v
+	o.Settings = v
 }
 
 func (o NewTopicInput) MarshalJSON() ([]byte, error) {
@@ -100,7 +93,7 @@ func (o NewTopicInput) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["name"] = o.Name
 	}
-	if o.Settings != nil {
+	if true {
 		toSerialize["settings"] = o.Settings
 	}
 	return json.Marshal(toSerialize)
@@ -141,5 +134,3 @@ func (v *NullableNewTopicInput) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
