@@ -218,7 +218,7 @@ func runCmd(opts *Options) error {
 
 	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
 
-	topicSettings := &strimziadminclient.TopicSettings{}
+	topicSettings := &strimziadminclient.UpdateTopicInput{}
 
 	if opts.retentionMsStr != "" {
 		needsUpdate = true
@@ -231,7 +231,7 @@ func runCmd(opts *Options) error {
 		return nil
 	}
 
-	updateTopicReq = updateTopicReq.TopicSettings(*topicSettings)
+	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
 
 	// update the topic
 	response, httpRes, topicErr := updateTopicReq.Execute()

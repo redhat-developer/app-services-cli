@@ -82,7 +82,7 @@ var _ DefaultApi = &DefaultApiMock{}
 //             UpdateTopicFunc: func(ctx context.Context, topicName string) ApiUpdateTopicRequest {
 // 	               panic("mock out the UpdateTopic method")
 //             },
-//             UpdateTopicExecuteFunc: func(r ApiUpdateTopicRequest) (UpdateTopicInput, *http.Response, GenericOpenAPIError) {
+//             UpdateTopicExecuteFunc: func(r ApiUpdateTopicRequest) (Topic, *http.Response, GenericOpenAPIError) {
 // 	               panic("mock out the UpdateTopicExecute method")
 //             },
 //         }
@@ -156,7 +156,7 @@ type DefaultApiMock struct {
 	UpdateTopicFunc func(ctx context.Context, topicName string) ApiUpdateTopicRequest
 
 	// UpdateTopicExecuteFunc mocks the UpdateTopicExecute method.
-	UpdateTopicExecuteFunc func(r ApiUpdateTopicRequest) (UpdateTopicInput, *http.Response, GenericOpenAPIError)
+	UpdateTopicExecuteFunc func(r ApiUpdateTopicRequest) (Topic, *http.Response, GenericOpenAPIError)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -983,7 +983,7 @@ func (mock *DefaultApiMock) UpdateTopicCalls() []struct {
 }
 
 // UpdateTopicExecute calls UpdateTopicExecuteFunc.
-func (mock *DefaultApiMock) UpdateTopicExecute(r ApiUpdateTopicRequest) (UpdateTopicInput, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, *http.Response, GenericOpenAPIError) {
 	if mock.UpdateTopicExecuteFunc == nil {
 		panic("DefaultApiMock.UpdateTopicExecuteFunc: method is nil but DefaultApi.UpdateTopicExecute was just called")
 	}

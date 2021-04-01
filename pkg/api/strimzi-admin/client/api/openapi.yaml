@@ -186,14 +186,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TopicSettings'
+              $ref: '#/components/schemas/UpdateTopicInput'
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateTopicInput'
+                $ref: '#/components/schemas/Topic'
           description: Topic updated successfully.
         "400":
           description: Unable to update topic.

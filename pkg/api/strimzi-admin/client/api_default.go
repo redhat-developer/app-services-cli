@@ -175,9 +175,9 @@ type DefaultApi interface {
 
 	/*
 	 * UpdateTopicExecute executes the request
-	 * @return UpdateTopicInput
+	 * @return Topic
 	 */
-	UpdateTopicExecute(r ApiUpdateTopicRequest) (UpdateTopicInput, *_nethttp.Response, GenericOpenAPIError)
+	UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, *_nethttp.Response, GenericOpenAPIError)
 }
 
 // DefaultApiService DefaultApi service
@@ -1296,18 +1296,18 @@ func (a *DefaultApiService) ResetConsumerGroupOffsetExecute(r ApiResetConsumerGr
 }
 
 type ApiUpdateTopicRequest struct {
-	ctx           _context.Context
-	ApiService    DefaultApi
-	topicName     string
-	topicSettings *TopicSettings
+	ctx              _context.Context
+	ApiService       DefaultApi
+	topicName        string
+	updateTopicInput *UpdateTopicInput
 }
 
-func (r ApiUpdateTopicRequest) TopicSettings(topicSettings TopicSettings) ApiUpdateTopicRequest {
-	r.topicSettings = &topicSettings
+func (r ApiUpdateTopicRequest) UpdateTopicInput(updateTopicInput UpdateTopicInput) ApiUpdateTopicRequest {
+	r.updateTopicInput = &updateTopicInput
 	return r
 }
 
-func (r ApiUpdateTopicRequest) Execute() (UpdateTopicInput, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiUpdateTopicRequest) Execute() (Topic, *_nethttp.Response, GenericOpenAPIError) {
 	return r.ApiService.UpdateTopicExecute(r)
 }
 
@@ -1328,9 +1328,9 @@ func (a *DefaultApiService) UpdateTopic(ctx _context.Context, topicName string) 
 
 /*
  * Execute executes the request
- * @return UpdateTopicInput
+ * @return Topic
  */
-func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (UpdateTopicInput, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, *_nethttp.Response, GenericOpenAPIError) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
@@ -1338,7 +1338,7 @@ func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (UpdateT
 		localVarFileName     string
 		localVarFileBytes    []byte
 		executionError       GenericOpenAPIError
-		localVarReturnValue  UpdateTopicInput
+		localVarReturnValue  Topic
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.UpdateTopic")
@@ -1353,8 +1353,8 @@ func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (UpdateT
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-	if r.topicSettings == nil {
-		executionError.error = "topicSettings is required and must be specified"
+	if r.updateTopicInput == nil {
+		executionError.error = "updateTopicInput is required and must be specified"
 		return localVarReturnValue, nil, executionError
 	}
 
@@ -1376,7 +1376,7 @@ func (a *DefaultApiService) UpdateTopicExecute(r ApiUpdateTopicRequest) (UpdateT
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.topicSettings
+	localVarPostBody = r.updateTopicInput
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		executionError.error = err.Error()
