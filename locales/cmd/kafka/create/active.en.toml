@@ -74,3 +74,10 @@ one = 'Auto-use Kafka is set, updating the current Kafka instance'
 
 [kafka.create.debug.autoUseNotSetMessage]
 one = 'Auto-use Kafka is not set, skipping updating the current Kafka instance'
+
+[kafka.create.log.info.termsCheck]
+one = '''
+In order to be able to create a Kafka instance, you must first review and accept the terms and conditions:
+
+{{.TermsURL}}
+'''

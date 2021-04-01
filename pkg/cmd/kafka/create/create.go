@@ -107,6 +107,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
+// nolint:funlen
 func runCreate(opts *Options) error {
 	logger, err := opts.Logger()
 	if err != nil {
@@ -124,6 +125,22 @@ func runCreate(opts *Options) error {
 	}
 
 	api := connection.API()
+
+	// the user must have accepted the terms and conditions from the provider
+	// before they can create a kafka instance
+	termsAccepted, termsURL, err := checkTermsAccepted(opts.Connection)
+	if err != nil {
+		return err
+	}
+	if !termsAccepted && termsURL != "" {
+		logger.Info(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.create.log.info.termsCheck",
+			TemplateData: map[string]interface{}{
+				"TermsURL": termsURL,
+			},
+		}))
+		return nil
+	}
 
 	var payload *kasclient.KafkaRequestPayload
 	if opts.interactive {
@@ -278,4 +295,28 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	}
 
 	return payload, nil
+}
+
+func checkTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirectURI string, err error) {
+	conn, err := connFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return false, "", err
+	}
+
+	termsReview, _, apiErr := conn.API().AccountMgmt().
+		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
+		Execute()
+	if apiErr.Error() != "" {
+		return false, "", apiErr
+	}
+
+	if !termsReview.GetTermsAvailable() && !termsReview.GetTermsRequired() {
+		return true, "", nil
+	}
+
+	if !termsReview.HasRedirectUrl() {
+		return false, "", errors.New("terms must be signed, but there is no terms URL")
+	}
+
+	return false, termsReview.GetRedirectUrl(), nil
 }
