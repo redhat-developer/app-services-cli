@@ -197,7 +197,7 @@ Because the bf2 GitHub organization is private, we must clone the release to a p
 
 Once all assets have been upload to the release on GitHub, run `./scripts/clone-release.sh` to clone the release to bf3fc6c/cli.
 
-### Working with mocked Kafka
+## Working with mocked Kafka
 
 For testing you can use localy hosted Kafka
 
