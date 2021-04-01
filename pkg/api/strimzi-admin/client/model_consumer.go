@@ -36,7 +36,7 @@ type Consumer struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewConsumer(groupId string, topic string, partition int32, offset float32, lag int32, ) *Consumer {
+func NewConsumer(groupId string, topic string, partition int32, offset float32, lag int32) *Consumer {
 	this := Consumer{}
 	this.GroupId = groupId
 	this.Topic = topic
@@ -56,7 +56,7 @@ func NewConsumerWithDefaults() *Consumer {
 
 // GetGroupId returns the GroupId field value
 func (o *Consumer) GetGroupId() string {
-	if o == nil  {
+	if o == nil {
 		var ret string
 		return ret
 	}
@@ -67,7 +67,7 @@ func (o *Consumer) GetGroupId() string {
 // GetGroupIdOk returns a tuple with the GroupId field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetGroupIdOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.GroupId, true
@@ -80,7 +80,7 @@ func (o *Consumer) SetGroupId(v string) {
 
 // GetTopic returns the Topic field value
 func (o *Consumer) GetTopic() string {
-	if o == nil  {
+	if o == nil {
 		var ret string
 		return ret
 	}
@@ -91,7 +91,7 @@ func (o *Consumer) GetTopic() string {
 // GetTopicOk returns a tuple with the Topic field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetTopicOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Topic, true
@@ -104,7 +104,7 @@ func (o *Consumer) SetTopic(v string) {
 
 // GetPartition returns the Partition field value
 func (o *Consumer) GetPartition() int32 {
-	if o == nil  {
+	if o == nil {
 		var ret int32
 		return ret
 	}
@@ -115,7 +115,7 @@ func (o *Consumer) GetPartition() int32 {
 // GetPartitionOk returns a tuple with the Partition field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetPartitionOk() (*int32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Partition, true
@@ -128,7 +128,7 @@ func (o *Consumer) SetPartition(v int32) {
 
 // GetOffset returns the Offset field value
 func (o *Consumer) GetOffset() float32 {
-	if o == nil  {
+	if o == nil {
 		var ret float32
 		return ret
 	}
@@ -139,7 +139,7 @@ func (o *Consumer) GetOffset() float32 {
 // GetOffsetOk returns a tuple with the Offset field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetOffsetOk() (*float32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Offset, true
@@ -184,7 +184,7 @@ func (o *Consumer) SetLogEndOffset(v float32) {
 
 // GetLag returns the Lag field value
 func (o *Consumer) GetLag() int32 {
-	if o == nil  {
+	if o == nil {
 		var ret int32
 		return ret
 	}
@@ -195,7 +195,7 @@ func (o *Consumer) GetLag() int32 {
 // GetLagOk returns a tuple with the Lag field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetLagOk() (*int32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Lag, true
@@ -299,5 +299,3 @@ func (v *NullableConsumer) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

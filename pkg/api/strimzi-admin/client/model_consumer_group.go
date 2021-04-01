@@ -26,7 +26,7 @@ type ConsumerGroup struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewConsumerGroup(id string, consumers []Consumer, ) *ConsumerGroup {
+func NewConsumerGroup(id string, consumers []Consumer) *ConsumerGroup {
 	this := ConsumerGroup{}
 	this.Id = id
 	this.Consumers = consumers
@@ -43,7 +43,7 @@ func NewConsumerGroupWithDefaults() *ConsumerGroup {
 
 // GetId returns the Id field value
 func (o *ConsumerGroup) GetId() string {
-	if o == nil  {
+	if o == nil {
 		var ret string
 		return ret
 	}
@@ -54,7 +54,7 @@ func (o *ConsumerGroup) GetId() string {
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroup) GetIdOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Id, true
@@ -67,7 +67,7 @@ func (o *ConsumerGroup) SetId(v string) {
 
 // GetConsumers returns the Consumers field value
 func (o *ConsumerGroup) GetConsumers() []Consumer {
-	if o == nil  {
+	if o == nil {
 		var ret []Consumer
 		return ret
 	}
@@ -78,7 +78,7 @@ func (o *ConsumerGroup) GetConsumers() []Consumer {
 // GetConsumersOk returns a tuple with the Consumers field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroup) GetConsumersOk() (*[]Consumer, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Consumers, true
@@ -135,5 +135,3 @@ func (v *NullableConsumerGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -39,7 +39,7 @@ import (
 )
 
 func main() {
-    newTopicInput := *openapiclient.NewNewTopicInput("Name_example") // NewTopicInput | Topic to create.
+    newTopicInput := *openapiclient.NewNewTopicInput("Name_example", *openapiclient.NewTopicSettings(int32(123))) // NewTopicInput | Topic to create.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -688,7 +688,7 @@ No authorization required
 
 ## UpdateTopic
 
-> Topic UpdateTopic(ctx, topicName).TopicSettings(topicSettings).Execute()
+> UpdateTopicInput UpdateTopic(ctx, topicName).TopicSettings(topicSettings).Execute()
 
 Updates the topic with the specified name.
 
@@ -717,7 +717,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.UpdateTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `UpdateTopic`: Topic
+    // response from `UpdateTopic`: UpdateTopicInput
     fmt.Fprintf(os.Stdout, "Response from `DefaultApi.UpdateTopic`: %v\n", resp)
 }
 ```
@@ -742,7 +742,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Topic**](Topic.md)
+[**UpdateTopicInput**](UpdateTopicInput.md)
 
 ### Authorization
 

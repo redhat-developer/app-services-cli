@@ -15,6 +15,7 @@ docs/Partition.md
 docs/Topic.md
 docs/TopicSettings.md
 docs/TopicsList.md
+docs/UpdateTopicInput.md
 git_push.sh
 model_config_entry.go
 model_consumer.go
@@ -25,5 +26,6 @@ model_partition.go
 model_topic.go
 model_topic_settings.go
 model_topics_list.go
+model_update_topic_input.go
 response.go
 utils.go

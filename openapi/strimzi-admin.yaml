@@ -177,7 +177,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Topic"
+                $ref: "#/components/schemas/UpdateTopicInput"
           description: Topic updated successfully.
         "400":
           description: Unable to update topic.
@@ -395,6 +395,8 @@ components:
     Topic:
       title: Root Type for NewTopicInput
       description: Kafka Topic (A feed where records are stored and published)
+      required:
+        - numPartitions
       type: object
       properties:
         name:
@@ -563,6 +565,7 @@ components:
       description: Input object to create a new topic.
       required:
         - name
+        - settings
       type: object
       properties:
         name:
@@ -717,3 +720,19 @@ components:
                 offset: 6
                 lag: 1
                 logEndOffset: 5
+    UpdateTopicInput:
+      title: Root Type for UpdateTopicInput
+      description: Kafka Topic (A feed where records are stored and published)
+      type: object
+      properties:
+        config:
+          description: Topic configuration entry.
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEntry"
+      example:
+        config:
+          - key: min.insync.replicas
+            value: "1"
+          - key: max.message.bytes
+            value: "1050000"
