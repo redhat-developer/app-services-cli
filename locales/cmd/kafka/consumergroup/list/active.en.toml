@@ -1,0 +1,25 @@
+[kafka.consumerGroup.list.cmd.use]
+description = "Use is the one-line usage message"
+one = "list"
+
+[kafka.consumerGroup.list.cmd.shortDescription]
+one = 'List all consumer groups'
+
+[kafka.consumerGroup.list.cmd.longDescription]
+one = 'List all consumer groups in the current Apache Kafka instance.'
+
+[kafka.consumerGroup.list.cmd.example]
+one =  '''
+# list all consumer groups
+$ rhoas kafka consumergroup list
+
+# list all consumer groups as JSON
+$ rhoas kafka consumergroup list -o json
+'''
+
+[kafka.consumerGroup.list.flag.limit]
+description = 'Description for the --limit flag'
+one = 'The maximum number of consumer groups to be returned'
+
+[kafka.consumerGroup.list.log.info.noConsumerGroups]
+one = 'Kafka instance "{{.InstanceName}}" has no consumer groups'

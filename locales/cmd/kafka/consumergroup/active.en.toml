@@ -1,0 +1,9 @@
+[kafka.consumerGroup.cmd.use]
+description = "Use is the one-line usage message"
+one = "consumergroup"
+
+[kafka.consumerGroup.cmd.shortDescription]
+one = 'Create, list, describe consumer groups'
+
+[kafka.consumerGroup.cmd.longDescription]
+one = 'Use these commands to create, list, describe, delete and update consumer groups'
