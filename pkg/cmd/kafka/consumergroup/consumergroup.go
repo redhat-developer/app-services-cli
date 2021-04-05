@@ -18,7 +18,7 @@ func NewConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		list.NewListCommand(f),
+		list.NewListConsumerGroupCommand(f),
 	)
 
 	return cmd

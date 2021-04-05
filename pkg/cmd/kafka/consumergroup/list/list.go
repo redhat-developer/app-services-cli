@@ -38,8 +38,8 @@ type consumerGroupRow struct {
 	PartitionsWithLag int    `json:"lag,omitempty" header:"Partitions with lag"`
 }
 
-// NewListCommand creates a new command to list consumer groups
-func NewListCommand(f *factory.Factory) *cobra.Command {
+// NewListConsumerGroupCommand creates a new command to list consumer groups
+func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
 		Connection: f.Connection,
