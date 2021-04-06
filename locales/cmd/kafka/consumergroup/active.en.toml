@@ -3,7 +3,7 @@ description = "Use is the one-line usage message"
 one = "consumergroup"
 
 [kafka.consumerGroup.cmd.shortDescription]
-one = 'Create, list, describe consumer groups'
+one = 'Describe, update, list and delete consumer groups for the current Kafka instance.'
 
 [kafka.consumerGroup.cmd.longDescription]
-one = 'Use these commands to create, list, describe, delete and update consumer groups'
+one = 'Use these commands to describe, update, list and delete consumer groups for the current Kafka instance'
