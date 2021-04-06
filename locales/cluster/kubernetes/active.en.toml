@@ -44,7 +44,7 @@ one = '''
 KafkaConnection successfully installed on your cluster.
 To view it execute:
 
-oc get mkc -o=yaml -n {{.Namespace}} {{.Name}}
+oc get akc -o=yaml -n {{.Namespace}} {{.Name}}
 
 '''
 
