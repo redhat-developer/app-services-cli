@@ -86,6 +86,7 @@ spec:
     kind: {{.Kind}}
     name: {{.Name}}
 EOF
+
 '''
 
 
