@@ -1,5 +1,5 @@
 /**
- * Handles specific operations for MKC resource
+ * Handles specific operations for Kafka Connection resource
  */
 package cluster
 
@@ -18,22 +18,22 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 )
 
-var MKCGroup = "rhoas.redhat.com"
-var MKCVersion = "v1alpha1"
+var AKCGroup = "rhoas.redhat.com"
+var AKCVersion = "v1alpha1"
 
-var MKCRMeta = metav1.TypeMeta{
+var AKCRMeta = metav1.TypeMeta{
 	Kind:       "KafkaConnection",
-	APIVersion: MKCGroup + "/" + MKCVersion,
+	APIVersion: AKCGroup + "/" + AKCVersion,
 }
 
-var MKCResource = schema.GroupVersionResource{
-	Group:    MKCGroup,
-	Version:  MKCVersion,
+var AKCResource = schema.GroupVersionResource{
+	Group:    AKCGroup,
+	Version:  AKCVersion,
 	Resource: "kafkaconnections",
 }
 
 // checks the cluster to see if a KafkaConnection CRD is installed
-func IsMKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
+func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -90,13 +90,13 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 		TemplateData: map[string]interface{}{
 			"Name":      crName,
 			"Namespace": namespace,
-			"Group":     MKCGroup,
-			"Version":   MKCVersion,
-			"Kind":      MKCRMeta.Kind,
+			"Group":     AKCGroup,
+			"Version":   AKCVersion,
+			"Kind":      AKCRMeta.Kind,
 		},
 	}))
 
-	w, err := c.dynamicClient.Resource(MKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+	w, err := c.dynamicClient.Resource(AKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
 	})
 
@@ -153,13 +153,13 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 	}
 }
 
-func createMKCObject(crName string, namespace string, kafkaID string) *KafkaConnection {
+func createKCObject(crName string, namespace string, kafkaID string) *KafkaConnection {
 	kafkaConnectionCR := &KafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
 			Namespace: namespace,
 		},
-		TypeMeta: MKCRMeta,
+		TypeMeta: AKCRMeta,
 		Spec: KafkaConnectionSpec{
 			KafkaID:               kafkaID,
 			AccessTokenSecretName: tokenSecretName,

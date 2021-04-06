@@ -197,7 +197,7 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 	crName := kafkaInstance.GetName()
 	kafkaID := kafkaInstance.GetId()
 
-	kafkaConnectionCR := createMKCObject(crName, namespace, kafkaID)
+	kafkaConnectionCR := createKCObject(crName, namespace, kafkaID)
 
 	crJSON, err := json.Marshal(kafkaConnectionCR)
 	if err != nil {
@@ -226,7 +226,7 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 
 // IsRhoasOperatorAvailableOnCluster checks the cluster to see if a KafkaConnection CRD is installed
 func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error) {
-	return IsMKCInstalledOnCluster(ctx, c)
+	return IsKCInstalledOnCluster(ctx, c)
 }
 
 func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, opts *ConnectArguments) error {
