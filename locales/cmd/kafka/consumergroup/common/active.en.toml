@@ -1,7 +1,7 @@
 [kafka.consumerGroup.common.flag.output.description]
 description = "Description for --output flag"
 one = 'Format in which to display the consumer group. Choose from: "json", "yml", "yaml"'
-other = 'Format in which to display the consumer group. Choose from: "json", "yml", "yaml"'
+other = 'Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"'
 
 [kafka.consumerGroup.common.error.unauthorized]
 one = 'you are unauthorized to {{.Operation}} this consumer group'

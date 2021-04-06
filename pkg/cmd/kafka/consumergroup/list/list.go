@@ -72,8 +72,12 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalizeFromID("kafka.consumerGroup.common.flag.output.description"))
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 1000, localizer.MustLocalizeFromID("kafka.consumerGroup.list.flag.limit"))
+
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalize(&localizer.Config{
+		MessageID:   "kafka.consumerGroup.common.flag.output.description",
+		PluralCount: 2,
+	}))
 
 	return cmd
 }
