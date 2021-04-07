@@ -3,6 +3,7 @@
 package kafka
 
 import (
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/consumergroup"
 	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic"
 	// "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic"
 	"github.com/spf13/cobra"
@@ -30,6 +31,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
 		topic.NewTopicCommand(f),
+		consumergroup.NewConsumerGroupCommand(f),
 	)
 
 	return cmd

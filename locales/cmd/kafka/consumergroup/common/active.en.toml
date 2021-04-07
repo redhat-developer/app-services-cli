@@ -1,0 +1,24 @@
+[kafka.consumerGroup.common.flag.output.description]
+description = "Description for --output flag"
+one = 'Format in which to display the consumer group. Choose from: "json", "yml", "yaml"'
+other = 'Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"'
+
+[kafka.consumerGroup.common.error.unauthorized]
+one = 'you are unauthorized to {{.Operation}} this consumer group'
+other = 'you are unauthorized to {{.Operation}} these consumer groups'
+
+[kafka.consumerGroup.common.error.forbidden]
+one = 'you are forbidden to {{.Operation}} this consumer group'
+other = 'you are forbidden to {{.Operation}} these consumer groups'
+
+[kafka.consumerGroup.common.error.internalServerError]
+one = 'internal server error'
+
+[kafka.consumerGroup.common.error.notFoundError]
+one = 'topic "{{.TopicName}}" not found in Kafka instance "{{.InstanceName}}"'
+
+[kafka.consumerGroup.common.error.unableToConnectToKafka]
+one = 'unable to connect to Kafka instance "{{.Name}}"'
+
+[kafka.consumerGroup.common.error.noKafkaSelected]
+one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
