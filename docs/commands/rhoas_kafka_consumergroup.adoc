@@ -2,11 +2,11 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Describe, update, list and delete consumer groups for the current Kafka instance.
+Describe, update, list, and delete consumer groups for the current Kafka instance.
 
 === Synopsis
 
-Use these commands to describe, update, list and delete consumer groups for the current Kafka instance
+Use these commands to describe, update, list, and delete consumer groups for the current Kafka instance
 
 === Options inherited from parent commands
 

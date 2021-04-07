@@ -14,7 +14,7 @@ Create, view, use, and manage your Apache Kafka instances
 === SEE ALSO
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
-* link:rhoas_kafka_consumergroup{relfilesuffix}[rhoas kafka consumergroup]	 - Describe, update, list and delete consumer groups for the current Kafka instance.
+* link:rhoas_kafka_consumergroup{relfilesuffix}[rhoas kafka consumergroup]	 - Describe, update, list, and delete consumer groups for the current Kafka instance.
 * link:rhoas_kafka_create{relfilesuffix}[rhoas kafka create]	 - Create an Apache Kafka instance
 * link:rhoas_kafka_delete{relfilesuffix}[rhoas kafka delete]	 - Delete an Apache Kafka instance
 * link:rhoas_kafka_describe{relfilesuffix}[rhoas kafka describe]	 - View configuration details of an Apache Kafka instance
