@@ -19,6 +19,10 @@ include::../modules/ref-cli-completion-zsh.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-completion.adoc[leveloffset=+1]
 
+include::../modules/ref-cli-kafka-consumergroup-list.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-kafka-consumergroup.adoc[leveloffset=+1]
+
 include::../modules/ref-cli-kafka-create.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-kafka-delete.adoc[leveloffset=+1]
