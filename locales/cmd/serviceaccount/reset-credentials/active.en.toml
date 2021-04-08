@@ -15,6 +15,7 @@ After the credentials have been reset, any applications or tools that use the
 credentials must be updated to use the new password.
 
 You must specify an output format into which the credentials will be stored.
+
   - env (default): Store credentials in an env file as environment variables
   - json: Store credentials in a JSON file
   - properties: Store credentials in a properties file, which is typically used in Java-related technologies.
