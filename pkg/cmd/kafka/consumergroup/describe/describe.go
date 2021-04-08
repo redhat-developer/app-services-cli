@@ -146,7 +146,12 @@ func runCmd(opts *Options) error {
 	default:
 		consumers := consumerGroupData.GetConsumers()
 		rows := mapConsumerGroupDescribeToTableFormat(consumers)
-		fmt.Println(opts.IO.Out, "Consumer group ID:", consumerGroupData.GetId())
+		fmt.Fprintln(opts.IO.Out, localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.consumerGroup.describe.output.id",
+			TemplateData: map[string]interface{}{
+				"ID": consumerGroupData.GetId(),
+			},
+		}))
 		dump.Table(stdout, rows)
 	}
 
