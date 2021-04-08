@@ -15,9 +15,11 @@ one = '''
 $ rhoas kafka consumergroup describe --id consumer_group_1 -o json
 '''
 
-[kafka.consumerGroup.describe.flag.id.description]
-description = 'Description for the --id flag'
-one = 'The unique ID of the consumer group to view'
-
 [kafka.consumerGroup.describe.output.id]
 one = 'Consumer group ID: {{.ID}}'
+
+[kafka.consumerGroup.describe.output.activeMembers]
+one = 'Active members: {{.ActiveMembers}}'
+
+[kafka.consumerGroup.describe.output.partitionsWithLag]
+one = 'Partitions with lag: {{.LaggingPartitions}}'

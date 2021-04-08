@@ -49,8 +49,11 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.example"),
-		Args:    cobra.NoArgs,
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
+
+			opts.id = args[0]
+
 			if opts.outputFormat != "" {
 				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
 					return err
@@ -76,12 +79,9 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.consumerGroup.describe.flag.id.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.consumerGroup.common.flag.output.description",
 	}))
-
-	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
 }
@@ -139,19 +139,32 @@ func runCmd(opts *Options) error {
 	switch opts.outputFormat {
 	case "json":
 		data, _ := json.Marshal(consumerGroupData)
-		_ = dump.JSON(opts.IO.Out, data)
+		_ = dump.JSON(stdout, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(consumerGroupData)
-		_ = dump.YAML(opts.IO.Out, data)
+		_ = dump.YAML(stdout, data)
 	default:
 		consumers := consumerGroupData.GetConsumers()
 		rows := mapConsumerGroupDescribeToTableFormat(consumers)
-		fmt.Fprintln(opts.IO.Out, localizer.MustLocalize(&localizer.Config{
+		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.consumerGroup.describe.output.id",
 			TemplateData: map[string]interface{}{
 				"ID": consumerGroupData.GetId(),
 			},
 		}))
+		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.consumerGroup.describe.output.activeMembers",
+			TemplateData: map[string]interface{}{
+				"ActiveMembers": len(consumerGroupData.GetConsumers()),
+			},
+		}))
+		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.consumerGroup.describe.output.partitionsWithLag",
+			TemplateData: map[string]interface{}{
+				"LaggingPartitions": consumergroup.GetPartitionsWithLag(consumerGroupData.GetConsumers()),
+			},
+		}))
+		fmt.Fprintln(stdout, "")
 		dump.Table(stdout, rows)
 	}
 

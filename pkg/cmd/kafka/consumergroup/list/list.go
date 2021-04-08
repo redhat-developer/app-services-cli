@@ -19,6 +19,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
+
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka/consumergroup"
 )
 
 type Options struct {
@@ -174,19 +176,10 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []strimziadminclient.Co
 	var rows []consumerGroupRow = []consumerGroupRow{}
 
 	for _, t := range consumerGroups {
-
-		var PartitionsWithLag int = 0
-
-		for _, consumer := range t.GetConsumers() {
-			if consumer.Lag > 0 {
-				PartitionsWithLag++
-			}
-		}
-
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetId(),
 			ActiveMembers:     len(t.GetConsumers()),
-			PartitionsWithLag: PartitionsWithLag,
+			PartitionsWithLag: consumergroup.GetPartitionsWithLag(t.GetConsumers()),
 		}
 		rows = append(rows, row)
 	}
