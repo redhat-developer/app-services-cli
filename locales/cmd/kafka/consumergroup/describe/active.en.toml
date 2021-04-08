@@ -1,0 +1,20 @@
+[kafka.consumerGroup.describe.cmd.use]
+one = 'describe'
+
+[kafka.consumerGroup.describe.cmd.shortDescription]
+one = 'Describe a consumer group'
+
+[kafka.consumerGroup.describe.cmd.longDescription]
+one = '''
+Print detailed information for a consumer group and its members.
+'''
+
+[kafka.consumerGroup.describe.cmd.example]
+one = '''
+# describe a consumer group
+$ rhoas kafka consumergroup describe --id consumer_group_1 -o json
+'''
+
+[kafka.consumerGroup.describe.flag.id.description]
+description = 'Description for the --id flag'
+one = 'The unique ID of the consumer group to view'
