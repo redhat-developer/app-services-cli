@@ -3,7 +3,6 @@
 package kafka
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	// "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	"github.com/spf13/cobra"
@@ -31,7 +30,8 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
 		topic.NewTopicCommand(f),
-		consumergroup.NewConsumerGroupCommand(f),
+		// disabled for now as consumer group API is not in production
+		// consumergroup.NewConsumerGroupCommand(f),
 	)
 
 	return cmd
