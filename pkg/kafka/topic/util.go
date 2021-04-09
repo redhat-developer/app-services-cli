@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 )
 
 var retentionMsKey string = "retention.ms"

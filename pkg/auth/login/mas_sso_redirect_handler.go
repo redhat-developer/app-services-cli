@@ -10,13 +10,13 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/coreos/go-oidc"
 	"github.com/markbates/pkger"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
 

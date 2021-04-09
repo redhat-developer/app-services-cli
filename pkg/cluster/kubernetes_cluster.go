@@ -9,29 +9,29 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 
 	"k8s.io/client-go/dynamic"
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/color"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // KubernetesCluster is a type which represents a Kubernetes cluster

@@ -1,7 +1,7 @@
 package cloudregionutil
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 // GetEnabledIDs extracts and returns a slice of the unique IDs of all enabled regions

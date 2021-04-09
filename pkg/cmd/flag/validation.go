@@ -1,7 +1,7 @@
 package flag
 
 import (
-	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 )
 
 // ValidOutput checks if value v is a valid value for --output

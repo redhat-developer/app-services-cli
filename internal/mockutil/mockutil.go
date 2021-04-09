@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/api"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 )
 
 func NewConfigMock(cfg *config.Config) config.IConfig {

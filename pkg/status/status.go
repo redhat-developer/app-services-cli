@@ -8,15 +8,15 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	kas "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/openconfig/goyang/pkg/indent"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	kas "github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 const tagTitle = "title"

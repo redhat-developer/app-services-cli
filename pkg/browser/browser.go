@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
 
 func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {

@@ -2,7 +2,7 @@ style: github
 template: CHANGELOG.tpl.md
 info:
   title: CHANGELOG
-  repository_url: https://github.com/bf2fc6cc711aee1a0c2a/cli
+  repository_url: https://github.com/redhat-developer/app-services-cli
 options:
   tag_filter_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
   commits:

@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/AlecAivazis/survey/v2/terminal"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/spf13/cobra"
 )
 

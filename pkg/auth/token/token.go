@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // Token contains the current access and refresh tokens from the Authorization server

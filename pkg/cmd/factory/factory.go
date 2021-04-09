@@ -1,10 +1,10 @@
 package factory
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // Factory is an abstract type which provides access to

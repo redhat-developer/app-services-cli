@@ -1,15 +1,15 @@
 package topic
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/delete"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/describe"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic/update"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/create"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/delete"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/describe"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/update"
 )
 
 const (

@@ -1,7 +1,7 @@
 package cloudproviderutil
 
 import (
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 // GetEnabledNames returns a list of cloud provider names from the enabled cloud providers

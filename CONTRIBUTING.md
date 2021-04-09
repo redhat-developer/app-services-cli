@@ -165,7 +165,7 @@ goreleaser --snapshot --rm-dist
 ### Creating the release
 
 Execute `git tag 0.20.1` to create the release tag. Then execute `git push origin 0.20.1` to push to the tag to your remote (GitHub).
-Once pushed, a [GitHub Action](https://github.com/bf2fc6cc711aee1a0c2a/cli/actions/workflows/release.yml) will create a release on GitHub and upload the binaries.
+Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-cli/actions/workflows/release.yml) will create a release on GitHub and upload the binaries.
 
 ### Generate a changelog
 
@@ -173,7 +173,7 @@ Once pushed, a [GitHub Action](https://github.com/bf2fc6cc711aee1a0c2a/cli/actio
 
 [git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
 
-Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/bf2fc6cc711aee1a0c2a/cli/releases/tag/latest).
+Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/redhat-developer/app-services-cli/releases/tag/latest).
 
 ### Make the release public
 

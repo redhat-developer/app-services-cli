@@ -3,22 +3,22 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/doc"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
 	"github.com/markbates/pkger"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	"github.com/redhat-developer/app-services-cli/pkg/doc"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/config"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/root"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
 	"github.com/spf13/cobra"
 )
 

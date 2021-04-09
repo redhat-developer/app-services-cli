@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
 
 // NewFile creates a new config type

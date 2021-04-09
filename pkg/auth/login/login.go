@@ -6,14 +6,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/pkce"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/browser"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
 	"github.com/coreos/go-oidc"
 	"github.com/phayes/freeport"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/pkce"
+	"github.com/redhat-developer/app-services-cli/pkg/browser"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
 

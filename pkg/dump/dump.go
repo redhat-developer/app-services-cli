@@ -10,8 +10,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil"
 	"github.com/landoop/tableprinter"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
 	"gitlab.com/c0b/go-ordered-json"
 	"gopkg.in/yaml.v2"

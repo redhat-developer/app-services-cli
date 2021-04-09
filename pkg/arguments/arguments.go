@@ -3,7 +3,7 @@
 package arguments
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/spf13/pflag"
 )
 
