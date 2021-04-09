@@ -88,7 +88,7 @@ func CreateAssembly(assembliesDir string, files []string) error {
 	}
 
 	contentTemplate := `[id="cli-command-reference_{context}"]
-= CLI command reference
+= CLI command reference (rhoas)
 
 [role="_abstract"]
 You use the ` + "`rhoas`" + ` CLI to manage your application services from the command line.
