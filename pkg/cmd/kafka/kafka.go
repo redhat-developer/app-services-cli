@@ -3,18 +3,18 @@
 package kafka
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/consumergroup"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic"
-	// "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/topic"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
+	// "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	"github.com/spf13/cobra"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/delete"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/describe"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/kafka/use"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/delete"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/describe"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
 )
 
 func NewKafkaCommand(f *factory.Factory) *cobra.Command {

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // LoggingRoundTripper implements http.RoundTripper. When set as Transport of http.Client, it executes HTTP requests with logging.

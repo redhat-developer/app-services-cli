@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/fields"

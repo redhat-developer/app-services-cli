@@ -6,17 +6,17 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/mockutil"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/mockutil"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/config"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
 func TestNewLogoutCommand(t *testing.T) {

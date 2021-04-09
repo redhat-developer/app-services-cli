@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 var (

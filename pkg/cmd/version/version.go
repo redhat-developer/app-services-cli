@@ -3,10 +3,10 @@ package version
 import (
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/build"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/spf13/cobra"
 )
 

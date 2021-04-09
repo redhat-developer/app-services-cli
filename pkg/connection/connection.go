@@ -3,7 +3,7 @@ package connection
 import (
 	"context"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
+	"github.com/redhat-developer/app-services-cli/pkg/api"
 )
 
 type Config struct {

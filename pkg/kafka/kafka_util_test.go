@@ -3,8 +3,8 @@ package kafka
 import (
 	"testing"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 func TestValidateName(t *testing.T) {

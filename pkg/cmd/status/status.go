@@ -5,20 +5,20 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
-	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/dump"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
-	pkgStatus "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/status"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	pkgStatus "github.com/redhat-developer/app-services-cli/pkg/status"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )

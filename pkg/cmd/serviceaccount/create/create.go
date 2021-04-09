@@ -6,21 +6,21 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/serviceaccount/validation"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
 
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/connection"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
 	"github.com/AlecAivazis/survey/v2"
-	flagutil "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmdutil/flags"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/serviceaccount/credentials"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/flag"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 

@@ -3,7 +3,7 @@ package kas
 import (
 	"errors"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 type ServiceErrorCode int

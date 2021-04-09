@@ -3,12 +3,12 @@ package completion
 import (
 	"errors"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion/bash"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion/fish"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/completion/zsh"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion/bash"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion/fish"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion/zsh"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/spf13/cobra"
 )
 

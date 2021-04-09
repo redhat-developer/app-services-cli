@@ -5,26 +5,26 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/ams/amsclient"
+	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
-	strimziadminclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/strimzi-admin/client"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api"
+	"github.com/redhat-developer/app-services-cli/pkg/api"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/Nerzal/gocloak/v7"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 )
 
 // Default values:

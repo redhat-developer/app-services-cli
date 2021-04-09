@@ -1,13 +1,13 @@
 package serviceaccount
 
 import (
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/localizer"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/factory"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/create"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/delete"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/describe"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/list"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/serviceaccount/resetcredentials"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/create"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/delete"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/describe"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/resetcredentials"
 	"github.com/spf13/cobra"
 )
 

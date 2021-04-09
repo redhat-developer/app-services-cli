@@ -8,13 +8,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/internal/config"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/cmd/debug"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 
 	"github.com/Nerzal/gocloak/v7"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/auth/token"
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // Builder contains the configuration and logic needed to connect to `api.openshift.com`.

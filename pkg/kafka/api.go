@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas"
-	kasclient "github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/kas/client"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 func GetKafkaByID(ctx context.Context, api kasclient.DefaultApi, id string) (*kasclient.KafkaRequest, *http.Response, error) {
