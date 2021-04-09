@@ -34,5 +34,5 @@ Command requires configuration using kubeconfig for Kubernetes cluster running R
 Operator can be installed using OperatorHub.
 You can find operator by typing "rhoas" in search.
 
-For more information please refer to https://operatorhub.io/how-to-install-an-operator
+For more information please visit Operator Github repository: https://github.com/redhat-developer/app-services-operator
 '''
