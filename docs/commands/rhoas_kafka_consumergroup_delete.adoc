@@ -1,0 +1,40 @@
+== rhoas kafka consumergroup delete
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Delete a consumer group
+
+=== Synopsis
+
+Delete a consumer group from the kafka instance.
+
+
+....
+rhoas kafka consumergroup delete [flags]
+....
+
+=== Examples
+
+....
+# delete a consumer group
+$ rhoas kafka consumergroup delete consumer_group_1
+
+....
+
+=== Options
+
+....
+  -y, --yes   Skip confirmation to forcibly delete a consumer group
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_kafka_consumergroup{relfilesuffix}[rhoas kafka consumergroup]	 - Describe, update, list, and delete consumer groups for the current Kafka instance.
+

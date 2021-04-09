@@ -1,0 +1,30 @@
+[kafka.consumerGroup.delete.cmd.use]
+one = 'delete'
+
+[kafka.consumerGroup.delete.cmd.shortDescription]
+one = 'Delete a consumer group'
+
+[kafka.consumerGroup.delete.cmd.longDescription]
+one = '''
+Delete a consumer group from the kafka instance.
+'''
+
+[kafka.consumerGroup.delete.cmd.example]
+one = '''
+# delete a consumer group
+$ rhoas kafka consumergroup delete consumer_group_1
+'''
+
+[kafka.consumerGroup.delete.flag.yes.description]
+one = 'Skip confirmation to forcibly delete a consumer group'
+
+[kafka.consumerGroup.delete.input.confirmDelete.message]
+description = 'Message for delete confirmation'
+one = 'Are you sure you want to delete the consumer group with ID "{{.ID}}"?'
+
+[kafka.consumerGroup.delete.log.debug.deleteNotConfirmed]
+description = 'Info message when user chose not to delete consumer group'
+one = 'Consumer group delete action was not confirmed. Exiting silently'
+
+[kafka.consumerGroup.delete.log.info.consumerGroupDeleted]
+one = 'Consumer group with ID "{{.ConsumerGroupID}}" has been deleted from the Kafka instance "{{.InstanceName}}"'

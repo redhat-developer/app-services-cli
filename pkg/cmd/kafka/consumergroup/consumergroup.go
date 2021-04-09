@@ -19,6 +19,7 @@ func NewConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.AddCommand(
 		list.NewListConsumerGroupCommand(f),
+		delete.NewDeleteConsumerGroupCommand(f),
 	)
 
 	return cmd
