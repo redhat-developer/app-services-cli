@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
+	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/api/ams/amsclient"
 	"net"
 	"net/http"
 	"net/url"
@@ -92,23 +93,23 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 		}
 	}
 
-	if c.connectionConfig.RequireMASAuth {
-		// nolint:govet
-		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
-		if err != nil {
-			return &MasAuthError{err}
-		}
-		if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
-			c.MASToken.AccessToken = refreshedMasTk.AccessToken
-			cfg.MasAccessToken = refreshedMasTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
-			c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
-			cfg.MasRefreshToken = refreshedMasTk.RefreshToken
-			cfgChanged = true
-		}
-	}
+	// if c.connectionConfig.RequireMASAuth {
+	// 	// nolint:govet
+	// 	refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
+	// 	if err != nil {
+	// 		return &MasAuthError{err}
+	// 	}
+	// 	if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
+	// 		c.MASToken.AccessToken = refreshedMasTk.AccessToken
+	// 		cfg.MasAccessToken = refreshedMasTk.AccessToken
+	// 		cfgChanged = true
+	// 	}
+	// 	if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
+	// 		c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
+	// 		cfg.MasRefreshToken = refreshedMasTk.RefreshToken
+	// 		cfgChanged = true
+	// 	}
+	// }
 
 	if !cfgChanged {
 		return nil
@@ -167,7 +168,20 @@ func (c *KeycloakConnection) API() *api.API {
 	var cachedKafkaID string
 	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
 	var cachedKafkaRequest *kasclient.KafkaRequest
+	var cachedAmsAPI amsclient.DefaultApi
 	var cachedKafkaAdminErr error
+
+	amsAPIFunc := func() amsclient.DefaultApi {
+		if cachedAmsAPI != nil {
+			return cachedAmsAPI
+		}
+
+		amsAPIClient := c.createAmsAPIClient()
+
+		cachedAmsAPI = amsAPIClient.DefaultApi
+
+		return cachedAmsAPI
+	}
 
 	kafkaAPIFunc := func() kasclient.DefaultApi {
 		if cachedKafkaServiceAPI != nil {
@@ -254,8 +268,9 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	return &api.API{
-		Kafka:      kafkaAPIFunc,
-		TopicAdmin: kafkaAdminAPIFunc,
+		Kafka:       kafkaAPIFunc,
+		TopicAdmin:  kafkaAdminAPIFunc,
+		AccountMgmt: amsAPIFunc,
 	}
 }
 
@@ -312,6 +327,21 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziad
 	}
 
 	apiClient := strimziadminclient.NewAPIClient(cfg)
+
+	return apiClient
+}
+
+func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {
+	cfg := amsclient.NewConfiguration()
+
+	cfg.Scheme = c.apiURL.Scheme
+	cfg.Host = c.apiURL.Host
+
+	cfg.HTTPClient = c.defaultHTTPClient
+
+	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
+
+	apiClient := amsclient.NewAPIClient(cfg)
 
 	return apiClient
 }

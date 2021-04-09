@@ -16,6 +16,7 @@ binary:=rhoas
 
 kasapi_dir=./pkg/api/kas/client
 strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
+amsapi_dir=./pkg/api/ams/amsclient
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -102,6 +103,13 @@ openapi/strimzi-admin/generate:
 	# generate mock
 	moq -out ${strimzi_admin_api_dir}/default_api_mock.go ${strimzi_admin_api_dir} DefaultApi
 	gofmt -w ${strimzi_admin_api_dir}
+.PHONY: openapi/strimzi-admin/generate
+
+openapi/ams/generate:
+	openapi-generator-cli generate -i openapi/ams.json -g go --package-name amsclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${amsapi_dir}
+	# generate mock
+	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
+	gofmt -w ${amsapi_dir}
 .PHONY: openapi/strimzi-admin/generate
 
 openapi/kas/pull:
