@@ -81,7 +81,7 @@ one = 'service account name cannot exceed {{.MaxNameLen}} characters'
 one = 'invalid service account name "{{.Name}}"; only lowercase letters (a-z), numbers, and "-" are accepted'
 
 [serviceAccount.common.validation.description.error.invalidChars]
-one = 'invalid service account description "{{.Description}}"; only lowercase letters (a-z) and numbers are accepted'
+one = 'invalid service account description "{{.Description}}"; only alphanumeric characters are accepted'
 
 [serviceAccount.common.validation.description.error.lengthError]
 one = 'service account description cannot exceed {{.MaxNameLen}} characters'
