@@ -110,9 +110,9 @@ func TestValidateDescription(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "fails with capital letters",
+			name:    "passes with capital letters",
 			args:    args{"Hello"},
-			wantErr: true,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
