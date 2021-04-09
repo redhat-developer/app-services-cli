@@ -13,7 +13,7 @@ const (
 	maxNameLength  = 50
 	minNameLength  = 1
 	// description validation rules
-	legalDescriptionChars = "^[a-z0-9\\s]*$"
+	legalDescriptionChars = "^[a-zA-Z0-9\\s]*$"
 	maxDescriptionLength  = 255
 )
 
