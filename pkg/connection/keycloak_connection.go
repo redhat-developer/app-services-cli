@@ -5,11 +5,12 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
@@ -35,7 +36,7 @@ const (
 	// SSO defaults
 	DefaultAuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
 	// MAS SSO defaults
-	DefaultMasAuthURL = "https://keycloak-mas-sso-stage.apps.app-sre-stage-0.k3s7.p1.openshiftapps.com/auth/realms/rhoas"
+	DefaultMasAuthURL = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
 )
 
 var DefaultScopes = []string{
