@@ -175,14 +175,6 @@ Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-
 
 Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/redhat-developer/app-services-cli/releases/tag/latest).
 
-### Make the release public
-
-> NOTE: This step is not required for pre-releases.
-
-Because the bf2 GitHub organization is private, we must clone the release to a public repository [bf3fc6c/cli](https://github.com/bf3fc6c/cli/releases).
-
-Once all assets have been upload to the release on GitHub, run `./scripts/clone-release.sh` to clone the release to bf3fc6c/cli.
-
 ## Working with mocked Kafka
 
 For testing you can use localy hosted Kafka
