@@ -3,8 +3,8 @@
 { # this ensures the entire script is downloaded #
 
   BINARY_NAME="rhoas"
-  SRC_ORG="bf3fc6c"
-  SRC_REPO="cli"
+  SRC_ORG="redhat-developer"
+  SRC_REPO="app-services-cli"
   OS_TYPE="linux"
   OS_LONG_BIT="64"
   RELEASE_TAG="${1:-latest}"
