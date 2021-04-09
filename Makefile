@@ -141,9 +141,6 @@ mock-api/client/start:
 	cd mas-mock && yarn && yarn start
 .PHONY: mock-api/client/start
 
-mock-api/keycloak/import-realm:
-	node mas-mock/keycloak/initKeycloak.js
-
 # clean up code and dependencies
 format:
 	@go mod tidy

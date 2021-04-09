@@ -96,23 +96,9 @@ To work and test CLI locally please follow the mock readme and then login into c
 
 > The mock API can become outdated from the current state of the KAS API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
 
-## Mock Authentication
-
-The repo has a local Keycloak instance which replicates the production environment. To start the server run `make mock-api/start`.
-
-You will need to update the `config.AuthURL` variable to `http://localhost:8080/auth/realms/redhat-external`.
-
-```shell
-rhoas login
-```
-
 ### `make mock-api/start`
 
 Starts the mock KAS Fleet Manager API and Kafka Admin API at [`http://localhost:8000`](http://localhost:8000).
-
-### `make mock-api/keycloak/import-realm`
-
-Imports a Keycloak realm and `rhoas-cli-prod` client.
 
 ### Logging in
 
