@@ -13,7 +13,7 @@ const (
 	maxNameLength  = 50
 	minNameLength  = 1
 	// description validation rules
-	legalDescriptionChars = "^[a-zA-Z0-9\\s]*$"
+	legalDescriptionChars = "^[a-zA-Z0-9.,\\-\\s]*$"
 	maxDescriptionLength  = 255
 )
 
@@ -76,7 +76,7 @@ func ValidateDescription(val interface{}) error {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "serviceAccount.common.validation.description.error.lengthError",
 			TemplateData: map[string]interface{}{
-				"MaxNameLen": maxDescriptionLength,
+				"MaxLen": maxDescriptionLength,
 			},
 		}))
 	}

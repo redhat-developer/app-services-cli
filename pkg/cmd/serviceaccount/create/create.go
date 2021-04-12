@@ -246,7 +246,10 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	promptDescription := &survey.Multiline{Message: localizer.MustLocalizeFromID("serviceAccount.create.input.description.message")}
+	promptDescription := &survey.Multiline{
+		Message: localizer.MustLocalizeFromID("serviceAccount.create.input.description.message"),
+		Help:    localizer.MustLocalizeFromID("serviceAccount.create.flag.description.description"),
+	}
 
 	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validation.ValidateDescription))
 	if err != nil {
