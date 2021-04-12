@@ -36,7 +36,7 @@ type Options struct {
 type topicRow struct {
 	Name            string `json:"name,omitempty" header:"Name"`
 	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
-	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time"`
+	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time (ms)"`
 	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size"`
 }
 
