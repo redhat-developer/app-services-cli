@@ -11,22 +11,19 @@ import (
 var RetentionMsKey string = "retention.ms"
 var RetentionSizeKey string = "retention.bytes"
 
-// CreateConfig creates a list of topic ConfigEntries
-func CreateConfig(retentionMs int) *[]strimziadminclient.ConfigEntry {
-	retentionEntry := CreateRetentionConfigEntry(retentionMs)
-
-	return &[]strimziadminclient.ConfigEntry{
-		*retentionEntry,
+// CreateConfigEntries converts a key value map of config entries to an array of config entries
+func CreateConfigEntries(entryMap map[string]*string) *[]strimziadminclient.ConfigEntry {
+	entries := []strimziadminclient.ConfigEntry{}
+	for key, value := range entryMap {
+		if value != nil {
+			// nolint:scopelint
+			entry := strimziadminclient.NewConfigEntry()
+			entry.SetKey(key)
+			entry.SetValue(*value)
+			entries = append(entries, *entry)
+		}
 	}
-}
-
-func CreateRetentionConfigEntry(retentionMs int) *strimziadminclient.ConfigEntry {
-	retentionPeriodF := strconv.FormatInt(int64(retentionMs), 10)
-
-	return &strimziadminclient.ConfigEntry{
-		Key:   &RetentionMsKey,
-		Value: &retentionPeriodF,
-	}
+	return &entries
 }
 
 // ConvertPartitionsToInt converts the value from "partitions" to int32
