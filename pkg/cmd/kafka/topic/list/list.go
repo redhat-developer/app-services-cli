@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -35,7 +36,7 @@ type Options struct {
 type topicRow struct {
 	Name            string `json:"name,omitempty" header:"Name"`
 	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
-	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time"`
+	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time (ms)"`
 	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size"`
 }
 
@@ -170,23 +171,32 @@ func mapTopicResultsToTableFormat(topics []strimziadminclient.Topic) []topicRow 
 	var rows []topicRow = []topicRow{}
 
 	for _, t := range topics {
-		var RetentionTime, RetentionSize string
-
-		for _, config := range t.GetConfig() {
-			if *config.Key == "retention.ms" {
-				RetentionTime = *config.Value
-			}
-			if *config.Key == "retention.bytes" {
-				RetentionSize = *config.Value
-			}
-		}
 
 		row := topicRow{
 			Name:            t.GetName(),
 			PartitionsCount: len(t.GetPartitions()),
-			RetentionTime:   RetentionTime,
-			RetentionSize:   RetentionSize,
 		}
+		for _, config := range t.GetConfig() {
+			unlimitedVal := "-1 (Unlimited)"
+
+			if *config.Key == topicutil.RetentionMsKey {
+				val := config.GetValue()
+				if val == "-1" {
+					row.RetentionTime = unlimitedVal
+				} else {
+					row.RetentionTime = val
+				}
+			}
+			if *config.Key == topicutil.RetentionSizeKey {
+				val := config.GetValue()
+				if val == "-1" {
+					row.RetentionSize = unlimitedVal
+				} else {
+					row.RetentionSize = val
+				}
+			}
+		}
+
 		rows = append(rows, row)
 	}
 

@@ -8,7 +8,8 @@ import (
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 )
 
-var retentionMsKey string = "retention.ms"
+var RetentionMsKey string = "retention.ms"
+var RetentionSizeKey string = "retention.bytes"
 
 // CreateConfig creates a list of topic ConfigEntries
 func CreateConfig(retentionMs int) *[]strimziadminclient.ConfigEntry {
@@ -23,7 +24,7 @@ func CreateRetentionConfigEntry(retentionMs int) *strimziadminclient.ConfigEntry
 	retentionPeriodF := strconv.FormatInt(int64(retentionMs), 10)
 
 	return &strimziadminclient.ConfigEntry{
-		Key:   &retentionMsKey,
+		Key:   &RetentionMsKey,
 		Value: &retentionPeriodF,
 	}
 }
