@@ -12,7 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
+	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
@@ -107,7 +107,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return nil
 				}
 
-				if err = topic.ValidateName(opts.topicName); err != nil {
+				if err = topicutil.ValidateName(opts.topicName); err != nil {
 					return err
 				}
 			}
@@ -119,23 +119,23 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			// check if the partition flag is set
 			if opts.partitionsStr != "" {
 				// nolint:govet
-				partitionCount, err = topic.ConvertPartitionsToInt(opts.partitionsStr)
+				partitionCount, err = topicutil.ConvertPartitionsToInt(opts.partitionsStr)
 				if err != nil {
 					return err
 				}
 
-				if err = topic.ValidatePartitionsN(partitionCount); err != nil {
+				if err = topicutil.ValidatePartitionsN(partitionCount); err != nil {
 					return err
 				}
 			}
 
 			if opts.retentionMsStr != "" {
-				retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
+				retentionPeriodMs, err = topicutil.ConvertRetentionMsToInt(opts.retentionMsStr)
 				if err != nil {
 					return err
 				}
 
-				if err = topic.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+				if err = topicutil.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
 					return err
 				}
 			}
@@ -174,7 +174,7 @@ func runCmd(opts *Options) error {
 		}
 
 		if opts.retentionMsStr != "" {
-			retentionPeriodMs, err = topic.ConvertRetentionMsToInt(opts.retentionMsStr)
+			retentionPeriodMs, err = topicutil.ConvertRetentionMsToInt(opts.retentionMsStr)
 			if err != nil {
 				return err
 			}
@@ -215,19 +215,26 @@ func runCmd(opts *Options) error {
 		}
 	}
 
+	// map to store the config entries which will be updated
+	var configEntryMap map[string]*string = map[string]*string{}
+
 	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
 
 	topicSettings := &strimziadminclient.UpdateTopicInput{}
 
 	if opts.retentionMsStr != "" {
 		needsUpdate = true
-		topicConfig := topic.CreateConfig(retentionPeriodMs)
-		topicSettings.SetConfig(*topicConfig)
+		configEntryMap[topicutil.RetentionMsKey] = &opts.retentionMsStr
 	}
 
 	if !needsUpdate {
 		logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
 		return nil
+	}
+
+	if len(configEntryMap) > 0 {
+		configEntries := topicutil.CreateConfigEntries(configEntryMap)
+		topicSettings.SetConfig(*configEntries)
 	}
 
 	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
@@ -317,7 +324,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    localizer.MustLocalizeFromID("kafka.topic.update.input.retentionMs.help"),
 	}
 
-	err = survey.AskOne(retentionPrompt, &opts.retentionMsStr, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
 	}

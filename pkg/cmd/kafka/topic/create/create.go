@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
+	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
@@ -78,15 +79,15 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			if !opts.interactive {
 				opts.topicName = args[0]
 
-				if err = topic.ValidateName(opts.topicName); err != nil {
+				if err = topicutil.ValidateName(opts.topicName); err != nil {
 					return err
 				}
 
-				if err = topic.ValidatePartitionsN(opts.partitions); err != nil {
+				if err = topicutil.ValidatePartitionsN(opts.partitions); err != nil {
 					return err
 				}
 
-				if err = topic.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
+				if err = topicutil.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
 					return err
 				}
 			}
@@ -152,7 +153,7 @@ func runCmd(opts *Options) error {
 		Name: opts.topicName,
 		Settings: strimziadminclient.TopicSettings{
 			NumPartitions: opts.partitions,
-			Config:        topic.CreateConfig(opts.retentionMs),
+			Config:        createConfigEntries(opts),
 		},
 	}
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
@@ -248,8 +249,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 		promptName,
 		&opts.topicName,
 		survey.WithValidator(survey.Required),
-		survey.WithValidator(topic.ValidateName),
-		survey.WithValidator(topic.ValidateNameIsAvailable(api, kafkaInstance.GetName())),
+		survey.WithValidator(topicutil.ValidateName),
+		survey.WithValidator(topicutil.ValidateNameIsAvailable(api, kafkaInstance.GetName())),
 	)
 
 	if err != nil {
@@ -262,7 +263,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Default: "1",
 	}
 
-	err = survey.AskOne(partitionsPrompt, &opts.partitions, survey.WithValidator(topic.ValidatePartitionsN))
+	err = survey.AskOne(partitionsPrompt, &opts.partitions, survey.WithValidator(topicutil.ValidatePartitionsN))
 	if err != nil {
 		return err
 	}
@@ -273,10 +274,18 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Default: fmt.Sprintf("%v", defaultRetentionPeriodMS),
 	}
 
-	err = survey.AskOne(retentionPrompt, &opts.retentionMs, survey.WithValidator(topic.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionPrompt, &opts.retentionMs, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func createConfigEntries(opts *Options) *[]strimziadminclient.ConfigEntry {
+	retentionMsStr := strconv.Itoa(opts.retentionMs)
+	configEntryMap := map[string]*string{
+		topicutil.RetentionMsKey: &retentionMsStr,
+	}
+	return topicutil.CreateConfigEntries(configEntryMap)
 }
