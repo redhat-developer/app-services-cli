@@ -17,6 +17,7 @@ const (
 	maxNameLength        = 249
 	minReplicationFactor = 1
 	minPartitions        = 1
+	maxPartitions        = 100
 )
 
 // ValidateName validates the name of the topic
@@ -74,10 +75,20 @@ func ValidatePartitionsN(v interface{}) error {
 
 	if partitions < minPartitions {
 		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.partitions.error.invalid",
+			MessageID: "kafka.topic.common.validation.partitions.error.invalid.minLength",
 			TemplateData: map[string]interface{}{
-				"Partitions":    partitions,
-				"MinPartitions": minPartitions,
+				"Partitions": partitions,
+				"Min":        minPartitions,
+			},
+		}))
+	}
+
+	if partitions > maxPartitions {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.validation.partitions.error.invalid.maxLength",
+			TemplateData: map[string]interface{}{
+				"Partitions": partitions,
+				"Max":        maxPartitions,
 			},
 		}))
 	}
