@@ -16,9 +16,9 @@ import (
 )
 
 type Options struct {
-	kafkaID string
-	id      string
-	force   bool
+	kafkaID     string
+	id          string
+	skipConfirm bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -64,7 +64,7 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, localizer.MustLocalizeFromID("kafka.consumerGroup.delete.flag.yes.description"))
+	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, localizer.MustLocalizeFromID("kafka.consumerGroup.delete.flag.yes.description"))
 
 	return cmd
 }
@@ -106,7 +106,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	if !opts.force {
+	if !opts.skipConfirm {
 		var confirmDelete bool
 		promptConfirmDelete := &survey.Confirm{
 			Message: localizer.MustLocalize(&localizer.Config{
@@ -159,7 +159,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"), consumerGroupErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.consumerGroup.common.error.unableToConnectToKafka",
