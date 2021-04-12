@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
@@ -125,12 +124,6 @@ func runCmd(opts *Options) error {
 	// perform delete topic API request
 	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).
 		Execute()
-	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
-	if err != nil {
-		logger.Debug("Could not read response body")
-	} else {
-		logger.Debug("Response Body:", string(bodyBytes))
-	}
 
 	if topicErr.Error() != "" {
 		if httpRes == nil {
@@ -200,7 +193,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",

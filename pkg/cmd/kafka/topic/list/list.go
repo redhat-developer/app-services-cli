@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -102,12 +101,6 @@ func runCmd(opts *Options) error {
 
 	a := api.GetTopicsList(context.Background())
 	topicData, httpRes, topicErr := a.Execute()
-	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
-	if err != nil {
-		logger.Debug("Could not read response body")
-	} else {
-		logger.Debug("Response Body:", string(bodyBytes))
-	}
 
 	if topicErr.Error() != "" {
 		if httpRes == nil {
@@ -132,7 +125,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"), topicErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
