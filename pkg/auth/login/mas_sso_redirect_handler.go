@@ -37,7 +37,7 @@ type masRedirectPageHandler struct {
 
 // nolint:funlen
 func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	f, _ := pkger.Open("/static/login/sso-redirect-page.html")
+	f, _ := pkger.Open("/static/login/mas-sso-redirect-page.html")
 
 	b := bytes.NewBufferString("")
 	if _, err := io.Copy(b, f); err != nil {

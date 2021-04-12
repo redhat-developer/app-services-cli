@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/coreos/go-oidc"
@@ -15,6 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
@@ -32,6 +34,8 @@ type redirectPageHandler struct {
 	Oauth2Config  *oauth2.Config
 	Ctx           context.Context
 	TokenVerifier *oidc.IDTokenVerifier
+	AuthURL       *url.URL
+	ClientID      string
 	CancelContext context.CancelFunc
 }
 
@@ -106,7 +110,12 @@ func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		},
 	})
 
-	redirectPage := fmt.Sprintf((string(out)), pageTitle, pageTitle, pageBody)
+	issuerURL, realm, ok := connection.SplitKeycloakRealmURL(h.AuthURL)
+	if !ok {
+		h.Logger.Error(localizer.MustLocalizeFromID("login.error.noRealmInURL"))
+		os.Exit(1)
+	}
+	redirectPage := fmt.Sprintf((string(out)), pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

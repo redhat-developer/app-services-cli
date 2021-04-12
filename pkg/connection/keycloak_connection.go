@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 
@@ -345,17 +344,4 @@ func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {
 	apiClient := amsclient.NewAPIClient(cfg)
 
 	return apiClient
-}
-
-// get the realm from the Keycloak URL
-func getKeycloakRealm(url *url.URL) (realm string, ok bool) {
-	parts := strings.Split(url.Path, "/")
-	for i, part := range parts {
-		if part == "realms" {
-			realm = parts[i+1]
-			ok = true
-		}
-	}
-
-	return realm, ok
 }

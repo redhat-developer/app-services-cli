@@ -240,7 +240,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 
 	baseAuthURL := fmt.Sprintf("%v://%v", authURL.Scheme, authURL.Host)
 
-	kcRealm, ok := getKeycloakRealm(authURL)
+	_, kcRealm, ok := SplitKeycloakRealmURL(authURL)
 	if !ok {
 		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.authURL)
 	}
@@ -255,7 +255,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	masKc := gocloak.NewClient(baseMasAuthURL)
 	masRestyClient := *keycloak.RestyClient()
 
-	masKcRealm, ok := getKeycloakRealm(masAuthURL)
+	_, masKcRealm, ok := SplitKeycloakRealmURL(masAuthURL)
 	if !ok {
 		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.masAuthURL)
 	}
