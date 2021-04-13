@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -303,10 +304,17 @@ func checkTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirec
 		return false, "", err
 	}
 
+	eventCode := "onlineService"
+	siteCode := "ocm"
+
 	termsReview, _, apiErr := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
+		SelfTermsReview(amsclient.SelfTermsReview{
+		EventCode: &eventCode,
+		SiteCode:  &siteCode,
+	}).
 		Execute()
-	if apiErr.Error() != "" {
+	if apiErr != nil && apiErr.Error() != "" {
 		return false, "", apiErr
 	}
 
