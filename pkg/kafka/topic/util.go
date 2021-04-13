@@ -58,3 +58,19 @@ func ConvertRetentionMsToInt(retentionMsStr string) (int, error) {
 
 	return retentionMsInt, nil
 }
+
+// ConvertRetentionBytesToInt converts the value from "retention-bytes" to int
+func ConvertRetentionBytesToInt(retentionBytesStr string) (int, error) {
+	retentionMsInt, err := strconv.Atoi(retentionBytesStr)
+
+	if err != nil {
+		return 0, errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.input.retentionSize.error.invalid",
+			TemplateData: map[string]interface{}{
+				"RetentionBytes": retentionBytesStr,
+			},
+		}))
+	}
+
+	return retentionMsInt, nil
+}

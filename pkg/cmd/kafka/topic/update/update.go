@@ -29,17 +29,19 @@ import (
 )
 
 var (
-	partitionCount    int32
-	retentionPeriodMs int
+	partitionCount     int32
+	retentionPeriodMs  int
+	retentionSizeBytes int
 )
 
 type Options struct {
-	topicName      string
-	partitionsStr  string
-	retentionMsStr string
-	kafkaID        string
-	outputFormat   string
-	interactive    bool
+	topicName         string
+	partitionsStr     string
+	retentionMsStr    string
+	retentionBytesStr string
+	kafkaID           string
+	outputFormat      string
+	interactive       bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -81,14 +83,14 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" {
+			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
 					MessageID: "argument.error.requiredWhenNonInteractive",
 					TemplateData: map[string]interface{}{
 						"Argument": "Name",
 					},
 				}))
-			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" {
+			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
 				opts.interactive = true
 			}
 
@@ -102,7 +104,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if opts.retentionMsStr == "" && opts.partitionsStr == "" {
+				if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
 					logger.Info(localizer.MustLocalizeFromID("kafka.topic.update.log.info.nothingToUpdate"))
 					return nil
 				}
@@ -140,6 +142,17 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
+			if opts.retentionBytesStr != "" {
+				retentionSizeBytes, err = topicutil.ConvertRetentionBytesToInt(opts.retentionBytesStr)
+				if err != nil {
+					return err
+				}
+
+				if err = topicutil.ValidateMessageRetentionSize(retentionSizeBytes); err != nil {
+					return err
+				}
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
@@ -159,6 +172,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		MessageID: "kafka.topic.common.flag.output.description",
 	}))
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
+	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", localizer.MustLocalizeFromID("kafka.topic.common.input.retentionBytes.description"))
 
 	return cmd
 }
@@ -175,6 +189,13 @@ func runCmd(opts *Options) error {
 
 		if opts.retentionMsStr != "" {
 			retentionPeriodMs, err = topicutil.ConvertRetentionMsToInt(opts.retentionMsStr)
+			if err != nil {
+				return err
+			}
+		}
+
+		if opts.retentionBytesStr != "" {
+			retentionSizeBytes, err = topicutil.ConvertRetentionBytesToInt(opts.retentionBytesStr)
 			if err != nil {
 				return err
 			}
@@ -225,6 +246,11 @@ func runCmd(opts *Options) error {
 	if opts.retentionMsStr != "" {
 		needsUpdate = true
 		configEntryMap[topicutil.RetentionMsKey] = &opts.retentionMsStr
+	}
+
+	if opts.retentionBytesStr != "" {
+		needsUpdate = true
+		configEntryMap[topicutil.RetentionSizeKey] = &opts.retentionBytesStr
 	}
 
 	if !needsUpdate {
@@ -319,12 +345,22 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
 
-	retentionPrompt := &survey.Input{
+	retentionMsPrompt := &survey.Input{
 		Message: localizer.MustLocalizeFromID("kafka.topic.update.input.retentionMs.message"),
 		Help:    localizer.MustLocalizeFromID("kafka.topic.update.input.retentionMs.help"),
 	}
 
-	err = survey.AskOne(retentionPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	if err != nil {
+		return err
+	}
+
+	retentionBytesPrompt := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.update.input.retentionBytes.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.update.input.retentionBytes.help"),
+	}
+
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
 	if err != nil {
 		return err
 	}

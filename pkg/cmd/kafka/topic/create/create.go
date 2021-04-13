@@ -29,15 +29,17 @@ import (
 
 const (
 	defaultRetentionPeriodMS = 604800000
+	defaultRetentionSize     = -1
 )
 
 type Options struct {
-	topicName    string
-	partitions   int32
-	retentionMs  int
-	kafkaID      string
-	outputFormat string
-	interactive  bool
+	topicName      string
+	partitions     int32
+	retentionMs    int
+	retentionBytes int
+	kafkaID        string
+	outputFormat   string
+	interactive    bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -90,6 +92,10 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 				if err = topicutil.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
 					return err
 				}
+
+				if err = topicutil.ValidateMessageRetentionSize(opts.retentionBytes); err != nil {
+					return err
+				}
 			}
 
 			if opts.kafkaID != "" {
@@ -116,6 +122,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	}))
 	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.description"))
 	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
+	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionBytes.description"))
 
 	return cmd
 }
@@ -268,13 +275,24 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	retentionPrompt := &survey.Input{
+	retentionMsPrompt := &survey.Input{
 		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionMs.message"),
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
-		Default: fmt.Sprintf("%v", defaultRetentionPeriodMS),
+		Default: strconv.Itoa(defaultRetentionPeriodMS),
 	}
 
-	err = survey.AskOne(retentionPrompt, &opts.retentionMs, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionMsPrompt, &opts.retentionMs, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	if err != nil {
+		return err
+	}
+
+	retentionBytesPrompt := &survey.Input{
+		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionBytes.message"),
+		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionBytes.description"),
+		Default: strconv.Itoa(defaultRetentionSize),
+	}
+
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytes, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
 	if err != nil {
 		return err
 	}
@@ -284,8 +302,10 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 func createConfigEntries(opts *Options) *[]strimziadminclient.ConfigEntry {
 	retentionMsStr := strconv.Itoa(opts.retentionMs)
+	retentionBytesStr := strconv.Itoa(opts.retentionBytes)
 	configEntryMap := map[string]*string{
-		topicutil.RetentionMsKey: &retentionMsStr,
+		topicutil.RetentionMsKey:   &retentionMsStr,
+		topicutil.RetentionSizeKey: &retentionBytesStr,
 	}
 	return topicutil.CreateConfigEntries(configEntryMap)
 }
