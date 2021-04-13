@@ -5567,6 +5567,13 @@ paths:
         upon. Resource ids returned as ["*"] is shorthand for all ids.
   /api/authorizations/v1/self_terms_review:
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfTermsReview'
+        description: Data to check self terms for
+        required: true
       responses:
         "200":
           content:
@@ -6984,6 +6991,16 @@ components:
           - Subscription
           type: string
       type: object
+    SelfTermsReview:
+      example:
+        event_code: event_code
+        site_code: site_code
+      properties:
+        event_code:
+          type: string
+        site_code:
+          type: string
+      type: object
     SkuList:
       allOf:
       - $ref: '#/components/schemas/List'
@@ -7242,9 +7259,15 @@ components:
       type: object
     TermsReview:
       example:
+        event_code: event_code
         account_username: account_username
+        site_code: site_code
       properties:
         account_username:
+          type: string
+        event_code:
+          type: string
+        site_code:
           type: string
       required:
       - account_username

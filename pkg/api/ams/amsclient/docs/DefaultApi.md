@@ -118,7 +118,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccessTokenPost(context.Background()).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccessTokenPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -184,7 +184,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Fields(fields).FetchLabels(fetchLabels).FetchCapabilities(fetchCapabilities).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -256,7 +256,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdGet(context.Background(), id).FetchLabels(fetchLabels).FetchCapabilities(fetchCapabilities).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -330,7 +330,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsGet(context.Background(), id).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -403,7 +403,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyDelete(context.Background(), id, key).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -472,7 +472,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyGet(context.Background(), id, key).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -544,7 +544,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyPatch(context.Background(), id, key).Label(label).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -616,7 +616,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsPost(context.Background(), id).Label(label).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -686,7 +686,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsIdPatch(context.Background(), id).AccountPatchRequest(accountPatchRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsIdPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -756,7 +756,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1AccountsPost(context.Background()).Account(account).DryRun(dryRun).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1AccountsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -821,7 +821,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1ClusterAuthorizationsPost(context.Background()).ClusterAuthorizationRequest(clusterAuthorizationRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1ClusterAuthorizationsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -885,7 +885,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1ClusterRegistrationsPost(context.Background()).ClusterRegistrationRequest(clusterRegistrationRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1ClusterRegistrationsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -949,7 +949,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1CurrentAccountGet(context.Background()).FetchLabels(fetchLabels).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1CurrentAccountGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1015,7 +1015,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1ErrorsGet(context.Background()).Page(page).Size(size).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1ErrorsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1081,7 +1081,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1ErrorsIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1ErrorsIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1150,7 +1150,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1FeatureTogglesIdQueryPost(context.Background(), id).FeatureToggleQueryRequest(featureToggleQueryRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1FeatureTogglesIdQueryPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1222,7 +1222,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1LabelsGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1LabelsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1289,7 +1289,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1MetricsGet(context.Background()).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1MetricsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1353,7 +1353,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1NotifyPost(context.Background()).NotificationRequest(notificationRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1NotifyPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1421,7 +1421,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).FetchLabels(fetchLabels).FetchCapabilities(fetchCapabilities).Fields(fields).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1493,7 +1493,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdGet(context.Background(), id).FetchLabels(fetchLabels).FetchCapabilities(fetchCapabilities).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1567,7 +1567,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsGet(context.Background(), id).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1640,7 +1640,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete(context.Background(), id, key).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1709,7 +1709,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet(context.Background(), id, key).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1781,7 +1781,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch(context.Background(), id, key).Label(label).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1853,7 +1853,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsPost(context.Background(), id).Label(label).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1923,7 +1923,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdPatch(context.Background(), id).OrganizationPatchRequest(organizationPatchRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -1992,7 +1992,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2062,7 +2062,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(context.Background(), orgId).Search(search).FetchRelatedResources(fetchRelatedResources).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2133,7 +2133,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet(context.Background(), orgId).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2206,7 +2206,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet(context.Background(), orgId).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2279,7 +2279,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost(context.Background(), orgId).ResourceQuotaRequest(resourceQuotaRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2349,7 +2349,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete(context.Background(), orgId, quotaId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2418,7 +2418,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet(context.Background(), orgId, quotaId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2490,7 +2490,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch(context.Background(), orgId, quotaId).ResourceQuotaRequest(resourceQuotaRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2561,7 +2561,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1OrganizationsPost(context.Background()).Organization(organization).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1OrganizationsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2627,7 +2627,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1PlansGet(context.Background()).Page(page).Size(size).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1PlansGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2693,7 +2693,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1PlansIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1PlansIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2761,7 +2761,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete(context.Background(), externalResourceId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2827,7 +2827,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1PullSecretsPost(context.Background()).PullSecretRequest(pullSecretRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1PullSecretsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2894,7 +2894,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistriesGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistriesGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -2961,7 +2961,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistriesIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistriesIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3034,7 +3034,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistryCredentialsGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistryCredentialsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3101,7 +3101,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdDelete(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3167,7 +3167,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3236,7 +3236,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdPatch(context.Background(), id).RegistryCredentialPatchRequest(registryCredentialPatchRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3305,7 +3305,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RegistryCredentialsPost(context.Background()).RegistryCredential(registryCredential).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RegistryCredentialsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3372,7 +3372,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1ReservedResourcesGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1ReservedResourcesGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3442,7 +3442,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1ResourceQuotaGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1ResourceQuotaGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3512,7 +3512,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RoleBindingsGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RoleBindingsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3579,7 +3579,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RoleBindingsIdDelete(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RoleBindingsIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3645,7 +3645,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RoleBindingsIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RoleBindingsIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3714,7 +3714,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RoleBindingsIdPatch(context.Background(), id).RoleBindingRequest(roleBindingRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RoleBindingsIdPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3783,7 +3783,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RoleBindingsPost(context.Background()).RoleBindingCreateRequest(roleBindingCreateRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RoleBindingsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3849,7 +3849,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RolesGet(context.Background()).Page(page).Size(size).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RolesGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3915,7 +3915,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1RolesIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1RolesIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -3983,7 +3983,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SkuRulesGet(context.Background()).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SkuRulesGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4047,7 +4047,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SkuRulesIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SkuRulesIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4115,7 +4115,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SkusGet(context.Background()).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SkusGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4179,7 +4179,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SkusIdGet(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SkusIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4255,7 +4255,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsGet(context.Background()).Page(page).Size(size).Search(search).FetchAccounts(fetchAccounts).FetchLabels(fetchLabels).FetchCapabilities(fetchCapabilities).Fields(fields).OrderBy(orderBy).Labels(labels).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4327,7 +4327,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdDelete(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4397,7 +4397,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdGet(context.Background(), id).FetchAccounts(fetchAccounts).FetchLabels(fetchLabels).FetchCapabilities(fetchCapabilities).FetchCpuAndSocket(fetchCpuAndSocket).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4473,7 +4473,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsGet(context.Background(), id).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4546,7 +4546,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete(context.Background(), id, key).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4615,7 +4615,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet(context.Background(), id, key).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4687,7 +4687,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch(context.Background(), id, key).Label(label).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4759,7 +4759,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsPost(context.Background(), id).Label(label).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4829,7 +4829,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdNotifyPost(context.Background(), id).NotificationRequest(notificationRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdNotifyPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4897,7 +4897,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdPatch(context.Background(), id).SubscriptionPatchRequest(subscriptionPatchRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdPatch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -4970,7 +4970,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet(context.Background(), id).Page(page).Size(size).Search(search).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5044,7 +5044,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet(context.Background(), id).Page(page).Size(size).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5112,7 +5112,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsPost(context.Background()).SubscriptionCreateRequest(subscriptionCreateRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5177,7 +5177,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete(context.Background(), subId, accountId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5250,7 +5250,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet(context.Background(), subId).Page(page).Size(size).Search(search).Fields(fields).OrderBy(orderBy).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5324,7 +5324,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost(context.Background(), subId).NotificationContactCreateRequest(notificationContactCreateRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5394,7 +5394,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet(context.Background(), subId, reservedResourceId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5464,7 +5464,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SupportCasesCaseIdDelete(context.Background(), caseId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SupportCasesCaseIdDelete``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5530,7 +5530,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1SupportCasesPost(context.Background()).SupportCasesRequest(supportCasesRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1SupportCasesPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5594,7 +5594,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAccountsMgmtV1TokenAuthorizationPost(context.Background()).TokenAuthorizationRequest(tokenAuthorizationRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAccountsMgmtV1TokenAuthorizationPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5658,7 +5658,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1AccessReviewPost(context.Background()).AccessReview(accessReview).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1AccessReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5722,7 +5722,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1CapabilityReviewPost(context.Background()).CapabilityReviewRequest(capabilityReviewRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1CapabilityReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5786,7 +5786,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1ExportControlReviewPost(context.Background()).ExportControlReviewRequest(exportControlReviewRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1ExportControlReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5850,7 +5850,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1ResourceReviewPost(context.Background()).ResourceReviewRequest(resourceReviewRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1ResourceReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5914,7 +5914,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1SelfAccessReviewPost(context.Background()).SelfAccessReview(selfAccessReview).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1SelfAccessReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -5978,7 +5978,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1SelfResourceReviewPost(context.Background()).SelfResourceReviewRequest(selfResourceReviewRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1SelfResourceReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -6020,7 +6020,7 @@ Name | Type | Description  | Notes
 
 ## ApiAuthorizationsV1SelfTermsReviewPost
 
-> TermsReviewResponse ApiAuthorizationsV1SelfTermsReviewPost(ctx).Execute()
+> TermsReviewResponse ApiAuthorizationsV1SelfTermsReviewPost(ctx).SelfTermsReview(selfTermsReview).Execute()
 
 Review your status of Terms
 
@@ -6037,11 +6037,12 @@ import (
 )
 
 func main() {
+    selfTermsReview := *openapiclient.NewSelfTermsReview() // SelfTermsReview | Data to check self terms for
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).Execute()
-    if err.Error() != "" {
+    resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).SelfTermsReview(selfTermsReview).Execute()
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1SelfTermsReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -6052,12 +6053,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiApiAuthorizationsV1SelfTermsReviewPostRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **selfTermsReview** | [**SelfTermsReview**](SelfTermsReview.md) | Data to check self terms for | 
 
 ### Return type
 
@@ -6069,7 +6074,7 @@ Other parameters are passed through a pointer to a apiApiAuthorizationsV1SelfTer
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -6101,7 +6106,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ApiAuthorizationsV1TermsReviewPost(context.Background()).TermsReview(termsReview).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ApiAuthorizationsV1TermsReviewPost``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }

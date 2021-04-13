@@ -37,7 +37,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccessTokenPostExecute executes the request
 	 * @return AccessTokenCfg
 	 */
-	ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsGet Returns a list of accounts
@@ -50,7 +50,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsGetExecute executes the request
 	 * @return AccountList
 	 */
-	ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdGet Get an account by id
@@ -64,7 +64,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsIdGetExecute executes the request
 	 * @return Account
 	 */
-	ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdLabelsGet Returns a list of labels
@@ -78,7 +78,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsIdLabelsGetExecute executes the request
 	 * @return LabelList
 	 */
-	ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdLabelsKeyDelete Delete a label
@@ -92,7 +92,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdLabelsKeyGet Get subscription labels by label key
@@ -107,7 +107,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdLabelsKeyPatch Create a new label or update an existing label
@@ -122,7 +122,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdLabelsPost Create a new label or update an existing label
@@ -136,7 +136,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsIdLabelsPostExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsIdPatch Update an account
@@ -150,7 +150,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsIdPatchExecute executes the request
 	 * @return Account
 	 */
-	ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1AccountsPost Create a new account
@@ -163,7 +163,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1AccountsPostExecute executes the request
 	 * @return Account
 	 */
-	ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1ClusterAuthorizationsPost Authorizes new cluster creation against an exsiting RH Subscription.
@@ -176,7 +176,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1ClusterAuthorizationsPostExecute executes the request
 	 * @return ClusterAuthorizationResponse
 	 */
-	ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1ClusterRegistrationsPost Finds or creates a cluster registration with a registy credential token and cluster ID
@@ -189,7 +189,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1ClusterRegistrationsPostExecute executes the request
 	 * @return ClusterRegistrationResponse
 	 */
-	ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1CurrentAccountGet Get the authenticated account
@@ -202,7 +202,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1CurrentAccountGetExecute executes the request
 	 * @return Account
 	 */
-	ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1ErrorsGet Returns a list of errors
@@ -215,7 +215,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1ErrorsGetExecute executes the request
 	 * @return ErrorList
 	 */
-	ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1ErrorsIdGet Get an error by id
@@ -229,7 +229,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1ErrorsIdGetExecute executes the request
 	 * @return Error
 	 */
-	ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1FeatureTogglesIdQueryPost Query a feature toggle by id
@@ -243,7 +243,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute executes the request
 	 * @return FeatureToggle
 	 */
-	ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1LabelsGet Returns a list of labels
@@ -256,7 +256,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1LabelsGetExecute executes the request
 	 * @return LabelList
 	 */
-	ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1MetricsGet Returns a list of metrics
@@ -269,7 +269,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1MetricsGetExecute executes the request
 	 * @return MetricsList
 	 */
-	ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1NotifyPost Notify the owner of cluster/subscription
@@ -281,7 +281,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1NotifyPostExecute executes the request
 	 */
-	ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsGet Returns a list of organizations
@@ -294,7 +294,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsGetExecute executes the request
 	 * @return OrganizationList
 	 */
-	ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdGet Get an organization by id
@@ -308,7 +308,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdGetExecute executes the request
 	 * @return Organization
 	 */
-	ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsGet Returns a list of labels
@@ -322,7 +322,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute executes the request
 	 * @return LabelList
 	 */
-	ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete Delete a label
@@ -336,7 +336,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet Get subscription labels by label key
@@ -351,7 +351,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch Create a new label or update an existing label
@@ -366,7 +366,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsPost Create a new label or update an existing label
@@ -380,7 +380,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdPatch Update an organization
@@ -394,7 +394,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdPatchExecute executes the request
 	 * @return Organization
 	 */
-	ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet Returns a summary of organizations clusters based on metrics
@@ -408,7 +408,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute executes the request
 	 * @return Summary
 	 */
-	ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet Returns a summary of quota cost
@@ -422,7 +422,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute executes the request
 	 * @return QuotaCostList
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet Returns a summary of resource quota
@@ -436,7 +436,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute executes the request
 	 * @return QuotaSummaryList
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet Returns a list of resource quota objects
@@ -450,7 +450,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute executes the request
 	 * @return ResourceQuotaList
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost Create a new resource quota
@@ -464,7 +464,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute executes the request
 	 * @return ResourceQuota
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete Delete a resource quota
@@ -478,7 +478,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet Get a resource quota by id
@@ -493,7 +493,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute executes the request
 	 * @return ResourceQuota
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch Update a resource quota
@@ -508,7 +508,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute executes the request
 	 * @return ResourceQuota
 	 */
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1OrganizationsPost Create a new organization
@@ -521,7 +521,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1OrganizationsPostExecute executes the request
 	 * @return Organization
 	 */
-	ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1PlansGet Get all plans
@@ -534,7 +534,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1PlansGetExecute executes the request
 	 * @return PlanList
 	 */
-	ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1PlansIdGet Get a plan by id
@@ -548,7 +548,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1PlansIdGetExecute executes the request
 	 * @return Plan
 	 */
-	ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete Delete a pull secret
@@ -561,7 +561,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1PullSecretsPost Return access token generated from registries in docker format
@@ -574,7 +574,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1PullSecretsPostExecute executes the request
 	 * @return AccessTokenCfg
 	 */
-	ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistriesGet Returns a list of registries
@@ -587,7 +587,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RegistriesGetExecute executes the request
 	 * @return RegistryList
 	 */
-	ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistriesIdGet Get an registry by id
@@ -601,7 +601,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RegistriesIdGetExecute executes the request
 	 * @return Registry
 	 */
-	ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistryCredentialsGet Method for ApiAccountsMgmtV1RegistryCredentialsGet
@@ -615,7 +615,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RegistryCredentialsGetExecute executes the request
 	 * @return RegistryCredentialList
 	 */
-	ApiAccountsMgmtV1RegistryCredentialsGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistryCredentialsGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistryCredentialsIdDelete Delete a registry credential by id
@@ -628,7 +628,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistryCredentialsIdGet Get a registry credentials by id
@@ -642,7 +642,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RegistryCredentialsIdGetExecute executes the request
 	 * @return RegistryCredential
 	 */
-	ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistryCredentialsIdPatch Update a registry credential
@@ -656,7 +656,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute executes the request
 	 * @return RegistryCredential
 	 */
-	ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RegistryCredentialsPost Request the creation of a registry credential
@@ -669,7 +669,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RegistryCredentialsPostExecute executes the request
 	 * @return RegistryCredential
 	 */
-	ApiAccountsMgmtV1RegistryCredentialsPostExecute(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RegistryCredentialsPostExecute(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1ReservedResourcesGet Returns a list of reserved resources
@@ -682,7 +682,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1ReservedResourcesGetExecute executes the request
 	 * @return ReservedResourceList
 	 */
-	ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1ResourceQuotaGet Returns a list of resource quota objects
@@ -695,7 +695,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1ResourceQuotaGetExecute executes the request
 	 * @return ResourceQuotaList
 	 */
-	ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RoleBindingsGet Returns a list of role bindings
@@ -708,7 +708,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RoleBindingsGetExecute executes the request
 	 * @return RoleBindingList
 	 */
-	ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RoleBindingsIdDelete Delete a role binding
@@ -721,7 +721,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1RoleBindingsIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RoleBindingsIdGet Get a role binding
@@ -735,7 +735,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RoleBindingsIdGetExecute executes the request
 	 * @return RoleBinding
 	 */
-	ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RoleBindingsIdPatch Update a role binding
@@ -749,7 +749,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RoleBindingsIdPatchExecute executes the request
 	 * @return RoleBinding
 	 */
-	ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RoleBindingsPost Create a new role binding
@@ -762,7 +762,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RoleBindingsPostExecute executes the request
 	 * @return RoleBinding
 	 */
-	ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RolesGet Returns a list of roles
@@ -775,7 +775,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RolesGetExecute executes the request
 	 * @return RoleList
 	 */
-	ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1RolesIdGet Get a role by id
@@ -789,7 +789,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1RolesIdGetExecute executes the request
 	 * @return Role
 	 */
-	ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SkuRulesGet Returns a list of UHC product SKU Rules
@@ -802,7 +802,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SkuRulesGetExecute executes the request
 	 * @return SkuRulesList
 	 */
-	ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SkuRulesIdGet Get a sku rules by id
@@ -816,7 +816,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SkuRulesIdGetExecute executes the request
 	 * @return SkuRules
 	 */
-	ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SkusGet Returns a list of UHC product SKUs
@@ -829,7 +829,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SkusGetExecute executes the request
 	 * @return SkuList
 	 */
-	ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SkusIdGet Get a sku by id
@@ -843,7 +843,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SkusIdGetExecute executes the request
 	 * @return SKU
 	 */
-	ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsGet Returns a list of subscriptions
@@ -856,7 +856,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsGetExecute executes the request
 	 * @return SubscriptionList
 	 */
-	ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdDelete Deletes a subscription by id
@@ -869,7 +869,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdGet Get a subscription by id
@@ -883,7 +883,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdGetExecute executes the request
 	 * @return Subscription
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsGet Returns a list of labels
@@ -897,7 +897,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute executes the request
 	 * @return LabelList
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete Delete a label
@@ -911,7 +911,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet Get subscription labels by label key
@@ -926,7 +926,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch Create a new label or update an existing label
@@ -941,7 +941,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsPost Create a new label or update an existing label
@@ -955,7 +955,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute executes the request
 	 * @return Label
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdNotifyPost Notify the owner of a subscription
@@ -968,7 +968,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute executes the request
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdPatch Update a subscription
@@ -982,7 +982,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdPatchExecute executes the request
 	 * @return Subscription
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet Returns a list of reserved resources
@@ -996,7 +996,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute executes the request
 	 * @return ReservedResourceList
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet Returns a list of open support creates opened against the external cluster id of this subscrption
@@ -1009,7 +1009,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute executes the request
 	 */
-	ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsPost Create a new subscription
@@ -1022,7 +1022,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsPostExecute executes the request
 	 * @return Subscription
 	 */
-	ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete Deletes a notification contact by subscription and account id
@@ -1036,7 +1036,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet Returns a list of notification contacts for the given subscription
@@ -1050,7 +1050,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute executes the request
 	 * @return AccountList
 	 */
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost Add an account as a notification contact to this subscription
@@ -1064,7 +1064,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute executes the request
 	 * @return Account
 	 */
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet Get reserved resources by id
@@ -1079,7 +1079,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute executes the request
 	 * @return ReservedResource
 	 */
-	ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SupportCasesCaseIdDelete Delete a support case
@@ -1092,7 +1092,7 @@ type DefaultApi interface {
 	/*
 	 * ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute executes the request
 	 */
-	ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1SupportCasesPost create a support case for the subscription
@@ -1105,7 +1105,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1SupportCasesPostExecute executes the request
 	 * @return SupportCasesCreatedResponse
 	 */
-	ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAccountsMgmtV1TokenAuthorizationPost Finds the account owner of the provided token
@@ -1118,7 +1118,7 @@ type DefaultApi interface {
 	 * ApiAccountsMgmtV1TokenAuthorizationPostExecute executes the request
 	 * @return TokenAuthorizationResponse
 	 */
-	ApiAccountsMgmtV1TokenAuthorizationPostExecute(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAccountsMgmtV1TokenAuthorizationPostExecute(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1AccessReviewPost Review an account's access to perform an action on a particular resource or resource type
@@ -1131,7 +1131,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1AccessReviewPostExecute executes the request
 	 * @return AccessReviewResponse
 	 */
-	ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1CapabilityReviewPost Review an account's capabilities
@@ -1144,7 +1144,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1CapabilityReviewPostExecute executes the request
 	 * @return CapabilityReview
 	 */
-	ApiAuthorizationsV1CapabilityReviewPostExecute(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1CapabilityReviewPostExecute(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1ExportControlReviewPost Determine whether a user is restricted from downloading Red Hat software based on export control compliance.
@@ -1157,7 +1157,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1ExportControlReviewPostExecute executes the request
 	 * @return ExportControlReview
 	 */
-	ApiAuthorizationsV1ExportControlReviewPostExecute(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1ExportControlReviewPostExecute(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1ResourceReviewPost Obtain resource ids for resources an account may perform the specified action upon. Resource ids returned as [\"*\"] is shorthand for all ids.
@@ -1170,7 +1170,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1ResourceReviewPostExecute executes the request
 	 * @return ResourceReview
 	 */
-	ApiAuthorizationsV1ResourceReviewPostExecute(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1ResourceReviewPostExecute(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1SelfAccessReviewPost Review your ability to perform an action on a particular resource or resource type
@@ -1183,7 +1183,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1SelfAccessReviewPostExecute executes the request
 	 * @return AccessReviewResponse
 	 */
-	ApiAuthorizationsV1SelfAccessReviewPostExecute(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1SelfAccessReviewPostExecute(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1SelfResourceReviewPost Obtain resource ids for resources you may perform the specified action upon. Resource ids returned as [\"*\"] is shorthand for all ids.
@@ -1196,7 +1196,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1SelfResourceReviewPostExecute executes the request
 	 * @return SelfResourceReview
 	 */
-	ApiAuthorizationsV1SelfResourceReviewPostExecute(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1SelfResourceReviewPostExecute(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1SelfTermsReviewPost Review your status of Terms
@@ -1209,7 +1209,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1SelfTermsReviewPostExecute executes the request
 	 * @return TermsReviewResponse
 	 */
-	ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error)
 
 	/*
 	 * ApiAuthorizationsV1TermsReviewPost Review an account's status of Terms
@@ -1222,7 +1222,7 @@ type DefaultApi interface {
 	 * ApiAuthorizationsV1TermsReviewPostExecute executes the request
 	 * @return TermsReviewResponse
 	 */
-	ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, GenericOpenAPIError)
+	ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error)
 }
 
 // DefaultApiService DefaultApi service
@@ -1233,7 +1233,7 @@ type ApiApiAccountsMgmtV1AccessTokenPostRequest struct {
 	ApiService DefaultApi
 }
 
-func (r ApiApiAccountsMgmtV1AccessTokenPostRequest) Execute() (AccessTokenCfg, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccessTokenPostRequest) Execute() (AccessTokenCfg, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccessTokenPostExecute(r)
 }
 
@@ -1253,21 +1253,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccessTokenPost(ctx _context.Contex
  * Execute executes the request
  * @return AccessTokenCfg
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  AccessTokenCfg
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccessTokenPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/access_token"
@@ -1295,22 +1293,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAcco
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1379,7 +1374,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAcco
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsGetRequest struct {
@@ -1423,7 +1418,7 @@ func (r ApiApiAccountsMgmtV1AccountsGetRequest) FetchCapabilities(fetchCapabilit
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsGetRequest) Execute() (AccountList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsGetRequest) Execute() (AccountList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsGetExecute(r)
 }
 
@@ -1443,21 +1438,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsGet(ctx _context.Context) A
  * Execute executes the request
  * @return AccountList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  AccountList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts"
@@ -1506,22 +1499,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccounts
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1570,7 +1560,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccounts
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdGetRequest struct {
@@ -1590,7 +1580,7 @@ func (r ApiApiAccountsMgmtV1AccountsIdGetRequest) FetchCapabilities(fetchCapabil
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdGetRequest) Execute() (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdGetRequest) Execute() (Account, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdGetExecute(r)
 }
 
@@ -1612,21 +1602,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdGet(ctx _context.Context,
  * Execute executes the request
  * @return Account
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Account
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}"
@@ -1661,22 +1649,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccoun
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1735,7 +1720,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccoun
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest struct {
@@ -1765,7 +1750,7 @@ func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) OrderBy(orderBy string) 
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) Execute() (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) Execute() (LabelList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r)
 }
 
@@ -1787,21 +1772,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsGet(ctx _context.Co
  * Execute executes the request
  * @return LabelList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  LabelList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdLabelsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}/labels"
@@ -1842,22 +1825,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApi
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1906,7 +1886,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApi
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest struct {
@@ -1916,7 +1896,7 @@ type ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest struct {
 	key        string
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r)
 }
 
@@ -1939,20 +1919,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyDelete(ctx _cont
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdLabelsKeyDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}/labels/{key}"
@@ -1982,22 +1960,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r 
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2047,7 +2022,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r 
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest struct {
@@ -2057,7 +2032,7 @@ type ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest struct {
 	key        string
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r)
 }
 
@@ -2081,21 +2056,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyGet(ctx _context
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdLabelsKeyGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}/labels/{key}"
@@ -2125,22 +2098,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r Api
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2199,7 +2169,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest struct {
@@ -2215,7 +2185,7 @@ func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) Label(label Label) 
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r)
 }
 
@@ -2239,21 +2209,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyPatch(ctx _conte
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdLabelsKeyPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}/labels/{key}"
@@ -2264,8 +2232,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r A
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.label == nil {
-		executionError.error = "label is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("label is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -2289,22 +2256,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r A
 	localVarPostBody = r.label
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2373,7 +2337,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest struct {
@@ -2388,7 +2352,7 @@ func (r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) Label(label Label) ApiA
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r)
 }
 
@@ -2410,21 +2374,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsPost(ctx _context.C
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdLabelsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}/labels"
@@ -2434,8 +2396,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiAp
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.label == nil {
-		executionError.error = "label is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("label is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -2459,22 +2420,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiAp
 	localVarPostBody = r.label
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2533,7 +2491,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiAp
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsIdPatchRequest struct {
@@ -2548,7 +2506,7 @@ func (r ApiApiAccountsMgmtV1AccountsIdPatchRequest) AccountPatchRequest(accountP
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsIdPatchRequest) Execute() (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsIdPatchRequest) Execute() (Account, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsIdPatchExecute(r)
 }
 
@@ -2570,21 +2528,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdPatch(ctx _context.Contex
  * Execute executes the request
  * @return Account
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Account
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsIdPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts/{id}"
@@ -2594,8 +2550,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAcco
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.accountPatchRequest == nil {
-		executionError.error = "accountPatchRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("accountPatchRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -2619,22 +2574,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAcco
 	localVarPostBody = r.accountPatchRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2713,7 +2665,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAcco
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1AccountsPostRequest struct {
@@ -2732,7 +2684,7 @@ func (r ApiApiAccountsMgmtV1AccountsPostRequest) DryRun(dryRun bool) ApiApiAccou
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1AccountsPostRequest) Execute() (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1AccountsPostRequest) Execute() (Account, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1AccountsPostExecute(r)
 }
 
@@ -2752,21 +2704,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsPost(ctx _context.Context) 
  * Execute executes the request
  * @return Account
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Account
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1AccountsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/accounts"
@@ -2775,8 +2725,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccount
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.account == nil {
-		executionError.error = "account is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("account is required and must be specified")
 	}
 
 	if r.dryRun != nil {
@@ -2803,22 +2752,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccount
 	localVarPostBody = r.account
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2887,7 +2833,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccount
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest struct {
@@ -2901,7 +2847,7 @@ func (r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) ClusterAuthorizati
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) Execute() (ClusterAuthorizationResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) Execute() (ClusterAuthorizationResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r)
 }
 
@@ -2921,21 +2867,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterAuthorizationsPost(ctx _cont
  * Execute executes the request
  * @return ClusterAuthorizationResponse
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ClusterAuthorizationResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1ClusterAuthorizationsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/cluster_authorizations"
@@ -2944,8 +2888,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.clusterAuthorizationRequest == nil {
-		executionError.error = "clusterAuthorizationRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("clusterAuthorizationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -2969,22 +2912,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r 
 	localVarPostBody = r.clusterAuthorizationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -3063,7 +3003,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest struct {
@@ -3077,7 +3017,7 @@ func (r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) ClusterRegistration
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) Execute() (ClusterRegistrationResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) Execute() (ClusterRegistrationResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r)
 }
 
@@ -3097,21 +3037,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterRegistrationsPost(ctx _conte
  * Execute executes the request
  * @return ClusterRegistrationResponse
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ClusterRegistrationResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1ClusterRegistrationsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/cluster_registrations"
@@ -3120,8 +3058,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r A
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.clusterRegistrationRequest == nil {
-		executionError.error = "clusterRegistrationRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("clusterRegistrationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -3145,22 +3082,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r A
 	localVarPostBody = r.clusterRegistrationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -3249,7 +3183,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1CurrentAccountGetRequest struct {
@@ -3263,7 +3197,7 @@ func (r ApiApiAccountsMgmtV1CurrentAccountGetRequest) FetchLabels(fetchLabels bo
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1CurrentAccountGetRequest) Execute() (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1CurrentAccountGetRequest) Execute() (Account, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1CurrentAccountGetExecute(r)
 }
 
@@ -3283,21 +3217,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1CurrentAccountGet(ctx _context.Cont
  * Execute executes the request
  * @return Account
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Account
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1CurrentAccountGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/current_account"
@@ -3328,22 +3260,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -3392,7 +3321,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1ErrorsGetRequest struct {
@@ -3416,7 +3345,7 @@ func (r ApiApiAccountsMgmtV1ErrorsGetRequest) Search(search string) ApiApiAccoun
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1ErrorsGetRequest) Execute() (ErrorList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1ErrorsGetRequest) Execute() (ErrorList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1ErrorsGetExecute(r)
 }
 
@@ -3436,21 +3365,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsGet(ctx _context.Context) Api
  * Execute executes the request
  * @return ErrorList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ErrorList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1ErrorsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/errors"
@@ -3487,22 +3414,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMg
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -3551,7 +3475,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMg
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1ErrorsIdGetRequest struct {
@@ -3560,7 +3484,7 @@ type ApiApiAccountsMgmtV1ErrorsIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1ErrorsIdGetRequest) Execute() (Error, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1ErrorsIdGetRequest) Execute() (Error, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1ErrorsIdGetExecute(r)
 }
 
@@ -3582,21 +3506,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsIdGet(ctx _context.Context, i
  * Execute executes the request
  * @return Error
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Error
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1ErrorsIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/errors/{id}"
@@ -3625,22 +3547,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccounts
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -3699,7 +3618,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccounts
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest struct {
@@ -3714,7 +3633,7 @@ func (r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) FeatureToggleQuery
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) Execute() (FeatureToggle, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) Execute() (FeatureToggle, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r)
 }
 
@@ -3736,21 +3655,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1FeatureTogglesIdQueryPost(ctx _cont
  * Execute executes the request
  * @return FeatureToggle
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  FeatureToggle
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1FeatureTogglesIdQueryPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/feature_toggles/{id}/query"
@@ -3760,8 +3677,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.featureToggleQueryRequest == nil {
-		executionError.error = "featureToggleQueryRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("featureToggleQueryRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -3785,22 +3701,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r 
 	localVarPostBody = r.featureToggleQueryRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -3859,7 +3772,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1LabelsGetRequest struct {
@@ -3888,7 +3801,7 @@ func (r ApiApiAccountsMgmtV1LabelsGetRequest) OrderBy(orderBy string) ApiApiAcco
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1LabelsGetRequest) Execute() (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1LabelsGetRequest) Execute() (LabelList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1LabelsGetExecute(r)
 }
 
@@ -3908,21 +3821,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1LabelsGet(ctx _context.Context) Api
  * Execute executes the request
  * @return LabelList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  LabelList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1LabelsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/labels"
@@ -3962,22 +3873,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMg
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4026,7 +3934,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMg
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1MetricsGetRequest struct {
@@ -4040,7 +3948,7 @@ func (r ApiApiAccountsMgmtV1MetricsGetRequest) Search(search string) ApiApiAccou
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1MetricsGetRequest) Execute() (MetricsList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1MetricsGetRequest) Execute() (MetricsList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1MetricsGetExecute(r)
 }
 
@@ -4060,21 +3968,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1MetricsGet(ctx _context.Context) Ap
  * Execute executes the request
  * @return MetricsList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  MetricsList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1MetricsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/metrics"
@@ -4105,22 +4011,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsM
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4169,7 +4072,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsM
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1NotifyPostRequest struct {
@@ -4183,7 +4086,7 @@ func (r ApiApiAccountsMgmtV1NotifyPostRequest) NotificationRequest(notificationR
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1NotifyPostRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1NotifyPostRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1NotifyPostExecute(r)
 }
 
@@ -4202,20 +4105,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1NotifyPost(ctx _context.Context) Ap
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1NotifyPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/notify"
@@ -4224,8 +4125,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsM
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.notificationRequest == nil {
-		executionError.error = "notificationRequest is required and must be specified"
-		return nil, executionError
+		return nil, reportError("notificationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -4249,22 +4149,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsM
 	localVarPostBody = r.notificationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4314,7 +4211,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsM
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsGetRequest struct {
@@ -4358,7 +4255,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Fields(fields string) ApiAp
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Execute() (OrganizationList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Execute() (OrganizationList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsGetExecute(r)
 }
 
@@ -4378,21 +4275,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsGet(ctx _context.Conte
  * Execute executes the request
  * @return OrganizationList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  OrganizationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations"
@@ -4441,22 +4336,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAcc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4505,7 +4397,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAcc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdGetRequest struct {
@@ -4525,7 +4417,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) FetchCapabilities(fetchCa
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) Execute() (Organization, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) Execute() (Organization, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdGetExecute(r)
 }
 
@@ -4547,21 +4439,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdGet(ctx _context.Con
  * Execute executes the request
  * @return Organization
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}"
@@ -4596,22 +4486,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiA
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4670,7 +4557,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiA
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest struct {
@@ -4700,7 +4587,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) OrderBy(orderBy str
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) Execute() (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) Execute() (LabelList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r)
 }
 
@@ -4722,21 +4609,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsGet(ctx _conte
  * Execute executes the request
  * @return LabelList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  LabelList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdLabelsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}/labels"
@@ -4777,22 +4662,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r A
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4841,7 +4723,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest struct {
@@ -4851,7 +4733,7 @@ type ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest struct {
 	key        string
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r)
 }
 
@@ -4874,20 +4756,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete(ctx 
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}/labels/{key}"
@@ -4917,22 +4797,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecu
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -4982,7 +4859,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecu
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest struct {
@@ -4992,7 +4869,7 @@ type ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest struct {
 	key        string
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r)
 }
 
@@ -5016,21 +4893,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet(ctx _co
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}/labels/{key}"
@@ -5060,22 +4935,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -5134,7 +5006,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest struct {
@@ -5150,7 +5022,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) Label(label La
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r)
 }
 
@@ -5174,21 +5046,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch(ctx _
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}/labels/{key}"
@@ -5199,8 +5069,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecut
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.label == nil {
-		executionError.error = "label is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("label is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -5224,22 +5093,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecut
 	localVarPostBody = r.label
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -5308,7 +5174,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecut
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest struct {
@@ -5323,7 +5189,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) Label(label Label)
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r)
 }
 
@@ -5345,21 +5211,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsPost(ctx _cont
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdLabelsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}/labels"
@@ -5369,8 +5233,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.label == nil {
-		executionError.error = "label is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("label is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -5394,22 +5257,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r 
 	localVarPostBody = r.label
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -5468,7 +5328,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdPatchRequest struct {
@@ -5483,7 +5343,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) OrganizationPatchReques
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) Execute() (Organization, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) Execute() (Organization, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdPatchExecute(r)
 }
 
@@ -5505,21 +5365,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdPatch(ctx _context.C
  * Execute executes the request
  * @return Organization
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}"
@@ -5529,8 +5387,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiAp
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.organizationPatchRequest == nil {
-		executionError.error = "organizationPatchRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("organizationPatchRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -5554,22 +5411,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiAp
 	localVarPostBody = r.organizationPatchRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -5638,7 +5492,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiAp
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest struct {
@@ -5647,7 +5501,7 @@ type ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) Execute() (Summary, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) Execute() (Summary, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r)
 }
 
@@ -5669,21 +5523,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet(
  * Execute executes the request
  * @return Summary
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Summary
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{id}/summary_dashboard"
@@ -5712,22 +5564,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetE
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -5776,7 +5625,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetE
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest struct {
@@ -5796,7 +5645,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) FetchRelatedR
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) Execute() (QuotaCostList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) Execute() (QuotaCostList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r)
 }
 
@@ -5818,21 +5667,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx 
  * Execute executes the request
  * @return QuotaCostList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  QuotaCostList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/quota_cost"
@@ -5867,22 +5714,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecu
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -5921,7 +5765,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecu
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest struct {
@@ -5936,7 +5780,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) Search(sea
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) Execute() (QuotaSummaryList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) Execute() (QuotaSummaryList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r)
 }
 
@@ -5958,21 +5802,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet(c
  * Execute executes the request
  * @return QuotaSummaryList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  QuotaSummaryList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/quota_summary"
@@ -6004,22 +5846,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetEx
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -6058,7 +5897,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetEx
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest struct {
@@ -6088,7 +5927,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) OrderBy(o
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) Execute() (ResourceQuotaList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) Execute() (ResourceQuotaList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r)
 }
 
@@ -6110,21 +5949,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet(
  * Execute executes the request
  * @return ResourceQuotaList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ResourceQuotaList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/resource_quota"
@@ -6165,22 +6002,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetE
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -6239,7 +6073,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetE
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest struct {
@@ -6254,7 +6088,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) Resource
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) Execute() (ResourceQuota, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) Execute() (ResourceQuota, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r)
 }
 
@@ -6276,21 +6110,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
  * Execute executes the request
  * @return ResourceQuota
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ResourceQuota
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/resource_quota"
@@ -6300,8 +6132,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.resourceQuotaRequest == nil {
-		executionError.error = "resourceQuotaRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("resourceQuotaRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -6325,22 +6156,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
 	localVarPostBody = r.resourceQuotaRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -6409,7 +6237,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest struct {
@@ -6419,7 +6247,7 @@ type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest str
 	quotaId    string
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r)
 }
 
@@ -6442,20 +6270,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/resource_quota/{quotaId}"
@@ -6485,22 +6311,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -6550,7 +6373,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest struct {
@@ -6560,7 +6383,7 @@ type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest struct
 	quotaId    string
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) Execute() (ResourceQuota, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) Execute() (ResourceQuota, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r)
 }
 
@@ -6584,21 +6407,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
  * Execute executes the request
  * @return ResourceQuota
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ResourceQuota
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/resource_quota/{quotaId}"
@@ -6628,22 +6449,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -6702,7 +6520,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest struct {
@@ -6718,7 +6536,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) 
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) Execute() (ResourceQuota, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) Execute() (ResourceQuota, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r)
 }
 
@@ -6742,21 +6560,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
  * Execute executes the request
  * @return ResourceQuota
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ResourceQuota
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations/{orgId}/resource_quota/{quotaId}"
@@ -6767,8 +6583,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.resourceQuotaRequest == nil {
-		executionError.error = "resourceQuotaRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("resourceQuotaRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -6792,22 +6607,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 	localVarPostBody = r.resourceQuotaRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -6876,7 +6688,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1OrganizationsPostRequest struct {
@@ -6890,7 +6702,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsPostRequest) Organization(organization 
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1OrganizationsPostRequest) Execute() (Organization, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1OrganizationsPostRequest) Execute() (Organization, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1OrganizationsPostExecute(r)
 }
 
@@ -6910,21 +6722,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsPost(ctx _context.Cont
  * Execute executes the request
  * @return Organization
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1OrganizationsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/organizations"
@@ -6933,8 +6743,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAc
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.organization == nil {
-		executionError.error = "organization is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("organization is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -6958,22 +6767,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAc
 	localVarPostBody = r.organization
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7042,7 +6848,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1PlansGetRequest struct {
@@ -7066,7 +6872,7 @@ func (r ApiApiAccountsMgmtV1PlansGetRequest) Search(search string) ApiApiAccount
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1PlansGetRequest) Execute() (PlanList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1PlansGetRequest) Execute() (PlanList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1PlansGetExecute(r)
 }
 
@@ -7086,21 +6892,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PlansGet(ctx _context.Context) ApiA
  * Execute executes the request
  * @return PlanList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  PlanList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1PlansGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/plans"
@@ -7137,22 +6941,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgm
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7201,7 +7002,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgm
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1PlansIdGetRequest struct {
@@ -7210,7 +7011,7 @@ type ApiApiAccountsMgmtV1PlansIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1PlansIdGetRequest) Execute() (Plan, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1PlansIdGetRequest) Execute() (Plan, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1PlansIdGetExecute(r)
 }
 
@@ -7232,21 +7033,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PlansIdGet(ctx _context.Context, id
  * Execute executes the request
  * @return Plan
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Plan
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1PlansIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/plans/{id}"
@@ -7275,22 +7074,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsM
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7349,7 +7145,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsM
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest struct {
@@ -7358,7 +7154,7 @@ type ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest struct {
 	externalResourceId string
 }
 
-func (r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r)
 }
 
@@ -7379,20 +7175,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/pull_secrets/{externalResourceId}"
@@ -7421,22 +7215,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7486,7 +7277,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1PullSecretsPostRequest struct {
@@ -7500,7 +7291,7 @@ func (r ApiApiAccountsMgmtV1PullSecretsPostRequest) PullSecretRequest(pullSecret
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1PullSecretsPostRequest) Execute() (AccessTokenCfg, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1PullSecretsPostRequest) Execute() (AccessTokenCfg, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1PullSecretsPostExecute(r)
 }
 
@@ -7520,21 +7311,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsPost(ctx _context.Contex
  * Execute executes the request
  * @return AccessTokenCfg
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  AccessTokenCfg
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1PullSecretsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/pull_secrets"
@@ -7543,8 +7332,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAcco
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.pullSecretRequest == nil {
-		executionError.error = "pullSecretRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("pullSecretRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -7568,22 +7356,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAcco
 	localVarPostBody = r.pullSecretRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7652,7 +7437,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAcco
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistriesGetRequest struct {
@@ -7681,7 +7466,7 @@ func (r ApiApiAccountsMgmtV1RegistriesGetRequest) OrderBy(orderBy string) ApiApi
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RegistriesGetRequest) Execute() (RegistryList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistriesGetRequest) Execute() (RegistryList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistriesGetExecute(r)
 }
 
@@ -7701,21 +7486,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesGet(ctx _context.Context)
  * Execute executes the request
  * @return RegistryList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RegistryList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistriesGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registries"
@@ -7755,22 +7538,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccoun
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7819,7 +7599,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccoun
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistriesIdGetRequest struct {
@@ -7828,7 +7608,7 @@ type ApiApiAccountsMgmtV1RegistriesIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1RegistriesIdGetRequest) Execute() (Registry, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistriesIdGetRequest) Execute() (Registry, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistriesIdGetExecute(r)
 }
 
@@ -7850,21 +7630,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesIdGet(ctx _context.Contex
  * Execute executes the request
  * @return Registry
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Registry
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistriesIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registries/{id}"
@@ -7893,22 +7671,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAcco
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -7967,7 +7742,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAcco
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistryCredentialsGetRequest struct {
@@ -7996,7 +7771,7 @@ func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) OrderBy(orderBy strin
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) Execute() (RegistryCredentialList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) Execute() (RegistryCredentialList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistryCredentialsGetExecute(r)
 }
 
@@ -8017,21 +7792,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsGet(ctx _context
  * Execute executes the request
  * @return RegistryCredentialList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RegistryCredentialList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistryCredentialsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registry_credentials"
@@ -8071,22 +7844,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsGetExecute(r Api
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -8135,7 +7905,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsGetExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest struct {
@@ -8144,7 +7914,7 @@ type ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r)
 }
 
@@ -8165,20 +7935,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdDelete(ctx _co
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistryCredentialsIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registry_credentials/{id}"
@@ -8207,22 +7975,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -8272,7 +8037,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest struct {
@@ -8281,7 +8046,7 @@ type ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) Execute() (RegistryCredential, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) Execute() (RegistryCredential, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r)
 }
 
@@ -8303,21 +8068,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdGet(ctx _conte
  * Execute executes the request
  * @return RegistryCredential
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RegistryCredential
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistryCredentialsIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registry_credentials/{id}"
@@ -8346,22 +8109,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r A
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -8420,7 +8180,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest struct {
@@ -8435,7 +8195,7 @@ func (r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) RegistryCredentia
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) Execute() (RegistryCredential, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) Execute() (RegistryCredential, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r)
 }
 
@@ -8457,21 +8217,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdPatch(ctx _con
  * Execute executes the request
  * @return RegistryCredential
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RegistryCredential
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistryCredentialsIdPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registry_credentials/{id}"
@@ -8481,8 +8239,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.registryCredentialPatchRequest == nil {
-		executionError.error = "registryCredentialPatchRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("registryCredentialPatchRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -8506,22 +8263,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r
 	localVarPostBody = r.registryCredentialPatchRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -8590,7 +8344,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RegistryCredentialsPostRequest struct {
@@ -8604,7 +8358,7 @@ func (r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) RegistryCredential(r
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) Execute() (RegistryCredential, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) Execute() (RegistryCredential, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RegistryCredentialsPostExecute(r)
 }
 
@@ -8624,21 +8378,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsPost(ctx _contex
  * Execute executes the request
  * @return RegistryCredential
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RegistryCredential
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RegistryCredentialsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/registry_credentials"
@@ -8647,8 +8399,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r Ap
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.registryCredential == nil {
-		executionError.error = "registryCredential is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("registryCredential is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -8672,22 +8423,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r Ap
 	localVarPostBody = r.registryCredential
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -8756,7 +8504,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r Ap
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1ReservedResourcesGetRequest struct {
@@ -8785,7 +8533,7 @@ func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) OrderBy(orderBy string)
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) Execute() (ReservedResourceList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) Execute() (ReservedResourceList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1ReservedResourcesGetExecute(r)
 }
 
@@ -8805,21 +8553,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ReservedResourcesGet(ctx _context.C
  * Execute executes the request
  * @return ReservedResourceList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ReservedResourceList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1ReservedResourcesGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/reserved_resources"
@@ -8859,22 +8605,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiAp
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -8923,7 +8666,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiAp
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1ResourceQuotaGetRequest struct {
@@ -8952,7 +8695,7 @@ func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) OrderBy(orderBy string) Api
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) Execute() (ResourceQuotaList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) Execute() (ResourceQuotaList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1ResourceQuotaGetExecute(r)
 }
 
@@ -8972,21 +8715,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ResourceQuotaGet(ctx _context.Conte
  * Execute executes the request
  * @return ResourceQuotaList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ResourceQuotaList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1ResourceQuotaGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/resource_quota"
@@ -9026,22 +8767,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAcc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -9090,7 +8828,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAcc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RoleBindingsGetRequest struct {
@@ -9119,7 +8857,7 @@ func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) OrderBy(orderBy string) ApiA
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) Execute() (RoleBindingList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) Execute() (RoleBindingList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RoleBindingsGetExecute(r)
 }
 
@@ -9139,21 +8877,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsGet(ctx _context.Contex
  * Execute executes the request
  * @return RoleBindingList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RoleBindingList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RoleBindingsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/role_bindings"
@@ -9193,22 +8929,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAcco
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -9257,7 +8990,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAcco
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest struct {
@@ -9266,7 +8999,7 @@ type ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r)
 }
 
@@ -9287,20 +9020,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdDelete(ctx _context.C
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RoleBindingsIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/role_bindings/{id}"
@@ -9329,22 +9060,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiAp
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -9394,7 +9122,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiAp
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RoleBindingsIdGetRequest struct {
@@ -9403,7 +9131,7 @@ type ApiApiAccountsMgmtV1RoleBindingsIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) Execute() (RoleBinding, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) Execute() (RoleBinding, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RoleBindingsIdGetExecute(r)
 }
 
@@ -9425,21 +9153,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdGet(ctx _context.Cont
  * Execute executes the request
  * @return RoleBinding
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RoleBinding
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RoleBindingsIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/role_bindings/{id}"
@@ -9468,22 +9194,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -9542,7 +9265,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest struct {
@@ -9557,7 +9280,7 @@ func (r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) RoleBindingRequest(roleB
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) Execute() (RoleBinding, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) Execute() (RoleBinding, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r)
 }
 
@@ -9579,21 +9302,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdPatch(ctx _context.Co
  * Execute executes the request
  * @return RoleBinding
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RoleBinding
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RoleBindingsIdPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/role_bindings/{id}"
@@ -9603,8 +9324,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApi
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.roleBindingRequest == nil {
-		executionError.error = "roleBindingRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("roleBindingRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -9628,22 +9348,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApi
 	localVarPostBody = r.roleBindingRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -9712,7 +9429,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApi
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RoleBindingsPostRequest struct {
@@ -9726,7 +9443,7 @@ func (r ApiApiAccountsMgmtV1RoleBindingsPostRequest) RoleBindingCreateRequest(ro
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RoleBindingsPostRequest) Execute() (RoleBinding, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RoleBindingsPostRequest) Execute() (RoleBinding, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RoleBindingsPostExecute(r)
 }
 
@@ -9746,21 +9463,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsPost(ctx _context.Conte
  * Execute executes the request
  * @return RoleBinding
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RoleBinding
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RoleBindingsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/role_bindings"
@@ -9769,8 +9484,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAcc
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.roleBindingCreateRequest == nil {
-		executionError.error = "roleBindingCreateRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("roleBindingCreateRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -9794,22 +9508,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAcc
 	localVarPostBody = r.roleBindingCreateRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -9878,7 +9589,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAcc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RolesGetRequest struct {
@@ -9902,7 +9613,7 @@ func (r ApiApiAccountsMgmtV1RolesGetRequest) Search(search string) ApiApiAccount
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1RolesGetRequest) Execute() (RoleList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RolesGetRequest) Execute() (RoleList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RolesGetExecute(r)
 }
 
@@ -9922,21 +9633,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RolesGet(ctx _context.Context) ApiA
  * Execute executes the request
  * @return RoleList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  RoleList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RolesGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/roles"
@@ -9973,22 +9682,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgm
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10037,7 +9743,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgm
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1RolesIdGetRequest struct {
@@ -10046,7 +9752,7 @@ type ApiApiAccountsMgmtV1RolesIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1RolesIdGetRequest) Execute() (Role, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1RolesIdGetRequest) Execute() (Role, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1RolesIdGetExecute(r)
 }
 
@@ -10068,21 +9774,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RolesIdGet(ctx _context.Context, id
  * Execute executes the request
  * @return Role
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Role
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1RolesIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/roles/{id}"
@@ -10111,22 +9815,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsM
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10185,7 +9886,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsM
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SkuRulesGetRequest struct {
@@ -10199,7 +9900,7 @@ func (r ApiApiAccountsMgmtV1SkuRulesGetRequest) Search(search string) ApiApiAcco
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SkuRulesGetRequest) Execute() (SkuRulesList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SkuRulesGetRequest) Execute() (SkuRulesList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SkuRulesGetExecute(r)
 }
 
@@ -10219,21 +9920,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesGet(ctx _context.Context) A
  * Execute executes the request
  * @return SkuRulesList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SkuRulesList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SkuRulesGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/sku_rules"
@@ -10264,22 +9963,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccounts
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10328,7 +10024,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccounts
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SkuRulesIdGetRequest struct {
@@ -10337,7 +10033,7 @@ type ApiApiAccountsMgmtV1SkuRulesIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) Execute() (SkuRules, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) Execute() (SkuRules, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SkuRulesIdGetExecute(r)
 }
 
@@ -10359,21 +10055,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesIdGet(ctx _context.Context,
  * Execute executes the request
  * @return SkuRules
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SkuRules
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SkuRulesIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/sku_rules/{id}"
@@ -10402,22 +10096,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccoun
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10476,7 +10167,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccoun
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SkusGetRequest struct {
@@ -10490,7 +10181,7 @@ func (r ApiApiAccountsMgmtV1SkusGetRequest) Search(search string) ApiApiAccounts
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SkusGetRequest) Execute() (SkuList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SkusGetRequest) Execute() (SkuList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SkusGetExecute(r)
 }
 
@@ -10510,21 +10201,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkusGet(ctx _context.Context) ApiAp
  * Execute executes the request
  * @return SkuList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SkuList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SkusGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/skus"
@@ -10555,22 +10244,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmt
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10619,7 +10305,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmt
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SkusIdGetRequest struct {
@@ -10628,7 +10314,7 @@ type ApiApiAccountsMgmtV1SkusIdGetRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1SkusIdGetRequest) Execute() (SKU, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SkusIdGetRequest) Execute() (SKU, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SkusIdGetExecute(r)
 }
 
@@ -10650,21 +10336,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkusIdGet(ctx _context.Context, id 
  * Execute executes the request
  * @return SKU
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SKU
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SkusIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/skus/{id}"
@@ -10693,22 +10377,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMg
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10767,7 +10448,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMg
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsGetRequest struct {
@@ -10821,7 +10502,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Labels(labels string) ApiAp
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Execute() (SubscriptionList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Execute() (SubscriptionList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsGetExecute(r)
 }
 
@@ -10841,21 +10522,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsGet(ctx _context.Conte
  * Execute executes the request
  * @return SubscriptionList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SubscriptionList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions"
@@ -10910,22 +10589,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAcc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -10974,7 +10650,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAcc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest struct {
@@ -10983,7 +10659,7 @@ type ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest struct {
 	id         string
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r)
 }
 
@@ -11004,20 +10680,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdDelete(ctx _context.
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}"
@@ -11046,22 +10720,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiA
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -11111,7 +10782,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiA
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdGetRequest struct {
@@ -11141,7 +10812,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) FetchCpuAndSocket(fetchCp
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) Execute() (Subscription, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) Execute() (Subscription, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdGetExecute(r)
 }
 
@@ -11163,21 +10834,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdGet(ctx _context.Con
  * Execute executes the request
  * @return Subscription
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Subscription
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}"
@@ -11218,22 +10887,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiA
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -11292,7 +10958,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiA
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest struct {
@@ -11322,7 +10988,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) OrderBy(orderBy str
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) Execute() (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) Execute() (LabelList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r)
 }
 
@@ -11344,21 +11010,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsGet(ctx _conte
  * Execute executes the request
  * @return LabelList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  LabelList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/labels"
@@ -11399,22 +11063,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r A
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -11463,7 +11124,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest struct {
@@ -11473,7 +11134,7 @@ type ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest struct {
 	key        string
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r)
 }
 
@@ -11496,20 +11157,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete(ctx 
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/labels/{key}"
@@ -11539,22 +11198,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecu
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -11604,7 +11260,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecu
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest struct {
@@ -11614,7 +11270,7 @@ type ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest struct {
 	key        string
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r)
 }
 
@@ -11638,21 +11294,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet(ctx _co
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/labels/{key}"
@@ -11682,22 +11336,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -11756,7 +11407,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest struct {
@@ -11772,7 +11423,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) Label(label La
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r)
 }
 
@@ -11796,21 +11447,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch(ctx _
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/labels/{key}"
@@ -11821,8 +11470,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecut
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.label == nil {
-		executionError.error = "label is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("label is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -11846,22 +11494,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecut
 	localVarPostBody = r.label
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -11930,7 +11575,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecut
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest struct {
@@ -11945,7 +11590,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) Label(label Label)
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) Execute() (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) Execute() (Label, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r)
 }
 
@@ -11967,21 +11612,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsPost(ctx _cont
  * Execute executes the request
  * @return Label
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Label
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdLabelsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/labels"
@@ -11991,8 +11634,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.label == nil {
-		executionError.error = "label is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("label is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -12016,22 +11658,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r 
 	localVarPostBody = r.label
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -12090,7 +11729,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest struct {
@@ -12105,7 +11744,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) NotificationReques
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r)
 }
 
@@ -12126,20 +11765,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdNotifyPost(ctx _cont
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdNotifyPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/notify"
@@ -12149,8 +11786,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.notificationRequest == nil {
-		executionError.error = "notificationRequest is required and must be specified"
-		return nil, executionError
+		return nil, reportError("notificationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -12174,22 +11810,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r 
 	localVarPostBody = r.notificationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -12239,7 +11872,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r 
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest struct {
@@ -12254,7 +11887,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) SubscriptionPatchReques
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) Execute() (Subscription, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) Execute() (Subscription, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r)
 }
 
@@ -12276,21 +11909,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdPatch(ctx _context.C
  * Execute executes the request
  * @return Subscription
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Subscription
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdPatch")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}"
@@ -12300,8 +11931,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiAp
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.subscriptionPatchRequest == nil {
-		executionError.error = "subscriptionPatchRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("subscriptionPatchRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -12325,22 +11955,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiAp
 	localVarPostBody = r.subscriptionPatchRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -12409,7 +12036,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiAp
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest struct {
@@ -12439,7 +12066,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) OrderBy(
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) Execute() (ReservedResourceList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) Execute() (ReservedResourceList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r)
 }
 
@@ -12461,21 +12088,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet
  * Execute executes the request
  * @return ReservedResourceList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ReservedResourceList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/reserved_resources"
@@ -12516,22 +12141,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -12580,7 +12202,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest struct {
@@ -12600,7 +12222,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) Size(size int
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r)
 }
 
@@ -12621,20 +12243,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet(ctx 
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{id}/support_cases"
@@ -12669,22 +12289,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecu
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -12724,7 +12341,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecu
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsPostRequest struct {
@@ -12738,7 +12355,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsPostRequest) SubscriptionCreateRequest(
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsPostRequest) Execute() (Subscription, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsPostRequest) Execute() (Subscription, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsPostExecute(r)
 }
 
@@ -12758,21 +12375,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsPost(ctx _context.Cont
  * Execute executes the request
  * @return Subscription
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Subscription
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions"
@@ -12781,8 +12396,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAc
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.subscriptionCreateRequest == nil {
-		executionError.error = "subscriptionCreateRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("subscriptionCreateRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -12806,22 +12420,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAc
 	localVarPostBody = r.subscriptionCreateRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -12890,7 +12501,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest struct {
@@ -12900,7 +12511,7 @@ type ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRe
 	accountId  string
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r)
 }
 
@@ -12923,20 +12534,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{subId}/notification_contacts/{accountId}"
@@ -12966,22 +12575,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13031,7 +12637,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest struct {
@@ -13066,7 +12672,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Or
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Execute() (AccountList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Execute() (AccountList, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r)
 }
 
@@ -13088,21 +12694,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
  * Execute executes the request
  * @return AccountList
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  AccountList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{subId}/notification_contacts"
@@ -13146,22 +12750,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13210,7 +12811,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest struct {
@@ -13225,7 +12826,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) N
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) Execute() (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) Execute() (Account, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r)
 }
 
@@ -13247,21 +12848,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
  * Execute executes the request
  * @return Account
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Account
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{subId}/notification_contacts"
@@ -13271,8 +12870,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.notificationContactCreateRequest == nil {
-		executionError.error = "notificationContactCreateRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("notificationContactCreateRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -13296,22 +12894,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 	localVarPostBody = r.notificationContactCreateRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13380,7 +12975,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest struct {
@@ -13390,7 +12985,7 @@ type ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGe
 	reservedResourceId string
 }
 
-func (r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) Execute() (ReservedResource, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) Execute() (ReservedResource, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r)
 }
 
@@ -13414,21 +13009,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdReservedResources
  * Execute executes the request
  * @return ReservedResource
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ReservedResource
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/subscriptions/{subId}/reserved_resources/{reservedResourceId}"
@@ -13458,22 +13051,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdReservedResources
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13532,7 +13122,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SubscriptionsSubIdReservedResources
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest struct {
@@ -13541,7 +13131,7 @@ type ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest struct {
 	caseId     string
 }
 
-func (r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) Execute() (*_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r)
 }
 
@@ -13562,20 +13152,18 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesCaseIdDelete(ctx _conte
 /*
  * Execute executes the request
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SupportCasesCaseIdDelete")
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/support_cases/{caseId}"
@@ -13604,22 +13192,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r A
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return nil, executionError
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarHTTPResponse, executionError
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13679,7 +13264,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r A
 		return localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, executionError
+	return localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1SupportCasesPostRequest struct {
@@ -13693,7 +13278,7 @@ func (r ApiApiAccountsMgmtV1SupportCasesPostRequest) SupportCasesRequest(support
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1SupportCasesPostRequest) Execute() (SupportCasesCreatedResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1SupportCasesPostRequest) Execute() (SupportCasesCreatedResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1SupportCasesPostExecute(r)
 }
 
@@ -13713,21 +13298,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesPost(ctx _context.Conte
  * Execute executes the request
  * @return SupportCasesCreatedResponse
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SupportCasesCreatedResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1SupportCasesPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/support_cases"
@@ -13736,8 +13319,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAcc
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.supportCasesRequest == nil {
-		executionError.error = "supportCasesRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("supportCasesRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -13761,22 +13343,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAcc
 	localVarPostBody = r.supportCasesRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13835,7 +13414,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAcc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAccountsMgmtV1TokenAuthorizationPostRequest struct {
@@ -13849,7 +13428,7 @@ func (r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) TokenAuthorizationReq
 	return r
 }
 
-func (r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) Execute() (TokenAuthorizationResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) Execute() (TokenAuthorizationResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAccountsMgmtV1TokenAuthorizationPostExecute(r)
 }
 
@@ -13869,21 +13448,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1TokenAuthorizationPost(ctx _context
  * Execute executes the request
  * @return TokenAuthorizationResponse
  */
-func (a *DefaultApiService) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  TokenAuthorizationResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAccountsMgmtV1TokenAuthorizationPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/accounts_mgmt/v1/token_authorization"
@@ -13892,8 +13469,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r Api
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.tokenAuthorizationRequest == nil {
-		executionError.error = "tokenAuthorizationRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("tokenAuthorizationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -13917,22 +13493,19 @@ func (a *DefaultApiService) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r Api
 	localVarPostBody = r.tokenAuthorizationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -13991,7 +13564,7 @@ func (a *DefaultApiService) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1AccessReviewPostRequest struct {
@@ -14005,7 +13578,7 @@ func (r ApiApiAuthorizationsV1AccessReviewPostRequest) AccessReview(accessReview
 	return r
 }
 
-func (r ApiApiAuthorizationsV1AccessReviewPostRequest) Execute() (AccessReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1AccessReviewPostRequest) Execute() (AccessReviewResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1AccessReviewPostExecute(r)
 }
 
@@ -14025,21 +13598,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1AccessReviewPost(ctx _context.Con
  * Execute executes the request
  * @return AccessReviewResponse
  */
-func (a *DefaultApiService) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  AccessReviewResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1AccessReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/access_review"
@@ -14048,8 +13619,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiA
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.accessReview == nil {
-		executionError.error = "accessReview is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("accessReview is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -14073,22 +13643,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiA
 	localVarPostBody = r.accessReview
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -14157,7 +13724,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiA
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1CapabilityReviewPostRequest struct {
@@ -14171,7 +13738,7 @@ func (r ApiApiAuthorizationsV1CapabilityReviewPostRequest) CapabilityReviewReque
 	return r
 }
 
-func (r ApiApiAuthorizationsV1CapabilityReviewPostRequest) Execute() (CapabilityReview, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1CapabilityReviewPostRequest) Execute() (CapabilityReview, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1CapabilityReviewPostExecute(r)
 }
 
@@ -14191,21 +13758,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1CapabilityReviewPost(ctx _context
  * Execute executes the request
  * @return CapabilityReview
  */
-func (a *DefaultApiService) ApiAuthorizationsV1CapabilityReviewPostExecute(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1CapabilityReviewPostExecute(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  CapabilityReview
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1CapabilityReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/capability_review"
@@ -14214,8 +13779,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1CapabilityReviewPostExecute(r Api
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.capabilityReviewRequest == nil {
-		executionError.error = "capabilityReviewRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("capabilityReviewRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -14239,22 +13803,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1CapabilityReviewPostExecute(r Api
 	localVarPostBody = r.capabilityReviewRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -14313,7 +13874,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1CapabilityReviewPostExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1ExportControlReviewPostRequest struct {
@@ -14327,7 +13888,7 @@ func (r ApiApiAuthorizationsV1ExportControlReviewPostRequest) ExportControlRevie
 	return r
 }
 
-func (r ApiApiAuthorizationsV1ExportControlReviewPostRequest) Execute() (ExportControlReview, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1ExportControlReviewPostRequest) Execute() (ExportControlReview, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1ExportControlReviewPostExecute(r)
 }
 
@@ -14347,21 +13908,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1ExportControlReviewPost(ctx _cont
  * Execute executes the request
  * @return ExportControlReview
  */
-func (a *DefaultApiService) ApiAuthorizationsV1ExportControlReviewPostExecute(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1ExportControlReviewPostExecute(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ExportControlReview
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1ExportControlReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/export_control_review"
@@ -14370,8 +13929,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1ExportControlReviewPostExecute(r 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.exportControlReviewRequest == nil {
-		executionError.error = "exportControlReviewRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("exportControlReviewRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -14395,22 +13953,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1ExportControlReviewPostExecute(r 
 	localVarPostBody = r.exportControlReviewRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -14469,7 +14024,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1ExportControlReviewPostExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1ResourceReviewPostRequest struct {
@@ -14483,7 +14038,7 @@ func (r ApiApiAuthorizationsV1ResourceReviewPostRequest) ResourceReviewRequest(r
 	return r
 }
 
-func (r ApiApiAuthorizationsV1ResourceReviewPostRequest) Execute() (ResourceReview, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1ResourceReviewPostRequest) Execute() (ResourceReview, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1ResourceReviewPostExecute(r)
 }
 
@@ -14503,21 +14058,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1ResourceReviewPost(ctx _context.C
  * Execute executes the request
  * @return ResourceReview
  */
-func (a *DefaultApiService) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ResourceReview
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1ResourceReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/resource_review"
@@ -14526,8 +14079,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiAp
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.resourceReviewRequest == nil {
-		executionError.error = "resourceReviewRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("resourceReviewRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -14551,22 +14103,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiAp
 	localVarPostBody = r.resourceReviewRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -14635,7 +14184,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiAp
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1SelfAccessReviewPostRequest struct {
@@ -14649,7 +14198,7 @@ func (r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) SelfAccessReview(self
 	return r
 }
 
-func (r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) Execute() (AccessReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) Execute() (AccessReviewResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1SelfAccessReviewPostExecute(r)
 }
 
@@ -14669,21 +14218,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfAccessReviewPost(ctx _context
  * Execute executes the request
  * @return AccessReviewResponse
  */
-func (a *DefaultApiService) ApiAuthorizationsV1SelfAccessReviewPostExecute(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1SelfAccessReviewPostExecute(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  AccessReviewResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1SelfAccessReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/self_access_review"
@@ -14692,8 +14239,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfAccessReviewPostExecute(r Api
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.selfAccessReview == nil {
-		executionError.error = "selfAccessReview is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("selfAccessReview is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -14717,22 +14263,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfAccessReviewPostExecute(r Api
 	localVarPostBody = r.selfAccessReview
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -14801,7 +14344,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfAccessReviewPostExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1SelfResourceReviewPostRequest struct {
@@ -14815,7 +14358,7 @@ func (r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) SelfResourceReviewR
 	return r
 }
 
-func (r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) Execute() (SelfResourceReview, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) Execute() (SelfResourceReview, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1SelfResourceReviewPostExecute(r)
 }
 
@@ -14835,21 +14378,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfResourceReviewPost(ctx _conte
  * Execute executes the request
  * @return SelfResourceReview
  */
-func (a *DefaultApiService) ApiAuthorizationsV1SelfResourceReviewPostExecute(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1SelfResourceReviewPostExecute(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  SelfResourceReview
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1SelfResourceReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/self_resource_review"
@@ -14858,8 +14399,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfResourceReviewPostExecute(r A
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.selfResourceReviewRequest == nil {
-		executionError.error = "selfResourceReviewRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("selfResourceReviewRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -14883,22 +14423,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfResourceReviewPostExecute(r A
 	localVarPostBody = r.selfResourceReviewRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -14967,15 +14504,21 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfResourceReviewPostExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1SelfTermsReviewPostRequest struct {
-	ctx        _context.Context
-	ApiService DefaultApi
+	ctx             _context.Context
+	ApiService      DefaultApi
+	selfTermsReview *SelfTermsReview
 }
 
-func (r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) Execute() (TermsReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) SelfTermsReview(selfTermsReview SelfTermsReview) ApiApiAuthorizationsV1SelfTermsReviewPostRequest {
+	r.selfTermsReview = &selfTermsReview
+	return r
+}
+
+func (r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) Execute() (TermsReviewResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1SelfTermsReviewPostExecute(r)
 }
 
@@ -14995,21 +14538,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfTermsReviewPost(ctx _context.
  * Execute executes the request
  * @return TermsReviewResponse
  */
-func (a *DefaultApiService) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  TermsReviewResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1SelfTermsReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/self_terms_review"
@@ -15017,9 +14558,12 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiA
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
+	if r.selfTermsReview == nil {
+		return localVarReturnValue, nil, reportError("selfTermsReview is required and must be specified")
+	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
+	localVarHTTPContentTypes := []string{"application/json"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -15035,24 +14579,23 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiA
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	// body params
+	localVarPostBody = r.selfTermsReview
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -15121,7 +14664,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiA
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiApiAuthorizationsV1TermsReviewPostRequest struct {
@@ -15135,7 +14678,7 @@ func (r ApiApiAuthorizationsV1TermsReviewPostRequest) TermsReview(termsReview Te
 	return r
 }
 
-func (r ApiApiAuthorizationsV1TermsReviewPostRequest) Execute() (TermsReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiApiAuthorizationsV1TermsReviewPostRequest) Execute() (TermsReviewResponse, *_nethttp.Response, error) {
 	return r.ApiService.ApiAuthorizationsV1TermsReviewPostExecute(r)
 }
 
@@ -15155,21 +14698,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1TermsReviewPost(ctx _context.Cont
  * Execute executes the request
  * @return TermsReviewResponse
  */
-func (a *DefaultApiService) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  TermsReviewResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ApiAuthorizationsV1TermsReviewPost")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/authorizations/v1/terms_review"
@@ -15178,8 +14719,7 @@ func (a *DefaultApiService) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAu
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.termsReview == nil {
-		executionError.error = "termsReview is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("termsReview is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -15203,22 +14743,19 @@ func (a *DefaultApiService) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAu
 	localVarPostBody = r.termsReview
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -15287,5 +14824,5 @@ func (a *DefaultApiService) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAu
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }

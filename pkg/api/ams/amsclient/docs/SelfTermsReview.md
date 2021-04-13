@@ -1,99 +1,78 @@
-# TermsReview
+# SelfTermsReview
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AccountUsername** | **string** |  | 
 **EventCode** | Pointer to **string** |  | [optional] 
 **SiteCode** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
-### NewTermsReview
+### NewSelfTermsReview
 
-`func NewTermsReview(accountUsername string, ) *TermsReview`
+`func NewSelfTermsReview() *SelfTermsReview`
 
-NewTermsReview instantiates a new TermsReview object
+NewSelfTermsReview instantiates a new SelfTermsReview object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewTermsReviewWithDefaults
+### NewSelfTermsReviewWithDefaults
 
-`func NewTermsReviewWithDefaults() *TermsReview`
+`func NewSelfTermsReviewWithDefaults() *SelfTermsReview`
 
-NewTermsReviewWithDefaults instantiates a new TermsReview object
+NewSelfTermsReviewWithDefaults instantiates a new SelfTermsReview object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetAccountUsername
-
-`func (o *TermsReview) GetAccountUsername() string`
-
-GetAccountUsername returns the AccountUsername field if non-nil, zero value otherwise.
-
-### GetAccountUsernameOk
-
-`func (o *TermsReview) GetAccountUsernameOk() (*string, bool)`
-
-GetAccountUsernameOk returns a tuple with the AccountUsername field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAccountUsername
-
-`func (o *TermsReview) SetAccountUsername(v string)`
-
-SetAccountUsername sets AccountUsername field to given value.
-
-
 ### GetEventCode
 
-`func (o *TermsReview) GetEventCode() string`
+`func (o *SelfTermsReview) GetEventCode() string`
 
 GetEventCode returns the EventCode field if non-nil, zero value otherwise.
 
 ### GetEventCodeOk
 
-`func (o *TermsReview) GetEventCodeOk() (*string, bool)`
+`func (o *SelfTermsReview) GetEventCodeOk() (*string, bool)`
 
 GetEventCodeOk returns a tuple with the EventCode field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetEventCode
 
-`func (o *TermsReview) SetEventCode(v string)`
+`func (o *SelfTermsReview) SetEventCode(v string)`
 
 SetEventCode sets EventCode field to given value.
 
 ### HasEventCode
 
-`func (o *TermsReview) HasEventCode() bool`
+`func (o *SelfTermsReview) HasEventCode() bool`
 
 HasEventCode returns a boolean if a field has been set.
 
 ### GetSiteCode
 
-`func (o *TermsReview) GetSiteCode() string`
+`func (o *SelfTermsReview) GetSiteCode() string`
 
 GetSiteCode returns the SiteCode field if non-nil, zero value otherwise.
 
 ### GetSiteCodeOk
 
-`func (o *TermsReview) GetSiteCodeOk() (*string, bool)`
+`func (o *SelfTermsReview) GetSiteCodeOk() (*string, bool)`
 
 GetSiteCodeOk returns a tuple with the SiteCode field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetSiteCode
 
-`func (o *TermsReview) SetSiteCode(v string)`
+`func (o *SelfTermsReview) SetSiteCode(v string)`
 
 SetSiteCode sets SiteCode field to given value.
 
 ### HasSiteCode
 
-`func (o *TermsReview) HasSiteCode() bool`
+`func (o *SelfTermsReview) HasSiteCode() bool`
 
 HasSiteCode returns a boolean if a field has been set.
 

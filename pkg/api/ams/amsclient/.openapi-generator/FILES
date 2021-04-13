@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -116,6 +115,7 @@ docs/SKUAllOf.md
 docs/SelfAccessReview.md
 docs/SelfResourceReview.md
 docs/SelfResourceReviewRequest.md
+docs/SelfTermsReview.md
 docs/SkuList.md
 docs/SkuListAllOf.md
 docs/SkuRules.md
@@ -249,6 +249,7 @@ model_role_list_all_of.go
 model_self_access_review.go
 model_self_resource_review.go
 model_self_resource_review_request.go
+model_self_terms_review.go
 model_sku.go
 model_sku_all_of.go
 model_sku_list.go
