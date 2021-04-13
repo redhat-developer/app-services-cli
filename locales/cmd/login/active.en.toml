@@ -110,3 +110,6 @@ one = 'Logging in to MAS-SSO...'
 
 [login.log.info.loggedInMAS]
 one = 'Logged in successfully to MAS-SSO'
+
+[login.error.noRealmInURL]
+one = 'the authentication URL is missing a realm'

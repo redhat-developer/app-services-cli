@@ -30,7 +30,6 @@ type AuthorizationCodeGrant struct {
 type SSOConfig struct {
 	AuthURL      string
 	RedirectPath string
-	SkipAuth     bool
 }
 
 // Execute runs an Authorization Code flow login
@@ -43,23 +42,6 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 		return err
 	}
 	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedIn"))
-
-	if masSSOCfg.SkipAuth {
-
-		cfg, err := a.Config.Load()
-		if err != nil {
-			return err
-		}
-
-		cfg.MasAccessToken = ""
-		cfg.MasRefreshToken = ""
-
-		if err = a.Config.Save(cfg); err != nil {
-			return err
-		}
-
-		return nil
-	}
 
 	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingInMAS"))
 	// log in to MAS-SSO
@@ -126,6 +108,11 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 		http.Redirect(w, r, authCodeURL, http.StatusFound)
 	})
 
+	authURL, err := url.Parse(cfg.AuthURL)
+	if err != nil {
+		return err
+	}
+
 	// HTTP handler for the redirect URL
 	sm.Handle("/"+redirectURL.Path, &redirectPageHandler{
 		CancelContext: cancel,
@@ -138,6 +125,7 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 		Oauth2Config:  oauthConfig,
 		State:         state,
 		TokenVerifier: verifier,
+		AuthURL:       authURL,
 		AuthOptions: []oauth2.AuthCodeOption{
 			oauth2.SetAuthURLParam("code_verifier", pkceCodeVerifier),
 			oauth2.SetAuthURLParam("grant_type", "authorization_code"),
