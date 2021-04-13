@@ -62,7 +62,6 @@ type Options struct {
 	insecureSkipTLSVerify bool
 	printURL              bool
 	offlineToken          string
-	skipMasSSOLogin       bool
 }
 
 // NewLoginCmd gets the command that's log the user in
