@@ -92,6 +92,10 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 				if err = topicutil.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
 					return err
 				}
+
+				if err = topicutil.ValidateMessageRetentionSize(opts.retentionBytes); err != nil {
+					return err
+				}
 			}
 
 			if opts.kafkaID != "" {
@@ -288,7 +292,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Default: fmt.Sprintf("%v", defaultRetentionSize),
 	}
 
-	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytes, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytes, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
 	if err != nil {
 		return err
 	}

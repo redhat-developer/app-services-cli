@@ -154,7 +154,7 @@ func ValidateMessageRetentionPeriod(v interface{}) error {
 	return nil
 }
 
-// ValidateMessageRetentionPeriod validates the value (bytes) of the retention size
+// ValidateMessageRetentionSize validates the value (bytes) of the retention size
 // the valid values can range from [-1,...]
 func ValidateMessageRetentionSize(v interface{}) error {
 	retentionSizeStr := fmt.Sprintf("%v", v)
