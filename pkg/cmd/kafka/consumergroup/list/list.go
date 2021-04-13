@@ -126,7 +126,7 @@ func runList(opts *Options) (err error) {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"), consumerGroupErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.consumerGroup.common.error.unableToConnectToKafka",

@@ -18,5 +18,6 @@ Use these commands to describe, update, list, and delete consumer groups for the
 === SEE ALSO
 
 * link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+* link:rhoas_kafka_consumergroup_delete{relfilesuffix}[rhoas kafka consumergroup delete]	 - Delete a consumer group
 * link:rhoas_kafka_consumergroup_list{relfilesuffix}[rhoas kafka consumergroup list]	 - List all consumer groups
 
