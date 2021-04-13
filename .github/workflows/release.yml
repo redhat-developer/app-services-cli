@@ -10,29 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: Set up Go
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.15.x
-      - name: setup env
-        run: |
-          echo "::set-env name=GOPATH::$(dirname $GITHUB_WORKSPACE)"
-          echo "::add-path::$(dirname $GITHUB_WORKSPACE)/bin"
-        shell: bash        
-      - 
-        name: Installed pkger
-        run: go get -u -v github.com/markbates/pkger/cmd/pkger
-      -
         name: Checkout
         uses: actions/checkout@v2
       -
         name: Unshallow
         run: git fetch --prune --unshallow
+      -
+        name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.15.x
+
       - 
         name: Embed static assets into binary
-        run: make pkger
-      - 
-        name: Run GoReleaser
+        run: |
+          go get -u github.com/markbates/pkger/cmd/pkger
+          make pkger
+
+      - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
           version: latest
