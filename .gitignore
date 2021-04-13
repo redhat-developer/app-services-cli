@@ -2,7 +2,6 @@
 vendor
 dist
 /rhoas
-/cmd/rhoas/pkged.go
 node_modules
 .idea
 

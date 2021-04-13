@@ -20,13 +20,7 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.15.x
-
-      - 
-        name: Embed static assets into binary
-        run: |
-          go get -u github.com/markbates/pkger/cmd/pkger
-          make pkger
-
+      
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
