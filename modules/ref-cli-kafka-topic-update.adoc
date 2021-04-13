@@ -24,8 +24,9 @@ $ rhoas kafka topic update topic-1 --replication-factor
 === Options
 
 ....
-  -o, --output string         Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
-      --retention-ms string   The period of time in milliseconds the broker will retain a partition log before deleting it
+  -o, --output string            Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml" (default "json")
+      --retention-bytes string   The maximum total size of a partition log segments before old log segments are deleted to free up space
+      --retention-ms string      The period of time in milliseconds the broker will retain a partition log before deleting it
 ....
 
 === Options inherited from parent commands
