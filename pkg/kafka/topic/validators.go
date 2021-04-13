@@ -154,6 +154,38 @@ func ValidateMessageRetentionPeriod(v interface{}) error {
 	return nil
 }
 
+// ValidateMessageRetentionPeriod validates the value (bytes) of the retention size
+// the valid values can range from [-1,...]
+func ValidateMessageRetentionSize(v interface{}) error {
+	retentionSizeStr := fmt.Sprintf("%v", v)
+
+	if retentionSizeStr == "" {
+		return nil
+	}
+
+	retentionPeriodBytes, err := strconv.Atoi(retentionSizeStr)
+	if err != nil {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "common.error.castError",
+			TemplateData: map[string]interface{}{
+				"Value": v,
+				"Type":  "int",
+			},
+		}))
+	}
+
+	if retentionPeriodBytes < -1 {
+		return errors.New(localizer.MustLocalize(&localizer.Config{
+			MessageID: "kafka.topic.common.validation.retentionSize.error.invalid",
+			TemplateData: map[string]interface{}{
+				"RetentionSize": retentionPeriodBytes,
+			},
+		}))
+	}
+
+	return nil
+}
+
 // ValidateNameIsAvailable checks if a topic with the given name already exists
 func ValidateNameIsAvailable(api strimziadminclient.DefaultApi, instance string) func(v interface{}) error {
 	return func(v interface{}) error {

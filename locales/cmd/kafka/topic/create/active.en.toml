@@ -28,8 +28,12 @@ one = 'topic "{{.TopicName}}" already exists in Kafka instance "{{.InstanceName}
 one = 'Topic "{{.TopicName}}" created in Kafka instance "{{.InstanceName}}":'
 
 [kafka.topic.create.input.retentionMs.message]
-description = 'Message for the Retention input'
+description = 'Message for the Retention period input'
 one = 'Retention Period (ms):'
+
+[kafka.topic.create.input.retentionBytes.message]
+description = 'Message for the Retention size input'
+one = 'Retention Size (bytes):'
 
 [kafka.topic.create.input.partitions.message]
 description = 'Message for the Partitions input'

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
@@ -37,7 +38,7 @@ type topicRow struct {
 	Name            string `json:"name,omitempty" header:"Name"`
 	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
 	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time (ms)"`
-	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size"`
+	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size (bytes)"`
 }
 
 // NewListTopicCommand gets a new command for getting kafkas.
