@@ -28,9 +28,17 @@ one = 'Nothing to update'
 one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}}" has been updated'
 
 [kafka.topic.update.input.retentionMs.message]
-description = 'Message for the Retention input'
+description = 'Message for the Retention period input'
 one = 'Retention Period (ms) [optional]:'
 
 [kafka.topic.update.input.retentionMs.help]
-description = 'Help for the Retention input'
+description = 'Help for the Retention period input'
 one = 'The period of time in milliseconds the broker will retain a partition log before deleting it. Leave blank to skip updating this value.'
+
+[kafka.topic.update.input.retentionBytes.message]
+description = 'Message for the Retention size input'
+one = 'Retention Size (bytes) [optional]:'
+
+[kafka.topic.update.input.retentionBytes.help]
+description = 'Help for the Retention size input'
+one = 'The maximum total size of a partition log segments before old log segments are deleted to free up space. Leave blank to skip updating this value.'
