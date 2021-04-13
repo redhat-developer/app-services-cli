@@ -278,7 +278,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	retentionMsPrompt := &survey.Input{
 		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionMs.message"),
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
-		Default: fmt.Sprintf("%v", defaultRetentionPeriodMS),
+		Default: strconv.Itoa(defaultRetentionPeriodMS),
 	}
 
 	err = survey.AskOne(retentionMsPrompt, &opts.retentionMs, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
@@ -289,7 +289,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	retentionBytesPrompt := &survey.Input{
 		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionBytes.message"),
 		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionBytes.description"),
-		Default: fmt.Sprintf("%v", defaultRetentionSize),
+		Default: strconv.Itoa(defaultRetentionSize),
 	}
 
 	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytes, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
