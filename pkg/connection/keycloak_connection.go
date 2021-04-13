@@ -35,7 +35,7 @@ const (
 	// SSO defaults
 	DefaultAuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
 	// MAS SSO defaults
-	DefaultMasAuthURL = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
+	DefaultMasAuthURL = "https://identity.api.openshift.com/auth/realms/rhoas"
 )
 
 var DefaultScopes = []string{
