@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	consumergrouputil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
@@ -161,7 +162,7 @@ func runCmd(opts *Options) error {
 		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.consumerGroup.describe.output.partitionsWithLag",
 			TemplateData: map[string]interface{}{
-				"LaggingPartitions": consumergroup.GetPartitionsWithLag(consumerGroupData.GetConsumers()),
+				"LaggingPartitions": consumergrouputil.GetPartitionsWithLag(consumerGroupData.GetConsumers()),
 			},
 		}))
 		fmt.Fprintln(stdout, "")
