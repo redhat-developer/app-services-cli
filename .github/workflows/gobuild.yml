@@ -2,34 +2,31 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Install Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.15.x
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v2
-      with:
-        version: v1.29
-        only-new-issues: true
-        args: --timeout 2m0s
-        # args: --issues-exit-code=0
-    - name: Check documentation
-      run: make docs/check
-    - name: Build
-      run: make binary
-    - name: Unit tests
-      run: make test/unit
-    - name: Integration tests
-      run: make test/integration
-
-
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15.x
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.29
+          args: --timeout 2m0s
+          # args: --issues-exit-code=0
+      - name: Check documentation
+        run: make docs/check
+      - name: Build
+        run: make binary
+      - name: Unit tests
+        run: make test/unit
+      - name: Integration tests
+        run: make test/integration
