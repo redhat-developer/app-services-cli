@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Total** | [**ClusterResourceTotal**](ClusterResource_total.md) |  | 
+**Total** | [**ClusterResourceTotal**](ClusterResourceTotal.md) |  | 
 **UpdatedTimestamp** | **time.Time** |  | 
-**Used** | [**ClusterResourceTotal**](ClusterResource_total.md) |  | 
+**Used** | [**ClusterResourceTotal**](ClusterResourceTotal.md) |  | 
 
 ## Methods
 

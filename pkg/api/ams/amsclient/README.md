@@ -279,6 +279,7 @@ Class | Method | HTTP request | Description
  - [SelfAccessReview](docs/SelfAccessReview.md)
  - [SelfResourceReview](docs/SelfResourceReview.md)
  - [SelfResourceReviewRequest](docs/SelfResourceReviewRequest.md)
+ - [SelfTermsReview](docs/SelfTermsReview.md)
  - [SkuList](docs/SkuList.md)
  - [SkuListAllOf](docs/SkuListAllOf.md)
  - [SkuRules](docs/SkuRules.md)

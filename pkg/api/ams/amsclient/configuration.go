@@ -113,7 +113,7 @@ func NewConfiguration() *Configuration {
 				Description: "Staging server",
 			},
 			{
-				URL:         "/",
+				URL:         "",
 				Description: "current domain",
 			},
 		},
