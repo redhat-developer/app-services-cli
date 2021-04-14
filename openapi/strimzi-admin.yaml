@@ -5,15 +5,13 @@ info:
   description: An API to provide REST endpoints for query Kafka for admin operations
   license:
     name: Apache 2.0
-    url: "https://www.apache.org/licenses/LICENSE-2.0"
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
 servers:
-  - url: "https://api.openshift.com"
+  - url: 'https://api.openshift.com'
     description: Main (production) server
-  - url: "https://api.stage.openshift.com"
+  - url: 'https://api.stage.openshift.com'
     description: Staging server
-  - url: "http://localhost:8001"
-    description: localhost
-  - url: "http://localhost:8000"
+  - url: 'http://localhost:8000'
     description: localhost
 paths:
   /topics:
@@ -46,24 +44,30 @@ paths:
           in: query
           required: false
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TopicsList"
+                $ref: '#/components/schemas/TopicsList'
           description: List of topics matching the users query paramters.
-        "400":
+        '400':
           content:
             application/json: {}
           description: Unable to retreive topics.
-        "401":
+        '401':
           content:
             application/json: {}
-          description: "Unauthorized, unable to retrive topics."
-        "500":
+          description: 'Unauthorized, unable to retrive topics.'
+        '500':
+          content:
+            application/json: {}
           description: Internal server error.
-        "503":
+        '503':
+          content:
+            application/json: {}
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: getTopicsList
       summary: List of topics
       description: >-
@@ -75,7 +79,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewTopicInput"
+              $ref: '#/components/schemas/NewTopicInput'
             examples:
               NewTopicInput:
                 value:
@@ -85,31 +89,33 @@ paths:
                     replicationFactor: 4
                     config:
                       - key: min.insync.replicas
-                        value: "1"
+                        value: '1'
                       - key: max.message.bytes
-                        value: "1050000"
+                        value: '1050000'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Topic"
+                $ref: '#/components/schemas/Topic'
           description: Topic created successfully.
-        "400":
+        '400':
           description: Unable to create topic.
-        "401":
-          description: "Unauthorized, Unable to create topic."
-        "409":
+        '401':
+          description: 'Unauthorized, Unable to create topic.'
+        '409':
           description: Entry already exisits
-        "500":
+        '500':
           description: Internal server error.
-        "503":
+        '503':
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: createTopic
       summary: Creates a new topic
       description: Creates a new topic for Kafka.
-  "/topics/{topicName}":
+  '/topics/{topicName}':
     get:
       parameters:
         - name: topicName
@@ -119,20 +125,30 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Topic"
+                $ref: '#/components/schemas/Topic'
           description: Kakfa topic details.
-        "401":
-          description: "Unauthorized, unable to retrieve topics."
-        "404":
+        '401':
+          content:
+            application/json: {}
+          description: 'Unauthorized, unable to retrieve topics.'
+        '404':
+          content:
+            application/json: {}
           description: Topic not found.
-        "500":
+        '500':
+          content:
+            application/json: {}
           description: Internal server error.
-        "503":
+        '503':
+          content:
+            application/json: {}
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: getTopic
       summary: Retrieves the topic with the specified name.
       description: Topic
@@ -145,16 +161,18 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           description: Topic deleted successfully.
-        "401":
-          description: "Unathorized, unable to delete topic."
-        "404":
+        '401':
+          description: 'Unathorized, unable to delete topic.'
+        '404':
           description: Topic not found.
-        "500":
+        '500':
           description: Internal server error.
-        "503":
+        '503':
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: deleteTopic
       summary: Deletes a  topic
       description: Deletes the topic with the specified name.
@@ -163,7 +181,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateTopicInput"
+              $ref: '#/components/schemas/UpdateTopicInput'
         required: true
       parameters:
         - name: topicName
@@ -173,22 +191,24 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Topic"
+                $ref: '#/components/schemas/Topic'
           description: Topic updated successfully.
-        "400":
+        '400':
           description: Unable to update topic.
-        "401":
-          description: "Unauthroized, unable to update topic."
-        "404":
+        '401':
+          description: 'Unauthroized, unable to update topic.'
+        '404':
           description: Topic not found.
-        "500":
+        '500':
           description: Internal server error.
-        "503":
+        '503':
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: updateTopic
       summary: Updates the topic with the specified name.
       description: updates the topic with the new data.
@@ -202,19 +222,21 @@ paths:
   /metrics:
     get:
       responses:
-        "200":
+        '200':
           description: Metrics
       operationId: metrics
       summary: Admin server metrics
   /api:
     get:
       responses:
-        "200":
+        '200':
           content:
             application/json: {}
           description: OpenAPI spec
+      # security:
+        # - Bearer: []
       operationId: openApi
-  "/consumer-groups/{consumerGroupId}":
+  '/consumer-groups/{consumerGroupId}':
     get:
       parameters:
         - name: consumerGroupId
@@ -223,76 +245,113 @@ paths:
             type: string
           in: path
           required: true
-        - name: topic
+        - examples:
+            Consumer group:
+              value:
+                id: consumer_group_1
+                consumers:
+                  - groupId: consumer_group_1
+                    topic: topic-1
+                    partition: 0
+                    memberId: consumer_group_member1
+                    offset: 5
+                    lag: 0
+                    logEndOffset: 5
+                  - groupId: consumer_group_1
+                    topic: topic-1
+                    partition: 1
+                    memberId: consumer_group_member2
+                    offset: 3
+                    lag: 0
+                    logEndOffset: 3
+                  - groupId: consumer_group_1
+                    topic: topic-1
+                    partition: 2
+                    memberId: consumer_group_member3
+                    offset: 6
+                    lag: 1
+                    logEndOffset: 5
+          name: topic
           description: Filter consumer groups for a specific topic
           schema:
             type: string
           in: query
           required: false
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConsumerGroup"
+                $ref: '#/components/schemas/ConsumerGroup'
           description: Consumer group details.
-        "401":
+        '401':
           content:
             application/json: {}
           description: >-
             Unauthorized, request has not been applied because it lacks valid authentication
             credentials.
-        "403":
+        '403':
           content:
             application/json: {}
           description: User is forbidden this view this consumer group.
-        "404":
+        '404':
           content:
             application/json: {}
           description: Consumer group not found.
-        "500":
+        '500':
           content:
             application/json: {}
           description: Internal server error.
-        "503":
+        '503':
           content:
             application/json: {}
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: getConsumerGroupById
       summary: Get a single consumer group by its unique ID.
     delete:
+      parameters:
+        - name: consumerGroupId
+          description: The unique ID of the cobsumer group.
+          schema:
+            type: string
+          in: path
+          required: true
       responses:
-        "204":
+        '204':
           description: The consumer group was deleted successfully.
-        "401":
+        '401':
           content:
             application/json: {}
           description: >-
             Unauthorized, request has not been applied because it lacks valid authentication
             credentials.
-        "403":
+        '403':
           content:
             application/json: {}
           description: Forbidden to delete this consumer group.
-        "404":
+        '404':
           content:
             application/json: {}
           description: The consumer group does not exist.
-        "423":
+        '423':
           content:
             application/json: {}
           description: User cannot delete consumer group with active members.
-        "500":
+        '500':
           content:
             application/json: {}
           description: Internal Server Error.
-        "503":
+        '503':
           content:
             application/json: {}
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: deleteConsumerGroupById
       summary: Delete a consumer group.
-      description: "Delete a consumer group, along with its consumers."
+      description: 'Delete a consumer group, along with its consumers.'
     parameters:
       - name: consumerGroupId
         description: The unique name of the topic.
@@ -300,43 +359,6 @@ paths:
           type: string
         in: path
         required: true
-  "/consumer-groups/{consumerGroupId}/reset-offset":
-    post:
-      parameters:
-        - name: consumerGroupId
-          description: The ID of the consumer group.
-          schema:
-            type: string
-          in: path
-          required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ConsumerGroup"
-          description: The consumer group offsets have been reset.
-        "401":
-          content:
-            application/json: {}
-          description: >-
-            Unauthorized, request has not been applied because it lacks valid authentication
-            credentials.
-        "403":
-          content:
-            application/json: {}
-          description: Forbidden to delete this consumer group.
-        "500":
-          content:
-            application/json: {}
-          description: Internal Server Error.
-        "503":
-          content:
-            application/json: {}
-          description: Unable to connect to the Kafka cluster.
-      operationId: resetConsumerGroupOffset
-      summary: Reset the offset for a consumer group.
-      description: Reset the offset for a particular consumer group.
   /consumer-groups:
     summary: API endpoints for consumer groups under a Kafka topic
     get:
@@ -357,46 +379,77 @@ paths:
             type: string
           in: query
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConsumerGroupList"
+                $ref: '#/components/schemas/ConsumerGroupList'
+              examples:
+                List of consumer groups:
+                  value:
+                    count: 1
+                    limit: 10
+                    offset: 0
+                    items:
+                      - id: consumer_group_1
+                        consumers:
+                          - groupId: consumer_group_1
+                            topic: topic-1
+                            partition: 0
+                            memberId: consumer_group_member1
+                            offset: 5
+                            lag: 0
+                            logEndOffset: 5
+                          - groupId: consumer_group_1
+                            topic: topic-1
+                            partition: 1
+                            memberId: consumer_group_member2
+                            offset: 3
+                            lag: 0
+                            logEndOffset: 3
+                          - groupId: consumer_group_1
+                            topic: topic-1
+                            partition: 2
+                            memberId: consumer_group_member3
+                            offset: 6
+                            lag: 1
+                            logEndOffset: 5
           description: List of consumer groups matching the request parameters.
-        "400":
+        '400':
           content:
             application/json: {}
           description: >-
             The server cannot or will not process the request due to something that is perceived
             to be a client error such as malformed request syntax.
-        "401":
+        '401':
           content:
             application/json: {}
           description: >-
             Unauthorized, request has not been applied because it lacks valid authentication
             credentials.
-        "403":
+        '403':
           content:
             application/json: {}
           description: User is forbidden to retrieve the list of consumer groups.
-        "500":
+        '500':
           content:
             application/json: {}
           description: An internal server error occurred.
-        "503":
+        '503':
           content:
             application/json: {}
           description: Unable to connect to the Kafka cluster.
+      # security:
+        # - Bearer: []
       operationId: getConsumerGroupList
       summary: List of consumer groups in the Kafka instance.
       description: Returns a list of all consumer groups for a particular Kafka instance.
+  /: {}
 components:
   schemas:
     Topic:
       title: Root Type for NewTopicInput
       description: Kafka Topic (A feed where records are stored and published)
-      required:
-        - numPartitions
       type: object
       properties:
         name:
@@ -406,19 +459,19 @@ components:
           description: Topic configuration entry.
           type: array
           items:
-            $ref: "#/components/schemas/ConfigEntry"
+            $ref: '#/components/schemas/ConfigEntry'
         partitions:
           description: Partitions for this topic.
           type: array
           items:
-            $ref: "#/components/schemas/Partition"
+            $ref: '#/components/schemas/Partition'
       example:
         name: my-topic
         config:
           - key: min.insync.replicas
-            value: "1"
+            value: '1'
           - key: max.message.bytes
-            value: "1050000"
+            value: '1050000'
         partitions:
           - id: 0
             replicas:
@@ -451,14 +504,14 @@ components:
           description: List of replicas for the partition
           type: array
           items:
-            $ref: "#/components/schemas/Node"
+            $ref: '#/components/schemas/Node'
         isr:
           description: List isync-replicas for this partition.
           type: array
           items:
-            $ref: "#/components/schemas/Node"
+            $ref: '#/components/schemas/Node'
         leader:
-          $ref: "#/components/schemas/Node"
+          $ref: '#/components/schemas/Node'
           description: Node that is the leader for this partition.
       example:
         id: 0
@@ -482,7 +535,7 @@ components:
           type: string
       example:
         key: min.insync.replicas
-        value: "1"
+        value: '1'
     TopicsList:
       description: A list of topics.
       required:
@@ -505,15 +558,15 @@ components:
           description: List of topics
           type: array
           items:
-            $ref: "#/components/schemas/Topic"
+            $ref: '#/components/schemas/Topic'
       example:
         items:
           - name: my-topic
             config:
               - key: min.insync.replicas
-                value: "1"
+                value: '1'
               - key: max.message.bytes
-                value: "1050000"
+                value: '1050000'
             partitions:
               - id: 0
                 replicas:
@@ -550,14 +603,14 @@ components:
           description: Topic configuration entry.
           type: array
           items:
-            $ref: "#/components/schemas/ConfigEntry"
+            $ref: '#/components/schemas/ConfigEntry'
       example:
         numPartitions: 2
         config:
           - key: min.insync.replicas
-            value: "1"
+            value: '1'
           - key: max.message.bytes
-            value: "1050000"
+            value: '1050000'
     Node:
       description: Kafka server / broker.
       type: object
@@ -569,10 +622,10 @@ components:
       type: object
       properties:
         name:
-          description: "The topic name, this value must be unique."
+          description: 'The topic name, this value must be unique.'
           type: string
         settings:
-          $ref: "#/components/schemas/TopicSettings"
+          $ref: '#/components/schemas/TopicSettings'
           description: >-
             The settings that are applicable to this topic.  This includes partitions,
             configuration information, and number of replicas.
@@ -582,9 +635,9 @@ components:
           numPartitions: 3
           config:
             - key: min.insync.replicas
-              value: "1"
+              value: '1'
             - key: max.message.bytes
-              value: "1050000"
+              value: '1050000'
     ConsumerGroup:
       description: A group of Kafka consumers
       required:
@@ -599,7 +652,7 @@ components:
           description: The list of consumers associated with this consumer group
           type: array
           items:
-            $ref: "#/components/schemas/Consumer"
+            $ref: '#/components/schemas/Consumer'
       example:
         id: consumer_group_1
         consumers:
@@ -682,7 +735,7 @@ components:
           description: Consumer group list items
           type: array
           items:
-            $ref: "#/components/schemas/ConsumerGroup"
+            $ref: '#/components/schemas/ConsumerGroup'
         count:
           description: The total number of consumer groups.
           type: number
@@ -729,10 +782,17 @@ components:
           description: Topic configuration entry.
           type: array
           items:
-            $ref: "#/components/schemas/ConfigEntry"
+            $ref: '#/components/schemas/ConfigEntry'
       example:
         config:
-          - key: min.insync.replicas
-            value: "1"
-          - key: max.message.bytes
-            value: "1050000"
+          -
+            key: min.insync.replicas
+            value: '1'
+          -
+            key: max.message.bytes
+            value: '1050000'
+  securitySchemes:
+    Bearer:
+      flows: {}
+      type: oauth2
+      description: Access token used with OAuth 2.0

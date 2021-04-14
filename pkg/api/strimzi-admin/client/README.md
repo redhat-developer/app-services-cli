@@ -87,7 +87,6 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**GetTopicsList**](docs/DefaultApi.md#gettopicslist) | **Get** /topics | List of topics
 *DefaultApi* | [**Metrics**](docs/DefaultApi.md#metrics) | **Get** /metrics | Admin server metrics
 *DefaultApi* | [**OpenApi**](docs/DefaultApi.md#openapi) | **Get** /api | 
-*DefaultApi* | [**ResetConsumerGroupOffset**](docs/DefaultApi.md#resetconsumergroupoffset) | **Post** /consumer-groups/{consumerGroupId}/reset-offset | Reset the offset for a consumer group.
 *DefaultApi* | [**UpdateTopic**](docs/DefaultApi.md#updatetopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 

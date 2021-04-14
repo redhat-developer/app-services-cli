@@ -113,11 +113,15 @@ func NewConfiguration() *Configuration {
 				Description: "Staging server",
 			},
 			{
+<<<<<<< HEAD
 				URL: "http://localhost:8001",
 				Description: "localhost",
 			},
 			{
 				URL: "http://localhost:8000",
+=======
+				URL:         "http://localhost:8000",
+>>>>>>> 37588c9 (chore: generate latest client)
 				Description: "localhost",
 			},
 		},

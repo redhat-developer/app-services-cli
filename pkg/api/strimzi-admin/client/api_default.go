@@ -44,7 +44,7 @@ type DefaultApi interface {
 	 * DeleteConsumerGroupById Delete a consumer group.
 	 * Delete a consumer group, along with its consumers.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param consumerGroupId The unique name of the topic.
+	 * @param consumerGroupId The unique ID of the cobsumer group.
 	 * @return ApiDeleteConsumerGroupByIdRequest
 	 */
 	DeleteConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest
@@ -148,6 +148,7 @@ type DefaultApi interface {
 	 * OpenApiExecute executes the request
 	 */
 	OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Response, error)
+<<<<<<< HEAD
 
 	/*
 	 * ResetConsumerGroupOffset Reset the offset for a consumer group.
@@ -163,6 +164,8 @@ type DefaultApi interface {
 	 * @return ConsumerGroup
 	 */
 	ResetConsumerGroupOffsetExecute(r ApiResetConsumerGroupOffsetRequest) (ConsumerGroup, *_nethttp.Response, error)
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 
 	/*
 	 * UpdateTopic Updates the topic with the specified name.
@@ -301,7 +304,10 @@ type ApiDeleteConsumerGroupByIdRequest struct {
 	consumerGroupId string
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 func (r ApiDeleteConsumerGroupByIdRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.DeleteConsumerGroupByIdExecute(r)
 }
@@ -310,7 +316,7 @@ func (r ApiDeleteConsumerGroupByIdRequest) Execute() (*_nethttp.Response, error)
  * DeleteConsumerGroupById Delete a consumer group.
  * Delete a consumer group, along with its consumers.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param consumerGroupId The unique name of the topic.
+ * @param consumerGroupId The unique ID of the cobsumer group.
  * @return ApiDeleteConsumerGroupByIdRequest
  */
 func (a *DefaultApiService) DeleteConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
@@ -396,7 +402,10 @@ type ApiDeleteTopicRequest struct {
 	topicName string
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 func (r ApiDeleteTopicRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.DeleteTopicExecute(r)
 }
@@ -730,7 +739,10 @@ type ApiGetTopicRequest struct {
 	topicName string
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 func (r ApiGetTopicRequest) Execute() (Topic, *_nethttp.Response, error) {
 	return r.ApiService.GetTopicExecute(r)
 }
@@ -969,7 +981,10 @@ type ApiMetricsRequest struct {
 	ApiService DefaultApi
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 func (r ApiMetricsRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.MetricsExecute(r)
 }
@@ -1059,7 +1074,10 @@ type ApiOpenApiRequest struct {
 	ApiService DefaultApi
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 func (r ApiOpenApiRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.OpenApiExecute(r)
 }
@@ -1142,6 +1160,7 @@ func (a *DefaultApiService) OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Respo
 	}
 
 	return localVarHTTPResponse, nil
+<<<<<<< HEAD
 }
 
 type ApiResetConsumerGroupOffsetRequest struct {
@@ -1248,6 +1267,8 @@ func (a *DefaultApiService) ResetConsumerGroupOffsetExecute(r ApiResetConsumerGr
 	}
 
 	return localVarReturnValue, localVarHTTPResponse, nil
+=======
+>>>>>>> 37588c9 (chore: generate latest client)
 }
 
 type ApiUpdateTopicRequest struct {
