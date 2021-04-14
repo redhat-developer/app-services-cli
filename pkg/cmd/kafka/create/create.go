@@ -310,9 +310,9 @@ func checkTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirec
 	termsReview, _, apiErr := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
 		SelfTermsReview(amsclient.SelfTermsReview{
-		EventCode: &eventCode,
-		SiteCode:  &siteCode,
-	}).
+			EventCode: &eventCode,
+			SiteCode:  &siteCode,
+		}).
 		Execute()
 	if apiErr != nil && apiErr.Error() != "" {
 		return false, "", apiErr
