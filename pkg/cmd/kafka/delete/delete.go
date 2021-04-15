@@ -120,12 +120,12 @@ func runDelete(opts *options) error {
 	ctx := context.Background()
 	if opts.name != "" {
 		response, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
-		if err.Error() != "" {
+		if err != nil {
 			return err
 		}
 	} else {
 		response, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
-		if err.Error() != "" {
+		if err != nil {
 			return err
 		}
 	}
@@ -160,10 +160,10 @@ func runDelete(opts *options) error {
 	logger.Debug(localizer.MustLocalizeFromID("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
 	a := api.Kafka().DeleteKafkaById(context.Background(), response.GetId())
 	a = a.Async(true)
-	_, _, apiErr := a.Execute()
+	_, _, err = a.Execute()
 
-	if apiErr.Error() != "" {
-		return apiErr
+	if err != nil {
+		return err
 	}
 
 	logger.Info(localizer.MustLocalize(&localizer.Config{

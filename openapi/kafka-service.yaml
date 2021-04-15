@@ -1,5 +1,5 @@
+openapi: 3.0.0 # need this as first line to allow some IDEs to know this is an openapi document.
 # All endpoints defined here will be discoverable by all users. If there is a need to keep some endpoints "private", add them to the "managed-services-api-private.yaml" file
-openapi: 3.0.0
 info:
   title: Kafka Service Fleet Manager
   version: 0.0.1
@@ -14,6 +14,39 @@ servers:
   - url: /
     description: current domain
 paths:
+  /api/managed-services-api/v1:
+    get:
+      operationId: versionMetadata
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionMetadata"
+          description: Version metadata
+      summary: Retrieves the version metadata
+  /api/managed-services-api/v1/status:
+    get:
+      operationId: serviceStatus
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceStatus"
+          description: Ok
+        "500":
+          description: Unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                500Example:
+                  $ref: "#/components/examples/500Example"
+      summary: Retrieves the status of resources e.g whether we have reached maximum service capacity
+      security:
+        - Bearer: []
   /api/managed-services-api/v1/kafkas/{id}:
     get:
       operationId: getKafkaById
@@ -515,6 +548,32 @@ paths:
                 sa-reset:
                   $ref: "#/components/examples/ServiceAccountExample"
           description: reset credentials
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                401Example:
+                  $ref: "#/components/examples/401Example"
+          description: auth token is invalid
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                401Example:
+                  $ref: "#/components/examples/403Example"
+          description: User not authorized to access the service
+        "500":
+          content:
+            application/json:
+              schema: {}
+              examples:
+                500Example:
+                  $ref: "#/components/examples/500Example"
+          description: Unexpected error occurred
       security:
         - Bearer: []
       operationId: resetServiceAccountCreds
@@ -668,6 +727,8 @@ components:
               type: string
             failed_reason:
               type: string
+            version:
+              type: string
           example:
             $ref: "#/components/examples/KafkaRequestExample"
     KafkaRequestList:
@@ -687,6 +748,40 @@ components:
               items:
                 allOf:
                   - $ref: "#/components/schemas/KafkaRequest"
+    VersionMetadata:
+      allOf:
+        - $ref: "#/components/schemas/ObjectReference"
+        - type: object
+          example:
+            kind: "APIVersion"
+            id: "v1"
+            href: "/api/managed-services-api/v1"
+            collections:
+              - id: "kafkas"
+                href: "/api/managed-services-api/v1/kafkas"
+                kind: "KafkaList"
+          properties:
+            collections:
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/ObjectReference"
+    ServiceStatus:
+      description: Schema for the service status response body
+      example:
+        kafkas:
+          max_capacity_reached: true
+      type: object
+      properties:
+        kafkas:
+          description: The kafka resource api status
+          type: object
+          required:
+            - max_capacity_reached
+          properties:
+            max_capacity_reached:
+              description: Indicates whether we have reached kafka maximum capacity
+              type: boolean
     KafkaRequestPayload:
       description: Schema for the request body sent to /kafkas POST
       required:
@@ -796,6 +891,11 @@ components:
               type: string
             clientSecret:
               type: string
+            owner:
+              type: string
+            created_at:
+              format: date-time
+              type: string
           example:
             $ref: "#/components/examples/ServiceAccountExample"
     ServiceAccountRequest:
@@ -822,20 +922,28 @@ components:
               description: "server generated unique id of the service account"
               type: string
             clientID:
-              description: ""
+              description: "client id of the service account"
               type: string
             name:
-              description: ""
+              description: "name of the service account"
+              type: string
+            owner:
+              description: "owner of the service account"
+              type: string
+            created_at:
+              format: date-time
+              description: "service account creation timestamp"
               type: string
             description:
-              description: ""
+              type: string
+              description: "description of the service account"
     ServiceAccountList:
       allOf:
         - type: object
           example:
             kind: "ServiceAccountList"
             items:
-              $ref: "#/components/examples/ServiceAccountListItemExample"
+              - $ref: "#/components/examples/ServiceAccountListItemExample"
           properties:
             kind:
               type: string
@@ -1076,9 +1184,10 @@ components:
         region: "us-east-1"
         owner: "api_kafka_service"
         name: "serviceapi"
-        bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org"
+        bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
         created_at: "2020-10-05T12:51:24.053142Z"
         updated_at: "2020-10-05T12:56:36.362208Z"
+        version: "2.6.0"
     KafkaRequestFailedCreationStatusExample:
       value:
         id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
@@ -1090,7 +1199,7 @@ components:
         region: "us-east-1"
         owner: "api_kafka_service"
         name: "serviceapi"
-        bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org"
+        bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
         created_at: "2020-10-05T12:51:24.053142Z"
         updated_at: "2020-10-05T12:56:36.362208Z"
         failed_reason: "a reason the kafka request creation failed"
@@ -1120,6 +1229,8 @@ components:
         description: "service account for my app"
         clientID: "SA-121212"
         clientSecret: "secret"
+        owner: "test-user"
+        created_at: "2021-04-07T16:24:01+05:30"
     ServiceAccountByIdExample:
       value:
         id: "1"
@@ -1128,6 +1239,8 @@ components:
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
+        owner: "test-user"
+        created_at: "2021-04-07T16:24:01+05:30"
     ServiceAccountListItemExample:
       value:
         id: "1"
@@ -1136,6 +1249,8 @@ components:
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
+        owner: "test-user"
+        created_at: "2021-04-07T16:24:01+05:30"
     MetricsRangeQueryExample:
       value:
         metric:

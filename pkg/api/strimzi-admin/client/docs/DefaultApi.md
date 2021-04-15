@@ -44,7 +44,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.CreateTopic(context.Background()).NewTopicInput(newTopicInput).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -110,7 +110,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.DeleteConsumerGroupById(context.Background(), consumerGroupId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteConsumerGroupById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -178,7 +178,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.DeleteTopic(context.Background(), topicName).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -245,7 +245,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetConsumerGroupById(context.Background(), consumerGroupId).Topic(topic).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetConsumerGroupById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -318,7 +318,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetConsumerGroupList(context.Background()).Limit(limit).Offset(offset).Topic(topic).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetConsumerGroupList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -386,7 +386,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetTopic(context.Background(), topicName).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -459,7 +459,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetTopicsList(context.Background()).Limit(limit).Filter(filter).Offset(offset).Order(order).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTopicsList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -525,7 +525,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.Metrics(context.Background()).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.Metrics``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -582,7 +582,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.OpenApi(context.Background()).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.OpenApi``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -642,7 +642,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ResetConsumerGroupOffset(context.Background(), consumerGroupId).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ResetConsumerGroupOffset``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -713,7 +713,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.UpdateTopic(context.Background(), topicName).UpdateTopicInput(updateTopicInput).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.UpdateTopic``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }

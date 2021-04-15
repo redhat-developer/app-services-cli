@@ -60,7 +60,7 @@ func (o *ConsumerGroupList) GetItems() []ConsumerGroup {
 // GetItemsOk returns a tuple with the Items field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroupList) GetItemsOk() (*[]ConsumerGroup, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Items, true
@@ -84,7 +84,7 @@ func (o *ConsumerGroupList) GetCount() float32 {
 // GetCountOk returns a tuple with the Count field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroupList) GetCountOk() (*float32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Count, true
@@ -108,7 +108,7 @@ func (o *ConsumerGroupList) GetLimit() float32 {
 // GetLimitOk returns a tuple with the Limit field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroupList) GetLimitOk() (*float32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Limit, true
@@ -132,7 +132,7 @@ func (o *ConsumerGroupList) GetOffset() int32 {
 // GetOffsetOk returns a tuple with the Offset field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroupList) GetOffsetOk() (*int32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Offset, true
@@ -195,3 +195,5 @@ func (v *NullableConsumerGroupList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

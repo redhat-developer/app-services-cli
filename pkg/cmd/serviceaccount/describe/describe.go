@@ -66,11 +66,11 @@ func runDescribe(opts *Options) error {
 	api := connection.API()
 
 	a := api.Kafka().GetServiceAccountById(context.Background(), opts.id)
-	res, httpRes, apiErr := a.Execute()
+	res, httpRes, err := a.Execute()
 
-	if apiErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return apiErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -87,11 +87,11 @@ func runDescribe(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Operation": "view",
 				},
-			}), apiErr)
+			}), err)
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
 		default:
-			return apiErr
+			return err
 		}
 	}
 

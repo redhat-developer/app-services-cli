@@ -103,9 +103,9 @@ func runResetCredentials(opts *Options) (err error) {
 
 	api := connection.API()
 
-	serviceacct, _, apiErr := api.Kafka().GetServiceAccountById(context.Background(), opts.id).Execute()
-	if apiErr.Error() != "" {
-		return apiErr
+	serviceacct, _, err := api.Kafka().GetServiceAccountById(context.Background(), opts.id).Execute()
+	if err != nil {
+		return err
 	}
 	serviceAcctName := serviceacct.GetName()
 
@@ -211,11 +211,11 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 		},
 	}))
 
-	serviceacct, httpRes, apiErr := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
+	serviceacct, httpRes, err := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
 
-	if apiErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return nil, apiErr
+			return nil, err
 		}
 
 		switch httpRes.StatusCode {
@@ -225,11 +225,11 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 				TemplateData: map[string]interface{}{
 					"Operation": "update",
 				},
-			}), apiErr)
+			}), err)
 		case 500:
-			return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+			return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
 		default:
-			return nil, apiErr
+			return nil, err
 		}
 	}
 

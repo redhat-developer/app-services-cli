@@ -38,8 +38,8 @@ func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete str
 	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}
-	topicRes, _, apiErr := api.GetTopicsList(context.Background()).Filter(toComplete).Execute()
-	if apiErr.Error() != "" {
+	topicRes, _, err := api.GetTopicsList(context.Background()).Filter(toComplete).Execute()
+	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}
 
@@ -71,7 +71,7 @@ func FilterValidKafkas(f *factory.Factory, searchName string) ([]string, cobra.S
 	}
 	kafkas, _, err := req.Execute()
 
-	if err.Error() != "" {
+	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}
 

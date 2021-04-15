@@ -122,12 +122,12 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).
+	_, httpRes, err := api.GetTopic(context.Background(), opts.topicName).
 		Execute()
 
-	if topicErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return topicErr
+			return err
 		}
 		if httpRes.StatusCode == 404 {
 			return errors.New(localizer.MustLocalize(&localizer.Config{
@@ -145,7 +145,7 @@ func runCmd(opts *Options) error {
 			Message: localizer.MustLocalizeFromID("kafka.topic.delete.input.name.message"),
 		}
 		var userConfirmedName string
-		if err := survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
+		if err = survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
 			return err
 		}
 
@@ -162,11 +162,11 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	httpRes, topicErr = api.DeleteTopic(context.Background(), opts.topicName).
+	httpRes, err = api.DeleteTopic(context.Background(), opts.topicName).
 		Execute()
-	if topicErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return topicErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -200,9 +200,9 @@ func runCmd(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Name": kafkaInstance.GetName(),
 				},
-			}), topicErr)
+			}), err)
 		default:
-			return topicErr
+			return err
 		}
 	}
 

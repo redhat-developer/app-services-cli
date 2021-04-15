@@ -14,6 +14,40 @@ servers:
 - description: current domain
   url: /
 paths:
+  /api/managed-services-api/v1:
+    get:
+      operationId: versionMetadata
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionMetadata'
+          description: Version metadata
+      summary: Retrieves the version metadata
+  /api/managed-services-api/v1/status:
+    get:
+      operationId: serviceStatus
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceStatus'
+          description: Ok
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error occurred
+      security:
+      - Bearer: []
+      summary: Retrieves the status of resources e.g whether we have reached maximum
+        service capacity
   /api/managed-services-api/v1/kafkas/{id}:
     delete:
       operationId: deleteKafkaById
@@ -684,6 +718,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServiceAccount'
           description: reset credentials
+        "401":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/401Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: auth token is invalid
+        "403":
+          content:
+            application/json:
+              examples:
+                "401Example":
+                  $ref: '#/components/examples/403Example'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User not authorized to access the service
+        "500":
+          content:
+            application/json:
+              examples:
+                "500Example":
+                  $ref: '#/components/examples/500Example'
+              schema: {}
+          description: Unexpected error occurred
       security:
       - Bearer: []
       summary: reset credentials for the service account
@@ -844,9 +904,10 @@ components:
         region: us-east-1
         owner: api_kafka_service
         name: serviceapi
-        bootstrapServerHost: serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org
+        bootstrapServerHost: serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org
         created_at: 2020-10-05T12:51:24.053142Z
         updated_at: 2020-10-05T12:56:36.362208Z
+        version: 2.6.0
     KafkaRequestFailedCreationStatusExample:
       value:
         id: 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
@@ -858,7 +919,7 @@ components:
         region: us-east-1
         owner: api_kafka_service
         name: serviceapi
-        bootstrapServerHost: serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.ms-bttg0jn170hp.x5u8.s1.devshift.org
+        bootstrapServerHost: serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org
         created_at: 2020-10-05T12:51:24.053142Z
         updated_at: 2020-10-05T12:56:36.362208Z
         failed_reason: a reason the kafka request creation failed
@@ -888,6 +949,8 @@ components:
         description: service account for my app
         clientID: SA-121212
         clientSecret: secret
+        owner: test-user
+        created_at: 2021-04-07T16:24:01+05:30
     ServiceAccountByIdExample:
       value:
         id: "1"
@@ -896,6 +959,8 @@ components:
         name: my-app-sa
         description: service account for my app
         clientID: SA-121212
+        owner: test-user
+        created_at: 2021-04-07T16:24:01+05:30
     ServiceAccountListItemExample:
       value:
         id: "1"
@@ -904,6 +969,8 @@ components:
         name: my-app-sa
         description: service account for my app
         clientID: SA-121212
+        owner: test-user
+        created_at: 2021-04-07T16:24:01+05:30
     MetricsRangeQueryExample:
       value:
         metric:
@@ -1205,6 +1272,19 @@ components:
       allOf:
       - $ref: '#/components/schemas/List'
       - $ref: '#/components/schemas/KafkaRequestList_allOf'
+    VersionMetadata:
+      allOf:
+      - $ref: '#/components/schemas/ObjectReference'
+      - $ref: '#/components/schemas/VersionMetadata_allOf'
+    ServiceStatus:
+      description: Schema for the service status response body
+      example:
+        kafkas:
+          max_capacity_reached: true
+      properties:
+        kafkas:
+          $ref: '#/components/schemas/ServiceStatus_kafkas'
+      type: object
     KafkaRequestPayload:
       description: Schema for the request body sent to /kafkas POST
       example:
@@ -1391,6 +1471,8 @@ components:
           type: string
         failed_reason:
           type: string
+        version:
+          type: string
       type: object
     KafkaRequestList_allOf:
       example:
@@ -1406,6 +1488,31 @@ components:
             allOf:
             - $ref: '#/components/schemas/KafkaRequest'
           type: array
+      type: object
+    VersionMetadata_allOf:
+      example:
+        kind: APIVersion
+        id: v1
+        href: /api/managed-services-api/v1
+        collections:
+        - id: kafkas
+          href: /api/managed-services-api/v1/kafkas
+          kind: KafkaList
+      properties:
+        collections:
+          items:
+            allOf:
+            - $ref: '#/components/schemas/ObjectReference'
+          type: array
+      type: object
+    ServiceStatus_kafkas:
+      description: The kafka resource api status
+      properties:
+        max_capacity_reached:
+          description: Indicates whether we have reached kafka maximum capacity
+          type: boolean
+      required:
+      - max_capacity_reached
       type: object
     CloudProviderList_allOf:
       example:
@@ -1452,6 +1559,11 @@ components:
           type: string
         clientSecret:
           type: string
+        owner:
+          type: string
+        created_at:
+          format: date-time
+          type: string
       type: object
     ServiceAccountListItem_allOf:
       properties:
@@ -1459,16 +1571,27 @@ components:
           description: server generated unique id of the service account
           type: string
         clientID:
+          description: client id of the service account
           type: string
         name:
+          description: name of the service account
           type: string
-        description: {}
+        owner:
+          description: owner of the service account
+          type: string
+        created_at:
+          description: service account creation timestamp
+          format: date-time
+          type: string
+        description:
+          description: description of the service account
+          type: string
       type: object
     ServiceAccountList_allOf:
       example:
         kind: ServiceAccountList
         items:
-          $ref: '#/components/examples/ServiceAccountListItemExample'
+        - $ref: '#/components/examples/ServiceAccountListItemExample'
       properties:
         kind:
           type: string

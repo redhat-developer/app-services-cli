@@ -12,16 +12,19 @@ package kasclient
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // ServiceAccountAllOf struct for ServiceAccountAllOf
 type ServiceAccountAllOf struct {
 	// server generated unique id of the service account
-	Id           *string `json:"id,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	ClientID     *string `json:"clientID,omitempty"`
-	ClientSecret *string `json:"clientSecret,omitempty"`
+	Id           *string    `json:"id,omitempty"`
+	Name         *string    `json:"name,omitempty"`
+	Description  *string    `json:"description,omitempty"`
+	ClientID     *string    `json:"clientID,omitempty"`
+	ClientSecret *string    `json:"clientSecret,omitempty"`
+	Owner        *string    `json:"owner,omitempty"`
+	CreatedAt    *time.Time `json:"created_at,omitempty"`
 }
 
 // NewServiceAccountAllOf instantiates a new ServiceAccountAllOf object
@@ -201,6 +204,70 @@ func (o *ServiceAccountAllOf) SetClientSecret(v string) {
 	o.ClientSecret = &v
 }
 
+// GetOwner returns the Owner field value if set, zero value otherwise.
+func (o *ServiceAccountAllOf) GetOwner() string {
+	if o == nil || o.Owner == nil {
+		var ret string
+		return ret
+	}
+	return *o.Owner
+}
+
+// GetOwnerOk returns a tuple with the Owner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountAllOf) GetOwnerOk() (*string, bool) {
+	if o == nil || o.Owner == nil {
+		return nil, false
+	}
+	return o.Owner, true
+}
+
+// HasOwner returns a boolean if a field has been set.
+func (o *ServiceAccountAllOf) HasOwner() bool {
+	if o != nil && o.Owner != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetOwner gets a reference to the given string and assigns it to the Owner field.
+func (o *ServiceAccountAllOf) SetOwner(v string) {
+	o.Owner = &v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *ServiceAccountAllOf) GetCreatedAt() time.Time {
+	if o == nil || o.CreatedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CreatedAt
+}
+
+// GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountAllOf) GetCreatedAtOk() (*time.Time, bool) {
+	if o == nil || o.CreatedAt == nil {
+		return nil, false
+	}
+	return o.CreatedAt, true
+}
+
+// HasCreatedAt returns a boolean if a field has been set.
+func (o *ServiceAccountAllOf) HasCreatedAt() bool {
+	if o != nil && o.CreatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *ServiceAccountAllOf) SetCreatedAt(v time.Time) {
+	o.CreatedAt = &v
+}
+
 func (o ServiceAccountAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Id != nil {
@@ -217,6 +284,12 @@ func (o ServiceAccountAllOf) MarshalJSON() ([]byte, error) {
 	}
 	if o.ClientSecret != nil {
 		toSerialize["clientSecret"] = o.ClientSecret
+	}
+	if o.Owner != nil {
+		toSerialize["owner"] = o.Owner
+	}
+	if o.CreatedAt != nil {
+		toSerialize["created_at"] = o.CreatedAt
 	}
 	return json.Marshal(toSerialize)
 }

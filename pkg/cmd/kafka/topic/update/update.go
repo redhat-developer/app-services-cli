@@ -219,11 +219,11 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	_, httpRes, topicErr := api.GetTopic(context.Background(), opts.topicName).Execute()
+	_, httpRes, err := api.GetTopic(context.Background(), opts.topicName).Execute()
 
-	if topicErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return topicErr
+			return err
 		}
 		if httpRes.StatusCode == 404 {
 			return errors.New(localizer.MustLocalize(&localizer.Config{
@@ -266,11 +266,11 @@ func runCmd(opts *Options) error {
 	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
 
 	// update the topic
-	response, httpRes, topicErr := updateTopicReq.Execute()
+	response, httpRes, err := updateTopicReq.Execute()
 	// handle error
-	if topicErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return topicErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -304,9 +304,9 @@ func runCmd(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Name": kafkaInstance.GetName(),
 				},
-			}), topicErr)
+			}), err)
 		default:
-			return topicErr
+			return err
 		}
 	}
 

@@ -91,6 +91,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**ListKafkas**](docs/DefaultApi.md#listkafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
 *DefaultApi* | [**ListServiceAccounts**](docs/DefaultApi.md#listserviceaccounts) | **Get** /api/managed-services-api/v1/serviceaccounts | List service accounts
 *DefaultApi* | [**ResetServiceAccountCreds**](docs/DefaultApi.md#resetserviceaccountcreds) | **Post** /api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials | reset credentials for the service account
+*DefaultApi* | [**ServiceStatus**](docs/DefaultApi.md#servicestatus) | **Get** /api/managed-services-api/v1/status | Retrieves the status of resources e.g whether we have reached maximum service capacity
+*DefaultApi* | [**VersionMetadata**](docs/DefaultApi.md#versionmetadata) | **Get** /api/managed-services-api/v1 | Retrieves the version metadata
 
 
 ## Documentation For Models
@@ -125,7 +127,11 @@ Class | Method | HTTP request | Description
  - [ServiceAccountListItem](docs/ServiceAccountListItem.md)
  - [ServiceAccountListItemAllOf](docs/ServiceAccountListItemAllOf.md)
  - [ServiceAccountRequest](docs/ServiceAccountRequest.md)
+ - [ServiceStatus](docs/ServiceStatus.md)
+ - [ServiceStatusKafkas](docs/ServiceStatusKafkas.md)
  - [Values](docs/Values.md)
+ - [VersionMetadata](docs/VersionMetadata.md)
+ - [VersionMetadataAllOf](docs/VersionMetadataAllOf.md)
 
 
 ## Documentation For Authorization

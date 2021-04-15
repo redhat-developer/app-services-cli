@@ -171,12 +171,12 @@ func createDivider(n int) string {
 }
 
 func getKafkaStatus(ctx context.Context, api kasclient.DefaultApi, id string) (status *KafkaStatus, err error) {
-	kafkaResponse, _, apiErr := api.GetKafkaById(ctx, id).Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+	kafkaResponse, _, err := api.GetKafkaById(ctx, id).Execute()
+	if kas.IsErr(err, kas.ErrorNotFound) {
 		return nil, kafka.ErrorNotFound(id)
 	}
-	if apiErr.Error() != "" {
-		return nil, apiErr
+	if err != nil {
+		return nil, err
 	}
 
 	status = &KafkaStatus{

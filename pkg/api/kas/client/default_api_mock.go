@@ -22,80 +22,92 @@ var _ DefaultApi = &DefaultApiMock{}
 //             CreateKafkaFunc: func(ctx context.Context) ApiCreateKafkaRequest {
 // 	               panic("mock out the CreateKafka method")
 //             },
-//             CreateKafkaExecuteFunc: func(r ApiCreateKafkaRequest) (KafkaRequest, *http.Response, GenericOpenAPIError) {
+//             CreateKafkaExecuteFunc: func(r ApiCreateKafkaRequest) (KafkaRequest, *http.Response, error) {
 // 	               panic("mock out the CreateKafkaExecute method")
 //             },
 //             CreateServiceAccountFunc: func(ctx context.Context) ApiCreateServiceAccountRequest {
 // 	               panic("mock out the CreateServiceAccount method")
 //             },
-//             CreateServiceAccountExecuteFunc: func(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+//             CreateServiceAccountExecuteFunc: func(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, error) {
 // 	               panic("mock out the CreateServiceAccountExecute method")
 //             },
 //             DeleteKafkaByIdFunc: func(ctx context.Context, id string) ApiDeleteKafkaByIdRequest {
 // 	               panic("mock out the DeleteKafkaById method")
 //             },
-//             DeleteKafkaByIdExecuteFunc: func(r ApiDeleteKafkaByIdRequest) (Error, *http.Response, GenericOpenAPIError) {
+//             DeleteKafkaByIdExecuteFunc: func(r ApiDeleteKafkaByIdRequest) (Error, *http.Response, error) {
 // 	               panic("mock out the DeleteKafkaByIdExecute method")
 //             },
 //             DeleteServiceAccountFunc: func(ctx context.Context, id string) ApiDeleteServiceAccountRequest {
 // 	               panic("mock out the DeleteServiceAccount method")
 //             },
-//             DeleteServiceAccountExecuteFunc: func(r ApiDeleteServiceAccountRequest) (Error, *http.Response, GenericOpenAPIError) {
+//             DeleteServiceAccountExecuteFunc: func(r ApiDeleteServiceAccountRequest) (Error, *http.Response, error) {
 // 	               panic("mock out the DeleteServiceAccountExecute method")
 //             },
 //             GetKafkaByIdFunc: func(ctx context.Context, id string) ApiGetKafkaByIdRequest {
 // 	               panic("mock out the GetKafkaById method")
 //             },
-//             GetKafkaByIdExecuteFunc: func(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, GenericOpenAPIError) {
+//             GetKafkaByIdExecuteFunc: func(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, error) {
 // 	               panic("mock out the GetKafkaByIdExecute method")
 //             },
 //             GetMetricsByInstantQueryFunc: func(ctx context.Context, id string) ApiGetMetricsByInstantQueryRequest {
 // 	               panic("mock out the GetMetricsByInstantQuery method")
 //             },
-//             GetMetricsByInstantQueryExecuteFunc: func(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *http.Response, GenericOpenAPIError) {
+//             GetMetricsByInstantQueryExecuteFunc: func(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *http.Response, error) {
 // 	               panic("mock out the GetMetricsByInstantQueryExecute method")
 //             },
 //             GetMetricsByRangeQueryFunc: func(ctx context.Context, id string) ApiGetMetricsByRangeQueryRequest {
 // 	               panic("mock out the GetMetricsByRangeQuery method")
 //             },
-//             GetMetricsByRangeQueryExecuteFunc: func(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *http.Response, GenericOpenAPIError) {
+//             GetMetricsByRangeQueryExecuteFunc: func(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *http.Response, error) {
 // 	               panic("mock out the GetMetricsByRangeQueryExecute method")
 //             },
 //             GetServiceAccountByIdFunc: func(ctx context.Context, id string) ApiGetServiceAccountByIdRequest {
 // 	               panic("mock out the GetServiceAccountById method")
 //             },
-//             GetServiceAccountByIdExecuteFunc: func(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+//             GetServiceAccountByIdExecuteFunc: func(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, error) {
 // 	               panic("mock out the GetServiceAccountByIdExecute method")
 //             },
 //             ListCloudProviderRegionsFunc: func(ctx context.Context, id string) ApiListCloudProviderRegionsRequest {
 // 	               panic("mock out the ListCloudProviderRegions method")
 //             },
-//             ListCloudProviderRegionsExecuteFunc: func(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *http.Response, GenericOpenAPIError) {
+//             ListCloudProviderRegionsExecuteFunc: func(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *http.Response, error) {
 // 	               panic("mock out the ListCloudProviderRegionsExecute method")
 //             },
 //             ListCloudProvidersFunc: func(ctx context.Context) ApiListCloudProvidersRequest {
 // 	               panic("mock out the ListCloudProviders method")
 //             },
-//             ListCloudProvidersExecuteFunc: func(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, GenericOpenAPIError) {
+//             ListCloudProvidersExecuteFunc: func(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, error) {
 // 	               panic("mock out the ListCloudProvidersExecute method")
 //             },
 //             ListKafkasFunc: func(ctx context.Context) ApiListKafkasRequest {
 // 	               panic("mock out the ListKafkas method")
 //             },
-//             ListKafkasExecuteFunc: func(r ApiListKafkasRequest) (KafkaRequestList, *http.Response, GenericOpenAPIError) {
+//             ListKafkasExecuteFunc: func(r ApiListKafkasRequest) (KafkaRequestList, *http.Response, error) {
 // 	               panic("mock out the ListKafkasExecute method")
 //             },
 //             ListServiceAccountsFunc: func(ctx context.Context) ApiListServiceAccountsRequest {
 // 	               panic("mock out the ListServiceAccounts method")
 //             },
-//             ListServiceAccountsExecuteFunc: func(r ApiListServiceAccountsRequest) (ServiceAccountList, *http.Response, GenericOpenAPIError) {
+//             ListServiceAccountsExecuteFunc: func(r ApiListServiceAccountsRequest) (ServiceAccountList, *http.Response, error) {
 // 	               panic("mock out the ListServiceAccountsExecute method")
 //             },
 //             ResetServiceAccountCredsFunc: func(ctx context.Context, id string) ApiResetServiceAccountCredsRequest {
 // 	               panic("mock out the ResetServiceAccountCreds method")
 //             },
-//             ResetServiceAccountCredsExecuteFunc: func(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+//             ResetServiceAccountCredsExecuteFunc: func(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *http.Response, error) {
 // 	               panic("mock out the ResetServiceAccountCredsExecute method")
+//             },
+//             ServiceStatusFunc: func(ctx context.Context) ApiServiceStatusRequest {
+// 	               panic("mock out the ServiceStatus method")
+//             },
+//             ServiceStatusExecuteFunc: func(r ApiServiceStatusRequest) (ServiceStatus, *http.Response, error) {
+// 	               panic("mock out the ServiceStatusExecute method")
+//             },
+//             VersionMetadataFunc: func(ctx context.Context) ApiVersionMetadataRequest {
+// 	               panic("mock out the VersionMetadata method")
+//             },
+//             VersionMetadataExecuteFunc: func(r ApiVersionMetadataRequest) (VersionMetadata, *http.Response, error) {
+// 	               panic("mock out the VersionMetadataExecute method")
 //             },
 //         }
 //
@@ -108,79 +120,91 @@ type DefaultApiMock struct {
 	CreateKafkaFunc func(ctx context.Context) ApiCreateKafkaRequest
 
 	// CreateKafkaExecuteFunc mocks the CreateKafkaExecute method.
-	CreateKafkaExecuteFunc func(r ApiCreateKafkaRequest) (KafkaRequest, *http.Response, GenericOpenAPIError)
+	CreateKafkaExecuteFunc func(r ApiCreateKafkaRequest) (KafkaRequest, *http.Response, error)
 
 	// CreateServiceAccountFunc mocks the CreateServiceAccount method.
 	CreateServiceAccountFunc func(ctx context.Context) ApiCreateServiceAccountRequest
 
 	// CreateServiceAccountExecuteFunc mocks the CreateServiceAccountExecute method.
-	CreateServiceAccountExecuteFunc func(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, GenericOpenAPIError)
+	CreateServiceAccountExecuteFunc func(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, error)
 
 	// DeleteKafkaByIdFunc mocks the DeleteKafkaById method.
 	DeleteKafkaByIdFunc func(ctx context.Context, id string) ApiDeleteKafkaByIdRequest
 
 	// DeleteKafkaByIdExecuteFunc mocks the DeleteKafkaByIdExecute method.
-	DeleteKafkaByIdExecuteFunc func(r ApiDeleteKafkaByIdRequest) (Error, *http.Response, GenericOpenAPIError)
+	DeleteKafkaByIdExecuteFunc func(r ApiDeleteKafkaByIdRequest) (Error, *http.Response, error)
 
 	// DeleteServiceAccountFunc mocks the DeleteServiceAccount method.
 	DeleteServiceAccountFunc func(ctx context.Context, id string) ApiDeleteServiceAccountRequest
 
 	// DeleteServiceAccountExecuteFunc mocks the DeleteServiceAccountExecute method.
-	DeleteServiceAccountExecuteFunc func(r ApiDeleteServiceAccountRequest) (Error, *http.Response, GenericOpenAPIError)
+	DeleteServiceAccountExecuteFunc func(r ApiDeleteServiceAccountRequest) (Error, *http.Response, error)
 
 	// GetKafkaByIdFunc mocks the GetKafkaById method.
 	GetKafkaByIdFunc func(ctx context.Context, id string) ApiGetKafkaByIdRequest
 
 	// GetKafkaByIdExecuteFunc mocks the GetKafkaByIdExecute method.
-	GetKafkaByIdExecuteFunc func(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, GenericOpenAPIError)
+	GetKafkaByIdExecuteFunc func(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, error)
 
 	// GetMetricsByInstantQueryFunc mocks the GetMetricsByInstantQuery method.
 	GetMetricsByInstantQueryFunc func(ctx context.Context, id string) ApiGetMetricsByInstantQueryRequest
 
 	// GetMetricsByInstantQueryExecuteFunc mocks the GetMetricsByInstantQueryExecute method.
-	GetMetricsByInstantQueryExecuteFunc func(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *http.Response, GenericOpenAPIError)
+	GetMetricsByInstantQueryExecuteFunc func(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *http.Response, error)
 
 	// GetMetricsByRangeQueryFunc mocks the GetMetricsByRangeQuery method.
 	GetMetricsByRangeQueryFunc func(ctx context.Context, id string) ApiGetMetricsByRangeQueryRequest
 
 	// GetMetricsByRangeQueryExecuteFunc mocks the GetMetricsByRangeQueryExecute method.
-	GetMetricsByRangeQueryExecuteFunc func(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *http.Response, GenericOpenAPIError)
+	GetMetricsByRangeQueryExecuteFunc func(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *http.Response, error)
 
 	// GetServiceAccountByIdFunc mocks the GetServiceAccountById method.
 	GetServiceAccountByIdFunc func(ctx context.Context, id string) ApiGetServiceAccountByIdRequest
 
 	// GetServiceAccountByIdExecuteFunc mocks the GetServiceAccountByIdExecute method.
-	GetServiceAccountByIdExecuteFunc func(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, GenericOpenAPIError)
+	GetServiceAccountByIdExecuteFunc func(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, error)
 
 	// ListCloudProviderRegionsFunc mocks the ListCloudProviderRegions method.
 	ListCloudProviderRegionsFunc func(ctx context.Context, id string) ApiListCloudProviderRegionsRequest
 
 	// ListCloudProviderRegionsExecuteFunc mocks the ListCloudProviderRegionsExecute method.
-	ListCloudProviderRegionsExecuteFunc func(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *http.Response, GenericOpenAPIError)
+	ListCloudProviderRegionsExecuteFunc func(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *http.Response, error)
 
 	// ListCloudProvidersFunc mocks the ListCloudProviders method.
 	ListCloudProvidersFunc func(ctx context.Context) ApiListCloudProvidersRequest
 
 	// ListCloudProvidersExecuteFunc mocks the ListCloudProvidersExecute method.
-	ListCloudProvidersExecuteFunc func(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, GenericOpenAPIError)
+	ListCloudProvidersExecuteFunc func(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, error)
 
 	// ListKafkasFunc mocks the ListKafkas method.
 	ListKafkasFunc func(ctx context.Context) ApiListKafkasRequest
 
 	// ListKafkasExecuteFunc mocks the ListKafkasExecute method.
-	ListKafkasExecuteFunc func(r ApiListKafkasRequest) (KafkaRequestList, *http.Response, GenericOpenAPIError)
+	ListKafkasExecuteFunc func(r ApiListKafkasRequest) (KafkaRequestList, *http.Response, error)
 
 	// ListServiceAccountsFunc mocks the ListServiceAccounts method.
 	ListServiceAccountsFunc func(ctx context.Context) ApiListServiceAccountsRequest
 
 	// ListServiceAccountsExecuteFunc mocks the ListServiceAccountsExecute method.
-	ListServiceAccountsExecuteFunc func(r ApiListServiceAccountsRequest) (ServiceAccountList, *http.Response, GenericOpenAPIError)
+	ListServiceAccountsExecuteFunc func(r ApiListServiceAccountsRequest) (ServiceAccountList, *http.Response, error)
 
 	// ResetServiceAccountCredsFunc mocks the ResetServiceAccountCreds method.
 	ResetServiceAccountCredsFunc func(ctx context.Context, id string) ApiResetServiceAccountCredsRequest
 
 	// ResetServiceAccountCredsExecuteFunc mocks the ResetServiceAccountCredsExecute method.
-	ResetServiceAccountCredsExecuteFunc func(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *http.Response, GenericOpenAPIError)
+	ResetServiceAccountCredsExecuteFunc func(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *http.Response, error)
+
+	// ServiceStatusFunc mocks the ServiceStatus method.
+	ServiceStatusFunc func(ctx context.Context) ApiServiceStatusRequest
+
+	// ServiceStatusExecuteFunc mocks the ServiceStatusExecute method.
+	ServiceStatusExecuteFunc func(r ApiServiceStatusRequest) (ServiceStatus, *http.Response, error)
+
+	// VersionMetadataFunc mocks the VersionMetadata method.
+	VersionMetadataFunc func(ctx context.Context) ApiVersionMetadataRequest
+
+	// VersionMetadataExecuteFunc mocks the VersionMetadataExecute method.
+	VersionMetadataExecuteFunc func(r ApiVersionMetadataRequest) (VersionMetadata, *http.Response, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -330,6 +354,26 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiResetServiceAccountCredsRequest
 		}
+		// ServiceStatus holds details about calls to the ServiceStatus method.
+		ServiceStatus []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// ServiceStatusExecute holds details about calls to the ServiceStatusExecute method.
+		ServiceStatusExecute []struct {
+			// R is the r argument value.
+			R ApiServiceStatusRequest
+		}
+		// VersionMetadata holds details about calls to the VersionMetadata method.
+		VersionMetadata []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// VersionMetadataExecute holds details about calls to the VersionMetadataExecute method.
+		VersionMetadataExecute []struct {
+			// R is the r argument value.
+			R ApiVersionMetadataRequest
+		}
 	}
 	lockCreateKafka                     sync.RWMutex
 	lockCreateKafkaExecute              sync.RWMutex
@@ -357,6 +401,10 @@ type DefaultApiMock struct {
 	lockListServiceAccountsExecute      sync.RWMutex
 	lockResetServiceAccountCreds        sync.RWMutex
 	lockResetServiceAccountCredsExecute sync.RWMutex
+	lockServiceStatus                   sync.RWMutex
+	lockServiceStatusExecute            sync.RWMutex
+	lockVersionMetadata                 sync.RWMutex
+	lockVersionMetadataExecute          sync.RWMutex
 }
 
 // CreateKafka calls CreateKafkaFunc.
@@ -391,7 +439,7 @@ func (mock *DefaultApiMock) CreateKafkaCalls() []struct {
 }
 
 // CreateKafkaExecute calls CreateKafkaExecuteFunc.
-func (mock *DefaultApiMock) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRequest, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRequest, *http.Response, error) {
 	if mock.CreateKafkaExecuteFunc == nil {
 		panic("DefaultApiMock.CreateKafkaExecuteFunc: method is nil but DefaultApi.CreateKafkaExecute was just called")
 	}
@@ -453,7 +501,7 @@ func (mock *DefaultApiMock) CreateServiceAccountCalls() []struct {
 }
 
 // CreateServiceAccountExecute calls CreateServiceAccountExecuteFunc.
-func (mock *DefaultApiMock) CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *http.Response, error) {
 	if mock.CreateServiceAccountExecuteFunc == nil {
 		panic("DefaultApiMock.CreateServiceAccountExecuteFunc: method is nil but DefaultApi.CreateServiceAccountExecute was just called")
 	}
@@ -519,7 +567,7 @@ func (mock *DefaultApiMock) DeleteKafkaByIdCalls() []struct {
 }
 
 // DeleteKafkaByIdExecute calls DeleteKafkaByIdExecuteFunc.
-func (mock *DefaultApiMock) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) (Error, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) (Error, *http.Response, error) {
 	if mock.DeleteKafkaByIdExecuteFunc == nil {
 		panic("DefaultApiMock.DeleteKafkaByIdExecuteFunc: method is nil but DefaultApi.DeleteKafkaByIdExecute was just called")
 	}
@@ -585,7 +633,7 @@ func (mock *DefaultApiMock) DeleteServiceAccountCalls() []struct {
 }
 
 // DeleteServiceAccountExecute calls DeleteServiceAccountExecuteFunc.
-func (mock *DefaultApiMock) DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *http.Response, error) {
 	if mock.DeleteServiceAccountExecuteFunc == nil {
 		panic("DefaultApiMock.DeleteServiceAccountExecuteFunc: method is nil but DefaultApi.DeleteServiceAccountExecute was just called")
 	}
@@ -651,7 +699,7 @@ func (mock *DefaultApiMock) GetKafkaByIdCalls() []struct {
 }
 
 // GetKafkaByIdExecute calls GetKafkaByIdExecuteFunc.
-func (mock *DefaultApiMock) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *http.Response, error) {
 	if mock.GetKafkaByIdExecuteFunc == nil {
 		panic("DefaultApiMock.GetKafkaByIdExecuteFunc: method is nil but DefaultApi.GetKafkaByIdExecute was just called")
 	}
@@ -717,7 +765,7 @@ func (mock *DefaultApiMock) GetMetricsByInstantQueryCalls() []struct {
 }
 
 // GetMetricsByInstantQueryExecute calls GetMetricsByInstantQueryExecuteFunc.
-func (mock *DefaultApiMock) GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *http.Response, error) {
 	if mock.GetMetricsByInstantQueryExecuteFunc == nil {
 		panic("DefaultApiMock.GetMetricsByInstantQueryExecuteFunc: method is nil but DefaultApi.GetMetricsByInstantQueryExecute was just called")
 	}
@@ -783,7 +831,7 @@ func (mock *DefaultApiMock) GetMetricsByRangeQueryCalls() []struct {
 }
 
 // GetMetricsByRangeQueryExecute calls GetMetricsByRangeQueryExecuteFunc.
-func (mock *DefaultApiMock) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *http.Response, error) {
 	if mock.GetMetricsByRangeQueryExecuteFunc == nil {
 		panic("DefaultApiMock.GetMetricsByRangeQueryExecuteFunc: method is nil but DefaultApi.GetMetricsByRangeQueryExecute was just called")
 	}
@@ -849,7 +897,7 @@ func (mock *DefaultApiMock) GetServiceAccountByIdCalls() []struct {
 }
 
 // GetServiceAccountByIdExecute calls GetServiceAccountByIdExecuteFunc.
-func (mock *DefaultApiMock) GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *http.Response, error) {
 	if mock.GetServiceAccountByIdExecuteFunc == nil {
 		panic("DefaultApiMock.GetServiceAccountByIdExecuteFunc: method is nil but DefaultApi.GetServiceAccountByIdExecute was just called")
 	}
@@ -915,7 +963,7 @@ func (mock *DefaultApiMock) ListCloudProviderRegionsCalls() []struct {
 }
 
 // ListCloudProviderRegionsExecute calls ListCloudProviderRegionsExecuteFunc.
-func (mock *DefaultApiMock) ListCloudProviderRegionsExecute(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) ListCloudProviderRegionsExecute(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *http.Response, error) {
 	if mock.ListCloudProviderRegionsExecuteFunc == nil {
 		panic("DefaultApiMock.ListCloudProviderRegionsExecuteFunc: method is nil but DefaultApi.ListCloudProviderRegionsExecute was just called")
 	}
@@ -977,7 +1025,7 @@ func (mock *DefaultApiMock) ListCloudProvidersCalls() []struct {
 }
 
 // ListCloudProvidersExecute calls ListCloudProvidersExecuteFunc.
-func (mock *DefaultApiMock) ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *http.Response, error) {
 	if mock.ListCloudProvidersExecuteFunc == nil {
 		panic("DefaultApiMock.ListCloudProvidersExecuteFunc: method is nil but DefaultApi.ListCloudProvidersExecute was just called")
 	}
@@ -1039,7 +1087,7 @@ func (mock *DefaultApiMock) ListKafkasCalls() []struct {
 }
 
 // ListKafkasExecute calls ListKafkasExecuteFunc.
-func (mock *DefaultApiMock) ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequestList, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequestList, *http.Response, error) {
 	if mock.ListKafkasExecuteFunc == nil {
 		panic("DefaultApiMock.ListKafkasExecuteFunc: method is nil but DefaultApi.ListKafkasExecute was just called")
 	}
@@ -1101,7 +1149,7 @@ func (mock *DefaultApiMock) ListServiceAccountsCalls() []struct {
 }
 
 // ListServiceAccountsExecute calls ListServiceAccountsExecuteFunc.
-func (mock *DefaultApiMock) ListServiceAccountsExecute(r ApiListServiceAccountsRequest) (ServiceAccountList, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) ListServiceAccountsExecute(r ApiListServiceAccountsRequest) (ServiceAccountList, *http.Response, error) {
 	if mock.ListServiceAccountsExecuteFunc == nil {
 		panic("DefaultApiMock.ListServiceAccountsExecuteFunc: method is nil but DefaultApi.ListServiceAccountsExecute was just called")
 	}
@@ -1167,7 +1215,7 @@ func (mock *DefaultApiMock) ResetServiceAccountCredsCalls() []struct {
 }
 
 // ResetServiceAccountCredsExecute calls ResetServiceAccountCredsExecuteFunc.
-func (mock *DefaultApiMock) ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *http.Response, GenericOpenAPIError) {
+func (mock *DefaultApiMock) ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *http.Response, error) {
 	if mock.ResetServiceAccountCredsExecuteFunc == nil {
 		panic("DefaultApiMock.ResetServiceAccountCredsExecuteFunc: method is nil but DefaultApi.ResetServiceAccountCredsExecute was just called")
 	}
@@ -1194,5 +1242,129 @@ func (mock *DefaultApiMock) ResetServiceAccountCredsExecuteCalls() []struct {
 	mock.lockResetServiceAccountCredsExecute.RLock()
 	calls = mock.calls.ResetServiceAccountCredsExecute
 	mock.lockResetServiceAccountCredsExecute.RUnlock()
+	return calls
+}
+
+// ServiceStatus calls ServiceStatusFunc.
+func (mock *DefaultApiMock) ServiceStatus(ctx context.Context) ApiServiceStatusRequest {
+	if mock.ServiceStatusFunc == nil {
+		panic("DefaultApiMock.ServiceStatusFunc: method is nil but DefaultApi.ServiceStatus was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockServiceStatus.Lock()
+	mock.calls.ServiceStatus = append(mock.calls.ServiceStatus, callInfo)
+	mock.lockServiceStatus.Unlock()
+	return mock.ServiceStatusFunc(ctx)
+}
+
+// ServiceStatusCalls gets all the calls that were made to ServiceStatus.
+// Check the length with:
+//     len(mockedDefaultApi.ServiceStatusCalls())
+func (mock *DefaultApiMock) ServiceStatusCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockServiceStatus.RLock()
+	calls = mock.calls.ServiceStatus
+	mock.lockServiceStatus.RUnlock()
+	return calls
+}
+
+// ServiceStatusExecute calls ServiceStatusExecuteFunc.
+func (mock *DefaultApiMock) ServiceStatusExecute(r ApiServiceStatusRequest) (ServiceStatus, *http.Response, error) {
+	if mock.ServiceStatusExecuteFunc == nil {
+		panic("DefaultApiMock.ServiceStatusExecuteFunc: method is nil but DefaultApi.ServiceStatusExecute was just called")
+	}
+	callInfo := struct {
+		R ApiServiceStatusRequest
+	}{
+		R: r,
+	}
+	mock.lockServiceStatusExecute.Lock()
+	mock.calls.ServiceStatusExecute = append(mock.calls.ServiceStatusExecute, callInfo)
+	mock.lockServiceStatusExecute.Unlock()
+	return mock.ServiceStatusExecuteFunc(r)
+}
+
+// ServiceStatusExecuteCalls gets all the calls that were made to ServiceStatusExecute.
+// Check the length with:
+//     len(mockedDefaultApi.ServiceStatusExecuteCalls())
+func (mock *DefaultApiMock) ServiceStatusExecuteCalls() []struct {
+	R ApiServiceStatusRequest
+} {
+	var calls []struct {
+		R ApiServiceStatusRequest
+	}
+	mock.lockServiceStatusExecute.RLock()
+	calls = mock.calls.ServiceStatusExecute
+	mock.lockServiceStatusExecute.RUnlock()
+	return calls
+}
+
+// VersionMetadata calls VersionMetadataFunc.
+func (mock *DefaultApiMock) VersionMetadata(ctx context.Context) ApiVersionMetadataRequest {
+	if mock.VersionMetadataFunc == nil {
+		panic("DefaultApiMock.VersionMetadataFunc: method is nil but DefaultApi.VersionMetadata was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockVersionMetadata.Lock()
+	mock.calls.VersionMetadata = append(mock.calls.VersionMetadata, callInfo)
+	mock.lockVersionMetadata.Unlock()
+	return mock.VersionMetadataFunc(ctx)
+}
+
+// VersionMetadataCalls gets all the calls that were made to VersionMetadata.
+// Check the length with:
+//     len(mockedDefaultApi.VersionMetadataCalls())
+func (mock *DefaultApiMock) VersionMetadataCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockVersionMetadata.RLock()
+	calls = mock.calls.VersionMetadata
+	mock.lockVersionMetadata.RUnlock()
+	return calls
+}
+
+// VersionMetadataExecute calls VersionMetadataExecuteFunc.
+func (mock *DefaultApiMock) VersionMetadataExecute(r ApiVersionMetadataRequest) (VersionMetadata, *http.Response, error) {
+	if mock.VersionMetadataExecuteFunc == nil {
+		panic("DefaultApiMock.VersionMetadataExecuteFunc: method is nil but DefaultApi.VersionMetadataExecute was just called")
+	}
+	callInfo := struct {
+		R ApiVersionMetadataRequest
+	}{
+		R: r,
+	}
+	mock.lockVersionMetadataExecute.Lock()
+	mock.calls.VersionMetadataExecute = append(mock.calls.VersionMetadataExecute, callInfo)
+	mock.lockVersionMetadataExecute.Unlock()
+	return mock.VersionMetadataExecuteFunc(r)
+}
+
+// VersionMetadataExecuteCalls gets all the calls that were made to VersionMetadataExecute.
+// Check the length with:
+//     len(mockedDefaultApi.VersionMetadataExecuteCalls())
+func (mock *DefaultApiMock) VersionMetadataExecuteCalls() []struct {
+	R ApiVersionMetadataRequest
+} {
+	var calls []struct {
+		R ApiVersionMetadataRequest
+	}
+	mock.lockVersionMetadataExecute.RLock()
+	calls = mock.calls.VersionMetadataExecute
+	mock.lockVersionMetadataExecute.RUnlock()
 	return calls
 }

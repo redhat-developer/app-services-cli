@@ -165,10 +165,10 @@ func runCmd(opts *Options) error {
 	}
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
 
-	response, httpRes, topicErr := createTopicReq.Execute()
-	if topicErr.Error() != "" {
+	response, httpRes, err := createTopicReq.Execute()
+	if err != nil {
 		if httpRes == nil {
-			return topicErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -202,9 +202,9 @@ func runCmd(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Name": kafkaInstance.GetName(),
 				},
-			}), topicErr)
+			}), err)
 		default:
-			return topicErr
+			return err
 		}
 	}
 

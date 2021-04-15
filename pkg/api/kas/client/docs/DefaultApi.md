@@ -17,6 +17,8 @@ Method | HTTP request | Description
 [**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
 [**ListServiceAccounts**](DefaultApi.md#ListServiceAccounts) | **Get** /api/managed-services-api/v1/serviceaccounts | List service accounts
 [**ResetServiceAccountCreds**](DefaultApi.md#ResetServiceAccountCreds) | **Post** /api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials | reset credentials for the service account
+[**ServiceStatus**](DefaultApi.md#ServiceStatus) | **Get** /api/managed-services-api/v1/status | Retrieves the status of resources e.g whether we have reached maximum service capacity
+[**VersionMetadata**](DefaultApi.md#VersionMetadata) | **Get** /api/managed-services-api/v1 | Retrieves the version metadata
 
 
 
@@ -45,7 +47,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.CreateKafka(context.Background()).Async(async).KafkaRequestPayload(kafkaRequestPayload).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateKafka``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -110,7 +112,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.CreateServiceAccount(context.Background()).ServiceAccountRequest(serviceAccountRequest).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateServiceAccount``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -175,7 +177,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.DeleteKafkaById(context.Background(), id).Async(async).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteKafkaById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -244,7 +246,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.DeleteServiceAccount(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteServiceAccount``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -312,7 +314,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetKafkaById(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetKafkaById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -381,7 +383,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetMetricsByInstantQuery(context.Background(), id).Filters(filters).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetMetricsByInstantQuery``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -453,7 +455,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetMetricsByRangeQuery(context.Background(), id).Duration(duration).Interval(interval).Filters(filters).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetMetricsByRangeQuery``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -524,7 +526,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.GetServiceAccountById(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetServiceAccountById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -594,7 +596,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ListCloudProviderRegions(context.Background(), id).Page(page).Size(size).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListCloudProviderRegions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -665,7 +667,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ListCloudProviders(context.Background()).Page(page).Size(size).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListCloudProviders``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -733,7 +735,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ListKafkas(context.Background()).Page(page).Size(size).OrderBy(orderBy).Search(search).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListKafkas``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -799,7 +801,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ListServiceAccounts(context.Background()).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ListServiceAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -859,7 +861,7 @@ func main() {
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
     resp, r, err := api_client.DefaultApi.ResetServiceAccountCreds(context.Background(), id).Execute()
-    if err.Error() != "" {
+    if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ResetServiceAccountCreds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
@@ -892,6 +894,124 @@ Name | Type | Description  | Notes
 ### Authorization
 
 [Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ServiceStatus
+
+> ServiceStatus ServiceStatus(ctx).Execute()
+
+Retrieves the status of resources e.g whether we have reached maximum service capacity
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.ServiceStatus(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ServiceStatus``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ServiceStatus`: ServiceStatus
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ServiceStatus`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiServiceStatusRequest struct via the builder pattern
+
+
+### Return type
+
+[**ServiceStatus**](ServiceStatus.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## VersionMetadata
+
+> VersionMetadata VersionMetadata(ctx).Execute()
+
+Retrieves the version metadata
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.VersionMetadata(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.VersionMetadata``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `VersionMetadata`: VersionMetadata
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.VersionMetadata`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVersionMetadataRequest struct via the builder pattern
+
+
+### Return type
+
+[**VersionMetadata**](VersionMetadata.md)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

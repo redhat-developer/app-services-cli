@@ -54,7 +54,7 @@ func (o *ConsumerGroup) GetId() string {
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroup) GetIdOk() (*string, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Id, true
@@ -78,7 +78,7 @@ func (o *ConsumerGroup) GetConsumers() []Consumer {
 // GetConsumersOk returns a tuple with the Consumers field value
 // and a boolean to check if the value has been set.
 func (o *ConsumerGroup) GetConsumersOk() (*[]Consumer, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Consumers, true
@@ -135,3 +135,5 @@ func (v *NullableConsumerGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
