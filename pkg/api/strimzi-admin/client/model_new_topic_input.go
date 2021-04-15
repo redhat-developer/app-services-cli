@@ -17,7 +17,7 @@ import (
 // NewTopicInput Input object to create a new topic.
 type NewTopicInput struct {
 	// The topic name, this value must be unique.
-	Name string `json:"name"`
+	Name     string        `json:"name"`
 	Settings TopicSettings `json:"settings"`
 }
 
@@ -53,7 +53,7 @@ func (o *NewTopicInput) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *NewTopicInput) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -77,7 +77,7 @@ func (o *NewTopicInput) GetSettings() TopicSettings {
 // GetSettingsOk returns a tuple with the Settings field value
 // and a boolean to check if the value has been set.
 func (o *NewTopicInput) GetSettingsOk() (*TopicSettings, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Settings, true
@@ -134,5 +134,3 @@ func (v *NullableNewTopicInput) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
