@@ -106,7 +106,6 @@ func runList(opts *options) error {
 	a = a.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != "" {
-
 		logger.Debug(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.list.log.debug.filteringKafkaList",
 			TemplateData: map[string]interface{}{

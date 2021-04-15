@@ -60,7 +60,7 @@ func (o *TopicsList) GetOffset() int32 {
 // GetOffsetOk returns a tuple with the Offset field value
 // and a boolean to check if the value has been set.
 func (o *TopicsList) GetOffsetOk() (*int32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Offset, true
@@ -84,7 +84,7 @@ func (o *TopicsList) GetLimit() int32 {
 // GetLimitOk returns a tuple with the Limit field value
 // and a boolean to check if the value has been set.
 func (o *TopicsList) GetLimitOk() (*int32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Limit, true
@@ -108,7 +108,7 @@ func (o *TopicsList) GetCount() int32 {
 // GetCountOk returns a tuple with the Count field value
 // and a boolean to check if the value has been set.
 func (o *TopicsList) GetCountOk() (*int32, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Count, true
@@ -132,7 +132,7 @@ func (o *TopicsList) GetItems() []Topic {
 // GetItemsOk returns a tuple with the Items field value
 // and a boolean to check if the value has been set.
 func (o *TopicsList) GetItemsOk() (*[]Topic, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Items, true
@@ -195,3 +195,5 @@ func (v *NullableTopicsList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -165,7 +165,7 @@ func runCmd(opts *Options) error {
 		dump.Table(stdout, rows)
 	}
 
-	return err
+	return nil
 }
 
 func mapTopicResultsToTableFormat(topics []strimziadminclient.Topic) []topicRow {

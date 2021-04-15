@@ -221,7 +221,7 @@ func (c *KeycloakConnection) API() *api.API {
 		} else if err != nil {
 			cachedKafkaAdminAPI = nil
 			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = fmt.Errorf("%v", err)
+			cachedKafkaAdminErr = fmt.Errorf("%w", err)
 
 			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 		}

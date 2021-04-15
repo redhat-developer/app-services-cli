@@ -3,7 +3,6 @@ package create
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
@@ -145,12 +144,6 @@ func runCreate(opts *Options) error {
 	a := api.Kafka().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, httpRes, err := a.Execute()
-	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
-	if err != nil {
-		logger.Debug("Could not read response body")
-	} else {
-		logger.Debug("Response Body:", string(bodyBytes))
-	}
 
 	if err != nil {
 		if httpRes == nil {

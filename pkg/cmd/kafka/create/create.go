@@ -315,7 +315,7 @@ func checkTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirec
 			SiteCode:  &siteCode,
 		}).
 		Execute()
-	if err != nil && err.Error() != "" {
+	if err != nil {
 		return false, "", err
 	}
 

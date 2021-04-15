@@ -145,7 +145,7 @@ func runCmd(opts *Options) error {
 			Message: localizer.MustLocalizeFromID("kafka.topic.delete.input.name.message"),
 		}
 		var userConfirmedName string
-		if err := survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
+		if err = survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
 			return err
 		}
 
