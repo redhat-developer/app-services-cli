@@ -6,7 +6,7 @@ Delete a consumer group
 
 === Synopsis
 
-Delete a consumer group from the kafka instance.
+Delete a consumer group from the Kafka instance.
 
 
 ....

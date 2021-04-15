@@ -150,6 +150,8 @@ func runCmd(opts *Options) error {
 					"Operation": "delete",
 				},
 			}))
+		case 423:
+			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.delete.error.locked"))
 		case 500:
 			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
