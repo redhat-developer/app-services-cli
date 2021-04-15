@@ -116,10 +116,10 @@ func runList(opts *options) error {
 		a = a.Search(buildQuery(opts.search))
 	}
 
-	response, _, apiErr := a.Execute()
+	response, _, err := a.Execute()
 
-	if apiErr.Error() != "" {
-		return apiErr
+	if err != nil {
+		return err
 	}
 
 	if response.Size == 0 {

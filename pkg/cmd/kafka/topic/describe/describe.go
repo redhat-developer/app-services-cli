@@ -118,13 +118,13 @@ func runCmd(opts *Options) error {
 	}
 
 	// fetch the topic
-	topicResponse, httpRes, topicErr := api.
+	topicResponse, httpRes, err := api.
 		GetTopic(context.Background(), opts.topicName).
 		Execute()
 
-	if topicErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return topicErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -158,9 +158,9 @@ func runCmd(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Name": kafkaInstance.GetName(),
 				},
-			}), topicErr)
+			}), err)
 		default:
-			return topicErr
+			return err
 		}
 	}
 

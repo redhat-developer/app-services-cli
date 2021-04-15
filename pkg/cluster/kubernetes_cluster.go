@@ -120,17 +120,16 @@ func (c *KubernetesCluster) CurrentNamespace() (string, error) {
 // Connect connects a remote Kafka instance to the Kubernetes cluster
 func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments) error {
 	api := c.connection.API()
-	kafkaInstance, _, apiError := api.Kafka().GetKafkaById(ctx, cmdOptions.SelectedKafka).Execute()
-	if kas.IsErr(apiError, kas.ErrorNotFound) {
+	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, cmdOptions.SelectedKafka).Execute()
+	if kas.IsErr(err, kas.ErrorNotFound) {
 		return kafka.ErrorNotFound(cmdOptions.SelectedKafka)
 	}
 
-	if apiError.Error() != "" {
-		return errors.New(apiError.Error())
+	if err != nil {
+		return err
 	}
 
 	var currentNamespace string
-	var err error
 	if cmdOptions.Namespace != "" {
 		currentNamespace = cmdOptions.Namespace
 	} else {
@@ -342,10 +341,10 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kasclien
 	serviceAcct := &kasclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
 	req := api.Kafka().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
-	res, _, apiErr := req.Execute()
+	res, _, err := req.Execute()
 
-	if apiErr.Error() != "" {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.createServiceAccount.error.createError"), apiErr)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.createServiceAccount.error.createError"), err)
 	}
 
 	return &res, nil

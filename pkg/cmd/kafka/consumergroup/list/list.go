@@ -101,11 +101,11 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	consumerGroupData, httpRes, consumerGroupErr := api.GetConsumerGroupList(ctx).Limit(opts.limit).Execute()
+	consumerGroupData, httpRes, err := api.GetConsumerGroupList(ctx).Limit(opts.limit).Execute()
 
-	if consumerGroupErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return consumerGroupErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -133,9 +133,9 @@ func runList(opts *Options) (err error) {
 				TemplateData: map[string]interface{}{
 					"Name": kafkaInstance.GetName(),
 				},
-			}), consumerGroupErr)
+			}), err)
 		default:
-			return consumerGroupErr
+			return err
 		}
 	}
 

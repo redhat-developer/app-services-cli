@@ -107,12 +107,12 @@ func runUse(opts *Options) error {
 	ctx := context.Background()
 	if opts.name != "" {
 		res, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
-		if err.Error() != "" {
+		if err != nil {
 			return err
 		}
 	} else {
 		res, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
-		if err.Error() != "" {
+		if err != nil {
 			return err
 		}
 	}

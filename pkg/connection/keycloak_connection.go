@@ -205,9 +205,9 @@ func (c *KeycloakConnection) API() *api.API {
 
 		api := kafkaAPIFunc()
 
-		kafkaInstance, resp, apiErr := api.GetKafkaById(context.Background(), kafkaID).Execute()
+		kafkaInstance, resp, err := api.GetKafkaById(context.Background(), kafkaID).Execute()
 		defer resp.Body.Close()
-		if kas.IsErr(apiErr, kas.ErrorNotFound) {
+		if kas.IsErr(err, kas.ErrorNotFound) {
 			cachedKafkaAdminAPI = nil
 			cachedKafkaRequest = nil
 			cachedKafkaAdminErr = errors.New(localizer.MustLocalize(&localizer.Config{
@@ -218,10 +218,10 @@ func (c *KeycloakConnection) API() *api.API {
 			}))
 
 			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
-		} else if apiErr.Error() != "" {
+		} else if err != nil {
 			cachedKafkaAdminAPI = nil
 			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = fmt.Errorf("%v", apiErr)
+			cachedKafkaAdminErr = fmt.Errorf("%v", err)
 
 			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 		}

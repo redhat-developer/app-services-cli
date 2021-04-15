@@ -73,11 +73,11 @@ func runDelete(opts *Options) (err error) {
 
 	api := connection.API()
 	a := api.Kafka().GetServiceAccountById(context.Background(), opts.id)
-	_, httpRes, apiErr := a.Execute()
+	_, httpRes, err := a.Execute()
 
-	if apiErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return apiErr
+			return err
 		}
 
 		if httpRes.StatusCode == 404 {
@@ -129,11 +129,11 @@ func deleteServiceAccount(opts *Options) error {
 	api := connection.API()
 
 	a := api.Kafka().DeleteServiceAccount(context.Background(), opts.id)
-	_, httpRes, apiErr := a.Execute()
+	_, httpRes, err := a.Execute()
 
-	if apiErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return apiErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -143,11 +143,11 @@ func deleteServiceAccount(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Operation": "delete",
 				},
-			}), apiErr)
+			}), err)
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
 		default:
-			return apiErr
+			return err
 		}
 	}
 

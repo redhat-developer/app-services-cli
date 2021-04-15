@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -178,10 +179,10 @@ func runCreate(opts *Options) error {
 	a := api.Kafka().CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
-	response, _, apiErr := a.Execute()
+	response, _, err := a.Execute()
 
-	if apiErr.Error() != "" {
-		return apiErr
+	if err != nil {
+		return err
 	}
 
 	logger.Info(localizer.MustLocalize(&localizer.Config{
@@ -247,9 +248,9 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, _, apiErr := api.Kafka().ListCloudProviders(context.Background()).Execute()
-	if apiErr.Error() != "" {
-		return nil, apiErr
+	cloudProviderResponse, _, err := api.Kafka().ListCloudProviders(context.Background()).Execute()
+	if err != nil {
+		return nil, err
 	}
 
 	cloudProviders := cloudProviderResponse.GetItems()
@@ -269,9 +270,9 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 	selectedCloudProvider := cloudproviderutil.FindByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, apiErr := api.Kafka().ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
-	if apiErr.Error() != "" {
-		return nil, apiErr
+	cloudRegionResponse, _, err := api.Kafka().ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
+	if err != nil {
+		return nil, err
 	}
 
 	regions := cloudRegionResponse.GetItems()
@@ -307,15 +308,15 @@ func checkTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirec
 	eventCode := "onlineService"
 	siteCode := "ocm"
 
-	termsReview, _, apiErr := conn.API().AccountMgmt().
+	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
 		SelfTermsReview(amsclient.SelfTermsReview{
 			EventCode: &eventCode,
 			SiteCode:  &siteCode,
 		}).
 		Execute()
-	if apiErr != nil && apiErr.Error() != "" {
-		return false, "", apiErr
+	if err != nil && err.Error() != "" {
+		return false, "", err
 	}
 
 	if !termsReview.GetTermsAvailable() && !termsReview.GetTermsRequired() {

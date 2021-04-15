@@ -144,7 +144,7 @@ func runCreate(opts *Options) error {
 	api := connection.API()
 	a := api.Kafka().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
-	serviceacct, httpRes, apiErr := a.Execute()
+	serviceacct, httpRes, err := a.Execute()
 	bodyBytes, err := ioutil.ReadAll(httpRes.Body)
 	if err != nil {
 		logger.Debug("Could not read response body")
@@ -152,9 +152,9 @@ func runCreate(opts *Options) error {
 		logger.Debug("Response Body:", string(bodyBytes))
 	}
 
-	if apiErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return apiErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -164,11 +164,11 @@ func runCreate(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Operation": "create",
 				},
-			}), apiErr)
+			}), err)
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), apiErr)
+			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
 		default:
-			return apiErr
+			return err
 		}
 	}
 
@@ -188,7 +188,7 @@ func runCreate(opts *Options) error {
 	// save the credentials to a file
 	err = credentials.Write(opts.fileFormat, opts.filename, creds)
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.couldNotSaveCredentialsFile"), apiErr)
+		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
 	}
 
 	logger.Info(localizer.MustLocalize(&localizer.Config{

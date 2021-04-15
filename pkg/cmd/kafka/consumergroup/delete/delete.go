@@ -89,11 +89,11 @@ func runCmd(opts *Options) error {
 
 	ctx := context.Background()
 
-	_, httpRes, consumerGroupErr := api.GetConsumerGroupById(ctx, opts.id).Execute()
+	_, httpRes, err := api.GetConsumerGroupById(ctx, opts.id).Execute()
 
-	if consumerGroupErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return consumerGroupErr
+			return err
 		}
 		if httpRes.StatusCode == 404 {
 			return errors.New(localizer.MustLocalize(&localizer.Config{
@@ -128,11 +128,11 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	httpRes, consumerGroupErr = api.DeleteConsumerGroupById(ctx, opts.id).Execute()
+	httpRes, err = api.DeleteConsumerGroupById(ctx, opts.id).Execute()
 
-	if consumerGroupErr.Error() != "" {
+	if err != nil {
 		if httpRes == nil {
-			return consumerGroupErr
+			return err
 		}
 
 		switch httpRes.StatusCode {
@@ -166,9 +166,9 @@ func runCmd(opts *Options) error {
 				TemplateData: map[string]interface{}{
 					"Name": kafkaInstance.GetName(),
 				},
-			}), consumerGroupErr)
+			}), err)
 		default:
-			return consumerGroupErr
+			return err
 		}
 	}
 

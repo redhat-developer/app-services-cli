@@ -19,10 +19,10 @@ const (
 func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kasclient.KafkaRequest, error) {
 	api := connection.API()
 
-	response, _, apiErr := api.Kafka().ListKafkas(context.Background()).Size(queryLimit).Execute()
+	response, _, err := api.Kafka().ListKafkas(context.Background()).Size(queryLimit).Execute()
 
-	if apiErr.Error() != "" {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotFetchKafkas"), apiErr)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.common.error.couldNotFetchKafkas"), err)
 	}
 
 	if response.Size == 0 {
@@ -42,7 +42,7 @@ func InteractiveSelect(connection connection.Connection, logger logging.Logger) 
 	}
 
 	var selectedKafkaIndex int
-	err := survey.AskOne(prompt, &selectedKafkaIndex)
+	err = survey.AskOne(prompt, &selectedKafkaIndex)
 	if err != nil {
 		return nil, err
 	}

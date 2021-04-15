@@ -12,20 +12,20 @@ import (
 func GetKafkaByID(ctx context.Context, api kasclient.DefaultApi, id string) (*kasclient.KafkaRequest, *http.Response, error) {
 	r := api.GetKafkaById(ctx, id)
 
-	kafkaReq, httpResponse, apiErr := r.Execute()
-	if kas.IsErr(apiErr, kas.ErrorNotFound) {
+	kafkaReq, httpResponse, err := r.Execute()
+	if kas.IsErr(err, kas.ErrorNotFound) {
 		return nil, httpResponse, ErrorNotFound(id)
 	}
 
-	return &kafkaReq, httpResponse, apiErr
+	return &kafkaReq, httpResponse, err
 }
 
 func GetKafkaByName(ctx context.Context, api kasclient.DefaultApi, name string) (*kasclient.KafkaRequest, *http.Response, error) {
 	r := api.ListKafkas(ctx)
 	r = r.Search(fmt.Sprintf("name = %v", name))
-	kafkaList, httpResponse, apiErr := r.Execute()
-	if apiErr.Error() != "" {
-		return nil, httpResponse, apiErr
+	kafkaList, httpResponse, err := r.Execute()
+	if err != nil {
+		return nil, httpResponse, err
 	}
 
 	if kafkaList.GetTotal() == 0 {
@@ -35,5 +35,5 @@ func GetKafkaByName(ctx context.Context, api kasclient.DefaultApi, name string) 
 	items := kafkaList.GetItems()
 	kafkaReq := items[0]
 
-	return &kafkaReq, httpResponse, apiErr
+	return &kafkaReq, httpResponse, err
 }
