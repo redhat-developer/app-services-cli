@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"sort"
 
 	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
@@ -26,7 +27,6 @@ type Options struct {
 	kafkaID      string
 	outputFormat string
 	id           string
-	topic        string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -87,7 +87,6 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.consumerGroup.common.flag.output.description",
 	}))
-	cmd.Flags().StringVar(&opts.topic, "topic", "", localizer.MustLocalizeFromID("kafka.consumerGroup.describe.flag.topic.description"))
 
 	return cmd
 }
@@ -179,6 +178,11 @@ func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consum
 		}
 		rows = append(rows, row)
 	}
+
+	// sort members by partition number
+	sort.Slice(rows, func(i, j int) bool {
+		return rows[i].Partition < rows[j].Partition
+	})
 
 	return rows
 }

@@ -9,7 +9,7 @@ one = '''
 Print detailed information for a consumer group and its members.
 '''
 
-[kafka.consumerGroup.describe.flag.topic.description]
+[kafka.consumerGroup.list.flag.topic.description]
 one = 'Fetch the consumer groups for a specific Kafka topic'
 
 [kafka.consumerGroup.describe.cmd.example]

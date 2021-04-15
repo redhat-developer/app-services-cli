@@ -31,6 +31,7 @@ type Options struct {
 	output  string
 	kafkaID string
 	limit   int32
+	topic   string
 }
 
 type consumerGroupRow struct {
@@ -79,6 +80,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		MessageID:   "kafka.consumerGroup.common.flag.output.description",
 		PluralCount: 2,
 	}))
+	cmd.Flags().StringVar(&opts.topic, "topic", "", localizer.MustLocalizeFromID("kafka.consumerGroup.list.flag.topic.description"))
 
 	return cmd
 }
@@ -102,7 +104,12 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	consumerGroupData, httpRes, err := api.GetConsumerGroupList(ctx).Limit(opts.limit).Execute()
+	req := api.GetConsumerGroupList(ctx)
+	req = req.Limit(opts.limit)
+	if opts.topic != "" {
+		req = req.Topic(opts.topic)
+	}
+	consumerGroupData, httpRes, err := req.Execute()
 
 	if err != nil {
 		if httpRes == nil {
