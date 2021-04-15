@@ -32,9 +32,11 @@ type Options struct {
 // svcAcctRow contains the properties used to
 // populate the list of service accounts into a table row
 type svcAcctRow struct {
-	ID       string `json:"id" header:"ID"`
-	Name     string `json:"name" header:"Name"`
-	ClientID string `json:"clientID" header:"Client ID"`
+	ID        string `json:"id" header:"ID"`
+	Name      string `json:"name" header:"Name"`
+	ClientID  string `json:"clientID" header:"Client ID"`
+	Owner     string `json:"owner" header:"Owner"`
+	CreatedAt string `json:"createdAt" header:"Created At"`
 }
 
 // NewListCommand creates a new command to list service accounts
@@ -129,9 +131,11 @@ func mapResponseItemsToRows(svcAccts []kasclient.ServiceAccountListItem) []svcAc
 
 	for _, sa := range svcAccts {
 		row := svcAcctRow{
-			ID:       sa.GetId(),
-			Name:     sa.GetName(),
-			ClientID: sa.GetClientID(),
+			ID:        sa.GetId(),
+			Name:      sa.GetName(),
+			ClientID:  sa.GetClientID(),
+			Owner:     sa.GetOwner(),
+			CreatedAt: sa.GetCreatedAt().String(),
 		}
 
 		rows = append(rows, row)
