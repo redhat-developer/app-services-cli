@@ -147,7 +147,7 @@ func runCmd(opts *Options) error {
 			return errors.New(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.common.error.forbidden",
 				TemplateData: map[string]interface{}{
-					"Operation": "list",
+					"Operation": "view",
 				},
 			}))
 		case 500:

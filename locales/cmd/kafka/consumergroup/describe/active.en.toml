@@ -1,0 +1,28 @@
+[kafka.consumerGroup.describe.cmd.use]
+one = 'describe'
+
+[kafka.consumerGroup.describe.cmd.shortDescription]
+one = 'Describe a consumer group'
+
+[kafka.consumerGroup.describe.cmd.longDescription]
+one = '''
+Print detailed information for a consumer group and its members.
+'''
+
+[kafka.consumerGroup.list.flag.topic.description]
+one = 'Fetch the consumer groups for a specific Kafka topic'
+
+[kafka.consumerGroup.describe.cmd.example]
+one = '''
+# describe a consumer group
+$ rhoas kafka consumergroup describe consumer_group_1 -o json
+'''
+
+[kafka.consumerGroup.describe.output.id]
+one = 'Consumer group ID: {{.ID}}'
+
+[kafka.consumerGroup.describe.output.activeMembers]
+one = 'Active members:'
+
+[kafka.consumerGroup.describe.output.partitionsWithLag]
+one = 'Partitions with lag:'

@@ -13,7 +13,6 @@ Method | HTTP request | Description
 [**GetTopicsList**](DefaultApi.md#GetTopicsList) | **Get** /topics | List of topics
 [**Metrics**](DefaultApi.md#Metrics) | **Get** /metrics | Admin server metrics
 [**OpenApi**](DefaultApi.md#OpenApi) | **Get** /api | 
-[**ResetConsumerGroupOffset**](DefaultApi.md#ResetConsumerGroupOffset) | **Post** /consumer-groups/{consumerGroupId}/reset-offset | Reset the offset for a consumer group.
 [**UpdateTopic**](DefaultApi.md#UpdateTopic) | **Patch** /topics/{topicName} | Updates the topic with the specified name.
 
 
@@ -105,7 +104,7 @@ import (
 )
 
 func main() {
-    consumerGroupId := "consumerGroupId_example" // string | The unique name of the topic.
+    consumerGroupId := "consumerGroupId_example" // string | The unique ID of the cobsumer group.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -123,7 +122,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**consumerGroupId** | **string** | The unique name of the topic. | 
+**consumerGroupId** | **string** | The unique ID of the cobsumer group. | 
 
 ### Other Parameters
 
@@ -240,7 +239,7 @@ import (
 
 func main() {
     consumerGroupId := "consumerGroupId_example" // string | The unique ID of the consumer group
-    topic := "topic_example" // string | Filter consumer groups for a specific topic (optional)
+    topic := "{"id":"consumer_group_1","consumers":[{"groupId":"consumer_group_1","topic":"topic-1","partition":0,"memberId":"consumer_group_member1","offset":5,"lag":0,"logEndOffset":5},{"groupId":"consumer_group_1","topic":"topic-1","partition":1,"memberId":"consumer_group_member2","offset":3,"lag":0,"logEndOffset":3},{"groupId":"consumer_group_1","topic":"topic-1","partition":2,"memberId":"consumer_group_member3","offset":6,"lag":1,"logEndOffset":5}]}" // string | Filter consumer groups for a specific topic (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -601,76 +600,6 @@ Other parameters are passed through a pointer to a apiOpenApiRequest struct via 
 ### Return type
 
  (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ResetConsumerGroupOffset
-
-> ConsumerGroup ResetConsumerGroupOffset(ctx, consumerGroupId).Execute()
-
-Reset the offset for a consumer group.
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    consumerGroupId := "consumerGroupId_example" // string | The ID of the consumer group.
-
-    configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.ResetConsumerGroupOffset(context.Background(), consumerGroupId).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.ResetConsumerGroupOffset``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `ResetConsumerGroupOffset`: ConsumerGroup
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.ResetConsumerGroupOffset`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**consumerGroupId** | **string** | The ID of the consumer group. | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiResetConsumerGroupOffsetRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-### Return type
-
-[**ConsumerGroup**](ConsumerGroup.md)
 
 ### Authorization
 

@@ -17,6 +17,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -30,6 +31,7 @@ type Options struct {
 	output  string
 	kafkaID string
 	limit   int32
+	topic   string
 }
 
 type consumerGroupRow struct {
@@ -78,6 +80,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		MessageID:   "kafka.consumerGroup.common.flag.output.description",
 		PluralCount: 2,
 	}))
+	cmd.Flags().StringVar(&opts.topic, "topic", "", localizer.MustLocalizeFromID("kafka.consumerGroup.list.flag.topic.description"))
 
 	return cmd
 }
@@ -101,7 +104,12 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	consumerGroupData, httpRes, err := api.GetConsumerGroupList(ctx).Limit(opts.limit).Execute()
+	req := api.GetConsumerGroupList(ctx)
+	req = req.Limit(opts.limit)
+	if opts.topic != "" {
+		req = req.Topic(opts.topic)
+	}
+	consumerGroupData, httpRes, err := req.Execute()
 
 	if err != nil {
 		if httpRes == nil {
@@ -174,19 +182,10 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []strimziadminclient.Co
 	var rows []consumerGroupRow = []consumerGroupRow{}
 
 	for _, t := range consumerGroups {
-
-		var PartitionsWithLag int = 0
-
-		for _, consumer := range t.GetConsumers() {
-			if consumer.Lag > 0 {
-				PartitionsWithLag++
-			}
-		}
-
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetId(),
 			ActiveMembers:     len(t.GetConsumers()),
-			PartitionsWithLag: PartitionsWithLag,
+			PartitionsWithLag: consumergroup.GetPartitionsWithLag(t.GetConsumers()),
 		}
 		rows = append(rows, row)
 	}

@@ -67,7 +67,7 @@ func (o *Consumer) GetGroupId() string {
 // GetGroupIdOk returns a tuple with the GroupId field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetGroupIdOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.GroupId, true
@@ -91,7 +91,7 @@ func (o *Consumer) GetTopic() string {
 // GetTopicOk returns a tuple with the Topic field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetTopicOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Topic, true
@@ -115,7 +115,7 @@ func (o *Consumer) GetPartition() int32 {
 // GetPartitionOk returns a tuple with the Partition field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetPartitionOk() (*int32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Partition, true
@@ -139,7 +139,7 @@ func (o *Consumer) GetOffset() float32 {
 // GetOffsetOk returns a tuple with the Offset field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetOffsetOk() (*float32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Offset, true
@@ -195,7 +195,7 @@ func (o *Consumer) GetLag() int32 {
 // GetLagOk returns a tuple with the Lag field value
 // and a boolean to check if the value has been set.
 func (o *Consumer) GetLagOk() (*int32, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Lag, true
@@ -299,5 +299,3 @@ func (v *NullableConsumer) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

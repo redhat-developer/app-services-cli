@@ -28,3 +28,6 @@ one = 'Consumer group delete action was not confirmed. Exiting silently'
 
 [kafka.consumerGroup.delete.log.info.consumerGroupDeleted]
 one = 'Consumer group with ID "{{.ConsumerGroupID}}" has been deleted from the Kafka instance "{{.InstanceName}}"'
+
+[kafka.consumerGroup.delete.error.locked]
+one = 'not allowed to delete a consumer group with active members'

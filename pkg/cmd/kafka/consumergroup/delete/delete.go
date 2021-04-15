@@ -99,8 +99,8 @@ func runCmd(opts *Options) error {
 			return errors.New(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.consumerGroup.common.error.notFoundError",
 				TemplateData: map[string]interface{}{
-					"ConsumerGroupID": opts.id,
-					"InstanceName":    kafkaInstance.GetName(),
+					"ID":           opts.id,
+					"InstanceName": kafkaInstance.GetName(),
 				},
 			}))
 		}
@@ -150,14 +150,8 @@ func runCmd(opts *Options) error {
 					"Operation": "delete",
 				},
 			}))
-		case 404:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.notFoundError",
-				TemplateData: map[string]interface{}{
-					"ConsumerGroupID": opts.id,
-					"InstanceName":    kafkaInstance.GetName(),
-				},
-			}))
+		case 423:
+			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.delete.error.locked"))
 		case 500:
 			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:

@@ -4,7 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/delete"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/describe"
 	"github.com/spf13/cobra"
 )
 
@@ -19,8 +19,9 @@ func NewConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		list.NewListConsumerGroupCommand(f),
+		// list.NewListConsumerGroupCommand(f),
 		delete.NewDeleteConsumerGroupCommand(f),
+		describe.NewDescribeConsumerGroupCommand(f),
 	)
 
 	return cmd
