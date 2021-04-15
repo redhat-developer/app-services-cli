@@ -117,7 +117,7 @@ func NewConfiguration() *Configuration {
 				Description: "localhost",
 			},
 			{
-				URL:         "/",
+				URL:         "",
 				Description: "current domain",
 			},
 		},

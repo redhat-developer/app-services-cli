@@ -12,17 +12,25 @@ package kasclient
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // ServiceAccountListItem struct for ServiceAccountListItem
 type ServiceAccountListItem struct {
 	// server generated unique id of the service account
-	Id          *string     `json:"id,omitempty"`
-	Kind        *string     `json:"kind,omitempty"`
-	Href        *string     `json:"href,omitempty"`
-	ClientID    *string     `json:"clientID,omitempty"`
-	Name        *string     `json:"name,omitempty"`
-	Description interface{} `json:"description,omitempty"`
+	Id   *string `json:"id,omitempty"`
+	Kind *string `json:"kind,omitempty"`
+	Href *string `json:"href,omitempty"`
+	// client id of the service account
+	ClientID *string `json:"clientID,omitempty"`
+	// name of the service account
+	Name *string `json:"name,omitempty"`
+	// owner of the service account
+	Owner *string `json:"owner,omitempty"`
+	// service account creation timestamp
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// description of the service account
+	Description *string `json:"description,omitempty"`
 }
 
 // NewServiceAccountListItem instantiates a new ServiceAccountListItem object
@@ -202,23 +210,86 @@ func (o *ServiceAccountListItem) SetName(v string) {
 	o.Name = &v
 }
 
-// GetDescription returns the Description field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *ServiceAccountListItem) GetDescription() interface{} {
-	if o == nil {
-		var ret interface{}
+// GetOwner returns the Owner field value if set, zero value otherwise.
+func (o *ServiceAccountListItem) GetOwner() string {
+	if o == nil || o.Owner == nil {
+		var ret string
 		return ret
 	}
-	return o.Description
+	return *o.Owner
+}
+
+// GetOwnerOk returns a tuple with the Owner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountListItem) GetOwnerOk() (*string, bool) {
+	if o == nil || o.Owner == nil {
+		return nil, false
+	}
+	return o.Owner, true
+}
+
+// HasOwner returns a boolean if a field has been set.
+func (o *ServiceAccountListItem) HasOwner() bool {
+	if o != nil && o.Owner != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetOwner gets a reference to the given string and assigns it to the Owner field.
+func (o *ServiceAccountListItem) SetOwner(v string) {
+	o.Owner = &v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *ServiceAccountListItem) GetCreatedAt() time.Time {
+	if o == nil || o.CreatedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CreatedAt
+}
+
+// GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountListItem) GetCreatedAtOk() (*time.Time, bool) {
+	if o == nil || o.CreatedAt == nil {
+		return nil, false
+	}
+	return o.CreatedAt, true
+}
+
+// HasCreatedAt returns a boolean if a field has been set.
+func (o *ServiceAccountListItem) HasCreatedAt() bool {
+	if o != nil && o.CreatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *ServiceAccountListItem) SetCreatedAt(v time.Time) {
+	o.CreatedAt = &v
+}
+
+// GetDescription returns the Description field value if set, zero value otherwise.
+func (o *ServiceAccountListItem) GetDescription() string {
+	if o == nil || o.Description == nil {
+		var ret string
+		return ret
+	}
+	return *o.Description
 }
 
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ServiceAccountListItem) GetDescriptionOk() (*interface{}, bool) {
+func (o *ServiceAccountListItem) GetDescriptionOk() (*string, bool) {
 	if o == nil || o.Description == nil {
 		return nil, false
 	}
-	return &o.Description, true
+	return o.Description, true
 }
 
 // HasDescription returns a boolean if a field has been set.
@@ -230,9 +301,9 @@ func (o *ServiceAccountListItem) HasDescription() bool {
 	return false
 }
 
-// SetDescription gets a reference to the given interface{} and assigns it to the Description field.
-func (o *ServiceAccountListItem) SetDescription(v interface{}) {
-	o.Description = v
+// SetDescription gets a reference to the given string and assigns it to the Description field.
+func (o *ServiceAccountListItem) SetDescription(v string) {
+	o.Description = &v
 }
 
 func (o ServiceAccountListItem) MarshalJSON() ([]byte, error) {
@@ -251,6 +322,12 @@ func (o ServiceAccountListItem) MarshalJSON() ([]byte, error) {
 	}
 	if o.Name != nil {
 		toSerialize["name"] = o.Name
+	}
+	if o.Owner != nil {
+		toSerialize["owner"] = o.Owner
+	}
+	if o.CreatedAt != nil {
+		toSerialize["created_at"] = o.CreatedAt
 	}
 	if o.Description != nil {
 		toSerialize["description"] = o.Description

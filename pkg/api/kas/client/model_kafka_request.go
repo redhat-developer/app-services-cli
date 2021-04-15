@@ -30,6 +30,7 @@ type KafkaRequest struct {
 	CreatedAt           *time.Time `json:"created_at,omitempty"`
 	UpdatedAt           *time.Time `json:"updated_at,omitempty"`
 	FailedReason        *string    `json:"failed_reason,omitempty"`
+	Version             *string    `json:"version,omitempty"`
 }
 
 // NewKafkaRequest instantiates a new KafkaRequest object
@@ -465,6 +466,38 @@ func (o *KafkaRequest) SetFailedReason(v string) {
 	o.FailedReason = &v
 }
 
+// GetVersion returns the Version field value if set, zero value otherwise.
+func (o *KafkaRequest) GetVersion() string {
+	if o == nil || o.Version == nil {
+		var ret string
+		return ret
+	}
+	return *o.Version
+}
+
+// GetVersionOk returns a tuple with the Version field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *KafkaRequest) GetVersionOk() (*string, bool) {
+	if o == nil || o.Version == nil {
+		return nil, false
+	}
+	return o.Version, true
+}
+
+// HasVersion returns a boolean if a field has been set.
+func (o *KafkaRequest) HasVersion() bool {
+	if o != nil && o.Version != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetVersion gets a reference to the given string and assigns it to the Version field.
+func (o *KafkaRequest) SetVersion(v string) {
+	o.Version = &v
+}
+
 func (o KafkaRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Id != nil {
@@ -505,6 +538,9 @@ func (o KafkaRequest) MarshalJSON() ([]byte, error) {
 	}
 	if o.FailedReason != nil {
 		toSerialize["failed_reason"] = o.FailedReason
+	}
+	if o.Version != nil {
+		toSerialize["version"] = o.Version
 	}
 	return json.Marshal(toSerialize)
 }

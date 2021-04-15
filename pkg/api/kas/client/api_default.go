@@ -38,7 +38,7 @@ type DefaultApi interface {
 	 * CreateKafkaExecute executes the request
 	 * @return KafkaRequest
 	 */
-	CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRequest, *_nethttp.Response, GenericOpenAPIError)
+	CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRequest, *_nethttp.Response, error)
 
 	/*
 	 * CreateServiceAccount Create a service account
@@ -51,7 +51,7 @@ type DefaultApi interface {
 	 * CreateServiceAccountExecute executes the request
 	 * @return ServiceAccount
 	 */
-	CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError)
+	CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, error)
 
 	/*
 	 * DeleteKafkaById Delete a kafka request by id
@@ -65,7 +65,7 @@ type DefaultApi interface {
 	 * DeleteKafkaByIdExecute executes the request
 	 * @return Error
 	 */
-	DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) (Error, *_nethttp.Response, GenericOpenAPIError)
+	DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) (Error, *_nethttp.Response, error)
 
 	/*
 	 * DeleteServiceAccount Delete service account
@@ -79,7 +79,7 @@ type DefaultApi interface {
 	 * DeleteServiceAccountExecute executes the request
 	 * @return Error
 	 */
-	DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *_nethttp.Response, GenericOpenAPIError)
+	DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *_nethttp.Response, error)
 
 	/*
 	 * GetKafkaById Get a kafka request by id
@@ -93,7 +93,7 @@ type DefaultApi interface {
 	 * GetKafkaByIdExecute executes the request
 	 * @return KafkaRequest
 	 */
-	GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *_nethttp.Response, GenericOpenAPIError)
+	GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *_nethttp.Response, error)
 
 	/*
 	 * GetMetricsByInstantQuery Get metrics with instant query by kafka id.
@@ -107,7 +107,7 @@ type DefaultApi interface {
 	 * GetMetricsByInstantQueryExecute executes the request
 	 * @return MetricsInstantQueryList
 	 */
-	GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *_nethttp.Response, GenericOpenAPIError)
+	GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *_nethttp.Response, error)
 
 	/*
 	 * GetMetricsByRangeQuery Get metrics with timeseries range query by kafka id.
@@ -121,7 +121,7 @@ type DefaultApi interface {
 	 * GetMetricsByRangeQueryExecute executes the request
 	 * @return MetricsRangeQueryList
 	 */
-	GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *_nethttp.Response, GenericOpenAPIError)
+	GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *_nethttp.Response, error)
 
 	/*
 	 * GetServiceAccountById get service account by id
@@ -135,7 +135,7 @@ type DefaultApi interface {
 	 * GetServiceAccountByIdExecute executes the request
 	 * @return ServiceAccount
 	 */
-	GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError)
+	GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *_nethttp.Response, error)
 
 	/*
 	 * ListCloudProviderRegions Retrieves the list of supported regions of the supported cloud provider.
@@ -149,7 +149,7 @@ type DefaultApi interface {
 	 * ListCloudProviderRegionsExecute executes the request
 	 * @return CloudRegionList
 	 */
-	ListCloudProviderRegionsExecute(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *_nethttp.Response, GenericOpenAPIError)
+	ListCloudProviderRegionsExecute(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *_nethttp.Response, error)
 
 	/*
 	 * ListCloudProviders Retrieves the list of supported cloud providers.
@@ -162,7 +162,7 @@ type DefaultApi interface {
 	 * ListCloudProvidersExecute executes the request
 	 * @return CloudProviderList
 	 */
-	ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *_nethttp.Response, GenericOpenAPIError)
+	ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *_nethttp.Response, error)
 
 	/*
 	 * ListKafkas Returns a list of Kafka requests
@@ -175,7 +175,7 @@ type DefaultApi interface {
 	 * ListKafkasExecute executes the request
 	 * @return KafkaRequestList
 	 */
-	ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequestList, *_nethttp.Response, GenericOpenAPIError)
+	ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequestList, *_nethttp.Response, error)
 
 	/*
 	 * ListServiceAccounts List service accounts
@@ -188,7 +188,7 @@ type DefaultApi interface {
 	 * ListServiceAccountsExecute executes the request
 	 * @return ServiceAccountList
 	 */
-	ListServiceAccountsExecute(r ApiListServiceAccountsRequest) (ServiceAccountList, *_nethttp.Response, GenericOpenAPIError)
+	ListServiceAccountsExecute(r ApiListServiceAccountsRequest) (ServiceAccountList, *_nethttp.Response, error)
 
 	/*
 	 * ResetServiceAccountCreds reset credentials for the service account
@@ -202,7 +202,33 @@ type DefaultApi interface {
 	 * ResetServiceAccountCredsExecute executes the request
 	 * @return ServiceAccount
 	 */
-	ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError)
+	ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *_nethttp.Response, error)
+
+	/*
+	 * ServiceStatus Retrieves the status of resources e.g whether we have reached maximum service capacity
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiServiceStatusRequest
+	 */
+	ServiceStatus(ctx _context.Context) ApiServiceStatusRequest
+
+	/*
+	 * ServiceStatusExecute executes the request
+	 * @return ServiceStatus
+	 */
+	ServiceStatusExecute(r ApiServiceStatusRequest) (ServiceStatus, *_nethttp.Response, error)
+
+	/*
+	 * VersionMetadata Retrieves the version metadata
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiVersionMetadataRequest
+	 */
+	VersionMetadata(ctx _context.Context) ApiVersionMetadataRequest
+
+	/*
+	 * VersionMetadataExecute executes the request
+	 * @return VersionMetadata
+	 */
+	VersionMetadataExecute(r ApiVersionMetadataRequest) (VersionMetadata, *_nethttp.Response, error)
 }
 
 // DefaultApiService DefaultApi service
@@ -224,7 +250,7 @@ func (r ApiCreateKafkaRequest) KafkaRequestPayload(kafkaRequestPayload KafkaRequ
 	return r
 }
 
-func (r ApiCreateKafkaRequest) Execute() (KafkaRequest, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiCreateKafkaRequest) Execute() (KafkaRequest, *_nethttp.Response, error) {
 	return r.ApiService.CreateKafkaExecute(r)
 }
 
@@ -244,21 +270,19 @@ func (a *DefaultApiService) CreateKafka(ctx _context.Context) ApiCreateKafkaRequ
  * Execute executes the request
  * @return KafkaRequest
  */
-func (a *DefaultApiService) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRequest, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRequest, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  KafkaRequest
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.CreateKafka")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas"
@@ -267,12 +291,10 @@ func (a *DefaultApiService) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRe
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.async == nil {
-		executionError.error = "async is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("async is required and must be specified")
 	}
 	if r.kafkaRequestPayload == nil {
-		executionError.error = "kafkaRequestPayload is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("kafkaRequestPayload is required and must be specified")
 	}
 
 	localVarQueryParams.Add("async", parameterToString(*r.async, ""))
@@ -297,22 +319,19 @@ func (a *DefaultApiService) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRe
 	localVarPostBody = r.kafkaRequestPayload
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -391,7 +410,7 @@ func (a *DefaultApiService) CreateKafkaExecute(r ApiCreateKafkaRequest) (KafkaRe
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiCreateServiceAccountRequest struct {
@@ -405,7 +424,7 @@ func (r ApiCreateServiceAccountRequest) ServiceAccountRequest(serviceAccountRequ
 	return r
 }
 
-func (r ApiCreateServiceAccountRequest) Execute() (ServiceAccount, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiCreateServiceAccountRequest) Execute() (ServiceAccount, *_nethttp.Response, error) {
 	return r.ApiService.CreateServiceAccountExecute(r)
 }
 
@@ -425,21 +444,19 @@ func (a *DefaultApiService) CreateServiceAccount(ctx _context.Context) ApiCreate
  * Execute executes the request
  * @return ServiceAccount
  */
-func (a *DefaultApiService) CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ServiceAccount
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.CreateServiceAccount")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/serviceaccounts"
@@ -448,8 +465,7 @@ func (a *DefaultApiService) CreateServiceAccountExecute(r ApiCreateServiceAccoun
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.serviceAccountRequest == nil {
-		executionError.error = "serviceAccountRequest is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("serviceAccountRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -473,22 +489,19 @@ func (a *DefaultApiService) CreateServiceAccountExecute(r ApiCreateServiceAccoun
 	localVarPostBody = r.serviceAccountRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -537,7 +550,7 @@ func (a *DefaultApiService) CreateServiceAccountExecute(r ApiCreateServiceAccoun
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiDeleteKafkaByIdRequest struct {
@@ -552,7 +565,7 @@ func (r ApiDeleteKafkaByIdRequest) Async(async bool) ApiDeleteKafkaByIdRequest {
 	return r
 }
 
-func (r ApiDeleteKafkaByIdRequest) Execute() (Error, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiDeleteKafkaByIdRequest) Execute() (Error, *_nethttp.Response, error) {
 	return r.ApiService.DeleteKafkaByIdExecute(r)
 }
 
@@ -574,21 +587,19 @@ func (a *DefaultApiService) DeleteKafkaById(ctx _context.Context, id string) Api
  * Execute executes the request
  * @return Error
  */
-func (a *DefaultApiService) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) (Error, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) (Error, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Error
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteKafkaById")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}"
@@ -598,8 +609,7 @@ func (a *DefaultApiService) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.async == nil {
-		executionError.error = "async is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("async is required and must be specified")
 	}
 
 	localVarQueryParams.Add("async", parameterToString(*r.async, ""))
@@ -622,22 +632,19 @@ func (a *DefaultApiService) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) 
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -706,7 +713,7 @@ func (a *DefaultApiService) DeleteKafkaByIdExecute(r ApiDeleteKafkaByIdRequest) 
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiDeleteServiceAccountRequest struct {
@@ -715,7 +722,7 @@ type ApiDeleteServiceAccountRequest struct {
 	id         string
 }
 
-func (r ApiDeleteServiceAccountRequest) Execute() (Error, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiDeleteServiceAccountRequest) Execute() (Error, *_nethttp.Response, error) {
 	return r.ApiService.DeleteServiceAccountExecute(r)
 }
 
@@ -737,21 +744,19 @@ func (a *DefaultApiService) DeleteServiceAccount(ctx _context.Context, id string
  * Execute executes the request
  * @return Error
  */
-func (a *DefaultApiService) DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) DeleteServiceAccountExecute(r ApiDeleteServiceAccountRequest) (Error, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  Error
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteServiceAccount")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/serviceaccounts/{id}"
@@ -780,22 +785,19 @@ func (a *DefaultApiService) DeleteServiceAccountExecute(r ApiDeleteServiceAccoun
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -844,7 +846,7 @@ func (a *DefaultApiService) DeleteServiceAccountExecute(r ApiDeleteServiceAccoun
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiGetKafkaByIdRequest struct {
@@ -853,7 +855,7 @@ type ApiGetKafkaByIdRequest struct {
 	id         string
 }
 
-func (r ApiGetKafkaByIdRequest) Execute() (KafkaRequest, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiGetKafkaByIdRequest) Execute() (KafkaRequest, *_nethttp.Response, error) {
 	return r.ApiService.GetKafkaByIdExecute(r)
 }
 
@@ -875,21 +877,19 @@ func (a *DefaultApiService) GetKafkaById(ctx _context.Context, id string) ApiGet
  * Execute executes the request
  * @return KafkaRequest
  */
-func (a *DefaultApiService) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (KafkaRequest, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  KafkaRequest
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetKafkaById")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}"
@@ -918,22 +918,19 @@ func (a *DefaultApiService) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (Kafka
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -992,7 +989,7 @@ func (a *DefaultApiService) GetKafkaByIdExecute(r ApiGetKafkaByIdRequest) (Kafka
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiGetMetricsByInstantQueryRequest struct {
@@ -1007,7 +1004,7 @@ func (r ApiGetMetricsByInstantQueryRequest) Filters(filters []string) ApiGetMetr
 	return r
 }
 
-func (r ApiGetMetricsByInstantQueryRequest) Execute() (MetricsInstantQueryList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiGetMetricsByInstantQueryRequest) Execute() (MetricsInstantQueryList, *_nethttp.Response, error) {
 	return r.ApiService.GetMetricsByInstantQueryExecute(r)
 }
 
@@ -1029,21 +1026,19 @@ func (a *DefaultApiService) GetMetricsByInstantQuery(ctx _context.Context, id st
  * Execute executes the request
  * @return MetricsInstantQueryList
  */
-func (a *DefaultApiService) GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetMetricsByInstantQueryExecute(r ApiGetMetricsByInstantQueryRequest) (MetricsInstantQueryList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  MetricsInstantQueryList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetMetricsByInstantQuery")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/metrics/query"
@@ -1083,22 +1078,19 @@ func (a *DefaultApiService) GetMetricsByInstantQueryExecute(r ApiGetMetricsByIns
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1137,7 +1129,7 @@ func (a *DefaultApiService) GetMetricsByInstantQueryExecute(r ApiGetMetricsByIns
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiGetMetricsByRangeQueryRequest struct {
@@ -1162,7 +1154,7 @@ func (r ApiGetMetricsByRangeQueryRequest) Filters(filters []string) ApiGetMetric
 	return r
 }
 
-func (r ApiGetMetricsByRangeQueryRequest) Execute() (MetricsRangeQueryList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiGetMetricsByRangeQueryRequest) Execute() (MetricsRangeQueryList, *_nethttp.Response, error) {
 	return r.ApiService.GetMetricsByRangeQueryExecute(r)
 }
 
@@ -1184,21 +1176,19 @@ func (a *DefaultApiService) GetMetricsByRangeQuery(ctx _context.Context, id stri
  * Execute executes the request
  * @return MetricsRangeQueryList
  */
-func (a *DefaultApiService) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRangeQueryRequest) (MetricsRangeQueryList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  MetricsRangeQueryList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetMetricsByRangeQuery")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas/{id}/metrics/query_range"
@@ -1208,28 +1198,22 @@ func (a *DefaultApiService) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRange
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.duration == nil {
-		executionError.error = "duration is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("duration is required and must be specified")
 	}
 	if *r.duration < 1 {
-		executionError.error = "duration must be greater than 1"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("duration must be greater than 1")
 	}
 	if *r.duration > 4320 {
-		executionError.error = "duration must be less than 4320"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("duration must be less than 4320")
 	}
 	if r.interval == nil {
-		executionError.error = "interval is required and must be specified"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("interval is required and must be specified")
 	}
 	if *r.interval < 1 {
-		executionError.error = "interval must be greater than 1"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("interval must be greater than 1")
 	}
 	if *r.interval > 10800 {
-		executionError.error = "interval must be less than 10800"
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, reportError("interval must be less than 10800")
 	}
 
 	localVarQueryParams.Add("duration", parameterToString(*r.duration, ""))
@@ -1264,22 +1248,19 @@ func (a *DefaultApiService) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRange
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1318,7 +1299,7 @@ func (a *DefaultApiService) GetMetricsByRangeQueryExecute(r ApiGetMetricsByRange
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiGetServiceAccountByIdRequest struct {
@@ -1327,7 +1308,7 @@ type ApiGetServiceAccountByIdRequest struct {
 	id         string
 }
 
-func (r ApiGetServiceAccountByIdRequest) Execute() (ServiceAccount, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiGetServiceAccountByIdRequest) Execute() (ServiceAccount, *_nethttp.Response, error) {
 	return r.ApiService.GetServiceAccountByIdExecute(r)
 }
 
@@ -1349,21 +1330,19 @@ func (a *DefaultApiService) GetServiceAccountById(ctx _context.Context, id strin
  * Execute executes the request
  * @return ServiceAccount
  */
-func (a *DefaultApiService) GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ServiceAccount
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetServiceAccountById")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/serviceaccounts/{id}"
@@ -1392,22 +1371,19 @@ func (a *DefaultApiService) GetServiceAccountByIdExecute(r ApiGetServiceAccountB
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1427,7 +1403,7 @@ func (a *DefaultApiService) GetServiceAccountByIdExecute(r ApiGetServiceAccountB
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiListCloudProviderRegionsRequest struct {
@@ -1447,7 +1423,7 @@ func (r ApiListCloudProviderRegionsRequest) Size(size string) ApiListCloudProvid
 	return r
 }
 
-func (r ApiListCloudProviderRegionsRequest) Execute() (CloudRegionList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiListCloudProviderRegionsRequest) Execute() (CloudRegionList, *_nethttp.Response, error) {
 	return r.ApiService.ListCloudProviderRegionsExecute(r)
 }
 
@@ -1469,21 +1445,19 @@ func (a *DefaultApiService) ListCloudProviderRegions(ctx _context.Context, id st
  * Execute executes the request
  * @return CloudRegionList
  */
-func (a *DefaultApiService) ListCloudProviderRegionsExecute(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ListCloudProviderRegionsExecute(r ApiListCloudProviderRegionsRequest) (CloudRegionList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  CloudRegionList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ListCloudProviderRegions")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/cloud_providers/{id}/regions"
@@ -1518,22 +1492,19 @@ func (a *DefaultApiService) ListCloudProviderRegionsExecute(r ApiListCloudProvid
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1572,7 +1543,7 @@ func (a *DefaultApiService) ListCloudProviderRegionsExecute(r ApiListCloudProvid
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiListCloudProvidersRequest struct {
@@ -1591,7 +1562,7 @@ func (r ApiListCloudProvidersRequest) Size(size string) ApiListCloudProvidersReq
 	return r
 }
 
-func (r ApiListCloudProvidersRequest) Execute() (CloudProviderList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiListCloudProvidersRequest) Execute() (CloudProviderList, *_nethttp.Response, error) {
 	return r.ApiService.ListCloudProvidersExecute(r)
 }
 
@@ -1611,21 +1582,19 @@ func (a *DefaultApiService) ListCloudProviders(ctx _context.Context) ApiListClou
  * Execute executes the request
  * @return CloudProviderList
  */
-func (a *DefaultApiService) ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ListCloudProvidersExecute(r ApiListCloudProvidersRequest) (CloudProviderList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  CloudProviderList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ListCloudProviders")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/cloud_providers"
@@ -1659,22 +1628,19 @@ func (a *DefaultApiService) ListCloudProvidersExecute(r ApiListCloudProvidersReq
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1713,7 +1679,7 @@ func (a *DefaultApiService) ListCloudProvidersExecute(r ApiListCloudProvidersReq
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiListKafkasRequest struct {
@@ -1742,7 +1708,7 @@ func (r ApiListKafkasRequest) Search(search string) ApiListKafkasRequest {
 	return r
 }
 
-func (r ApiListKafkasRequest) Execute() (KafkaRequestList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiListKafkasRequest) Execute() (KafkaRequestList, *_nethttp.Response, error) {
 	return r.ApiService.ListKafkasExecute(r)
 }
 
@@ -1762,21 +1728,19 @@ func (a *DefaultApiService) ListKafkas(ctx _context.Context) ApiListKafkasReques
  * Execute executes the request
  * @return KafkaRequestList
  */
-func (a *DefaultApiService) ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequestList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequestList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  KafkaRequestList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ListKafkas")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/kafkas"
@@ -1816,22 +1780,19 @@ func (a *DefaultApiService) ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequ
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -1890,7 +1851,7 @@ func (a *DefaultApiService) ListKafkasExecute(r ApiListKafkasRequest) (KafkaRequ
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiListServiceAccountsRequest struct {
@@ -1898,7 +1859,7 @@ type ApiListServiceAccountsRequest struct {
 	ApiService DefaultApi
 }
 
-func (r ApiListServiceAccountsRequest) Execute() (ServiceAccountList, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiListServiceAccountsRequest) Execute() (ServiceAccountList, *_nethttp.Response, error) {
 	return r.ApiService.ListServiceAccountsExecute(r)
 }
 
@@ -1918,21 +1879,19 @@ func (a *DefaultApiService) ListServiceAccounts(ctx _context.Context) ApiListSer
  * Execute executes the request
  * @return ServiceAccountList
  */
-func (a *DefaultApiService) ListServiceAccountsExecute(r ApiListServiceAccountsRequest) (ServiceAccountList, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ListServiceAccountsExecute(r ApiListServiceAccountsRequest) (ServiceAccountList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ServiceAccountList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ListServiceAccounts")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/serviceaccounts"
@@ -1960,22 +1919,19 @@ func (a *DefaultApiService) ListServiceAccountsExecute(r ApiListServiceAccountsR
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2024,7 +1980,7 @@ func (a *DefaultApiService) ListServiceAccountsExecute(r ApiListServiceAccountsR
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiResetServiceAccountCredsRequest struct {
@@ -2033,7 +1989,7 @@ type ApiResetServiceAccountCredsRequest struct {
 	id         string
 }
 
-func (r ApiResetServiceAccountCredsRequest) Execute() (ServiceAccount, *_nethttp.Response, GenericOpenAPIError) {
+func (r ApiResetServiceAccountCredsRequest) Execute() (ServiceAccount, *_nethttp.Response, error) {
 	return r.ApiService.ResetServiceAccountCredsExecute(r)
 }
 
@@ -2055,21 +2011,19 @@ func (a *DefaultApiService) ResetServiceAccountCreds(ctx _context.Context, id st
  * Execute executes the request
  * @return ServiceAccount
  */
-func (a *DefaultApiService) ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *_nethttp.Response, GenericOpenAPIError) {
+func (a *DefaultApiService) ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		executionError       GenericOpenAPIError
 		localVarReturnValue  ServiceAccount
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ResetServiceAccountCreds")
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials"
@@ -2098,22 +2052,257 @@ func (a *DefaultApiService) ResetServiceAccountCredsExecute(r ApiResetServiceAcc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, nil, executionError
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		executionError.error = err.Error()
-		return localVarReturnValue, localVarHTTPResponse, executionError
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v interface{}
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiServiceStatusRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+}
+
+func (r ApiServiceStatusRequest) Execute() (ServiceStatus, *_nethttp.Response, error) {
+	return r.ApiService.ServiceStatusExecute(r)
+}
+
+/*
+ * ServiceStatus Retrieves the status of resources e.g whether we have reached maximum service capacity
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiServiceStatusRequest
+ */
+func (a *DefaultApiService) ServiceStatus(ctx _context.Context) ApiServiceStatusRequest {
+	return ApiServiceStatusRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return ServiceStatus
+ */
+func (a *DefaultApiService) ServiceStatusExecute(r ApiServiceStatusRequest) (ServiceStatus, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  ServiceStatus
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ServiceStatus")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/managed-services-api/v1/status"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiVersionMetadataRequest struct {
+	ctx        _context.Context
+	ApiService DefaultApi
+}
+
+func (r ApiVersionMetadataRequest) Execute() (VersionMetadata, *_nethttp.Response, error) {
+	return r.ApiService.VersionMetadataExecute(r)
+}
+
+/*
+ * VersionMetadata Retrieves the version metadata
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiVersionMetadataRequest
+ */
+func (a *DefaultApiService) VersionMetadata(ctx _context.Context) ApiVersionMetadataRequest {
+	return ApiVersionMetadataRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return VersionMetadata
+ */
+func (a *DefaultApiService) VersionMetadataExecute(r ApiVersionMetadataRequest) (VersionMetadata, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  VersionMetadata
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.VersionMetadata")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/managed-services-api/v1"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -2133,5 +2322,5 @@ func (a *DefaultApiService) ResetServiceAccountCredsExecute(r ApiResetServiceAcc
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, executionError
+	return localVarReturnValue, localVarHTTPResponse, nil
 }

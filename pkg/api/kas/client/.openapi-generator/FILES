@@ -36,7 +36,11 @@ docs/ServiceAccountListAllOf.md
 docs/ServiceAccountListItem.md
 docs/ServiceAccountListItemAllOf.md
 docs/ServiceAccountRequest.md
+docs/ServiceStatus.md
+docs/ServiceStatusKafkas.md
 docs/Values.md
+docs/VersionMetadata.md
+docs/VersionMetadataAllOf.md
 git_push.sh
 model_cloud_provider.go
 model_cloud_provider_list.go
@@ -68,6 +72,10 @@ model_service_account_list_all_of.go
 model_service_account_list_item.go
 model_service_account_list_item_all_of.go
 model_service_account_request.go
+model_service_status.go
+model_service_status_kafkas.go
 model_values.go
+model_version_metadata.go
+model_version_metadata_all_of.go
 response.go
 utils.go
