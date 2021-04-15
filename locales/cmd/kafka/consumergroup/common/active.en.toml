@@ -15,7 +15,7 @@ other = 'you are forbidden to {{.Operation}} these consumer groups'
 one = 'internal server error'
 
 [kafka.consumerGroup.common.error.notFoundError]
-one = 'consumer group with ID "{{.ConsumerGroupID}}" not found in Kafka instance "{{.InstanceName}}"'
+one = 'consumer group with ID "{{.ID}}" not found in Kafka instance "{{.InstanceName}}"'
 
 [kafka.consumerGroup.common.error.unableToConnectToKafka]
 one = 'unable to connect to Kafka instance "{{.Name}}"'

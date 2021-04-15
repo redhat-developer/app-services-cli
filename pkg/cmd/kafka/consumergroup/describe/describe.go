@@ -5,14 +5,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
-	consumergrouputil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
+	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -24,6 +26,7 @@ type Options struct {
 	kafkaID      string
 	outputFormat string
 	id           string
+	topic        string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -33,6 +36,7 @@ type Options struct {
 type consumerRow struct {
 	MemberID      string `json:"memberId,omitempty" header:"Member ID"`
 	Partition     int    `json:"partition,omitempty" header:"Partition"`
+	Topic         string `json:"topic,omitempty" header:"Topic"`
 	LogEndOffset  int    `json:"logEndOffset,omitempty" header:"Log end offset"`
 	CurrentOffset int    `json:"offset,omitempty" header:"Current offset"`
 	OffsetLag     int    `json:"lag,omitempty" header:"Offset lag"`
@@ -83,6 +87,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.consumerGroup.common.flag.output.description",
 	}))
+	cmd.Flags().StringVar(&opts.topic, "topic", "", localizer.MustLocalizeFromID("kafka.consumerGroup.describe.flag.topic.description"))
 
 	return cmd
 }
@@ -102,12 +107,20 @@ func runCmd(opts *Options) error {
 
 	consumerGroupData, httpRes, consumerGroupErr := api.GetConsumerGroupById(ctx, opts.id).Execute()
 
-	if consumerGroupErr.Error() != "" {
+	if consumerGroupErr != nil && consumerGroupErr.Error() != "" {
 		if httpRes == nil {
 			return consumerGroupErr
 		}
 
 		switch httpRes.StatusCode {
+		case 404:
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.consumerGroup.common.error.notFoundError",
+				TemplateData: map[string]interface{}{
+					"ID":           opts.id,
+					"InstanceName": kafkaInstance.GetName(),
+				},
+			}))
 		case 401:
 			return errors.New(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.consumerGroup.common.error.unauthorized",
@@ -123,7 +136,7 @@ func runCmd(opts *Options) error {
 				},
 			}))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"), consumerGroupErr)
+			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
 			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.consumerGroup.common.error.unableToConnectToKafka",
@@ -145,41 +158,20 @@ func runCmd(opts *Options) error {
 		data, _ := yaml.Marshal(consumerGroupData)
 		_ = dump.YAML(stdout, data)
 	default:
-		consumers := consumerGroupData.GetConsumers()
-		rows := mapConsumerGroupDescribeToTableFormat(consumers)
-		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.consumerGroup.describe.output.id",
-			TemplateData: map[string]interface{}{
-				"ID": consumerGroupData.GetId(),
-			},
-		}))
-		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.consumerGroup.describe.output.activeMembers",
-			TemplateData: map[string]interface{}{
-				"ActiveMembers": len(consumerGroupData.GetConsumers()),
-			},
-		}))
-		fmt.Fprintln(stdout, localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.consumerGroup.describe.output.partitionsWithLag",
-			TemplateData: map[string]interface{}{
-				"LaggingPartitions": consumergrouputil.GetPartitionsWithLag(consumerGroupData.GetConsumers()),
-			},
-		}))
-		fmt.Fprintln(stdout, "")
-		dump.Table(stdout, rows)
+		printConsumerGroupDetails(stdout, consumerGroupData)
 	}
 
 	return nil
 }
 
 func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consumer) []consumerRow {
-
 	var rows []consumerRow = []consumerRow{}
 
 	for _, consumer := range consumers {
 
 		row := consumerRow{
 			Partition:     int(consumer.GetPartition()),
+			Topic:         consumer.GetTopic(),
 			MemberID:      consumer.GetMemberId(),
 			LogEndOffset:  int(consumer.GetLogEndOffset()),
 			CurrentOffset: int(consumer.GetOffset()),
@@ -189,4 +181,18 @@ func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consum
 	}
 
 	return rows
+}
+
+func printConsumerGroupDetails(w io.Writer, consumerGroupData strimziadminclient.ConsumerGroup) {
+	fmt.Fprintln(w, "")
+	consumers := consumerGroupData.GetConsumers()
+
+	activeMembersCount := cgutil.GetActiveConsumersCount(consumers)
+	partitionsWithLagCount := cgutil.GetPartitionsWithLag(consumers)
+
+	fmt.Fprintln(w, color.Bold(localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount)
+	fmt.Fprintln(w, "")
+
+	rows := mapConsumerGroupDescribeToTableFormat(consumers)
+	dump.Table(w, rows)
 }

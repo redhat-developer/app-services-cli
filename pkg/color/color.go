@@ -2,6 +2,8 @@
 package color
 
 import (
+	"fmt"
+
 	"github.com/fatih/color"
 )
 
@@ -23,4 +25,8 @@ func Success(format string) string {
 // Error returns a colored string for error messages
 func Error(format string) string {
 	return color.HiRedString(format)
+}
+
+func Bold(s string) string {
+	return fmt.Sprintf("\033[1m%v\033[0m", s)
 }

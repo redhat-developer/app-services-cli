@@ -14,3 +14,12 @@ func GetPartitionsWithLag(consumers []strimziadminclient.Consumer) (partitionsWi
 
 	return partitionsWithLag
 }
+
+func GetActiveConsumersCount(consumers []strimziadminclient.Consumer) (count int) {
+	for _, c := range consumers {
+		if c.Partition != -1 {
+			count++
+		}
+	}
+	return count
+}

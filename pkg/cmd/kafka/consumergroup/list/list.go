@@ -17,10 +17,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
-
-	"github.com/bf2fc6cc711aee1a0c2a/cli/pkg/kafka/consumergroup"
 )
 
 type Options struct {
