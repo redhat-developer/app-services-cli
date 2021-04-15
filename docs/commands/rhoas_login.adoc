@@ -29,7 +29,7 @@ $ rhoas login --print-sso-url
 === Options
 
 ....
-      --api-gateway string    URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development. (default "https://api.stage.openshift.com")
+      --api-gateway string    URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development. (default "https://api.openshift.com")
       --auth-url string       The URL of the SSO Authentication server. (default "https://sso.redhat.com/auth/realms/redhat-external")
       --client-id string      OpenID client identifier (default "rhoas-cli-prod")
       --insecure              Enables insecure communication with the server. This disables verification of TLS certificates and host names.
