@@ -26,25 +26,30 @@ func CheckSurveyError(err error) error {
 
 // FilterValidTopicNameArgs filters topics from the API and returns the names
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
-func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete string) ([]string, cobra.ShellCompDirective) {
+func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) ([]string, cobra.ShellCompDirective) {
 	validNames := []string{}
+
+	cfg, err := f.Config.Load()
+	if err != nil {
+		return validNames, cobra.ShellCompDirectiveError
+	}
+
+	if !cfg.HasKafka() {
+		return validNames, cobra.ShellCompDirectiveError
+	}
 
 	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}
 
-	api, _, err := conn.API().TopicAdmin(kafkaID)
+	api, _, err := conn.API().TopicAdmin(cfg.Services.Kafka.ClusterID)
 	if err != nil {
 		return validNames, cobra.ShellCompDirectiveError
 	}
 	topicRes, _, err := api.GetTopicsList(context.Background()).Filter(toComplete).Execute()
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveError
-	}
-
-	if topicRes.GetCount() == 0 {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, cobra.ShellCompDirectiveNoSpace
 	}
 
 	items := topicRes.GetItems()
@@ -52,12 +57,12 @@ func FilterValidTopicNameArgs(f *factory.Factory, kafkaID string, toComplete str
 		validNames = append(validNames, topic.GetName())
 	}
 
-	return validNames, cobra.ShellCompDirectiveDefault
+	return validNames, cobra.ShellCompDirectiveNoSpace
 }
 
 // FilterValidKafkaNames filters Kafkas by name from the API and returns the names
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
-func FilterValidKafkas(f *factory.Factory, searchName string) ([]string, cobra.ShellCompDirective) {
+func FilterValidKafkas(f *factory.Factory, toComplete string) ([]string, cobra.ShellCompDirective) {
 	validNames := []string{}
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
@@ -66,8 +71,8 @@ func FilterValidKafkas(f *factory.Factory, searchName string) ([]string, cobra.S
 	}
 
 	req := conn.API().Kafka().ListKafkas(context.Background())
-	if searchName != "" {
-		req = req.Search(fmt.Sprintf("name+like %v%%", searchName))
+	if toComplete != "" {
+		req = req.Search(fmt.Sprintf("name+like %v%%", toComplete))
 	}
 	kafkas, _, err := req.Execute()
 
@@ -80,5 +85,5 @@ func FilterValidKafkas(f *factory.Factory, searchName string) ([]string, cobra.S
 		validNames = append(validNames, kafka.GetName())
 	}
 
-	return validNames, cobra.ShellCompDirectiveDefault
+	return validNames, cobra.ShellCompDirectiveNoSpace
 }

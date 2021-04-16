@@ -49,11 +49,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.RangeArgs(0, 1),
 		// Dynamic completion of the Kafka name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var searchName string
-			if len(args) > 0 {
-				searchName = args[0]
-			}
-			return cmdutil.FilterValidKafkas(f, searchName)
+			return cmdutil.FilterValidKafkas(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
