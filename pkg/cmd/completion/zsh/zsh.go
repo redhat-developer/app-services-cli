@@ -12,6 +12,7 @@ func NewCommand(f *factory.Factory) *cobra.Command {
 		Short:                 localizer.MustLocalizeFromID("completion.zsh.cmd.shortDescription"),
 		Long:                  localizer.MustLocalizeFromID("completion.zsh.cmd.longDescription"),
 		DisableFlagsInUseLine: true,
+		Args:                  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Parent().Parent().GenZshCompletion(f.IOStreams.Out)
 		},

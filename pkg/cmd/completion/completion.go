@@ -21,6 +21,7 @@ func NewCompletionCommand(f *factory.Factory) *cobra.Command {
 		Use:   localizer.MustLocalizeFromID("completion.cmd.use"),
 		Short: localizer.MustLocalizeFromID("completion.cmd.shortDescription"),
 		Long:  localizer.MustLocalizeFromID("completion.cmd.longDescription"),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
 				return errors.New(localizer.MustLocalizeFromID("completion.cmd.error.subcommandRequired"))

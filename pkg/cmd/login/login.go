@@ -78,6 +78,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("login.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("login.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("login.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.offlineToken != "" && opts.clientID == defaultClientID {
 				opts.clientID = defaultOfflineTokenClientID

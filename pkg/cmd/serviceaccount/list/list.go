@@ -53,6 +53,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("serviceAccount.list.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("serviceAccount.list.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("serviceAccount.list.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)

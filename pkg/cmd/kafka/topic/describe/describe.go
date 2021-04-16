@@ -48,7 +48,7 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.topic.describe.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.topic.describe.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.topic.describe.cmd.example"),
-		Args:    cobra.ExactArgs(1),
+		Args:    cobra.ExactValidArgs(1),
 		// dynamic completion of topic names
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			validNames := []string{}

@@ -33,6 +33,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 		Use:   localizer.MustLocalizeFromID("logout.cmd.use"),
 		Short: localizer.MustLocalizeFromID("logout.cmd.shortDescription"),
 		Long:  localizer.MustLocalizeFromID("logout.cmd.longDescription"),
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogout(opts)
 		},

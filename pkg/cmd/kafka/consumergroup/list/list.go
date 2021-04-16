@@ -54,6 +54,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.consumerGroup.list.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.consumerGroup.list.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.consumerGroup.list.cmd.example"),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)

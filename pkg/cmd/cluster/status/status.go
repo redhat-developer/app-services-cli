@@ -42,6 +42,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("cluster.status.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("cluster.status.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("cluster.status.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runStatus(opts)
 		},
