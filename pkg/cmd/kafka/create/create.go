@@ -202,7 +202,7 @@ func runCreate(opts *Options) error {
 	}
 
 	kafkaCfg := &config.KafkaConfig{
-		ClusterID: *response.Id,
+		ClusterID: response.GetId(),
 	}
 
 	if opts.autoUse {
