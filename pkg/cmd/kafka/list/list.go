@@ -121,7 +121,7 @@ func runList(opts *options) error {
 		return err
 	}
 
-	if response.Size == 0 {
+	if response.Size == 0 && opts.outputFormat == "" {
 		logger.Info(localizer.MustLocalizeFromID("kafka.common.log.info.noKafkaInstances"))
 		return nil
 	}

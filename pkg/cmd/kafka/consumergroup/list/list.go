@@ -110,7 +110,6 @@ func runList(opts *Options) (err error) {
 		req = req.Topic(opts.topic)
 	}
 	consumerGroupData, httpRes, err := req.Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -147,7 +146,7 @@ func runList(opts *Options) (err error) {
 		}
 	}
 
-	if consumerGroupData.GetCount() == 0 {
+	if consumerGroupData.GetCount() == 0 && opts.output == "" {
 		logger.Info(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.consumerGroup.list.log.info.noConsumerGroups",
 			TemplateData: map[string]interface{}{
