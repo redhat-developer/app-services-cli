@@ -24,6 +24,7 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 		Hidden:  true,
 		Short:   localizer.MustLocalizeFromID("version.cmd.shortDescription"),
 		Example: localizer.MustLocalizeFromID("whoami.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runCmd(opts)
 		},

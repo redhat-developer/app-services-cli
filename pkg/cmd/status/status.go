@@ -53,7 +53,8 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Short:     localizer.MustLocalizeFromID("status.cmd.shortDescription"),
 		Long:      localizer.MustLocalizeFromID("status.cmd.longDescription"),
 		Example:   localizer.MustLocalizeFromID("status.cmd.example"),
-		ValidArgs: []string{kafkaSvcName},
+		ValidArgs: validServices,
+		Args:      cobra.RangeArgs(0, len(validServices)),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				for _, s := range args {

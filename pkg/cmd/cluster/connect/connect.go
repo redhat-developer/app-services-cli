@@ -43,6 +43,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("cluster.connect.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("cluster.connect.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("cluster.connect.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
 				return errors.New(localizer.MustLocalize(&localizer.Config{

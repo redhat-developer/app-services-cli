@@ -38,7 +38,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("serviceAccount.describe.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("serviceAccount.describe.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("serviceAccount.describe.cmd.example"),
-		Args:    cobra.ExactArgs(0),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {

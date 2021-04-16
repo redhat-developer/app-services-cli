@@ -34,6 +34,7 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("whoami.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("whoami.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("whoami.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runCmd(opts)
 		},

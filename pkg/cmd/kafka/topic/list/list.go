@@ -55,6 +55,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.topic.list.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.topic.list.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.topic.list.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" {
 				if err := flag.ValidateOutput(opts.output); err != nil {

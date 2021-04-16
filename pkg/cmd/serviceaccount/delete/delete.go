@@ -38,6 +38,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("serviceAccount.delete.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("serviceAccount.delete.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("serviceAccount.delete.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
