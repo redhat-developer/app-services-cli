@@ -2,8 +2,10 @@ package cluster
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	sboContext "github.com/redhat-developer/service-binding-operator/pkg/reconcile/pipeline/context"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -31,7 +33,7 @@ type KubernetesClients struct {
 
 var deploymentResource = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
 
-func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string, appName string) error {
+func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string, appName string, forceCreationWithoutAsk bool) error {
 	clients, err := client()
 	if err != nil {
 		return err
@@ -42,13 +44,17 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 		if err != nil {
 			return err
 		}
-		logger.Info("Namespace not provided. Using ", ns)
+		logger.Info(&localizer.Config{
+			MessageID: "cluster.serviceBinding.namespaceInfo",
+			TemplateData: map[string]interface{}{
+				"Namespace": color.Info(ns),
+			},
+		})
 	}
-	logger.Debug("Binding arguments", serviceName, ns, appName)
 
 	// Get proper deployment
 	if appName == "" {
-		appName, err = fetchAppNameFromCluster(logger, clients, ns)
+		appName, err = fetchAppNameFromCluster(clients, ns)
 		if err != nil {
 			return err
 		}
@@ -59,26 +65,28 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 		}
 	}
 
-	// Status and confirmation
+	// Print desired action
 	fmt.Printf("Binding '%v' with '%v' app \n", serviceName, appName)
 
-	var shouldContinue bool
-	confirm := &survey.Confirm{
-		Message: "Do you want to continue?",
-	}
-	err = survey.AskOne(confirm, &shouldContinue)
-	if err != nil {
-		return err
-	}
+	if !forceCreationWithoutAsk {
+		var shouldContinue bool
+		confirm := &survey.Confirm{
+			Message: localizer.MustLocalizeFromID("cluster.serviceBinding.confirm.message"),
+		}
+		err = survey.AskOne(confirm, &shouldContinue)
+		if err != nil {
+			return err
+		}
 
-	if !shouldContinue {
-		return nil
+		if !shouldContinue {
+			return nil
+		}
 	}
 
 	// Check KafkaConnection
 	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(context.TODO(), serviceName, metav1.GetOptions{})
 	if err != nil {
-		return fmt.Errorf("Selected Kafka doesn't exist on the server. Please execute rhoas cluster connect first ")
+		return errors.New(localizer.MustLocalizeFromID("cluster.serviceBinding.serviceMissing.message"))
 	}
 
 	// Execute binding
@@ -87,7 +95,7 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 		return err
 	}
 
-	fmt.Printf("Binding %v with %v app succeeded\n", serviceName, appName)
+	logger.Info(localizer.MustLocalizeFromID("cluster.serviceBinding.bindingSuccess"), serviceName, appName)
 	return nil
 }
 
@@ -142,11 +150,9 @@ func performBinding(serviceName string, appName string, ns string, clients *Kube
 	return err
 }
 
-func fetchAppNameFromCluster(logger logging.Logger, clients *KubernetesClients, ns string) (string, error) {
-	logger.Debug("AppName missing. Looking for all apps on server")
+func fetchAppNameFromCluster(clients *KubernetesClients, ns string) (string, error) {
 	list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		logger.Debug("Cannot list")
 		return "", err
 	}
 	var appNames []string
@@ -163,7 +169,7 @@ func fetchAppNameFromCluster(logger logging.Logger, clients *KubernetesClients, 
 	}
 
 	prompt := &survey.Select{
-		Message:  "Please select application you want to connect with",
+		Message:  localizer.MustLocalizeFromID("cluster.serviceBinding.connect.survey.message"),
 		Options:  appNames,
 		PageSize: 10,
 	}

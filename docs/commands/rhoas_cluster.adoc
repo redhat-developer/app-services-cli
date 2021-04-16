@@ -28,6 +28,7 @@ $ rhoas cluster connect --yes > create_service_binding.sh
 === SEE ALSO
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_cluster_bind{relfilesuffix}[rhoas cluster bind]	 - Connect your service with your application
 * link:rhoas_cluster_connect{relfilesuffix}[rhoas cluster connect]	 - Connect your services to Kubernetes or OpenShift
 * link:rhoas_cluster_status{relfilesuffix}[rhoas cluster status]	 - View status of the current Kubernetes or OpenShift cluster
 
