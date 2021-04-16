@@ -1,0 +1,22 @@
+[cluster.serviceBinding.namespaceInfo]
+one = '"Namespace not provided. Using {{.Namespace}} namespace'
+
+[cluster.serviceBinding.confirm.message]
+one = 'Do you want to continue?'
+
+[cluster.serviceBinding.connect.survey.message]
+one = 'Please select application you want to connect with'
+
+[cluster.serviceBinding.serviceMissing.message]
+one = '''
+Selected service is missing on the specified namespace.
+Please run "rhoas cluster connect" command before binding your service.
+'''
+
+[cluster.serviceBinding.bindingSuccess]
+one = 'Binding %v with %v app succeeded'
+
+[cluster.serviceBinding.status.message]
+one = 'Binding "%v" with "%v" app'
+
+
