@@ -3,7 +3,6 @@ package cmdutil
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/AlecAivazis/survey/v2/terminal"
@@ -26,30 +25,37 @@ func CheckSurveyError(err error) error {
 
 // FilterValidTopicNameArgs filters topics from the API and returns the names
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
-func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) ([]string, cobra.ShellCompDirective) {
-	validNames := []string{}
+func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames []string, directive cobra.ShellCompDirective) {
+	validNames = []string{}
+	directive = cobra.ShellCompDirectiveDefault
 
 	cfg, err := f.Config.Load()
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, directive
 	}
 
 	if !cfg.HasKafka() {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, directive
 	}
 
 	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, directive
 	}
 
 	api, _, err := conn.API().TopicAdmin(cfg.Services.Kafka.ClusterID)
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, directive
 	}
-	topicRes, _, err := api.GetTopicsList(context.Background()).Filter(toComplete).Execute()
+	req := api.GetTopicsList(context.Background())
+	if toComplete != "" {
+		req = req.Filter(toComplete)
+	}
+
+	topicRes, _, err := req.Execute()
+
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveNoSpace
+		return validNames, directive
 	}
 
 	items := topicRes.GetItems()
@@ -57,27 +63,29 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) ([]string, 
 		validNames = append(validNames, topic.GetName())
 	}
 
-	return validNames, cobra.ShellCompDirectiveNoSpace
+	return validNames, directive
 }
 
 // FilterValidKafkaNames filters Kafkas by name from the API and returns the names
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
-func FilterValidKafkas(f *factory.Factory, toComplete string) ([]string, cobra.ShellCompDirective) {
-	validNames := []string{}
+func FilterValidKafkas(f *factory.Factory, toComplete string) (validNames []string, directive cobra.ShellCompDirective) {
+	validNames = []string{}
+	directive = cobra.ShellCompDirectiveNoFileComp
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, directive
 	}
 
 	req := conn.API().Kafka().ListKafkas(context.Background())
 	if toComplete != "" {
-		req = req.Search(fmt.Sprintf("name+like %v%%", toComplete))
+		searchQ := "name like " + toComplete + "%"
+		req = req.Search(searchQ)
 	}
 	kafkas, _, err := req.Execute()
 
 	if err != nil {
-		return validNames, cobra.ShellCompDirectiveError
+		return validNames, directive
 	}
 
 	items := kafkas.GetItems()
@@ -85,5 +93,5 @@ func FilterValidKafkas(f *factory.Factory, toComplete string) ([]string, cobra.S
 		validNames = append(validNames, kafka.GetName())
 	}
 
-	return validNames, cobra.ShellCompDirectiveNoSpace
+	return validNames, directive
 }
