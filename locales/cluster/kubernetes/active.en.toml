@@ -55,10 +55,6 @@ one = '''process of watching KafkaConnection timed out'''
 one = '''
 Waiting for status from KafkaConnection resource.
 Created KafkaConnection can be already injected to your application:
-You can bind credentials to your application using:
-- odo cli 
-- OpenShift topology view
-- manually using kubectl 
 
 To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
