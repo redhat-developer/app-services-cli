@@ -5,6 +5,8 @@
 You use the `rhoas` CLI to manage your application services from the command line.
 
 
+include::../modules/ref-cli-cluster-bind.adoc[leveloffset=+1]
+
 include::../modules/ref-cli-cluster-connect.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-cluster-status.adoc[leveloffset=+1]

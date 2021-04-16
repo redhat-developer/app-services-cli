@@ -7,6 +7,9 @@ View and perform operations on your Kubernetes or OpenShift cluster
 === Examples
 
 ....
+# check status of the connection to your cluster
+$ rhoas cluster status 
+
 # connect with cluster without including currently selected services
 $ rhoas cluster connect --ignore-context
 
@@ -15,6 +18,9 @@ $ rhoas cluster connect --token=value
 
 # connect with cluster and save script to create service binding
 $ rhoas cluster connect --yes > create_service_binding.sh
+
+# connect managed service with your application
+$ rhoas cluster bind 
 
 ....
 
@@ -28,6 +34,7 @@ $ rhoas cluster connect --yes > create_service_binding.sh
 === SEE ALSO
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_cluster_bind{relfilesuffix}[rhoas cluster bind]	 - Connect your RHOAS services to Kubernetes or OpenShift applications
 * link:rhoas_cluster_connect{relfilesuffix}[rhoas cluster connect]	 - Connect your services to Kubernetes or OpenShift
 * link:rhoas_cluster_status{relfilesuffix}[rhoas cluster status]	 - View status of the current Kubernetes or OpenShift cluster
 
