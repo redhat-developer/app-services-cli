@@ -16,3 +16,7 @@ Please run "rhoas cluster connect" command before binding your service.
 [cluster.serviceBinding.bindingSuccess]
 one = 'Binding %v with %v app succeeded'
 
+[cluster.serviceBinding.status.message]
+one = 'Binding "%v" with "%v" app'
+
+

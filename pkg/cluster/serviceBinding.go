@@ -66,7 +66,7 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 	}
 
 	// Print desired action
-	fmt.Printf("Binding '%v' with '%v' app \n", serviceName, appName)
+	logger.Info(fmt.Sprintf(localizer.MustLocalizeFromID("cluster.serviceBinding.status.message"), serviceName, appName))
 
 	if !forceCreationWithoutAsk {
 		var shouldContinue bool
@@ -95,7 +95,7 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 		return err
 	}
 
-	logger.Info(localizer.MustLocalizeFromID("cluster.serviceBinding.bindingSuccess"), serviceName, appName)
+	logger.Info(fmt.Sprintf(localizer.MustLocalizeFromID("cluster.serviceBinding.bindingSuccess"), serviceName, appName))
 	return nil
 }
 
