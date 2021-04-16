@@ -48,40 +48,12 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 
 	// Get proper deployment
 	if appName == "" {
-		logger.Debug("AppName missing. Looking for all apps on server")
-		list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(context.TODO(), metav1.ListOptions{})
-		if err != nil {
-			logger.Debug("Cannot list")
-			return err
-		}
-		var appNames []string
-		for _, d := range list.Items {
-			name, found, err := unstructured.NestedString(d.Object, "metadata", "name")
-			if err != nil || !found {
-				continue
-			}
-			appNames = append(appNames, name)
-		}
-
-		if len(appNames) == 0{
-			return fmt.Errorf("Selected namespace has no deployments ")
-		}
-
-		prompt := &survey.Select{
-			Message:  "Please select application you want to connect with",
-			Options:  appNames,
-			PageSize: 10,
-		}
-
-		var selectedAppIndex int
-		err = survey.AskOne(prompt, &selectedAppIndex)
+		appName, err = fetchAppNameFromCluster(logger, clients, ns)
 		if err != nil {
 			return err
 		}
-
-		appName = appNames[selectedAppIndex]
 	} else {
-		_, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).Get(context.TODO(), appName, metav1.GetOptions{})
+		_, err = clients.dynamicClient.Resource(deploymentResource).Namespace(ns).Get(context.TODO(), appName, metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
@@ -110,6 +82,16 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 	}
 
 	// Execute binding
+	err = performBinding(serviceName, appName, ns, clients)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Binding %v with %v app succeeded\n", serviceName, appName)
+	return nil
+}
+
+func performBinding(serviceName string, appName string, ns string, clients *KubernetesClients) error {
 	serviceRef := v1alpha1.Service{
 		NamespacedRef: v1alpha1.NamespacedRef{
 			Ref: v1alpha1.Ref{
@@ -157,12 +139,41 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 	if retry {
 		_, err = p.Process(sb)
 	}
+	return err
+}
 
+func fetchAppNameFromCluster(logger logging.Logger, clients *KubernetesClients, ns string) (string, error) {
+	logger.Debug("AppName missing. Looking for all apps on server")
+	list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		return err
+		logger.Debug("Cannot list")
+		return "", err
 	}
-	fmt.Printf("Binding %v with %v app succeeded\n", serviceName, appName)
-	return nil
+	var appNames []string
+	for _, d := range list.Items {
+		name, found, err2 := unstructured.NestedString(d.Object, "metadata", "name")
+		if err2 != nil || !found {
+			continue
+		}
+		appNames = append(appNames, name)
+	}
+
+	if len(appNames) == 0 {
+		return "", fmt.Errorf("Selected namespace has no deployments ")
+	}
+
+	prompt := &survey.Select{
+		Message:  "Please select application you want to connect with",
+		Options:  appNames,
+		PageSize: 10,
+	}
+
+	var selectedAppIndex int
+	err = survey.AskOne(prompt, &selectedAppIndex)
+	if err != nil {
+		return "", err
+	}
+	return appNames[selectedAppIndex], nil
 }
 
 func client() (*KubernetesClients, error) {

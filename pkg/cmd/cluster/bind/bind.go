@@ -24,10 +24,9 @@ type Options struct {
 	kubeconfigLocation string
 	namespace          string
 
-	forceCreationWithoutAsk bool
-	ignoreContext           bool
-	appName                 string
-	selectedKafka           string
+	ignoreContext bool
+	appName       string
+	selectedKafka string
 }
 
 func NewBindCommand(f *factory.Factory) *cobra.Command {
@@ -104,7 +103,7 @@ func runBind(opts *Options) error {
 	api := connection.API()
 	kafkaInstance, _, error := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
 
-	if err != nil  {
+	if err != nil {
 		return error
 	}
 
