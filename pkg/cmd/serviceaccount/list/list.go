@@ -105,7 +105,7 @@ func runList(opts *Options) (err error) {
 	}
 
 	serviceaccounts := res.GetItems()
-	if len(serviceaccounts) == 0 {
+	if len(serviceaccounts) == 0 && opts.output == "" {
 		logger.Info(localizer.MustLocalizeFromID("serviceAccount.list.log.info.noneFound"))
 		return nil
 	}

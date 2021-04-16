@@ -140,7 +140,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	if topicData.GetCount() == 0 {
+	if topicData.GetCount() == 0 && opts.output == "" {
 		logger.Info(localizer.MustLocalize(&localizer.Config{
 			MessageID: "kafka.topic.list.log.info.noTopics",
 			TemplateData: map[string]interface{}{
