@@ -54,7 +54,7 @@ one = '''process of watching KafkaConnection timed out'''
 [cluster.kubernetes.watchForKafkaStatus.log.info.wait]
 one = '''
 Waiting for status from KafkaConnection resource.
-Created KafkaConnection can be already injected to your application:
+Created KafkaConnection can be already injected to your application.
 
 To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
