@@ -67,20 +67,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.ExactValidArgs(1),
 		// Dynamic completion of the topic name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			validNames := []string{}
-
-			var searchName string = args[0]
-
-			cfg, err := opts.Config.Load()
-			if err != nil {
-				return validNames, cobra.ShellCompDirectiveError
-			}
-
-			if !cfg.HasKafka() {
-				return validNames, cobra.ShellCompDirectiveError
-			}
-
-			return cmdutil.FilterValidTopicNameArgs(f, cfg.Services.Kafka.ClusterID, searchName)
+			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {

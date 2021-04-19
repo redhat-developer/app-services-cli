@@ -48,11 +48,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Example: localizer.MustLocalizeFromID("kafka.delete.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var searchName string
-			if len(args) > 0 {
-				searchName = args[0]
-			}
-			return cmdutil.FilterValidKafkas(f, searchName)
+			return cmdutil.FilterValidKafkas(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {

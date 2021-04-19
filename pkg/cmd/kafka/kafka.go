@@ -20,7 +20,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   localizer.MustLocalizeFromID("kafka.cmd.use"),
 		Short: localizer.MustLocalizeFromID("kafka.cmd.shortDescription"),
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.MinimumNArgs(1),
 	}
 
 	// add sub-commands
