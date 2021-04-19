@@ -288,7 +288,7 @@ paths:
         examples:
           Consumer group:
             value:
-              id: consumer_group_1
+              groupId: consumer_group_1
               consumers:
               - groupId: consumer_group_1
                 topic: topic-1
@@ -387,7 +387,7 @@ paths:
                     limit: 10
                     offset: 0
                     items:
-                    - id: consumer_group_1
+                    - groupId: consumer_group_1
                       consumers:
                       - groupId: consumer_group_1
                         topic: topic-1
@@ -657,7 +657,7 @@ components:
           lag: 1
           logEndOffset: 5
       properties:
-        id:
+        groupId:
           description: Unique identifier for the consumer group
           type: string
         consumers:
@@ -667,7 +667,7 @@ components:
           type: array
       required:
       - consumers
-      - id
+      - groupId
       type: object
     Consumer:
       description: A Kafka consumer is responsible for reading records from one or
@@ -721,7 +721,7 @@ components:
         limit: 10
         offset: 0
         items:
-        - id: consumer_group_1
+        - groupId: consumer_group_1
           consumers:
           - groupId: consumer_group_1
             topic: topic-1
