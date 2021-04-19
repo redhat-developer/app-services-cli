@@ -41,6 +41,7 @@ type ServiceBindingOptions struct {
 	ForceUseOperator        bool
 	ForceUseSDK             bool
 	BindingName             string
+	BindAsFiles             bool
 }
 
 func ExecuteServiceBinding(logger logging.Logger, options *ServiceBindingOptions) error {
@@ -54,12 +55,12 @@ func ExecuteServiceBinding(logger logging.Logger, options *ServiceBindingOptions
 		if err != nil {
 			return err
 		}
-		logger.Info(localizer.Config{
+		logger.Info(localizer.MustLocalize(&localizer.Config{
 			MessageID: "cluster.serviceBinding.namespaceInfo",
 			TemplateData: map[string]interface{}{
 				"Namespace": color.Info(ns),
 			},
-		})
+		}))
 	}
 
 	// Get proper deployment
@@ -141,8 +142,8 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 
 	sb := &v1alpha1.ServiceBinding{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%v-%v", options.ServiceName, options.BindingName),
-			Namespace: options.Namespace,
+			Name:      options.BindingName,
+			Namespace: ns,
 		},
 		Spec: v1alpha1.ServiceBindingSpec{
 			BindAsFiles: true,

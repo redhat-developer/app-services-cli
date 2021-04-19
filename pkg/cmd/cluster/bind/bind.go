@@ -126,6 +126,7 @@ func runBind(opts *Options) error {
 		ForceUseOperator:        opts.forceOperator,
 		ForceUseSDK:             opts.forceSDK,
 		BindingName:             opts.bindingName,
+		BindAsFiles:             true,
 	})
 
 	return err
