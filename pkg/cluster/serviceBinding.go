@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	sboContext "github.com/redhat-developer/service-binding-operator/pkg/reconcile/pipeline/context"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/rest"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 	"os"
@@ -33,7 +34,9 @@ type KubernetesClients struct {
 
 var deploymentResource = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
 
-func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string, appName string, forceCreationWithoutAsk bool) error {
+// TODO extract arguments
+func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string, appName string,
+	forceCreationWithoutAsk bool, forceUseOperator bool) error {
 	clients, err := client()
 	if err != nil {
 		return err
@@ -90,7 +93,7 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 	}
 
 	// Execute binding
-	err = performBinding(serviceName, appName, ns, clients)
+	err = performBinding(serviceName, appName, ns, clients, forceUseOperator, logger)
 	if err != nil {
 		return err
 	}
@@ -99,7 +102,8 @@ func ExecuteServiceBinding(logger logging.Logger, serviceName string, ns string,
 	return nil
 }
 
-func performBinding(serviceName string, appName string, ns string, clients *KubernetesClients) error {
+func performBinding(serviceName string, appName string, ns string, clients *KubernetesClients,
+	forceUseOperator bool, logger logging.Logger) error {
 	serviceRef := v1alpha1.Service{
 		NamespacedRef: v1alpha1.NamespacedRef{
 			Ref: v1alpha1.Ref{
@@ -134,6 +138,26 @@ func performBinding(serviceName string, appName string, ns string, clients *Kube
 	}
 	sb.SetGroupVersionKind(v1alpha1.GroupVersionKind)
 
+	// Check of operator is installed
+	_, err := clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
+		List(context.TODO(), metav1.ListOptions{Limit: 1})
+
+	if err != nil {
+		if forceUseOperator {
+			return errors.New(localizer.MustLocalizeFromID("cluster.serviceBinding.operatorMissing") + err.Error())
+		}
+		logger.Debug("Service binding Operator not available. Will use SDK")
+	} else {
+		logger.Info(localizer.MustLocalizeFromID("cluster.serviceBinding.usingOperator"))
+		sbData, err := runtime.DefaultUnstructuredConverter.ToUnstructured(sb)
+		unstructuredSB := unstructured.Unstructured{Object: sbData}
+		_, err = clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
+			Create(context.TODO(), &unstructuredSB, metav1.CreateOptions{})
+
+		return err
+	}
+
+	// Use SDK instead of operatort
 	restMapper, err := apiutil.NewDynamicRESTMapper(clients.restConfig)
 	if err != nil {
 		return err

@@ -28,6 +28,7 @@ type Options struct {
 	ignoreContext           bool
 	appName                 string
 	selectedKafka           string
+	useOperator             bool
 }
 
 func NewBindCommand(f *factory.Factory) *cobra.Command {
@@ -69,6 +70,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, localizer.MustLocalizeFromID("cluster.common.flag.yes.description"))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", localizer.MustLocalizeFromID("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, localizer.MustLocalizeFromID("cluster.common.flag.ignoreContext.description"))
+	cmd.Flags().BoolVarP(&opts.useOperator, "force-operator", "", false, localizer.MustLocalizeFromID("cluster.bind.flag.onlyOperator.description"))
 
 	return cmd
 }
@@ -116,7 +118,8 @@ func runBind(opts *Options) error {
 	err = cluster.ExecuteServiceBinding(logger, *kafkaInstance.Name,
 		opts.namespace,
 		opts.appName,
-		opts.forceCreationWithoutAsk)
+		opts.forceCreationWithoutAsk,
+		opts.useOperator)
 
 	return err
 }
