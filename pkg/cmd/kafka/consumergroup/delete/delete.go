@@ -40,11 +40,8 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.example"),
-		Args:    cobra.ExactArgs(1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-
-			opts.id = args[0]
-
 			if opts.kafkaID != "" {
 				return runCmd(opts)
 			}
@@ -65,6 +62,8 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, localizer.MustLocalizeFromID("kafka.consumerGroup.delete.flag.yes.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.consumerGroup.common.flag.id.description"))
+	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
 }
@@ -107,24 +106,24 @@ func runCmd(opts *Options) error {
 	}
 
 	if !opts.skipConfirm {
-		var confirmDelete bool
-		promptConfirmDelete := &survey.Confirm{
-			Message: localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.delete.input.confirmDelete.message",
-				TemplateData: map[string]interface{}{
-					"ID": opts.id,
-				},
-			}),
+		var confirmedID string
+		promptConfirmDelete := &survey.Input{
+			Message: localizer.MustLocalizeFromID("kafka.consumerGroup.delete.input.name.message"),
 		}
 
-		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
+		err = survey.AskOne(promptConfirmDelete, &confirmedID)
 		if err != nil {
 			return err
 		}
 
-		if !confirmDelete {
-			logger.Debug(localizer.MustLocalizeFromID("kafka.consumerGroup.delete.log.debug.deleteNotConfirmed"))
-			return nil
+		if confirmedID != opts.id {
+			return errors.New(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.consumerGroup.delete.error.mismatchedIDConfirmation",
+				TemplateData: map[string]interface{}{
+					"ConfirmedID": confirmedID,
+					"ID":          opts.id,
+				},
+			}))
 		}
 	}
 

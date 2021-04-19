@@ -76,7 +76,6 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 1000, localizer.MustLocalizeFromID("kafka.consumerGroup.list.flag.limit"))
-
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID:   "kafka.consumerGroup.common.flag.output.description",
 		PluralCount: 2,
@@ -87,7 +86,6 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *Options) (err error) {
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -147,29 +145,26 @@ func runList(opts *Options) (err error) {
 		}
 	}
 
-	if consumerGroupData.GetCount() == 0 && opts.output == "" {
-		logger.Info(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.consumerGroup.list.log.info.noConsumerGroups",
-			TemplateData: map[string]interface{}{
-				"InstanceName": kafkaInstance.GetName(),
-			},
-		}))
-
+	ok, err := checkForConsumerGroups(int(consumerGroupData.GetCount()), opts, kafkaInstance.GetName())
+	if err != nil {
+		return err
+	}
+	if !ok {
 		return nil
 	}
 
-	stdout := opts.IO.Out
 	switch opts.output {
 	case "json":
 		data, _ := json.Marshal(consumerGroupData)
-		_ = dump.JSON(stdout, data)
+		_ = dump.JSON(opts.IO.Out, data)
 	case "yaml", "yml":
 		data, _ := yaml.Marshal(consumerGroupData)
-		_ = dump.YAML(stdout, data)
+		_ = dump.YAML(opts.IO.Out, data)
 	default:
+		logger.Info("")
 		topics := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(topics)
-		dump.Table(stdout, rows)
+		dump.Table(opts.IO.Out, rows)
 
 		return nil
 	}
@@ -191,4 +186,36 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []strimziadminclient.Co
 	}
 
 	return rows
+}
+
+// checks if there are any consumer groups available
+// prints to stderr if not
+func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCount bool, err error) {
+	logger, err := opts.Logger()
+	if err != nil {
+		return false, err
+	}
+
+	if count == 0 && opts.output == "" {
+		if opts.topic == "" {
+			logger.Info(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.consumerGroup.list.log.info.noConsumerGroups",
+				TemplateData: map[string]interface{}{
+					"InstanceName": kafkaName,
+				},
+			}))
+		} else {
+			logger.Info(localizer.MustLocalize(&localizer.Config{
+				MessageID: "kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic",
+				TemplateData: map[string]interface{}{
+					"InstanceName": kafkaName,
+					"TopicName":    opts.topic,
+				},
+			}))
+		}
+
+		return false, nil
+	}
+
+	return true, nil
 }
