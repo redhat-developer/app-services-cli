@@ -8,6 +8,7 @@ import (
 	"io"
 	"sort"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -86,6 +87,11 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}))
 	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.consumerGroup.common.flag.id.description"))
 	_ = cmd.MarkFlagRequired("id")
+
+	// flag based completions for ID
+	_ = cmd.RegisterFlagCompletionFunc("id", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return cmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+	})
 
 	return cmd
 }

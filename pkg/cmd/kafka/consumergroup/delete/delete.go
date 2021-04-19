@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -64,6 +65,11 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, localizer.MustLocalizeFromID("kafka.consumerGroup.delete.flag.yes.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.consumerGroup.common.flag.id.description"))
 	_ = cmd.MarkFlagRequired("id")
+
+	// flag based completions for ID
+	_ = cmd.RegisterFlagCompletionFunc("id", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return cmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+	})
 
 	return cmd
 }

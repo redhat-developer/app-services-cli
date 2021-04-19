@@ -27,7 +27,7 @@ func CheckSurveyError(err error) error {
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
 func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames []string, directive cobra.ShellCompDirective) {
 	validNames = []string{}
-	directive = cobra.ShellCompDirectiveDefault
+	directive = cobra.ShellCompDirectiveNoSpace
 
 	cfg, err := f.Config.Load()
 	if err != nil {
@@ -66,11 +66,51 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 	return validNames, directive
 }
 
+// FilterValidTopicNameArgs filters topics from the API and returns the names
+// This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
+func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validIDs []string, directive cobra.ShellCompDirective) {
+	validIDs = []string{}
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	cfg, err := f.Config.Load()
+	if err != nil {
+		return validIDs, directive
+	}
+
+	if !cfg.HasKafka() {
+		return validIDs, directive
+	}
+
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return validIDs, directive
+	}
+
+	api, _, err := conn.API().TopicAdmin(cfg.Services.Kafka.ClusterID)
+	if err != nil {
+		return validIDs, directive
+	}
+	req := api.GetConsumerGroupList(context.Background())
+
+	cgRes, _, err := req.Execute()
+
+	if err != nil {
+		return validIDs, directive
+	}
+
+	items := cgRes.GetItems()
+	for _, cg := range items {
+		validIDs = append(validIDs, cg.GetGroupId())
+	}
+
+	return validIDs, directive
+}
+
 // FilterValidKafkaNames filters Kafkas by name from the API and returns the names
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
 func FilterValidKafkas(f *factory.Factory, toComplete string) (validNames []string, directive cobra.ShellCompDirective) {
 	validNames = []string{}
-	directive = cobra.ShellCompDirectiveNoFileComp
+	directive = cobra.ShellCompDirectiveNoSpace
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
