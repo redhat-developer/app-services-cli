@@ -22,7 +22,7 @@ $ rhoas kafka consumergroup describe consumer_group_1 -o json
 one = 'Consumer group ID: {{.ID}}'
 
 [kafka.consumerGroup.describe.output.activeMembers]
-one = 'Active members:'
+one = 'ACTIVE MEMBERS:'
 
 [kafka.consumerGroup.describe.output.partitionsWithLag]
-one = 'Partitions with lag:'
+one = 'PARTITIONS WITH LAG:'
