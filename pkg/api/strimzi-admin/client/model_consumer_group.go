@@ -17,7 +17,7 @@ import (
 // ConsumerGroup A group of Kafka consumers
 type ConsumerGroup struct {
 	// Unique identifier for the consumer group
-	Id string `json:"id"`
+	GroupId string `json:"groupId"`
 	// The list of consumers associated with this consumer group
 	Consumers []Consumer `json:"consumers"`
 }
@@ -26,9 +26,9 @@ type ConsumerGroup struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewConsumerGroup(id string, consumers []Consumer) *ConsumerGroup {
+func NewConsumerGroup(groupId string, consumers []Consumer) *ConsumerGroup {
 	this := ConsumerGroup{}
-	this.Id = id
+	this.GroupId = groupId
 	this.Consumers = consumers
 	return &this
 }
@@ -41,28 +41,28 @@ func NewConsumerGroupWithDefaults() *ConsumerGroup {
 	return &this
 }
 
-// GetId returns the Id field value
-func (o *ConsumerGroup) GetId() string {
+// GetGroupId returns the GroupId field value
+func (o *ConsumerGroup) GetGroupId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Id
+	return o.GroupId
 }
 
-// GetIdOk returns a tuple with the Id field value
+// GetGroupIdOk returns a tuple with the GroupId field value
 // and a boolean to check if the value has been set.
-func (o *ConsumerGroup) GetIdOk() (*string, bool) {
+func (o *ConsumerGroup) GetGroupIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Id, true
+	return &o.GroupId, true
 }
 
-// SetId sets field value
-func (o *ConsumerGroup) SetId(v string) {
-	o.Id = v
+// SetGroupId sets field value
+func (o *ConsumerGroup) SetGroupId(v string) {
+	o.GroupId = v
 }
 
 // GetConsumers returns the Consumers field value
@@ -92,7 +92,7 @@ func (o *ConsumerGroup) SetConsumers(v []Consumer) {
 func (o ConsumerGroup) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["id"] = o.Id
+		toSerialize["groupId"] = o.GroupId
 	}
 	if true {
 		toSerialize["consumers"] = o.Consumers

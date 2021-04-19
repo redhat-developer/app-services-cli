@@ -18,16 +18,18 @@ $ rhoas kafka consumergroup delete consumer_group_1
 [kafka.consumerGroup.delete.flag.yes.description]
 one = 'Skip confirmation to forcibly delete a consumer group'
 
-[kafka.consumerGroup.delete.input.confirmDelete.message]
-description = 'Message for delete confirmation'
-one = 'Are you sure you want to delete the consumer group with ID "{{.ID}}"?'
+[kafka.consumerGroup.delete.input.name.message]
+one = 'Confirm the ID of the consumer group you want to delete:'
 
 [kafka.consumerGroup.delete.log.debug.deleteNotConfirmed]
 description = 'Info message when user chose not to delete consumer group'
 one = 'Consumer group delete action was not confirmed. Exiting silently'
 
+[kafka.consumerGroup.delete.error.mismatchedIDConfirmation]
+one = 'consumer group ID entered "{{.ConfirmedID}}" does not match the ID of the consumer group you tried to delete "{{.ID}}"'
+
 [kafka.consumerGroup.delete.log.info.consumerGroupDeleted]
 one = 'Consumer group with ID "{{.ConsumerGroupID}}" has been deleted from the Kafka instance "{{.InstanceName}}"'
 
 [kafka.consumerGroup.delete.error.locked]
-one = 'not allowed to delete a consumer group with active members'
+one = "a consumer group with active members cannot be deleted"

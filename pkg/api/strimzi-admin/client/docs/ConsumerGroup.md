@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **string** | Unique identifier for the consumer group | 
+**GroupId** | **string** | Unique identifier for the consumer group | 
 **Consumers** | [**[]Consumer**](Consumer.md) | The list of consumers associated with this consumer group | 
 
 ## Methods
 
 ### NewConsumerGroup
 
-`func NewConsumerGroup(id string, consumers []Consumer, ) *ConsumerGroup`
+`func NewConsumerGroup(groupId string, consumers []Consumer, ) *ConsumerGroup`
 
 NewConsumerGroup instantiates a new ConsumerGroup object
 This constructor will assign default values to properties that have it defined,
@@ -26,24 +26,24 @@ NewConsumerGroupWithDefaults instantiates a new ConsumerGroup object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetId
+### GetGroupId
 
-`func (o *ConsumerGroup) GetId() string`
+`func (o *ConsumerGroup) GetGroupId() string`
 
-GetId returns the Id field if non-nil, zero value otherwise.
+GetGroupId returns the GroupId field if non-nil, zero value otherwise.
 
-### GetIdOk
+### GetGroupIdOk
 
-`func (o *ConsumerGroup) GetIdOk() (*string, bool)`
+`func (o *ConsumerGroup) GetGroupIdOk() (*string, bool)`
 
-GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+GetGroupIdOk returns a tuple with the GroupId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetId
+### SetGroupId
 
-`func (o *ConsumerGroup) SetId(v string)`
+`func (o *ConsumerGroup) SetGroupId(v string)`
 
-SetId sets Id field to given value.
+SetGroupId sets GroupId field to given value.
 
 
 ### GetConsumers

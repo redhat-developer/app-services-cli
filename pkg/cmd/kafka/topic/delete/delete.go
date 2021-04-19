@@ -134,14 +134,13 @@ func runCmd(opts *Options) error {
 		}
 
 		if userConfirmedName != opts.topicName {
-			logger.Info(localizer.MustLocalize(&localizer.Config{
+			return errors.New(localizer.MustLocalize(&localizer.Config{
 				MessageID: "kafka.topic.delete.error.mismatchedNameConfirmation",
 				TemplateData: map[string]interface{}{
 					"ConfirmedName": userConfirmedName,
 					"ActualName":    opts.topicName,
 				},
 			}))
-			return nil
 		}
 	}
 

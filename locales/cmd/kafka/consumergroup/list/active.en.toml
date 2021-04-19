@@ -23,3 +23,6 @@ one = 'The maximum number of consumer groups to be returned'
 
 [kafka.consumerGroup.list.log.info.noConsumerGroups]
 one = 'Kafka instance "{{.InstanceName}}" has no consumer groups'
+
+[kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic]
+one = 'Kafka instance "{{.InstanceName}}" has no consumer groups for topic "{{.TopicName}}"'

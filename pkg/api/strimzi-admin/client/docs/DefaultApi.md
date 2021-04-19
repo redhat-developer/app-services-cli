@@ -239,7 +239,7 @@ import (
 
 func main() {
     consumerGroupId := "consumerGroupId_example" // string | The unique ID of the consumer group
-    topic := "{"id":"consumer_group_1","consumers":[{"groupId":"consumer_group_1","topic":"topic-1","partition":0,"memberId":"consumer_group_member1","offset":5,"lag":0,"logEndOffset":5},{"groupId":"consumer_group_1","topic":"topic-1","partition":1,"memberId":"consumer_group_member2","offset":3,"lag":0,"logEndOffset":3},{"groupId":"consumer_group_1","topic":"topic-1","partition":2,"memberId":"consumer_group_member3","offset":6,"lag":1,"logEndOffset":5}]}" // string | Filter consumer groups for a specific topic (optional)
+    topic := "{"groupId":"consumer_group_1","consumers":[{"groupId":"consumer_group_1","topic":"topic-1","partition":0,"memberId":"consumer_group_member1","offset":5,"lag":0,"logEndOffset":5},{"groupId":"consumer_group_1","topic":"topic-1","partition":1,"memberId":"consumer_group_member2","offset":3,"lag":0,"logEndOffset":3},{"groupId":"consumer_group_1","topic":"topic-1","partition":2,"memberId":"consumer_group_member3","offset":6,"lag":1,"logEndOffset":5}]}" // string | Filter consumer groups for a specific topic (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

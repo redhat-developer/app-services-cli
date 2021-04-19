@@ -8,6 +8,7 @@ import (
 	"io"
 	"sort"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -54,11 +55,8 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Short:   localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.shortDescription"),
 		Long:    localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.longDescription"),
 		Example: localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.example"),
-		Args:    cobra.ExactArgs(1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-
-			opts.id = args[0]
-
 			if opts.outputFormat != "" {
 				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
 					return err
@@ -87,6 +85,18 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.consumerGroup.common.flag.output.description",
 	}))
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.consumerGroup.common.flag.id.description",
+		TemplateData: map[string]interface{}{
+			"Action": "view",
+		},
+	}))
+	_ = cmd.MarkFlagRequired("id")
+
+	// flag based completions for ID
+	_ = cmd.RegisterFlagCompletionFunc("id", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return cmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+	})
 
 	return cmd
 }
