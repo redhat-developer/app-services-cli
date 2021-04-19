@@ -13,11 +13,10 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
 
-	"github.com/google/go-github/v35/github"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/httputil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -199,7 +198,11 @@ func runLogin(opts *Options) (err error) {
 		}))
 	}
 
-	checkForNewVersion(logger)
+	// debug mode checks this for a version update also.
+	// so we check if is enabled first so as not to print it twice
+	if !debug.Enabled() {
+		build.CheckForUpdate(context.Background(), logger)
+	}
 
 	return nil
 }
@@ -228,20 +231,5 @@ func createTransport(insecure bool) *http.Transport {
 	// #nosec 402
 	return &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure},
-	}
-}
-
-func checkForNewVersion(logger logging.Logger) {
-	client := github.NewClient(nil)
-
-	latest, _, err := client.Repositories.GetLatestRelease(context.Background(), "redhat-developer", "app-services-cli")
-	if err != nil {
-		return
-	}
-
-	if latest.TagName != &build.Version {
-		logger.Info("")
-		logger.Info(color.Info("A new version of rhoas is available:"), color.CodeSnippet(*latest.TagName))
-		logger.Info(color.Info(latest.GetHTMLURL()))
 	}
 }

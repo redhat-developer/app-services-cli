@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL = bash
 
-RHOAS_VERSION ?= $(shell git describe --tags 2>/dev/null || git rev-parse --short HEAD)
+RHOAS_VERSION ?= "dev"
 
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.Version=$(RHOAS_VERSION) $(GO_LDFLAGS)
 
