@@ -4,4 +4,4 @@ pkg/api/kas/**/* linguist-generated=true
 pkg/api/strimzi-admin/**/* linguist-generated=true
 
 # ignore the generated command line reference document in GitHub PRs
-docs/commands/*
+docs/commands/*.adoc linguist-generated=true
