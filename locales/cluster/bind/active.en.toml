@@ -1,5 +1,5 @@
 [cluster.serviceBinding.namespaceInfo]
-one = '"Namespace not provided. Using {{.Namespace}} namespace'
+one = 'Namespace not provided. Using {{.Namespace}} namespace'
 
 [cluster.serviceBinding.confirm.message]
 one = 'Do you want to continue?'
