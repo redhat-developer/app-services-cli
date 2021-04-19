@@ -174,37 +174,3 @@ Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-
 [git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
 
 Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/redhat-developer/app-services-cli/releases/tag/latest).
-
-## Working with mocked Kafka
-
-For testing you can use localy hosted Kafka
-
-1. Run local kafka 
-
-```
-cd mas-mock
-docker-compose up -d
-```
-
-2. Use Kafdrop to monitor it
-
-http://localhost:9000
-
-3. In CLI execute use command
-
-```
-rhoas kafka use 324234234
-```
-
-4. Edit `clusterHost` in `~/.rhoascli.json` to point to `localhost:9092`
-
-Your config should look as follows:
-```
-  ...
-  "services": {
-    "kafka": {
-      "clusterId": "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
-    }
-  }
-  ...
-```
