@@ -85,7 +85,12 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
 		MessageID: "kafka.consumerGroup.common.flag.output.description",
 	}))
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.consumerGroup.common.flag.id.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.consumerGroup.common.flag.id.description",
+		TemplateData: map[string]interface{}{
+			"Action": "view",
+		},
+	}))
 	_ = cmd.MarkFlagRequired("id")
 
 	// flag based completions for ID

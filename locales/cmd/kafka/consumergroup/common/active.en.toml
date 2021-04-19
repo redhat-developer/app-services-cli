@@ -4,7 +4,7 @@ one = 'Format in which to display the consumer group. Choose from: "json", "yml"
 other = 'Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"'
 
 [kafka.consumerGroup.common.flag.id.description]
-one = 'The consumer group ID'
+one = 'The unique ID of the consumer group to {{.Action}}'
 
 [kafka.consumerGroup.common.error.unauthorized]
 one = 'you are unauthorized to {{.Operation}} this consumer group'

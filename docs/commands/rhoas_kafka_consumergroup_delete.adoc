@@ -24,7 +24,7 @@ $ rhoas kafka consumergroup delete consumer_group_1
 === Options
 
 ....
-      --id string   The consumer group ID
+      --id string   The unique ID of the consumer group to delete
   -y, --yes         Skip confirmation to forcibly delete a consumer group
 ....
 

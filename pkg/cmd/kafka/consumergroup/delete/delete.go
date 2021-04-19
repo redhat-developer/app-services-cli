@@ -63,7 +63,12 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, localizer.MustLocalizeFromID("kafka.consumerGroup.delete.flag.yes.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.consumerGroup.common.flag.id.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalize(&localizer.Config{
+		MessageID: "kafka.consumerGroup.common.flag.id.description",
+		TemplateData: map[string]interface{}{
+			"Action": "delete",
+		},
+	}))
 	_ = cmd.MarkFlagRequired("id")
 
 	// flag based completions for ID

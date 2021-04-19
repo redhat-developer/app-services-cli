@@ -66,8 +66,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 	return validNames, directive
 }
 
-// FilterValidTopicNameArgs filters topics from the API and returns the names
-// This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
+// FilterValidConsumerGroups returns the list of consumer group IDs from the API
 func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validIDs []string, directive cobra.ShellCompDirective) {
 	validIDs = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
