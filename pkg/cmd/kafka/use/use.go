@@ -80,6 +80,10 @@ func runUse(opts *Options) error {
 		if err != nil {
 			return err
 		}
+		// no Kafka was selected, exit program
+		if opts.name == "" {
+			return nil
+		}
 	}
 
 	logger, err := opts.Logger()
@@ -115,7 +119,7 @@ func runUse(opts *Options) error {
 
 	// build Kafka config object from the response
 	var kafkaConfig config.KafkaConfig = config.KafkaConfig{
-		ClusterID: *res.Id,
+		ClusterID: res.GetId(),
 	}
 
 	cfg.Services.Kafka = &kafkaConfig
