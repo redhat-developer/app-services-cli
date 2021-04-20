@@ -222,6 +222,17 @@
       "args": [
         "status"
       ]
+    },
+    {
+      "name": "version",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "version"
+      ]
     }
   ]
 }

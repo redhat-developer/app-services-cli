@@ -2,10 +2,10 @@ package build
 
 import (
 	"context"
-	"regexp"
 	"runtime/debug"
 
 	"github.com/google/go-github/github"
+	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
@@ -54,47 +54,58 @@ func init() {
 // the version currently being used. If so, it logs this information
 // to the console.
 func CheckForUpdate(ctx context.Context, logger logging.Logger) {
-	latest, err := getLatestVersion(ctx)
+	releases, err := getReleases(ctx)
 	if err != nil {
-		logger.Debug("Could not check latest version:", err)
 		return
 	}
 
-	latestVersion := latest.TagName
+	var latestRelease *github.RepositoryRelease
+	releaseTagIndexMap := map[string]int{}
+	for i, release := range releases {
+		// assign the latest non-pre release as the latest public release
+		if latestRelease == nil && !release.GetPrerelease() {
+			latestRelease = release
+		}
 
-	// if the user is using a dev or pre-release version, do not check for if an update is available
-	if isDevBuild() || isPreRelease(Version) {
+		// create an tag:index map of the releases
+		// the first index (0) is the latest release
+		releaseTagIndexMap[release.GetTagName()] = i
+		if release.GetTagName() == Version {
+			break
+		}
+	}
+
+	currentVersionIndex, ok := releaseTagIndexMap[Version]
+	if !ok {
+		// the currently used version does not exist as a public release
+		// assume it to be an unpublished or dev release
 		return
 	}
 
-	if latestVersion != &Version {
+	latestVersionIndex := releaseTagIndexMap[latestRelease.GetTagName()]
+
+	// if the index of the current version is greater than the latest release
+	// this means it is older, and therefore, an update is available.
+	if currentVersionIndex > latestVersionIndex {
 		logger.Info()
-		logger.Info(color.Info("A new version of rhoas is available:"), color.CodeSnippet(*latestVersion))
-		logger.Info(color.Info(latest.GetHTMLURL()))
+		logger.Info(color.Info(localizer.MustLocalizeFromID("common.log.info.updateAvailable")), color.CodeSnippet(latestRelease.GetTagName()))
+		logger.Info(color.Info(latestRelease.GetHTMLURL()))
 		logger.Info()
 	}
 }
 
-// Get the latest version of the CLI
-func getLatestVersion(ctx context.Context) (*github.RepositoryRelease, error) {
+func getReleases(ctx context.Context) ([]*github.RepositoryRelease, error) {
 	client := github.NewClient(nil)
 
-	latest, _, err := client.Repositories.GetLatestRelease(ctx, RepositoryOwner, RepositoryName)
+	releases, _, err := client.Repositories.ListReleases(ctx, RepositoryOwner, RepositoryName, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return latest, nil
+	return releases, nil
 }
 
 // isDevBuild returns true if the current build is "dev" (dev build)
 func isDevBuild() bool {
 	return Version == "dev"
-}
-
-// check if the tag is a pre-release tag
-// true it if contains anything other than MAJOR.MINOR.PATCH
-func isPreRelease(tag string) bool {
-	match, _ := regexp.MatchString("^[0-9]+\\.[0-9]+\\.[0-9]+$", tag)
-	return !match
 }
