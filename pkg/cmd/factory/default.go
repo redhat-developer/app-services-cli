@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -78,12 +79,12 @@ func New(cliVersion string) *Factory {
 			builder.WithURL(cfg.APIUrl)
 		}
 		if cfg.AuthURL == "" {
-			cfg.AuthURL = connection.DefaultAuthURL
+			cfg.AuthURL = build.ProductionAuthURL
 		}
 		builder.WithAuthURL(cfg.AuthURL)
 
 		if cfg.MasAuthURL == "" {
-			cfg.MasAuthURL = connection.DefaultMasAuthURL
+			cfg.MasAuthURL = build.ProductionMasAuthURL
 		}
 		builder.WithMASAuthURL(cfg.MasAuthURL)
 

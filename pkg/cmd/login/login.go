@@ -27,28 +27,37 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	devURL                      = "http://localhost:8000"
-	productionURL               = "https://api.openshift.com"
-	stagingURL                  = "https://api.stage.openshift.com"
-	integrationURL              = "https://api-integration.6943.hive-integration.openshiftapps.com"
-	defaultClientID             = "rhoas-cli-prod"
-	defaultOfflineTokenClientID = "cloud-services"
-)
-
-// When the value of the `--url` option is one of the keys of this map it will be replaced by the
+// When the value of the `--api-gateway` option is one of the keys of this map it will be replaced by the
 // corresponding value.
-var urlAliases = map[string]string{
-	"production":  productionURL,
-	"prod":        productionURL,
-	"prd":         productionURL,
-	"staging":     stagingURL,
-	"stage":       stagingURL,
-	"stg":         stagingURL,
-	"integration": integrationURL,
-	"int":         integrationURL,
-	"dev":         devURL,
-	"development": devURL,
+var apiGatewayAliases = map[string]string{
+	"production": build.ProductionAPIURL,
+	"prod":       build.ProductionAPIURL,
+	"prd":        build.ProductionAPIURL,
+	"staging":    build.StagingAPIURL,
+	"stage":      build.StagingAPIURL,
+	"stg":        build.StagingAPIURL,
+}
+
+// When the value of the `--auth-url` option is one of the keys of this map it will be replaced by the
+// corresponding value.
+var authURLAliases = map[string]string{
+	"production": build.ProductionAuthURL,
+	"prod":       build.ProductionAuthURL,
+	"prd":        build.ProductionAuthURL,
+	"staging":    build.ProductionAuthURL,
+	"stage":      build.ProductionAuthURL,
+	"stg":        build.ProductionAuthURL,
+}
+
+// When the value of the `--mas-auth-url` option is one of the keys of this map it will be replaced by the
+// corresponding value.
+var masAuthURLAliases = map[string]string{
+	"production": build.ProductionMasAuthURL,
+	"prod":       build.ProductionMasAuthURL,
+	"prd":        build.ProductionMasAuthURL,
+	"staging":    build.StagingMasAuthURL,
+	"stage":      build.StagingMasAuthURL,
+	"stg":        build.StagingMasAuthURL,
 }
 
 type Options struct {
@@ -83,18 +92,18 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		Example: localizer.MustLocalizeFromID("login.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if opts.offlineToken != "" && opts.clientID == defaultClientID {
-				opts.clientID = defaultOfflineTokenClientID
+			if opts.offlineToken != "" && opts.clientID == build.DefaultClientID {
+				opts.clientID = build.DefaultOfflineTokenClientID
 			}
 			return runLogin(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "api-gateway", stagingURL, localizer.MustLocalizeFromID("login.flag.apiGateway"))
+	cmd.Flags().StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, localizer.MustLocalizeFromID("login.flag.apiGateway"))
 	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, localizer.MustLocalizeFromID("login.flag.insecure"))
-	cmd.Flags().StringVar(&opts.clientID, "client-id", defaultClientID, localizer.MustLocalizeFromID("login.flag.clientId"))
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", connection.DefaultAuthURL, localizer.MustLocalizeFromID("login.flag.authUrl"))
-	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", connection.DefaultMasAuthURL, localizer.MustLocalizeFromID("login.flag.masAuthUrl"))
+	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, localizer.MustLocalizeFromID("login.flag.clientId"))
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, localizer.MustLocalizeFromID("login.flag.authUrl"))
+	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, localizer.MustLocalizeFromID("login.flag.masAuthUrl"))
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, localizer.MustLocalizeFromID("login.flag.printSsoUrl"))
 	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, localizer.MustLocalizeFromID("login.flag.scope"))
 	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", localizer.MustLocalizeFromID("login.flag.token"))
@@ -109,25 +118,22 @@ func runLogin(opts *Options) (err error) {
 		return err
 	}
 
-	// If the value of the `--url` is any of the aliases then replace it with the corresponding
-	// real URL:
-	unparsedGatewayURL, ok := urlAliases[opts.url]
-	if !ok {
-		unparsedGatewayURL = opts.url
-	}
-
-	gatewayURL, err := url.ParseRequestURI(unparsedGatewayURL)
+	gatewayURL, err := getURLFromAlias(opts.url, apiGatewayAliases)
 	if err != nil {
 		return err
 	}
-	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-			MessageID: "login.error.schemeMissingFromUrl",
-			TemplateData: map[string]interface{}{
-				"URL": gatewayURL.String(),
-			},
-		}))
+
+	authURL, err := getURLFromAlias(opts.authURL, authURLAliases)
+	if err != nil {
+		return err
 	}
+	opts.authURL = authURL.String()
+
+	masAuthURL, err := getURLFromAlias(opts.masAuthURL, masAuthURLAliases)
+	if err != nil {
+		return err
+	}
+	opts.masAuthURL = masAuthURL.String()
 
 	if opts.offlineToken == "" {
 		tr := createTransport(opts.insecureSkipTLSVerify)
@@ -235,4 +241,28 @@ func createTransport(insecure bool) *http.Transport {
 	return &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure},
 	}
+}
+
+func getURLFromAlias(urlOrAlias string, urlAliasMap map[string]string) (*url.URL, error) {
+	// If the URL value is any of the aliases then replace it with the corresponding
+	// real URL:
+	unparsedGatewayURL, ok := urlAliasMap[urlOrAlias]
+	if !ok {
+		unparsedGatewayURL = urlOrAlias
+	}
+
+	gatewayURL, err := url.ParseRequestURI(unparsedGatewayURL)
+	if err != nil {
+		return nil, err
+	}
+	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
+		return nil, fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+			MessageID: "login.error.schemeMissingFromUrl",
+			TemplateData: map[string]interface{}{
+				"URL": gatewayURL.String(),
+			},
+		}))
+	}
+
+	return gatewayURL, nil
 }

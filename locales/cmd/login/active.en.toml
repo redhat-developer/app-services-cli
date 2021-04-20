@@ -26,7 +26,7 @@ $ rhoas login --print-sso-url
 
 [login.flag.apiGateway]
 description = 'Description for --api-gateway flag'
-one = 'URL of the API gateway. The value can be the URL or an alias. Valid aliases are: production|staging|integration|development.'
+one = 'URL of the API gateway.'
 
 [login.flag.insecure]
 description = 'Description for --insecure flag'

@@ -27,17 +27,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 )
 
-// Default values:
-const (
-	DefaultClientID = "rhoas-cli-prod"
-	DefaultURL      = "https://api.openshift.com"
-
-	// SSO defaults
-	DefaultAuthURL = "https://sso.redhat.com/auth/realms/redhat-external"
-	// MAS SSO defaults
-	DefaultMasAuthURL = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
-)
-
 var DefaultScopes = []string{
 	"openid",
 }
