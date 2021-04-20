@@ -37,5 +37,5 @@ $ rhoas kafka consumergroup describe consumer_group_1 -o json
 
 === SEE ALSO
 
-* link:rhoas_kafka_consumergroup{relfilesuffix}[rhoas kafka consumergroup]	 - Describe, update, list, and delete consumer groups for the current Kafka instance.
+* link:rhoas_kafka_consumergroup{relfilesuffix}[rhoas kafka consumergroup]	 - Describe, list, and delete consumer groups for the current Kafka instance.
 
