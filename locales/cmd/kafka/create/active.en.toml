@@ -44,7 +44,7 @@ one = 'Creating Kafka instance "{{.Name}}'
 
 [kafka.create.info.successMessage]
 description = 'Message to display when instance has been created'
-one = 'Kafka instance "{{.Name}}" created successfully'
+one = 'Kafka instance "{{.Name}}" is being provisioned. You can monitor its progress by running "rhoas status".'
 
 [kafka.create.input.name.message]
 description = 'Input title for Name'
