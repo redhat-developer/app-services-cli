@@ -10,15 +10,26 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-// Version is dynamically set by the toolchain or overridden by the Makefile.
-var Version = "dev"
-var Language = "en"
+// Define public variables here which you wish to be configurable at build time
+var (
+	// Version is dynamically set by the toolchain or overridden by the Makefile.
+	Version = "dev"
 
-// RepositoryOwner is the remote GitHub organization for the releases
-var RepositoryOwner = "redhat-developer"
+	// Language used, can be overridden by Makefile or CI
+	Language = "en"
 
-// RepositoryName is the remote GitHub repository for the releases
-var RepositoryName = "app-services-cli"
+	// RepositoryOwner is the remote GitHub organization for the releases
+	RepositoryOwner = "redhat-developer"
+
+	// RepositoryName is the remote GitHub repository for the releases
+	RepositoryName = "app-services-cli"
+
+	// TermsReviewEventCode is the event code used when checking the terms review
+	TermsReviewEventCode = "onlineService"
+
+	// TermsReviewSiteCode is the site code used when checking the terms review
+	TermsReviewSiteCode = "ocm"
+)
 
 func init() {
 	if isDevBuild() {
@@ -70,6 +81,8 @@ func isDevBuild() bool {
 	return Version == "dev"
 }
 
+// check if the tag is a pre-release tag
+// true it if contains anything other than MAJOR.MINOR.PATCH
 func isPreRelease(tag string) bool {
 	match, _ := regexp.MatchString("^[0-9]+\\.[0-9]+\\.[0-9]+$", tag)
 	return !match

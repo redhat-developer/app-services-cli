@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
@@ -305,14 +306,11 @@ func checkTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirec
 		return false, "", err
 	}
 
-	eventCode := "onlineService"
-	siteCode := "ocm"
-
 	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
 		SelfTermsReview(amsclient.SelfTermsReview{
-			EventCode: &eventCode,
-			SiteCode:  &siteCode,
+			EventCode: &build.TermsReviewEventCode,
+			SiteCode:  &build.TermsReviewSiteCode,
 		}).
 		Execute()
 	if err != nil {
