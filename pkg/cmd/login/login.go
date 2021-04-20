@@ -218,6 +218,9 @@ func loginWithOfflineToken(opts *Options) (err error) {
 	cfg.MasAuthURL = opts.masAuthURL
 	cfg.Scopes = opts.scopes
 	cfg.RefreshToken = opts.offlineToken
+	// remove MAS-SSO tokens, as this does not support token login
+	cfg.MasAccessToken = ""
+	cfg.MasRefreshToken = ""
 
 	if err = opts.Config.Save(cfg); err != nil {
 		return err

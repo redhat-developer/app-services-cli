@@ -2,7 +2,7 @@
 one = 'not logged in. Run "rhoas login" to authenticate'
 
 [connection.error.notLoggedInMASError]
-one = 'not logged in to MAS-SSO. Run "rhoas login" to authenticate'
+one = 'not logged in to MAS-SSO. Run "rhoas login" to authenticate. Note: token-based login is not supported by the Kafka "topic" and "consumergroup" commands.'
 
 [connection.error.sessionExpiredError]
 one = 'session expired. Run "rhoas login" to authenticate'
