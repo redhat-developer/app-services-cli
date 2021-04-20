@@ -96,13 +96,11 @@ func runBind(opts *Options) error {
 
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
-		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(apiConnection, logger)
-		if err != nil {
-
+		selectedKafka, err2 := kafka.InteractiveSelect(apiConnection, logger)
+		if err2 != nil {
 			return err
 		}
-		opts.selectedKafka = *selectedKafka.Id
+		opts.selectedKafka = selectedKafka.GetId()
 	} else {
 		opts.selectedKafka = cfg.Services.Kafka.ClusterID
 	}
@@ -119,7 +117,7 @@ func runBind(opts *Options) error {
 	}
 
 	err = cluster.ExecuteServiceBinding(logger, &cluster.ServiceBindingOptions{
-		ServiceName:             *kafkaInstance.Name,
+		ServiceName:             kafkaInstance.GetName(),
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
