@@ -177,10 +177,11 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []strimziadminclient.Co
 	var rows []consumerGroupRow = []consumerGroupRow{}
 
 	for _, t := range consumerGroups {
+		consumers := t.GetConsumers()
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetGroupId(),
-			ActiveMembers:     len(t.GetConsumers()),
-			PartitionsWithLag: consumergroup.GetPartitionsWithLag(t.GetConsumers()),
+			ActiveMembers:     consumergroup.GetActiveConsumersCount(consumers),
+			PartitionsWithLag: consumergroup.GetPartitionsWithLag(consumers),
 		}
 		rows = append(rows, row)
 	}
