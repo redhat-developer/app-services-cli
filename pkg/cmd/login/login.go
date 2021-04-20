@@ -9,11 +9,14 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
+
 	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/httputil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -193,6 +196,12 @@ func runLogin(opts *Options) (err error) {
 				"Username": username,
 			},
 		}))
+	}
+
+	// debug mode checks this for a version update also.
+	// so we check if is enabled first so as not to print it twice
+	if !debug.Enabled() {
+		build.CheckForUpdate(context.Background(), logger)
 	}
 
 	return nil

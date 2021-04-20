@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"os"
+
 	"github.com/markbates/pkger"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
@@ -67,7 +69,11 @@ func main() {
 		os.Exit(0)
 	}
 
-	if err = rootCmd.Execute(); err == nil {
+	err = rootCmd.Execute()
+	if debug.Enabled() {
+		build.CheckForUpdate(context.Background(), logger)
+	}
+	if err == nil {
 		return
 	}
 

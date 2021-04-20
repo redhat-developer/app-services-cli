@@ -1,22 +1,27 @@
 package version
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
-	IO *iostreams.IOStreams
+	IO     *iostreams.IOStreams
+	Logger func() (logging.Logger, error)
 }
 
 func NewVersionCmd(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		IO: f.IOStreams,
+		IO:     f.IOStreams,
+		Logger: f.Logger,
 	}
 
 	cmd := &cobra.Command{
@@ -40,5 +45,16 @@ func runCmd(opts *Options) (err error) {
 			"Version": build.Version,
 		},
 	}))
+
+	logger, err := opts.Logger()
+	if err != nil {
+		return nil
+	}
+
+	// debug mode checks this for a version update also.
+	// so we check if is enabled first so as not to print it twice
+	if !debug.Enabled() {
+		build.CheckForUpdate(context.Background(), logger)
+	}
 	return nil
 }
