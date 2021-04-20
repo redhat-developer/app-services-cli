@@ -96,8 +96,9 @@ func runBind(opts *Options) error {
 
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
-		selectedKafka, err2 := kafka.InteractiveSelect(apiConnection, logger)
-		if err2 != nil {
+		// nolint:govet
+		selectedKafka, err := kafka.InteractiveSelect(apiConnection, logger)
+		if err != nil {
 			return err
 		}
 		opts.selectedKafka = selectedKafka.GetId()
@@ -106,10 +107,10 @@ func runBind(opts *Options) error {
 	}
 
 	api := apiConnection.API()
-	kafkaInstance, _, err2 := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
+	kafkaInstance, _, err := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
 
-	if err2 != nil {
-		return err2
+	if err != nil {
+		return err
 	}
 
 	if kafkaInstance.Name == nil {
