@@ -132,7 +132,7 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 	}
 
 	if options.BindingName == "" {
-		randomValue := make([]byte, 4)
+		randomValue := make([]byte, 2)
 		_, err := rand.Read(randomValue)
 		if err != nil {
 			return err
@@ -169,7 +169,6 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 		return useSDKForBinding(clients, sb)
 	}
 
-	logger.Debug("Using Operator to perform binding")
 	return useOperatorForBinding(logger, sb, clients, ns)
 
 }
