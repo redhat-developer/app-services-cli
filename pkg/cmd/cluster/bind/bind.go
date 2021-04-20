@@ -28,6 +28,10 @@ type Options struct {
 	ignoreContext           bool
 	appName                 string
 	selectedKafka           string
+
+	forceOperator bool
+	forceSDK      bool
+	bindingName   string
 }
 
 func NewBindCommand(f *factory.Factory) *cobra.Command {
@@ -69,12 +73,13 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, localizer.MustLocalizeFromID("cluster.common.flag.yes.description"))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", localizer.MustLocalizeFromID("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, localizer.MustLocalizeFromID("cluster.common.flag.ignoreContext.description"))
-
+	cmd.Flags().BoolVarP(&opts.forceOperator, "force-operator", "", false, localizer.MustLocalizeFromID("cluster.bind.flag.forceOperator.description"))
+	cmd.Flags().BoolVarP(&opts.forceSDK, "force-sdk", "", false, localizer.MustLocalizeFromID("cluster.bind.flag.forceSDK.description"))
 	return cmd
 }
 
 func runBind(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	apiConnection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -91,32 +96,37 @@ func runBind(opts *Options) error {
 
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
-		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(connection, logger)
+		// nolint:govet
+		selectedKafka, err := kafka.InteractiveSelect(apiConnection, logger)
 		if err != nil {
-
 			return err
 		}
-		opts.selectedKafka = *selectedKafka.Id
+		opts.selectedKafka = selectedKafka.GetId()
 	} else {
 		opts.selectedKafka = cfg.Services.Kafka.ClusterID
 	}
 
-	api := connection.API()
-	kafkaInstance, _, error := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
+	api := apiConnection.API()
+	kafkaInstance, _, err := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
 
-	if error != nil {
-		return error
+	if err != nil {
+		return err
 	}
 
 	if kafkaInstance.Name == nil {
 		return errors.New(localizer.MustLocalizeFromID("cluster.bind.error.emptyResponse"))
 	}
 
-	err = cluster.ExecuteServiceBinding(logger, *kafkaInstance.Name,
-		opts.namespace,
-		opts.appName,
-		opts.forceCreationWithoutAsk)
+	err = cluster.ExecuteServiceBinding(logger, &cluster.ServiceBindingOptions{
+		ServiceName:             kafkaInstance.GetName(),
+		Namespace:               opts.namespace,
+		AppName:                 opts.appName,
+		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
+		ForceUseOperator:        opts.forceOperator,
+		ForceUseSDK:             opts.forceSDK,
+		BindingName:             opts.bindingName,
+		BindAsFiles:             true,
+	})
 
 	return err
 }

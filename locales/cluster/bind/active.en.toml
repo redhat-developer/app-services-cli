@@ -1,5 +1,5 @@
 [cluster.serviceBinding.namespaceInfo]
-one = '"Namespace not provided. Using {{.Namespace}} namespace'
+one = 'Namespace not provided. Using {{.Namespace}} namespace'
 
 [cluster.serviceBinding.confirm.message]
 one = 'Do you want to continue?'
@@ -19,4 +19,12 @@ one = 'Binding %v with %v app succeeded'
 [cluster.serviceBinding.status.message]
 one = 'Binding "%v" with "%v" app'
 
+[cluster.serviceBinding.operatorMissing]
+one = '''
+Operator is not available on the current cluster.
+Please remove --force-operator=true if you wish to create resource without operator
+Error:
+'''
 
+[cluster.serviceBinding.usingOperator]
+one = 'Using ServiceBinding Operator to perform binding'
