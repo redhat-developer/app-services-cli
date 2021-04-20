@@ -31,6 +31,17 @@ var (
 	TermsReviewSiteCode = "ocm"
 )
 
+// Auth Build variables
+var (
+	ProductionAPIURL            = "https://api.openshift.com"
+	StagingAPIURL               = "https://api.stage.openshift.com"
+	DefaultClientID             = "rhoas-cli-prod"
+	DefaultOfflineTokenClientID = "cloud-services"
+	ProductionAuthURL           = "https://sso.redhat.com/auth/realms/redhat-external"
+	ProductionMasAuthURL        = "https://identity.api.openshift.com/auth/realms/rhoas"
+	StagingMasAuthURL           = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
+)
+
 func init() {
 	if isDevBuild() {
 		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "(devel)" {

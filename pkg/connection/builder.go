@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net/http"
 	"net/url"
 
@@ -208,7 +209,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	// Set the default URL, if needed:
 	rawAPIURL := b.apiURL
 	if rawAPIURL == "" {
-		rawAPIURL = DefaultURL
+		rawAPIURL = build.ProductionAPIURL
 	}
 	apiURL, err := url.Parse(rawAPIURL)
 	if err != nil {
