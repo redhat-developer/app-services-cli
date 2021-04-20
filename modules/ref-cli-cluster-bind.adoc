@@ -15,6 +15,9 @@ Bind command detects Kubernetes deployments and inject managed services credenti
 For information about what credentials are injected please refer to individual services
 Command will inject credentials as files into `/bindings` folder inside your application.
 
+Bind command will create volume inside your deployment or
+ServiceBindingOperator resource if you have it installed on your cluster
+
 
 ....
 rhoas cluster bind [flags]
@@ -35,6 +38,8 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
 
 ....
       --app-name string     Name of the kubernetes deployment to bind
+      --force-operator      Use ServiceBindingOperator only and fail if Operator is not installed
+      --force-sdk           Use Service Binding SDK and skip ServiceBindingOperator even if installed on the cluster
       --ignore-context      Ignore currently selected services and ask to select each service separately
       --kubeconfig string   Location of the kubeconfig file.
   -n, --namespace string    Custom Kubernetes namespace (if not set current namespace will be used)
