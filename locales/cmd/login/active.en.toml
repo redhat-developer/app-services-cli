@@ -12,6 +12,10 @@ one = '''
 Log in securely to RHOAS through a web browser.
 
 This command opens your web browser, where you can enter your credentials.
+
+When using the rhoas CLI in an environment without a web browser, 
+you can log in using an offline-token by passing the "--token" flag, which can be obtained at {{.OfflineTokenURL}}.
+Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands.
 '''
 
 [login.cmd.example]
@@ -22,6 +26,9 @@ $ rhoas login
 
 # print the authentication URL instead of automatically opening the browser
 $ rhoas login --print-sso-url
+
+# log in using an offline token
+$ rhoas login --token <your-token>
 '''
 
 [login.flag.apiGateway]
@@ -45,7 +52,7 @@ description = 'Description for the --auth-url flag'
 one = "The URL of the MAS-SSO Authentication server."
 
 [login.flag.token]
-one = "Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token."
+one = "Allows you to log in using an offline token, which can be obtained at {{.OfflineTokenURL}}."
 
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'

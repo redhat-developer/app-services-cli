@@ -10,6 +10,9 @@ Log in securely to RHOAS through a web browser.
 
 This command opens your web browser, where you can enter your credentials.
 
+Alternatively you can log in using an offline-token by passing the "--token" flag, which can be obtained at https://cloud.redhat.com/openshift/token.
+Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands.
+
 
 ....
 rhoas login [flags]
@@ -23,6 +26,9 @@ $ rhoas login
 
 # print the authentication URL instead of automatically opening the browser
 $ rhoas login --print-sso-url
+
+# log in using an offline token
+$ rhoas login --token <your-token>
 
 ....
 

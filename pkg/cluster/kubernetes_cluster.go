@@ -15,6 +15,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
@@ -246,7 +247,12 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 
 	if opts.OfflineAccessToken == "" {
 		apiTokenInput := &survey.Input{
-			Message: localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"),
+			Message: localizer.MustLocalize(&localizer.Config{
+				MessageID: "cluster.common.flag.offline.token.description",
+				TemplateData: map[string]interface{}{
+					"OfflineTokenURL": build.OfflineTokenURL,
+				},
+			}),
 		}
 		surveyErr := survey.AskOne(apiTokenInput, &opts.OfflineAccessToken)
 		if surveyErr != nil {
