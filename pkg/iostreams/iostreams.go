@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/mattn/go-isatty"
 )
 
@@ -92,8 +93,8 @@ func System() *IOStreams {
 	io := &IOStreams{
 		In:          os.Stdin,
 		originalOut: os.Stdout,
-		Out:         os.Stdout,
-		ErrOut:      os.Stderr,
+		Out:         color.Output,
+		ErrOut:      color.Error,
 	}
 
 	// prevent duplicate isTerminal queries now that we know the answer
