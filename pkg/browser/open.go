@@ -1,23 +1,24 @@
 package browser
 
 import (
-	"fmt"
+	"errors"
 	"os/exec"
 	"runtime"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
 
-func GetOpenBrowserCommand(url string) (*exec.Cmd, error) {
+// Open opens the URL in the default browser
+func Open(url string) error {
 	switch runtime.GOOS {
 	case "linux":
-		return exec.Command("xdg-open", url), nil
+		return exec.Command("xdg-open", url).Run()
 	case "windows":
-		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url), nil
+		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Run()
 	case "darwin":
-		return exec.Command("open", url), nil
+		return exec.Command("open", url).Run()
 	default:
-		return nil, fmt.Errorf(localizer.MustLocalize(&localizer.Config{
+		return errors.New(localizer.MustLocalize(&localizer.Config{
 			MessageID: "browser.getOpenBrowserCommand.error.unsupportedOperatingSystem",
 			TemplateData: map[string]interface{}{
 				"OS": runtime.GOOS,
