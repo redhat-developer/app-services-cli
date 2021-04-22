@@ -86,9 +86,14 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("login.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("login.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("login.cmd.longDescription"),
+		Use:   localizer.MustLocalizeFromID("login.cmd.use"),
+		Short: localizer.MustLocalizeFromID("login.cmd.shortDescription"),
+		Long: localizer.MustLocalize(&localizer.Config{
+			MessageID: "login.cmd.longDescription",
+			TemplateData: map[string]interface{}{
+				"OfflineTokenURL": build.OfflineTokenURL,
+			},
+		}),
 		Example: localizer.MustLocalizeFromID("login.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
@@ -106,7 +111,12 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, localizer.MustLocalizeFromID("login.flag.masAuthUrl"))
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, localizer.MustLocalizeFromID("login.flag.printSsoUrl"))
 	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, localizer.MustLocalizeFromID("login.flag.scope"))
-	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", localizer.MustLocalizeFromID("login.flag.token"))
+	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", localizer.MustLocalize(&localizer.Config{
+		MessageID: "login.flag.token",
+		TemplateData: map[string]interface{}{
+			"OfflineTokenURL": build.OfflineTokenURL,
+		},
+	}))
 
 	return cmd
 }
