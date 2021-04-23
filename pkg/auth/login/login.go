@@ -277,6 +277,6 @@ func createRedirectURL(path string) (*url.URL, int, error) {
 // fallback to printing the URL to the user terminal instead.
 func (a *AuthorizationCodeGrant) printAuthURLFallback(authCodeURL string, redirectURL *url.URL, err error) {
 	a.PrintURL = true
-	a.Logger.Debug("Error opening browser:", err, "\nPrinting Auth URL to console instead instead")
+	a.Logger.Debug("Error opening browser:", err, "\nPrinting Auth URL to console instead")
 	a.openBrowser(authCodeURL, redirectURL)
 }

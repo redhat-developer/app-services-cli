@@ -49,7 +49,7 @@ one = "The URL of the SSO Authentication server."
 
 [login.flag.masAuthUrl]
 description = 'Description for the --auth-url flag'
-one = "The URL of the MAS-SSO Authentication server."
+one = "The URL of the identity.api.openshift.com Authentication server."
 
 [login.flag.token]
 one = "Allows you to log in using an offline token, which can be obtained at {{.OfflineTokenURL}}."
@@ -64,7 +64,7 @@ one = 'Override the default OpenID scope. To specify multiple scopes, use a sepa
 
 [login.flag.skipMasSSOLogin]
 description = 'Description for the --skip-mas-login flag'
-one = 'Skip logging in to MAS-SSO'
+one = 'Skip logging in to identity.api.openshift.com'
 
 [login.redirectPage.title]
 description = 'Title for the RHOAS login redirect webpage'
@@ -75,8 +75,8 @@ description = 'Title for the RHOAS login redirect webpage'
 one = 'You are now logged in as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.masRedirectPage.body]
-description = 'Title for the MAS-SSO login redirect webpage'
-one = 'You are now logged in to MAS-SSO as <span style="font-weight:700">{{.Username}}</span>.'
+description = 'Title for the identity.api.openshift.com login redirect webpage'
+one = 'You are now logged in to identity.api.openshift.com as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.error.schemeMissingFromUrl]
 description = 'Error message for when scheme is missing from the Auth URL'
@@ -113,10 +113,10 @@ one = 'Logging in...'
 one = 'Logged in successfully'
 
 [login.log.info.loggingInMAS]
-one = 'Logging in to MAS-SSO...'
+one = 'Logging in to identity.api.openshift.com...'
 
 [login.log.info.loggedInMAS]
-one = 'Logged in successfully to MAS-SSO'
+one = 'Logged in successfully to identity.api.openshift.com'
 
 [login.error.noRealmInURL]
 one = 'the authentication URL is missing a realm'
