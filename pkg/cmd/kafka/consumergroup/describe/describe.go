@@ -16,7 +16,6 @@ import (
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -204,7 +203,8 @@ func printConsumerGroupDetails(w io.Writer, consumerGroupData strimziadminclient
 	activeMembersCount := cgutil.GetActiveConsumersCount(consumers)
 	partitionsWithLagCount := cgutil.GetPartitionsWithLag(consumers)
 
-	fmt.Fprintln(w, color.Bold(localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount)
+	fmt.Fprintln(w, localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.activeMembers"), activeMembersCount, "\t", localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.partitionsWithLag"), partitionsWithLagCount)
+	fmt.Fprintln(w, "")
 	fmt.Fprintln(w, "")
 
 	rows := mapConsumerGroupDescribeToTableFormat(consumers)
