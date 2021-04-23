@@ -1,6 +1,6 @@
 [
   {
-    "id": "consumer_group_1",
+    "groupId": "consumer_group_1",
     "consumers": [
       {
         "groupId": "consumer_group_1",
@@ -23,7 +23,7 @@
     ]
   },
   {
-    "id": "consumer_group_2",
+    "groupId": "consumer_group_2",
     "consumers": [
       {
         "groupId": "consumer_group_2",

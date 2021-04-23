@@ -197,6 +197,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consum
 	return rows
 }
 
+// print the consumer grooup details
 func printConsumerGroupDetails(w io.Writer, consumerGroupData strimziadminclient.ConsumerGroup) {
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()

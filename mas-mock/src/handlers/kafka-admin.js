@@ -139,7 +139,7 @@ module.exports = {
 };
 
 function getConsumerGroup(id) {
-  return consumerGroups.find(c => c.id === id);
+  return consumerGroups.find(c => c.groupId === id);
 }
 
 function getTopic(name) {

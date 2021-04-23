@@ -3,6 +3,7 @@ package color
 
 import (
 	"fmt"
+	"runtime"
 
 	"github.com/fatih/color"
 )
@@ -27,6 +28,12 @@ func Error(format string) string {
 	return color.HiRedString(format)
 }
 
+// Bold makes a string bold
 func Bold(s string) string {
+	// do not bold the string if the current OS is Windows
+	// Command Prompt does not support ANSI escape characters
+	if runtime.GOOS == "windows" {
+		return s
+	}
 	return fmt.Sprintf("\033[1m%v\033[0m", s)
 }
