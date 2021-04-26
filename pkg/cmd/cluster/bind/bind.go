@@ -101,6 +101,9 @@ func runBind(opts *Options) error {
 		if err != nil {
 			return err
 		}
+		if selectedKafka == nil {
+			return nil
+		}
 		opts.selectedKafka = selectedKafka.GetId()
 	} else {
 		opts.selectedKafka = cfg.Services.Kafka.ClusterID

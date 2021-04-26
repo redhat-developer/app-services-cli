@@ -53,7 +53,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 					},
 				}))
 			}
-			return runBind(opts)
+			return runConnect(opts)
 		},
 	}
 
@@ -66,7 +66,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runBind(opts *Options) error {
+func runConnect(opts *Options) error {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -92,10 +92,12 @@ func runBind(opts *Options) error {
 		// nolint
 		selectedKafka, err := kafka.InteractiveSelect(connection, logger)
 		if err != nil {
-
 			return err
 		}
-		opts.selectedKafka = *selectedKafka.Id
+		if selectedKafka == nil {
+			return nil
+		}
+		opts.selectedKafka = selectedKafka.GetId()
 	} else {
 		opts.selectedKafka = cfg.Services.Kafka.ClusterID
 	}
