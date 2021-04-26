@@ -92,8 +92,10 @@ func runConnect(opts *Options) error {
 		// nolint
 		selectedKafka, err := kafka.InteractiveSelect(connection, logger)
 		if err != nil {
-
 			return err
+		}
+		if selectedKafka == nil {
+			return nil
 		}
 		opts.selectedKafka = selectedKafka.GetId()
 	} else {
