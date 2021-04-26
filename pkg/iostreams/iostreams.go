@@ -80,6 +80,13 @@ func (s *IOStreams) CanPrompt() bool {
 	return s.IsStdinTTY() && s.IsStdoutTTY()
 }
 
+func (s *IOStreams) IsSSHSession() bool {
+	_, hasClient := os.LookupEnv("SSH_CLIENT")
+	_, hasTTY := os.LookupEnv("SSH_TTY")
+
+	return hasClient || hasTTY
+}
+
 func isTerminal(f *os.File) bool {
 	return isatty.IsTerminal(f.Fd()) || isatty.IsCygwinTerminal(f.Fd())
 }

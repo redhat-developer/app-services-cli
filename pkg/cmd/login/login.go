@@ -74,6 +74,7 @@ type Options struct {
 	insecureSkipTLSVerify bool
 	printURL              bool
 	offlineToken          string
+	remoteSession         bool
 }
 
 // NewLoginCmd gets the command that's log the user in
@@ -100,6 +101,9 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 			if opts.offlineToken != "" && opts.clientID == build.DefaultClientID {
 				opts.clientID = build.DefaultOfflineTokenClientID
 			}
+
+			if 
+
 			return runLogin(opts)
 		},
 	}
@@ -123,6 +127,8 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runLogin(opts *Options) (err error) {
+	isRemoteLogin := opts.IO.IsSSHSession()
+
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
