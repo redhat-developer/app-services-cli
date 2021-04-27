@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
@@ -85,7 +86,11 @@ func (c *File) Location() (path string, err error) {
 	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {
-		path, err = getUserConfig(".rhoascli.json")
+		userCfgDir, err := os.UserConfigDir()
+		if err != nil {
+			return "", nil
+		}
+		path = filepath.Join(userCfgDir, "rhoascli.json")
 		if err != nil {
 			return "", err
 		}
