@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
@@ -58,7 +59,12 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", localizer.MustLocalizeFromID("cluster.common.flag.kubeconfig.description"))
-	cmd.Flags().StringVarP(&opts.offlineAccessToken, "token", "", "", localizer.MustLocalizeFromID("cluster.common.flag.offline.token.description"))
+	cmd.Flags().StringVarP(&opts.offlineAccessToken, "token", "", "", localizer.MustLocalize(&localizer.Config{
+		MessageID: "cluster.common.flag.offline.token.description",
+		TemplateData: map[string]interface{}{
+			"OfflineTokenURL": build.OfflineTokenURL,
+		},
+	}))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", localizer.MustLocalizeFromID("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, localizer.MustLocalizeFromID("cluster.common.flag.yes.description"))
 	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, localizer.MustLocalizeFromID("cluster.common.flag.ignoreContext.description"))

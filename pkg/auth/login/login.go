@@ -132,9 +132,7 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 		},
 	})
 
-	if err = a.openBrowser(authCodeURL, redirectURL); err != nil {
-		return err
-	}
+	a.openBrowser(authCodeURL, redirectURL)
 
 	// start the local server
 	a.startServer(clientCtx, &server)
@@ -215,31 +213,24 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 		},
 	})
 
-	if err = a.openBrowser(authCodeURL, redirectURL); err != nil {
-		return err
-	}
-
+	a.openBrowser(authCodeURL, redirectURL)
 	a.startServer(clientCtx, &server)
 
 	return nil
 }
 
-func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *url.URL) error {
+func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *url.URL) {
 	if a.PrintURL {
 		a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.openSSOUrl"), "\n")
 		fmt.Fprintln(a.IO.Out, authCodeURL)
 		a.Logger.Info("")
 	} else {
-		openBrowserExec, err := browser.GetOpenBrowserCommand(redirectURL.Scheme + "://" + redirectURL.Host)
+		err := browser.Open(redirectURL.Scheme + "://" + redirectURL.Host)
 		if err != nil {
-			return err
-		}
-		if err = openBrowserExec.Run(); err != nil {
-			return err
+			a.printAuthURLFallback(authCodeURL, redirectURL, err)
+			return
 		}
 	}
-
-	return nil
 }
 
 // starts the local HTTP webserver to handle redirect from the Auth server
@@ -280,4 +271,12 @@ func createRedirectURL(path string) (*url.URL, int, error) {
 	}
 
 	return redirectURL, port, nil
+}
+
+// when there is an error trying to automatically open the browser on the login page
+// fallback to printing the URL to the user terminal instead.
+func (a *AuthorizationCodeGrant) printAuthURLFallback(authCodeURL string, redirectURL *url.URL, err error) {
+	a.PrintURL = true
+	a.Logger.Debug("Error opening browser:", err, "\nPrinting Auth URL to console instead")
+	a.openBrowser(authCodeURL, redirectURL)
 }

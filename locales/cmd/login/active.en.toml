@@ -12,6 +12,10 @@ one = '''
 Log in securely to RHOAS through a web browser.
 
 This command opens your web browser, where you can enter your credentials.
+
+When using the rhoas CLI in an environment without a web browser, 
+you can log in using an offline-token by passing the "--token" flag, which can be obtained at {{.OfflineTokenURL}}.
+Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands.
 '''
 
 [login.cmd.example]
@@ -22,6 +26,9 @@ $ rhoas login
 
 # print the authentication URL instead of automatically opening the browser
 $ rhoas login --print-sso-url
+
+# log in using an offline token
+$ rhoas login --token <your-token>
 '''
 
 [login.flag.apiGateway]
@@ -42,10 +49,10 @@ one = "The URL of the SSO Authentication server."
 
 [login.flag.masAuthUrl]
 description = 'Description for the --auth-url flag'
-one = "The URL of the MAS-SSO Authentication server."
+one = "The URL of the identity.api.openshift.com Authentication server."
 
 [login.flag.token]
-one = "Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token."
+one = "Allows you to log in using an offline token, which can be obtained at {{.OfflineTokenURL}}."
 
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'
@@ -57,7 +64,7 @@ one = 'Override the default OpenID scope. To specify multiple scopes, use a sepa
 
 [login.flag.skipMasSSOLogin]
 description = 'Description for the --skip-mas-login flag'
-one = 'Skip logging in to MAS-SSO'
+one = 'Skip logging in to identity.api.openshift.com'
 
 [login.redirectPage.title]
 description = 'Title for the RHOAS login redirect webpage'
@@ -68,8 +75,8 @@ description = 'Title for the RHOAS login redirect webpage'
 one = 'You are now logged in as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.masRedirectPage.body]
-description = 'Title for the MAS-SSO login redirect webpage'
-one = 'You are now logged in to MAS-SSO as <span style="font-weight:700">{{.Username}}</span>.'
+description = 'Title for the identity.api.openshift.com login redirect webpage'
+one = 'You are now logged in to identity.api.openshift.com as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.error.schemeMissingFromUrl]
 description = 'Error message for when scheme is missing from the Auth URL'
@@ -106,10 +113,16 @@ one = 'Logging in...'
 one = 'Logged in successfully'
 
 [login.log.info.loggingInMAS]
-one = 'Logging in to MAS-SSO...'
+one = 'Logging in to identity.api.openshift.com...'
 
 [login.log.info.loggedInMAS]
-one = 'Logged in successfully to MAS-SSO'
+one = 'Logged in successfully to identity.api.openshift.com'
 
 [login.error.noRealmInURL]
 one = 'the authentication URL is missing a realm'
+
+[login.log.debug.sshLoginDetected]
+one = '''
+SSH session detected: you may experience issues attempting to log in through a web browser. 
+You can log in using an offline-token by passing the "--token" flag instead, which can be obtained at {{.OfflineTokenURL}}.
+'''
