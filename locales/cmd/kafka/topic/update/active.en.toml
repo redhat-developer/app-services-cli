@@ -12,7 +12,7 @@ Update a topic in the current Apache Kafka instance.
 [kafka.topic.update.cmd.example]
 one = '''
 # update the number of replicas for a topic
-$ rhoas kafka topic update topic-1 --replication-factor 
+$ rhoas kafka topic update topic-1 --retention-ms -1
 '''
 
 [kafka.topic.update.error.cannotDecreasePartitionCountError]
