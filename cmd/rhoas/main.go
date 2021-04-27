@@ -140,7 +140,6 @@ func initConfig(f *factory.Factory) {
 
 // check if the config file is located in the old default location
 // if so, move it to the new location
-// TODO: Remove this function after 0.28.0 is released.
 func moveConfigFile(cfg config.IConfig) error {
 	cfgPath, err := cfg.Location()
 	if err != nil {
