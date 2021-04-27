@@ -74,7 +74,6 @@ type Options struct {
 	insecureSkipTLSVerify bool
 	printURL              bool
 	offlineToken          string
-	remoteSession         bool
 }
 
 // NewLoginCmd gets the command that's log the user in
@@ -102,7 +101,19 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 				opts.clientID = build.DefaultOfflineTokenClientID
 			}
 
-			if 
+			logger, err := opts.Logger()
+			if err != nil {
+				return err
+			}
+
+			if opts.IO.IsSSHSession() && opts.offlineToken == "" {
+				logger.Info(localizer.MustLocalize(&localizer.Config{
+					MessageID: "login.log.info.sshLoginDetected",
+					TemplateData: map[string]interface{}{
+						"OfflineTokenURL": build.OfflineTokenURL,
+					},
+				}))
+			}
 
 			return runLogin(opts)
 		},
@@ -127,8 +138,6 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runLogin(opts *Options) (err error) {
-	isRemoteLogin := opts.IO.IsSSHSession()
-
 	logger, err := opts.Logger()
 	if err != nil {
 		return err

@@ -120,3 +120,9 @@ one = 'Logged in successfully to identity.api.openshift.com'
 
 [login.error.noRealmInURL]
 one = 'the authentication URL is missing a realm'
+
+[login.log.debug.sshLoginDetected]
+one = '''
+SSH session detected: you may experience issues attempting to log in through a web browser. 
+You can log in using an offline-token by passing the "--token" flag instead, which can be obtained at {{.OfflineTokenURL}}.
+'''
