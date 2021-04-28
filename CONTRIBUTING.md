@@ -6,7 +6,7 @@ Thank you for contributing to the RHOAS CLI. See below for guides to help you co
 
 The following will need to be installed on your device in order to contribute to this project.
 
-- [Go >= v1.15](https://golang.org/dl)
+- [Go >= v1.16](https://golang.org/dl)
 - [golangci-lint](https://golangci-lint.run)
 - [OpenAPI Generator](https://openapi-generator.tech/)
 - [Yarn](https://classic.yarnpkg.com)
