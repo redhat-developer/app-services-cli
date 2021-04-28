@@ -4,10 +4,11 @@ import (
 	"testing"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/locales"
 )
 
 func TestValidateName(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles()
+	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
 
 	type args struct {
 		val interface{}
@@ -74,7 +75,7 @@ func TestValidateName(t *testing.T) {
 }
 
 func TestValidateDescription(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles()
+	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
 
 	type args struct {
 		val interface{}

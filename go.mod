@@ -10,14 +10,12 @@ require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.10.0
-	github.com/gobuffalo/here v0.6.2 // indirect
 	github.com/golang/protobuf v1.5.1 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
-	github.com/markbates/pkger v0.17.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.1.2

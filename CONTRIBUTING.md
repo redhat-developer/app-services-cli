@@ -46,10 +46,6 @@ Builds an executable binary `rhoas` of the CLI in the project root. Executable o
 
 Formats source code.
 
-#### `make pkger`
-
-Packages static assets into the binary.
-
 ### `make generate`
 
 Generates code based on comments in code. This is primarily used to generate interface stubs using [moq](https://github.com/matryer/moq).
@@ -116,9 +112,7 @@ export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4NDgzMTAyLTRhYzAtND
 
 ## Internationalization
 
-All text strings are placed in `./locales` directory. Group files into usage groups: commands go together under `./locales/cmd/{whoami,kafka/serviceaccount}` etc. All others can be grouped by their package.
-
-When you make a change to a locale file, you _must_ run `make pkger` to embed the static files into the Go code. Please ensure this step is done before committing.
+All text strings are placed in `./pkg/locales/assets` directory. Group files into usage groups: commands go together under `./pkg/locales/assets/cmd/{whoami,kafka/serviceaccount}` etc. All others can be grouped by their package.
 
 ## Documentation
 

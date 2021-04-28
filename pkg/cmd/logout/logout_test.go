@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/redhat-developer/app-services-cli/pkg/locales"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -20,7 +21,7 @@ import (
 )
 
 func TestNewLogoutCommand(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles()
+	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
 	type args struct {
 		cfg        *config.Config
 		connection *connection.KeycloakConnection

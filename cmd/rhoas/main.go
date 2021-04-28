@@ -7,10 +7,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/markbates/pkger"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/locales"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
@@ -31,17 +31,11 @@ var (
 
 // load all locale files
 func loadStaticFiles() error {
-	err := localizer.IncludeAssetsAndLoadMessageFiles()
+	err := localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
 	if err != nil {
 		return err
 	}
-
-	return pkger.Walk("/static", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		return nil
-	})
+	return nil
 }
 
 func main() {

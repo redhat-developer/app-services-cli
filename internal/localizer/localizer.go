@@ -1,15 +1,11 @@
 package localizer
 
 import (
-	"bytes"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"os"
+	"io/fs"
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/markbates/pkger"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 )
@@ -43,13 +39,12 @@ type Config struct {
 	PluralCount int
 }
 
-// IncludeAssetsAndLoadMessageFiles walks the /internal/locales directory
+// IncludeAssetsAndLoadMessageFiles walks the locales directory
 // and allows the static assets found to be embedded into the binary
-// by github.com/markbates/pkger
 // It also loads all files into memory
-func IncludeAssetsAndLoadMessageFiles() error {
+func IncludeAssetsAndLoadMessageFiles(embeddedFiles fs.FS) error {
 	localeFileName := fmt.Sprintf("active.%v", getLangFormat())
-	return pkger.Walk("/locales", func(path string, info os.FileInfo, err error) error {
+	return fs.WalkDir(embeddedFiles, ".", func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -58,7 +53,7 @@ func IncludeAssetsAndLoadMessageFiles() error {
 			return nil
 		}
 
-		err = loadMessageFile(path)
+		err = loadMessageFile(embeddedFiles, path)
 		if err != nil {
 			return err
 		}
@@ -91,23 +86,14 @@ func MustLocalizeFromID(messageID string) string {
 // loadMessageFile loads the message file int context
 // Using github.com/nicksnyder/go-i18n/v2/i18n
 // pathTree to File is an array of the parent directories
-func loadMessageFile(path string) (err error) {
+func loadMessageFile(files fs.FS, path string) (err error) {
 	// open the static i18n file
-	f, err := pkger.Open(path)
+	buf, err := fs.ReadFile(files, path)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	b := bytes.NewBufferString("")
-	// copy to contents of the file to a buffer string
-	if _, err = io.Copy(b, f); err != nil {
-		panic(err)
-	}
-	// read the contents of the file to a byte array
-	out, _ := ioutil.ReadAll(b)
-	// load the contents into context
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	_, err = bundle.ParseMessageFileBytes(out, "en.toml")
+	_, err = bundle.ParseMessageFileBytes(buf, "en.toml")
 	if err != nil {
 		return err
 	}

@@ -1,18 +1,16 @@
 package login
 
 import (
-	"bytes"
 	"context"
+	// embed static HTML file
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 
 	"github.com/coreos/go-oidc"
-	"github.com/markbates/pkger"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
@@ -21,6 +19,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
+
+//go:embed static/sso-redirect-page.html
+var ssoRedirectHTMLPage string
 
 // handler for the SSO redirect page
 type redirectPageHandler struct {
@@ -41,17 +42,6 @@ type redirectPageHandler struct {
 
 // nolint:funlen
 func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	f, _ := pkger.Open("/static/login/sso-redirect-page.html")
-
-	b := bytes.NewBufferString("")
-	if _, err := io.Copy(b, f); err != nil {
-		fmt.Fprintln(h.IO.ErrOut, err)
-		f.Close()
-		os.Exit(1)
-	}
-
-	out, _ := ioutil.ReadAll(b)
-
 	h.Logger.Debug(localizer.MustLocalize(&localizer.Config{
 		MessageID: "login.log.debug.redirectedToCallbackUrl",
 		TemplateData: map[string]interface{}{
@@ -115,7 +105,7 @@ func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		h.Logger.Error(localizer.MustLocalizeFromID("login.error.noRealmInURL"))
 		os.Exit(1)
 	}
-	redirectPage := fmt.Sprintf((string(out)), pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
+	redirectPage := fmt.Sprintf(ssoRedirectHTMLPage, pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

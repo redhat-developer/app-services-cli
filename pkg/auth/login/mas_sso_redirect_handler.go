@@ -1,17 +1,15 @@
 package login
 
 import (
-	"bytes"
 	"context"
+	// embed static HTML file
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 
 	"github.com/coreos/go-oidc"
-	"github.com/markbates/pkger"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
@@ -19,6 +17,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
+
+//go:embed static/mas-sso-redirect-page.html
+var masSSOredirectHTMLPage string
 
 // handler for the MAS-SSO redirect page
 type masRedirectPageHandler struct {
@@ -37,17 +38,6 @@ type masRedirectPageHandler struct {
 
 // nolint:funlen
 func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	f, _ := pkger.Open("/static/login/mas-sso-redirect-page.html")
-
-	b := bytes.NewBufferString("")
-	if _, err := io.Copy(b, f); err != nil {
-		fmt.Fprintln(h.IO.ErrOut, err)
-		f.Close()
-		os.Exit(1)
-	}
-
-	out, _ := ioutil.ReadAll(b)
-
 	logger := h.Logger
 
 	logger.Debug(localizer.MustLocalize(&localizer.Config{
@@ -105,7 +95,7 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		},
 	})
 
-	redirectPage := fmt.Sprintf((string(out)), pageTitle, pageTitle, pageBody)
+	redirectPage := fmt.Sprintf(masSSOredirectHTMLPage, pageTitle, pageTitle, pageBody)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
