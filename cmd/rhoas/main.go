@@ -145,13 +145,24 @@ func moveConfigFile(cfg config.IConfig) error {
 	if err != nil {
 		return err
 	}
-	userCfgPath, err := os.UserConfigDir()
+	rhoasCfgDir, err := config.DefaultDir()
 	if err != nil {
 		return err
 	}
-	oldFilePath := filepath.Join(userCfgPath, ".rhoascli.json")
-	if os.Getenv("RHOASCLI_CONFIG") == oldFilePath {
+	userCfgDir, err := os.UserConfigDir()
+	if err != nil {
+		return err
+	}
+	oldFilePath := filepath.Join(userCfgDir, ".rhoascli.json")
+	if os.Getenv("RHOASCONFIG") == oldFilePath {
 		return nil
+	}
+	// create rhoas config directory
+	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
+		err = os.Mkdir(rhoasCfgDir, 0700)
+		if err != nil {
+			return err
+		}
 	}
 	if _, err = os.Stat(oldFilePath); err == nil {
 		return os.Rename(oldFilePath, cfgPath)
