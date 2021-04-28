@@ -2,11 +2,11 @@ package root
 
 import (
 	"flag"
-	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
+	"github.com/redhat-developer/app-services-cli/pkg/locales"
 
 	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
@@ -21,24 +21,23 @@ import (
 	"github.com/spf13/pflag"
 )
 
-func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command {
+func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,
-		Use:           localizer.MustLocalizeFromID("root.cmd.use"),
-		Short:         localizer.MustLocalizeFromID("root.cmd.shortDescription"),
-		Long:          localizer.MustLocalizeFromID("root.cmd.longDescription"),
-		Example:       localizer.MustLocalizeFromID("root.cmd.example"),
+		Use:           f.Localizer.LoadMessage("root.cmd.use"),
+		Short:         f.Localizer.LoadMessage("root.cmd.shortDescription"),
+		Long:          f.Localizer.LoadMessage("root.cmd.longDescription"),
+		Example:       f.Localizer.LoadMessage("root.cmd.example"),
 	}
 
 	cmd.Version = version
 
-	cmd.SetVersionTemplate(fmt.Sprintln(localizer.MustLocalize(&localizer.Config{
-		MessageID: "version.cmd.outputText",
+	cmd.SetVersionTemplate(f.Localizer.LoadMessageWithConfig("version.cmd.outputText", &locales.LocalizerConfig{
 		TemplateData: map[string]interface{}{
-			"Version": version,
+			"Version": build.Version,
 		},
-	})))
+	}))
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
@@ -47,18 +46,19 @@ func NewRootCommand(cmdFactory *factory.Factory, version string) *cobra.Command 
 
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
-	fs.BoolVarP(&help, "help", "h", false, localizer.MustLocalizeFromID("root.cmd.flag.help.description"))
+	fs.BoolVarP(&help, "help", "h", false, f.Localizer.LoadMessage("root.cmd.flag.help.description"))
+	return cmd
 
 	// Child commands
-	cmd.AddCommand(login.NewLoginCmd(cmdFactory))
-	cmd.AddCommand(logout.NewLogoutCommand(cmdFactory))
-	cmd.AddCommand(kafka.NewKafkaCommand(cmdFactory))
-	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(cmdFactory))
-	cmd.AddCommand(cluster.NewClusterCommand(cmdFactory))
-	cmd.AddCommand(status.NewStatusCommand(cmdFactory))
-	cmd.AddCommand(completion.NewCompletionCommand(cmdFactory))
-	cmd.AddCommand(whoami.NewWhoAmICmd(cmdFactory))
-	cmd.AddCommand(cliversion.NewVersionCmd(cmdFactory))
+	cmd.AddCommand(login.NewLoginCmd(f))
+	cmd.AddCommand(logout.NewLogoutCommand(f))
+	cmd.AddCommand(kafka.NewKafkaCommand(f))
+	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(f))
+	cmd.AddCommand(cluster.NewClusterCommand(f))
+	cmd.AddCommand(status.NewStatusCommand(f))
+	cmd.AddCommand(completion.NewCompletionCommand(f))
+	cmd.AddCommand(whoami.NewWhoAmICmd(f))
+	cmd.AddCommand(cliversion.NewVersionCmd(f))
 
 	return cmd
 }

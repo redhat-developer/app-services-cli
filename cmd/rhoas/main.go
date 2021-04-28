@@ -15,7 +15,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 
@@ -29,24 +28,15 @@ var (
 	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 )
 
-// load all locale files
-func loadStaticFiles() error {
-	err := localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func main() {
-	err := loadStaticFiles()
+	localizer, err := locales.New(nil)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
 	buildVersion := build.Version
-	cmdFactory := factory.New(build.Version)
+	cmdFactory := factory.New(build.Version, localizer)
 	logger, err := cmdFactory.Logger()
 	if err != nil {
 		fmt.Println(cmdFactory.IOStreams.ErrOut, err)

@@ -9,13 +9,15 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/locales"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
-	IO     *iostreams.IOStreams
-	Logger func() (logging.Logger, error)
+	IO        *iostreams.IOStreams
+	Logger    func() (logging.Logger, error)
+	localizer locales.Localizer
 }
 
 func NewVersionCmd(f *factory.Factory) *cobra.Command {
@@ -39,8 +41,7 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *Options) (err error) {
-	fmt.Fprintln(opts.IO.Out, localizer.MustLocalize(&localizer.Config{
-		MessageID: "version.cmd.outputText",
+	fmt.Fprintln(opts.IO.Out, opts.localizer.LoadMessageWithConfig("version.cmd.outputText", &locales.LocalizerConfig{
 		TemplateData: map[string]interface{}{
 			"Version": build.Version,
 		},
