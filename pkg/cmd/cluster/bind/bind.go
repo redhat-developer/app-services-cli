@@ -46,27 +46,27 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "bind",
-		Short:   opts.localizer.LoadMessage("cluster.bind.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("cluster.bind.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("cluster.bind.cmd.example"),
+		Short:   opts.localizer.MustLocalize("cluster.bind.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("cluster.bind.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("cluster.bind.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context")))
 			}
 			if opts.appName == "" && !opts.IO.CanPrompt() {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "appName")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "appName")))
 			}
 			return runBind(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", opts.localizer.LoadMessage("cluster.common.flag.kubeconfig.description"))
-	cmd.Flags().StringVarP(&opts.appName, "app-name", "", "", opts.localizer.LoadMessage("cluster.bind.flag.appName"))
-	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.LoadMessage("cluster.common.flag.yes.description"))
-	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.LoadMessage("cluster.common.flag.namespace.description"))
-	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, opts.localizer.LoadMessage("cluster.common.flag.ignoreContext.description"))
-	cmd.Flags().BoolVarP(&opts.forceOperator, "force-operator", "", false, opts.localizer.LoadMessage("cluster.bind.flag.forceOperator.description"))
-	cmd.Flags().BoolVarP(&opts.forceSDK, "force-sdk", "", false, opts.localizer.LoadMessage("cluster.bind.flag.forceSDK.description"))
+	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
+	cmd.Flags().StringVarP(&opts.appName, "app-name", "", "", opts.localizer.MustLocalize("cluster.bind.flag.appName"))
+	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
+	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
+	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
+	cmd.Flags().BoolVarP(&opts.forceOperator, "force-operator", "", false, opts.localizer.MustLocalize("cluster.bind.flag.forceOperator.description"))
+	cmd.Flags().BoolVarP(&opts.forceSDK, "force-sdk", "", false, opts.localizer.MustLocalize("cluster.bind.flag.forceSDK.description"))
 	return cmd
 }
 
@@ -109,7 +109,7 @@ func runBind(opts *Options) error {
 	}
 
 	if kafkaInstance.Name == nil {
-		return errors.New(opts.localizer.LoadMessage("cluster.bind.error.emptyResponse"))
+		return errors.New(opts.localizer.MustLocalize("cluster.bind.error.emptyResponse"))
 	}
 
 	err = cluster.ExecuteServiceBinding(logger, opts.localizer, &cluster.ServiceBindingOptions{

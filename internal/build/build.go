@@ -90,7 +90,7 @@ func CheckForUpdate(ctx context.Context, logger logging.Logger, localizer locali
 	// this means it is older, and therefore, an update is available.
 	if currentVersionIndex > latestVersionIndex {
 		logger.Info()
-		logger.Info(color.Info(localizer.LoadMessage("common.log.info.updateAvailable")), color.CodeSnippet(latestRelease.GetTagName()))
+		logger.Info(color.Info(localizer.MustLocalize("common.log.info.updateAvailable")), color.CodeSnippet(latestRelease.GetTagName()))
 		logger.Info(color.Info(latestRelease.GetHTMLURL()))
 		logger.Info()
 	}

@@ -1,3 +1,4 @@
+// Internationalization implementation using nicksnyder/go-i18n
 package goi18n
 
 import (
@@ -14,6 +15,7 @@ import (
 	"golang.org/x/text/language"
 )
 
+// go-i18n implementation
 type Goi18n struct {
 	files     fs.FS
 	language  *language.Tag
@@ -66,13 +68,13 @@ func New(cfg *Config) (localize.Localizer, error) {
 	return loc, err
 }
 
-// LoadMessage loads a i18n message from the file system
+// MustLocalize loads a i18n message from the file system
 // You can pass dynamic values using template entries
 // Examples:
 //
-// `localizer.LoadMessage("my-message-id", &localize.TemplateEntry{"Name", "Danny"}`
+// `localizer.MustLocalize("my-message-id", &localize.TemplateEntry{"Name", "Danny"}`
 //
-func (l *Goi18n) LoadMessage(id string, tmplEntries ...*localize.TemplateEntry) string {
+func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry) string {
 	templateData := map[string]interface{}{}
 	// map the template entries to the go-i18n format
 	for _, t := range tmplEntries {
@@ -94,12 +96,12 @@ func (l *Goi18n) load() error {
 			return nil
 		}
 
-		return l.loadMessageFile(l.files, path)
+		return l.MustLocalizeFile(l.files, path)
 	})
 }
 
 // read the message file from the file system
-func (l *Goi18n) loadMessageFile(files fs.FS, path string) (err error) {
+func (l *Goi18n) MustLocalizeFile(files fs.FS, path string) (err error) {
 	// open the static i18n file
 	buf, err := fs.ReadFile(files, path)
 	if err != nil {

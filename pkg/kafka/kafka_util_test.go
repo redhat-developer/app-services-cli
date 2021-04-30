@@ -9,7 +9,7 @@ import (
 )
 
 func TestValidateName(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
+	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
 
 	type args struct {
 		name string
@@ -101,7 +101,7 @@ func TestValidateName(t *testing.T) {
 }
 
 func TestTransformRequest(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
+	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
 	hostWithSSLPort := "my-kafka-url:443"
 	hostWithNoPort := "my-kafka-url"
 
@@ -159,7 +159,7 @@ func TestTransformRequest(t *testing.T) {
 }
 
 func TestTransformKafkaRequestListItems(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
+	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
 	hostWithSSLPort := "my-kafka-url:443"
 	hostWithNoPort := "my-kafka-url"
 	emptyHost := ""

@@ -8,7 +8,7 @@ import (
 )
 
 func TestValidateName(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
+	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
 
 	type args struct {
 		val interface{}
@@ -75,7 +75,7 @@ func TestValidateName(t *testing.T) {
 }
 
 func TestValidateDescription(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
+	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
 
 	type args struct {
 		val interface{}

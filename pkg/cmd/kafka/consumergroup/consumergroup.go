@@ -12,9 +12,9 @@ import (
 func NewConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
-		Use:   f.Localizer.LoadMessage("kafka.consumerGroup.cmd.use"),
-		Short: f.Localizer.LoadMessage("kafka.consumerGroup.cmd.shortDescription"),
-		Long:  f.Localizer.LoadMessage("kafka.consumerGroup.cmd.longDescription"),
+		Use:   f.Localizer.MustLocalize("kafka.consumerGroup.cmd.use"),
+		Short: f.Localizer.MustLocalize("kafka.consumerGroup.cmd.shortDescription"),
+		Long:  f.Localizer.MustLocalize("kafka.consumerGroup.cmd.longDescription"),
 		Args:  cobra.ExactArgs(1),
 	}
 

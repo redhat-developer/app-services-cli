@@ -25,15 +25,15 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,
-		Use:           f.Localizer.LoadMessage("root.cmd.use"),
-		Short:         f.Localizer.LoadMessage("root.cmd.shortDescription"),
-		Long:          f.Localizer.LoadMessage("root.cmd.longDescription"),
-		Example:       f.Localizer.LoadMessage("root.cmd.example"),
+		Use:           f.Localizer.MustLocalize("root.cmd.use"),
+		Short:         f.Localizer.MustLocalize("root.cmd.shortDescription"),
+		Long:          f.Localizer.MustLocalize("root.cmd.longDescription"),
+		Example:       f.Localizer.MustLocalize("root.cmd.example"),
 	}
 
 	cmd.Version = version
 
-	cmd.SetVersionTemplate(f.Localizer.LoadMessage("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
+	cmd.SetVersionTemplate(f.Localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
@@ -42,7 +42,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
-	fs.BoolVarP(&help, "help", "h", false, f.Localizer.LoadMessage("root.cmd.flag.help.description"))
+	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))

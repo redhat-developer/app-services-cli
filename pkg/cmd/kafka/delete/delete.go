@@ -45,10 +45,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.delete.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.delete.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.delete.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.delete.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.delete.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.delete.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.delete.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.delete.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			return cmdutil.FilterValidKafkas(f, toComplete)
@@ -63,7 +63,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.LoadMessage("kafka.common.error.idAndNameCannotBeUsed"))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.error.idAndNameCannotBeUsed"))
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -77,7 +77,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(opts.localizer.LoadMessage("kafka.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -86,8 +86,8 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("kafka.delete.flag.id"))
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.LoadMessage("kafka.delete.flag.yes"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.delete.flag.yes"))
 
 	return cmd
 }
@@ -126,12 +126,12 @@ func runDelete(opts *options) error {
 
 	kafkaName := response.GetName()
 
-	logger.Info(opts.localizer.LoadMessage("kafka.delete.log.info.deleting", localize.NewEntry("Name", kafkaName)))
+	logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleting", localize.NewEntry("Name", kafkaName)))
 	logger.Info("")
 
 	if !opts.force {
 		promptConfirmName := &survey.Input{
-			Message: opts.localizer.LoadMessage("kafka.delete.input.confirmName.message"),
+			Message: opts.localizer.MustLocalize("kafka.delete.input.confirmName.message"),
 		}
 
 		var confirmedKafkaName string
@@ -141,13 +141,13 @@ func runDelete(opts *options) error {
 		}
 
 		if confirmedKafkaName != kafkaName {
-			logger.Info(opts.localizer.LoadMessage("kafka.delete.log.info.incorrectNameConfirmation"))
+			logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
 			return nil
 		}
 	}
 
 	// delete the Kafka
-	logger.Debug(opts.localizer.LoadMessage("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
+	logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
 	a := api.Kafka().DeleteKafkaById(context.Background(), response.GetId())
 	a = a.Async(true)
 	_, _, err = a.Execute()
@@ -156,7 +156,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	logger.Info(opts.localizer.LoadMessage("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
+	logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

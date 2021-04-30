@@ -59,14 +59,14 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.topic.create.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.topic.create.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.topic.create.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.topic.create.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.topic.create.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.topic.create.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.topic.create.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.topic.create.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && len(args) == 0 {
-				return errors.New(opts.localizer.LoadMessage("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
+				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
 			} else if len(args) == 0 {
 				opts.interactive = true
 			}
@@ -105,7 +105,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf(opts.localizer.LoadMessage("kafka.topic.common.error.noKafkaSelected"))
+				return fmt.Errorf(opts.localizer.MustLocalize("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -114,10 +114,10 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.LoadMessage("kafka.topic.common.flag.output.description"))
-	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, opts.localizer.LoadMessage("kafka.topic.common.input.partitions.description"))
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.LoadMessage("kafka.topic.common.input.retentionMs.description"))
-	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.LoadMessage("kafka.topic.common.input.retentionBytes.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
+	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
+	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
 
 	return cmd
 }
@@ -169,21 +169,21 @@ func runCmd(opts *Options) error {
 		operationTmplPair := localize.NewEntry("Operation", "create")
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unauthorized", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.forbidden", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
 		case 409:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", opts.topicName), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", opts.topicName), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 		case 500:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.internalServerError"))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
 		case 503:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
 
-	logger.Info(opts.localizer.LoadMessage("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+	logger.Info(opts.localizer.MustLocalize("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 	switch opts.outputFormat {
 	case "json":
@@ -214,11 +214,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug(opts.localizer.LoadMessage("common.log.debug.startingInteractivePrompt"))
+	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
-		Message: opts.localizer.LoadMessage("kafka.topic.common.input.name.message"),
-		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.name.help"),
+		Message: opts.localizer.MustLocalize("kafka.topic.common.input.name.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.common.input.name.help"),
 	}
 
 	err = survey.AskOne(
@@ -234,8 +234,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	partitionsPrompt := &survey.Input{
-		Message: opts.localizer.LoadMessage("kafka.topic.create.input.partitions.message"),
-		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.partitions.description"),
+		Message: opts.localizer.MustLocalize("kafka.topic.create.input.partitions.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"),
 		Default: "1",
 	}
 
@@ -245,8 +245,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	retentionMsPrompt := &survey.Input{
-		Message: opts.localizer.LoadMessage("kafka.topic.create.input.retentionMs.message"),
-		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.retentionMs.description"),
+		Message: opts.localizer.MustLocalize("kafka.topic.create.input.retentionMs.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"),
 		Default: strconv.Itoa(defaultRetentionPeriodMS),
 	}
 
@@ -256,8 +256,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	retentionBytesPrompt := &survey.Input{
-		Message: opts.localizer.LoadMessage("kafka.topic.create.input.retentionBytes.message"),
-		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.retentionBytes.description"),
+		Message: opts.localizer.MustLocalize("kafka.topic.create.input.retentionBytes.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"),
 		Default: strconv.Itoa(defaultRetentionSize),
 	}
 

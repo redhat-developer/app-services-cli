@@ -49,19 +49,19 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("serviceAccount.resetCredentials.cmd.use"),
-		Short:   opts.localizer.LoadMessage("serviceAccount.resetCredentials.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("serviceAccount.resetCredentials.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("serviceAccount.resetCredentials.cmd.example"),
+		Use:     opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.use"),
+		Short:   opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.id == "" {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "id")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "id")))
 			} else if opts.id == "" {
 				opts.interactive = true
 			}
 
 			if !opts.interactive && opts.fileFormat == "" {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
 			}
 
 			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
@@ -73,11 +73,11 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("serviceAccount.resetCredentials.flag.id.description"))
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.LoadMessage("serviceAccount.common.flag.overwrite.description"))
-	cmd.Flags().StringVar(&opts.filename, "file-location", "", opts.localizer.LoadMessage("serviceAccount.common.flag.fileLocation.description"))
-	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.LoadMessage("serviceAccount.common.flag.fileFormat.description"))
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.LoadMessage("serviceAccount.resetCredentials.flag.yes.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("serviceAccount.resetCredentials.flag.id.description"))
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
+	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("serviceAccount.resetCredentials.flag.yes.description"))
 
 	return cmd
 }
@@ -115,22 +115,22 @@ func runResetCredentials(opts *Options) (err error) {
 	// If the credentials file already exists, and the --overwrite flag is not set then return an error
 	// indicating that the user should explicitly request overwriting of the file
 	if _, err = os.Stat(opts.filename); err == nil && !opts.overwrite {
-		return errors.New(opts.localizer.LoadMessage("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename)))
+		return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename)))
 	}
 
 	if !opts.force {
 		// prompt the user to confirm their wish to proceed with this action
 		var confirmReset bool
-		opts.localizer.LoadMessage("serviceAccount.resetCredentials.input.confirmReset.message", localize.NewEntry("ID", opts.id))
+		opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.confirmReset.message", localize.NewEntry("ID", opts.id))
 		promptConfirmDelete := &survey.Confirm{
-			Message: opts.localizer.LoadMessage("serviceAccount.resetCredentials.input.confirmReset.message", localize.NewEntry("ID", opts.id)),
+			Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.confirmReset.message", localize.NewEntry("ID", opts.id)),
 		}
 
 		if err = survey.AskOne(promptConfirmDelete, &confirmReset); err != nil {
 			return err
 		}
 		if !confirmReset {
-			logger.Debug(opts.localizer.LoadMessage("serviceAccount.resetCredentials.log.debug.cancelledReset"))
+			logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.cancelledReset"))
 			return nil
 		}
 	}
@@ -138,10 +138,10 @@ func runResetCredentials(opts *Options) (err error) {
 	updatedServiceAccount, err := resetCredentials(serviceAcctName, opts)
 
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.localizer.LoadMessage("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("Name", updatedServiceAccount.GetName())), err)
+		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("Name", updatedServiceAccount.GetName())), err)
 	}
 
-	logger.Info(opts.localizer.LoadMessage("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
+	logger.Info(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
 
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientID(),
@@ -154,7 +154,7 @@ func runResetCredentials(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Info(opts.localizer.LoadMessage("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
+	logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
 
 	return nil
 }
@@ -173,7 +173,7 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 		return nil, err
 	}
 
-	logger.Debug(opts.localizer.LoadMessage("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
+	logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 
 	serviceacct, httpRes, err := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
 
@@ -184,10 +184,10 @@ func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, er
 
 		switch httpRes.StatusCode {
 		case 403:
-			opts.localizer.LoadMessage("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update"))
-			return nil, fmt.Errorf("%v: %w", opts.localizer.LoadMessage("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update")), err)
+			opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update"))
+			return nil, fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update")), err)
 		case 500:
-			return nil, errors.New(opts.localizer.LoadMessage("serviceAccount.common.error.internalServerError"))
+			return nil, errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.internalServerError"))
 		default:
 			return nil, err
 		}
@@ -207,11 +207,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug(opts.localizer.LoadMessage("common.log.debug.startingInteractivePrompt"))
+	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptID := &survey.Input{
-		Message: opts.localizer.LoadMessage("serviceAccount.resetCredentials.input.id.message"),
-		Help:    opts.localizer.LoadMessage("serviceAccount.resetCredentials.input.id.help"),
+		Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.id.message"),
+		Help:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.id.help"),
 	}
 
 	err = survey.AskOne(promptID, &opts.id, survey.WithValidator(survey.Required))
@@ -221,11 +221,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	// if the --output flag was not used, ask in the prompt
 	if opts.fileFormat == "" {
-		logger.Debug(opts.localizer.LoadMessage("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
+		logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
 
 		fileFormatPrompt := &survey.Select{
-			Message: opts.localizer.LoadMessage("serviceAccount.resetCredentials.input.fileFormat.message"),
-			Help:    opts.localizer.LoadMessage("serviceAccount.resetCredentials.input.fileFormat.help"),
+			Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.message"),
+			Help:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.help"),
 			Options: flagutil.CredentialsOutputFormats,
 			Default: "env",
 		}

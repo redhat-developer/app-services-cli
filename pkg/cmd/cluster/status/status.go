@@ -40,17 +40,17 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("cluster.status.cmd.use"),
-		Short:   opts.localizer.LoadMessage("cluster.status.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("cluster.status.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("cluster.status.cmd.example"),
+		Use:     opts.localizer.MustLocalize("cluster.status.cmd.use"),
+		Short:   opts.localizer.MustLocalize("cluster.status.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("cluster.status.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("cluster.status.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runStatus(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.kubeconfig, "kubeconfig", "", "", opts.localizer.LoadMessage("cluster.common.flag.kubeconfig.description"))
+	cmd.Flags().StringVarP(&opts.kubeconfig, "kubeconfig", "", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
 
 	return cmd
 }
@@ -79,9 +79,9 @@ func runStatus(opts *Options) error {
 	}
 
 	if isCRDInstalled {
-		operatorStatus = color.Success(opts.localizer.LoadMessage("cluster.common.operatorInstalledMessage"))
+		operatorStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
 	} else {
-		operatorStatus = color.Error(opts.localizer.LoadMessage("cluster.common.operatorNotInstalledMessage"))
+		operatorStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
 	currentNamespace, err := clusterConn.CurrentNamespace()
@@ -91,7 +91,7 @@ func runStatus(opts *Options) error {
 
 	fmt.Fprintln(
 		opts.IO.Out,
-		opts.localizer.LoadMessage("cluster.status.statusMessage",
+		opts.localizer.MustLocalize("cluster.status.statusMessage",
 			localize.NewEntry("Namespace", color.Info(currentNamespace)),
 			localize.NewEntry("OperatorStatus", operatorStatus)),
 	)

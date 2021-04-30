@@ -62,9 +62,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   opts.localizer.LoadMessage("kafka.list.cmd.use"),
-		Short: opts.localizer.LoadMessage("kafka.list.cmd.shortDescription"),
-		Long:  opts.localizer.LoadMessage("kafka.list.cmd.longDescription"),
+		Use:   opts.localizer.MustLocalize("kafka.list.cmd.use"),
+		Short: opts.localizer.MustLocalize("kafka.list.cmd.shortDescription"),
+		Long:  opts.localizer.MustLocalize("kafka.list.cmd.longDescription"),
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
@@ -79,10 +79,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.LoadMessage("kafkas.common.flag.output.description"))
-	cmd.Flags().IntVarP(&opts.page, "page", "", 0, opts.localizer.LoadMessage("kafka.list.flag.page"))
-	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, opts.localizer.LoadMessage("kafka.list.flag.limit"))
-	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.LoadMessage("kafka.list.flag.search"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafkas.common.flag.output.description"))
+	cmd.Flags().IntVarP(&opts.page, "page", "", 0, opts.localizer.MustLocalize("kafka.list.flag.page"))
+	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
+	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
 
 	return cmd
 }
@@ -106,7 +106,7 @@ func runList(opts *options) error {
 
 	if opts.search != "" {
 		query := buildQuery(opts.search)
-		logger.Debug(opts.localizer.LoadMessage("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
+		logger.Debug(opts.localizer.MustLocalize("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
 		a = a.Search(query)
 	}
 
@@ -117,7 +117,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 && opts.outputFormat == "" {
-		logger.Info(opts.localizer.LoadMessage("kafka.common.log.info.noKafkaInstances"))
+		logger.Info(opts.localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
 		return nil
 	}
 

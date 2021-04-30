@@ -50,10 +50,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("serviceAccount.list.cmd.use"),
-		Short:   opts.localizer.LoadMessage("serviceAccount.list.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("serviceAccount.list.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("serviceAccount.list.cmd.example"),
+		Use:     opts.localizer.MustLocalize("serviceAccount.list.cmd.use"),
+		Short:   opts.localizer.MustLocalize("serviceAccount.list.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("serviceAccount.list.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("serviceAccount.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
@@ -64,7 +64,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.LoadMessage("serviceAccount.list.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("serviceAccount.list.flag.output.description"))
 
 	return cmd
 }
@@ -91,7 +91,7 @@ func runList(opts *Options) (err error) {
 
 	serviceaccounts := res.GetItems()
 	if len(serviceaccounts) == 0 && opts.output == "" {
-		logger.Info(opts.localizer.LoadMessage("serviceAccount.list.log.info.noneFound"))
+		logger.Info(opts.localizer.MustLocalize("serviceAccount.list.log.info.noneFound"))
 		return nil
 	}
 

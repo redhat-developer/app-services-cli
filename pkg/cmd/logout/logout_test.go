@@ -21,7 +21,7 @@ import (
 )
 
 func TestNewLogoutCommand(t *testing.T) {
-	_ = localizer.IncludeAssetsAndLoadMessageFiles(locales.FS())
+	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
 	type args struct {
 		cfg        *config.Config
 		connection *connection.KeycloakConnection

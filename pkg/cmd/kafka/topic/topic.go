@@ -19,9 +19,9 @@ const (
 // NewTopicCommand gives commands that manages Kafka topics.
 func NewTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   f.Localizer.LoadMessage("kafka.topic.cmd.use"),
-		Short: f.Localizer.LoadMessage("kafka.topic.cmd.shortDescription"),
-		Long:  f.Localizer.LoadMessage("kafka.topic.cmd.longDescription"),
+		Use:   f.Localizer.MustLocalize("kafka.topic.cmd.use"),
+		Short: f.Localizer.MustLocalize("kafka.topic.cmd.shortDescription"),
+		Long:  f.Localizer.MustLocalize("kafka.topic.cmd.longDescription"),
 	}
 
 	cmd.AddCommand(

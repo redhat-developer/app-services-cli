@@ -32,9 +32,9 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   opts.localizer.LoadMessage("logout.cmd.use"),
-		Short: opts.localizer.LoadMessage("logout.cmd.shortDescription"),
-		Long:  opts.localizer.LoadMessage("logout.cmd.longDescription"),
+		Use:   opts.localizer.MustLocalize("logout.cmd.use"),
+		Short: opts.localizer.MustLocalize("logout.cmd.shortDescription"),
+		Long:  opts.localizer.MustLocalize("logout.cmd.longDescription"),
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogout(opts)
@@ -57,10 +57,10 @@ func runLogout(opts *Options) error {
 	err = connection.Logout(context.TODO())
 
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.localizer.LoadMessage("logout.error.unableToLogout"), err)
+		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("logout.error.unableToLogout"), err)
 	}
 
-	logger.Info(opts.localizer.LoadMessage("logout.log.info.logoutSuccess"))
+	logger.Info(opts.localizer.MustLocalize("logout.log.info.logoutSuccess"))
 
 	return nil
 }

@@ -56,7 +56,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 		if err != nil {
 			return err
 		}
-		logger.Info(localizer.LoadMessage("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
+		logger.Info(localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
 	// Get proper deployment
@@ -73,12 +73,12 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 	}
 
 	// Print desired action
-	logger.Info(fmt.Sprintf(localizer.LoadMessage("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
+	logger.Info(fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
 
 	if !options.ForceCreationWithoutAsk {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
-			Message: localizer.LoadMessage("cluster.serviceBinding.confirm.message"),
+			Message: localizer.MustLocalize("cluster.serviceBinding.confirm.message"),
 		}
 		err = survey.AskOne(confirm, &shouldContinue)
 		if err != nil {
@@ -93,7 +93,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 	// Check KafkaConnection
 	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(context.TODO(), options.ServiceName, metav1.GetOptions{})
 	if err != nil {
-		return errors.New(localizer.LoadMessage("cluster.serviceBinding.serviceMissing.message"))
+		return errors.New(localizer.MustLocalize("cluster.serviceBinding.serviceMissing.message"))
 	}
 
 	// Execute binding
@@ -102,7 +102,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 		return err
 	}
 
-	logger.Info(fmt.Sprintf(localizer.LoadMessage("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
+	logger.Info(fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
 	return nil
 }
 
@@ -159,7 +159,7 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 
 	if err != nil {
 		if options.ForceUseOperator {
-			return errors.New(localizer.LoadMessage("cluster.serviceBinding.operatorMissing") + err.Error())
+			return errors.New(localizer.MustLocalize("cluster.serviceBinding.operatorMissing") + err.Error())
 		}
 		logger.Debug("Service binding Operator not available. Will use SDK option for binding")
 		return useSDKForBinding(clients, sb)
@@ -170,7 +170,7 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 }
 
 func useOperatorForBinding(logger logging.Logger, localizer localize.Localizer, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
-	logger.Info(localizer.LoadMessage("cluster.serviceBinding.usingOperator"))
+	logger.Info(localizer.MustLocalize("cluster.serviceBinding.usingOperator"))
 	sbData, err := runtime.DefaultUnstructuredConverter.ToUnstructured(sb)
 	if err != nil {
 		return err
@@ -219,7 +219,7 @@ func fetchAppNameFromCluster(clients *KubernetesClients, localizer localize.Loca
 	}
 
 	prompt := &survey.Select{
-		Message:  localizer.LoadMessage("cluster.serviceBinding.connect.survey.message"),
+		Message:  localizer.MustLocalize("cluster.serviceBinding.connect.survey.message"),
 		Options:  appNames,
 		PageSize: 10,
 	}
@@ -242,22 +242,22 @@ func client(localizer localize.Localizer) (*KubernetesClients, error) {
 
 	_, err := os.Stat(kubeconfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.configNotFoundError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.configNotFoundError"), err)
 	}
 
 	restConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	dynamicClient, err := dynamic.NewForConfig(restConfig)
 
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	// Used for namespaces and general queries

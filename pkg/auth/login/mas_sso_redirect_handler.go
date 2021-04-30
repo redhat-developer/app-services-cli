@@ -85,8 +85,8 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		rawUsername = fmt.Sprintf("%v", userName)
 	}
 
-	pageTitle := h.Localizer.LoadMessage("login.redirectPage.title")
-	pageBody := h.Localizer.LoadMessage("login.masRedirectPage.body", localize.NewEntry("Username", rawUsername))
+	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
+	pageBody := h.Localizer.MustLocalize("login.masRedirectPage.body", localize.NewEntry("Username", rawUsername))
 
 	redirectPage := fmt.Sprintf(masSSOredirectHTMLPage, pageTitle, pageTitle, pageBody)
 

@@ -42,10 +42,10 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.topic.delete.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.topic.delete.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.topic.delete.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.topic.delete.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.topic.delete.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.topic.delete.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.topic.delete.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.topic.delete.cmd.example"),
 		Args:    cobra.ExactValidArgs(1),
 		// Dynamic completion of the topic name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -53,7 +53,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.force {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes")))
 			}
 
 			if len(args) > 0 {
@@ -70,7 +70,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf(opts.localizer.LoadMessage("kafka.topic.common.error.noKafkaSelected"))
+				return fmt.Errorf(opts.localizer.MustLocalize("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -79,7 +79,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.LoadMessage("kafka.topic.delete.flag.yes.description"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.topic.delete.flag.yes.description"))
 
 	return cmd
 }
@@ -112,13 +112,13 @@ func runCmd(opts *Options) error {
 			return err
 		}
 		if httpRes.StatusCode == 404 {
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
 		}
 	}
 
 	if !opts.force {
 		var promptConfirmName = &survey.Input{
-			Message: opts.localizer.LoadMessage("kafka.topic.delete.input.name.message"),
+			Message: opts.localizer.MustLocalize("kafka.topic.delete.input.name.message"),
 		}
 		var userConfirmedName string
 		if err = survey.AskOne(promptConfirmName, &userConfirmedName); err != nil {
@@ -126,7 +126,7 @@ func runCmd(opts *Options) error {
 		}
 
 		if userConfirmedName != opts.topicName {
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.delete.error.mismatchedNameConfirmation", localize.NewEntry("ConfirmedName", userConfirmedName), localize.NewEntry("ActualName", opts.topicName)))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.delete.error.mismatchedNameConfirmation", localize.NewEntry("ConfirmedName", userConfirmedName), localize.NewEntry("ActualName", opts.topicName)))
 		}
 	}
 
@@ -141,21 +141,21 @@ func runCmd(opts *Options) error {
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 		switch httpRes.StatusCode {
 		case 404:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
 		case 401:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unauthorized", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.forbidden", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
 		case 500:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.internalServerError"))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
 		case 503:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
 
-	logger.Info(opts.localizer.LoadMessage("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
+	logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
 
 	return nil
 }

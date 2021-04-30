@@ -32,10 +32,10 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.LoadMessage("whoami.cmd.use"),
-		Short:   f.Localizer.LoadMessage("whoami.cmd.shortDescription"),
-		Long:    f.Localizer.LoadMessage("whoami.cmd.longDescription"),
-		Example: f.Localizer.LoadMessage("whoami.cmd.example"),
+		Use:     f.Localizer.MustLocalize("whoami.cmd.use"),
+		Short:   f.Localizer.MustLocalize("whoami.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("whoami.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("whoami.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runCmd(opts)
@@ -70,7 +70,7 @@ func runCmd(opts *Options) (err error) {
 	if ok {
 		fmt.Fprintln(opts.IO.Out, userName)
 	} else {
-		logger.Info(opts.localizer.LoadMessage("whoami.log.info.tokenHasNoUsername"))
+		logger.Info(opts.localizer.MustLocalize("whoami.log.info.tokenHasNoUsername"))
 	}
 
 	return nil

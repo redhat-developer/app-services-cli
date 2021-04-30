@@ -42,24 +42,24 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("cluster.connect.cmd.use"),
-		Short:   opts.localizer.LoadMessage("cluster.connect.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("cluster.connect.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("cluster.connect.cmd.example"),
+		Use:     opts.localizer.MustLocalize("cluster.connect.cmd.use"),
+		Short:   opts.localizer.MustLocalize("cluster.connect.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("cluster.connect.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("cluster.connect.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context")))
 			}
 			return runConnect(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", opts.localizer.LoadMessage("cluster.common.flag.kubeconfig.description"))
-	cmd.Flags().StringVarP(&opts.offlineAccessToken, "token", "", "", opts.localizer.LoadMessage("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
-	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.LoadMessage("cluster.common.flag.namespace.description"))
-	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.LoadMessage("cluster.common.flag.yes.description"))
-	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, opts.localizer.LoadMessage("cluster.common.flag.ignoreContext.description"))
+	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
+	cmd.Flags().StringVarP(&opts.offlineAccessToken, "token", "", "", opts.localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
+	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
+	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 
 	return cmd
 }

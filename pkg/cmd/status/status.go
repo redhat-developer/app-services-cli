@@ -51,17 +51,17 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:       opts.localizer.LoadMessage("status.cmd.use"),
-		Short:     opts.localizer.LoadMessage("status.cmd.shortDescription"),
-		Long:      opts.localizer.LoadMessage("status.cmd.longDescription"),
-		Example:   opts.localizer.LoadMessage("status.cmd.example"),
+		Use:       opts.localizer.MustLocalize("status.cmd.use"),
+		Short:     opts.localizer.MustLocalize("status.cmd.shortDescription"),
+		Long:      opts.localizer.MustLocalize("status.cmd.longDescription"),
+		Example:   opts.localizer.MustLocalize("status.cmd.example"),
 		ValidArgs: validServices,
 		Args:      cobra.RangeArgs(0, len(validServices)),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				for _, s := range args {
 					if !flags.IsValidInput(s, validServices...) {
-						return errors.New(opts.localizer.LoadMessage("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s)))
+						return errors.New(opts.localizer.MustLocalize("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s)))
 					}
 				}
 
@@ -77,7 +77,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.LoadMessage("status.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("status.flag.output.description"))
 
 	return cmd
 }
@@ -101,7 +101,7 @@ func runStatus(opts *Options) error {
 	}
 
 	if len(opts.services) > 0 {
-		logger.Debug(opts.localizer.LoadMessage("status.log.debug.requestingStatusOfServices"), opts.services)
+		logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
 	status, ok, err := pkgStatus.Get(context.Background(), pkgOpts)
@@ -111,7 +111,7 @@ func runStatus(opts *Options) error {
 
 	if !ok {
 		logger.Info("")
-		logger.Info(opts.localizer.LoadMessage("status.log.info.noStatusesAreUsed"))
+		logger.Info(opts.localizer.MustLocalize("status.log.info.noStatusesAreUsed"))
 		return nil
 	}
 

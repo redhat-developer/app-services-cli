@@ -52,10 +52,10 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.consumerGroup.list.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.consumerGroup.list.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.consumerGroup.list.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.consumerGroup.list.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
@@ -68,7 +68,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.noKafkaSelected"))
+				return fmt.Errorf(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -77,9 +77,9 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 1000, opts.localizer.LoadMessage("kafka.consumerGroup.list.flag.limit"))
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.LoadMessage("kafka.consumerGroup.list.flag.output.description"))
-	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.LoadMessage("kafka.consumerGroup.list.flag.topic.description"))
+	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 1000, opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.limit"))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.output.description"))
+	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.topic.description"))
 
 	return cmd
 }
@@ -117,13 +117,13 @@ func runList(opts *Options) (err error) {
 
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.list.common.error.unauthorized", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.list.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.list.common.error.forbidden", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.list.common.error.forbidden", operationTmplPair))
 		case 500:
-			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.internalServerError"))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
-			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
@@ -183,9 +183,9 @@ func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCoun
 	kafkaNameTmplPair := localize.NewEntry("Name", kafkaName)
 	if count == 0 && opts.output == "" {
 		if opts.topic == "" {
-			logger.Info(opts.localizer.LoadMessage("kafka.consumerGroup.list.log.info.noConsumerGroups"), kafkaNameTmplPair)
+			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroups"), kafkaNameTmplPair)
 		} else {
-			logger.Info(opts.localizer.LoadMessage("kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic"), kafkaNameTmplPair, localize.NewEntry("TopicName", opts.topic))
+			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic"), kafkaNameTmplPair, localize.NewEntry("TopicName", opts.topic))
 		}
 
 		return false, nil

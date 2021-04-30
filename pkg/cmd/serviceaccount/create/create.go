@@ -51,21 +51,21 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("serviceAccount.create.cmd.use"),
-		Short:   opts.localizer.LoadMessage("serviceAccount.create.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("serviceAccount.create.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("serviceAccount.create.cmd.example"),
+		Use:     opts.localizer.MustLocalize("serviceAccount.create.cmd.use"),
+		Short:   opts.localizer.MustLocalize("serviceAccount.create.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("serviceAccount.create.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("serviceAccount.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return errors.New(opts.localizer.LoadMessage("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "name")))
+				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "name")))
 			} else if opts.name == "" && opts.description == "" {
 				opts.interactive = true
 			}
 
 			if !opts.interactive {
 				if opts.fileFormat == "" {
-					return errors.New(opts.localizer.LoadMessage("flag.error.required", localize.NewEntry("Flag", "file-format")))
+					return errors.New(opts.localizer.MustLocalize("flag.error.required", localize.NewEntry("Flag", "file-format")))
 				}
 
 				if err = validation.ValidateName(opts.name); err != nil {
@@ -86,11 +86,11 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.LoadMessage("serviceAccount.create.flag.name.description"))
-	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.LoadMessage("serviceAccount.create.flag.description.description"))
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.LoadMessage("serviceAccount.common.flag.overwrite.description"))
-	cmd.Flags().StringVar(&opts.filename, "file-location", "", opts.localizer.LoadMessage("serviceAccount.common.flag.fileLocation.description"))
-	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.LoadMessage("serviceAccount.common.flag.fileFormat.description"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("serviceAccount.create.flag.name.description"))
+	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("serviceAccount.create.flag.description.description"))
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
+	cmd.Flags().StringVar(&opts.filename, "file-location", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
+	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
 
 	return cmd
 }
@@ -122,7 +122,7 @@ func runCreate(opts *Options) error {
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(opts.filename)
 	if err == nil && !opts.overwrite {
-		return errors.New(opts.localizer.LoadMessage("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename)))
+		return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename)))
 	}
 
 	// create the service account
@@ -137,7 +137,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	logger.Info(opts.localizer.LoadMessage("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
+	logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientID(),
@@ -147,10 +147,10 @@ func runCreate(opts *Options) error {
 	// save the credentials to a file
 	err = credentials.Write(opts.fileFormat, opts.filename, creds)
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.localizer.LoadMessage("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
+		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
 	}
 
-	logger.Info(opts.localizer.LoadMessage("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FileName", opts.filename)))
+	logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FileName", opts.filename)))
 
 	return nil
 }
@@ -166,11 +166,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug(opts.localizer.LoadMessage("common.log.debug.startingInteractivePrompt"))
+	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
-		Message: opts.localizer.LoadMessage("serviceAccount.create.input.name.message"),
-		Help:    opts.localizer.LoadMessage("serviceAccount.create.input.name.help"),
+		Message: opts.localizer.MustLocalize("serviceAccount.create.input.name.message"),
+		Help:    opts.localizer.MustLocalize("serviceAccount.create.input.name.help"),
 	}
 
 	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateName))
@@ -180,11 +180,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	// if the --file-format flag was not used, ask in the prompt
 	if opts.fileFormat == "" {
-		logger.Debug(opts.localizer.LoadMessage("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
+		logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
 
 		fileFormatPrompt := &survey.Select{
-			Message: opts.localizer.LoadMessage("serviceAccount.create.input.fileFormat.message"),
-			Help:    opts.localizer.LoadMessage("serviceAccount.create.input.fileFormat.help"),
+			Message: opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.message"),
+			Help:    opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.help"),
 			Options: flagutil.CredentialsOutputFormats,
 			Default: "env",
 		}
@@ -201,8 +201,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	promptDescription := &survey.Multiline{
-		Message: opts.localizer.LoadMessage("serviceAccount.create.input.description.message"),
-		Help:    opts.localizer.LoadMessage("serviceAccount.create.flag.description.description"),
+		Message: opts.localizer.MustLocalize("serviceAccount.create.input.description.message"),
+		Help:    opts.localizer.MustLocalize("serviceAccount.create.flag.description.description"),
 	}
 
 	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validation.ValidateDescription))
@@ -210,7 +210,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Info(opts.localizer.LoadMessage("serviceAccount.create.log.info.creating", localize.NewEntry("Name", opts.name)))
+	logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.creating", localize.NewEntry("Name", opts.name)))
 
 	return nil
 }

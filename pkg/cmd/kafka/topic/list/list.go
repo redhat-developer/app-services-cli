@@ -52,10 +52,10 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.topic.list.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.topic.list.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.topic.list.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.topic.list.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.topic.list.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.topic.list.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.topic.list.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.topic.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" {
@@ -70,7 +70,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -79,7 +79,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.LoadMessage("kafka.topic.list.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 
 	return cmd
 }
@@ -111,20 +111,20 @@ func runCmd(opts *Options) error {
 		operationTemplatePair := localize.NewEntry("Operation", "list")
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.list.common.error.unauthorized", operationTemplatePair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.common.error.unauthorized", operationTemplatePair))
 		case 403:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.list.common.error.forbidden", operationTemplatePair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.common.error.forbidden", operationTemplatePair))
 		case 500:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.internalServerError"))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
 		case 503:
-			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
 
 	if topicData.GetCount() == 0 && opts.output == "" {
-		logger.Info(opts.localizer.LoadMessage("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+		logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 		return nil
 	}

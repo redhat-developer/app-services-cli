@@ -88,10 +88,10 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("login.cmd.use"),
-		Short:   opts.localizer.LoadMessage("login.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("login.cmd.longDescription", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
-		Example: opts.localizer.LoadMessage("login.cmd.example"),
+		Use:     opts.localizer.MustLocalize("login.cmd.use"),
+		Short:   opts.localizer.MustLocalize("login.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("login.cmd.longDescription", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
+		Example: opts.localizer.MustLocalize("login.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.offlineToken != "" && opts.clientID == build.DefaultClientID {
@@ -104,21 +104,21 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.IO.IsSSHSession() && opts.offlineToken == "" {
-				logger.Info(opts.localizer.LoadMessage("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+				logger.Info(opts.localizer.MustLocalize("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 			}
 
 			return runLogin(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, opts.localizer.LoadMessage("login.flag.apiGateway"))
-	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, opts.localizer.LoadMessage("login.flag.insecure"))
-	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, opts.localizer.LoadMessage("login.flag.clientId"))
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.LoadMessage("login.flag.authUrl"))
-	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.LoadMessage("login.flag.masAuthUrl"))
-	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.LoadMessage("login.flag.printSsoUrl"))
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, opts.localizer.LoadMessage("login.flag.scope"))
-	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.LoadMessage("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+	cmd.Flags().StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, opts.localizer.MustLocalize("login.flag.apiGateway"))
+	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, opts.localizer.MustLocalize("login.flag.insecure"))
+	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, opts.localizer.MustLocalize("login.flag.clientId"))
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.MustLocalize("login.flag.authUrl"))
+	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.MustLocalize("login.flag.masAuthUrl"))
+	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
+	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 
 	return cmd
 }
@@ -209,9 +209,9 @@ func runLogin(opts *Options) (err error) {
 	username, ok := token.GetUsername(cfg.AccessToken)
 	logger.Info("")
 	if !ok {
-		logger.Info(opts.localizer.LoadMessage("login.log.info.loginSuccessNoUsername"))
+		logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {
-		opts.localizer.LoadMessage("login.log.info.loginSuccess", localize.NewEntry("Username", username))
+		opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username))
 	}
 
 	// debug mode checks this for a version update also.
@@ -266,7 +266,7 @@ func getURLFromAlias(urlOrAlias string, urlAliasMap map[string]string, localizer
 		return nil, err
 	}
 	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		err = errors.New(localizer.LoadMessage("login.error.schemeMissingFromUrl", localize.NewEntry("URL", gatewayURL.String())))
+		err = errors.New(localizer.MustLocalize("login.error.schemeMissingFromUrl", localize.NewEntry("URL", gatewayURL.String())))
 		return nil, err
 	}
 

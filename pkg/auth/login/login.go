@@ -38,18 +38,18 @@ type SSOConfig struct {
 // https://tools.ietf.org/html/rfc6749#section-4.1
 func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) error {
 	// log in to SSO
-	a.Logger.Info(a.Localizer.LoadMessage("login.log.info.loggingIn"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingIn"))
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(a.Localizer.LoadMessage("login.log.info.loggedIn"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedIn"))
 
-	a.Logger.Info(a.Localizer.LoadMessage("login.log.info.loggingInMAS"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingInMAS"))
 	// log in to MAS-SSO
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(a.Localizer.LoadMessage("login.log.info.loggedInMAS"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedInMAS"))
 
 	return nil
 }
@@ -216,7 +216,7 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 
 func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *url.URL) {
 	if a.PrintURL {
-		a.Logger.Info(a.Localizer.LoadMessage("login.log.info.openSSOUrl"), "\n")
+		a.Logger.Info(a.Localizer.MustLocalize("login.log.info.openSSOUrl"), "\n")
 		fmt.Fprintln(a.IO.Out, authCodeURL)
 		a.Logger.Info("")
 	} else {
@@ -232,7 +232,7 @@ func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *ur
 func (a *AuthorizationCodeGrant) startServer(ctx context.Context, server *http.Server) {
 	go func() {
 		if err := server.ListenAndServe(); err == nil {
-			a.Logger.Error(a.Localizer.LoadMessage("login.log.error.unableToStartServer"), localize.NewEntry("Error", err))
+			a.Logger.Error(a.Localizer.MustLocalize("login.log.error.unableToStartServer"), localize.NewEntry("Error", err))
 		}
 	}()
 	<-ctx.Done()

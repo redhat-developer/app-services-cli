@@ -16,7 +16,7 @@ var (
 // Localizer is an abstract interface
 // which defines methods to load i18n messages
 type Localizer interface {
-	LoadMessage(id string, templateEntries ...*TemplateEntry) string
+	MustLocalize(id string, templateEntries ...*TemplateEntry) string
 }
 
 // TemplateEntry is a type which defines

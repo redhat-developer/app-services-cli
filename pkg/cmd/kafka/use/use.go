@@ -43,10 +43,10 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.use.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.use.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.use.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.use.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.use.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.use.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.use.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.use.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			return cmdutil.FilterValidKafkas(f, toComplete)
@@ -56,20 +56,20 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 				opts.name = args[0]
 			} else if opts.id == "" {
 				if !opts.IO.CanPrompt() {
-					return errors.New(opts.localizer.LoadMessage("kafka.use.error.idOrNameRequired"))
+					return errors.New(opts.localizer.MustLocalize("kafka.use.error.idOrNameRequired"))
 				}
 				opts.interactive = true
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.LoadMessage("kafka.common.error.idAndNameCannotBeUsed"))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.error.idAndNameCannotBeUsed"))
 			}
 
 			return runUse(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("kafka.use.flag.id"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
 
 	return cmd
 }
@@ -127,11 +127,11 @@ func runUse(opts *Options) error {
 	nameTmplEntry := localize.NewEntry("Name", res.GetName())
 	cfg.Services.Kafka = &kafkaConfig
 	if err := opts.Config.Save(cfg); err != nil {
-		saveErrMsg := opts.localizer.LoadMessage("kafka.use.error.saveError", nameTmplEntry)
+		saveErrMsg := opts.localizer.MustLocalize("kafka.use.error.saveError", nameTmplEntry)
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	logger.Info(opts.localizer.LoadMessage("kafka.use.log.info.useSuccess", nameTmplEntry))
+	logger.Info(opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }
@@ -147,7 +147,7 @@ func runInteractivePrompt(opts *Options) error {
 		return err
 	}
 
-	logger.Debug(opts.localizer.LoadMessage("common.log.debug.startingInteractivePrompt"))
+	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	selectedKafka, err := kafka.InteractiveSelect(connection, logger)
 	if err != nil {

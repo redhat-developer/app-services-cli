@@ -44,10 +44,10 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.LoadMessage("kafka.describe.cmd.use"),
-		Short:   opts.localizer.LoadMessage("kafka.describe.cmd.shortDescription"),
-		Long:    opts.localizer.LoadMessage("kafka.describe.cmd.longDescription"),
-		Example: opts.localizer.LoadMessage("kafka.describe.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.describe.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.describe.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.describe.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.describe.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		// Dynamic completion of the Kafka name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -64,7 +64,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.LoadMessage("kafka.common.error.idAndNameCannotBeUsed"))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.error.idAndNameCannotBeUsed"))
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -78,7 +78,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(opts.localizer.LoadMessage("kafka.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -87,8 +87,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.LoadMessage("kafka.common.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("kafka.describe.flag.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
 
 	return cmd
 }

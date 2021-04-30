@@ -90,12 +90,12 @@ func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		username = "unknown"
 	}
 
-	pageTitle := h.Localizer.LoadMessage("login.redirectPage.title")
-	pageBody := h.Localizer.LoadMessage("login.redirectPage.body", localize.NewEntry("Username", username))
+	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
+	pageBody := h.Localizer.MustLocalize("login.redirectPage.body", localize.NewEntry("Username", username))
 
 	issuerURL, realm, ok := connection.SplitKeycloakRealmURL(h.AuthURL)
 	if !ok {
-		h.Logger.Error(h.Localizer.LoadMessage("login.error.noRealmInURL"))
+		h.Logger.Error(h.Localizer.MustLocalize("login.error.noRealmInURL"))
 		os.Exit(1)
 	}
 	redirectPage := fmt.Sprintf(ssoRedirectHTMLPage, pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
