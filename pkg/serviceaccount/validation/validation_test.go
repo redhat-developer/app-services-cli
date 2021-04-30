@@ -2,14 +2,9 @@ package validation
 
 import (
 	"testing"
-
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
-	"github.com/redhat-developer/app-services-cli/pkg/localizer"
 )
 
 func TestValidateName(t *testing.T) {
-	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
-
 	type args struct {
 		val interface{}
 	}
@@ -75,8 +70,6 @@ func TestValidateName(t *testing.T) {
 }
 
 func TestValidateDescription(t *testing.T) {
-	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
-
 	type args struct {
 		val interface{}
 	}

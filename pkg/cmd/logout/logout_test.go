@@ -6,12 +6,11 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/redhat-developer/app-services-cli/pkg/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/internal/mockutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -21,7 +20,7 @@ import (
 )
 
 func TestNewLogoutCommand(t *testing.T) {
-	_ = localizer.IncludeAssetsAndMustLocalizeFiles(locales.FS())
+	localizer, _ := goi18n.New(nil)
 	type args struct {
 		cfg        *config.Config
 		connection *connection.KeycloakConnection
@@ -76,6 +75,7 @@ func TestNewLogoutCommand(t *testing.T) {
 				Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
 					return mockutil.NewConnectionMock(tt.args.connection, nil), nil
 				},
+				Localizer: localizer,
 				Logger: func() (logging.Logger, error) {
 					loggerBuilder := logging.NewStdLoggerBuilder()
 					loggerBuilder = loggerBuilder.Debug(true)
