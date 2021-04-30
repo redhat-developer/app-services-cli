@@ -40,7 +40,7 @@ one = 'Set the new Kafka instance to the current instance'
 
 [kafka.create.log.debug.creatingKafka]
 description = 'Debug message when Kafka instance is being created'
-one = 'Creating Kafka instance "{{.Name}}'
+one = 'Creating Kafka instance "{{.Name}}"...'
 
 [kafka.create.info.successMessage]
 description = 'Message to display when instance has been created'

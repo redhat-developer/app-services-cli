@@ -1,7 +1,8 @@
 [kafka.topic.common.flag.output.description]
-description = "Description for --output flag"
 one = 'Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml"'
-other = 'Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"'
+
+[kafka.topic.list.flag.output.description]
+one = 'Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"'
 
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
@@ -23,11 +24,15 @@ one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the
 
 [kafka.topic.common.error.unauthorized]
 one = 'you are unauthorized to {{.Operation}} this topic'
-other = 'you are unauthorized to {{.Operation}} these topics'
 
 [kafka.topic.common.error.forbidden]
 one = 'you are forbidden to {{.Operation}} this topic'
-other = 'you are forbidden to {{.Operation}} these topics'
+
+[kafka.topic.list.error.unauthorized]
+one = 'you are unauthorized to {{.Operation}} these topics'
+
+[kafka.topic.list.error.forbidden]
+one = 'you are forbidden to {{.Operation}} these topics'
 
 [kafka.topic.common.error.internalServerError]
 one = 'internal server error'

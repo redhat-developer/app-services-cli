@@ -9,7 +9,9 @@ one = 'no Kafka instance is currently set, use the "--id" flag or set the curren
 [kafka.common.flag.output.description]
 description = "Description for --output flag"
 one = 'Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml"'
-other = 'Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"'
+
+[kafkas.common.flag.output.description]
+one = 'Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"'
 
 [kafka.common.error.idAndNameCannotBeUsed]
 one = 'name argument and --id flag cannot be used at the same time'
