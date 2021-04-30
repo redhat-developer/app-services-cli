@@ -1,12 +1,10 @@
 package token
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
@@ -56,22 +54,12 @@ func (t *Token) NeedsRefresh() bool {
 	now := time.Now()
 	expires, left, err := GetExpiry(t.AccessToken, now)
 	if err != nil {
-		t.Logger.Debug(localizer.MustLocalize(&localizer.Config{
-			MessageID: "connection.tokenNeedsRefresh.log.debug.expiryCheckError",
-			TemplateData: map[string]interface{}{
-				"Reason": err.Error(),
-			},
-		}))
+		t.Logger.Debug("Error while checking token expiry:", err)
 		return false
 	}
 
 	if !expires || left > 5*time.Minute {
-		t.Logger.Debug(localizer.MustLocalize(&localizer.Config{
-			MessageID: "connection.tokenNeedsRefresh.log.debug.tokenIsStillValid",
-			TemplateData: map[string]interface{}{
-				"TimeLeft": left,
-			},
-		}))
+		t.Logger.Debug("Token is still valid. Expires in", left)
 		return false
 	}
 
@@ -82,25 +70,19 @@ func Parse(textToken string) (token *jwt.Token, err error) {
 	parser := new(jwt.Parser)
 	token, _, err = parser.ParseUnverified(textToken, jwt.MapClaims{})
 	if err != nil {
-		err = fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("auth.token.parse.error.parseError"), err)
+		err = fmt.Errorf("%v: %w", "unable to parse token", err)
 		return
 	}
 	return token, nil
 }
 
-func MapClaims(token *jwt.Token) (jwt.MapClaims, error) {
+func MapClaims(token *jwt.Token) (claims jwt.MapClaims, err error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		err := errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "auth.token.mapClaims.error.claimsError",
-			TemplateData: map[string]interface{}{
-				"Claims": claims,
-			},
-		}))
-		return nil, err
+		err = fmt.Errorf("expected map claims but got \"%v\"", claims)
 	}
 
-	return claims, nil
+	return claims, err
 }
 
 func GetExpiry(tokenStr string, now time.Time) (expires bool,
@@ -120,12 +102,7 @@ func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	if ok {
 		exp, ok = claim.(float64)
 		if !ok {
-			err = errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "auth.token.getExpiry.error.expectedExpiryClaimError",
-				TemplateData: map[string]interface{}{
-					"Claim": claim,
-				},
-			}))
+			err = fmt.Errorf("expected floating point \"exp\" but got \"%v\"", claim)
 			return
 		}
 	}

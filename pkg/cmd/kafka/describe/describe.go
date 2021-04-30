@@ -8,11 +8,11 @@ import (
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -30,6 +30,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
+	localizer  localize.Localizer
 }
 
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
@@ -39,13 +40,14 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.describe.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.describe.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.describe.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("kafka.describe.cmd.example"),
+		Use:     opts.localizer.LoadMessage("kafka.describe.cmd.use"),
+		Short:   opts.localizer.LoadMessage("kafka.describe.cmd.shortDescription"),
+		Long:    opts.localizer.LoadMessage("kafka.describe.cmd.longDescription"),
+		Example: opts.localizer.LoadMessage("kafka.describe.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		// Dynamic completion of the Kafka name
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -62,7 +64,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.idAndNameCannotBeUsed"))
+				return errors.New(opts.localizer.LoadMessage("kafka.common.error.idAndNameCannotBeUsed"))
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -76,7 +78,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.LoadMessage("kafka.common.error.noKafkaSelected"))
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID
@@ -85,8 +87,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalizeFromID("kafka.common.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.describe.flag.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.LoadMessage("kafka.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("kafka.describe.flag.id"))
 
 	return cmd
 }

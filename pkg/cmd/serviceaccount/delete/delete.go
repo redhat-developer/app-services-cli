@@ -2,14 +2,15 @@ package delete
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -19,6 +20,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 
 	id    string
 	force bool
@@ -31,30 +33,26 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("serviceAccount.delete.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("serviceAccount.delete.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("serviceAccount.delete.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("serviceAccount.delete.cmd.example"),
+		Use:     opts.localizer.LoadMessage("serviceAccount.delete.cmd.use"),
+		Short:   opts.localizer.LoadMessage("serviceAccount.delete.cmd.shortDescription"),
+		Long:    opts.localizer.LoadMessage("serviceAccount.delete.cmd.longDescription"),
+		Example: opts.localizer.LoadMessage("serviceAccount.delete.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
-				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: "flag.error.requiredWhenNonInteractive",
-					TemplateData: map[string]interface{}{
-						"Flag": "yes",
-					},
-				}))
+				return flag.RequiredWhenNonInteractiveError("yes")
 			}
 
 			return runDelete(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("serviceAccount.delete.flag.id.description"))
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, localizer.MustLocalizeFromID("serviceAccount.delete.flag.yes.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("serviceAccount.delete.flag.id.description"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.LoadMessage("serviceAccount.delete.flag.yes.description"))
 
 	_ = cmd.MarkFlagRequired("id")
 
@@ -82,24 +80,14 @@ func runDelete(opts *Options) (err error) {
 		}
 
 		if httpRes.StatusCode == 404 {
-			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.error.notFoundError",
-				TemplateData: map[string]interface{}{
-					"ID": opts.id,
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id)))
 		}
 	}
 
 	if !opts.force {
 		var confirmDelete bool
 		promptConfirmDelete := &survey.Confirm{
-			Message: localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.delete.input.confirmDelete.message",
-				TemplateData: map[string]interface{}{
-					"ID": opts.id,
-				},
-			}),
+			Message: opts.localizer.LoadMessage("serviceAccount.delete.input.confirmDelete.message", localize.NewEntry("ID", opts.id)),
 		}
 
 		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
@@ -108,7 +96,7 @@ func runDelete(opts *Options) (err error) {
 		}
 
 		if !confirmDelete {
-			logger.Debug(localizer.MustLocalizeFromID("serviceAccount.delete.log.debug.deleteNotConfirmed"))
+			logger.Debug(opts.localizer.LoadMessage("serviceAccount.delete.log.debug.deleteNotConfirmed"))
 			return nil
 		}
 	}
@@ -139,20 +127,15 @@ func deleteServiceAccount(opts *Options) error {
 
 		switch httpRes.StatusCode {
 		case 403:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.error.forbidden",
-				TemplateData: map[string]interface{}{
-					"Operation": "delete",
-				},
-			}), err)
+			return errors.New(opts.localizer.LoadMessage("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete")))
 		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
+			return errors.New(opts.localizer.LoadMessage("serviceAccount.common.error.internalServerError"))
 		default:
 			return err
 		}
 	}
 
-	logger.Info(localizer.MustLocalizeFromID("serviceAccount.delete.log.info.deleteSuccess"))
+	logger.Info(opts.localizer.LoadMessage("serviceAccount.delete.log.info.deleteSuccess"))
 
 	return nil
 }

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
-	"github.com/redhat-developer/app-services-cli/pkg/locales"
+	"github.com/redhat-developer/app-services-cli/pkg/localizer"
 )
 
 func TestValidateName(t *testing.T) {

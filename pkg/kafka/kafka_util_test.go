@@ -5,7 +5,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
-	"github.com/redhat-developer/app-services-cli/pkg/locales"
+	"github.com/redhat-developer/app-services-cli/pkg/localizer"
 )
 
 func TestValidateName(t *testing.T) {

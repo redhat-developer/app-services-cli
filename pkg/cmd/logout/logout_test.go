@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/redhat-developer/app-services-cli/pkg/locales"
+	"github.com/redhat-developer/app-services-cli/pkg/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"

@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
 
 // NewFile creates a new config type
@@ -32,17 +30,17 @@ func (c *File) Load() (*Config, error) {
 		return nil, err
 	}
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.statError"), err)
+		return nil, fmt.Errorf("%v: %w", "unable to check if config file exists", err)
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.readError"), err)
+		return nil, fmt.Errorf("%v: %w", "unable to read config file", err)
 	}
 	var cfg Config
 	err = json.Unmarshal(data, &cfg)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.parseError"), err)
+		return nil, fmt.Errorf("%v: %w", "unable to parse config", err)
 	}
 	return &cfg, nil
 }
@@ -55,7 +53,7 @@ func (c *File) Save(cfg *Config) error {
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.save.error.marshalError"), err)
+		return fmt.Errorf("%v: %w", "unable to marshal config", err)
 	}
 	rhoasCfgDir, err := DefaultDir()
 	if err != nil {
@@ -69,7 +67,7 @@ func (c *File) Save(cfg *Config) error {
 	}
 	err = ioutil.WriteFile(file, data, 0600)
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.save.error.writeError"), err)
+		return fmt.Errorf("%v: %w", "unable to save config", err)
 	}
 	return nil
 }

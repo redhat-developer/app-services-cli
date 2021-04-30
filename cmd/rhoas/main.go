@@ -10,7 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/locales"
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
@@ -29,7 +29,7 @@ var (
 )
 
 func main() {
-	localizer, err := locales.New(nil)
+	localizer, err := goi18n.New(nil)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -56,7 +56,7 @@ func main() {
 
 	err = rootCmd.Execute()
 	if debug.Enabled() {
-		build.CheckForUpdate(context.Background(), logger)
+		build.CheckForUpdate(context.Background(), logger, localizer)
 	}
 	if err == nil {
 		return

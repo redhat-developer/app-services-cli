@@ -8,10 +8,10 @@ import (
 	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
@@ -45,6 +45,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 }
 
 // NewCreateTopicCommand gets a new command for creating kafka topic.
@@ -54,22 +55,18 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.topic.create.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.topic.create.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.topic.create.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("kafka.topic.create.cmd.example"),
+		Use:     opts.localizer.LoadMessage("kafka.topic.create.cmd.use"),
+		Short:   opts.localizer.LoadMessage("kafka.topic.create.cmd.shortDescription"),
+		Long:    opts.localizer.LoadMessage("kafka.topic.create.cmd.longDescription"),
+		Example: opts.localizer.LoadMessage("kafka.topic.create.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && len(args) == 0 {
-				return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-					MessageID: "argument.error.requiredWhenNonInteractive",
-					TemplateData: map[string]interface{}{
-						"Argument": "Name",
-					},
-				}))
+				return errors.New(opts.localizer.LoadMessage("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
 			} else if len(args) == 0 {
 				opts.interactive = true
 			}
@@ -108,7 +105,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf(localizer.MustLocalizeFromID("kafka.topic.common.error.noKafkaSelected"))
+				return fmt.Errorf(opts.localizer.LoadMessage("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -117,12 +114,10 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.topic.common.flag.output.description",
-	}))
-	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.description"))
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"))
-	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, localizer.MustLocalizeFromID("kafka.topic.common.input.retentionBytes.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.LoadMessage("kafka.topic.common.flag.output.description"))
+	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, opts.localizer.LoadMessage("kafka.topic.common.input.partitions.description"))
+	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.LoadMessage("kafka.topic.common.input.retentionMs.description"))
+	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.LoadMessage("kafka.topic.common.input.retentionBytes.description"))
 
 	return cmd
 }
@@ -171,50 +166,24 @@ func runCmd(opts *Options) error {
 			return err
 		}
 
+		operationTmplPair := localize.NewEntry("Operation", "create")
 		switch httpRes.StatusCode {
 		case 401:
-			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.common.error.unauthorized",
-				TemplateData: map[string]interface{}{
-					"Operation": "create",
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.common.error.forbidden",
-				TemplateData: map[string]interface{}{
-					"Operation": "create",
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.forbidden", operationTmplPair))
 		case 409:
-			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.create.error.conflictError",
-				TemplateData: map[string]interface{}{
-					"TopicName":    opts.topicName,
-					"InstanceName": kafkaInstance.GetName(),
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", opts.topicName), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 		case 500:
-			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.internalServerError"))
 		case 503:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
-				TemplateData: map[string]interface{}{
-					"Name": kafkaInstance.GetName(),
-				},
-			}), err)
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
 
-	logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.topic.create.log.info.topicCreated",
-		TemplateData: map[string]interface{}{
-			"TopicName":    response.GetName(),
-			"InstanceName": kafkaInstance.GetName(),
-		},
-	}))
+	logger.Info(opts.localizer.LoadMessage("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 	switch opts.outputFormat {
 	case "json":
@@ -245,11 +214,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
+	logger.Debug(opts.localizer.LoadMessage("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.common.input.name.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.name.help"),
+		Message: opts.localizer.LoadMessage("kafka.topic.common.input.name.message"),
+		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.name.help"),
 	}
 
 	err = survey.AskOne(
@@ -265,8 +234,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	partitionsPrompt := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.partitions.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.partitions.description"),
+		Message: opts.localizer.LoadMessage("kafka.topic.create.input.partitions.message"),
+		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.partitions.description"),
 		Default: "1",
 	}
 
@@ -276,8 +245,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	retentionMsPrompt := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionMs.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionMs.description"),
+		Message: opts.localizer.LoadMessage("kafka.topic.create.input.retentionMs.message"),
+		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.retentionMs.description"),
 		Default: strconv.Itoa(defaultRetentionPeriodMS),
 	}
 
@@ -287,8 +256,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	retentionBytesPrompt := &survey.Input{
-		Message: localizer.MustLocalizeFromID("kafka.topic.create.input.retentionBytes.message"),
-		Help:    localizer.MustLocalizeFromID("kafka.topic.common.input.retentionBytes.description"),
+		Message: opts.localizer.LoadMessage("kafka.topic.create.input.retentionBytes.message"),
+		Help:    opts.localizer.LoadMessage("kafka.topic.common.input.retentionBytes.description"),
 		Default: strconv.Itoa(defaultRetentionSize),
 	}
 

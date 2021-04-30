@@ -4,16 +4,16 @@ import (
 	"flag"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
-	"github.com/redhat-developer/app-services-cli/pkg/locales"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/logout"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
@@ -33,11 +33,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	cmd.Version = version
 
-	cmd.SetVersionTemplate(f.Localizer.LoadMessageWithConfig("version.cmd.outputText", &locales.LocalizerConfig{
-		TemplateData: map[string]interface{}{
-			"Version": build.Version,
-		},
-	}))
+	cmd.SetVersionTemplate(f.Localizer.LoadMessage("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
@@ -47,7 +43,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.LoadMessage("root.cmd.flag.help.description"))
-	return cmd
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))

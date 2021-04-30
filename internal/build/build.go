@@ -5,8 +5,8 @@ import (
 	"runtime/debug"
 
 	"github.com/google/go-github/github"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
@@ -55,7 +55,7 @@ func init() {
 // CheckForUpdate checks if there is a newer version of the CLI than
 // the version currently being used. If so, it logs this information
 // to the console.
-func CheckForUpdate(ctx context.Context, logger logging.Logger) {
+func CheckForUpdate(ctx context.Context, logger logging.Logger, localizer localize.Localizer) {
 	releases, err := getReleases(ctx)
 	if err != nil {
 		return
@@ -90,7 +90,7 @@ func CheckForUpdate(ctx context.Context, logger logging.Logger) {
 	// this means it is older, and therefore, an update is available.
 	if currentVersionIndex > latestVersionIndex {
 		logger.Info()
-		logger.Info(color.Info(localizer.MustLocalizeFromID("common.log.info.updateAvailable")), color.CodeSnippet(latestRelease.GetTagName()))
+		logger.Info(color.Info(localizer.LoadMessage("common.log.info.updateAvailable")), color.CodeSnippet(latestRelease.GetTagName()))
 		logger.Info(color.Info(latestRelease.GetHTMLURL()))
 		logger.Info()
 	}

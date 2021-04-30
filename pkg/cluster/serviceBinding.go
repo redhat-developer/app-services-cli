@@ -5,9 +5,12 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/redhat-developer/service-binding-operator/api/v1alpha1"
 	"github.com/redhat-developer/service-binding-operator/pkg/reconcile/pipeline/builder"
@@ -20,8 +23,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
-	"os"
-	"path/filepath"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 )
 
@@ -44,8 +45,8 @@ type ServiceBindingOptions struct {
 	BindAsFiles             bool
 }
 
-func ExecuteServiceBinding(logger logging.Logger, options *ServiceBindingOptions) error {
-	clients, err := client()
+func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, options *ServiceBindingOptions) error {
+	clients, err := client(localizer)
 	if err != nil {
 		return err
 	}
@@ -55,17 +56,12 @@ func ExecuteServiceBinding(logger logging.Logger, options *ServiceBindingOptions
 		if err != nil {
 			return err
 		}
-		logger.Info(localizer.MustLocalize(&localizer.Config{
-			MessageID: "cluster.serviceBinding.namespaceInfo",
-			TemplateData: map[string]interface{}{
-				"Namespace": color.Info(ns),
-			},
-		}))
+		logger.Info(localizer.LoadMessage("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
 	// Get proper deployment
 	if options.AppName == "" {
-		options.AppName, err = fetchAppNameFromCluster(clients, ns)
+		options.AppName, err = fetchAppNameFromCluster(clients, localizer, ns)
 		if err != nil {
 			return err
 		}
@@ -77,12 +73,12 @@ func ExecuteServiceBinding(logger logging.Logger, options *ServiceBindingOptions
 	}
 
 	// Print desired action
-	logger.Info(fmt.Sprintf(localizer.MustLocalizeFromID("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
+	logger.Info(fmt.Sprintf(localizer.LoadMessage("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
 
 	if !options.ForceCreationWithoutAsk {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
-			Message: localizer.MustLocalizeFromID("cluster.serviceBinding.confirm.message"),
+			Message: localizer.LoadMessage("cluster.serviceBinding.confirm.message"),
 		}
 		err = survey.AskOne(confirm, &shouldContinue)
 		if err != nil {
@@ -97,20 +93,20 @@ func ExecuteServiceBinding(logger logging.Logger, options *ServiceBindingOptions
 	// Check KafkaConnection
 	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(context.TODO(), options.ServiceName, metav1.GetOptions{})
 	if err != nil {
-		return errors.New(localizer.MustLocalizeFromID("cluster.serviceBinding.serviceMissing.message"))
+		return errors.New(localizer.LoadMessage("cluster.serviceBinding.serviceMissing.message"))
 	}
 
 	// Execute binding
-	err = performBinding(options, ns, clients, logger)
+	err = performBinding(options, ns, clients, logger, localizer)
 	if err != nil {
 		return err
 	}
 
-	logger.Info(fmt.Sprintf(localizer.MustLocalizeFromID("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
+	logger.Info(fmt.Sprintf(localizer.LoadMessage("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
 	return nil
 }
 
-func performBinding(options *ServiceBindingOptions, ns string, clients *KubernetesClients, logger logging.Logger) error {
+func performBinding(options *ServiceBindingOptions, ns string, clients *KubernetesClients, logger logging.Logger, localizer localize.Localizer) error {
 	serviceRef := v1alpha1.Service{
 		NamespacedRef: v1alpha1.NamespacedRef{
 			Ref: v1alpha1.Ref{
@@ -163,18 +159,18 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 
 	if err != nil {
 		if options.ForceUseOperator {
-			return errors.New(localizer.MustLocalizeFromID("cluster.serviceBinding.operatorMissing") + err.Error())
+			return errors.New(localizer.LoadMessage("cluster.serviceBinding.operatorMissing") + err.Error())
 		}
 		logger.Debug("Service binding Operator not available. Will use SDK option for binding")
 		return useSDKForBinding(clients, sb)
 	}
 
-	return useOperatorForBinding(logger, sb, clients, ns)
+	return useOperatorForBinding(logger, localizer, sb, clients, ns)
 
 }
 
-func useOperatorForBinding(logger logging.Logger, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
-	logger.Info(localizer.MustLocalizeFromID("cluster.serviceBinding.usingOperator"))
+func useOperatorForBinding(logger logging.Logger, localizer localize.Localizer, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
+	logger.Info(localizer.LoadMessage("cluster.serviceBinding.usingOperator"))
 	sbData, err := runtime.DefaultUnstructuredConverter.ToUnstructured(sb)
 	if err != nil {
 		return err
@@ -204,7 +200,7 @@ func useSDKForBinding(clients *KubernetesClients, sb *v1alpha1.ServiceBinding) e
 	return err
 }
 
-func fetchAppNameFromCluster(clients *KubernetesClients, ns string) (string, error) {
+func fetchAppNameFromCluster(clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
 	list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
 		return "", err
@@ -219,11 +215,11 @@ func fetchAppNameFromCluster(clients *KubernetesClients, ns string) (string, err
 	}
 
 	if len(appNames) == 0 {
-		return "", fmt.Errorf("Selected namespace has no deployments ")
+		return "", errors.New("selected namespace has no deployments")
 	}
 
 	prompt := &survey.Select{
-		Message:  localizer.MustLocalizeFromID("cluster.serviceBinding.connect.survey.message"),
+		Message:  localizer.LoadMessage("cluster.serviceBinding.connect.survey.message"),
 		Options:  appNames,
 		PageSize: 10,
 	}
@@ -236,7 +232,7 @@ func fetchAppNameFromCluster(clients *KubernetesClients, ns string) (string, err
 	return appNames[selectedAppIndex], nil
 }
 
-func client() (*KubernetesClients, error) {
+func client(localizer localize.Localizer) (*KubernetesClients, error) {
 	kubeconfig := os.Getenv("KUBECONFIG")
 
 	if kubeconfig == "" {
@@ -246,22 +242,22 @@ func client() (*KubernetesClients, error) {
 
 	_, err := os.Stat(kubeconfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.configNotFoundError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.configNotFoundError"), err)
 	}
 
 	restConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	dynamicClient, err := dynamic.NewForConfig(restConfig)
 
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", localizer.LoadMessage("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	// Used for namespaces and general queries

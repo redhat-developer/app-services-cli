@@ -3,16 +3,16 @@ package status
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -34,6 +34,7 @@ type Options struct {
 	Config     config.IConfig
 	Logger     func() (logging.Logger, error)
 	Connection factory.ConnectionFunc
+	localizer  localize.Localizer
 
 	outputFormat string
 	services     []string
@@ -46,25 +47,21 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		services:   validServices,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:       localizer.MustLocalizeFromID("status.cmd.use"),
-		Short:     localizer.MustLocalizeFromID("status.cmd.shortDescription"),
-		Long:      localizer.MustLocalizeFromID("status.cmd.longDescription"),
-		Example:   localizer.MustLocalizeFromID("status.cmd.example"),
+		Use:       opts.localizer.LoadMessage("status.cmd.use"),
+		Short:     opts.localizer.LoadMessage("status.cmd.shortDescription"),
+		Long:      opts.localizer.LoadMessage("status.cmd.longDescription"),
+		Example:   opts.localizer.LoadMessage("status.cmd.example"),
 		ValidArgs: validServices,
 		Args:      cobra.RangeArgs(0, len(validServices)),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				for _, s := range args {
 					if !flags.IsValidInput(s, validServices...) {
-						return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-							MessageID: "status.error.args.error.unknownServiceError",
-							TemplateData: map[string]interface{}{
-								"ServiceName": s,
-							},
-						}))
+						return errors.New(opts.localizer.LoadMessage("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s)))
 					}
 				}
 
@@ -80,7 +77,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalizeFromID("status.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.LoadMessage("status.flag.output.description"))
 
 	return cmd
 }
@@ -104,7 +101,7 @@ func runStatus(opts *Options) error {
 	}
 
 	if len(opts.services) > 0 {
-		logger.Debug(localizer.MustLocalizeFromID("status.log.debug.requestingStatusOfServices"), opts.services)
+		logger.Debug(opts.localizer.LoadMessage("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
 	status, ok, err := pkgStatus.Get(context.Background(), pkgOpts)
@@ -114,7 +111,7 @@ func runStatus(opts *Options) error {
 
 	if !ok {
 		logger.Info("")
-		logger.Info(localizer.MustLocalizeFromID("status.log.info.noStatusesAreUsed"))
+		logger.Info(opts.localizer.LoadMessage("status.log.info.noStatusesAreUsed"))
 		return nil
 	}
 

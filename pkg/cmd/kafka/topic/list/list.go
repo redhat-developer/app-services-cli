@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
@@ -29,6 +28,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 
 	kafkaID string
 	output  string
@@ -48,13 +48,14 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.topic.list.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.topic.list.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.topic.list.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("kafka.topic.list.cmd.example"),
+		Use:     opts.localizer.LoadMessage("kafka.topic.list.cmd.use"),
+		Short:   opts.localizer.LoadMessage("kafka.topic.list.cmd.shortDescription"),
+		Long:    opts.localizer.LoadMessage("kafka.topic.list.cmd.longDescription"),
+		Example: opts.localizer.LoadMessage("kafka.topic.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" {
@@ -69,7 +70,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -78,10 +79,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalize(&localizer.Config{
-		MessageID:   "kafka.topic.common.flag.output.description",
-		PluralCount: 2,
-	}))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.LoadMessage("kafka.topic.list.flag.output.description"))
 
 	return cmd
 }
@@ -110,44 +108,23 @@ func runCmd(opts *Options) error {
 			return err
 		}
 
+		operationTemplatePair := localize.NewEntry("Operation", "list")
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID:   "kafka.topic.common.error.unauthorized",
-				PluralCount: 2,
-				TemplateData: map[string]interface{}{
-					"Operation": "list",
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.list.common.error.unauthorized", operationTemplatePair))
 		case 403:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID:   "kafka.topic.common.error.forbidden",
-				PluralCount: 2,
-				TemplateData: map[string]interface{}{
-					"Operation": "list",
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.list.common.error.forbidden", operationTemplatePair))
 		case 500:
-			return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.error.internalServerError"))
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.internalServerError"))
 		case 503:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.common.error.unableToConnectToKafka",
-				TemplateData: map[string]interface{}{
-					"Name": kafkaInstance.GetName(),
-				},
-			}), err)
+			return errors.New(opts.localizer.LoadMessage("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
 
 	if topicData.GetCount() == 0 && opts.output == "" {
-		logger.Info(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.list.log.info.noTopics",
-			TemplateData: map[string]interface{}{
-				"InstanceName": kafkaInstance.GetName(),
-			},
-		}))
+		logger.Info(opts.localizer.LoadMessage("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 		return nil
 	}

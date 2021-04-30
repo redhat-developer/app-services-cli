@@ -11,9 +11,9 @@ import (
 
 	"github.com/coreos/go-oidc"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
@@ -34,18 +34,16 @@ type masRedirectPageHandler struct {
 	Ctx           context.Context
 	TokenVerifier *oidc.IDTokenVerifier
 	CancelContext context.CancelFunc
+	Localizer     localize.Localizer
 }
 
 // nolint:funlen
 func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	logger := h.Logger
 
-	logger.Debug(localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.log.debug.redirectedToCallbackUrl",
-		TemplateData: map[string]interface{}{
-			"URL": fmt.Sprintf("%v%v", h.ServerAddr, r.URL.String()),
-		},
-	}), "\n")
+	callbackURL := fmt.Sprintf("%v%v", h.ServerAddr, r.URL.String())
+	logger.Debug("Redirected to callback URL:", callbackURL)
+	logger.Debug()
 
 	if r.URL.Query().Get("state") != h.State {
 		http.Error(w, "state did not match", http.StatusBadRequest)
@@ -87,13 +85,8 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		rawUsername = fmt.Sprintf("%v", userName)
 	}
 
-	pageTitle := localizer.MustLocalizeFromID("login.redirectPage.title")
-	pageBody := localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.masRedirectPage.body",
-		TemplateData: map[string]interface{}{
-			"Username": rawUsername,
-		},
-	})
+	pageTitle := h.Localizer.LoadMessage("login.redirectPage.title")
+	pageBody := h.Localizer.LoadMessage("login.masRedirectPage.body", localize.NewEntry("Username", rawUsername))
 
 	redirectPage := fmt.Sprintf(masSSOredirectHTMLPage, pageTitle, pageTitle, pageBody)
 

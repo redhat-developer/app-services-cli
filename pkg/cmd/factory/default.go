@@ -10,7 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/httputil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/locales"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
@@ -19,7 +19,7 @@ import (
 // giving centralized access to the config and API connection
 
 // nolint:funlen
-func New(cliVersion string, localizer locales.Localizer) *Factory {
+func New(cliVersion string, localizer localize.Localizer) *Factory {
 	io := iostreams.System()
 
 	var logger logging.Logger

@@ -7,7 +7,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	"github.com/spf13/cobra"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/delete"
@@ -18,8 +17,8 @@ import (
 
 func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   localizer.MustLocalizeFromID("kafka.cmd.use"),
-		Short: localizer.MustLocalizeFromID("kafka.cmd.shortDescription"),
+		Use:   f.Localizer.LoadMessage("kafka.cmd.use"),
+		Short: f.Localizer.LoadMessage("kafka.cmd.shortDescription"),
 		Args:  cobra.MinimumNArgs(1),
 	}
 
@@ -31,7 +30,6 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
 		topic.NewTopicCommand(f),
-		// disabled for now as consumer group API is not in production
 		consumergroup.NewConsumerGroupCommand(f),
 	)
 

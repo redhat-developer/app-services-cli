@@ -112,7 +112,7 @@ export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4NDgzMTAyLTRhYzAtND
 
 ## Internationalization
 
-All text strings are placed in `./pkg/locales/assets` directory. Group files into usage groups: commands go together under `./pkg/locales/assets/cmd/{whoami,kafka/serviceaccount}` etc. All others can be grouped by their package.
+All text strings are placed in `./pkg/localizer/assets` directory.
 
 ## Documentation
 

@@ -3,10 +3,8 @@ package list
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -15,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -25,6 +24,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	IO         *iostreams.IOStreams
+	localizer  localize.Localizer
 
 	output string
 }
@@ -46,13 +46,14 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("serviceAccount.list.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("serviceAccount.list.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("serviceAccount.list.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("serviceAccount.list.cmd.example"),
+		Use:     opts.localizer.LoadMessage("serviceAccount.list.cmd.use"),
+		Short:   opts.localizer.LoadMessage("serviceAccount.list.cmd.shortDescription"),
+		Long:    opts.localizer.LoadMessage("serviceAccount.list.cmd.longDescription"),
+		Example: opts.localizer.LoadMessage("serviceAccount.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
@@ -63,7 +64,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", localizer.MustLocalizeFromID("serviceAccount.common.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.LoadMessage("serviceAccount.list.flag.output.description"))
 
 	return cmd
 }
@@ -82,32 +83,15 @@ func runList(opts *Options) (err error) {
 	api := connection.API()
 
 	a := api.Kafka().ListServiceAccounts(context.Background())
-	res, httpRes, err := a.Execute()
+	res, _, err := a.Execute()
 
 	if err != nil {
-		if httpRes == nil {
-			return err
-		}
-
-		switch httpRes.StatusCode {
-		case 403:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID:   "serviceAccount.common.error.forbidden",
-				PluralCount: 2,
-				TemplateData: map[string]interface{}{
-					"Operation": "list",
-				},
-			}), err)
-		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
-		default:
-			return err
-		}
+		return err
 	}
 
 	serviceaccounts := res.GetItems()
 	if len(serviceaccounts) == 0 && opts.output == "" {
-		logger.Info(localizer.MustLocalizeFromID("serviceAccount.list.log.info.noneFound"))
+		logger.Info(opts.localizer.LoadMessage("serviceAccount.list.log.info.noneFound"))
 		return nil
 	}
 

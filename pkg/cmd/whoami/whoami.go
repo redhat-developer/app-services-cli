@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
@@ -19,6 +19,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 }
 
 func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
@@ -27,13 +28,14 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("whoami.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("whoami.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("whoami.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("whoami.cmd.example"),
+		Use:     f.Localizer.LoadMessage("whoami.cmd.use"),
+		Short:   f.Localizer.LoadMessage("whoami.cmd.shortDescription"),
+		Long:    f.Localizer.LoadMessage("whoami.cmd.longDescription"),
+		Example: f.Localizer.LoadMessage("whoami.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runCmd(opts)
@@ -68,7 +70,7 @@ func runCmd(opts *Options) (err error) {
 	if ok {
 		fmt.Fprintln(opts.IO.Out, userName)
 	} else {
-		logger.Info(localizer.MustLocalizeFromID("whoami.log.info.tokenHasNoUsername"))
+		logger.Info(opts.localizer.LoadMessage("whoami.log.info.tokenHasNoUsername"))
 	}
 
 	return nil

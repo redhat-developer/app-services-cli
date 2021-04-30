@@ -9,9 +9,9 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
@@ -19,6 +19,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 }
 
 // NewLogoutCommand gets the command that's logs the current logged in user
@@ -27,12 +28,13 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:   localizer.MustLocalizeFromID("logout.cmd.use"),
-		Short: localizer.MustLocalizeFromID("logout.cmd.shortDescription"),
-		Long:  localizer.MustLocalizeFromID("logout.cmd.longDescription"),
+		Use:   opts.localizer.LoadMessage("logout.cmd.use"),
+		Short: opts.localizer.LoadMessage("logout.cmd.shortDescription"),
+		Long:  opts.localizer.LoadMessage("logout.cmd.longDescription"),
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runLogout(opts)
@@ -55,10 +57,10 @@ func runLogout(opts *Options) error {
 	err = connection.Logout(context.TODO())
 
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("logout.error.unableToLogout"), err)
+		return fmt.Errorf("%v: %w", opts.localizer.LoadMessage("logout.error.unableToLogout"), err)
 	}
 
-	logger.Info(localizer.MustLocalizeFromID("logout.log.info.logoutSuccess"))
+	logger.Info(opts.localizer.LoadMessage("logout.log.info.logoutSuccess"))
 
 	return nil
 }

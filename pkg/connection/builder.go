@@ -147,7 +147,6 @@ func (b *Builder) Build() (connection *KeycloakConnection, err error) {
 // BuildContext uses the configuration stored in the builder to create a new connection. The builder
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
-// TODO: Localize error messages
 // nolint:funlen
 func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnection, err error) {
 	if b.connectionConfig.RequireAuth && b.accessToken == "" && b.refreshToken == "" {

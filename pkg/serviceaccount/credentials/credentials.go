@@ -1,12 +1,12 @@
 package credentials
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -101,8 +101,8 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 	for chooseFileLocation {
 		// choose location
 		fileNamePrompt := &survey.Input{
-			Message: localizer.MustLocalizeFromID("serviceAccount.common.input.credentialsFileLocation.message"),
-			Help:    localizer.MustLocalizeFromID("serviceAccount.common.input.credentialsFileLocation.help"),
+			Message: "Credentials file location",
+			Help:    "Enter the path to the file where the service account credentials will be saved to",
 			Default: defaultPath,
 		}
 		if filePath == "" {
@@ -129,12 +129,7 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 		}
 
 		overwriteFilePrompt := &survey.Confirm{
-			Message: localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.input.confirmOverwrite.message",
-				TemplateData: map[string]interface{}{
-					"FilePath": color.CodeSnippet(filePath),
-				},
-			}),
+			Message: fmt.Sprintf("File %v already exists. Do you want to overwrite it?", color.CodeSnippet(filePath)),
 		}
 
 		err = survey.AskOne(overwriteFilePrompt, &overwrite)
@@ -149,7 +144,7 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 		filePath = ""
 
 		diffLocationPrompt := &survey.Confirm{
-			Message: localizer.MustLocalizeFromID("serviceAccount.common.input.specifyDifferentLocation.message"),
+			Message: "Would you like to specify a different file location?",
 		}
 		err = survey.AskOne(diffLocationPrompt, &chooseFileLocation)
 		if err != nil {
@@ -159,9 +154,8 @@ func ChooseFileLocation(outputFormat string, filePath string, overwrite bool) (s
 	}
 
 	if filePath == "" {
-		return "", overwrite, fmt.Errorf(localizer.MustLocalizeFromID("serviceAccount.common.error.mustSpecifyFile"))
+		return "", overwrite, errors.New("you must specify a file to save the service account credentials")
 	}
 
-	fmt.Println(filePath)
 	return filePath, overwrite, nil
 }

@@ -3,15 +3,14 @@ package delete
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -25,6 +24,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 }
 
 // NewDeleteConsumerGroupCommand gets a new command for deleting a consumer group.
@@ -34,13 +34,14 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("kafka.consumerGroup.delete.cmd.example"),
+		Use:     opts.localizer.LoadMessage("kafka.consumerGroup.delete.cmd.use"),
+		Short:   opts.localizer.LoadMessage("kafka.consumerGroup.delete.cmd.shortDescription"),
+		Long:    opts.localizer.LoadMessage("kafka.consumerGroup.delete.cmd.longDescription"),
+		Example: opts.localizer.LoadMessage("kafka.consumerGroup.delete.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if opts.kafkaID != "" {
@@ -53,7 +54,7 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -62,13 +63,9 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, localizer.MustLocalizeFromID("kafka.consumerGroup.delete.flag.yes.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.consumerGroup.common.flag.id.description",
-		TemplateData: map[string]interface{}{
-			"Action": "delete",
-		},
-	}))
+	opts.localizer.LoadMessage("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "delete"))
+	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, opts.localizer.LoadMessage("kafka.consumerGroup.delete.flag.yes.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.LoadMessage("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "delete")))
 	_ = cmd.MarkFlagRequired("id")
 
 	// flag based completions for ID
@@ -101,25 +98,21 @@ func runCmd(opts *Options) error {
 
 	_, httpRes, err := api.GetConsumerGroupById(ctx, opts.id).Execute()
 
+	cgIDPair := localize.NewEntry("ID", opts.id)
+	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
 		if httpRes.StatusCode == 404 {
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.notFoundError",
-				TemplateData: map[string]interface{}{
-					"ID":           opts.id,
-					"InstanceName": kafkaInstance.GetName(),
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair))
 		}
 	}
 
 	if !opts.skipConfirm {
 		var confirmedID string
 		promptConfirmDelete := &survey.Input{
-			Message: localizer.MustLocalizeFromID("kafka.consumerGroup.delete.input.name.message"),
+			Message: opts.localizer.LoadMessage("kafka.consumerGroup.delete.input.name.message"),
 		}
 
 		err = survey.AskOne(promptConfirmDelete, &confirmedID)
@@ -128,13 +121,7 @@ func runCmd(opts *Options) error {
 		}
 
 		if confirmedID != opts.id {
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.delete.error.mismatchedIDConfirmation",
-				TemplateData: map[string]interface{}{
-					"ConfirmedID": confirmedID,
-					"ID":          opts.id,
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.delete.error.mismatchedIDConfirmation", localize.NewEntry("ConfirmedID", confirmedID), cgIDPair))
 		}
 	}
 
@@ -145,44 +132,24 @@ func runCmd(opts *Options) error {
 			return err
 		}
 
+		operationTmplPair := localize.NewEntry("Operation", "delete")
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.unauthorized",
-				TemplateData: map[string]interface{}{
-					"Operation": "delete",
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.forbidden",
-				TemplateData: map[string]interface{}{
-					"Operation": "delete",
-				},
-			}))
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
 		case 423:
-			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.delete.error.locked"))
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.delete.error.locked"))
 		case 500:
-			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.unableToConnectToKafka",
-				TemplateData: map[string]interface{}{
-					"Name": kafkaInstance.GetName(),
-				},
-			}), err)
+			return errors.New(opts.localizer.LoadMessage("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
 
-	logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.consumerGroup.delete.log.info.consumerGroupDeleted",
-		TemplateData: map[string]interface{}{
-			"ConsumerGroupID": opts.id,
-			"InstanceName":    kafkaInstance.GetName(),
-		},
-	}))
+	logger.Info(opts.localizer.LoadMessage("kafka.consumerGroup.delete.log.info.consumerGroupDeleted", localize.NewEntry("ConsumerGroupID", opts.id), kafkaNameTmplPair))
 
 	return nil
 }

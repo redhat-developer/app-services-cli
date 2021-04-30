@@ -12,10 +12,10 @@ import (
 
 	"github.com/coreos/go-oidc"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
@@ -37,17 +37,15 @@ type redirectPageHandler struct {
 	TokenVerifier *oidc.IDTokenVerifier
 	AuthURL       *url.URL
 	ClientID      string
+	Localizer     localize.Localizer
 	CancelContext context.CancelFunc
 }
 
 // nolint:funlen
 func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.Logger.Debug(localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.log.debug.redirectedToCallbackUrl",
-		TemplateData: map[string]interface{}{
-			"URL": fmt.Sprintf("%v%v", h.ServerAddr, r.URL.String()),
-		},
-	}), "\n")
+	callbackURL := fmt.Sprintf("%v%v", h.ServerAddr, r.URL.String())
+	h.Logger.Debug("Redirected to callback URL:", callbackURL)
+	h.Logger.Debug()
 
 	if r.URL.Query().Get("state") != h.State {
 		http.Error(w, "state did not match", http.StatusBadRequest)
@@ -92,17 +90,12 @@ func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		username = "unknown"
 	}
 
-	pageTitle := localizer.MustLocalizeFromID("login.redirectPage.title")
-	pageBody := localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.redirectPage.body",
-		TemplateData: map[string]interface{}{
-			"Username": username,
-		},
-	})
+	pageTitle := h.Localizer.LoadMessage("login.redirectPage.title")
+	pageBody := h.Localizer.LoadMessage("login.redirectPage.body", localize.NewEntry("Username", username))
 
 	issuerURL, realm, ok := connection.SplitKeycloakRealmURL(h.AuthURL)
 	if !ok {
-		h.Logger.Error(localizer.MustLocalizeFromID("login.error.noRealmInURL"))
+		h.Logger.Error(h.Localizer.LoadMessage("login.error.noRealmInURL"))
 		os.Exit(1)
 	}
 	redirectPage := fmt.Sprintf(ssoRedirectHTMLPage, pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
