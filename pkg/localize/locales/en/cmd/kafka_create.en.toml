@@ -1,0 +1,83 @@
+[kafka.create.cmd.use]
+description = "Use is the one-line usage message"
+one = "create"
+
+[kafka.create.cmd.shortDescription]
+description = "Short description for command"
+one = "Create an Apache Kafka instance"
+
+[kafka.create.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Create an Apache Kafka instance on a particular cloud provider and region.
+
+After creating the instance you can view it by running "rhoas kafka describe".
+'''
+
+[kafka.create.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# start an interactive prompt to fill out the configuration values for the instance
+$ rhoas kafka create
+
+# create a Kafka instance
+$ rhoas kafka create my-kafka-instance
+
+# create a Kafka instance and output the result in YAML
+$ rhoas kafka create -o yaml
+'''
+
+[kafka.create.flag.cloudProvider.description]
+description = 'Description for the --provider flag'
+one = 'Cloud Provider ID'
+
+[kafka.create.flag.cloudRegion.description]
+description = 'Description for the --region flag'
+one = 'Cloud Provider Region ID'
+
+[kafka.create.flag.autoUse.description]
+one = 'Set the new Kafka instance to the current instance'
+
+[kafka.create.log.debug.creatingKafka]
+description = 'Debug message when Kafka instance is being created'
+one = 'Creating Kafka instance "{{.Name}}"...'
+
+[kafka.create.info.successMessage]
+description = 'Message to display when instance has been created'
+one = 'Kafka instance "{{.Name}}" is being provisioned. You can monitor its progress by running "rhoas status".'
+
+[kafka.create.input.name.message]
+description = 'Input title for Name'
+one = 'Name:'
+
+[kafka.create.input.name.help]
+description = 'Help for Name input'
+one = 'Unique name of the Kafka instance'
+
+[kafka.create.input.cloudProvider.message]
+description = 'Input title for Cloud Provider'
+one = 'Cloud Provider:'
+
+[kafka.create.input.cloudRegion.message]
+description = 'Input title for Cloud Region'
+one = "Cloud Region:"
+
+[kafka.create.input.cloudRegion.help]
+description = 'Help text for Cloud Region'
+one = "Geographical region where the Kafka instance will be deployed"
+
+[kafka.create.argument.name.error.requiredWhenNonInteractive]
+one = 'name is required. Run "rhoas kafka create <name>"'
+
+[kafka.create.debug.autoUseSetMessage]
+one = 'Auto-use Kafka is set, updating the current Kafka instance'
+
+[kafka.create.debug.autoUseNotSetMessage]
+one = 'Auto-use Kafka is not set, skipping updating the current Kafka instance'
+
+[kafka.create.log.info.termsCheck]
+one = '''
+In order to be able to create a Kafka instance, you must first review and accept the terms and conditions:
+
+{{.TermsURL}}
+'''

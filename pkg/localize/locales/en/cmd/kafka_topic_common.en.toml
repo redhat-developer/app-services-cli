@@ -1,0 +1,88 @@
+[kafka.topic.common.flag.output.description]
+one = 'Format in which to display the Kafka topic. Choose from: "json", "yml", "yaml"'
+
+[kafka.topic.list.flag.output.description]
+one = 'Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"'
+
+[kafka.topic.common.input.partitions.description]
+description = 'help for the Partitions input'
+one = 'The number of partitions in the topic'
+
+[kafka.topic.common.flag.replicas.description]
+one = 'The replication factor for the topic'
+
+[kafka.topic.common.input.retentionMs.description]
+description = 'Description for the Retention period input'
+one = 'The period of time in milliseconds the broker will retain a partition log before deleting it'
+
+[kafka.topic.common.input.retentionBytes.description]
+description = 'Description for the Retention size input'
+one = 'The maximum total size of a partition log segments before old log segments are deleted to free up space'
+
+[kafka.topic.common.error.noKafkaSelected]
+one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
+
+[kafka.topic.common.error.unauthorized]
+one = 'you are unauthorized to {{.Operation}} this topic'
+
+[kafka.topic.common.error.forbidden]
+one = 'you are forbidden to {{.Operation}} this topic'
+
+[kafka.topic.list.error.unauthorized]
+one = 'you are unauthorized to {{.Operation}} these topics'
+
+[kafka.topic.list.error.forbidden]
+one = 'you are forbidden to {{.Operation}} these topics'
+
+[kafka.topic.common.error.internalServerError]
+one = 'internal server error'
+
+[kafka.topic.common.error.unableToConnectToKafka]
+one = 'unable to connect to Kafka instance "{{.Name}}"'
+
+[kafka.topic.common.error.notFoundError]
+one = 'topic "{{.TopicName}}" not found in Kafka instance "{{.InstanceName}}"'
+
+[kafka.topic.common.validation.name.error.required]
+one = 'topic name is required'
+
+[kafka.topic.common.validation.name.error.lengthError]
+one = 'topic name cannot exceed {{.MaxNameLen}} characters'
+
+[kafka.topic.common.validation.name.error.invalidChars]
+one = 'invalid topic name "{{.Name}}"; only letters (Aa-Zz), numbers, "_" and "-" are accepted'
+
+[kafka.topic.common.validation.partitions.error.invalid.minLength]
+one = 'invalid partition count {{.Partitions}}, minimum value is {{.Min}}'
+
+[kafka.topic.common.validation.partitions.error.invalid.maxLength]
+one = 'invalid partition count {{.Partitions}}, maximum value is {{.Max}}'
+
+[kafka.topic.common.validation.replicationFactor.error.invalid]
+one = 'invalid replication factor {{.ReplicationFactor}}, minimum value is {{.MinReplicationFactor}}'
+
+[kafka.topic.common.validation.retentionPeriod.error.invalid]
+one = 'invalid retention period {{.RetentionPeriod}}, minimum value is -1'
+
+[kafka.topic.common.validation.retentionSize.error.invalid]
+one = 'invalid retention size {{.RetentionSize}}, minimum value is -1'
+
+[kafka.topic.common.input.name.message]
+description = 'title for the Name input'
+one = 'Name:'
+
+[kafka.topic.common.input.name.help]
+description = 'help for the Name input'
+one = "Name for the Kafka topic"
+
+[kafka.topic.common.input.partitions.error.invalid]
+description = 'Error message when an invalid partition value is entered'
+one = 'invalid value for partitions: {{.Partition}}'
+
+[kafka.topic.common.input.retentionMs.error.invalid]
+description = 'Error message when an invalid retention period is entered'
+one = 'invalid value for retention period: {{.RetentionMs}}'
+
+[kafka.topic.common.input.retentionBytes.error.invalid]
+description = 'Error message when an invalid retention size is entered'
+one = 'invalid value for retention size: {{.RetentionBytes}}'

@@ -2,9 +2,10 @@ package validation
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
 )
 
 const (
@@ -21,24 +22,13 @@ const (
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)
 	if !ok {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": val,
-				"Type":  "string",
-			},
-		}))
+		return commonerr.NewCastError(val, "string")
 	}
 
 	if len(name) < minNameLength {
-		return errors.New(localizer.MustLocalizeFromID("serviceAccount.common.validation.name.error.required"))
+		return errors.New("service account name is required")
 	} else if len(name) > maxNameLength {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "serviceAccount.common.validation.name.error.lengthError",
-			TemplateData: map[string]interface{}{
-				"MaxNameLen": maxNameLength,
-			},
-		}))
+		return fmt.Errorf("service account name cannot exceed %v characters", maxNameLength)
 	}
 
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
@@ -47,25 +37,14 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalize(&localizer.Config{
-		MessageID: "serviceAccount.common.validation.name.error.invalidChars",
-		TemplateData: map[string]interface{}{
-			"Name": name,
-		},
-	}))
+	return fmt.Errorf(`invalid service account name "%v"; only lowercase letters (a-z), numbers, and "-" are accepted`, name)
 }
 
 // ValidateDescription validates the service account description text
 func ValidateDescription(val interface{}) error {
 	description, ok := val.(string)
 	if !ok {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": val,
-				"Type":  "string",
-			},
-		}))
+		return commonerr.NewCastError(val, "string")
 	}
 
 	if description == "" {
@@ -73,12 +52,7 @@ func ValidateDescription(val interface{}) error {
 	}
 
 	if len(description) > maxDescriptionLength {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "serviceAccount.common.validation.description.error.lengthError",
-			TemplateData: map[string]interface{}{
-				"MaxLen": maxDescriptionLength,
-			},
-		}))
+		return fmt.Errorf("service account description cannot exceed %v characters", maxDescriptionLength)
 	}
 
 	matched, _ := regexp.Match(legalDescriptionChars, []byte(description))
@@ -87,10 +61,5 @@ func ValidateDescription(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalize(&localizer.Config{
-		MessageID: "serviceAccount.common.validation.description.error.invalidChars",
-		TemplateData: map[string]interface{}{
-			"Description": description,
-		},
-	}))
+	return errors.New(`invalid service account description; only alphanumeric characters and "-", ".", "," are accepted.`)
 }

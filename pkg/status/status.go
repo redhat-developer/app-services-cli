@@ -9,11 +9,10 @@ import (
 	"text/tabwriter"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 
 	"github.com/openconfig/goyang/pkg/indent"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	kas "github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -63,16 +62,16 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka(), kafkaCfg.ClusterID)
 			if err != nil {
 				if kas.IsErr(err, kas.ErrorNotFound) {
-					err = kafka.ErrorNotFound(kafkaCfg.ClusterID)
-					logger.Info(err)
-					logger.Info(localizer.MustLocalizeFromID("status.log.info.selectAnotherKafka"))
+					err = kafkaerr.NotFoundByIDError(kafkaCfg.ClusterID)
+					logger.Error(err)
+					logger.Info(`Run "rhoas kafka use" to use another Kafka instance.`)
 				}
 			} else {
 				status.Kafka = kafkaStatus
 				ok = true
 			}
 		} else {
-			logger.Debug(localizer.MustLocalizeFromID("status.log.debug.noKafkaSelected"))
+			logger.Debug("No Kafka instance is currently used, skipping status check")
 		}
 	}
 
@@ -173,7 +172,7 @@ func createDivider(n int) string {
 func getKafkaStatus(ctx context.Context, api kasclient.DefaultApi, id string) (status *KafkaStatus, err error) {
 	kafkaResponse, _, err := api.GetKafkaById(ctx, id).Execute()
 	if kas.IsErr(err, kas.ErrorNotFound) {
-		return nil, kafka.ErrorNotFound(id)
+		return nil, kafkaerr.NotFoundByIDError(id)
 	}
 	if err != nil {
 		return nil, err

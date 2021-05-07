@@ -10,9 +10,9 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -32,6 +32,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
+	localizer  localize.Localizer
 }
 
 type consumerRow struct {
@@ -49,12 +50,13 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Config:     f.Config,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("kafka.consumerGroup.describe.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.consumerGroup.describe.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.consumerGroup.describe.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.consumerGroup.describe.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.consumerGroup.describe.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if opts.outputFormat != "" {
@@ -73,7 +75,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.noKafkaSelected"))
+				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.noKafkaSelected"))
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -82,15 +84,8 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.consumerGroup.common.flag.output.description",
-	}))
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.consumerGroup.common.flag.id.description",
-		TemplateData: map[string]interface{}{
-			"Action": "view",
-		},
-	}))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "view")))
 	_ = cmd.MarkFlagRequired("id")
 
 	// flag based completions for ID
@@ -121,38 +116,21 @@ func runCmd(opts *Options) error {
 			return err
 		}
 
+		cgIDPair := localize.NewEntry("ID", opts.id)
+		kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
+		operationTmplPair := localize.NewEntry("Operation", "view")
+
 		switch httpRes.StatusCode {
 		case 404:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.notFoundError",
-				TemplateData: map[string]interface{}{
-					"ID":           opts.id,
-					"InstanceName": kafkaInstance.GetName(),
-				},
-			}))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair))
 		case 401:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.unauthorized",
-				TemplateData: map[string]interface{}{
-					"Operation": "view",
-				},
-			}))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.forbidden",
-				TemplateData: map[string]interface{}{
-					"Operation": "view",
-				},
-			}))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
 		case 500:
-			return errors.New(localizer.MustLocalizeFromID("kafka.consumerGroup.common.error.internalServerError"))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.consumerGroup.common.error.unableToConnectToKafka",
-				TemplateData: map[string]interface{}{
-					"Name": kafkaInstance.GetName(),
-				},
-			}), err)
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
@@ -167,7 +145,7 @@ func runCmd(opts *Options) error {
 		data, _ := yaml.Marshal(consumerGroupData)
 		_ = dump.YAML(stdout, data)
 	default:
-		printConsumerGroupDetails(stdout, consumerGroupData)
+		printConsumerGroupDetails(stdout, consumerGroupData, opts.localizer)
 	}
 
 	return nil
@@ -198,14 +176,14 @@ func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consum
 }
 
 // print the consumer grooup details
-func printConsumerGroupDetails(w io.Writer, consumerGroupData strimziadminclient.ConsumerGroup) {
+func printConsumerGroupDetails(w io.Writer, consumerGroupData strimziadminclient.ConsumerGroup, localizer localize.Localizer) {
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()
 
 	activeMembersCount := cgutil.GetActiveConsumersCount(consumers)
 	partitionsWithLagCount := cgutil.GetPartitionsWithLag(consumers)
 
-	fmt.Fprintln(w, color.Bold(localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalizeFromID("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount)
+	fmt.Fprintln(w, color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount)
 	fmt.Fprintln(w, "")
 
 	rows := mapConsumerGroupDescribeToTableFormat(consumers)

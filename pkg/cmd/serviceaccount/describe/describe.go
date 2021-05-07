@@ -3,16 +3,16 @@ package describe
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -24,6 +24,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
+	localizer  localize.Localizer
 }
 
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
@@ -31,13 +32,14 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("serviceAccount.describe.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("serviceAccount.describe.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("serviceAccount.describe.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("serviceAccount.describe.cmd.example"),
+		Use:     opts.localizer.MustLocalize("serviceAccount.describe.cmd.use"),
+		Short:   opts.localizer.MustLocalize("serviceAccount.describe.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("serviceAccount.describe.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("serviceAccount.describe.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
@@ -49,8 +51,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("serviceAccount.describe.flag.id.description"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", localizer.MustLocalizeFromID("serviceAccount.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("serviceAccount.describe.flag.id.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("serviceAccount.common.flag.output.description"))
 
 	_ = cmd.MarkFlagRequired("id")
 
@@ -75,21 +77,7 @@ func runDescribe(opts *Options) error {
 
 		switch httpRes.StatusCode {
 		case 404:
-			return fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.error.notFoundError",
-				TemplateData: map[string]interface{}{
-					"ID": opts.id,
-				},
-			}))
-		case 403:
-			return fmt.Errorf("%v: %w", localizer.MustLocalize(&localizer.Config{
-				MessageID: "serviceAccount.common.error.forbidden",
-				TemplateData: map[string]interface{}{
-					"Operation": "view",
-				},
-			}), err)
-		case 500:
-			return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("serviceAccount.common.error.internalServerError"), err)
+			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id)))
 		default:
 			return err
 		}

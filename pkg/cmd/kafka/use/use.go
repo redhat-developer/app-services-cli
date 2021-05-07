@@ -8,6 +8,7 @@ import (
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
@@ -16,7 +17,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
@@ -30,6 +30,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
@@ -38,13 +39,14 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("kafka.use.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("kafka.use.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("kafka.use.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("kafka.use.cmd.example"),
+		Use:     opts.localizer.MustLocalize("kafka.use.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.use.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.use.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.use.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			return cmdutil.FilterValidKafkas(f, toComplete)
@@ -54,20 +56,20 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 				opts.name = args[0]
 			} else if opts.id == "" {
 				if !opts.IO.CanPrompt() {
-					return errors.New(localizer.MustLocalizeFromID("kafka.use.error.idOrNameRequired"))
+					return errors.New(opts.localizer.MustLocalize("kafka.use.error.idOrNameRequired"))
 				}
 				opts.interactive = true
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(localizer.MustLocalizeFromID("kafka.common.error.idAndNameCannotBeUsed"))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.error.idAndNameCannotBeUsed"))
 			}
 
 			return runUse(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", localizer.MustLocalizeFromID("kafka.use.flag.id"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
 
 	return cmd
 }
@@ -122,23 +124,14 @@ func runUse(opts *Options) error {
 		ClusterID: res.GetId(),
 	}
 
+	nameTmplEntry := localize.NewEntry("Name", res.GetName())
 	cfg.Services.Kafka = &kafkaConfig
 	if err := opts.Config.Save(cfg); err != nil {
-		saveErrMsg := localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.use.error.saveError",
-			TemplateData: map[string]interface{}{
-				"Name": res.GetName(),
-			},
-		})
+		saveErrMsg := opts.localizer.MustLocalize("kafka.use.error.saveError", nameTmplEntry)
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	logger.Info(localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.use.log.info.useSuccess",
-		TemplateData: map[string]interface{}{
-			"Name": res.GetName(),
-		},
-	}))
+	logger.Info(opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }
@@ -154,7 +147,7 @@ func runInteractivePrompt(opts *Options) error {
 		return err
 	}
 
-	logger.Debug(localizer.MustLocalizeFromID("common.log.debug.startingInteractivePrompt"))
+	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	selectedKafka, err := kafka.InteractiveSelect(connection, logger)
 	if err != nil {
