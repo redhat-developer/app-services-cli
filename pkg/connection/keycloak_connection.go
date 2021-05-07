@@ -3,18 +3,17 @@ package connection
 import (
 	"context"
 	"crypto/x509"
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
 	"net/url"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 
@@ -54,7 +53,7 @@ type KeycloakConnection struct {
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
-	c.logger.Debug(localizer.MustLocalizeFromID("connection.refreshTokens.log.debug.refreshingTokens"))
+	c.logger.Debug("Refreshing tokens")
 
 	cfg, err := c.Config.Load()
 	if err != nil {
@@ -107,7 +106,7 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 	if err = c.Config.Save(cfg); err != nil {
 		return err
 	}
-	c.logger.Debug(localizer.MustLocalizeFromID("connection.refreshTokens.log.debug.tokensRefreshed"))
+	c.logger.Debug("Tokens refreshed")
 
 	return nil
 }
@@ -199,12 +198,7 @@ func (c *KeycloakConnection) API() *api.API {
 		if kas.IsErr(err, kas.ErrorNotFound) {
 			cachedKafkaAdminAPI = nil
 			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.common.error.notFoundByIdError",
-				TemplateData: map[string]interface{}{
-					"ID": kafkaID,
-				},
-			}))
+			cachedKafkaAdminErr = kafkaerr.NotFoundByIDError(kafkaID)
 
 			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 		} else if err != nil {
@@ -223,12 +217,7 @@ func (c *KeycloakConnection) API() *api.API {
 		if kafkaStatus != "ready" {
 			cachedKafkaAdminAPI = nil
 			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.common.error.notReadyError",
-				TemplateData: map[string]interface{}{
-					"Name": kafkaInstance.GetName(),
-				},
-			}))
+			cachedKafkaAdminErr = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
 
 			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 		}
@@ -237,12 +226,7 @@ func (c *KeycloakConnection) API() *api.API {
 		if bootstrapURL == "" {
 			cachedKafkaAdminAPI = nil
 			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-				MessageID: "connection.error.missingBootstrapURL",
-				TemplateData: map[string]interface{}{
-					"Name": kafkaInstance.GetName(),
-				},
-			}))
+			cachedKafkaAdminErr = fmt.Errorf(`bootstrap URL is missing for Kafka instance "%v"`, kafkaInstance.GetName())
 
 			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
 		}

@@ -4,6 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
@@ -18,6 +19,8 @@ type Factory struct {
 	Connection ConnectionFunc
 	// Returns a logger to create leveled logs in the application
 	Logger func() (logging.Logger, error)
+	// Localizer provides text to the commands
+	Localizer localize.Localizer
 }
 
 type ConnectionFunc func(cfg *connection.Config) (connection.Connection, error)

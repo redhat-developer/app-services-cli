@@ -6,9 +6,9 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -25,6 +25,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	IO         *iostreams.IOStreams
+	localizer  localize.Localizer
 
 	kubeconfig string
 }
@@ -35,20 +36,21 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("cluster.status.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("cluster.status.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("cluster.status.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("cluster.status.cmd.example"),
+		Use:     opts.localizer.MustLocalize("cluster.status.cmd.use"),
+		Short:   opts.localizer.MustLocalize("cluster.status.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("cluster.status.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("cluster.status.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runStatus(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.kubeconfig, "kubeconfig", "", "", localizer.MustLocalizeFromID("cluster.common.flag.kubeconfig.description"))
+	cmd.Flags().StringVarP(&opts.kubeconfig, "kubeconfig", "", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
 
 	return cmd
 }
@@ -64,7 +66,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfig, opts.IO)
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfig, opts.IO, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -77,9 +79,9 @@ func runStatus(opts *Options) error {
 	}
 
 	if isCRDInstalled {
-		operatorStatus = color.Success(localizer.MustLocalizeFromID("cluster.common.operatorInstalledMessage"))
+		operatorStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
 	} else {
-		operatorStatus = color.Error(localizer.MustLocalizeFromID("cluster.common.operatorNotInstalledMessage"))
+		operatorStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
 	currentNamespace, err := clusterConn.CurrentNamespace()
@@ -89,13 +91,9 @@ func runStatus(opts *Options) error {
 
 	fmt.Fprintln(
 		opts.IO.Out,
-		localizer.MustLocalize(&localizer.Config{
-			MessageID: "cluster.status.statusMessage",
-			TemplateData: map[string]interface{}{
-				"Namespace":      color.Info(currentNamespace),
-				"OperatorStatus": operatorStatus,
-			},
-		}),
+		opts.localizer.MustLocalize("cluster.status.statusMessage",
+			localize.NewEntry("Namespace", color.Info(currentNamespace)),
+			localize.NewEntry("OperatorStatus", operatorStatus)),
 	)
 
 	return nil

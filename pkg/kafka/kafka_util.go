@@ -6,7 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
+
 	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
@@ -20,17 +22,11 @@ func ValidateName(val interface{}) error {
 	name, ok := val.(string)
 
 	if !ok {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": val,
-				"Type":  "string",
-			},
-		}))
+		return commonerr.NewCastError(val, "string")
 	}
 
 	if len(name) < 1 || len(name) > 32 {
-		return fmt.Errorf(localizer.MustLocalizeFromID("kafka.validation.name.error.lengthError"))
+		return errors.New("Kafka instance name must be between 1 and 32 characters")
 	}
 
 	matched := validNameRegexp.MatchString(name)
@@ -39,7 +35,7 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalizeFromID("kafka.validation.error.invalidName"))
+	return kafkaerr.InvalidNameError(name)
 }
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
@@ -76,13 +72,7 @@ func ValidateSearchInput(val interface{}) error {
 	search, ok := val.(string)
 
 	if !ok {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": val,
-				"Type":  "string",
-			},
-		}))
+		return commonerr.NewCastError(val, "string")
 	}
 
 	matched := validSearchRegexp.MatchString(search)
@@ -91,10 +81,5 @@ func ValidateSearchInput(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.validation.error.invalidSearchValue",
-		TemplateData: map[string]interface{}{
-			"Search": search,
-		},
-	}))
+	return kafkaerr.InvalidSearchValueError(search)
 }

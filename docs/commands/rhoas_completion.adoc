@@ -15,10 +15,6 @@ Run `rhoas completion [bash|zsh|fish] -h` for instructions on installing command
 When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
 
 
-....
-rhoas completion [flags]
-....
-
 === Options inherited from parent commands
 
 ....

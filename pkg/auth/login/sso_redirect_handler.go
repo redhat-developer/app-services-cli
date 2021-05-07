@@ -1,26 +1,27 @@
 package login
 
 import (
-	"bytes"
 	"context"
+	// embed static HTML file
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 
 	"github.com/coreos/go-oidc"
-	"github.com/markbates/pkger"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
+
+//go:embed static/sso-redirect-page.html
+var ssoRedirectHTMLPage string
 
 // handler for the SSO redirect page
 type redirectPageHandler struct {
@@ -36,28 +37,15 @@ type redirectPageHandler struct {
 	TokenVerifier *oidc.IDTokenVerifier
 	AuthURL       *url.URL
 	ClientID      string
+	Localizer     localize.Localizer
 	CancelContext context.CancelFunc
 }
 
 // nolint:funlen
 func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	f, _ := pkger.Open("/static/login/sso-redirect-page.html")
-
-	b := bytes.NewBufferString("")
-	if _, err := io.Copy(b, f); err != nil {
-		fmt.Fprintln(h.IO.ErrOut, err)
-		f.Close()
-		os.Exit(1)
-	}
-
-	out, _ := ioutil.ReadAll(b)
-
-	h.Logger.Debug(localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.log.debug.redirectedToCallbackUrl",
-		TemplateData: map[string]interface{}{
-			"URL": fmt.Sprintf("%v%v", h.ServerAddr, r.URL.String()),
-		},
-	}), "\n")
+	callbackURL := fmt.Sprintf("%v%v", h.ServerAddr, r.URL.String())
+	h.Logger.Debug("Redirected to callback URL:", callbackURL)
+	h.Logger.Debug()
 
 	if r.URL.Query().Get("state") != h.State {
 		http.Error(w, "state did not match", http.StatusBadRequest)
@@ -102,20 +90,15 @@ func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		username = "unknown"
 	}
 
-	pageTitle := localizer.MustLocalizeFromID("login.redirectPage.title")
-	pageBody := localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.redirectPage.body",
-		TemplateData: map[string]interface{}{
-			"Username": username,
-		},
-	})
+	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
+	pageBody := h.Localizer.MustLocalize("login.redirectPage.body", localize.NewEntry("Username", username))
 
 	issuerURL, realm, ok := connection.SplitKeycloakRealmURL(h.AuthURL)
 	if !ok {
-		h.Logger.Error(localizer.MustLocalizeFromID("login.error.noRealmInURL"))
+		h.Logger.Error(h.Localizer.MustLocalize("login.error.noRealmInURL"))
 		os.Exit(1)
 	}
-	redirectPage := fmt.Sprintf((string(out)), pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
+	redirectPage := fmt.Sprintf(ssoRedirectHTMLPage, pageTitle, pageTitle, pageBody, issuerURL, realm, h.ClientID)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

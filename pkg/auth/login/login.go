@@ -9,10 +9,10 @@ import (
 	"github.com/coreos/go-oidc"
 	"github.com/phayes/freeport"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/pkce"
 	"github.com/redhat-developer/app-services-cli/pkg/browser"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
@@ -22,6 +22,7 @@ type AuthorizationCodeGrant struct {
 	Config     config.IConfig
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
+	Localizer  localize.Localizer
 	ClientID   string
 	Scopes     []string
 	PrintURL   bool
@@ -37,18 +38,18 @@ type SSOConfig struct {
 // https://tools.ietf.org/html/rfc6749#section-4.1
 func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) error {
 	// log in to SSO
-	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingIn"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingIn"))
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedIn"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedIn"))
 
-	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggingInMAS"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingInMAS"))
 	// log in to MAS-SSO
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.loggedInMAS"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedInMAS"))
 
 	return nil
 }
@@ -90,12 +91,8 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 	}
 	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
 	authCodeURL := oauthConfig.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
-	a.Logger.Debug(localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.log.debug.createdAuthorizationUrl",
-		TemplateData: map[string]interface{}{
-			"URL": authCodeURL,
-		},
-	}), "\n")
+	a.Logger.Debug("Opening Authorization URL:", authCodeURL)
+	a.Logger.Info()
 
 	// create a localhost server to handle redirects and exchange tokens securely
 	sm := http.NewServeMux()
@@ -126,15 +123,14 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 		State:         state,
 		TokenVerifier: verifier,
 		AuthURL:       authURL,
+		Localizer:     a.Localizer,
 		AuthOptions: []oauth2.AuthCodeOption{
 			oauth2.SetAuthURLParam("code_verifier", pkceCodeVerifier),
 			oauth2.SetAuthURLParam("grant_type", "authorization_code"),
 		},
 	})
 
-	if err = a.openBrowser(authCodeURL, redirectURL); err != nil {
-		return err
-	}
+	a.openBrowser(authCodeURL, redirectURL)
 
 	// start the local server
 	a.startServer(clientCtx, &server)
@@ -180,12 +176,8 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
 
 	authCodeURL := oauthConfig.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
-	a.Logger.Debug(localizer.MustLocalize(&localizer.Config{
-		MessageID: "login.log.debug.createdAuthorizationUrl",
-		TemplateData: map[string]interface{}{
-			"URL": authCodeURL,
-		},
-	}), "\n")
+	a.Logger.Debug("Opening Authorization URL:", authCodeURL)
+	a.Logger.Info()
 
 	sm := http.NewServeMux()
 	server := http.Server{
@@ -209,49 +201,38 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 		Oauth2Config:  oauthConfig,
 		State:         state,
 		TokenVerifier: verifier,
+		Localizer:     a.Localizer,
 		AuthOptions: []oauth2.AuthCodeOption{
 			oauth2.SetAuthURLParam("code_verifier", pkceCodeVerifier),
 			oauth2.SetAuthURLParam("grant_type", "authorization_code"),
 		},
 	})
 
-	if err = a.openBrowser(authCodeURL, redirectURL); err != nil {
-		return err
-	}
-
+	a.openBrowser(authCodeURL, redirectURL)
 	a.startServer(clientCtx, &server)
 
 	return nil
 }
 
-func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *url.URL) error {
+func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *url.URL) {
 	if a.PrintURL {
-		a.Logger.Info(localizer.MustLocalizeFromID("login.log.info.openSSOUrl"), "\n")
+		a.Logger.Info(a.Localizer.MustLocalize("login.log.info.openSSOUrl"), "\n")
 		fmt.Fprintln(a.IO.Out, authCodeURL)
 		a.Logger.Info("")
 	} else {
-		openBrowserExec, err := browser.GetOpenBrowserCommand(redirectURL.Scheme + "://" + redirectURL.Host)
+		err := browser.Open(redirectURL.Scheme + "://" + redirectURL.Host)
 		if err != nil {
-			return err
-		}
-		if err = openBrowserExec.Run(); err != nil {
-			return err
+			a.printAuthURLFallback(authCodeURL, redirectURL, err)
+			return
 		}
 	}
-
-	return nil
 }
 
 // starts the local HTTP webserver to handle redirect from the Auth server
 func (a *AuthorizationCodeGrant) startServer(ctx context.Context, server *http.Server) {
 	go func() {
 		if err := server.ListenAndServe(); err == nil {
-			a.Logger.Error(localizer.MustLocalize(&localizer.Config{
-				MessageID: "login.log.error.unableToStartServer",
-				TemplateData: map[string]interface{}{
-					"Error": err,
-				},
-			}))
+			a.Logger.Error(a.Localizer.MustLocalize("login.log.error.unableToStartServer"), localize.NewEntry("Error", err))
 		}
 	}()
 	<-ctx.Done()
@@ -280,4 +261,12 @@ func createRedirectURL(path string) (*url.URL, int, error) {
 	}
 
 	return redirectURL, port, nil
+}
+
+// when there is an error trying to automatically open the browser on the login page
+// fallback to printing the URL to the user terminal instead.
+func (a *AuthorizationCodeGrant) printAuthURLFallback(authCodeURL string, redirectURL *url.URL, err error) {
+	a.PrintURL = true
+	a.Logger.Debug("Error opening browser:", err, "\nPrinting Auth URL to console instead")
+	a.openBrowser(authCodeURL, redirectURL)
 }

@@ -2,8 +2,6 @@ package flag
 
 import (
 	"fmt"
-
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
 
 type Error struct {
@@ -22,7 +20,7 @@ func (e *Error) Unwrap() error {
 func InvalidValueError(flag string, val interface{}, validOptions ...string) *Error {
 	var chooseFromStr string
 	if len(validOptions) > 0 {
-		chooseFromStr = localizer.MustLocalizeFromID("flag.error.invalidValue.options")
+		chooseFromStr = ", valid options are: '"
 		for i, option := range validOptions {
 			chooseFromStr += fmt.Sprintf(`"%v"`, option)
 			if (i + 1) < len(validOptions) {
@@ -30,11 +28,9 @@ func InvalidValueError(flag string, val interface{}, validOptions ...string) *Er
 			}
 		}
 	}
-	return &Error{Err: fmt.Errorf("%v%v", localizer.MustLocalize(&localizer.Config{
-		MessageID: "flag.error.invalidValue.base",
-		TemplateData: map[string]interface{}{
-			"Flag":  flag,
-			"Value": val,
-		},
-	}), chooseFromStr)}
+	return &Error{Err: fmt.Errorf(`invalid value "%v" for --%v%v`, flag, val, chooseFromStr)}
+}
+
+func RequiredWhenNonInteractiveError(arg string) error {
+	return fmt.Errorf("%v required when not running interactively", arg)
 }

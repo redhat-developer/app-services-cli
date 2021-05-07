@@ -1,7 +1,6 @@
 package topic
 
 import (
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -20,9 +19,9 @@ const (
 // NewTopicCommand gives commands that manages Kafka topics.
 func NewTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   localizer.MustLocalizeFromID("kafka.topic.cmd.use"),
-		Short: localizer.MustLocalizeFromID("kafka.topic.cmd.shortDescription"),
-		Long:  localizer.MustLocalizeFromID("kafka.topic.cmd.longDescription"),
+		Use:   f.Localizer.MustLocalize("kafka.topic.cmd.use"),
+		Short: f.Localizer.MustLocalize("kafka.topic.cmd.shortDescription"),
+		Long:  f.Localizer.MustLocalize("kafka.topic.cmd.longDescription"),
 	}
 
 	cmd.AddCommand(

@@ -5,7 +5,7 @@ package login
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
+	"errors"
 	"net/http"
 	"net/url"
 
@@ -13,9 +13,9 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/httputil"
@@ -65,6 +65,7 @@ type Options struct {
 	Logger     func() (logging.Logger, error)
 	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
+	localizer  localize.Localizer
 
 	url                   string
 	authURL               string
@@ -83,30 +84,41 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:     localizer.MustLocalizeFromID("login.cmd.use"),
-		Short:   localizer.MustLocalizeFromID("login.cmd.shortDescription"),
-		Long:    localizer.MustLocalizeFromID("login.cmd.longDescription"),
-		Example: localizer.MustLocalizeFromID("login.cmd.example"),
+		Use:     opts.localizer.MustLocalize("login.cmd.use"),
+		Short:   opts.localizer.MustLocalize("login.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("login.cmd.longDescription", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
+		Example: opts.localizer.MustLocalize("login.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.offlineToken != "" && opts.clientID == build.DefaultClientID {
 				opts.clientID = build.DefaultOfflineTokenClientID
 			}
+
+			logger, err := opts.Logger()
+			if err != nil {
+				return err
+			}
+
+			if opts.IO.IsSSHSession() && opts.offlineToken == "" {
+				logger.Info(opts.localizer.MustLocalize("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+			}
+
 			return runLogin(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, localizer.MustLocalizeFromID("login.flag.apiGateway"))
-	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, localizer.MustLocalizeFromID("login.flag.insecure"))
-	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, localizer.MustLocalizeFromID("login.flag.clientId"))
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, localizer.MustLocalizeFromID("login.flag.authUrl"))
-	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, localizer.MustLocalizeFromID("login.flag.masAuthUrl"))
-	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, localizer.MustLocalizeFromID("login.flag.printSsoUrl"))
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, localizer.MustLocalizeFromID("login.flag.scope"))
-	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", localizer.MustLocalizeFromID("login.flag.token"))
+	cmd.Flags().StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, opts.localizer.MustLocalize("login.flag.apiGateway"))
+	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, opts.localizer.MustLocalize("login.flag.insecure"))
+	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, opts.localizer.MustLocalize("login.flag.clientId"))
+	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.MustLocalize("login.flag.authUrl"))
+	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.MustLocalize("login.flag.masAuthUrl"))
+	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
+	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 
 	return cmd
 }
@@ -118,18 +130,18 @@ func runLogin(opts *Options) (err error) {
 		return err
 	}
 
-	gatewayURL, err := getURLFromAlias(opts.url, apiGatewayAliases)
+	gatewayURL, err := getURLFromAlias(opts.url, apiGatewayAliases, opts.localizer)
 	if err != nil {
 		return err
 	}
 
-	authURL, err := getURLFromAlias(opts.authURL, authURLAliases)
+	authURL, err := getURLFromAlias(opts.authURL, authURLAliases, opts.localizer)
 	if err != nil {
 		return err
 	}
 	opts.authURL = authURL.String()
 
-	masAuthURL, err := getURLFromAlias(opts.masAuthURL, masAuthURLAliases)
+	masAuthURL, err := getURLFromAlias(opts.masAuthURL, masAuthURLAliases, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -152,15 +164,18 @@ func runLogin(opts *Options) (err error) {
 			Config:     opts.Config,
 			ClientID:   opts.clientID,
 			PrintURL:   opts.printURL,
+			Localizer:  opts.localizer,
 		}
 
 		ssoCfg := &login.SSOConfig{
-			AuthURL:      opts.authURL,
+			AuthURL: opts.authURL,
+			// TODO: make this a build variable
 			RedirectPath: "sso-redhat-callback",
 		}
 
 		masSsoCfg := &login.SSOConfig{
-			AuthURL:      opts.masAuthURL,
+			AuthURL: opts.masAuthURL,
+			// TODO: make this a build variable
 			RedirectPath: "mas-sso-callback",
 		}
 
@@ -194,20 +209,15 @@ func runLogin(opts *Options) (err error) {
 	username, ok := token.GetUsername(cfg.AccessToken)
 	logger.Info("")
 	if !ok {
-		logger.Info(localizer.MustLocalizeFromID("login.log.info.loginSuccessNoUsername"))
+		logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {
-		logger.Info(localizer.MustLocalize(&localizer.Config{
-			MessageID: "login.log.info.loginSuccess",
-			TemplateData: map[string]interface{}{
-				"Username": username,
-			},
-		}))
+		opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username))
 	}
 
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
 	if !debug.Enabled() {
-		build.CheckForUpdate(context.Background(), logger)
+		build.CheckForUpdate(context.Background(), logger, opts.localizer)
 	}
 
 	return nil
@@ -243,7 +253,7 @@ func createTransport(insecure bool) *http.Transport {
 	}
 }
 
-func getURLFromAlias(urlOrAlias string, urlAliasMap map[string]string) (*url.URL, error) {
+func getURLFromAlias(urlOrAlias string, urlAliasMap map[string]string, localizer localize.Localizer) (u *url.URL, err error) {
 	// If the URL value is any of the aliases then replace it with the corresponding
 	// real URL:
 	unparsedGatewayURL, ok := urlAliasMap[urlOrAlias]
@@ -256,12 +266,8 @@ func getURLFromAlias(urlOrAlias string, urlAliasMap map[string]string) (*url.URL
 		return nil, err
 	}
 	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		return nil, fmt.Errorf(localizer.MustLocalize(&localizer.Config{
-			MessageID: "login.error.schemeMissingFromUrl",
-			TemplateData: map[string]interface{}{
-				"URL": gatewayURL.String(),
-			},
-		}))
+		err = errors.New(localizer.MustLocalize("login.error.schemeMissingFromUrl", localize.NewEntry("URL", gatewayURL.String())))
+		return nil, err
 	}
 
 	return gatewayURL, nil

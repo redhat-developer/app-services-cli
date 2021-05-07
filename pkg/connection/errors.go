@@ -3,8 +3,6 @@ package connection
 import (
 	"errors"
 	"fmt"
-
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 )
 
 // AuthError defines an Authentication error
@@ -38,13 +36,13 @@ func AuthErrorf(format string, a ...interface{}) *AuthError {
 }
 
 func notLoggedInError() error {
-	return errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInError"))
+	return errors.New(`not logged in. Run "rhoas login" to authenticate`)
 }
 
 func notLoggedInMASError() error {
-	return errors.New(localizer.MustLocalizeFromID("connection.error.notLoggedInMASError"))
+	return errors.New(`not logged in to identity.api.openshift.com. Run "rhoas login" to authenticate. Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands`)
 }
 
 func sessionExpiredError() error {
-	return errors.New(localizer.MustLocalizeFromID("connection.error.sessionExpiredError"))
+	return errors.New(`session expired. Run "rhoas login" to authenticate`)
 }

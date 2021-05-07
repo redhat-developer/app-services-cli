@@ -68,15 +68,6 @@ install:
 	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
 
-# pkger packages static assets into the binary file
-pkger:
-	pkger -o cmd/rhoas
-.PHONY: pkger
-
-pkger/check:
-	./scripts/check-pkger.sh
-.PHONY: pkger/check
-
 # Runs the integration tests.
 test/integration: install
 	go test ./test/integration

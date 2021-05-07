@@ -8,8 +8,8 @@ import (
 
 	"strconv"
 
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
 )
 
 const (
@@ -24,24 +24,13 @@ const (
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)
 	if !ok {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": val,
-				"Type":  "string",
-			},
-		}))
+		return commonerr.NewCastError(val, "string")
 	}
 
 	if len(name) < 1 {
-		return errors.New(localizer.MustLocalizeFromID("kafka.topic.common.validation.name.error.required"))
+		return errors.New("topic name is required")
 	} else if len(name) > maxNameLength {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.name.error.lengthError",
-			TemplateData: map[string]interface{}{
-				"MaxNameLen": maxNameLength,
-			},
-		}))
+		return fmt.Errorf("topic name cannot exceed %v characters", maxNameLength)
 	}
 
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
@@ -50,12 +39,7 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalize(&localizer.Config{
-		MessageID: "kafka.topic.common.validation.name.error.invalidChars",
-		TemplateData: map[string]interface{}{
-			"Name": name,
-		},
-	}))
+	return fmt.Errorf(`invalid topic name "%v"; only letters (Aa-Zz), numbers, "_" and "-" are accepted`, name)
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
@@ -64,33 +48,15 @@ func ValidatePartitionsN(v interface{}) error {
 
 	partitions, err := strconv.Atoi(partitionsStr)
 	if err != nil {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": v,
-				"Type":  "int32",
-			},
-		}))
+		return commonerr.NewCastError(v, "int32")
 	}
 
 	if partitions < minPartitions {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.partitions.error.invalid.minLength",
-			TemplateData: map[string]interface{}{
-				"Partitions": partitions,
-				"Min":        minPartitions,
-			},
-		}))
+		return fmt.Errorf("invalid partition count %v, minimum value is %v", partitions, minPartitions)
 	}
 
 	if partitions > maxPartitions {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.partitions.error.invalid.maxLength",
-			TemplateData: map[string]interface{}{
-				"Partitions": partitions,
-				"Max":        maxPartitions,
-			},
-		}))
+		return fmt.Errorf("invalid partition count %v, maximum value is %v", partitions, maxPartitions)
 	}
 
 	return nil
@@ -100,23 +66,11 @@ func ValidatePartitionsN(v interface{}) error {
 func ValidateReplicationFactorN(v interface{}) error {
 	replicas, ok := v.(int32)
 	if !ok {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": v,
-				"Type":  "int32",
-			},
-		}))
+		return commonerr.NewCastError(v, "int32")
 	}
 
 	if replicas < minReplicationFactor {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.replicationFactor.error.invalid",
-			TemplateData: map[string]interface{}{
-				"ReplicationFactor":    replicas,
-				"MinReplicationFactor": minReplicationFactor,
-			},
-		}))
+		return fmt.Errorf("invalid replication factor %v, minimum value is %v", replicas, minReplicationFactor)
 	}
 
 	return nil
@@ -133,22 +87,11 @@ func ValidateMessageRetentionPeriod(v interface{}) error {
 
 	retentionPeriodMs, err := strconv.Atoi(retentionPeriodMsStr)
 	if err != nil {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": v,
-				"Type":  "int",
-			},
-		}))
+		return commonerr.NewCastError(v, "int")
 	}
 
 	if retentionPeriodMs < -1 {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.retentionPeriod.error.invalid",
-			TemplateData: map[string]interface{}{
-				"RetentionPeriod": retentionPeriodMs,
-			},
-		}))
+		return fmt.Errorf("invalid retention period %v, minimum value is -1", retentionPeriodMs)
 	}
 
 	return nil
@@ -165,22 +108,11 @@ func ValidateMessageRetentionSize(v interface{}) error {
 
 	retentionPeriodBytes, err := strconv.Atoi(retentionSizeStr)
 	if err != nil {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "common.error.castError",
-			TemplateData: map[string]interface{}{
-				"Value": v,
-				"Type":  "int",
-			},
-		}))
+		return commonerr.NewCastError(v, "int")
 	}
 
 	if retentionPeriodBytes < -1 {
-		return errors.New(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.topic.common.validation.retentionSize.error.invalid",
-			TemplateData: map[string]interface{}{
-				"RetentionSize": retentionPeriodBytes,
-			},
-		}))
+		return fmt.Errorf("invalid retention size %v, minimum value is -1", retentionPeriodBytes)
 	}
 
 	return nil
@@ -194,13 +126,7 @@ func ValidateNameIsAvailable(api strimziadminclient.DefaultApi, instance string)
 		_, httpRes, _ := api.GetTopic(context.Background(), name).Execute()
 
 		if httpRes != nil && httpRes.StatusCode == 200 {
-			return errors.New(localizer.MustLocalize(&localizer.Config{
-				MessageID: "kafka.topic.create.error.conflictError",
-				TemplateData: map[string]interface{}{
-					"TopicName":    name,
-					"InstanceName": instance,
-				},
-			}))
+			return fmt.Errorf(`topic "%v" already exists in Kafka instance "%v"`, name, instance)
 		}
 
 		return nil

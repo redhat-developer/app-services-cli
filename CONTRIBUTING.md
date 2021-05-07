@@ -6,7 +6,7 @@ Thank you for contributing to the RHOAS CLI. See below for guides to help you co
 
 The following will need to be installed on your device in order to contribute to this project.
 
-- [Go >= v1.15](https://golang.org/dl)
+- [Go >= v1.16](https://golang.org/dl)
 - [golangci-lint](https://golangci-lint.run)
 - [OpenAPI Generator](https://openapi-generator.tech/)
 - [Yarn](https://classic.yarnpkg.com)
@@ -45,10 +45,6 @@ Builds an executable binary `rhoas` of the CLI in the project root. Executable o
 #### `make format`
 
 Formats source code.
-
-#### `make pkger`
-
-Packages static assets into the binary.
 
 ### `make generate`
 
@@ -116,9 +112,7 @@ export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4NDgzMTAyLTRhYzAtND
 
 ## Internationalization
 
-All text strings are placed in `./locales` directory. Group files into usage groups: commands go together under `./locales/cmd/{whoami,kafka/serviceaccount}` etc. All others can be grouped by their package.
-
-When you make a change to a locale file, you _must_ run `make pkger` to embed the static files into the Go code. Please ensure this step is done before committing.
+All text strings are placed in `./pkg/localizer/assets` directory.
 
 ## Documentation
 

@@ -1,7 +1,6 @@
 package serviceaccount
 
 import (
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/delete"
@@ -14,9 +13,9 @@ import (
 // NewServiceAccountCommand creates a new command sub-group to manage service accounts
 func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   localizer.MustLocalizeFromID("serviceAccount.cmd.use"),
-		Short: localizer.MustLocalizeFromID("serviceAccount.cmd.shortDescription"),
-		Long:  localizer.MustLocalizeFromID("serviceAccount.cmd.longDescription"),
+		Use:   f.Localizer.MustLocalize("serviceAccount.cmd.use"),
+		Short: f.Localizer.MustLocalize("serviceAccount.cmd.shortDescription"),
+		Long:  f.Localizer.MustLocalize("serviceAccount.cmd.longDescription"),
 		Args:  cobra.ExactArgs(1),
 	}
 

@@ -11,13 +11,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -45,6 +45,7 @@ type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
+	localizer  localize.Localizer
 }
 
 // NewListCommand creates a new command for listing kafkas.
@@ -57,12 +58,13 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
+		localizer:  f.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:   localizer.MustLocalizeFromID("kafka.list.cmd.use"),
-		Short: localizer.MustLocalizeFromID("kafka.list.cmd.shortDescription"),
-		Long:  localizer.MustLocalizeFromID("kafka.list.cmd.longDescription"),
+		Use:   opts.localizer.MustLocalize("kafka.list.cmd.use"),
+		Short: opts.localizer.MustLocalize("kafka.list.cmd.shortDescription"),
+		Long:  opts.localizer.MustLocalize("kafka.list.cmd.longDescription"),
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
@@ -77,13 +79,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", localizer.MustLocalize(&localizer.Config{
-		MessageID:   "kafka.common.flag.output.description",
-		PluralCount: 2,
-	}))
-	cmd.Flags().IntVarP(&opts.page, "page", "", 0, localizer.MustLocalizeFromID("kafka.list.flag.page"))
-	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, localizer.MustLocalizeFromID("kafka.list.flag.limit"))
-	cmd.Flags().StringVarP(&opts.search, "search", "", "", localizer.MustLocalizeFromID("kafka.list.flag.search"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafkas.common.flag.output.description"))
+	cmd.Flags().IntVarP(&opts.page, "page", "", 0, opts.localizer.MustLocalize("kafka.list.flag.page"))
+	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
+	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
 
 	return cmd
 }
@@ -106,13 +105,9 @@ func runList(opts *options) error {
 	a = a.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != "" {
-		logger.Debug(localizer.MustLocalize(&localizer.Config{
-			MessageID: "kafka.list.log.debug.filteringKafkaList",
-			TemplateData: map[string]interface{}{
-				"Search": buildQuery(opts.search),
-			},
-		}))
-		a = a.Search(buildQuery(opts.search))
+		query := buildQuery(opts.search)
+		logger.Debug(opts.localizer.MustLocalize("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
+		a = a.Search(query)
 	}
 
 	response, _, err := a.Execute()
@@ -122,7 +117,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 && opts.outputFormat == "" {
-		logger.Info(localizer.MustLocalizeFromID("kafka.common.log.info.noKafkaInstances"))
+		logger.Info(opts.localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
 		return nil
 	}
 

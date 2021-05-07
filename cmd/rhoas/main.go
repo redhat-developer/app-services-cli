@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
-	"github.com/markbates/pkger"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 
@@ -28,30 +28,15 @@ var (
 	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 )
 
-// load all locale files
-func loadStaticFiles() error {
-	err := localizer.IncludeAssetsAndLoadMessageFiles()
-	if err != nil {
-		return err
-	}
-
-	return pkger.Walk("/static", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-}
-
 func main() {
-	err := loadStaticFiles()
+	localizer, err := goi18n.New(nil)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
 	buildVersion := build.Version
-	cmdFactory := factory.New(build.Version)
+	cmdFactory := factory.New(build.Version, localizer)
 	logger, err := cmdFactory.Logger()
 	if err != nil {
 		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
@@ -71,7 +56,7 @@ func main() {
 
 	err = rootCmd.Execute()
 	if debug.Enabled() {
-		build.CheckForUpdate(context.Background(), logger)
+		build.CheckForUpdate(context.Background(), logger, localizer)
 	}
 	if err == nil {
 		return
@@ -113,7 +98,15 @@ func generateDocumentation(rootCommand *cobra.Command) {
 }
 
 func initConfig(f *factory.Factory) {
+	// check if the config file is located in the old default location
+	// if so, move it to the new location
+	err := moveConfigFile(f.Config)
+	if err != nil {
+		fmt.Fprintf(f.IOStreams.ErrOut, "Error migrating config file to new location: %v", err)
+	}
+
 	cfgFile, err := f.Config.Load()
+
 	if cfgFile != nil {
 		return
 	}
@@ -127,4 +120,36 @@ func initConfig(f *factory.Factory) {
 		fmt.Fprintln(f.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
+}
+
+// check if the config file is located in the old default location
+// if so, move it to the new location
+func moveConfigFile(cfg config.IConfig) error {
+	cfgPath, err := cfg.Location()
+	if err != nil {
+		return err
+	}
+	rhoasCfgDir, err := config.DefaultDir()
+	if err != nil {
+		return err
+	}
+	userCfgDir, err := os.UserConfigDir()
+	if err != nil {
+		return err
+	}
+	oldFilePath := filepath.Join(userCfgDir, ".rhoascli.json")
+	if os.Getenv("RHOASCONFIG") == oldFilePath {
+		return nil
+	}
+	// create rhoas config directory
+	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
+		err = os.Mkdir(rhoasCfgDir, 0700)
+		if err != nil {
+			return err
+		}
+	}
+	if _, err = os.Stat(oldFilePath); err == nil {
+		return os.Rename(oldFilePath, cfgPath)
+	}
+	return nil
 }

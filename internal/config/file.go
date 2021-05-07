@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	"github.com/redhat-developer/app-services-cli/internal/localizer"
+	"path/filepath"
 )
 
 // NewFile creates a new config type
@@ -31,17 +30,17 @@ func (c *File) Load() (*Config, error) {
 		return nil, err
 	}
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.statError"), err)
+		return nil, fmt.Errorf("%v: %w", "unable to check if config file exists", err)
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.readError"), err)
+		return nil, fmt.Errorf("%v: %w", "unable to read config file", err)
 	}
 	var cfg Config
 	err = json.Unmarshal(data, &cfg)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.load.error.parseError"), err)
+		return nil, fmt.Errorf("%v: %w", "unable to parse config", err)
 	}
 	return &cfg, nil
 }
@@ -54,11 +53,21 @@ func (c *File) Save(cfg *Config) error {
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.save.error.marshalError"), err)
+		return fmt.Errorf("%v: %w", "unable to marshal config", err)
+	}
+	rhoasCfgDir, err := DefaultDir()
+	if err != nil {
+		return err
+	}
+	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
+		err = os.Mkdir(rhoasCfgDir, 0700)
+		if err != nil {
+			return err
+		}
 	}
 	err = ioutil.WriteFile(file, data, 0600)
 	if err != nil {
-		return fmt.Errorf("%v: %w", localizer.MustLocalizeFromID("config.save.error.writeError"), err)
+		return fmt.Errorf("%v: %w", "unable to save config", err)
 	}
 	return nil
 }
@@ -82,13 +91,26 @@ func (c *File) Remove() error {
 
 // Location gets the path to the config file
 func (c *File) Location() (path string, err error) {
-	if rhoasConfig := os.Getenv("RHOASCLI_CONFIG"); rhoasConfig != "" {
+	if rhoasConfig := os.Getenv("RHOASCONFIG"); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {
-		path, err = getUserConfig(".rhoascli.json")
+		rhoasCfgDir, err := DefaultDir()
+		if err != nil {
+			return "", nil
+		}
+		path = filepath.Join(rhoasCfgDir, "config.json")
 		if err != nil {
 			return "", err
 		}
 	}
 	return path, nil
+}
+
+// DefaultDir returns the default parent directory of the config file
+func DefaultDir() (string, error) {
+	userCfgDir, err := os.UserConfigDir()
+	if err != nil {
+		return "", nil
+	}
+	return filepath.Join(userCfgDir, "rhoas"), nil
 }

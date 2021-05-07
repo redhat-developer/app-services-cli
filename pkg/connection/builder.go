@@ -5,9 +5,10 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net/http"
 	"net/url"
+
+	"github.com/redhat-developer/app-services-cli/internal/build"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
@@ -146,19 +147,18 @@ func (b *Builder) Build() (connection *KeycloakConnection, err error) {
 // BuildContext uses the configuration stored in the builder to create a new connection. The builder
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
-// TODO: Localize error messages
 // nolint:funlen
 func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnection, err error) {
-	if b.clientID == "" {
-		return nil, AuthErrorf("Missing client ID")
-	}
-
 	if b.connectionConfig.RequireAuth && b.accessToken == "" && b.refreshToken == "" {
 		return nil, &AuthError{notLoggedInError()}
 	}
 
 	if b.connectionConfig.RequireMASAuth && b.masAccessToken == "" && b.masRefreshToken == "" {
 		return nil, &MasAuthError{notLoggedInMASError()}
+	}
+
+	if b.clientID == "" {
+		return nil, AuthErrorf("missing client ID")
 	}
 
 	if b.config == nil {
