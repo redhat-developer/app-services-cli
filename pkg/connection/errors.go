@@ -40,7 +40,7 @@ func notLoggedInError() error {
 }
 
 func notLoggedInMASError() error {
-	return errors.New(`not logged in to identity.api.openshift.com. Run "rhoas login" to authenticate. Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands.`)
+	return errors.New(`not logged in to identity.api.openshift.com. Run "rhoas login" to authenticate. Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands`)
 }
 
 func sessionExpiredError() error {

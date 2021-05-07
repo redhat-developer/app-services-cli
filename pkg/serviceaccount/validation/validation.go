@@ -61,5 +61,5 @@ func ValidateDescription(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(`invalid service account description; only alphanumeric characters and "-", ".", "," are accepted.`)
+	return errors.New(`invalid service account description; only alphanumeric characters and "-", ".", "," are accepted`)
 }
