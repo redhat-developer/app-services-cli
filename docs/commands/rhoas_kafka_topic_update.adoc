@@ -17,7 +17,7 @@ rhoas kafka topic update [flags]
 
 ....
 # update the number of replicas for a topic
-$ rhoas kafka topic update topic-1 --replication-factor 
+$ rhoas kafka topic update topic-1 --retention-ms -1
 
 ....
 
