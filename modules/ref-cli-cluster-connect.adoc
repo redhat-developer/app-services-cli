@@ -40,8 +40,7 @@ $ rhoas cluster connect
       --ignore-context      Ignore currently selected services and ask to select each service separately
       --kubeconfig string   Location of the kubeconfig file.
   -n, --namespace string    Custom Kubernetes namespace (if not set current namespace will be used)
-      --token string        Provide an offline token to be used by the operator.
-                            To get a token, visit https://cloud.redhat.com/openshift/token.
+      --token string        Provide an offline token to be used by the operator. To obtain a token, visit https://cloud.redhat.com/openshift/token.
                             
   -y, --yes                 Forcibly create a binding without confirmation.
 ....
