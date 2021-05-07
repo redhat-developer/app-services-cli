@@ -2,11 +2,10 @@ name: Generate a CHANGELOG
 on: 
   push:
     branches:
-      - main
+      - changelog
 jobs:
   package:
     runs-on: ubuntu-latest
     steps:
-      - uses: nuuday/github-changelog-action@v1.0.0
-        with:
-          next_version: "1.0.0"
+      - uses: craicoverflow/install-git-chglog@v0.3.0
+        run: git-chglog
