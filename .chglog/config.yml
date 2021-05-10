@@ -4,7 +4,7 @@ info:
   title: CHANGELOG
   repository_url: https://github.com/redhat-developer/app-services-cli
 options:
-  tag_filter_pattern: '^v[0-9]+\.[0-9]+\.[0-9]+$'
+  tag_filter_pattern: '^v?[0-9]+\.[0-9]+\.[0-9]+$'
   commits:
     filters:
       Type:
