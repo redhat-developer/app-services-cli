@@ -6,7 +6,6 @@
 ### {{ .Title }}
 
 {{ range .Commits -}}
-* {{ .Subject }}
 * {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
 {{ end }}
 {{ end -}}
