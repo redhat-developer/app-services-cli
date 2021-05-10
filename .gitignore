@@ -3,6 +3,7 @@ vendor
 dist
 /rhoas
 node_modules
+**/package-lock.json
 .idea
 
 # These are ignored because they are the common extension
