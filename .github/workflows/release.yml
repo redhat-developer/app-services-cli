@@ -20,12 +20,21 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.16.x
+
+      - 
+        name: Install git-chglog
+        uses: craicoverflow/install-git-chglog@v1
+
+      - 
+        name: Generate release notes
+        run: |
+          git-chglog $(git describe --tags $(git rev-parse HEAD)) -o RELEASE_NOTES.md
       
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
           version: latest
-          args: release --rm-dist
+          args: release --rm-dist --release-notes=RELEASE_NOTES.md
           key: ${{ secrets.YOUR_PRIVATE_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
