@@ -32,9 +32,6 @@
       "summary": "Manage the list of all registries.",
       "description": "",
       "get": {
-        "tags": [
-          "Registries"
-        ],
         "responses": {
           "200": {
             "content": {
@@ -74,9 +71,6 @@
           },
           "required": true
         },
-        "tags": [
-          "Registries"
-        ],
         "responses": {
           "202": {
             "content": {
@@ -106,9 +100,7 @@
       "summary": "Manage a specific Registry.",
       "description": "",
       "get": {
-        "tags": [
-          "Registries"
-        ],
+        "tags": ["Registries"],
         "responses": {
           "200": {
             "content": {
@@ -137,9 +129,6 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Registries"
-        ],
         "responses": {
           "204": {
             "description": "Successful response."
@@ -171,325 +160,14 @@
           "required": true
         }
       ]
-    },
-    "/api/v1/admin/tasks": {
-      "summary": "Manage the list of all tasks executed on the server.",
-      "get": {
-        "tags": [
-          "Admin",
-          "Tasks"
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Task"
-                  }
-                }
-              }
-            },
-            "description": "A successful response."
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        },
-        "operationId": "getTasks",
-        "summary": "Get the list of all tasks executed on the server.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/tasks/{taskId}": {
-      "summary": "Manage a specific task executed on the server.",
-      "get": {
-        "tags": [
-          "Admin",
-          "Tasks"
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            },
-            "description": "A successful response."
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        },
-        "operationId": "getTask",
-        "summary": "Get a specific task executed on the server.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "taskId",
-          "schema": {
-            "type": "string"
-          },
-          "in": "path",
-          "required": true
-        }
-      ]
-    },
-    "/api/v1": {
-      "summary": "Get the OpenAPI schema for version 1 of this REST API.",
-      "get": {
-        "tags": [
-          "Info"
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {}
-            },
-            "description": "A successful response."
-          }
-        },
-        "operationId": "getSchema",
-        "summary": "Get the OpenAPI schema for version 1 of this REST API.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/registryDeployments": {
-      "summary": "Manage the list of all registry deployments.",
-      "get": {
-        "tags": [
-          "RegistryDeployments"
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RegistryDeployment"
-                  }
-                }
-              }
-            },
-            "description": "A successful response."
-          }
-        },
-        "operationId": "getRegistryDeployments",
-        "summary": "Get the list of all registry deployments.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegistryDeploymentCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "tags": [
-          "RegistryDeployments"
-        ],
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegistryDeployment"
-                }
-              }
-            },
-            "description": "A successful response."
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                }
-              }
-            },
-            "description": "A Registry Deployment with the same configuration already exists."
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        },
-        "operationId": "createRegistryDeployment",
-        "summary": "Create a registry deployment.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/registryDeployments/{registryDeploymentId}": {
-      "summary": "Manage a specific registry deployment.",
-      "description": "",
-      "get": {
-        "tags": [
-          "RegistryDeployments"
-        ],
-        "parameters": [
-          {
-            "name": "registryDeploymentId",
-            "schema": {
-              "type": "integer"
-            },
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegistryDeployment"
-                }
-              }
-            },
-            "description": "A successful response."
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        },
-        "operationId": "getRegistryDeployment",
-        "summary": "Get a specific registry deployment.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "RegistryDeployments"
-        ],
-        "parameters": [
-          {
-            "name": "registryDeploymentId",
-            "schema": {
-              "type": "integer"
-            },
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "A successful response. The Registry Deployment has been deleted."
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                }
-              }
-            },
-            "description": "Could not delete Registry Deployment because there is a Registry deployed there."
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        },
-        "operationId": "deleteRegistryDeployment",
-        "summary": "Delete a specific Registry Deployment.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
     }
   },
   "components": {
     "schemas": {
-      "RegistryDeployment": {
-        "description": "Multi-tenant Service Registry deployment, that can host Service Registry instances.",
-        "required": [
-          "status",
-          "id",
-          "registryDeploymentUrl",
-          "tenantManagerUrl"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "",
-            "type": "integer"
-          },
-          "tenantManagerUrl": {
-            "description": "",
-            "type": "string"
-          },
-          "registryDeploymentUrl": {
-            "description": "",
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/RegistryDeploymentStatus",
-            "description": ""
-          },
-          "name": {
-            "description": "User-defined Registry Deployment name. Does not have to be unique.",
-            "type": "string"
-          }
-        },
-        "example": {
-          "id": 1,
-          "tenantManagerUrl": "https://registry-tenant-manager.apps.example.com",
-          "registryDeploymentUrl": "https://registry.apps.example.com",
-          "status": {
-            "status": "AVAILABLE",
-            "lastUpdated": "2021-05-04T12:34:56Z"
-          },
-          "name": "my-deployment"
-        }
-      },
       "Registry": {
         "title": "Root Type for Registry",
         "description": "Service Registry instance within a multi-tenant deployment.",
-        "required": [
-          "id",
-          "registryUrl",
-          "status"
-        ],
+        "required": ["id", "registryUrl", "status"],
         "type": "object",
         "properties": {
           "id": {
@@ -524,10 +202,7 @@
       },
       "RegistryStatus": {
         "description": "",
-        "required": [
-          "value",
-          "lastUpdated"
-        ],
+        "required": ["value", "lastUpdated"],
         "type": "object",
         "properties": {
           "lastUpdated": {
@@ -561,128 +236,8 @@
       },
       "RegistryStatusValue": {
         "description": "",
-        "enum": [
-          "PROVISIONING",
-          "AVAILABLE",
-          "UNAVAILABLE"
-        ],
+        "enum": ["PROVISIONING", "AVAILABLE", "UNAVAILABLE"],
         "type": "string"
-      },
-      "RegistryDeploymentStatusValue": {
-        "description": "",
-        "enum": [
-          "PROCESSING",
-          "AVAILABLE",
-          "UNAVAILABLE"
-        ],
-        "type": "string"
-      },
-      "RegistryDeploymentStatus": {
-        "description": "",
-        "required": [
-          "value",
-          "lastUpdated"
-        ],
-        "type": "object",
-        "properties": {
-          "lastUpdated": {
-            "format": "date-time",
-            "description": "ISO 8601 UTC timestamp.",
-            "type": "string"
-          },
-          "value": {
-            "$ref": "#/components/schemas/RegistryDeploymentStatusValue",
-            "description": ""
-          }
-        },
-        "example": {
-          "value": "AVAILABLE",
-          "lastUpdated": "2021-05-04T12:34:56Z"
-        }
-      },
-      "ErrorInfo": {
-        "$ref": "#/components/schemas/ErrorInfo1"
-      },
-      "RegistryDeploymentCreate": {
-        "description": "Information used to create (register) a new multi-tenant Service Registry deployment, that can host Service Registry instances.",
-        "required": [
-          "registryDeploymentUrl",
-          "tenantManagerUrl"
-        ],
-        "type": "object",
-        "properties": {
-          "registryDeploymentUrl": {
-            "description": "",
-            "type": "string"
-          },
-          "tenantManagerUrl": {
-            "description": "",
-            "type": "string"
-          },
-          "name": {
-            "description": "User-defined Registry Deployment name. Does not have to be unique.",
-            "type": "string"
-          }
-        },
-        "example": {
-          "registryDeploymentUrl": "https://registry.apps.example.com",
-          "tenantManagerUrl": "https://registry-tenant-manager.apps.example.com",
-          "name": "my-deployment"
-        }
-      },
-      "Task": {
-        "description": "",
-        "required": [
-          "id",
-          "type",
-          "data",
-          "schedule"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "",
-            "type": "string"
-          },
-          "type": {
-            "description": "",
-            "type": "string"
-          },
-          "data": {
-            "description": "",
-            "type": "string"
-          },
-          "schedule": {
-            "$ref": "#/components/schemas/TaskSchedule",
-            "description": ""
-          }
-        }
-      },
-      "TaskSchedule": {
-        "title": "Root Type for TaskSchedule",
-        "description": "",
-        "required": [
-          "firstExecuteAt"
-        ],
-        "type": "object",
-        "properties": {
-          "firstExecuteAt": {
-            "description": "ISO 8601 UTC timestamp.",
-            "type": "string"
-          },
-          "priority": {
-            "description": "Higher number means higher priority. Default priority is 5.",
-            "type": "integer"
-          },
-          "intervalSec": {
-            "type": "integer"
-          }
-        },
-        "example": {
-          "firstExecuteAt": "2021-05-04T12:34:56Z",
-          "intervalSec": 300,
-          "priority": 5
-        }
       },
       "ErrorInfo1": {
         "title": "Root Type for ErrorInfo",
@@ -703,6 +258,13 @@
           "error_code": 500,
           "message": "An error occurred on the server."
         }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
       }
     },
     "responses": {

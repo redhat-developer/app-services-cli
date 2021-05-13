@@ -18,7 +18,14 @@ module.exports = {
   },
   createRegistry: async (c, req, res) => {
     res.status(200).json({
-      "name": "my-registry"
+      "id": 42,
+      "name": "my-registry",
+      "registryUrl": "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-339f4248d706",
+      "status": {
+        "status": "PROVISIONING",
+        "lastUpdated": "2021-05-04T12:34:56Z"
+      },
+      "registryDeploymentId": 1
     });
   },
   getRegistry: async (c, req, res) => {
@@ -36,33 +43,7 @@ module.exports = {
   deleteRegistry: async (c, req, res) => {
     res.status(204).json();
   },
-  getTasks: async (c, req, res) => {
-    res.status(200).json([
-      {
-        "id": "string",
-        "type": "string",
-        "data": "string",
-        "schedule": {
-          "firstExecuteAt": "2021-05-04T12:34:56Z",
-          "intervalSec": 300,
-          "priority": 5
-        }
-      }
-    ]);
-  },
-  getTask: async (c, req, res) => {
-    res.status(200).json({
-      "id": "string",
-      "type": "string",
-      "data": "string",
-      "schedule": {
-        "firstExecuteAt": "2021-05-04T12:34:56Z",
-        "intervalSec": 300,
-        "priority": 5
-      }
-    });
-  },
-
+  
   // Handling auth
   notFound: async (c, req, res) => res.status(404).json({ err: "not found" }),
   unauthorizedHandler: async (c, req, res) =>

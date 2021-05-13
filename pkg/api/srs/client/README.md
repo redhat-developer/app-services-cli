@@ -1,4 +1,4 @@
-# Go API client for kasclient
+# Go API client for srsclient
 
 Main entry point for the system, responsible for all sorts of management operations for the whole service of managed service registry.
 
@@ -22,7 +22,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```golang
-import sw "./kasclient"
+import sw "./srsclient"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
@@ -78,19 +78,10 @@ All URIs are relative to *https://api.openshift.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AdminApi* | [**GetTask**](docs/AdminApi.md#gettask) | **Get** /api/v1/admin/tasks/{taskId} | Get a specific task executed on the server.
-*AdminApi* | [**GetTasks**](docs/AdminApi.md#gettasks) | **Get** /api/v1/admin/tasks | Get the list of all tasks executed on the server.
-*InfoApi* | [**GetSchema**](docs/InfoApi.md#getschema) | **Get** /api/v1 | Get the OpenAPI schema for version 1 of this REST API.
-*RegistriesApi* | [**CreateRegistry**](docs/RegistriesApi.md#createregistry) | **Post** /api/v1/registries | Create a Registry.
-*RegistriesApi* | [**DeleteRegistry**](docs/RegistriesApi.md#deleteregistry) | **Delete** /api/v1/registries/{registryId} | Delete a Registry
-*RegistriesApi* | [**GetRegistries**](docs/RegistriesApi.md#getregistries) | **Get** /api/v1/registries | Get the list of all registries.
+*DefaultApi* | [**CreateRegistry**](docs/DefaultApi.md#createregistry) | **Post** /api/v1/registries | Create a Registry.
+*DefaultApi* | [**DeleteRegistry**](docs/DefaultApi.md#deleteregistry) | **Delete** /api/v1/registries/{registryId} | Delete a Registry
+*DefaultApi* | [**GetRegistries**](docs/DefaultApi.md#getregistries) | **Get** /api/v1/registries | Get the list of all registries.
 *RegistriesApi* | [**GetRegistry**](docs/RegistriesApi.md#getregistry) | **Get** /api/v1/registries/{registryId} | Get a Registry
-*RegistryDeploymentsApi* | [**CreateRegistryDeployment**](docs/RegistryDeploymentsApi.md#createregistrydeployment) | **Post** /api/v1/registryDeployments | Create a registry deployment.
-*RegistryDeploymentsApi* | [**DeleteRegistryDeployment**](docs/RegistryDeploymentsApi.md#deleteregistrydeployment) | **Delete** /api/v1/registryDeployments/{registryDeploymentId} | Delete a specific Registry Deployment.
-*RegistryDeploymentsApi* | [**GetRegistryDeployment**](docs/RegistryDeploymentsApi.md#getregistrydeployment) | **Get** /api/v1/registryDeployments/{registryDeploymentId} | Get a specific registry deployment.
-*RegistryDeploymentsApi* | [**GetRegistryDeployments**](docs/RegistryDeploymentsApi.md#getregistrydeployments) | **Get** /api/v1/registryDeployments | Get the list of all registry deployments.
-*TasksApi* | [**GetTask**](docs/TasksApi.md#gettask) | **Get** /api/v1/admin/tasks/{taskId} | Get a specific task executed on the server.
-*TasksApi* | [**GetTasks**](docs/TasksApi.md#gettasks) | **Get** /api/v1/admin/tasks | Get the list of all tasks executed on the server.
 
 
 ## Documentation For Models
@@ -98,19 +89,24 @@ Class | Method | HTTP request | Description
  - [ErrorInfo1](docs/ErrorInfo1.md)
  - [Registry](docs/Registry.md)
  - [RegistryCreate](docs/RegistryCreate.md)
- - [RegistryDeployment](docs/RegistryDeployment.md)
- - [RegistryDeploymentCreate](docs/RegistryDeploymentCreate.md)
- - [RegistryDeploymentStatus](docs/RegistryDeploymentStatus.md)
- - [RegistryDeploymentStatusValue](docs/RegistryDeploymentStatusValue.md)
  - [RegistryStatus](docs/RegistryStatus.md)
  - [RegistryStatusValue](docs/RegistryStatusValue.md)
- - [Task](docs/Task.md)
- - [TaskSchedule](docs/TaskSchedule.md)
 
 
 ## Documentation For Authorization
 
- Endpoints do not require authorization.
+
+
+### Bearer
+
+- **Type**: HTTP Bearer token authentication
+
+Example
+
+```golang
+auth := context.WithValue(context.Background(), sw.ContextAccessToken, "BEARERTOKENSTRING")
+r, err := client.Service.Operation(auth, args)
+```
 
 
 ## Documentation for Utility Methods

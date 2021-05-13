@@ -4,8 +4,8 @@
 package strimziadminclient
 
 import (
-	"context"
-	"net/http"
+	_context "context"
+	_nethttp "net/http"
 	"sync"
 )
 
@@ -15,143 +15,143 @@ var _ DefaultApi = &DefaultApiMock{}
 
 // DefaultApiMock is a mock implementation of DefaultApi.
 //
-//     func TestSomethingThatUsesDefaultApi(t *testing.T) {
+// 	func TestSomethingThatUsesDefaultApi(t *testing.T) {
 //
-//         // make and configure a mocked DefaultApi
-//         mockedDefaultApi := &DefaultApiMock{
-//             CreateTopicFunc: func(ctx context.Context) ApiCreateTopicRequest {
-// 	               panic("mock out the CreateTopic method")
-//             },
-//             CreateTopicExecuteFunc: func(r ApiCreateTopicRequest) (Topic, *http.Response, error) {
-// 	               panic("mock out the CreateTopicExecute method")
-//             },
-//             DeleteConsumerGroupByIdFunc: func(ctx context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
-// 	               panic("mock out the DeleteConsumerGroupById method")
-//             },
-//             DeleteConsumerGroupByIdExecuteFunc: func(r ApiDeleteConsumerGroupByIdRequest) (*http.Response, error) {
-// 	               panic("mock out the DeleteConsumerGroupByIdExecute method")
-//             },
-//             DeleteTopicFunc: func(ctx context.Context, topicName string) ApiDeleteTopicRequest {
-// 	               panic("mock out the DeleteTopic method")
-//             },
-//             DeleteTopicExecuteFunc: func(r ApiDeleteTopicRequest) (*http.Response, error) {
-// 	               panic("mock out the DeleteTopicExecute method")
-//             },
-//             GetConsumerGroupByIdFunc: func(ctx context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest {
-// 	               panic("mock out the GetConsumerGroupById method")
-//             },
-//             GetConsumerGroupByIdExecuteFunc: func(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *http.Response, error) {
-// 	               panic("mock out the GetConsumerGroupByIdExecute method")
-//             },
-//             GetConsumerGroupListFunc: func(ctx context.Context) ApiGetConsumerGroupListRequest {
-// 	               panic("mock out the GetConsumerGroupList method")
-//             },
-//             GetConsumerGroupListExecuteFunc: func(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *http.Response, error) {
-// 	               panic("mock out the GetConsumerGroupListExecute method")
-//             },
-//             GetTopicFunc: func(ctx context.Context, topicName string) ApiGetTopicRequest {
-// 	               panic("mock out the GetTopic method")
-//             },
-//             GetTopicExecuteFunc: func(r ApiGetTopicRequest) (Topic, *http.Response, error) {
-// 	               panic("mock out the GetTopicExecute method")
-//             },
-//             GetTopicsListFunc: func(ctx context.Context) ApiGetTopicsListRequest {
-// 	               panic("mock out the GetTopicsList method")
-//             },
-//             GetTopicsListExecuteFunc: func(r ApiGetTopicsListRequest) (TopicsList, *http.Response, error) {
-// 	               panic("mock out the GetTopicsListExecute method")
-//             },
-//             MetricsFunc: func(ctx context.Context) ApiMetricsRequest {
-// 	               panic("mock out the Metrics method")
-//             },
-//             MetricsExecuteFunc: func(r ApiMetricsRequest) (*http.Response, error) {
-// 	               panic("mock out the MetricsExecute method")
-//             },
-//             OpenApiFunc: func(ctx context.Context) ApiOpenApiRequest {
-// 	               panic("mock out the OpenApi method")
-//             },
-//             OpenApiExecuteFunc: func(r ApiOpenApiRequest) (*http.Response, error) {
-// 	               panic("mock out the OpenApiExecute method")
-//             },
-//             UpdateTopicFunc: func(ctx context.Context, topicName string) ApiUpdateTopicRequest {
-// 	               panic("mock out the UpdateTopic method")
-//             },
-//             UpdateTopicExecuteFunc: func(r ApiUpdateTopicRequest) (Topic, *http.Response, error) {
-// 	               panic("mock out the UpdateTopicExecute method")
-//             },
-//         }
+// 		// make and configure a mocked DefaultApi
+// 		mockedDefaultApi := &DefaultApiMock{
+// 			CreateTopicFunc: func(ctx _context.Context) ApiCreateTopicRequest {
+// 				panic("mock out the CreateTopic method")
+// 			},
+// 			CreateTopicExecuteFunc: func(r ApiCreateTopicRequest) (Topic, *_nethttp.Response, error) {
+// 				panic("mock out the CreateTopicExecute method")
+// 			},
+// 			DeleteConsumerGroupByIdFunc: func(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
+// 				panic("mock out the DeleteConsumerGroupById method")
+// 			},
+// 			DeleteConsumerGroupByIdExecuteFunc: func(r ApiDeleteConsumerGroupByIdRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the DeleteConsumerGroupByIdExecute method")
+// 			},
+// 			DeleteTopicFunc: func(ctx _context.Context, topicName string) ApiDeleteTopicRequest {
+// 				panic("mock out the DeleteTopic method")
+// 			},
+// 			DeleteTopicExecuteFunc: func(r ApiDeleteTopicRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the DeleteTopicExecute method")
+// 			},
+// 			GetConsumerGroupByIdFunc: func(ctx _context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest {
+// 				panic("mock out the GetConsumerGroupById method")
+// 			},
+// 			GetConsumerGroupByIdExecuteFunc: func(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *_nethttp.Response, error) {
+// 				panic("mock out the GetConsumerGroupByIdExecute method")
+// 			},
+// 			GetConsumerGroupListFunc: func(ctx _context.Context) ApiGetConsumerGroupListRequest {
+// 				panic("mock out the GetConsumerGroupList method")
+// 			},
+// 			GetConsumerGroupListExecuteFunc: func(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *_nethttp.Response, error) {
+// 				panic("mock out the GetConsumerGroupListExecute method")
+// 			},
+// 			GetTopicFunc: func(ctx _context.Context, topicName string) ApiGetTopicRequest {
+// 				panic("mock out the GetTopic method")
+// 			},
+// 			GetTopicExecuteFunc: func(r ApiGetTopicRequest) (Topic, *_nethttp.Response, error) {
+// 				panic("mock out the GetTopicExecute method")
+// 			},
+// 			GetTopicsListFunc: func(ctx _context.Context) ApiGetTopicsListRequest {
+// 				panic("mock out the GetTopicsList method")
+// 			},
+// 			GetTopicsListExecuteFunc: func(r ApiGetTopicsListRequest) (TopicsList, *_nethttp.Response, error) {
+// 				panic("mock out the GetTopicsListExecute method")
+// 			},
+// 			MetricsFunc: func(ctx _context.Context) ApiMetricsRequest {
+// 				panic("mock out the Metrics method")
+// 			},
+// 			MetricsExecuteFunc: func(r ApiMetricsRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the MetricsExecute method")
+// 			},
+// 			OpenApiFunc: func(ctx _context.Context) ApiOpenApiRequest {
+// 				panic("mock out the OpenApi method")
+// 			},
+// 			OpenApiExecuteFunc: func(r ApiOpenApiRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the OpenApiExecute method")
+// 			},
+// 			UpdateTopicFunc: func(ctx _context.Context, topicName string) ApiUpdateTopicRequest {
+// 				panic("mock out the UpdateTopic method")
+// 			},
+// 			UpdateTopicExecuteFunc: func(r ApiUpdateTopicRequest) (Topic, *_nethttp.Response, error) {
+// 				panic("mock out the UpdateTopicExecute method")
+// 			},
+// 		}
 //
-//         // use mockedDefaultApi in code that requires DefaultApi
-//         // and then make assertions.
+// 		// use mockedDefaultApi in code that requires DefaultApi
+// 		// and then make assertions.
 //
-//     }
+// 	}
 type DefaultApiMock struct {
 	// CreateTopicFunc mocks the CreateTopic method.
-	CreateTopicFunc func(ctx context.Context) ApiCreateTopicRequest
+	CreateTopicFunc func(ctx _context.Context) ApiCreateTopicRequest
 
 	// CreateTopicExecuteFunc mocks the CreateTopicExecute method.
-	CreateTopicExecuteFunc func(r ApiCreateTopicRequest) (Topic, *http.Response, error)
+	CreateTopicExecuteFunc func(r ApiCreateTopicRequest) (Topic, *_nethttp.Response, error)
 
 	// DeleteConsumerGroupByIdFunc mocks the DeleteConsumerGroupById method.
-	DeleteConsumerGroupByIdFunc func(ctx context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest
+	DeleteConsumerGroupByIdFunc func(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest
 
 	// DeleteConsumerGroupByIdExecuteFunc mocks the DeleteConsumerGroupByIdExecute method.
-	DeleteConsumerGroupByIdExecuteFunc func(r ApiDeleteConsumerGroupByIdRequest) (*http.Response, error)
+	DeleteConsumerGroupByIdExecuteFunc func(r ApiDeleteConsumerGroupByIdRequest) (*_nethttp.Response, error)
 
 	// DeleteTopicFunc mocks the DeleteTopic method.
-	DeleteTopicFunc func(ctx context.Context, topicName string) ApiDeleteTopicRequest
+	DeleteTopicFunc func(ctx _context.Context, topicName string) ApiDeleteTopicRequest
 
 	// DeleteTopicExecuteFunc mocks the DeleteTopicExecute method.
-	DeleteTopicExecuteFunc func(r ApiDeleteTopicRequest) (*http.Response, error)
+	DeleteTopicExecuteFunc func(r ApiDeleteTopicRequest) (*_nethttp.Response, error)
 
 	// GetConsumerGroupByIdFunc mocks the GetConsumerGroupById method.
-	GetConsumerGroupByIdFunc func(ctx context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest
+	GetConsumerGroupByIdFunc func(ctx _context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest
 
 	// GetConsumerGroupByIdExecuteFunc mocks the GetConsumerGroupByIdExecute method.
-	GetConsumerGroupByIdExecuteFunc func(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *http.Response, error)
+	GetConsumerGroupByIdExecuteFunc func(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *_nethttp.Response, error)
 
 	// GetConsumerGroupListFunc mocks the GetConsumerGroupList method.
-	GetConsumerGroupListFunc func(ctx context.Context) ApiGetConsumerGroupListRequest
+	GetConsumerGroupListFunc func(ctx _context.Context) ApiGetConsumerGroupListRequest
 
 	// GetConsumerGroupListExecuteFunc mocks the GetConsumerGroupListExecute method.
-	GetConsumerGroupListExecuteFunc func(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *http.Response, error)
+	GetConsumerGroupListExecuteFunc func(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *_nethttp.Response, error)
 
 	// GetTopicFunc mocks the GetTopic method.
-	GetTopicFunc func(ctx context.Context, topicName string) ApiGetTopicRequest
+	GetTopicFunc func(ctx _context.Context, topicName string) ApiGetTopicRequest
 
 	// GetTopicExecuteFunc mocks the GetTopicExecute method.
-	GetTopicExecuteFunc func(r ApiGetTopicRequest) (Topic, *http.Response, error)
+	GetTopicExecuteFunc func(r ApiGetTopicRequest) (Topic, *_nethttp.Response, error)
 
 	// GetTopicsListFunc mocks the GetTopicsList method.
-	GetTopicsListFunc func(ctx context.Context) ApiGetTopicsListRequest
+	GetTopicsListFunc func(ctx _context.Context) ApiGetTopicsListRequest
 
 	// GetTopicsListExecuteFunc mocks the GetTopicsListExecute method.
-	GetTopicsListExecuteFunc func(r ApiGetTopicsListRequest) (TopicsList, *http.Response, error)
+	GetTopicsListExecuteFunc func(r ApiGetTopicsListRequest) (TopicsList, *_nethttp.Response, error)
 
 	// MetricsFunc mocks the Metrics method.
-	MetricsFunc func(ctx context.Context) ApiMetricsRequest
+	MetricsFunc func(ctx _context.Context) ApiMetricsRequest
 
 	// MetricsExecuteFunc mocks the MetricsExecute method.
-	MetricsExecuteFunc func(r ApiMetricsRequest) (*http.Response, error)
+	MetricsExecuteFunc func(r ApiMetricsRequest) (*_nethttp.Response, error)
 
 	// OpenApiFunc mocks the OpenApi method.
-	OpenApiFunc func(ctx context.Context) ApiOpenApiRequest
+	OpenApiFunc func(ctx _context.Context) ApiOpenApiRequest
 
 	// OpenApiExecuteFunc mocks the OpenApiExecute method.
-	OpenApiExecuteFunc func(r ApiOpenApiRequest) (*http.Response, error)
+	OpenApiExecuteFunc func(r ApiOpenApiRequest) (*_nethttp.Response, error)
 
 	// UpdateTopicFunc mocks the UpdateTopic method.
-	UpdateTopicFunc func(ctx context.Context, topicName string) ApiUpdateTopicRequest
+	UpdateTopicFunc func(ctx _context.Context, topicName string) ApiUpdateTopicRequest
 
 	// UpdateTopicExecuteFunc mocks the UpdateTopicExecute method.
-	UpdateTopicExecuteFunc func(r ApiUpdateTopicRequest) (Topic, *http.Response, error)
+	UpdateTopicExecuteFunc func(r ApiUpdateTopicRequest) (Topic, *_nethttp.Response, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
 		// CreateTopic holds details about calls to the CreateTopic method.
 		CreateTopic []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// CreateTopicExecute holds details about calls to the CreateTopicExecute method.
 		CreateTopicExecute []struct {
@@ -161,7 +161,7 @@ type DefaultApiMock struct {
 		// DeleteConsumerGroupById holds details about calls to the DeleteConsumerGroupById method.
 		DeleteConsumerGroupById []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ConsumerGroupId is the consumerGroupId argument value.
 			ConsumerGroupId string
 		}
@@ -173,7 +173,7 @@ type DefaultApiMock struct {
 		// DeleteTopic holds details about calls to the DeleteTopic method.
 		DeleteTopic []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// TopicName is the topicName argument value.
 			TopicName string
 		}
@@ -185,7 +185,7 @@ type DefaultApiMock struct {
 		// GetConsumerGroupById holds details about calls to the GetConsumerGroupById method.
 		GetConsumerGroupById []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ConsumerGroupId is the consumerGroupId argument value.
 			ConsumerGroupId string
 		}
@@ -197,7 +197,7 @@ type DefaultApiMock struct {
 		// GetConsumerGroupList holds details about calls to the GetConsumerGroupList method.
 		GetConsumerGroupList []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// GetConsumerGroupListExecute holds details about calls to the GetConsumerGroupListExecute method.
 		GetConsumerGroupListExecute []struct {
@@ -207,7 +207,7 @@ type DefaultApiMock struct {
 		// GetTopic holds details about calls to the GetTopic method.
 		GetTopic []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// TopicName is the topicName argument value.
 			TopicName string
 		}
@@ -219,7 +219,7 @@ type DefaultApiMock struct {
 		// GetTopicsList holds details about calls to the GetTopicsList method.
 		GetTopicsList []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// GetTopicsListExecute holds details about calls to the GetTopicsListExecute method.
 		GetTopicsListExecute []struct {
@@ -229,7 +229,7 @@ type DefaultApiMock struct {
 		// Metrics holds details about calls to the Metrics method.
 		Metrics []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// MetricsExecute holds details about calls to the MetricsExecute method.
 		MetricsExecute []struct {
@@ -239,7 +239,7 @@ type DefaultApiMock struct {
 		// OpenApi holds details about calls to the OpenApi method.
 		OpenApi []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// OpenApiExecute holds details about calls to the OpenApiExecute method.
 		OpenApiExecute []struct {
@@ -249,7 +249,7 @@ type DefaultApiMock struct {
 		// UpdateTopic holds details about calls to the UpdateTopic method.
 		UpdateTopic []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// TopicName is the topicName argument value.
 			TopicName string
 		}
@@ -282,12 +282,12 @@ type DefaultApiMock struct {
 }
 
 // CreateTopic calls CreateTopicFunc.
-func (mock *DefaultApiMock) CreateTopic(ctx context.Context) ApiCreateTopicRequest {
+func (mock *DefaultApiMock) CreateTopic(ctx _context.Context) ApiCreateTopicRequest {
 	if mock.CreateTopicFunc == nil {
 		panic("DefaultApiMock.CreateTopicFunc: method is nil but DefaultApi.CreateTopic was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -301,10 +301,10 @@ func (mock *DefaultApiMock) CreateTopic(ctx context.Context) ApiCreateTopicReque
 // Check the length with:
 //     len(mockedDefaultApi.CreateTopicCalls())
 func (mock *DefaultApiMock) CreateTopicCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockCreateTopic.RLock()
 	calls = mock.calls.CreateTopic
@@ -313,7 +313,7 @@ func (mock *DefaultApiMock) CreateTopicCalls() []struct {
 }
 
 // CreateTopicExecute calls CreateTopicExecuteFunc.
-func (mock *DefaultApiMock) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, *http.Response, error) {
+func (mock *DefaultApiMock) CreateTopicExecute(r ApiCreateTopicRequest) (Topic, *_nethttp.Response, error) {
 	if mock.CreateTopicExecuteFunc == nil {
 		panic("DefaultApiMock.CreateTopicExecuteFunc: method is nil but DefaultApi.CreateTopicExecute was just called")
 	}
@@ -344,12 +344,12 @@ func (mock *DefaultApiMock) CreateTopicExecuteCalls() []struct {
 }
 
 // DeleteConsumerGroupById calls DeleteConsumerGroupByIdFunc.
-func (mock *DefaultApiMock) DeleteConsumerGroupById(ctx context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
+func (mock *DefaultApiMock) DeleteConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiDeleteConsumerGroupByIdRequest {
 	if mock.DeleteConsumerGroupByIdFunc == nil {
 		panic("DefaultApiMock.DeleteConsumerGroupByIdFunc: method is nil but DefaultApi.DeleteConsumerGroupById was just called")
 	}
 	callInfo := struct {
-		Ctx             context.Context
+		Ctx             _context.Context
 		ConsumerGroupId string
 	}{
 		Ctx:             ctx,
@@ -365,11 +365,11 @@ func (mock *DefaultApiMock) DeleteConsumerGroupById(ctx context.Context, consume
 // Check the length with:
 //     len(mockedDefaultApi.DeleteConsumerGroupByIdCalls())
 func (mock *DefaultApiMock) DeleteConsumerGroupByIdCalls() []struct {
-	Ctx             context.Context
+	Ctx             _context.Context
 	ConsumerGroupId string
 } {
 	var calls []struct {
-		Ctx             context.Context
+		Ctx             _context.Context
 		ConsumerGroupId string
 	}
 	mock.lockDeleteConsumerGroupById.RLock()
@@ -379,7 +379,7 @@ func (mock *DefaultApiMock) DeleteConsumerGroupByIdCalls() []struct {
 }
 
 // DeleteConsumerGroupByIdExecute calls DeleteConsumerGroupByIdExecuteFunc.
-func (mock *DefaultApiMock) DeleteConsumerGroupByIdExecute(r ApiDeleteConsumerGroupByIdRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) DeleteConsumerGroupByIdExecute(r ApiDeleteConsumerGroupByIdRequest) (*_nethttp.Response, error) {
 	if mock.DeleteConsumerGroupByIdExecuteFunc == nil {
 		panic("DefaultApiMock.DeleteConsumerGroupByIdExecuteFunc: method is nil but DefaultApi.DeleteConsumerGroupByIdExecute was just called")
 	}
@@ -410,12 +410,12 @@ func (mock *DefaultApiMock) DeleteConsumerGroupByIdExecuteCalls() []struct {
 }
 
 // DeleteTopic calls DeleteTopicFunc.
-func (mock *DefaultApiMock) DeleteTopic(ctx context.Context, topicName string) ApiDeleteTopicRequest {
+func (mock *DefaultApiMock) DeleteTopic(ctx _context.Context, topicName string) ApiDeleteTopicRequest {
 	if mock.DeleteTopicFunc == nil {
 		panic("DefaultApiMock.DeleteTopicFunc: method is nil but DefaultApi.DeleteTopic was just called")
 	}
 	callInfo := struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		TopicName string
 	}{
 		Ctx:       ctx,
@@ -431,11 +431,11 @@ func (mock *DefaultApiMock) DeleteTopic(ctx context.Context, topicName string) A
 // Check the length with:
 //     len(mockedDefaultApi.DeleteTopicCalls())
 func (mock *DefaultApiMock) DeleteTopicCalls() []struct {
-	Ctx       context.Context
+	Ctx       _context.Context
 	TopicName string
 } {
 	var calls []struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		TopicName string
 	}
 	mock.lockDeleteTopic.RLock()
@@ -445,7 +445,7 @@ func (mock *DefaultApiMock) DeleteTopicCalls() []struct {
 }
 
 // DeleteTopicExecute calls DeleteTopicExecuteFunc.
-func (mock *DefaultApiMock) DeleteTopicExecute(r ApiDeleteTopicRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) DeleteTopicExecute(r ApiDeleteTopicRequest) (*_nethttp.Response, error) {
 	if mock.DeleteTopicExecuteFunc == nil {
 		panic("DefaultApiMock.DeleteTopicExecuteFunc: method is nil but DefaultApi.DeleteTopicExecute was just called")
 	}
@@ -476,12 +476,12 @@ func (mock *DefaultApiMock) DeleteTopicExecuteCalls() []struct {
 }
 
 // GetConsumerGroupById calls GetConsumerGroupByIdFunc.
-func (mock *DefaultApiMock) GetConsumerGroupById(ctx context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest {
+func (mock *DefaultApiMock) GetConsumerGroupById(ctx _context.Context, consumerGroupId string) ApiGetConsumerGroupByIdRequest {
 	if mock.GetConsumerGroupByIdFunc == nil {
 		panic("DefaultApiMock.GetConsumerGroupByIdFunc: method is nil but DefaultApi.GetConsumerGroupById was just called")
 	}
 	callInfo := struct {
-		Ctx             context.Context
+		Ctx             _context.Context
 		ConsumerGroupId string
 	}{
 		Ctx:             ctx,
@@ -497,11 +497,11 @@ func (mock *DefaultApiMock) GetConsumerGroupById(ctx context.Context, consumerGr
 // Check the length with:
 //     len(mockedDefaultApi.GetConsumerGroupByIdCalls())
 func (mock *DefaultApiMock) GetConsumerGroupByIdCalls() []struct {
-	Ctx             context.Context
+	Ctx             _context.Context
 	ConsumerGroupId string
 } {
 	var calls []struct {
-		Ctx             context.Context
+		Ctx             _context.Context
 		ConsumerGroupId string
 	}
 	mock.lockGetConsumerGroupById.RLock()
@@ -511,7 +511,7 @@ func (mock *DefaultApiMock) GetConsumerGroupByIdCalls() []struct {
 }
 
 // GetConsumerGroupByIdExecute calls GetConsumerGroupByIdExecuteFunc.
-func (mock *DefaultApiMock) GetConsumerGroupByIdExecute(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *http.Response, error) {
+func (mock *DefaultApiMock) GetConsumerGroupByIdExecute(r ApiGetConsumerGroupByIdRequest) (ConsumerGroup, *_nethttp.Response, error) {
 	if mock.GetConsumerGroupByIdExecuteFunc == nil {
 		panic("DefaultApiMock.GetConsumerGroupByIdExecuteFunc: method is nil but DefaultApi.GetConsumerGroupByIdExecute was just called")
 	}
@@ -542,12 +542,12 @@ func (mock *DefaultApiMock) GetConsumerGroupByIdExecuteCalls() []struct {
 }
 
 // GetConsumerGroupList calls GetConsumerGroupListFunc.
-func (mock *DefaultApiMock) GetConsumerGroupList(ctx context.Context) ApiGetConsumerGroupListRequest {
+func (mock *DefaultApiMock) GetConsumerGroupList(ctx _context.Context) ApiGetConsumerGroupListRequest {
 	if mock.GetConsumerGroupListFunc == nil {
 		panic("DefaultApiMock.GetConsumerGroupListFunc: method is nil but DefaultApi.GetConsumerGroupList was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -561,10 +561,10 @@ func (mock *DefaultApiMock) GetConsumerGroupList(ctx context.Context) ApiGetCons
 // Check the length with:
 //     len(mockedDefaultApi.GetConsumerGroupListCalls())
 func (mock *DefaultApiMock) GetConsumerGroupListCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockGetConsumerGroupList.RLock()
 	calls = mock.calls.GetConsumerGroupList
@@ -573,7 +573,7 @@ func (mock *DefaultApiMock) GetConsumerGroupListCalls() []struct {
 }
 
 // GetConsumerGroupListExecute calls GetConsumerGroupListExecuteFunc.
-func (mock *DefaultApiMock) GetConsumerGroupListExecute(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *http.Response, error) {
+func (mock *DefaultApiMock) GetConsumerGroupListExecute(r ApiGetConsumerGroupListRequest) (ConsumerGroupList, *_nethttp.Response, error) {
 	if mock.GetConsumerGroupListExecuteFunc == nil {
 		panic("DefaultApiMock.GetConsumerGroupListExecuteFunc: method is nil but DefaultApi.GetConsumerGroupListExecute was just called")
 	}
@@ -604,12 +604,12 @@ func (mock *DefaultApiMock) GetConsumerGroupListExecuteCalls() []struct {
 }
 
 // GetTopic calls GetTopicFunc.
-func (mock *DefaultApiMock) GetTopic(ctx context.Context, topicName string) ApiGetTopicRequest {
+func (mock *DefaultApiMock) GetTopic(ctx _context.Context, topicName string) ApiGetTopicRequest {
 	if mock.GetTopicFunc == nil {
 		panic("DefaultApiMock.GetTopicFunc: method is nil but DefaultApi.GetTopic was just called")
 	}
 	callInfo := struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		TopicName string
 	}{
 		Ctx:       ctx,
@@ -625,11 +625,11 @@ func (mock *DefaultApiMock) GetTopic(ctx context.Context, topicName string) ApiG
 // Check the length with:
 //     len(mockedDefaultApi.GetTopicCalls())
 func (mock *DefaultApiMock) GetTopicCalls() []struct {
-	Ctx       context.Context
+	Ctx       _context.Context
 	TopicName string
 } {
 	var calls []struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		TopicName string
 	}
 	mock.lockGetTopic.RLock()
@@ -639,7 +639,7 @@ func (mock *DefaultApiMock) GetTopicCalls() []struct {
 }
 
 // GetTopicExecute calls GetTopicExecuteFunc.
-func (mock *DefaultApiMock) GetTopicExecute(r ApiGetTopicRequest) (Topic, *http.Response, error) {
+func (mock *DefaultApiMock) GetTopicExecute(r ApiGetTopicRequest) (Topic, *_nethttp.Response, error) {
 	if mock.GetTopicExecuteFunc == nil {
 		panic("DefaultApiMock.GetTopicExecuteFunc: method is nil but DefaultApi.GetTopicExecute was just called")
 	}
@@ -670,12 +670,12 @@ func (mock *DefaultApiMock) GetTopicExecuteCalls() []struct {
 }
 
 // GetTopicsList calls GetTopicsListFunc.
-func (mock *DefaultApiMock) GetTopicsList(ctx context.Context) ApiGetTopicsListRequest {
+func (mock *DefaultApiMock) GetTopicsList(ctx _context.Context) ApiGetTopicsListRequest {
 	if mock.GetTopicsListFunc == nil {
 		panic("DefaultApiMock.GetTopicsListFunc: method is nil but DefaultApi.GetTopicsList was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -689,10 +689,10 @@ func (mock *DefaultApiMock) GetTopicsList(ctx context.Context) ApiGetTopicsListR
 // Check the length with:
 //     len(mockedDefaultApi.GetTopicsListCalls())
 func (mock *DefaultApiMock) GetTopicsListCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockGetTopicsList.RLock()
 	calls = mock.calls.GetTopicsList
@@ -701,7 +701,7 @@ func (mock *DefaultApiMock) GetTopicsListCalls() []struct {
 }
 
 // GetTopicsListExecute calls GetTopicsListExecuteFunc.
-func (mock *DefaultApiMock) GetTopicsListExecute(r ApiGetTopicsListRequest) (TopicsList, *http.Response, error) {
+func (mock *DefaultApiMock) GetTopicsListExecute(r ApiGetTopicsListRequest) (TopicsList, *_nethttp.Response, error) {
 	if mock.GetTopicsListExecuteFunc == nil {
 		panic("DefaultApiMock.GetTopicsListExecuteFunc: method is nil but DefaultApi.GetTopicsListExecute was just called")
 	}
@@ -732,12 +732,12 @@ func (mock *DefaultApiMock) GetTopicsListExecuteCalls() []struct {
 }
 
 // Metrics calls MetricsFunc.
-func (mock *DefaultApiMock) Metrics(ctx context.Context) ApiMetricsRequest {
+func (mock *DefaultApiMock) Metrics(ctx _context.Context) ApiMetricsRequest {
 	if mock.MetricsFunc == nil {
 		panic("DefaultApiMock.MetricsFunc: method is nil but DefaultApi.Metrics was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -751,10 +751,10 @@ func (mock *DefaultApiMock) Metrics(ctx context.Context) ApiMetricsRequest {
 // Check the length with:
 //     len(mockedDefaultApi.MetricsCalls())
 func (mock *DefaultApiMock) MetricsCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockMetrics.RLock()
 	calls = mock.calls.Metrics
@@ -763,7 +763,7 @@ func (mock *DefaultApiMock) MetricsCalls() []struct {
 }
 
 // MetricsExecute calls MetricsExecuteFunc.
-func (mock *DefaultApiMock) MetricsExecute(r ApiMetricsRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) MetricsExecute(r ApiMetricsRequest) (*_nethttp.Response, error) {
 	if mock.MetricsExecuteFunc == nil {
 		panic("DefaultApiMock.MetricsExecuteFunc: method is nil but DefaultApi.MetricsExecute was just called")
 	}
@@ -794,12 +794,12 @@ func (mock *DefaultApiMock) MetricsExecuteCalls() []struct {
 }
 
 // OpenApi calls OpenApiFunc.
-func (mock *DefaultApiMock) OpenApi(ctx context.Context) ApiOpenApiRequest {
+func (mock *DefaultApiMock) OpenApi(ctx _context.Context) ApiOpenApiRequest {
 	if mock.OpenApiFunc == nil {
 		panic("DefaultApiMock.OpenApiFunc: method is nil but DefaultApi.OpenApi was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -813,10 +813,10 @@ func (mock *DefaultApiMock) OpenApi(ctx context.Context) ApiOpenApiRequest {
 // Check the length with:
 //     len(mockedDefaultApi.OpenApiCalls())
 func (mock *DefaultApiMock) OpenApiCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockOpenApi.RLock()
 	calls = mock.calls.OpenApi
@@ -825,7 +825,7 @@ func (mock *DefaultApiMock) OpenApiCalls() []struct {
 }
 
 // OpenApiExecute calls OpenApiExecuteFunc.
-func (mock *DefaultApiMock) OpenApiExecute(r ApiOpenApiRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) OpenApiExecute(r ApiOpenApiRequest) (*_nethttp.Response, error) {
 	if mock.OpenApiExecuteFunc == nil {
 		panic("DefaultApiMock.OpenApiExecuteFunc: method is nil but DefaultApi.OpenApiExecute was just called")
 	}
@@ -856,12 +856,12 @@ func (mock *DefaultApiMock) OpenApiExecuteCalls() []struct {
 }
 
 // UpdateTopic calls UpdateTopicFunc.
-func (mock *DefaultApiMock) UpdateTopic(ctx context.Context, topicName string) ApiUpdateTopicRequest {
+func (mock *DefaultApiMock) UpdateTopic(ctx _context.Context, topicName string) ApiUpdateTopicRequest {
 	if mock.UpdateTopicFunc == nil {
 		panic("DefaultApiMock.UpdateTopicFunc: method is nil but DefaultApi.UpdateTopic was just called")
 	}
 	callInfo := struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		TopicName string
 	}{
 		Ctx:       ctx,
@@ -877,11 +877,11 @@ func (mock *DefaultApiMock) UpdateTopic(ctx context.Context, topicName string) A
 // Check the length with:
 //     len(mockedDefaultApi.UpdateTopicCalls())
 func (mock *DefaultApiMock) UpdateTopicCalls() []struct {
-	Ctx       context.Context
+	Ctx       _context.Context
 	TopicName string
 } {
 	var calls []struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		TopicName string
 	}
 	mock.lockUpdateTopic.RLock()
@@ -891,7 +891,7 @@ func (mock *DefaultApiMock) UpdateTopicCalls() []struct {
 }
 
 // UpdateTopicExecute calls UpdateTopicExecuteFunc.
-func (mock *DefaultApiMock) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, *http.Response, error) {
+func (mock *DefaultApiMock) UpdateTopicExecute(r ApiUpdateTopicRequest) (Topic, *_nethttp.Response, error) {
 	if mock.UpdateTopicExecuteFunc == nil {
 		panic("DefaultApiMock.UpdateTopicExecuteFunc: method is nil but DefaultApi.UpdateTopicExecute was just called")
 	}
