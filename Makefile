@@ -24,6 +24,7 @@ endif
 binary:=rhoas
 
 kasapi_dir=./pkg/api/kas/client
+srsapi_dir=./pkg/api/srs/client
 strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 amsapi_dir=./pkg/api/ams/amsclient
 
@@ -81,10 +82,10 @@ test/unit: install
 openapi/pull: openapi/strimzi-admin/pull openapi/kas/pull
 .PHONY: openapi/pull
 
-openapi/validate: openapi/strimzi-admin/validate openapi/kas/validate
+openapi/validate: openapi/strimzi-admin/validate openapi/kas/validate openapi/srs/validate
 .PHONY: openapi/validate
 
-openapi/generate: openapi/strimzi-admin/generate openapi/kas/generate
+openapi/generate: openapi/strimzi-admin/generate openapi/kas/generate openapi/strimzi-admin/generate openapi/srs/generate
 .PHONY: openapi/validate
 
 openapi/strimzi-admin/pull:
@@ -129,6 +130,21 @@ openapi/kas/generate:
 	moq -out ${kasapi_dir}/default_api_mock.go ${kasapi_dir} DefaultApi
 	gofmt -w ${kasapi_dir}
 .PHONY: openapi/kas/generate
+
+# generate the openapi schema
+openapi/srs/generate:
+	openapi-generator-cli generate -i openapi/srs-fleet-manager.json -g go --package-name kasclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${srsapi_dir}
+	openapi-generator-cli validate -i openapi/srs-fleet-manager.json
+	# generate mock
+	moq -out ${srsapi_dir}/default_api_mock.go ${srsapi_dir} DefaultApi
+	gofmt -w ${srsapi_dir}
+.PHONY: openapi/srs/generate
+
+# validate the openapi schema
+openapi/kas/validate:
+	openapi-generator-cli validate -i openapi/srs-fleet-manager.json
+.PHONY: openapi/kas/validate
+
 
 mock-api/start: mock-api/client/start
 .PHONY: mock-api/start
