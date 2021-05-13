@@ -1,0 +1,567 @@
+openapi: 3.0.2
+info:
+  description: Main entry point for the system, responsible for all sorts of management
+    operations for the whole service of managed service registry.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  title: Service Registry Service - Fleet Manager - v1
+  version: 0.0.1
+servers:
+- description: Main (production) server
+  url: https://api.openshift.com
+- description: Staging server
+  url: https://api.stage.openshift.com
+- description: localhost
+  url: http://localhost:8000
+- description: current domain
+  url: /
+paths:
+  /api/v1/registries:
+    get:
+      operationId: getRegistries
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Registry'
+                type: array
+          description: A successful response.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Get the list of all registries.
+      tags:
+      - Registries
+    post:
+      operationId: createRegistry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryCreate'
+        description: A new `Registry` to be created.
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registry'
+          description: A successful response. The full request to create a new `Registry`
+            is processed asynchronously. User should verify the result of the operation
+            by reading the `status` property of the created `Registry` entity.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Create a Registry.
+      tags:
+      - Registries
+    summary: Manage the list of all registries.
+  /api/v1/registries/{registryId}:
+    delete:
+      description: Deletes an existing `Registry`.
+      operationId: deleteRegistry
+      parameters:
+      - description: A unique identifier for a `Registry`.
+        explode: false
+        in: path
+        name: registryId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Successful response.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: The response returned when something is requested but cannot
+            be found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Delete a Registry
+      tags:
+      - Registries
+    get:
+      description: Gets the details of a single instance of a `Registry`.
+      operationId: getRegistry
+      parameters:
+      - description: A unique identifier for a `Registry`.
+        explode: false
+        in: path
+        name: registryId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registry'
+          description: Successful response - returns a single `Registry`.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: The response returned when something is requested but cannot
+            be found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Get a Registry
+      tags:
+      - Registries
+    summary: Manage a specific Registry.
+  /api/v1/admin/tasks:
+    get:
+      operationId: getTasks
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Task'
+                type: array
+          description: A successful response.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Get the list of all tasks executed on the server.
+      tags:
+      - Admin
+      - Tasks
+    summary: Manage the list of all tasks executed on the server.
+  /api/v1/admin/tasks/{taskId}:
+    get:
+      operationId: getTask
+      parameters:
+      - explode: false
+        in: path
+        name: taskId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+          description: A successful response.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: The response returned when something is requested but cannot
+            be found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Get a specific task executed on the server.
+      tags:
+      - Admin
+      - Tasks
+    summary: Manage a specific task executed on the server.
+  /api/v1:
+    get:
+      operationId: getSchema
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: A successful response.
+      security:
+      - Bearer: []
+      summary: Get the OpenAPI schema for version 1 of this REST API.
+      tags:
+      - Info
+    summary: Get the OpenAPI schema for version 1 of this REST API.
+  /api/v1/registryDeployments:
+    get:
+      operationId: getRegistryDeployments
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/RegistryDeployment'
+                type: array
+          description: A successful response.
+      security:
+      - Bearer: []
+      summary: Get the list of all registry deployments.
+      tags:
+      - RegistryDeployments
+    post:
+      operationId: createRegistryDeployment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryDeploymentCreate'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryDeployment'
+          description: A successful response.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo'
+          description: A Registry Deployment with the same configuration already exists.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Create a registry deployment.
+      tags:
+      - RegistryDeployments
+    summary: Manage the list of all registry deployments.
+  /api/v1/registryDeployments/{registryDeploymentId}:
+    delete:
+      operationId: deleteRegistryDeployment
+      parameters:
+      - explode: false
+        in: path
+        name: registryDeploymentId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: A successful response. The Registry Deployment has been deleted.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: The response returned when something is requested but cannot
+            be found.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo'
+          description: Could not delete Registry Deployment because there is a Registry
+            deployed there.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Delete a specific Registry Deployment.
+      tags:
+      - RegistryDeployments
+    get:
+      operationId: getRegistryDeployment
+      parameters:
+      - explode: false
+        in: path
+        name: registryDeploymentId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryDeployment'
+          description: A successful response.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: The response returned when something is requested but cannot
+            be found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInfo1'
+          description: "The response sent from the server when an unexpected error\
+            \ occurs (for example \na database connection error)."
+      security:
+      - Bearer: []
+      summary: Get a specific registry deployment.
+      tags:
+      - RegistryDeployments
+    summary: Manage a specific registry deployment.
+components:
+  responses:
+    NotFound:
+      $ref: '#/components/responses/NotFound1'
+    ServerError:
+      $ref: '#/components/responses/ServerError1'
+    NotFound1:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorInfo1'
+      description: The response returned when something is requested but cannot be
+        found.
+    ServerError1:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorInfo1'
+      description: "The response sent from the server when an unexpected error occurs\
+        \ (for example \na database connection error)."
+  schemas:
+    RegistryDeployment:
+      description: Multi-tenant Service Registry deployment, that can host Service
+        Registry instances.
+      example:
+        id: 1
+        tenantManagerUrl: https://registry-tenant-manager.apps.example.com
+        registryDeploymentUrl: https://registry.apps.example.com
+        status:
+          status: AVAILABLE
+          lastUpdated: 2021-05-04T12:34:56Z
+        name: my-deployment
+      properties:
+        id:
+          type: integer
+        tenantManagerUrl:
+          type: string
+        registryDeploymentUrl:
+          type: string
+        status:
+          $ref: '#/components/schemas/RegistryDeploymentStatus'
+        name:
+          description: User-defined Registry Deployment name. Does not have to be
+            unique.
+          type: string
+      required:
+      - id
+      - registryDeploymentUrl
+      - status
+      - tenantManagerUrl
+      type: object
+    Registry:
+      description: Service Registry instance within a multi-tenant deployment.
+      example:
+        id: 42
+        name: my-registry
+        registryUrl: https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-339f4248d706
+        status:
+          status: PROVISIONING
+          lastUpdated: 2021-05-04T12:34:56Z
+        registryDeploymentId: 1
+      properties:
+        id:
+          type: integer
+        status:
+          $ref: '#/components/schemas/RegistryStatus'
+        registryUrl:
+          type: string
+        name:
+          description: User-defined Registry name. Does not have to be unique.
+          type: string
+        registryDeploymentId:
+          description: Identifier of a multi-tenant deployment, where this Service
+            Registry instance resides.
+          type: integer
+      required:
+      - id
+      - registryUrl
+      - status
+      title: Root Type for Registry
+      type: object
+    RegistryStatus:
+      example:
+        value: AVAILABLE
+        lastUpdated: 2021-05-04T12:34:56Z
+      properties:
+        lastUpdated:
+          description: ISO 8601 UTC timestamp.
+          format: date-time
+          type: string
+        value:
+          $ref: '#/components/schemas/RegistryStatusValue'
+      required:
+      - lastUpdated
+      - value
+      type: object
+    RegistryCreate:
+      description: Information used to create a new Service Registry instance within
+        a multi-tenant deployment.
+      example:
+        name: my-registry
+      properties:
+        name:
+          description: User-defined Registry name. Does not have to be unique.
+          type: string
+      title: Root Type for RegistryCreate
+      type: object
+    RegistryStatusValue:
+      enum:
+      - PROVISIONING
+      - AVAILABLE
+      - UNAVAILABLE
+      type: string
+    RegistryDeploymentStatusValue:
+      enum:
+      - PROCESSING
+      - AVAILABLE
+      - UNAVAILABLE
+      type: string
+    RegistryDeploymentStatus:
+      example:
+        value: AVAILABLE
+        lastUpdated: 2021-05-04T12:34:56Z
+      properties:
+        lastUpdated:
+          description: ISO 8601 UTC timestamp.
+          format: date-time
+          type: string
+        value:
+          $ref: '#/components/schemas/RegistryDeploymentStatusValue'
+      required:
+      - lastUpdated
+      - value
+      type: object
+    ErrorInfo:
+      $ref: '#/components/schemas/ErrorInfo1'
+    RegistryDeploymentCreate:
+      description: Information used to create (register) a new multi-tenant Service
+        Registry deployment, that can host Service Registry instances.
+      example:
+        registryDeploymentUrl: https://registry.apps.example.com
+        tenantManagerUrl: https://registry-tenant-manager.apps.example.com
+        name: my-deployment
+      properties:
+        registryDeploymentUrl:
+          type: string
+        tenantManagerUrl:
+          type: string
+        name:
+          description: User-defined Registry Deployment name. Does not have to be
+            unique.
+          type: string
+      required:
+      - registryDeploymentUrl
+      - tenantManagerUrl
+      type: object
+    Task:
+      example:
+        schedule:
+          firstExecuteAt: 2021-05-04T12:34:56Z
+          intervalSec: 300
+          priority: 5
+        data: data
+        id: id
+        type: type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        data:
+          type: string
+        schedule:
+          $ref: '#/components/schemas/TaskSchedule'
+      required:
+      - data
+      - id
+      - schedule
+      - type
+      type: object
+    TaskSchedule:
+      example:
+        firstExecuteAt: 2021-05-04T12:34:56Z
+        intervalSec: 300
+        priority: 5
+      properties:
+        firstExecuteAt:
+          description: ISO 8601 UTC timestamp.
+          type: string
+        priority:
+          description: Higher number means higher priority. Default priority is 5.
+          type: integer
+        intervalSec:
+          type: integer
+      required:
+      - firstExecuteAt
+      title: Root Type for TaskSchedule
+      type: object
+    ErrorInfo1:
+      description: Details about a specific error returned by the server.
+      example:
+        error_code: 500
+        message: An error occurred on the server.
+      properties:
+        error_code:
+          type: integer
+        message:
+          type: string
+      required:
+      - error_code
+      title: Root Type for ErrorInfo
+      type: object
