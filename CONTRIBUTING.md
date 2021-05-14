@@ -88,7 +88,7 @@ Generates a Golang API client in `./pkg/api/kas/client` and `./pkg/api/strimzi-a
 The repo has a local mocked version of the KAS API in `./mas-mock`.
 To work and test CLI locally please follow the mock readme and then login into cli using dev profile:
 
-> rhoas login --url=http://locahost:8080
+> rhoas login --url=http://locahost:8000
 
 > The mock API can become outdated from the current state of the KAS API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
 
