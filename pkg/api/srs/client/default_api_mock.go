@@ -37,6 +37,12 @@ var _ DefaultApi = &DefaultApiMock{}
 // 			GetRegistriesExecuteFunc: func(r ApiGetRegistriesRequest) ([]Registry, *_nethttp.Response, error) {
 // 				panic("mock out the GetRegistriesExecute method")
 // 			},
+// 			GetRegistryFunc: func(ctx _context.Context, registryId int32) ApiGetRegistryRequest {
+// 				panic("mock out the GetRegistry method")
+// 			},
+// 			GetRegistryExecuteFunc: func(r ApiGetRegistryRequest) (Registry, *_nethttp.Response, error) {
+// 				panic("mock out the GetRegistryExecute method")
+// 			},
 // 		}
 //
 // 		// use mockedDefaultApi in code that requires DefaultApi
@@ -61,6 +67,12 @@ type DefaultApiMock struct {
 
 	// GetRegistriesExecuteFunc mocks the GetRegistriesExecute method.
 	GetRegistriesExecuteFunc func(r ApiGetRegistriesRequest) ([]Registry, *_nethttp.Response, error)
+
+	// GetRegistryFunc mocks the GetRegistry method.
+	GetRegistryFunc func(ctx _context.Context, registryId int32) ApiGetRegistryRequest
+
+	// GetRegistryExecuteFunc mocks the GetRegistryExecute method.
+	GetRegistryExecuteFunc func(r ApiGetRegistryRequest) (Registry, *_nethttp.Response, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -96,6 +108,18 @@ type DefaultApiMock struct {
 			// R is the r argument value.
 			R ApiGetRegistriesRequest
 		}
+		// GetRegistry holds details about calls to the GetRegistry method.
+		GetRegistry []struct {
+			// Ctx is the ctx argument value.
+			Ctx _context.Context
+			// RegistryId is the registryId argument value.
+			RegistryId int32
+		}
+		// GetRegistryExecute holds details about calls to the GetRegistryExecute method.
+		GetRegistryExecute []struct {
+			// R is the r argument value.
+			R ApiGetRegistryRequest
+		}
 	}
 	lockCreateRegistry        sync.RWMutex
 	lockCreateRegistryExecute sync.RWMutex
@@ -103,6 +127,8 @@ type DefaultApiMock struct {
 	lockDeleteRegistryExecute sync.RWMutex
 	lockGetRegistries         sync.RWMutex
 	lockGetRegistriesExecute  sync.RWMutex
+	lockGetRegistry           sync.RWMutex
+	lockGetRegistryExecute    sync.RWMutex
 }
 
 // CreateRegistry calls CreateRegistryFunc.
@@ -292,5 +318,71 @@ func (mock *DefaultApiMock) GetRegistriesExecuteCalls() []struct {
 	mock.lockGetRegistriesExecute.RLock()
 	calls = mock.calls.GetRegistriesExecute
 	mock.lockGetRegistriesExecute.RUnlock()
+	return calls
+}
+
+// GetRegistry calls GetRegistryFunc.
+func (mock *DefaultApiMock) GetRegistry(ctx _context.Context, registryId int32) ApiGetRegistryRequest {
+	if mock.GetRegistryFunc == nil {
+		panic("DefaultApiMock.GetRegistryFunc: method is nil but DefaultApi.GetRegistry was just called")
+	}
+	callInfo := struct {
+		Ctx        _context.Context
+		RegistryId int32
+	}{
+		Ctx:        ctx,
+		RegistryId: registryId,
+	}
+	mock.lockGetRegistry.Lock()
+	mock.calls.GetRegistry = append(mock.calls.GetRegistry, callInfo)
+	mock.lockGetRegistry.Unlock()
+	return mock.GetRegistryFunc(ctx, registryId)
+}
+
+// GetRegistryCalls gets all the calls that were made to GetRegistry.
+// Check the length with:
+//     len(mockedDefaultApi.GetRegistryCalls())
+func (mock *DefaultApiMock) GetRegistryCalls() []struct {
+	Ctx        _context.Context
+	RegistryId int32
+} {
+	var calls []struct {
+		Ctx        _context.Context
+		RegistryId int32
+	}
+	mock.lockGetRegistry.RLock()
+	calls = mock.calls.GetRegistry
+	mock.lockGetRegistry.RUnlock()
+	return calls
+}
+
+// GetRegistryExecute calls GetRegistryExecuteFunc.
+func (mock *DefaultApiMock) GetRegistryExecute(r ApiGetRegistryRequest) (Registry, *_nethttp.Response, error) {
+	if mock.GetRegistryExecuteFunc == nil {
+		panic("DefaultApiMock.GetRegistryExecuteFunc: method is nil but DefaultApi.GetRegistryExecute was just called")
+	}
+	callInfo := struct {
+		R ApiGetRegistryRequest
+	}{
+		R: r,
+	}
+	mock.lockGetRegistryExecute.Lock()
+	mock.calls.GetRegistryExecute = append(mock.calls.GetRegistryExecute, callInfo)
+	mock.lockGetRegistryExecute.Unlock()
+	return mock.GetRegistryExecuteFunc(r)
+}
+
+// GetRegistryExecuteCalls gets all the calls that were made to GetRegistryExecute.
+// Check the length with:
+//     len(mockedDefaultApi.GetRegistryExecuteCalls())
+func (mock *DefaultApiMock) GetRegistryExecuteCalls() []struct {
+	R ApiGetRegistryRequest
+} {
+	var calls []struct {
+		R ApiGetRegistryRequest
+	}
+	mock.lockGetRegistryExecute.RLock()
+	calls = mock.calls.GetRegistryExecute
+	mock.lockGetRegistryExecute.RUnlock()
 	return calls
 }

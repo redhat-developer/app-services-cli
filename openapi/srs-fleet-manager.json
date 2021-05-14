@@ -100,7 +100,6 @@
       "summary": "Manage a specific Registry.",
       "description": "",
       "get": {
-        "tags": ["Registries"],
         "responses": {
           "200": {
             "content": {

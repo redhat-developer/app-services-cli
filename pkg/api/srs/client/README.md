@@ -81,7 +81,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CreateRegistry**](docs/DefaultApi.md#createregistry) | **Post** /api/v1/registries | Create a Registry.
 *DefaultApi* | [**DeleteRegistry**](docs/DefaultApi.md#deleteregistry) | **Delete** /api/v1/registries/{registryId} | Delete a Registry
 *DefaultApi* | [**GetRegistries**](docs/DefaultApi.md#getregistries) | **Get** /api/v1/registries | Get the list of all registries.
-*RegistriesApi* | [**GetRegistry**](docs/RegistriesApi.md#getregistry) | **Get** /api/v1/registries/{registryId} | Get a Registry
+*DefaultApi* | [**GetRegistry**](docs/DefaultApi.md#getregistry) | **Get** /api/v1/registries/{registryId} | Get a Registry
 
 
 ## Documentation For Models

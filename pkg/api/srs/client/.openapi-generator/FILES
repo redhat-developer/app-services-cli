@@ -1,14 +1,13 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
 api_default.go
-api_registries.go
 client.go
 configuration.go
 docs/DefaultApi.md
 docs/ErrorInfo1.md
-docs/RegistriesApi.md
 docs/Registry.md
 docs/RegistryCreate.md
 docs/RegistryStatus.md

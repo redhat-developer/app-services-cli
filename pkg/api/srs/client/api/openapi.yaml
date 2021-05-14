@@ -137,8 +137,6 @@ paths:
       security:
       - Bearer: []
       summary: Get a Registry
-      tags:
-      - Registries
     summary: Manage a specific Registry.
 components:
   responses:
