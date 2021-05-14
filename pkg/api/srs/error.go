@@ -116,7 +116,3 @@ func IsErr(err error, errCode ServiceErrorCode) bool {
 
 	return ServiceErrorCode(mappedErr.GetErrorCode()) == errCode
 }
-
-func getCode(code ServiceErrorCode) string {
-	return fmt.Sprintf("%v-%v", ErrCodePrefix, code)
-}

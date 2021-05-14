@@ -152,7 +152,7 @@ func runDelete(opts *options) error {
 
 	logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
 	// TODO temporary change to int (requires api change)
-	rgInt, _ := strconv.Atoi(opts.id)
+	rgInt, _ := strconv.ParseInt(opts.id, 10, 0)
 	registryID := int32(rgInt)
 	a := api.ServiceRegistry().DeleteRegistry(context.Background(), registryID)
 	_, err = a.Execute()

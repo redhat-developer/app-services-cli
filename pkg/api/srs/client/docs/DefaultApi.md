@@ -4,10 +4,10 @@ All URIs are relative to *https://api.openshift.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateRegistry**](DefaultApi.md#CreateRegistry) | **Post** /api/v1/registries | Create a Registry.
-[**DeleteRegistry**](DefaultApi.md#DeleteRegistry) | **Delete** /api/v1/registries/{registryId} | Delete a Registry
-[**GetRegistries**](DefaultApi.md#GetRegistries) | **Get** /api/v1/registries | Get the list of all registries.
-[**GetRegistry**](DefaultApi.md#GetRegistry) | **Get** /api/v1/registries/{registryId} | Get a Registry
+[**CreateRegistry**](DefaultApi.md#CreateRegistry) | **Post** /api/serviceregistry_mgmt/v1/registries | Create a Registry.
+[**DeleteRegistry**](DefaultApi.md#DeleteRegistry) | **Delete** /api/serviceregistry_mgmt/v1/registries/{registryId} | Delete a Registry
+[**GetRegistries**](DefaultApi.md#GetRegistries) | **Get** /api/serviceregistry_mgmt/v1/registries | Get the list of all registries.
+[**GetRegistry**](DefaultApi.md#GetRegistry) | **Get** /api/serviceregistry_mgmt/v1/registries/{registryId} | Get a Registry
 
 
 

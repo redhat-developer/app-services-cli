@@ -10,7 +10,7 @@ import (
 )
 
 func GetServiceRegistryByID(ctx context.Context, api srsclient.DefaultApi, registryID string) (*srsclient.Registry, *http.Response, error) {
-	rgInt, _ := strconv.Atoi(registryID)
+	rgInt, _ := strconv.ParseInt(registryID, 10, 0)
 	registryInt := int32(rgInt)
 
 	request := api.GetRegistry(ctx, registryInt)

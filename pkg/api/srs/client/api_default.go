@@ -131,7 +131,7 @@ func (a *DefaultApiService) CreateRegistryExecute(r ApiCreateRegistryRequest) (R
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/registries"
+	localVarPath := localBasePath + "/api/serviceregistry_mgmt/v1/registries"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -247,7 +247,7 @@ func (a *DefaultApiService) DeleteRegistryExecute(r ApiDeleteRegistryRequest) (*
 		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/registries/{registryId}"
+	localVarPath := localBasePath + "/api/serviceregistry_mgmt/v1/registries/{registryId}"
 	localVarPath = strings.Replace(localVarPath, "{"+"registryId"+"}", _neturl.PathEscape(parameterToString(r.registryId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -358,7 +358,7 @@ func (a *DefaultApiService) GetRegistriesExecute(r ApiGetRegistriesRequest) ([]R
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/registries"
+	localVarPath := localBasePath + "/api/serviceregistry_mgmt/v1/registries"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -471,7 +471,7 @@ func (a *DefaultApiService) GetRegistryExecute(r ApiGetRegistryRequest) (Registr
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/registries/{registryId}"
+	localVarPath := localBasePath + "/api/serviceregistry_mgmt/v1/registries/{registryId}"
 	localVarPath = strings.Replace(localVarPath, "{"+"registryId"+"}", _neturl.PathEscape(parameterToString(r.registryId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)

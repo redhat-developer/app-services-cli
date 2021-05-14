@@ -1,20 +1,28 @@
 const OpenAPIBackend = require("openapi-backend").default;
 const express = require("express");
 const kafkaHandlers = require("./handlers/kas-fleet-manager");
+const srsHandlers = require("./handlers/srs-fleet-manager");
 const topicHandlers = require("./handlers/kafka-admin");
-const path = require('path');
-var cors = require('cors');
+const path = require("path");
 
 const api = express();
 api.use(express.json());
 
 // define api
-const kafkaAPI = new OpenAPIBackend({ definition: path.join(__dirname, "../../openapi/kafka-service.yaml") });
-const topicAPI = new OpenAPIBackend({ definition: path.join(__dirname, "../../openapi/strimzi-admin.yaml") });
+const kafkaAPI = new OpenAPIBackend({
+  definition: path.join(__dirname, "../../openapi/kafka-service.yaml"),
+});
+const topicAPI = new OpenAPIBackend({
+  definition: path.join(__dirname, "../../openapi/strimzi-admin.yaml"),
+});
+const srsControlApi = new OpenAPIBackend({
+  definition: path.join(__dirname, "../../openapi/srs-fleet-manager.json"),
+});
 
 // register handlers
 kafkaAPI.register(kafkaHandlers);
 topicAPI.register(topicHandlers);
+srsControlApi.register(srsHandlers);
 
 // register security handler
 kafkaAPI.registerSecurityHandler("Bearer", (c, req, res) => {
@@ -31,19 +39,24 @@ kafkaAPI.registerSecurityHandler("Bearer", (c, req, res) => {
 // Skipping validation of the schema
 // validation fails on this schema definition
 // even though it is valid through other validation forms like Swagger.io
-topicAPI.validateDefinition = () => { }
+topicAPI.validateDefinition = () => {};
 
 kafkaAPI.init();
 topicAPI.init();
+srsControlApi.init();
 
 api.use((req, res) => {
-  if (req.url.startsWith("/api/managed-services-api/v1")) {
-    return kafkaAPI.handleRequest(req, req, res)
+  if (req.url.startsWith("/api/serviceregistry_mgmt/v1/serviceregistry")) {
+    return srsControlApi.handleRequest(req, req, res);
+  } else if (req.url.startsWith("/api/managed-services-api/v1/")) {
+    return kafkaAPI.handleRequest(req, req, res);
   } else if (req.url.startsWith("/rest")) {
     req.url = req.url.replace("/rest", "");
     return topicAPI.handleRequest(req, req, res);
   }
-  res.status(405).status({err: "Method not allowed"})
-})
+  res.status(405).status({ err: "Method not allowed" });
+});
 
-api.listen(8000, () => console.info("Kafka Service API listening at http://localhost:8000"))
+api.listen(8000, () =>
+  console.info("Kafka Service API listening at http://localhost:8000")
+);

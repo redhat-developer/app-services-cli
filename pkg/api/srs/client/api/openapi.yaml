@@ -17,7 +17,7 @@ servers:
 - description: current domain
   url: /
 paths:
-  /api/v1/registries:
+  /api/serviceregistry_mgmt/v1/registries:
     get:
       operationId: getRegistries
       responses:
@@ -68,7 +68,7 @@ paths:
       - Bearer: []
       summary: Create a Registry.
     summary: Manage the list of all registries.
-  /api/v1/registries/{registryId}:
+  /api/serviceregistry_mgmt/v1/registries/{registryId}:
     delete:
       description: Deletes an existing `Registry`.
       operationId: deleteRegistry

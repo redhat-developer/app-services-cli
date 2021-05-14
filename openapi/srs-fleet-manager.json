@@ -28,7 +28,7 @@
     }
   ],
   "paths": {
-    "/api/v1/registries": {
+    "/api/serviceregistry_mgmt/v1/registries": {
       "summary": "Manage the list of all registries.",
       "description": "",
       "get": {
@@ -96,7 +96,7 @@
         ]
       }
     },
-    "/api/v1/registries/{registryId}": {
+    "/api/serviceregistry_mgmt/v1/registries/{registryId}": {
       "summary": "Manage a specific Registry.",
       "description": "",
       "get": {
