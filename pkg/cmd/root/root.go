@@ -3,6 +3,8 @@ package root
 import (
 	"flag"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
@@ -48,6 +50,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(login.NewLoginCmd(f))
 	cmd.AddCommand(logout.NewLogoutCommand(f))
 	cmd.AddCommand(kafka.NewKafkaCommand(f))
+	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(f))
 	cmd.AddCommand(cluster.NewClusterCommand(f))
 	cmd.AddCommand(status.NewStatusCommand(f))

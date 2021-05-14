@@ -27,12 +27,20 @@ type Config struct {
 
 // ServiceConfigMap is a map of configs for the application services
 type ServiceConfigMap struct {
-	Kafka *KafkaConfig `json:"kafka"`
+	Kafka           *KafkaConfig           `json:"kafka"`
+	ServiceRegistry *ServiceRegistryConfig `json:"serviceregistry"`
 }
 
 // KafkaConfig is the config for the Kafka service
 type KafkaConfig struct {
 	ClusterID string `json:"clusterId"`
+}
+
+// KafkaConfig is the config for the Kafka service
+type ServiceRegistryConfig struct {
+	// TODO team to change this to string value
+	InstanceID int32  `json:"clusterId"`
+	Name       string `json:"name"`
 }
 
 func (c *Config) HasKafka() bool {
