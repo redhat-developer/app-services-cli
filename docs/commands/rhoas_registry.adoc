@@ -1,0 +1,22 @@
+== rhoas registry
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Service Registry commands
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_registry_create{relfilesuffix}[rhoas registry create]	 - Create an Apache Kafka instance
+* link:rhoas_registry_delete{relfilesuffix}[rhoas registry delete]	 - Delete an Apache Kafka instance
+* link:rhoas_registry_describe{relfilesuffix}[rhoas registry describe]	 - View configuration details of an Apache Kafka instance
+* link:rhoas_registry_list{relfilesuffix}[rhoas registry list]	 - List all Apache Kafka instances
+* link:rhoas_registry_use{relfilesuffix}[rhoas registry use]	 - Set the current Apache Kafka instance
+
