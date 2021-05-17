@@ -15,7 +15,7 @@
         }
     },
     "paths": {
-        "/ids/contentIds/{contentId}/": {
+        "/api/service-registry/v2/ids/contentIds/{contentId}/": {
             "summary": "Access artifact content utilizing the unique content identifier for that content.",
             "get": {
                 "tags": [
@@ -49,7 +49,7 @@
                 }
             ]
         },
-        "/groups/{groupId}/artifacts": {
+        "/api/service-registry/v2/groups/{groupId}/artifacts": {
             "summary": "Manage the collection of artifacts within a single group in the registry.",
             "get": {
                 "tags": [
@@ -274,7 +274,7 @@
                 }
             ]
         },
-        "/groups/{groupId}/artifacts/{artifactId}": {
+        "/api/service-registry/v2/groups/{groupId}/artifacts/{artifactId}": {
             "summary": "Manage a single artifact.",
             "get": {
                 "tags": [
@@ -440,8 +440,7 @@
                     "required": true
                 }
             ]
-        },
-        "x-codegen-contextRoot": "/service-registry/v2"
+        }
     },
     "components": {
         "schemas": {

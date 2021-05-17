@@ -32,7 +32,7 @@ tags:
     \ update, \nor delete artifacts. This section includes all of these primary operations."
   name: Artifacts
 paths:
-  /ids/contentIds/{contentId}/:
+  /api/service-registry/v2/ids/contentIds/{contentId}/:
     get:
       description: |
         Gets the content for an artifact version in the registry using the unique content
@@ -98,7 +98,7 @@ paths:
       - Artifacts
     summary: Access artifact content utilizing the unique content identifier for that
       content.
-  /groups/{groupId}/artifacts:
+  /api/service-registry/v2/groups/{groupId}/artifacts:
     delete:
       description: Deletes all of the artifacts that exist in a given group.
       operationId: deleteArtifactsInGroup
@@ -406,7 +406,7 @@ paths:
       - Artifacts
       x-codegen-async: true
     summary: Manage the collection of artifacts within a single group in the registry.
-  /groups/{groupId}/artifacts/{artifactId}:
+  /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId}:
     delete:
       description: |-
         Deletes an artifact completely, resulting in all versions of the artifact also being

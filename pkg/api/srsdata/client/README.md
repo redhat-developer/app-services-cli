@@ -96,13 +96,13 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ArtifactsApi* | [**CreateArtifact**](docs/ArtifactsApi.md#createartifact) | **Post** /groups/{groupId}/artifacts | Create artifact
-*ArtifactsApi* | [**DeleteArtifact**](docs/ArtifactsApi.md#deleteartifact) | **Delete** /groups/{groupId}/artifacts/{artifactId} | Delete artifact
-*ArtifactsApi* | [**DeleteArtifactsInGroup**](docs/ArtifactsApi.md#deleteartifactsingroup) | **Delete** /groups/{groupId}/artifacts | Deletes all artifacts in a group
-*ArtifactsApi* | [**GetContentById**](docs/ArtifactsApi.md#getcontentbyid) | **Get** /ids/contentIds/{contentId}/ | Get artifact content by ID
-*ArtifactsApi* | [**GetLatestArtifact**](docs/ArtifactsApi.md#getlatestartifact) | **Get** /groups/{groupId}/artifacts/{artifactId} | Get latest artifact
-*ArtifactsApi* | [**ListArtifactsInGroup**](docs/ArtifactsApi.md#listartifactsingroup) | **Get** /groups/{groupId}/artifacts | List artifacts in group
-*ArtifactsApi* | [**UpdateArtifact**](docs/ArtifactsApi.md#updateartifact) | **Put** /groups/{groupId}/artifacts/{artifactId} | Update artifact
+*ArtifactsApi* | [**CreateArtifact**](docs/ArtifactsApi.md#createartifact) | **Post** /api/service-registry/v2/groups/{groupId}/artifacts | Create artifact
+*ArtifactsApi* | [**DeleteArtifact**](docs/ArtifactsApi.md#deleteartifact) | **Delete** /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId} | Delete artifact
+*ArtifactsApi* | [**DeleteArtifactsInGroup**](docs/ArtifactsApi.md#deleteartifactsingroup) | **Delete** /api/service-registry/v2/groups/{groupId}/artifacts | Deletes all artifacts in a group
+*ArtifactsApi* | [**GetContentById**](docs/ArtifactsApi.md#getcontentbyid) | **Get** /api/service-registry/v2/ids/contentIds/{contentId}/ | Get artifact content by ID
+*ArtifactsApi* | [**GetLatestArtifact**](docs/ArtifactsApi.md#getlatestartifact) | **Get** /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId} | Get latest artifact
+*ArtifactsApi* | [**ListArtifactsInGroup**](docs/ArtifactsApi.md#listartifactsingroup) | **Get** /api/service-registry/v2/groups/{groupId}/artifacts | List artifacts in group
+*ArtifactsApi* | [**UpdateArtifact**](docs/ArtifactsApi.md#updateartifact) | **Put** /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId} | Update artifact
 
 
 ## Documentation For Models

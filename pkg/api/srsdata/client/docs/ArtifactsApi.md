@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateArtifact**](ArtifactsApi.md#CreateArtifact) | **Post** /groups/{groupId}/artifacts | Create artifact
-[**DeleteArtifact**](ArtifactsApi.md#DeleteArtifact) | **Delete** /groups/{groupId}/artifacts/{artifactId} | Delete artifact
-[**DeleteArtifactsInGroup**](ArtifactsApi.md#DeleteArtifactsInGroup) | **Delete** /groups/{groupId}/artifacts | Deletes all artifacts in a group
-[**GetContentById**](ArtifactsApi.md#GetContentById) | **Get** /ids/contentIds/{contentId}/ | Get artifact content by ID
-[**GetLatestArtifact**](ArtifactsApi.md#GetLatestArtifact) | **Get** /groups/{groupId}/artifacts/{artifactId} | Get latest artifact
-[**ListArtifactsInGroup**](ArtifactsApi.md#ListArtifactsInGroup) | **Get** /groups/{groupId}/artifacts | List artifacts in group
-[**UpdateArtifact**](ArtifactsApi.md#UpdateArtifact) | **Put** /groups/{groupId}/artifacts/{artifactId} | Update artifact
+[**CreateArtifact**](ArtifactsApi.md#CreateArtifact) | **Post** /api/service-registry/v2/groups/{groupId}/artifacts | Create artifact
+[**DeleteArtifact**](ArtifactsApi.md#DeleteArtifact) | **Delete** /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId} | Delete artifact
+[**DeleteArtifactsInGroup**](ArtifactsApi.md#DeleteArtifactsInGroup) | **Delete** /api/service-registry/v2/groups/{groupId}/artifacts | Deletes all artifacts in a group
+[**GetContentById**](ArtifactsApi.md#GetContentById) | **Get** /api/service-registry/v2/ids/contentIds/{contentId}/ | Get artifact content by ID
+[**GetLatestArtifact**](ArtifactsApi.md#GetLatestArtifact) | **Get** /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId} | Get latest artifact
+[**ListArtifactsInGroup**](ArtifactsApi.md#ListArtifactsInGroup) | **Get** /api/service-registry/v2/groups/{groupId}/artifacts | List artifacts in group
+[**UpdateArtifact**](ArtifactsApi.md#UpdateArtifact) | **Put** /api/service-registry/v2/groups/{groupId}/artifacts/{artifactId} | Update artifact
 
 
 

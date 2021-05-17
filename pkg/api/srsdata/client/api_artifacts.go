@@ -349,7 +349,7 @@ func (a *ArtifactsApiService) CreateArtifactExecute(r ApiCreateArtifactRequest) 
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/groups/{groupId}/artifacts"
+	localVarPath := localBasePath + "/api/service-registry/v2/groups/{groupId}/artifacts"
 	localVarPath = strings.Replace(localVarPath, "{"+"groupId"+"}", _neturl.PathEscape(parameterToString(r.groupId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -508,7 +508,7 @@ func (a *ArtifactsApiService) DeleteArtifactExecute(r ApiDeleteArtifactRequest) 
 		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/groups/{groupId}/artifacts/{artifactId}"
+	localVarPath := localBasePath + "/api/service-registry/v2/groups/{groupId}/artifacts/{artifactId}"
 	localVarPath = strings.Replace(localVarPath, "{"+"groupId"+"}", _neturl.PathEscape(parameterToString(r.groupId, "")), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"artifactId"+"}", _neturl.PathEscape(parameterToString(r.artifactId, "")), -1)
 
@@ -622,7 +622,7 @@ func (a *ArtifactsApiService) DeleteArtifactsInGroupExecute(r ApiDeleteArtifacts
 		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/groups/{groupId}/artifacts"
+	localVarPath := localBasePath + "/api/service-registry/v2/groups/{groupId}/artifacts"
 	localVarPath = strings.Replace(localVarPath, "{"+"groupId"+"}", _neturl.PathEscape(parameterToString(r.groupId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -735,7 +735,7 @@ func (a *ArtifactsApiService) GetContentByIdExecute(r ApiGetContentByIdRequest) 
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/ids/contentIds/{contentId}/"
+	localVarPath := localBasePath + "/api/service-registry/v2/ids/contentIds/{contentId}/"
 	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", _neturl.PathEscape(parameterToString(r.contentId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -870,7 +870,7 @@ func (a *ArtifactsApiService) GetLatestArtifactExecute(r ApiGetLatestArtifactReq
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/groups/{groupId}/artifacts/{artifactId}"
+	localVarPath := localBasePath + "/api/service-registry/v2/groups/{groupId}/artifacts/{artifactId}"
 	localVarPath = strings.Replace(localVarPath, "{"+"groupId"+"}", _neturl.PathEscape(parameterToString(r.groupId, "")), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"artifactId"+"}", _neturl.PathEscape(parameterToString(r.artifactId, "")), -1)
 
@@ -1017,7 +1017,7 @@ func (a *ArtifactsApiService) ListArtifactsInGroupExecute(r ApiListArtifactsInGr
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/groups/{groupId}/artifacts"
+	localVarPath := localBasePath + "/api/service-registry/v2/groups/{groupId}/artifacts"
 	localVarPath = strings.Replace(localVarPath, "{"+"groupId"+"}", _neturl.PathEscape(parameterToString(r.groupId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -1171,7 +1171,7 @@ func (a *ArtifactsApiService) UpdateArtifactExecute(r ApiUpdateArtifactRequest) 
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/groups/{groupId}/artifacts/{artifactId}"
+	localVarPath := localBasePath + "/api/service-registry/v2/groups/{groupId}/artifacts/{artifactId}"
 	localVarPath = strings.Replace(localVarPath, "{"+"groupId"+"}", _neturl.PathEscape(parameterToString(r.groupId, "")), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"artifactId"+"}", _neturl.PathEscape(parameterToString(r.artifactId, "")), -1)
 

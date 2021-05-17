@@ -2,6 +2,7 @@ const OpenAPIBackend = require("openapi-backend").default;
 const express = require("express");
 const kafkaHandlers = require("./handlers/kas-fleet-manager");
 const srsHandlers = require("./handlers/srs-fleet-manager");
+const srsDataHandlers = require("./handlers/srs-data");
 const topicHandlers = require("./handlers/kafka-admin");
 const path = require("path");
 
@@ -19,10 +20,16 @@ const srsControlApi = new OpenAPIBackend({
   definition: path.join(__dirname, "../../openapi/srs-fleet-manager.json"),
 });
 
+const srsDataApi = new OpenAPIBackend({
+  definition: path.join(__dirname, "../../openapi/srs-service.json"),
+});
+
+
 // register handlers
 kafkaAPI.register(kafkaHandlers);
 topicAPI.register(topicHandlers);
 srsControlApi.register(srsHandlers);
+srsDataApi.register(srsDataApi)
 
 // register security handler
 kafkaAPI.registerSecurityHandler("Bearer", (c, req, res) => {
@@ -41,11 +48,21 @@ kafkaAPI.registerSecurityHandler("Bearer", (c, req, res) => {
 // even though it is valid through other validation forms like Swagger.io
 topicAPI.validateDefinition = () => {};
 
+// Skipping validation of the schema
+// validation fails on this schema definition
+// even though it is valid through other validation forms like Swagger.io
+srsControlApi.validateDefinition = () => {};
+srsDataApi.validateDefinition = () => {};
+
 kafkaAPI.init();
 topicAPI.init();
 srsControlApi.init();
+srsDataApi.init();
 
 api.use((req, res) => {
+  if (req.url.startsWith("/api/service-registry/v2")) {
+    return srsDataApi.handleRequest(req, req, res);
+  } 
   if (req.url.startsWith("/api/serviceregistry_mgmt/v1/serviceregistry")) {
     return srsControlApi.handleRequest(req, req, res);
   } else if (req.url.startsWith("/api/managed-services-api/v1/")) {

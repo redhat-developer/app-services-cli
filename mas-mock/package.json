@@ -11,7 +11,8 @@
     "test": "jest",
     "api:kafka-service": "openapi-editor --file ../openapi/kafka-service.yaml --port 10000",
     "api:topic-admin": "openapi-editor --file ../openapi/strimzi-admin.yaml --port 10001",
-    "api:service-registry": "openapi-editor --file ../openapi/srs-fleet-manager.json --port 10003"
+    "api:srs": "openapi-editor --file ../openapi/srs-fleet-manager.json --port 10003",
+    "api:srs-data": "openapi-editor --file ../openapi/srs-service.json --port 10003"
   },
   "dependencies": {
     "cors": "^2.8.5",
