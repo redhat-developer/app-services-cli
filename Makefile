@@ -149,7 +149,7 @@ openapi/srs/validate:
 
 # generate the openapi schema
 openapi/srsdata/generate:
-	openapi-generator-cli generate -i openapi/srs-service.json -g go --package-name srsdata --model-package=models -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${srsapi_service_dir}
+	openapi-generator-cli generate -i openapi/srs-service.json -g go --package-name srsdata -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${srsapi_service_dir}
 	openapi-generator-cli validate -i openapi/srs-service.json
 	# generate mock
 	moq -out ${srsapi_service_dir}/default_api_mock.go ${srsapi_service_dir} ArtifactsApi
