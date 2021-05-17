@@ -25,7 +25,7 @@ binary:=rhoas
 
 kasapi_dir=./pkg/api/kas/client
 srsapi_dir=./pkg/api/srs/client
-srsapi_service_dir=./pkg/api/serviceregistry/client
+srsapi_service_dir=./pkg/api/srsdata/client
 strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 amsapi_dir=./pkg/api/ams/amsclient
 
@@ -83,10 +83,10 @@ test/unit: install
 openapi/pull: openapi/strimzi-admin/pull openapi/kas/pull
 .PHONY: openapi/pull
 
-openapi/validate: openapi/strimzi-admin/validate openapi/kas/validate openapi/srs/validate openapi/srs-service/validate
+openapi/validate: openapi/strimzi-admin/validate openapi/kas/validate openapi/srs/validate openapi/srsdata/validate
 .PHONY: openapi/validate
 
-openapi/generate: openapi/strimzi-admin/generate openapi/kas/generate openapi/strimzi-admin/generate openapi/srs/generate openapi/srs/validate openapi/srs-service/generate
+openapi/generate: openapi/strimzi-admin/generate openapi/kas/generate openapi/strimzi-admin/generate openapi/srs/generate openapi/srs/validate openapi/srsdata/generate
 .PHONY: openapi/validate
 
 openapi/strimzi-admin/pull:
@@ -148,18 +148,18 @@ openapi/srs/validate:
 .PHONY: openapi/srs/validate
 
 # generate the openapi schema
-openapi/srs-service/generate:
-	openapi-generator-cli generate -i openapi/srs-service.json -g go --package-name serviceregistry -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${srsapi_service_dir}
+openapi/srsdata/generate:
+	openapi-generator-cli generate -i openapi/srs-service.json -g go --package-name srsdata --model-package=models -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${srsapi_service_dir}
 	openapi-generator-cli validate -i openapi/srs-service.json
 	# generate mock
-	moq -out ${srsapi_service_dir}/default_api_mock.go ${srsapi_service_dir} Artifacts
+	moq -out ${srsapi_service_dir}/default_api_mock.go ${srsapi_service_dir} ArtifactsApi
 	gofmt -w ${srsapi_service_dir}
-.PHONY: openapi/srs-service/generate
+.PHONY: openapi/srsdata/generate
 
 # validate the openapi schema
-openapi/srs-service/validate:
+openapi/srsdata/validate:
 	openapi-generator-cli validate -i openapi/srs-service.json
-.PHONY: openapi/srs-service/validate
+.PHONY: openapi/srsdata/validate
 
 mock-api/start: mock-api/client/start
 .PHONY: mock-api/start
