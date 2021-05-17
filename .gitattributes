@@ -2,6 +2,8 @@
 pkg/api/ams/**/* linguist-generated=true
 pkg/api/kas/**/* linguist-generated=true
 pkg/api/strimzi-admin/**/* linguist-generated=true
+pkg/api/srs/**/* linguist-generated=true
+pkg/api/srsdata/**/* linguist-generated=true
 
 # ignore the generated command line reference document in GitHub PRs
 docs/commands/*.adoc linguist-generated=true
