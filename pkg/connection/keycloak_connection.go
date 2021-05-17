@@ -8,7 +8,10 @@ import (
 	"net/http"
 	"net/url"
 
+	srsdata "github.com/redhat-developer/app-services-cli/pkg/api/srsdata/client"
+
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
+	srsclient "github.com/redhat-developer/app-services-cli/pkg/api/srs/client"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -153,6 +156,8 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 // nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
 	var cachedKafkaServiceAPI kasclient.DefaultApi
+	var cachedSrsAPI srsclient.DefaultApi
+	var cachedSrDataAPI srsdata.ArtifactsApi
 	var cachedKafkaID string
 	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
 	var cachedKafkaRequest *kasclient.KafkaRequest
@@ -182,6 +187,34 @@ func (c *KeycloakConnection) API() *api.API {
 		cachedKafkaServiceAPI = kafkaAPIClient.DefaultApi
 
 		return cachedKafkaServiceAPI
+	}
+
+	srsAPIFunc := func() srsclient.DefaultApi {
+		if cachedSrsAPI != nil {
+			return cachedSrsAPI
+		}
+
+		// create the client
+		srsAPIClient := c.createServiceRegistryAPIClient()
+
+		cachedSrsAPI = srsAPIClient.DefaultApi
+
+		return cachedSrsAPI
+	}
+
+	// TODO that will be just single API over the topic
+	// We need to be able to support more than single one
+	srsDataAPIFunc := func() srsdata.ArtifactsApi {
+		if cachedSrDataAPI != nil {
+			return cachedSrDataAPI
+		}
+
+		// create the client
+		srsAPIClient := c.createServiceRegistryDataPlaneClient()
+
+		cachedSrDataAPI = srsAPIClient.ArtifactsApi
+
+		return cachedSrDataAPI
 	}
 
 	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kasclient.KafkaRequest, error) {
@@ -241,9 +274,11 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	return &api.API{
-		Kafka:       kafkaAPIFunc,
-		TopicAdmin:  kafkaAdminAPIFunc,
-		AccountMgmt: amsAPIFunc,
+		Kafka:               kafkaAPIFunc,
+		TopicAdmin:          kafkaAdminAPIFunc,
+		AccountMgmt:         amsAPIFunc,
+		ServiceRegistry:     srsAPIFunc,
+		ServiceRegistryData: srsDataAPIFunc,
 	}
 }
 
@@ -259,6 +294,38 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kasclient.APIClient {
 	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
 
 	apiClient := kasclient.NewAPIClient(cfg)
+
+	return apiClient
+}
+
+// Create a new Kafka API client
+func (c *KeycloakConnection) createServiceRegistryAPIClient() *srsclient.APIClient {
+	cfg := srsclient.NewConfiguration()
+
+	cfg.Scheme = c.apiURL.Scheme
+	cfg.Host = c.apiURL.Host
+
+	cfg.HTTPClient = c.defaultHTTPClient
+
+	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
+
+	apiClient := srsclient.NewAPIClient(cfg)
+
+	return apiClient
+}
+
+// Create a new Kafka API client
+func (c *KeycloakConnection) createServiceRegistryDataPlaneClient() *srsdata.APIClient {
+	cfg := srsdata.NewConfiguration()
+
+	cfg.Scheme = c.apiURL.Scheme
+	cfg.Host = c.apiURL.Host
+
+	cfg.HTTPClient = c.defaultHTTPClient
+
+	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
+
+	apiClient := srsdata.NewAPIClient(cfg)
 
 	return apiClient
 }
