@@ -5,9 +5,11 @@ const srsHandlers = require("./handlers/srs-fleet-manager");
 const srsDataHandlers = require("./handlers/srs-data");
 const topicHandlers = require("./handlers/kafka-admin");
 const path = require("path");
+var cors = require('cors');
 
 const api = express();
 api.use(express.json());
+api.use(cors())
 
 // define api
 const kafkaAPI = new OpenAPIBackend({
@@ -16,43 +18,35 @@ const kafkaAPI = new OpenAPIBackend({
 const topicAPI = new OpenAPIBackend({
   definition: path.join(__dirname, "../../openapi/strimzi-admin.yaml"),
 });
+
+// TODO all API definitions should be done in yaml 
 const srsControlApi = new OpenAPIBackend({
-  definition: path.join(__dirname, "../../openapi/srs-fleet-manager.json"),
+  definition: path.join(__dirname, "../../pkg/api/srs/client/api/openapi.yaml"),
 });
 
 const srsDataApi = new OpenAPIBackend({
-  definition: path.join(__dirname, "../../openapi/srs-service.json"),
+  definition: path.join(__dirname, "../../pkg/api/srsdata/client/api/openapi.yaml"),
 });
-
 
 // register handlers
 kafkaAPI.register(kafkaHandlers);
 topicAPI.register(topicHandlers);
 srsControlApi.register(srsHandlers);
-srsDataApi.register(srsDataApi)
+srsDataApi.register(srsDataHandlers);
 
 // register security handler
 kafkaAPI.registerSecurityHandler("Bearer", (c, req, res) => {
   return true;
+});
 
-  // const authHeader = c.request.headers['authorization'];
-  // if (!authHeader) {
-  //   throw new Error('Missing authorization header');
-  // }
-  // const token = authHeader.replace('Bearer ', '');
-  // return jwt.verify(token, 'secret');
+srsControlApi.registerSecurityHandler("Bearer", (c, req, res) => {
+  return true;
 });
 
 // Skipping validation of the schema
 // validation fails on this schema definition
 // even though it is valid through other validation forms like Swagger.io
 topicAPI.validateDefinition = () => {};
-
-// Skipping validation of the schema
-// validation fails on this schema definition
-// even though it is valid through other validation forms like Swagger.io
-srsControlApi.validateDefinition = () => {};
-srsDataApi.validateDefinition = () => {};
 
 kafkaAPI.init();
 topicAPI.init();
@@ -61,13 +55,22 @@ srsDataApi.init();
 
 api.use((req, res) => {
   if (req.url.startsWith("/api/service-registry/v2")) {
+    console.debug("Calling serviceregistry")
     return srsDataApi.handleRequest(req, req, res);
-  } 
-  if (req.url.startsWith("/api/serviceregistry_mgmt/v1/serviceregistry")) {
+  }
+  
+  if (req.url.startsWith("/api/serviceregistry_mgmt/v1/registries")) {
+    console.debug("Calling serviceregistry_mgmt")
     return srsControlApi.handleRequest(req, req, res);
-  } else if (req.url.startsWith("/api/managed-services-api/v1/")) {
+  }
+
+  if (req.url.startsWith("/api/managed-services-api/v1/")) {
+    console.debug("Calling Kafka")
     return kafkaAPI.handleRequest(req, req, res);
-  } else if (req.url.startsWith("/rest")) {
+  }
+
+  if (req.url.startsWith("/rest")) {
+    console.debug("Calling Kafka Admin")
     req.url = req.url.replace("/rest", "");
     return topicAPI.handleRequest(req, req, res);
   }

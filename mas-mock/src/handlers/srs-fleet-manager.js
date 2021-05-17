@@ -3,6 +3,7 @@
 
 module.exports = {
   getRegistries: async (c, req, res) => {
+    console.log("called")
     res.status(200).json([
       {
         "id": 42,

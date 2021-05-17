@@ -1,6 +1,7 @@
 openapi: 3.0.2
 info:
-  description: Main entry point for the system, responsible for all sorts of management
+  description:
+    Main entry point for the system, responsible for all sorts of management
     operations for the whole service of managed service registry.
   license:
     name: Apache 2.0
@@ -8,14 +9,14 @@ info:
   title: Service Registry Service - Fleet Manager - v1
   version: 0.0.1
 servers:
-- description: Main (production) server
-  url: https://api.openshift.com
-- description: Staging server
-  url: https://api.stage.openshift.com
-- description: localhost
-  url: http://localhost:8000
-- description: current domain
-  url: /
+  - description: Main (production) server
+    url: https://api.openshift.com
+  - description: Staging server
+    url: https://api.stage.openshift.com
+  - description: localhost
+    url: http://localhost:8000
+  - description: current domain
+    url: /
 paths:
   /api/serviceregistry_mgmt/v1/registries:
     get:
@@ -26,18 +27,19 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Registry'
+                  $ref: "#/components/schemas/Registry"
                 type: array
           description: A successful response.
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInfo1'
-          description: "The response sent from the server when an unexpected error\
+                $ref: "#/components/schemas/ErrorInfo1"
+          description:
+            "The response sent from the server when an unexpected error\
             \ occurs (for example \na database connection error)."
       security:
-      - Bearer: []
+        - Bearer: []
       summary: Get the list of all registries.
     post:
       operationId: createRegistry
@@ -45,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegistryCreate'
+              $ref: "#/components/schemas/RegistryCreate"
         description: A new `Registry` to be created.
         required: true
       responses:
@@ -53,19 +55,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Registry'
-          description: A successful response. The full request to create a new `Registry`
+                $ref: "#/components/schemas/Registry"
+          description:
+            A successful response. The full request to create a new `Registry`
             is processed asynchronously. User should verify the result of the operation
             by reading the `status` property of the created `Registry` entity.
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInfo1'
-          description: "The response sent from the server when an unexpected error\
+                $ref: "#/components/schemas/ErrorInfo1"
+          description:
+            "The response sent from the server when an unexpected error\
             \ occurs (for example \na database connection error)."
       security:
-      - Bearer: []
+        - Bearer: []
       summary: Create a Registry.
     summary: Manage the list of all registries.
   /api/serviceregistry_mgmt/v1/registries/{registryId}:
@@ -73,14 +77,14 @@ paths:
       description: Deletes an existing `Registry`.
       operationId: deleteRegistry
       parameters:
-      - description: A unique identifier for a `Registry`.
-        explode: false
-        in: path
-        name: registryId
-        required: true
-        schema:
-          type: integer
-        style: simple
+        - description: A unique identifier for a `Registry`.
+          explode: false
+          in: path
+          name: registryId
+          required: true
+          schema:
+            type: integer
+          style: simple
       responses:
         "204":
           description: Successful response.
@@ -88,75 +92,81 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInfo1'
-          description: The response returned when something is requested but cannot
+                $ref: "#/components/schemas/ErrorInfo1"
+          description:
+            The response returned when something is requested but cannot
             be found.
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInfo1'
-          description: "The response sent from the server when an unexpected error\
+                $ref: "#/components/schemas/ErrorInfo1"
+          description:
+            "The response sent from the server when an unexpected error\
             \ occurs (for example \na database connection error)."
       security:
-      - Bearer: []
+        - Bearer: []
       summary: Delete a Registry
     get:
       description: Gets the details of a single instance of a `Registry`.
       operationId: getRegistry
       parameters:
-      - description: A unique identifier for a `Registry`.
-        explode: false
-        in: path
-        name: registryId
-        required: true
-        schema:
-          type: integer
-        style: simple
+        - description: A unique identifier for a `Registry`.
+          explode: false
+          in: path
+          name: registryId
+          required: true
+          schema:
+            type: integer
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Registry'
+                $ref: "#/components/schemas/Registry"
           description: Successful response - returns a single `Registry`.
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInfo1'
-          description: The response returned when something is requested but cannot
+                $ref: "#/components/schemas/ErrorInfo1"
+          description:
+            The response returned when something is requested but cannot
             be found.
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInfo1'
-          description: "The response sent from the server when an unexpected error\
+                $ref: "#/components/schemas/ErrorInfo1"
+          description:
+            "The response sent from the server when an unexpected error\
             \ occurs (for example \na database connection error)."
       security:
-      - Bearer: []
+        - Bearer: []
       summary: Get a Registry
     summary: Manage a specific Registry.
 components:
   responses:
     NotFound:
-      $ref: '#/components/responses/NotFound1'
+      $ref: "#/components/responses/NotFound1"
     ServerError:
-      $ref: '#/components/responses/ServerError1'
+      $ref: "#/components/responses/ServerError1"
     NotFound1:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorInfo1'
-      description: The response returned when something is requested but cannot be
+            $ref: "#/components/schemas/ErrorInfo1"
+      description:
+        The response returned when something is requested but cannot be
         found.
     ServerError1:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorInfo1'
-      description: "The response sent from the server when an unexpected error occurs\
+            $ref: "#/components/schemas/ErrorInfo1"
+      description:
+        "The response sent from the server when an unexpected error occurs\
         \ (for example \na database connection error)."
   schemas:
     Registry:
@@ -173,20 +183,21 @@ components:
         id:
           type: integer
         status:
-          $ref: '#/components/schemas/RegistryStatus'
+          $ref: "#/components/schemas/RegistryStatus"
         registryUrl:
           type: string
         name:
           description: User-defined Registry name. Does not have to be unique.
           type: string
         registryDeploymentId:
-          description: Identifier of a multi-tenant deployment, where this Service
+          description:
+            Identifier of a multi-tenant deployment, where this Service
             Registry instance resides.
           type: integer
       required:
-      - id
-      - registryUrl
-      - status
+        - id
+        - registryUrl
+        - status
       title: Root Type for Registry
       type: object
     RegistryStatus:
@@ -199,13 +210,14 @@ components:
           format: date-time
           type: string
         value:
-          $ref: '#/components/schemas/RegistryStatusValue'
+          $ref: "#/components/schemas/RegistryStatusValue"
       required:
-      - lastUpdated
-      - value
+        - lastUpdated
+        - value
       type: object
     RegistryCreate:
-      description: Information used to create a new Service Registry instance within
+      description:
+        Information used to create a new Service Registry instance within
         a multi-tenant deployment.
       example:
         name: my-registry
@@ -217,9 +229,9 @@ components:
       type: object
     RegistryStatusValue:
       enum:
-      - PROVISIONING
-      - AVAILABLE
-      - UNAVAILABLE
+        - PROVISIONING
+        - AVAILABLE
+        - UNAVAILABLE
       type: string
     ErrorInfo1:
       description: Details about a specific error returned by the server.
@@ -232,7 +244,7 @@ components:
         message:
           type: string
       required:
-      - error_code
+        - error_code
       title: Root Type for ErrorInfo
       type: object
   securitySchemes:
