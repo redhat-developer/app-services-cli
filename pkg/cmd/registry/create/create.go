@@ -113,17 +113,18 @@ func runCreate(opts *Options) error {
 
 	api := connection.API()
 
+	// TODO ask if terms and conditions are needed to be accepted
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a instance
-	termsAccepted, termsURL, err := checkTermsAccepted(opts.Connection)
-	if err != nil {
-		return err
-	}
-	if !termsAccepted && termsURL != "" {
-		// FIXME Common i18n between kafka and registry?
-		logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
-		return nil
-	}
+	// termsAccepted, termsURL, err := checkTermsAccepted(opts.Connection)
+	// if err != nil {
+	// 	return err
+	// }
+	// if !termsAccepted && termsURL != "" {
+	// 	// FIXME Common i18n between kafka and registry?
+	// 	logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
+	// 	return nil
+	// }
 
 	var payload *srsclient.RegistryCreate
 	if opts.interactive {
@@ -133,14 +134,13 @@ func runCreate(opts *Options) error {
 		if err != nil {
 			return err
 		}
-
 	} else {
 		payload = &srsclient.RegistryCreate{
 			Name: &opts.name,
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.create.log.debug.creatingKafka", localize.NewEntry("Name", opts.name)))
+	logger.Info("Creating service registry " + opts.name)
 
 	a := api.ServiceRegistry().CreateRegistry(context.Background())
 	a = a.RegistryCreate(*payload)
