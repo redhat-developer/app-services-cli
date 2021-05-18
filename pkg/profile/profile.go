@@ -59,5 +59,6 @@ func EnableDevPreview(f *factory.Factory, enablement *string) (*config.Config, e
 		logger.Info("Cannot enable dev preview. ", err)
 		return nil, err
 	}
+	logger.Info("Successfully changed visibility of devpreview commands")
 	return config, err
 }

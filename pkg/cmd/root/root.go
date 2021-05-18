@@ -46,9 +46,9 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	var help bool
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
 
-	var devpreview *string = nil
-	cmd.Flags().StringVar(devpreview, "devpreview", "", f.Localizer.MustLocalize("root.cmd.flag.devpreview.description"))
-	_, _ = profile.EnableDevPreview(f, devpreview)
+	devpreview := ""
+	cmd.Flags().StringVar(&devpreview, "devpreview", "", f.Localizer.MustLocalize("root.cmd.flag.devpreview.description"))
+	_, _ = profile.EnableDevPreview(f, &devpreview)
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))
