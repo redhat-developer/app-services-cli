@@ -9,7 +9,7 @@ one = '''
 Create a topic in the current Apache Kafka instance.
 
 This command lets you create a topic, set a desired number of 
-partitions, replicas and retention period or else use the default values.
+partitions, retention size and retention period or else use the default values.
 '''
 
 [kafka.topic.create.cmd.example]

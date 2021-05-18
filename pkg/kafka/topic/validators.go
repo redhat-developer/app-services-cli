@@ -13,11 +13,10 @@ import (
 )
 
 const (
-	legalNameChars       = "^[a-zA-Z0-9\\_\\-]+$"
-	maxNameLength        = 249
-	minReplicationFactor = 1
-	minPartitions        = 1
-	maxPartitions        = 100
+	legalNameChars = "^[a-zA-Z0-9\\_\\-]+$"
+	maxNameLength  = 249
+	minPartitions  = 1
+	maxPartitions  = 100
 )
 
 // ValidateName validates the name of the topic
@@ -57,20 +56,6 @@ func ValidatePartitionsN(v interface{}) error {
 
 	if partitions > maxPartitions {
 		return fmt.Errorf("invalid partition count %v, maximum value is %v", partitions, maxPartitions)
-	}
-
-	return nil
-}
-
-// ValidationReplicationFactorN performs validation on the number of replicas v
-func ValidateReplicationFactorN(v interface{}) error {
-	replicas, ok := v.(int32)
-	if !ok {
-		return commonerr.NewCastError(v, "int32")
-	}
-
-	if replicas < minReplicationFactor {
-		return fmt.Errorf("invalid replication factor %v, minimum value is %v", replicas, minReplicationFactor)
 	}
 
 	return nil

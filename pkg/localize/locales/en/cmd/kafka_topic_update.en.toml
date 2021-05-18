@@ -11,7 +11,7 @@ Update a topic in the current Apache Kafka instance.
 
 [kafka.topic.update.cmd.example]
 one = '''
-# update the number of replicas for a topic
+# update the message retention period for a topic
 $ rhoas kafka topic update topic-1 --retention-ms -1
 '''
 
