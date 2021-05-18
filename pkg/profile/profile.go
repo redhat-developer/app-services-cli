@@ -1,4 +1,4 @@
-// This file contains functions that add common arguments to the command line
+// This file contains functions that help to manage visibility of early stage commands
 package profile
 
 import (
@@ -9,14 +9,17 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 )
 
+// Visual element displayed in help
 func DevPreviewLabel() string {
 	return color.Bold(" [Preview] ")
 }
 
+// Annotation used in templates and tools like documentation generation
 func DevPreviewAnnotation() map[string]string {
 	return map[string]string{"channel": "preview"}
 }
 
+// Check if preview is enabled
 func DevPreviewEnabled(f *factory.Factory) bool {
 	logger, err := f.Logger()
 	if err != nil {
@@ -32,6 +35,7 @@ func DevPreviewEnabled(f *factory.Factory) bool {
 	return config.DevPreviewEnabled
 }
 
+// Enable dev preview
 func EnableDevPreview(f *factory.Factory, enablement *string) (*config.Config, error) {
 	if *enablement == "" {
 		// Flag not present no action needed.
