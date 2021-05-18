@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
+	"github.com/redhat-developer/app-services-cli/pkg/profile"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
@@ -36,7 +37,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.Version = version
 
 	cmd.SetVersionTemplate(f.Localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
-
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	fs := cmd.PersistentFlags()
@@ -46,17 +46,25 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	var help bool
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
 
+	var devpreview *string = nil
+	cmd.Flags().StringVar(devpreview, "devpreview", "", f.Localizer.MustLocalize("root.cmd.flag.devpreview.description"))
+	_, _ = profile.EnableDevPreview(f, devpreview)
+
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))
 	cmd.AddCommand(logout.NewLogoutCommand(f))
 	cmd.AddCommand(kafka.NewKafkaCommand(f))
-	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(f))
 	cmd.AddCommand(cluster.NewClusterCommand(f))
 	cmd.AddCommand(status.NewStatusCommand(f))
 	cmd.AddCommand(completion.NewCompletionCommand(f))
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
+
+	// Dev preview commands
+	if profile.DevPreviewEnabled(f) {
+		cmd.AddCommand(registry.NewServiceRegistryCommand(f))
+	}
 
 	return cmd
 }

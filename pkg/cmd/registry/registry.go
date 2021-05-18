@@ -3,21 +3,22 @@
 package registry
 
 import (
-	"github.com/spf13/cobra"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/delete"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/describe"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/list"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/create"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/delete"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/describe"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
+	"github.com/redhat-developer/app-services-cli/pkg/profile"
+	"github.com/spf13/cobra"
 )
 
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "registry",
-		Short: "Service Registry commands",
-		Args:  cobra.MinimumNArgs(1),
+		Use:         "registry",
+		Annotations: profile.DevPreviewAnnotation(),
+		Short:       profile.DevPreviewLabel() + "Service Registry commands",
+		Args:        cobra.MinimumNArgs(1),
 	}
 
 	// add sub-commands

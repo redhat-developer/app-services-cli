@@ -1,21 +1,37 @@
 // This file contains functions that add common arguments to the command line
-package arguments
+package profile
 
 import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/spf13/pflag"
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 )
 
-// AddDebugFlag adds the '--debug' flag to the given set of command line flags
-func AddDebugFlag(fs *pflag.FlagSet) {
-	debug.AddFlag(fs)
+func DevPreviewLabel() string {
+	return color.Bold(" [Preview] ")
 }
 
-// Enables dev preview in config
+func DevPreviewAnnotation() map[string]string {
+	return map[string]string{"channel": "preview"}
+}
+
+func DevPreviewEnabled(f *factory.Factory) bool {
+	logger, err := f.Logger()
+	if err != nil {
+		logger.Info("Cannot determine status of dev preview. ", err)
+		return false
+	}
+	config, err := f.Config.Load()
+	if err != nil {
+		logger.Info("Cannot determine status of dev preview. ", err)
+		return false
+	}
+
+	return config.DevPreviewEnabled
+}
+
 func EnableDevPreview(f *factory.Factory, enablement *string) (*config.Config, error) {
 	if *enablement == "" {
 		// Flag not present no action needed.
@@ -24,19 +40,19 @@ func EnableDevPreview(f *factory.Factory, enablement *string) (*config.Config, e
 
 	logger, err := f.Logger()
 	if err != nil {
-		logger.Info("Cannot enable dev preview")
+		logger.Info("Cannot enable dev preview. ", err)
 		return nil, err
 	}
 	config, err := f.Config.Load()
 	if err != nil {
-		logger.Info("Cannot enable dev preview")
+		logger.Info("Cannot enable dev preview.", err)
 		return nil, err
 	}
 
 	config.DevPreviewEnabled = strings.ToLower(*enablement) == "true" || *enablement == "yes" || *enablement == "y"
 	err = f.Config.Save(config)
 	if err != nil {
-		logger.Info("Cannot enable dev preview")
+		logger.Info("Cannot enable dev preview. ", err)
 		return nil, err
 	}
 	return config, err
