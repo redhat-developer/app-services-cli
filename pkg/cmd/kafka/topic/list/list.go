@@ -111,9 +111,9 @@ func runCmd(opts *Options) error {
 		operationTemplatePair := localize.NewEntry("Operation", "list")
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.common.error.unauthorized", operationTemplatePair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.unauthorized", operationTemplatePair))
 		case 403:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.common.error.forbidden", operationTemplatePair))
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.forbidden", operationTemplatePair))
 		case 500:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
 		case 503:

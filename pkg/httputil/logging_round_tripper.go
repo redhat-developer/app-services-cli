@@ -15,10 +15,16 @@ type LoggingRoundTripper struct {
 }
 
 // RoundTrip logs the http request and response in debug mode
+// for all errors, where status code >= 400
 func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	resp, err := c.Proxied.RoundTrip(r)
 	if err != nil {
 		return nil, err
+	}
+
+	// only dump the HTTP request and response for errors
+	if resp.StatusCode < 400 {
+		return resp, nil
 	}
 
 	requestDump, err := httputil.DumpRequest(r, true)

@@ -180,10 +180,10 @@ func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCoun
 	if err != nil {
 		return false, err
 	}
-	kafkaNameTmplPair := localize.NewEntry("Name", kafkaName)
+	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaName)
 	if count == 0 && opts.output == "" {
 		if opts.topic == "" {
-			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroups"), kafkaNameTmplPair)
+			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroups", kafkaNameTmplPair))
 		} else {
 			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic"), kafkaNameTmplPair, localize.NewEntry("TopicName", opts.topic))
 		}
