@@ -13,12 +13,26 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var example string = `
+## Create registry
+rhoas registry create --name=new
+
+## List registry
+rhoas registry list 
+
+## Create Artifact
+rhoas registry artifact create ./schema.graphql
+`
+
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "registry",
-		// Hidden
+		Use:         "registry",
+		Hidden:      !profile.DevPreviewEnabled(f),
 		Annotations: profile.DevPreviewAnnotation(),
 		Short:       profile.DevPreviewLabel() + "Service Registry commands",
+		Long:        "",
+		Version:     "dev",
+		Example:     example,
 		Args:        cobra.MinimumNArgs(1),
 	}
 

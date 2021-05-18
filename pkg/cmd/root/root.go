@@ -66,10 +66,8 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
 
-	// Dev preview commands
-	if profile.DevPreviewEnabled(f) {
-		cmd.AddCommand(registry.NewServiceRegistryCommand(f))
-	}
+	// Early stage/dev preview commands
+	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 
 	return cmd
 }
