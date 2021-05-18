@@ -15,7 +15,8 @@ import (
 
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:         "registry",
+		Use: "registry",
+		// Hidden
 		Annotations: profile.DevPreviewAnnotation(),
 		Short:       profile.DevPreviewLabel() + "Service Registry commands",
 		Args:        cobra.MinimumNArgs(1),

@@ -37,16 +37,18 @@ func DevPreviewEnabled(f *factory.Factory) bool {
 
 // Enable dev preview
 func EnableDevPreview(f *factory.Factory, enablement *string) (*config.Config, error) {
-	if *enablement == "" {
-		// Flag not present no action needed.
-		return nil, nil
-	}
-
 	logger, err := f.Logger()
 	if err != nil {
 		logger.Info("Cannot enable dev preview. ", err)
 		return nil, err
 	}
+
+	if *enablement == "" {
+		logger.Info("Skip")
+		// Flag not present no action needed.
+		return nil, nil
+	}
+
 	config, err := f.Config.Load()
 	if err != nil {
 		logger.Info("Cannot enable dev preview.", err)
@@ -59,6 +61,10 @@ func EnableDevPreview(f *factory.Factory, enablement *string) (*config.Config, e
 		logger.Info("Cannot enable dev preview. ", err)
 		return nil, err
 	}
-	logger.Info("Successfully changed visibility of devpreview commands")
+	if config.DevPreviewEnabled {
+		logger.Info("Developer Preview commands activated. Use help command to view them.")
+	} else {
+		logger.Info("Developer Preview commands deactivated.")
+	}
 	return config, err
 }
