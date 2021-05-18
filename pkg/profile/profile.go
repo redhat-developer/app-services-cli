@@ -11,7 +11,7 @@ import (
 
 // Visual element displayed in help
 func DevPreviewLabel() string {
-	return color.Bold(" [Preview] ")
+	return color.Info("[Preview] ")
 }
 
 // Annotation used in templates and tools like documentation generation
