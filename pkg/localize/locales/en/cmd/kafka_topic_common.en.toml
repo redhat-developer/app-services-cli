@@ -8,9 +8,6 @@ one = 'Format in which to display the Kafka topics. Choose from: "json", "yml", 
 description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'
 
-[kafka.topic.common.flag.replicas.description]
-one = 'The replication factor for the topic'
-
 [kafka.topic.common.input.retentionMs.description]
 description = 'Description for the Retention period input'
 one = 'The period of time in milliseconds the broker will retain a partition log before deleting it'
