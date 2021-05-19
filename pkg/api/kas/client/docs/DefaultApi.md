@@ -4,21 +4,21 @@ All URIs are relative to *https://api.openshift.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateKafka**](DefaultApi.md#CreateKafka) | **Post** /api/managed-services-api/v1/kafkas | Create a new kafka Request
-[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Post** /api/managed-services-api/v1/serviceaccounts | Create a service account
-[**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/managed-services-api/v1/kafkas/{id} | Delete a kafka request by id
-[**DeleteServiceAccount**](DefaultApi.md#DeleteServiceAccount) | **Delete** /api/managed-services-api/v1/serviceaccounts/{id} | Delete service account
-[**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/managed-services-api/v1/kafkas/{id} | Get a kafka request by id
-[**GetMetricsByInstantQuery**](DefaultApi.md#GetMetricsByInstantQuery) | **Get** /api/managed-services-api/v1/kafkas/{id}/metrics/query | Get metrics with instant query by kafka id.
-[**GetMetricsByRangeQuery**](DefaultApi.md#GetMetricsByRangeQuery) | **Get** /api/managed-services-api/v1/kafkas/{id}/metrics/query_range | Get metrics with timeseries range query by kafka id.
-[**GetServiceAccountById**](DefaultApi.md#GetServiceAccountById) | **Get** /api/managed-services-api/v1/serviceaccounts/{id} | get service account by id
-[**ListCloudProviderRegions**](DefaultApi.md#ListCloudProviderRegions) | **Get** /api/managed-services-api/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
-[**ListCloudProviders**](DefaultApi.md#ListCloudProviders) | **Get** /api/managed-services-api/v1/cloud_providers | Retrieves the list of supported cloud providers.
-[**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/managed-services-api/v1/kafkas | Returns a list of Kafka requests
-[**ListServiceAccounts**](DefaultApi.md#ListServiceAccounts) | **Get** /api/managed-services-api/v1/serviceaccounts | List service accounts
-[**ResetServiceAccountCreds**](DefaultApi.md#ResetServiceAccountCreds) | **Post** /api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials | reset credentials for the service account
-[**ServiceStatus**](DefaultApi.md#ServiceStatus) | **Get** /api/managed-services-api/v1/status | Retrieves the status of resources e.g whether we have reached maximum service capacity
-[**VersionMetadata**](DefaultApi.md#VersionMetadata) | **Get** /api/managed-services-api/v1 | Retrieves the version metadata
+[**CreateKafka**](DefaultApi.md#CreateKafka) | **Post** /api/kafkas_mgmt/v1/kafkas | Create a new kafka Request
+[**CreateServiceAccount**](DefaultApi.md#CreateServiceAccount) | **Post** /api/kafkas_mgmt/v1/serviceaccounts | Create a service account
+[**DeleteKafkaById**](DefaultApi.md#DeleteKafkaById) | **Delete** /api/kafkas_mgmt/v1/kafkas/{id} | Delete a kafka request by id
+[**DeleteServiceAccount**](DefaultApi.md#DeleteServiceAccount) | **Delete** /api/kafkas_mgmt/v1/serviceaccounts/{id} | Delete service account
+[**GetKafkaById**](DefaultApi.md#GetKafkaById) | **Get** /api/kafkas_mgmt/v1/kafkas/{id} | Get a kafka request by id
+[**GetMetricsByInstantQuery**](DefaultApi.md#GetMetricsByInstantQuery) | **Get** /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query | Get metrics with instant query by kafka id.
+[**GetMetricsByRangeQuery**](DefaultApi.md#GetMetricsByRangeQuery) | **Get** /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query_range | Get metrics with timeseries range query by kafka id.
+[**GetServiceAccountById**](DefaultApi.md#GetServiceAccountById) | **Get** /api/kafkas_mgmt/v1/serviceaccounts/{id} | get service account by id
+[**ListCloudProviderRegions**](DefaultApi.md#ListCloudProviderRegions) | **Get** /api/kafkas_mgmt/v1/cloud_providers/{id}/regions | Retrieves the list of supported regions of the supported cloud provider.
+[**ListCloudProviders**](DefaultApi.md#ListCloudProviders) | **Get** /api/kafkas_mgmt/v1/cloud_providers | Retrieves the list of supported cloud providers.
+[**ListKafkas**](DefaultApi.md#ListKafkas) | **Get** /api/kafkas_mgmt/v1/kafkas | Returns a list of Kafka requests
+[**ListServiceAccounts**](DefaultApi.md#ListServiceAccounts) | **Get** /api/kafkas_mgmt/v1/serviceaccounts | List service accounts
+[**ResetServiceAccountCreds**](DefaultApi.md#ResetServiceAccountCreds) | **Post** /api/kafkas_mgmt/v1/serviceaccounts/{id}/reset-credentials | reset credentials for the service account
+[**ServiceStatus**](DefaultApi.md#ServiceStatus) | **Get** /api/kafkas_mgmt/v1/status | Retrieves the status of resources e.g whether we have reached maximum service capacity
+[**VersionMetadata**](DefaultApi.md#VersionMetadata) | **Get** /api/kafkas_mgmt/v1 | Retrieves the version metadata
 
 
 

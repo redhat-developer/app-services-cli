@@ -2,7 +2,7 @@ openapi: 3.0.0 # need this as first line to allow some IDEs to know this is an o
 # All endpoints defined here will be discoverable by all users. If there is a need to keep some endpoints "private", add them to the "managed-services-api-private.yaml" file
 info:
   title: Kafka Service Fleet Manager
-  version: 0.0.1
+  version: 1.0.0
   description: Kafka Service Fleet Manager is a Rest API to manage kafka instances and connectors.
 servers:
   - url: https://api.openshift.com
@@ -14,7 +14,7 @@ servers:
   - url: /
     description: current domain
 paths:
-  /api/managed-services-api/v1:
+  /api/kafkas_mgmt/v1:
     get:
       operationId: versionMetadata
       responses:
@@ -22,10 +22,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VersionMetadata"
+                $ref: '#/components/schemas/VersionMetadata'
           description: Version metadata
       summary: Retrieves the version metadata
-  /api/managed-services-api/v1/status:
+  /api/kafkas_mgmt/v1/status:
     get:
       operationId: serviceStatus
       responses:
@@ -33,21 +33,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceStatus"
+                $ref: '#/components/schemas/ServiceStatus'
           description: Ok
         "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'  
       summary: Retrieves the status of resources e.g whether we have reached maximum service capacity
       security:
-        - Bearer: []
-  /api/managed-services-api/v1/kafkas/{id}:
+        - Bearer: []    
+  /api/kafkas_mgmt/v1/kafkas/{id}:
     get:
       operationId: getKafkaById
       responses:
@@ -55,48 +55,48 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/KafkaRequest"
+                $ref: '#/components/schemas/KafkaRequest'
               examples:
                 KafkaRequestGetResponseExample:
-                  $ref: "#/components/examples/KafkaRequestExample"
+                  $ref: '#/components/examples/KafkaRequestExample'
                 KafkaRequestGetResponseWithFailedCreationStatusExample:
-                  $ref: "#/components/examples/KafkaRequestFailedCreationStatusExample"
+                  $ref: '#/components/examples/KafkaRequestFailedCreationStatusExample'
           description: Kafka request found by id
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: Auth token is invalid
         "403":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 403Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: User not authorized to access the service.
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 404Example:
-                  $ref: "#/components/examples/404Example"
+                  $ref: '#/components/examples/404Example'
           description: No kafka request with specified id exists
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
           description: Unexpected error occurred
       security:
         - Bearer: []
@@ -115,7 +115,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               example:
               #No Content
           description: Deleted
@@ -123,53 +123,53 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 400DeletionExample:
-                  $ref: "#/components/examples/400DeletionExample"
+                  $ref: '#/components/examples/400DeletionExample'
           description: Validation errors occurred
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: Auth token is invalid
         "403":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 403Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: User not authorized to access the service.
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 404DeleteExample:
-                  $ref: "#/components/examples/404DeleteExample"
+                  $ref: '#/components/examples/404DeleteExample'
           description: No kafka request with specified id exists
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500DeleteExample:
-                  $ref: "#/components/examples/500DeleteExample"
+                  $ref: '#/components/examples/500DeleteExample'
           description: Unexpected error occurred
       summary: Delete a kafka request by id
       security:
         - Bearer: []
     parameters:
       - $ref: "#/components/parameters/id"
-  /api/managed-services-api/v1/kafkas:
+  /api/kafkas_mgmt/v1/kafkas:
     post:
       operationId: createKafka
       parameters:
@@ -184,78 +184,78 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/KafkaRequestPayload"
+              $ref: '#/components/schemas/KafkaRequestPayload'
             examples:
               USRegion:
-                $ref: "#/components/examples/USRegionExample"
+                $ref: '#/components/examples/USRegionExample'
               EURegion:
-                $ref: "#/components/examples/EURegionExample"
+                $ref: '#/components/examples/EURegionExample'
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/KafkaRequest"
+                $ref: '#/components/schemas/KafkaRequest'
               examples:
                 KafkaRequestPostResponseExample:
-                  $ref: "#/components/examples/KafkaRequestExample"
+                  $ref: '#/components/examples/KafkaRequestExample'
           description: Accepted
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 400CreationExample:
-                  $ref: "#/components/examples/400CreationExample"
+                  $ref: '#/components/examples/400CreationExample'
           description: Validation errors occurred
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: Auth token is invalid
         "403":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 403Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
                 403MaxAllowedInstanceReachedExample:
-                  $ref: "#/components/examples/403MaxAllowedInstanceReachedExample"
+                  $ref: '#/components/examples/403MaxAllowedInstanceReachedExample'
           description: User forbidden either because the user is not authorized to access the service or because the maximum number of instances that can be created by this user has been reached.
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 404Example:
-                  $ref: "#/components/examples/404Example"
+                  $ref: '#/components/examples/404Example'
           description: The requested resource doesn't exist
         "409":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 409NameConflictExample:
-                  $ref: "#/components/examples/409NameConflictExample"
+                  $ref: '#/components/examples/409NameConflictExample'
           description: A conflict has been detected in the creation of this resource
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
           description: An unexpected error occurred creating the Kafka Request
       security:
         - Bearer: []
@@ -271,152 +271,152 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/KafkaRequestList"
+                $ref: '#/components/schemas/KafkaRequestList'
         "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 InvalidQueryExample:
-                  $ref: "#/components/examples/400InvalidQueryExample"
+                  $ref: '#/components/examples/400InvalidQueryExample'
         "401":
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
         "403":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 403Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: User not authorized to access the service.
         "500":
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
       parameters:
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/orderBy"
-        - $ref: "#/components/parameters/search"
-  /api/managed-services-api/v1/cloud_providers:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/search'
+  /api/kafkas_mgmt/v1/cloud_providers:
     get:
       summary: Retrieves the list of supported cloud providers.
       operationId: listCloudProviders
       security:
         - Bearer: []
       responses:
-        "200":
+        '200':
           description: Retrieved list of supported cloud providers
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CloudProviderList"
-        "401":
+                $ref: '#/components/schemas/CloudProviderList'
+        '401':
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
-        "500":
+                  $ref: '#/components/examples/401Example'
+        '500':
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
       parameters:
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/size"
-  /api/managed-services-api/v1/cloud_providers/{id}/regions:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+  /api/kafkas_mgmt/v1/cloud_providers/{id}/regions:
     get:
       summary: Retrieves the list of supported regions of the supported cloud provider.
       operationId: listCloudProviderRegions
       security:
         - Bearer: []
       responses:
-        "200":
+        '200':
           description: Retrieved list of supported cloud providers regions
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CloudRegionList"
-        "401":
+                $ref: '#/components/schemas/CloudRegionList'
+        '401':
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
-        "500":
+                  $ref: '#/components/examples/401Example'
+        '500':
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/size"
-  /api/managed-services-api/v1/serviceaccounts:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+  /api/kafkas_mgmt/v1/serviceaccounts:
     get:
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceAccountList"
+                $ref: '#/components/schemas/ServiceAccountList'
           description: List of service accounts
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: Auth token is invalid
-        "403":
+        '403':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 403Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: User not authorized to access the service
-        "500":
+        '500':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
           description: Unexpected error occurred
       security:
         - Bearer: []
@@ -428,65 +428,65 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ServiceAccountRequest"
+              $ref: '#/components/schemas/ServiceAccountRequest'
             examples:
               sa:
-                $ref: "#/components/examples/ServiceAccountRequestExample"
+                $ref: '#/components/examples/ServiceAccountRequestExample'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceAccount"
+                $ref: '#/components/schemas/ServiceAccount'
               examples:
                 serviceaccount:
-                  $ref: "#/components/examples/ServiceAccountExample"
+                  $ref: '#/components/examples/ServiceAccountExample'
           description: service account created
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: Auth token is invalid
-        "403":
+        '403':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 403Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: list of service account
-        "500":
+        '500':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
           description: Unexpected error occurred
       security:
         - Bearer: []
       operationId: createServiceAccount
       summary: Create a service account
-  "/api/managed-services-api/v1/serviceaccounts/{id}":
+  '/api/kafkas_mgmt/v1/serviceaccounts/{id}':
     get:
       parameters:
         - $ref: "#/components/parameters/id"
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceAccount"
+                $ref: '#/components/schemas/ServiceAccount'
               examples:
                 sa:
-                  $ref: "#/components/examples/ServiceAccountByIdExample"
+                  $ref: '#/components/examples/ServiceAccountByIdExample'
           description: get service account by id
       security:
         - Bearer: []
@@ -498,81 +498,81 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
       responses:
-        "204":
+        '204':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: deleted
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: auth token is invalid
-        "403":
+        '403':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: User not authorized to access the service
-        "500":
+        '500':
           content:
             application/json:
               schema: {}
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
           description: Unexpected error occurred
       security:
         - Bearer: []
       operationId: deleteServiceAccount
       summary: Delete service account
-  "/api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials":
+  '/api/kafkas_mgmt/v1/serviceaccounts/{id}/reset-credentials':
     post:
       parameters:
         - $ref: "#/components/parameters/id"
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceAccount"
+                $ref: '#/components/schemas/ServiceAccount'
               examples:
                 sa-reset:
-                  $ref: "#/components/examples/ServiceAccountExample"
+                  $ref: '#/components/examples/ServiceAccountExample'
           description: reset credentials
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
+                  $ref: '#/components/examples/401Example'
           description: auth token is invalid
-        "403":
+        '403':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/403Example"
+                  $ref: '#/components/examples/403Example'
           description: User not authorized to access the service
-        "500":
+        '500':
           content:
             application/json:
               schema: {}
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
           description: Unexpected error occurred
       security:
         - Bearer: []
@@ -581,76 +581,77 @@ paths:
   #
   # These are the user-facing related endpoints
   #
-  /api/managed-services-api/v1/kafkas/{id}/metrics/query_range:
+  /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query_range:
     get:
       summary: Get metrics with timeseries range query by kafka id.
       operationId: GetMetricsByRangeQuery
       security:
         - Bearer: []
       responses:
-        "200":
+        '200':
           description: A JSON array of prometheus metrics objects from observatorium
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MetricsRangeQueryList"
-        "401":
+                $ref: '#/components/schemas/MetricsRangeQueryList'
+        '401':
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
-        "500":
+                  $ref: '#/components/examples/401Example'
+        '500':
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/duration"
         - $ref: "#/components/parameters/interval"
         - $ref: "#/components/parameters/filters"
-  /api/managed-services-api/v1/kafkas/{id}/metrics/query:
+  /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query:
     get:
       summary: Get metrics with instant query by kafka id.
       operationId: GetMetricsByInstantQuery
       security:
         - Bearer: []
       responses:
-        "200":
+        '200':
           description: A JSON array of prometheus metrics objects from observatorium
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MetricsInstantQueryList"
-        "401":
+                $ref: '#/components/schemas/MetricsInstantQueryList'
+        '401':
           description: Auth token is invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 401Example:
-                  $ref: "#/components/examples/401Example"
-        "500":
+                  $ref: '#/components/examples/401Example'
+        '500':
           description: Unexpected error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               examples:
                 500Example:
-                  $ref: "#/components/examples/500Example"
+                  $ref: '#/components/examples/500Example'
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/filters"
+
 
 components:
   schemas:
@@ -741,7 +742,7 @@ components:
             size: "1"
             total: "1"
             item:
-              $ref: "#/components/examples/KafkaRequestExample"
+              $ref: '#/components/examples/KafkaRequestExample'
           properties:
             items:
               type: array
@@ -755,11 +756,11 @@ components:
           example:
             kind: "APIVersion"
             id: "v1"
-            href: "/api/managed-services-api/v1"
+            href: "/api/kafkas_mgmt/v1"
             collections:
               - id: "kafkas"
-                href: "/api/managed-services-api/v1/kafkas"
-                kind: "KafkaList"
+                href: "/api/kafkas_mgmt/v1/kafkas"
+                kind: "KafkaList" 
           properties:
             collections:
               type: array
@@ -776,10 +777,10 @@ components:
         kafkas:
           description: The kafka resource api status
           type: object
-          required:
+          required: 
             - max_capacity_reached
-          properties:
-            max_capacity_reached:
+          properties: 
+            max_capacity_reached: 
               description: Indicates whether we have reached kafka maximum capacity
               type: boolean
     KafkaRequestPayload:
@@ -795,7 +796,7 @@ components:
           description: Set this to true to configure the Kafka cluster to be multiAZ
           type: boolean
         name:
-          description: "The name of the Kafka cluster. It must consist of lower-case alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character, and can not be longer than 32 characters."
+          description: 'The name of the Kafka cluster. It must consist of lower-case alphanumeric characters or ''-'', start with an alphabetic character, and end with an alphanumeric character, and can not be longer than 32 characters.'
           type: string
         region:
           description: The region where the Kafka cluster will be created in
@@ -810,7 +811,7 @@ components:
             size: "1"
             total: "1"
             item:
-              $ref: "#/components/examples/CloudProviderExample"
+              $ref: '#/components/examples/CloudProviderExample'
           properties:
             items:
               type: array
@@ -827,7 +828,7 @@ components:
             size: "1"
             total: "1"
             item:
-              $ref: "#/components/examples/CloudRegionExample"
+              $ref: '#/components/examples/CloudRegionExample'
           properties:
             items:
               type: array
@@ -835,57 +836,57 @@ components:
                 allOf:
                   - $ref: "#/components/schemas/CloudRegion"
     CloudProvider:
-      description: "Cloud provider."
+      description: 'Cloud provider.'
       properties:
         kind:
-          description: "Indicates the type of this object. Will be 'CloudProvider' link."
+          description: 'Indicates the type of this object. Will be ''CloudProvider'' link.'
           type: string
         id:
-          description: "Unique identifier of the object."
+          description: 'Unique identifier of the object.'
           type: string
         display_name:
-          description: "Name of the cloud provider for display purposes."
+          description: 'Name of the cloud provider for display purposes.'
           type: string
         name:
-          description: "Human friendly identifier of the cloud provider, for example `aws`."
+          description: 'Human friendly identifier of the cloud provider, for example `aws`.'
           type: string
         enabled:
-          description: "Whether the cloud provider is enabled for deploying an OSD cluster."
+          description: 'Whether the cloud provider is enabled for deploying an OSD cluster.'
           type: boolean
       required:
         - enabled
     CloudRegion:
-      description: "Description of a region of a cloud provider."
+      description: 'Description of a region of a cloud provider.'
       properties:
         kind:
-          description: "Indicates the type of this object. Will be 'CloudRegion'."
+          description: 'Indicates the type of this object. Will be ''CloudRegion''.'
           type: string
         id:
-          description: "Unique identifier of the object."
+          description: 'Unique identifier of the object.'
           type: string
         display_name:
-          description: "Name of the region for display purposes, for example `N. Virginia`."
+          description: 'Name of the region for display purposes, for example `N. Virginia`.'
           type: string
         enabled:
-          description: "Whether the region is enabled for deploying an OSD cluster."
+          description: 'Whether the region is enabled for deploying an OSD cluster.'
           type: boolean
           default: false
       required:
         - enabled
     ServiceAccount:
-      description: "Service Account created in MAS-SSO for the Kafka Cluster for authentication"
+      description: 'Service Account created in MAS-SSO for the Kafka Cluster for authentication'
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
         - type: object
           properties:
             id:
-              description: "server generated unique id of the service account"
+              description: 'server generated unique id of the service account'
               type: string
             name:
-              description: ""
+              description: ''
               type: string
             description:
-              description: ""
+              description: ''
               type: string
             clientID:
               type: string
@@ -899,51 +900,51 @@ components:
           example:
             $ref: "#/components/examples/ServiceAccountExample"
     ServiceAccountRequest:
-      description: "Schema for the request to create a service account"
+      description: 'Schema for the request to create a service account'
       required:
         - name
       type: object
       properties:
         name:
-          description: "The name of the service account"
+          description: 'The name of the service account'
           type: string
         description:
-          description: "A description for the service account"
+          description: 'A description for the service account'
           type: string
       example:
         $ref: "#/components/examples/ServiceAccountRequestExample"
     ServiceAccountListItem:
-      description: ""
+      description: ''
       allOf:
         - $ref: "#/components/schemas/ObjectReference"
         - type: object
           properties:
             id:
-              description: "server generated unique id of the service account"
+              description: 'server generated unique id of the service account'
               type: string
             clientID:
-              description: "client id of the service account"
+              description: 'client id of the service account'
               type: string
             name:
-              description: "name of the service account"
+              description: 'name of the service account'
               type: string
             owner:
-              description: "owner of the service account"
+              description: 'owner of the service account'
               type: string
             created_at:
               format: date-time
-              description: "service account creation timestamp"
+              description: 'service account creation timestamp'
               type: string
             description:
               type: string
-              description: "description of the service account"
+              description: 'description of the service account'
     ServiceAccountList:
       allOf:
         - type: object
           example:
             kind: "ServiceAccountList"
             items:
-              - $ref: "#/components/examples/ServiceAccountListItemExample"
+              - $ref: '#/components/examples/ServiceAccountListItemExample'
           properties:
             kind:
               type: string
@@ -952,6 +953,9 @@ components:
               items:
                 allOf:
                   - $ref: "#/components/schemas/ServiceAccountListItem"
+          required:
+            - kind
+            - items
     # user-facing metrics related #
     MetricsRangeQueryList:
       allOf:
@@ -960,7 +964,7 @@ components:
             kind: "MetricsRangeQueryList"
             id: "1nbpS70HduPe4l0to8jSg2CLzfu"
             items:
-              $ref: "#/components/examples/MetricsRangeQueryExample"
+              $ref: '#/components/examples/MetricsRangeQueryExample'
           properties:
             kind:
               type: string
@@ -981,7 +985,7 @@ components:
         values:
           type: array
           items:
-            $ref: "#/components/schemas/values"
+            $ref: '#/components/schemas/values'
     values:
       type: object
       properties:
@@ -1000,7 +1004,7 @@ components:
             kind: "MetricsInstantQueryList"
             id: "1nbpS70HduPe4l0to8jSg2CLzfu"
             items:
-              $ref: "#/components/examples/MetricsInstantQueryExample"
+              $ref: '#/components/examples/MetricsInstantQueryExample'
           properties:
             kind:
               type: string
@@ -1027,6 +1031,7 @@ components:
       required:
         - Value
 
+
   parameters:
     id:
       name: id
@@ -1038,7 +1043,7 @@ components:
     duration:
       name: duration
       in: query
-      description: The length of time in minutes over which to return the metrics.
+      description:  The length of time in minutes over which to return the metrics.
       required: true
       schema:
         type: integer
@@ -1177,12 +1182,12 @@ components:
       value:
         id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
         kind: "kafka"
-        href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
+        href: "/api/kafkas_mgmt/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
         status: "ready"
         cloud_provider: "aws"
         multi_az: true
         region: "us-east-1"
-        owner: "api_kafka_service"
+        owner:  "api_kafka_service"
         name: "serviceapi"
         bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
         created_at: "2020-10-05T12:51:24.053142Z"
@@ -1192,12 +1197,12 @@ components:
       value:
         id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
         kind: "kafka"
-        href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
+        href: "/api/kafkas_mgmt/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg"
         status: "failed"
         cloud_provider: "aws"
         multi_az: true
         region: "us-east-1"
-        owner: "api_kafka_service"
+        owner:  "api_kafka_service"
         name: "serviceapi"
         bootstrapServerHost: "serviceapi-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
         created_at: "2020-10-05T12:51:24.053142Z"
@@ -1224,7 +1229,7 @@ components:
       value:
         id: "1"
         kind: "ServiceAccount"
-        href: "/api/managed-services-api/v1/serviceaccounts/1"
+        href: "/api/kafkas_mgmt/v1/serviceaccounts/1"
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
@@ -1235,7 +1240,7 @@ components:
       value:
         id: "1"
         kind: "ServiceAccount"
-        href: "/api/managed-services-api/v1/serviceaccounts/1"
+        href: "/api/kafkas_mgmt/v1/serviceaccounts/1"
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
@@ -1245,7 +1250,7 @@ components:
       value:
         id: "1"
         kind: "ServiceAccountListItem"
-        href: "/api/managed-services-api/v1/serviceaccounts/1"
+        href: "/api/kafkas_mgmt/v1/serviceaccounts/1"
         name: "my-app-sa"
         description: "service account for my app"
         clientID: "SA-121212"
@@ -1276,89 +1281,88 @@ components:
       value:
         id: "103"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/103"
-        code: "MGD-SERV-API-103"
+        href: "/api/kafkas_mgmt/v1/errors/103"
+        code: "KAFKAS-MGMT-103"
         reason: "Synchronous action is not supported, use async=true parameter"
         operation_id: "1iWIimqGcrDuL61aUxIZqBTqNRa"
     400CreationExample:
       value:
         id: "103"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/103"
-        code: "MGD-SERV-API-103"
+        href: "/api/kafkas_mgmt/v1/errors/103"
+        code: "KAFKAS-MGMT-103"
         reason: "Synchronous action is not supported, use async=true parameter"
         operation_id: "1iWIimqGcrDuL61aUxIZqBTqNRa"
     400InvalidQueryExample:
       value:
         id: "203"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/23"
-        code: "MGD-SERV-API-23"
-        reason: "Failed to parse search query: Unable to list kafka requests for api_kafka_service: MGD-SERV-API-23: Failed to parse search query: Unsupported column name for search: 'id'. Supported column names are: region, name, cloud_provider, name, status. Query invalid: id = 123"
+        href: "/api/kafkas_mgmt/v1/errors/23"
+        code: "KAFKAS-MGMT-23"
+        reason: "Failed to parse search query: Unable to list kafka requests for api_kafka_service: KAFKAS-MGMT-23: Failed to parse search query: Unsupported column name for search: 'id'. Supported column names are: region, name, cloud_provider, name, status. Query invalid: id = 123"
         operation_id: "1lWDGuybIrEnxrAem724gqkkiDv"
     404Example:
       value:
         id: "404"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/7"
-        code: "MGD-SERV-API-7"
+        href: "/api/kafkas_mgmt/v1/errors/7"
+        code: "KAFKAS-MGMT-7"
         reason: "The requested resource doesn't exist"
     404DeleteExample:
       value:
         id: "7"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/7"
-        code: "MGD-SERV-API-7"
+        href: "/api/kafkas_mgmt/v1/errors/7"
+        code: "KAFKAS-MGMT-7"
         reason: "KafkaResource with id='1iK3duVYIvv5YvLlyz1mGR3JyqN' not found"
         operation_id: "1iYO7g2g6HTdUKUa2ksH82kQD3y"
     401Example:
       value:
         id: "11"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/11"
-        code: "MGD-SERV-API-11"
+        href: "/api/kafkas_mgmt/v1/errors/11"
+        code: "KAFKAS-MGMT-11"
         reason: "Unable to verify JWT token: Required authorization token not found"
         operation_id: "1iY3UhEhwmXBpWPfI2lNekpd4ZD"
     403Example:
       value:
         id: "4"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/4"
-        code: "MGD-SERV-API-4"
+        href: "/api/kafkas_mgmt/v1/errors/4"
+        code: "KAFKAS-MGMT-4"
         reason: "User 'foo-bar' is not authorized to access the service."
         operation_id: "1lY3UiEhznXBpWPfI2lNejpd4YC"
     403MaxAllowedInstanceReachedExample:
       value:
         id: "5"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/5"
-        code: "MGD-SERV-API-5"
+        href: "/api/kafkas_mgmt/v1/errors/5"
+        code: "KAFKAS-MGMT-5"
         reason: "User 'foo-bar' has reached a maximum number of 6 allowed instances."
         operation_id: "1lY3UiEkxnXBpVPeI2oNejd3XB"
     409NameConflictExample:
       value:
         id: "36"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/36"
-        code: "MGD-SERV-API-36"
+        href: "/api/kafkas_mgmt/v1/errors/36"
+        code: "KAFKAS-MGMT-36"
         reason: "Kafka cluster name is already used"
         operation_id: "6kY0UiEkzkXCzWPeI2oYehd3ED"
     500Example:
       value:
         id: "9"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/9"
-        code: "MGD-SERV-API-9"
+        href: "/api/kafkas_mgmt/v1/errors/9"
+        code: "KAFKAS-MGMT-9"
         reason: "Unspecified error"
         operation_id: "1ieELvF9jMQY6YghfM9gGRsHvEW"
     500DeleteExample:
       value:
         id: "9"
         kind: "Error"
-        href: "/api/managed-services-api/v1/errors/9"
-        code: "MGD-SERV-API-9"
-        reason:
-          "error deleting syncset: OCM-EX-9: failed to delete syncset: ext-serviceapi-1ix03lndlmq0qfc7sita5sljv8e
+        href: "/api/kafkas_mgmt/v1/errors/9"
+        code: "KAFKAS-MGMT-9"
+        reason: "error deleting syncset: OCM-EX-9: failed to delete syncset: ext-serviceapi-1ix03lndlmq0qfc7sita5sljv8e
           for cluster id: 1g5d88q0lrcdv4g7alb7slfgnj3dhbsj%!(EXTRA *errors.Error=identifier
           is '404', code is 'CLUSTERS-MGMT-404' and operation identifier is '1g5or50viu07oealuehrkc26dgftj1ac':
           Cluster '1g5d88q0lrcdv4g7alb7slfgnj3dhbsj' not found)"

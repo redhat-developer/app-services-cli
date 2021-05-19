@@ -3,13 +3,14 @@ package kas
 import (
 	"errors"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+
+	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 )
 
 type ServiceErrorCode int
 
 const (
-	ErrCodePrefix = "MGD-SERV-API"
+	ErrCodePrefix = "KAFKAS-MGMT"
 
 	// Forbidden occurs when a user is not allowed to access the service
 	ErrorForbidden ServiceErrorCode = 4

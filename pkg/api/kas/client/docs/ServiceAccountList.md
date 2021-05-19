@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Kind** | Pointer to **string** |  | [optional] 
-**Items** | Pointer to [**[]ServiceAccountListItem**](ServiceAccountListItem.md) |  | [optional] 
+**Kind** | **string** |  | 
+**Items** | [**[]ServiceAccountListItem**](ServiceAccountListItem.md) |  | 
 
 ## Methods
 
 ### NewServiceAccountList
 
-`func NewServiceAccountList() *ServiceAccountList`
+`func NewServiceAccountList(kind string, items []ServiceAccountListItem, ) *ServiceAccountList`
 
 NewServiceAccountList instantiates a new ServiceAccountList object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetKind sets Kind field to given value.
 
-### HasKind
-
-`func (o *ServiceAccountList) HasKind() bool`
-
-HasKind returns a boolean if a field has been set.
 
 ### GetItems
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetItems sets Items field to given value.
 
-### HasItems
-
-`func (o *ServiceAccountList) HasItems() bool`
-
-HasItems returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

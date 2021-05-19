@@ -13,7 +13,7 @@ module.exports = {
     res.status(202).json({
       id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
       kind: "kafka",
-      href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
+      href: "/api/kafkas_mgmt/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
       status: "complete",
       cloud_provider: "aws",
       multi_az: false,
@@ -31,7 +31,7 @@ module.exports = {
     res.status(204).json({
       id: "1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
       kind: "kafka",
-      href: "/api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
+      href: "/api/kafkas_mgmt/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg",
       status: "complete",
       cloud_provider: "aws",
       multi_az: false,
@@ -49,7 +49,7 @@ module.exports = {
     res.status(200).json({
       "id": "1qCXzgiGqva0D5bXIB0Gn9g23Ni",
       "kind": "Kafka",
-      "href": "/api/managed-services-api/v1/kafkas/1qCXzgiGqva0D5bXIB0Gn9g23Ni",
+      "href": "/api/kafkas_mgmt/v1/kafkas/1qCXzgiGqva0D5bXIB0Gn9g23Ni",
       "status": "ready",
       "cloud_provider": "aws",
       "multi_az": true,
@@ -72,7 +72,7 @@ module.exports = {
         {
           "id": "1qCXzgiGqva0D5bXIB0Gn9g23Ni",
           "kind": "Kafka",
-          "href": "/api/managed-services-api/v1/kafkas/1qCXzgiGqva0D5bXIB0Gn9g23Ni",
+          "href": "/api/kafkas_mgmt/v1/kafkas/1qCXzgiGqva0D5bXIB0Gn9g23Ni",
           "status": "ready",
           "cloud_provider": "aws",
           "multi_az": true,
@@ -86,7 +86,7 @@ module.exports = {
         {
           "id": "1qA44seeSR71w5WgnGx3Lc0GGpY",
           "kind": "Kafka",
-          "href": "/api/managed-services-api/v1/kafkas/1qA44seeSR71w5WgnGx3Lc0GGpY",
+          "href": "/api/kafkas_mgmt/v1/kafkas/1qA44seeSR71w5WgnGx3Lc0GGpY",
           "status": "ready",
           "cloud_provider": "aws",
           "multi_az": true,
