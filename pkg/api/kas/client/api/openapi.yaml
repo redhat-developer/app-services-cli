@@ -3,7 +3,7 @@ info:
   description: Kafka Service Fleet Manager is a Rest API to manage kafka instances
     and connectors.
   title: Kafka Service Fleet Manager
-  version: 0.0.1
+  version: 1.0.0
 servers:
 - description: Main (production) server
   url: https://api.openshift.com
@@ -14,7 +14,7 @@ servers:
 - description: current domain
   url: /
 paths:
-  /api/managed-services-api/v1:
+  /api/kafkas_mgmt/v1:
     get:
       operationId: versionMetadata
       responses:
@@ -25,7 +25,7 @@ paths:
                 $ref: '#/components/schemas/VersionMetadata'
           description: Version metadata
       summary: Retrieves the version metadata
-  /api/managed-services-api/v1/status:
+  /api/kafkas_mgmt/v1/status:
     get:
       operationId: serviceStatus
       responses:
@@ -48,7 +48,7 @@ paths:
       - Bearer: []
       summary: Retrieves the status of resources e.g whether we have reached maximum
         service capacity
-  /api/managed-services-api/v1/kafkas/{id}:
+  /api/kafkas_mgmt/v1/kafkas/{id}:
     delete:
       operationId: deleteKafkaById
       parameters:
@@ -185,7 +185,7 @@ paths:
       security:
       - Bearer: []
       summary: Get a kafka request by id
-  /api/managed-services-api/v1/kafkas:
+  /api/kafkas_mgmt/v1/kafkas:
     get:
       operationId: listKafkas
       parameters:
@@ -414,7 +414,7 @@ paths:
       security:
       - Bearer: []
       summary: Create a new kafka Request
-  /api/managed-services-api/v1/cloud_providers:
+  /api/kafkas_mgmt/v1/cloud_providers:
     get:
       operationId: listCloudProviders
       parameters:
@@ -468,7 +468,7 @@ paths:
       security:
       - Bearer: []
       summary: Retrieves the list of supported cloud providers.
-  /api/managed-services-api/v1/cloud_providers/{id}/regions:
+  /api/kafkas_mgmt/v1/cloud_providers/{id}/regions:
     get:
       operationId: listCloudProviderRegions
       parameters:
@@ -530,7 +530,7 @@ paths:
       security:
       - Bearer: []
       summary: Retrieves the list of supported regions of the supported cloud provider.
-  /api/managed-services-api/v1/serviceaccounts:
+  /api/kafkas_mgmt/v1/serviceaccounts:
     get:
       operationId: listServiceAccounts
       responses:
@@ -622,7 +622,7 @@ paths:
       security:
       - Bearer: []
       summary: Create a service account
-  /api/managed-services-api/v1/serviceaccounts/{id}:
+  /api/kafkas_mgmt/v1/serviceaccounts/{id}:
     delete:
       operationId: deleteServiceAccount
       parameters:
@@ -696,7 +696,7 @@ paths:
       - Bearer: []
       summary: get service account by id
     summary: Get service account by id
-  /api/managed-services-api/v1/serviceaccounts/{id}/reset-credentials:
+  /api/kafkas_mgmt/v1/serviceaccounts/{id}/reset-credentials:
     post:
       operationId: resetServiceAccountCreds
       parameters:
@@ -747,7 +747,7 @@ paths:
       security:
       - Bearer: []
       summary: reset credentials for the service account
-  /api/managed-services-api/v1/kafkas/{id}/metrics/query_range:
+  /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query_range:
     get:
       operationId: GetMetricsByRangeQuery
       parameters:
@@ -829,7 +829,7 @@ paths:
       security:
       - Bearer: []
       summary: Get metrics with timeseries range query by kafka id.
-  /api/managed-services-api/v1/kafkas/{id}/metrics/query:
+  /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query:
     get:
       operationId: GetMetricsByInstantQuery
       parameters:
@@ -897,7 +897,7 @@ components:
       value:
         id: 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
         kind: kafka
-        href: /api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+        href: /api/kafkas_mgmt/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
         status: ready
         cloud_provider: aws
         multi_az: true
@@ -912,7 +912,7 @@ components:
       value:
         id: 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
         kind: kafka
-        href: /api/managed-services-api/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+        href: /api/kafkas_mgmt/v1/kafkas/1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
         status: failed
         cloud_provider: aws
         multi_az: true
@@ -944,7 +944,7 @@ components:
       value:
         id: "1"
         kind: ServiceAccount
-        href: /api/managed-services-api/v1/serviceaccounts/1
+        href: /api/kafkas_mgmt/v1/serviceaccounts/1
         name: my-app-sa
         description: service account for my app
         clientID: SA-121212
@@ -955,7 +955,7 @@ components:
       value:
         id: "1"
         kind: ServiceAccount
-        href: /api/managed-services-api/v1/serviceaccounts/1
+        href: /api/kafkas_mgmt/v1/serviceaccounts/1
         name: my-app-sa
         description: service account for my app
         clientID: SA-121212
@@ -965,7 +965,7 @@ components:
       value:
         id: "1"
         kind: ServiceAccountListItem
-        href: /api/managed-services-api/v1/serviceaccounts/1
+        href: /api/kafkas_mgmt/v1/serviceaccounts/1
         name: my-app-sa
         description: service account for my app
         clientID: SA-121212
@@ -996,26 +996,26 @@ components:
       value:
         id: "103"
         kind: Error
-        href: /api/managed-services-api/v1/errors/103
-        code: MGD-SERV-API-103
+        href: /api/kafkas_mgmt/v1/errors/103
+        code: KAFKAS-MGMT-103
         reason: Synchronous action is not supported, use async=true parameter
         operation_id: 1iWIimqGcrDuL61aUxIZqBTqNRa
     "400CreationExample":
       value:
         id: "103"
         kind: Error
-        href: /api/managed-services-api/v1/errors/103
-        code: MGD-SERV-API-103
+        href: /api/kafkas_mgmt/v1/errors/103
+        code: KAFKAS-MGMT-103
         reason: Synchronous action is not supported, use async=true parameter
         operation_id: 1iWIimqGcrDuL61aUxIZqBTqNRa
     "400InvalidQueryExample":
       value:
         id: "203"
         kind: Error
-        href: /api/managed-services-api/v1/errors/23
-        code: MGD-SERV-API-23
+        href: /api/kafkas_mgmt/v1/errors/23
+        code: KAFKAS-MGMT-23
         reason: 'Failed to parse search query: Unable to list kafka requests for api_kafka_service:
-          MGD-SERV-API-23: Failed to parse search query: Unsupported column name for
+          KAFKAS-MGMT-23: Failed to parse search query: Unsupported column name for
           search: ''id''. Supported column names are: region, name, cloud_provider,
           name, status. Query invalid: id = 123'
         operation_id: 1lWDGuybIrEnxrAem724gqkkiDv
@@ -1023,63 +1023,63 @@ components:
       value:
         id: "404"
         kind: Error
-        href: /api/managed-services-api/v1/errors/7
-        code: MGD-SERV-API-7
+        href: /api/kafkas_mgmt/v1/errors/7
+        code: KAFKAS-MGMT-7
         reason: The requested resource doesn't exist
     "404DeleteExample":
       value:
         id: "7"
         kind: Error
-        href: /api/managed-services-api/v1/errors/7
-        code: MGD-SERV-API-7
+        href: /api/kafkas_mgmt/v1/errors/7
+        code: KAFKAS-MGMT-7
         reason: KafkaResource with id='1iK3duVYIvv5YvLlyz1mGR3JyqN' not found
         operation_id: 1iYO7g2g6HTdUKUa2ksH82kQD3y
     "401Example":
       value:
         id: "11"
         kind: Error
-        href: /api/managed-services-api/v1/errors/11
-        code: MGD-SERV-API-11
+        href: /api/kafkas_mgmt/v1/errors/11
+        code: KAFKAS-MGMT-11
         reason: 'Unable to verify JWT token: Required authorization token not found'
         operation_id: 1iY3UhEhwmXBpWPfI2lNekpd4ZD
     "403Example":
       value:
         id: "4"
         kind: Error
-        href: /api/managed-services-api/v1/errors/4
-        code: MGD-SERV-API-4
+        href: /api/kafkas_mgmt/v1/errors/4
+        code: KAFKAS-MGMT-4
         reason: User 'foo-bar' is not authorized to access the service.
         operation_id: 1lY3UiEhznXBpWPfI2lNejpd4YC
     "403MaxAllowedInstanceReachedExample":
       value:
         id: "5"
         kind: Error
-        href: /api/managed-services-api/v1/errors/5
-        code: MGD-SERV-API-5
+        href: /api/kafkas_mgmt/v1/errors/5
+        code: KAFKAS-MGMT-5
         reason: User 'foo-bar' has reached a maximum number of 6 allowed instances.
         operation_id: 1lY3UiEkxnXBpVPeI2oNejd3XB
     "409NameConflictExample":
       value:
         id: "36"
         kind: Error
-        href: /api/managed-services-api/v1/errors/36
-        code: MGD-SERV-API-36
+        href: /api/kafkas_mgmt/v1/errors/36
+        code: KAFKAS-MGMT-36
         reason: Kafka cluster name is already used
         operation_id: 6kY0UiEkzkXCzWPeI2oYehd3ED
     "500Example":
       value:
         id: "9"
         kind: Error
-        href: /api/managed-services-api/v1/errors/9
-        code: MGD-SERV-API-9
+        href: /api/kafkas_mgmt/v1/errors/9
+        code: KAFKAS-MGMT-9
         reason: Unspecified error
         operation_id: 1ieELvF9jMQY6YghfM9gGRsHvEW
     "500DeleteExample":
       value:
         id: "9"
         kind: Error
-        href: /api/managed-services-api/v1/errors/9
-        code: MGD-SERV-API-9
+        href: /api/kafkas_mgmt/v1/errors/9
+        code: KAFKAS-MGMT-9
         reason: 'error deleting syncset: OCM-EX-9: failed to delete syncset: ext-serviceapi-1ix03lndlmq0qfc7sita5sljv8e
           for cluster id: 1g5d88q0lrcdv4g7alb7slfgnj3dhbsj%!(EXTRA *errors.Error=identifier
           is ''404'', code is ''CLUSTERS-MGMT-404'' and operation identifier is ''1g5or50viu07oealuehrkc26dgftj1ac'':
@@ -1493,10 +1493,10 @@ components:
       example:
         kind: APIVersion
         id: v1
-        href: /api/managed-services-api/v1
+        href: /api/kafkas_mgmt/v1
         collections:
         - id: kafkas
-          href: /api/managed-services-api/v1/kafkas
+          href: /api/kafkas_mgmt/v1/kafkas
           kind: KafkaList
       properties:
         collections:
@@ -1600,6 +1600,9 @@ components:
             allOf:
             - $ref: '#/components/schemas/ServiceAccountListItem'
           type: array
+      required:
+      - items
+      - kind
       type: object
     MetricsRangeQueryList_allOf:
       example:

@@ -37,7 +37,7 @@ kafkaAPI.init();
 topicAPI.init();
 
 api.use((req, res) => {
-  if (req.url.startsWith("/api/managed-services-api/v1")) {
+  if (req.url.startsWith("/api/kafkas_mgmt/v1")) {
     return kafkaAPI.handleRequest(req, req, res)
   } else if (req.url.startsWith("/rest")) {
     req.url = req.url.replace("/rest", "");
