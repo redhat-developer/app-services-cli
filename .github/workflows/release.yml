@@ -31,7 +31,6 @@ jobs:
             echo "::set-output name=prerelease::true"
           fi
       - run: echo ${{ steps.check-tag.outputs.prerelease }}
-      - run: exit 0
       - 
         name: Install git-chglog
         uses: craicoverflow/install-git-chglog@v1
