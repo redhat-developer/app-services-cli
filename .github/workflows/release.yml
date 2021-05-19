@@ -36,13 +36,13 @@ jobs:
         uses: craicoverflow/install-git-chglog@v1
       - 
         name: Generate release notes
-        if: steps.check-tag.outputs.prerelease == false
+        if: steps.check-tag.outputs.prerelease == 'false'
         run: |
           git-chglog -t .chglog/RELEASE.tpl.md $(git describe --tags $(git rev-parse HEAD)) -o RELEASE_NOTES.md
       
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
-        if: steps.check-tag.outputs.prerelease == false
+        if: steps.check-tag.outputs.prerelease == 'false'
         with:
           version: latest
           args: release --rm-dist --release-notes=RELEASE_NOTES.md
@@ -52,10 +52,10 @@ jobs:
 
       - name: Run GoReleaser on pre-release
         uses: goreleaser/goreleaser-action@v1
-        if: steps.check-tag.outputs.prerelease == true
+        if: steps.check-tag.outputs.prerelease == 'true'
         with:
           version: latest
-          args: release --rm-dist --release-notes=RELEASE_NOTES.md
+          args: release --rm-dist
           key: ${{ secrets.YOUR_PRIVATE_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
