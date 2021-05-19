@@ -7,10 +7,10 @@ module.exports = {
     res.status(200).json([
       {
         "id": 42,
-        "name": "my-registry",
+        "name": "test",
         "registryUrl": "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-339f4248d706",
         "status": {
-          "status": "PROVISIONING",
+          "value": "AVAILABLE",
           "lastUpdated": "2021-05-04T12:34:56Z"
         },
         "registryDeploymentId": 1
@@ -20,10 +20,10 @@ module.exports = {
   createRegistry: async (c, req, res) => {
     res.status(200).json({
       "id": 42,
-      "name": "my-registry",
+      "name": "test",
       "registryUrl": "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-339f4248d706",
       "status": {
-        "status": "PROVISIONING",
+        "value": "PROVISIONING",
         "lastUpdated": "2021-05-04T12:34:56Z"
       },
       "registryDeploymentId": 1
@@ -32,10 +32,10 @@ module.exports = {
   getRegistry: async (c, req, res) => {
     res.status(200).json({
       "id": 42,
-      "name": "my-registry",
+      "name": "test",
       "registryUrl": "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-339f4248d706",
       "status": {
-        "status": "PROVISIONING",
+        "value": "AVAILABLE",
         "lastUpdated": "2021-05-04T12:34:56Z"
       },
       "registryDeploymentId": 1

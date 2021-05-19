@@ -204,13 +204,13 @@ func (c *KeycloakConnection) API() *api.API {
 
 	// TODO that will be just single API over the topic
 	// We need to be able to support more than single one
-	srsDataAPIFunc := func() srsdata.ArtifactsApi {
+	srsDataAPIFunc := func(registryHost string) srsdata.ArtifactsApi {
 		if cachedSrDataAPI != nil {
 			return cachedSrDataAPI
 		}
 
 		// create the client
-		srsAPIClient := c.createServiceRegistryDataPlaneClient()
+		srsAPIClient := c.createServiceRegistryDataPlaneClient(registryHost)
 
 		cachedSrDataAPI = srsAPIClient.ArtifactsApi
 
@@ -315,12 +315,16 @@ func (c *KeycloakConnection) createServiceRegistryAPIClient() *srsclient.APIClie
 }
 
 // Create a new Kafka API client
-func (c *KeycloakConnection) createServiceRegistryDataPlaneClient() *srsdata.APIClient {
+func (c *KeycloakConnection) createServiceRegistryDataPlaneClient(host string) *srsdata.APIClient {
 	cfg := srsdata.NewConfiguration()
 
-	cfg.Scheme = c.apiURL.Scheme
-	cfg.Host = c.apiURL.Host
-
+	// TODO hardcoded to mock right now
+	cfg.Servers = srsdata.ServerConfigurations{
+		{
+			URL:         "http://localhost:8000",
+			Description: "Admin server",
+		},
+	}
 	cfg.HTTPClient = c.defaultHTTPClient
 
 	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))

@@ -54,6 +54,7 @@ srsControlApi.init();
 srsDataApi.init();
 
 api.use((req, res) => {
+  console.debug("URL", req.url);
   if (req.url.startsWith("/api/service-registry/v2")) {
     console.debug("Calling serviceregistry")
     return srsDataApi.handleRequest(req, req, res);

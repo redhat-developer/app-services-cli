@@ -123,17 +123,15 @@ func runUse(opts *Options) error {
 		Name:       *registry.Name,
 	}
 
-	nameTmplEntry := localize.NewEntry("Name", registry.GetName())
 	// FIXME Use as helper?
 	logger.Debug(opts.localizer.MustLocalize("kafka.create.debug.autoUseSetMessage"))
 	cfg.Services.ServiceRegistry = registryConfig
 	if err := opts.Config.Save(cfg); err != nil {
-		saveErrMsg := opts.localizer.MustLocalize("kafka.use.error.saveError", nameTmplEntry)
+		saveErrMsg := "Cannot save config"
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
-
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
+	logger.Info("Successfully setup registry to " + registry.GetName())
 
 	return nil
 }

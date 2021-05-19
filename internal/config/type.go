@@ -48,3 +48,8 @@ func (c *Config) HasKafka() bool {
 	return c.Services.Kafka != nil &&
 		c.Services.Kafka.ClusterID != ""
 }
+
+func (c *Config) HasServiceRegistry() bool {
+	return c.Services.ServiceRegistry != nil &&
+		c.Services.ServiceRegistry.Name != ""
+}

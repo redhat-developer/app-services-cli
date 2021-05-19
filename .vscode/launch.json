@@ -31,14 +31,15 @@
       ]
     },
     {
-      "name": "Whoami",
+      "name": "registry",
       "type": "go",
       "request": "launch",
       "mode": "auto",
+      "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/cmd/rhoas",
       "env": {},
       "args": [
-        "whoami"
+        "registry", "artifact",   "create", "./openapitools.json"
       ]
     },
     {

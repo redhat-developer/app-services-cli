@@ -81,7 +81,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
 			}
 
-			opts.id = string(cfg.Services.ServiceRegistry.InstanceID)
+			opts.id = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
 
 			return runDelete(opts)
 		},

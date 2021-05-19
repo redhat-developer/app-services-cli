@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	srsclient "github.com/redhat-developer/app-services-cli/pkg/api/srs/client"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -23,7 +24,7 @@ import (
 )
 
 // row is the details of a Kafka instance needed to print to a table
-type kafkaRow struct {
+type RegistryRow struct {
 	ID     string `json:"id" header:"ID"`
 	Name   string `json:"name" header:"Name"`
 	URL    string `json:"registryUrl" header:"Registry URL"`
@@ -96,7 +97,7 @@ func runList(opts *options) error {
 	}
 
 	if len(response) == 0 && opts.outputFormat == "" {
-		logger.Info(opts.localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
+		logger.Info("No registry instances")
 		return nil
 	}
 
@@ -116,12 +117,12 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(registries *[]srsclient.Registry) []kafkaRow {
-	rows := []kafkaRow{}
+func mapResponseItemsToRows(registries *[]srsclient.Registry) []RegistryRow {
+	rows := []RegistryRow{}
 
 	for _, k := range *registries {
-		row := kafkaRow{
-			ID:     string(k.GetId()),
+		row := RegistryRow{
+			ID:     fmt.Sprint(k.Id),
 			Name:   k.GetName(),
 			URL:    k.GetRegistryUrl(),
 			Status: string(k.GetStatus().Value),

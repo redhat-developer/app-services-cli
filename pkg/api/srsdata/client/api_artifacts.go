@@ -29,62 +29,62 @@ var (
 type ArtifactsApi interface {
 
 	/*
-		 * CreateArtifact Create artifact
-		 * Creates a new artifact by posting the artifact content.  The body of the request should
-	be the raw content of the artifact.  This is typically in JSON format for *most* of the
-	supported types, but may be in another format for a few (for example, `PROTOBUF`).
+			 * CreateArtifact Create artifact
+			 * Creates a new artifact by posting the artifact content.  The body of the request should
+		be the raw content of the artifact.  This is typically in JSON format for *most* of the
+		supported types, but may be in another format for a few (for example, `PROTOBUF`).
 
-	The registry attempts to figure out what kind of artifact is being added from the
-	following supported list:
+		The registry attempts to figure out what kind of artifact is being added from the
+		following supported list:
 
-	* Avro (`AVRO`)
-	* Protobuf (`PROTOBUF`)
-	* JSON Schema (`JSON`)
-	* Kafka Connect (`KCONNECT`)
-	* OpenAPI (`OPENAPI`)
-	* AsyncAPI (`ASYNCAPI`)
-	* GraphQL (`GRAPHQL`)
-	* Web Services Description Language (`WSDL`)
-	* XML Schema (`XSD`)
+		* Avro (`AVRO`)
+		* Protobuf (`PROTOBUF`)
+		* JSON Schema (`JSON`)
+		* Kafka Connect (`KCONNECT`)
+		* OpenAPI (`OPENAPI`)
+		* AsyncAPI (`ASYNCAPI`)
+		* GraphQL (`GRAPHQL`)
+		* Web Services Description Language (`WSDL`)
+		* XML Schema (`XSD`)
 
-	Alternatively, you can specify the artifact type using the `X-Registry-ArtifactType`
-	HTTP request header, or include a hint in the request's `Content-Type`.  For example:
+		Alternatively, you can specify the artifact type using the `X-Registry-ArtifactType`
+		HTTP request header, or include a hint in the request's `Content-Type`.  For example:
 
-	```
-	Content-Type: application/json; artifactType=AVRO
-	```
+		```
+		Content-Type: application/json; artifactType=AVRO
+		```
 
-	An artifact is created using the content provided in the body of the request.  This
-	content is created under a unique artifact ID that can be provided in the request
-	using the `X-Registry-ArtifactId` request header.  If not provided in the request,
-	the server generates a unique ID for the artifact.  It is typically recommended
-	that callers provide the ID, because this is typically a meaningful identifier,
-	and for most use cases should be supplied by the caller.
+		An artifact is created using the content provided in the body of the request.  This
+		content is created under a unique artifact ID that can be provided in the request
+		using the `X-Registry-ArtifactId` request header.  If not provided in the request,
+		the server generates a unique ID for the artifact.  It is typically recommended
+		that callers provide the ID, because this is typically a meaningful identifier,
+		and for most use cases should be supplied by the caller.
 
-	If an artifact with the provided artifact ID already exists, the default behavior
-	is for the server to reject the content with a 409 error.  However, the caller can
-	supply the `ifExists` query parameter to alter this default behavior. The `ifExists`
-	query parameter can have one of the following values:
+		If an artifact with the provided artifact ID already exists, the default behavior
+		is for the server to reject the content with a 409 error.  However, the caller can
+		supply the `ifExists` query parameter to alter this default behavior. The `ifExists`
+		query parameter can have one of the following values:
 
-	* `FAIL` (*default*) - server rejects the content with a 409 error
-	* `UPDATE` - server updates the existing artifact and returns the new metadata
-	* `RETURN` - server does not create or add content to the server, but instead
-	returns the metadata for the existing artifact
-	* `RETURN_OR_UPDATE` - server returns an existing **version** that matches the
-	provided content if such a version exists, otherwise a new version is created
+		* `FAIL` (*default*) - server rejects the content with a 409 error
+		* `UPDATE` - server updates the existing artifact and returns the new metadata
+		* `RETURN` - server does not create or add content to the server, but instead
+		returns the metadata for the existing artifact
+		* `RETURN_OR_UPDATE` - server returns an existing **version** that matches the
+		provided content if such a version exists, otherwise a new version is created
 
-	This operation may fail for one of the following reasons:
+		This operation may fail for one of the following reasons:
 
-	* An invalid `ArtifactType` was indicated (HTTP error `400`)
-	* No `ArtifactType` was indicated and the server could not determine one from the content (HTTP error `400`)
-	* Provided content (request body) was empty (HTTP error `400`)
-	* An artifact with the provided ID already exists (HTTP error `409`)
-	* The content violates one of the configured global rules (HTTP error `409`)
-	* A server error occurred (HTTP error `500`)
+		* An invalid `ArtifactType` was indicated (HTTP error `400`)
+		* No `ArtifactType` was indicated and the server could not determine one from the content (HTTP error `400`)
+		* Provided content (request body) was empty (HTTP error `400`)
+		* An artifact with the provided ID already exists (HTTP error `409`)
+		* The content violates one of the configured global rules (HTTP error `409`)
+		* A server error occurred (HTTP error `500`)
 
-		 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-		 * @param groupId Unique ID of an artifact group.
-		 * @return ApiCreateArtifactRequest
+			 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+			 * @param groupId Unique ID of an artifact group.
+			 * @return ApiCreateArtifactRequest
 	*/
 	CreateArtifact(ctx _context.Context, groupId string) ApiCreateArtifactRequest
 
@@ -95,16 +95,16 @@ type ArtifactsApi interface {
 	CreateArtifactExecute(r ApiCreateArtifactRequest) (ArtifactMetaData, *_nethttp.Response, error)
 
 	/*
-		 * DeleteArtifact Delete artifact
-		 * Deletes an artifact completely, resulting in all versions of the artifact also being
-	deleted.  This may fail for one of the following reasons:
+			 * DeleteArtifact Delete artifact
+			 * Deletes an artifact completely, resulting in all versions of the artifact also being
+		deleted.  This may fail for one of the following reasons:
 
-	* No artifact with the `artifactId` exists (HTTP error `404`)
-	* A server error occurred (HTTP error `500`)
-		 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-		 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
-		 * @param artifactId The artifact ID.  Can be a string (client-provided) or UUID (server-generated), representing the unique artifact identifier.
-		 * @return ApiDeleteArtifactRequest
+		* No artifact with the `artifactId` exists (HTTP error `404`)
+		* A server error occurred (HTTP error `500`)
+			 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+			 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
+			 * @param artifactId The artifact ID.  Can be a string (client-provided) or UUID (server-generated), representing the unique artifact identifier.
+			 * @return ApiDeleteArtifactRequest
 	*/
 	DeleteArtifact(ctx _context.Context, groupId string, artifactId string) ApiDeleteArtifactRequest
 
@@ -128,19 +128,19 @@ type ArtifactsApi interface {
 	DeleteArtifactsInGroupExecute(r ApiDeleteArtifactsInGroupRequest) (*_nethttp.Response, error)
 
 	/*
-		 * GetContentById Get artifact content by ID
-		 * Gets the content for an artifact version in the registry using the unique content
-	identifier for that content.  This content ID may be shared by multiple artifact
-	versions in the case where the artifact versions are identical.
+			 * GetContentById Get artifact content by ID
+			 * Gets the content for an artifact version in the registry using the unique content
+		identifier for that content.  This content ID may be shared by multiple artifact
+		versions in the case where the artifact versions are identical.
 
-	This operation may fail for one of the following reasons:
+		This operation may fail for one of the following reasons:
 
-	* No content with this `contentId` exists (HTTP error `404`)
-	* A server error occurred (HTTP error `500`)
+		* No content with this `contentId` exists (HTTP error `404`)
+		* A server error occurred (HTTP error `500`)
 
-		 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-		 * @param contentId Global identifier for a single artifact content.
-		 * @return ApiGetContentByIdRequest
+			 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+			 * @param contentId Global identifier for a single artifact content.
+			 * @return ApiGetContentByIdRequest
 	*/
 	GetContentById(ctx _context.Context, contentId int64) ApiGetContentByIdRequest
 
@@ -151,20 +151,20 @@ type ArtifactsApi interface {
 	GetContentByIdExecute(r ApiGetContentByIdRequest) (*os.File, *_nethttp.Response, error)
 
 	/*
-		 * GetLatestArtifact Get latest artifact
-		 * Returns the latest version of the artifact in its raw form.  The `Content-Type` of the
-	response depends on the artifact type.  In most cases, this is `application/json`, but
-	for some types it may be different (for example, `PROTOBUF`).
+			 * GetLatestArtifact Get latest artifact
+			 * Returns the latest version of the artifact in its raw form.  The `Content-Type` of the
+		response depends on the artifact type.  In most cases, this is `application/json`, but
+		for some types it may be different (for example, `PROTOBUF`).
 
-	This operation may fail for one of the following reasons:
+		This operation may fail for one of the following reasons:
 
-	* No artifact with this `artifactId` exists (HTTP error `404`)
-	* A server error occurred (HTTP error `500`)
+		* No artifact with this `artifactId` exists (HTTP error `404`)
+		* A server error occurred (HTTP error `500`)
 
-		 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-		 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
-		 * @param artifactId The artifact ID.  Can be a string (client-provided) or UUID (server-generated), representing the unique artifact identifier.
-		 * @return ApiGetLatestArtifactRequest
+			 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+			 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
+			 * @param artifactId The artifact ID.  Can be a string (client-provided) or UUID (server-generated), representing the unique artifact identifier.
+			 * @return ApiGetLatestArtifactRequest
 	*/
 	GetLatestArtifact(ctx _context.Context, groupId string, artifactId string) ApiGetLatestArtifactRequest
 
@@ -190,26 +190,26 @@ type ArtifactsApi interface {
 	ListArtifactsInGroupExecute(r ApiListArtifactsInGroupRequest) (ArtifactSearchResults, *_nethttp.Response, error)
 
 	/*
-		 * UpdateArtifact Update artifact
-		 * Updates an artifact by uploading new content.  The body of the request should
-	be the raw content of the artifact.  This is typically in JSON format for *most*
-	of the supported types, but may be in another format for a few (for example, `PROTOBUF`).
-	The type of the content should be compatible with the artifact's type (it would be
-	an error to update an `AVRO` artifact with new `OPENAPI` content, for example).
+			 * UpdateArtifact Update artifact
+			 * Updates an artifact by uploading new content.  The body of the request should
+		be the raw content of the artifact.  This is typically in JSON format for *most*
+		of the supported types, but may be in another format for a few (for example, `PROTOBUF`).
+		The type of the content should be compatible with the artifact's type (it would be
+		an error to update an `AVRO` artifact with new `OPENAPI` content, for example).
 
-	The update could fail for a number of reasons including:
+		The update could fail for a number of reasons including:
 
-	* Provided content (request body) was empty (HTTP error `400`)
-	* No artifact with the `artifactId` exists (HTTP error `404`)
-	* The new content violates one of the rules configured for the artifact (HTTP error `409`)
-	* A server error occurred (HTTP error `500`)
+		* Provided content (request body) was empty (HTTP error `400`)
+		* No artifact with the `artifactId` exists (HTTP error `404`)
+		* The new content violates one of the rules configured for the artifact (HTTP error `409`)
+		* A server error occurred (HTTP error `500`)
 
-	When successful, this creates a new version of the artifact, making it the most recent
-	(and therefore official) version of the artifact.
-		 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-		 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
-		 * @param artifactId The artifact ID.  Can be a string (client-provided) or UUID (server-generated), representing the unique artifact identifier.
-		 * @return ApiUpdateArtifactRequest
+		When successful, this creates a new version of the artifact, making it the most recent
+		(and therefore official) version of the artifact.
+			 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+			 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
+			 * @param artifactId The artifact ID.  Can be a string (client-provided) or UUID (server-generated), representing the unique artifact identifier.
+			 * @return ApiUpdateArtifactRequest
 	*/
 	UpdateArtifact(ctx _context.Context, groupId string, artifactId string) ApiUpdateArtifactRequest
 
