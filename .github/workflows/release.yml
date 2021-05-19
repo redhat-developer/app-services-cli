@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - run: echo ${GITHUB_REF}
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -27,24 +26,24 @@ jobs:
         id: check-tag
         run: |
           if [[ ${GITHUB_REF} =~ ^refs/tags/^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo ::set-output name=prerelease=false
+            echo "::set-output name=prerelease::false"
           else
-            echo ::set-output name=prerelease=true
+            echo "::set-output name=prerelease::true"
           fi
-
+      - run: echo ${{ steps.check-tag.outputs.prerelease }}
+      - run: exit 0
       - 
         name: Install git-chglog
         uses: craicoverflow/install-git-chglog@v1
-
       - 
         name: Generate release notes
-        if: steps.check-tag.outputs.prerelease == 'false'
+        if: steps.check-tag.outputs.prerelease == false
         run: |
           git-chglog -t .chglog/RELEASE.tpl.md $(git describe --tags $(git rev-parse HEAD)) -o RELEASE_NOTES.md
       
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
-        if: steps.check-tag.outputs.prerelease == 'false'
+        if: steps.check-tag.outputs.prerelease == false
         with:
           version: latest
           args: release --rm-dist --release-notes=RELEASE_NOTES.md
@@ -54,7 +53,7 @@ jobs:
 
       - name: Run GoReleaser on pre-release
         uses: goreleaser/goreleaser-action@v1
-        if: steps.check-tag.outputs.prerelease == 'true'
+        if: steps.check-tag.outputs.prerelease == true
         with:
           version: latest
           args: release --rm-dist --release-notes=RELEASE_NOTES.md
