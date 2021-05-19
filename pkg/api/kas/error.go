@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 )
 
 type ServiceErrorCode int
@@ -95,13 +95,13 @@ func (e *Error) Unwrap() error {
 }
 
 // GetAPIError gets a strongly typed error from an error
-func GetAPIError(err error) (e kasclient.Error, ok bool) {
-	var apiError kasclient.GenericOpenAPIError
+func GetAPIError(err error) (e kafkamgmtv1.Error, ok bool) {
+	var apiError kafkamgmtv1.GenericOpenAPIError
 
 	if ok = errors.As(err, &apiError); ok {
 		errModel := apiError.Model()
 
-		e, ok = errModel.(kasclient.Error)
+		e, ok = errModel.(kafkamgmtv1.Error)
 	}
 
 	return e, ok

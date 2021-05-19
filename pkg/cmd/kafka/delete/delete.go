@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -14,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -110,7 +110,7 @@ func runDelete(opts *options) error {
 
 	api := connection.API()
 
-	var response *kasclient.KafkaRequest
+	var response *kafkamgmtv1.KafkaRequest
 	ctx := context.Background()
 	if opts.name != "" {
 		response, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)

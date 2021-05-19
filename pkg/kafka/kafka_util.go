@@ -8,8 +8,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 )
 
 var (
@@ -40,7 +39,7 @@ func ValidateName(val interface{}) error {
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformKafkaRequestListItems(items []kasclient.KafkaRequest) []kasclient.KafkaRequest {
+func TransformKafkaRequestListItems(items []kafkamgmtv1.KafkaRequest) []kafkamgmtv1.KafkaRequest {
 	for i := range items {
 		kafka := items[i]
 		kafka = *TransformKafkaRequest(&kafka)
@@ -52,7 +51,7 @@ func TransformKafkaRequestListItems(items []kasclient.KafkaRequest) []kasclient.
 
 // TransformKafkaRequest modifies fields from the KafkaRequest payload object
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformKafkaRequest(kafka *kasclient.KafkaRequest) *kasclient.KafkaRequest {
+func TransformKafkaRequest(kafka *kafkamgmtv1.KafkaRequest) *kafkamgmtv1.KafkaRequest {
 	bootstrapHost := kafka.GetBootstrapServerHost()
 
 	if bootstrapHost == "" {

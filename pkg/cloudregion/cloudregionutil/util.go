@@ -1,11 +1,11 @@
 package cloudregionutil
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 )
 
 // GetEnabledIDs extracts and returns a slice of the unique IDs of all enabled regions
-func GetEnabledIDs(regions []kasclient.CloudRegion) []string {
+func GetEnabledIDs(regions []kafkamgmtv1.CloudRegion) []string {
 	var regionIDs = []string{}
 	for _, region := range regions {
 		if region.GetEnabled() {

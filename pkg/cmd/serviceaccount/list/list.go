@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -15,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -111,7 +111,7 @@ func runList(opts *Options) (err error) {
 	return nil
 }
 
-func mapResponseItemsToRows(svcAccts []kasclient.ServiceAccountListItem) []svcAcctRow {
+func mapResponseItemsToRows(svcAccts []kafkamgmtv1.ServiceAccountListItem) []svcAcctRow {
 	rows := []svcAcctRow{}
 
 	for _, sa := range svcAccts {

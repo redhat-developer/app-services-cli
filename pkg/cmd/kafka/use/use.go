@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
@@ -105,7 +105,7 @@ func runUse(opts *Options) error {
 
 	api := connection.API()
 
-	var res *kasclient.KafkaRequest
+	var res *kafkamgmtv1.KafkaRequest
 	ctx := context.Background()
 	if opts.name != "" {
 		res, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)

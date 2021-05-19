@@ -123,7 +123,7 @@ openapi/kas/validate:
 
 # generate the openapi schema
 openapi/kas/generate:
-	openapi-generator-cli generate -i openapi/kafka-service.yaml -g go --package-name kasclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${kasapi_dir}
+	openapi-generator-cli generate -i openapi/kafka-service.yaml -g go --package-name kafkamgmtv1 -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${kasapi_dir}
 	openapi-generator-cli validate -i openapi/kafka-service.yaml
 	# generate mock
 	moq -out ${kasapi_dir}/default_api_mock.go ${kasapi_dir} DefaultApi

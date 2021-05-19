@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
+
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
@@ -15,8 +17,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cloudprovider/cloudproviderutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cloudregion/cloudregionutil"
@@ -142,7 +142,7 @@ func runCreate(opts *Options) error {
 		return nil
 	}
 
-	var payload *kasclient.KafkaRequestPayload
+	var payload *kafkamgmtv1.KafkaRequestPayload
 	if opts.interactive {
 		logger.Debug()
 
@@ -159,7 +159,7 @@ func runCreate(opts *Options) error {
 			opts.region = defaultRegion
 		}
 
-		payload = &kasclient.KafkaRequestPayload{
+		payload = &kafkamgmtv1.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
@@ -207,7 +207,7 @@ func runCreate(opts *Options) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *Options) (payload *kafkamgmtv1.KafkaRequestPayload, err error) {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -277,7 +277,7 @@ func promptKafkaPayload(opts *Options) (payload *kasclient.KafkaRequestPayload, 
 		return nil, err
 	}
 
-	payload = &kasclient.KafkaRequestPayload{
+	payload = &kafkamgmtv1.KafkaRequestPayload{
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
