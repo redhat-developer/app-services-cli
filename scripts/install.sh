@@ -47,9 +47,20 @@
     cut -d '"' -f 4)
 
   if [ -z "$DOWNLOAD_TAG" ]; then
-    echo "Release tag $RELEASE_TAG not found"
-    exit 1
+    API_RELEASE_URL="$API_RELEASES_BASE_URL/tags/v$RELEASE_TAG"
+
+    DOWNLOAD_TAG=$(curl -s "${API_RELEASE_URL}" |
+    grep "tag_name.*" |
+    cut -d '"' -f 4)
+
+    if [ -z "$DOWNLOAD_TAG" ]; then
+      echo "Release tag $RELEASE_TAG not found"
+      exit 1
+    fi
+
+    DOWNLOAD_TAG="$RELEASE_TAG"
   fi
+
 
   ASSET_NAME="${BINARY_NAME}_${DOWNLOAD_TAG}_${OS_TYPE}_amd${OS_LONG_BIT}"
   ASSET_NAME_COMPRESSED="${ASSET_NAME}.tar.gz"
@@ -64,7 +75,7 @@
   if curl -sL "$DOWNLOAD_URL" --output "${ASSET_NAME_COMPRESSED}"; then
     echo "$BINARY_NAME v${DOWNLOAD_TAG} downloaded"
   else
-    echo "Error downloading $BINARY_NAME v${DOWNLOAD_TAG}"
+    echo "Error downloading $BINARY_NAME ${DOWNLOAD_TAG}"
   fi
 
   # unpack and place the binary in the users PATH
