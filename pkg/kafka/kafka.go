@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
 )
 
 const (

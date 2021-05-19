@@ -64,7 +64,6 @@ Runs integration tests
 
 ## Kafka Service Fleet Manager API (KAS)
 
-- The CLI communicates with the Kafka Service Fleet Manager (KAS) API. For this there is a generated API client in `./pkg/api/kas/client`. 
 - The CLI uses the Strimzi API for topic management. The client is located in `./pkg/api/strimzi-admin/client`
 
 ### Updating the API client
@@ -78,10 +77,6 @@ Saves the latest OpenAPI specification files to the `./openapi` directory.
 #### `make openapi/validate`
 
 Validates the OpenAPI specification files.
-
-#### `make openapi/generate`
-
-Generates a Golang API client in `./pkg/api/kas/client` and `./pkg/api/strimzi-admin/client`.
 
 ## Mock API
 

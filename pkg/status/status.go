@@ -10,7 +10,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
 
 	"github.com/openconfig/goyang/pkg/indent"
 	"github.com/redhat-developer/app-services-cli/internal/config"

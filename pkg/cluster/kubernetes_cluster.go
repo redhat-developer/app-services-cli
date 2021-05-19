@@ -1,7 +1,6 @@
 package cluster
 
 import (
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 	"context"
 	"encoding/json"
 	"errors"
@@ -9,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"

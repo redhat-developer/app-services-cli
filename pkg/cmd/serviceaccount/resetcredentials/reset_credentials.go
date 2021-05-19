@@ -2,10 +2,11 @@ package resetcredentials
 
 import (
 	"context"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/apis/kafka/kafkamgmt/v1"
 	"errors"
 	"fmt"
 	"os"
+
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"

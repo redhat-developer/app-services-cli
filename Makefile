@@ -23,7 +23,6 @@ endif
 # The details of the application:
 binary:=rhoas
 
-kasapi_dir=./pkg/api/kas/client
 strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 amsapi_dir=./pkg/api/ams/amsclient
 
@@ -78,13 +77,13 @@ test/unit: install
 	go test ./pkg/...
 .PHONY: test/unit
 
-openapi/pull: openapi/strimzi-admin/pull openapi/kas/pull
+openapi/pull: openapi/strimzi-admin/pull
 .PHONY: openapi/pull
 
-openapi/validate: openapi/strimzi-admin/validate openapi/kas/validate
+openapi/validate: openapi/strimzi-admin/validate
 .PHONY: openapi/validate
 
-openapi/generate: openapi/strimzi-admin/generate openapi/kas/generate
+openapi/generate: openapi/strimzi-admin/generate
 .PHONY: openapi/validate
 
 openapi/strimzi-admin/pull:
@@ -111,24 +110,6 @@ openapi/ams/generate:
 	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
 	gofmt -w ${amsapi_dir}
 .PHONY: openapi/strimzi-admin/generate
-
-openapi/kas/pull:
-	wget -O ./openapi/kafka-service.yaml --no-check-certificate https://gitlab.cee.redhat.com/service/kas-fleet-manager/-/raw/master/openapi/kas-fleet-manager.yaml
-.PHONY: openapi/kas/pull
-
-# validate the openapi schema
-openapi/kas/validate:
-	openapi-generator-cli validate -i openapi/kafka-service.yaml
-.PHONY: openapi/kas/validate
-
-# generate the openapi schema
-openapi/kas/generate:
-	openapi-generator-cli generate -i openapi/kafka-service.yaml -g go --package-name kafkamgmtv1 -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${kasapi_dir}
-	openapi-generator-cli validate -i openapi/kafka-service.yaml
-	# generate mock
-	moq -out ${kasapi_dir}/default_api_mock.go ${kasapi_dir} DefaultApi
-	gofmt -w ${kasapi_dir}
-.PHONY: openapi/kas/generate
 
 mock-api/start: mock-api/client/start
 .PHONY: mock-api/start
