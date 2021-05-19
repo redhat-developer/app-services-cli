@@ -37,7 +37,7 @@ module.exports = {
           createdOn: "2019-03-22T12:51:19Z",
         },
       ],
-      count: 0,
+      count: 1,
     });
   },
   createArtifact: async (c, req, res) => {
@@ -47,10 +47,10 @@ module.exports = {
       name: "mytopic.jsonschema",
       description: "Not provided",
       type: "JSON",
-      version: "18",
+      version: "1",
       createdBy: "wtrocki",
       createdOn: "2019-03-22T12:51:19Z",
-      modifiedBy: "user2",
+      modifiedBy: "wtrocki",
       modifiedOn: "2019-07-19T15:09:00Z",
       globalId: 12984719247,
       contentId: 82736,
