@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"

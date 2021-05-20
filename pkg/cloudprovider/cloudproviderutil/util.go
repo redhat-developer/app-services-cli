@@ -1,6 +1,6 @@
 package cloudproviderutil
 
-import kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
+import kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
 // GetEnabledNames returns a list of cloud provider names from the enabled cloud providers
 func GetEnabledNames(cloudProviders []kafkamgmtv1.CloudProvider) []string {

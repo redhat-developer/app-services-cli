@@ -7,7 +7,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 )
 
 func GetKafkaByID(ctx context.Context, api kafkamgmtv1.DefaultApi, id string) (*kafkamgmtv1.KafkaRequest, *http.Response, error) {

@@ -3,7 +3,7 @@ package kafka
 import (
 	"testing"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 )
 
 func TestValidateName(t *testing.T) {

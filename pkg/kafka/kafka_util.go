@@ -8,7 +8,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafka/mgmt/apiv1"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 )
 
 var (
