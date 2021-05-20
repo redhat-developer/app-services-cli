@@ -143,7 +143,7 @@ func moveConfigFile(cfg config.IConfig) error {
 	}
 	// create rhoas config directory
 	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
-		err = os.Mkdir(rhoasCfgDir, 0700)
+		err = os.MkdirAll(rhoasCfgDir, 0700)
 		if err != nil {
 			return err
 		}
