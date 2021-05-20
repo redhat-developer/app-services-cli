@@ -268,7 +268,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
+	logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
 
 	switch opts.outputFormat {
 	case "json":
