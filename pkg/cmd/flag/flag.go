@@ -20,7 +20,7 @@ func (e *Error) Unwrap() error {
 func InvalidValueError(flag string, val interface{}, validOptions ...string) *Error {
 	var chooseFromStr string
 	if len(validOptions) > 0 {
-		chooseFromStr = ", valid options are: '"
+		chooseFromStr = ", valid options are: "
 		for i, option := range validOptions {
 			chooseFromStr += fmt.Sprintf(`"%v"`, option)
 			if (i + 1) < len(validOptions) {
@@ -28,7 +28,7 @@ func InvalidValueError(flag string, val interface{}, validOptions ...string) *Er
 			}
 		}
 	}
-	return &Error{Err: fmt.Errorf(`invalid value "%v" for --%v%v`, flag, val, chooseFromStr)}
+	return &Error{Err: fmt.Errorf(`invalid value "%v" for --%v%v`, val, flag, chooseFromStr)}
 }
 
 func RequiredWhenNonInteractiveError(arg string) error {
