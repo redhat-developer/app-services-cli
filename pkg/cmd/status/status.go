@@ -79,9 +79,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("status.flag.output.description"))
 
-	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return flagutil.ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
-	})
+	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
 
 	return cmd
 }

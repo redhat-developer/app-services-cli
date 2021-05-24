@@ -84,9 +84,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
 
-	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return flagutil.ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
-	})
+	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
 
 	return cmd
 }

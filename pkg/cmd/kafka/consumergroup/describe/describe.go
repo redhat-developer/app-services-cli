@@ -94,9 +94,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		return cmdutil.FilterValidConsumerGroupIDs(f, toComplete)
 	})
 
-	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return flagutil.ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
-	})
+	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
 
 	return cmd
 }
