@@ -56,6 +56,10 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	_ = cmd.MarkFlagRequired("id")
 
+	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return flagutil.ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
+	})
+
 	return cmd
 }
 
