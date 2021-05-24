@@ -42,7 +42,7 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf(`invalid topic name "%v"; only letters (Aa-Zz), numbers, "_" and "-" are accepted`, name)
+	return fmt.Errorf(`invalid topic name "%v"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted`, name)
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
