@@ -146,7 +146,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	// print status
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
-	c.localizer.MustLocalize("cluster.kubernetes.info",
+	c.localizer.MustLocalize("cluster.kubernetes.statusInfo",
 		localize.NewEntry("InstanceName", color.Info(kafkaInstance.GetName())),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(serviceAccountSecretName)))
