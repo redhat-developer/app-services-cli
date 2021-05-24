@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/fields"
@@ -57,7 +57,7 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 	return true, data.Error()
 }
 
-func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespace string, k *kasclient.KafkaRequest) error {
+func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespace string, k *kafkamgmtv1.KafkaRequest) error {
 	data := c.clientset.
 		RESTClient().
 		Get().

@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"strconv"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 
@@ -137,7 +137,7 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(kafkas []kasclient.KafkaRequest) []kafkaRow {
+func mapResponseItemsToRows(kafkas []kafkamgmtv1.KafkaRequest) []kafkaRow {
 	rows := []kafkaRow{}
 
 	for _, k := range kafkas {

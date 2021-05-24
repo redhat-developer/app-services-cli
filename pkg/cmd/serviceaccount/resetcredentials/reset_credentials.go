@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
@@ -159,7 +160,7 @@ func runResetCredentials(opts *Options) (err error) {
 	return nil
 }
 
-func resetCredentials(name string, opts *Options) (*kasclient.ServiceAccount, error) {
+func resetCredentials(name string, opts *Options) (*kafkamgmtv1.ServiceAccount, error) {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err

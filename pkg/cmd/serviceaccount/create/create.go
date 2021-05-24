@@ -8,8 +8,8 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -126,7 +126,7 @@ func runCreate(opts *Options) error {
 	}
 
 	// create the service account
-	serviceAccountPayload := &kasclient.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
+	serviceAccountPayload := &kafkamgmtv1.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
 	api := connection.API()
 	a := api.Kafka().CreateServiceAccount(context.Background())

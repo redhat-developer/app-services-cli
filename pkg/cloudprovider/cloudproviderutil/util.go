@@ -1,11 +1,9 @@
 package cloudproviderutil
 
-import (
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
-)
+import kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
 // GetEnabledNames returns a list of cloud provider names from the enabled cloud providers
-func GetEnabledNames(cloudProviders []kasclient.CloudProvider) []string {
+func GetEnabledNames(cloudProviders []kafkamgmtv1.CloudProvider) []string {
 	var cloudProviderNames = []string{}
 	for _, provider := range cloudProviders {
 		if provider.GetEnabled() {
@@ -16,7 +14,7 @@ func GetEnabledNames(cloudProviders []kasclient.CloudProvider) []string {
 }
 
 // FindByName finds and returns a cloud provider item from the list by its name
-func FindByName(cloudProviders []kasclient.CloudProvider, name string) *kasclient.CloudProvider {
+func FindByName(cloudProviders []kafkamgmtv1.CloudProvider, name string) *kafkamgmtv1.CloudProvider {
 	for _, p := range cloudProviders {
 		if p.GetName() == name {
 			return &p

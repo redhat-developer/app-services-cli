@@ -5,16 +5,16 @@ import (
 	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 )
 
 const (
 	queryLimit = "1000"
 )
 
-func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kasclient.KafkaRequest, error) {
+func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kafkamgmtv1.KafkaRequest, error) {
 	api := connection.API()
 
 	response, _, err := api.Kafka().ListKafkas(context.Background()).Size(queryLimit).Execute()

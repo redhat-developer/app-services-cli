@@ -13,11 +13,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -101,7 +101,7 @@ func runDescribe(opts *Options) error {
 
 	api := connection.API()
 
-	var kafkaInstance *kasclient.KafkaRequest
+	var kafkaInstance *kafkamgmtv1.KafkaRequest
 	ctx := context.Background()
 	if opts.name != "" {
 		kafkaInstance, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
@@ -118,7 +118,7 @@ func runDescribe(opts *Options) error {
 	return printKafka(kafkaInstance, opts)
 }
 
-func printKafka(kafka *kasclient.KafkaRequest, opts *Options) error {
+func printKafka(kafka *kafkamgmtv1.KafkaRequest, opts *Options) error {
 	switch opts.outputFormat {
 	case "yaml", "yml":
 		data, err := yaml.Marshal(kafka)

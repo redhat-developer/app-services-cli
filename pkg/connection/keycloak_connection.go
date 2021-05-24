@@ -8,13 +8,15 @@ import (
 	"net/http"
 	"net/url"
 
+	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	"golang.org/x/oauth2"
+
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 
-	kasclient "github.com/redhat-developer/app-services-cli/pkg/api/kas/client"
 	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api"
@@ -152,10 +154,10 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 // API Creates a new API type which is a single type for multiple APIs
 // nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
-	var cachedKafkaServiceAPI kasclient.DefaultApi
+	var cachedKafkaServiceAPI kafkamgmtv1.DefaultApi
 	var cachedKafkaID string
 	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
-	var cachedKafkaRequest *kasclient.KafkaRequest
+	var cachedKafkaRequest *kafkamgmtv1.KafkaRequest
 	var cachedAmsAPI amsclient.DefaultApi
 	var cachedKafkaAdminErr error
 
@@ -171,7 +173,7 @@ func (c *KeycloakConnection) API() *api.API {
 		return cachedAmsAPI
 	}
 
-	kafkaAPIFunc := func() kasclient.DefaultApi {
+	kafkaAPIFunc := func() kafkamgmtv1.DefaultApi {
 		if cachedKafkaServiceAPI != nil {
 			return cachedKafkaServiceAPI
 		}
@@ -184,7 +186,7 @@ func (c *KeycloakConnection) API() *api.API {
 		return cachedKafkaServiceAPI
 	}
 
-	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kasclient.KafkaRequest, error) {
+	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kafkamgmtv1.KafkaRequest, error) {
 		// if the api client is already created, and the same Kafka ID is used
 		// return the cached client
 		if cachedKafkaAdminAPI != nil && kafkaID == cachedKafkaID {
@@ -248,17 +250,15 @@ func (c *KeycloakConnection) API() *api.API {
 }
 
 // Create a new Kafka API client
-func (c *KeycloakConnection) createKafkaAPIClient() *kasclient.APIClient {
-	cfg := kasclient.NewConfiguration()
+func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtv1.APIClient {
+	cfg := kafkamgmtv1.NewConfiguration()
 
 	cfg.Scheme = c.apiURL.Scheme
 	cfg.Host = c.apiURL.Host
 
-	cfg.HTTPClient = c.defaultHTTPClient
+	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
 
-	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
-
-	apiClient := kasclient.NewAPIClient(cfg)
+	apiClient := kafkamgmtv1.NewAPIClient(cfg)
 
 	return apiClient
 }
@@ -290,7 +290,7 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziad
 
 	cfg.HTTPClient = c.defaultHTTPClient
 	cfg.Host = apiURL.Host
-	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.MASToken.AccessToken))
+	cfg.HTTPClient = c.createOAuthTransport(c.MASToken.AccessToken)
 
 	cfg.Servers = strimziadminclient.ServerConfigurations{
 		{
@@ -310,11 +310,25 @@ func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {
 	cfg.Scheme = c.apiURL.Scheme
 	cfg.Host = c.apiURL.Host
 
-	cfg.HTTPClient = c.defaultHTTPClient
-
-	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
+	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
 
 	apiClient := amsclient.NewAPIClient(cfg)
 
 	return apiClient
+}
+
+// wraps the HTTP client with an OAuth2 Transport layer to provide automatic token refreshing
+func (c *KeycloakConnection) createOAuthTransport(accessToken string) *http.Client {
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{
+			AccessToken: accessToken,
+		},
+	)
+
+	return &http.Client{
+		Transport: &oauth2.Transport{
+			Base:   c.defaultHTTPClient.Transport,
+			Source: oauth2.ReuseTokenSource(nil, ts),
+		},
+	}
 }
