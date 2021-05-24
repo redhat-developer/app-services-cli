@@ -9,6 +9,7 @@ import (
 	"net/url"
 
 	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	"golang.org/x/oauth2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
@@ -255,9 +256,7 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtv1.APIClient {
 	cfg.Scheme = c.apiURL.Scheme
 	cfg.Host = c.apiURL.Host
 
-	cfg.HTTPClient = c.defaultHTTPClient
-
-	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
+	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
 
 	apiClient := kafkamgmtv1.NewAPIClient(cfg)
 
@@ -291,7 +290,7 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziad
 
 	cfg.HTTPClient = c.defaultHTTPClient
 	cfg.Host = apiURL.Host
-	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.MASToken.AccessToken))
+	cfg.HTTPClient = c.createOAuthTransport(c.MASToken.AccessToken)
 
 	cfg.Servers = strimziadminclient.ServerConfigurations{
 		{
@@ -311,11 +310,25 @@ func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {
 	cfg.Scheme = c.apiURL.Scheme
 	cfg.Host = c.apiURL.Host
 
-	cfg.HTTPClient = c.defaultHTTPClient
-
-	cfg.AddDefaultHeader("Authorization", fmt.Sprintf("Bearer %v", c.Token.AccessToken))
+	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
 
 	apiClient := amsclient.NewAPIClient(cfg)
 
 	return apiClient
+}
+
+// wraps the HTTP client with an OAuth2 Transport layer to provide automatic token refreshing
+func (c *KeycloakConnection) createOAuthTransport(accessToken string) *http.Client {
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{
+			AccessToken: accessToken,
+		},
+	)
+
+	return &http.Client{
+		Transport: &oauth2.Transport{
+			Base:   c.defaultHTTPClient.Transport,
+			Source: oauth2.ReuseTokenSource(nil, ts),
+		},
+	}
 }
