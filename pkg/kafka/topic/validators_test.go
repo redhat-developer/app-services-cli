@@ -2,6 +2,7 @@ package topic
 
 import "testing"
 
+// nolint:funlen
 func TestValidateName(t *testing.T) {
 
 	type args struct {
@@ -38,7 +39,14 @@ func TestValidateName(t *testing.T) {
 			args: args{
 				name: "r*maujj??",
 			},
-			wantErr: false,
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when containing commas",
+			args: args{
+				name: "kaf,ka",
+			},
+			wantErr: true,
 		},
 		{
 			name: "Should be invalid when name is exactly 0 characters",
