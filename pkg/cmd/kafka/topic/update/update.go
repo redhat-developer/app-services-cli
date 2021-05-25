@@ -157,7 +157,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
 
-	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
+	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }

@@ -26,3 +26,11 @@ func EnableStaticFlagCompletion(cmd *cobra.Command, flagName string, validValues
 		return validValues, cobra.ShellCompDirectiveNoSpace
 	})
 }
+
+// // EnableOutputFlagCompletion enables autocompletion for output flag
+func EnableOutputFlagCompletion(cmd *cobra.Command) {
+
+	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
+	})
+}

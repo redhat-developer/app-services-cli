@@ -83,7 +83,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 
-	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
+	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }
