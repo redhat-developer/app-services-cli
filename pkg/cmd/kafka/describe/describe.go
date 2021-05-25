@@ -90,6 +90,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
 
+	flagutil.EnableOutputFlagCompletion(cmd)
+
 	return cmd
 }
 
