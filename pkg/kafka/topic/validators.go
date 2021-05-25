@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	legalNameChars = `[a-zA-Z0-9._-]`
+	legalNameChars = "[a-zA-Z0-9._-]"
 	maxNameLength  = 249
 	minPartitions  = 1
 	maxPartitions  = 100
@@ -33,7 +33,7 @@ func ValidateName(val interface{}) error {
 	}
 
 	if (name == ".") || (name == "..") {
-		return fmt.Errorf(`invalid topic name "%v"; can't be "." or ".."`, name)
+		return errors.New(`topic name can not be "." or ".."`)
 	}
 
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
