@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	legalNameChars = "^[a-zA-Z0-9\\_\\-]+$"
+	legalNameChars = "^[a-zA-Z0-9._-]+$"
 	maxNameLength  = 249
 	minPartitions  = 1
 	maxPartitions  = 100
@@ -32,13 +32,17 @@ func ValidateName(val interface{}) error {
 		return fmt.Errorf("topic name cannot exceed %v characters", maxNameLength)
 	}
 
+	if (name == ".") || (name == "..") {
+		return errors.New(`topic name can not be "." or ".."`)
+	}
+
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
 
 	if matched {
 		return nil
 	}
 
-	return fmt.Errorf(`invalid topic name "%v"; only letters (Aa-Zz), numbers, "_" and "-" are accepted`, name)
+	return fmt.Errorf(`invalid topic name "%v"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted`, name)
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
