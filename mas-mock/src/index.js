@@ -9,7 +9,7 @@ const api = express();
 api.use(express.json());
 
 // define api
-const kafkaAPI = new OpenAPIBackend({ definition: path.join(__dirname, "./kas-fleet-manager.yaml") });
+const kafkaAPI = new OpenAPIBackend({ definition: path.join(__dirname, "./openapi/kas-fleet-manager.yaml") });
 const topicAPI = new OpenAPIBackend({ definition: path.join(__dirname, "../../openapi/strimzi-admin.yaml") });
 
 // register handlers
