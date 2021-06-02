@@ -169,12 +169,16 @@ func runCreate(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.create.log.debug.creatingKafka", localize.NewEntry("Name", opts.name)))
+	logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", localize.NewEntry("Name", payload.Name)))
 
 	a := api.Kafka().CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
-	response, _, err := a.Execute()
+	response, httpRes, err := a.Execute()
+
+	if httpRes.StatusCode == 409 {
+		return errors.New(opts.localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name)))
+	}
 
 	if err != nil {
 		return err
@@ -232,7 +236,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtv1.KafkaRequestPayload
 		Help:    opts.localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName), survey.WithValidator(pkgKafka.ValidateNameIsAvailable(api.Kafka(), opts.localizer)))
 	if err != nil {
 		return nil, err
 	}

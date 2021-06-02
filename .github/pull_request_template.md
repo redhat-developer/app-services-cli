@@ -1,4 +1,4 @@
-<!-- Add a description here or link to therelevant GitHub issue
+<!-- Add a description here or link to the relevant GitHub issue
 See https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue on how to link an issue -->
 
 Closes # <!-- If there is no issue to link, you can remove this -->
