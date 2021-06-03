@@ -141,7 +141,7 @@ func runCreate(opts *Options) error {
 	logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
 
 	creds := &credentials.Credentials{
-		ClientID:     serviceacct.GetClientID(),
+		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetClientSecret(),
 	}
 

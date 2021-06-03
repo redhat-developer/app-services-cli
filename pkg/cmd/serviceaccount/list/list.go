@@ -117,7 +117,7 @@ func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) [
 		row := svcAcctRow{
 			ID:        sa.GetId(),
 			Name:      sa.GetName(),
-			ClientID:  sa.GetClientID(),
+			ClientID:  sa.GetClientId(),
 			Owner:     sa.GetOwner(),
 			CreatedAt: sa.GetCreatedAt().String(),
 		}

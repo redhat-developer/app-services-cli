@@ -294,7 +294,7 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 			Namespace: namespace,
 		},
 		StringData: map[string]string{
-			"client-id":     serviceAcct.GetClientID(),
+			"client-id":     serviceAcct.GetClientId(),
 			"client-secret": serviceAcct.GetClientSecret(),
 		},
 	}

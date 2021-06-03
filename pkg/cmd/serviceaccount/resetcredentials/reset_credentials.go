@@ -147,7 +147,7 @@ func runResetCredentials(opts *Options) (err error) {
 	logger.Info(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
 
 	creds := &credentials.Credentials{
-		ClientID:     updatedServiceAccount.GetClientID(),
+		ClientID:     updatedServiceAccount.GetClientId(),
 		ClientSecret: updatedServiceAccount.GetClientSecret(),
 	}
 
