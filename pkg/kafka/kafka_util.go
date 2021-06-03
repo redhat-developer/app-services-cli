@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"regexp"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 )
 
@@ -81,4 +83,23 @@ func ValidateSearchInput(val interface{}) error {
 	}
 
 	return kafkaerr.InvalidSearchValueError(search)
+}
+
+// ValidateNameIsAvailable checks if a kafka instance with the given name already exists
+func ValidateNameIsAvailable(api kafkamgmtv1.DefaultApi, localizer localize.Localizer) func(v interface{}) error {
+	return func(v interface{}) error {
+		name, _ := v.(string)
+
+		_, httpRes, _ := GetKafkaByName(context.Background(), api, name)
+
+		if httpRes != nil && httpRes.StatusCode == 200 {
+			return errors.New(localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
+		}
+
+		if httpRes != nil && httpRes.Body != nil {
+			httpRes.Body.Close()
+		}
+
+		return nil
+	}
 }

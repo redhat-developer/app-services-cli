@@ -65,7 +65,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 			if !opts.interactive {
 				if opts.fileFormat == "" {
-					return errors.New(opts.localizer.MustLocalize("flag.error.required", localize.NewEntry("Flag", "file-format")))
+					return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
 				}
 
 				if err = validation.ValidateName(opts.name); err != nil {

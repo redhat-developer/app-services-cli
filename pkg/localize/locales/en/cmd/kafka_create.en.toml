@@ -38,8 +38,8 @@ one = 'Cloud Provider Region ID'
 [kafka.create.flag.autoUse.description]
 one = 'Set the new Kafka instance to the current instance'
 
-[kafka.create.log.debug.creatingKafka]
-description = 'Debug message when Kafka instance is being created'
+[kafka.create.log.info.creatingKafka]
+description = 'Message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}"...'
 
 [kafka.create.info.successMessage]
@@ -81,3 +81,6 @@ In order to be able to create a Kafka instance, you must first review and accept
 
 {{.TermsURL}}
 '''
+
+[kafka.create.error.conflictError]
+one = 'Kafka instance "{{.Name}}" already exists'
