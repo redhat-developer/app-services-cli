@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 func TestCreateConfigEntries(t *testing.T) {
@@ -19,7 +19,7 @@ func TestCreateConfigEntries(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *[]strimziadminclient.ConfigEntry
+		want *[]kafkainstanceclient.ConfigEntry
 	}{
 		{
 			name: "should convert config entry map to an array with the same values",
@@ -29,7 +29,7 @@ func TestCreateConfigEntries(t *testing.T) {
 					keyTwo: nil,
 				},
 			},
-			want: &[]strimziadminclient.ConfigEntry{
+			want: &[]kafkainstanceclient.ConfigEntry{
 				{
 					Key:   &keyOne,
 					Value: &valOne,

@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
@@ -99,12 +99,12 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
 
-	a := api.GetTopicsList(context.Background())
+	a := api.GetTopics(context.Background())
 	topicData, httpRes, err := a.Execute()
 
 	if err != nil {
@@ -150,7 +150,7 @@ func runCmd(opts *Options) error {
 	return nil
 }
 
-func mapTopicResultsToTableFormat(topics []strimziadminclient.Topic) []topicRow {
+func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow {
 	var rows []topicRow = []topicRow{}
 
 	for _, t := range topics {

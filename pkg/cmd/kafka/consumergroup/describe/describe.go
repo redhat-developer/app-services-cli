@@ -13,7 +13,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -21,6 +20,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -105,7 +105,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
@@ -154,7 +154,7 @@ func runCmd(opts *Options) error {
 	return nil
 }
 
-func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consumer) []consumerRow {
+func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consumer) []consumerRow {
 	var rows []consumerRow = []consumerRow{}
 
 	for _, consumer := range consumers {
@@ -179,7 +179,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []strimziadminclient.Consum
 }
 
 // print the consumer grooup details
-func printConsumerGroupDetails(w io.Writer, consumerGroupData strimziadminclient.ConsumerGroup, localizer localize.Localizer) {
+func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclient.ConsumerGroup, localizer localize.Localizer) {
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()
 

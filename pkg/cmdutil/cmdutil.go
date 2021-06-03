@@ -43,11 +43,11 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	api, _, err := conn.API().TopicAdmin(cfg.Services.Kafka.ClusterID)
+	api, _, err := conn.API().KafkaAdmin(cfg.Services.Kafka.ClusterID)
 	if err != nil {
 		return validNames, directive
 	}
-	req := api.GetTopicsList(context.Background())
+	req := api.GetTopics(context.Background())
 	if toComplete != "" {
 		req = req.Filter(toComplete)
 	}
@@ -85,11 +85,11 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	api, _, err := conn.API().TopicAdmin(cfg.Services.Kafka.ClusterID)
+	api, _, err := conn.API().KafkaAdmin(cfg.Services.Kafka.ClusterID)
 	if err != nil {
 		return validIDs, directive
 	}
-	req := api.GetConsumerGroupList(context.Background())
+	req := api.GetConsumerGroups(context.Background())
 
 	cgRes, _, err := req.Execute()
 

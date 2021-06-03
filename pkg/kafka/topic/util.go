@@ -4,19 +4,19 @@ import (
 	"fmt"
 	"strconv"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 var RetentionMsKey string = "retention.ms"
 var RetentionSizeKey string = "retention.bytes"
 
 // CreateConfigEntries converts a key value map of config entries to an array of config entries
-func CreateConfigEntries(entryMap map[string]*string) *[]strimziadminclient.ConfigEntry {
-	entries := []strimziadminclient.ConfigEntry{}
+func CreateConfigEntries(entryMap map[string]*string) *[]kafkainstanceclient.ConfigEntry {
+	entries := []kafkainstanceclient.ConfigEntry{}
 	for key, value := range entryMap {
 		if value != nil {
 			// nolint:scopelint
-			entry := strimziadminclient.NewConfigEntry()
+			entry := kafkainstanceclient.NewConfigEntry()
 			entry.SetKey(key)
 			entry.SetValue(*value)
 			entries = append(entries, *entry)

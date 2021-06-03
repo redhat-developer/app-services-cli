@@ -1,11 +1,11 @@
 package consumergroup
 
 import (
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 // GetPartitionsWithLag returns the number of partitions having lag for a consumer group
-func GetPartitionsWithLag(consumers []strimziadminclient.Consumer) (partitionsWithLag int) {
+func GetPartitionsWithLag(consumers []kafkainstanceclient.Consumer) (partitionsWithLag int) {
 	for _, consumer := range consumers {
 		if consumer.Lag > 0 {
 			partitionsWithLag++
@@ -15,7 +15,7 @@ func GetPartitionsWithLag(consumers []strimziadminclient.Consumer) (partitionsWi
 	return partitionsWithLag
 }
 
-func GetActiveConsumersCount(consumers []strimziadminclient.Consumer) (count int) {
+func GetActiveConsumersCount(consumers []kafkainstanceclient.Consumer) (count int) {
 	for _, c := range consumers {
 		if c.Partition != -1 {
 			count++

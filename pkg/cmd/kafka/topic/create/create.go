@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"strconv"
 
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+
 	"github.com/AlecAivazis/survey/v2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -15,7 +17,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -147,16 +148,16 @@ func runCmd(opts *Options) error {
 	}
 
 	ctx := context.Background()
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
 
 	createTopicReq := api.CreateTopic(ctx)
 
-	topicInput := strimziadminclient.NewTopicInput{
+	topicInput := kafkainstanceclient.NewTopicInput{
 		Name: opts.topicName,
-		Settings: strimziadminclient.TopicSettings{
+		Settings: kafkainstanceclient.TopicSettings{
 			NumPartitions: opts.partitions,
 			Config:        createConfigEntries(opts),
 		},
@@ -207,7 +208,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
@@ -272,7 +273,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	return nil
 }
 
-func createConfigEntries(opts *Options) *[]strimziadminclient.ConfigEntry {
+func createConfigEntries(opts *Options) *[]kafkainstanceclient.ConfigEntry {
 	retentionMsStr := strconv.Itoa(opts.retentionMs)
 	retentionBytesStr := strconv.Itoa(opts.retentionBytes)
 	configEntryMap := map[string]*string{

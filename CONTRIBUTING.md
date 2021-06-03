@@ -62,22 +62,6 @@ Runs unit tests
 
 Runs integration tests
 
-## Kafka Service Fleet Manager API (KAS)
-
-- The CLI uses the Strimzi API for topic management. The client is located in `./pkg/api/strimzi-admin/client`
-
-### Updating the API client
-
-Please ensure you have the latest generated version. Follow the steps below to update all API clients.
-
-#### `make openapi/pull`
-
-Saves the latest OpenAPI specification files to the `./openapi` directory.
-
-#### `make openapi/validate`
-
-Validates the OpenAPI specification files.
-
 ## Mock API
 
 The repo has a local mocked version of the KAS API in `./mas-mock`.
