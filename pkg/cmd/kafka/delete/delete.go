@@ -13,7 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -110,7 +110,7 @@ func runDelete(opts *options) error {
 
 	api := connection.API()
 
-	var response *kafkamgmtv1.KafkaRequest
+	var response *kafkamgmtclient.KafkaRequest
 	ctx := context.Background()
 	if opts.name != "" {
 		response, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)

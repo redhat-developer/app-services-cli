@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
@@ -192,7 +192,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 }
 
 // createKafkaConnectionCustomResource creates a new "KafkaConnection" CR
-func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, namespace string, kafkaInstance *kafkamgmtv1.KafkaRequest) error {
+func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, namespace string, kafkaInstance *kafkamgmtclient.KafkaRequest) error {
 	crName := kafkaInstance.GetName()
 	kafkaID := kafkaInstance.GetId()
 
@@ -310,12 +310,12 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 }
 
 // createServiceAccount creates a service account
-func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kafkamgmtv1.ServiceAccount, error) {
+func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kafkamgmtclient.ServiceAccount, error) {
 	t := time.Now()
 
 	api := c.connection.API()
-	serviceAcct := &kafkamgmtv1.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
-	req := api.Kafka().CreateServiceAccount(ctx)
+	serviceAcct := &kafkamgmtclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
+	req := api.ServiceAccount().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
 	res, _, err := req.Execute()
 

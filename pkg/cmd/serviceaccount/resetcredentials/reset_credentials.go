@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -99,7 +99,7 @@ func runResetCredentials(opts *Options) (err error) {
 
 	api := connection.API()
 
-	serviceacct, _, err := api.Kafka().GetServiceAccountById(context.Background(), opts.id).Execute()
+	serviceacct, _, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
 	if err != nil {
 		return err
 	}
@@ -162,7 +162,7 @@ func runResetCredentials(opts *Options) (err error) {
 	return nil
 }
 
-func resetCredentials(name string, opts *Options) (*kafkamgmtv1.ServiceAccount, error) {
+func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccount, error) {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -178,7 +178,7 @@ func resetCredentials(name string, opts *Options) (*kafkamgmtv1.ServiceAccount, 
 
 	logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 
-	serviceacct, httpRes, err := api.Kafka().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
 
 	if err != nil {
 		if httpRes == nil {

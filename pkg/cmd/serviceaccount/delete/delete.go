@@ -70,9 +70,7 @@ func runDelete(opts *Options) (err error) {
 		return err
 	}
 
-	api := connection.API()
-	a := api.Kafka().GetServiceAccountById(context.Background(), opts.id)
-	_, httpRes, err := a.Execute()
+	_, httpRes, err := connection.API().ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
 
 	if err != nil {
 		if httpRes == nil {
@@ -115,10 +113,7 @@ func deleteServiceAccount(opts *Options) error {
 		return err
 	}
 
-	api := connection.API()
-
-	a := api.Kafka().DeleteServiceAccount(context.Background(), opts.id)
-	_, httpRes, err := a.Execute()
+	_, httpRes, err := connection.API().ServiceAccount().DeleteServiceAccountById(context.Background(), opts.id).Execute()
 
 	if err != nil {
 		if httpRes == nil {

@@ -10,7 +10,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/openconfig/goyang/pkg/indent"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -169,7 +169,7 @@ func createDivider(n int) string {
 	return b
 }
 
-func getKafkaStatus(ctx context.Context, api kafkamgmtv1.DefaultApi, id string) (status *KafkaStatus, err error) {
+func getKafkaStatus(ctx context.Context, api kafkamgmtclient.DefaultApi, id string) (status *KafkaStatus, err error) {
 	kafkaResponse, _, err := api.GetKafkaById(ctx, id).Execute()
 	if kas.IsErr(err, kas.ErrorNotFound) {
 		return nil, kafkaerr.NotFoundByIDError(id)

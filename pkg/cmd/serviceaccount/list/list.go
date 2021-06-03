@@ -14,7 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -82,10 +82,7 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	api := connection.API()
-
-	a := api.Kafka().ListServiceAccounts(context.Background())
-	res, _, err := a.Execute()
+	res, _, err := connection.API().ServiceAccount().GetServiceAccounts(context.Background()).Execute()
 
 	if err != nil {
 		return err
@@ -113,7 +110,7 @@ func runList(opts *Options) (err error) {
 	return nil
 }
 
-func mapResponseItemsToRows(svcAccts []kafkamgmtv1.ServiceAccountListItem) []svcAcctRow {
+func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {
 	rows := []svcAcctRow{}
 
 	for _, sa := range svcAccts {

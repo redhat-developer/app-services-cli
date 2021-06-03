@@ -10,7 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 var (
@@ -41,7 +41,7 @@ func ValidateName(val interface{}) error {
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformKafkaRequestListItems(items []kafkamgmtv1.KafkaRequest) []kafkamgmtv1.KafkaRequest {
+func TransformKafkaRequestListItems(items []kafkamgmtclient.KafkaRequest) []kafkamgmtclient.KafkaRequest {
 	for i := range items {
 		kafka := items[i]
 		kafka = *TransformKafkaRequest(&kafka)
@@ -53,7 +53,7 @@ func TransformKafkaRequestListItems(items []kafkamgmtv1.KafkaRequest) []kafkamgm
 
 // TransformKafkaRequest modifies fields from the KafkaRequest payload object
 // The main transformation is appending ":443" to the Bootstrap Server URL
-func TransformKafkaRequest(kafka *kafkamgmtv1.KafkaRequest) *kafkamgmtv1.KafkaRequest {
+func TransformKafkaRequest(kafka *kafkamgmtclient.KafkaRequest) *kafkamgmtclient.KafkaRequest {
 	bootstrapHost := kafka.GetBootstrapServerHost()
 
 	if bootstrapHost == "" {
@@ -86,7 +86,7 @@ func ValidateSearchInput(val interface{}) error {
 }
 
 // ValidateNameIsAvailable checks if a kafka instance with the given name already exists
-func ValidateNameIsAvailable(api kafkamgmtv1.DefaultApi, localizer localize.Localizer) func(v interface{}) error {
+func ValidateNameIsAvailable(api kafkamgmtclient.DefaultApi, localizer localize.Localizer) func(v interface{}) error {
 	return func(v interface{}) error {
 		name, _ := v.(string)
 

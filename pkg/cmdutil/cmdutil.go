@@ -116,7 +116,7 @@ func FilterValidKafkas(f *factory.Factory, toComplete string) (validNames []stri
 		return validNames, directive
 	}
 
-	req := conn.API().Kafka().ListKafkas(context.Background())
+	req := conn.API().Kafka().GetKafkas(context.Background())
 	if toComplete != "" {
 		searchQ := "name like " + toComplete + "%"
 		req = req.Search(searchQ)

@@ -8,7 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
@@ -105,7 +105,7 @@ func runUse(opts *Options) error {
 
 	api := connection.API()
 
-	var res *kafkamgmtv1.KafkaRequest
+	var res *kafkamgmtclient.KafkaRequest
 	ctx := context.Background()
 	if opts.name != "" {
 		res, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)

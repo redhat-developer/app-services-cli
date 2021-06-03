@@ -8,7 +8,9 @@ import (
 	"net/http"
 	"net/url"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+
 	"golang.org/x/oauth2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
@@ -154,10 +156,10 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 // API Creates a new API type which is a single type for multiple APIs
 // nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
-	var cachedKafkaServiceAPI kafkamgmtv1.DefaultApi
+	var cachedKafkaServiceAPI kafkamgmtclient.DefaultApi
 	var cachedKafkaID string
 	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
-	var cachedKafkaRequest *kafkamgmtv1.KafkaRequest
+	var cachedKafkaRequest *kafkamgmtclient.KafkaRequest
 	var cachedAmsAPI amsclient.DefaultApi
 	var cachedKafkaAdminErr error
 
@@ -173,7 +175,7 @@ func (c *KeycloakConnection) API() *api.API {
 		return cachedAmsAPI
 	}
 
-	kafkaAPIFunc := func() kafkamgmtv1.DefaultApi {
+	kafkaAPIFunc := func() kafkamgmtclient.DefaultApi {
 		if cachedKafkaServiceAPI != nil {
 			return cachedKafkaServiceAPI
 		}
@@ -186,7 +188,13 @@ func (c *KeycloakConnection) API() *api.API {
 		return cachedKafkaServiceAPI
 	}
 
-	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kafkamgmtv1.KafkaRequest, error) {
+	serviceAccountAPIFunc := func() kafkamgmtclient.SecurityApi {
+		apiClient := c.createKafkaAPIClient()
+
+		return apiClient.SecurityApi
+	}
+
+	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error) {
 		// if the api client is already created, and the same Kafka ID is used
 		// return the cached client
 		if cachedKafkaAdminAPI != nil && kafkaID == cachedKafkaID {
@@ -243,24 +251,23 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	return &api.API{
-		Kafka:       kafkaAPIFunc,
-		TopicAdmin:  kafkaAdminAPIFunc,
-		AccountMgmt: amsAPIFunc,
+		Kafka:          kafkaAPIFunc,
+		ServiceAccount: serviceAccountAPIFunc,
+		TopicAdmin:     kafkaAdminAPIFunc,
+		AccountMgmt:    amsAPIFunc,
 	}
 }
 
 // Create a new Kafka API client
-func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtv1.APIClient {
-	cfg := kafkamgmtv1.NewConfiguration()
+func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtclient.APIClient {
+	tc := c.createOAuthTransport(c.Token.AccessToken)
+	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
+		ServerURL:  c.apiURL,
+		Debug:      c.logger.DebugEnabled(),
+		HTTPClient: tc,
+	})
 
-	cfg.Scheme = c.apiURL.Scheme
-	cfg.Host = c.apiURL.Host
-
-	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
-
-	apiClient := kafkamgmtv1.NewAPIClient(cfg)
-
-	return apiClient
+	return client
 }
 
 // Create a new KafkaAdmin API client
