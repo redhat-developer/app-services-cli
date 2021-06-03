@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
@@ -10,6 +10,6 @@ import (
 type API struct {
 	Kafka          func() kafkamgmtclient.DefaultApi
 	ServiceAccount func() kafkamgmtclient.SecurityApi
-	TopicAdmin     func(kafkaID string) (strimziadminclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error)
+	KafkaAdmin     func(kafkaID string) (kafkainstanceclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error)
 	AccountMgmt    func() amsclient.DefaultApi
 }
