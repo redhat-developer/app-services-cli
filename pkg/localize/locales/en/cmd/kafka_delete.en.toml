@@ -47,4 +47,4 @@ one = 'Deleting Kafka instance'
 
 [kafka.delete.log.info.deleteSuccess]
 description = 'Info message when instance was deleted'
-one = 'Kafka instance "{{.Name}}" is being deleted. You can monitor its progress by running "rhoas status".'
+one = 'Kafka instance "{{.Name}}" is being deleted'
