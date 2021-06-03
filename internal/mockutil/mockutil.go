@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api"
@@ -30,7 +30,7 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 	}
 }
 
-func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmtv1.APIClient) connection.Connection {
+func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmtclient.APIClient) connection.Connection {
 	return &connection.ConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) error {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
@@ -68,7 +68,7 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmt
 		},
 		APIFunc: func() *api.API {
 			a := &api.API{
-				Kafka: func() kafkamgmtv1.DefaultApi {
+				Kafka: func() kafkamgmtclient.DefaultApi {
 					return apiClient.DefaultApi
 				},
 			}
@@ -78,8 +78,8 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmt
 	}
 }
 
-func NewKafkaRequestTypeMock(name string) kafkamgmtv1.KafkaRequest {
-	var kafkaReq kafkamgmtv1.KafkaRequest
+func NewKafkaRequestTypeMock(name string) kafkamgmtclient.KafkaRequest {
+	var kafkaReq kafkamgmtclient.KafkaRequest
 	kafkaReq.SetId("1")
 	kafkaReq.SetName(name)
 
