@@ -7,10 +7,10 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
-func GetKafkaByID(ctx context.Context, api kafkamgmtv1.DefaultApi, id string) (*kafkamgmtv1.KafkaRequest, *http.Response, error) {
+func GetKafkaByID(ctx context.Context, api kafkamgmtclient.DefaultApi, id string) (*kafkamgmtclient.KafkaRequest, *http.Response, error) {
 	r := api.GetKafkaById(ctx, id)
 
 	kafkaReq, httpResponse, err := r.Execute()
@@ -21,8 +21,8 @@ func GetKafkaByID(ctx context.Context, api kafkamgmtv1.DefaultApi, id string) (*
 	return &kafkaReq, httpResponse, err
 }
 
-func GetKafkaByName(ctx context.Context, api kafkamgmtv1.DefaultApi, name string) (*kafkamgmtv1.KafkaRequest, *http.Response, error) {
-	r := api.ListKafkas(ctx)
+func GetKafkaByName(ctx context.Context, api kafkamgmtclient.DefaultApi, name string) (*kafkamgmtclient.KafkaRequest, *http.Response, error) {
+	r := api.GetKafkas(ctx)
 	r = r.Search(fmt.Sprintf("name = %v", name))
 	kafkaList, httpResponse, err := r.Execute()
 	if err != nil {

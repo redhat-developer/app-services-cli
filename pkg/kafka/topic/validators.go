@@ -8,8 +8,8 @@ import (
 
 	"strconv"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 const (
@@ -108,7 +108,7 @@ func ValidateMessageRetentionSize(v interface{}) error {
 }
 
 // ValidateNameIsAvailable checks if a topic with the given name already exists
-func ValidateNameIsAvailable(api strimziadminclient.DefaultApi, instance string) func(v interface{}) error {
+func ValidateNameIsAvailable(api kafkainstanceclient.DefaultApi, instance string) func(v interface{}) error {
 	return func(v interface{}) error {
 		name, _ := v.(string)
 

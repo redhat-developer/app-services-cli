@@ -17,9 +17,9 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -196,7 +196,7 @@ func runCmd(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
@@ -222,7 +222,7 @@ func runCmd(opts *Options) error {
 
 	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
 
-	topicSettings := &strimziadminclient.UpdateTopicInput{}
+	topicSettings := &kafkainstanceclient.UpdateTopicInput{}
 
 	if opts.retentionMsStr != "" {
 		needsUpdate = true

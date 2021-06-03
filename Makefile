@@ -23,7 +23,6 @@ endif
 # The details of the application:
 binary:=rhoas
 
-strimzi_admin_api_dir=./pkg/api/strimzi-admin/client
 amsapi_dir=./pkg/api/ams/amsclient
 
 # Enable Go modules:
@@ -77,39 +76,12 @@ test/unit: install
 	go test ./pkg/...
 .PHONY: test/unit
 
-openapi/pull: openapi/strimzi-admin/pull
-.PHONY: openapi/pull
-
-openapi/validate: openapi/strimzi-admin/validate
-.PHONY: openapi/validate
-
-openapi/generate: openapi/strimzi-admin/generate
-.PHONY: openapi/validate
-
-openapi/strimzi-admin/pull:
-	wget -O ./openapi/strimzi-admin.yaml https://raw.githubusercontent.com/strimzi/strimzi-admin/e45b7410c36a96866a417e7adb8646f05d8293b9/rest/src/main/resources/openapi-specs/rest.yaml
-.PHONY: openapi/strimzi-admin/pull
-
-# validate the openapi schema
-openapi/strimzi-admin/validate:
-	openapi-generator-cli validate -i openapi/strimzi-admin.yaml
-.PHONY: openapi/strimzi-admin/validate
-
-# generate the openapi schema
-openapi/strimzi-admin/generate:
-	openapi-generator-cli generate -i openapi/strimzi-admin.yaml -g go --package-name strimziadminclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${strimzi_admin_api_dir}
-	openapi-generator-cli validate -i openapi/strimzi-admin.yaml
-	# generate mock
-	moq -out ${strimzi_admin_api_dir}/default_api_mock.go ${strimzi_admin_api_dir} DefaultApi
-	gofmt -w ${strimzi_admin_api_dir}
-.PHONY: openapi/strimzi-admin/generate
-
 openapi/ams/generate:
 	openapi-generator-cli generate -i openapi/ams.json -g go --package-name amsclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${amsapi_dir}
 	# generate mock
 	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
 	gofmt -w ${amsapi_dir}
-.PHONY: openapi/strimzi-admin/generate
+.PHONY: openapi/ams/generate
 
 mock-api/start: mock-api/client/start
 .PHONY: mock-api/start

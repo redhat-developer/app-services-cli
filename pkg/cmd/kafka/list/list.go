@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 
@@ -102,7 +102,7 @@ func runList(opts *options) error {
 
 	api := connection.API()
 
-	a := api.Kafka().ListKafkas(context.Background())
+	a := api.Kafka().GetKafkas(context.Background())
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 
@@ -139,7 +139,7 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(kafkas []kafkamgmtv1.KafkaRequest) []kafkaRow {
+func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
 	rows := []kafkaRow{}
 
 	for _, k := range kafkas {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
@@ -128,10 +128,9 @@ func runCreate(opts *Options) error {
 	}
 
 	// create the service account
-	serviceAccountPayload := &kafkamgmtv1.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
+	serviceAccountPayload := &kafkamgmtclient.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
-	api := connection.API()
-	a := api.Kafka().CreateServiceAccount(context.Background())
+	a := connection.API().ServiceAccount().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, err := a.Execute()
 
@@ -142,7 +141,7 @@ func runCreate(opts *Options) error {
 	logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
 
 	creds := &credentials.Credentials{
-		ClientID:     serviceacct.GetClientID(),
+		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetClientSecret(),
 	}
 

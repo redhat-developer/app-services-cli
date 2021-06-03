@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -144,7 +144,7 @@ func runCreate(opts *Options) error {
 		return nil
 	}
 
-	var payload *kafkamgmtv1.KafkaRequestPayload
+	var payload *kafkamgmtclient.KafkaRequestPayload
 	if opts.interactive {
 		logger.Debug()
 
@@ -161,7 +161,7 @@ func runCreate(opts *Options) error {
 			opts.region = defaultRegion
 		}
 
-		payload = &kafkamgmtv1.KafkaRequestPayload{
+		payload = &kafkamgmtclient.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
@@ -213,7 +213,7 @@ func runCreate(opts *Options) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *Options) (payload *kafkamgmtv1.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -242,7 +242,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtv1.KafkaRequestPayload
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, _, err := api.Kafka().ListCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, _, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
 	if err != nil {
 		return nil, err
 	}
@@ -264,7 +264,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtv1.KafkaRequestPayload
 	selectedCloudProvider := cloudproviderutil.FindByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, err := api.Kafka().ListCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
+	cloudRegionResponse, _, err := api.Kafka().GetCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
 	if err != nil {
 		return nil, err
 	}
@@ -283,7 +283,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtv1.KafkaRequestPayload
 		return nil, err
 	}
 
-	payload = &kafkamgmtv1.KafkaRequestPayload{
+	payload = &kafkamgmtclient.KafkaRequestPayload{
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,

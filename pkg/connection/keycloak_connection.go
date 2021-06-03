@@ -8,7 +8,11 @@ import (
 	"net/http"
 	"net/url"
 
-	kafkamgmtv1 "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+
 	"golang.org/x/oauth2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
@@ -16,8 +20,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
-
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api"
 
@@ -154,119 +156,78 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 // API Creates a new API type which is a single type for multiple APIs
 // nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
-	var cachedKafkaServiceAPI kafkamgmtv1.DefaultApi
-	var cachedKafkaID string
-	var cachedKafkaAdminAPI strimziadminclient.DefaultApi
-	var cachedKafkaRequest *kafkamgmtv1.KafkaRequest
-	var cachedAmsAPI amsclient.DefaultApi
-	var cachedKafkaAdminErr error
-
 	amsAPIFunc := func() amsclient.DefaultApi {
-		if cachedAmsAPI != nil {
-			return cachedAmsAPI
-		}
-
 		amsAPIClient := c.createAmsAPIClient()
 
-		cachedAmsAPI = amsAPIClient.DefaultApi
-
-		return cachedAmsAPI
+		return amsAPIClient.DefaultApi
 	}
 
-	kafkaAPIFunc := func() kafkamgmtv1.DefaultApi {
-		if cachedKafkaServiceAPI != nil {
-			return cachedKafkaServiceAPI
-		}
-
+	kafkaAPIFunc := func() kafkamgmtclient.DefaultApi {
 		// create the client
 		kafkaAPIClient := c.createKafkaAPIClient()
 
-		cachedKafkaServiceAPI = kafkaAPIClient.DefaultApi
-
-		return cachedKafkaServiceAPI
+		return kafkaAPIClient.DefaultApi
 	}
 
-	kafkaAdminAPIFunc := func(kafkaID string) (strimziadminclient.DefaultApi, *kafkamgmtv1.KafkaRequest, error) {
-		// if the api client is already created, and the same Kafka ID is used
-		// return the cached client
-		if cachedKafkaAdminAPI != nil && kafkaID == cachedKafkaID {
-			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
-		}
+	serviceAccountAPIFunc := func() kafkamgmtclient.SecurityApi {
+		apiClient := c.createKafkaAPIClient()
 
+		return apiClient.SecurityApi
+	}
+
+	kafkaAdminAPIFunc := func(kafkaID string) (kafkainstanceclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error) {
 		api := kafkaAPIFunc()
 
 		kafkaInstance, resp, err := api.GetKafkaById(context.Background(), kafkaID).Execute()
 		defer resp.Body.Close()
 		if kas.IsErr(err, kas.ErrorNotFound) {
-			cachedKafkaAdminAPI = nil
-			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = kafkaerr.NotFoundByIDError(kafkaID)
-
-			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+			return nil, nil, kafkaerr.NotFoundByIDError(kafkaID)
 		} else if err != nil {
-			cachedKafkaAdminAPI = nil
-			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = fmt.Errorf("%w", err)
-
-			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+			return nil, nil, fmt.Errorf("%w", err)
 		}
-
-		cachedKafkaRequest = &kafkaInstance
-		// cache the Kafka ID
-		cachedKafkaID = kafkaID
 
 		kafkaStatus := kafkaInstance.GetStatus()
 		if kafkaStatus != "ready" {
-			cachedKafkaAdminAPI = nil
-			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
+			err = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
 
-			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+			return nil, nil, err
 		}
 
 		bootstrapURL := kafkaInstance.GetBootstrapServerHost()
 		if bootstrapURL == "" {
-			cachedKafkaAdminAPI = nil
-			cachedKafkaRequest = nil
-			cachedKafkaAdminErr = fmt.Errorf(`bootstrap URL is missing for Kafka instance "%v"`, kafkaInstance.GetName())
+			err = fmt.Errorf(`bootstrap URL is missing for Kafka instance "%v"`, kafkaInstance.GetName())
 
-			return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+			return nil, nil, err
 		}
 
 		// create the client
 		apiClient := c.createKafkaAdminAPI(bootstrapURL)
 
-		cachedKafkaAdminAPI = apiClient.DefaultApi
-		cachedKafkaAdminErr = nil
-
-		return cachedKafkaAdminAPI, cachedKafkaRequest, cachedKafkaAdminErr
+		return *apiClient, &kafkaInstance, nil
 	}
 
 	return &api.API{
-		Kafka:       kafkaAPIFunc,
-		TopicAdmin:  kafkaAdminAPIFunc,
-		AccountMgmt: amsAPIFunc,
+		Kafka:          kafkaAPIFunc,
+		ServiceAccount: serviceAccountAPIFunc,
+		KafkaAdmin:     kafkaAdminAPIFunc,
+		AccountMgmt:    amsAPIFunc,
 	}
 }
 
 // Create a new Kafka API client
-func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtv1.APIClient {
-	cfg := kafkamgmtv1.NewConfiguration()
+func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtclient.APIClient {
+	tc := c.createOAuthTransport(c.Token.AccessToken)
+	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
+		BaseURL:    c.apiURL.String(),
+		Debug:      c.logger.DebugEnabled(),
+		HTTPClient: tc,
+	})
 
-	cfg.Scheme = c.apiURL.Scheme
-	cfg.Host = c.apiURL.Host
-
-	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
-
-	apiClient := kafkamgmtv1.NewAPIClient(cfg)
-
-	return apiClient
+	return client
 }
 
 // Create a new KafkaAdmin API client
-func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziadminclient.APIClient {
-	cfg := strimziadminclient.NewConfiguration()
-
+func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainstanceclient.DefaultApi {
 	host, port, _ := net.SplitHostPort(bootstrapURL)
 	var apiURL *url.URL
 
@@ -288,20 +249,13 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *strimziad
 
 	c.logger.Debugf("Making request to %v", apiURL.String())
 
-	cfg.HTTPClient = c.defaultHTTPClient
-	cfg.Host = apiURL.Host
-	cfg.HTTPClient = c.createOAuthTransport(c.MASToken.AccessToken)
+	client := kafkainstance.NewAPIClient(&kafkainstance.Config{
+		BaseURL:    apiURL.String(),
+		Debug:      c.logger.DebugEnabled(),
+		HTTPClient: c.createOAuthTransport(c.MASToken.AccessToken),
+	})
 
-	cfg.Servers = strimziadminclient.ServerConfigurations{
-		{
-			URL:         apiURL.String(),
-			Description: "Admin server",
-		},
-	}
-
-	apiClient := strimziadminclient.NewAPIClient(cfg)
-
-	return apiClient
+	return &client.DefaultApi
 }
 
 func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {

@@ -9,7 +9,6 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	strimziadminclient "github.com/redhat-developer/app-services-cli/pkg/api/strimzi-admin/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -19,6 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -99,12 +99,12 @@ func runList(opts *Options) (err error) {
 
 	ctx := context.Background()
 
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
 
-	req := api.GetConsumerGroupList(ctx)
+	req := api.GetConsumerGroups(ctx)
 	req = req.Limit(opts.limit)
 	if opts.topic != "" {
 		req = req.Topic(opts.topic)
@@ -159,7 +159,7 @@ func runList(opts *Options) (err error) {
 
 }
 
-func mapConsumerGroupResultsToTableFormat(consumerGroups []strimziadminclient.ConsumerGroup) []consumerGroupRow {
+func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {
 	var rows []consumerGroupRow = []consumerGroupRow{}
 
 	for _, t := range consumerGroups {

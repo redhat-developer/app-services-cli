@@ -99,7 +99,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	api, kafkaInstance, err := conn.API().TopicAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
