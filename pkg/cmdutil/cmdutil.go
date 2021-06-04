@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/redhat-developer/app-services-cli/pkg/cloudprovider/cloudproviderutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/spf13/cobra"
@@ -106,7 +107,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 }
 
 // FilterValidKafkaNames filters Kafkas by name from the API and returns the names
-// This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
+// This is used in the cobra.ValidArgsFunction for dynamic completion of Kafka instance names
 func FilterValidKafkas(f *factory.Factory, toComplete string) (validNames []string, directive cobra.ShellCompDirective) {
 	validNames = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
@@ -133,4 +134,28 @@ func FilterValidKafkas(f *factory.Factory, toComplete string) (validNames []stri
 	}
 
 	return validNames, directive
+}
+
+// FetchCloudProviders returns the list of supported cloud providers for creating a Kafka instance
+// This is used in the cmd.RegisterFlagCompletionFunc for dynamic completion of --provider
+func FetchCloudProviders(f *factory.Factory) (validProviders []string, directive cobra.ShellCompDirective) {
+	validProviders = []string{}
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return validProviders, directive
+	}
+
+	api := conn.API()
+
+	cloudProviderResponse, _, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
+	if err != nil {
+		return validProviders, directive
+	}
+
+	cloudProviders := cloudProviderResponse.GetItems()
+	validProviders = cloudproviderutil.GetEnabledNames(cloudProviders)
+
+	return validProviders, directive
 }
