@@ -29,6 +29,9 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
 [cluster.bind.flag.appName]
 one = '''Name of the kubernetes deployment to bind'''
 
+[cluster.bind.flag.bindName]
+one = 'Name of the Service binding object to create when using operator'
+
 [cluster.bind.flag.forceOperator.description]
 one = '''Use ServiceBindingOperator only and fail if Operator is not installed'''
 
