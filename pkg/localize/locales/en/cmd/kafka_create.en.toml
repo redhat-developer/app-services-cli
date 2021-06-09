@@ -69,6 +69,9 @@ one = "Geographical region where the Kafka instance will be deployed"
 [kafka.create.argument.name.error.requiredWhenNonInteractive]
 one = 'name is required. Run "rhoas kafka create <name>"'
 
+[kafka.create.flags.notAllowedWhenInteractive]
+one = 'region and provider flags not allowed for interactive Kafka instance creation'
+
 [kafka.create.debug.autoUseSetMessage]
 one = 'Auto-use Kafka is set, updating the current Kafka instance'
 

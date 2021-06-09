@@ -92,6 +92,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return errors.New(opts.localizer.MustLocalize("kafka.create.argument.name.error.requiredWhenNonInteractive"))
 			} else if opts.name == "" {
+				if opts.provider != "" || opts.region != "" {
+					return errors.New(opts.localizer.MustLocalize("kafka.create.flags.notAllowedWhenInteractive"))
+				}
 				opts.interactive = true
 			}
 
