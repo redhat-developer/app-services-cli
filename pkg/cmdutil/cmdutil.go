@@ -142,14 +142,12 @@ func FetchCloudProviders(f *factory.Factory) (validProviders []string, directive
 	validProviders = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return validProviders, directive
 	}
 
-	api := conn.API()
-
-	cloudProviderResponse, _, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, _, err := conn.API().Kafka().GetCloudProviders(context.Background()).Execute()
 	if err != nil {
 		return validProviders, directive
 	}
