@@ -20,3 +20,15 @@ $ rhoas kafka topic list -o json
 
 [kafka.topic.list.log.info.noTopics]
 one = 'Kafka instance "{{.InstanceName}}" has no topics. Run "rhoas kafka topic create <topic-name>" to create one'
+
+[kafka.topic.list.flag.search.description]
+description = 'Description for the --search flag'
+one = 'Text search to filter the Kafka topics by name'
+
+[kafka.topic.list.log.debug.filteringTopicList]
+description = 'Debug message when filtering the list of Kafka topic'
+one = 'Filtering Kafka topics with the query "{{.Search}}"'
+
+[kafka.topic.list.error.illegalSearchValue]
+description = 'Error message when invalid chars are used for search flag'
+one = 'illegal search value "{{.Search}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'

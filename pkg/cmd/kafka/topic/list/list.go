@@ -34,6 +34,7 @@ type Options struct {
 
 	kafkaID string
 	output  string
+	search  string
 }
 
 type topicRow struct {
@@ -66,6 +67,12 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
+			if opts.search != "" {
+				if err := topicutil.ValidateSearchInput(opts.search, opts.localizer); err != nil {
+					return err
+				}
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
@@ -82,6 +89,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -105,6 +113,12 @@ func runCmd(opts *Options) error {
 	}
 
 	a := api.GetTopics(context.Background())
+
+	if opts.search != "" {
+		logger.Debug(opts.localizer.MustLocalize("kafka.topic.list.log.debug.filteringTopicList", localize.NewEntry("Search", opts.search)))
+		a = a.Filter(opts.search)
+	}
+
 	topicData, httpRes, err := a.Execute()
 
 	if err != nil {

@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
@@ -43,6 +44,23 @@ func ValidateName(val interface{}) error {
 	}
 
 	return fmt.Errorf(`invalid topic name "%v"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted`, name)
+}
+
+func ValidateSearchInput(val interface{}, localizer localize.Localizer) error {
+
+	search, ok := val.(string)
+	if !ok {
+		return commonerr.NewCastError(val, "string")
+	}
+
+	matched, _ := regexp.Match(legalNameChars, []byte(search))
+
+	if matched {
+		return nil
+	}
+
+	return fmt.Errorf(localizer.MustLocalize("kafka.topic.list.error.illegalSearchValue", localize.NewEntry("Search", search)))
+
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
