@@ -19,7 +19,7 @@ $ rhoas kafka topic list -o json
 '''
 
 [kafka.topic.list.log.info.noTopics]
-one = 'Kafka instance "{{.InstanceName}}" has no topics. Run "rhoas kafka topic create <topic-name>" to create one'
+one = 'No topics found in Kafka instance "{{.InstanceName}}"'
 
 [kafka.topic.list.flag.search.description]
 description = 'Description for the --search flag'
