@@ -83,16 +83,9 @@ openapi/ams/generate:
 	gofmt -w ${amsapi_dir}
 .PHONY: openapi/ams/generate
 
-mock-api/start: mock-api/client/start
+mock-api/start: 
+	echo -e "y" | npx @rhoas/api-mock
 .PHONY: mock-api/start
-
-mock-api/server/start:
-	cd mas-mock && docker-compose up -d
-.PHONY: mock-api/server/start
-
-mock-api/client/start:
-	cd mas-mock && yarn && yarn start
-.PHONY: mock-api/client/start
 
 # clean up code and dependencies
 format:

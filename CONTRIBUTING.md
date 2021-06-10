@@ -62,31 +62,26 @@ Runs unit tests
 
 Runs integration tests
 
-## Mock API
+## Using CLI with Mock RHOAS API
 
-The repo has a local mocked version of the KAS API in `./mas-mock`.
-To work and test CLI locally please follow the mock readme and then login into cli using dev profile:
+RHOAS SDK provides mock for all supported APIs.
+To use mock you need to have NPM installed on your system and have free port 8000
+To work and test CLI locally please follow the [mock readme](https://github.com/redhat-developer/app-services-sdk-js/tree/main/packages/api-mock) and then login into cli using dev profile:
 
-> rhoas login --url=http://locahost:8080
-
-> The mock API can become outdated from the current state of the KAS API. If you want to work with it please ensure it uses the latest OpenAPI spec, making changes where necessary.
+```shell
+rhoas login --api-gateway=http://localhost:8000
+```
 
 ### `make mock-api/start`
 
-Starts the mock KAS Fleet Manager API and Kafka Admin API at [`http://localhost:8000`](http://localhost:8000).
+Starts the mock all services Manager API and Instance API at [`http://localhost:8000`](http://localhost:8000).
 
 ### Logging in
 
 To log in to the mock API, run `rhoas login against the local server` with your authentication token:
 
 ```shell
-rhoas login --url http://localhost:8000
-```
-
-If you don't have an authentication token, you can still use a faked one, provided it has the correct payload:
-
-```shell
-export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4NDgzMTAyLTRhYzAtNDQ0Mi1hZjMwLTAwYWExMDdjZDc5MCJ9.eyJpYXQiOjE2MDQ1OTAzNDAsImp0aSI6ImNjZjg1MmM5LWI5YWEtNDE3Ny1hYmU0LWZkYWU0NmZmNmIxMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInN1YiI6ImY6LTMzMGVkMmRiLWEwMWUtNDI2OC04ZTkzLTE5ZjhmOGM2YTUxYzpkZXZlbG9wZXIiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoiYXBpLXNlcnZpY2VzIiwibm9uY2UiOiI5OTBjOTI1NS0xNTI3LTRiMTItOTM5OS02YWM2ZGZkMDJmZWQiLCJzZXNzaW9uX3N0YXRlIjoiYTY4Y2U1ZjktZTBiNi00MTc0LTg1YWItMDdmNzBkOGYxZmU2Iiwic2NvcGUiOiJvcGVuaWQgb2ZmbGluZV9hY2Nlc3MifQ.WTfFifDGnPkJX-IQSbzPWRhBKE7Gq5E6SKq3e70jbNc"
+rhoas login --api-gateway=http://localhost:8000
 ```
 
 ## Internationalization
