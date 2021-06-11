@@ -232,7 +232,7 @@ func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *ur
 func (a *AuthorizationCodeGrant) startServer(ctx context.Context, server *http.Server) {
 	go func() {
 		if err := server.ListenAndServe(); err == nil {
-			a.Logger.Error(a.Localizer.MustLocalize("login.log.error.unableToStartServer"), localize.NewEntry("Error", err))
+			a.Logger.Error(a.Localizer.MustLocalize("login.log.error.unableToStartServer", localize.NewEntry("Error", err)))
 		}
 	}()
 	<-ctx.Done()
