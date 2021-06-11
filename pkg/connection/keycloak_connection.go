@@ -229,16 +229,16 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtclient.APIClient {
 // Create a new KafkaAdmin API client
 func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainstanceclient.DefaultApi {
 	host, port, _ := net.SplitHostPort(bootstrapURL)
+
 	var apiURL *url.URL
 
 	if host == "localhost" {
 		apiURL = &url.URL{
 			Scheme: "http",
 			Host:   fmt.Sprintf("localhost:%v", port),
-			Path:   "/rest",
 		}
 		apiURL.Scheme = "http"
-		apiURL.Path = "/rest"
+		apiURL.Path = "/data/kafka"
 	} else {
 		apiHost := fmt.Sprintf("admin-server-%v", host)
 		apiURL, _ = url.Parse(apiHost)
