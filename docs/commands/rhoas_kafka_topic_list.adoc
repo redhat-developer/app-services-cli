@@ -28,6 +28,7 @@ $ rhoas kafka topic list -o json
 
 ....
   -o, --output string   Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"
+      --search string   Text search to filter the Kafka topics by name
 ....
 
 === Options inherited from parent commands
