@@ -137,8 +137,10 @@ goreleaser --snapshot --rm-dist
 
 ### Creating the release
 
-Execute `git tag 0.20.1` to create the release tag. Then execute `git push origin 0.20.1` to push to the tag to your remote (GitHub).
+Execute `git tag v0.20.1` to create the release tag. Then execute `git push origin v0.20.1` to push to the tag to your remote (GitHub).
 Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-cli/actions/workflows/release.yml) will create a release on GitHub and upload the binaries.
+
+> NOTE: To create a pre-release, the tag should have appropriate suffix, e.g v0.20.1-alpha1
 
 ### Generate a changelog
 
