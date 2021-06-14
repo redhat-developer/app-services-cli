@@ -1,5 +1,4 @@
 {{ range .Versions }}
-
 {{ range .CommitGroups -}}
 ## {{ .Title }}
 
