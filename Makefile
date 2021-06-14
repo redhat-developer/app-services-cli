@@ -66,12 +66,6 @@ install:
 	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
 
-# Runs the integration tests.
-test/integration: install
-	go test ./test/integration
-.PHONY: test/integration
-
-# Runs the integration tests.
 test/unit: install
 	go test ./pkg/...
 .PHONY: test/unit

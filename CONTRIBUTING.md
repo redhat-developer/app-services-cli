@@ -58,10 +58,6 @@ If you have the Go extension for VS Code, you can generate test stubs for a file
 
 Runs unit tests
 
-### `make test/integration`
-
-Runs integration tests
-
 ## Using CLI with Mock RHOAS API
 
 RHOAS SDK provides mock for all supported APIs.
