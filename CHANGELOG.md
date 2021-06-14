@@ -1,4 +1,28 @@
 
+<a name="v0.24.4"></a>
+## [v0.24.4](https://github.com/redhat-developer/app-services-cli/compare/0.24.3...v0.24.4) (2021-06-14)
+
+### Bug Fixes
+
+* fix invalid i18n arg ([#681](https://github.com/redhat-developer/app-services-cli/issues/681))
+* minor bug fixes and validations ([#696](https://github.com/redhat-developer/app-services-cli/issues/696))
+* misformatted error message ([#669](https://github.com/redhat-developer/app-services-cli/issues/669))
+* erroneous message for invalid option ([#689](https://github.com/redhat-developer/app-services-cli/issues/689))
+* localize id for cluster info ([#688](https://github.com/redhat-developer/app-services-cli/issues/688))
+* fix invalid i18n ID ([#680](https://github.com/redhat-developer/app-services-cli/issues/680))
+* **config:** create config directory if it does not exist ([#683](https://github.com/redhat-developer/app-services-cli/issues/683))
+* **kafka create:** run interactive if no name provided and fix typos ([#705](https://github.com/redhat-developer/app-services-cli/issues/705))
+* **kafka delete:** show proper message for delete operation ([#700](https://github.com/redhat-developer/app-services-cli/issues/700))
+* **kafka topic:** update regexp for topic name ([#663](https://github.com/redhat-developer/app-services-cli/issues/663))
+
+### Features
+
+* Add ability to specify a binding name using binding-name flag
+* **completion:** dynamic completion for suitable flags ([#702](https://github.com/redhat-developer/app-services-cli/issues/702))
+* **completion:** static completion for suitable flags ([#686](https://github.com/redhat-developer/app-services-cli/issues/686))
+* **kafka topic:** add search flag to list subcommand ([#709](https://github.com/redhat-developer/app-services-cli/issues/709))
+
+
 <a name="0.24.3"></a>
 ## [0.24.3](https://github.com/redhat-developer/app-services-cli/compare/0.24.2...0.24.3) (2021-04-26)
 
