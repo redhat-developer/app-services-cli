@@ -6,6 +6,7 @@ import (
 	"regexp"
 
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 )
 
 const (
@@ -13,6 +14,7 @@ const (
 	legalNameChars = "^[a-z]([-a-z0-9]*[a-z0-9])?$"
 	maxNameLength  = 50
 	minNameLength  = 1
+	leagalUUID     = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 	// description validation rules
 	legalDescriptionChars = "^[a-zA-Z0-9.,\\-\\s]*$"
 	maxDescriptionLength  = 255
@@ -62,4 +64,23 @@ func ValidateDescription(val interface{}) error {
 	}
 
 	return errors.New(`invalid service account description; only alphanumeric characters and "-", ".", "," are accepted`)
+}
+
+// ValidateID validates if ID is a valid UUID
+func ValidateID(localizer localize.Localizer) func(v interface{}) error {
+	return func(val interface{}) error {
+		id, ok := val.(string)
+		if !ok {
+			return commonerr.NewCastError(val, "string")
+		}
+
+		matched, _ := regexp.Match(leagalUUID, []byte(id))
+
+		if matched {
+			return nil
+		}
+
+		return errors.New(localizer.MustLocalize("serviceAccount.common.validation.id.error.invalidID", localize.NewEntry("ID", id)))
+	}
+
 }

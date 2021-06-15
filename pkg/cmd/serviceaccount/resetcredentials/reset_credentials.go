@@ -15,6 +15,7 @@ import (
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -217,7 +218,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.id.help"),
 	}
 
-	err = survey.AskOne(promptID, &opts.id, survey.WithValidator(survey.Required))
+	err = survey.AskOne(promptID, &opts.id, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateID(opts.localizer)))
 	if err != nil {
 		return err
 	}
