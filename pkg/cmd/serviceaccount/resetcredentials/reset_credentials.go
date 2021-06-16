@@ -71,6 +71,11 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			}
 
+			validID := validation.ValidateUUID(opts.localizer)(opts.id)
+			if validID != nil {
+				return validID
+			}
+
 			return runResetCredentials(opts)
 		},
 	}
@@ -218,7 +223,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.id.help"),
 	}
 
-	err = survey.AskOne(promptID, &opts.id, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateID(opts.localizer)))
+	err = survey.AskOne(promptID, &opts.id, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateUUID(opts.localizer)))
 	if err != nil {
 		return err
 	}
