@@ -19,24 +19,26 @@ var (
 )
 
 // ValidateName validates the proposed name of a Kafka instance
-func ValidateName(val interface{}) error {
-	name, ok := val.(string)
+func ValidateName(localizer localize.Localizer) func(v interface{}) error {
+	return func(val interface{}) error {
+		name, ok := val.(string)
 
-	if !ok {
-		return commonerr.NewCastError(val, "string")
+		if !ok {
+			return commonerr.NewCastError(val, "string")
+		}
+
+		if len(name) < 1 || len(name) > 32 {
+			return errors.New(localizer.MustLocalize("kafka.validation.name.error.lengthError"))
+		}
+
+		matched := validNameRegexp.MatchString(name)
+
+		if matched {
+			return nil
+		}
+
+		return kafkaerr.InvalidNameError(name)
 	}
-
-	if len(name) < 1 || len(name) > 32 {
-		return errors.New("Kafka instance name must be between 1 and 32 characters")
-	}
-
-	matched := validNameRegexp.MatchString(name)
-
-	if matched {
-		return nil
-	}
-
-	return kafkaerr.InvalidNameError(name)
 }
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances

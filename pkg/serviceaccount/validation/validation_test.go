@@ -2,6 +2,8 @@ package validation
 
 import (
 	"testing"
+
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 )
 
 func TestValidateName(t *testing.T) {
@@ -59,10 +61,12 @@ func TestValidateName(t *testing.T) {
 			wantErr: true,
 		},
 	}
+
+	localizer, _ := goi18n.New(nil)
 	// nolint:scopelint
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateName(tt.args.val); (err != nil) != tt.wantErr {
+			if err := ValidateName(localizer)(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -109,10 +113,13 @@ func TestValidateDescription(t *testing.T) {
 			wantErr: false,
 		},
 	}
+
+	localizer, _ := goi18n.New(nil)
+
 	for _, tt := range tests {
 		// nolint:scopelint
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateDescription(tt.args.val); (err != nil) != tt.wantErr {
+			if err := ValidateDescription(localizer)(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateDescription() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

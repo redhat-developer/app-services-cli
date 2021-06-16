@@ -3,6 +3,7 @@ package kafka
 import (
 	"testing"
 
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
@@ -87,10 +88,12 @@ func TestValidateName(t *testing.T) {
 			wantErr: true,
 		},
 	}
+
+	localizer, _ := goi18n.New(nil)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// nolint
-			if err := ValidateName(tt.args.name); (err != nil) != tt.wantErr {
+			if err := ValidateName(localizer)(tt.args.name); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

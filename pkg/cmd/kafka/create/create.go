@@ -84,7 +84,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			if len(args) > 0 {
 				opts.name = args[0]
 
-				if err := kafka.ValidateName(opts.name); err != nil {
+				if err := kafka.ValidateName(opts.localizer)(opts.name); err != nil {
 					return err
 				}
 			}
@@ -243,7 +243,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 		Help:    opts.localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName), survey.WithValidator(pkgKafka.ValidateNameIsAvailable(api.Kafka(), opts.localizer)))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName(opts.localizer)), survey.WithValidator(pkgKafka.ValidateNameIsAvailable(api.Kafka(), opts.localizer)))
 	if err != nil {
 		return nil, err
 	}

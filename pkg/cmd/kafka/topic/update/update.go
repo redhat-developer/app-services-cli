@@ -94,7 +94,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return nil
 				}
 
-				if err = topicutil.ValidateName(opts.topicName); err != nil {
+				if err = topicutil.ValidateName(opts.localizer)(opts.topicName); err != nil {
 					return err
 				}
 			}
@@ -111,7 +111,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidatePartitionsN(partitionCount); err != nil {
+				if err = topicutil.ValidatePartitionsN(opts.localizer)(partitionCount); err != nil {
 					return err
 				}
 			}
@@ -122,7 +122,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+				if err = topicutil.ValidateMessageRetentionPeriod(opts.localizer)(retentionPeriodMs); err != nil {
 					return err
 				}
 			}
@@ -133,7 +133,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionSize(retentionSizeBytes); err != nil {
+				if err = topicutil.ValidateMessageRetentionSize(opts.localizer)(retentionSizeBytes); err != nil {
 					return err
 				}
 			}
@@ -304,7 +304,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.retentionMs.help"),
 	}
 
-	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod((opts.localizer))))
 	if err != nil {
 		return err
 	}
@@ -314,7 +314,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.retentionBytes.help"),
 	}
 
-	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(topicutil.ValidateMessageRetentionSize(opts.localizer)))
 	if err != nil {
 		return err
 	}

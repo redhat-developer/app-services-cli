@@ -68,10 +68,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 					return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
 				}
 
-				if err = validation.ValidateName(opts.name); err != nil {
+				if err = validation.ValidateName(opts.localizer)(opts.name); err != nil {
 					return err
 				}
-				if err = validation.ValidateDescription(opts.description); err != nil {
+				if err = validation.ValidateDescription(opts.localizer)(opts.description); err != nil {
 					return err
 				}
 			}
@@ -174,7 +174,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateName))
+	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateName(opts.localizer)))
 	if err != nil {
 		return err
 	}
@@ -206,7 +206,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.create.flag.description.description"),
 	}
 
-	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validation.ValidateDescription))
+	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validation.ValidateDescription(opts.localizer)))
 	if err != nil {
 		return err
 	}
