@@ -66,7 +66,7 @@ func ValidateDescription(val interface{}) error {
 	return errors.New(`invalid service account description; only alphanumeric characters and "-", ".", "," are accepted`)
 }
 
-// ValidateID validates if ID is a valid UUID
+// ValidateUUID validates if ID is a valid UUID
 func ValidateUUID(localizer localize.Localizer) func(v interface{}) error {
 	return func(val interface{}) error {
 		id, ok := val.(string)
