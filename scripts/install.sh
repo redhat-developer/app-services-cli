@@ -61,6 +61,10 @@
     DOWNLOAD_TAG="$RELEASE_TAG"
   fi
 
+  if [[ $DOWNLOAD_TAG == v* ]]; then
+    DOWNLOAD_TAG="${DOWNLOAD_TAG:1}"
+  fi
+
 
   ASSET_NAME="${BINARY_NAME}_${DOWNLOAD_TAG}_${OS_TYPE}_amd${OS_LONG_BIT}"
   ASSET_NAME_COMPRESSED="${ASSET_NAME}.tar.gz"
