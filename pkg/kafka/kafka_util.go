@@ -7,7 +7,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -19,7 +21,8 @@ var (
 )
 
 type Validator struct {
-	Localizer localize.Localizer
+	Localizer  localize.Localizer
+	Connection factory.ConnectionFunc
 }
 
 // ValidateName validates the proposed name of a Kafka instance
@@ -90,36 +93,25 @@ func ValidateSearchInput(val interface{}) error {
 }
 
 // ValidateNameIsAvailable checks if a kafka instance with the given name already exists
-func ValidateNameIsAvailable(api kafkamgmtclient.DefaultApi, localizer localize.Localizer) func(v interface{}) error {
-	return func(v interface{}) error {
-		name, _ := v.(string)
+func (v Validator) ValidateNameIsAvailable(val interface{}) error {
+	name, _ := val.(string)
 
-		_, httpRes, _ := GetKafkaByName(context.Background(), api, name)
-
-		if httpRes != nil && httpRes.StatusCode == 200 {
-			return errors.New(localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
-		}
-
-		if httpRes != nil && httpRes.Body != nil {
-			httpRes.Body.Close()
-		}
-
-		return nil
+	connection, err := v.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return err
 	}
+
+	api := connection.API()
+
+	_, httpRes, _ := GetKafkaByName(context.Background(), api.Kafka(), name)
+
+	if httpRes != nil && httpRes.StatusCode == 200 {
+		return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
+	}
+
+	if httpRes != nil && httpRes.Body != nil {
+		httpRes.Body.Close()
+	}
+
+	return nil
 }
-
-// func (v Validator) ValidateNameIsAvailable(val interface{}) error {
-// 	name, _ := val.(string)
-
-// 	_, httpRes, _ := GetKafkaByName(context.Background(), v.Api, name)
-
-// 	if httpRes != nil && httpRes.StatusCode == 200 {
-// 		return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
-// 	}
-
-// 	if httpRes != nil && httpRes.Body != nil {
-// 		httpRes.Body.Close()
-// 	}
-
-// 	return nil
-// }
