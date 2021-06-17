@@ -20,13 +20,14 @@ var (
 	validSearchRegexp = regexp.MustCompile(`^([a-zA-Z0-9-_%]*[a-zA-Z0-9-_%])?$`)
 )
 
+// Validator is interface for validation object
 type Validator struct {
 	Localizer  localize.Localizer
 	Connection factory.ConnectionFunc
 }
 
 // ValidateName validates the proposed name of a Kafka instance
-func (v Validator) ValidateName(val interface{}) error {
+func (v *Validator) ValidateName(val interface{}) error {
 	name, ok := val.(string)
 
 	if !ok {
@@ -93,7 +94,7 @@ func ValidateSearchInput(val interface{}) error {
 }
 
 // ValidateNameIsAvailable checks if a kafka instance with the given name already exists
-func (v Validator) ValidateNameIsAvailable(val interface{}) error {
+func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	name, _ := val.(string)
 
 	connection, err := v.Connection(connection.DefaultConfigSkipMasAuth)

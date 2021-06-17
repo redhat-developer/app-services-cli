@@ -23,7 +23,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-
 	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
@@ -52,7 +51,6 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	localizer  localize.Localizer
-	validator  *pkgKafka.Validator
 }
 
 const (
@@ -70,10 +68,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
-		validator: &pkgKafka.Validator{
-			Localizer:  f.Localizer,
-			Connection: f.Connection,
-		},
 
 		multiAZ: defaultMultiAZ,
 	}
@@ -86,9 +80,13 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
+				validator := &pkgKafka.Validator{
+					Localizer:  opts.localizer,
+					Connection: opts.Connection,
+				}
 				opts.name = args[0]
 
-				if err := opts.validator.ValidateName(opts.name); err != nil {
+				if err := validator.ValidateName(opts.name); err != nil {
 					return err
 				}
 			}
@@ -232,6 +230,11 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 
 	api := connection.API()
 
+	validator := &pkgKafka.Validator{
+		Localizer:  opts.localizer,
+		Connection: opts.Connection,
+	}
+
 	// set type to store the answers from the prompt with defaults
 	answers := struct {
 		Name          string
@@ -247,7 +250,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 		Help:    opts.localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(opts.validator.ValidateName), survey.WithValidator(opts.validator.ValidateNameIsAvailable))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
 		return nil, err
 	}

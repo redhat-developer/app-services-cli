@@ -30,7 +30,6 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	localizer  localize.Localizer
-	validator  *validation.Validator
 
 	fileFormat  string
 	overwrite   bool
@@ -49,7 +48,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
-		validator:  &validation.Validator{Localizer: f.Localizer},
 	}
 
 	cmd := &cobra.Command{
@@ -66,14 +64,19 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.interactive {
+
+				validator := &validation.Validator{
+					Localizer: opts.localizer,
+				}
+
 				if opts.fileFormat == "" {
 					return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
 				}
 
-				if err = opts.validator.ValidateName(opts.name); err != nil {
+				if err = validator.ValidateName(opts.name); err != nil {
 					return err
 				}
-				if err = opts.validator.ValidateDescription(opts.description); err != nil {
+				if err = validator.ValidateDescription(opts.description); err != nil {
 					return err
 				}
 			}
@@ -169,6 +172,10 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
+	validator := &validation.Validator{
+		Localizer: opts.localizer,
+	}
+
 	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
@@ -176,7 +183,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(opts.validator.ValidateName))
+	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(validator.ValidateName))
 	if err != nil {
 		return err
 	}
@@ -208,7 +215,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.create.flag.description.description"),
 	}
 
-	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(opts.validator.ValidateDescription))
+	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validator.ValidateDescription))
 	if err != nil {
 		return err
 	}

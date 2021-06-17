@@ -18,11 +18,12 @@ const (
 	maxDescriptionLength  = 255
 )
 
+// Validator is interface for validation object
 type Validator struct {
 	Localizer localize.Localizer
 }
 
-func (v Validator) ValidateName(val interface{}) error {
+func (v *Validator) ValidateName(val interface{}) error {
 	name, ok := val.(string)
 	if !ok {
 		return commonerr.NewCastError(val, "string")
@@ -44,7 +45,7 @@ func (v Validator) ValidateName(val interface{}) error {
 }
 
 // ValidateDescription validates the service account description text
-func (v Validator) ValidateDescription(val interface{}) error {
+func (v *Validator) ValidateDescription(val interface{}) error {
 	description, ok := val.(string)
 	if !ok {
 		return commonerr.NewCastError(val, "string")

@@ -3,19 +3,18 @@ package kafka
 import (
 	"testing"
 
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
-var validator *Validator = &Validator{
-	Localizer: getValidator(),
-}
+var validator *Validator
 
-func getValidator() localize.Localizer {
+func init() {
 	localizer, _ := goi18n.New(nil)
 
-	return localizer
+	validator = &Validator{
+		Localizer: localizer,
+	}
 }
 
 func TestValidateName(t *testing.T) {

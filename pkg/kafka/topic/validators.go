@@ -20,12 +20,13 @@ const (
 	maxPartitions  = 100
 )
 
+// Validator is interface for validation object
 type Validator struct {
 	Localizer localize.Localizer
 }
 
 // ValidateName validates the name of the topic
-func (v Validator) ValidateName(val interface{}) error {
+func (v *Validator) ValidateName(val interface{}) error {
 	name, ok := val.(string)
 	if !ok {
 		return commonerr.NewCastError(val, "string")
@@ -68,12 +69,12 @@ func ValidateSearchInput(val interface{}, localizer localize.Localizer) error {
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
-func (v Validator) ValidatePartitionsN(val interface{}) error {
-	partitionsStr := fmt.Sprintf("%v", v)
+func (v *Validator) ValidatePartitionsN(val interface{}) error {
+	partitionsStr := fmt.Sprintf("%v", val)
 
 	partitions, err := strconv.Atoi(partitionsStr)
 	if err != nil {
-		return commonerr.NewCastError(v, "int32")
+		return commonerr.NewCastError(val, "int32")
 	}
 
 	if partitions < minPartitions {
@@ -89,7 +90,7 @@ func (v Validator) ValidatePartitionsN(val interface{}) error {
 
 // ValidateMessageRetentionPeriod validates the value (ms) of the retention period
 // the valid values can range from [-1,...]
-func (v Validator) ValidateMessageRetentionPeriod(val interface{}) error {
+func (v *Validator) ValidateMessageRetentionPeriod(val interface{}) error {
 	retentionPeriodMsStr := fmt.Sprintf("%v", val)
 
 	if retentionPeriodMsStr == "" {
@@ -110,7 +111,7 @@ func (v Validator) ValidateMessageRetentionPeriod(val interface{}) error {
 
 // ValidateMessageRetentionSize validates the value (bytes) of the retention size
 // the valid values can range from [-1,...]
-func (v Validator) ValidateMessageRetentionSize(val interface{}) error {
+func (v *Validator) ValidateMessageRetentionSize(val interface{}) error {
 	retentionSizeStr := fmt.Sprintf("%v", val)
 
 	if retentionSizeStr == "" {
