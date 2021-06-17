@@ -1,0 +1,39 @@
+package ams
+
+import (
+	"context"
+	"errors"
+
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
+)
+
+func CheckTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirectURI string, err error) {
+	conn, err := connFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return false, "", err
+	}
+
+	termsReview, _, err := conn.API().AccountMgmt().
+		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
+		SelfTermsReview(amsclient.SelfTermsReview{
+			EventCode: &build.TermsReviewEventCode,
+			SiteCode:  &build.TermsReviewSiteCode,
+		}).
+		Execute()
+	if err != nil {
+		return false, "", err
+	}
+
+	if !termsReview.GetTermsAvailable() && !termsReview.GetTermsRequired() {
+		return true, "", nil
+	}
+
+	if !termsReview.HasRedirectUrl() {
+		return false, "", errors.New("terms must be signed, but there is no terms URL")
+	}
+
+	return false, termsReview.GetRedirectUrl(), nil
+}

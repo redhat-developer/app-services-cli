@@ -12,14 +12,16 @@ import (
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-
+	registrymgmt "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1"
+	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"golang.org/x/oauth2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
+
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api"
 
@@ -175,6 +177,12 @@ func (c *KeycloakConnection) API() *api.API {
 		return apiClient.SecurityApi
 	}
 
+	registryAPIFunc := func() registrymgmtclient.RegistriesApi {
+		srsAPIClient := c.createServiceRegistryAPIClient()
+
+		return srsAPIClient.RegistriesApi
+	}
+
 	kafkaAdminAPIFunc := func(kafkaID string) (kafkainstanceclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error) {
 		api := kafkaAPIFunc()
 
@@ -217,10 +225,11 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	return &api.API{
-		Kafka:          kafkaAPIFunc,
-		ServiceAccount: serviceAccountAPIFunc,
-		KafkaAdmin:     kafkaAdminAPIFunc,
-		AccountMgmt:    amsAPIFunc,
+		Kafka:               kafkaAPIFunc,
+		ServiceAccount:      serviceAccountAPIFunc,
+		KafkaAdmin:          kafkaAdminAPIFunc,
+		AccountMgmt:         amsAPIFunc,
+		ServiceRegistryMgmt: registryAPIFunc,
 	}
 }
 
@@ -228,6 +237,18 @@ func (c *KeycloakConnection) API() *api.API {
 func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtclient.APIClient {
 	tc := c.createOAuthTransport(c.Token.AccessToken)
 	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
+		BaseURL:    c.apiURL.String(),
+		Debug:      c.logger.DebugEnabled(),
+		HTTPClient: tc,
+	})
+
+	return client
+}
+
+// Create a new Kafka API client
+func (c *KeycloakConnection) createServiceRegistryAPIClient() *registrymgmtclient.APIClient {
+	tc := c.createOAuthTransport(c.Token.AccessToken)
+	client := registrymgmt.NewAPIClient(&registrymgmt.Config{
 		BaseURL:    c.apiURL.String(),
 		Debug:      c.logger.DebugEnabled(),
 		HTTPClient: tc,

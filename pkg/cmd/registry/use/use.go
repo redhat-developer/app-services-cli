@@ -8,17 +8,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-
-	"github.com/spf13/cobra"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	"github.com/spf13/cobra"
 )
 
 type Options struct {
@@ -43,20 +39,17 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.use.cmd.use"),
-		Short:   opts.localizer.MustLocalize("kafka.use.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("kafka.use.cmd.longDescription"),
-		Example: opts.localizer.MustLocalize("kafka.use.cmd.example"),
+		Use:     "use",
+		Short:   f.Localizer.MustLocalize("registry.cmd.use.shortDescription"),
+		Long:    f.Localizer.MustLocalize("registry.cmd.use.longDescription"),
+		Example: f.Localizer.MustLocalize("registry.cmd.use.example"),
 		Args:    cobra.RangeArgs(0, 1),
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidKafkas(f, toComplete)
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.name = args[0]
 			} else if opts.id == "" {
 				if !opts.IO.CanPrompt() {
-					return errors.New(opts.localizer.MustLocalize("kafka.use.error.idOrNameRequired"))
+					return errors.New(opts.localizer.MustLocalize("registry.use.error.idOrNameRequired"))
 				}
 				opts.interactive = true
 			}
@@ -69,7 +62,8 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
+	// TODO - why not using name here but other commands do use it?
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.use.flag.id"))
 
 	return cmd
 }
@@ -82,7 +76,7 @@ func runUse(opts *Options) error {
 		if err != nil {
 			return err
 		}
-		// no Kafka was selected, exit program
+		// no service was selected, exit program
 		if opts.name == "" {
 			return nil
 		}
@@ -105,33 +99,33 @@ func runUse(opts *Options) error {
 
 	api := connection.API()
 
-	var res *kafkamgmtclient.KafkaRequest
+	var registry *srsmgmtv1.RegistryRest
 	ctx := context.Background()
 	if opts.name != "" {
-		res, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		res, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		registry, _, err = serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
 	}
 
-	// build Kafka config object from the response
-	var kafkaConfig config.KafkaConfig = config.KafkaConfig{
-		ClusterID: res.GetId(),
+	registryConfig := &config.ServiceRegistryConfig{
+		InstanceID: registry.GetId(),
+		Name:       *registry.Name,
 	}
 
-	nameTmplEntry := localize.NewEntry("Name", res.GetName())
-	cfg.Services.Kafka = &kafkaConfig
+	nameTmplEntry := localize.NewEntry("Name", registry.GetName())
+	cfg.Services.ServiceRegistry = registryConfig
 	if err := opts.Config.Save(cfg); err != nil {
-		saveErrMsg := opts.localizer.MustLocalize("kafka.use.error.saveError", nameTmplEntry)
+		saveErrMsg := opts.localizer.MustLocalize("registry.use.error.saveError", nameTmplEntry)
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
+	logger.Info(opts.localizer.MustLocalize("registry.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }
@@ -149,12 +143,12 @@ func runInteractivePrompt(opts *Options) error {
 
 	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedKafka, err := kafka.InteractiveSelect(connection, logger)
+	selectedRegistry, err := serviceregistry.InteractiveSelect(connection, logger)
 	if err != nil {
 		return err
 	}
 
-	opts.name = selectedKafka.GetName()
+	opts.name = selectedRegistry.GetName()
 
 	return nil
 }

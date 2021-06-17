@@ -136,7 +136,7 @@ func runList(opts *Options) (err error) {
 		}
 	}
 
-	ok, err := checkForConsumerGroups(int(consumerGroupData.GetSize()), opts, kafkaInstance.GetName())
+	ok, err := checkForConsumerGroups(int(consumerGroupData.GetTotal()), opts, kafkaInstance.GetName())
 	if err != nil {
 		return err
 	}

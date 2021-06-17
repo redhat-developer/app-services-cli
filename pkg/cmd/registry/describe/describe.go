@@ -9,15 +9,14 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -33,8 +32,8 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
-// NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
-// or by using the kafka instance set in the config, if any
+// NewDescribeCommand describes a service instance, either by passing an `--id flag`
+// or by using the service instance set in the config, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,
@@ -44,15 +43,11 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.describe.cmd.use"),
-		Short:   opts.localizer.MustLocalize("kafka.describe.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("kafka.describe.cmd.longDescription"),
-		Example: opts.localizer.MustLocalize("kafka.describe.cmd.example"),
+		Use:     "describe",
+		Short:   f.Localizer.MustLocalize("registry.cmd.describe.shortDescription"),
+		Long:    f.Localizer.MustLocalize("registry.cmd.describe.longDescription"),
+		Example: f.Localizer.MustLocalize("registry.cmd.describe.example"),
 		Args:    cobra.RangeArgs(0, 1),
-		// Dynamic completion of the Kafka name
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidKafkas(f, toComplete)
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
@@ -76,21 +71,19 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			var kafkaConfig *config.KafkaConfig
-			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
+			var registryConfig *config.ServiceRegistryConfig
+			if cfg.Services.ServiceRegistry == registryConfig || cfg.Services.ServiceRegistry.InstanceID == "" {
+				return errors.New(opts.localizer.MustLocalize("registry.common.error.noServiceSelected"))
 			}
 
-			opts.id = cfg.Services.Kafka.ClusterID
+			opts.id = cfg.Services.ServiceRegistry.InstanceID
 
 			return runDescribe(opts)
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
-
-	flagutil.EnableOutputFlagCompletion(cmd)
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.common.flag.id"))
 
 	return cmd
 }
@@ -103,33 +96,33 @@ func runDescribe(opts *Options) error {
 
 	api := connection.API()
 
-	var kafkaInstance *kafkamgmtclient.KafkaRequest
+	var registry *srsmgmtv1.RegistryRest
 	ctx := context.Background()
 	if opts.name != "" {
-		kafkaInstance, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		kafkaInstance, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		registry, _, err = serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
 	}
 
-	return printKafka(kafkaInstance, opts)
+	return printService(registry, opts)
 }
 
-func printKafka(kafka *kafkamgmtclient.KafkaRequest, opts *Options) error {
+func printService(registry interface{}, opts *Options) error {
 	switch opts.outputFormat {
 	case "yaml", "yml":
-		data, err := yaml.Marshal(kafka)
+		data, err := yaml.Marshal(registry)
 		if err != nil {
 			return err
 		}
 		return dump.YAML(opts.IO.Out, data)
 	default:
-		data, err := json.Marshal(kafka)
+		data, err := json.Marshal(registry)
 		if err != nil {
 			return err
 		}

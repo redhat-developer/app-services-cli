@@ -3,6 +3,9 @@ package root
 import (
 	"flag"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
+	"github.com/redhat-developer/app-services-cli/pkg/profile"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
@@ -22,6 +25,8 @@ import (
 )
 
 func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
+	var devpreview string
+
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,
@@ -29,20 +34,26 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 		Short:         f.Localizer.MustLocalize("root.cmd.shortDescription"),
 		Long:          f.Localizer.MustLocalize("root.cmd.longDescription"),
 		Example:       f.Localizer.MustLocalize("root.cmd.example"),
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			if devpreview == "" {
+				return cmd.Help()
+			}
+
+			_, err := profile.EnableDevPreview(f, &devpreview)
+			return err
+		},
 	}
+	fs := cmd.PersistentFlags()
+	arguments.AddDebugFlag(fs)
+	// this flag comes out of the box, but has its own basic usage text, so this overrides that
+	var help bool
+	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
+	cmd.Flags().StringVarP(&devpreview, "devpreview", "", "", f.Localizer.MustLocalize("root.cmd.flag.devpreview.description"))
 
 	cmd.Version = version
 
 	cmd.SetVersionTemplate(f.Localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
-
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
-
-	fs := cmd.PersistentFlags()
-	arguments.AddDebugFlag(fs)
-
-	// this flag comes out of the box, but has its own basic usage text, so this overrides that
-	var help bool
-	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))
@@ -54,6 +65,9 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(completion.NewCompletionCommand(f))
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
+
+	// Early stage/dev preview commands
+	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 
 	return cmd
 }

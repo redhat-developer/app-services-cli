@@ -96,7 +96,7 @@ func (c *File) Location() (path string, err error) {
 	} else {
 		rhoasCfgDir, err := DefaultDir()
 		if err != nil {
-			return "", nil
+			return "", err
 		}
 		path = filepath.Join(rhoasCfgDir, "config.json")
 		if err != nil {
@@ -110,7 +110,7 @@ func (c *File) Location() (path string, err error) {
 func DefaultDir() (string, error) {
 	userCfgDir, err := os.UserConfigDir()
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	return filepath.Join(userCfgDir, "rhoas"), nil
 }

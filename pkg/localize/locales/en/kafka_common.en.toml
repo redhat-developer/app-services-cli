@@ -1,6 +1,6 @@
 [kafka.validation.error.invalidName]
 one = '''
-Invalid Kafka instance name. Valid names must satisfy the following conditions:
+Invalid instance name. Valid names must satisfy the following conditions:
 
   - must be between 1 and 32 characters
   - must only consist of lower case, alphanumeric characters and '-'

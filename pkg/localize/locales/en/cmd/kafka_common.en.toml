@@ -13,9 +13,6 @@ one = 'Format in which to display the Kafka instance. Choose from: "json", "yml"
 [kafkas.common.flag.output.description]
 one = 'Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"'
 
-[kafka.common.error.idAndNameCannotBeUsed]
-one = 'name argument and --id flag cannot be used at the same time'
-
 [kafka.common.error.couldNotFetchKafkas]
 description = 'Error message when list of Kafka instances could not be fetched'
 one = 'unable to list Kafka instances'
@@ -29,3 +26,4 @@ one = 'No Kafka instances were found.'
 
 [kafka.topic.common.error.topicNotFoundError]
 one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'
+
