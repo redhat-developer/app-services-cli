@@ -14,7 +14,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 
@@ -53,6 +52,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	localizer  localize.Localizer
+	validator  *pkgKafka.Validator
 }
 
 const (
@@ -70,6 +70,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		validator: &pkgKafka.Validator{
+			Localizer: f.Localizer,
+		},
 
 		multiAZ: defaultMultiAZ,
 	}
@@ -84,7 +87,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			if len(args) > 0 {
 				opts.name = args[0]
 
-				if err := kafka.ValidateName(opts.localizer)(opts.name); err != nil {
+				if err := opts.validator.ValidateName(opts.name); err != nil {
 					return err
 				}
 			}
@@ -243,7 +246,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 		Help:    opts.localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(pkgKafka.ValidateName(opts.localizer)), survey.WithValidator(pkgKafka.ValidateNameIsAvailable(api.Kafka(), opts.localizer)))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(opts.validator.ValidateName), survey.WithValidator(pkgKafka.ValidateNameIsAvailable(api.Kafka(), opts.localizer)))
 	if err != nil {
 		return nil, err
 	}

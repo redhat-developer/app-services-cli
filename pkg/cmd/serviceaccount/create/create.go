@@ -30,6 +30,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	localizer  localize.Localizer
+	validator  *validation.Validator
 
 	fileFormat  string
 	overwrite   bool
@@ -48,6 +49,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		validator:  &validation.Validator{Localizer: f.Localizer},
 	}
 
 	cmd := &cobra.Command{
@@ -68,10 +70,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 					return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
 				}
 
-				if err = validation.ValidateName(opts.localizer)(opts.name); err != nil {
+				if err = opts.validator.ValidateName(opts.name); err != nil {
 					return err
 				}
-				if err = validation.ValidateDescription(opts.localizer)(opts.description); err != nil {
+				if err = opts.validator.ValidateDescription(opts.description); err != nil {
 					return err
 				}
 			}
@@ -174,7 +176,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(validation.ValidateName(opts.localizer)))
+	err = survey.AskOne(promptName, &opts.name, survey.WithValidator(survey.Required), survey.WithValidator(opts.validator.ValidateName))
 	if err != nil {
 		return err
 	}
@@ -206,7 +208,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("serviceAccount.create.flag.description.description"),
 	}
 
-	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(validation.ValidateDescription(opts.localizer)))
+	err = survey.AskOne(promptDescription, &opts.description, survey.WithValidator(opts.validator.ValidateDescription))
 	if err != nil {
 		return err
 	}

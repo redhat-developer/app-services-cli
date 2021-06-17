@@ -49,6 +49,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     func() (logging.Logger, error)
 	localizer  localize.Localizer
+	validator  *topicutil.Validator
 }
 
 // NewUpdateTopicCommand gets a new command for updating a kafka topic.
@@ -60,6 +61,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		validator:  &topicutil.Validator{Localizer: f.Localizer},
 	}
 
 	cmd := &cobra.Command{
@@ -94,7 +96,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return nil
 				}
 
-				if err = topicutil.ValidateName(opts.localizer)(opts.topicName); err != nil {
+				if err = opts.validator.ValidateName(opts.topicName); err != nil {
 					return err
 				}
 			}
@@ -111,7 +113,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidatePartitionsN(opts.localizer)(partitionCount); err != nil {
+				if err = opts.validator.ValidatePartitionsN(partitionCount); err != nil {
 					return err
 				}
 			}
@@ -122,7 +124,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionPeriod(opts.localizer)(retentionPeriodMs); err != nil {
+				if err = opts.validator.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
 					return err
 				}
 			}
@@ -133,7 +135,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionSize(opts.localizer)(retentionSizeBytes); err != nil {
+				if err = opts.validator.ValidateMessageRetentionSize(retentionSizeBytes); err != nil {
 					return err
 				}
 			}
@@ -304,7 +306,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.retentionMs.help"),
 	}
 
-	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod((opts.localizer))))
+	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(opts.validator.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
 	}
@@ -314,7 +316,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.retentionBytes.help"),
 	}
 
-	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(topicutil.ValidateMessageRetentionSize(opts.localizer)))
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(opts.validator.ValidateMessageRetentionSize))
 	if err != nil {
 		return err
 	}

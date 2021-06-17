@@ -18,27 +18,29 @@ var (
 	validSearchRegexp = regexp.MustCompile(`^([a-zA-Z0-9-_%]*[a-zA-Z0-9-_%])?$`)
 )
 
+type Validator struct {
+	Localizer localize.Localizer
+}
+
 // ValidateName validates the proposed name of a Kafka instance
-func ValidateName(localizer localize.Localizer) func(v interface{}) error {
-	return func(val interface{}) error {
-		name, ok := val.(string)
+func (v Validator) ValidateName(val interface{}) error {
+	name, ok := val.(string)
 
-		if !ok {
-			return commonerr.NewCastError(val, "string")
-		}
-
-		if len(name) < 1 || len(name) > 32 {
-			return errors.New(localizer.MustLocalize("kafka.validation.name.error.lengthError"))
-		}
-
-		matched := validNameRegexp.MatchString(name)
-
-		if matched {
-			return nil
-		}
-
-		return kafkaerr.InvalidNameError(name)
+	if !ok {
+		return commonerr.NewCastError(val, "string")
 	}
+
+	if len(name) < 1 || len(name) > 32 {
+		return errors.New(v.Localizer.MustLocalize("kafka.validation.name.error.lengthError"))
+	}
+
+	matched := validNameRegexp.MatchString(name)
+
+	if matched {
+		return nil
+	}
+
+	return kafkaerr.InvalidNameError(name)
 }
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
@@ -105,3 +107,19 @@ func ValidateNameIsAvailable(api kafkamgmtclient.DefaultApi, localizer localize.
 		return nil
 	}
 }
+
+// func (v Validator) ValidateNameIsAvailable(val interface{}) error {
+// 	name, _ := val.(string)
+
+// 	_, httpRes, _ := GetKafkaByName(context.Background(), v.Api, name)
+
+// 	if httpRes != nil && httpRes.StatusCode == 200 {
+// 		return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
+// 	}
+
+// 	if httpRes != nil && httpRes.Body != nil {
+// 		httpRes.Body.Close()
+// 	}
+
+// 	return nil
+// }
