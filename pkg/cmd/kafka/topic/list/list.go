@@ -68,7 +68,10 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.search != "" {
-				if err := topicutil.ValidateSearchInput(opts.search, opts.localizer); err != nil {
+				validator := &topicutil.Validator{
+					Localizer: opts.localizer,
+				}
+				if err := validator.ValidateSearchInput(opts.search); err != nil {
 					return err
 				}
 			}

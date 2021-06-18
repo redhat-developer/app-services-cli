@@ -6,6 +6,16 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 )
 
+var validator *Validator
+
+func init() {
+	localizer, _ := goi18n.New(nil)
+
+	validator = &Validator{
+		Localizer: localizer,
+	}
+}
+
 func TestValidateName(t *testing.T) {
 	type args struct {
 		val interface{}
@@ -64,7 +74,7 @@ func TestValidateName(t *testing.T) {
 	// nolint:scopelint
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateName(tt.args.val); (err != nil) != tt.wantErr {
+			if err := validator.ValidateName(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -163,10 +173,11 @@ func TestValidateDescription(t *testing.T) {
 			wantErr: false,
 		},
 	}
+
 	for _, tt := range tests {
 		// nolint:scopelint
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateDescription(tt.args.val); (err != nil) != tt.wantErr {
+			if err := validator.ValidateDescription(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateDescription() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

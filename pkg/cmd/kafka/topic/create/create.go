@@ -78,21 +78,26 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.interactive {
+
+				validator := &topicutil.Validator{
+					Localizer: opts.localizer,
+				}
+
 				opts.topicName = args[0]
 
-				if err = topicutil.ValidateName(opts.topicName); err != nil {
+				if err = validator.ValidateName(opts.topicName); err != nil {
 					return err
 				}
 
-				if err = topicutil.ValidatePartitionsN(opts.partitions); err != nil {
+				if err = validator.ValidatePartitionsN(opts.partitions); err != nil {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
+				if err = validator.ValidateMessageRetentionPeriod(opts.retentionMs); err != nil {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionSize(opts.retentionBytes); err != nil {
+				if err = validator.ValidateMessageRetentionSize(opts.retentionBytes); err != nil {
 					return err
 				}
 			}
@@ -203,19 +208,15 @@ func runCmd(opts *Options) error {
 
 func runInteractivePrompt(opts *Options) (err error) {
 
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-	if err != nil {
-		return err
-	}
-
-	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
-	if err != nil {
-		return err
-	}
-
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
+	}
+
+	validator := &topicutil.Validator{
+		Localizer:  opts.localizer,
+		InstanceID: opts.kafkaID,
+		Connection: opts.Connection,
 	}
 
 	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
@@ -229,8 +230,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 		promptName,
 		&opts.topicName,
 		survey.WithValidator(survey.Required),
-		survey.WithValidator(topicutil.ValidateName),
-		survey.WithValidator(topicutil.ValidateNameIsAvailable(api, kafkaInstance.GetName())),
+		survey.WithValidator(validator.ValidateName),
+		survey.WithValidator(validator.ValidateNameIsAvailable),
 	)
 
 	if err != nil {
@@ -243,7 +244,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Default: "1",
 	}
 
-	err = survey.AskOne(partitionsPrompt, &opts.partitions, survey.WithValidator(topicutil.ValidatePartitionsN))
+	err = survey.AskOne(partitionsPrompt, &opts.partitions, survey.WithValidator(validator.ValidatePartitionsN))
 	if err != nil {
 		return err
 	}
@@ -254,7 +255,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Default: strconv.Itoa(defaultRetentionPeriodMS),
 	}
 
-	err = survey.AskOne(retentionMsPrompt, &opts.retentionMs, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionMsPrompt, &opts.retentionMs, survey.WithValidator(validator.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
 	}
@@ -265,7 +266,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Default: strconv.Itoa(defaultRetentionSize),
 	}
 
-	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytes, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytes, survey.WithValidator(validator.ValidateMessageRetentionSize))
 	if err != nil {
 		return err
 	}

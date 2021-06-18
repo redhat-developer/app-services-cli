@@ -1,6 +1,20 @@
 package topic
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
+)
+
+var validator *Validator
+
+func init() {
+	localizer, _ := goi18n.New(nil)
+
+	validator = &Validator{
+		Localizer: localizer,
+	}
+}
 
 // nolint:funlen
 func TestValidateName(t *testing.T) {
@@ -91,10 +105,11 @@ func TestValidateName(t *testing.T) {
 			wantErr: false,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// nolint
-			if err := ValidateName(tt.args.name); (err != nil) != tt.wantErr {
+			if err := validator.ValidateName(tt.args.name); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
