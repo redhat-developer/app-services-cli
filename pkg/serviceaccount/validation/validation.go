@@ -2,7 +2,6 @@ package validation
 
 import (
 	"errors"
-	"fmt"
 	"regexp"
 
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
@@ -20,17 +19,21 @@ const (
 	maxDescriptionLength  = 255
 )
 
-// ValidateName validates the name of the service account
-func ValidateName(val interface{}) error {
+// Validator is a type for validating service account configuration values
+type Validator struct {
+	Localizer localize.Localizer
+}
+
+func (v *Validator) ValidateName(val interface{}) error {
 	name, ok := val.(string)
 	if !ok {
 		return commonerr.NewCastError(val, "string")
 	}
 
 	if len(name) < minNameLength {
-		return errors.New("service account name is required")
+		return errors.New(v.Localizer.MustLocalize("serviceAccount.common.validation.name.error.required"))
 	} else if len(name) > maxNameLength {
-		return fmt.Errorf("service account name cannot exceed %v characters", maxNameLength)
+		return errors.New(v.Localizer.MustLocalize("serviceAccount.common.validation.name.error.lengthError", localize.NewEntry("MaxNameLen", maxNameLength)))
 	}
 
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
@@ -39,11 +42,11 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf(`invalid service account name "%v"; only lowercase letters (a-z), numbers, and "-" are accepted`, name)
+	return errors.New(v.Localizer.MustLocalize("serviceAccount.common.validation.name.error.invalidChars", localize.NewEntry("Name", name)))
 }
 
 // ValidateDescription validates the service account description text
-func ValidateDescription(val interface{}) error {
+func (v *Validator) ValidateDescription(val interface{}) error {
 	description, ok := val.(string)
 	if !ok {
 		return commonerr.NewCastError(val, "string")
@@ -54,7 +57,7 @@ func ValidateDescription(val interface{}) error {
 	}
 
 	if len(description) > maxDescriptionLength {
-		return fmt.Errorf("service account description cannot exceed %v characters", maxDescriptionLength)
+		return errors.New(v.Localizer.MustLocalize("serviceAccount.common.validation.description.error.lengthError", localize.NewEntry("MaxLen", maxDescriptionLength)))
 	}
 
 	matched, _ := regexp.Match(legalDescriptionChars, []byte(description))
@@ -63,7 +66,7 @@ func ValidateDescription(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(`invalid service account description; only alphanumeric characters and "-", ".", "," are accepted`)
+	return errors.New(v.Localizer.MustLocalize("serviceAccount.common.validation.description.error.invalidChars"))
 }
 
 // ValidateUUID validates if ID is a valid UUID
