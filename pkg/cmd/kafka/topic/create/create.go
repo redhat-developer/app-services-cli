@@ -208,23 +208,15 @@ func runCmd(opts *Options) error {
 
 func runInteractivePrompt(opts *Options) (err error) {
 
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-	if err != nil {
-		return err
-	}
-
-	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
-	if err != nil {
-		return err
-	}
-
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
 	}
 
 	validator := &topicutil.Validator{
-		Localizer: opts.localizer,
+		Localizer:  opts.localizer,
+		InstanceID: opts.kafkaID,
+		Connection: opts.Connection,
 	}
 
 	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
@@ -239,7 +231,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		&opts.topicName,
 		survey.WithValidator(survey.Required),
 		survey.WithValidator(validator.ValidateName),
-		survey.WithValidator(topicutil.ValidateNameIsAvailable(api, kafkaInstance.GetName(), opts.localizer)),
+		survey.WithValidator(validator.ValidateNameIsAvailable),
 	)
 
 	if err != nil {

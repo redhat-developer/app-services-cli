@@ -8,9 +8,10 @@ import (
 
 	"strconv"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/common/commonerr"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 const (
@@ -20,9 +21,11 @@ const (
 	maxPartitions  = 100
 )
 
-// Validator is interface for validation object
+// Validator is a type for validating Kafka topic configuration values
 type Validator struct {
-	Localizer localize.Localizer
+	Localizer  localize.Localizer
+	InstanceID string
+	Connection factory.ConnectionFunc
 }
 
 // ValidateName validates the name of the topic
@@ -51,7 +54,7 @@ func (v *Validator) ValidateName(val interface{}) error {
 	return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.name.error.invalidChars", localize.NewEntry("Name", name)))
 }
 
-func ValidateSearchInput(val interface{}, localizer localize.Localizer) error {
+func (v *Validator) ValidateSearchInput(val interface{}) error {
 
 	search, ok := val.(string)
 	if !ok {
@@ -64,7 +67,7 @@ func ValidateSearchInput(val interface{}, localizer localize.Localizer) error {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalize("kafka.topic.list.error.illegalSearchValue", localize.NewEntry("Search", search)))
+	return errors.New(v.Localizer.MustLocalize("kafka.topic.list.error.illegalSearchValue", localize.NewEntry("Search", search)))
 
 }
 
@@ -131,16 +134,24 @@ func (v *Validator) ValidateMessageRetentionSize(val interface{}) error {
 }
 
 // ValidateNameIsAvailable checks if a topic with the given name already exists
-func ValidateNameIsAvailable(api kafkainstanceclient.DefaultApi, instance string, localizer localize.Localizer) func(v interface{}) error {
-	return func(v interface{}) error {
-		name, _ := v.(string)
+func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
+	name, _ := val.(string)
 
-		_, httpRes, _ := api.GetTopic(context.Background(), name).Execute()
-
-		if httpRes != nil && httpRes.StatusCode == 200 {
-			return errors.New(localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", instance)))
-		}
-
-		return nil
+	conn, err := v.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return err
 	}
+
+	api, kafkaInstance, err := conn.API().KafkaAdmin(v.InstanceID)
+	if err != nil {
+		return err
+	}
+
+	_, httpRes, _ := api.GetTopic(context.Background(), name).Execute()
+
+	if httpRes != nil && httpRes.StatusCode == 200 {
+		return errors.New(v.Localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", kafkaInstance)))
+	}
+
+	return nil
 }

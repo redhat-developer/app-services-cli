@@ -18,7 +18,7 @@ const (
 	maxDescriptionLength  = 255
 )
 
-// Validator is interface for validation object
+// Validator is a type for validating service account configuration values
 type Validator struct {
 	Localizer localize.Localizer
 }

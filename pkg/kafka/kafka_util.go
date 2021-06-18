@@ -20,7 +20,7 @@ var (
 	validSearchRegexp = regexp.MustCompile(`^([a-zA-Z0-9-_%]*[a-zA-Z0-9-_%])?$`)
 )
 
-// Validator is interface for validation object
+// Validator is a type for validating Kafka configuration values
 type Validator struct {
 	Localizer  localize.Localizer
 	Connection factory.ConnectionFunc
