@@ -150,7 +150,7 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	_, httpRes, _ := api.GetTopic(context.Background(), name).Execute()
 
 	if httpRes != nil && httpRes.StatusCode == 200 {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", kafkaInstance)))
+		return errors.New(v.Localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 	}
 
 	return nil
