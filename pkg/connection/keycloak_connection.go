@@ -187,9 +187,19 @@ func (c *KeycloakConnection) API() *api.API {
 		}
 
 		kafkaStatus := kafkaInstance.GetStatus()
-		if kafkaStatus != "ready" {
-			err = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
 
+		switch kafkaStatus {
+		case "provisioning", "accepted":
+			err = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
+			return nil, nil, err
+		case "failed":
+			err = fmt.Errorf(`Kafka instance "%v" has failed`, kafkaInstance.GetName())
+			return nil, nil, err
+		case "deprovision":
+			err = fmt.Errorf(`Kafka instance "%v" is being deprovisioned`, kafkaInstance.GetName())
+			return nil, nil, err
+		case "deleting":
+			err = fmt.Errorf(`Kafka instance "%v" is being deleted`, kafkaInstance.GetName())
 			return nil, nil, err
 		}
 
