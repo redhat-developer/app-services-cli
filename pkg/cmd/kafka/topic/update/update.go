@@ -73,6 +73,11 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
+
+			validator := &topicutil.Validator{
+				Localizer: opts.localizer,
+			}
+
 			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
 				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
 			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
@@ -94,7 +99,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return nil
 				}
 
-				if err = topicutil.ValidateName(opts.topicName); err != nil {
+				if err = validator.ValidateName(opts.topicName); err != nil {
 					return err
 				}
 			}
@@ -111,7 +116,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidatePartitionsN(partitionCount); err != nil {
+				if err = validator.ValidatePartitionsN(partitionCount); err != nil {
 					return err
 				}
 			}
@@ -122,7 +127,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
+				if err = validator.ValidateMessageRetentionPeriod(retentionPeriodMs); err != nil {
 					return err
 				}
 			}
@@ -133,7 +138,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if err = topicutil.ValidateMessageRetentionSize(retentionSizeBytes); err != nil {
+				if err = validator.ValidateMessageRetentionSize(retentionSizeBytes); err != nil {
 					return err
 				}
 			}
@@ -297,6 +302,10 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
+	validator := &topicutil.Validator{
+		Localizer: opts.localizer,
+	}
+
 	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	retentionMsPrompt := &survey.Input{
@@ -304,7 +313,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.retentionMs.help"),
 	}
 
-	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(topicutil.ValidateMessageRetentionPeriod))
+	err = survey.AskOne(retentionMsPrompt, &opts.retentionMsStr, survey.WithValidator(validator.ValidateMessageRetentionPeriod))
 	if err != nil {
 		return err
 	}
@@ -314,7 +323,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.retentionBytes.help"),
 	}
 
-	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(topicutil.ValidateMessageRetentionSize))
+	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(validator.ValidateMessageRetentionSize))
 	if err != nil {
 		return err
 	}

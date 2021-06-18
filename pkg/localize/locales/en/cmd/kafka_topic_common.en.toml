@@ -46,13 +46,16 @@ one = 'topic name is required'
 [kafka.topic.common.validation.name.error.lengthError]
 one = 'topic name cannot exceed {{.MaxNameLen}} characters'
 
-[kafka.topic.common.validation.name.error.invalidChars]
-one = 'invalid topic name "{{.Name}}"; only letters (Aa-Zz), numbers, "_" and "-" are accepted'
+[kafka.topic.common.validation.name.error.dotsError]
+one = 'topic name can not be "." or ".."'
 
-[kafka.topic.common.validation.partitions.error.invalid.minLength]
+[kafka.topic.common.validation.name.error.invalidChars]
+one = 'invalid topic name "{{.Name}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'
+
+[kafka.topic.common.validation.partitions.error.invalid.minValue]
 one = 'invalid partition count {{.Partitions}}, minimum value is {{.Min}}'
 
-[kafka.topic.common.validation.partitions.error.invalid.maxLength]
+[kafka.topic.common.validation.partitions.error.invalid.maxValue]
 one = 'invalid partition count {{.Partitions}}, maximum value is {{.Max}}'
 
 [kafka.topic.common.validation.replicationFactor.error.invalid]
