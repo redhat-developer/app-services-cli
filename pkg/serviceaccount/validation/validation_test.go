@@ -122,11 +122,10 @@ func TestValidateUUID(t *testing.T) {
 		},
 	}
 
-	localizer, _ := goi18n.New(nil)
 	// nolint:scopelint
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateUUID(localizer)(tt.args.val); (err != nil) != tt.wantErr {
+			if err := validator.ValidateUUID(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateUUID() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

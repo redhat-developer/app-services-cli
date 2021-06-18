@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
 	"github.com/spf13/cobra"
 )
 
@@ -45,6 +46,15 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return flag.RequiredWhenNonInteractiveError("yes")
+			}
+
+			validator := &validation.Validator{
+				Localizer: opts.localizer,
+			}
+
+			validID := validator.ValidateUUID(opts.id)
+			if validID != nil {
+				return validID
 			}
 
 			return runDelete(opts)

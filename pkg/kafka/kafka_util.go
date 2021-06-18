@@ -77,7 +77,7 @@ func TransformKafkaRequest(kafka *kafkamgmtclient.KafkaRequest) *kafkamgmtclient
 }
 
 // ValidateSearchInput validates the text provided to filter the Kafka instances
-func ValidateSearchInput(val interface{}) error {
+func (v *Validator) ValidateSearchInput(val interface{}) error {
 	search, ok := val.(string)
 
 	if !ok {
