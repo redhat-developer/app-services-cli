@@ -1,14 +1,6 @@
 {
-  "extends": [
-    "config:base"
-  ],
+  "extends": [ "github>redhat-developer/app-services-renovate-config" ],
   "postUpdateOptions": [
     "gomodTidy"
-  ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
-    }
   ]
 }
