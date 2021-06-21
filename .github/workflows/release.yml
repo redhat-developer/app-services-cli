@@ -38,15 +38,16 @@ jobs:
         name: Generate release notes
         if: steps.check-tag.outputs.prerelease == 'false'
         run: |
-          git-chglog -t .chglog/RELEASE.tpl.md $(git describe --tags $(git rev-parse HEAD)) -o RELEASE_NOTES.md
+          git-chglog -t .chglog/RELEASE.tpl.md $(git describe --tags $(git rev-parse HEAD)) > RELEASE_NOTES.md
       
+      - run: cat RELEASE_NOTES.md
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         if: steps.check-tag.outputs.prerelease == 'false'
         with:
           version: latest
           args: release --rm-dist --release-notes=RELEASE_NOTES.md
-          key: ${{ secrets.YOUR_PRIVATE_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,6 +57,5 @@ jobs:
         with:
           version: latest
           args: release --rm-dist
-          key: ${{ secrets.YOUR_PRIVATE_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
