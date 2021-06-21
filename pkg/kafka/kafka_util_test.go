@@ -49,7 +49,7 @@ func TestValidateName(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Should be invalid when using hyphens",
+			name: "Should be valid when using hyphens",
 			args: args{
 				name: "my-kafka-instance",
 			},
@@ -233,6 +233,77 @@ func TestTransformKafkaRequestListItems(t *testing.T) {
 				if gotBootstrapHost != wantBootstrapHost {
 					t.Fatalf("Expected BootstrapServerHost = %v, got %v", wantBootstrapHost, gotBootstrapHost)
 				}
+			}
+		})
+	}
+}
+
+func TestValidateSearchInput(t *testing.T) {
+
+	type args struct {
+		search string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "Should be valid when value is null string",
+			args: args{
+				search: "",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be valid when using hyphens",
+			args: args{
+				search: "my-kafka-instance",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be valid when using underscores",
+			args: args{
+				search: "my_kafka",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be valid when starts with number",
+			args: args{
+				search: "1kafka",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be valid when includes uppercase letter",
+			args: args{
+				search: "Kafka-instance",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be invalid when includes special characters",
+			args: args{
+				search: "search*instance",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be valid when contains percentile symbol",
+			args: args{
+				search: "kaf%",
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// nolint
+			if err := validator.ValidateSearchInput(tt.args.search); (err != nil) != tt.wantErr {
+				t.Errorf("ValidateSearchInput() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

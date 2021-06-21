@@ -71,7 +71,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
-			if err := kafka.ValidateSearchInput(opts.search); err != nil {
+			validator := &kafka.Validator{
+				Localizer: opts.localizer,
+			}
+
+			if err := validator.ValidateSearchInput(opts.search); err != nil {
 				return err
 			}
 
