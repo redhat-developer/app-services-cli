@@ -33,8 +33,7 @@ func InvalidSearchValueError(v string) error {
 }
 
 func InvalidNameError(v string) error {
-	InvalidNameErr = fmt.Errorf(`
-	Invalid Kafka instance name "%v". Valid names must satisfy the following conditions:
+	InvalidNameErr = fmt.Errorf(`invalid Kafka instance name "%v". Valid names must satisfy the following conditions:
 
   - must be between 1 and 32 characters
   - must only consist of lower case, alphanumeric characters and '-'
