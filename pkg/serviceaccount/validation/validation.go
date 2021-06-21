@@ -70,20 +70,17 @@ func (v *Validator) ValidateDescription(val interface{}) error {
 }
 
 // ValidateUUID validates if ID is a valid UUID
-func ValidateUUID(localizer localize.Localizer) func(v interface{}) error {
-	return func(val interface{}) error {
-		id, ok := val.(string)
-		if !ok {
-			return commonerr.NewCastError(val, "string")
-		}
-
-		matched, _ := regexp.Match(legalUUID, []byte(id))
-
-		if matched {
-			return nil
-		}
-
-		return errors.New(localizer.MustLocalize("serviceAccount.common.validation.id.error.invalidID", localize.NewEntry("ID", id)))
+func (v *Validator) ValidateUUID(val interface{}) error {
+	id, ok := val.(string)
+	if !ok {
+		return commonerr.NewCastError(val, "string")
 	}
 
+	matched, _ := regexp.Match(legalUUID, []byte(id))
+
+	if matched {
+		return nil
+	}
+
+	return errors.New(v.Localizer.MustLocalize("serviceAccount.common.validation.id.error.invalidID", localize.NewEntry("ID", id)))
 }
