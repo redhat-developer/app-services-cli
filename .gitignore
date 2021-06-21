@@ -11,6 +11,7 @@ node_modules
 # You can explicitly override these on a per file basis with a "!" prefix
 # Example: /!keycloak.json
 /*.json
+!renovate.json
 /*.yaml
 /*.yml
 /*.env
