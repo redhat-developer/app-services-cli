@@ -212,28 +212,18 @@ This change will mean that old Kafka instances are inaccessible without overridi
 
 
 <a name="0.20.3"></a>
-## [0.20.3](https://github.com/redhat-developer/app-services-cli/compare/0.20.2...0.20.3) (2021-03-29)
+## [0.20.3](https://github.com/redhat-developer/app-services-cli/compare/0.20.1...0.20.3) (2021-03-29)
 
 ### Bug Fixes
 
+* **config:** check if .config directory exists ([#498](https://github.com/redhat-developer/app-services-cli/issues/498))
+* **kafka topic:** creation in interactive mode should check if name is available ([#492](https://github.com/redhat-developer/app-services-cli/issues/492))
 * **serviceaccount:** fix invalid i18n message ([#509](https://github.com/redhat-developer/app-services-cli/issues/509))
 * **serviceaccount reset-credentials:** files should use clientID, clientSecret instead of user, password ([#502](https://github.com/redhat-developer/app-services-cli/issues/502))
 
 ### Features
 
 * add support for generating modular docs ([#504](https://github.com/redhat-developer/app-services-cli/issues/504))
-
-
-<a name="0.20.2"></a>
-## [0.20.2](https://github.com/redhat-developer/app-services-cli/compare/0.20.1...0.20.2) (2021-03-26)
-
-### Bug Fixes
-
-* **config:** check if .config directory exists ([#498](https://github.com/redhat-developer/app-services-cli/issues/498))
-* **kafka topic:** creation in interactive mode should check if name is available ([#492](https://github.com/redhat-developer/app-services-cli/issues/492))
-
-### Features
-
 * **kafka create:** add --use flag to set current Kafka instance ([#491](https://github.com/redhat-developer/app-services-cli/issues/491))
 
 
