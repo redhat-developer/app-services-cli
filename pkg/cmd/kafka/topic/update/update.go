@@ -292,9 +292,29 @@ func runCmd(opts *Options) error {
 
 func runInteractivePrompt(opts *Options) (err error) {
 
-	_, err = opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
+	}
+
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
+	if err != nil {
+		return err
+	}
+
+	// check if topic exists
+	_, httpRes, err := api.GetTopic(context.Background(), opts.topicName).
+		Execute()
+
+	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
+	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
+	if err != nil {
+		if httpRes == nil {
+			return err
+		}
+		if httpRes.StatusCode == 404 {
+			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
+		}
 	}
 
 	logger, err := opts.Logger()
