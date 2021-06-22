@@ -78,7 +78,8 @@ openapi/ams/generate:
 .PHONY: openapi/ams/generate
 
 mock-api/start: 
-	echo -e "y" | npx @rhoas/api-mock
+	npm install -g @rhoas/api-mock
+	asapi
 .PHONY: mock-api/start
 
 # clean up code and dependencies
