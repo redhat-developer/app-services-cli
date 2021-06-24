@@ -79,7 +79,7 @@ openapi/ams/generate:
 
 mock-api/start: 
 	npm install -g @rhoas/api-mock
-	asapi
+	asapi --pre-seed
 .PHONY: mock-api/start
 
 # clean up code and dependencies
