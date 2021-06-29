@@ -21,7 +21,7 @@ require (
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2
 	github.com/pkg/errors v0.9.1
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
-	github.com/redhat-developer/app-services-sdk-go v0.3.9
+	github.com/redhat-developer/app-services-sdk-go v0.4.0
 	github.com/redhat-developer/service-binding-operator v0.8.0
 	github.com/spf13/cobra v1.1.3
 	github.com/spf13/pflag v1.0.5
