@@ -245,7 +245,7 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtclient.APIClient {
 	return client
 }
 
-// Create a new Kafka API client
+// Create a new Registry API client
 func (c *KeycloakConnection) createServiceRegistryAPIClient() *registrymgmtclient.APIClient {
 	tc := c.createOAuthTransport(c.Token.AccessToken)
 	client := registrymgmt.NewAPIClient(&registrymgmt.Config{

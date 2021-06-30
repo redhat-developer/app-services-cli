@@ -4,13 +4,13 @@ one = 'Service Registry commands'
 [registry.cmd.longDescription]
 one = ''' 
 Manage your service registries directly from the command line.
-Create new Service Registry instances and interact with them by creating artifacts and downloading them to your machine
+Create new Service Registry instances and interact with them by creating artifacts and downloading them to your computer
 '''
 
 [registry.cmd.example]
 one = '''
 ## Create Service Registry
-rhoas registry create --name=myregistry
+rhoas registry create myregistry
 
 ## List registry
 rhoas registry list 
@@ -27,7 +27,7 @@ Create Service Registry instance
 [registry.cmd.create.example]
 one = '''
 ## Create Service Registry
-rhoas registry create --name=myregistry
+rhoas registry create myregistry
 '''
 
 [registry.cmd.create.info.successMessage]
@@ -56,7 +56,7 @@ Describe Service Registry instance. Fetch all required fields including Registry
 
 [registry.cmd.describe.example]
 one = '''
-rhoas registry describe [id]
+rhoas registry describe <id>
 '''
 
 [registry.cmd.list.shortDescription]
@@ -101,7 +101,7 @@ one = 'Name can be any alpha numeric characters'
 
 [registry.cmd.create.error.couldNotUse]
 description = 'Error message when a instance could not be set to the current instance'
-one = 'could not set the current Service Registry instance {{.ErrorMessage}} as default'
+one = 'could not set the current Service Registry instance as default: {{.ErrorMessage}}'
 
 [registry.common.error.noServiceSelected]
 description = 'Error message when no Registry is set'
