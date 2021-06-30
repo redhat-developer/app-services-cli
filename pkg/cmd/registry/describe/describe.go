@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -110,22 +111,22 @@ func runDescribe(opts *Options) error {
 		}
 	}
 
-	return printService(registry, opts)
+	return printService(opts.IO.Out, registry, opts.outputFormat)
 }
 
-func printService(registry interface{}, opts *Options) error {
-	switch opts.outputFormat {
+func printService(w io.Writer, registry interface{}, outputFormat string) error {
+	switch outputFormat {
 	case "yaml", "yml":
 		data, err := yaml.Marshal(registry)
 		if err != nil {
 			return err
 		}
-		return dump.YAML(opts.IO.Out, data)
+		return dump.YAML(w, data)
 	default:
 		data, err := json.Marshal(registry)
 		if err != nil {
 			return err
 		}
-		return dump.JSON(opts.IO.Out, data)
+		return dump.JSON(w, data)
 	}
 }
