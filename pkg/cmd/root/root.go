@@ -39,7 +39,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 				return cmd.Help()
 			}
 
-			_, err := profile.EnableDevPreview(f, &devpreview)
+			_, err := profile.EnableDevPreview(f, devpreview)
 			return err
 		},
 	}

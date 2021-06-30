@@ -6,15 +6,10 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 )
 
-func CheckTermsAccepted(connFunc factory.ConnectionFunc) (accepted bool, redirectURI string, err error) {
-	conn, err := connFunc(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return false, "", err
-	}
+func CheckTermsAccepted(conn connection.Connection) (accepted bool, redirectURI string, err error) {
 
 	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
