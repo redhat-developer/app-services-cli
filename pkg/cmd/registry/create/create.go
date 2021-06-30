@@ -135,15 +135,11 @@ func runCreate(opts *Options) error {
 
 	logger.Info("Creating service registry " + opts.name)
 
-	api := connection.API()
-
 	response, _, err := connection.API().
 		ServiceRegistryMgmt().
 		CreateRegistry(context.Background()).
 		RegistryCreateRest(*payload).
 		Execute()
-	a = a.RegistryCreateRest(*payload)
-	response, _, err := a.Execute()
 
 	if err != nil {
 		return err
