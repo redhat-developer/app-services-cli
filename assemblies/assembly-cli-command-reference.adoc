@@ -57,6 +57,18 @@ include::../modules/ref-cli-login.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-logout.adoc[leveloffset=+1]
 
+include::../modules/ref-cli-service-registry-create.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-registry-delete.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-registry-describe.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-registry-list.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-registry.adoc[leveloffset=+1]
+
 include::../modules/ref-cli-serviceaccount-create.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-serviceaccount-delete.adoc[leveloffset=+1]
@@ -68,10 +80,6 @@ include::../modules/ref-cli-serviceaccount-list.adoc[leveloffset=+1]
 include::../modules/ref-cli-serviceaccount-reset-credentials.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-serviceaccount.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-status-connect.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-status-status.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-status.adoc[leveloffset=+1]
 
