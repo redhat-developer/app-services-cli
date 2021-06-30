@@ -8,14 +8,14 @@ ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
  
 Manage your service registries directly from the command line.
-Create new Service Registry instances and interact with them by creating artifacts and downloading them to your machine
+Create new Service Registry instances and interact with them by creating artifacts and downloading them to your computer
 
 
 === Examples
 
 ....
 ## Create Service Registry
-rhoas registry create --name=myregistry
+rhoas registry create myregistry
 
 ## List registry
 rhoas registry list 

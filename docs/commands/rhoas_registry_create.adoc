@@ -17,7 +17,7 @@ rhoas registry create [flags]
 
 ....
 ## Create Service Registry
-rhoas registry create --name=myregistry
+rhoas registry create myregistry
 
 ....
 

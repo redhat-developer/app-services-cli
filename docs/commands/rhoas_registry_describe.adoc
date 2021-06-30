@@ -17,7 +17,7 @@ rhoas registry describe [flags]
 === Examples
 
 ....
-rhoas registry describe [id]
+rhoas registry describe <id>
 
 ....
 
