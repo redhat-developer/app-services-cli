@@ -11,6 +11,7 @@ import (
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -21,8 +22,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
-
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/color"

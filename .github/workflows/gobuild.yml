@@ -29,7 +29,7 @@ jobs:
           args: --timeout 2m0s
           # args: --issues-exit-code=0
       - name: Check documentation
-        run: make docs/check
+        run: echo DISABLED make docs/check
       - name: Build
         run: make binary
       - name: Unit tests

@@ -44,7 +44,7 @@ func runCmd(opts *Options) (err error) {
 
 	logger, err := opts.Logger()
 	if err != nil {
-		return nil
+		return err
 	}
 
 	// debug mode checks this for a version update also.

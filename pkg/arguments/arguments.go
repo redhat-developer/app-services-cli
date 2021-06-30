@@ -1,5 +1,4 @@
 // This file contains functions that add common arguments to the command line
-
 package arguments
 
 import (

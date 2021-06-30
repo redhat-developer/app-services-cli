@@ -7,18 +7,19 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/spf13/cobra"
+
+	srsmgmtv1client "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 type options struct {
@@ -33,7 +34,6 @@ type options struct {
 	localizer  localize.Localizer
 }
 
-// NewDeleteCommand command for deleting kafkas.
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Config:     f.Config,
@@ -44,10 +44,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.delete.cmd.use"),
-		Short:   opts.localizer.MustLocalize("kafka.delete.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("kafka.delete.cmd.longDescription"),
-		Example: opts.localizer.MustLocalize("kafka.delete.cmd.example"),
+		Use:     "delete",
+		Short:   f.Localizer.MustLocalize("registry.cmd.delete.shortDescription"),
+		Long:    f.Localizer.MustLocalize("registry.cmd.delete.longDescription"),
+		Example: f.Localizer.MustLocalize("registry.cmd.delete.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
@@ -71,19 +71,19 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			var kafkaConfig *config.KafkaConfig
-			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
+			var serviceRegistryConfig *config.ServiceRegistryConfig
+			if cfg.Services.ServiceRegistry == serviceRegistryConfig || cfg.Services.ServiceRegistry.InstanceID == "" {
+				return errors.New(opts.localizer.MustLocalize("registry.common.error.noServiceSelected"))
 			}
 
-			opts.id = cfg.Services.Kafka.ClusterID
+			opts.id = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
 
 			return runDelete(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.delete.flag.yes"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.common.flag.id"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("registry.common.flag.yes"))
 
 	return cmd
 }
@@ -106,60 +106,61 @@ func runDelete(opts *options) error {
 
 	api := connection.API()
 
-	var response *kafkamgmtclient.KafkaRequest
+	var registry *srsmgmtv1client.RegistryRest
 	ctx := context.Background()
 	if opts.name != "" {
-		response, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		response, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		registry, _, err = serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
 	}
 
-	kafkaName := response.GetName()
+	registryName := registry.GetName()
+	logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deletingService", localize.NewEntry("Name", registryName)))
+	logger.Info("")
 
 	if !opts.force {
 		promptConfirmName := &survey.Input{
-			Message: opts.localizer.MustLocalize("kafka.delete.input.confirmName.message"),
+			Message: opts.localizer.MustLocalize("registry.delete.input.confirmName.message"),
 		}
 
-		var confirmedKafkaName string
-		err = survey.AskOne(promptConfirmName, &confirmedKafkaName)
+		var confirmedName string
+		err = survey.AskOne(promptConfirmName, &confirmedName)
 		if err != nil {
 			return err
 		}
 
-		if confirmedKafkaName != kafkaName {
-			logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
+		if confirmedName != registryName {
+			logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.incorrectNameConfirmation"))
 			return nil
 		}
 	}
 
-	// delete the Kafka
-	logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
-	a := api.Kafka().DeleteKafkaById(context.Background(), response.GetId())
-	a = a.Async(true)
-	_, _, err = a.Execute()
+	logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
+
+	a := api.ServiceRegistryMgmt().DeleteRegistry(context.Background(), opts.id)
+	_, err = a.Execute()
 
 	if err != nil {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
+	logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
 
-	currentKafka := cfg.Services.Kafka
+	currentContextRegistry := cfg.Services.ServiceRegistry
 	// this is not the current cluster, our work here is done
-	if currentKafka == nil || currentKafka.ClusterID != response.GetId() {
+	if currentContextRegistry == nil || currentContextRegistry.InstanceID != opts.id {
 		return nil
 	}
 
-	// the Kafka that was deleted is set as the user's current cluster
+	// the service that was deleted is set as the user's current cluster
 	// since it was deleted it should be removed from the config
-	cfg.Services.Kafka = nil
+	cfg.Services.ServiceRegistry = nil
 	err = opts.Config.Save(cfg)
 	if err != nil {
 		return err
