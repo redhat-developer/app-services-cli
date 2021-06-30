@@ -137,7 +137,11 @@ func runCreate(opts *Options) error {
 
 	api := connection.API()
 
-	a := api.ServiceRegistryMgmt().CreateRegistry(context.Background())
+	response, _, err := connection.API().
+		ServiceRegistryMgmt().
+		CreateRegistry(context.Background()).
+		RegistryCreateRest(*payload).
+		Execute()
 	a = a.RegistryCreateRest(*payload)
 	response, _, err := a.Execute()
 
