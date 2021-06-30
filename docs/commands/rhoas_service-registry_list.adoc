@@ -1,4 +1,4 @@
-== rhoas registry list
+== rhoas service-registry list
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -11,7 +11,7 @@ List all service registries for your account with ability to paginate over the r
 
 
 ....
-rhoas registry list [flags]
+rhoas service-registry list [flags]
 ....
 
 === Examples
@@ -39,5 +39,5 @@ rhoas registry list
 
 === SEE ALSO
 
-* link:rhoas_registry{relfilesuffix}[rhoas registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
 

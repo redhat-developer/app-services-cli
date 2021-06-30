@@ -1,4 +1,4 @@
-== rhoas registry create
+== rhoas service-registry create
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -10,7 +10,7 @@ Create Service Registry instance
 
 
 ....
-rhoas registry create [flags]
+rhoas service-registry create [flags]
 ....
 
 === Examples
@@ -37,5 +37,5 @@ rhoas registry create myregistry
 
 === SEE ALSO
 
-* link:rhoas_registry{relfilesuffix}[rhoas registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
 

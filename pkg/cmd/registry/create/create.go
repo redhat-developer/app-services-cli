@@ -133,7 +133,7 @@ func runCreate(opts *Options) error {
 		return nil
 	}
 
-	logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", opts.name)))
+	logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", payload.GetName())))
 
 	response, _, err := connection.API().
 		ServiceRegistryMgmt().

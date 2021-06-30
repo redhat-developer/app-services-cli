@@ -1,4 +1,4 @@
-== rhoas registry use
+== rhoas service-registry use
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -11,7 +11,7 @@ Select Service Registry instance that will be used with all instances specific c
 
 
 ....
-rhoas registry use [flags]
+rhoas service-registry use [flags]
 ....
 
 === Examples
@@ -36,5 +36,5 @@ rhoas registry use <id>
 
 === SEE ALSO
 
-* link:rhoas_registry{relfilesuffix}[rhoas registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
 

@@ -34,7 +34,7 @@ rhoas registry create myregistry
 one = 'Successfully created Service Registry'
 
 [registry.cmd.create.info.action]
-one = 'Creating Service Registry with name: "{{.Name}}"'
+one = 'Creating Service Registry with name: {{.Name}}'
 
 [registry.cmd.delete.shortDescription]
 one = 'Delete Service Registry'

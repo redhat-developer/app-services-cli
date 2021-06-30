@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
@@ -27,11 +26,11 @@ func GetServiceRegistryByName(ctx context.Context, api srsmgmtv1.RegistriesApi, 
 	}
 
 	if registryList.GetTotal() == 0 {
-		return nil, nil, kafkaerr.NotFoundByNameError(name)
+		return nil, nil, fmt.Errorf(`Instance "%v" not found`, name)
 	}
 
 	items := registryList.GetItems()
-	kafkaReq := items[0]
+	registryReq := items[0]
 
-	return &kafkaReq, httpResponse, err
+	return &registryReq, httpResponse, err
 }

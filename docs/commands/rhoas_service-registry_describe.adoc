@@ -1,4 +1,4 @@
-== rhoas registry describe
+== rhoas service-registry describe
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -11,7 +11,7 @@ Describe Service Registry instance. Fetch all required fields including Registry
 
 
 ....
-rhoas registry describe [flags]
+rhoas service-registry describe [flags]
 ....
 
 === Examples
@@ -37,5 +37,5 @@ rhoas registry describe <id>
 
 === SEE ALSO
 
-* link:rhoas_registry{relfilesuffix}[rhoas registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
 

@@ -1,4 +1,4 @@
-== rhoas registry delete
+== rhoas service-registry delete
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -11,7 +11,7 @@ Create Service Registry instance along with all artifacts
 
 
 ....
-rhoas registry delete [flags]
+rhoas service-registry delete [flags]
 ....
 
 === Examples
@@ -37,5 +37,5 @@ rhoas registry delete <id>
 
 === SEE ALSO
 
-* link:rhoas_registry{relfilesuffix}[rhoas registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
 

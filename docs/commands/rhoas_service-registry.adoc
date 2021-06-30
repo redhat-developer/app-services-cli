@@ -1,4 +1,4 @@
-== rhoas registry
+== rhoas service-registry
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -32,9 +32,9 @@ rhoas registry list
 === SEE ALSO
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
-* link:rhoas_registry_create{relfilesuffix}[rhoas registry create]	 - Create Service Registry
-* link:rhoas_registry_delete{relfilesuffix}[rhoas registry delete]	 - Delete Service Registry
-* link:rhoas_registry_describe{relfilesuffix}[rhoas registry describe]	 - Describe Service Registry instance
-* link:rhoas_registry_list{relfilesuffix}[rhoas registry list]	 - List service registries
-* link:rhoas_registry_use{relfilesuffix}[rhoas registry use]	 - Use Service Registry
+* link:rhoas_service-registry_create{relfilesuffix}[rhoas service-registry create]	 - Create Service Registry
+* link:rhoas_service-registry_delete{relfilesuffix}[rhoas service-registry delete]	 - Delete Service Registry
+* link:rhoas_service-registry_describe{relfilesuffix}[rhoas service-registry describe]	 - Describe Service Registry instance
+* link:rhoas_service-registry_list{relfilesuffix}[rhoas service-registry list]	 - List service registries
+* link:rhoas_service-registry_use{relfilesuffix}[rhoas service-registry use]	 - Use Service Registry
 
