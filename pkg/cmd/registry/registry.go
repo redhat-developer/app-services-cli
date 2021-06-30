@@ -13,10 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var example string = `
-
-`
-
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "registry",

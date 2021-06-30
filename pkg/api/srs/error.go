@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 type ServiceErrorCode int
 
 const (
-	ErrCodePrefix = "KAFKAS-MGMT"
+	ErrCodePrefix = "SRS-MGMT"
 
 	// Forbidden occurs when a user is not allowed to access the service
 	ErrorForbidden ServiceErrorCode = 4
@@ -63,8 +63,8 @@ const (
 	// Region not supported
 	ErrorRegionNotSupported ServiceErrorCode = 31
 
-	// Invalid kafka cluster name
-	ErrorMalformedKafkaClusterName ServiceErrorCode = 32
+	// Invalid registry name
+	ErrorMalformedName ServiceErrorCode = 32
 
 	// Minimum field length validation
 	ErrorMinimumFieldLength ServiceErrorCode = 33
@@ -75,8 +75,8 @@ const (
 	// Only MultiAZ is supported
 	ErrorOnlyMultiAZSupported ServiceErrorCode = 35
 
-	// Kafka cluster name must be unique
-	ErrorDuplicateKafkaClusterName ServiceErrorCode = 36
+	// registry name must be unique
+	ErrorDuplicateName ServiceErrorCode = 36
 
 	// Failure to send an error response (i.e. unable to send error response as the error can't be converted to JSON.)
 	ErrorUnableToSendErrorResponse ServiceErrorCode = 1000
@@ -95,13 +95,13 @@ func (e *Error) Unwrap() error {
 }
 
 // GetAPIError gets a strongly typed error from an error
-func GetAPIError(err error) (e kafkamgmtclient.Error, ok bool) {
-	var apiError kafkamgmtclient.GenericOpenAPIError
+func GetAPIError(err error) (e registrymgmtclient.ErrorRest, ok bool) {
+	var apiError registrymgmtclient.GenericOpenAPIError
 
 	if ok = errors.As(err, &apiError); ok {
 		errModel := apiError.Model()
 
-		e, ok = errModel.(kafkamgmtclient.Error)
+		e, ok = errModel.(registrymgmtclient.ErrorRest)
 	}
 
 	return e, ok
