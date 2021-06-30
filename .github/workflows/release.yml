@@ -18,7 +18,7 @@ jobs:
         # run: git fetch
       -
         name: Set up Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v2
         with:
           go-version: 1.16.x
 
@@ -43,7 +43,7 @@ jobs:
       - run: cat RELEASE_NOTES.md
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v1
+        uses: goreleaser/goreleaser-action@v2
         if: steps.check-tag.outputs.prerelease == 'false'
         with:
           version: latest
@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run GoReleaser on pre-release
-        uses: goreleaser/goreleaser-action@v1
+        uses: goreleaser/goreleaser-action@v2
         if: steps.check-tag.outputs.prerelease == 'true'
         with:
           version: latest
