@@ -1,0 +1,43 @@
+== rhoas registry list
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+List service registries
+
+=== Synopsis
+
+ 
+List all service registries for your account with ability to paginate over the results
+
+
+....
+rhoas registry list [flags]
+....
+
+=== Examples
+
+....
+rhoas registry list
+
+....
+
+=== Options
+
+....
+      --limit int32     The maximum number of Service Registry instances to be returned (default 100)
+  -o, --output string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml"
+      --page int32      Display the Service Registry instances from the specified page number.
+      --search string   Text search to filter the Service Registry instances by name
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_registry{relfilesuffix}[rhoas registry]	 - [96m[Preview] [0mService Registry commands
+
