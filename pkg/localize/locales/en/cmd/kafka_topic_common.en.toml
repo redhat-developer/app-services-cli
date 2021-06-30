@@ -16,6 +16,10 @@ one = 'The period of time in milliseconds the broker will retain a partition log
 description = 'Description for the Retention size input'
 one = 'The maximum total size of a partition log segments before old log segments are deleted to free up space'
 
+[kafka.topic.common.input.cleanupPolicy.description]
+description = 'Description for the Cleanup policy input'
+one = 'Determines whether log messages are deleted, compacted, or both'
+
 [kafka.topic.common.error.noKafkaSelected]
 one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
 
