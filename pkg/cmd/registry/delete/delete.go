@@ -152,7 +152,6 @@ func runDelete(opts *options) error {
 
 	logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
 
-	// TODO this should be helper
 	currentContextRegistry := cfg.Services.ServiceRegistry
 	// this is not the current cluster, our work here is done
 	if currentContextRegistry == nil || currentContextRegistry.InstanceID != opts.id {

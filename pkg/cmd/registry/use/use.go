@@ -62,7 +62,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	// TODO - why not using name here but other commands do use it?
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.use.flag.id"))
 
 	return cmd

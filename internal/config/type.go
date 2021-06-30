@@ -38,7 +38,6 @@ type KafkaConfig struct {
 }
 
 type ServiceRegistryConfig struct {
-	// TODO team to change this to string value
 	InstanceID string `json:"instanceId"`
 	Name       string `json:"name"`
 }
