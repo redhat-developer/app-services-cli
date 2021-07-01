@@ -124,9 +124,9 @@ func runList(opts *Options) (err error) {
 
 		switch httpRes.StatusCode {
 		case 401:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.list.common.error.unauthorized", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
 		case 403:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.list.common.error.forbidden", operationTmplPair))
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
 		case 500:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
 		case 503:
