@@ -39,8 +39,10 @@ jobs:
         if: steps.check-tag.outputs.prerelease == 'false'
         run: |
           git-chglog -t .chglog/RELEASE.tpl.md $(git describe --tags $(git rev-parse HEAD)) > RELEASE_NOTES.md
-      
-      - run: cat RELEASE_NOTES.md
+     
+      - name: Print release notes
+        if: steps.check-tag.outputs.prerelease == 'false'
+        run: cat RELEASE_NOTES.md
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
