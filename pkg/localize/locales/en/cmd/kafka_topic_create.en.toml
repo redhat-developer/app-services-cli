@@ -38,3 +38,7 @@ one = 'Retention Size (bytes):'
 [kafka.topic.create.input.partitions.message]
 description = 'Message for the Partitions input'
 one = 'Number of Partitions:'
+
+[kafka.topic.create.input.cleanupPolicy.message]
+description = 'Message for the Cleanup Policy input'
+one = 'Cleanup Policy:'

@@ -9,6 +9,10 @@ import (
 
 var RetentionMsKey string = "retention.ms"
 var RetentionSizeKey string = "retention.bytes"
+var PartitionsKey string = "partitions"
+var CleanupPolicy string = "cleanup.policy"
+
+var ValidCleanupPolicies = []string{"delete", "compact", "compact, delete"}
 
 // CreateConfigEntries converts a key value map of config entries to an array of config entries
 func CreateConfigEntries(entryMap map[string]*string) *[]kafkainstanceclient.ConfigEntry {

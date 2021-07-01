@@ -32,6 +32,7 @@ import (
 const (
 	defaultRetentionPeriodMS = 604800000
 	defaultRetentionSize     = -1
+	defaultCleanupPolicy     = "delete"
 )
 
 type Options struct {
@@ -41,6 +42,7 @@ type Options struct {
 	retentionBytes int
 	kafkaID        string
 	outputFormat   string
+	cleanupPolicy  string
 	interactive    bool
 
 	IO         *iostreams.IOStreams
@@ -75,6 +77,12 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
 				return err
+			}
+
+			// check that a valid --cleanup-policy flag value is used
+			validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
+			if !validPolicy {
+				return flag.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 			}
 
 			if !opts.interactive {
@@ -125,8 +133,11 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
 	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
+	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", defaultCleanupPolicy, opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
+
+	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
 
 	return cmd
 }
@@ -271,15 +282,29 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
+	cleanupPolicyPrompt := &survey.Select{
+		Message: opts.localizer.MustLocalize("kafka.topic.create.input.cleanupPolicy.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"),
+		Options: topicutil.ValidCleanupPolicies,
+		Default: defaultCleanupPolicy,
+	}
+
+	err = survey.AskOne(cleanupPolicyPrompt, &opts.cleanupPolicy)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func createConfigEntries(opts *Options) *[]kafkainstanceclient.ConfigEntry {
 	retentionMsStr := strconv.Itoa(opts.retentionMs)
 	retentionBytesStr := strconv.Itoa(opts.retentionBytes)
+	cleanupPolicyStr := opts.cleanupPolicy
 	configEntryMap := map[string]*string{
 		topicutil.RetentionMsKey:   &retentionMsStr,
 		topicutil.RetentionSizeKey: &retentionBytesStr,
+		topicutil.CleanupPolicy:    &cleanupPolicyStr,
 	}
 	return topicutil.CreateConfigEntries(configEntryMap)
 }
