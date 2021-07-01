@@ -2,13 +2,11 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Describe Service Registry instance
+Describe a Service Registry instance
 
 === Synopsis
 
- 
-Describe Service Registry instance. Fetch all required fields including Registry URL 
-
+Describe a Service Registry instance. Fetch all required fields including the registry URL. 
 
 ....
 rhoas service-registry describe [flags]
@@ -24,8 +22,8 @@ rhoas registry describe <id>
 === Options
 
 ....
-      --id string       Unique ID of the Registry instance you want to delete. If not set, the current Registry instance will be used.
-  -o, --output string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml" (default "json")
+      --id string       Unique ID of the registry instance you want to describe. If not set, the current registry instance will be used.
+  -o, --output string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml" (default "json").
 ....
 
 === Options inherited from parent commands
@@ -38,4 +36,3 @@ rhoas registry describe <id>
 === SEE ALSO
 
 * link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
-

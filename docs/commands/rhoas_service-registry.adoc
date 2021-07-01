@@ -6,10 +6,9 @@ ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 === Synopsis
 
- 
-Manage your service registries directly from the command line.
-Create new Service Registry instances and interact with them by creating artifacts and downloading them to your computer
+Manage your Service Registry instances directly from the command line. 
 
+Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
 
 === Examples
 
@@ -32,9 +31,8 @@ rhoas registry list
 === SEE ALSO
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
-* link:rhoas_service-registry_create{relfilesuffix}[rhoas service-registry create]	 - Create Service Registry
-* link:rhoas_service-registry_delete{relfilesuffix}[rhoas service-registry delete]	 - Delete Service Registry
+* link:rhoas_service-registry_create{relfilesuffix}[rhoas service-registry create]	 - Create Service Registry instance
+* link:rhoas_service-registry_delete{relfilesuffix}[rhoas service-registry delete]	 - Delete Service Registry instance
 * link:rhoas_service-registry_describe{relfilesuffix}[rhoas service-registry describe]	 - Describe Service Registry instance
-* link:rhoas_service-registry_list{relfilesuffix}[rhoas service-registry list]	 - List service registries
-* link:rhoas_service-registry_use{relfilesuffix}[rhoas service-registry use]	 - Use Service Registry
-
+* link:rhoas_service-registry_list{relfilesuffix}[rhoas service-registry list]	 - List Service Registry instances
+* link:rhoas_service-registry_use{relfilesuffix}[rhoas service-registry use]	 - Use Service Registry instance

@@ -2,12 +2,11 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Create Service Registry
+Create a Service Registry instance
 
 === Synopsis
 
-Create Service Registry instance  
-
+Create a Service Registry instance to store and manage your schema and API artifacts.  
 
 ....
 rhoas service-registry create [flags]
@@ -24,8 +23,8 @@ rhoas registry create myregistry
 === Options
 
 ....
-  -o, --output string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml" (default "json")
-      --use             Set the new Service Registry instance to the current instance (default true)
+  -o, --output string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml". (default "json").
+      --use             Set the new Service Registry instance to the current instance (default true).
 ....
 
 === Options inherited from parent commands
@@ -38,4 +37,3 @@ rhoas registry create myregistry
 === SEE ALSO
 
 * link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
-

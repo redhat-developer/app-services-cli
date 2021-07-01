@@ -2,13 +2,11 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Delete Service Registry
+Delete a Service Registry instance
 
 === Synopsis
 
- 
-Create Service Registry instance along with all artifacts
-
+Delete a Service Registry instance along with all of its schema and API artifacts.
 
 ....
 rhoas service-registry delete [flags]
@@ -24,7 +22,7 @@ rhoas registry delete <id>
 === Options
 
 ....
-      --id string   Unique ID of the Registry instance you want to delete. If not set, the current Registry instance will be used.
+      --id string   Unique ID of the Service Registry instance you want to delete. If not set, the current Service Registry instance is used.
   -y, --yes         Skip confirmation to forcibly delete this Service Registry instance.
 ....
 
@@ -38,4 +36,3 @@ rhoas registry delete <id>
 === SEE ALSO
 
 * link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
-

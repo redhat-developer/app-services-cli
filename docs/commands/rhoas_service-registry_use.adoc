@@ -2,13 +2,11 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Use Service Registry
+Use a Service Registry instance
 
 === Synopsis
 
- 
-Select Service Registry instance that will be used with all instances specific commands
-
+Select a Service Registry instance to use with all instance-specific commands.
 
 ....
 rhoas service-registry use [flags]
@@ -24,7 +22,7 @@ rhoas registry use <id>
 === Options
 
 ....
-      --id string   Unique ID of the Service Registry instance you want to set as the current instance.
+      --id string   Unique ID of the Service Registry instance that you want to set as the current instance.
 ....
 
 === Options inherited from parent commands
@@ -37,4 +35,3 @@ rhoas registry use <id>
 === SEE ALSO
 
 * link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
-
