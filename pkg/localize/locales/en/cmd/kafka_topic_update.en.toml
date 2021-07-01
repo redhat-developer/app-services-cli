@@ -42,3 +42,11 @@ one = 'Retention Size (bytes) [optional]:'
 [kafka.topic.update.input.retentionBytes.help]
 description = 'Help for the Retention size input'
 one = 'The maximum total size of a partition log segments before old log segments are deleted to free up space. Leave blank to skip updating this value.'
+
+[kafka.topic.update.input.cleanupPolicy.message]
+description = 'Message for the Cleanup policy input'
+one = 'Cleanup Policy [optional]:'
+
+[kafka.topic.update.input.cleanupPolicy.help]
+description = 'Help for the Cleanup policy input'
+one = 'Determines whether log messages are deleted, compacted, or both. Leave blank to skip updating this value.'

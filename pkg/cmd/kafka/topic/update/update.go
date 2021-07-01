@@ -43,6 +43,7 @@ type Options struct {
 	kafkaID           string
 	outputFormat      string
 	interactive       bool
+	cleanupPolicy     string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -80,7 +81,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
 				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
-			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
+			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" && opts.cleanupPolicy == "" {
 				opts.interactive = true
 			}
 
@@ -94,7 +95,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
+				if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" && opts.cleanupPolicy == "" {
 					logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.nothingToUpdate"))
 					return nil
 				}
@@ -102,6 +103,15 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				if err = validator.ValidateName(opts.topicName); err != nil {
 					return err
 				}
+
+				// check that a valid --cleanup-policy flag value is used
+				if opts.cleanupPolicy != "" {
+					validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
+					if !validPolicy {
+						return flag.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
+					}
+				}
+
 			}
 
 			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
@@ -161,8 +171,11 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
+	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
+
+	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
 
 	return cmd
 }
@@ -239,6 +252,11 @@ func runCmd(opts *Options) error {
 		configEntryMap[topicutil.RetentionSizeKey] = &opts.retentionBytesStr
 	}
 
+	if opts.cleanupPolicy != "" {
+		needsUpdate = true
+		configEntryMap[topicutil.CleanupPolicy] = &opts.cleanupPolicy
+	}
+
 	if !needsUpdate {
 		logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.nothingToUpdate"))
 		return nil
@@ -303,7 +321,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	// check if topic exists
-	_, httpRes, err := api.GetTopic(context.Background(), opts.topicName).
+	topic, httpRes, err := api.GetTopic(context.Background(), opts.topicName).
 		Execute()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
@@ -344,6 +362,18 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	err = survey.AskOne(retentionBytesPrompt, &opts.retentionBytesStr, survey.WithValidator(validator.ValidateMessageRetentionSize))
+	if err != nil {
+		return err
+	}
+
+	cleanupPolicyPrompt := &survey.Select{
+		Message: opts.localizer.MustLocalize("kafka.topic.update.input.cleanupPolicy.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.cleanupPolicy.help"),
+		Options: topicutil.ValidCleanupPolicies,
+		Default: topicutil.GetConfigValue(topic.GetConfig(), topicutil.CleanupPolicy),
+	}
+
+	err = survey.AskOne(cleanupPolicyPrompt, &opts.cleanupPolicy)
 	if err != nil {
 		return err
 	}

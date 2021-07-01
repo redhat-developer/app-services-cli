@@ -12,7 +12,7 @@ var RetentionSizeKey string = "retention.bytes"
 var PartitionsKey string = "partitions"
 var CleanupPolicy string = "cleanup.policy"
 
-var ValidCleanupPolicies = []string{"delete", "compact", "compact, delete"}
+var ValidCleanupPolicies = []string{"delete", "compact", "compact,delete"}
 
 // CreateConfigEntries converts a key value map of config entries to an array of config entries
 func CreateConfigEntries(entryMap map[string]*string) *[]kafkainstanceclient.ConfigEntry {
@@ -62,4 +62,15 @@ func ConvertRetentionBytesToInt(retentionBytesStr string) (int, error) {
 	}
 
 	return retentionMsInt, nil
+}
+
+func GetConfigValue(configEntries []kafkainstanceclient.ConfigEntry, keyName string) (val string) {
+	for _, config := range configEntries {
+
+		if *config.Key == keyName {
+			val = config.GetValue()
+		}
+	}
+
+	return val
 }
