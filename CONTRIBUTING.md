@@ -82,11 +82,13 @@ rhoas login --api-gateway=http://localhost:8000
 
 ## Internationalization
 
-All text strings are placed in `./pkg/localizer/assets` directory.
+All text strings are placed in `./pkg/localize/locales` directory.
 
 ## Documentation
 
-The main CLI documentation can be found in the `./docs` folder.
+The main CLI documentation source files are stored in the `./pkg/localize/locales/en/cmd/` directory.
+
+The CLI documentation output is generated in the `./docs` directory.
 
 ### Generating documentation
 

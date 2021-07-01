@@ -3,8 +3,9 @@ one = 'Service Registry commands'
 
 [registry.cmd.longDescription]
 one = ''' 
-Manage your service registries directly from the command line.
-Create new Service Registry instances and interact with them by creating artifacts and downloading them to your computer
+Manage your Service Registry instances directly from the command line.
+
+Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
 '''
 
 [registry.cmd.example]
@@ -12,16 +13,16 @@ one = '''
 ## Create Service Registry
 rhoas registry create myregistry
 
-## List registry
+## List Service Registry instances
 rhoas registry list 
 '''
 
 [registry.cmd.create.shortDescription]
-one = 'Create Service Registry'
+one = 'Create a Service Registry instance'
 
 [registry.cmd.create.longDescription]
 one = '''
-Create Service Registry instance  
+Create a Service Registry instance to store and manage your schema and API artifacts. 
 '''
 
 [registry.cmd.create.example]
@@ -37,11 +38,11 @@ one = 'Successfully created Service Registry'
 one = 'Creating Service Registry with name: {{.Name}}'
 
 [registry.cmd.delete.shortDescription]
-one = 'Delete Service Registry'
+one = 'Delete a Service Registry instance'
 
 [registry.cmd.delete.longDescription]
 one = ''' 
-Create Service Registry instance along with all artifacts
+Delete a Service Registry instance along with all of its schema and API artifacts.
 '''
 
 [registry.cmd.delete.example]
@@ -50,11 +51,11 @@ rhoas registry delete <id>
 '''
 
 [registry.cmd.describe.shortDescription]
-one = 'Describe Service Registry instance'
+one = 'Describe a Service Registry instance'
 
 [registry.cmd.describe.longDescription]
 one = ''' 
-Describe Service Registry instance. Fetch all required fields including Registry URL 
+Describe a Service Registry instance. Fetch all required fields including the registry URL. 
 '''
 
 [registry.cmd.describe.example]
@@ -63,11 +64,11 @@ rhoas registry describe <id>
 '''
 
 [registry.cmd.list.shortDescription]
-one = 'List service registries'
+one = 'List Service Registry instances'
 
 [registry.cmd.list.longDescription]
 one = ''' 
-List all service registries for your account with ability to paginate over the results
+List all Service Registry instances for your account with the ability to paginate over the results.
 '''
 
 [registry.cmd.list.example]
@@ -76,11 +77,11 @@ rhoas registry list
 '''
 
 [registry.cmd.use.shortDescription]
-one = 'Use Service Registry'
+one = 'Use a Service Registry instance'
 
 [registry.cmd.use.longDescription]
 one = ''' 
-Select Service Registry instance that will be used with all instances specific commands
+Select a Service Registry instance to use with all instance-specific commands.
 '''
 
 [registry.cmd.use.example]
@@ -100,19 +101,19 @@ one = 'Set the new Service Registry instance to the current instance'
 one = 'Name of Service Registry:'
 
 [registry.cmd.create.input.name.help]
-one = 'Name can be any alpha numeric characters'
+one = 'Name can be any alphanumeric characters'
 
 [registry.cmd.create.error.couldNotUse]
-description = 'Error message when a instance could not be set to the current instance'
+description = 'Error message when Service Registry instance could not be set to the current instance'
 one = 'could not set the current Service Registry instance as default: {{.ErrorMessage}}'
 
 [registry.common.error.noServiceSelected]
-description = 'Error message when no Registry is set'
+description = 'Error message when no Service Registry is set'
 one = 'no Service Registry instance is currently set, use the "--id" flag or set the current instance with the "rhoas registry use" command'
  
 [registry.common.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the Registry instance you want to delete. If not set, the current Registry instance will be used.'
+one = 'Unique ID of the Service Registry instance you want to delete. If not set, the current Service Registry instance is used.'
 
 [registry.common.flag.yes]
 description = 'Description for the --yes flag'
@@ -128,15 +129,15 @@ one = 'The name you entered does not match the name of the Service Registry inst
 
 [registry.delete.log.info.deletingService]
 description = 'Debug message when deleting Service Registry'
-one = 'Deleting "{{.Name}}" Service Registry instance'
+one = 'Deleting "{{.Name}}" Service Registry instance.'
 
 [registry.delete.log.info.deleteSuccess]
-description = 'Info message when instance was deleted'
-one = 'Service Registry instance "{{.Name}}" was deleted'
+description = 'Info message when Service Registry instance was deleted'
+one = 'Service Registry instance "{{.Name}}" was deleted.'
 
 [registry.cmd.flag.output.description]
 description = "Description for --output flag"
-one = 'Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml"'
+one = 'Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml".'
 
 [registry.list.flag.page]
 description = 'Description for the --page flag'
@@ -144,15 +145,15 @@ one = 'Display the Service Registry instances from the specified page number.'
 
 [registry.list.flag.limit]
 description = 'Description for the --limit flag'
-one = 'The maximum number of Service Registry instances to be returned'
+one = 'The maximum number of Service Registry instances to be returned.'
 
 [registry.list.flag.search]
 description = 'Description for the --search flag'
-one = 'Text search to filter the Service Registry instances by name'
+one = 'Text search to filter the Service Registry instances by name.'
 
 [registry.list.log.debug.filteringList]
 description = 'Debug message when filtering the list of Service Registry instances'
-one = 'Filtering Service Registry instances with the query "{{.Search}}"'
+one = 'Filtering Service Registry instances with the query "{{.Search}}".'
 
 [registry.common.log.info.noInstances]
 description = 'Info message when no Registry instances were found'
