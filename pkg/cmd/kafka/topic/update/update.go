@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 
@@ -222,7 +223,7 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	_, httpRes, err := api.GetTopic(context.Background(), opts.topicName).Execute()
+	topic, httpRes, err := api.GetTopic(context.Background(), opts.topicName).Execute()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -252,7 +253,7 @@ func runCmd(opts *Options) error {
 		configEntryMap[topicutil.RetentionSizeKey] = &opts.retentionBytesStr
 	}
 
-	if opts.cleanupPolicy != "" {
+	if opts.cleanupPolicy != "" && strings.Compare(opts.cleanupPolicy, topicutil.GetConfigValue(topic.GetConfig(), topicutil.CleanupPolicy)) != 0 {
 		needsUpdate = true
 		configEntryMap[topicutil.CleanupPolicy] = &opts.cleanupPolicy
 	}
