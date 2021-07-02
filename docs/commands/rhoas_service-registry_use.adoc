@@ -2,12 +2,12 @@
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
-Use Service Registry
+Use a Service Registry instance
 
 === Synopsis
 
  
-Select Service Registry instance that will be used with all instances specific commands
+Select a Service Registry instance to use with all instance-specific commands.
 
 
 ....
