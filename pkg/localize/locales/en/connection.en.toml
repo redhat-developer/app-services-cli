@@ -2,7 +2,7 @@
 one = 'not logged in. Run "rhoas login" to authenticate'
 
 [connection.error.notLoggedInMASError]
-one = 'not logged in to identity.api.openshift.com. Run "rhoas login" to authenticate. Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands.'
+one = 'not logged in to identity.api.openshift.com. Run "rhoas login" to authenticate. Note: token-based login is not supported by the Kafka "topic" and "consumer-group" subcommands.'
 
 [connection.error.sessionExpiredError]
 one = 'session expired. Run "rhoas login" to authenticate'

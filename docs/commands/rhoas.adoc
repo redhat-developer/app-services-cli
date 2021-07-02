@@ -22,7 +22,7 @@ $ rhoas login
 $ rhoas kafka create my-kafka-cluster
 
 # create a service account and save credentials to a JSON file
-$ rhoas serviceaccount create -o json
+$ rhoas service-account create -o json
 
 # connect your Kubernetes/OpenShift cluster to a service
 $ rhoas cluster connect

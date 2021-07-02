@@ -12,7 +12,7 @@ Delete a consumer group from the Kafka instance.
 [kafka.consumerGroup.delete.cmd.example]
 one = '''
 # delete a consumer group
-$ rhoas kafka consumergroup delete consumer_group_1
+$ rhoas kafka consumer-group delete consumer_group_1
 '''
 
 [kafka.consumerGroup.delete.flag.yes.description]
