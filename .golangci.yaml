@@ -98,7 +98,6 @@ linters:
     - revive
     - exportloopref
     - godox
-    - misspell
     - govet
     - gofmt
     - gocritic
