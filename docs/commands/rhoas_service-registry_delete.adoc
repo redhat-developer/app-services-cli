@@ -17,7 +17,7 @@ rhoas service-registry delete [flags]
 === Examples
 
 ....
-rhoas registry delete <id>
+rhoas service-registry delete <id>
 
 ....
 

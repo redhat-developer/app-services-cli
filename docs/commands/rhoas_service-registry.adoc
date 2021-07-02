@@ -16,10 +16,10 @@ Create new Service Registry instances and interact with them by adding schema an
 
 ....
 ## Create Service Registry
-rhoas registry create myregistry
+rhoas service-registry create myregistry
 
 ## List Service Registry instances
-rhoas registry list 
+rhoas service-registry list 
 
 ....
 

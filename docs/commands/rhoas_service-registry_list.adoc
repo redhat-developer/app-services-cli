@@ -17,7 +17,7 @@ rhoas service-registry list [flags]
 === Examples
 
 ....
-rhoas registry list
+rhoas service-registry list
 
 ....
 

@@ -17,7 +17,7 @@ rhoas service-registry use [flags]
 === Examples
 
 ....
-rhoas registry use <id>
+rhoas service-registry use <id>
 
 ....
 
