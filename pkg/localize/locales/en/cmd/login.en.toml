@@ -15,7 +15,7 @@ This command opens your web browser, where you can enter your credentials.
 
 When using the rhoas CLI in an environment without a web browser, 
 you can log in using an offline-token by passing the "--token" flag, which can be obtained at {{.OfflineTokenURL}}.
-Note: token-based login is not supported by the Kafka "topic" and "consumergroup" subcommands.
+Note: token-based login is not supported by the Kafka "topic" and "consumer-group" subcommands.
 '''
 
 [login.cmd.example]

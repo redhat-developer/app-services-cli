@@ -16,10 +16,10 @@ rhoas kafka consumer-group list [flags]
 
 ....
 # list all consumer groups
-$ rhoas kafka consumergroup list
+$ rhoas kafka consumer-group list
 
 # list all consumer groups as JSON
-$ rhoas kafka consumergroup list -o json
+$ rhoas kafka consumer-group list -o json
 
 ....
 
