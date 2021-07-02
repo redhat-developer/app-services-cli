@@ -25,7 +25,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.29
+          version: latest
           args: --timeout 2m0s
       - name: Check documentation
         run: make docs/check
