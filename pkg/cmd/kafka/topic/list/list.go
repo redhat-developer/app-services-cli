@@ -168,7 +168,7 @@ func runCmd(opts *Options) error {
 }
 
 func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow {
-	var rows []topicRow = []topicRow{}
+	rows := []topicRow{}
 
 	for _, t := range topics {
 

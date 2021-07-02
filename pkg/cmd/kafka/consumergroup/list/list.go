@@ -164,7 +164,7 @@ func runList(opts *Options) (err error) {
 }
 
 func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {
-	var rows []consumerGroupRow = []consumerGroupRow{}
+	rows := []consumerGroupRow{}
 
 	for _, t := range consumerGroups {
 		consumers := t.GetConsumers()

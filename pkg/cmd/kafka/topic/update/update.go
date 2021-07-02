@@ -221,7 +221,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// map to store the config entries which will be updated
-	var configEntryMap map[string]*string = map[string]*string{}
+	configEntryMap := map[string]*string{}
 
 	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
 

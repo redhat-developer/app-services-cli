@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	RetentionMsKey   string = "retention.ms"
-	RetentionSizeKey string = "retention.bytes"
-	PartitionsKey    string = "partitions"
-	CleanupPolicy    string = "cleanup.policy"
+	RetentionMsKey   = "retention.ms"
+	RetentionSizeKey = "retention.bytes"
+	PartitionsKey    = "partitions"
+	CleanupPolicy    = "cleanup.policy"
 )
 
 var ValidCleanupPolicies = []string{"delete", "compact", "compact, delete"}

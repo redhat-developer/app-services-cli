@@ -149,8 +149,6 @@ func GenAsciidocTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHa
 	if _, err := io.WriteString(f, filePrepender(filename)); err != nil {
 		return err
 	}
-	if err := GenAsciidocCustom(cmd, f, linkHandler); err != nil {
-		return err
-	}
-	return nil
+
+	return GenAsciidocCustom(cmd, f, linkHandler)
 }

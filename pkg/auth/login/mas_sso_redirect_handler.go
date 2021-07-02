@@ -80,7 +80,7 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	accessTkn, _ := token.Parse(resp.OAuth2Token.AccessToken)
 	tknClaims, _ := token.MapClaims(accessTkn)
 	userName, ok := tknClaims["preferred_username"]
-	var rawUsername string = "unknown"
+	rawUsername := "unknown"
 	if ok {
 		rawUsername = fmt.Sprintf("%v", userName)
 	}

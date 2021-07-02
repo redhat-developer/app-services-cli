@@ -154,7 +154,7 @@ func runCmd(opts *Options) error {
 }
 
 func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consumer) []consumerRow {
-	var rows []consumerRow = []consumerRow{}
+	rows := []consumerRow{}
 
 	for _, consumer := range consumers {
 
