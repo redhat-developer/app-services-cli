@@ -47,9 +47,6 @@ linters-settings:
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
-  golint:
-    # minimal confidence for issues, default is 0.8
-    min-confidence: 0.8
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -60,12 +57,6 @@ linters-settings:
     disable:
       - shadow
     disable-all: false
-  gofumpt:
-    # Select the Go version to target. The default is `1.15`.
-    lang-version: "1.16"
-    # Choose whether or not to use the extra rules that are disabled
-    # by default
-    extra-rules: false
   revive:
     # see https://github.com/mgechev/revive#available-rules for details.
     ignore-generated-header: true
@@ -74,12 +65,7 @@ linters-settings:
       - name: indent-error-flow
         severity: warning
       - name: add-constant
-        severity: warning
-        arguments:
-          - maxLitCount: "3"
-            allowStrs: '""'
-            allowInts: "0,1,2"
-            allowFloats: "0.0,0.,1.0,1.,2.0,2."
+        disabled: true
   misspell:
     # Correct spellings using locale preferences for US or UK.
     # Default is to use a neutral variety of English.
@@ -88,9 +74,10 @@ linters-settings:
     ignore-words:
       - rhoas
 linters:
-  disable-all: true
+  disable:
+    - scopelint
   enable:
-    - gofumpt
+    - gofmt
     - funlen
     - deadcode
     - revive
@@ -99,7 +86,6 @@ linters:
     - govet
     - gocritic
     - misspell
-    - golint
   presets:
     - bugs
     - unused
