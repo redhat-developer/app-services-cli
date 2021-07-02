@@ -86,6 +86,9 @@ mock-api/start:
 format:
 	@go mod tidy
 	@gofmt -w `find . -type f -name '*.go'`
+
+	@GO111MODULE=on go get mvdan.cc/gofumpt
+	@gofumpt -l -w .
 .PHONY: format
 
 # Symlink common git hookd into .git directory
