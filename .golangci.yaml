@@ -88,10 +88,8 @@ linters-settings:
     ignore-words:
       - rhoas
 linters:
+  disable-all: true
   enable:
-    # Temporary disabled rules that require multiple changes
-    # - cyclop
-    # - wsl
     - gofumpt
     - funlen
     - deadcode
@@ -99,7 +97,6 @@ linters:
     - exportloopref
     - godox
     - govet
-    - gofmt
     - gocritic
     - misspell
     - golint
