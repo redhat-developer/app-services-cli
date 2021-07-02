@@ -44,8 +44,8 @@ $ rhoas cluster connect
 * link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 * link:rhoas_login{relfilesuffix}[rhoas login]	 - Log in to RHOAS
 * link:rhoas_logout{relfilesuffix}[rhoas logout]	 - Log out from RHOAS
+* link:rhoas_service-account{relfilesuffix}[rhoas service-account]	 - Create, list, describe, delete and update service accounts
 * link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
-* link:rhoas_serviceaccount{relfilesuffix}[rhoas serviceaccount]	 - Create, list, describe, delete and update service accounts
 * link:rhoas_status{relfilesuffix}[rhoas status]	 - View the status of all currently used services
 * link:rhoas_whoami{relfilesuffix}[rhoas whoami]	 - Print current username
 
