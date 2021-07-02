@@ -21,13 +21,13 @@ include::../modules/ref-cli-completion-zsh.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-completion.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-kafka-consumergroup-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-delete.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-kafka-consumergroup-describe.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-describe.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-kafka-consumergroup-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-list.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-kafka-consumergroup.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-kafka-create.adoc[leveloffset=+1]
 
@@ -57,6 +57,18 @@ include::../modules/ref-cli-login.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-logout.adoc[leveloffset=+1]
 
+include::../modules/ref-cli-service-account-create.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-account-delete.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-account-describe.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-account-list.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-account-reset-credentials.adoc[leveloffset=+1]
+
+include::../modules/ref-cli-service-account.adoc[leveloffset=+1]
+
 include::../modules/ref-cli-service-registry-create.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-service-registry-delete.adoc[leveloffset=+1]
@@ -68,18 +80,6 @@ include::../modules/ref-cli-service-registry-list.adoc[leveloffset=+1]
 include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-service-registry.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-serviceaccount-create.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-serviceaccount-delete.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-serviceaccount-describe.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-serviceaccount-list.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-serviceaccount-reset-credentials.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-serviceaccount.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-status.adoc[leveloffset=+1]
 

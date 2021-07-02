@@ -1,4 +1,4 @@
-== rhoas kafka consumergroup delete
+== rhoas kafka consumer-group delete
 
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
@@ -10,14 +10,14 @@ Delete a consumer group from the Kafka instance.
 
 
 ....
-rhoas kafka consumergroup delete [flags]
+rhoas kafka consumer-group delete [flags]
 ....
 
 === Examples
 
 ....
 # delete a consumer group
-$ rhoas kafka consumergroup delete consumer_group_1
+$ rhoas kafka consumer-group delete consumer_group_1
 
 ....
 
@@ -37,5 +37,5 @@ $ rhoas kafka consumergroup delete consumer_group_1
 
 === SEE ALSO
 
-* link:rhoas_kafka_consumergroup{relfilesuffix}[rhoas kafka consumergroup]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+* link:rhoas_kafka_consumer-group{relfilesuffix}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
 
