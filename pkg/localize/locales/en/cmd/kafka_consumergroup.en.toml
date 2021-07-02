@@ -1,6 +1,6 @@
 [kafka.consumerGroup.cmd.use]
 description = "Use is the one-line usage message"
-one = "consumergroup"
+one = "consumer-group"
 
 [kafka.consumerGroup.cmd.shortDescription]
 one = 'Describe, list, and delete consumer groups for the current Kafka instance.'
