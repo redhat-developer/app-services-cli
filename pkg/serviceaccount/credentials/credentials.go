@@ -74,7 +74,7 @@ func Write(output string, filepath string, credentials *Credentials) error {
 	// replace any env vars in the file path
 	trueFilePath := os.ExpandEnv(filepath)
 
-	return ioutil.WriteFile(trueFilePath, fileData, 0600)
+	return ioutil.WriteFile(trueFilePath, fileData, 0o600)
 }
 
 func getFileFormat(output string) (format string) {

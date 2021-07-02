@@ -73,7 +73,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-
 			validator := &topicutil.Validator{
 				Localizer: opts.localizer,
 			}
@@ -169,7 +168,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCmd(opts *Options) error {
-
 	if opts.interactive {
 		// run the update command interactively
 		err := runInteractivePrompt(opts)
@@ -291,7 +289,6 @@ func runCmd(opts *Options) error {
 }
 
 func runInteractivePrompt(opts *Options) (err error) {
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

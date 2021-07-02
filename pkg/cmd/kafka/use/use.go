@@ -75,7 +75,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runUse(opts *Options) error {
-
 	if opts.interactive {
 		// run the use command interactively
 		err := runInteractivePrompt(opts)

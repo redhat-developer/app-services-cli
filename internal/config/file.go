@@ -60,12 +60,12 @@ func (c *File) Save(cfg *Config) error {
 		return err
 	}
 	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
-		err = os.Mkdir(rhoasCfgDir, 0700)
+		err = os.Mkdir(rhoasCfgDir, 0o700)
 		if err != nil {
 			return err
 		}
 	}
-	err = ioutil.WriteFile(file, data, 0600)
+	err = ioutil.WriteFile(file, data, 0o600)
 	if err != nil {
 		return fmt.Errorf("%v: %w", "unable to save config", err)
 	}

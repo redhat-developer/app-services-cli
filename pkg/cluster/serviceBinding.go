@@ -156,7 +156,6 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 	// Check of operator is installed
 	_, err := clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
 		List(context.TODO(), metav1.ListOptions{Limit: 1})
-
 	if err != nil {
 		if options.ForceUseOperator {
 			return errors.New(localizer.MustLocalize("cluster.serviceBinding.operatorMissing") + err.Error())
@@ -166,7 +165,6 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 	}
 
 	return useOperatorForBinding(logger, localizer, sb, clients, ns)
-
 }
 
 func useOperatorForBinding(logger logging.Logger, localizer localize.Localizer, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
@@ -255,7 +253,6 @@ func client(localizer localize.Localizer) (*KubernetesClients, error) {
 	}
 
 	dynamicClient, err := dynamic.NewForConfig(restConfig)
-
 	if err != nil {
 		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}

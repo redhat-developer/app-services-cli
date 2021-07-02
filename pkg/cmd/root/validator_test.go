@@ -14,7 +14,6 @@ import (
 )
 
 func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
-
 	localizer, err := goi18n.New(nil)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

@@ -5,8 +5,9 @@ package connection
 
 import (
 	"context"
-	"github.com/redhat-developer/app-services-cli/pkg/api"
 	"sync"
+
+	"github.com/redhat-developer/app-services-cli/pkg/api"
 )
 
 // Ensure, that ConnectionMock does implement Connection.
@@ -47,8 +48,7 @@ type ConnectionMock struct {
 	// calls tracks calls to the methods.
 	calls struct {
 		// API holds details about calls to the API method.
-		API []struct {
-		}
+		API []struct{}
 		// Logout holds details about calls to the Logout method.
 		Logout []struct {
 			// Ctx is the ctx argument value.
@@ -70,8 +70,7 @@ func (mock *ConnectionMock) API() *api.API {
 	if mock.APIFunc == nil {
 		panic("ConnectionMock.APIFunc: method is nil but Connection.API was just called")
 	}
-	callInfo := struct {
-	}{}
+	callInfo := struct{}{}
 	mock.lockAPI.Lock()
 	mock.calls.API = append(mock.calls.API, callInfo)
 	mock.lockAPI.Unlock()
@@ -81,10 +80,8 @@ func (mock *ConnectionMock) API() *api.API {
 // APICalls gets all the calls that were made to API.
 // Check the length with:
 //     len(mockedConnection.APICalls())
-func (mock *ConnectionMock) APICalls() []struct {
-} {
-	var calls []struct {
-	}
+func (mock *ConnectionMock) APICalls() []struct{} {
+	var calls []struct{}
 	mock.lockAPI.RLock()
 	calls = mock.calls.API
 	mock.lockAPI.RUnlock()

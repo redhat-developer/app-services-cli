@@ -123,13 +123,13 @@ func runCmd(opts *Options) error {
 	}
 
 	topicData, httpRes, err := a.Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
 
 		operationTemplatePair := localize.NewEntry("Operation", "list")
+
 		switch httpRes.StatusCode {
 		case 401:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.unauthorized", operationTemplatePair))

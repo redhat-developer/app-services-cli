@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -55,7 +54,6 @@ func (v *Validator) ValidateName(val interface{}) error {
 }
 
 func (v *Validator) ValidateSearchInput(val interface{}) error {
-
 	search, ok := val.(string)
 	if !ok {
 		return commonerr.NewCastError(val, "string")
@@ -68,7 +66,6 @@ func (v *Validator) ValidateSearchInput(val interface{}) error {
 	}
 
 	return errors.New(v.Localizer.MustLocalize("kafka.topic.list.error.illegalSearchValue", localize.NewEntry("Search", search)))
-
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v

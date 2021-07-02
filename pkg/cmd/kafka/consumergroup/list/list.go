@@ -161,7 +161,6 @@ func runList(opts *Options) (err error) {
 	}
 
 	return nil
-
 }
 
 func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {

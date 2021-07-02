@@ -1393,26 +1393,32 @@ func (r ApiApiAccountsMgmtV1AccountsGetRequest) Page(page int32) ApiApiAccountsM
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsGetRequest) Size(size int32) ApiApiAccountsMgmtV1AccountsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsGetRequest) Search(search string) ApiApiAccountsMgmtV1AccountsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1AccountsGetRequest {
 	r.orderBy = &orderBy
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsGetRequest) Fields(fields string) ApiApiAccountsMgmtV1AccountsGetRequest {
 	r.fields = &fields
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsGetRequest) FetchLabels(fetchLabels bool) ApiApiAccountsMgmtV1AccountsGetRequest {
 	r.fetchLabels = &fetchLabels
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsGetRequest) FetchCapabilities(fetchCapabilities bool) ApiApiAccountsMgmtV1AccountsGetRequest {
 	r.fetchCapabilities = &fetchCapabilities
 	return r
@@ -1575,6 +1581,7 @@ func (r ApiApiAccountsMgmtV1AccountsIdGetRequest) FetchLabels(fetchLabels bool) 
 	r.fetchLabels = &fetchLabels
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsIdGetRequest) FetchCapabilities(fetchCapabilities bool) ApiApiAccountsMgmtV1AccountsIdGetRequest {
 	r.fetchCapabilities = &fetchCapabilities
 	return r
@@ -1737,14 +1744,17 @@ func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) Page(page int32) ApiApiA
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) Size(size int32) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) Search(search string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -2679,6 +2689,7 @@ func (r ApiApiAccountsMgmtV1AccountsPostRequest) Account(account Account) ApiApi
 	r.account = &account
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1AccountsPostRequest) DryRun(dryRun bool) ApiApiAccountsMgmtV1AccountsPostRequest {
 	r.dryRun = &dryRun
 	return r
@@ -3336,10 +3347,12 @@ func (r ApiApiAccountsMgmtV1ErrorsGetRequest) Page(page int32) ApiApiAccountsMgm
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ErrorsGetRequest) Size(size int32) ApiApiAccountsMgmtV1ErrorsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ErrorsGetRequest) Search(search string) ApiApiAccountsMgmtV1ErrorsGetRequest {
 	r.search = &search
 	return r
@@ -3788,14 +3801,17 @@ func (r ApiApiAccountsMgmtV1LabelsGetRequest) Page(page int32) ApiApiAccountsMgm
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1LabelsGetRequest) Size(size int32) ApiApiAccountsMgmtV1LabelsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1LabelsGetRequest) Search(search string) ApiApiAccountsMgmtV1LabelsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1LabelsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1LabelsGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -4230,26 +4246,32 @@ func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Page(page int32) ApiApiAcco
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Size(size int32) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Search(search string) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	r.orderBy = &orderBy
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) FetchLabels(fetchLabels bool) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	r.fetchLabels = &fetchLabels
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) FetchCapabilities(fetchCapabilities bool) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	r.fetchCapabilities = &fetchCapabilities
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsGetRequest) Fields(fields string) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	r.fields = &fields
 	return r
@@ -4412,6 +4434,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) FetchLabels(fetchLabels b
 	r.fetchLabels = &fetchLabels
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) FetchCapabilities(fetchCapabilities bool) ApiApiAccountsMgmtV1OrganizationsIdGetRequest {
 	r.fetchCapabilities = &fetchCapabilities
 	return r
@@ -4574,14 +4597,17 @@ func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) Page(page int32) Ap
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) Size(size int32) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) Search(search string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -5640,6 +5666,7 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) Search(search
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) FetchRelatedResources(fetchRelatedResources bool) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest {
 	r.fetchRelatedResources = &fetchRelatedResources
 	return r
@@ -5914,14 +5941,17 @@ func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) Page(page
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) Size(size int32) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) Search(search string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -6863,10 +6893,12 @@ func (r ApiApiAccountsMgmtV1PlansGetRequest) Page(page int32) ApiApiAccountsMgmt
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1PlansGetRequest) Size(size int32) ApiApiAccountsMgmtV1PlansGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1PlansGetRequest) Search(search string) ApiApiAccountsMgmtV1PlansGetRequest {
 	r.search = &search
 	return r
@@ -7453,14 +7485,17 @@ func (r ApiApiAccountsMgmtV1RegistriesGetRequest) Page(page int32) ApiApiAccount
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RegistriesGetRequest) Size(size int32) ApiApiAccountsMgmtV1RegistriesGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RegistriesGetRequest) Search(search string) ApiApiAccountsMgmtV1RegistriesGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RegistriesGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1RegistriesGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -7758,14 +7793,17 @@ func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) Page(page int32) ApiA
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) Size(size int32) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) Search(search string) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -8520,14 +8558,17 @@ func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) Page(page int32) ApiApi
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) Size(size int32) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) Search(search string) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -8682,14 +8723,17 @@ func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) Page(page int32) ApiApiAcco
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) Size(size int32) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) Search(search string) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -8844,14 +8888,17 @@ func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) Page(page int32) ApiApiAccou
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) Size(size int32) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) Search(search string) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RoleBindingsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -9604,10 +9651,12 @@ func (r ApiApiAccountsMgmtV1RolesGetRequest) Page(page int32) ApiApiAccountsMgmt
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RolesGetRequest) Size(size int32) ApiApiAccountsMgmtV1RolesGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1RolesGetRequest) Search(search string) ApiApiAccountsMgmtV1RolesGetRequest {
 	r.search = &search
 	return r
@@ -10469,34 +10518,42 @@ func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Page(page int32) ApiApiAcco
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Size(size int32) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Search(search string) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) FetchAccounts(fetchAccounts bool) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.fetchAccounts = &fetchAccounts
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) FetchLabels(fetchLabels bool) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.fetchLabels = &fetchLabels
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) FetchCapabilities(fetchCapabilities bool) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.fetchCapabilities = &fetchCapabilities
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Fields(fields string) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.fields = &fields
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.orderBy = &orderBy
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsGetRequest) Labels(labels string) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	r.labels = &labels
 	return r
@@ -10799,14 +10856,17 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) FetchAccounts(fetchAccoun
 	r.fetchAccounts = &fetchAccounts
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) FetchLabels(fetchLabels bool) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
 	r.fetchLabels = &fetchLabels
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) FetchCapabilities(fetchCapabilities bool) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
 	r.fetchCapabilities = &fetchCapabilities
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) FetchCpuAndSocket(fetchCpuAndSocket bool) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
 	r.fetchCpuAndSocket = &fetchCpuAndSocket
 	return r
@@ -10975,14 +11035,17 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) Page(page int32) Ap
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) Size(size int32) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) Search(search string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -12053,14 +12116,17 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) Page(pag
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) Size(size int32) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) Search(search string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
 	r.orderBy = &orderBy
 	return r
@@ -12217,6 +12283,7 @@ func (r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) Page(page int
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) Size(size int32) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest {
 	r.size = &size
 	return r
@@ -12655,18 +12722,22 @@ func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Pa
 	r.page = &page
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Size(size int32) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
 	r.size = &size
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Search(search string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
 	r.search = &search
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) Fields(fields string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
 	r.fields = &fields
 	return r
 }
+
 func (r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) OrderBy(orderBy string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
 	r.orderBy = &orderBy
 	return r

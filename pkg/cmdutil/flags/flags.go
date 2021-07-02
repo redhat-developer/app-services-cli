@@ -21,7 +21,6 @@ func IsValidInput(input string, validValues ...string) bool {
 
 // EnableStaticFlagCompletion enables autocompletion for flags with predefined valid values
 func EnableStaticFlagCompletion(cmd *cobra.Command, flagName string, validValues []string) {
-
 	_ = cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return validValues, cobra.ShellCompDirectiveNoSpace
 	})
@@ -29,7 +28,6 @@ func EnableStaticFlagCompletion(cmd *cobra.Command, flagName string, validValues
 
 // // EnableOutputFlagCompletion enables autocompletion for output flag
 func EnableOutputFlagCompletion(cmd *cobra.Command) {
-
 	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
 	})

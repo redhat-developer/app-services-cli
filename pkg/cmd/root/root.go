@@ -47,6 +47,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	arguments.AddDebugFlag(fs)
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
+
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
 	cmd.Flags().StringVarP(&devpreview, "devpreview", "", "", f.Localizer.MustLocalize("root.cmd.flag.devpreview.description"))
 

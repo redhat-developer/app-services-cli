@@ -38,7 +38,6 @@ func New(cliVersion string, localizer localize.Localizer) *Factory {
 		loggerBuilder = loggerBuilder.Debug(debugEnabled)
 
 		logger, err := loggerBuilder.Build()
-
 		if err != nil {
 			return nil, err
 		}

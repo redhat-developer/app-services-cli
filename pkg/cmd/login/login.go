@@ -204,6 +204,7 @@ func runLogin(opts *Options) (err error) {
 
 	username, ok := token.GetUsername(cfg.AccessToken)
 	logger.Info("")
+
 	if !ok {
 		logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {

@@ -51,14 +51,11 @@ type IConfigMock struct {
 	// calls tracks calls to the methods.
 	calls struct {
 		// Load holds details about calls to the Load method.
-		Load []struct {
-		}
+		Load []struct{}
 		// Location holds details about calls to the Location method.
-		Location []struct {
-		}
+		Location []struct{}
 		// Remove holds details about calls to the Remove method.
-		Remove []struct {
-		}
+		Remove []struct{}
 		// Save holds details about calls to the Save method.
 		Save []struct {
 			// Config is the config argument value.
@@ -76,8 +73,7 @@ func (mock *IConfigMock) Load() (*Config, error) {
 	if mock.LoadFunc == nil {
 		panic("IConfigMock.LoadFunc: method is nil but IConfig.Load was just called")
 	}
-	callInfo := struct {
-	}{}
+	callInfo := struct{}{}
 	mock.lockLoad.Lock()
 	mock.calls.Load = append(mock.calls.Load, callInfo)
 	mock.lockLoad.Unlock()
@@ -87,10 +83,8 @@ func (mock *IConfigMock) Load() (*Config, error) {
 // LoadCalls gets all the calls that were made to Load.
 // Check the length with:
 //     len(mockedIConfig.LoadCalls())
-func (mock *IConfigMock) LoadCalls() []struct {
-} {
-	var calls []struct {
-	}
+func (mock *IConfigMock) LoadCalls() []struct{} {
+	var calls []struct{}
 	mock.lockLoad.RLock()
 	calls = mock.calls.Load
 	mock.lockLoad.RUnlock()
@@ -102,8 +96,7 @@ func (mock *IConfigMock) Location() (string, error) {
 	if mock.LocationFunc == nil {
 		panic("IConfigMock.LocationFunc: method is nil but IConfig.Location was just called")
 	}
-	callInfo := struct {
-	}{}
+	callInfo := struct{}{}
 	mock.lockLocation.Lock()
 	mock.calls.Location = append(mock.calls.Location, callInfo)
 	mock.lockLocation.Unlock()
@@ -113,10 +106,8 @@ func (mock *IConfigMock) Location() (string, error) {
 // LocationCalls gets all the calls that were made to Location.
 // Check the length with:
 //     len(mockedIConfig.LocationCalls())
-func (mock *IConfigMock) LocationCalls() []struct {
-} {
-	var calls []struct {
-	}
+func (mock *IConfigMock) LocationCalls() []struct{} {
+	var calls []struct{}
 	mock.lockLocation.RLock()
 	calls = mock.calls.Location
 	mock.lockLocation.RUnlock()
@@ -128,8 +119,7 @@ func (mock *IConfigMock) Remove() error {
 	if mock.RemoveFunc == nil {
 		panic("IConfigMock.RemoveFunc: method is nil but IConfig.Remove was just called")
 	}
-	callInfo := struct {
-	}{}
+	callInfo := struct{}{}
 	mock.lockRemove.Lock()
 	mock.calls.Remove = append(mock.calls.Remove, callInfo)
 	mock.lockRemove.Unlock()
@@ -139,10 +129,8 @@ func (mock *IConfigMock) Remove() error {
 // RemoveCalls gets all the calls that were made to Remove.
 // Check the length with:
 //     len(mockedIConfig.RemoveCalls())
-func (mock *IConfigMock) RemoveCalls() []struct {
-} {
-	var calls []struct {
-	}
+func (mock *IConfigMock) RemoveCalls() []struct{} {
+	var calls []struct{}
 	mock.lockRemove.RLock()
 	calls = mock.calls.Remove
 	mock.lockRemove.RUnlock()

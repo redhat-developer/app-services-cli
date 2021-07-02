@@ -102,7 +102,6 @@ func runList(opts *options) error {
 	}
 
 	response, _, err := a.Execute()
-
 	if err != nil {
 		return err
 	}
@@ -146,12 +145,10 @@ func mapResponseItemsToRows(registries *[]srsmgmtv1.RegistryRest) []RegistryRow 
 }
 
 func buildQuery(search string) string {
-
 	queryString := fmt.Sprintf(
 		"name=%v",
 		search,
 	)
 
 	return queryString
-
 }

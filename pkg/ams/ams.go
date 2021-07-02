@@ -10,7 +10,6 @@ import (
 )
 
 func CheckTermsAccepted(conn connection.Connection) (accepted bool, redirectURI string, err error) {
-
 	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
 		SelfTermsReview(amsclient.SelfTermsReview{

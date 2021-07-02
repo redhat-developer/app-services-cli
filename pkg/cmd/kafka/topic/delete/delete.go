@@ -117,7 +117,7 @@ func runCmd(opts *Options) error {
 	}
 
 	if !opts.force {
-		var promptConfirmName = &survey.Input{
+		promptConfirmName := &survey.Input{
 			Message: opts.localizer.MustLocalize("kafka.topic.delete.input.name.message"),
 		}
 		var userConfirmedName string

@@ -140,7 +140,6 @@ func runCreate(opts *Options) error {
 		CreateRegistry(context.Background()).
 		RegistryCreateRest(*payload).
 		Execute()
-
 	if err != nil {
 		return err
 	}

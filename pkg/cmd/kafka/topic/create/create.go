@@ -144,7 +144,6 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCmd(opts *Options) error {
-
 	if opts.interactive {
 		// run the create command interactively
 		err := runInteractivePrompt(opts)
@@ -218,7 +217,6 @@ func runCmd(opts *Options) error {
 }
 
 func runInteractivePrompt(opts *Options) (err error) {
-
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
