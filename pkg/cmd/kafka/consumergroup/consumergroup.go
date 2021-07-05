@@ -10,7 +10,6 @@ import (
 
 // NewConsumerGroupCommand creates a new command sub-group for consumer group operations
 func NewConsumerGroupCommand(f *factory.Factory) *cobra.Command {
-
 	cmd := &cobra.Command{
 		Use:   f.Localizer.MustLocalize("kafka.consumerGroup.cmd.use"),
 		Short: f.Localizer.MustLocalize("kafka.consumerGroup.cmd.shortDescription"),

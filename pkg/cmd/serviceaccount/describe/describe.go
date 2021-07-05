@@ -70,7 +70,6 @@ func runDescribe(opts *Options) error {
 	api := connection.API()
 
 	res, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return err

@@ -85,6 +85,7 @@ mock-api/start:
 # clean up code and dependencies
 format:
 	@go mod tidy
+
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 

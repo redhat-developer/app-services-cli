@@ -18,7 +18,6 @@ func InteractiveSelect(connection connection.Connection, logger logging.Logger) 
 	api := connection.API()
 
 	response, _, err := api.ServiceRegistryMgmt().GetRegistries(context.Background()).Size(queryLimit).Execute()
-
 	if err != nil {
 		return nil, fmt.Errorf("unable to list Service Registry instances: %w", err)
 	}

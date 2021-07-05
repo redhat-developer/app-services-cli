@@ -18,7 +18,6 @@ func init() {
 }
 
 func TestValidateName(t *testing.T) {
-
 	type args struct {
 		name string
 	}
@@ -239,7 +238,6 @@ func TestTransformKafkaRequestListItems(t *testing.T) {
 }
 
 func TestValidateSearchInput(t *testing.T) {
-
 	type args struct {
 		search string
 	}

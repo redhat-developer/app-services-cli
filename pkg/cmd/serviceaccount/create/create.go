@@ -138,7 +138,6 @@ func runCreate(opts *Options) error {
 	a := connection.API().ServiceAccount().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, err := a.Execute()
-
 	if err != nil {
 		return err
 	}

@@ -78,7 +78,6 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCmd(opts *Options) error {
-
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
@@ -133,6 +132,7 @@ func runCmd(opts *Options) error {
 		}
 
 		operationTmplPair := localize.NewEntry("Operation", "delete")
+
 		switch httpRes.StatusCode {
 		case 401:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))

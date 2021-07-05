@@ -15,7 +15,7 @@ const (
 	// Forbidden occurs when a user is not allowed to access the service
 	ErrorForbidden ServiceErrorCode = 4
 
-	// Forbidden occurs when a user or organisation has reached maximum number of allowed instances
+	// Forbidden occurs when a user or organization has reached maximum number of allowed instances
 	ErrorMaxAllowedInstanceReached ServiceErrorCode = 5
 
 	// Conflict occurs when a database constraint is violated

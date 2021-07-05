@@ -83,7 +83,6 @@ func runList(opts *Options) (err error) {
 	}
 
 	res, _, err := connection.API().ServiceAccount().GetServiceAccounts(context.Background()).Execute()
-
 	if err != nil {
 		return err
 	}

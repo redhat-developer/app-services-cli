@@ -113,7 +113,6 @@ func runCmd(opts *Options) error {
 	ctx := context.Background()
 
 	consumerGroupData, httpRes, err := api.GetConsumerGroupById(ctx, opts.id).Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -155,7 +154,7 @@ func runCmd(opts *Options) error {
 }
 
 func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consumer) []consumerRow {
-	var rows []consumerRow = []consumerRow{}
+	rows := []consumerRow{}
 
 	for _, consumer := range consumers {
 

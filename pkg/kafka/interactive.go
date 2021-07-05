@@ -18,7 +18,6 @@ func InteractiveSelect(connection connection.Connection, logger logging.Logger) 
 	api := connection.API()
 
 	response, _, err := api.Kafka().GetKafkas(context.Background()).Size(queryLimit).Execute()
-
 	if err != nil {
 		return nil, fmt.Errorf("unable to list Kafka instances: %w", err)
 	}

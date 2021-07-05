@@ -18,8 +18,10 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 )
 
-var AKCGroup = "rhoas.redhat.com"
-var AKCVersion = "v1alpha1"
+var (
+	AKCGroup   = "rhoas.redhat.com"
+	AKCVersion = "v1alpha1"
+)
 
 var AKCRMeta = metav1.TypeMeta{
 	Kind:       "KafkaConnection",
@@ -95,7 +97,6 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 	w, err := c.dynamicClient.Resource(AKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
 	})
-
 	if err != nil {
 		return err
 	}
@@ -109,7 +110,6 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 					return err
 				}
 				conditions, found, err := unstructured.NestedSlice(unstructuredObj, "status", "conditions")
-
 				if err != nil {
 					return err
 				}

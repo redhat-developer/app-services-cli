@@ -6,7 +6,7 @@ import (
 
 // GetEnabledNames returns a list of cloud provider names from the enabled cloud providers
 func GetEnabledNames(cloudProviders []kafkamgmtclient.CloudProvider) []string {
-	var cloudProviderNames = []string{}
+	cloudProviderNames := []string{}
 	for _, provider := range cloudProviders {
 		if provider.GetEnabled() {
 			cloudProviderNames = append(cloudProviderNames, provider.GetName())

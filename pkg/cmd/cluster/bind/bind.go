@@ -104,7 +104,6 @@ func runBind(opts *Options) error {
 
 	api := apiConnection.API()
 	kafkaInstance, _, err := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
-
 	if err != nil {
 		return err
 	}

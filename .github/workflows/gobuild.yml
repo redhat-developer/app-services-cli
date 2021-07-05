@@ -25,8 +25,11 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.29
-          args: --timeout 2m0s
+          version: v1.41.1
+          skip-go-installation: true
+          # skip-pkg-cache: true
+          # skip-build-cache: true
+          args: --timeout 2m0s  
       - name: Check documentation
         run: make docs/check
       - name: Build

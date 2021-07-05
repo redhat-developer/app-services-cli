@@ -18,7 +18,6 @@ func init() {
 
 // nolint:funlen
 func TestValidateName(t *testing.T) {
-
 	type args struct {
 		name string
 	}
@@ -117,7 +116,6 @@ func TestValidateName(t *testing.T) {
 }
 
 func TestValidateSearchInput(t *testing.T) {
-
 	type args struct {
 		search string
 	}

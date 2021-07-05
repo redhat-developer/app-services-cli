@@ -60,11 +60,7 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmt
 			cfg.MasAccessToken = ""
 			cfg.MasRefreshToken = ""
 
-			if err = conn.Config.Save(cfg); err != nil {
-				return err
-			}
-
-			return nil
+			return conn.Config.Save(cfg)
 		},
 		APIFunc: func() *api.API {
 			a := &api.API{

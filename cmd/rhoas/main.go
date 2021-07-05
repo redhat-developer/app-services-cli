@@ -24,9 +24,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	generateDocs = os.Getenv("GENERATE_DOCS") == "true"
-)
+var generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 
 func main() {
 	localizer, err := goi18n.New(nil)
@@ -143,7 +141,7 @@ func moveConfigFile(cfg config.IConfig) error {
 	}
 	// create rhoas config directory
 	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
-		err = os.MkdirAll(rhoasCfgDir, 0700)
+		err = os.MkdirAll(rhoasCfgDir, 0o700)
 		if err != nil {
 			return err
 		}

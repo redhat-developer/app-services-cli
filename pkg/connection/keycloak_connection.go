@@ -148,11 +148,7 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 	cfg.MasAccessToken = ""
 	cfg.MasRefreshToken = ""
 
-	if err = c.Config.Save(cfg); err != nil {
-		return err
-	}
-
-	return nil
+	return c.Config.Save(cfg)
 }
 
 // API Creates a new API type which is a single type for multiple APIs

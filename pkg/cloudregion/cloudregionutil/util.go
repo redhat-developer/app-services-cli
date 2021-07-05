@@ -6,7 +6,7 @@ import (
 
 // GetEnabledIDs extracts and returns a slice of the unique IDs of all enabled regions
 func GetEnabledIDs(regions []kafkamgmtclient.CloudRegion) []string {
-	var regionIDs = []string{}
+	regionIDs := []string{}
 	for _, region := range regions {
 		if region.GetEnabled() {
 			regionIDs = append(regionIDs, region.GetId())

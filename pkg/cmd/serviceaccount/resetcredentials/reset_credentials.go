@@ -149,7 +149,6 @@ func runResetCredentials(opts *Options) (err error) {
 	}
 
 	updatedServiceAccount, err := resetCredentials(serviceAcctName, opts)
-
 	if err != nil {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("Name", updatedServiceAccount.GetName())), err)
 	}
@@ -189,7 +188,6 @@ func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccou
 	logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 
 	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return nil, err

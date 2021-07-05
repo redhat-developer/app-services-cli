@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/internal/docs"
 	"os"
+
+	"github.com/redhat-developer/app-services-cli/internal/docs"
 )
 
 func main() {

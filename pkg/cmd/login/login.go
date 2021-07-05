@@ -164,14 +164,12 @@ func runLogin(opts *Options) (err error) {
 		}
 
 		ssoCfg := &login.SSOConfig{
-			AuthURL: opts.authURL,
-			// TODO: make this a build variable
+			AuthURL:      opts.authURL,
 			RedirectPath: "sso-redhat-callback",
 		}
 
 		masSsoCfg := &login.SSOConfig{
-			AuthURL: opts.masAuthURL,
-			// TODO: make this a build variable
+			AuthURL:      opts.masAuthURL,
 			RedirectPath: "mas-sso-callback",
 		}
 
@@ -204,6 +202,7 @@ func runLogin(opts *Options) (err error) {
 
 	username, ok := token.GetUsername(cfg.AccessToken)
 	logger.Info("")
+
 	if !ok {
 		logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {

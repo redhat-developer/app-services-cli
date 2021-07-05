@@ -12,8 +12,8 @@ run:
   # from this option's value (see skip-dirs-use-default).
   # "/" will be replaced by current OS file path separator to properly work
   # on Windows.
-  skip-dirs:
-    - pkg/api/managedservices
+  #skip-dirs:
+  #  - .chglog
 # output configuration options
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
@@ -47,9 +47,6 @@ linters-settings:
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
-  golint:
-    # minimal confidence for issues, default is 0.8
-    min-confidence: 0.8
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -60,14 +57,35 @@ linters-settings:
     disable:
       - shadow
     disable-all: false
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    severity: warning
+    rules:
+      - name: indent-error-flow
+        severity: warning
+      - name: add-constant
+        disabled: true
+  misspell:
+    # Correct spellings using locale preferences for US or UK.
+    # Default is to use a neutral variety of English.
+    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+    locale: US
+    ignore-words:
+      - rhoas
 linters:
+  disable:
+    - scopelint
   enable:
-    - funlen
-    - govet
     - gofmt
+    - funlen
+    - deadcode
+    - revive
+    - exportloopref
+    - godox
+    - govet
     - gocritic
     - misspell
-    - golint
   presets:
     - bugs
     - unused

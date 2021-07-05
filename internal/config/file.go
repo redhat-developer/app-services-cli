@@ -18,6 +18,8 @@ func NewFile() IConfig {
 // File is a type which describes a config file
 type File struct{}
 
+const errorFormat = "%v: %w"
+
 // Load loads the configuration from the configuration file. If the configuration file doesn't exist
 // it will return an empty configuration object.
 func (c *File) Load() (*Config, error) {
@@ -30,17 +32,17 @@ func (c *File) Load() (*Config, error) {
 		return nil, err
 	}
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", "unable to check if config file exists", err)
+		return nil, fmt.Errorf(errorFormat, "unable to check if config file exists", err)
 	}
 	// #nosec G304
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", "unable to read config file", err)
+		return nil, fmt.Errorf(errorFormat, "unable to read config file", err)
 	}
 	var cfg Config
 	err = json.Unmarshal(data, &cfg)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", "unable to parse config", err)
+		return nil, fmt.Errorf(errorFormat, "unable to parse config", err)
 	}
 	return &cfg, nil
 }
@@ -60,14 +62,14 @@ func (c *File) Save(cfg *Config) error {
 		return err
 	}
 	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
-		err = os.Mkdir(rhoasCfgDir, 0700)
+		err = os.Mkdir(rhoasCfgDir, 0o700)
 		if err != nil {
 			return err
 		}
 	}
-	err = ioutil.WriteFile(file, data, 0600)
+	err = ioutil.WriteFile(file, data, 0o600)
 	if err != nil {
-		return fmt.Errorf("%v: %w", "unable to save config", err)
+		return fmt.Errorf(errorFormat, "unable to save config", err)
 	}
 	return nil
 }

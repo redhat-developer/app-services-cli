@@ -108,7 +108,6 @@ func runCmd(opts *Options) error {
 	topicResponse, httpRes, err := api.
 		GetTopic(context.Background(), opts.topicName).
 		Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -117,6 +116,7 @@ func runCmd(opts *Options) error {
 		topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
 		kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
 		operationTmplPair := localize.NewEntry("Operation", "delete")
+
 		switch httpRes.StatusCode {
 		case 404:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))

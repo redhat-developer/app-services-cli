@@ -2,7 +2,6 @@ package docs
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
 	"io"
 	"os"
 	"path"
@@ -10,6 +9,8 @@ import (
 	"sort"
 	"strings"
 	"text/template"
+
+	"github.com/pkg/errors"
 )
 
 // Create Modular Documentation from the CLI generated docs
@@ -31,7 +32,7 @@ func CreateModularDocs() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	err = os.MkdirAll(modulesDir, 0755)
+	err = os.MkdirAll(modulesDir, 0o755)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -45,7 +46,7 @@ func CreateModularDocs() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	err = os.MkdirAll(assembliesDir, 0755)
+	err = os.MkdirAll(assembliesDir, 0o755)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -72,7 +73,6 @@ func CreateModules(modulesDir string, commandAdocFiles []string) ([]string, erro
 }
 
 func CreateAssembly(assembliesDir string, files []string) error {
-
 	sort.Slice(files, func(i, j int) bool {
 		return files[i] < files[j]
 	})
