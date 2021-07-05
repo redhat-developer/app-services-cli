@@ -143,7 +143,7 @@ func runDelete(opts *options) error {
 
 	logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
 
-	a := api.ServiceRegistryMgmt().DeleteRegistry(context.Background(), opts.id)
+	a := api.ServiceRegistryMgmt().DeleteRegistry(context.Background(), registry.GetId())
 	_, err = a.Execute()
 
 	if err != nil {

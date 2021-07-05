@@ -17,7 +17,7 @@ rhoas service-registry list [flags]
 === Examples
 
 ....
-rhoas registry list
+rhoas service-registry list
 
 ....
 
@@ -39,5 +39,5 @@ rhoas registry list
 
 === SEE ALSO
 
-* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [Preview] Service Registry commands
 

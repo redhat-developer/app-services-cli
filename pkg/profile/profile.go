@@ -6,12 +6,11 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
 )
 
 // Visual element displayed in help
 func ApplyDevPreviewLabel(message string) string {
-	return color.Info("[Preview] ") + message
+	return "[Preview] " + message
 }
 
 // Annotation used in templates and tools like documentation generation

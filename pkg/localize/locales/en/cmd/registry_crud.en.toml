@@ -11,10 +11,10 @@ Create new Service Registry instances and interact with them by adding schema an
 [registry.cmd.example]
 one = '''
 ## Create Service Registry
-rhoas registry create myregistry
+rhoas service-registry create myregistry
 
 ## List Service Registry instances
-rhoas registry list 
+rhoas service-registry list 
 '''
 
 [registry.cmd.create.shortDescription]
@@ -28,7 +28,7 @@ Create a Service Registry instance to store and manage your schema and API artif
 [registry.cmd.create.example]
 one = '''
 ## Create Service Registry
-rhoas registry create myregistry
+rhoas service-registry create myregistry
 '''
 
 [registry.cmd.create.info.successMessage]
@@ -47,7 +47,7 @@ Delete a Service Registry instance along with all of its schema and API artifact
 
 [registry.cmd.delete.example]
 one = '''
-rhoas registry delete <id>
+rhoas service-registry delete <id>
 '''
 
 [registry.cmd.describe.shortDescription]
@@ -60,7 +60,7 @@ Describe a Service Registry instance. Fetch all required fields including the re
 
 [registry.cmd.describe.example]
 one = '''
-rhoas registry describe <id>
+rhoas service-registry describe <id>
 '''
 
 [registry.cmd.list.shortDescription]
@@ -73,7 +73,7 @@ List all Service Registry instances for your account with the ability to paginat
 
 [registry.cmd.list.example]
 one = '''
-rhoas registry list
+rhoas service-registry list
 '''
 
 [registry.cmd.use.shortDescription]
@@ -86,7 +86,7 @@ Select a Service Registry instance to use with all instance-specific commands.
 
 [registry.cmd.use.example]
 one = '''
-rhoas registry use <id>
+rhoas service-registry use <id>
 '''
 
 # Errors
@@ -109,7 +109,7 @@ one = 'could not set the current Service Registry instance as default: {{.ErrorM
 
 [registry.common.error.noServiceSelected]
 description = 'Error message when no Service Registry is set'
-one = 'no Service Registry instance is currently set, use the "--id" flag or set the current instance with the "rhoas registry use" command'
+one = 'no Service Registry instance is currently set, use the "--id" flag or set the current instance with the "rhoas service-registry use" command'
  
 [registry.common.flag.id]
 description = 'Description for the --id flag'

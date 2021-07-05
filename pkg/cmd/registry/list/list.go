@@ -130,7 +130,8 @@ func runList(opts *options) error {
 func mapResponseItemsToRows(registries *[]srsmgmtv1.RegistryRest) []RegistryRow {
 	rows := []RegistryRow{}
 
-	for _, k := range *registries {
+	for i := range *registries {
+		k := (*registries)[i]
 		row := RegistryRow{
 			ID:     fmt.Sprint(k.Id),
 			Name:   k.GetName(),
