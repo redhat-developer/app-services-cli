@@ -5,7 +5,7 @@ This folder contains scripts for automating often-used, multiple step tasks.
 
 ## check-docs.sh
 
-Scripts check if documentation was changedf
+Scripts check if documentation was changed.
  
 ## generate-changelog.sh
 
