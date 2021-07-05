@@ -17,7 +17,7 @@ rhoas service-registry use [flags]
 === Examples
 
 ....
-rhoas registry use <id>
+rhoas service-registry use <id>
 
 ....
 
@@ -36,5 +36,5 @@ rhoas registry use <id>
 
 === SEE ALSO
 
-* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [Preview] Service Registry commands
 

@@ -17,7 +17,7 @@ rhoas service-registry delete [flags]
 === Examples
 
 ....
-rhoas registry delete <id>
+rhoas service-registry delete <id>
 
 ....
 
@@ -37,5 +37,5 @@ rhoas registry delete <id>
 
 === SEE ALSO
 
-* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [96m[Preview] [0mService Registry commands
+* link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [Preview] Service Registry commands
 
