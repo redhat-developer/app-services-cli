@@ -1,4 +1,36 @@
 
+<a name="v0.25.0"></a>
+## [v0.25.0](https://github.com/redhat-developer/app-services-cli/compare/v0.24.4...v0.25.0) (2021-07-05)
+
+### Bug Fixes
+
+* fix not working insecure login ([#738](https://github.com/redhat-developer/app-services-cli/issues/738))
+* add cobra commands validator ([#767](https://github.com/redhat-developer/app-services-cli/issues/767))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.7 ([#749](https://github.com/redhat-developer/app-services-cli/issues/749))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.6 ([#740](https://github.com/redhat-developer/app-services-cli/issues/740))
+* **deps:** update module github.com/openconfig/goyang to v0.2.6 ([#737](https://github.com/redhat-developer/app-services-cli/issues/737))
+* **deps:** update golang.org/x/oauth2 commit hash to 14747e6 ([#741](https://github.com/redhat-developer/app-services-cli/issues/741))
+* **deps:** update golang.org/x/oauth2 commit hash to bce0382 ([#742](https://github.com/redhat-developer/app-services-cli/issues/742))
+* **deps:** update golang.org/x/oauth2 commit hash to a8dc77f ([#743](https://github.com/redhat-developer/app-services-cli/issues/743))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.4.0 ([#758](https://github.com/redhat-developer/app-services-cli/issues/758))
+* **deps:** update all ([#755](https://github.com/redhat-developer/app-services-cli/issues/755))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.9 ([#754](https://github.com/redhat-developer/app-services-cli/issues/754))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.8 ([#752](https://github.com/redhat-developer/app-services-cli/issues/752))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.9.2 ([#751](https://github.com/redhat-developer/app-services-cli/issues/751))
+* **deps:** update all
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.9.1 ([#736](https://github.com/redhat-developer/app-services-cli/issues/736))
+* **error:** remove blank line from error message ([#727](https://github.com/redhat-developer/app-services-cli/issues/727))
+* **kafka admin:** validations and show proper error messages ([#729](https://github.com/redhat-developer/app-services-cli/issues/729))
+* **kafka consumergroup list:** fix reference to the wrong i18n ID ([#775](https://github.com/redhat-developer/app-services-cli/issues/775))
+* **serviceaccount reset-credentials:** validate serviceaccount ID in prompt ([#720](https://github.com/redhat-developer/app-services-cli/issues/720))
+* **topic:** use the updated methods in KafkaInstance SDK
+
+### Features
+
+* **kafka topic create:** add cleanup policy flag ([#771](https://github.com/redhat-developer/app-services-cli/issues/771))
+* **kafka topic update:** add cleanup policy flag ([#776](https://github.com/redhat-developer/app-services-cli/issues/776))
+
+
 <a name="v0.24.4"></a>
 ## [v0.24.4](https://github.com/redhat-developer/app-services-cli/compare/0.24.3...v0.24.4) (2021-06-14)
 
