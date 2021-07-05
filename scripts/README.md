@@ -2,13 +2,18 @@
 
 This folder contains scripts for automating often-used, multiple step tasks.
 
-## ./pandoc.sh
 
-[./pandoc.sh](./pandoc.sh) converts the Markdown command line reference documentation to Asciidoc.
+## check-docs.sh
 
-## ./pullapi.sh
+Scripts check if documentation was changed.
+ 
+## generate-changelog.sh
 
-[./pullapi.sh](./pullapi.sh) fetches the latest OpenAPI definition from the service API.
+Generate changelog for the repository based on commit messages
+ 
+##  install.sh
+
+CLI installation script
 
 ## ./util
 
