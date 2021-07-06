@@ -24,6 +24,4 @@ $ rhoas cluster connect
 
 [root.cmd.flag.help.description]
 one = 'Show help for a command'
-
-[root.cmd.flag.devpreview.description]
-one = 'Enable commands that are available under early developer preview. Use --devpreview=yes'
+ 

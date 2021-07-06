@@ -1,0 +1,31 @@
+[config.cmd.shortDescription]
+one = 'Change specific configuration for the options'
+
+[config.cmd.longDescription]
+one = '''
+Change configuration of the cli by executing one of the available subcommands
+'''
+
+[config.cmd.example]
+one = '''
+# change dev preview configuration
+$ rhoas config dev-preview true
+'''
+
+[devpreview.cmd.shortDescription]
+one = 'Sets development preview features in config'
+
+[devpreview.cmd.longDescription]
+one = '''
+Dev preview is used to enable commands in the CLI that are not available for general use. 
+Those commands usually work against alpha versions of the API and might often have breaking changes.
+'''
+
+[devpreview.cmd.example]
+one = '''
+# change dev preview configuration
+$ rhoas config dev-preview true
+'''
+ 
+[devpreview.error.enablement]
+one = 'Invalid positional argument. Valid values are "true" or "false"'
