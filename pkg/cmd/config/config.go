@@ -1,9 +1,7 @@
 package status
 
 import (
-	"errors"
 	"strconv"
-	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/profile"
@@ -25,10 +23,6 @@ type Options struct {
 	devPreview bool
 }
 
-const DevPreviewConfigArgument = "devPreview"
-
-var validArguments = []string{DevPreviewConfigArgument}
-
 func NewConfigCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		IO:        f.IOStreams,
@@ -38,42 +32,28 @@ func NewConfigCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:       "config",
-		Short:     opts.localizer.MustLocalize("config.cmd.shortDescription"),
-		Long:      opts.localizer.MustLocalize("config.cmd.longDescription"),
-		Example:   opts.localizer.MustLocalize("config.cmd.example"),
-		ValidArgs: validArguments,
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) != 2 {
-				return errors.New("Command accepts two arguments")
-			}
-
-			invalidConfigArg := true
-			for _, configArg := range validArguments {
-				if configArg == args[0] {
-					invalidConfigArg = false
-				}
-			}
-
-			if invalidConfigArg {
-				return errors.New("First argument should contain: " + strings.Join(validArguments, ","))
-			}
-
-			if _, err := strconv.ParseBool(args[1]); err != nil {
-				return errors.New("Second argument should be boolean")
-			}
-
-			return nil
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if args[0] == DevPreviewConfigArgument {
-				devPreview, _ := strconv.ParseBool(args[1])
-				_, err := profile.EnableDevPreview(f, devPreview)
-				return err
-			}
-			return nil
-		},
+		Use:     "config",
+		Short:   opts.localizer.MustLocalize("config.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("config.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("config.cmd.example"),
 	}
 
+	devPreview := &cobra.Command{
+		Use:       "devPreview",
+		Short:     opts.localizer.MustLocalize("devPreview"),
+		Long:      opts.localizer.MustLocalize("config.cmd.longDescription"),
+		Example:   opts.localizer.MustLocalize("config.cmd.example"),
+		ValidArgs: []string{"true", "false"},
+		Args:      cobra.ExactValidArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			devPreview, err := strconv.ParseBool(args[0])
+			if err != nil {
+				return err
+			}
+			_, err = profile.EnableDevPreview(f, devPreview)
+			return err
+		},
+	}
+	cmd.AddCommand(devPreview)
 	return cmd
 }
