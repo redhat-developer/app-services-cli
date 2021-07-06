@@ -136,8 +136,8 @@ func mapResponseItemsToRows(registries *[]srsmgmtv1.RegistryRest) []RegistryRow 
 			ID:     fmt.Sprint(k.Id),
 			Name:   k.GetName(),
 			URL:    k.GetRegistryUrl(),
-			Status: k.GetStatus(),
-                        Owner:  k.GetOwner(),
+			Status: string(k.GetStatus()),
+			Owner:  k.GetOwner(),
 		}
 
 		rows = append(rows, row)
