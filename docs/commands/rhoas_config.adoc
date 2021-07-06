@@ -1,0 +1,31 @@
+== rhoas config
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Change specific configuration for the options
+
+=== Synopsis
+
+Change configuration of the cli by executing one of the available subcommands
+
+
+=== Examples
+
+....
+# change dev preview configuration
+$ rhoas config devpreview true
+
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+* link:rhoas_config_devPreview{relfilesuffix}[rhoas config devPreview]	 - Sets development preview features in config
+

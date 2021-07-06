@@ -1,0 +1,35 @@
+== rhoas config devPreview
+
+ifdef::env-github,env-browser[:relfilesuffix: .adoc]
+
+Sets development preview features in config
+
+=== Synopsis
+
+Dev preview is used to enable commands in the CLI that are not available for general use. 
+Those commands usually work against alpha versions of the API and might often have breaking changes.
+
+
+....
+rhoas config devPreview [flags]
+....
+
+=== Examples
+
+....
+# change dev preview configuration
+$ rhoas config devpreview true
+
+....
+
+=== Options inherited from parent commands
+
+....
+  -d, --debug   Enable debug mode
+  -h, --help    Show help for a command
+....
+
+=== SEE ALSO
+
+* link:rhoas_config{relfilesuffix}[rhoas config]	 - Change specific configuration for the options
+

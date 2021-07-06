@@ -1,4 +1,4 @@
-package status
+package config
 
 import (
 	"strconv"
@@ -40,9 +40,9 @@ func NewConfigCommand(f *factory.Factory) *cobra.Command {
 
 	devPreview := &cobra.Command{
 		Use:       "devPreview",
-		Short:     opts.localizer.MustLocalize("devPreview"),
-		Long:      opts.localizer.MustLocalize("config.cmd.longDescription"),
-		Example:   opts.localizer.MustLocalize("config.cmd.example"),
+		Short:     opts.localizer.MustLocalize("devpreview.cmd.shortDescription"),
+		Long:      opts.localizer.MustLocalize("devpreview.cmd.longDescription"),
+		Example:   opts.localizer.MustLocalize("devpreview.cmd.example"),
 		ValidArgs: []string{"true", "false"},
 		Args:      cobra.ExactValidArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
