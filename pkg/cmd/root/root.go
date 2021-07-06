@@ -3,6 +3,8 @@ package root
 import (
 	"flag"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/config"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -54,6 +56,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(completion.NewCompletionCommand(f))
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
+	cmd.AddCommand(config.NewConfigCommand(f))
 
 	// Early stage/dev preview commands
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
