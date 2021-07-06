@@ -1,10 +1,12 @@
-== rhoas kafka consumer-group list
+= rhoas kafka consumer-group list
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 List all consumer groups
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 List all consumer groups in the current Apache Kafka instance.
 
@@ -12,7 +14,8 @@ List all consumer groups in the current Apache Kafka instance.
 rhoas kafka consumer-group list [flags]
 ....
 
-=== Examples
+[discrete]
+== Examples
 
 ....
 # list all consumer groups
@@ -25,20 +28,17 @@ $ rhoas kafka consumer-group list -o json
 
 === Options
 
-....
-      --limit int32     The maximum number of consumer groups to be returned (default 1000)
-  -o, --output string   Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"
-      --topic string    Fetch the consumer groups for a specific Kafka topic
-....
+      --limit:: int32     The maximum number of consumer groups to be returned (default 1000)
+  -o, --output:: string   Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"
+      --topic:: string    Fetch the consumer groups for a specific Kafka topic
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas_kafka_consumer-group{relfilesuffix}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
 

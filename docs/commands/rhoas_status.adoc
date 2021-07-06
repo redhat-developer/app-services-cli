@@ -1,10 +1,12 @@
-== rhoas status
+= rhoas status
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 View the status of all currently used services
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 View status information of your currently used services.
 Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
@@ -16,7 +18,8 @@ To use a different service run "rhoas <service> use [args] [flags]".
 rhoas status [args] [flags]
 ....
 
-=== Examples
+[discrete]
+== Examples
 
 ....
 # view the status of all services
@@ -32,18 +35,15 @@ $ rhoas status -o json
 
 === Options
 
-....
-  -o, --output string   Format in which to display the status of your services. Choose from: "json", "yml", "yaml"
-....
+  -o, --output:: string   Format in which to display the status of your services. Choose from: "json", "yml", "yaml"
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
 

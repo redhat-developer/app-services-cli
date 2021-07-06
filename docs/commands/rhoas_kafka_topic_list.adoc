@@ -1,10 +1,12 @@
-== rhoas kafka topic list
+= rhoas kafka topic list
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 List all topics
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 List all topics in the current Apache Kafka instance.
 
@@ -13,7 +15,8 @@ List all topics in the current Apache Kafka instance.
 rhoas kafka topic list [flags]
 ....
 
-=== Examples
+[discrete]
+== Examples
 
 ....
 # list all topics
@@ -26,19 +29,16 @@ $ rhoas kafka topic list -o json
 
 === Options
 
-....
-  -o, --output string   Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"
-      --search string   Text search to filter the Kafka topics by name
-....
+  -o, --output:: string   Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"
+      --search:: string   Text search to filter the Kafka topics by name
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas_kafka_topic{relfilesuffix}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
 

@@ -17,6 +17,7 @@ package doc
 import (
 	"bytes"
 	"fmt"
+	"github.com/spf13/pflag"
 	"io"
 	"os"
 	"path/filepath"
@@ -27,21 +28,126 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// FlagUsages returns a string containing the usage information
+// for all flags in the FlagSet.
+func FlagUsages(f *pflag.FlagSet) string {
+	buf := new(bytes.Buffer)
+
+	lines := make([]string, 0)
+
+	maxlen := 0
+	f.VisitAll(func(flag *pflag.Flag) {
+		if flag.Hidden {
+			return
+		}
+
+		line := ""
+		if flag.Shorthand != "" && flag.ShorthandDeprecated == "" {
+			line = fmt.Sprintf("  -%s, --%s::", flag.Shorthand, flag.Name)
+		} else {
+			line = fmt.Sprintf("      --%s::", flag.Name)
+		}
+
+		varname, usage := pflag.UnquoteUsage(flag)
+		if varname != "" {
+			line += " " + varname
+		}
+		if flag.NoOptDefVal != "" {
+			switch flag.Value.Type() {
+			case "string":
+				line += fmt.Sprintf("[=\"%s\"]", flag.NoOptDefVal)
+			case "bool":
+				if flag.NoOptDefVal != "true" {
+					line += fmt.Sprintf("[=%s]", flag.NoOptDefVal)
+				}
+			case "count":
+				if flag.NoOptDefVal != "+1" {
+					line += fmt.Sprintf("[=%s]", flag.NoOptDefVal)
+				}
+			default:
+				line += fmt.Sprintf("[=%s]", flag.NoOptDefVal)
+			}
+		}
+
+		// This special character will be replaced with spacing once the
+		// correct alignment is calculated
+		line += "\x00"
+		if len(line) > maxlen {
+			maxlen = len(line)
+		}
+
+		line += usage
+		if !defaultIsZeroValue(flag) {
+			if flag.Value.Type() == "string" {
+				line += fmt.Sprintf(" (default %q)", flag.DefValue)
+			} else {
+				line += fmt.Sprintf(" (default %s)", flag.DefValue)
+			}
+		}
+		if len(flag.Deprecated) != 0 {
+			line += fmt.Sprintf(" (DEPRECATED: %s)", flag.Deprecated)
+		}
+
+		lines = append(lines, line)
+	})
+
+	for _, line := range lines {
+		sidx := strings.Index(line, "\x00")
+		spacing := strings.Repeat(" ", maxlen-sidx)
+		// maxlen + 2 comes from + 1 for the \x00 and + 1 for the (deliberate) off-by-one in maxlen-sidx
+		fmt.Fprintln(buf, line[:sidx], spacing, line[sidx+1:])
+	}
+
+	return buf.String()
+}
+
+// defaultIsZeroValue returns true if the default value for this flag represents
+// a zero value.
+func defaultIsZeroValue(f *pflag.Flag) bool {
+	switch f.Value.Type() {
+	case "bool":
+		return f.DefValue == "false"
+	case "duration":
+		// Beginning in Go 1.7, duration zero values are "0s"
+		return f.DefValue == "0" || f.DefValue == "0s"
+	case "int", "int8", "int32", "int64", "uint", "uint8", "uint16", "unit32", "uint64", "count", "float32", "float64":
+		return f.DefValue == "0"
+	case "string":
+		return f.DefValue == ""
+	case "ip", "ipMask", "ipNet":
+		return f.DefValue == "<nil>"
+	case "intSlice", "stringSlice", "stringArray":
+		return f.DefValue == "[]"
+	default:
+		switch f.Value.String() {
+		case "false":
+			return true
+		case "<nil>":
+			return true
+		case "":
+			return true
+		case "0":
+			return true
+		}
+		return false
+	}
+}
+
 func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 	flags := cmd.NonInheritedFlags()
 	flags.SetOutput(buf)
 	if flags.HasAvailableFlags() {
-		buf.WriteString("=== Options\n\n....\n")
-		flags.PrintDefaults()
-		buf.WriteString("....\n\n")
+		buf.WriteString("=== Options\n\n")
+		buf.WriteString(FlagUsages(flags))
+		buf.WriteString("\n")
 	}
 
 	parentFlags := cmd.InheritedFlags()
 	parentFlags.SetOutput(buf)
 	if parentFlags.HasAvailableFlags() {
-		buf.WriteString("=== Options inherited from parent commands\n\n....\n")
-		parentFlags.PrintDefaults()
-		buf.WriteString("....\n\n")
+		buf.WriteString("=== Options inherited from parent commands\n\n")
+		buf.WriteString(FlagUsages(parentFlags))
+		buf.WriteString("\n")
 	}
 	return nil
 }
@@ -58,11 +164,13 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 
 	buf := new(bytes.Buffer)
 	name := cmd.CommandPath()
-	buf.WriteString("== " + name + "\n\n")
+	buf.WriteString("= " + name + "\n\n")
+	buf.WriteString("[role=\"_abstract\"]\n")
 	buf.WriteString("ifdef::env-github,env-browser[:relfilesuffix: .adoc]\n\n")
 	buf.WriteString(cmd.Short + "\n\n")
 	if len(cmd.Long) > 0 {
-		buf.WriteString("=== Synopsis\n\n")
+		buf.WriteString("[discrete]\n")
+		buf.WriteString("== Synopsis\n\n")
 		buf.WriteString(cmd.Long + "\n\n")
 	}
 
@@ -71,7 +179,8 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	}
 
 	if len(cmd.Example) > 0 {
-		buf.WriteString("=== Examples\n\n")
+		buf.WriteString("[discrete]\n")
+		buf.WriteString("== Examples\n\n")
 		buf.WriteString(fmt.Sprintf("....\n%s\n....\n\n", cmd.Example))
 	}
 
@@ -79,7 +188,8 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		return err
 	}
 	if hasSeeAlso(cmd) {
-		buf.WriteString("=== SEE ALSO\n\n")
+		buf.WriteString("[discrete]\n")
+		buf.WriteString("== See Also\n\n")
 		if cmd.HasParent() {
 			parent := cmd.Parent()
 			pname := parent.CommandPath()
