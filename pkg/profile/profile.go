@@ -2,8 +2,6 @@
 package profile
 
 import (
-	"strings"
-
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
@@ -35,16 +33,11 @@ func DevPreviewEnabled(f *factory.Factory) bool {
 }
 
 // Enable dev preview
-func EnableDevPreview(f *factory.Factory, enablement string) (*config.Config, error) {
+func EnableDevPreview(f *factory.Factory, enablement bool) (*config.Config, error) {
 	logger, err := f.Logger()
 	if err != nil {
 		logger.Info("Cannot enable dev preview. ", err)
 		return nil, err
-	}
-
-	if enablement == "" {
-		// Flag not present no action needed.
-		return nil, nil
 	}
 
 	config, err := f.Config.Load()
@@ -53,7 +46,7 @@ func EnableDevPreview(f *factory.Factory, enablement string) (*config.Config, er
 		return nil, err
 	}
 
-	config.DevPreviewEnabled = strings.ToLower(enablement) == "true" || enablement == "yes" || enablement == "y"
+	config.DevPreviewEnabled = enablement
 	err = f.Config.Save(config)
 	if err != nil {
 		logger.Info("Cannot enable dev preview. ", err)

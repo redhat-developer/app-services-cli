@@ -1,0 +1,19 @@
+[config.cmd.shortDescription]
+one = 'Change specific configuration for the options'
+
+[config.cmd.longDescription]
+one = '''
+Change configuration of the cli by executing one of the available subcommands
+rhoas config --devpreview=true
+'''
+
+[config.cmd.example]
+one = '''
+# change dev preview configuration
+$ rhoas config --devpreview=true
+'''
+
+[config.flag.devpreview.description]
+one = 'Sets development preview features in config'
+
+ 
