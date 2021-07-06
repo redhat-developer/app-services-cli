@@ -16,7 +16,7 @@ Change configuration of the cli by executing one of the available subcommands
 
 ....
 # change dev preview configuration
-$ rhoas config devpreview true
+$ rhoas config dev-preview true
 
 ....
 
@@ -30,5 +30,5 @@ $ rhoas config devpreview true
 == See also
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
-* link:rhoas_config_devPreview{relfilesuffix}[rhoas config devPreview]	 - Sets development preview features in config
+* link:rhoas_config_dev-preview{relfilesuffix}[rhoas config dev-preview]	 - Sets development preview features in config
 

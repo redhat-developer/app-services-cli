@@ -1,4 +1,4 @@
-= rhoas config devPreview
+= rhoas config dev-preview
 
 [role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
@@ -13,7 +13,7 @@ Those commands usually work against alpha versions of the API and might often ha
 
 
 ....
-rhoas config devPreview [flags]
+rhoas config dev-preview [flags]
 ....
 
 [discrete]
@@ -21,7 +21,7 @@ rhoas config devPreview [flags]
 
 ....
 # change dev preview configuration
-$ rhoas config devpreview true
+$ rhoas config dev-preview true
 
 ....
 

@@ -9,7 +9,7 @@ Change configuration of the cli by executing one of the available subcommands
 [config.cmd.example]
 one = '''
 # change dev preview configuration
-$ rhoas config devpreview true
+$ rhoas config dev-preview true
 '''
 
 [devpreview.cmd.shortDescription]
@@ -24,7 +24,7 @@ Those commands usually work against alpha versions of the API and might often ha
 [devpreview.cmd.example]
 one = '''
 # change dev preview configuration
-$ rhoas config devpreview true
+$ rhoas config dev-preview true
 '''
  
 [devpreview.error.enablement]

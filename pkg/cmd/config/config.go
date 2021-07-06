@@ -38,7 +38,7 @@ func NewConfigCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	devPreview := &cobra.Command{
-		Use:       "devPreview",
+		Use:       "dev-preview",
 		Short:     opts.localizer.MustLocalize("devpreview.cmd.shortDescription"),
 		Long:      opts.localizer.MustLocalize("devpreview.cmd.longDescription"),
 		Example:   opts.localizer.MustLocalize("devpreview.cmd.example"),
