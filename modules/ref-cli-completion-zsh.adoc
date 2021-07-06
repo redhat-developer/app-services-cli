@@ -1,10 +1,12 @@
-== rhoas completion zsh
+= rhoas completion zsh
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 Generate command completion script for Zsh shell
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 Generate command completion script for Zsh shell.
 
@@ -19,12 +21,11 @@ rhoas completion zsh
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
 

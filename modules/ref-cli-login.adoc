@@ -1,10 +1,12 @@
-== rhoas login
+= rhoas login
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 Log in to RHOAS
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 Log in securely to RHOAS through a web browser.
 
@@ -19,7 +21,8 @@ Note: token-based login is not supported by the Kafka "topic" and "consumer-grou
 rhoas login [flags]
 ....
 
-=== Examples
+[discrete]
+== Examples
 
 ....
 # securely log in to RHOAS by using a web browser
@@ -35,25 +38,22 @@ $ rhoas login --token <your-token>
 
 === Options
 
-....
-      --api-gateway string    URL of the API gateway. (default "https://api.openshift.com")
-      --auth-url string       The URL of the SSO Authentication server. (default "https://sso.redhat.com/auth/realms/redhat-external")
-      --client-id string      OpenID client identifier (default "rhoas-cli-prod")
-      --insecure              Enables insecure communication with the server. This disables verification of TLS certificates and host names.
-      --mas-auth-url string   The URL of the identity.api.openshift.com Authentication server. (default "https://identity.api.openshift.com/auth/realms/rhoas")
-      --print-sso-url         Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.
-      --scope stringArray     Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope. (default [openid])
-  -t, --token string          Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token.
-....
+      --api-gateway:: string    URL of the API gateway. (default "https://api.openshift.com")
+      --auth-url:: string       The URL of the SSO Authentication server. (default "https://sso.redhat.com/auth/realms/redhat-external")
+      --client-id:: string      OpenID client identifier (default "rhoas-cli-prod")
+      --insecure::              Enables insecure communication with the server. This disables verification of TLS certificates and host names.
+      --mas-auth-url:: string   The URL of the identity.api.openshift.com Authentication server. (default "https://identity.api.openshift.com/auth/realms/rhoas")
+      --print-sso-url::         Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser.
+      --scope:: stringArray     Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope. (default [openid])
+  -t, --token:: string          Allows you to log in using an offline token, which can be obtained at https://cloud.redhat.com/openshift/token.
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
 

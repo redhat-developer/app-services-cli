@@ -1,10 +1,12 @@
-== rhoas kafka list
+= rhoas kafka list
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 List all Apache Kafka instances
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 List all Apache Kafka instances.
 
@@ -21,21 +23,18 @@ rhoas kafka list [flags]
 
 === Options
 
-....
-      --limit int       The maximum number of Kafka instances to be returned (default 100)
-  -o, --output string   Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"
-      --page int        Display the Kafka instances from the specified page number.
-      --search string   Text search to filter the Kafka instances by name, owner, cloud_provider, region and status
-....
+      --limit:: int       The maximum number of Kafka instances to be returned (default 100)
+  -o, --output:: string   Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"
+      --page:: int        Display the Kafka instances from the specified page number.
+      --search:: string   Text search to filter the Kafka instances by name, owner, cloud_provider, region and status
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 
