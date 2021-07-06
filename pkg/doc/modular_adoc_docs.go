@@ -137,7 +137,8 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 	flags := cmd.NonInheritedFlags()
 	flags.SetOutput(buf)
 	if flags.HasAvailableFlags() {
-		buf.WriteString("=== Options\n\n")
+		buf.WriteString("[discrete]\n")
+		buf.WriteString("== Options\n\n")
 		buf.WriteString(FlagUsages(flags))
 		buf.WriteString("\n")
 	}
@@ -145,7 +146,8 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 	parentFlags := cmd.InheritedFlags()
 	parentFlags.SetOutput(buf)
 	if parentFlags.HasAvailableFlags() {
-		buf.WriteString("=== Options inherited from parent commands\n\n")
+		buf.WriteString("[discrete]\n")
+		buf.WriteString("== Options inherited from parent commands\n\n")
 		buf.WriteString(FlagUsages(parentFlags))
 		buf.WriteString("\n")
 	}
@@ -189,7 +191,7 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	}
 	if hasSeeAlso(cmd) {
 		buf.WriteString("[discrete]\n")
-		buf.WriteString("== See Also\n\n")
+		buf.WriteString("== See also\n\n")
 		if cmd.HasParent() {
 			parent := cmd.Parent()
 			pname := parent.CommandPath()
