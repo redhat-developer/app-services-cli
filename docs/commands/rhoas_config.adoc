@@ -20,13 +20,14 @@ $ rhoas config devpreview true
 
 ....
 
-=== Options inherited from parent commands
+[discrete]
+== Options inherited from parent commands
 
   -d, --debug::   Enable debug mode
   -h, --help::    Show help for a command
 
 [discrete]
-== See Also
+== See also
 
 * link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
 * link:rhoas_config_devPreview{relfilesuffix}[rhoas config devPreview]	 - Sets development preview features in config

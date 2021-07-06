@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -46,7 +47,7 @@ func NewConfigCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			devPreview, err := strconv.ParseBool(args[0])
 			if err != nil {
-				return err
+				return errors.New(opts.localizer.MustLocalize("devpreview.error.enablement"))
 			}
 			_, err = profile.EnableDevPreview(f, devPreview)
 			return err

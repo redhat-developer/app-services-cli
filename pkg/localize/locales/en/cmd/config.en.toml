@@ -27,5 +27,5 @@ one = '''
 $ rhoas config devpreview true
 '''
  
-
- 
+[devpreview.error.enablement]
+one = 'Invalid positional argument. Valid values are "true" or "false"'
