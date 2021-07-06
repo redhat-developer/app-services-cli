@@ -28,7 +28,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// FlagUsagesWrapped returns a string containing the usage information
+// FlagUsages returns a string containing the usage information
 // for all flags in the FlagSet.
 func FlagUsages(f *pflag.FlagSet) string {
 	buf := new(bytes.Buffer)
