@@ -1,10 +1,12 @@
-== rhoas service-registry describe
+= rhoas service-registry describe
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 Describe a Service Registry instance
 
-=== Synopsis
+[discrete]
+== Synopsis
 
  
 Describe a Service Registry instance. Fetch all required fields including the registry URL. 
@@ -14,7 +16,8 @@ Describe a Service Registry instance. Fetch all required fields including the re
 rhoas service-registry describe [flags]
 ....
 
-=== Examples
+[discrete]
+== Examples
 
 ....
 rhoas service-registry describe <id>
@@ -23,19 +26,16 @@ rhoas service-registry describe <id>
 
 === Options
 
-....
-      --id string       Unique ID of the Service Registry instance you want to delete. If not set, the current Service Registry instance is used.
-  -o, --output string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml". (default "json")
-....
+      --id:: string       Unique ID of the Service Registry instance you want to delete. If not set, the current Service Registry instance is used.
+  -o, --output:: string   Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml". (default "json")
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas_service-registry{relfilesuffix}[rhoas service-registry]	 - [Preview] Service Registry commands
 

@@ -10,16 +10,8 @@ RHOAS CLI
 
 Manage your application services directly from the command line.
 
-<<<<<<< HEAD
-....
-rhoas <command> <subcommand> [flags]
-....
-
 [discrete]
 == Examples
-=======
-=== Examples
->>>>>>> 05c29d3... docs: update and generate documentation for config command
 
 ....
 # authenticate securely through your web browser
@@ -39,16 +31,8 @@ $ rhoas cluster connect
 [discrete]
 == Options
 
-<<<<<<< HEAD
-  -d, --debug::               Enable debug mode
-      --devpreview:: string   Enable commands that are available under early developer preview. Use --devpreview=yes
-  -h, --help::                Show help for a command
-=======
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
->>>>>>> 05c29d3... docs: update and generate documentation for config command
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
 [discrete]
 == See also
