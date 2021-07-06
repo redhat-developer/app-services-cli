@@ -10,13 +10,14 @@ Create, describe, update, list and delete topics
 
 Create, describe, update, list and delete topics for the current Kafka instance.
 
-=== Options inherited from parent commands
+[discrete]
+== Options inherited from parent commands
 
   -d, --debug::   Enable debug mode
   -h, --help::    Show help for a command
 
 [discrete]
-== See Also
+== See also
 
 * link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 * link:rhoas_kafka_topic_create{relfilesuffix}[rhoas kafka topic create]	 - Create a topic
