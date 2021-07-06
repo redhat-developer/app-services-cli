@@ -9,7 +9,7 @@ import (
 )
 
 func TestEnableDevPreviewConfig(t *testing.T) {
-	testVal := ""
+	testVal := true
 	factoryObj := factory.New("dev", nil)
 	factoryObj.Config = mockutil.NewConfigMock(&config.Config{})
 	config, err := EnableDevPreview(factoryObj, testVal)
@@ -20,7 +20,7 @@ func TestEnableDevPreviewConfig(t *testing.T) {
 		t.Errorf("TestEnableDevPreviewConfig error = %v, want %v", err, nil)
 	}
 
-	testVal = "giberish"
+	testVal = false
 	config, err = EnableDevPreview(factoryObj, testVal)
 	if config.DevPreviewEnabled == true {
 		t.Errorf("TestEnableDevPreviewConfig() config.DevPreviewEnabled = %v, want %v", config.DevPreviewEnabled, false)
@@ -29,29 +29,12 @@ func TestEnableDevPreviewConfig(t *testing.T) {
 		t.Errorf("TestEnableDevPreviewConfig error = %v, want %v", err, nil)
 	}
 
-	testVal = "true"
-	config, err = EnableDevPreview(factoryObj, testVal)
-	if config.DevPreviewEnabled != true {
-		t.Errorf("TestEnableDevPreviewConfig config.DevPreviewEnabled = %v, want %v", config.DevPreviewEnabled, true)
-	}
-	if err != nil {
-		t.Errorf("TestEnableDevPreviewConfig error = %v, want %v", err, nil)
-	}
-
-	testVal = "yes"
-	config, err = EnableDevPreview(factoryObj, testVal)
-	if config.DevPreviewEnabled != true {
-		t.Errorf("TestEnableDevPreviewConfig config.DevPreviewEnabled = %v, want %v", config.DevPreviewEnabled, true)
-	}
-	if err != nil {
-		t.Errorf("TestEnableDevPreviewConfig error = %v, want %v", err, nil)
-	}
 }
 
 func TestDevPreviewEnabled(t *testing.T) {
 	factoryObj := factory.New("dev", nil)
 	factoryObj.Config = mockutil.NewConfigMock(&config.Config{})
-	testVal := "false"
+	testVal := false
 	config, _ := EnableDevPreview(factoryObj, testVal)
 	t.Log("Ess", config)
 	enabled := DevPreviewEnabled(factoryObj)
@@ -60,7 +43,7 @@ func TestDevPreviewEnabled(t *testing.T) {
 		t.Errorf("TestEnableDevPreviewConfig enabled = %v, want %v", enabled, false)
 	}
 
-	testVal = "true"
+	testVal = true
 	_, _ = EnableDevPreview(factoryObj, testVal)
 
 	enabled = DevPreviewEnabled(factoryObj)

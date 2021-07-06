@@ -19,8 +19,6 @@ type Options struct {
 	Config    config.IConfig
 	Logger    func() (logging.Logger, error)
 	localizer localize.Localizer
-
-	devPreview bool
 }
 
 func NewConfigCommand(f *factory.Factory) *cobra.Command {
