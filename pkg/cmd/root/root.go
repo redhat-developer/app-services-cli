@@ -4,7 +4,6 @@ import (
 	"flag"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
-	"github.com/redhat-developer/app-services-cli/pkg/profile"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
@@ -25,8 +24,6 @@ import (
 )
 
 func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
-	var devpreview string
-
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,
@@ -34,14 +31,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 		Short:         f.Localizer.MustLocalize("root.cmd.shortDescription"),
 		Long:          f.Localizer.MustLocalize("root.cmd.longDescription"),
 		Example:       f.Localizer.MustLocalize("root.cmd.example"),
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			if devpreview == "" {
-				return cmd.Help()
-			}
-
-			_, err := profile.EnableDevPreview(f, devpreview)
-			return err
-		},
 	}
 	fs := cmd.PersistentFlags()
 	arguments.AddDebugFlag(fs)
@@ -49,7 +38,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	var help bool
 
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
-	cmd.Flags().StringVarP(&devpreview, "devpreview", "", "", f.Localizer.MustLocalize("root.cmd.flag.devpreview.description"))
 
 	cmd.Version = version
 
