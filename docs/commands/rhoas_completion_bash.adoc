@@ -25,13 +25,14 @@ Installing on macOS:
 rhoas completion bash
 ....
 
-=== Options inherited from parent commands
+[discrete]
+== Options inherited from parent commands
 
   -d, --debug::   Enable debug mode
   -h, --help::    Show help for a command
 
 [discrete]
-== See Also
+== See also
 
 * link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
 
