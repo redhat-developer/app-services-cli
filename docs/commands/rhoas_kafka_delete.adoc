@@ -1,10 +1,12 @@
-== rhoas kafka delete
+= rhoas kafka delete
 
+[role="_abstract"]
 ifdef::env-github,env-browser[:relfilesuffix: .adoc]
 
 Delete an Apache Kafka instance
 
-=== Synopsis
+[discrete]
+== Synopsis
 
 Permanently delete an Apache Kafka instance, including all topics.
 
@@ -16,7 +18,8 @@ Otherwise you can pass "--yes" to skip confirmation and forcibly delete the inst
 rhoas kafka delete [flags]
 ....
 
-=== Examples
+[discrete]
+== Examples
 
 ....
 # delete the current Kafka instance
@@ -29,19 +32,16 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 === Options
 
-....
-      --id string   Unique ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.
-  -y, --yes         Skip confirmation to forcibly delete this Kafka instance.
-....
+      --id:: string   Unique ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.
+  -y, --yes::         Skip confirmation to forcibly delete this Kafka instance.
 
 === Options inherited from parent commands
 
-....
-  -d, --debug   Enable debug mode
-  -h, --help    Show help for a command
-....
+  -d, --debug::   Enable debug mode
+  -h, --help::    Show help for a command
 
-=== SEE ALSO
+[discrete]
+== See Also
 
 * link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 
