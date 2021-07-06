@@ -32,14 +32,15 @@ $ rhoas cluster connect
 
 ....
 
-=== Options
+[discrete]
+== Options
 
   -d, --debug::               Enable debug mode
       --devpreview:: string   Enable commands that are available under early developer preview. Use --devpreview=yes
   -h, --help::                Show help for a command
 
 [discrete]
-== See Also
+== See also
 
 * link:rhoas_cluster{relfilesuffix}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 * link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)

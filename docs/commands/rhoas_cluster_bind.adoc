@@ -37,7 +37,8 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
 
 ....
 
-=== Options
+[discrete]
+== Options
 
       --app-name:: string       Name of the kubernetes deployment to bind
       --binding-name:: string   Name of the Service binding object to create when using operator
@@ -48,13 +49,14 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
   -n, --namespace:: string      Custom Kubernetes namespace (if not set current namespace will be used)
   -y, --yes::                   Forcibly create a binding without confirmation.
 
-=== Options inherited from parent commands
+[discrete]
+== Options inherited from parent commands
 
   -d, --debug::   Enable debug mode
   -h, --help::    Show help for a command
 
 [discrete]
-== See Also
+== See also
 
 * link:rhoas_cluster{relfilesuffix}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 
