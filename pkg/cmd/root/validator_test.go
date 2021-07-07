@@ -31,13 +31,37 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 	cmd := NewRootCommand(cmdFactory, buildVersion)
 
 	// Testing cobra commands with default recommended config
-	var vali rules.RuleConfig
-	validationErr := vali.ExecuteRules(cmd)
+	vali := rules.ValidatorConfig{
+		ValidatorOptions: rules.ValidatorOptions{
+			SkipCommands: map[string]bool{
+				"rhoas kafka":                true,
+				"rhoas kafka list":           true,
+				"rhoas completion":           true,
+				"rhoas completion bash":      true,
+				"rhoas completion fish":      true,
+				"rhoas completion zsh":       true,
+				"rhoas kafka consumer-group": true,
+				"rhoas kafka topic":          true,
+				"rhoas cluster":              true,
+				"rhoas logout":               true,
+				"rhoas service-account":      true,
+			},
+		},
+		ValidatorRules: rules.ValidatorRules{
+			Length: rules.Length{
+				Limits: map[string]rules.Limit{
+					"Short":   {Min: 5},
+					"Example": {Min: 10},
+					"Long":    {Min: 10},
+				},
+			},
+		},
+	}
+	validationErr := rules.ExecuteRules(cmd, &vali)
 
-	// commented out the assertion for CI to pass
-	// if len(validationErr) != 0 {
-	// 	t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
-	// }
+	if len(validationErr) != 0 {
+		t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
+	}
 
 	for _, errs := range validationErr {
 		if errs.Err != nil {
