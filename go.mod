@@ -7,7 +7,7 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
-	github.com/aerogear/charmil v0.1.0
+	github.com/aerogear/charmil v0.2.0
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.12.0
