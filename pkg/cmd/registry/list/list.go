@@ -75,6 +75,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("registry.list.flag.limit"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("registry.list.flag.search"))
 
+	flagutil.EnableOutputFlagCompletion(cmd)
+
 	return cmd
 }
 
