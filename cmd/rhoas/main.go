@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -40,7 +41,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	initConfig(cmdFactory)
+	err = initConfig(cmdFactory)
+	if err != nil {
+		logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		os.Exit(1)
+	}
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
 
@@ -94,20 +99,35 @@ func generateDocumentation(rootCommand *cobra.Command) {
 	}
 }
 
-func initConfig(f *factory.Factory) {
+func initConfig(f *factory.Factory) error {
+	if !config.HasCustomLocation() {
+		rhoasCfgDir, err := config.DefaultDir()
+		if err != nil {
+			return err
+		}
+
+		// create rhoas config directory
+		if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
+			err = os.MkdirAll(rhoasCfgDir, 0o700)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	cfgFile, err := f.Config.Load()
 
 	if cfgFile != nil {
-		return
+		return err
 	}
+
 	if !os.IsNotExist(err) {
-		fmt.Fprintln(f.IOStreams.ErrOut, err)
-		os.Exit(1)
+		return err
 	}
 
 	cfgFile = &config.Config{}
 	if err := f.Config.Save(cfgFile); err != nil {
-		fmt.Fprintln(f.IOStreams.ErrOut, err)
-		os.Exit(1)
+		return err
 	}
+	return nil
 }
