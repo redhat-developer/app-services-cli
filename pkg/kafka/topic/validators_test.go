@@ -401,3 +401,157 @@ func TestValidateMessageRetentionSize(t *testing.T) {
 		})
 	}
 }
+
+func TestValidatePage(t *testing.T) {
+	type args struct {
+		page string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "Should throw error when non-numeric value is provided",
+			args: args{
+				page: "kafka",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be valid when numeric value is provided",
+			args: args{
+				page: "1",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be invalid when 0 is passed",
+			args: args{
+				page: "0",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when -1 is passed",
+			args: args{
+				page: "-1",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when value less than -1 is passed",
+			args: args{
+				page: "-100",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when containing decimal point",
+			args: args{
+				page: "3.0",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid for special characters",
+			args: args{
+				page: "90*",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be valid when 100000 is passed",
+			args: args{
+				page: "100000",
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// nolint
+			if err := validator.ValidatePage(tt.args.page); (err != nil) != tt.wantErr {
+				t.Errorf("ValidatePage() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateSize(t *testing.T) {
+	type args struct {
+		size string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "Should throw error when non-numeric value is provided",
+			args: args{
+				size: "kafka",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be valid when numeric value is provided",
+			args: args{
+				size: "1",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should be invalid when 0 is passed",
+			args: args{
+				size: "0",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when -1 is passed",
+			args: args{
+				size: "-1",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when value less than -1 is passed",
+			args: args{
+				size: "-100",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid when containing decimal point",
+			args: args{
+				size: "3.0",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be invalid for special characters",
+			args: args{
+				size: "90*",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Should be valid when 100000 is passed",
+			args: args{
+				size: "100000",
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// nolint
+			if err := validator.ValidateSize(tt.args.size); (err != nil) != tt.wantErr {
+				t.Errorf("ValidateSize() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

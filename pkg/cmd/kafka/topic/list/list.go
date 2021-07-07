@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -35,7 +36,14 @@ type Options struct {
 	kafkaID string
 	output  string
 	search  string
+	page    int
+	size    int
 }
+
+const (
+	defaultPage = 1
+	defaultSize = 10
+)
 
 type topicRow struct {
 	Name            string `json:"name,omitempty" header:"Name"`
@@ -67,6 +75,18 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
+			validator := &topicutil.Validator{
+				Localizer: opts.localizer,
+			}
+
+			if err := validator.ValidatePage(opts.page); err != nil {
+				return err
+			}
+
+			if err := validator.ValidateSize(opts.size); err != nil {
+				return err
+			}
+
 			if opts.search != "" {
 				validator := &topicutil.Validator{
 					Localizer: opts.localizer,
@@ -93,6 +113,8 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
+	cmd.Flags().IntVarP(&opts.page, "page", "", defaultPage, opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
+	cmd.Flags().IntVarP(&opts.size, "size", "", defaultSize, opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -122,6 +144,14 @@ func runCmd(opts *Options) error {
 		a = a.Filter(opts.search)
 	}
 
+	if opts.size != defaultSize {
+		a = a.Size(int32(opts.size))
+	}
+
+	if opts.page != defaultPage {
+		a = a.Page(int32(opts.page))
+	}
+
 	topicData, httpRes, err := a.Execute()
 	if err != nil {
 		if httpRes == nil {
@@ -131,13 +161,13 @@ func runCmd(opts *Options) error {
 		operationTemplatePair := localize.NewEntry("Operation", "list")
 
 		switch httpRes.StatusCode {
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.unauthorized", operationTemplatePair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.forbidden", operationTemplatePair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
