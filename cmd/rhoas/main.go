@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
@@ -98,7 +99,7 @@ func generateDocumentation(rootCommand *cobra.Command) {
 func initConfig(f *factory.Factory, logger logging.Logger) {
 	rhoasCfgDir, err := config.DefaultDir()
 	if err != nil {
-		logger.Errorf("Error fetching config dir.", err)
+		logger.Errorf(f.Localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
 	}
 
 	customFolder, isCustomFolderSet := os.LookupEnv("RHOASCONFIG")
@@ -110,7 +111,7 @@ func initConfig(f *factory.Factory, logger logging.Logger) {
 	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
 		err = os.MkdirAll(rhoasCfgDir, 0o700)
 		if err != nil {
-			logger.Errorf("Error creating configuration folder")
+			logger.Errorf(f.Localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
 			os.Exit(1)
 			return
 		}
