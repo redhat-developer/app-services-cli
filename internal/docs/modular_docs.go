@@ -87,7 +87,8 @@ func CreateAssembly(assembliesDir string, files []string) error {
 		commandFileNames = append(commandFileNames, relPath)
 	}
 
-	contentTemplate := `[id="cli-command-reference_{context}"]
+	contentTemplate := `:context: rhoas-cli-command-reference
+[id="cli-command-reference_{context}"]
 = CLI command reference (rhoas)
 
 [role="_abstract"]
