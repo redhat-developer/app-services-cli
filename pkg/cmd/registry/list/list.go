@@ -27,7 +27,6 @@ import (
 type RegistryRow struct {
 	ID     string `json:"id" header:"ID"`
 	Name   string `json:"name" header:"Name"`
-	URL    string `json:"registryUrl" header:"Registry URL"`
 	Owner  string `json:"owner" header:"Owner"`
 	Status string `json:"status" header:"Status"`
 }
@@ -137,7 +136,6 @@ func mapResponseItemsToRows(registries *[]srsmgmtv1.RegistryRest) []RegistryRow 
 		row := RegistryRow{
 			ID:     fmt.Sprint(k.Id),
 			Name:   k.GetName(),
-			URL:    k.GetRegistryUrl(),
 			Status: string(k.GetStatus()),
 			Owner:  k.GetOwner(),
 		}
