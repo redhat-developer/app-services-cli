@@ -100,16 +100,18 @@ func generateDocumentation(rootCommand *cobra.Command) {
 }
 
 func initConfig(f *factory.Factory) error {
-	rhoasCfgDir, err := config.DefaultDir()
-	if err != nil {
-		return err
-	}
-
-	// create rhoas config directory
-	if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
-		err = os.MkdirAll(rhoasCfgDir, 0o700)
+	if !config.HasCustomLocation() {
+		rhoasCfgDir, err := config.DefaultDir()
 		if err != nil {
 			return err
+		}
+
+		// create rhoas config directory
+		if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
+			err = os.MkdirAll(rhoasCfgDir, 0o700)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -120,13 +122,11 @@ func initConfig(f *factory.Factory) error {
 	}
 
 	if !os.IsNotExist(err) {
-		fmt.Fprintln(f.IOStreams.ErrOut, err)
 		return err
 	}
 
 	cfgFile = &config.Config{}
 	if err := f.Config.Save(cfgFile); err != nil {
-		fmt.Fprintln(f.IOStreams.ErrOut, err)
 		return err
 	}
 	return nil

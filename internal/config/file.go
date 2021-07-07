@@ -20,6 +20,8 @@ type File struct{}
 
 const errorFormat = "%v: %w"
 
+const EnvName = "RHOASCONFIG"
+
 // Load loads the configuration from the configuration file. If the configuration file doesn't exist
 // it will return an empty configuration object.
 func (c *File) Load() (*Config, error) {
@@ -93,7 +95,7 @@ func (c *File) Remove() error {
 
 // Location gets the path to the config file
 func (c *File) Location() (path string, err error) {
-	if rhoasConfig := os.Getenv("RHOASCONFIG"); rhoasConfig != "" {
+	if rhoasConfig := os.Getenv(EnvName); rhoasConfig != "" {
 		path = rhoasConfig
 	} else {
 		rhoasCfgDir, err := DefaultDir()
@@ -106,6 +108,12 @@ func (c *File) Location() (path string, err error) {
 		}
 	}
 	return path, nil
+}
+
+// Checks if config has custom location
+func HasCustomLocation() bool {
+	rhoasConfig := os.Getenv(EnvName)
+	return rhoasConfig != ""
 }
 
 // DefaultDir returns the default parent directory of the config file
