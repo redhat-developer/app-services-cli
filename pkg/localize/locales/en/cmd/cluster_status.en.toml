@@ -6,10 +6,10 @@ one = 'View status of the current Kubernetes or OpenShift cluster'
 
 [cluster.status.cmd.longDescription]
 one = '''
-View information about the current Kubernetes or OpenShift cluster. 
+View information about the current Kubernetes or OpenShift cluster.
 You can use this information to connect your application service to the cluster.
 
-Before using this command, you must be logged into a Kubernetes or OpenShift 
+Before using this command, you must be logged into a Kubernetes or OpenShift
 cluster. The command uses your kubeconfig file to identify the cluster context.
 '''
 
@@ -30,9 +30,13 @@ one = '''
 Namespace: {{.Namespace}}
 RHOAS Operator: {{.OperatorStatus}}
 
-Command requires configuration using kubeconfig for Kubernetes cluster running RHOAS operator.
-Operator can be installed using OperatorHub.
-You can find operator by typing "rhoas" in search.
+Before using this command, you must be logged into a Kubernetes or OpenShift cluster in which the RHOAS Operator is installed.
 
-For more information please visit Operator GitHub repository: https://github.com/redhat-developer/app-services-operator
+To find the RHOAS Operator in the OpenShift web console:
+
+1. Navigate to the Operators > OperatorHub page.
+
+2. In the Filter by Keyword box, type "rhoas".
+
+For more information about the RHOAS Operator, see the app-services-operator GitHub repository: https://github.com/redhat-developer/app-services-operator.
 '''
