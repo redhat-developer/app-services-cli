@@ -1,8 +1,7 @@
-= rhoas completion
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-completion_{context}]]rhoas completion
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Outputs command completion for the given shell (bash, zsh, or fish)
 
 [discrete]
@@ -26,8 +25,32 @@ When you have installed the command completion script, make sure you restart you
 [discrete]
 == See also
 
-* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
-* link:rhoas_completion_bash{relfilesuffix}[rhoas completion bash]	 - Generate command completion script for Bash shell
-* link:rhoas_completion_fish{relfilesuffix}[rhoas completion fish]	 - Generate command completion script for fish shell
-* link:rhoas_completion_zsh{relfilesuffix}[rhoas completion zsh]	 - Generate command completion script for Zsh shell
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#user-content-ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_completion_bash.adoc#user-content-ref-rhoas-completion-bash_{context}[rhoas completion bash]	 - Generate command completion script for Bash shell
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-completion-bash_{context}[rhoas completion bash]	 - Generate command completion script for Bash shell
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_completion_fish.adoc#user-content-ref-rhoas-completion-fish_{context}[rhoas completion fish]	 - Generate command completion script for fish shell
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-completion-fish_{context}[rhoas completion fish]	 - Generate command completion script for fish shell
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_completion_zsh.adoc#user-content-ref-rhoas-completion-zsh_{context}[rhoas completion zsh]	 - Generate command completion script for Zsh shell
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-completion-zsh_{context}[rhoas completion zsh]	 - Generate command completion script for Zsh shell
+endif::[]
 

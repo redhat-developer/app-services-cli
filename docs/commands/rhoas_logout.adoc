@@ -1,8 +1,7 @@
-= rhoas logout
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-logout_{context}]]rhoas logout
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Log out from RHOAS
 
 [discrete]
@@ -23,5 +22,11 @@ rhoas logout [flags]
 [discrete]
 == See also
 
-* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#user-content-ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
 

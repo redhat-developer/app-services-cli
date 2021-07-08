@@ -1,8 +1,7 @@
-= rhoas kafka delete
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-kafka-delete_{context}]]rhoas kafka delete
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Delete an Apache Kafka instance
 
 [discrete]
@@ -45,5 +44,11 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 [discrete]
 == See also
 
-* link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka.adoc#user-content-ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+endif::[]
 

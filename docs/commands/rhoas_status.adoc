@@ -1,8 +1,7 @@
-= rhoas status
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-status_{context}]]rhoas status
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 View the status of all currently used services
 
 [discrete]
@@ -47,5 +46,11 @@ $ rhoas status -o json
 [discrete]
 == See also
 
-* link:rhoas{relfilesuffix}[rhoas]	 - RHOAS CLI
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#user-content-ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
 

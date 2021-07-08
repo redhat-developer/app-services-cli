@@ -1,8 +1,7 @@
-= rhoas cluster bind
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-cluster-bind_{context}]]rhoas cluster bind
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Connect your RHOAS services to Kubernetes or OpenShift applications
 
 [discrete]
@@ -58,5 +57,11 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
 [discrete]
 == See also
 
-* link:rhoas_cluster{relfilesuffix}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
+
+ifdef::env-github,env-browser[]
+* link:rhoas_cluster.adoc#user-content-ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
+endif::[]
 
