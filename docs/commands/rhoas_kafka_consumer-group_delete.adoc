@@ -1,8 +1,7 @@
-= rhoas kafka consumer-group delete
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-kafka-consumer-group-delete_{context}]]rhoas kafka consumer-group delete
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Delete a consumer group
 
 [discrete]
@@ -39,5 +38,11 @@ $ rhoas kafka consumer-group delete consumer_group_1
 [discrete]
 == See also
 
-* link:rhoas_kafka_consumer-group{relfilesuffix}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group.adoc#user-content-ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+endif::[]
 

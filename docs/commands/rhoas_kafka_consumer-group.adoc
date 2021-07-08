@@ -1,8 +1,7 @@
-= rhoas kafka consumer-group
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-kafka-consumer-group_{context}]]rhoas kafka consumer-group
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Describe, list, and delete consumer groups for the current Kafka instance.
 
 [discrete]
@@ -19,8 +18,32 @@ Use these commands to describe, list, and delete consumer groups for the current
 [discrete]
 == See also
 
-* link:rhoas_kafka{relfilesuffix}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
-* link:rhoas_kafka_consumer-group_delete{relfilesuffix}[rhoas kafka consumer-group delete]	 - Delete a consumer group
-* link:rhoas_kafka_consumer-group_describe{relfilesuffix}[rhoas kafka consumer-group describe]	 - Describe a consumer group
-* link:rhoas_kafka_consumer-group_list{relfilesuffix}[rhoas kafka consumer-group list]	 - List all consumer groups
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka.adoc#user-content-ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group_delete.adoc#user-content-ref-rhoas-kafka-consumer-group-delete_{context}[rhoas kafka consumer-group delete]	 - Delete a consumer group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group-delete_{context}[rhoas kafka consumer-group delete]	 - Delete a consumer group
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group_describe.adoc#user-content-ref-rhoas-kafka-consumer-group-describe_{context}[rhoas kafka consumer-group describe]	 - Describe a consumer group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group-describe_{context}[rhoas kafka consumer-group describe]	 - Describe a consumer group
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group_list.adoc#user-content-ref-rhoas-kafka-consumer-group-list_{context}[rhoas kafka consumer-group list]	 - List all consumer groups
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group-list_{context}[rhoas kafka consumer-group list]	 - List all consumer groups
+endif::[]
 

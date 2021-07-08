@@ -23,10 +23,44 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/spf13/cobra"
 )
+
+var linkTemplate = template.Must(template.New("linkTemplate").Parse(`
+ifdef::env-github,env-browser[]
+* link:{{.Link}}.adoc#user-content-{{.Id}}[{{.Name}}]	 - {{.Short}}
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#{{.Id}}[{{.Name}}]	 - {{.Short}}
+endif::[]
+`))
+
+func nameToId(name string) string {
+	return fmt.Sprintf("ref-%s_{context}", strings.ReplaceAll(name, " ", "-"))
+}
+
+func writeXref(buf *bytes.Buffer, name string, short string) error {
+	id := nameToId(name)
+	link := strings.ReplaceAll(name, " ", "_")
+	err := linkTemplate.Execute(buf, struct {
+		Id    string
+		Name  string
+		Link  string
+		Short string
+	}{
+		id,
+		name,
+		link,
+		short,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 // FlagUsages returns a string containing the usage information
 // for all flags in the FlagSet.
@@ -166,9 +200,9 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 
 	buf := new(bytes.Buffer)
 	name := cmd.CommandPath()
-	buf.WriteString("= " + name + "\n\n")
+	buf.WriteString("ifdef::env-github,env-browser[:context: cmd]\n")
+	buf.WriteString(fmt.Sprintf("= [[%s]]%s\n\n", nameToId(name), name))
 	buf.WriteString("[role=\"_abstract\"]\n")
-	buf.WriteString("ifdef::env-github,env-browser[:relfilesuffix: .adoc]\n\n")
 	buf.WriteString(cmd.Short + "\n\n")
 	if len(cmd.Long) > 0 {
 		buf.WriteString("[discrete]\n")
@@ -195,9 +229,9 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		if cmd.HasParent() {
 			parent := cmd.Parent()
 			pname := parent.CommandPath()
-			link := pname + "{relfilesuffix}"
-			link = strings.ReplaceAll(link, " ", "_")
-			buf.WriteString(fmt.Sprintf("* link:%s[%s]\t - %s\n", linkHandler(link), pname, parent.Short))
+			if err := writeXref(buf, pname, parent.Short); err != nil {
+				return err
+			}
 			cmd.VisitParents(func(c *cobra.Command) {
 				if c.DisableAutoGenTag {
 					cmd.DisableAutoGenTag = c.DisableAutoGenTag
@@ -213,9 +247,9 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 				continue
 			}
 			cname := name + " " + child.Name()
-			link := cname + "{relfilesuffix}"
-			link = strings.ReplaceAll(link, " ", "_")
-			buf.WriteString(fmt.Sprintf("* link:%s[%s]\t - %s\n", linkHandler(link), cname, child.Short))
+			if err := writeXref(buf, cname, child.Short); err != nil {
+				return err
+			}
 		}
 		buf.WriteString("\n")
 	}

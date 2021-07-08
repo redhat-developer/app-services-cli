@@ -1,8 +1,7 @@
-= rhoas completion bash
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-completion-bash_{context}]]rhoas completion bash
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Generate command completion script for Bash shell
 
 [discrete]
@@ -34,5 +33,11 @@ rhoas completion bash
 [discrete]
 == See also
 
-* link:rhoas_completion{relfilesuffix}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+
+ifdef::env-github,env-browser[]
+* link:rhoas_completion.adoc#user-content-ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+endif::[]
 
