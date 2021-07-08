@@ -13,6 +13,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	consumergrouputil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
+
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -71,6 +73,15 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 			if !cfg.HasKafka() {
 				return fmt.Errorf(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.noKafkaSelected"))
+			}
+
+			if opts.search != "" {
+				validator := &consumergrouputil.Validator{
+					Localizer: opts.localizer,
+				}
+				if err = validator.ValidateSearchInput(opts.search); err != nil {
+					return err
+				}
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID

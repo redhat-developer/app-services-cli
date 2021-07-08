@@ -32,3 +32,7 @@ one = 'you are unauthorized to {{.Operation}} these consumer groups'
 
 [kafka.consumerGroup.list.error.forbidden]
 one = 'you are forbidden to {{.Operation}} these consumer groups'
+
+[kafka.consumerGroup.list.error.illegalSearchValue]
+description = 'Error message when invalid chars are used for search flag'
+one = 'illegal search value "{{.Search}}"; only letters (Aa-Zz), numbers and "-" are accepted'
