@@ -40,11 +40,6 @@ type Options struct {
 	size    int32
 }
 
-const (
-	defaultPage = 1
-	defaultSize = 10
-)
-
 type topicRow struct {
 	Name            string `json:"name,omitempty" header:"Name"`
 	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
@@ -75,16 +70,12 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			validator := topicutil.Validator{
-				Localizer: opts.localizer,
+			if opts.page < 1 {
+				return errors.New(opts.localizer.MustLocalize("kafka.topic.list.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
 			}
 
-			if err := validator.ValidatePage(opts.page); err != nil {
-				return err
-			}
-
-			if err := validator.ValidateSize(opts.size); err != nil {
-				return err
+			if opts.size < 1 {
+				return errors.New(opts.localizer.MustLocalize("kafka.topic.list.validation.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
 			}
 
 			if opts.search != "" {
@@ -113,8 +104,8 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
-	cmd.Flags().Int32VarP(&opts.page, "page", "", defaultPage, opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
-	cmd.Flags().Int32VarP(&opts.size, "size", "", defaultSize, opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
+	cmd.Flags().Int32VarP(&opts.size, "size", "", 10, opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -144,13 +135,9 @@ func runCmd(opts *Options) error {
 		a = a.Filter(opts.search)
 	}
 
-	if opts.size != defaultSize {
-		a = a.Size(opts.size)
-	}
+	a = a.Size(opts.size)
 
-	if opts.page != defaultPage {
-		a = a.Page(opts.page)
-	}
+	a = a.Page(opts.page)
 
 	topicData, httpRes, err := a.Execute()
 	if err != nil {

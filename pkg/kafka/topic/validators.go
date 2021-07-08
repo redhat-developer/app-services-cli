@@ -154,37 +154,3 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 
 	return nil
 }
-
-// ValidatePage validates the value of page flag
-// the valid values can range from [1,...]
-func (v *Validator) ValidatePage(val interface{}) error {
-	pageStr := fmt.Sprintf("%v", val)
-
-	page, err := strconv.Atoi(pageStr)
-	if err != nil {
-		return commonerr.NewCastError(val, "int32")
-	}
-
-	if page < minPage {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.list.validation.page.error.invalid.minValue", localize.NewEntry("Page", page), localize.NewEntry("Min", minPage)))
-	}
-
-	return nil
-}
-
-// ValidateSize validates the value of size flag
-// the valid values can range from [1,...]
-func (v *Validator) ValidateSize(val interface{}) error {
-	sizeStr := fmt.Sprintf("%v", val)
-
-	size, err := strconv.Atoi(sizeStr)
-	if err != nil {
-		return commonerr.NewCastError(val, "int32")
-	}
-
-	if size < minSize {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.list.validation.size.error.invalid.minValue", localize.NewEntry("Size", size), localize.NewEntry("Min", minSize)))
-	}
-
-	return nil
-}
