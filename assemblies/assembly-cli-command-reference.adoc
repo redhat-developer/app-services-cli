@@ -73,18 +73,6 @@ include::../modules/ref-cli-service-account-reset-credentials.adoc[leveloffset=+
 
 include::../modules/ref-cli-service-account.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-service-registry-create.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-service-registry-delete.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-service-registry-describe.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-service-registry-list.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+1]
-
-include::../modules/ref-cli-service-registry.adoc[leveloffset=+1]
-
 include::../modules/ref-cli-status.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-whoami.adoc[leveloffset=+1]
