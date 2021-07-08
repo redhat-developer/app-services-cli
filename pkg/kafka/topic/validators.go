@@ -17,8 +17,6 @@ const (
 	legalNameChars = "^[a-zA-Z0-9._-]+$"
 	maxNameLength  = 249
 	minPartitions  = 1
-	minPage        = 1
-	minSize        = 1
 	maxPartitions  = 100
 )
 
