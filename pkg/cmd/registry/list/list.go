@@ -70,7 +70,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-	cmd.Flags().Int32VarP(&opts.page, "page", "", 0, opts.localizer.MustLocalize("registry.list.flag.page"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("registry.list.flag.page"))
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("registry.list.flag.limit"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("registry.list.flag.search"))
 
