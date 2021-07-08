@@ -75,7 +75,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			validator := &topicutil.Validator{
+			validator := topicutil.Validator{
 				Localizer: opts.localizer,
 			}
 
@@ -338,7 +338,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	validator := &topicutil.Validator{
+	validator := topicutil.Validator{
 		Localizer: opts.localizer,
 	}
 

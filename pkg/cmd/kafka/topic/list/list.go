@@ -36,8 +36,8 @@ type Options struct {
 	kafkaID string
 	output  string
 	search  string
-	page    int
-	size    int
+	page    int32
+	size    int32
 }
 
 const (
@@ -75,7 +75,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			validator := &topicutil.Validator{
+			validator := topicutil.Validator{
 				Localizer: opts.localizer,
 			}
 
@@ -88,7 +88,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.search != "" {
-				validator := &topicutil.Validator{
+				validator := topicutil.Validator{
 					Localizer: opts.localizer,
 				}
 				if err := validator.ValidateSearchInput(opts.search); err != nil {
@@ -113,8 +113,8 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
-	cmd.Flags().IntVarP(&opts.page, "page", "", defaultPage, opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
-	cmd.Flags().IntVarP(&opts.size, "size", "", defaultSize, opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", defaultPage, opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
+	cmd.Flags().Int32VarP(&opts.size, "size", "", defaultSize, opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -145,11 +145,11 @@ func runCmd(opts *Options) error {
 	}
 
 	if opts.size != defaultSize {
-		a = a.Size(int32(opts.size))
+		a = a.Size(opts.size)
 	}
 
 	if opts.page != defaultPage {
-		a = a.Page(int32(opts.page))
+		a = a.Page(opts.page)
 	}
 
 	topicData, httpRes, err := a.Execute()
@@ -173,6 +173,8 @@ func runCmd(opts *Options) error {
 			return err
 		}
 	}
+
+	defer httpRes.Body.Close()
 
 	if topicData.GetTotal() == 0 && opts.output == "" {
 		logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))

@@ -87,7 +87,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			if !opts.interactive {
 
-				validator := &topicutil.Validator{
+				validator := topicutil.Validator{
 					Localizer: opts.localizer,
 				}
 
@@ -222,7 +222,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	validator := &topicutil.Validator{
+	validator := topicutil.Validator{
 		Localizer:  opts.localizer,
 		InstanceID: opts.kafkaID,
 		Connection: opts.Connection,
