@@ -1,3 +1,4 @@
+:context: rhoas-cli-command-reference
 [id="cli-command-reference_{context}"]
 = CLI command reference (rhoas)
 

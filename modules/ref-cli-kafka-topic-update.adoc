@@ -1,8 +1,7 @@
-= rhoas kafka topic update
+ifdef::env-github,env-browser[:context: cmd]
+= [[ref-rhoas-kafka-topic-update_{context}]]rhoas kafka topic update
 
 [role="_abstract"]
-ifdef::env-github,env-browser[:relfilesuffix: .adoc]
-
 Update a Kafka topic
 
 [discrete]
@@ -41,5 +40,11 @@ $ rhoas kafka topic update topic-1 --retention-ms -1
 [discrete]
 == See also
 
-* link:rhoas_kafka_topic{relfilesuffix}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_topic.adoc#user-content-ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
 
