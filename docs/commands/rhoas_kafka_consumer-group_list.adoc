@@ -30,6 +30,7 @@ $ rhoas kafka consumer-group list -o json
 
       `--limit` _int32_::       The maximum number of consumer groups to be returned (default 1000)
   `-o`, `--output` _string_::   Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"
+      `--search` _string_::     Text search to filter consumer groups by ID
       `--topic` _string_::      Fetch the consumer groups for a specific Kafka topic
 
 [discrete]

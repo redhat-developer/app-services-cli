@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -34,6 +35,7 @@ type Options struct {
 	kafkaID string
 	limit   int32
 	topic   string
+	search  string
 }
 
 type consumerGroupRow struct {
@@ -81,6 +83,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 1000, opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.limit"))
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.output.description"))
 	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.topic.description"))
+	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.search"))
 
 	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
@@ -91,6 +94,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
+// nolint:funlen
 func runList(opts *Options) (err error) {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
@@ -114,6 +118,10 @@ func runList(opts *Options) (err error) {
 	if opts.topic != "" {
 		req = req.Topic(opts.topic)
 	}
+	if opts.search != "" {
+		req = req.GroupIdFilter(opts.search)
+	}
+
 	consumerGroupData, httpRes, err := req.Execute()
 	if err != nil {
 		if httpRes == nil {

@@ -21,6 +21,10 @@ $ rhoas kafka consumer-group list -o json
 description = 'Description for the --limit flag'
 one = 'The maximum number of consumer groups to be returned'
 
+[kafka.consumerGroup.list.flag.search]
+description = 'Description for the --search flag'
+one = 'Text search to filter consumer groups by ID'
+
 [kafka.consumerGroup.list.log.info.noConsumerGroups]
 one = 'Kafka instance "{{.InstanceName}}" has no consumer groups'
 
