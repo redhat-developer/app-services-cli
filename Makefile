@@ -8,11 +8,18 @@ REPOSITORY_NAME ?= "app-services-cli"
 TERMS_REVIEW_EVENT_CODE ?= "onlineService"
 TERMS_REVIEW_SITE_CODE ?= "ocm"
 
+# see pkg/cmdutil/constants.go
+DEFAULT_PAGE_NUMBER ?= 1
+DEFAULT_PAGE_SIZE ?= 10
+
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.Version=$(RHOAS_VERSION) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.RepositoryOwner=$(REPOSITORY_OWNER) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.RepositoryName=$(REPOSITORY_NAME) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.TermsReviewEventCode=$(TERMS_REVIEW_EVENT_CODE) $(GO_LDFLAGS)
-GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.TermsReviewSiteCode=$(TERMS_REVIEW_SITE_CODE) $(GO_LDFLAGS)
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/pkg/cmdutil.DefaultPageSize=$(TERMS_REVIEW_SITE_CODE) $(GO_LDFLAGS)
+
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/pkg/cmdutil.DefaultPageSize=$(DEFAULT_PAGE_SIZE) $(GO_LDFLAGS)
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/pkg/cmdutil.DefaultPageNumber=$(DEFAULT_PAGE_NUMBER) $(GO_LDFLAGS)
 
 BUILDFLAGS :=
 

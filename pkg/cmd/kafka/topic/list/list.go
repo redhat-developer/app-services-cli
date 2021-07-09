@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
@@ -104,8 +105,8 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
-	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
-	cmd.Flags().Int32VarP(&opts.size, "size", "", 10, opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", int32(cmdutil.DefaultPageNumber), opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
+	cmd.Flags().Int32VarP(&opts.size, "size", "", int32(cmdutil.DefaultPageSize), opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
