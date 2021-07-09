@@ -34,16 +34,16 @@ $ rhoas kafka create -o yaml
 [discrete]
 == Options
 
-  -o, --output:: string     Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml" (default "json")
-      --provider:: string   Cloud Provider ID
-      --region:: string     Cloud Provider Region ID
-      --use::               Set the new Kafka instance to the current instance (default true)
+  `-o`, `--output` _string_::   Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml" (default "json")
+      `--provider` _string_::   Cloud Provider ID
+      `--region` _string_::     Cloud Provider Region ID
+      `--use`::                 Set the new Kafka instance to the current instance (default true)
 
 [discrete]
 == Options inherited from parent commands
 
-  -d, --debug::   Enable debug mode
-  -h, --help::    Show help for a command
+  `-d`, `--debug`::   Enable debug mode
+  `-h`, `--help`::    Show help for a command
 
 [discrete]
 == See also

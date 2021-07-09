@@ -28,8 +28,8 @@ $ rhoas cluster bind
 [discrete]
 == Options inherited from parent commands
 
-  -d, --debug::   Enable debug mode
-  -h, --help::    Show help for a command
+  `-d`, `--debug`::   Enable debug mode
+  `-h`, `--help`::    Show help for a command
 
 [discrete]
 == See also

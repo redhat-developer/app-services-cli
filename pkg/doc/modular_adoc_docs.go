@@ -77,15 +77,16 @@ func FlagUsages(f *pflag.FlagSet) string {
 
 		line := ""
 		if flag.Shorthand != "" && flag.ShorthandDeprecated == "" {
-			line = fmt.Sprintf("  -%s, --%s::", flag.Shorthand, flag.Name)
+			line = fmt.Sprintf("  `-%s`, `--%s`", flag.Shorthand, flag.Name)
 		} else {
-			line = fmt.Sprintf("      --%s::", flag.Name)
+			line = fmt.Sprintf("      `--%s`", flag.Name)
 		}
 
 		varname, usage := pflag.UnquoteUsage(flag)
 		if varname != "" {
-			line += " " + varname
+			line += fmt.Sprintf(" _%s_", varname)
 		}
+		line += "::"
 		if flag.NoOptDefVal != "" {
 			switch flag.Value.Type() {
 			case "string":
