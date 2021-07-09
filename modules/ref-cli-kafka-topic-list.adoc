@@ -29,14 +29,14 @@ $ rhoas kafka topic list -o json
 [discrete]
 == Options
 
-  -o, --output:: string   Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"
-      --search:: string   Text search to filter the Kafka topics by name
+  `-o`, `--output` _string_::   Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"
+      `--search` _string_::     Text search to filter the Kafka topics by name
 
 [discrete]
 == Options inherited from parent commands
 
-  -d, --debug::   Enable debug mode
-  -h, --help::    Show help for a command
+  `-d`, `--debug`::   Enable debug mode
+  `-h`, `--help`::    Show help for a command
 
 [discrete]
 == See also
