@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas-cluster-status_{context}]]rhoas cluster status
+[id='ref-rhoas-cluster-status_{context}']
+= rhoas cluster status
 
 [role="_abstract"]
 View status of the current Kubernetes or OpenShift cluster
@@ -43,7 +44,7 @@ $ rhoas cluster status
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_cluster.adoc#user-content-ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
+* link:rhoas_cluster.adoc#rhoas-cluster[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster

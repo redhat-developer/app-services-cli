@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas-config-dev-preview_{context}]]rhoas config dev-preview
+[id='ref-rhoas-config-dev-preview_{context}']
+= rhoas config dev-preview
 
 [role="_abstract"]
 Sets development preview features in config
@@ -35,7 +36,7 @@ $ rhoas config dev-preview true
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_config.adoc#user-content-ref-rhoas-config_{context}[rhoas config]	 - Change specific configuration for the options
+* link:rhoas_config.adoc#rhoas-config[rhoas config]	 - Change specific configuration for the options
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-config_{context}[rhoas config]	 - Change specific configuration for the options

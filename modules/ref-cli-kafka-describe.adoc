@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas-kafka-describe_{context}]]rhoas kafka describe
+[id='ref-rhoas-kafka-describe_{context}']
+= rhoas kafka describe
 
 [role="_abstract"]
 View configuration details of an Apache Kafka instance
@@ -52,7 +53,7 @@ $ rhoas kafka describe -o yaml
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#user-content-ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
