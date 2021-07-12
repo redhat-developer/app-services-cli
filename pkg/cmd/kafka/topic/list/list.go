@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
@@ -35,6 +37,8 @@ type Options struct {
 	kafkaID string
 	output  string
 	search  string
+	page    int32
+	size    int32
 }
 
 type topicRow struct {
@@ -67,8 +71,16 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
+			if opts.page < 1 {
+				return errors.New(opts.localizer.MustLocalize("kafka.topic.list.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
+			}
+
+			if opts.size < 1 {
+				return errors.New(opts.localizer.MustLocalize("kafka.topic.list.validation.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
+			}
+
 			if opts.search != "" {
-				validator := &topicutil.Validator{
+				validator := topicutil.Validator{
 					Localizer: opts.localizer,
 				}
 				if err := validator.ValidateSearchInput(opts.search); err != nil {
@@ -93,6 +105,8 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", int32(cmdutil.DefaultPageNumber), opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
+	cmd.Flags().Int32VarP(&opts.size, "size", "", int32(cmdutil.DefaultPageSize), opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -122,6 +136,10 @@ func runCmd(opts *Options) error {
 		a = a.Filter(opts.search)
 	}
 
+	a = a.Size(opts.size)
+
+	a = a.Page(opts.page)
+
 	topicData, httpRes, err := a.Execute()
 	if err != nil {
 		if httpRes == nil {
@@ -131,18 +149,20 @@ func runCmd(opts *Options) error {
 		operationTemplatePair := localize.NewEntry("Operation", "list")
 
 		switch httpRes.StatusCode {
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.unauthorized", operationTemplatePair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.forbidden", operationTemplatePair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
+
+	defer httpRes.Body.Close()
 
 	if topicData.GetTotal() == 0 && opts.output == "" {
 		logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
