@@ -31,27 +31,34 @@ import (
 
 var linkTemplate = template.Must(template.New("linkTemplate").Parse(`
 ifdef::env-github,env-browser[]
-* link:{{.Link}}.adoc#user-content-{{.Id}}[{{.Name}}]	 - {{.Short}}
+* link:{{.Link}}.adoc#{{.GitHubId}}[{{.Name}}]	 - {{.Short}}
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#{{.Id}}[{{.Name}}]	 - {{.Short}}
+* link:{path}#{{.PantheonId}}[{{.Name}}]	 - {{.Short}}
 endif::[]
 `))
 
-func nameToId(name string) string {
+func nameToPantheonId(name string) string {
 	return fmt.Sprintf("ref-%s_{context}", strings.ReplaceAll(name, " ", "-"))
 }
 
+func nameToGitHubId(name string) string {
+	return strings.ReplaceAll(name, " ", "-")
+}
+
 func writeXref(buf *bytes.Buffer, name string, short string) error {
-	id := nameToId(name)
+	pantheonId := nameToPantheonId(name)
+	gitHubId := nameToGitHubId(name)
 	link := strings.ReplaceAll(name, " ", "_")
 	err := linkTemplate.Execute(buf, struct {
-		Id    string
-		Name  string
-		Link  string
-		Short string
+		PantheonId string
+		GitHubId   string
+		Name       string
+		Link       string
+		Short      string
 	}{
-		id,
+		pantheonId,
+		gitHubId,
 		name,
 		link,
 		short,
@@ -202,7 +209,8 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	buf := new(bytes.Buffer)
 	name := cmd.CommandPath()
 	buf.WriteString("ifdef::env-github,env-browser[:context: cmd]\n")
-	buf.WriteString(fmt.Sprintf("= [[%s]]%s\n\n", nameToId(name), name))
+	buf.WriteString(fmt.Sprintf("[id='%s']\n", nameToPantheonId(name)))
+	buf.WriteString(fmt.Sprintf("= %s\n\n", name))
 	buf.WriteString("[role=\"_abstract\"]\n")
 	buf.WriteString(cmd.Short + "\n\n")
 	if len(cmd.Long) > 0 {
