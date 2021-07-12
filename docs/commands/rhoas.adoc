@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas_{context}]]rhoas
+[id='ref-rhoas_{context}']
+= rhoas
 
 [role="_abstract"]
 RHOAS CLI
@@ -38,63 +39,63 @@ $ rhoas cluster connect
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_cluster.adoc#user-content-ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
+* link:rhoas_cluster.adoc#rhoas-cluster[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_completion.adoc#user-content-ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_config.adoc#user-content-ref-rhoas-config_{context}[rhoas config]	 - Change specific configuration for the options
+* link:rhoas_config.adoc#rhoas-config[rhoas config]	 - Change specific configuration for the options
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-config_{context}[rhoas config]	 - Change specific configuration for the options
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#user-content-ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_login.adoc#user-content-ref-rhoas-login_{context}[rhoas login]	 - Log in to RHOAS
+* link:rhoas_login.adoc#rhoas-login[rhoas login]	 - Log in to RHOAS
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-login_{context}[rhoas login]	 - Log in to RHOAS
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_logout.adoc#user-content-ref-rhoas-logout_{context}[rhoas logout]	 - Log out from RHOAS
+* link:rhoas_logout.adoc#rhoas-logout[rhoas logout]	 - Log out from RHOAS
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-logout_{context}[rhoas logout]	 - Log out from RHOAS
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-account.adoc#user-content-ref-rhoas-service-account_{context}[rhoas service-account]	 - Create, list, describe, delete and update service accounts
+* link:rhoas_service-account.adoc#rhoas-service-account[rhoas service-account]	 - Create, list, describe, delete and update service accounts
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-service-account_{context}[rhoas service-account]	 - Create, list, describe, delete and update service accounts
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_status.adoc#user-content-ref-rhoas-status_{context}[rhoas status]	 - View the status of all currently used services
+* link:rhoas_status.adoc#rhoas-status[rhoas status]	 - View the status of all currently used services
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-status_{context}[rhoas status]	 - View the status of all currently used services
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_whoami.adoc#user-content-ref-rhoas-whoami_{context}[rhoas whoami]	 - Print current username
+* link:rhoas_whoami.adoc#rhoas-whoami[rhoas whoami]	 - Print current username
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-whoami_{context}[rhoas whoami]	 - Print current username

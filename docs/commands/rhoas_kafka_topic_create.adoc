@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas-kafka-topic-create_{context}]]rhoas kafka topic create
+[id='ref-rhoas-kafka-topic-create_{context}']
+= rhoas kafka topic create
 
 [role="_abstract"]
 Create a topic
@@ -46,7 +47,7 @@ $ rhoas kafka topic create topic-1
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic.adoc#user-content-ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list and delete topics
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics

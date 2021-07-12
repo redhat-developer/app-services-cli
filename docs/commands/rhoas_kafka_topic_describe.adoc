@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas-kafka-topic-describe_{context}]]rhoas kafka topic describe
+[id='ref-rhoas-kafka-topic-describe_{context}']
+= rhoas kafka topic describe
 
 [role="_abstract"]
 Describe a topic
@@ -39,7 +40,7 @@ $ rhoas kafka topic describe topic-1
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic.adoc#user-content-ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list and delete topics
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics

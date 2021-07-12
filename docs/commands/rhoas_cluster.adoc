@@ -1,5 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-= [[ref-rhoas-cluster_{context}]]rhoas cluster
+[id='ref-rhoas-cluster_{context}']
+= rhoas cluster
 
 [role="_abstract"]
 View and perform operations on your Kubernetes or OpenShift cluster
@@ -36,28 +37,28 @@ $ rhoas cluster bind
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas.adoc#user-content-ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_cluster_bind.adoc#user-content-ref-rhoas-cluster-bind_{context}[rhoas cluster bind]	 - Connect your RHOAS services to Kubernetes or OpenShift applications
+* link:rhoas_cluster_bind.adoc#rhoas-cluster-bind[rhoas cluster bind]	 - Connect your RHOAS services to Kubernetes or OpenShift applications
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-cluster-bind_{context}[rhoas cluster bind]	 - Connect your RHOAS services to Kubernetes or OpenShift applications
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_cluster_connect.adoc#user-content-ref-rhoas-cluster-connect_{context}[rhoas cluster connect]	 - Connect your services to Kubernetes or OpenShift
+* link:rhoas_cluster_connect.adoc#rhoas-cluster-connect[rhoas cluster connect]	 - Connect your services to Kubernetes or OpenShift
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-cluster-connect_{context}[rhoas cluster connect]	 - Connect your services to Kubernetes or OpenShift
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_cluster_status.adoc#user-content-ref-rhoas-cluster-status_{context}[rhoas cluster status]	 - View status of the current Kubernetes or OpenShift cluster
+* link:rhoas_cluster_status.adoc#rhoas-cluster-status[rhoas cluster status]	 - View status of the current Kubernetes or OpenShift cluster
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-cluster-status_{context}[rhoas cluster status]	 - View status of the current Kubernetes or OpenShift cluster
