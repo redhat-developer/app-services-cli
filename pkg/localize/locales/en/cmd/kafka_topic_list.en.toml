@@ -33,12 +33,6 @@ one = 'Current page number for list of topics.'
 description = 'Description for the --size flag'
 one = 'Maximum number of items to be returned per page.'
 
-[kafka.topic.list.validation.page.error.invalid.minValue]
-one = 'invalid page number {{.Page}}, minimum value is -1'
-
-[kafka.topic.list.validation.size.error.invalid.minValue]
-one = 'invalid value for size {{.Size}}, minimum value is -1'
-
 [kafka.topic.list.log.debug.filteringTopicList]
 description = 'Debug message when filtering the list of Kafka topic'
 one = 'Filtering Kafka topics with the query "{{.Search}}"'

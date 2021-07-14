@@ -27,3 +27,9 @@ one = 'No Kafka instances were found.'
 [kafka.topic.common.error.topicNotFoundError]
 one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'
 
+
+[kafka.common.validation.page.error.invalid.minValue]
+one = 'invalid page number {{.Page}}, minimum value is -1'
+
+[kafka.common.validation.size.error.invalid.minValue]
+one = 'invalid value for size {{.Size}}, minimum value is -1'

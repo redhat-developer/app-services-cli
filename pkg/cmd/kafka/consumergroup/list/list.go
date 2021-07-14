@@ -33,9 +33,10 @@ type Options struct {
 
 	output  string
 	kafkaID string
-	limit   int32
 	topic   string
 	search  string
+	page    int32
+	size    int32
 }
 
 type consumerGroupRow struct {
@@ -65,6 +66,14 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
 			}
 
+			if opts.page < 1 {
+				return errors.New(opts.localizer.MustLocalize("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
+			}
+
+			if opts.size < 1 {
+				return errors.New(opts.localizer.MustLocalize("kafka.common.validation.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
@@ -80,10 +89,11 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 1000, opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.limit"))
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.output.description"))
 	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.topic.description"))
 	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.search"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", int32(cmdutil.DefaultPageNumber), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.page"))
+	cmd.Flags().Int32VarP(&opts.size, "size", "", int32(cmdutil.DefaultPageSize), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.size"))
 
 	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
@@ -114,13 +124,17 @@ func runList(opts *Options) (err error) {
 	}
 
 	req := api.GetConsumerGroups(ctx)
-	req = req.Limit(opts.limit)
+
 	if opts.topic != "" {
 		req = req.Topic(opts.topic)
 	}
 	if opts.search != "" {
 		req = req.GroupIdFilter(opts.search)
 	}
+
+	req = req.Size(opts.size)
+
+	req = req.Page(opts.page)
 
 	consumerGroupData, httpRes, err := req.Execute()
 	if err != nil {
