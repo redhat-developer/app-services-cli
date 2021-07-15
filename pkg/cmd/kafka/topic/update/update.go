@@ -172,6 +172,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
 	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
+	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -202,6 +203,14 @@ func runCmd(opts *Options) error {
 				return err
 			}
 		}
+
+		if opts.partitionsStr != "" {
+			partitionCount, err = topicutil.ConvertPartitionsToInt(opts.partitionsStr)
+			if err != nil {
+				return err
+			}
+		}
+
 	}
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
@@ -254,6 +263,11 @@ func runCmd(opts *Options) error {
 	if opts.cleanupPolicy != "" && strings.Compare(opts.cleanupPolicy, topicutil.GetConfigValue(topic.GetConfig(), topicutil.CleanupPolicy)) != 0 {
 		needsUpdate = true
 		configEntryMap[topicutil.CleanupPolicy] = &opts.cleanupPolicy
+	}
+
+	if opts.partitionsStr != "" {
+		needsUpdate = true
+		topicSettings.SetNumPartitions(partitionCount)
 	}
 
 	if !needsUpdate {
@@ -343,6 +357,18 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+
+	partitionsPrompt := &survey.Input{
+		Message: opts.localizer.MustLocalize("kafka.topic.update.input.partitions.message"),
+		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.partitions.help"),
+	}
+
+	validator.CurPartitions = len(*topic.Partitions)
+
+	err = survey.AskOne(partitionsPrompt, &opts.partitionsStr, survey.WithValidator(validator.ValidatePartitionsN))
+	if err != nil {
+		return err
+	}
 
 	retentionMsPrompt := &survey.Input{
 		Message: opts.localizer.MustLocalize("kafka.topic.update.input.retentionMs.message"),

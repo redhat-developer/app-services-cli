@@ -50,3 +50,11 @@ one = 'Cleanup Policy [optional]:'
 [kafka.topic.update.input.cleanupPolicy.help]
 description = 'Help for the Cleanup policy input'
 one = 'Determines whether log messages are deleted, compacted, or both. Leave blank to skip updating this value.'
+
+[kafka.topic.update.input.partitions.message]
+description = 'Message for the Partitions input'
+one = 'Number of Partitions [optional]:'
+
+[kafka.topic.update.input.partitions.help]
+description = 'Help for the Partitions input'
+one = 'The number of partitions in the topic. Leave blank to skip updating this value.'

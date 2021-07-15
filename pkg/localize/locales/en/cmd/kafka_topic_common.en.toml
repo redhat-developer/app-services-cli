@@ -59,6 +59,9 @@ one = 'invalid topic name "{{.Name}}"; only letters (Aa-Zz), numbers, "_", "." a
 [kafka.topic.common.validation.partitions.error.invalid.minValue]
 one = 'invalid partition count {{.Partitions}}, minimum value is {{.Min}}'
 
+[kafka.topic.common.validation.partitions.error.invalid.lesserValue]
+one = 'Topic currently has {{.CurrPartitions}} partitions, which is higher than the requested {{.Partitions}}.'
+
 [kafka.topic.common.validation.partitions.error.invalid.maxValue]
 one = 'invalid partition count {{.Partitions}}, maximum value is {{.Max}}'
 

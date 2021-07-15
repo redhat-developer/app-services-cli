@@ -22,9 +22,10 @@ const (
 
 // Validator is a type for validating Kafka topic configuration values
 type Validator struct {
-	Localizer  localize.Localizer
-	InstanceID string
-	Connection factory.ConnectionFunc
+	Localizer     localize.Localizer
+	InstanceID    string
+	Connection    factory.ConnectionFunc
+	CurPartitions int
 }
 
 // ValidateName validates the name of the topic
@@ -72,6 +73,10 @@ func (v *Validator) ValidateSearchInput(val interface{}) error {
 func (v *Validator) ValidatePartitionsN(val interface{}) error {
 	partitionsStr := fmt.Sprintf("%v", val)
 
+	if partitionsStr == "" {
+		return nil
+	}
+
 	partitions, err := strconv.Atoi(partitionsStr)
 	if err != nil {
 		return commonerr.NewCastError(val, "int32")
@@ -79,6 +84,11 @@ func (v *Validator) ValidatePartitionsN(val interface{}) error {
 
 	if partitions < minPartitions {
 		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.partitions.error.invalid.minValue", localize.NewEntry("Partitions", partitions), localize.NewEntry("Min", minPartitions)))
+	}
+
+	if partitions < v.CurPartitions {
+		// return errors.New("partitions can only increase")
+		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.partitions.error.invalid.lesserValue", localize.NewEntry("CurrPartitions", v.CurPartitions), localize.NewEntry("Partitions", partitions)))
 	}
 
 	if partitions > maxPartitions {
