@@ -244,13 +244,6 @@ func TestValidatePartitionsN(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Should be invalid when null string is passed",
-			args: args{
-				partitions: "",
-			},
-			wantErr: true,
-		},
-		{
 			name: "Should be valid when equal to max allowed value(100)",
 			args: args{
 				partitions: "100",

@@ -87,7 +87,6 @@ func (v *Validator) ValidatePartitionsN(val interface{}) error {
 	}
 
 	if partitions < v.CurPartitions {
-		// return errors.New("partitions can only increase")
 		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.partitions.error.invalid.lesserValue", localize.NewEntry("CurrPartitions", v.CurPartitions), localize.NewEntry("Partitions", partitions)))
 	}
 
