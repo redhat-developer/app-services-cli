@@ -72,11 +72,11 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.page < 1 {
-				return errors.New(opts.localizer.MustLocalize("kafka.topic.list.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
 			}
 
 			if opts.size < 1 {
-				return errors.New(opts.localizer.MustLocalize("kafka.topic.list.validation.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
+				return errors.New(opts.localizer.MustLocalize("kafka.common.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
 			}
 
 			if opts.search != "" {
