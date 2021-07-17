@@ -90,6 +90,9 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 	req := api.GetConsumerGroups(context.Background())
+	if toComplete != "" {
+		req = req.GroupIdFilter(toComplete)
+	}
 
 	cgRes, _, err := req.Execute()
 	if err != nil {
