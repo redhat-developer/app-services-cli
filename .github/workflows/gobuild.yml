@@ -3,14 +3,8 @@ name: Go Build
 on:
   push:
     branches: [main]
-    paths:
-      - '**.go'
-      - 'go.mod'
   pull_request:
     branches: [main]
-    paths:
-      - '**.go'
-      - 'go.mod'
 
 jobs:
   build:
