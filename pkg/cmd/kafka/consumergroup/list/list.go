@@ -175,8 +175,8 @@ func runList(opts *Options) (err error) {
 		_ = dump.YAML(opts.IO.Out, data)
 	default:
 		logger.Info("")
-		topics := consumerGroupData.GetItems()
-		rows := mapConsumerGroupResultsToTableFormat(topics)
+		consumerGroups := consumerGroupData.GetItems()
+		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
 		dump.Table(opts.IO.Out, rows)
 
 		return nil
