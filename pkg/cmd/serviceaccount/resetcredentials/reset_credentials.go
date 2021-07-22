@@ -71,13 +71,15 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			}
 
-			validator := &validation.Validator{
-				Localizer: opts.localizer,
-			}
+			if !opts.interactive {
+				validator := &validation.Validator{
+					Localizer: opts.localizer,
+				}
 
-			validID := validator.ValidateUUID(opts.id)
-			if validID != nil {
-				return validID
+				validID := validator.ValidateUUID(opts.id)
+				if validID != nil {
+					return validID
+				}
 			}
 
 			return runResetCredentials(opts)
