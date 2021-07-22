@@ -67,8 +67,7 @@ changelog:
 nfpms:
   - file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     description: Command line tool for RHOAS
-    bindir: /usr
+    bindir: /usr/bin
     formats:
       - deb
       - rpm
-  
