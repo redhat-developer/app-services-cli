@@ -1,4 +1,36 @@
 
+<a name="v0.26.0"></a>
+## [v0.26.0](https://github.com/redhat-developer/app-services-cli/compare/v0.25.0...v0.26.0) (2021-07-22)
+
+### Bug Fixes
+
+* change default pagination flag ([#816](https://github.com/redhat-developer/app-services-cli/issues/816))
+* remove old workaround for migrating config file name ([#795](https://github.com/redhat-developer/app-services-cli/issues/795))
+* add owner to registry list ([#802](https://github.com/redhat-developer/app-services-cli/issues/802))
+* create folder for the initial config ([#806](https://github.com/redhat-developer/app-services-cli/issues/806))
+* remove URL from table view for serviceregistry list command ([#809](https://github.com/redhat-developer/app-services-cli/issues/809))
+* invalid location of shared service i18n files ([#808](https://github.com/redhat-developer/app-services-cli/issues/808))
+* update charmil & validatorOptions ([#814](https://github.com/redhat-developer/app-services-cli/issues/814))
+* cannot delete service registry by name ([#786](https://github.com/redhat-developer/app-services-cli/issues/786))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.6.0
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.6.2
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.7.0
+* **deps:** update all to v0.21.3
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.9.3
+* **deps:** update all
+* **kafka consumer-group:** use group id filter for dynamic completions ([#827](https://github.com/redhat-developer/app-services-cli/issues/827))
+* **service-account:** reset-credentials prompt ([#838](https://github.com/redhat-developer/app-services-cli/issues/838))
+
+### Features
+
+* enable auto completion for output flag in service-registry commands ([#805](https://github.com/redhat-developer/app-services-cli/issues/805))
+* config command ([#798](https://github.com/redhat-developer/app-services-cli/issues/798))
+* **consumer-group list:** add flags for pagination ([#821](https://github.com/redhat-developer/app-services-cli/issues/821))
+* **consumer-group list:** add search flag ([#813](https://github.com/redhat-developer/app-services-cli/issues/813))
+* **kafka topic:** partitions flag for update ([#823](https://github.com/redhat-developer/app-services-cli/issues/823))
+* **kafka topic list:** add flags for pagination ([#810](https://github.com/redhat-developer/app-services-cli/issues/810))
+
+
 <a name="v0.25.0"></a>
 ## [v0.25.0](https://github.com/redhat-developer/app-services-cli/compare/v0.24.4...v0.25.0) (2021-07-05)
 
