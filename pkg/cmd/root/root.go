@@ -7,11 +7,9 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
@@ -40,10 +38,11 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	var help bool
 
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
+	fs.Bool("version", false, f.Localizer.MustLocalize("root.cmd.flag.version.description"))
 
 	cmd.Version = version
 
-	cmd.SetVersionTemplate(f.Localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
+	// cmd.SetVersionTemplate(f.Localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	// Child commands

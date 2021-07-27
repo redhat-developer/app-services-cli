@@ -2,17 +2,12 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 
@@ -57,24 +52,16 @@ func main() {
 	}
 
 	err = rootCmd.Execute()
-	if debug.Enabled() {
-		build.CheckForUpdate(context.Background(), logger, localizer)
-	}
 	if err == nil {
+		if debug.Enabled() {
+			build.CheckForUpdate(context.Background(), logger, localizer)
+		}
 		return
 	}
 
-	if e, ok := kas.GetAPIError(err); ok {
-		logger.Error("Error:", e.GetReason())
-		if debug.Enabled() {
-			errJSON, _ := json.Marshal(e)
-			_ = dump.JSON(cmdFactory.IOStreams.ErrOut, errJSON)
-		}
-		os.Exit(1)
-	}
-
-	if err = cmdutil.CheckSurveyError(err); err != nil {
-		logger.Error("Error:", err)
+	if err != nil {
+		logger.Error(wrapErrorf(err, localizer))
+		build.CheckForUpdate(context.Background(), logger, localizer)
 		os.Exit(1)
 	}
 }
@@ -130,4 +117,8 @@ func initConfig(f *factory.Factory) error {
 		return err
 	}
 	return nil
+}
+
+func wrapErrorf(err error, localizer localize.Localizer) error {
+	return fmt.Errorf("Error: %w. %v", err, localizer.MustLocalize("common.log.error.verboseModeHint"))
 }
