@@ -30,6 +30,8 @@ jobs:
           # skip-pkg-cache: true
           # skip-build-cache: true
           args: --timeout 2m0s  
+      - name: Check documentation
+        run: make docs/check
       - name: Build
         run: make binary
       - name: Unit tests
