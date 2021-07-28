@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
-	"path/filepath"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"gopkg.in/yaml.v2"
@@ -86,8 +85,7 @@ func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry)
 
 // walk the file system and load each file into memory
 func (l *Goi18n) load() error {
-	localesRoot := filepath.Join(l.path, l.language.String())
-	return fs.WalkDir(l.files, localesRoot, func(path string, info fs.DirEntry, err error) error {
+	return fs.WalkDir(l.files, l.path, func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
