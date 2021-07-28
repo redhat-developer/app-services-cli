@@ -29,6 +29,7 @@ jobs:
           # skip-build-cache: true
           args: --timeout 3m0s  
       - name: Check documentation
+        if: matrix.os == 'ubuntu-latest'
         run: make docs/check
       - name: Build
         run: make binary
