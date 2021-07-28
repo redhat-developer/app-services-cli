@@ -10,10 +10,16 @@ import (
 
 	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+
+	registryinstance "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal"
+	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+
 	registrymgmt "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+
 	"golang.org/x/oauth2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
@@ -220,12 +226,52 @@ func (c *KeycloakConnection) API() *api.API {
 		return client, &kafkaInstance, nil
 	}
 
+	registryInstanceAPIFunc := func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.RegistryRest, error) {
+		api := registryAPIFunc()
+
+		instance, resp, err := api.GetRegistry(context.Background(), registryID).Execute()
+		defer resp.Body.Close()
+		if err != nil {
+			return nil, nil, fmt.Errorf("%w", err)
+		}
+
+		status := instance.GetStatus()
+		// nolint
+		switch status {
+		case "provisioning", "accepted":
+			err = fmt.Errorf(`Service Registry instance "%v" is not ready yet`, instance.GetName())
+			return nil, nil, err
+		case "failed":
+			err = fmt.Errorf(`Service Registry instance "%v" has failed`, instance.GetName())
+			return nil, nil, err
+		case "deprovision":
+			err = fmt.Errorf(`Service Registry instance "%v" is being deprovisioned`, instance.GetName())
+			return nil, nil, err
+		case "deleting":
+			err = fmt.Errorf(`Service Registry instance "%v" is being deleted`, instance.GetName())
+			return nil, nil, err
+		}
+
+		url := instance.GetRegistryUrl()
+		if url == "" {
+			err = fmt.Errorf(`URL is missing for Service Registry instance "%v"`, instance.GetName())
+
+			return nil, nil, err
+		}
+
+		// create the client
+		client := c.createServiceRegistryInstanceAPI(url)
+
+		return client, &instance, nil
+	}
+
 	return &api.API{
-		Kafka:               kafkaAPIFunc,
-		ServiceAccount:      serviceAccountAPIFunc,
-		KafkaAdmin:          kafkaAdminAPIFunc,
-		AccountMgmt:         amsAPIFunc,
-		ServiceRegistryMgmt: registryAPIFunc,
+		Kafka:                   kafkaAPIFunc,
+		ServiceAccount:          serviceAccountAPIFunc,
+		KafkaAdmin:              kafkaAdminAPIFunc,
+		ServiceRegistryInstance: registryInstanceAPIFunc,
+		AccountMgmt:             amsAPIFunc,
+		ServiceRegistryMgmt:     registryAPIFunc,
 	}
 }
 
@@ -278,6 +324,34 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainst
 
 	client := kafkainstance.NewAPIClient(&kafkainstance.Config{
 		BaseURL:    apiURL.String(),
+		Debug:      c.logger.DebugEnabled(),
+		HTTPClient: c.createOAuthTransport(c.MASToken.AccessToken),
+	})
+
+	return client
+}
+
+// Create a new RegistryInstance API client
+func (c *KeycloakConnection) createServiceRegistryInstanceAPI(registryUrl string) *registryinstanceclient.APIClient {
+	host, port, _ := net.SplitHostPort(registryUrl)
+
+	var baseURL string
+	if host == "localhost" {
+		var apiURL *url.URL = &url.URL{
+			Scheme: "http",
+			Host:   fmt.Sprintf("localhost:%v", port),
+		}
+		apiURL.Scheme = "http"
+		apiURL.Path = "/data/registry"
+		baseURL = apiURL.String()
+	} else {
+		baseURL = registryUrl + "/apis/registry/v2"
+	}
+
+	c.logger.Debugf("Making request to %v", baseURL)
+
+	client := registryinstance.NewAPIClient(&registryinstance.Config{
+		BaseURL:    baseURL,
 		Debug:      c.logger.DebugEnabled(),
 		HTTPClient: c.createOAuthTransport(c.MASToken.AccessToken),
 	})

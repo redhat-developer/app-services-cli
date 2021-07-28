@@ -93,7 +93,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-// nolint:funlen
 func runCreate(opts *Options) error {
 	logger, err := opts.Logger()
 	if err != nil {
