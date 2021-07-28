@@ -3,9 +3,11 @@ package registry
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/describe"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
 	"github.com/redhat-developer/app-services-cli/pkg/profile"
@@ -23,7 +25,6 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("registry.cmd.example"),
 		Args:    cobra.MinimumNArgs(1),
 	}
-
 	// add sub-commands
 	cmd.AddCommand(
 		create.NewCreateCommand(f),
@@ -31,6 +32,7 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		delete.NewDeleteCommand(f),
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
+		artifact.NewArtifactsCommand(f),
 	)
 
 	return cmd
