@@ -168,7 +168,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 		}
 
 		if consumer.GetMemberId() == "" {
-			row.MemberID = "unconsumed"
+			row.MemberID = color.Italic("unconsumed")
 		}
 
 		rows = append(rows, row)

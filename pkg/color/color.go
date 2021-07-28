@@ -37,3 +37,9 @@ func Bold(s string) string {
 	}
 	return fmt.Sprintf("\033[1m%v\033[0m", s)
 }
+
+// Bold makes a string italicized
+func Italic(s string) string {
+	c := color.New(color.Italic)
+	return c.Sprintf(s)
+}
