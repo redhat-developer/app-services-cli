@@ -11,7 +11,7 @@ import (
 type API struct {
 	Kafka          func() kafkamgmtclient.DefaultApi
 	ServiceAccount func() kafkamgmtclient.SecurityApi
-	KafkaAdmin     func(kafkaID string) (kafkainstanceclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error)
+	KafkaAdmin     func(kafkaID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	AccountMgmt    func() amsclient.DefaultApi
 
 	ServiceRegistryMgmt func() srsmgmtclient.RegistriesApi

@@ -179,7 +179,7 @@ func (c *KeycloakConnection) API() *api.API {
 		return srsAPIClient.RegistriesApi
 	}
 
-	kafkaAdminAPIFunc := func(kafkaID string) (kafkainstanceclient.DefaultApi, *kafkamgmtclient.KafkaRequest, error) {
+	kafkaAdminAPIFunc := func(kafkaID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error) {
 		api := kafkaAPIFunc()
 
 		kafkaInstance, resp, err := api.GetKafkaById(context.Background(), kafkaID).Execute()
@@ -215,9 +215,9 @@ func (c *KeycloakConnection) API() *api.API {
 		}
 
 		// create the client
-		apiClient := c.createKafkaAdminAPI(bootstrapURL)
+		client := c.createKafkaAdminAPI(bootstrapURL)
 
-		return *apiClient, &kafkaInstance, nil
+		return client, &kafkaInstance, nil
 	}
 
 	return &api.API{
@@ -254,7 +254,7 @@ func (c *KeycloakConnection) createServiceRegistryAPIClient() *registrymgmtclien
 }
 
 // Create a new KafkaAdmin API client
-func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainstanceclient.DefaultApi {
+func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainstanceclient.APIClient {
 	host, port, _ := net.SplitHostPort(bootstrapURL)
 
 	var apiURL *url.URL
@@ -282,7 +282,7 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainst
 		HTTPClient: c.createOAuthTransport(c.MASToken.AccessToken),
 	})
 
-	return &client.DefaultApi
+	return client
 }
 
 func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {

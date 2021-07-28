@@ -123,7 +123,7 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	req := api.GetConsumerGroups(ctx)
+	req := api.GroupsApi.GetConsumerGroups(ctx)
 
 	if opts.topic != "" {
 		req = req.Topic(opts.topic)
