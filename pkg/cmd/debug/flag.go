@@ -4,7 +4,7 @@ package debug
 
 import "github.com/spf13/pflag"
 
-// AddFlag adds the veerbose flag to the given set of command line flags.
+// AddFlag adds the verbose flag to the given set of command line flags.
 func AddFlag(flags *pflag.FlagSet) {
 	flags.BoolVarP(
 		&enabled,
