@@ -20,19 +20,21 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: golangci-lint
-        if: matrix.os == 'ubuntu-latest'
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.41.1
-          skip-go-installation: true
-          # skip-pkg-cache: true
-          # skip-build-cache: true
-          args: --timeout 3m0s  
-      - name: Check documentation
-        if: matrix.os == 'ubuntu-latest'
-        run: make docs/check
-      - name: Build
-        run: make binary
-      - name: Unit tests
-        run: make test/unit
+      - name: run rhoas
+        run: go run ./cmd/rhoas whoami
+      # - name: golangci-lint
+      #   if: matrix.os == 'ubuntu-latest'
+      #   uses: golangci/golangci-lint-action@v2
+      #   with:
+      #     version: v1.41.1
+      #     skip-go-installation: true
+      #     # skip-pkg-cache: true
+      #     # skip-build-cache: true
+      #     args: --timeout 3m0s  
+      # - name: Check documentation
+      #   if: matrix.os == 'ubuntu-latest'
+      #   run: make docs/check
+      # - name: Build
+      #   run: make binary
+      # - name: Unit tests
+      #   run: make test/unit

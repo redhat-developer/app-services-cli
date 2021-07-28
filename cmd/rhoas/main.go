@@ -33,6 +33,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Println(localizer.MustLocalize("root.cmd.use"))
+	os.Exit(0)
+
 	buildVersion := build.Version
 	cmdFactory := factory.New(build.Version, localizer)
 	logger, err := cmdFactory.Logger()
