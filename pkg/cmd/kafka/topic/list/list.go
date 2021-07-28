@@ -129,7 +129,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	a := api.GetTopics(context.Background())
+	a := api.TopicsApi.GetTopics(context.Background())
 
 	if opts.search != "" {
 		logger.Debug(opts.localizer.MustLocalize("kafka.topic.list.log.debug.filteringTopicList", localize.NewEntry("Search", opts.search)))

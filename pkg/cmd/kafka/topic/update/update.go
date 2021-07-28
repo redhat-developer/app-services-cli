@@ -230,7 +230,7 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	topic, httpRes, err := api.GetTopic(context.Background(), opts.topicName).Execute()
+	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).Execute()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -246,7 +246,7 @@ func runCmd(opts *Options) error {
 	// map to store the config entries which will be updated
 	configEntryMap := map[string]*string{}
 
-	updateTopicReq := api.UpdateTopic(context.Background(), opts.topicName)
+	updateTopicReq := api.TopicsApi.UpdateTopic(context.Background(), opts.topicName)
 
 	topicSettings := &kafkainstanceclient.UpdateTopicInput{}
 
@@ -333,7 +333,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	// check if topic exists
-	topic, httpRes, err := api.GetTopic(context.Background(), opts.topicName).
+	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).
 		Execute()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)

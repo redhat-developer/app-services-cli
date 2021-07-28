@@ -102,7 +102,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	_, httpRes, err := api.GetTopic(context.Background(), opts.topicName).
+	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).
 		Execute()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
@@ -131,7 +131,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	httpRes, err = api.DeleteTopic(context.Background(), opts.topicName).
+	httpRes, err = api.TopicsApi.DeleteTopic(context.Background(), opts.topicName).
 		Execute()
 	if err != nil {
 		if httpRes == nil {

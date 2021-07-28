@@ -48,7 +48,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 	if err != nil {
 		return validNames, directive
 	}
-	req := api.GetTopics(context.Background())
+	req := api.TopicsApi.GetTopics(context.Background())
 	if toComplete != "" {
 		req = req.Filter(toComplete)
 	}
@@ -89,7 +89,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 	if err != nil {
 		return validIDs, directive
 	}
-	req := api.GetConsumerGroups(context.Background())
+	req := api.GroupsApi.GetConsumerGroups(context.Background())
 	if toComplete != "" {
 		req = req.GroupIdFilter(toComplete)
 	}

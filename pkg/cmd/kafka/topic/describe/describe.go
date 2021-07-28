@@ -105,7 +105,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// fetch the topic
-	topicResponse, httpRes, err := api.
+	topicResponse, httpRes, err := api.TopicsApi.
 		GetTopic(context.Background(), opts.topicName).
 		Execute()
 	if err != nil {

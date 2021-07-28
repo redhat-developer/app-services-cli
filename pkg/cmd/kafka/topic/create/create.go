@@ -168,7 +168,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	createTopicReq := api.CreateTopic(ctx)
+	createTopicReq := api.TopicsApi.CreateTopic(ctx)
 
 	topicInput := kafkainstanceclient.NewTopicInput{
 		Name: opts.topicName,
