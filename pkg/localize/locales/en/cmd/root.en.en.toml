@@ -24,4 +24,7 @@ $ rhoas cluster connect
 
 [root.cmd.flag.help.description]
 one = 'Show help for a command'
+
+[root.cmd.flag.version.description]
+one = 'Show rhoas version'
  
