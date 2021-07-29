@@ -3,6 +3,7 @@ package login
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -236,9 +237,7 @@ func (a *AuthorizationCodeGrant) openBrowser(authCodeURL string, redirectURL *ur
 // starts the local HTTP webserver to handle redirect from the Auth server
 func (a *AuthorizationCodeGrant) startServer(ctx context.Context, server *http.Server) {
 	go func() {
-		if err := server.ListenAndServe(); err == nil {
-			a.Logger.Error(a.Localizer.MustLocalize("login.log.error.unableToStartServer", localize.NewEntry("Error", err)))
-		}
+		log.Fatal(server.ListenAndServe())
 	}()
 	<-ctx.Done()
 }
