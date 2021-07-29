@@ -20,7 +20,7 @@ rhoas kafka consumer-group describe [flags]
 
 ....
 # describe a consumer group
-$ rhoas kafka consumer-group describe consumer_group_1 -o json
+$ rhoas kafka consumer-group describe --id consumer_group_1 -o json
 
 ....
 

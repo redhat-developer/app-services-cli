@@ -20,7 +20,7 @@ rhoas kafka consumer-group delete [flags]
 
 ....
 # delete a consumer group
-$ rhoas kafka consumer-group delete consumer_group_1
+$ rhoas kafka consumer-group delete --id consumer_group_1
 
 ....
 
