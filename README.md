@@ -1,6 +1,9 @@
 # RHOAS CLI
+<p align="center">
+  <img alt="Logo" src="https://user-images.githubusercontent.com/11743717/127519981-97c76ae4-f17b-4ac8-8b4d-365bfa4a6374.png">
+</p>
 
-Repository for the RHOAS CLI.
+`rhoas` is a command-line client for managing all of your managed services on Kubernetes.
 
 ## Guides
 
