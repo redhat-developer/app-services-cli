@@ -3,7 +3,7 @@
   <img alt="Logo" src="https://user-images.githubusercontent.com/11743717/127519981-97c76ae4-f17b-4ac8-8b4d-365bfa4a6374.png">
 </p>
 
-`rhoas` is a command-line client for managing all of your managed services on Kubernetes.
+`rhoas` is a command-line client for managing all of your application services on Kubernetes.
 
 ## Guides
 
