@@ -15,7 +15,7 @@ one = 'Fetch the consumer groups for a specific Kafka topic'
 [kafka.consumerGroup.describe.cmd.example]
 one = '''
 # describe a consumer group
-$ rhoas kafka consumer-group describe consumer_group_1 -o json
+$ rhoas kafka consumer-group describe --id consumer_group_1 -o json
 '''
 
 [kafka.consumerGroup.describe.output.id]
