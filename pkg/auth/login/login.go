@@ -14,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/static"
 	"golang.org/x/oauth2"
 )
 
@@ -105,6 +106,8 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 		http.Redirect(w, r, authCodeURL, http.StatusFound)
 	})
 
+	sm.Handle("/static/", createStaticHTTPHandler())
+
 	authURL, err := url.Parse(cfg.AuthURL)
 	if err != nil {
 		return err
@@ -189,6 +192,8 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 		http.Redirect(w, r, authCodeURL, http.StatusFound)
 	})
 
+	sm.Handle("/static/", createStaticHTTPHandler())
+
 	// HTTP handler for the redirect page
 	sm.Handle("/"+redirectURL.Path, &masRedirectPageHandler{
 		CancelContext: cancel,
@@ -269,4 +274,9 @@ func (a *AuthorizationCodeGrant) printAuthURLFallback(authCodeURL string, redire
 	a.PrintURL = true
 	a.Logger.Debug("Error opening browser:", err, "\nPrinting Auth URL to console instead")
 	a.openBrowser(authCodeURL, redirectURL)
+}
+
+func createStaticHTTPHandler() http.Handler {
+	staticFs := http.FileServer(http.FS(static.ImagesFS()))
+	return http.StripPrefix("/static", staticFs)
 }
