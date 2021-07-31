@@ -31,7 +31,7 @@ $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
 [discrete]
 == Options
 
-      `--id` _string_::   Unique ID of the Kafka instance you want to set as the current instance.
+      `--id` _string_::   Unique ID of the Kafka instance you want to set as the current instance
 
 [discrete]
 == Options inherited from parent commands

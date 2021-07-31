@@ -33,11 +33,11 @@ $ rhoas login --token <your-token>
 
 [login.flag.apiGateway]
 description = 'Description for --api-gateway flag'
-one = 'URL of the API gateway.'
+one = 'URL of the API gateway'
 
 [login.flag.insecure]
 description = 'Description for --insecure flag'
-one = 'Enables insecure communication with the server. This disables verification of TLS certificates and host names.'
+one = 'Enables insecure communication with the server by disabling TLS certificate and host name verification'
 
 [login.flag.clientId]
 description = '--client-id flag description'
@@ -45,22 +45,22 @@ one = 'OpenID client identifier'
 
 [login.flag.authUrl]
 description = 'Description for the --auth-url flag'
-one = "The URL of the SSO Authentication server."
+one = "The URL of the SSO Authentication server"
 
 [login.flag.masAuthUrl]
 description = 'Description for the --auth-url flag'
-one = "The URL of the identity.api.openshift.com Authentication server."
+one = "The URL of the identity.api.openshift.com Authentication server"
 
 [login.flag.token]
-one = "Allows you to log in using an offline token, which can be obtained at {{.OfflineTokenURL}}."
+one = "Allows you to log in using an offline token, which can be obtained at {{.OfflineTokenURL}}"
 
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'
-one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser. This is useful if you need to log in with different credentials than the credentials you used in your default web browser."
+one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser which is useful if you need to log in with different credentials than the credentials you used in your default web browser"
 
 [login.flag.scope]
 description = 'Description for the --scope flag'
-one = 'Override the default OpenID scope. To specify multiple scopes, use a separate --scope for each scope.'
+one = 'Override the default OpenID scope, if you want to specify multiple scopes, use a separate --scope for each scope'
 
 [login.flag.skipMasSSOLogin]
 description = 'Description for the --skip-mas-login flag'

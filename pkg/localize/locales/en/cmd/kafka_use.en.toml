@@ -25,7 +25,7 @@ $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
 
 [kafka.use.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the Kafka instance you want to set as the current instance.'
+one = 'Unique ID of the Kafka instance you want to set as the current instance'
 
 [kafka.use.error.saveError]
 description = 'Error message when current Kafka could not be saved in config'

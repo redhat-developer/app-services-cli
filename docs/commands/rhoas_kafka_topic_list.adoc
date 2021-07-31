@@ -31,9 +31,9 @@ $ rhoas kafka topic list -o json
 == Options
 
   `-o`, `--output` _string_::   Format in which to display the Kafka topics. Choose from: "json", "yml", "yaml"
-      `--page` _int32_::        Current page number for list of topics. (default 1)
+      `--page` _int32_::        Current page number for list of topics (default 1)
       `--search` _string_::     Text search to filter the Kafka topics by name
-      `--size` _int32_::        Maximum number of items to be returned per page. (default 10)
+      `--size` _int32_::        Maximum number of items to be returned per page (default 10)
 
 [discrete]
 == Options inherited from parent commands

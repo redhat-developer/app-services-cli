@@ -27,11 +27,11 @@ one = 'Text search to filter the Kafka topics by name'
 
 [kafka.topic.list.flag.page.description]
 description = 'Description for the --page flag'
-one = 'Current page number for list of topics.'
+one = 'Current page number for list of topics'
 
 [kafka.topic.list.flag.size.description]
 description = 'Description for the --size flag'
-one = 'Maximum number of items to be returned per page.'
+one = 'Maximum number of items to be returned per page'
 
 [kafka.topic.list.log.debug.filteringTopicList]
 description = 'Debug message when filtering the list of Kafka topic'

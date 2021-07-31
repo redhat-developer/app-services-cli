@@ -113,11 +113,11 @@ one = 'no Service Registry instance is currently set, use the "--id" flag or set
  
 [registry.common.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the Service Registry instance you want to delete. If not set, the current Service Registry instance is used.'
+one = 'If unique ID not set for the Service Registry instance you want to delete, the current Service Registry instance will be utilised'
 
 [registry.common.flag.yes]
 description = 'Description for the --yes flag'
-one = 'Skip confirmation to forcibly delete this Service Registry instance.'
+one = 'Skip confirmation to forcibly delete this Service Registry instance'
 
 [registry.delete.input.confirmName.message]
 description = 'Input title for Service Registry name confirmation'
@@ -137,19 +137,19 @@ one = 'Service Registry instance "{{.Name}}" was deleted.'
 
 [registry.cmd.flag.output.description]
 description = "Description for --output flag"
-one = 'Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml".'
+one = 'Format in which to display the Service Registry instance. Choose from: "json", "yml", "yaml"'
 
 [registry.list.flag.page]
 description = 'Description for the --page flag'
-one = 'Display the Service Registry instances from the specified page number.'
+one = 'Display the Service Registry instances from the specified page number'
 
 [registry.list.flag.limit]
 description = 'Description for the --limit flag'
-one = 'The maximum number of Service Registry instances to be returned.'
+one = 'The maximum number of Service Registry instances to be returned'
 
 [registry.list.flag.search]
 description = 'Description for the --search flag'
-one = 'Text search to filter the Service Registry instances by name.'
+one = 'Text search to filter the Service Registry instances by name'
 
 [registry.list.log.debug.filteringList]
 description = 'Debug message when filtering the list of Service Registry instances'
@@ -161,7 +161,7 @@ one = 'No Service Registry instances were found.'
 
 [registry.use.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the Service Registry instance you want to set as the current instance.'
+one = 'Unique ID of the Service Registry instance you want to set as the current instance'
 
 [registry.use.error.saveError]
 description = 'Error message when current Service Registry could not be saved in config'

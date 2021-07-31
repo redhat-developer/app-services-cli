@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/aerogear/charmil/validator"
 	"github.com/aerogear/charmil/validator/rules"
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -34,17 +35,11 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 	vali := rules.ValidatorConfig{
 		ValidatorOptions: rules.ValidatorOptions{
 			SkipCommands: map[string]bool{
-				"rhoas kafka":                true,
-				"rhoas kafka list":           true,
-				"rhoas completion":           true,
-				"rhoas completion bash":      true,
-				"rhoas completion fish":      true,
-				"rhoas completion zsh":       true,
-				"rhoas kafka consumer-group": true,
-				"rhoas kafka topic":          true,
-				"rhoas cluster":              true,
-				"rhoas logout":               true,
-				"rhoas service-account":      true,
+				"rhoas kafka*":           true,
+				"rhoas completion*":      true,
+				"rhoas cluster":          true,
+				"rhoas logout":           true,
+				"rhoas service-account*": true,
 			},
 		},
 		ValidatorRules: rules.ValidatorRules{
@@ -53,6 +48,11 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 					"Short":   {Min: 5},
 					"Example": {Min: 10},
 					"Long":    {Min: 10},
+				},
+			},
+			Punctuation: rules.Punctuation{
+				RuleOptions: validator.RuleOptions{
+					Verbose: true,
 				},
 			},
 		},

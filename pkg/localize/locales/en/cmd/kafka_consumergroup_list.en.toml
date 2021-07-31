@@ -27,11 +27,11 @@ one = 'Text search to filter consumer groups by ID'
 
 [kafka.consumerGroup.list.flag.page]
 description = 'Description for the --page flag'
-one = 'Current page number for list of consumer groups.'
+one = 'Current page number for list of consumer groups'
 
 [kafka.consumerGroup.list.flag.size]
 description = 'Description for the --size flag'
-one = 'Maximum number of consumer groups to be returned per page.'
+one = 'Maximum number of consumer groups to be returned per page'
 
 [kafka.consumerGroup.list.log.info.noConsumerGroups]
 one = 'Kafka instance "{{.InstanceName}}" has no consumer groups'
