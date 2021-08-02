@@ -30,7 +30,7 @@ $ rhoas kafka list -o json
 
 [kafka.list.flag.id]
 description = 'Description for the --id flag'
-one = 'If unique ID not set for the Kafka instance you want to list, the current Kafka instance will be utilised'
+one = 'If a unique ID is not set for the Kafka instance you want to list, the current Kafka instance will be utilised'
 
 [kafka.list.flag.page]
 description = 'Description for the --page flag'

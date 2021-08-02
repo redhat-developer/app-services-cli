@@ -28,7 +28,7 @@ $ rhoas kafka consumer-group describe --id consumer_group_1 -o json
 == Options
 
       `--id` _string_::         The unique ID of the consumer group to view
-  `-o`, `--output` _string_::   Format in which to display the consumer group. Choose from: "json", "yml", "yaml"
+  `-o`, `--output` _string_::   Choose a format from: "json", "yml", "yaml", to display the consumer group
 
 [discrete]
 == Options inherited from parent commands

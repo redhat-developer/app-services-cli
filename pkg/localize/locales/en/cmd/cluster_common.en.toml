@@ -3,7 +3,7 @@ one = 'Location of the kubeconfig file'
 
 [cluster.common.flag.offline.token.description]
 one = '''
-Provide an offline token to be used by the operator. To obtain a token, visit {{.OfflineTokenURL}}
+Provide an offline token to be used by the operator, for getting a token, visit {{.OfflineTokenURL}}
 '''
 
 [cluster.common.flag.yes.description]

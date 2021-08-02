@@ -33,4 +33,4 @@ $ rhoas kafka describe -o yaml
 
 [kafka.describe.flag.id]
 description = 'Description for the --id flag'
-one = 'If unique ID not set for the Kafka instance you want to view, the current Kafka instance will be utilised'
+one = 'If a unique ID is not set for the Kafka instance you want to view, the current Kafka instance will be utilised'

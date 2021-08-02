@@ -25,7 +25,7 @@ rhoas kafka list [flags]
 == Options
 
       `--limit` _int_::         The maximum number of Kafka instances to be returned (default 100)
-  `-o`, `--output` _string_::   Format in which to display the Kafka instances. Choose from: "json", "yml", "yaml"
+  `-o`, `--output` _string_::   Choose a format from: "json", "yml", "yaml", to display the Kafka instances
       `--page` _int_::          Display the Kafka instances from the specified page number
       `--search` _string_::     Text search to filter the Kafka instances by name, owner, cloud_provider, region and status
 

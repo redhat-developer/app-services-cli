@@ -39,8 +39,8 @@ $ rhoas kafka describe -o yaml
 [discrete]
 == Options
 
-      `--id` _string_::         If unique ID not set for the Kafka instance you want to view, the current Kafka instance will be utilised
-  `-o`, `--output` _string_::   Format in which to display the Kafka instance. Choose from: "json", "yml", "yaml" (default "json")
+      `--id` _string_::         If a unique ID is not set for the Kafka instance you want to view, the current Kafka instance will be utilised
+  `-o`, `--output` _string_::   Choose a format from: "json", "yml", "yaml", to display the Kafka instance (default "json")
 
 [discrete]
 == Options inherited from parent commands

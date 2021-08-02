@@ -27,7 +27,7 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 [kafka.delete.flag.id]
 description = 'Description for the --id flag'
-one = 'If unique ID not set for the Kafka instance you want to delete, the current Kafka instance will be utilised'
+one = 'If a unique ID is not set for the Kafka instance you want to delete, the current Kafka instance will be utilised'
 
 [kafka.delete.flag.yes]
 description = 'Description for the --yes flag'
