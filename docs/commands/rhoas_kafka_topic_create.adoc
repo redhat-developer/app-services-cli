@@ -31,7 +31,7 @@ $ rhoas kafka topic create topic-1
 == Options
 
       `--cleanup-policy` _string_::   Determines whether log messages are deleted, compacted, or both (default "delete")
-  `-o`, `--output` _string_::         Choose a format from: "json", "yml", "yaml", to display the Kafka topic (default "json")
+  `-o`, `--output` _string_::         Format in which to display the Kafka topic (choose from: "json", "yml", "yaml") (default "json")
       `--partitions` _int32_::        The number of partitions in the topic (default 1)
       `--retention-bytes` _int_::     The maximum total size of a partition log segments before old log segments are deleted to free up space (default -1)
       `--retention-ms` _int_::        The period of time in milliseconds the broker will retain a partition log before deleting it (default 604800000)
