@@ -52,15 +52,15 @@ description = 'Description for the --auth-url flag'
 one = "The URL of the identity.api.openshift.com Authentication server"
 
 [login.flag.token]
-one = "Allows you to log in using an offline token, which can be obtained at {{.OfflineTokenURL}}"
+one = "Log in using an offline token, which can be obtained at {{.OfflineTokenURL}}"
 
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'
-one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser which is useful if you need to log in with different credentials than the credentials you used in your default web browser"
+one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser (this is useful if you need to log in with different credentials than the credentials you used in your default web browser)"
 
 [login.flag.scope]
 description = 'Description for the --scope flag'
-one = 'Override the default OpenID scope, if you want to specify multiple scopes, use a separate --scope for each scope'
+one = 'Override the default OpenID scope (to specify multiple scopes, use a separate --scope for each scope)'
 
 [login.flag.skipMasSSOLogin]
 description = 'Description for the --skip-mas-login flag'

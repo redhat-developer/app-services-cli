@@ -28,7 +28,7 @@ $ rhoas status -o json
 one = 'unknown service "{{.ServiceName}}"'
 
 [status.flag.output.description]
-one = 'Choose a format from: "json", "yml", "yaml" to display the status of your services'
+one = 'Format in which to display the status of your services (choose from: "json", "yml", "yaml")'
 
 [status.log.debug.requestingStatusOfServices]
 one = 'Requesting status of the following services:'
