@@ -8,14 +8,12 @@ on:
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       -
         name: Checkout
         uses: actions/checkout@v2
-      # -
-        # name: Unshallow
-        # run: git fetch
+        with:
+          fetch-depth: 0
       -
         name: Set up Go
         uses: actions/setup-go@v2
@@ -30,7 +28,12 @@ jobs:
           else
             echo "::set-output name=prerelease::true"
           fi
-      - run: echo ${{ steps.check-tag.outputs.prerelease }}
+      - id: set-version
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const version = context.ref.replace(/^refs\/tags\//, '').replace(/^v/, '')
+            core.setOutput('version', version)
       - 
         name: Install git-chglog
         uses: craicoverflow/install-git-chglog@v1
@@ -61,3 +64,12 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Guides of new version
+        if: steps.check-tag.outputs.prerelease == 'false'
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.APP_SERVICES_CI }}
+          repository: redhat-developer/app-services-guides
+          event-type: rhoas-cli-release
+          client-payload: '{"version": steps.set-version.outputs.version }'
