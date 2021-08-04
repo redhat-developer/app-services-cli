@@ -29,4 +29,4 @@ $ rhoas cluster connect
 '''
 
 [cluster.connect.flag.secretName.description]
-one = 'Name of the secret that holds the Kafka credentials.'
+one = 'Name of the secret that holds the Kafka credentials'

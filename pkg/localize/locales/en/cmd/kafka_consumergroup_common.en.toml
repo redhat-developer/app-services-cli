@@ -1,10 +1,10 @@
 [kafka.consumerGroup.common.flag.output.description]
 description = "Description for --output flag"
-one = 'Format in which to display the consumer group. Choose from: "json", "yml", "yaml"'
+one = 'Format in which to display the consumer group (choose from: "json", "yml", "yaml")'
 
 [kafka.consumerGroup.list.flag.output.description]
 description = "Description for --output flag"
-one = 'Format in which to display the consumer groups. Choose from: "json", "yml", "yaml"'
+one = 'Format in which to display the consumer group (choose from: "json", "yml", "yaml")'
 
 [kafka.consumerGroup.common.flag.id.description]
 one = 'The unique ID of the consumer group to {{.Action}}'

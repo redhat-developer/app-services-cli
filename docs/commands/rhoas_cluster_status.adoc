@@ -31,7 +31,7 @@ $ rhoas cluster status
 [discrete]
 == Options
 
-      `--kubeconfig` _string_::   Location of the kubeconfig file.
+      `--kubeconfig` _string_::   Location of the kubeconfig file
 
 [discrete]
 == Options inherited from parent commands

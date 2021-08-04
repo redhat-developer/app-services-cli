@@ -27,11 +27,11 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 [kafka.delete.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the Kafka instance you want to delete. If not set, the current Kafka instance will be used.'
+one = 'Unique ID of the Kafka instance you want to delete (if not provided, the current Kafka instance will be deleted)'
 
 [kafka.delete.flag.yes]
 description = 'Description for the --yes flag'
-one = 'Skip confirmation to forcibly delete this Kafka instance.'
+one = 'Skip confirmation to forcibly delete this Kafka instance'
 
 [kafka.delete.input.confirmName.message]
 description = 'Input title for Kafka name confirmation'

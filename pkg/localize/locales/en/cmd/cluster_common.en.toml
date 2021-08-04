@@ -1,13 +1,13 @@
 [cluster.common.flag.kubeconfig.description]
-one = 'Location of the kubeconfig file.'
+one = 'Location of the kubeconfig file'
 
 [cluster.common.flag.offline.token.description]
 one = '''
-Provide an offline token to be used by the operator. To obtain a token, visit {{.OfflineTokenURL}}.
+Provide an offline token to be used by the operator (to get a token, visit {{.OfflineTokenURL}})
 '''
 
 [cluster.common.flag.yes.description]
-one = 'Forcibly create a binding without confirmation.'
+one = 'Forcibly create a binding without confirmation'
 
 [cluster.common.flag.namespace.description]
 one = 'Custom Kubernetes namespace (if not set current namespace will be used)'
