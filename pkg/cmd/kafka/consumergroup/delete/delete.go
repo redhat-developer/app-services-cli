@@ -64,7 +64,6 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "delete"))
 	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, opts.localizer.MustLocalize("kafka.consumerGroup.delete.flag.yes.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "delete")))
 	_ = cmd.MarkFlagRequired("id")

@@ -9,6 +9,7 @@ import (
 var (
 	ValidOutputFormats       = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
 	CredentialsOutputFormats = []string{"env", "json", "properties"}
+	ValidOffsets             = []string{"timestamp", "absolute", "latest", "earliest"}
 )
 
 // IsValidInput checks if the input value is in the range of valid values

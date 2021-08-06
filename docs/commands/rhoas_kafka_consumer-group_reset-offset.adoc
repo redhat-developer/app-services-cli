@@ -1,0 +1,57 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-kafka-consumer-group-reset-offset_{context}']
+= rhoas kafka consumer-group reset-offset
+
+[role="_abstract"]
+Reset offset of a consumer group
+
+[discrete]
+== Synopsis
+
+Reset offset for a consumer group from the Kafka instance.
+
+
+....
+rhoas kafka consumer-group reset-offset [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# reset offset for a consumer group
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest
+
+# reset offset for specific consumers in a consumer group
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions "1 2"
+
+....
+
+[discrete]
+== Options
+
+      `--id` _string_::           The unique ID of the consumer group to reset-offset
+      `--offset` _string_::       Offset type (earliest, latest, absolute, timestamp)
+      `--partitions` _string_::   Partitions on which reset-offset is to be carried upon (space separated integers)
+      `--topic` _string_::        Select topic for which consumer group offsets are to be reset
+      `--value` _string_::        Custom offset value (required when offset is absolute or timestamp)
+  `-y`, `--yes`::                 Skip confirmation to forcibly reset-offset of a consumer group
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+      `--version`::     Show rhoas version
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+endif::[]
+
