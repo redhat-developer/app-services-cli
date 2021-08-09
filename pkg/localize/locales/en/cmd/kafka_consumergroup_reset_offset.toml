@@ -30,8 +30,14 @@ one = 'Custom offset value (required when offset is absolute or timestamp)'
 [kafka.consumerGroup.resetOffset.flag.partitions]
 one = 'Partitions on which reset-offset is to be carried upon (space separated integers)'
 
+[kafka.consumerGroup.resetOffset.flag.output]
+one = 'Output in which to display reset offset result'
+
 [kafka.consumerGroup.resetOffset.input.confirmReset.message]
 one = 'Are you sure you want to reset the offset for consumer group "{{.ID}}"?'
 
 [kafka.consumerGroup.resetOffset.log.debug.cancelledReset]
 one = 'You have chosen to not reset the consumer group offset.'
+
+[kafka.consumerGroup.resetOffset.log.info.successful]
+one = 'Offset has been reset for consumers of Consumer group with ID "{{.ConsumerGroupID}}" in the Kafka instance "{{.InstanceName}}"'
