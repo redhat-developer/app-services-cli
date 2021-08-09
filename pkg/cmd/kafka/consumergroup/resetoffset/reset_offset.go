@@ -108,7 +108,6 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 // nolint:funlen
 func runCmd(opts *Options) error {
 
-	fmt.Println("reset offset")
 	logger, err := opts.Logger()
 	if err != nil {
 		return err
@@ -179,8 +178,9 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	_, httpRes, err := a.Execute()
-	fmt.Println("status code", httpRes.StatusCode)
+	updatedConsumers, httpRes, err := a.Execute()
+	// display the response object(todo)
+	fmt.Println(updatedConsumers)
 
 	if err != nil {
 
