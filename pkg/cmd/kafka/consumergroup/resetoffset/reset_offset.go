@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -28,7 +26,7 @@ type Options struct {
 	value       string
 	offset      string
 	topic       string
-	partitions  string
+	partitions  []int32
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -85,7 +83,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.value, "value", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.value"))
 	cmd.Flags().StringVar(&opts.offset, "offset", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.offset"))
 	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.topic"))
-	cmd.Flags().StringVar(&opts.partitions, "partitions", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.partitions"))
+	cmd.Flags().Int32SliceVar(&opts.partitions, "partitions", []int32{}, opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.partitions"))
 
 	_ = cmd.MarkFlagRequired("id")
 	_ = cmd.MarkFlagRequired("offset")
@@ -138,20 +136,8 @@ func runCmd(opts *Options) error {
 			Topic: opts.topic,
 		}
 
-		if opts.partitions != "" {
-			partitionsStr := strings.Fields(opts.partitions)
-
-			partitionsArr := []int32{}
-
-			for _, partition := range partitionsStr {
-				partitionInt, convErr := strconv.ParseInt(partition, 10, 32)
-				if convErr != nil {
-					return convErr
-				}
-				partitionsArr = append(partitionsArr, int32(partitionInt))
-			}
-
-			topicToReset.Partitions = &partitionsArr
+		if len(opts.partitions) != 0 {
+			topicToReset.Partitions = &opts.partitions
 		}
 
 		topicsToResetArr := []kafkainstanceclient.TopicsToResetOffset{topicToReset}

@@ -12,7 +12,7 @@ one = '''
 $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest
 
 # reset offset for specific consumers in a consumer group
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions "1 2"
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions 0,1
 '''
 
 [kafka.consumerGroup.resetOffset.flag.topic]

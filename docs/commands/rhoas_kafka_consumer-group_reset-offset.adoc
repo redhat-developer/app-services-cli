@@ -23,19 +23,19 @@ rhoas kafka consumer-group reset-offset [flags]
 $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest
 
 # reset offset for specific consumers in a consumer group
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions "1 2"
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions 0,1
 
 ....
 
 [discrete]
 == Options
 
-      `--id` _string_::           The unique ID of the consumer group to reset-offset
-      `--offset` _string_::       Offset type (earliest, latest, absolute, timestamp)
-      `--partitions` _string_::   Partitions on which reset-offset is to be carried upon (space separated integers)
-      `--topic` _string_::        Select topic for which consumer group offsets are to be reset
-      `--value` _string_::        Custom offset value (required when offset is absolute or timestamp)
-  `-y`, `--yes`::                 Skip confirmation to forcibly reset-offset of a consumer group
+      `--id` _string_::               The unique ID of the consumer group to reset-offset
+      `--offset` _string_::           Offset type (earliest, latest, absolute, timestamp)
+      `--partitions` _int32Slice_::   Partitions on which reset-offset is to be carried upon (space separated integers) (default [])
+      `--topic` _string_::            Select topic for which consumer group offsets are to be reset
+      `--value` _string_::            Custom offset value (required when offset is absolute or timestamp)
+  `-y`, `--yes`::                     Skip confirmation to forcibly reset-offset of a consumer group
 
 [discrete]
 == Options inherited from parent commands
