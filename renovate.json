@@ -2,5 +2,6 @@
   "extends": [ "github>redhat-developer/app-services-renovate-config" ],
   "postUpdateOptions": [
     "gomodTidy"
-  ]
+  ],
+  "ignoreDeps": ["github.com/redhat-developer/service-binding-operator"]
 }
