@@ -39,7 +39,7 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
-type UpdatedConsumerRow struct {
+type updatedConsumerRow struct {
 	Topic     string `json:"groupId,omitempty" header:"Topic"`
 	Partition int32  `json:"active_members,omitempty" header:"Partition"`
 	Offset    int32  `json:"lag,omitempty" header:"Offset"`
@@ -71,6 +71,10 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				if err = flag.ValidateOffset(opts.offset); err != nil {
 					return err
 				}
+			}
+
+			if opts.value == "" && (opts.offset == "absolute" || opts.offset == "timestamp") {
+				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset)))
 			}
 
 			if opts.kafkaID != "" {
@@ -207,7 +211,11 @@ func runCmd(opts *Options) error {
 
 	defer httpRes.Body.Close()
 
-	logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.log.info.successful", localize.NewEntry("ConsumerGroupID", opts.id), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+	logger.Info(opts.localizer.MustLocalize(
+		"kafka.consumerGroup.resetOffset.log.info.successful",
+		localize.NewEntry("ConsumerGroupID", opts.id),
+		localize.NewEntry("InstanceName", kafkaInstance.GetName())),
+	)
 
 	switch opts.output {
 	case "json":
@@ -229,12 +237,12 @@ func runCmd(opts *Options) error {
 
 }
 
-func mapResetOffsetResultToTableFormat(consumers []kafkainstanceclient.ConsumerGroupResetOffsetResultItem) []UpdatedConsumerRow {
-	rows := []UpdatedConsumerRow{}
+func mapResetOffsetResultToTableFormat(consumers []kafkainstanceclient.ConsumerGroupResetOffsetResultItem) []updatedConsumerRow {
+	rows := []updatedConsumerRow{}
 
 	for _, t := range consumers {
 
-		row := UpdatedConsumerRow{
+		row := updatedConsumerRow{
 			Topic:     t.GetTopic(),
 			Partition: t.GetPartition(),
 			Offset:    t.GetOffset(),
