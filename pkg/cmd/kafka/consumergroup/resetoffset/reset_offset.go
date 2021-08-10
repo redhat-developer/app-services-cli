@@ -238,16 +238,16 @@ func runCmd(opts *Options) error {
 }
 
 func mapResetOffsetResultToTableFormat(consumers []kafkainstanceclient.ConsumerGroupResetOffsetResultItem) []updatedConsumerRow {
-	rows := []updatedConsumerRow{}
+	rows := make([]updatedConsumerRow, len(consumers))
 
-	for _, t := range consumers {
+	for i, t := range consumers {
 
 		row := updatedConsumerRow{
 			Topic:     t.GetTopic(),
 			Partition: t.GetPartition(),
 			Offset:    t.GetOffset(),
 		}
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows
