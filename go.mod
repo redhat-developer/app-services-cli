@@ -3,11 +3,11 @@ module github.com/redhat-developer/app-services-cli
 go 1.16
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.2.14
-	github.com/BurntSushi/toml v0.3.1
+	github.com/AlecAivazis/survey/v2 v2.2.16
+	github.com/BurntSushi/toml v0.4.1
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
-	github.com/aerogear/charmil v0.6.1
+	github.com/aerogear/charmil v0.8.1
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.12.0
@@ -26,11 +26,11 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
+	golang.org/x/oauth2 v0.0.0-20210805134026-6f1e6394065a
 	golang.org/x/text v0.3.6
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/api v0.21.3
-	k8s.io/apimachinery v0.21.3
-	k8s.io/client-go v0.21.3
-	sigs.k8s.io/controller-runtime v0.9.3
+	k8s.io/api v0.22.0
+	k8s.io/apimachinery v0.22.0
+	k8s.io/client-go v0.22.0
+	sigs.k8s.io/controller-runtime v0.9.5
 )
