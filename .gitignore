@@ -17,3 +17,4 @@ node_modules
 /*.env
 /*.properties
 .idea/
+.vscode/settings.json
