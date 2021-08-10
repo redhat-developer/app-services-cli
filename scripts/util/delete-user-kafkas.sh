@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+set -uo pipefail
+
 # Script to delete a user's Kafka instances
 # ./scripts/delete-user-kafkas.sh $username
 if [ ! "$(command -v jq)" ]; then

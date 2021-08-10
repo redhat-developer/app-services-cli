@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -uo pipefail
+
 if ! command -v bf3-uploader &> /dev/null
 then
   echo "Installing git-chglog"
