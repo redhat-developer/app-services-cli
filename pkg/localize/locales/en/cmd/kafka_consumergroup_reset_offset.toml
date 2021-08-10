@@ -1,9 +1,9 @@
 [kafka.consumerGroup.resetOffset.cmd.shortDescription]
-one = 'Reset offset of a consumer group'
+one = 'Reset offset for a consumer group'
 
 [kafka.consumerGroup.resetOffset.cmd.longDescription]
 one = '''
-Reset offset for a consumer group from the Kafka instance.
+Reset the offset for a consumer group.
 '''
 
 [kafka.consumerGroup.resetOffset.cmd.example]
@@ -19,25 +19,25 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest 
 one = 'Select topic for which consumer group offsets are to be reset'
 
 [kafka.consumerGroup.resetOffset.flag.yes]
-one = 'Skip confirmation to forcibly reset-offset of a consumer group'
+one = 'Skip confirmation to forcibly reset the offset for the consumer group'
 
 [kafka.consumerGroup.resetOffset.flag.offset]
-one = 'Offset type (earliest, latest, absolute, timestamp)'
+one = 'Offset type (choose from: "earliest", "latest", "absolute", "timestamp")'
 
 [kafka.consumerGroup.resetOffset.flag.value]
-one = 'Custom offset value (required when offset is absolute or timestamp)'
+one = 'Custom offset value (required when offset is "absolute" or "timestamp")'
 
 [kafka.consumerGroup.resetOffset.flag.partitions]
-one = 'Partitions on which reset-offset is to be carried upon (space separated integers)'
+one = 'Partitions on which to reset the consumer group offset (space separated integers)'
 
 [kafka.consumerGroup.resetOffset.flag.output]
-one = 'Output in which to display reset offset result'
+one = 'Format in which to display reset offset result (choose from: "json", "yml", "yaml")'
 
 [kafka.consumerGroup.resetOffset.input.confirmReset.message]
 one = 'Are you sure you want to reset the offset for consumer group "{{.ID}}"?'
 
 [kafka.consumerGroup.resetOffset.log.debug.cancelledReset]
-one = 'You have chosen to not reset the consumer group offset.'
+one = 'You have chosen not to reset the consumer group offset.'
 
 [kafka.consumerGroup.resetOffset.log.info.successful]
 one = 'Offset has been reset for consumers of Consumer group with ID "{{.ConsumerGroupID}}" in the Kafka instance "{{.InstanceName}}"'

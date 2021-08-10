@@ -3,12 +3,12 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas kafka consumer-group reset-offset
 
 [role="_abstract"]
-Reset offset of a consumer group
+Reset offset for a consumer group
 
 [discrete]
 == Synopsis
 
-Reset offset for a consumer group from the Kafka instance.
+Reset the offset for a consumer group.
 
 
 ....
@@ -31,12 +31,12 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest 
 == Options
 
       `--id` _string_::               The unique ID of the consumer group to reset-offset
-      `--offset` _string_::           Offset type (earliest, latest, absolute, timestamp)
-  `-o`, `--output` _string_::         Output in which to display reset offset result
-      `--partitions` _int32Slice_::   Partitions on which reset-offset is to be carried upon (space separated integers) (default [])
+      `--offset` _string_::           Offset type (choose from: "earliest", "latest", "absolute", "timestamp")
+  `-o`, `--output` _string_::         Format in which to display reset offset result (choose from: "json", "yml", "yaml")
+      `--partitions` _int32Slice_::   Partitions on which to reset the consumer group offset (space separated integers) (default [])
       `--topic` _string_::            Select topic for which consumer group offsets are to be reset
-      `--value` _string_::            Custom offset value (required when offset is absolute or timestamp)
-  `-y`, `--yes`::                     Skip confirmation to forcibly reset-offset of a consumer group
+      `--value` _string_::            Custom offset value (required when offset is "absolute" or "timestamp")
+  `-y`, `--yes`::                     Skip confirmation to forcibly reset the offset for the consumer group
 
 [discrete]
 == Options inherited from parent commands
