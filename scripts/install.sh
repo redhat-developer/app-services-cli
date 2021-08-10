@@ -2,6 +2,8 @@
 
 { # this ensures the entire script is downloaded #
 
+  set -uo pipefail
+
   BINARY_NAME="rhoas"
   SRC_ORG="redhat-developer"
   SRC_REPO="app-services-cli"

@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ref: https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
 #
+set -uo pipefail
 # Usage example: /bin/sh ./git_push.sh wing328 openapi-pestore-perl "minor update" "gitlab.com"
 
 git_user_id=$1

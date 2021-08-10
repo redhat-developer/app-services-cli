@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+set -uo pipefail
+
 echo "Deleting all service accounts"
 
 serviceaccount_uuids=$(rhoas serviceaccount list -o json | jq -rc '.items[].id')
