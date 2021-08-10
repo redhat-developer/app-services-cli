@@ -3,6 +3,7 @@ package goi18n
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 
@@ -81,6 +82,16 @@ func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry)
 	}
 	cfg := &i18n.LocalizeConfig{MessageID: id, PluralCount: 1, TemplateData: templateData}
 	return l.localizer.MustLocalize(cfg)
+}
+
+// MustLocalizeError loads a i18n message from the file system
+// and returns an error
+// Examples:
+//
+// `err := localizer.MustLocalizeError("my-message-id", &localize.TemplateEntry{"Name", "Danny"}`
+//
+func (l *Goi18n) MustLocalizeError(id string, tmplEntries ...*localize.TemplateEntry) error {
+	return errors.New(l.MustLocalize(id, tmplEntries...))
 }
 
 // walk the file system and load each file into memory
