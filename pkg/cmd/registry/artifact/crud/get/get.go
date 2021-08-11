@@ -57,16 +57,16 @@ For fetching artifacts using global identifiers please use "service-registry dow
 `,
 		Example: `
 ## Get latest artifact by name
-rhoas service-registry artifacts get myschema
+rhoas service-registry artifact get myschema
 
 ## Get latest artifact and save its content to file
-rhoas service-registry artifacts get myschema myschema.json
+rhoas service-registry artifact get myschema myschema.json
 
 ## Get latest artifact and pipe it to other command 
-rhoas service-registry artifacts get myschema | grep -i 'user'
+rhoas service-registry artifact get myschema | grep -i 'user'
 
 ## Get latest artifact by specifying custom group, registry and name as flag
-rhoas service-registry artifacts get --group mygroup --instance-id=myregistry --artifact myartifact
+rhoas service-registry artifact get --group mygroup --instance-id=myregistry --artifact myartifact
 `,
 		Args: cobra.RangeArgs(0, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
