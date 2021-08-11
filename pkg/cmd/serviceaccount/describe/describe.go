@@ -84,7 +84,7 @@ func runDescribe(opts *Options) error {
 	}
 
 	switch opts.outputFormat {
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(res)
 		_ = dump.YAML(opts.IO.Out, data)
 	default:

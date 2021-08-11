@@ -1,10 +1,13 @@
 // flags package is a helper package for processing and interactive command line flags
 package flags
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/spf13/cobra"
+)
 
 var (
-	ValidOutputFormats       = []string{"json", "yml", "yaml"}
+	ValidOutputFormats       = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
 	CredentialsOutputFormats = []string{"env", "json", "properties"}
 )
 

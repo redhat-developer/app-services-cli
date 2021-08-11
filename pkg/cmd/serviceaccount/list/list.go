@@ -95,10 +95,10 @@ func runList(opts *Options) (err error) {
 
 	outStream := opts.IO.Out
 	switch opts.output {
-	case "json":
+	case dump.JSONFormat:
 		data, _ := json.MarshalIndent(res, "", cmdutil.DefaultJSONIndent)
 		_ = dump.JSON(outStream, data)
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(res)
 		_ = dump.YAML(outStream, data)
 	default:

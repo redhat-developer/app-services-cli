@@ -1,4 +1,4 @@
-// Package dump contains functions used to dump documents to JSON, YAML and Table formats
+// Package dump contains functions used to print documents to JSON, YAML and Table formats
 package dump
 
 import (
@@ -15,6 +15,12 @@ import (
 
 	"gitlab.com/c0b/go-ordered-json"
 	"gopkg.in/yaml.v2"
+)
+
+const (
+	JSONFormat = "json"
+	YAMLFormat = "yaml"
+	YMLFormat  = "yml"
 )
 
 // JSON dumps the given data to the given stream so that it looks pretty. If the data is a valid
