@@ -18,7 +18,7 @@ import (
 
 	"k8s.io/client-go/dynamic"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
