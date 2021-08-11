@@ -31,7 +31,7 @@ type AuthorizationCodeGrant struct {
 }
 
 type SSOConfig struct {
-	AuthURL      string
+	AuthURL      *url.URL
 	RedirectPath string
 }
 
@@ -46,12 +46,14 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 	}
 	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedIn"))
 
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingInMAS"))
+	masSSOHost := masSSOCfg.AuthURL.Host
+
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingInMAS", localize.NewEntry("Host", masSSOHost)))
 	// log in to MAS-SSO
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedInMAS"))
+	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
 
 	return nil
 }
@@ -62,7 +64,7 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 	a.Logger.Debug("Logging into", cfg.AuthURL, "\n")
 	clientCtx, cancel := createClientContext(ctx, a.HTTPClient)
 	defer cancel()
-	provider, err := oidc.NewProvider(ctx, cfg.AuthURL)
+	provider, err := oidc.NewProvider(ctx, cfg.AuthURL.String())
 	if err != nil {
 		return err
 	}
@@ -109,7 +111,7 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 
 	sm.Handle("/static/", createStaticHTTPHandler())
 
-	authURL, err := url.Parse(cfg.AuthURL)
+	authURL, err := url.Parse(cfg.AuthURL.String())
 	if err != nil {
 		return err
 	}
@@ -148,7 +150,7 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 
 	clientCtx, cancel := createClientContext(ctx, a.HTTPClient)
 	defer cancel()
-	provider, err := oidc.NewProvider(ctx, cfg.AuthURL)
+	provider, err := oidc.NewProvider(ctx, cfg.AuthURL.String())
 	if err != nil {
 		return err
 	}
@@ -202,6 +204,7 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 		Port:          redirectURLPort,
 		Config:        a.Config,
 		Logger:        a.Logger,
+		AuthURL:       cfg.AuthURL,
 		IO:            a.IO,
 		ServerAddr:    server.Addr,
 		Oauth2Config:  oauthConfig,

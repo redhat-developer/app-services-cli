@@ -62,10 +62,6 @@ one = "Prints the console login URL, which you can use to log in to RHOAS from a
 description = 'Description for the --scope flag'
 one = 'Override the default OpenID scope (to specify multiple scopes, use a separate --scope for each scope)'
 
-[login.flag.skipMasSSOLogin]
-description = 'Description for the --skip-mas-login flag'
-one = 'Skip logging in to identity.api.openshift.com'
-
 [login.redirectPage.title]
 description = 'Title for the RHOAS login redirect webpage'
 one = 'Welcome to RHOAS'
@@ -76,7 +72,7 @@ one = 'You are now logged in as <span style="font-weight:700">{{.Username}}</spa
 
 [login.masRedirectPage.body]
 description = 'Title for the identity.api.openshift.com login redirect webpage'
-one = 'You are now logged in to identity.api.openshift.com as <span style="font-weight:700">{{.Username}}</span>.'
+one = 'You are now logged in to <span style="font-weight:700">{{.Host}}</span> as <span style="font-weight:700">{{.Username}}</span>.'
 
 [login.error.schemeMissingFromUrl]
 description = 'Error message for when scheme is missing from the Auth URL'
@@ -113,10 +109,10 @@ one = 'Logging in...'
 one = 'Logged in successfully'
 
 [login.log.info.loggingInMAS]
-one = 'Logging in to identity.api.openshift.com...'
+one = 'Logging in to {{.Host}}...'
 
 [login.log.info.loggedInMAS]
-one = 'Logged in successfully to identity.api.openshift.com'
+one = 'Logged in successfully to {{.Host}}'
 
 [login.error.noRealmInURL]
 one = 'the authentication URL is missing a realm'

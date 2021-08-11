@@ -164,12 +164,12 @@ func runLogin(opts *Options) (err error) {
 		}
 
 		ssoCfg := &login.SSOConfig{
-			AuthURL:      opts.authURL,
+			AuthURL:      authURL,
 			RedirectPath: "sso-redhat-callback",
 		}
 
 		masSsoCfg := &login.SSOConfig{
-			AuthURL:      opts.masAuthURL,
+			AuthURL:      masAuthURL,
 			RedirectPath: "mas-sso-callback",
 		}
 
