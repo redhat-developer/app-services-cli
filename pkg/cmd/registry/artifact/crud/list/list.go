@@ -75,13 +75,13 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Long:  "List all artifacts for the group by specified output format (by default table)",
 		Example: `
 ## List all artifacts for the default artifacts group
-rhoas service-registry artifacts list
+rhoas service-registry artifact list
 
 ## List all artifacts with explicit group 
-rhoas service-registry artifacts list --group=my=group
+rhoas service-registry artifact list --group=my-group
 
 ## List all artifacts with limit and group
-rhoas service-registry artifacts list --page=2 --limit=10
+rhoas service-registry artifact list --page=2 --limit=10
 		`,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {

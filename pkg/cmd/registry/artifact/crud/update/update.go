@@ -69,7 +69,7 @@ This content is updated under a unique artifactId provided by user.
 		`,
 		Example: `
 ## update artifact from group and artifact-id
-rhoas service-registry artifacts update my-artifact.json --artifact=my-artifact --group my-group
+rhoas service-registry artifact update my-artifact.json --artifact=my-artifact --group my-group
 `,
 		Args: cobra.RangeArgs(0, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
