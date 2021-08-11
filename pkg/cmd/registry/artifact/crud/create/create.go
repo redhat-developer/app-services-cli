@@ -2,18 +2,15 @@ package create
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
@@ -197,14 +194,7 @@ func runCreate(opts *Options) error {
 	}
 	logger.Info("Artifact created")
 
-	switch opts.outputFormat {
-	case "json":
-		data, _ := json.MarshalIndent(metadata, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
-		data, _ := yaml.Marshal(metadata)
-		_ = dump.YAML(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, metadata, opts.IO.Out)
 
 	return nil
 }

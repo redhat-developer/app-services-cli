@@ -2,7 +2,6 @@ package metadata
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -13,7 +12,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -125,13 +123,7 @@ func runGet(opts *Options) error {
 
 	logger.Info("Successfully fetched artifact metadata")
 
-	switch opts.outputFormat {
-	case "yaml", "yml":
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
-		data, _ := json.Marshal(response)
-		_ = dump.JSON(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+
 	return nil
 }
