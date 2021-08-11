@@ -3,7 +3,6 @@ package delete
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -70,7 +69,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return fmt.Errorf(opts.localizer.MustLocalize("kafka.topic.common.error.noKafkaSelected"))
+				return opts.localizer.MustLocalizeError("kafka.topic.common.error.noKafkaSelected")
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
