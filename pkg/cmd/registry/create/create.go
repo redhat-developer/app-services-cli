@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -23,11 +22,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 )
 
 type Options struct {
@@ -147,14 +144,7 @@ func runCreate(opts *Options) error {
 
 	logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
-	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 
 	registryConfig := &config.ServiceRegistryConfig{
 		InstanceID: response.GetId(),
