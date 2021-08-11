@@ -13,6 +13,7 @@ func NewClusterCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     f.Localizer.MustLocalize("cluster.cmd.use"),
 		Short:   f.Localizer.MustLocalize("cluster.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("cluster.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("cluster.cmd.example"),
 		Args:    cobra.ExactArgs(1),
 	}

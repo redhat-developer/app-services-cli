@@ -18,6 +18,18 @@ Run `rhoas completion [bash|zsh|fish] -h` for instructions on installing command
 When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
 '''
 
+[completion.cmd.example]
+one = '''
+## Generate command completion script for Bash shell
+rhoas completion bash
+
+## Generate command completion script for fish shell
+rhoas completion fish
+
+## Generate command completion script for Zsh shell
+rhoas completion zsh
+'''
+
 [completion.cmd.error.subcommandRequired]
 one = 'a subcommand of either "bash", "zsh", "fish" is required'
 
@@ -45,6 +57,11 @@ Installing on macOS:
 2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
 '''
 
+[completion.bash.cmd.example]
+one = '''
+rhoas completion bash
+'''
+
 [completion.zsh.cmd.use]
 description = "Use is the one-line usage message"
 one = "zsh"
@@ -62,6 +79,11 @@ Generate command completion script for Zsh shell.
 
 '''
 
+[completion.zsh.cmd.example]
+one = '''
+rhoas completion zsh
+'''
+
 [completion.fish.cmd.use]
 description = "Use is the one-line usage message"
 one = "fish"
@@ -75,4 +97,9 @@ one = '''
 Generate command completion script for fish shell.
 
 Run `rhoas command completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+'''
+
+[completion.fish.cmd.example]
+one = '''
+rhoas completion fish
 '''

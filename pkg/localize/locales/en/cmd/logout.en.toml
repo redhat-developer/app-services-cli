@@ -10,6 +10,11 @@ one = "Log out from RHOAS"
 description = "Long description for command"
 one = 'Log out from RHOAS. To manage your services again, log in using "rhoas login".'
 
+[logout.cmd.example]
+one = '''
+rhoas logout
+'''
+
 [logout.error.unableToLogout]
 description = 'Log out error message'
 one = 'unable to log out:'

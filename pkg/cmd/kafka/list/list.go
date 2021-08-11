@@ -62,10 +62,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   opts.localizer.MustLocalize("kafka.list.cmd.use"),
-		Short: opts.localizer.MustLocalize("kafka.list.cmd.shortDescription"),
-		Long:  opts.localizer.MustLocalize("kafka.list.cmd.longDescription"),
-		Args:  cobra.NoArgs,
+		Use:     opts.localizer.MustLocalize("kafka.list.cmd.use"),
+		Short:   opts.localizer.MustLocalize("kafka.list.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("kafka.list.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("kafka.list.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)

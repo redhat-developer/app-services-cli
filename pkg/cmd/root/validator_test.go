@@ -33,15 +33,6 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 
 	// Testing cobra commands with default recommended config
 	vali := rules.ValidatorConfig{
-		ValidatorOptions: rules.ValidatorOptions{
-			SkipCommands: map[string]bool{
-				"rhoas kafka*":           true,
-				"rhoas completion*":      true,
-				"rhoas cluster":          true,
-				"rhoas logout":           true,
-				"rhoas service-account*": true,
-			},
-		},
 		ValidatorRules: rules.ValidatorRules{
 			Length: rules.Length{
 				Limits: map[string]rules.Limit{

@@ -6,3 +6,12 @@ one = 'Create, describe, update, list and delete topics'
 
 [kafka.topic.cmd.longDescription]
 one = 'Create, describe, update, list and delete topics for the current Kafka instance.'
+
+[kafka.topic.cmd.example]
+one = '''
+## Create a Topic
+rhoas kafka topic create mytopic
+
+## List all Topics
+rhoas kafka topic list 
+'''

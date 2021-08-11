@@ -5,3 +5,17 @@ one = "kafka"
 [kafka.cmd.shortDescription]
 description = "Short description for command"
 one = "Create, view, use, and manage your Apache Kafka instances"
+
+[kafka.cmd.longDescription]
+description = "Long description for command"
+one = "Manage your Apache Kafka instances directly from the command line."
+
+[kafka.cmd.example]
+description = "Examples for command"
+one = '''
+## Create an Apache Kafka instance
+rhoas kafka create my-kafka-instance
+
+## List all Apache Kafka instances
+rhoas kafka list
+'''
