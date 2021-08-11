@@ -119,11 +119,11 @@ func runStatus(opts *Options) error {
 
 	stdout := opts.IO.Out
 	switch opts.outputFormat {
-	case "json":
+	case dump.JSONFormat:
 		data, _ := json.Marshal(status)
 		_ = dump.JSON(stdout, data)
 		return nil
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(status)
 		_ = dump.YAML(stdout, data)
 		return nil

@@ -166,10 +166,10 @@ func runList(opts *Options) (err error) {
 	}
 
 	switch opts.output {
-	case "json":
+	case dump.JSONFormat:
 		data, _ := json.Marshal(consumerGroupData)
 		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(consumerGroupData)
 		_ = dump.YAML(opts.IO.Out, data)
 	default:

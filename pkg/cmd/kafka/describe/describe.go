@@ -122,7 +122,7 @@ func runDescribe(opts *Options) error {
 
 func printKafka(kafka *kafkamgmtclient.KafkaRequest, opts *Options) error {
 	switch opts.outputFormat {
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, err := yaml.Marshal(kafka)
 		if err != nil {
 			return err

@@ -172,10 +172,10 @@ func runCmd(opts *Options) error {
 
 	stdout := opts.IO.Out
 	switch opts.output {
-	case "json":
+	case dump.JSONFormat:
 		data, _ := json.Marshal(topicData)
 		_ = dump.JSON(stdout, data)
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(topicData)
 		_ = dump.YAML(stdout, data)
 	default:

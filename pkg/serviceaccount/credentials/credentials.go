@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 
 	"github.com/AlecAivazis/survey/v2"
 
@@ -49,7 +50,7 @@ func GetDefaultPath(outputFormat string) (filePath string) {
 		filePath = ".env"
 	case "properties":
 		filePath = "credentials.properties"
-	case "json":
+	case dump.JSONFormat:
 		filePath = "credentials.json"
 	}
 
@@ -83,7 +84,7 @@ func getFileFormat(output string) (format string) {
 		format = templateEnv
 	case "properties":
 		format = templateProperties
-	case "json":
+	case dump.JSONFormat:
 		format = templateJSON
 	}
 

@@ -118,7 +118,7 @@ func runDescribe(opts *Options) error {
 
 func printService(w io.Writer, registry interface{}, outputFormat string) error {
 	switch outputFormat {
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, err := yaml.Marshal(registry)
 		if err != nil {
 			return err

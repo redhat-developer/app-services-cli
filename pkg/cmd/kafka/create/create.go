@@ -194,10 +194,10 @@ func runCreate(opts *Options) error {
 	logger.Info(opts.localizer.MustLocalize("kafka.create.info.successMessage", localize.NewEntry("Name", response.GetName())))
 
 	switch opts.outputFormat {
-	case "json":
+	case dump.JSONFormat:
 		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
 		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(response)
 		_ = dump.YAML(opts.IO.Out, data)
 	}

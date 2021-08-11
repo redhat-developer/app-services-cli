@@ -204,10 +204,10 @@ func runCmd(opts *Options) error {
 	logger.Info(opts.localizer.MustLocalize("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 	switch opts.outputFormat {
-	case "json":
+	case dump.JSONFormat:
 		data, _ := json.Marshal(response)
 		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		data, _ := yaml.Marshal(response)
 		_ = dump.YAML(opts.IO.Out, data)
 	}

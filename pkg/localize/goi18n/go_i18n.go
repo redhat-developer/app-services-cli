@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/fs"
 
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"gopkg.in/yaml.v2"
 
@@ -121,9 +122,9 @@ func (l *Goi18n) MustLocalizeFile(files fs.FS, path string) (err error) {
 	switch l.format {
 	case "toml":
 		unmarshalFunc = toml.Unmarshal
-	case "yaml", "yml":
+	case dump.YAMLFormat, dump.YMLFormat:
 		unmarshalFunc = yaml.Unmarshal
-	case "json":
+	case dump.JSONFormat:
 		unmarshalFunc = json.Unmarshal
 	default:
 		return fmt.Errorf("unsupported format \"%v\"", l.format)
