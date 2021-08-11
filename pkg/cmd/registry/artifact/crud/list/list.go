@@ -93,6 +93,10 @@ rhoas service-registry artifact list --page=2 --limit=10
 				opts.group = args[0]
 			}
 
+			if opts.page < 1 || opts.limit < 1 {
+				return errors.New("page and limit values should be bigger than 1")
+			}
+
 			if opts.registryID != "" {
 				return runList(opts)
 			}
@@ -149,7 +153,8 @@ func runList(opts *Options) error {
 		return err
 	}
 	request := a.ArtifactsApi.ListArtifactsInGroup(context.Background(), opts.group)
-	request = request.Offset(opts.page * opts.limit)
+
+	request = request.Offset((opts.page - 1) * opts.limit)
 	request = request.Limit(opts.limit)
 
 	response, _, err := request.Execute()
@@ -158,7 +163,7 @@ func runList(opts *Options) error {
 	}
 
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {
-		logger.Info("No artifacts available for this group and registry instance")
+		logger.Info("No artifacts available for " + opts.group + " group and registry id " + opts.registryID)
 		return nil
 	}
 
