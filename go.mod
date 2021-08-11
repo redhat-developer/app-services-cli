@@ -26,11 +26,11 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/oauth2 v0.0.0-20210805134026-6f1e6394065a
-	golang.org/x/text v0.3.6
+	golang.org/x/oauth2 v0.0.0-20210810183815-faf39c7919d5
+	golang.org/x/text v0.3.7
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.22.0
 	k8s.io/apimachinery v0.22.0
 	k8s.io/client-go v0.22.0
-	sigs.k8s.io/controller-runtime v0.9.5
+	sigs.k8s.io/controller-runtime v0.9.6
 )
