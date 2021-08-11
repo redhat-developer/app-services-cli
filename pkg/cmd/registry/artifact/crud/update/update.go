@@ -68,23 +68,19 @@ This content is updated under a unique artifactId provided by user.
 ## update artifact from group and artifact-id
 rhoas service-registry artifact update my-artifact.json --artifact=my-artifact --group my-group
 `,
-		Args: cobra.RangeArgs(0, 2),
+		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
-			if len(args) > 0 {
-				opts.artifact = args[0]
-			}
-
 			if opts.artifact == "" {
-				return errors.New("Artifact is required. Please specify artifact as positional argument or by using --artifact flag")
+				return errors.New("Artifact is required. Please specify artifact by using --artifact flag")
 			}
 
-			if len(args) > 1 {
-				opts.file = args[1]
+			if len(args) > 0 {
+				opts.file = args[0]
 			}
 
 			if opts.registryID != "" {
