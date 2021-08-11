@@ -62,16 +62,16 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 		--hash - SHA-256 hash of the content`,
 		Example: `
 ## Get latest artifact by content id
-rhoas service-registry artifacts download --content-id=183282932983
+rhoas service-registry artifact download --content-id=183282932983
 
 ## Get latest artifact by content id to specific file
-rhoas service-registry artifacts download --content-id=183282932983 schema.json
+rhoas service-registry artifact download --content-id=183282932983 schema.json
 
 ## Get latest artifact by global id
-rhoas service-registry artifacts download --global-id=383282932983
+rhoas service-registry artifact download --global-id=383282932983
 
 ## Get latest artifact by hash
-rhoas service-registry artifacts download --hash=c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4
+rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4
 `,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {

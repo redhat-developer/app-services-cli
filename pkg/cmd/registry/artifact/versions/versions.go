@@ -51,10 +51,10 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 		Long:  "Get latest artifact versions by specifying group and artifacts id",
 		Example: `
 ## Get latest artifact versions for default group
-rhoas service-registry artifacts versions my-artifact
+rhoas service-registry artifact versions my-artifact
 
 ## Get latest artifact versions for my-group group
-rhoas service-registry artifacts versions my-artifact --group mygroup 
+rhoas service-registry artifact versions my-artifact --group mygroup 
 		`,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -54,10 +54,10 @@ The returned metadata includes both generated (read-only) and editable metadata 
 `,
 		Example: `
 ## Get latest artifact metadata for default group
-rhoas service-registry artifacts metadata my-artifact
+rhoas service-registry artifact metadata my-artifact
 
 ## Get latest artifact metadata for my-group group
-rhoas service-registry artifacts metadata my-artifact --group mygroup 
+rhoas service-registry artifact metadata my-artifact --group mygroup 
 		`,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -87,14 +87,11 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Short: "Creates new artifact from file or standard input",
 		Long:  longDescription,
 		Example: `
-## Create artifact in my-group from schema.json file
-rhoas service-registry artifacts create my-group schema.json
-
 # Create an artifact in default group
-rhoas service-registry artifacts create my-artifact.json
+rhoas service-registry artifact create my-artifact.json
 
 # Create an artifact with specified type
-rhoas service-registry artifacts create --type=JSON my-artifact.json
+rhoas service-registry artifact create --type=JSON my-artifact.json
 		`,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
