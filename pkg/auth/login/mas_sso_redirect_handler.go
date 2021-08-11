@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/coreos/go-oidc/v3/oidc"
@@ -28,6 +29,7 @@ type masRedirectPageHandler struct {
 	Logger        logging.Logger
 	ServerAddr    string
 	Port          int
+	AuthURL       *url.URL
 	AuthOptions   []oauth2.AuthCodeOption
 	State         string
 	Oauth2Config  *oauth2.Config
@@ -86,7 +88,7 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	}
 
 	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
-	pageBody := h.Localizer.MustLocalize("login.masRedirectPage.body", localize.NewEntry("Username", rawUsername))
+	pageBody := h.Localizer.MustLocalize("login.masRedirectPage.body", localize.NewEntry("Host", h.AuthURL.Host), localize.NewEntry("Username", rawUsername))
 
 	redirectPage := fmt.Sprintf(masSSOredirectHTMLPage, pageTitle, pageTitle, pageBody)
 
