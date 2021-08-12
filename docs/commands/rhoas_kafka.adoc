@@ -94,6 +94,13 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
+* link:rhoas_kafka_update.adoc#rhoas-kafka-update[rhoas kafka update]	 - Update configuration details of a Kafka instance.
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-update_{context}[rhoas kafka update]	 - Update configuration details of a Kafka instance.
+endif::[]
+
+ifdef::env-github,env-browser[]
 * link:rhoas_kafka_use.adoc#rhoas-kafka-use[rhoas kafka use]	 - Set the current Apache Kafka instance
 endif::[]
 ifdef::pantheonenv[]

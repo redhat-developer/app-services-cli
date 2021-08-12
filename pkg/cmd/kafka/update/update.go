@@ -32,6 +32,8 @@ type options struct {
 
 	outputFormat string
 
+	interactive bool
+
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -76,7 +78,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.MustLocalize("service.error.idAndNameCannotBeUsed"))
+				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -144,7 +146,7 @@ func run(opts *options) error {
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
 
 	opts.logger.Infof(`
-%v 🗒️
+ %v 🗒️
 
  %v`, color.Underline(color.Bold(opts.localizer.MustLocalize("kafka.update.summaryTitle"))), updateSummary)
 
@@ -170,18 +172,20 @@ func run(opts *options) error {
 		UpdateKafkaById(opts.Context, kafkaInstance.GetId()).
 		KafkaUpdateRequest(*updateObj).
 		Execute()
+		
+		if httpRes != nil {
+	defer httpRes.Body.Close()
+		}
 
 	spinner.Stop()
 
-	if err != nil {
-		opts.logger.Info("\n") // Needed to ensure there is a newline after the spinner has stopped
-		if apiError, ok := kas.GetAPIError(err); ok {
-			return errors.New(apiError.GetReason())
-		}
-		return err
+	if apiError, ok := kas.GetAPIError(err); ok {
+		return errors.New(apiError.GetReason())
 	}
 
-	defer httpRes.Body.Close()
+	if err != nil {
+		return err
+	}
 
 	opts.logger.Infof(`
 

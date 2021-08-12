@@ -29,6 +29,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 	// add sub-commands
 	cmd.AddCommand(
 		create.NewCreateCommand(f),
+		update.NewUpdateCommand(f),
 		describe.NewDescribeCommand(f),
 		delete.NewDeleteCommand(f),
 		list.NewListCommand(f),

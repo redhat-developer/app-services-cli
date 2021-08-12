@@ -30,7 +30,11 @@ description = 'Description for the --name flag'
 one = 'Name of the Kafka instance you want to update'
 
 [kafka.update.flag.owner]
+<<<<<<< HEAD
 description = 'Description for the --owner flag'
+=======
+description = 'Description for the --name flag'
+>>>>>>> 39811b7f (feat(kafka): add ability to update Kafka instance)
 one = 'ID of the user you want to set as the owner of this Kafka instance'
 
 [kafka.update.flag.yes]
