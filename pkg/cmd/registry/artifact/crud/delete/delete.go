@@ -145,7 +145,7 @@ func runDelete(opts *Options) error {
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
-		logger.Info("Artifacts in group" + opts.group + " deleted")
+		logger.Info("Artifacts in group " + opts.group + " deleted")
 	} else {
 		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact).Execute()
 		if err != nil {

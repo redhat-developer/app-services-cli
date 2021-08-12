@@ -154,8 +154,8 @@ func runList(opts *Options) error {
 
 	request = request.Offset((opts.page - 1) * opts.limit)
 	request = request.Limit(opts.limit)
-	request = request.Orderby(registryinstanceclient.CREATED_ON)
-	request = request.Order(registryinstanceclient.ASC)
+	request = request.Orderby(registryinstanceclient.SORTBY_CREATED_ON)
+	request = request.Order(registryinstanceclient.SORTORDER_ASC)
 
 	response, _, err := request.Execute()
 	if err != nil {
