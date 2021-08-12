@@ -25,6 +25,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 
@@ -56,6 +57,7 @@ type KeycloakConnection struct {
 	keycloakClient    gocloak.GoCloak
 	masKeycloakClient gocloak.GoCloak
 	apiURL            *url.URL
+	consoleURL        *url.URL
 	defaultRealm      string
 	masRealm          string
 	logger            logging.Logger
@@ -186,6 +188,17 @@ func (c *KeycloakConnection) API() *api.API {
 		return srsAPIClient.RegistriesApi
 	}
 
+	rbacAPI := rbac.RbacAPI{
+		PrincipalAPI: func() rbac.PrincipalAPI {
+			cfg := rbac.Config{
+				Debug:       c.logger.DebugEnabled(),
+				BaseURL:     c.consoleURL,
+				AccessToken: c.Token.AccessToken,
+			}
+			return rbac.NewPrincipalAPIClient(&cfg)
+		},
+	}
+
 	kafkaAdminAPIFunc := func(kafkaID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error) {
 		api := kafkaAPIFunc()
 
@@ -273,6 +286,7 @@ func (c *KeycloakConnection) API() *api.API {
 		ServiceRegistryInstance: registryInstanceAPIFunc,
 		AccountMgmt:             amsAPIFunc,
 		ServiceRegistryMgmt:     registryAPIFunc,
+		RBAC:                    rbacAPI,
 	}
 }
 

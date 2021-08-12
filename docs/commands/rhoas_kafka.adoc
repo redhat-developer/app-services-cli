@@ -52,10 +52,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
 endif::[]
 
 ifdef::env-github,env-browser[]
@@ -91,6 +91,13 @@ ifdef::env-github,env-browser[]
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_update.adoc#rhoas-kafka-update[rhoas kafka update]	 - Update configuration details of a Kafka instance.
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-update_{context}[rhoas kafka update]	 - Update configuration details of a Kafka instance.
 endif::[]
 
 ifdef::env-github,env-browser[]

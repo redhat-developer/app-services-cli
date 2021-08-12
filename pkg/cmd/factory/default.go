@@ -77,6 +77,8 @@ func New(localizer localize.Localizer) *Factory {
 		}
 		builder.WithMASAuthURL(cfg.MasAuthURL)
 
+		builder.WithConsoleURL(build.ConsoleURL)
+
 		builder.WithInsecure(cfg.Insecure)
 
 		builder.WithConfig(cfgFile)

@@ -47,14 +47,14 @@ var (
 var (
 	ProductionAPIURL            = "https://api.openshift.com"
 	StagingAPIURL               = "https://api.stage.openshift.com"
+	ConsoleURL                  = "https://console.redhat.com"
 	DefaultClientID             = "rhoas-cli-prod"
 	DefaultUserAgentPrefix      = "rhoas-cli_"
 	DefaultOfflineTokenClientID = "cloud-services"
-	// #nosec G101
-	OfflineTokenURL      = "https://console.redhat.com/openshift/token"
-	ProductionAuthURL    = "https://sso.redhat.com/auth/realms/redhat-external"
-	ProductionMasAuthURL = "https://identity.api.openshift.com/auth/realms/rhoas"
-	StagingMasAuthURL    = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
+	OfflineTokenURL             = ConsoleURL + "/openshift/token"
+	ProductionAuthURL           = "https://sso.redhat.com/auth/realms/redhat-external"
+	ProductionMasAuthURL        = "https://identity.api.openshift.com/auth/realms/rhoas"
+	StagingMasAuthURL           = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
 )
 
 func init() {

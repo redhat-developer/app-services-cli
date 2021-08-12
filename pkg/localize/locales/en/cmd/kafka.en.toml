@@ -77,7 +77,7 @@ description = "Use is the one-line usage message"
 one = "consumer-group"
 
 [kafka.consumerGroup.cmd.shortDescription]
-one = 'Describe, list, and delete consumer groups for the current Kafka instance.'
+one = 'Describe, list, and delete consumer groups for the current Apache Kafka instance'
 
 [kafka.consumerGroup.cmd.longDescription]
 one = '''
@@ -860,3 +860,7 @@ one = 'Kafka instance "{{.Name}}" not found'
 
 [kafka.common.error.notReadyError]
 one = 'Kafka instance "{{.Name}}" is not ready yet'
+
+[kafka.update.flag.owner]
+description = 'Description for the --owner flag'
+one = 'ID of the Kafka instance owner'

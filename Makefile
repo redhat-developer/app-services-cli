@@ -34,6 +34,7 @@ endif
 binary:=rhoas
 
 amsapi_dir=./pkg/api/ams/amsclient
+rbacapi_dir=./pkg/api/rbac/rbacclient
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -85,6 +86,13 @@ openapi/ams/generate:
 	# generate mock
 	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
 	gofmt -w ${amsapi_dir}
+.PHONY: openapi/ams/generate
+
+openapi/rbac/generate:
+	openapi-generator-cli generate -i https://console.redhat.com/api/rbac/v1/openapi.json -g go --package-name rbacclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${rbacapi_dir}
+	# generate mock
+	moq -out ${rbacapi_dir}/role_api_mock.go ${rbacapi_dir} RoleApi
+	gofmt -w ${rbacapi_dir}
 .PHONY: openapi/ams/generate
 
 mock-api/start: 

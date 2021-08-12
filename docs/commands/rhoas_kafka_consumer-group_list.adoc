@@ -46,9 +46,9 @@ $ rhoas kafka consumer-group list -o json
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance.
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
 endif::[]
 
