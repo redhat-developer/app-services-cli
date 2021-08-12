@@ -9,9 +9,9 @@ one = 'Create, describe, update, list and delete topics for the current Kafka in
 
 [kafka.topic.cmd.example]
 one = '''
-## Create a Topic
+## Create a topic
 rhoas kafka topic create mytopic
 
-## List all Topics
+## List all topics
 rhoas kafka topic list 
 '''

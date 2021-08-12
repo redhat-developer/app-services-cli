@@ -10,9 +10,9 @@ one = 'Use these commands to describe, list, and delete consumer groups for the 
 
 [kafka.consumerGroup.cmd.example]
 one = '''
-## Delete a Consumer Group
+## Delete a consumer group
 rhoas kafka consumer-group delete --id consumer_group_1
 
-## List all Consumer Groups
+## List all consumer groups
 rhoas kafka consumer-group list
 '''

@@ -33,6 +33,7 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 
 	// Testing cobra commands with default recommended config
 	vali := rules.ValidatorConfig{
+		ValidatorOptions: rules.ValidatorOptions{},
 		ValidatorRules: rules.ValidatorRules{
 			Length: rules.Length{
 				Limits: map[string]rules.Limit{
