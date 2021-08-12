@@ -133,13 +133,13 @@ func runDelete(opts *Options) error {
 		opts.group = util.DefaultArtifactGroup
 	}
 
+	ctx := context.Background()
 	if opts.artifact == "" {
 		logger.Info("Artifact was not specified. Command will delete all artifacts in the group")
 		err = confirmDelete(opts, "Do you want to delete ALL ARTIFACTS from group "+opts.group)
 		if err != nil {
 			return err
 		}
-		ctx := context.Background()
 		request := dataAPI.ArtifactsApi.DeleteArtifactsInGroup(ctx, opts.group)
 		_, err = request.Execute()
 		if err != nil {
@@ -147,15 +147,18 @@ func runDelete(opts *Options) error {
 		}
 		logger.Info("Artifacts in group" + opts.group + " deleted")
 	} else {
+		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact).Execute()
+		if err != nil {
+			return errors.New("Artifact " + opts.artifact + " not found")
+		}
 		logger.Info("Deleting artifact " + opts.artifact)
 		err = confirmDelete(opts, "Do you want to delete artifact "+opts.artifact+" from group "+opts.group)
 		if err != nil {
 			return err
 		}
-		ctx := context.Background()
 		request := dataAPI.ArtifactsApi.DeleteArtifact(ctx, opts.group, opts.artifact)
 
-		_, err := request.Execute()
+		_, err = request.Execute()
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
