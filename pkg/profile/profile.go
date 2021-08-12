@@ -3,21 +3,23 @@ package profile
 
 import (
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 var DevPreviewEnv string = "RHOAS_DEV"
 
-// Visual element displayed in help
-func ApplyDevPreviewLabel(message string) string {
-	return "[Preview] " + message
+// ApplyDevPreviewLabel adds visual element displayed in help
+func ApplyDevPreviewLabel(cmd *cobra.Command) {
+	cmd.Long = "This command is available as part of developer preview.\n" + cmd.Long
 }
 
-// Annotation used in templates and tools like documentation generation
+// DevPreviewAnnotation used in templates and tools like documentation generation
 func DevPreviewAnnotation() map[string]string {
 	return map[string]string{"channel": "preview"}
 }
 
-// Check if preview is enabled
-func DevPreviewEnabled() bool {
+// DevModeEnabled Check if development mode is enabled
+func DevModeEnabled() bool {
 	return os.Getenv(DevPreviewEnv) != ""
 }

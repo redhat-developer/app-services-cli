@@ -17,14 +17,15 @@ import (
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "service-registry",
-		Hidden:      !profile.DevPreviewEnabled(),
+		Hidden:      !profile.DevModeEnabled(),
 		Annotations: profile.DevPreviewAnnotation(),
-
-		Short:   profile.ApplyDevPreviewLabel(f.Localizer.MustLocalize("registry.cmd.shortDescription")),
-		Long:    f.Localizer.MustLocalize("registry.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("registry.cmd.example"),
-		Args:    cobra.MinimumNArgs(1),
+		Short:       f.Localizer.MustLocalize("registry.cmd.shortDescription"),
+		Long:        f.Localizer.MustLocalize("registry.cmd.longDescription"),
+		Example:     f.Localizer.MustLocalize("registry.cmd.example"),
+		Args:        cobra.MinimumNArgs(1),
 	}
+
+	profile.ApplyDevPreviewLabel(cmd)
 	// add sub-commands
 	cmd.AddCommand(
 		create.NewCreateCommand(f),
