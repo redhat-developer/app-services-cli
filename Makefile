@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := binary
 SHELL = bash
 
 # see internal/build.go on build configurations
@@ -95,11 +95,6 @@ format:
 
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
-
-# Symlink common git hookd into .git directory
-githooks:
-	ln -fs $$(pwd)/githooks/pre-commit .git/hooks
-.PHONY: githooks
 
 docs/check: docs/generate
 	./scripts/check-docs.sh
