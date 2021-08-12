@@ -17,7 +17,7 @@ import (
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "service-registry",
-		Hidden:      !profile.DevPreviewEnabled(f),
+		Hidden:      !profile.DevPreviewEnabled(),
 		Annotations: profile.DevPreviewAnnotation(),
 
 		Short:   profile.ApplyDevPreviewLabel(f.Localizer.MustLocalize("registry.cmd.shortDescription")),

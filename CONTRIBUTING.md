@@ -22,6 +22,15 @@ You can run the CLI commands files directly with `go run`. All commands and subc
 go run ./cmd/rhoas kafka create "test" --provider=aws --region=us-east-1
 ```
 
+### Development features
+
+To enable development and early access commands please set environment variable in your terminal:
+
+```bash
+RHOAS_DEV=true
+rhoas service-registry
+```
+
 ### Development commands
 
 #### `make lint`
