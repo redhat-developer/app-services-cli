@@ -13,7 +13,7 @@ Kubernetes Namespace:   {{.Namespace}}
 Service Account Secret: {{.ServiceAccountSecretName}}
 '''
 
-[cluster.kubernetes.error.missingConfigError]
+[cluster.kubernetes.error.configNotFoundError]
 one = 'missing kubeconfig file'
 
 [cluster.kubernetes.error.loadConfigError]
