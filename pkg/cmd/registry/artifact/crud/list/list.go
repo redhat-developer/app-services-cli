@@ -58,7 +58,7 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
-// NewListCommand creates a new command for listing service registries.
+// NewListCommand creates a new command for listing registry artifacts.
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,

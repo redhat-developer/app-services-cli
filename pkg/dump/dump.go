@@ -137,7 +137,7 @@ func haveYQ(minVersion int) bool {
 	return false
 }
 
-// Dump prints the given data to the given format
+// PrintDataInFormat prints the given data to the given format
 func PrintDataInFormat(format string, data interface{}, writter io.Writer) {
 	switch format {
 	case YAMLFormat, YMLFormat:

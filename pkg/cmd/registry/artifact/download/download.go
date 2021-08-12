@@ -40,6 +40,7 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
+// NewDownloadCommand creates a new command for downloading binary content for registry artifacts.
 func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,

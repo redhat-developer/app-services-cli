@@ -40,6 +40,7 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
+// NewUpdateCommand creates a new command for updating binary content of registry artifacts.
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		IO:         f.IOStreams,

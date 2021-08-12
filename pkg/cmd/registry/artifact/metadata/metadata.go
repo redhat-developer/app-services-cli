@@ -34,6 +34,7 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
+// NewMetadataCommand creates a new command for fetching metadata for registry artifacts.
 func NewMetadataCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
 		Config:     f.Config,

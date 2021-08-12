@@ -32,7 +32,7 @@ func GetAPIError(err error) (e registryinstanceclient.Error, ok bool) {
 	return e, ok
 }
 
-// Error code contains message that can be returned to the user
+// TransformError code contains message that can be returned to the user
 func TransformError(err error) error {
 	mappedErr, ok := GetAPIError(err)
 	if !ok {
