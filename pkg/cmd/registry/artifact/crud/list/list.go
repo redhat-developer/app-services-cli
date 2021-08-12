@@ -47,7 +47,6 @@ type Options struct {
 
 	registryID   string
 	outputFormat string
-	orderBy      string
 
 	page  int32
 	limit int32
@@ -120,7 +119,6 @@ rhoas service-registry artifact list --page=2 --limit=10
 
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, "Page number")
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, "Page limit")
-	cmd.Flags().StringVarP(&opts.orderBy, "order", "", "", "Order by fields (id, name etc.) ")
 
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml, table)")
@@ -156,6 +154,8 @@ func runList(opts *Options) error {
 
 	request = request.Offset((opts.page - 1) * opts.limit)
 	request = request.Limit(opts.limit)
+	request = request.Orderby(registryinstanceclient.CREATED_ON)
+	request = request.Order(registryinstanceclient.ASC)
 
 	response, _, err := request.Execute()
 	if err != nil {
