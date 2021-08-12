@@ -162,6 +162,12 @@ func runList(opts *Options) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
+	totalCount := opts.page * opts.limit
+	if len(response.Artifacts) != 0 && response.GetCount() < totalCount {
+		logger.Info("Provided limit and page arguments are larger than total count of elements on the server", response.GetCount())
+		return nil
+	}
+
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {
 		logger.Info("No artifacts available for " + opts.group + " group and registry id " + opts.registryID)
 		return nil
