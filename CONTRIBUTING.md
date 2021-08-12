@@ -27,8 +27,14 @@ go run ./cmd/rhoas kafka create "test" --provider=aws --region=us-east-1
 To enable development and early access commands please set environment variable in your terminal:
 
 ```bash
-RHOAS_DEV=true
+export RHOAS_DEV=true
 rhoas service-registry
+```
+
+To permamently enable dev commands add export to your bash/zsh profile files
+
+```bash
+export RHOAS_DEV=true
 ```
 
 ### Development commands
