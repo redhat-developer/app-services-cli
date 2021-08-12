@@ -25,7 +25,6 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		Args:        cobra.MinimumNArgs(1),
 	}
 
-	profile.ApplyDevPreviewLabel(cmd)
 	// add sub-commands
 	cmd.AddCommand(
 		create.NewCreateCommand(f),
@@ -35,6 +34,8 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		use.NewUseCommand(f),
 		artifact.NewArtifactsCommand(f),
 	)
+
+	profile.ApplyDevPreviewLabel(cmd)
 
 	return cmd
 }
