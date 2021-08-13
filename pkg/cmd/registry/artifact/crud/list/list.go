@@ -121,7 +121,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, "Page limit")
 
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml, table)")
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -162,12 +162,6 @@ func runList(opts *Options) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	totalCount := opts.page * opts.limit
-	if len(response.Artifacts) != 0 && response.GetCount() < totalCount {
-		logger.Info("Provided limit and page arguments are larger than total count of elements on the server", response.GetCount())
-		return nil
-	}
-
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {
 		logger.Info("No artifacts available for " + opts.group + " group and registry id " + opts.registryID)
 		return nil
@@ -181,7 +175,7 @@ func runList(opts *Options) error {
 		data, _ := yaml.Marshal(response)
 		_ = dump.YAML(opts.IO.Out, data)
 	default:
-		rows := mapResponseItemsToRows(&response.Artifacts)
+		rows := mapResponseItemsToRows(response.Artifacts)
 		dump.Table(opts.IO.Out, rows)
 		logger.Info("")
 	}
@@ -189,11 +183,11 @@ func runList(opts *Options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(artifacts *[]registryinstanceclient.SearchedArtifact) []artifactRow {
+func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact) []artifactRow {
 	rows := []artifactRow{}
 
-	for i := range *artifacts {
-		k := (*artifacts)[i]
+	for i := range artifacts {
+		k := (artifacts)[i]
 		row := artifactRow{
 			Id:        k.GetId(),
 			Name:      k.GetName(),

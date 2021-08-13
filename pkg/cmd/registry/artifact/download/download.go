@@ -147,7 +147,7 @@ func runGet(opts *Options) error {
 		request := dataAPI.ArtifactsApi.GetContentByHash(ctx, opts.hash)
 		dataFile, _, err = request.Execute()
 	} else {
-		return errors.New("Please specify at least one flag: [contentId, globalId, hash]")
+		return errors.New("please specify at least one flag: [contentId, global-id, hash]")
 	}
 
 	if err != nil {

@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-var DefaultArtifactGroup = "default"
+const DefaultArtifactGroup = "default"
 
 var AllowedArtifactTypeEnumValues = []string{
 	"AVRO",

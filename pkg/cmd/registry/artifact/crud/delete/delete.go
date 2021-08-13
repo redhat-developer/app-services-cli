@@ -180,7 +180,7 @@ func confirmDelete(opts *Options, message string) error {
 		}
 
 		if !shouldContinue {
-			return errors.New("")
+			return errors.New("command stopped by user")
 		}
 	}
 	return nil
