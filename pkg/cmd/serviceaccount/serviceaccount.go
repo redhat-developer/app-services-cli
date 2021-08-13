@@ -13,10 +13,11 @@ import (
 // NewServiceAccountCommand creates a new command sub-group to manage service accounts
 func NewServiceAccountCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   f.Localizer.MustLocalize("serviceAccount.cmd.use"),
-		Short: f.Localizer.MustLocalize("serviceAccount.cmd.shortDescription"),
-		Long:  f.Localizer.MustLocalize("serviceAccount.cmd.longDescription"),
-		Args:  cobra.ExactArgs(1),
+		Use:     f.Localizer.MustLocalize("serviceAccount.cmd.use"),
+		Short:   f.Localizer.MustLocalize("serviceAccount.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("serviceAccount.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("serviceAccount.cmd.example"),
+		Args:    cobra.ExactArgs(1),
 	}
 
 	cmd.AddCommand(

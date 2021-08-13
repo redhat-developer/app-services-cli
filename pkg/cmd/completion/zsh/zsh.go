@@ -10,6 +10,7 @@ func NewCommand(f *factory.Factory) *cobra.Command {
 		Use:                   f.Localizer.MustLocalize("completion.zsh.cmd.use"),
 		Short:                 f.Localizer.MustLocalize("completion.zsh.cmd.shortDescription"),
 		Long:                  f.Localizer.MustLocalize("completion.zsh.cmd.longDescription"),
+		Example:               f.Localizer.MustLocalize("completion.zsh.cmd.example"),
 		DisableFlagsInUseLine: true,
 		Args:                  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {

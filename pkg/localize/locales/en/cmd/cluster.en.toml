@@ -4,6 +4,9 @@ one = 'cluster'
 [cluster.cmd.shortDescription]
 one = 'View and perform operations on your Kubernetes or OpenShift cluster'
 
+[cluster.cmd.longDescription]
+one = 'Use these commands to connect and bind your services to Kubernetes or OpenShift applications. You can also check if the Kubernetes or OpenShift cluster has the required Operators to perform this operation.'
+
 [cluster.cmd.example]
 one = '''
 # check status of the connection to your cluster
