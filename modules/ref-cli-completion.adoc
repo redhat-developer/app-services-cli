@@ -18,6 +18,21 @@ When you have installed the command completion script, make sure you restart you
 
 
 [discrete]
+== Examples
+
+....
+## Generate command completion script for Bash shell
+rhoas completion bash
+
+## Generate command completion script for fish shell
+rhoas completion fish
+
+## Generate command completion script for Zsh shell
+rhoas completion zsh
+
+....
+
+[discrete]
 == Options inherited from parent commands
 
   `-h`, `--help`::      Show help for a command
