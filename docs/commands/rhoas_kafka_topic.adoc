@@ -11,6 +11,18 @@ Create, describe, update, list and delete topics
 Create, describe, update, list and delete topics for the current Kafka instance.
 
 [discrete]
+== Examples
+
+....
+## Create a topic
+rhoas kafka topic create mytopic
+
+## List all topics
+rhoas kafka topic list 
+
+....
+
+[discrete]
 == Options inherited from parent commands
 
   `-h`, `--help`::      Show help for a command
@@ -22,10 +34,10 @@ Create, describe, update, list and delete topics for the current Kafka instance.
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Apache Kafka instances
+* link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
 endif::[]
 
 ifdef::env-github,env-browser[]

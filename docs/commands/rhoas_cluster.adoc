@@ -6,6 +6,11 @@ ifdef::env-github,env-browser[:context: cmd]
 View and perform operations on your Kubernetes or OpenShift cluster
 
 [discrete]
+== Synopsis
+
+Use these commands to connect and bind your services to Kubernetes or OpenShift applications. You can also check if the Kubernetes or OpenShift cluster has the required Operators to perform this operation.
+
+[discrete]
 == Examples
 
 ....
