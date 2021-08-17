@@ -75,7 +75,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 			}
 
 			if opts.artifact == "" {
-				return errors.New("artifact is required. Please specify artifact as positional argument or by using --artifact-id flag")
+				return errors.New("artifact id is required. Please specify artifact as positional argument or by using --artifact-id flag")
 			}
 
 			if len(args) > 1 {

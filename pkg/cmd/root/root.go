@@ -3,8 +3,6 @@ package root
 import (
 	"flag"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/config"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
@@ -42,7 +40,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	cmd.Version = version
 
-	// cmd.SetVersionTemplate(f.Localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	// Child commands
@@ -55,9 +52,8 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(completion.NewCompletionCommand(f))
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
-	cmd.AddCommand(config.NewConfigCommand(f))
 
-	// Early stage/dev preview commands
+	// Registry commands
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 
 	return cmd

@@ -60,6 +60,10 @@ rhoas service-registry artifact versions my-artifact --group mygroup
 				opts.artifact = args[0]
 			}
 
+			if opts.artifact == "" {
+				return errors.New("artifact id is required. Please specify artifact as positional argument or by using --artifact-id flag")
+			}
+
 			if opts.registryID != "" {
 				return runGet(opts)
 			}

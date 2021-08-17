@@ -65,7 +65,7 @@ rhoas service-registry artifact metadata my-artifact --group mygroup
 			}
 
 			if opts.artifact == "" {
-				return errors.New("artifact is required. Please specify artifact by using --artifact-id flag")
+				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
 			}
 
 			if opts.registryID != "" {
