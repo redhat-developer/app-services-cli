@@ -93,7 +93,7 @@ rhoas service-registry artifact delete my-artifact
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("No service Registry selected. Use 'rhoas service-registry use' use to select your registry")
+				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
@@ -149,7 +149,7 @@ func runDelete(opts *Options) error {
 	} else {
 		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact).Execute()
 		if err != nil {
-			return errors.New("Artifact " + opts.artifact + " not found")
+			return errors.New("artifact " + opts.artifact + " not found")
 		}
 		logger.Info("Deleting artifact " + opts.artifact)
 		err = confirmDelete(opts, "Do you want to delete artifact "+opts.artifact+" from group "+opts.group)

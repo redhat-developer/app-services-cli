@@ -75,7 +75,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 			}
 
 			if opts.artifact == "" {
-				return errors.New("Artifact is required. Please specify artifact as positional argument or by using --artifact-id flag")
+				return errors.New("artifact is required. Please specify artifact as positional argument or by using --artifact-id flag")
 			}
 
 			if len(args) > 1 {
@@ -92,7 +92,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("No service Registry selected. Use 'rhoas service-registry use' to select your registry")
+				return errors.New("no service Registry selected. Use 'rhoas service-registry use' to select your registry")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)

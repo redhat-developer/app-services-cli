@@ -90,7 +90,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("No service Registry selected. Use 'rhoas service-registry use' to select your registry")
+				return errors.New("no service Registry selected. Use 'rhoas service-registry use' to select your registry")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)

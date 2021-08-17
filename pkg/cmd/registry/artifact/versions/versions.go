@@ -70,7 +70,7 @@ rhoas service-registry artifact versions my-artifact --group mygroup
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("No service Registry selected. Use 'rhoas service-registry use' to select your registry")
+				return errors.New("no service Registry selected. Use 'rhoas service-registry use' to select your registry")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)

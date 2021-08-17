@@ -106,7 +106,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("No service Registry selected. Use rhoas registry use to select your registry")
+				return errors.New("no service Registry selected. Use rhoas registry use to select your registry")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)

@@ -112,12 +112,12 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 
 			if opts.artifactType != "" {
 				if _, err = registryinstanceclient.NewArtifactTypeFromValue(opts.artifactType); err != nil {
-					return errors.New("Invalid artifact type. Please use one of following values: " + util.GetAllowedArtifactTypeEnumValuesAsString())
+					return errors.New("invalid artifact type. Please use one of following values: " + util.GetAllowedArtifactTypeEnumValuesAsString())
 				}
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("No service Registry selected. Use 'rhoas service-registry use' use to select your registry")
+				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
