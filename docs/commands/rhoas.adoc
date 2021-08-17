@@ -54,13 +54,6 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_config.adoc#rhoas-config[rhoas config]	 - Change specific configuration for the options
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-config_{context}[rhoas config]	 - Change specific configuration for the options
-endif::[]
-
-ifdef::env-github,env-browser[]
 * link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
 endif::[]
 ifdef::pantheonenv[]
