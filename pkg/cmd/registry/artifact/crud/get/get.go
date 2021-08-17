@@ -66,7 +66,7 @@ rhoas service-registry artifact get myschema myschema.json
 rhoas service-registry artifact get myschema | grep -i 'user'
 
 ## Get latest artifact by specifying custom group, registry and name as flag
-rhoas service-registry artifact get --group mygroup --instance-id=myregistry --artifact myartifact
+rhoas service-registry artifact get --group mygroup --instance-id=myregistry --artifact-id myartifact
 `,
 		Args: cobra.RangeArgs(0, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -75,7 +75,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 			}
 
 			if opts.artifact == "" {
-				return errors.New("Artifact is required. Please specify artifact as positional argument or by using --artifact flag")
+				return errors.New("Artifact is required. Please specify artifact as positional argument or by using --artifact-id flag")
 			}
 
 			if len(args) > 1 {
@@ -100,7 +100,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact", "a", "", "Id of the artifact")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVarP(&opts.outputFile, "output-file", "", "", "Filename of the output file")

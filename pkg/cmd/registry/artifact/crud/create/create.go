@@ -128,7 +128,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", "File location of the artifact")
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact", "a", "", "Id of the artifact")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", "Type of artifact. Choose from:  "+util.GetAllowedArtifactTypeEnumValuesAsString())
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")

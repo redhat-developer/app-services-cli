@@ -28,25 +28,25 @@ This set of commands provide create, read, update, and delete operations for sch
 `,
 		Example: `
 ## Create artifact in my-group from schema.json file
-rhoas service-registry artifact create --artifact=my-artifact --group=my-group artifact.json
+rhoas service-registry artifact create --artifact-id=my-artifact --group=my-group artifact.json
 
 ## Get artifact content
-rhoas service-registry artifact get --artifact=my-artifact --group=my-group file.json 
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group file.json 
 
 ## Delete artifact
-rhoas service-registry artifact delete --artifact=my-artifact
+rhoas service-registry artifact delete --artifact-id=my-artifact
 
 ## Get artifact metadata
-rhoas service-registry artifact metadata --artifact=my-artifact --group=my-group
+rhoas service-registry artifact metadata --artifact-id=my-artifact --group=my-group
 
 ## Update artifact
-rhoas service-registry artifact update --artifact=my-artifact artifact-new.json
+rhoas service-registry artifact update --artifact-id=my-artifact artifact-new.json
 
 ## List Artifacts
 rhoas service-registry artifact list --group=my-group --limit=10 page=1
 
 ## View artifact versions
-rhoas service-registry artifact versions --artifact=my-artifact --group=my-group
+rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-group
 		`,
 		Args: cobra.MinimumNArgs(1),
 	}

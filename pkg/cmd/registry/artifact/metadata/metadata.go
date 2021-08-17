@@ -65,7 +65,7 @@ rhoas service-registry artifact metadata my-artifact --group mygroup
 			}
 
 			if opts.artifact == "" {
-				return errors.New("Artifact is required. Please specify artifact by using --artifact flag")
+				return errors.New("Artifact is required. Please specify artifact by using --artifact-id flag")
 			}
 
 			if opts.registryID != "" {
@@ -86,7 +86,7 @@ rhoas service-registry artifact metadata my-artifact --group mygroup
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact", "a", "", "Id of the artifact")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")

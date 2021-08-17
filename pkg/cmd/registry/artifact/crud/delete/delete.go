@@ -56,8 +56,8 @@ Deletes all of the artifacts that exist in a given group.
 
 Delete command works in two modes:
 
-	- When --artifact argument is missing delete will delete all artifacts in the group
-	- When --artifact is specified delete deletes only single artifact and its version
+	- When --artifact-id argument is missing delete will delete all artifacts in the group
+	- When --artifact-id is specified delete deletes only single artifact and its version
 
 When --group parameter is missing the command will create a new artifact under the "default" group.
 		`,
@@ -104,7 +104,7 @@ rhoas service-registry artifact delete my-artifact
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, "Delete without prompt")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact", "a", "", "Id of the artifact")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 	flagutil.EnableOutputFlagCompletion(cmd)

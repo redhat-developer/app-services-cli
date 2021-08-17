@@ -67,7 +67,7 @@ This content is updated under a unique artifactId provided by user.
 		`,
 		Example: `
 ## update artifact from group and artifact-id
-rhoas service-registry artifact update my-artifact.json --artifact=my-artifact --group my-group
+rhoas service-registry artifact update my-artifact.json --artifact-id=my-artifact --group my-group
 `,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -77,7 +77,7 @@ rhoas service-registry artifact update my-artifact.json --artifact=my-artifact -
 			}
 
 			if opts.artifact == "" {
-				return errors.New("Artifact is required. Please specify artifact by using --artifact flag")
+				return errors.New("Artifact is required. Please specify artifact by using --artifact-id flag")
 			}
 
 			if len(args) > 0 {
@@ -105,7 +105,7 @@ rhoas service-registry artifact update my-artifact.json --artifact=my-artifact -
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", "File location of the artifact")
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact", "a", "", "Id of the artifact")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 
