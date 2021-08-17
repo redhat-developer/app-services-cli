@@ -98,7 +98,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.hash, "hash", "", "", "SHA-256 hash of the artifact")
 	cmd.Flags().Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, "Global ID of the artifact")
 	cmd.Flags().Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, "ContentId of the artifact")
@@ -127,7 +127,7 @@ func runGet(opts *Options) error {
 		return err
 	}
 
-	if opts.group == "" {
+	if opts.group == util.DefaultArtifactGroup {
 		logger.Info("Group was not specified. Using 'default' artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}

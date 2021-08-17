@@ -129,7 +129,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", "File location of the artifact")
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", "Type of artifact. Choose from:  "+util.GetAllowedArtifactTypeEnumValuesAsString())
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 
@@ -158,8 +158,8 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	if opts.group == "" {
-		logger.Info("Group was not specified. Using " + util.DefaultArtifactGroup + " artifacts group.")
+	if opts.group == util.DefaultArtifactGroup {
+		logger.Info("Group was not specified. Using ", util.DefaultArtifactGroup, " artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
@@ -171,7 +171,7 @@ func runCreate(opts *Options) error {
 			return err
 		}
 	} else {
-		logger.Info("Reading file content from stdin")
+		logger.Info("Reading file content from standard input")
 		specifiedFile, err = util.CreateFileFromStdin()
 		if err != nil {
 			return err

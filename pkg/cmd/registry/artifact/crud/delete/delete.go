@@ -105,7 +105,7 @@ rhoas service-registry artifact delete my-artifact
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -128,8 +128,8 @@ func runDelete(opts *Options) error {
 		return err
 	}
 
-	if opts.group == "" {
-		logger.Info("Group was not specified. Using " + util.DefaultArtifactGroup + " artifacts group.")
+	if opts.group == util.DefaultArtifactGroup {
+		logger.Info("Group was not specified. Using ", util.DefaultArtifactGroup, " artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 

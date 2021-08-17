@@ -101,7 +101,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 	}
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
 	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVarP(&opts.outputFile, "output-file", "", "", "Filename of the output file")
 	cmd.Flags().StringVarP(&opts.version, "version", "", "", "Version of the artifact")
@@ -127,8 +127,8 @@ func runGet(opts *Options) error {
 		return err
 	}
 
-	if opts.group == "" {
-		logger.Info("Group was not specified. Using " + util.DefaultArtifactGroup + " artifacts group.")
+	if opts.group == util.DefaultArtifactGroup {
+		logger.Info("Group was not specified. Using ", util.DefaultArtifactGroup, " artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
