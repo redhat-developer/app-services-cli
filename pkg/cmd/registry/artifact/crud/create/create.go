@@ -159,7 +159,7 @@ func runCreate(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using ", util.DefaultArtifactGroup, " artifacts group.")
+		logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
