@@ -2,9 +2,7 @@ package describe
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
-	"io"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -19,7 +17,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 type Options struct {
@@ -113,22 +110,7 @@ func runDescribe(opts *Options) error {
 		}
 	}
 
-	return printService(opts.IO.Out, registry, opts.outputFormat)
-}
+	dump.PrintDataInFormat(opts.outputFormat, registry, opts.IO.Out)
 
-func printService(w io.Writer, registry interface{}, outputFormat string) error {
-	switch outputFormat {
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, err := yaml.Marshal(registry)
-		if err != nil {
-			return err
-		}
-		return dump.YAML(w, data)
-	default:
-		data, err := json.Marshal(registry)
-		if err != nil {
-			return err
-		}
-		return dump.JSON(w, data)
-	}
+	return nil
 }

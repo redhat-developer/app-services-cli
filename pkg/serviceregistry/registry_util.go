@@ -18,7 +18,7 @@ func ValidateName(val interface{}) error {
 	}
 
 	if len(name) < 1 || len(name) > 32 {
-		return errors.New("ServiceRegistry instance name must be between 1 and 32 characters")
+		return errors.New("serviceRegistry instance name must be between 1 and 32 characters")
 	}
 
 	matched := validNameRegexp.MatchString(name)
@@ -27,5 +27,5 @@ func ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return errors.New("Invalid service registry name: " + name)
+	return errors.New("invalid service registry name: " + name)
 }
