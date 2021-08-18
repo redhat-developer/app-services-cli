@@ -28,9 +28,7 @@ type Options struct {
 	group    string
 
 	registryID string
-
-	outputFormat string
-	force        bool
+	force      bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -74,11 +72,6 @@ rhoas service-registry artifact delete my-artifact
 				return flag.RequiredWhenNonInteractiveError("yes")
 			}
 
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
 			if len(args) > 0 {
 				opts.artifact = args[0]
 			}
@@ -102,8 +95,6 @@ rhoas service-registry artifact delete my-artifact
 	}
 
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, "Delete without prompt")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
