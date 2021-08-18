@@ -18,7 +18,7 @@ func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 		Use:   "artifact",
 		Short: "Manage Service Registry Artifacts",
 		Long: `
-Manage Service Registry Artifacts using currently selected Service Registry.
+Manage Service Registry Artifacts using the currently selected Service Registry.
 
 Commands are executed on the currently selected Service Registry instance that can be overridden by --instance-id flag.
 
