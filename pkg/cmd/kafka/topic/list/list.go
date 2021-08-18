@@ -105,7 +105,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
-	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
+	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
 	cmd.Flags().Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
 	cmd.Flags().Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 

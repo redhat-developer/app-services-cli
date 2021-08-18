@@ -106,7 +106,7 @@ rhoas service-registry artifact delete my-artifact
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
-	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
