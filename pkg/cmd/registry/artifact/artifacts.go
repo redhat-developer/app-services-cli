@@ -18,6 +18,8 @@ func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 		Use:   "artifact",
 		Short: "Manage Service Registry Artifacts",
 		Long: `
+Manage Service Registry Artifacts using currently selected Service Registry.
+
 Apicurio Registry Artifacts enables developers to manage and share the structure of their data. 
 For example, client applications can dynamically push or pull the latest updates to or from the registry without needing to redeploy.
 Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. 
