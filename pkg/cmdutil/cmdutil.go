@@ -160,7 +160,7 @@ func FetchCloudProviders(f *factory.Factory) (validProviders []string, directive
 }
 
 func ConvertPageValueToInt32(s string) int32 {
-	val, err := strconv.Atoi(s)
+	val, err := strconv.ParseInt(s, 10, 32)
 
 	if err != nil {
 		return 1
@@ -170,7 +170,7 @@ func ConvertPageValueToInt32(s string) int32 {
 }
 
 func ConvertSizeValueToInt32(s string) int32 {
-	val, err := strconv.Atoi(s)
+	val, err := strconv.ParseInt(s, 10, 32)
 
 	if err != nil {
 		return 10
