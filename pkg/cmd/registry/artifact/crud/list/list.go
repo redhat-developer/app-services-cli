@@ -115,7 +115,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", "", "Artifact group")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, "Page number")
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, "Page limit")
