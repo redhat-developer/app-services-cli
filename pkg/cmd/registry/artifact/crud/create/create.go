@@ -66,8 +66,8 @@ It is typically recommended that callers provide the ID, because this is a meani
 If an artifact with the provided artifact ID already exists command will fail with error.
 
 
-When --group parameter is missing the command will create a new artifact under the "default" group.
-when --registry is missing the command will create a new artifact for currently active service registry (visible in rhoas service-registry describe)
+When --group parameter is missing the command will use "default" group.
+when --instance-id is missing the command will create a new artifact for currently active service registry (visible in rhoas service-registry describe)
 `
 
 func NewCreateCommand(f *factory.Factory) *cobra.Command {

@@ -18,12 +18,16 @@ func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 		Use:   "artifact",
 		Short: "Manage Service Registry Artifacts",
 		Long: `
+Manage Service Registry Artifacts using the currently selected Service Registry.
+
+Commands are executed on the currently selected Service Registry instance that can be overridden by --instance-id flag.
+
 Apicurio Registry Artifacts enables developers to manage and share the structure of their data. 
 For example, client applications can dynamically push or pull the latest updates to or from the registry without needing to redeploy.
 Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. 
 For example, this includes rules for content validation and version compatibility.
 
-Registry commands enable client applications to manage the artifacts in the registry. 
+Artifact commands enable client applications to manage the artifacts in the registry. 
 This set of commands provide create, read, update, and delete operations for schema and API artifacts, rules, versions, and metadata.
 `,
 		Example: `

@@ -3,9 +3,14 @@ one = 'Service Registry commands'
 
 [registry.cmd.longDescription]
 one = ''' 
-Manage your Service Registry instances directly from the command line.
+Manage and interact with your Service Registry instances directly from the command line.
 
 Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
+
+Commands are divided into the following categories:
+ - instance management commands: create, list, and so on
+ - commands executed on selected instance: artifacts
+ - "use" command that selects the current instance
 '''
 
 [registry.cmd.example]

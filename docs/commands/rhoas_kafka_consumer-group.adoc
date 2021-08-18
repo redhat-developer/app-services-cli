@@ -8,7 +8,10 @@ Describe, list, and delete consumer groups for the current Kafka instance.
 [discrete]
 == Synopsis
 
-Use these commands to describe, list, and delete consumer groups for the current Kafka instance.
+Use these commands to describe, list, and delete consumer groups for the current Kafka instance.'
+ 
+Commands are executed on the currently selected Kafka instance that can be overridden by --instance-id flag.
+
 
 [discrete]
 == Examples

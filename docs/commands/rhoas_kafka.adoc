@@ -8,7 +8,13 @@ Create, view, use, and manage your Kafka instances
 [discrete]
 == Synopsis
 
-A collection of commands for managing and interacting with Kafka instances.
+Commands for managing and interacting with Kafka instances.
+
+Commands are divided into the following categories:
+ - instance management commands: create, list, and so on
+ - commands executed on the selected instance: topic, consumer-group
+ - "use" command that selects the current instance
+
 
 [discrete]
 == Examples

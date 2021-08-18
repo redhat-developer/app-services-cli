@@ -8,7 +8,14 @@ one = "Create, view, use, and manage your Kafka instances"
 
 [kafka.cmd.longDescription]
 description = "Long description for command"
-one = "A collection of commands for managing and interacting with Kafka instances."
+one = '''
+Commands for managing and interacting with Kafka instances.
+
+Commands are divided into the following categories:
+ - instance management commands: create, list, and so on
+ - commands executed on the selected instance: topic, consumer-group
+ - "use" command that selects the current instance
+'''
 
 [kafka.cmd.example]
 description = "Examples for command"
