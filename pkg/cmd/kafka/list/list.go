@@ -87,9 +87,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafkas.common.flag.output.description"))
-	cmd.Flags().IntVarP(&opts.page, "page", "", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
-	cmd.Flags().IntVarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
-	cmd.Flags().StringVarP(&opts.search, "search", "", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
+	cmd.Flags().IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
+	cmd.Flags().IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
+	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 

@@ -50,7 +50,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.kubeconfig, "kubeconfig", "", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
+	cmd.Flags().StringVar(&opts.kubeconfig, "kubeconfig", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
 
 	return cmd
 }

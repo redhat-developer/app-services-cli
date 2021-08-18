@@ -60,14 +60,14 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.kubeconfigLocation, "kubeconfig", "", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
-	cmd.Flags().StringVarP(&opts.appName, "app-name", "", "", opts.localizer.MustLocalize("cluster.bind.flag.appName"))
-	cmd.Flags().StringVarP(&opts.bindingName, "binding-name", "", "", opts.localizer.MustLocalize("cluster.bind.flag.bindName"))
+	cmd.Flags().StringVar(&opts.kubeconfigLocation, "kubeconfig", "", opts.localizer.MustLocalize("cluster.common.flag.kubeconfig.description"))
+	cmd.Flags().StringVar(&opts.appName, "app-name", "", opts.localizer.MustLocalize("cluster.bind.flag.appName"))
+	cmd.Flags().StringVar(&opts.bindingName, "binding-name", "", opts.localizer.MustLocalize("cluster.bind.flag.bindName"))
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
-	cmd.Flags().BoolVarP(&opts.ignoreContext, "ignore-context", "", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
-	cmd.Flags().BoolVarP(&opts.forceOperator, "force-operator", "", false, opts.localizer.MustLocalize("cluster.bind.flag.forceOperator.description"))
-	cmd.Flags().BoolVarP(&opts.forceSDK, "force-sdk", "", false, opts.localizer.MustLocalize("cluster.bind.flag.forceSDK.description"))
+	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
+	cmd.Flags().BoolVar(&opts.forceOperator, "force-operator", false, opts.localizer.MustLocalize("cluster.bind.flag.forceOperator.description"))
+	cmd.Flags().BoolVar(&opts.forceSDK, "force-sdk", false, opts.localizer.MustLocalize("cluster.bind.flag.forceSDK.description"))
 	return cmd
 }
 

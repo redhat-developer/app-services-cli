@@ -120,7 +120,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, "Page number")
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, "Page limit")
 
-	cmd.Flags().StringVarP(&opts.registryID, "instance-id", "", "", "Id of the registry to be used. By default uses currently selected registry")
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
