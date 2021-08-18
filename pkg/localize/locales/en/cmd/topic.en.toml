@@ -8,7 +8,7 @@ one = 'Create, describe, update, list and delete topics'
 one = '''
 Create, describe, update, list and delete topics for the current Kafka instance.
 
-Commands are executed on the currently selected Kafka instance that can be overriden by --instance-id flag.
+Commands are executed on the currently selected Kafka instance that can be overridden by --instance-id flag.
 '''
 
 [kafka.topic.cmd.example]
