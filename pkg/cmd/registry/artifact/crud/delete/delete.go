@@ -50,9 +50,9 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Deletes all of the artifacts that exist in a given group",
+		Short: "Deletes single or all artifacts in a given group",
 		Long: `
-Deletes all of the artifacts that exist in a given group. 
+Deletes single or all artifacts in a given group. 
 
 Delete command works in two modes:
 
