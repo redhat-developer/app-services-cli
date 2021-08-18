@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/redhat-developer/app-services-cli/pkg/cloudprovider/cloudproviderutil"
@@ -156,4 +157,24 @@ func FetchCloudProviders(f *factory.Factory) (validProviders []string, directive
 	validProviders = cloudproviderutil.GetEnabledNames(cloudProviders)
 
 	return validProviders, directive
+}
+
+func ConvertPageValueToInt32(s string) int32 {
+	val, err := strconv.Atoi(s)
+
+	if err != nil {
+		return 1
+	}
+
+	return int32(val)
+}
+
+func ConvertSizeValueToInt32(s string) int32 {
+	val, err := strconv.Atoi(s)
+
+	if err != nil {
+		return 10
+	}
+
+	return int32(val)
 }
