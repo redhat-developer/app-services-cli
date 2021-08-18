@@ -27,7 +27,7 @@ For example, client applications can dynamically push or pull the latest updates
 Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. 
 For example, this includes rules for content validation and version compatibility.
 
-Registry commands enable client applications to manage the artifacts in the registry. 
+Artifact commands enable client applications to manage the artifacts in the registry. 
 This set of commands provide create, read, update, and delete operations for schema and API artifacts, rules, versions, and metadata.
 `,
 		Example: `
