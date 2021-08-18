@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -91,8 +92,8 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.output.description"))
 	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.topic.description"))
 	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.search"))
-	cmd.Flags().Int32VarP(&opts.page, "page", "", int32(cmdutil.DefaultPageNumber), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.page"))
-	cmd.Flags().Int32VarP(&opts.size, "size", "", int32(cmdutil.DefaultPageSize), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.size"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.page"))
+	cmd.Flags().Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.size"))
 
 	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)

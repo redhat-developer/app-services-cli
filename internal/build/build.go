@@ -29,6 +29,12 @@ var (
 
 	// TermsReviewSiteCode is the site code used when checking the terms review
 	TermsReviewSiteCode = "ocm"
+
+	// DefaultPageSize is the default number of items per page when using list commands
+	DefaultPageSize = "10"
+
+	// DefaultPageNumber is the default page number when using list commands
+	DefaultPageNumber = "1"
 )
 
 // Auth Build variables
