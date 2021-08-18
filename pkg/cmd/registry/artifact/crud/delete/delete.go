@@ -59,7 +59,7 @@ Delete command works in two modes:
 	- When --artifact-id argument is missing delete will delete all artifacts in the group
 	- When --artifact-id is specified delete deletes only single artifact and its version
 
-When --group parameter is missing the command will create a new artifact under the "default" group.
+When --group parameter is missing the command will use "default" group.
 		`,
 		Example: `
 ## Delete all artifacts in the group "default"
