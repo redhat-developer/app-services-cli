@@ -13,7 +13,7 @@ A collection of commands for managing and interacting with Kafka instances.
 
 Commands are divided into the following categories:
  - instance management commands: create, list etc.
- - commands executed on selected instance: topics, consumer-group
+ - commands executed on selected instance: topic, consumer-group
  - "use" command that selects current instance
 '''
 
