@@ -168,7 +168,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 		}
 
 		if consumer.GetMemberId() == "" {
-			row.MemberID = color.Italic("unconsumed")
+			row.MemberID = color.Italic("unassigned")
 		}
 
 		rows = append(rows, row)
@@ -189,9 +189,9 @@ func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclien
 
 	activeMembersCount := cgutil.GetActiveConsumersCount(consumers)
 	partitionsWithLagCount := cgutil.GetPartitionsWithLag(consumers)
-	unconsumedPartitions := cgutil.GetUnconsumedPartitions(consumers)
+	unassignedPartitions := cgutil.GetUnassignedPartitions(consumers)
 
-	fmt.Fprintln(w, color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.unconsumedPartitions")), unconsumedPartitions)
+	fmt.Fprintln(w, color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.unassignedPartitions")), unassignedPartitions)
 	fmt.Fprintln(w, "")
 
 	rows := mapConsumerGroupDescribeToTableFormat(consumers)

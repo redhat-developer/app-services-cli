@@ -27,5 +27,5 @@ one = 'ACTIVE MEMBERS:'
 [kafka.consumerGroup.describe.output.partitionsWithLag]
 one = 'PARTITIONS WITH LAG:'
 
-[kafka.consumerGroup.describe.output.unconsumedPartitions]
-one = 'UNCONSUMED PARTITIONS:'
+[kafka.consumerGroup.describe.output.unassignedPartitions]
+one = 'UNASSIGNED PARTITIONS:'
