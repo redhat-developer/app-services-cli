@@ -10,7 +10,7 @@ Create, describe, update, list and delete topics
 
 Create, describe, update, list and delete topics for the current Kafka instance.
 
-Commands are executed on the currently selected Kafka instance that can be overridden by --instance-id flag.
+Commands are executed on the currently selected Kafka instance.
 
 
 [discrete]

@@ -9,7 +9,7 @@ one = 'Describe, list, and delete consumer groups for the current Kafka instance
 one = '''
 Use these commands to describe, list, and delete consumer groups for the current Kafka instance.'
  
-Commands are executed on the currently selected Kafka instance that can be overridden by --instance-id flag.
+Commands are executed on the currently selected Kafka instance.
 '''
 
 [kafka.consumerGroup.cmd.example]
