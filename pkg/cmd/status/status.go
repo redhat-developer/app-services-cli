@@ -9,6 +9,7 @@ import (
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/profile"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
@@ -24,7 +25,8 @@ import (
 )
 
 const (
-	kafkaSvcName = "kafka"
+	kafkaSvcName    = "kafka"
+	registrySvcName = "service-registry"
 )
 
 var validServices = []string{kafkaSvcName}
@@ -41,6 +43,11 @@ type Options struct {
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
+
+	if profile.DevModeEnabled() {
+		validServices = append(validServices, registrySvcName)
+	}
+
 	opts := &Options{
 		IO:         f.IOStreams,
 		Config:     f.Config,
