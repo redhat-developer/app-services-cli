@@ -10,6 +10,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
+	"github.com/redhat-developer/app-services-cli/pkg/profile"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -24,7 +25,7 @@ const tagTitle = "title"
 
 type Status struct {
 	Kafka    *KafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
-	Registry *RegistryStatus `json:"registry,omitempty" title:"Registry"`
+	Registry *RegistryStatus `json:"registry,omitempty" title:"Service Registry"`
 }
 
 type KafkaStatus struct {
@@ -85,7 +86,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 		}
 	}
 
-	if stringInSlice("registry", opts.Services) {
+	if profile.DevModeEnabled() && stringInSlice("service-registry", opts.Services) {
 		registryCfg := cfg.Services.ServiceRegistry
 		if registryCfg != nil && registryCfg.InstanceID != "" {
 			// nolint:govet
