@@ -66,7 +66,7 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 rhoas service-registry artifact download --content-id=183282932983
 
 ## Get latest artifact by content id to specific file
-rhoas service-registry artifact download --content-id=183282932983 schema.json
+rhoas service-registry artifact download --content-id=183282932983 --file-location=schema.json
 
 ## Get latest artifact by global id
 rhoas service-registry artifact download --global-id=383282932983
@@ -76,10 +76,6 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 `,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
-				opts.outputFile = args[0]
-			}
-
 			if opts.registryID != "" {
 				return runGet(opts)
 			}
@@ -90,7 +86,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service Registry selected. Use 'rhoas service-registry use' to select your registry")
+				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
@@ -98,7 +94,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.hash, "hash", "", "SHA-256 hash of the artifact")
 	cmd.Flags().Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, "Global ID of the artifact")
 	cmd.Flags().Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, "ContentId of the artifact")

@@ -35,7 +35,10 @@ This set of commands provide create, read, update, and delete operations for sch
 rhoas service-registry artifact create --artifact-id=my-artifact --group=my-group artifact.json
 
 ## Get artifact content
-rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group file.json 
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --file-location=artifact.json
+
+## Get artifact content by hash
+rhoas service-registry artifact download --hash=cab4...al9 --file-location=artifact.json
 
 ## Delete artifact
 rhoas service-registry artifact delete --artifact-id=my-artifact

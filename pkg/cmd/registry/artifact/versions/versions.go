@@ -45,23 +45,20 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "versions",
-		Short: "Get latest artifact versions by id and group",
-		Long:  "Get latest artifact versions by specifying group and artifacts id",
+		Short: "Get latest artifact versions by artifact-id and group",
+		Long:  "Get latest artifact versions by specifying group and artifact-id",
 		Example: `
 ## Get latest artifact versions for default group
-rhoas service-registry artifact versions my-artifact
+rhoas service-registry artifact versions --artifact-id=my-artifact
 
 ## Get latest artifact versions for my-group group
-rhoas service-registry artifact versions my-artifact --group mygroup 
+rhoas service-registry artifact versions --artifact-id=my-artifact --group mygroup 
 		`,
-		Args: cobra.RangeArgs(0, 1),
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
-				opts.artifact = args[0]
-			}
 
 			if opts.artifact == "" {
-				return errors.New("artifact id is required. Please specify artifact as positional argument or by using --artifact-id flag")
+				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
 			}
 
 			if opts.registryID != "" {
@@ -74,7 +71,7 @@ rhoas service-registry artifact versions my-artifact --group mygroup
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service Registry selected. Use 'rhoas service-registry use' to select your registry")
+				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
@@ -83,7 +80,7 @@ rhoas service-registry artifact versions my-artifact --group mygroup
 	}
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
 
