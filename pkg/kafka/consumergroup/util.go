@@ -24,11 +24,11 @@ func GetActiveConsumersCount(consumers []kafkainstanceclient.Consumer) (count in
 	return count
 }
 
-func GetUnconsumedPartitions(consumers []kafkainstanceclient.Consumer) (unconsumedPartitions int) {
+func GetUnassignedPartitions(consumers []kafkainstanceclient.Consumer) (unassignedPartitions int) {
 	for _, c := range consumers {
 		if c.GetMemberId() == "" {
-			unconsumedPartitions++
+			unassignedPartitions++
 		}
 	}
-	return unconsumedPartitions
+	return unassignedPartitions
 }
