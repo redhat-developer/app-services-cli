@@ -10,18 +10,21 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/openconfig/goyang/pkg/indent"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	kas "github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 const tagTitle = "title"
 
 type Status struct {
-	Kafka *KafkaStatus `json:"kafka,omitempty" title:"Kafka"`
+	Kafka    *KafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
+	Registry *RegistryStatus `json:"registry,omitempty" title:"Registry"`
 }
 
 type KafkaStatus struct {
@@ -30,6 +33,13 @@ type KafkaStatus struct {
 	Status              string `json:"status,omitempty"`
 	BootstrapServerHost string `json:"bootstrap_server_host,omitempty" title:"Bootstrap URL"`
 	FailedReason        string `json:"failed_reason,omitempty" title:"Failed Reason"`
+}
+
+type RegistryStatus struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Status      string `json:"status,omitempty"`
+	RegistryUrl string `json:"registryUrl,omitempty" title:"Registry URL"`
 }
 
 type Options struct {
@@ -72,6 +82,21 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			}
 		} else {
 			logger.Debug("No Kafka instance is currently used, skipping status check")
+		}
+	}
+
+	if stringInSlice("registry", opts.Services) {
+		registryCfg := cfg.Services.ServiceRegistry
+		if registryCfg != nil && registryCfg.InstanceID != "" {
+			// nolint:govet
+			registry, newErr := getRegistryStatus(ctx, api.ServiceRegistryMgmt(), registryCfg.InstanceID)
+			if newErr != nil {
+				return status, ok, err
+			}
+			status.Registry = registry
+			ok = true
+		} else {
+			logger.Debug("No service registry is currently used, skipping status check")
 		}
 	}
 
@@ -187,6 +212,22 @@ func getKafkaStatus(ctx context.Context, api kafkamgmtclient.DefaultApi, id stri
 
 	if kafkaResponse.GetStatus() == "failed" {
 		status.FailedReason = kafkaResponse.GetFailedReason()
+	}
+
+	return status, err
+}
+
+func getRegistryStatus(ctx context.Context, api srsmgmtv1.RegistriesApi, id string) (status *RegistryStatus, err error) {
+	registry, _, err := serviceregistry.GetServiceRegistryByID(ctx, api, id)
+	if err != nil {
+		return nil, err
+	}
+
+	status = &RegistryStatus{
+		ID:          registry.GetId(),
+		Name:        registry.GetName(),
+		RegistryUrl: registry.GetRegistryUrl(),
+		Status:      string(registry.GetStatus()),
 	}
 
 	return status, err

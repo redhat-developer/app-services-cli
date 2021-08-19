@@ -24,10 +24,11 @@ import (
 )
 
 const (
-	kafkaSvcName = "kafka"
+	kafkaSvcName    = "kafka"
+	registrySvcName = "registry"
 )
 
-var validServices = []string{kafkaSvcName}
+var validServices = []string{kafkaSvcName, registrySvcName}
 
 type Options struct {
 	IO         *iostreams.IOStreams
