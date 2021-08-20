@@ -52,28 +52,21 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Long: `
 Deletes single or all artifacts in a given group. 
 
-Delete command works in two modes:
-
-	- When --artifact-id argument is missing delete will delete all artifacts in the group
-	- When --artifact-id is specified delete deletes only single artifact and its version
-
+When called without arguments delete will delete all artifacts in the group
+When --artifact-id is specified delete deletes only single artifact and its version
 When --group parameter is missing the command will use "default" group.
 		`,
 		Example: `
 ## Delete all artifacts in the group "default"
-rhoas service-registry artifact delete 
+rhoas service-registry artifact delete
 
 ## Delete artifact in the group "default" with name "my-artifact"
-rhoas service-registry artifact delete my-artifact
+rhoas service-registry artifact delete --artifact-id=my-artifact
 		`,
-		Args: cobra.RangeArgs(0, 1),
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return flag.RequiredWhenNonInteractiveError("yes")
-			}
-
-			if len(args) > 0 {
-				opts.artifact = args[0]
 			}
 
 			if opts.registryID != "" {
@@ -96,7 +89,7 @@ rhoas service-registry artifact delete my-artifact
 
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, "Delete without prompt")
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 	flagutil.EnableOutputFlagCompletion(cmd)
 

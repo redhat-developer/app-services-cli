@@ -49,37 +49,29 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 		Use:   "get",
 		Short: "Get artifact by id and group",
 		Long: `Get artifact by specifying id and group.
-Command will fetch the latest artifact from the registry based on the artifactId and group.
+Command will fetch the latest artifact from the registry based on the artifact-id and group.
 
 When --version is specified command will fetch the specific version of the artifact.
-Get command will fetch artifacts based on group and artifactId and version.
+Get command will fetch artifacts based on --group and --artifact-id and --version.
 For fetching artifacts using global identifiers please use "service-registry download" command
 `,
 		Example: `
-## Get latest artifact by name
-rhoas service-registry artifact get myschema
+## Get latest artifact with name "my-artifact" and print it out to standard out
+rhoas service-registry artifact get --artifact-id=my-artifact
 
-## Get latest artifact and save its content to file
-rhoas service-registry artifact get myschema myschema.json
+## Get latest artifact with name "my-artifact" from group "my-group" and save it to artifact.json file
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --file-location=artifact.json
 
 ## Get latest artifact and pipe it to other command 
-rhoas service-registry artifact get myschema | grep -i 'user'
+rhoas service-registry artifact get --artifact-id=my-artifact | grep -i 'user'
 
-## Get latest artifact by specifying custom group, registry and name as flag
-rhoas service-registry artifact get --group mygroup --instance-id=myregistry --artifact-id myartifact
+## Get artifact with custom version and print it out to standard out
+rhoas service-registry artifact get --artifact-id=myartifact --version=4
 `,
-		Args: cobra.RangeArgs(0, 2),
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
-				opts.artifact = args[0]
-			}
-
 			if opts.artifact == "" {
-				return errors.New("artifact id is required. Please specify artifact as positional argument or by using --artifact-id flag")
-			}
-
-			if len(args) > 1 {
-				opts.outputFile = args[1]
+				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
 			}
 
 			if opts.registryID != "" {
@@ -92,7 +84,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service Registry selected. Use 'rhoas service-registry use' to select your registry")
+				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
 			}
 
 			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
@@ -101,7 +93,7 @@ rhoas service-registry artifact get --group mygroup --instance-id=myregistry --a
 	}
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 	cmd.Flags().StringVar(&opts.outputFile, "file-location", "", "Location of the output file")
 	cmd.Flags().StringVar(&opts.version, "version", "", "Version of the artifact")

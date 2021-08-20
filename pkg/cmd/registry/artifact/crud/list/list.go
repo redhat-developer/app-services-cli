@@ -73,23 +73,19 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Short: "List artifacts",
 		Long:  "List all artifacts for the group by specified output format (by default table)",
 		Example: `
-## List all artifacts for the default artifacts group
+## List all artifacts for the "default" artifacts group
 rhoas service-registry artifact list
 
-## List all artifacts with explicit group 
+## List all artifacts with "my-group" group 
 rhoas service-registry artifact list --group=my-group
 
 ## List all artifacts with limit and group
 rhoas service-registry artifact list --page=2 --limit=10
 		`,
-		Args: cobra.RangeArgs(0, 1),
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
-			}
-
-			if len(args) > 0 {
-				opts.group = args[0]
 			}
 
 			if opts.page < 1 || opts.limit < 1 {
@@ -116,7 +112,6 @@ rhoas service-registry artifact list --page=2 --limit=10
 	}
 
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, "Page number")
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, "Page limit")
 

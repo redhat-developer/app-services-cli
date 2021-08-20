@@ -57,8 +57,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 Update artifact from file or directly standard input
 
 Artifacts can be typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
-The type of the content should be compatible with the artifact's type.
-(it would be an error to update an AVRO artifact with new OPENAPI content, for example).
+The type of the content should be compatible with the current artifact's type.
 
 When successful, this creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
 
@@ -67,7 +66,10 @@ This content is updated under a unique artifactId provided by user.
 		`,
 		Example: `
 ## update artifact from group and artifact-id
-rhoas service-registry artifact update my-artifact.json --artifact-id=my-artifact --group my-group
+rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json 
+
+## update artifact from group and artifact-id
+rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json 
 `,
 		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -106,7 +108,7 @@ rhoas service-registry artifact update my-artifact.json --artifact-id=my-artifac
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", "File location of the artifact")
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Group of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
