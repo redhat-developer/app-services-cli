@@ -46,7 +46,6 @@ $ rhoas kafka list -o json
 
   `-h`, `--help`::      Show help for a command
   `-v`, `--verbose`::   Enable verbose mode
-      `--version`::     Show rhoas version
 
 [discrete]
 == See also

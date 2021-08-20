@@ -19,7 +19,7 @@ import (
 // giving centralized access to the config and API connection
 
 // nolint:funlen
-func New(cliVersion string, localizer localize.Localizer) *Factory {
+func New(localizer localize.Localizer) *Factory {
 	io := iostreams.System()
 
 	var logger logging.Logger

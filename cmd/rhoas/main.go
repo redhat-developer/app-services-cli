@@ -29,7 +29,7 @@ func main() {
 	}
 
 	buildVersion := build.Version
-	cmdFactory := factory.New(build.Version, localizer)
+	cmdFactory := factory.New(localizer)
 	logger, err := cmdFactory.Logger()
 	if err != nil {
 		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
@@ -58,12 +58,9 @@ func main() {
 		}
 		return
 	}
-
-	if err != nil {
-		logger.Error(wrapErrorf(err, localizer))
-		build.CheckForUpdate(context.Background(), logger, localizer)
-		os.Exit(1)
-	}
+	logger.Error(wrapErrorf(err, localizer))
+	build.CheckForUpdate(context.Background(), logger, localizer)
+	os.Exit(1)
 }
 
 /**

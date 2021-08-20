@@ -22,7 +22,7 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 	}
 
 	buildVersion := build.Version
-	cmdFactory := factory.New(build.Version, localizer)
+	cmdFactory := factory.New(localizer)
 	if err != nil {
 		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)
