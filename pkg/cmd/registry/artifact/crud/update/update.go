@@ -62,7 +62,7 @@ The type of the content should be compatible with the current artifact's type.
 When successful, this creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
 
 An artifact is update using the content provided in the body of the request.  
-This content is updated under afu unique artifactId provided by user.
+This content is updated under a unique artifactId provided by user.
 		`,
 		Example: `
 ## update artifact from group and artifact-id
