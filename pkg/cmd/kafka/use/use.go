@@ -68,7 +68,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
-	cmd.Flags().StringVar(&opts.id, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
 	return cmd
 }
 
