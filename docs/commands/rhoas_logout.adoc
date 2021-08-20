@@ -27,7 +27,6 @@ rhoas logout
 
   `-h`, `--help`::      Show help for a command
   `-v`, `--verbose`::   Enable verbose mode
-      `--version`::     Show rhoas version
 
 [discrete]
 == See also
