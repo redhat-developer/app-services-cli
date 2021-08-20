@@ -33,6 +33,10 @@ type Options struct {
 	file         string
 	artifactType string
 
+	version     string
+	title       string
+	description string
+
 	registryID   string
 	outputFormat string
 
@@ -130,10 +134,16 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
+
+	cmd.Flags().StringVar(&opts.version, "version", "", "Custom version of the artifact (for example 1.0.0)")
+	cmd.Flags().StringVar(&opts.title, "title", "", "Custom title of the artifact")
+	cmd.Flags().StringVar(&opts.description, "description", "", "Custom description of the artifact")
+
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", "Type of artifact. Choose from:  "+util.GetAllowedArtifactTypeEnumValuesAsString())
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
+
 	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return util.AllowedArtifactTypeEnumValues, cobra.ShellCompDirectiveNoSpace
 	})
@@ -185,6 +195,9 @@ func runCreate(opts *Options) error {
 	}
 	if opts.artifact != "" {
 		request = request.XRegistryArtifactId(opts.artifact)
+	}
+	if opts.version != "" {
+		request = request.XRegistryVersion(opts.version)
 	}
 
 	request = request.Body(specifiedFile)
