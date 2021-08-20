@@ -10,10 +10,10 @@ one = "Set the current Apache Kafka instance"
 description = "Long description for command"
 one = '''
 Select an Apache Kafka instance and set it as the current instance.
+You can specify a Apache Kafka instance by --name or --id.
 
-When you set the Kafka instance to be used, it is set as the current instance for all "rhoas kafka" commands.
+When you set the Kafka instance to be used, it is set as the current instance for all rhoas kafka topics and rhoas kafka consumer-group commands.
 
-When an ID is not specified in other Kafka commands, the current Kafka instance is used.
 '''
 
 [kafka.use.cmd.example]
@@ -26,6 +26,11 @@ $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
 [kafka.use.flag.id]
 description = 'Description for the --id flag'
 one = 'Unique ID of the Kafka instance you want to set as the current instance'
+
+[kafka.use.flag.name]
+description = 'Description for the --name flag'
+one = 'Name of the Kafka instance you want to set as the current instance'
+
 
 [kafka.use.error.saveError]
 description = 'Error message when current Kafka could not be saved in config'

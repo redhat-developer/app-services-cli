@@ -43,11 +43,9 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("registry.cmd.use.shortDescription"),
 		Long:    f.Localizer.MustLocalize("registry.cmd.use.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.cmd.use.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
-				opts.name = args[0]
-			} else if opts.id == "" {
+			if opts.id == "" && opts.name == "" {
 				if !opts.IO.CanPrompt() {
 					return errors.New(opts.localizer.MustLocalize("registry.use.error.idOrNameRequired"))
 				}
@@ -63,6 +61,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.use.flag.id"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.use.flag.name"))
 
 	return cmd
 }

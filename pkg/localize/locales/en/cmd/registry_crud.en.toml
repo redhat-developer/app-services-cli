@@ -87,6 +87,9 @@ one = 'Use a Service Registry instance'
 [registry.cmd.use.longDescription]
 one = ''' 
 Select a Service Registry instance to use with all instance-specific commands.
+You can specify a Service Registry instance by --name or --id.
+
+When you set the Service Registry instance to be used, it is set as the current instance for all rhoas service-registry artifact commands.
 '''
 
 [registry.cmd.use.example]
@@ -167,6 +170,10 @@ one = 'No Service Registry instances were found.'
 [registry.use.flag.id]
 description = 'Description for the --id flag'
 one = 'Unique ID of the Service Registry instance you want to set as the current instance'
+
+[registry.use.flag.name]
+description = 'Description for the --name flag'
+one = 'Name the Service Registry instance you want to set as the current instance'
 
 [registry.use.error.saveError]
 description = 'Error message when current Service Registry could not be saved in config'
