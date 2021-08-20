@@ -47,14 +47,12 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.use.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.use.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.use.cmd.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			return cmdutil.FilterValidKafkas(f, toComplete)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
-				opts.name = args[0]
-			} else if opts.id == "" {
+			if opts.id == "" && opts.name == "" {
 				if !opts.IO.CanPrompt() {
 					return errors.New(opts.localizer.MustLocalize("kafka.use.error.idOrNameRequired"))
 				}
@@ -70,7 +68,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
-
+	cmd.Flags().StringVar(&opts.id, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
 	return cmd
 }
 

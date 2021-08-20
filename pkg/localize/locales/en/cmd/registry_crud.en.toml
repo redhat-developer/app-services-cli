@@ -168,6 +168,10 @@ one = 'No Service Registry instances were found.'
 description = 'Description for the --id flag'
 one = 'Unique ID of the Service Registry instance you want to set as the current instance'
 
+[registry.use.flag.name]
+description = 'Description for the --name flag'
+one = 'Name the Service Registry instance you want to set as the current instance'
+
 [registry.use.error.saveError]
 description = 'Error message when current Service Registry could not be saved in config'
 one = 'could not set "{{.Name}}" as the current Service Registry instance'
