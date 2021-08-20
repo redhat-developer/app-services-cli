@@ -57,11 +57,10 @@ func main() {
 			build.CheckForUpdate(context.Background(), logger, localizer)
 		}
 		return
-	} else {
-		logger.Error(wrapErrorf(err, localizer))
-		build.CheckForUpdate(context.Background(), logger, localizer)
-		os.Exit(1)
 	}
+	logger.Error(wrapErrorf(err, localizer))
+	build.CheckForUpdate(context.Background(), logger, localizer)
+	os.Exit(1)
 }
 
 /**
