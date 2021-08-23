@@ -24,7 +24,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.2.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.3.2
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.1.0
+	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.1.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.1.1
 	github.com/redhat-developer/service-binding-operator v0.8.0
 	github.com/spf13/cobra v1.2.1

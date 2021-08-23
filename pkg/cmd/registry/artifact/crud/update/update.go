@@ -166,6 +166,14 @@ func runUpdate(opts *Options) error {
 	if opts.version != "" {
 		request = request.XRegistryVersion(opts.version)
 	}
+	if opts.title != "" {
+		request = request.XRegistryName(opts.title)
+	}
+
+	if opts.description != "" {
+		request = request.XRegistryVersion(opts.description)
+	}
+
 	request = request.Body(specifiedFile)
 	metadata, _, err := request.Execute()
 	if err != nil {
