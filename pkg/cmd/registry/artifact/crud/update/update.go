@@ -33,6 +33,10 @@ type Options struct {
 	registryID   string
 	outputFormat string
 
+	version     string
+	title       string
+	description string
+
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -111,6 +115,10 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 
+	cmd.Flags().StringVar(&opts.version, "version", "", "Custom version of the artifact (for example 1.0.0)")
+	cmd.Flags().StringVar(&opts.title, "title", "", "Custom title of the artifact")
+	cmd.Flags().StringVar(&opts.description, "description", "", "Custom description of the artifact")
+
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
@@ -155,6 +163,17 @@ func runUpdate(opts *Options) error {
 
 	ctx := context.Background()
 	request := dataAPI.ArtifactsApi.UpdateArtifact(ctx, opts.group, opts.artifact)
+	if opts.version != "" {
+		request = request.XRegistryVersion(opts.version)
+	}
+	if opts.title != "" {
+		request = request.XRegistryName(opts.title)
+	}
+
+	if opts.description != "" {
+		request = request.XRegistryDescription(opts.description)
+	}
+
 	request = request.Body(specifiedFile)
 	metadata, _, err := request.Execute()
 	if err != nil {

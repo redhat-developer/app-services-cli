@@ -133,10 +133,10 @@ func runGet(opts *Options) error {
 	ctx := context.Background()
 	var dataFile *os.File
 	// nolint
-	if opts.contentId != -1 {
+	if opts.contentId != unusedFlagIdValue {
 		request := dataAPI.ArtifactsApi.GetContentById(ctx, opts.contentId)
 		dataFile, _, err = request.Execute()
-	} else if opts.globalId != -1 {
+	} else if opts.globalId != unusedFlagIdValue {
 		request := dataAPI.ArtifactsApi.GetContentByGlobalId(ctx, opts.globalId)
 		dataFile, _, err = request.Execute()
 	} else if opts.hash != "" {
