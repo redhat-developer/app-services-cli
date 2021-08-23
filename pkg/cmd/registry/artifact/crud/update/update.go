@@ -171,7 +171,7 @@ func runUpdate(opts *Options) error {
 	}
 
 	if opts.description != "" {
-		request = request.XRegistryVersion(opts.description)
+		request = request.XRegistryDescription(opts.description)
 	}
 
 	request = request.Body(specifiedFile)
