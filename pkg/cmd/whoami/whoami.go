@@ -61,11 +61,10 @@ func runCmd(opts *Options) (err error) {
 		return err
 	}
 
-	accessTkn, _ := token.Parse(cfg.AccessToken)
-
-	tknClaims, _ := token.MapClaims(accessTkn)
-
-	userName, ok := tknClaims["preferred_username"]
+	userName, ok := token.GetUsername(cfg.AccessToken)
+	if !ok {
+		userName = "unknown"
+	}
 
 	if ok {
 		fmt.Fprintln(opts.IO.Out, userName)

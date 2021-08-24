@@ -117,12 +117,19 @@ func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	return
 }
 
+// GetUsername extracts the username claim value from the JWT
 func GetUsername(tokenStr string) (username string, ok bool) {
 	accessTkn, _ := Parse(tokenStr)
 	tknClaims, _ := MapClaims(accessTkn)
-	userName, ok := tknClaims["preferred_username"]
+	u, ok := tknClaims["preferred_username"]
 	if ok {
-		username = fmt.Sprintf("%v", userName)
+		username = fmt.Sprintf("%v", u)
+		return
+	}
+	u, ok = tknClaims["username"]
+	if ok {
+		username = fmt.Sprintf("%v", u)
+		return
 	}
 
 	return username, ok

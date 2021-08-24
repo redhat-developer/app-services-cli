@@ -79,16 +79,13 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	accessTkn, _ := token.Parse(resp.OAuth2Token.AccessToken)
-	tknClaims, _ := token.MapClaims(accessTkn)
-	userName, ok := tknClaims["preferred_username"]
-	rawUsername := "unknown"
-	if ok {
-		rawUsername = fmt.Sprintf("%v", userName)
+	userName, ok := token.GetUsername(resp.OAuth2Token.AccessToken)
+	if !ok {
+		userName = "unknown"
 	}
 
 	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
-	pageBody := h.Localizer.MustLocalize("login.masRedirectPage.body", localize.NewEntry("Host", h.AuthURL.Host), localize.NewEntry("Username", rawUsername))
+	pageBody := h.Localizer.MustLocalize("login.masRedirectPage.body", localize.NewEntry("Host", h.AuthURL.Host), localize.NewEntry("Username", userName))
 
 	redirectPage := fmt.Sprintf(masSSOredirectHTMLPage, pageTitle, pageTitle, pageBody)
 
