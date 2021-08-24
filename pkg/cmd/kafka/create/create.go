@@ -218,7 +218,9 @@ func runCreate(opts *Options) error {
 
 		for svcstatus.IsCreating(response.GetStatus()) {
 			time.Sleep(cmdutil.DefaultPollTime)
-			s.Suffix = " " + opts.localizer.MustLocalize("kafka.create.log.info.creationInProgress", localize.NewEntry("Name", response.GetName()), localize.NewEntry("Status", color.Info(response.GetStatus())))
+			s.Suffix = " " + opts.localizer.MustLocalize("kafka.create.log.info.creationInProgress",
+				localize.NewEntry("Name", response.GetName()),
+				localize.NewEntry("Status", color.Info(response.GetStatus())))
 			response, httpRes, err = api.Kafka().GetKafkaById(context.Background(), response.GetId()).Execute()
 			defer httpRes.Body.Close()
 			logger.Debug("Checking Kafka status:", response.GetStatus())
@@ -227,8 +229,7 @@ func runCreate(opts *Options) error {
 			}
 		}
 		s.Stop()
-		logger.Info()
-		logger.Info()
+		logger.Info("\n")
 		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", localize.NewEntry("Name", response.GetName())))
 	}
 
