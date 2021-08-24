@@ -39,6 +39,7 @@ $ rhoas kafka create -o yaml
       `--provider` _string_::   Cloud Provider ID
       `--region` _string_::     Cloud Provider Region ID
       `--use`::                 Set the new Kafka instance to the current instance (default true)
+  `-w`, `--wait`::              Wait until the Kafka instance is created
 
 [discrete]
 == Options inherited from parent commands
