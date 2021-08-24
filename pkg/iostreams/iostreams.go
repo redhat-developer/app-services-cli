@@ -3,7 +3,9 @@ package iostreams
 import (
 	"io"
 	"os"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 	"github.com/mattn/go-isatty"
 )
@@ -86,6 +88,11 @@ func (s *IOStreams) IsSSHSession() bool {
 	_, hasTTY := os.LookupEnv("SSH_TTY")
 
 	return hasClient || hasTTY
+}
+
+// NewSpinner returns a new spinner progress bar to be used in synchronous commands
+func (s *IOStreams) NewSpinner() *spinner.Spinner {
+	return spinner.New(spinner.CharSets[9], 100*time.Millisecond, spinner.WithWriter(s.ErrOut))
 }
 
 func isTerminal(f *os.File) bool {

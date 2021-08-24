@@ -38,13 +38,26 @@ one = 'Cloud Provider Region ID'
 [kafka.create.flag.autoUse.description]
 one = 'Set the new Kafka instance to the current instance'
 
+[kafka.create.flag.wait.description]
+one = 'Wait until the Kafka instance is created'
+
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}"...'
 
-[kafka.create.info.successMessage]
+[kafka.create.log.info.creationInProgress]
+description = 'Message when Kafka instance is being created'
+one = 'Kafka instance "{{.Name}}" is being created. Current status: {{.Status}}.'
+
+[kafka.create.info.successAsync]
 description = 'Message to display when instance has been created'
-one = 'Kafka instance "{{.Name}}" is being provisioned. You can monitor its progress by running "rhoas status".'
+one = 'Kafka instance "{{.Name}}" is being created. To monitor its status run "rhoas status".'
+
+[kafka.create.log.info.creatingKafkaSyncSigint]
+one = 'Your Kafka instance is being created in the background. To monitor its status run "rhoas status" or "rhoas kafka describe".'
+
+[kafka.create.info.successSync]
+one = 'Kafka instance "{{.Name}}" has been created:'
 
 [kafka.create.input.name.message]
 description = 'Input title for Name'
