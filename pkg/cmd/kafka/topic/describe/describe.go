@@ -25,7 +25,7 @@ import (
 )
 
 type Options struct {
-	topicName    string
+	name         string
 	kafkaID      string
 	outputFormat string
 
@@ -51,16 +51,8 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.topic.describe.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.topic.describe.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.describe.cmd.example"),
-		Args:    cobra.ExactValidArgs(1),
-		// dynamic completion of topic names
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
-		},
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if len(args) > 0 {
-				opts.topicName = args[0]
-			}
-
 			if opts.outputFormat != "" {
 				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
 					return err
@@ -88,6 +80,12 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+	})
+	_ = cmd.MarkFlagRequired("name")
+
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
@@ -106,14 +104,14 @@ func runCmd(opts *Options) error {
 
 	// fetch the topic
 	topicResponse, httpRes, err := api.TopicsApi.
-		GetTopic(context.Background(), opts.topicName).
+		GetTopic(context.Background(), opts.name).
 		Execute()
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
 
-		topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
+		topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 		kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 

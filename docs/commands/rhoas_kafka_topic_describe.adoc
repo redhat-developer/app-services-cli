@@ -27,6 +27,7 @@ $ rhoas kafka topic describe topic-1
 [discrete]
 == Options
 
+      `--name` _string_::       Format in which to display the Kafka topic (choose from: "json", "yml", "yaml")
   `-o`, `--output` _string_::   Format in which to display the Kafka topic (choose from: "json", "yml", "yaml") (default "json")
 
 [discrete]
