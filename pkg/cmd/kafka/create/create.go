@@ -15,6 +15,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/ams"
@@ -22,9 +23,6 @@ import (
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	svcstatus "github.com/redhat-developer/app-services-cli/pkg/service/status"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cloudprovider/cloudproviderutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cloudregion/cloudregionutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -121,7 +119,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(flags.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FetchCloudProviders(f)
+		return kafkacmdutil.GetCloudProviderCompletionValues(f)
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)
@@ -309,7 +307,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	cloudProviders := cloudProviderResponse.GetItems()
-	cloudProviderNames := cloudproviderutil.GetEnabledNames(cloudProviders)
+	cloudProviderNames := kafkacmdutil.GetEnabledCloudProviderNames(cloudProviders)
 
 	cloudProviderPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
@@ -322,7 +320,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	// get the selected provider type from the name selected
-	selectedCloudProvider := cloudproviderutil.FindByName(cloudProviders, answers.CloudProvider)
+	selectedCloudProvider := kafkacmdutil.FindCloudProviderByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
 	cloudRegionResponse, _, err := api.Kafka().GetCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
@@ -331,7 +329,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := cloudregionutil.GetEnabledIDs(regions)
+	regionIDs := kafkacmdutil.GetEnabledCloudRegionIDs(regions)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
