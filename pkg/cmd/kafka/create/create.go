@@ -5,27 +5,31 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	"gopkg.in/yaml.v2"
 
+	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	svcstatus "github.com/redhat-developer/app-services-cli/pkg/service/status"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cloudprovider/cloudproviderutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cloudregion/cloudregionutil"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -43,6 +47,7 @@ type Options struct {
 	autoUse      bool
 
 	interactive bool
+	wait        bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -111,6 +116,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
+	cmd.Flags().BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(flags.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FetchCloudProviders(f)
@@ -174,8 +180,6 @@ func runCreate(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", localize.NewEntry("Name", payload.Name)))
-
 	api := connection.API()
 
 	a := api.Kafka().CreateKafka(context.Background())
@@ -183,23 +187,12 @@ func runCreate(opts *Options) error {
 	a = a.Async(true)
 	response, httpRes, err := a.Execute()
 
-	if httpRes.StatusCode == 409 {
+	if httpRes.StatusCode == http.StatusBadRequest {
 		return errors.New(opts.localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name)))
 	}
 
 	if err != nil {
 		return err
-	}
-
-	logger.Info(opts.localizer.MustLocalize("kafka.create.info.successMessage", localize.NewEntry("Name", response.GetName())))
-
-	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.MarshalIndent(response, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
 	}
 
 	kafkaCfg := &config.KafkaConfig{
@@ -209,11 +202,46 @@ func runCreate(opts *Options) error {
 	if opts.autoUse {
 		logger.Debug("Auto-use is set, updating the current instance")
 		cfg.Services.Kafka = kafkaCfg
-		if err := opts.Config.Save(cfg); err != nil {
+		if err = opts.Config.Save(cfg); err != nil {
 			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.common.error.couldNotUseKafka"), err)
 		}
 	} else {
 		logger.Debug("Auto-use is not set, skipping updating the current instance")
+	}
+
+	if opts.wait {
+		logger.Debug("--wait flag is enabled, waiting for Kafka to finish creating")
+		s := opts.IO.NewSpinner()
+		s.Suffix = fmt.Sprintf(" %v", opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", localize.NewEntry("Name", opts.name)))
+		s.Start()
+
+		for svcstatus.IsCreating(response.GetStatus()) {
+			time.Sleep(cmdutil.DefaultPollTime)
+			s.Suffix = " " + opts.localizer.MustLocalize("kafka.create.log.info.creationInProgress", localize.NewEntry("Name", response.GetName()), localize.NewEntry("Status", color.Info(response.GetStatus())))
+			response, httpRes, err = api.Kafka().GetKafkaById(context.Background(), response.GetId()).Execute()
+			logger.Debug("Checking Kafka status:", response.GetStatus())
+			if err != nil {
+				return err
+			}
+		}
+		s.Stop()
+		logger.Info()
+		logger.Info()
+		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", localize.NewEntry("Name", response.GetName())))
+	}
+
+	switch opts.outputFormat {
+	case dump.JSONFormat:
+		data, _ := json.Marshal(response)
+		_ = dump.JSON(opts.IO.Out, data)
+	case dump.YAMLFormat, dump.YMLFormat:
+		data, _ := yaml.Marshal(response)
+		_ = dump.YAML(opts.IO.Out, data)
+	}
+
+	if !opts.wait {
+		logger.Info()
+		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", localize.NewEntry("Name", response.GetName())))
 	}
 
 	return nil
