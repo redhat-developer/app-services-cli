@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 	"time"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -210,27 +212,42 @@ func runCreate(opts *Options) error {
 		logger.Debug("Auto-use is not set, skipping updating the current instance")
 	}
 
+	nameTemplateEntry := localize.NewEntry("Name", response.GetName())
+
 	if opts.wait {
 		logger.Debug("--wait flag is enabled, waiting for Kafka to finish creating")
 		s := opts.IO.NewSpinner()
-		s.Suffix = fmt.Sprintf(" %v", opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", localize.NewEntry("Name", opts.name)))
+		s.Suffix = fmt.Sprintf(" %v", opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", nameTemplateEntry))
 		s.Start()
+
+		// when there is a SIGINT, display a message informing the user that this does not cancel the creation
+		// and that it is being created in the background
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt)
+		go func() {
+			for range c {
+				logger.Info()
+				logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.creatingKafkaSyncSigint"))
+				os.Exit(0)
+			}
+		}()
 
 		for svcstatus.IsCreating(response.GetStatus()) {
 			time.Sleep(cmdutil.DefaultPollTime)
-			s.Suffix = " " + opts.localizer.MustLocalize("kafka.create.log.info.creationInProgress",
-				localize.NewEntry("Name", response.GetName()),
-				localize.NewEntry("Status", color.Info(response.GetStatus())))
+
 			response, httpRes, err = api.Kafka().GetKafkaById(context.Background(), response.GetId()).Execute()
-			defer httpRes.Body.Close()
-			logger.Debug("Checking Kafka status:", response.GetStatus())
 			if err != nil {
 				return err
 			}
+			defer httpRes.Body.Close()
+			logger.Debug("Checking Kafka status:", response.GetStatus())
+
+			s.Suffix = createSpinnerSuffix(opts.localizer, response.GetName(), response.GetStatus())
+
 		}
 		s.Stop()
 		logger.Info("\n")
-		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", localize.NewEntry("Name", response.GetName())))
+		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
 	switch opts.outputFormat {
@@ -244,7 +261,7 @@ func runCreate(opts *Options) error {
 
 	if !opts.wait {
 		logger.Info()
-		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", localize.NewEntry("Name", response.GetName())))
+		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
 	}
 
 	return nil
@@ -335,4 +352,10 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	return payload, nil
+}
+
+func createSpinnerSuffix(localizer localize.Localizer, name string, status string) string {
+	return " " + localizer.MustLocalize("kafka.create.log.info.creationInProgress",
+		localize.NewEntry("Name", name),
+		localize.NewEntry("Status", color.Info(status)))
 }
