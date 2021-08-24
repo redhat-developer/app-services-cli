@@ -186,6 +186,7 @@ func runCreate(opts *Options) error {
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, httpRes, err := a.Execute()
+	defer httpRes.Body.Close()
 
 	if httpRes.StatusCode == http.StatusBadRequest {
 		return errors.New(opts.localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name)))
@@ -219,6 +220,7 @@ func runCreate(opts *Options) error {
 			time.Sleep(cmdutil.DefaultPollTime)
 			s.Suffix = " " + opts.localizer.MustLocalize("kafka.create.log.info.creationInProgress", localize.NewEntry("Name", response.GetName()), localize.NewEntry("Status", color.Info(response.GetStatus())))
 			response, httpRes, err = api.Kafka().GetKafkaById(context.Background(), response.GetId()).Execute()
+			defer httpRes.Body.Close()
 			logger.Debug("Checking Kafka status:", response.GetStatus())
 			if err != nil {
 				return err
@@ -282,7 +284,8 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, _, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, httpRes, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		return nil, err
 	}
