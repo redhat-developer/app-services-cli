@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"sort"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -113,6 +114,7 @@ func runCmd(opts *Options) error {
 	ctx := context.Background()
 
 	consumerGroupData, httpRes, err := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -123,15 +125,15 @@ func runCmd(opts *Options) error {
 		operationTmplPair := localize.NewEntry("Operation", "view")
 
 		switch httpRes.StatusCode {
-		case 404:
+		case http.StatusNotFound:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair))
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err

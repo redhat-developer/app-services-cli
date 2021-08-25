@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 
 	"gopkg.in/yaml.v2"
 
@@ -137,6 +138,7 @@ func runList(opts *Options) (err error) {
 	req = req.Page(opts.page)
 
 	consumerGroupData, httpRes, err := req.Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -145,13 +147,13 @@ func runList(opts *Options) (err error) {
 		operationTmplPair := localize.NewEntry("Operation", "list")
 
 		switch httpRes.StatusCode {
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err

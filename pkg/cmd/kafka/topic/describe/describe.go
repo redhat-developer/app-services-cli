@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -103,9 +104,9 @@ func runCmd(opts *Options) error {
 	}
 
 	// fetch the topic
-	topicResponse, httpRes, err := api.TopicsApi.
-		GetTopic(context.Background(), opts.name).
-		Execute()
+	topicResponse, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
+	defer httpRes.Body.Close()
+
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -116,15 +117,15 @@ func runCmd(opts *Options) error {
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 
 		switch httpRes.StatusCode {
-		case 404:
+		case http.StatusNotFound:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err

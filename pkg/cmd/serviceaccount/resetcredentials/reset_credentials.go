@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -111,7 +112,8 @@ func runResetCredentials(opts *Options) (err error) {
 
 	api := connection.API()
 
-	serviceacct, _, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		return err
 	}
@@ -190,16 +192,17 @@ func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccou
 	logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 
 	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
 			return nil, err
 		}
 
 		switch httpRes.StatusCode {
-		case 403:
+		case http.StatusForbidden:
 			opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update"))
 			return nil, fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update")), err)
-		case 500:
+		case http.StatusInternalServerError:
 			return nil, errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.internalServerError"))
 		default:
 			return nil, err

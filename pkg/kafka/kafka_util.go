@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
 
@@ -104,9 +105,13 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 
 	api := connection.API()
 
-	_, httpRes, _ := GetKafkaByName(context.Background(), api.Kafka(), name)
+	_, httpRes, err := GetKafkaByName(context.Background(), api.Kafka(), name)
+	defer httpRes.Body.Close()
+	if err != nil {
+		return err
+	}
 
-	if httpRes != nil && httpRes.StatusCode == 200 {
+	if httpRes != nil && httpRes.StatusCode == http.StatusOK {
 		return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
 	}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strconv"
 
@@ -153,9 +154,13 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 		return err
 	}
 
-	_, httpRes, _ := api.TopicsApi.GetTopic(context.Background(), name).Execute()
+	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), name).Execute()
+	defer httpRes.Body.Close()
+	if err != nil {
+		return err
+	}
 
-	if httpRes != nil && httpRes.StatusCode == 200 {
+	if httpRes != nil && httpRes.StatusCode == http.StatusOK {
 		return errors.New(v.Localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 	}
 
