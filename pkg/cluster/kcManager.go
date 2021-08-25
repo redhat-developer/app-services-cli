@@ -85,15 +85,6 @@ func getKafkaConnectionsAPIURL(namespace string) string {
 func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.wait"))
 
-	templateEntries := []*localize.TemplateEntry{
-		localize.NewEntry("Name", crName),
-		localize.NewEntry("Namespace", namespace),
-		localize.NewEntry("Group", AKCGroup),
-		localize.NewEntry("Version", AKCVersion),
-		localize.NewEntry("Kind", AKCRMeta.Kind),
-	}
-	fmt.Fprint(c.io.Out, c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.binding", templateEntries...))
-
 	w, err := c.dynamicClient.Resource(AKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
 	})
