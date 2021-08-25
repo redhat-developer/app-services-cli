@@ -24,7 +24,10 @@ rhoas kafka use [flags]
 
 ....
 # set a kafka instance to be the current instance
-$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
+$ rhoas kafka use --name=my-kafka
+
+# set a kafka instance to be the current instance
+$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
 

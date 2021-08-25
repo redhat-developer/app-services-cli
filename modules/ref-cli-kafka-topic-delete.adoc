@@ -20,7 +20,7 @@ rhoas kafka topic delete [flags]
 
 ....
 # delete a topic
-$ rhoas kafka topic delete topic-1
+$ rhoas kafka topic delete --name topic-1
 
 ....
 
