@@ -81,7 +81,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
 
 	// TODO: log an error in debug mode. Requires https://github.com/redhat-developer/app-services-cli/issues/914 to be completed
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)

@@ -81,7 +81,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.delete.flag.yes"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
 
 	// TODO: log an error in debug mode. Requires https://github.com/redhat-developer/app-services-cli/issues/914 to be completed
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
