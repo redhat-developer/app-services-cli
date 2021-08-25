@@ -12,8 +12,11 @@ Update a topic in the current Apache Kafka instance.
 [kafka.topic.update.cmd.example]
 one = '''
 # update the message retention period for a topic
-$ rhoas kafka topic update topic-1 --retention-ms -1
+$ rhoas kafka topic update --name topic-1 --retention-ms -1
 '''
+
+[kafka.topic.update.flag.name]
+one = 'Name of the Kafka topic you want to update'
 
 [kafka.topic.update.error.cannotDecreasePartitionCountError]
 one = 'the number of topic partitions cannot be decreased from {{.From}} to {{.To}}'

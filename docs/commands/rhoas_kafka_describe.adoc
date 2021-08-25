@@ -31,6 +31,9 @@ $ rhoas kafka describe
 # view a specific instance by passing the --id flag
 $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
+# view a specific instance by passing the --name flag
+$ rhoas kafka describe --name=my-kafka
+
 # customise the output format
 $ rhoas kafka describe -o yaml
 
@@ -39,7 +42,8 @@ $ rhoas kafka describe -o yaml
 [discrete]
 == Options
 
-      `--id` _string_::         Unique ID of the Kafka instance you want to view (if not provided, the current Kafka instance will be displayed)
+      `--id` _string_::         Unique ID of the Kafka instance you want to view
+      `--name` _string_::       Name of the Kafka instance you want to view
   `-o`, `--output` _string_::   Format in which to display the Kafka instance (choose from: "json", "yml", "yaml") (default "json")
 
 [discrete]

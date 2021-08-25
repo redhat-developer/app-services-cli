@@ -27,10 +27,17 @@ $ rhoas kafka describe
 # view a specific instance by passing the --id flag
 $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
+# view a specific instance by passing the --name flag
+$ rhoas kafka describe --name=my-kafka
+
 # customise the output format
 $ rhoas kafka describe -o yaml
 '''
 
 [kafka.describe.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the Kafka instance you want to view (if not provided, the current Kafka instance will be displayed)'
+one = 'Unique ID of the Kafka instance you want to view'
+
+[kafka.describe.flag.name]
+description = 'Description for the --name flag'
+one = 'Name of the Kafka instance you want to view'

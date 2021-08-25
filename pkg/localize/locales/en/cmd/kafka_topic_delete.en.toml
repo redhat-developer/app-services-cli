@@ -12,7 +12,7 @@ Delete a topic in the current Apache Kafka instance.
 [kafka.topic.delete.cmd.example]
 one = '''
 # delete a topic
-$ rhoas kafka topic delete topic-1
+$ rhoas kafka topic delete --name topic-1
 '''
 
 [kafka.topic.delete.flag.yes.description]

@@ -6,4 +6,4 @@ In order to be able to create a new instance, you must first review and accept t
 '''
 
 [service.error.idAndNameCannotBeUsed]
-one = 'name argument and --id flag cannot be used at the same time'
+one = '--name and --id flags cannot be used at the same time'

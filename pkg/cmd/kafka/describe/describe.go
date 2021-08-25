@@ -8,13 +8,13 @@ import (
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -48,19 +48,11 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.describe.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.describe.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.describe.cmd.example"),
-		Args:    cobra.RangeArgs(0, 1),
-		// Dynamic completion of the Kafka name
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidKafkas(f, toComplete)
-		},
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
-			if len(args) > 0 {
-				opts.name = args[0]
 			}
 
 			if opts.name != "" && opts.id != "" {
@@ -89,7 +81,9 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
 
+	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd

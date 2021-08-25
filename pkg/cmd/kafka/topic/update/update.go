@@ -36,7 +36,7 @@ var (
 )
 
 type Options struct {
-	topicName         string
+	name              string
 	partitionsStr     string
 	retentionMsStr    string
 	retentionBytesStr string
@@ -68,11 +68,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.topic.update.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.topic.update.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.update.cmd.example"),
-		Args:    cobra.ExactValidArgs(1),
-		// Dynamic completion of the topic name
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
-		},
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			validator := topicutil.Validator{
 				Localizer: opts.localizer,
@@ -83,8 +79,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" && opts.cleanupPolicy == "" {
 				opts.interactive = true
 			}
-
-			opts.topicName = args[0]
 
 			if !opts.interactive {
 
@@ -99,7 +93,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return nil
 				}
 
-				if err = validator.ValidateName(opts.topicName); err != nil {
+				if err = validator.ValidateName(opts.name); err != nil {
 					return err
 				}
 
@@ -173,6 +167,12 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
 	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+	})
+	_ = cmd.MarkFlagRequired("name")
+
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
@@ -229,9 +229,9 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).Execute()
+	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
 
-	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
+	topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
 	if err != nil {
 		if httpRes == nil {
@@ -245,7 +245,7 @@ func runCmd(opts *Options) error {
 	// map to store the config entries which will be updated
 	configEntryMap := map[string]*string{}
 
-	updateTopicReq := api.TopicsApi.UpdateTopic(context.Background(), opts.topicName)
+	updateTopicReq := api.TopicsApi.UpdateTopic(context.Background(), opts.name)
 
 	topicSettings := &kafkainstanceclient.UpdateTopicInput{}
 
@@ -332,10 +332,10 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	// check if topic exists
-	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).
+	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).
 		Execute()
 
-	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
+	topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
 	if err != nil {
 		if httpRes == nil {

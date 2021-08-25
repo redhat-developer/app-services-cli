@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -48,14 +49,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.delete.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.delete.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.delete.cmd.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return flag.RequiredWhenNonInteractiveError("yes")
-			}
-
-			if len(args) > 0 {
-				opts.name = args[0]
 			}
 
 			if opts.name != "" && opts.id != "" {
@@ -84,6 +81,9 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.delete.flag.yes"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
+
+	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
 
 	return cmd
 }

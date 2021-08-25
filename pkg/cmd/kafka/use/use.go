@@ -7,10 +7,9 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
@@ -48,9 +47,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Long:    opts.localizer.MustLocalize("kafka.use.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.use.cmd.example"),
 		Args:    cobra.NoArgs,
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidKafkas(f, toComplete)
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.id == "" && opts.name == "" {
 				if !opts.IO.CanPrompt() {
@@ -69,6 +65,9 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
+
+	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+
 	return cmd
 }
 
