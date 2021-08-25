@@ -58,34 +58,10 @@ Created KafkaConnection can be already injected to your application.
 
 To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
+
+You can bind KafkaConnection to your application by executing "rhoas cluster bind" 
+or directly in the OpenShift Console topology view.
 '''
-
-[cluster.kubernetes.watchForKafkaStatus.binding]
-one = '''
-cat <<EOF | kubectl apply -f - 
-apiVersion: binding.operators.coreos.com/v1alpha1
-kind: ServiceBinding
-metadata:
-  name: kafka-config
-  namespace: {{.Namespace}}
-spec:
-  application:
-    group: apps
-    name: name-of-your-application
-    resource: deployments
-    version: v1
-    
-  bindAsFiles: true
-  services:
-  - group: {{.Group}}
-    version: {{.Version}}
-    kind: {{.Kind}}
-    name: {{.Name}}
-EOF
-
-'''
-
-
 
 [cluster.kubernetes.serviceaccountsecret.error.createError]
 one = 'could not create Service Account secret'
