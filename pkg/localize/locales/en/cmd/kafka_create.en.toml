@@ -21,11 +21,14 @@ one = '''
 $ rhoas kafka create
 
 # create a Kafka instance
-$ rhoas kafka create my-kafka-instance
+$ rhoas kafka create --name my-kafka-instance
 
 # create a Kafka instance and output the result in YAML
 $ rhoas kafka create -o yaml
 '''
+
+[kafka.create.flag.name.description]
+one = 'Unique name of the Kafka instance'
 
 [kafka.create.flag.cloudProvider.description]
 description = 'Description for the --provider flag'
@@ -80,7 +83,7 @@ description = 'Help text for Cloud Region'
 one = "Geographical region where the Kafka instance will be deployed"
 
 [kafka.create.argument.name.error.requiredWhenNonInteractive]
-one = 'name is required. Run "rhoas kafka create <name>"'
+one = 'name is required. Run "rhoas kafka create --name <name>"'
 
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'

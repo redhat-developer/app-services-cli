@@ -82,13 +82,11 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.create.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
+			if opts.name != "" {
 				validator := &pkgKafka.Validator{
 					Localizer:  opts.localizer,
 					Connection: opts.Connection,
 				}
-				opts.name = args[0]
-
 				if err := validator.ValidateName(opts.name); err != nil {
 					return err
 				}
@@ -112,6 +110,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.create.flag.name.description"))
 	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
 	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))

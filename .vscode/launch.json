@@ -127,7 +127,7 @@
         "kafka",
         "topic",
         "create",
-        "my-topic"
+        "--name=my-topic"
       ]
     },
     {

@@ -167,7 +167,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
 	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})

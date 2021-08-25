@@ -1,3 +1,6 @@
+[kafka.topic.common.flag.name.description]
+one = 'Topic name'
+
 [kafka.topic.common.flag.output.description]
 one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "yaml")'
 

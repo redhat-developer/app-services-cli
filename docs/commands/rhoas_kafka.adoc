@@ -21,7 +21,7 @@ Commands are divided into the following categories:
 
 ....
 ## Create an Kafka instance
-rhoas kafka create my-kafka-instance
+rhoas kafka create --name my-kafka-instance
 
 ## View configuration details of an Kafka instance
 rhoas kafka describe
@@ -30,7 +30,7 @@ rhoas kafka describe
 rhoas kafka list
 
 ## Create an Kafka Topic
-rhoas kafka topic create mytopic 
+rhoas kafka topic create --name mytopic 
 
 ....
 

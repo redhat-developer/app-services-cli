@@ -68,9 +68,9 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.topic.create.cmd.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if !opts.IO.CanPrompt() && len(args) == 0 {
+			if !opts.IO.CanPrompt() && opts.topicName != "" {
 				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
-			} else if len(args) == 0 {
+			} else if opts.topicName == "" {
 				opts.interactive = true
 			}
 
@@ -85,12 +85,9 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.interactive {
-
 				validator := topicutil.Validator{
 					Localizer: opts.localizer,
 				}
-
-				opts.topicName = args[0]
 
 				if err = validator.ValidateName(opts.topicName); err != nil {
 					return err
@@ -128,14 +125,14 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	cmd.Flags().StringVar(&opts.topicName, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
 	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
 	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", defaultCleanupPolicy, opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
-
 	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
 
 	return cmd
