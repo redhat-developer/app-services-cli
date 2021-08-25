@@ -28,6 +28,9 @@ $ rhoas kafka delete
 # delete a Kafka instance with a specific ID
 $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
+# delete a Kafka instance with a specific name
+$ rhoas kafka delete --name=my-kafka
+
 ....
 
 [discrete]

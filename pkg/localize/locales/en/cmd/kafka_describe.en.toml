@@ -27,6 +27,9 @@ $ rhoas kafka describe
 # view a specific instance by passing the --id flag
 $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
+# view a specific instance by passing the --name flag
+$ rhoas kafka describe --name=my-kafka
+
 # customise the output format
 $ rhoas kafka describe -o yaml
 '''

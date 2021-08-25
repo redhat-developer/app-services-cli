@@ -20,7 +20,10 @@ When you set the Kafka instance to be used, it is set as the current instance fo
 description = 'Examples of how to use the command'
 one = '''
 # set a kafka instance to be the current instance
-$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg,
+$ rhoas kafka use --name=my-kafka
+
+# set a kafka instance to be the current instance
+$ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [kafka.use.flag.id]
