@@ -153,11 +153,7 @@ func runList(opts *Options) (err error) {
 		}
 	}
 
-	ok, err := checkForConsumerGroups(int(consumerGroupData.GetTotal()), opts, kafkaInstance.GetName())
-	if err != nil {
-		return err
-	}
-	if !ok {
+	if !checkForConsumerGroups(int(consumerGroupData.GetTotal()), opts, kafkaInstance.GetName()) {
 		return nil
 	}
 
@@ -198,7 +194,7 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 
 // checks if there are any consumer groups available
 // prints to stderr if not
-func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCount bool, err error) {
+func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCount bool) {
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaName)
 	if count == 0 && opts.output == "" {
 		if opts.topic == "" {
@@ -207,8 +203,8 @@ func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCoun
 			opts.Logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic", kafkaNameTmplPair, localize.NewEntry("TopicName", opts.topic)))
 		}
 
-		return false, nil
+		return false
 	}
 
-	return true, nil
+	return true
 }
