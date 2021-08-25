@@ -11,7 +11,6 @@ import (
 
 // FilterValidTopicNameArgs filters topics from the API and returns the names
 // This is used in the cobra.ValidArgsFunction for dynamic completion of topic names
-// TODO: Move this into a "kafkaadmincmdutil" package
 func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames []string, directive cobra.ShellCompDirective) {
 	validNames = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
@@ -53,7 +52,6 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 }
 
 // FilterValidConsumerGroups returns the list of consumer group IDs from the API
-// TODO: Move this into a "kafkaadmincmdutil" package
 func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validIDs []string, directive cobra.ShellCompDirective) {
 	validIDs = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace

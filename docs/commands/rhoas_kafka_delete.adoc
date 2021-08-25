@@ -34,7 +34,7 @@ $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 == Options
 
       `--id` _string_::     Unique ID of the Kafka instance you want to delete
-      `--name` _string_::   Name of the Kafka instance you want to view
+      `--name` _string_::   Name of the Kafka instance you want to delete
   `-y`, `--yes`::           Skip confirmation to forcibly delete this Kafka instance
 
 [discrete]
