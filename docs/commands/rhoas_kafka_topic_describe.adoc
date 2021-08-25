@@ -20,7 +20,7 @@ rhoas kafka topic describe [flags]
 
 ....
 # describe a topic
-$ rhoas kafka topic describe topic-1
+$ rhoas kafka topic describe --name topic-1
 
 ....
 

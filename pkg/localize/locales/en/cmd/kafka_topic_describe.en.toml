@@ -15,5 +15,5 @@ one = 'Name of the Kafka topic you want to view'
 [kafka.topic.describe.cmd.example]
 one = '''
 # describe a topic
-$ rhoas kafka topic describe topic-1
+$ rhoas kafka topic describe --name topic-1
 '''
