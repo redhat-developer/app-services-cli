@@ -16,6 +16,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
+
+	serviceregistry "github.com/redhat-developer/app-services-cli/pkg/cluster/serviceregistry"
 )
 
 var (
@@ -23,9 +25,19 @@ var (
 	AKCVersion = "v1alpha1"
 )
 
+var (
+	RegistryGroup   = "rhoas.redhat.com"
+	RegistryVersion = "v1alpha1"
+)
+
 var AKCRMeta = metav1.TypeMeta{
 	Kind:       "KafkaConnection",
 	APIVersion: AKCGroup + "/" + AKCVersion,
+}
+
+var SRCMeta = metav1.TypeMeta{
+	Kind:       "ServiceRegistryConnection",
+	APIVersion: RegistryGroup + "/" + RegistryVersion,
 }
 
 var AKCResource = schema.GroupVersionResource{
@@ -82,6 +94,10 @@ func getKafkaConnectionsAPIURL(namespace string) string {
 	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
 }
 
+func getRegistryAPIURL(namespace string) string {
+	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/serviceregistryconnections", namespace)
+}
+
 func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.wait"))
 
@@ -133,6 +149,26 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 			return fmt.Errorf(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.error.timeout"))
 		}
 	}
+}
+
+// TODO move to serviceregistry/manager
+func createRegistryObject(crName string, namespace string, registryId string) *serviceregistry.ServiceRegistryConnection {
+	registryCR := &serviceregistry.ServiceRegistryConnection{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      crName,
+			Namespace: namespace,
+		},
+		TypeMeta: SRCMeta,
+		Spec: serviceregistry.ServiceRegistryConnectionSpec{
+			ServiceRegistryId:     registryId,
+			AccessTokenSecretName: tokenSecretName,
+			Credentials: serviceregistry.CredentialsSpec{
+				SecretName: serviceAccountSecretName,
+			},
+		},
+	}
+
+	return registryCR
 }
 
 func createKCObject(crName string, namespace string, kafkaID string) *KafkaConnection {

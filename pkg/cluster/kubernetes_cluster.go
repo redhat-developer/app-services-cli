@@ -140,11 +140,15 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		}
 	}
 
+	// TODO pick up registry from context
+	registryName := "MyRegistry"
+
 	// print status
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.statusInfo",
-		localize.NewEntry("InstanceName", color.Info(kafkaInstance.GetName())),
+		localize.NewEntry("KafkaInstanceName", color.Info(kafkaInstance.GetName())),
+		localize.NewEntry("RegistryInstanceName", registryName),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(serviceAccountSecretName))))
 
@@ -164,10 +168,10 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		}
 	}
 
-	err = CheckIfConnectionsExist(ctx, c, currentNamespace, &kafkaInstance)
-	if err != nil {
-		return err
-	}
+	// err = CheckIfConnectionsExist(ctx, c, currentNamespace, &kafkaInstance)
+	// if err != nil {
+	// 	return err
+	// }
 
 	// Token with auth for operator to pick
 	err = c.createTokenSecretIfNeeded(ctx, currentNamespace, cmdOptions)
@@ -180,7 +184,12 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		return err
 	}
 
-	err = c.createKafkaConnectionCustomResource(ctx, currentNamespace, &kafkaInstance)
+	// err = c.createKafkaConnectionCustomResource(ctx, currentNamespace, &kafkaInstance)
+	// if err != nil {
+	// 	return err
+	// }
+
+	err = c.createRegistryCustomResource(ctx, currentNamespace)
 	if err != nil {
 		return err
 	}
@@ -213,6 +222,32 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
 
 	return watchForKafkaStatus(c, crName, namespace)
+}
+
+// createKafkaConnectionCustomResource creates a new "KafkaConnection" CR
+func (c *KubernetesCluster) createRegistryCustomResource(ctx context.Context, namespace string) error {
+	crName := "hack"
+	registryId := "2953"
+
+	registryCR := createRegistryObject(crName, namespace, registryId)
+
+	crJSON, err := json.Marshal(registryCR)
+	if err != nil {
+		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.error.marshalError"), err)
+	}
+
+	data := c.clientset.RESTClient().
+		Post().
+		AbsPath(getRegistryAPIURL(namespace)).
+		Body(crJSON).
+		Do(ctx)
+
+	if data.Error() != nil {
+		return data.Error()
+	}
+
+	c.logger.Info("hey we created registry instance")
+	return nil
 }
 
 // IsRhoasOperatorAvailableOnCluster checks the cluster to see if a KafkaConnection CRD is installed
