@@ -29,7 +29,7 @@ type Options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
 }
@@ -90,11 +90,6 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 }
 
 func runGet(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -106,11 +101,11 @@ func runGet(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using 'default' artifacts group.")
+		opts.Logger.Info("Group was not specified. Using 'default' artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	logger.Info("Fetching artifact versions")
+	opts.Logger.Info("Fetching artifact versions")
 
 	ctx := context.Background()
 	request := dataAPI.VersionsApi.ListArtifactVersions(ctx, opts.group, opts.artifact)
@@ -119,7 +114,7 @@ func runGet(opts *Options) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	logger.Info("Successfully fetched artifact versions")
+	opts.Logger.Info("Successfully fetched artifact versions")
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

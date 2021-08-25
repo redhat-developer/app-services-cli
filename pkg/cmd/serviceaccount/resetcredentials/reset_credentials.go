@@ -28,7 +28,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 
 	id         string
@@ -104,11 +104,6 @@ func runResetCredentials(opts *Options) (err error) {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	api := connection.API()
 
 	serviceacct, _, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
@@ -145,7 +140,7 @@ func runResetCredentials(opts *Options) (err error) {
 			return err
 		}
 		if !confirmReset {
-			logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.cancelledReset"))
+			opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.cancelledReset"))
 			return nil
 		}
 	}
@@ -155,7 +150,7 @@ func runResetCredentials(opts *Options) (err error) {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("Name", updatedServiceAccount.GetName())), err)
 	}
 
-	logger.Info(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
 
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
@@ -168,7 +163,7 @@ func runResetCredentials(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
 
 	return nil
 }
@@ -182,12 +177,7 @@ func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccou
 	// check if the service account exists
 	api := connection.API()
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return nil, err
-	}
-
-	logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
+	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 
 	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
 	if err != nil {
@@ -215,12 +205,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
-	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptID := &survey.Input{
 		Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.id.message"),
@@ -238,7 +223,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	// if the --output flag was not used, ask in the prompt
 	if opts.fileFormat == "" {
-		logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
+		opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
 
 		fileFormatPrompt := &survey.Select{
 			Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.message"),

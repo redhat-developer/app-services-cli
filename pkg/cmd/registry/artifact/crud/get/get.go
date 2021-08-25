@@ -31,7 +31,7 @@ type Options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
 }
@@ -104,11 +104,6 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 }
 
 func runGet(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -120,18 +115,18 @@ func runGet(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
 	ctx := context.Background()
 	var dataFile *os.File
 	if opts.version != "" {
-		logger.Info("Fetching artifact with version: " + opts.version)
+		opts.Logger.Info("Fetching artifact with version: " + opts.version)
 		request := dataAPI.VersionsApi.GetArtifactVersion(ctx, opts.group, opts.artifact, opts.version)
 		dataFile, _, err = request.Execute()
 	} else {
-		logger.Info("Fetching latest artifact")
+		opts.Logger.Info("Fetching latest artifact")
 		request := dataAPI.ArtifactsApi.GetLatestArtifact(ctx, opts.group, opts.artifact)
 		dataFile, _, err = request.Execute()
 	}
@@ -152,6 +147,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	logger.Info("Successfully fetched artifact")
+	opts.Logger.Info("Successfully fetched artifact")
 	return nil
 }

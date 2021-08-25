@@ -18,7 +18,7 @@ type Factory struct {
 	// Creates a connection to the API
 	Connection ConnectionFunc
 	// Returns a logger to create leveled logs in the application
-	Logger func() (logging.Logger, error)
+	Logger logging.Logger
 	// Localizer provides text to the commands
 	Localizer localize.Localizer
 }

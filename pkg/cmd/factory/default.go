@@ -126,7 +126,7 @@ func New(localizer localize.Localizer) *Factory {
 		IOStreams:  io,
 		Config:     cfgFile,
 		Connection: connectionFunc,
-		Logger:     loggerFunc,
+		Logger:     logger,
 		Localizer:  localizer,
 	}
 }

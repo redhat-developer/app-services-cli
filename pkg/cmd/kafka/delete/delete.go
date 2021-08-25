@@ -30,7 +30,7 @@ type options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -89,11 +89,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -134,13 +129,13 @@ func runDelete(opts *options) error {
 		}
 
 		if confirmedKafkaName != kafkaName {
-			logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
+			opts.Logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
 			return nil
 		}
 	}
 
 	// delete the Kafka
-	logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
+	opts.Logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
 	a := api.Kafka().DeleteKafkaById(context.Background(), response.GetId())
 	a = a.Async(true)
 	_, _, err = a.Execute()
@@ -149,7 +144,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
+	opts.Logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

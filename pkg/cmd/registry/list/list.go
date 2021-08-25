@@ -42,7 +42,7 @@ type options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -81,11 +81,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -99,7 +94,7 @@ func runList(opts *options) error {
 
 	if opts.search != "" {
 		query := buildQuery(opts.search)
-		logger.Debug("Filtering Service Registries with query", query)
+		opts.Logger.Debug("Filtering Service Registries with query", query)
 		a = a.Search(query)
 	}
 
@@ -109,7 +104,7 @@ func runList(opts *options) error {
 	}
 
 	if len(response.Items) == 0 && opts.outputFormat == "" {
-		logger.Info(opts.localizer.MustLocalize("registry.common.log.info.noInstances"))
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.common.log.info.noInstances"))
 		return nil
 	}
 
@@ -123,7 +118,7 @@ func runList(opts *options) error {
 	default:
 		rows := mapResponseItemsToRows(&response.Items)
 		dump.Table(opts.IO.Out, rows)
-		logger.Info("")
+		opts.Logger.Info("")
 	}
 
 	return nil

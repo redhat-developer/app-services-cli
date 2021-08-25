@@ -30,15 +30,10 @@ func main() {
 
 	buildVersion := build.Version
 	cmdFactory := factory.New(localizer)
-	logger, err := cmdFactory.Logger()
-	if err != nil {
-		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
-		os.Exit(1)
-	}
 
 	err = initConfig(cmdFactory)
 	if err != nil {
-		logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
 		os.Exit(1)
 	}
 
@@ -54,12 +49,12 @@ func main() {
 	err = rootCmd.Execute()
 	if err == nil {
 		if debug.Enabled() {
-			build.CheckForUpdate(context.Background(), logger, localizer)
+			build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
 		}
 		return
 	}
-	logger.Error(wrapErrorf(err, localizer))
-	build.CheckForUpdate(context.Background(), logger, localizer)
+	cmdFactory.Logger.Error(wrapErrorf(err, localizer))
+	build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
 	os.Exit(1)
 }
 

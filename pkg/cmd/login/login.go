@@ -62,7 +62,7 @@ var masAuthURLAliases = map[string]string{
 
 type Options struct {
 	Config     config.IConfig
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
@@ -98,13 +98,8 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 				opts.clientID = build.DefaultOfflineTokenClientID
 			}
 
-			logger, err := opts.Logger()
-			if err != nil {
-				return err
-			}
-
 			if opts.IO.IsSSHSession() && opts.offlineToken == "" {
-				logger.Info(opts.localizer.MustLocalize("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+				opts.Logger.Info(opts.localizer.MustLocalize("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 			}
 
 			return runLogin(opts)
@@ -125,11 +120,6 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runLogin(opts *Options) (err error) {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	gatewayURL, err := getURLFromAlias(opts.url, apiGatewayAliases, opts.localizer)
 	if err != nil {
 		return err
@@ -155,7 +145,7 @@ func runLogin(opts *Options) (err error) {
 		loginExec := &login.AuthorizationCodeGrant{
 			HTTPClient: httpClient,
 			Scopes:     opts.scopes,
-			Logger:     logger,
+			Logger:     opts.Logger,
 			IO:         opts.IO,
 			Config:     opts.Config,
 			ClientID:   opts.clientID,
@@ -201,10 +191,10 @@ func runLogin(opts *Options) (err error) {
 	}
 
 	username, ok := token.GetUsername(cfg.AccessToken)
-	logger.Info("")
+	opts.Logger.Info("")
 
 	if !ok {
-		logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
+		opts.Logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {
 		opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username))
 	}
@@ -212,7 +202,7 @@ func runLogin(opts *Options) (err error) {
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
 	if !debug.Enabled() {
-		build.CheckForUpdate(context.Background(), logger, opts.localizer)
+		build.CheckForUpdate(context.Background(), opts.Logger, opts.localizer)
 	}
 
 	return nil

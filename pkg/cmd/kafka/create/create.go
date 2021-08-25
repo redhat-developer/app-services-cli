@@ -52,7 +52,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -129,11 +129,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCreate(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -151,13 +146,13 @@ func runCreate(opts *Options) error {
 		return err
 	}
 	if !termsAccepted && termsURL != "" {
-		logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
+		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
 		return nil
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
 	if opts.interactive {
-		logger.Debug()
+		opts.Logger.Debug()
 
 		payload, err = promptKafkaPayload(opts)
 		if err != nil {
@@ -201,19 +196,19 @@ func runCreate(opts *Options) error {
 	}
 
 	if opts.autoUse {
-		logger.Debug("Auto-use is set, updating the current instance")
+		opts.Logger.Debug("Auto-use is set, updating the current instance")
 		cfg.Services.Kafka = kafkaCfg
 		if err = opts.Config.Save(cfg); err != nil {
 			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.common.error.couldNotUseKafka"), err)
 		}
 	} else {
-		logger.Debug("Auto-use is not set, skipping updating the current instance")
+		opts.Logger.Debug("Auto-use is not set, skipping updating the current instance")
 	}
 
 	nameTemplateEntry := localize.NewEntry("Name", response.GetName())
 
 	if opts.wait {
-		logger.Debug("--wait flag is enabled, waiting for Kafka to finish creating")
+		opts.Logger.Debug("--wait flag is enabled, waiting for Kafka to finish creating")
 		s := opts.IO.NewSpinner()
 		s.Suffix = fmt.Sprintf(" %v", opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", nameTemplateEntry))
 		s.Start()
@@ -224,8 +219,8 @@ func runCreate(opts *Options) error {
 		signal.Notify(c, os.Interrupt)
 		go func() {
 			for range c {
-				logger.Info()
-				logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.creatingKafkaSyncSigint"))
+				opts.Logger.Info()
+				opts.Logger.Info(opts.localizer.MustLocalize("kafka.create.log.info.creatingKafkaSyncSigint"))
 				os.Exit(0)
 			}
 		}()
@@ -238,14 +233,14 @@ func runCreate(opts *Options) error {
 				return err
 			}
 			defer httpRes.Body.Close()
-			logger.Debug("Checking Kafka status:", response.GetStatus())
+			opts.Logger.Debug("Checking Kafka status:", response.GetStatus())
 
 			s.Suffix = createSpinnerSuffix(opts.localizer, response.GetName(), response.GetStatus())
 
 		}
 		s.Stop()
-		logger.Info("\n")
-		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
+		opts.Logger.Info("\n")
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
 	switch opts.outputFormat {
@@ -258,8 +253,8 @@ func runCreate(opts *Options) error {
 	}
 
 	if !opts.wait {
-		logger.Info()
-		logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
+		opts.Logger.Info()
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
 	}
 
 	return nil

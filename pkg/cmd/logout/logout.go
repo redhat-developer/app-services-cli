@@ -18,7 +18,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -45,11 +45,6 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runLogout(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -61,7 +56,7 @@ func runLogout(opts *Options) error {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("logout.error.unableToLogout"), err)
 	}
 
-	logger.Info(opts.localizer.MustLocalize("logout.log.info.logoutSuccess"))
+	opts.Logger.Info(opts.localizer.MustLocalize("logout.log.info.logoutSuccess"))
 
 	return nil
 }

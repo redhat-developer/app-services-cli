@@ -22,7 +22,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
 
@@ -72,11 +72,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *Options) (err error) {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -89,7 +84,7 @@ func runList(opts *Options) (err error) {
 
 	serviceaccounts := res.GetItems()
 	if len(serviceaccounts) == 0 && opts.output == "" {
-		logger.Info(opts.localizer.MustLocalize("serviceAccount.list.log.info.noneFound"))
+		opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.list.log.info.noneFound"))
 		return nil
 	}
 

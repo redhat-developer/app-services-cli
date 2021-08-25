@@ -54,7 +54,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -124,13 +124,8 @@ rhoas service-registry artifact list --page=2 --limit=10
 }
 
 func runList(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
@@ -158,7 +153,7 @@ func runList(opts *Options) error {
 	}
 
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {
-		logger.Info("No artifacts available for " + opts.group + " group and registry id " + opts.registryID)
+		opts.Logger.Info("No artifacts available for " + opts.group + " group and registry id " + opts.registryID)
 		return nil
 	}
 
@@ -172,7 +167,7 @@ func runList(opts *Options) error {
 	default:
 		rows := mapResponseItemsToRows(response.Artifacts)
 		dump.Table(opts.IO.Out, rows)
-		logger.Info("")
+		opts.Logger.Info("")
 	}
 
 	return nil

@@ -33,7 +33,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -97,11 +97,6 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 }
 
 func runDelete(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -113,13 +108,13 @@ func runDelete(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
 	ctx := context.Background()
 	if opts.artifact == "" {
-		logger.Info("Artifact was not specified. Command will delete all artifacts in the group")
+		opts.Logger.Info("Artifact was not specified. Command will delete all artifacts in the group")
 		err = confirmDelete(opts, "Do you want to delete ALL ARTIFACTS from group "+opts.group)
 		if err != nil {
 			return err
@@ -129,13 +124,13 @@ func runDelete(opts *Options) error {
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
-		logger.Info("Artifacts in group " + opts.group + " deleted")
+		opts.Logger.Info("Artifacts in group " + opts.group + " deleted")
 	} else {
 		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact).Execute()
 		if err != nil {
 			return errors.New("artifact " + opts.artifact + " not found")
 		}
-		logger.Info("Deleting artifact " + opts.artifact)
+		opts.Logger.Info("Deleting artifact " + opts.artifact)
 		err = confirmDelete(opts, "Do you want to delete artifact "+opts.artifact+" from group "+opts.group)
 		if err != nil {
 			return err
@@ -146,7 +141,7 @@ func runDelete(opts *Options) error {
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
-		logger.Info("Artifact deleted: " + opts.artifact)
+		opts.Logger.Info("Artifact deleted: " + opts.artifact)
 	}
 
 	return nil

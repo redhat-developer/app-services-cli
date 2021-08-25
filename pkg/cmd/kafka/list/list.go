@@ -46,7 +46,7 @@ type options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -97,11 +97,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -115,7 +110,7 @@ func runList(opts *options) error {
 
 	if opts.search != "" {
 		query := buildQuery(opts.search)
-		logger.Debug(opts.localizer.MustLocalize("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
+		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
 		a = a.Search(query)
 	}
 
@@ -125,7 +120,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 && opts.outputFormat == "" {
-		logger.Info(opts.localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
 		return nil
 	}
 
@@ -139,7 +134,7 @@ func runList(opts *options) error {
 	default:
 		rows := mapResponseItemsToRows(response.GetItems())
 		dump.Table(opts.IO.Out, rows)
-		logger.Info("")
+		opts.Logger.Info("")
 	}
 
 	return nil

@@ -28,7 +28,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 
 	fileFormat  string
@@ -104,11 +104,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCreate(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -142,7 +137,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
@@ -155,7 +150,7 @@ func runCreate(opts *Options) error {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
 	}
 
-	logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
 
 	return nil
 }
@@ -166,16 +161,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	validator := &validation.Validator{
 		Localizer: opts.localizer,
 	}
 
-	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
 		Message: opts.localizer.MustLocalize("serviceAccount.create.input.name.message"),
@@ -189,7 +179,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	// if the --file-format flag was not used, ask in the prompt
 	if opts.fileFormat == "" {
-		logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
+		opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
 
 		fileFormatPrompt := &survey.Select{
 			Message: opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.message"),
@@ -219,7 +209,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.creating", localize.NewEntry("Name", opts.name)))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.creating", localize.NewEntry("Name", opts.name)))
 
 	return nil
 }
