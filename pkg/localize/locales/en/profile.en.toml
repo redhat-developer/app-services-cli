@@ -1,8 +1,0 @@
-[profile.error.enablement]
-one = 'Cannot enable dev preview.'
-
-[profile.status.devpreview.enabled]
-one = 'Developer Preview commands activated. Use help command to view them.'
-
-[profile.status.devpreview.disabled]
-one = 'Developer Preview commands deactivated.'

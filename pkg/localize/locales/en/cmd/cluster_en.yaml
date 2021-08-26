@@ -1,0 +1,342 @@
+cluster:
+  kubernetes:
+    log:
+      info:
+        statusMessage:
+          one: >
+            This command will link your cluster with Cloud Services by creating
+            custom resources and secrets.
+
+            In case of problems please execute "rhoas cluster status" to check
+            if your cluster is properly configured
+    statusInfo:
+      one: |
+        Connection Details:
+
+        Apache Kafka instance:  {{.InstanceName}}
+        Kubernetes Namespace:   {{.Namespace}}
+        Service Account Secret: {{.ServiceAccountSecretName}}
+    error:
+      configNotFoundError:
+        one: missing kubeconfig file
+      loadConfigError:
+        one: failed to load kubeconfig
+    connect:
+      input:
+        confirm:
+          message:
+            one: Do you want to continue?
+      log:
+        debug:
+          cancellingConnect:
+            one: Cancelling cluster connection
+    createKafkaCR:
+      error:
+        marshalError:
+          one: could not marshal KafkaConnection to JSON object
+      log:
+        info:
+          customResourceCreated:
+            one: 'KafkaConnection resource "{{.Name}}" has been created'
+    watchForKafkaStatus:
+      error:
+        format:
+          one: >
+            invalid result from operator. Status object is not compatible with
+            expected result from CLI.
+        status:
+          one: |
+            error when processing KafkaConnection: %v
+        timeout:
+          one: process of watching KafkaConnection timed out
+      log:
+        info:
+          success:
+            one: |+
+              KafkaConnection successfully installed on your cluster.
+              To view it execute:
+
+              oc get akc -o=yaml -n {{.Namespace}} {{.Name}}
+
+          wait:
+            one: >
+              Waiting for status from KafkaConnection resource.
+
+              Created KafkaConnection can be already injected to your
+              application.
+
+
+              To bind you need to have Service Binding Operator installed:
+
+              https://github.com/redhat-developer/service-binding-operator
+
+
+              You can bind KafkaConnection to your application by executing
+              "rhoas cluster bind"
+
+              or directly in the OpenShift Console topology view.
+    serviceaccountsecret:
+      error:
+        createError:
+          one: could not create Service Account secret
+      log:
+        info:
+          exist:
+            one: Service account secret already exist.
+    tokensecret:
+      log:
+        info:
+          found:
+            one: Access token already exist on the specified namespace
+    createTokenSecret:
+      log:
+        info:
+          createSuccess:
+            one: 'Token Secret "{{.Name}}" created successfully'
+          createFailed:
+            one: 'Creation of the "{{.Name}}" secret failed:'
+    createSASecret:
+      log:
+        info:
+          createSuccess:
+            one: 'Service Account Secret "{{.Name}}" created successfully'
+    createServiceAccount:
+      error:
+        createError:
+          one: could not create service account
+    checkIfConnectionExist:
+      existError:
+        one: KafkaConnection already exist
+  connect:
+    cmd:
+      use:
+        one: connect
+      shortDescription:
+        one: Connect your services to Kubernetes or OpenShift
+      longDescription:
+        one: >+
+          Connect your application services to your Kubernetes or OpenShift
+          cluster.
+
+          The kubeconfig file is used to connect to the cluster and identify the
+          context.
+
+          Alternatively, you can use the KUBECONFIG environment variable to read
+          your configuration.
+
+
+          NOTE: This command requires the RHOAS operator to be running on your
+          cluster.
+
+
+          This command will:
+
+
+          1. Create a service account and mount it as a secret into your
+          cluster.
+
+          If the cluster has a service account, it will be refreshed.
+
+
+          2. Create a Kafka Request object that can be used to create a
+          ServiceBinding object using
+
+          the Service Binding operator
+          (https://github.com/redhat-developer/service-binding-operator).
+
+      example:
+        one: |
+          # connect the current Kafka instance to your cluster
+          $ rhoas cluster connect
+    flag:
+      secretName:
+        description:
+          one: Name of the secret that holds the Kafka credentials
+  bind:
+    cmd:
+      shortDescription:
+        one: Connect your RHOAS services to Kubernetes or OpenShift applications
+      longDescription:
+        one: >
+          Command allows you to connect services created by connect command to
+          your application
+
+          running on OpenShift or Kubernetes platform.
+
+          Bind will scan your namespace and detect all application deployments
+          that you can connect your
+
+          services with.
+
+
+          Bind command detects Kubernetes deployments and inject managed
+          services credentials to them.
+
+          For information about what credentials are injected please refer to
+          individual services
+
+          Command will inject credentials as files into `/bindings` folder
+          inside your application.
+
+
+          Bind command will create volume inside your deployment or
+
+          ServiceBindingOperator resource if you have it installed on your
+          cluster
+      example:
+        one: |
+          # Bind using interactive mode
+          $ rhoas cluster bind
+
+          # Bind to specific namespace and application
+          $ rhoas cluster bind --namespace=ns --app-name=myapp
+    flag:
+      appName:
+        one: Name of the kubernetes deployment to bind
+      bindName:
+        one: Name of the Service binding object to create when using operator
+      forceOperator:
+        description:
+          one: >-
+            Use ServiceBindingOperator only and fail if Operator is not
+            installed
+      forceSDK:
+        description:
+          one: >-
+            Use Service Binding SDK and skip ServiceBindingOperator even if
+            installed on the cluster
+    error:
+      emptyResponse:
+        one: Server returned empty response for service
+  serviceBinding:
+    namespaceInfo:
+      one: 'Namespace not provided. Using {{.Namespace}} namespace'
+    confirm:
+      message:
+        one: Do you want to continue?
+    connect:
+      survey:
+        message:
+          one: Please select application you want to connect with
+    serviceMissing:
+      message:
+        one: >
+          Selected service is missing on the specified namespace.
+
+          Please run "rhoas cluster connect" command before binding your
+          service.
+    bindingSuccess:
+      one: Binding %v with %v app succeeded
+    status:
+      message:
+        one: Binding "%v" with "%v" app
+    operatorMissing:
+      one: >
+        Operator is not available on the current cluster.
+
+        Please remove --force-operator=true if you wish to create resource
+        without operator
+
+        Error:
+    usingOperator:
+      one: Using ServiceBinding Operator to perform binding
+  cmd:
+    use:
+      one: cluster
+    shortDescription:
+      one: View and perform operations on your Kubernetes or OpenShift cluster
+    longDescription:
+      one: >-
+        Use these commands to connect and bind your services to Kubernetes or
+        OpenShift applications. You can also check if the Kubernetes or
+        OpenShift cluster has the required Operators to perform this operation.
+    example:
+      one: |
+        # check status of the connection to your cluster
+        $ rhoas cluster status
+
+        # connect with cluster without including currently selected services
+        $ rhoas cluster connect --ignore-context
+
+        # connect with cluster using specified token
+        $ rhoas cluster connect --token=value
+
+        # connect with cluster and save script to create service binding
+        $ rhoas cluster connect --yes > create_service_binding.sh
+
+        # connect managed service with your application
+        $ rhoas cluster bind
+  status:
+    cmd:
+      use:
+        one: status
+      shortDescription:
+        one: View status of the current Kubernetes or OpenShift cluster
+      longDescription:
+        one: >
+          View information about the current Kubernetes or OpenShift cluster.
+
+          You can use this information to connect your application service to
+          the cluster.
+
+
+          Before using this command, you must be logged into a Kubernetes or
+          OpenShift
+
+          cluster. The command uses your kubeconfig file to identify the cluster
+          context.
+      example:
+        one: |
+          # print status of the current cluster
+          $ rhoas cluster status
+    statusMessage:
+      one: >
+        Namespace: {{.Namespace}}
+
+        RHOAS Operator: {{.OperatorStatus}}
+
+
+        Before using this command, you must be logged into a Kubernetes or
+        OpenShift cluster in which the RHOAS Operator is installed.
+
+
+        To find the RHOAS Operator in the OpenShift web console:
+
+
+        1. Navigate to the Operators > OperatorHub page.
+
+
+        2. In the Filter by Keyword box, type "rhoas".
+
+
+        For more information about the RHOAS Operator, see the
+        app-services-operator GitHub repository:
+        https://github.com/redhat-developer/app-services-operator.
+  common:
+    operatorInstalledMessage:
+      one: Installed
+    operatorNotInstalledMessage:
+      one: Not installed
+    flag:
+      kubeconfig:
+        description:
+          one: Location of the kubeconfig file
+      offline:
+        token:
+          description:
+            one: >
+              Provide an offline token to be used by the operator (to get a
+              token, visit {{.OfflineTokenURL}})
+      'yes':
+        description:
+          one: Forcibly create a binding without confirmation
+      namespace:
+        description:
+          one: >-
+            Custom Kubernetes namespace (if not set current namespace will be
+            used)
+      ignoreContext:
+        description:
+          one: >-
+            Ignore currently selected services and ask to select each service
+            separately

@@ -1,9 +1,0 @@
-[service.info.termsCheck]
-one = '''
-In order to be able to create a new instance, you must first review and accept the terms and conditions:
-
-{{.TermsURL}}
-'''
-
-[service.error.idAndNameCannotBeUsed]
-one = '--name and --id flags cannot be used at the same time'

@@ -1,2 +1,0 @@
-[browser.getOpenBrowserCommand.error.unsupportedOperatingSystem]
-one = 'unsupported operating system "{{.OS}}"'

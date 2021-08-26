@@ -1,0 +1,940 @@
+kafka:
+  topic:
+    create:
+      cmd:
+        use:
+          one: create
+        shortDescription:
+          one: Create a topic
+        longDescription:
+          one: >
+            Create a topic in the current Apache Kafka instance.
+
+
+            This command lets you create a topic, set a desired number of
+
+            partitions, retention size and retention period or else use the
+            default values.
+        example:
+          one: |
+            # create a topic
+            $ rhoas kafka topic create --name topic-1
+      error:
+        topicNameIsRequired:
+          one: >-
+            topic name is required. Run "rhoas kafka topic create --name
+            <topic-name>"
+        conflictError:
+          one: >-
+            topic "{{.TopicName}}" already exists in Kafka instance
+            "{{.InstanceName}}"
+      log:
+        info:
+          topicCreated:
+            one: >-
+              Topic "{{.TopicName}}" created in Kafka instance
+              "{{.InstanceName}}":
+      input:
+        retentionMs:
+          message:
+            description: Message for the Retention period input
+            one: 'Retention Period (ms):'
+        retentionBytes:
+          message:
+            description: Message for the Retention size input
+            one: 'Retention Size (bytes):'
+        partitions:
+          message:
+            description: Message for the Partitions input
+            one: 'Number of Partitions:'
+        cleanupPolicy:
+          message:
+            description: Message for the Cleanup Policy input
+            one: 'Cleanup Policy:'
+    describe:
+      cmd:
+        use:
+          one: describe
+        shortDescription:
+          one: Describe a topic
+        longDescription:
+          one: |
+            Print detailed configuration information for a Kafka topic.
+        example:
+          one: |
+            # describe a topic
+            $ rhoas kafka topic describe --name topic-1
+      flag:
+        name:
+          one: Name of the Kafka topic you want to view
+    list:
+      cmd:
+        use:
+          one: list
+        shortDescription:
+          one: List all topics
+        longDescription:
+          one: |
+            List all topics in the current Apache Kafka instance.
+        example:
+          one: |
+            # list all topics
+            $ rhoas kafka topic list
+
+            # list all topics as JSON
+            $ rhoas kafka topic list -o json
+      log:
+        info:
+          noTopics:
+            one: 'No topics found in Kafka instance "{{.InstanceName}}"'
+        debug:
+          filteringTopicList:
+            description: Debug message when filtering the list of Kafka topic
+            one: 'Filtering Kafka topics with the query "{{.Search}}"'
+      flag:
+        search:
+          description:
+            description: Description for the --search flag
+            one: Text search to filter the Kafka topics by name
+        page:
+          description:
+            description: Description for the --page flag
+            one: Current page number for list of topics
+        size:
+          description:
+            description: Description for the --size flag
+            one: Maximum number of items to be returned per page
+        output:
+          description:
+            one: >-
+              Format in which to display the Kafka topic (choose from: "json",
+              "yml", "yaml")
+      error:
+        illegalSearchValue:
+          description: Error message when invalid chars are used for search flag
+          one: >-
+            illegal search value "{{.Search}}"; only letters (Aa-Zz), numbers,
+            "_", "." and "-" are accepted
+        unauthorized:
+          one: 'you are unauthorized to {{.Operation}} these topics'
+        forbidden:
+          one: 'you are forbidden to {{.Operation}} these topics'
+    common:
+      flag:
+        name:
+          description:
+            one: Topic name
+        output:
+          description:
+            one: >-
+              Format in which to display the Kafka topic (choose from: "json",
+              "yml", "yaml")
+      input:
+        partitions:
+          description:
+            description: help for the Partitions input
+            one: The number of partitions in the topic
+          error:
+            invalid:
+              description: Error message when an invalid partition value is entered
+              one: 'invalid value for partitions: {{.Partition}}'
+        retentionMs:
+          description:
+            description: Description for the Retention period input
+            one: >-
+              The period of time in milliseconds the broker will retain a
+              partition log before deleting it
+          error:
+            invalid:
+              description: Error message when an invalid retention period is entered
+              one: 'invalid value for retention period: {{.RetentionMs}}'
+        retentionBytes:
+          description:
+            description: Description for the Retention size input
+            one: >-
+              The maximum total size of a partition log segments before old log
+              segments are deleted to free up space
+          error:
+            invalid:
+              description: Error message when an invalid retention size is entered
+              one: 'invalid value for retention size: {{.RetentionBytes}}'
+        cleanupPolicy:
+          description:
+            description: Description for the Cleanup policy input
+            one: 'Determines whether log messages are deleted, compacted, or both'
+        name:
+          message:
+            description: title for the Name input
+            one: 'Name:'
+          help:
+            description: help for the Name input
+            one: Name for the Kafka topic
+      error:
+        noKafkaSelected:
+          one: >-
+            no Kafka instance is currently selected, run "rhoas kafka use" to
+            set the current instance
+        unauthorized:
+          one: 'you are unauthorized to {{.Operation}} this topic'
+        forbidden:
+          one: 'you are forbidden to {{.Operation}} this topic'
+        internalServerError:
+          one: internal server error
+        unableToConnectToKafka:
+          one: 'unable to connect to Kafka instance "{{.Name}}"'
+        notFoundError:
+          one: >-
+            topic "{{.TopicName}}" not found in Kafka instance
+            "{{.InstanceName}}"
+        topicNotFoundError:
+          one: >-
+            topic "{{.TopicName}}" does not exist in Kafka instance
+            "{{.InstanceName}}"
+      validation:
+        name:
+          error:
+            required:
+              one: topic name is required
+            lengthError:
+              one: 'topic name cannot exceed {{.MaxNameLen}} characters'
+            dotsError:
+              one: topic name can not be "." or ".."
+            invalidChars:
+              one: >-
+                invalid topic name "{{.Name}}"; only letters (Aa-Zz), numbers,
+                "_", "." and "-" are accepted
+        partitions:
+          error:
+            invalid:
+              minValue:
+                one: >-
+                  invalid partition count {{.Partitions}}, minimum value is
+                  {{.Min}}
+              lesserValue:
+                one: >-
+                  Topic currently has {{.CurrPartitions}} partitions, which is
+                  higher than the requested {{.Partitions}}.
+              maxValue:
+                one: >-
+                  invalid partition count {{.Partitions}}, maximum value is
+                  {{.Max}}
+        replicationFactor:
+          error:
+            invalid:
+              one: >-
+                invalid replication factor {{.ReplicationFactor}}, minimum value
+                is {{.MinReplicationFactor}}
+        retentionPeriod:
+          error:
+            invalid:
+              one: >-
+                invalid retention period {{.RetentionPeriod}}, minimum value is
+                -1
+        retentionSize:
+          error:
+            invalid:
+              one: 'invalid retention size {{.RetentionSize}}, minimum value is -1'
+    cmd:
+      use:
+        one: topic
+      shortDescription:
+        one: 'Create, describe, update, list and delete topics'
+      longDescription:
+        one: >
+          Create, describe, update, list and delete topics for the current Kafka
+          instance.
+
+
+          Commands are executed on the currently selected Kafka instance.
+      example:
+        one: |
+          ## Create a topic
+          rhoas kafka topic create --name mytopic
+
+          ## List all topics
+          rhoas kafka topic list
+    delete:
+      cmd:
+        use:
+          one: delete
+        shortDescription:
+          one: Delete a topic
+        longDescription:
+          one: |
+            Delete a topic in the current Apache Kafka instance.
+        example:
+          one: |
+            # delete a topic
+            $ rhoas kafka topic delete --name topic-1
+      flag:
+        'yes':
+          description:
+            one: Skip confirmation to forcibly delete a topic
+      input:
+        name:
+          message:
+            one: 'Confirm the name of the topic you want to delete:'
+      error:
+        mismatchedNameConfirmation:
+          one: >-
+            topic name entered "{{.ConfirmedName}}" does not match the name of
+            the topic you tried to delete "{{.ActualName}}"
+      log:
+        info:
+          topicDeleted:
+            one: >-
+              Topic "{{.TopicName}}" has been deleted from the Kafka instance
+              "{{.InstanceName}}"
+    update:
+      cmd:
+        use:
+          one: update
+        shortDescription:
+          one: Update a Kafka topic
+        longDescription:
+          one: |
+            Update a topic in the current Apache Kafka instance.
+        example:
+          one: |
+            # update the message retention period for a topic
+            $ rhoas kafka topic update --name topic-1 --retention-ms -1
+      flag:
+        name:
+          one: Name of the Kafka topic you want to update
+      error:
+        cannotDecreasePartitionCountError:
+          one: >-
+            the number of topic partitions cannot be decreased from {{.From}} to
+            {{.To}}
+      log:
+        info:
+          samePartitionCount:
+            one: 'Topic "{{.Name}}" already has {{.Count}} partitions.'
+          nothingToUpdate:
+            one: Nothing to update
+          topicUpdated:
+            one: >-
+              Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}}" has
+              been updated
+      input:
+        retentionMs:
+          message:
+            description: Message for the Retention period input
+            one: 'Retention Period (ms) [optional]:'
+          help:
+            description: Help for the Retention period input
+            one: >-
+              The period of time in milliseconds the broker will retain a
+              partition log before deleting it. Leave blank to skip updating
+              this value.
+        retentionBytes:
+          message:
+            description: Message for the Retention size input
+            one: 'Retention Size (bytes) [optional]:'
+          help:
+            description: Help for the Retention size input
+            one: >-
+              The maximum total size of a partition log segments before old log
+              segments are deleted to free up space. Leave blank to skip
+              updating this value.
+        cleanupPolicy:
+          message:
+            description: Message for the Cleanup policy input
+            one: 'Cleanup Policy [optional]:'
+          help:
+            description: Help for the Cleanup policy input
+            one: >-
+              Determines whether log messages are deleted, compacted, or both.
+              Leave blank to skip updating this value.
+        partitions:
+          message:
+            description: Message for the Partitions input
+            one: 'Number of Partitions [optional]:'
+          help:
+            description: Help for the Partitions input
+            one: >-
+              The number of partitions in the topic. Leave blank to skip
+              updating this value.
+  consumerGroup:
+    common:
+      flag:
+        output:
+          description:
+            description: Description for --output flag
+            one: >-
+              Format in which to display the consumer group (choose from:
+              "json", "yml", "yaml")
+        id:
+          description:
+            one: 'The unique ID of the consumer group to {{.Action}}'
+      error:
+        unauthorized:
+          one: 'you are unauthorized to {{.Operation}} this consumer group'
+        forbidden:
+          one: 'you are forbidden to {{.Operation}} this consumer group'
+        internalServerError:
+          one: internal server error
+        notFoundError:
+          one: >-
+            consumer group with ID "{{.ID}}" not found in Kafka instance
+            "{{.InstanceName}}"
+        unableToConnectToKafka:
+          one: 'unable to connect to Kafka instance "{{.Name}}"'
+        noKafkaSelected:
+          one: >-
+            no Kafka instance is currently selected, run "rhoas kafka use" to
+            set the current instance
+    list:
+      flag:
+        output:
+          description:
+            description: Description for --output flag
+            one: >-
+              Format in which to display the consumer group (choose from:
+              "json", "yml", "yaml")
+        topic:
+          description:
+            one: Fetch the consumer groups for a specific Kafka topic
+        limit:
+          description: Description for the --limit flag
+          one: The maximum number of consumer groups to be returned
+        search:
+          description: Description for the --search flag
+          one: Text search to filter consumer groups by ID
+        page:
+          description: Description for the --page flag
+          one: Current page number for list of consumer groups
+        size:
+          description: Description for the --size flag
+          one: Maximum number of consumer groups to be returned per page
+      error:
+        unauthorized:
+          one: 'you are unauthorized to {{.Operation}} these consumer groups'
+        forbidden:
+          one: 'you are forbidden to {{.Operation}} these consumer groups'
+      cmd:
+        use:
+          description: Use is the one-line usage message
+          one: list
+        shortDescription:
+          one: List all consumer groups
+        longDescription:
+          one: List all consumer groups in the current Apache Kafka instance.
+        example:
+          one: |
+            # list all consumer groups
+            $ rhoas kafka consumer-group list
+
+            # list all consumer groups as JSON
+            $ rhoas kafka consumer-group list -o json
+      log:
+        info:
+          noConsumerGroups:
+            one: 'Kafka instance "{{.InstanceName}}" has no consumer groups'
+          noConsumerGroupsForTopic:
+            one: >-
+              Kafka instance "{{.InstanceName}}" has no consumer groups for
+              topic "{{.TopicName}}"
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: consumer-group
+      shortDescription:
+        one: >-
+          Describe, list, and delete consumer groups for the current Kafka
+          instance.
+      longDescription:
+        one: >
+          Use these commands to describe, list, and delete consumer groups for
+          the current Kafka instance.'
+
+
+          Commands are executed on the currently selected Kafka instance.
+      example:
+        one: |
+          ## Delete a consumer group
+          rhoas kafka consumer-group delete --id consumer_group_1
+
+          ## List all consumer groups
+          rhoas kafka consumer-group list
+    describe:
+      cmd:
+        use:
+          one: describe
+        shortDescription:
+          one: Describe a consumer group
+        longDescription:
+          one: |
+            Print detailed information for a consumer group and its members.
+        example:
+          one: |
+            # describe a consumer group
+            $ rhoas kafka consumer-group describe --id consumer_group_1 -o json
+      output:
+        id:
+          one: 'Consumer group ID: {{.ID}}'
+        activeMembers:
+          one: 'ACTIVE MEMBERS:'
+        partitionsWithLag:
+          one: 'PARTITIONS WITH LAG:'
+        unassignedPartitions:
+          one: 'UNASSIGNED PARTITIONS:'
+    delete:
+      cmd:
+        use:
+          one: delete
+        shortDescription:
+          one: Delete a consumer group
+        longDescription:
+          one: |
+            Delete a consumer group from the Kafka instance.
+        example:
+          one: |
+            # delete a consumer group
+            $ rhoas kafka consumer-group delete --id consumer_group_1
+      flag:
+        'yes':
+          description:
+            one: Skip confirmation to forcibly delete a consumer group
+      input:
+        name:
+          message:
+            one: 'Confirm the ID of the consumer group you want to delete:'
+      log:
+        debug:
+          deleteNotConfirmed:
+            description: Info message when user chose not to delete consumer group
+            one: Consumer group delete action was not confirmed. Exiting silently
+        info:
+          consumerGroupDeleted:
+            one: >-
+              Consumer group with ID "{{.ConsumerGroupID}}" has been deleted
+              from the Kafka instance "{{.InstanceName}}"
+      error:
+        mismatchedIDConfirmation:
+          one: >-
+            consumer group ID entered "{{.ConfirmedID}}" does not match the ID
+            of the consumer group you tried to delete "{{.ID}}"
+        locked:
+          one: a consumer group with active members cannot be deleted
+  common:
+    error:
+      couldNotUseKafka:
+        description: >-
+          Error message when a Kafka instance could not be set to the current
+          instance
+        one: 'could not set the current Kafka instance as default: {{.ErrorMessage}}'
+      noKafkaSelected:
+        description: Error message when no Kafka is set
+        one: >-
+          no Kafka instance is currently set, use the "--id" flag or set the
+          current instance with the "rhoas kafka use" command
+      couldNotFetchKafkas:
+        description: Error message when list of Kafka instances could not be fetched
+        one: unable to list Kafka instances
+      load:
+        completions:
+          name:
+            flag:
+              one: 'failed to load completions for --name:'
+      notFoundByIdError:
+        one: 'Kafka instance with ID "{{.ID}}" not found'
+      notFoundByNameError:
+        one: 'Kafka instance "{{.Name}}" not found'
+      notReadyError:
+        one: 'Kafka instance "{{.Name}}" is not ready yet'
+    flag:
+      output:
+        description:
+          description: Description for --output flag
+          one: >-
+            Format in which to display the Kafka instance (choose from: "json",
+            "yml", "yaml")
+    input:
+      instanceName:
+        message:
+          one: 'Select Kafka instance to connect:'
+    log:
+      info:
+        noKafkaInstances:
+          description: Info message when no Kafka instances were found
+          one: No Kafka instances were found.
+    validation:
+      page:
+        error:
+          invalid:
+            minValue:
+              one: 'invalid page number {{.Page}}, minimum value is -1'
+      size:
+        error:
+          invalid:
+            minValue:
+              one: 'invalid value for size {{.Size}}, minimum value is -1'
+  cmd:
+    use:
+      description: Use is the one-line usage message
+      one: kafka
+    shortDescription:
+      description: Short description for command
+      one: 'Create, view, use, and manage your Kafka instances'
+    longDescription:
+      description: Long description for command
+      one: |
+        Commands for managing and interacting with Kafka instances.
+
+        Commands are divided into the following categories:
+         - instance management commands: create, list, and so on
+         - commands executed on the selected instance: topic, consumer-group
+         - "use" command that selects the current instance
+    example:
+      description: Examples for command
+      one: |
+        ## Create an Kafka instance
+        rhoas kafka create --name my-kafka-instance
+
+        ## View configuration details of an Kafka instance
+        rhoas kafka describe
+
+        ## List all Kafka instances
+        rhoas kafka list
+
+        ## Create an Kafka Topic
+        rhoas kafka topic create --name mytopic
+  delete:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: delete
+      shortDescription:
+        description: Short description for command
+        one: Delete an Apache Kafka instance
+      longDescription:
+        description: Long description for command
+        one: >
+          Permanently delete an Apache Kafka instance, including all topics.
+
+
+          When this command is run, you will be asked to confirm the name of the
+          instance you want to delete.
+
+          Otherwise you can pass "--yes" to skip confirmation and forcibly
+          delete the instance.
+      example:
+        description: Examples of how to use the command
+        one: |
+          # delete the current Kafka instance
+          $ rhoas kafka delete
+
+          # delete a Kafka instance with a specific ID
+          $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+
+          # delete a Kafka instance with a specific name
+          $ rhoas kafka delete --name=my-kafka
+    flag:
+      id:
+        description: Description for the --id flag
+        one: Unique ID of the Kafka instance you want to delete
+      name:
+        description: Description for the --name flag
+        one: Name of the Kafka instance you want to delete
+      'yes':
+        description: Description for the --yes flag
+        one: Skip confirmation to forcibly delete this Kafka instance
+    input:
+      confirmName:
+        message:
+          description: Input title for Kafka name confirmation
+          one: 'Confirm the name of the instance you want to delete:'
+    log:
+      info:
+        incorrectNameConfirmation:
+          description: Info message when user incorrectly confirms the name
+          one: >-
+            The name you entered does not match the name of the Kafka instance
+            that you are trying to delete. Please check that it is correct and
+            try again.
+        deleteSuccess:
+          description: Info message when instance was deleted
+          one: 'Kafka instance "{{.Name}}" is being deleted'
+      debug:
+        deletingKafka:
+          description: Debug message when deleting Kafka
+          one: Deleting Kafka instance
+  list:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: list
+      shortDescription:
+        description: Short description for command
+        one: List all Apache Kafka instances
+      longDescription:
+        description: Long description for command
+        one: >
+          List all Apache Kafka instances.
+
+
+          This command will provide a high level view of all Kafka instances.
+
+          The fields displayed are: ID, Name, Owner, Status, Cloud Provider,
+          Region.
+
+          Use the describe command to view all fields for a specific instance.
+
+
+          The instances are displayed by default in a table, but can also be
+          displayed as JSON or YAML.
+      example:
+        description: Examples of how to use the command
+        one: |
+          # list all Kafka instances using the default output format
+          $ rhoas kafka list
+
+          # list all Kafka instances using JSON as the output format
+          $ rhoas kafka list -o json
+    flag:
+      id:
+        description: Description for the --id flag
+        one: >-
+          Unique ID of the Kafka instance you want to list (if not provided, the
+          current Kafka instance will be listed)
+      page:
+        description: Description for the --page flag
+        one: Display the Kafka instances from the specified page number
+      limit:
+        description: Description for the --limit flag
+        one: The maximum number of Kafka instances to be returned
+      search:
+        description: Description for the --search flag
+        one: >-
+          Text search to filter the Kafka instances by name, owner,
+          cloud_provider, region and status
+    log:
+      debug:
+        filteringKafkaList:
+          description: Debug message when filtering the list of Kafka instances
+          one: 'Filtering Kafka instances with the query "{{.Search}}"'
+  use:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: use
+      shortDescription:
+        description: Short description for command
+        one: Set the current Apache Kafka instance
+      longDescription:
+        description: Long description for command
+        one: >+
+          Select an Apache Kafka instance and set it as the current instance.
+
+          You can specify a Apache Kafka instance by --name or --id.
+
+
+          When you set the Kafka instance to be used, it is set as the current
+          instance for all rhoas kafka topics and rhoas kafka consumer-group
+          commands.
+
+      example:
+        description: Examples of how to use the command
+        one: |
+          # set a kafka instance to be the current instance
+          $ rhoas kafka use --name=my-kafka
+
+          # set a kafka instance to be the current instance
+          $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+    flag:
+      id:
+        description: Description for the --id flag
+        one: >-
+          Unique ID of the Kafka instance you want to set as the current
+          instance
+      name:
+        description: Description for the --name flag
+        one: Name of the Kafka instance you want to set as the current instance
+    error:
+      saveError:
+        description: Error message when current Kafka could not be saved in config
+        one: 'could not set "{{.Name}}" as the current Kafka instance'
+      idOrNameRequired:
+        one: '--id flag or name required when not running interactively'
+    log:
+      info:
+        useSuccess:
+          description: Info message when current Kafka was set
+          one: 'Kafka instance "{{.Name}}" has been set as the current instance.'
+  describe:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: describe
+      shortDescription:
+        description: Short description for command
+        one: View configuration details of an Apache Kafka instance
+      longDescription:
+        description: Long description for command
+        one: >
+          View configuration fields and their values for an Apache Kafka
+          instance.
+
+
+          Pass the "--id" flag to specify which instance you would like to view.
+
+
+          If the "--id" flag is not passed then the selected Kafka instance will
+          be used, if available.
+
+
+          You can view the output as either as JSON or YAML.
+      example:
+        description: Examples of how to use the command
+        one: |
+          # view the current Kafka instance instance
+          $ rhoas kafka describe
+
+          # view a specific instance by passing the --id flag
+          $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+
+          # view a specific instance by passing the --name flag
+          $ rhoas kafka describe --name=my-kafka
+
+          # customise the output format
+          $ rhoas kafka describe -o yaml
+    flag:
+      id:
+        description: Description for the --id flag
+        one: Unique ID of the Kafka instance you want to view
+      name:
+        description: Description for the --name flag
+        one: Name of the Kafka instance you want to view
+  create:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: create
+      shortDescription:
+        description: Short description for command
+        one: Create an Apache Kafka instance
+      longDescription:
+        description: Long description for command
+        one: >
+          Create an Apache Kafka instance on a particular cloud provider and
+          region.
+
+
+          After creating the instance you can view it by running "rhoas kafka
+          describe".
+      example:
+        description: Examples of how to use the command
+        one: >
+          # start an interactive prompt to fill out the configuration values for
+          the instance
+
+          $ rhoas kafka create
+
+
+          # create a Kafka instance
+
+          $ rhoas kafka create --name my-kafka-instance
+
+
+          # create a Kafka instance and output the result in YAML
+
+          $ rhoas kafka create -o yaml
+    flag:
+      name:
+        description:
+          one: Unique name of the Kafka instance
+      cloudProvider:
+        description:
+          description: Description for the --provider flag
+          one: Cloud Provider ID
+      cloudRegion:
+        description:
+          description: Description for the --region flag
+          one: Cloud Provider Region ID
+      autoUse:
+        description:
+          one: Set the new Kafka instance to the current instance
+      wait:
+        description:
+          one: Wait until the Kafka instance is created
+    log:
+      info:
+        creatingKafka:
+          description: Message when Kafka instance is being created
+          one: 'Creating Kafka instance "{{.Name}}"...'
+        creationInProgress:
+          description: Message when Kafka instance is being created
+          one: >-
+            Kafka instance "{{.Name}}" is being created. Current status:
+            {{.Status}}.
+        creatingKafkaSyncSigint:
+          one: >-
+            Your Kafka instance is being created in the background. To monitor
+            its status run "rhoas status" or "rhoas kafka describe".
+    info:
+      successAsync:
+        description: Message to display when instance has been created
+        one: >-
+          Kafka instance "{{.Name}}" is being created. To monitor its status run
+          "rhoas status".
+      successSync:
+        one: 'Kafka instance "{{.Name}}" has been created:'
+    input:
+      name:
+        message:
+          description: Input title for Name
+          one: 'Name:'
+        help:
+          description: Help for Name input
+          one: Unique name of the Kafka instance
+      cloudProvider:
+        message:
+          description: Input title for Cloud Provider
+          one: 'Cloud Provider:'
+      cloudRegion:
+        message:
+          description: Input title for Cloud Region
+          one: 'Cloud Region:'
+        help:
+          description: Help text for Cloud Region
+          one: Geographical region where the Kafka instance will be deployed
+    argument:
+      name:
+        error:
+          requiredWhenNonInteractive:
+            one: name is required. Run "rhoas kafka create --name <name>"
+    error:
+      conflictError:
+        one: 'Kafka instance "{{.Name}}" already exists'
+  validation:
+    error:
+      invalidName:
+        one: >
+          Invalid instance name. Valid names must satisfy the following
+          conditions:
+
+            - must be between 1 and 32 characters
+            - must only consist of lower case, alphanumeric characters and '-'
+            - must start with an alphabetic character
+            - must end with an alphanumeric character
+      invalidSearchValue:
+        description: Error message when invalid search input is provided
+        one: >
+          illegal search value "{{.Search}}", search input must satisfy the
+          following conditions:
+
+            - must be of 1 or more characters
+            - must only consist of alphanumeric characters, '-', '_' and '%'
+    name:
+      error:
+        lengthError:
+          one: Kafka instance name must be between 1 and 32 characters
+kafkas:
+  common:
+    flag:
+      output:
+        description:
+          one: >-
+            Format in which to display the Kafka instances (choose from: "json",
+            "yml", "yaml")

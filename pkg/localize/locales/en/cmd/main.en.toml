@@ -1,2 +1,0 @@
-[main.config.error]
-one = 'Error when initializing configuration: "{{.Error}}"'

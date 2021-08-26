@@ -1,0 +1,168 @@
+root:
+  cmd:
+    use:
+      one: 'rhoas <command> <subcommand> [flags]'
+    shortDescription:
+      one: RHOAS CLI
+    longDescription:
+      one: Manage your application services directly from the command line.
+    example:
+      one: |
+        # authenticate securely through your web browser
+        $ rhoas login
+
+        # create a Kafka instance
+        $ rhoas kafka create --name my-kafka-instance
+
+        # create a service account and save credentials to a JSON file
+        $ rhoas service-account create -o json
+
+        # connect your Kubernetes/OpenShift cluster to a service
+        $ rhoas cluster connect
+    flag:
+      help:
+        description:
+          one: Show help for a command
+      version:
+        description:
+          one: Show rhoas version
+version:
+  cmd:
+    use:
+      description: Use is the one-line usage message
+      one: version
+    shortDescription:
+      description: Short description for command
+      one: Print rhoas version
+    example:
+      description: Examples of how to use the command
+      one: |
+        # print rhoas version
+        $ rhoas version
+    outputText:
+      one: 'rhoas version {{.Version}}'
+main:
+  config:
+    error:
+      one: 'Error when initializing configuration: "{{.Error}}"'
+auth:
+  token:
+    parse:
+      error:
+        parseError:
+          one: unable not parse token
+    mapClaims:
+      error:
+        claimsError:
+          one: 'expected map claims but got "{{.Claims}}"'
+    getExpiry:
+      error:
+        expectedExpiryClaimError:
+          one: 'expected floating point "exp" but got "{{Claim}}"'
+browser:
+  getOpenBrowserCommand:
+    error:
+      unsupportedOperatingSystem:
+        one: 'unsupported operating system "{{.OS}}"'
+common:
+  log:
+    debug:
+      startingInteractivePrompt:
+        description: Debug message when starting an interactive prompt
+        one: Starting interactive prompt
+      couldNotSaveRefreshTokenToConfig:
+        one: 'Could not save refreshed tokens to config:'
+    info:
+      updateAvailable:
+        one: 'A new version of rhoas is available:'
+    error:
+      verboseModeHint:
+        one: >-
+          Run the command in verbose mode using the -v flag to see more
+          information
+  error:
+    castError:
+      one: 'could not cast "{{.Value}}" to {{.Type}}'
+    unsupportedOperatingSystem:
+      one: 'unsupported operating system "{{.OS}}"'
+connection:
+  error:
+    notLoggedInError:
+      one: not logged in. Run "rhoas login" to authenticate
+    notLoggedInMASError:
+      one: >-
+        not logged in to identity.api.openshift.com. Run "rhoas login" to
+        authenticate. Note: token-based login is not supported by the Kafka
+        "topic" and "consumer-group" subcommands.
+    sessionExpiredError:
+      one: session expired. Run "rhoas login" to authenticate
+    missingBootstrapURL:
+      one: 'bootstrap URL is missing for Kafka instance "{{.Name}}"'
+  refreshTokens:
+    log:
+      debug:
+        refreshingTokens:
+          one: Refreshing access tokens
+        tokensRefreshed:
+          one: Access tokens refreshed
+  tokenNeedsRefresh:
+    log:
+      debug:
+        expiryCheckError:
+          one: 'Error while checking token expiry: {{.Reason}}'
+        tokenIsStillValid:
+          one: 'Token is still valid. Expires in {{.TimeLeft}}'
+profile:
+  error:
+    enablement:
+      one: Cannot enable dev preview.
+  status:
+    devpreview:
+      enabled:
+        one: Developer Preview commands activated. Use help command to view them.
+      disabled:
+        one: Developer Preview commands deactivated.
+flag:
+  error:
+    requiredWhenNonInteractive:
+      description: Flag is required when not running interactively
+      one: '--{{.Flag}} required when not running interactively'
+    invalidValue:
+      base:
+        description: Invalid flag value
+        one: 'invalid value "{{.Value}}" for --{{.Flag}}'
+      options:
+        one: ', valid options are: '
+    requiredFlag:
+      description: Required flag error message
+      one: '--{{.Flag}} is a required flag'
+argument:
+  error:
+    requiredWhenNonInteractive:
+      description: Argument is required when not running interactively
+      one: '{{.Argument}} required when not running interactively'
+whoami:
+  cmd:
+    use:
+      description: Use is the one-line usage message
+      one: whoami
+    shortDescription:
+      description: Short description for command
+      one: Print current username
+    longDescription:
+      description: Long description for command
+      one: >
+        Print the username of the currently active user.
+
+
+        This command prints the username associated with the user currently
+        logged in.
+    example:
+      description: Examples of how to use the command
+      one: |
+        # print current username
+        $ rhoas whoami
+  log:
+    info:
+      tokenHasNoUsername:
+        one: Token has no username

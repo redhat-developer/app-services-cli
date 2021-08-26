@@ -46,13 +46,13 @@ func New(cfg *Config) (localize.Localizer, error) {
 	if cfg.files == nil {
 		cfg.files = localize.GetDefaultLocales()
 		cfg.path = "locales"
-		cfg.format = "toml"
+		cfg.format = "yaml"
 	}
 	if cfg.language == nil {
 		cfg.language = localize.GetDefaultLanguage()
 	}
 	if cfg.format == "" {
-		cfg.format = "toml"
+		cfg.format = "yaml"
 	}
 
 	bundle := i18n.NewBundle(*cfg.language)

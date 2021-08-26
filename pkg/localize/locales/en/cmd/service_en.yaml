@@ -1,0 +1,429 @@
+service:
+  info:
+    termsCheck:
+      one: >
+        In order to be able to create a new instance, you must first review and
+        accept the terms and conditions:
+
+
+        {{.TermsURL}}
+  error:
+    idAndNameCannotBeUsed:
+      one: '--name and --id flags cannot be used at the same time'
+serviceAccount:
+  describe:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: describe
+      shortDescription:
+        description: Short description for command
+        one: View configuration details of a service account
+      longDescription:
+        description: Long description for command
+        one: >
+          View configuration fields and their values for a service account.
+
+
+          Pass the "--id" flag to specify which service account you would like
+          to view.
+
+
+          You can view the output as either as JSON or YAML.
+      example:
+        description: Examples of how to use the command
+        one: >
+          # view a specific service account
+
+          $ rhoas service-account describe
+          --id=8a06e685-f827-44bc-b0a7-250bc8abe52e --output yml
+    flag:
+      id:
+        description:
+          description: Description for the --id flag
+          one: The unique ID of the service account to view
+  delete:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: delete
+      shortDescription:
+        description: Short description for command
+        one: Delete a service account
+      longDescription:
+        description: Long description for command
+        one: |
+          Permanently delete a service account.
+
+          Applications and tools which use the service account
+          credentials will stop working and should be updated.
+      example:
+        description: Examples of how to use the command
+        one: >
+          # delete a service account
+
+          $ rhoas service-account delete --id
+          173c1ad9-932d-4007-ae0f-4da74f4d2ccd
+    flag:
+      id:
+        description:
+          description: Description for the --id flag
+          one: The unique ID of the service account to delete
+      'yes':
+        description:
+          description: Description for the --yes flag
+          one: Skip confirmation to forcibly delete this service account
+    input:
+      confirmDelete:
+        message:
+          description: Message for input
+          one: >-
+            Are you sure you want to delete the service account with ID
+            "{{.ID}}"?
+    log:
+      debug:
+        deleteNotConfirmed:
+          description: Info message when user chose not to delete service account
+          one: Service account delete action was not confirmed. Exiting silently
+      info:
+        deleteSuccess:
+          one: Service account deleted successfully.
+    error:
+      unableToDelete:
+        description: Unable to delete error message
+        one: unable to delete service account
+  list:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: list
+      shortDescription:
+        description: Short description for command
+        one: List service accounts
+      longDescription:
+        description: Long description for command
+        one: >
+          List all service accounts.
+
+
+          This command will provide a high level view of all service accounts.
+
+
+          The service accounts are displayed by default in a table, but can also
+          be
+
+          displayed as JSON or YAML.
+      example:
+        description: Examples of how to use the command
+        one: |
+          # list all service accounts using the default output format
+          $ rhoas service-account list
+
+          # list all service accounts using JSON as the output format
+          $ rhoas service-account list -o json
+    error:
+      unableToList:
+        description: Error message when unable to list service accounts
+        one: unable to list service accounts
+    log:
+      info:
+        noneFound:
+          description: Info message when no service accounts were found
+          one: No service accounts were found.
+    flag:
+      output:
+        description:
+          one: >-
+            Format in which to display the service accounts (choose from:
+            "json", "yml", "yaml")
+  resetCredentials:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: reset-credentials
+      shortDescription:
+        description: Short description for command
+        one: Reset service account credentials
+      longDescription:
+        description: Long description for command
+        one: >
+          Reset the credentials for a service account.
+
+          This command will generate a new password for a service account.
+
+          After the credentials have been reset, any applications or tools that
+          use the
+
+          credentials must be updated to use the new password.
+
+
+          You must specify an output format into which the credentials will be
+          stored.
+
+            - env (default): Store credentials in an env file as environment variables
+            - json: Store credentials in a JSON file
+            - properties: Store credentials in a properties file, which is typically used in Java-related technologies.
+      example:
+        description: Examples of how to use the command
+        one: >
+          # start an interactive prompt to reset credentials
+
+          $ rhoas service-account reset-credentials
+
+
+          # reset credentials for the service account specified and save the
+          credentials to a JSON file
+
+          $ rhoas service-account reset-credentials --id
+          173c1ad9-932d-4007-ae0f-4da74f4d2ccd -o json
+    flag:
+      id:
+        description:
+          description: Description for --id flag
+          one: >-
+            The unique ID of the service account for which you want to reset the
+            credentials
+      'yes':
+        description:
+          one: Skip confirmation to forcibly reset service account credentials
+    error:
+      couldNotCreate:
+        description: Error message when service account could not be created
+        one: could not create service account
+      resetError:
+        one: 'could not reset credentials for service account "{{.Name}}"'
+    log:
+      info:
+        createdSuccessfully:
+          one: 'Service account "{{.Name}}" created successfully with ID "{{.ID}}".'
+        resetSuccess:
+          one: 'Credentials reset for service account "{{.Name}}"'
+      debug:
+        interactive:
+          fileFormatNotUsed:
+            description: debug message
+            one: '--file-format flag is not set, prompting user to enter a value'
+        cancelledReset:
+          one: You have chosen to not reset the service account credentials.
+        resettingCredentials:
+          one: 'Resetting credentials for service account "{{.Name}}"'
+    input:
+      id:
+        message:
+          one: 'Service Account ID:'
+        help:
+          description: help for the ID input
+          one: What is the ID of the service account?
+      fileFormat:
+        message:
+          description: Title for credentials format input
+          one: 'Credentials file format:'
+        help:
+          description: Help for credentials format input
+          one: 'File format in which to save the service account credentials:'
+      confirmReset:
+        message:
+          one: >-
+            Are you sure you want to reset the credentials for service account
+            "{{.ID}}"?
+  create:
+    cmd:
+      use:
+        description: Use is the one-line usage message
+        one: create
+      shortDescription:
+        description: Short description for command
+        one: Create a service account
+      longDescription:
+        description: Long description for command
+        one: >
+          Create a service account with credentials that are saved to a file.
+
+
+          Applications and tools use these service account credentials to
+          authenticate
+
+          and interact with your application services.
+
+
+          You must specify an output format into which the credentials will be
+          stored.
+            - env (default): Store credentials in an env file as environment variables
+            - json: Store credentials in a JSON file
+            - properties: Store credentials in a properties file, which is typically used in Java-related technologies.
+      example:
+        description: Examples of how to use the command
+        one: >
+          # create a service account through an interactive prompt
+
+          $ rhoas service-account create
+
+
+          # create a service account and save the credentials in a JSON file
+
+          $ rhoas service-account create --file-format json
+
+
+          # create a service account and forcibly overwrite the credentials file
+          if it exists already
+
+          $ rhoas service-account create --overwrite
+
+
+          # create a service account and save credentials to a custom file
+          location
+
+          $ rhoas service-account create
+          --file-location=./service-acct-credentials.json
+    flag:
+      name:
+        description:
+          description: Description for --name flag
+          one: Name of the service account
+      description:
+        description:
+          description: Description for --description flag
+          one: >-
+            Description for the service account (only alphanumeric characters
+            and '-', '.', ',' are valid)
+    error:
+      couldNotCreate:
+        description: Error message when service account could not be created
+        one: could not create service account
+    log:
+      info:
+        creating:
+          one: 'Creating service account "{{.Name}}"'
+        createdSuccessfully:
+          one: 'Service account "{{.Name}}" created successfully with ID "{{.ID}}".'
+    input:
+      name:
+        message:
+          description: title for the Name input
+          one: 'Name:'
+        help:
+          description: help for the Name input
+          one: Give your service account an easily identifiable name
+      fileFormat:
+        message:
+          description: Title for credentials format input
+          one: 'Credentials file format:'
+        help:
+          description: Help for credentials format input
+          one: 'File format in which to save the service account credentials:'
+      description:
+        message:
+          description: Message for service account description
+          one: 'Description [optional]:'
+  cmd:
+    use:
+      one: service-account
+    shortDescription:
+      one: 'Create, list, describe, delete and update service accounts'
+    longDescription:
+      one: >-
+        Use these commands to create, list, describe, delete and update service
+        accounts. You can also reset the credentials for a service account.
+    example:
+      one: |
+        ## Create a service account
+        rhoas service-account create myserviceaccount
+
+        ## List all service accounts
+        rhoas service-account list
+  common:
+    flag:
+      output:
+        description:
+          description: Description for --output flag
+          one: >-
+            Format in which to display the service account (choose from: "json",
+            "yml", "yaml")
+      fileFormat:
+        description:
+          description: Description for the --file-format flag
+          one: >-
+            Format in which to save the service account credentials (choose
+            from: "env", "json", "properties")
+      overwrite:
+        description:
+          description: Description for --overwrite flag
+          one: Forcibly overwrite a credentials file if it already exists
+      fileLocation:
+        description:
+          description: Description for --file-location flag
+          one: Sets a custom file location to save the credentials
+    error:
+      credentialsFileAlreadyExists:
+        description: Error message for when a credentials file alredy exists at a location
+        one: >-
+          file {{.FilePath}} already exists. Use --overwrite to overwrite the
+          file, or the --file-location flag to choose a different location
+      couldNotSaveCredentialsFile:
+        description: Error message when service account credentials could not be saved
+        one: could not save credentials to file
+      notFoundError:
+        description: Error message when service account is not found
+        one: 'service account with ID "{{.ID}}" not found'
+      internalServerError:
+        one: internal server error
+      forbidden:
+        one: 'you are forbidden to {{.Operation}} this service account'
+        other: 'you are forbidden to {{.Operation}} these service accounts'
+      mustSpecifyFile:
+        description: Error message when location not specified
+        one: you must specify a file to save the service account credentials
+    log:
+      info:
+        credentialsSaved:
+          description: Credentials file saved message
+          one: 'Credentials saved to {{.FilePath}}'
+      debug:
+        interactive:
+          fileFormatNotSet:
+            description: debug message
+            one: '--file-format flag is not set, prompting user to enter a value'
+    input:
+      credentialsFileLocation:
+        message:
+          description: Input message for credentials file location
+          one: 'Credentials file location:'
+        help:
+          description: Input help for credentials file location
+          one: >-
+            Enter the path to the file where the service account credentials
+            will be saved to
+      confirmOverwrite:
+        message:
+          description: Input mesage for overwrite credentials input
+          one: 'File {{.FilePath}} already exists. Do you want to overwrite it?'
+      specifyDifferentLocation:
+        message:
+          description: Input mesage for specify credentials location confirmation
+          one: Would you like to specify a different file location?
+    validation:
+      name:
+        error:
+          required:
+            one: service account name is required
+          lengthError:
+            one: 'service account name cannot exceed {{.MaxNameLen}} characters'
+          invalidChars:
+            one: >-
+              invalid service account name "{{.Name}}"; only lowercase letters
+              (a-z), numbers, and "-" are accepted
+      description:
+        error:
+          invalidChars:
+            one: >-
+              invalid service account description: only alphanumeric characters
+              and "-", ".", "," are accepted
+          lengthError:
+            one: 'service account description cannot exceed {{.MaxLen}} characters'
+      id:
+        error:
+          invalidID:
+            one: '"{{.ID}}" is not a valid UUID'
+serviceAccount.describe.error.unableToDescribe:
+  description: Error message when unable to fetch service account configuration
+  one: unable to fetch service account info
