@@ -26,20 +26,31 @@ var (
 	AKCVersion = "v1alpha1"
 )
 
+var (
+	SRCGroup   = "rhoas.redhat.com"
+	SRCVersion = "v1alpha1"
+)
+
 var AKCRMeta = metav1.TypeMeta{
 	Kind:       "KafkaConnection",
 	APIVersion: AKCGroup + "/" + AKCVersion,
 }
 
-var ServiceRegistryResourceMeta = metav1.TypeMeta{
+var RegistryResourceMeta = metav1.TypeMeta{
 	Kind:       "ServiceRegistryConnection",
-	APIVersion: AKCGroup + "/" + AKCVersion,
+	APIVersion: SRCGroup + "/" + SRCVersion,
 }
 
 var AKCResource = schema.GroupVersionResource{
 	Group:    AKCGroup,
 	Version:  AKCVersion,
 	Resource: "kafkaconnections",
+}
+
+var SRCResource = schema.GroupVersionResource{
+	Group:    SRCGroup,
+	Version:  SRCVersion,
+	Resource: "serviceregistryconnections",
 }
 
 // checks the cluster to see if a KafkaConnection CRD is installed
@@ -148,6 +159,59 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 	}
 }
 
+func watchForServiceRegistryStatus(c *KubernetesCluster, crName string, namespace string) error {
+	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForRegistryStatus.log.info.wait"))
+
+	w, err := c.dynamicClient.Resource(SRCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
+	})
+	if err != nil {
+		return err
+	}
+
+	for {
+		select {
+		case event := <-w.ResultChan():
+			if event.Type == watch.Modified {
+				unstructuredObj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(event.Object)
+				if err != nil {
+					return err
+				}
+				conditions, found, err := unstructured.NestedSlice(unstructuredObj, "status", "conditions")
+				if err != nil {
+					return err
+				}
+
+				if found {
+					for _, condition := range conditions {
+						typedCondition, ok := condition.(map[string]interface{})
+						if !ok {
+							return fmt.Errorf(c.localizer.MustLocalize("cluster.kubernetes.watchForRegistryStatus.error.format"), typedCondition)
+						}
+						if typedCondition["type"].(string) == "Finished" {
+							if typedCondition["status"].(string) == "False" {
+								w.Stop()
+								return fmt.Errorf(c.localizer.MustLocalize("cluster.kubernetes.watchForRegistryStatus.error.status"), typedCondition["message"])
+							}
+							if typedCondition["status"].(string) == "True" {
+								c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForRegistryStatus.log.info.success", localize.NewEntry("Name", crName), localize.NewEntry("Namespace", namespace)))
+
+								w.Stop()
+								return nil
+							}
+						}
+					}
+					w.Stop()
+				}
+			}
+
+		case <-time.After(60 * time.Second):
+			w.Stop()
+			return fmt.Errorf(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.error.timeout"))
+		}
+	}
+}
+
 func createKCObject(crName string, namespace string, kafkaID string) *kafka.KafkaConnection {
 	kafkaConnectionCR := &kafka.KafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
@@ -167,15 +231,15 @@ func createKCObject(crName string, namespace string, kafkaID string) *kafka.Kafk
 	return kafkaConnectionCR
 }
 
-func createSRObject(crName string, namespace string, kafkaID string) *serviceregistry.ServiceRegsitryConnection {
+func createSRObject(crName string, namespace string, registryID string) *serviceregistry.ServiceRegsitryConnection {
 	serviceRegistryCR := &serviceregistry.ServiceRegsitryConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
 			Namespace: namespace,
 		},
-		TypeMeta: ServiceRegistryResourceMeta,
+		TypeMeta: RegistryResourceMeta,
 		Spec: serviceregistry.ServiceRegsitryConnectionSpec{
-			ServiceRegistryId:     kafkaID,
+			ServiceRegistryId:     registryID,
 			AccessTokenSecretName: tokenSecretName,
 			Credentials: serviceregistry.CredentialsSpec{
 				SecretName: serviceAccountSecretName,

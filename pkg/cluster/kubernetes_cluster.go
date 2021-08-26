@@ -237,7 +237,7 @@ func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Cont
 
 	crJSON, err := json.Marshal(serviceRegistryCR)
 	if err != nil {
-		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.error.marshalError"), err)
+		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createRegistryCR.error.marshalError"), err)
 	}
 
 	data := c.clientset.RESTClient().
@@ -250,10 +250,10 @@ func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Cont
 		return data.Error()
 	}
 
-	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
+	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createRegistryCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
 	// c.logger.Info("KafkaConnection resource some-registry-name has been created'")
 
-	return watchForKafkaStatus(c, crName, namespace)
+	return watchForServiceRegistryStatus(c, crName, namespace)
 }
 
 // IsRhoasOperatorAvailableOnCluster checks the cluster to see if a KafkaConnection CRD is installed
