@@ -35,6 +35,12 @@ var (
 
 	// DefaultPageNumber is the default page number when using list commands
 	DefaultPageNumber = "1"
+
+	// SSORedirectPath is the default SSO redirect path
+	SSORedirectPath = "sso-redhat-callback"
+
+	// MASSSORedirectPath is the default MAS-SSO redirect path
+	MASSSORedirectPath = "mas-sso-callback"
 )
 
 // Auth Build variables
