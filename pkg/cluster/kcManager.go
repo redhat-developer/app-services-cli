@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -26,6 +28,11 @@ var (
 
 var AKCRMeta = metav1.TypeMeta{
 	Kind:       "KafkaConnection",
+	APIVersion: AKCGroup + "/" + AKCVersion,
+}
+
+var ServiceRegistryResourceMeta = metav1.TypeMeta{
+	Kind:       "ServiceRegistryConnection",
 	APIVersion: AKCGroup + "/" + AKCVersion,
 }
 
@@ -83,6 +90,11 @@ func getKafkaConnectionsAPIURL(namespace string) string {
 	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
 }
 
+// Encapsulate things like these in their respective packages
+func getServiceRegistryAPIURL(namespace string) string {
+	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/serviceregistryconnections", namespace)
+}
+
 func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.wait"))
 
@@ -136,21 +148,40 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 	}
 }
 
-func createKCObject(crName string, namespace string, kafkaID string) *KafkaConnection {
-	kafkaConnectionCR := &KafkaConnection{
+func createKCObject(crName string, namespace string, kafkaID string) *kafka.KafkaConnection {
+	kafkaConnectionCR := &kafka.KafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      crName,
 			Namespace: namespace,
 		},
 		TypeMeta: AKCRMeta,
-		Spec: KafkaConnectionSpec{
+		Spec: kafka.KafkaConnectionSpec{
 			KafkaID:               kafkaID,
 			AccessTokenSecretName: tokenSecretName,
-			Credentials: CredentialsSpec{
+			Credentials: kafka.CredentialsSpec{
 				SecretName: serviceAccountSecretName,
 			},
 		},
 	}
 
 	return kafkaConnectionCR
+}
+
+func createSRObject(crName string, namespace string, kafkaID string) *serviceregistry.ServiceRegsitryConnection {
+	serviceRegistryCR := &serviceregistry.ServiceRegsitryConnection{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      crName,
+			Namespace: namespace,
+		},
+		TypeMeta: ServiceRegistryResourceMeta,
+		Spec: serviceregistry.ServiceRegsitryConnectionSpec{
+			ServiceRegistryId:     kafkaID,
+			AccessTokenSecretName: tokenSecretName,
+			Credentials: serviceregistry.CredentialsSpec{
+				SecretName: serviceAccountSecretName,
+			},
+		},
+	}
+
+	return serviceRegistryCR
 }

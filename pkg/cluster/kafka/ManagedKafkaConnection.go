@@ -1,4 +1,4 @@
-package cluster
+package kafka
 
 // We should use dependency once repo is public
 

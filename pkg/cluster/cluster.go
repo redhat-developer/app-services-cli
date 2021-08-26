@@ -9,6 +9,7 @@ type ConnectArguments struct {
 	ForceCreationWithoutAsk bool
 	IgnoreContext           bool
 	SelectedKafka           string
+	SelectedRegistry        string
 	Namespace               string
 }
 

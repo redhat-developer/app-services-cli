@@ -9,6 +9,7 @@ one = '''
 Connection Details:
 
 Apache Kafka instance:  {{.InstanceName}}
+Service Registry Name:  {{.RegistryInstanceName}}
 Kubernetes Namespace:   {{.Namespace}}
 Service Account Secret: {{.ServiceAccountSecretName}}
 '''

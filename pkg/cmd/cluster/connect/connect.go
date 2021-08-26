@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/spf13/cobra"
 )
 
@@ -30,6 +31,7 @@ type Options struct {
 	forceCreationWithoutAsk bool
 	ignoreContext           bool
 	selectedKafka           string
+	selectedRegistry        string
 }
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
@@ -95,12 +97,27 @@ func runConnect(opts *Options) error {
 		opts.selectedKafka = cfg.Services.Kafka.ClusterID
 	}
 
+	if cfg.Services.ServiceRegistry == nil || opts.ignoreContext {
+		// nolint
+		selectedServiceRegistry, err := serviceregistry.InteractiveSelect(connection, logger)
+		if err != nil {
+			return err
+		}
+		if selectedServiceRegistry == nil {
+			return nil
+		}
+		opts.selectedRegistry = selectedServiceRegistry.GetId()
+	} else {
+		opts.selectedRegistry = cfg.Services.ServiceRegistry.InstanceID
+	}
+
 	arguments := &cluster.ConnectArguments{
 		OfflineAccessToken:      opts.offlineAccessToken,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		IgnoreContext:           opts.ignoreContext,
 		SelectedKafka:           opts.selectedKafka,
 		Namespace:               opts.namespace,
+		SelectedRegistry:        opts.selectedRegistry,
 	}
 
 	err = clusterConn.Connect(context.Background(), arguments)

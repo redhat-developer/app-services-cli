@@ -9,7 +9,9 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -130,6 +132,11 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		return err
 	}
 
+	registryInstance, _, err := serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), cmdOptions.SelectedRegistry)
+	if err != nil {
+		return err
+	}
+
 	var currentNamespace string
 	if cmdOptions.Namespace != "" {
 		currentNamespace = cmdOptions.Namespace
@@ -146,6 +153,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.statusInfo",
 		localize.NewEntry("InstanceName", color.Info(kafkaInstance.GetName())),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
+		localize.NewEntry("RegistryInstanceName", color.Info(registryInstance.GetName())),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(serviceAccountSecretName))))
 
 	if cmdOptions.ForceCreationWithoutAsk == false {
@@ -185,6 +193,11 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		return err
 	}
 
+	err = c.createServiceRegistryCustomResource(ctx, currentNamespace, registryInstance)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -211,6 +224,34 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 	}
 
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
+
+	return watchForKafkaStatus(c, crName, namespace)
+}
+
+// createServiceRegistryCustomResource creates a new "ServiceRegistryConnection" CR
+func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Context, namespace string, registryInstance *srsmgmtv1.RegistryRest) error {
+	crName := registryInstance.GetName()
+	registryId := registryInstance.GetId()
+
+	serviceRegistryCR := createSRObject(crName, namespace, registryId)
+
+	crJSON, err := json.Marshal(serviceRegistryCR)
+	if err != nil {
+		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.error.marshalError"), err)
+	}
+
+	data := c.clientset.RESTClient().
+		Post().
+		AbsPath(getServiceRegistryAPIURL(namespace)).
+		Body(crJSON).
+		Do(ctx)
+
+	if data.Error() != nil {
+		return data.Error()
+	}
+
+	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
+	// c.logger.Info("KafkaConnection resource some-registry-name has been created'")
 
 	return watchForKafkaStatus(c, crName, namespace)
 }
