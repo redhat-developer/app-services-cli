@@ -16,7 +16,7 @@ Commands are divided into the following categories:
 [registry.cmd.example]
 one = '''
 ## Create Service Registry
-rhoas service-registry create myregistry
+rhoas service-registry create --name myregistry
 
 ## List Service Registry instances
 rhoas service-registry list 
@@ -33,7 +33,7 @@ Create a Service Registry instance to store and manage your schema and API artif
 [registry.cmd.create.example]
 one = '''
 ## Create Service Registry
-rhoas service-registry create myregistry
+rhoas service-registry create --name myregistry
 '''
 
 [registry.cmd.create.info.successMessage]
@@ -52,7 +52,11 @@ Delete a Service Registry instance along with all of its schema and API artifact
 
 [registry.cmd.delete.example]
 one = '''
-rhoas service-registry delete <id>
+# delete by name
+rhoas service-registry delete --name <name>
+
+# delete by ID
+rhoas service-registry delete --id <id>
 '''
 
 [registry.cmd.describe.shortDescription]
@@ -65,7 +69,12 @@ Describe a Service Registry instance. Fetch all required fields including the re
 
 [registry.cmd.describe.example]
 one = '''
-rhoas service-registry describe <id>
+# describe by name
+rhoas service-registry describe --name <name>
+
+
+# describe by ID
+rhoas service-registry describe --id <id>
 '''
 
 [registry.cmd.list.shortDescription]
@@ -94,7 +103,11 @@ When you set the Service Registry instance to be used, it is set as the current 
 
 [registry.cmd.use.example]
 one = '''
-rhoas service-registry use <id>
+# use by name
+rhoas service-registry use --name <name>
+
+# use by ID
+rhoas service-registry use --id <id>
 '''
 
 # Errors

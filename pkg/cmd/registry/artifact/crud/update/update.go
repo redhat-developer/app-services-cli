@@ -75,7 +75,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 ## update artifact from group and artifact-id
 rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json 
 `,
-		Args: cobra.NoArgs,
+		Args: cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
