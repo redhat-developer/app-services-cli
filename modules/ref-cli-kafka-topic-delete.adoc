@@ -27,7 +27,8 @@ $ rhoas kafka topic delete --name topic-1
 [discrete]
 == Options
 
-  `-y`, `--yes`::   Skip confirmation to forcibly delete a topic
+      `--name` _string_::   Topic name
+  `-y`, `--yes`::           Skip confirmation to forcibly delete a topic
 
 [discrete]
 == Options inherited from parent commands

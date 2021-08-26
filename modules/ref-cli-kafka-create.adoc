@@ -25,7 +25,7 @@ rhoas kafka create [flags]
 $ rhoas kafka create
 
 # create a Kafka instance
-$ rhoas kafka create my-kafka-instance
+$ rhoas kafka create --name my-kafka-instance
 
 # create a Kafka instance and output the result in YAML
 $ rhoas kafka create -o yaml
@@ -35,6 +35,7 @@ $ rhoas kafka create -o yaml
 [discrete]
 == Options
 
+      `--name` _string_::       Unique name of the Kafka instance
   `-o`, `--output` _string_::   Format in which to display the Kafka instance (choose from: "json", "yml", "yaml") (default "json")
       `--provider` _string_::   Cloud Provider ID
       `--region` _string_::     Cloud Provider Region ID
