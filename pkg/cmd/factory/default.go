@@ -122,6 +122,8 @@ func New(localizer localize.Localizer) *Factory {
 		return conn, nil
 	}
 
+	logger, _ = loggerFunc()
+
 	return &Factory{
 		IOStreams:  io,
 		Config:     cfgFile,
