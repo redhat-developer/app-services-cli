@@ -17,6 +17,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -30,6 +31,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -40,6 +42,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
+		Logger:     f.Logger,
 		localizer:  f.Localizer,
 	}
 
@@ -83,7 +86,9 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
 
-	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
+		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
+	}
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd

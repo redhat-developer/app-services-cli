@@ -33,3 +33,6 @@ one = 'invalid page number {{.Page}}, minimum value is -1'
 
 [kafka.common.validation.size.error.invalid.minValue]
 one = 'invalid value for size {{.Size}}, minimum value is -1'
+
+[kafka.common.error.load.completions.name.flag]
+one = 'failed to load completions for --name:'
