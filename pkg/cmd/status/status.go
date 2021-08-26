@@ -34,7 +34,7 @@ var validServices = []string{kafkaSvcName}
 type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
 
@@ -104,13 +104,8 @@ func runStatus(opts *Options) error {
 		Services:   opts.services,
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	if len(opts.services) > 0 {
-		logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
+		opts.Logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
 	status, ok, err := pkgStatus.Get(context.Background(), pkgOpts)
@@ -119,8 +114,8 @@ func runStatus(opts *Options) error {
 	}
 
 	if !ok {
-		logger.Info("")
-		logger.Info(opts.localizer.MustLocalize("status.log.info.noStatusesAreUsed"))
+		opts.Logger.Info("")
+		opts.Logger.Info(opts.localizer.MustLocalize("status.log.info.noStatusesAreUsed"))
 		return nil
 	}
 

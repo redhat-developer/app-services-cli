@@ -30,7 +30,7 @@ type options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -89,11 +89,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -121,8 +116,8 @@ func runDelete(opts *options) error {
 	}
 
 	registryName := registry.GetName()
-	logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deletingService", localize.NewEntry("Name", registryName)))
-	logger.Info("")
+	opts.Logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deletingService", localize.NewEntry("Name", registryName)))
+	opts.Logger.Info("")
 
 	if !opts.force {
 		promptConfirmName := &survey.Input{
@@ -136,12 +131,12 @@ func runDelete(opts *options) error {
 		}
 
 		if confirmedName != registryName {
-			logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.incorrectNameConfirmation"))
+			opts.Logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.incorrectNameConfirmation"))
 			return nil
 		}
 	}
 
-	logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
+	opts.Logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
 
 	a := api.ServiceRegistryMgmt().DeleteRegistry(context.Background(), registry.GetId())
 	_, err = a.Execute()
@@ -150,7 +145,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
+	opts.Logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
 
 	currentContextRegistry := cfg.Services.ServiceRegistry
 	// this is not the current cluster, our work here is done

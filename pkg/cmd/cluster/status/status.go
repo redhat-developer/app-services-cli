@@ -23,7 +23,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
 
@@ -61,12 +61,7 @@ func runStatus(opts *Options) error {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
-	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfig, opts.IO, opts.localizer)
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -75,7 +70,7 @@ func runStatus(opts *Options) error {
 	// Add versioning in future
 	isCRDInstalled, err := clusterConn.IsRhoasOperatorAvailableOnCluster(context.Background())
 	if isCRDInstalled && err != nil {
-		logger.Debug(err)
+		opts.Logger.Debug(err)
 	}
 
 	if isCRDInstalled {

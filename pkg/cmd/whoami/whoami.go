@@ -18,7 +18,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -51,11 +51,6 @@ func runCmd(opts *Options) (err error) {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -69,7 +64,7 @@ func runCmd(opts *Options) (err error) {
 	if ok {
 		fmt.Fprintln(opts.IO.Out, userName)
 	} else {
-		logger.Info(opts.localizer.MustLocalize("whoami.log.info.tokenHasNoUsername"))
+		opts.Logger.Info(opts.localizer.MustLocalize("whoami.log.info.tokenHasNoUsername"))
 	}
 
 	return nil

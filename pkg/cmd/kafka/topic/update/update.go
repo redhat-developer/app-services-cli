@@ -49,7 +49,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -82,15 +82,8 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.interactive {
-
-				// nolint:govet
-				logger, err := opts.Logger()
-				if err != nil {
-					return err
-				}
-
 				if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" && opts.cleanupPolicy == "" {
-					logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.nothingToUpdate"))
+					opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.nothingToUpdate"))
 					return nil
 				}
 
@@ -218,10 +211,6 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
@@ -272,7 +261,7 @@ func runCmd(opts *Options) error {
 	}
 
 	if !needsUpdate {
-		logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.nothingToUpdate"))
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.nothingToUpdate"))
 		return nil
 	}
 
@@ -310,7 +299,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
+	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
 
 	switch opts.outputFormat {
 	case dump.JSONFormat:
@@ -350,16 +339,11 @@ func runInteractivePrompt(opts *Options) (err error) {
 		}
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	validator := topicutil.Validator{
 		Localizer: opts.localizer,
 	}
 
-	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	partitionsPrompt := &survey.Input{
 		Message: opts.localizer.MustLocalize("kafka.topic.update.input.partitions.message"),

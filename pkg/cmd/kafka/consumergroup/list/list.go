@@ -28,7 +28,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
 
@@ -112,11 +112,6 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	ctx := context.Background()
 
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
@@ -160,11 +155,7 @@ func runList(opts *Options) (err error) {
 		}
 	}
 
-	ok, err := checkForConsumerGroups(int(consumerGroupData.GetTotal()), opts, kafkaInstance.GetName())
-	if err != nil {
-		return err
-	}
-	if !ok {
+	if !checkForConsumerGroups(int(consumerGroupData.GetTotal()), opts, kafkaInstance.GetName()) {
 		return nil
 	}
 
@@ -176,7 +167,7 @@ func runList(opts *Options) (err error) {
 		data, _ := yaml.Marshal(consumerGroupData)
 		_ = dump.YAML(opts.IO.Out, data)
 	default:
-		logger.Info("")
+		opts.Logger.Info("")
 		consumerGroups := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
 		dump.Table(opts.IO.Out, rows)
@@ -205,21 +196,17 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 
 // checks if there are any consumer groups available
 // prints to stderr if not
-func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCount bool, err error) {
-	logger, err := opts.Logger()
-	if err != nil {
-		return false, err
-	}
+func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCount bool) {
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaName)
 	if count == 0 && opts.output == "" {
 		if opts.topic == "" {
-			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroups", kafkaNameTmplPair))
+			opts.Logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroups", kafkaNameTmplPair))
 		} else {
-			logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic", kafkaNameTmplPair, localize.NewEntry("TopicName", opts.topic)))
+			opts.Logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic", kafkaNameTmplPair, localize.NewEntry("TopicName", opts.topic)))
 		}
 
-		return false, nil
+		return false
 	}
 
-	return true, nil
+	return true
 }

@@ -40,7 +40,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -125,12 +125,6 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 }
 
 func runUpdate(opts *Options) error {
-
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -142,19 +136,19 @@ func runUpdate(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
 	var specifiedFile *os.File
 	if opts.file != "" {
-		logger.Info("Opening file: " + opts.file)
+		opts.Logger.Info("Opening file: " + opts.file)
 		specifiedFile, err = os.Open(opts.file)
 		if err != nil {
 			return err
 		}
 	} else {
-		logger.Info("Reading file content from stdin")
+		opts.Logger.Info("Reading file content from stdin")
 		specifiedFile, err = util.CreateFileFromStdin()
 		if err != nil {
 			return err
@@ -179,7 +173,7 @@ func runUpdate(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	logger.Info("Artifact updated")
+	opts.Logger.Info("Artifact updated")
 
 	dump.PrintDataInFormat(opts.outputFormat, metadata, opts.IO.Out)
 

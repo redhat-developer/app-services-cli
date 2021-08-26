@@ -25,7 +25,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -79,11 +79,6 @@ func runUse(opts *Options) error {
 		}
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -122,25 +117,20 @@ func runUse(opts *Options) error {
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	logger.Info(opts.localizer.MustLocalize("registry.use.log.info.useSuccess", nameTmplEntry))
+	opts.Logger.Info(opts.localizer.MustLocalize("registry.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }
 
 func runInteractivePrompt(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedRegistry, err := serviceregistry.InteractiveSelect(connection, logger)
+	selectedRegistry, err := serviceregistry.InteractiveSelect(connection, opts.Logger)
 	if err != nil {
 		return err
 	}

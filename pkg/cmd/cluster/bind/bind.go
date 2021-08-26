@@ -18,7 +18,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
 
@@ -77,11 +77,6 @@ func runBind(opts *Options) error {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -90,7 +85,7 @@ func runBind(opts *Options) error {
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint:govet
-		selectedKafka, err := kafka.InteractiveSelect(apiConnection, logger)
+		selectedKafka, err := kafka.InteractiveSelect(apiConnection, opts.Logger)
 		if err != nil {
 			return err
 		}
@@ -112,7 +107,7 @@ func runBind(opts *Options) error {
 		return errors.New(opts.localizer.MustLocalize("cluster.bind.error.emptyResponse"))
 	}
 
-	err = cluster.ExecuteServiceBinding(logger, opts.localizer, &cluster.ServiceBindingOptions{
+	err = cluster.ExecuteServiceBinding(opts.Logger, opts.localizer, &cluster.ServiceBindingOptions{
 		ServiceName:             kafkaInstance.GetName(),
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,

@@ -21,7 +21,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 
 	id    string
@@ -71,11 +71,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *Options) (err error) {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -105,7 +100,7 @@ func runDelete(opts *Options) (err error) {
 		}
 
 		if !confirmDelete {
-			logger.Debug(opts.localizer.MustLocalize("serviceAccount.delete.log.debug.deleteNotConfirmed"))
+			opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.delete.log.debug.deleteNotConfirmed"))
 			return nil
 		}
 	}
@@ -115,11 +110,6 @@ func runDelete(opts *Options) (err error) {
 
 func deleteServiceAccount(opts *Options) error {
 	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return err
-	}
-
-	logger, err := opts.Logger()
 	if err != nil {
 		return err
 	}
@@ -141,7 +131,7 @@ func deleteServiceAccount(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("serviceAccount.delete.log.info.deleteSuccess"))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.delete.log.info.deleteSuccess"))
 
 	return nil
 }

@@ -38,7 +38,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -91,11 +91,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -103,7 +98,7 @@ func runCreate(opts *Options) error {
 
 	var payload *srsmgmtv1.RegistryCreateRest
 	if opts.interactive {
-		logger.Debug()
+		opts.Logger.Debug()
 
 		payload, err = promptPayload(opts)
 		if err != nil {
@@ -127,11 +122,11 @@ func runCreate(opts *Options) error {
 		return err
 	}
 	if !termsAccepted && termsURL != "" {
-		logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
+		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
 		return nil
 	}
 
-	logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", payload.GetName())))
+	opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", payload.GetName())))
 
 	response, _, err := connection.API().
 		ServiceRegistryMgmt().
@@ -142,7 +137,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
+	opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 
@@ -152,13 +147,13 @@ func runCreate(opts *Options) error {
 	}
 
 	if opts.autoUse {
-		logger.Debug("Auto-use is set, updating the current instance")
+		opts.Logger.Debug("Auto-use is set, updating the current instance")
 		cfg.Services.ServiceRegistry = registryConfig
 		if err := opts.Config.Save(cfg); err != nil {
 			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("registry.cmd.create.error.couldNotUse"), err)
 		}
 	} else {
-		logger.Debug("Auto-use is not set, skipping updating the current instance")
+		opts.Logger.Debug("Auto-use is not set, skipping updating the current instance")
 	}
 
 	return nil

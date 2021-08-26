@@ -68,7 +68,11 @@ func TestNewLogoutCommand(t *testing.T) {
 	}
 	for _, tt := range tests {
 		tt.args.connection.Config = mockutil.NewConfigMock(tt.args.cfg)
-		// nolint
+
+		loggerBuilder := logging.NewStdLoggerBuilder()
+		loggerBuilder = loggerBuilder.Debug(true)
+		logger, _ := loggerBuilder.Build()
+
 		t.Run(tt.name, func(t *testing.T) {
 			factory := &factory.Factory{
 				Config: mockutil.NewConfigMock(tt.args.cfg),
@@ -76,16 +80,7 @@ func TestNewLogoutCommand(t *testing.T) {
 					return mockutil.NewConnectionMock(tt.args.connection, nil), nil
 				},
 				Localizer: localizer,
-				Logger: func() (logging.Logger, error) {
-					loggerBuilder := logging.NewStdLoggerBuilder()
-					loggerBuilder = loggerBuilder.Debug(true)
-					logger, err := loggerBuilder.Build()
-					if err != nil {
-						return nil, err
-					}
-
-					return logger, nil
-				},
+				Logger:    logger,
 			}
 
 			cmd := NewLogoutCommand(factory)

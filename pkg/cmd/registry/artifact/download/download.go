@@ -35,7 +35,7 @@ type Options struct {
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
 }
@@ -108,11 +108,6 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 }
 
 func runGet(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -124,11 +119,11 @@ func runGet(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		logger.Info("Group was not specified. Using 'default' artifacts group.")
+		opts.Logger.Info("Group was not specified. Using 'default' artifacts group.")
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	logger.Info("Fetching artifact")
+	opts.Logger.Info("Fetching artifact")
 
 	ctx := context.Background()
 	var dataFile *os.File
@@ -164,6 +159,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	logger.Info("Successfully fetched artifact")
+	opts.Logger.Info("Successfully fetched artifact")
 	return nil
 }

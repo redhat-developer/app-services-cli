@@ -27,7 +27,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -86,11 +86,6 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 // nolint:funlen
 func runCmd(opts *Options) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-	if err != nil {
-		return err
-	}
-
-	logger, err := opts.Logger()
 	if err != nil {
 		return err
 	}
@@ -154,7 +149,7 @@ func runCmd(opts *Options) error {
 	}
 	defer httpRes.Body.Close()
 
-	logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
+	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
 
 	return nil
 }

@@ -45,7 +45,7 @@ type RegistryStatus struct {
 
 type Options struct {
 	Config     config.IConfig
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	Connection connection.Connection
 
 	// request specific services
@@ -55,10 +55,6 @@ type Options struct {
 // Get gets the status of all services currently set in the user config
 func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error) {
 	cfg, err := opts.Config.Load()
-	if err != nil {
-		return nil, false, err
-	}
-	logger, err := opts.Logger()
 	if err != nil {
 		return nil, false, err
 	}
@@ -74,15 +70,15 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			if err != nil {
 				if kas.IsErr(err, kas.ErrorNotFound) {
 					err = kafkaerr.NotFoundByIDError(kafkaCfg.ClusterID)
-					logger.Error(err)
-					logger.Info(`Run "rhoas kafka use" to use another Kafka instance.`)
+					opts.Logger.Error(err)
+					opts.Logger.Info(`Run "rhoas kafka use" to use another Kafka instance.`)
 				}
 			} else {
 				status.Kafka = kafkaStatus
 				ok = true
 			}
 		} else {
-			logger.Debug("No Kafka instance is currently used, skipping status check")
+			opts.Logger.Debug("No Kafka instance is currently used, skipping status check")
 		}
 	}
 
@@ -97,7 +93,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			status.Registry = registry
 			ok = true
 		} else {
-			logger.Debug("No service registry is currently used, skipping status check")
+			opts.Logger.Debug("No service registry is currently used, skipping status check")
 		}
 	}
 

@@ -32,7 +32,7 @@ type Options struct {
 	Config     config.IConfig
 	IO         *iostreams.IOStreams
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 
 	kafkaID string
@@ -120,11 +120,6 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
@@ -133,7 +128,7 @@ func runCmd(opts *Options) error {
 	a := api.TopicsApi.GetTopics(context.Background())
 
 	if opts.search != "" {
-		logger.Debug(opts.localizer.MustLocalize("kafka.topic.list.log.debug.filteringTopicList", localize.NewEntry("Search", opts.search)))
+		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.topic.list.log.debug.filteringTopicList", localize.NewEntry("Search", opts.search)))
 		a = a.Filter(opts.search)
 	}
 
@@ -166,7 +161,7 @@ func runCmd(opts *Options) error {
 	defer httpRes.Body.Close()
 
 	if topicData.GetTotal() == 0 && opts.output == "" {
-		logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 		return nil
 	}

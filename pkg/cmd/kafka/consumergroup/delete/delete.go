@@ -24,7 +24,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -79,11 +79,6 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCmd(opts *Options) error {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -153,7 +148,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.delete.log.info.consumerGroupDeleted", localize.NewEntry("ConsumerGroupID", opts.id), kafkaNameTmplPair))
+	opts.Logger.Info(opts.localizer.MustLocalize("kafka.consumerGroup.delete.log.info.consumerGroupDeleted", localize.NewEntry("ConsumerGroupID", opts.id), kafkaNameTmplPair))
 
 	return nil
 }

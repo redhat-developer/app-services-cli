@@ -19,7 +19,7 @@ import (
 type Options struct {
 	Config     config.IConfig
 	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
 
@@ -70,12 +70,7 @@ func runConnect(opts *Options) error {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
-	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
+	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -88,7 +83,7 @@ func runConnect(opts *Options) error {
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(connection, logger)
+		selectedKafka, err := kafka.InteractiveSelect(connection, opts.Logger)
 		if err != nil {
 			return err
 		}

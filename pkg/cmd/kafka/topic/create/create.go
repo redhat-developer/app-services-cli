@@ -48,7 +48,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -154,11 +154,6 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	ctx := context.Background()
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
@@ -201,7 +196,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	logger.Info(opts.localizer.MustLocalize("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
 	switch opts.outputFormat {
 	case dump.JSONFormat:
@@ -216,18 +211,13 @@ func runCmd(opts *Options) error {
 }
 
 func runInteractivePrompt(opts *Options) (err error) {
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	validator := topicutil.Validator{
 		Localizer:  opts.localizer,
 		InstanceID: opts.kafkaID,
 		Connection: opts.Connection,
 	}
 
-	logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
 	promptName := &survey.Input{
 		Message: opts.localizer.MustLocalize("kafka.topic.common.input.name.message"),
