@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -81,12 +82,13 @@ func runDelete(opts *Options) (err error) {
 	}
 
 	_, httpRes, err := connection.API().ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
 
-		if httpRes.StatusCode == 404 {
+		if httpRes.StatusCode == http.StatusNotFound {
 			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id)))
 		}
 	}
@@ -123,15 +125,16 @@ func deleteServiceAccount(opts *Options) error {
 	}
 
 	_, httpRes, err := connection.API().ServiceAccount().DeleteServiceAccountById(context.Background(), opts.id).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
 
 		switch httpRes.StatusCode {
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete")))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.internalServerError"))
 		default:
 			return err

@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -100,8 +101,8 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).
-		Execute()
+	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).Execute()
+	defer httpRes.Body.Close()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -109,7 +110,7 @@ func runCmd(opts *Options) error {
 		if httpRes == nil {
 			return err
 		}
-		if httpRes.StatusCode == 404 {
+		if httpRes.StatusCode == http.StatusNotFound {
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
 		}
 	}
@@ -129,8 +130,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	httpRes, err = api.TopicsApi.DeleteTopic(context.Background(), opts.topicName).
-		Execute()
+	httpRes, err = api.TopicsApi.DeleteTopic(context.Background(), opts.topicName).Execute()
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -138,20 +138,21 @@ func runCmd(opts *Options) error {
 
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 		switch httpRes.StatusCode {
-		case 404:
+		case http.StatusNotFound:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
 		}
 	}
+	defer httpRes.Body.Close()
 
 	logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -230,6 +231,7 @@ func runCmd(opts *Options) error {
 	var needsUpdate bool
 
 	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
+	defer httpRes.Body.Close()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -237,7 +239,7 @@ func runCmd(opts *Options) error {
 		if httpRes == nil {
 			return err
 		}
-		if httpRes.StatusCode == 404 {
+		if httpRes.StatusCode == http.StatusNotFound {
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
 		}
 	}
@@ -283,6 +285,8 @@ func runCmd(opts *Options) error {
 
 	// update the topic
 	response, httpRes, err := updateTopicReq.Execute()
+	defer httpRes.Body.Close()
+
 	// handle error
 	if err != nil {
 		if httpRes == nil {
@@ -291,15 +295,15 @@ func runCmd(opts *Options) error {
 
 		operationTmplPair := localize.NewEntry("Operation", "update")
 		switch httpRes.StatusCode {
-		case 404:
+		case http.StatusNotFound:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err
@@ -332,8 +336,8 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	// check if topic exists
-	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).
-		Execute()
+	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
+	defer httpRes.Body.Close()
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -341,7 +345,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 		if httpRes == nil {
 			return err
 		}
-		if httpRes.StatusCode == 404 {
+		if httpRes.StatusCode == http.StatusNotFound {
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
 		}
 	}

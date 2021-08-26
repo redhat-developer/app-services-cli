@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 	"strconv"
 
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -176,6 +177,8 @@ func runCmd(opts *Options) error {
 	createTopicReq = createTopicReq.NewTopicInput(topicInput)
 
 	response, httpRes, err := createTopicReq.Execute()
+	defer httpRes.Body.Close()
+
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -183,15 +186,15 @@ func runCmd(opts *Options) error {
 
 		operationTmplPair := localize.NewEntry("Operation", "create")
 		switch httpRes.StatusCode {
-		case 401:
+		case http.StatusUnauthorized:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
-		case 403:
+		case http.StatusForbidden:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
-		case 409:
+		case http.StatusConflict:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", opts.topicName), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
-		case 500:
+		case http.StatusInternalServerError:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
-		case 503:
+		case http.StatusServiceUnavailable:
 			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
 		default:
 			return err

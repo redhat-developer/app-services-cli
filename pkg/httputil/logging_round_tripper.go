@@ -23,7 +23,7 @@ func (c LoggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) 
 	}
 
 	// only dump the HTTP request and response for errors
-	if resp.StatusCode < 400 {
+	if resp.StatusCode < http.StatusBadRequest {
 		return resp, nil
 	}
 

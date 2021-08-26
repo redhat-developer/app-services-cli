@@ -6,6 +6,7 @@ package cluster
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -52,7 +53,7 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 	}
 
 	var status int
-	if data.StatusCode(&status); status == 404 {
+	if data.StatusCode(&status); status == http.StatusNotFound {
 		return false, nil
 	}
 
@@ -67,7 +68,7 @@ func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespac
 		Do(ctx)
 
 	var status int
-	if data.StatusCode(&status); status == 404 {
+	if data.StatusCode(&status); status == http.StatusNotFound {
 		return nil
 	}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -70,13 +71,14 @@ func runDescribe(opts *Options) error {
 	api := connection.API()
 
 	res, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
 
 		switch httpRes.StatusCode {
-		case 404:
+		case http.StatusNotFound:
 			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id)))
 		default:
 			return err
