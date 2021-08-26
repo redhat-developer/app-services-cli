@@ -68,7 +68,8 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-gr
 		update.NewUpdateCommand(f),
 
 		// Misc
-		metadata.NewMetadataCommand(f),
+		metadata.NewGetMetadataCommand(f),
+		metadata.NewSetMetadataCommand(f),
 		versions.NewVersionsCommand(f),
 		download.NewDownloadCommand(f),
 	)

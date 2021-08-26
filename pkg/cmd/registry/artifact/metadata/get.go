@@ -3,6 +3,7 @@ package metadata
 import (
 	"context"
 	"errors"
+
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -18,7 +19,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-type Options struct {
+type GetOptions struct {
 	artifact     string
 	group        string
 	outputFormat string
@@ -32,9 +33,9 @@ type Options struct {
 	localizer  localize.Localizer
 }
 
-// NewMetadataCommand creates a new command for fetching metadata for registry artifacts.
-func NewMetadataCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+// NewGetMetadataCommand creates a new command for fetching metadata for registry artifacts.
+func NewGetMetadataCommand(f *factory.Factory) *cobra.Command {
+	opts := &GetOptions{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -43,7 +44,7 @@ func NewMetadataCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "metadata",
+		Use:   "metadata-get",
 		Short: "Get artifact metadata",
 		Long: `
 Gets the metadata for an artifact in the service registry. 
@@ -90,7 +91,7 @@ rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygro
 	return cmd
 }
 
-func runGet(opts *Options) error {
+func runGet(opts *GetOptions) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
