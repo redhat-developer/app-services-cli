@@ -26,24 +26,13 @@ func New(localizer localize.Localizer) *Factory {
 	var conn connection.Connection
 	cfgFile := config.NewFile()
 
-	loggerFunc := func() (logging.Logger, error) {
-		if logger != nil {
-			return logger, nil
-		}
+	loggerBuilder := logging.NewStdLoggerBuilder()
+	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
 
-		loggerBuilder := logging.NewStdLoggerBuilder()
-		loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
+	debugEnabled := debug.Enabled()
+	loggerBuilder = loggerBuilder.Debug(debugEnabled)
 
-		debugEnabled := debug.Enabled()
-		loggerBuilder = loggerBuilder.Debug(debugEnabled)
-
-		logger, err := loggerBuilder.Build()
-		if err != nil {
-			return nil, err
-		}
-
-		return logger, nil
-	}
+	logger, _ = loggerBuilder.Build()
 
 	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
 		if conn != nil {
@@ -92,12 +81,6 @@ func New(localizer localize.Localizer) *Factory {
 
 		builder.WithConfig(cfgFile)
 
-		// create a logger if it has not already been created
-		logger, err = loggerFunc()
-		if err != nil {
-			return nil, err
-		}
-
 		transportWrapper := func(a http.RoundTripper) http.RoundTripper {
 			return &httputil.LoggingRoundTripper{
 				Proxied: a,
@@ -121,8 +104,6 @@ func New(localizer localize.Localizer) *Factory {
 
 		return conn, nil
 	}
-
-	logger, _ = loggerFunc()
 
 	return &Factory{
 		IOStreams:  io,
