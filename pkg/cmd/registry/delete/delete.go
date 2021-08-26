@@ -46,14 +46,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("registry.cmd.delete.shortDescription"),
 		Long:    f.Localizer.MustLocalize("registry.cmd.delete.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.cmd.delete.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return flag.RequiredWhenNonInteractiveError("yes")
-			}
-
-			if len(args) > 0 {
-				opts.name = args[0]
 			}
 
 			if opts.name != "" && opts.id != "" {
@@ -80,6 +76,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.delete.flag.name.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.common.flag.id"))
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("registry.common.flag.yes"))
 

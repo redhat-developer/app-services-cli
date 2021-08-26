@@ -16,7 +16,7 @@ Commands are divided into the following categories:
 [registry.cmd.example]
 one = '''
 ## Create Service Registry
-rhoas service-registry create myregistry
+rhoas service-registry create --name myregistry
 
 ## List Service Registry instances
 rhoas service-registry list 
@@ -33,7 +33,7 @@ Create a Service Registry instance to store and manage your schema and API artif
 [registry.cmd.create.example]
 one = '''
 ## Create Service Registry
-rhoas service-registry create myregistry
+rhoas service-registry create --name myregistry
 '''
 
 [registry.cmd.create.info.successMessage]
@@ -52,7 +52,11 @@ Delete a Service Registry instance along with all of its schema and API artifact
 
 [registry.cmd.delete.example]
 one = '''
-rhoas service-registry delete <id>
+# delete by name
+rhoas service-registry delete --name <name>
+
+# delete by ID
+rhoas service-registry delete --id <id>
 '''
 
 [registry.cmd.describe.shortDescription]
@@ -65,7 +69,12 @@ Describe a Service Registry instance. Fetch all required fields including the re
 
 [registry.cmd.describe.example]
 one = '''
-rhoas service-registry describe <id>
+# describe by name
+rhoas service-registry describe --name <name>
+
+
+# describe by ID
+rhoas service-registry describe --id <id>
 '''
 
 [registry.cmd.list.shortDescription]
@@ -94,7 +103,11 @@ When you set the Service Registry instance to be used, it is set as the current 
 
 [registry.cmd.use.example]
 one = '''
-rhoas service-registry use <id>
+# use by name
+rhoas service-registry use --name <name>
+
+# use by ID
+rhoas service-registry use --id <id>
 '''
 
 # Errors
@@ -104,6 +117,9 @@ one = 'Name argument is required when not in interactive'
 
 [registry.cmd.create.flag.use.description]
 one = 'Set the new Service Registry instance to the current instance'
+
+[registry.cmd.create.flag.name.description]
+one = 'Unique name of the Service Registry instance'
 
 [registry.cmd.create.input.name.message]
 one = 'Name of Service Registry:'
@@ -180,8 +196,14 @@ description = 'Error message when current Service Registry could not be saved in
 one = 'could not set "{{.Name}}" as the current Service Registry instance'
 
 [registry.use.error.idOrNameRequired]
-one= '--id flag or name required when not running interactively'
+one= 'either --id or --name flag is required when not running interactively'
 
 [registry.use.log.info.useSuccess]
 description = 'Info message when current Service Registry was set' 
 one = 'Service Registry instance "{{.Name}}" has been set as the current instance.'
+
+[registry.cmd.describe.flag.name.description]
+one = 'Name of the Service Registry instance to view'
+
+[registry.cmd.delete.flag.name.description]
+one = 'Name of the Service Registry instance to delete'

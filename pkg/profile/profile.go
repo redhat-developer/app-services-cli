@@ -3,6 +3,7 @@ package profile
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -26,5 +27,12 @@ func DevPreviewAnnotation() map[string]string {
 
 // DevModeEnabled Check if development mode is enabled
 func DevModeEnabled() bool {
-	return os.Getenv(DevPreviewEnv) != ""
+	rawEnvVal := os.Getenv(DevPreviewEnv)
+
+	boolVal, err := strconv.ParseBool(rawEnvVal)
+	if err != nil {
+		return false
+	}
+
+	return boolVal
 }

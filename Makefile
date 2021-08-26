@@ -100,7 +100,8 @@ docs/check: docs/generate
 .PHONY: docs/check
 
 docs/generate:
-	GENERATE_DOCS=true go run ./cmd/rhoas
+	rm -rf ./docs/commands/*
+	GENERATE_DOCS=true RHOAS_DEV=false go run ./cmd/rhoas
 .PHONY: docs/generate
 
 docs/generate-modular-docs: docs/generate
