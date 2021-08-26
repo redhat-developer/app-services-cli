@@ -57,11 +57,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("registry.cmd.create.shortDescription"),
 		Long:    f.Localizer.MustLocalize("registry.cmd.create.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.cmd.create.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) > 0 {
-				opts.name = args[0]
-
+			if opts.name != "" {
 				if err := serviceregistry.ValidateName(opts.name); err != nil {
 					return err
 				}
@@ -82,6 +80,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.create.flag.name.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("registry.cmd.create.flag.use.description"))
 

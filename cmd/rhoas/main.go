@@ -67,7 +67,7 @@ func main() {
 * Generates documentation files
  */
 func generateDocumentation(rootCommand *cobra.Command) {
-	fmt.Fprint(os.Stderr, "Generating docs.\n\n")
+	fmt.Fprintln(os.Stderr, "\n🛠️  Generating rhoas command-line reference documentation...")
 	filePrepender := func(filename string) string {
 		return ""
 	}
@@ -76,11 +76,11 @@ func generateDocumentation(rootCommand *cobra.Command) {
 
 	linkHandler := func(s string) string { return s }
 
-	err := doc.GenAsciidocTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)
-	if err != nil {
+	if err := doc.GenAsciidocTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+	fmt.Fprintln(os.Stderr, "\n✅ Command-line reference documentation has been generated successfully")
 }
 
 func initConfig(f *factory.Factory) error {

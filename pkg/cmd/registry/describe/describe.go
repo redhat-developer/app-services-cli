@@ -45,15 +45,11 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("registry.cmd.describe.shortDescription"),
 		Long:    f.Localizer.MustLocalize("registry.cmd.describe.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.cmd.describe.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
-			if len(args) > 0 {
-				opts.name = args[0]
 			}
 
 			if opts.name != "" && opts.id != "" {
@@ -80,6 +76,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.describe.flag.name.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.common.flag.id"))
 

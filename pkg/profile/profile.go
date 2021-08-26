@@ -2,6 +2,7 @@
 package profile
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -33,5 +34,6 @@ func DevModeEnabled() bool {
 	if err != nil {
 		return false
 	}
+
 	return boolVal
 }
