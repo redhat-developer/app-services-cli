@@ -4,12 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
-
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
@@ -76,7 +74,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return errors.New(opts.localizer.MustLocalize("registry.common.error.noServiceSelected"))
 			}
 
-			opts.id = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.id = cfg.Services.ServiceRegistry.InstanceID
 
 			return runDelete(opts)
 		},

@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -105,7 +103,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 				return errors.New("no service Registry selected. Use rhoas registry use to select your registry")
 			}
 
-			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
 
 			return runList(opts)
 		},

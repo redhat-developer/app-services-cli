@@ -3,7 +3,6 @@ package create
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -124,7 +123,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
 			}
 
-			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
 			return runCreate(opts)
 		},
 	}
