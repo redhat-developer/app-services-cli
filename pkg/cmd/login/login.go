@@ -157,12 +157,12 @@ func runLogin(opts *Options) (err error) {
 
 		ssoCfg := &login.SSOConfig{
 			AuthURL:      authURL,
-			RedirectPath: "sso-redhat-callback",
+			RedirectPath: build.SSORedirectPath,
 		}
 
 		masSsoCfg := &login.SSOConfig{
 			AuthURL:      masAuthURL,
-			RedirectPath: "mas-sso-callback",
+			RedirectPath: build.MASSSORedirectPath,
 		}
 
 		if err = loginExec.Execute(context.Background(), ssoCfg, masSsoCfg); err != nil {

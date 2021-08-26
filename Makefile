@@ -7,6 +7,8 @@ REPOSITORY_OWNER ?= "redhat-developer"
 REPOSITORY_NAME ?= "app-services-cli"
 TERMS_REVIEW_EVENT_CODE ?= "onlineService"
 TERMS_REVIEW_SITE_CODE ?= "ocm"
+SSO_REDIRECT_PATH ?= "sso-redhat-callback"
+MAS_SSO_REDIRECT_PATH ?= "mas-sso-callback"
 
 # see pkg/cmdutil/constants.go
 DEFAULT_PAGE_NUMBER ?= "1"
@@ -19,6 +21,8 @@ GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.Ter
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.TermsReviewSiteCode=$(TERMS_REVIEW_SITE_CODE) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.DefaultPageSize=$(DEFAULT_PAGE_SIZE) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.DefaultPageNumber=$(DEFAULT_PAGE_NUMBER) $(GO_LDFLAGS)
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.SSORedirectPath=$(SSO_REDIRECT_PATH) $(GO_LDFLAGS)
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.MASSSORedirectPath=$(MAS_SSO_REDIRECT_PATH) $(GO_LDFLAGS)
 
 BUILDFLAGS :=
 
