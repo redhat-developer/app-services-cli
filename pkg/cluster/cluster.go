@@ -9,7 +9,10 @@ type ConnectArguments struct {
 	ForceCreationWithoutAsk bool
 	IgnoreContext           bool
 	SelectedKafka           string
+	SelectedRegistry        string
 	Namespace               string
+	SelectedService         string
+	SelectedServiceID       string
 }
 
 // Cluster defines methods used to interact with a cluster

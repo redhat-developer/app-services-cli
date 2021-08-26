@@ -2,13 +2,13 @@ package connect
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
@@ -28,7 +28,8 @@ type options struct {
 	offlineAccessToken      string
 	forceCreationWithoutAsk bool
 	ignoreContext           bool
-	selectedKafka           string
+	serviceID               string
+	serviceType             string
 }
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
@@ -60,6 +61,8 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
+	cmd.Flags().StringVar(&opts.serviceID, "service-name", "", opts.localizer.MustLocalize("cluster.common.flag.serviceId.description"))
+	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceName.description"))
 
 	return cmd
 }
@@ -75,32 +78,13 @@ func runConnect(opts *options) error {
 		return err
 	}
 
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
-
-	// In future config will include Id's of other services
-	if cfg.Services.Kafka == nil || opts.ignoreContext {
-		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
-		if err != nil {
-			return err
-		}
-		if selectedKafka == nil {
-			return nil
-		}
-		opts.selectedKafka = selectedKafka.GetId()
-	} else {
-		opts.selectedKafka = cfg.Services.Kafka.ClusterID
-	}
-
 	arguments := &cluster.ConnectArguments{
 		OfflineAccessToken:      opts.offlineAccessToken,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		IgnoreContext:           opts.ignoreContext,
-		SelectedKafka:           opts.selectedKafka,
 		Namespace:               opts.namespace,
+		SelectedService:         opts.serviceType,
+		SelectedServiceID:       opts.serviceID,
 	}
 
 	err = clusterConn.Connect(opts.Context, arguments)

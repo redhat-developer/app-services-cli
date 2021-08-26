@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -97,7 +98,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	}
 
 	// Check KafkaConnection
-	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(ctx, options.ServiceName, metav1.GetOptions{})
+	_, err = clients.dynamicClient.Resource(kafka.AKCResource).Namespace(ns).Get(ctx, options.ServiceName, metav1.GetOptions{})
 	if err != nil {
 		return localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
@@ -116,9 +117,9 @@ func performBinding(ctx context.Context, options *ServiceBindingOptions, ns stri
 	serviceRef := v1alpha1.Service{
 		NamespacedRef: v1alpha1.NamespacedRef{
 			Ref: v1alpha1.Ref{
-				Group:    AKCResource.Group,
-				Version:  AKCResource.Version,
-				Resource: AKCResource.Resource,
+				Group:    kafka.AKCResource.Group,
+				Version:  kafka.AKCResource.Version,
+				Resource: kafka.AKCResource.Resource,
 				Name:     options.ServiceName,
 			},
 		},

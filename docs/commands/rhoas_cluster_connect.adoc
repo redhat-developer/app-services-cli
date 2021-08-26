@@ -40,12 +40,14 @@ $ rhoas cluster connect
 [discrete]
 == Options
 
-      `--ignore-context`::         Ignore currently selected services and ask to select each service separately
-      `--kubeconfig` _string_::    Location of the kubeconfig file
-  `-n`, `--namespace` _string_::   Custom Kubernetes namespace (if not set current namespace will be used)
-      `--token` _string_::         Provide an offline token to be used by the operator (to get a token, visit https://console.redhat.com/openshift/token)
+      `--ignore-context`::          Ignore currently selected services and ask to select each service separately
+      `--kubeconfig` _string_::     Location of the kubeconfig file
+  `-n`, `--namespace` _string_::    Custom Kubernetes namespace (if not set current namespace will be used)
+      `--service-name` _string_::   ID of service to connect to
+      `--service-type` _string_::   Service name to connect to
+      `--token` _string_::          Provide an offline token to be used by the operator (to get a token, visit https://console.redhat.com/openshift/token)
 
-  `-y`, `--yes`::                  Forcibly create a binding without confirmation
+  `-y`, `--yes`::                   Forcibly create a binding without confirmation
 
 [discrete]
 == Options inherited from parent commands

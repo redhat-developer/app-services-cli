@@ -9,6 +9,7 @@ one = '''
 Connection Details:
 
 Apache Kafka instance:  {{.InstanceName}}
+Service Registry Name:  {{.RegistryInstanceName}}
 Kubernetes Namespace:   {{.Namespace}}
 Service Account Secret: {{.ServiceAccountSecretName}}
 '''
@@ -28,15 +29,29 @@ one = 'Cancelling cluster connection'
 [cluster.kubernetes.createKafkaCR.error.marshalError]
 one = 'could not marshal KafkaConnection to JSON object'
 
+[cluster.kubernetes.createRegistryCR.error.marshalError]
+one = 'could not marshal ServiceRegsitryConnection to JSON object'
+
 [cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
 one = 'KafkaConnection resource "{{.Name}}" has been created'
+
+[cluster.kubernetes.createRegistryCR.log.info.customResourceCreated]
+one = 'ServiceRegistryConnection resource "{{.Name}}" has been created'
 
 [cluster.kubernetes.watchForKafkaStatus.error.format]
 one = '''invalid result from operator. Status object is not compatible with expected result from CLI.
 '''
 
+[cluster.kubernetes.watchForRegistryStatus.error.format]
+one = '''invalid result from operator. Status object is not compatible with expected result from CLI.
+'''
+
 [cluster.kubernetes.watchForKafkaStatus.error.status]
 one = '''error when processing KafkaConnection: %v
+'''
+
+[cluster.kubernetes.watchForRegistryStatus.error.status]
+one = '''error when processing ServiceRegistryConnection: %v
 '''
 
 [cluster.kubernetes.watchForKafkaStatus.log.info.success]
@@ -45,6 +60,15 @@ KafkaConnection successfully installed on your cluster.
 To view it execute:
 
 oc get kafkaconnection -o=yaml -n {{.Namespace}} {{.Name}}
+
+'''
+
+[cluster.kubernetes.watchForRegistryStatus.log.info.success]
+one = '''
+ServiceRegistryConnection successfully installed on your cluster.
+To view it execute:
+
+oc get src -o=yaml -n {{.Namespace}} {{.Name}}
 
 '''
 
@@ -60,6 +84,18 @@ To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
 
 You can bind KafkaConnection to your application by executing "rhoas cluster bind" 
+or directly in the OpenShift Console topology view.
+'''
+
+[cluster.kubernetes.watchForRegistryStatus.log.info.wait]
+one = '''
+Waiting for status from ServiceRegistryConnection resource.
+Created ServiceRegistryConnection can be already injected to your application.
+
+To bind you need to have Service Binding Operator installed:
+https://github.com/redhat-developer/service-binding-operator
+
+You can bind ServiceRegistryConnection to your application by executing "rhoas cluster bind" 
 or directly in the OpenShift Console topology view.
 '''
 
@@ -86,3 +122,6 @@ one = 'Service account secret already exist.'
 
 [cluster.kubernetes.checkIfConnectionExist.existError]
 one = 'KafkaConnection already exist'
+
+[cluster.kubernetes.checkIfServiceRegistryConnectionExist.existError]
+one = 'ServiceRegistryConnection already exist'
