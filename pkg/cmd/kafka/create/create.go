@@ -80,7 +80,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.create.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.create.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.create.cmd.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name != "" {
 				validator := &pkgKafka.Validator{

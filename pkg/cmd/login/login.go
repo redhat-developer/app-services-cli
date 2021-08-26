@@ -6,6 +6,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -140,6 +141,7 @@ func runLogin(opts *Options) (err error) {
 		return err
 	}
 	opts.authURL = authURL.String()
+	fmt.Println(opts.authURL)
 
 	masAuthURL, err := getURLFromAlias(opts.masAuthURL, masAuthURLAliases, opts.localizer)
 	if err != nil {
