@@ -66,7 +66,10 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
 
-	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	if err != nil {
+		opts.Logger.Debug(err)
+	}
 
 	return cmd
 }

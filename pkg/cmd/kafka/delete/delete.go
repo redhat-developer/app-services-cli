@@ -83,7 +83,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.delete.flag.yes"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
 
-	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	if err != nil {
+		opts.Logger.Debug(err)
+	}
 
 	return cmd
 }
