@@ -132,13 +132,10 @@ func runCmd(opts *Options) error {
 
 	// perform delete topic API request
 	httpRes, err = api.TopicsApi.DeleteTopic(context.Background(), opts.topicName).Execute()
-
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
-
-		defer httpRes.Body.Close()
 
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 		switch httpRes.StatusCode {
@@ -156,6 +153,7 @@ func runCmd(opts *Options) error {
 			return err
 		}
 	}
+	defer httpRes.Body.Close()
 
 	logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
 
