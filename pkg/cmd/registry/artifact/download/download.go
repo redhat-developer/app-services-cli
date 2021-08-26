@@ -89,7 +89,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
 			}
 
-			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
 			return runGet(opts)
 		},
 	}

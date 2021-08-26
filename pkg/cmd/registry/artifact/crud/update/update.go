@@ -3,7 +3,6 @@ package update
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -103,7 +102,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
 			}
 
-			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
 			return runUpdate(opts)
 		},
 	}

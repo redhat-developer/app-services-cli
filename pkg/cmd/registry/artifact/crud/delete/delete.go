@@ -3,8 +3,6 @@ package delete
 import (
 	"context"
 	"errors"
-	"fmt"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -82,7 +80,7 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
 			}
 
-			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
 			return runDelete(opts)
 		},
 	}

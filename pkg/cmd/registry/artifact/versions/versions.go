@@ -3,8 +3,6 @@ package versions
 import (
 	"context"
 	"errors"
-	"fmt"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -74,7 +72,7 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
 			}
 
-			opts.registryID = fmt.Sprint(cfg.Services.ServiceRegistry.InstanceID)
+			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
 			return runGet(opts)
 		},
 	}
