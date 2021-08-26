@@ -13,7 +13,7 @@ one = '''
 $ rhoas login
 
 # create a Kafka instance
-$ rhoas kafka create my-kafka-cluster
+$ rhoas kafka create --name my-kafka-instance
 
 # create a service account and save credentials to a JSON file
 $ rhoas service-account create -o json

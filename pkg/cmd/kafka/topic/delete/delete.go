@@ -45,18 +45,10 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   opts.localizer.MustLocalize("kafka.topic.delete.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.topic.delete.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.delete.cmd.example"),
-		Args:    cobra.ExactValidArgs(1),
-		// Dynamic completion of the topic name
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return cmdutil.FilterValidTopicNameArgs(f, toComplete)
-		},
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes")))
-			}
-
-			if len(args) > 0 {
-				opts.topicName = args[0]
 			}
 
 			if opts.kafkaID != "" {
@@ -78,6 +70,13 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&opts.topicName, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
+
+	_ = cmd.MarkFlagRequired("name")
+
+	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+	})
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.topic.delete.flag.yes.description"))
 
 	return cmd
