@@ -12,7 +12,7 @@ Log in securely to RHOAS through a web browser.
 
 This command opens your web browser, where you can enter your credentials.
 
-When using the rhoas CLI in an environment without a web browser, 
+When using the rhoas CLI in an environment without a web browser,
 you can log in using an offline-token by passing the "--token" flag, which can be obtained at https://console.redhat.com/openshift/token.
 Note: token-based login is not supported by the Kafka "topic" and "consumer-group" subcommands.
 

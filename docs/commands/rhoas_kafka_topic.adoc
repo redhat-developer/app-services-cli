@@ -21,7 +21,7 @@ Commands are executed on the currently selected Kafka instance.
 rhoas kafka topic create --name mytopic
 
 ## List all topics
-rhoas kafka topic list 
+rhoas kafka topic list
 
 ....
 

@@ -30,7 +30,7 @@ rhoas kafka describe
 rhoas kafka list
 
 ## Create an Kafka Topic
-rhoas kafka topic create --name mytopic 
+rhoas kafka topic create --name mytopic
 
 ....
 

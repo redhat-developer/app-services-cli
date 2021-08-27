@@ -15,7 +15,7 @@ Use these commands to connect and bind your services to Kubernetes or OpenShift 
 
 ....
 # check status of the connection to your cluster
-$ rhoas cluster status 
+$ rhoas cluster status
 
 # connect with cluster without including currently selected services
 $ rhoas cluster connect --ignore-context
@@ -27,7 +27,7 @@ $ rhoas cluster connect --token=value
 $ rhoas cluster connect --yes > create_service_binding.sh
 
 # connect managed service with your application
-$ rhoas cluster bind 
+$ rhoas cluster bind
 
 ....
 

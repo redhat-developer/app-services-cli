@@ -22,7 +22,6 @@ rhoas completion fish
 
 ....
 rhoas completion fish
-
 ....
 
 [discrete]
