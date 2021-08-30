@@ -69,7 +69,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.topic.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			if !opts.IO.CanPrompt() && opts.topicName != "" {
+			if !opts.IO.CanPrompt() && opts.topicName == "" {
 				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
 			} else if opts.topicName == "" {
 				opts.interactive = true
