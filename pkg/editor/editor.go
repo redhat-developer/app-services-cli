@@ -38,6 +38,7 @@ func (e *Editor) Run() ([]byte, error) {
 	defer os.Remove(path)
 
 	args := []string{shell, shellCommandFlag, fmt.Sprintf("%s %s", editor, path)}
+	// #nosec 204
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

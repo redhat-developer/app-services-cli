@@ -60,6 +60,10 @@ rhoas service-registry artifact metadata-set
 		`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if opts.name == "" && opts.description == "" && !opts.IO.CanPrompt() {
+				return errors.New("Editor mode cannot be started in non-interactive mode. Please use --name and --description flags")
+			}
+
 			if opts.artifact == "" {
 				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
 			}
@@ -136,8 +140,7 @@ func runSet(opts *SetOptions) error {
 			editableMedata.Description = &opts.description
 		}
 	} else {
-		// TODO check interactive mode
-		opts.Logger.Info("Running interactive mode to let you edit metadata")
+		opts.Logger.Info("Running edito to let you edit metadata. Please close editor to continue...")
 		editableMedata, err = runEditor(editableMedata)
 		if err != nil {
 			return err
@@ -157,7 +160,17 @@ func runSet(opts *SetOptions) error {
 }
 
 func runEditor(currentMetadata *registryinstanceclient.EditableMetaData) (*registryinstanceclient.EditableMetaData, error) {
-	metadataJson, err := json.Marshal(currentMetadata)
+	// Fill defaults for json fields
+	if currentMetadata.Labels == nil {
+		currentMetadata.Labels = &[]string{}
+	}
+	if currentMetadata.Properties == nil {
+		currentMetadata.Properties = &map[string]string{}
+	}
+	metadataJson, err := json.MarshalIndent(currentMetadata, "", " ")
+	if err != nil {
+		return nil, err
+	}
 	editor := editor.New(metadataJson, "metadata.json")
 	output, err := editor.Run()
 	if err != nil {
