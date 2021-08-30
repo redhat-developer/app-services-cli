@@ -35,7 +35,7 @@ type Options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
-	Logger     func() (logging.Logger, error)
+	Logger     logging.Logger
 	localizer  localize.Localizer
 }
 
@@ -127,11 +127,6 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 // nolint:funlen
 func runCmd(opts *Options) error {
 
-	logger, err := opts.Logger()
-	if err != nil {
-		return err
-	}
-
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -180,7 +175,7 @@ func runCmd(opts *Options) error {
 			return err
 		}
 		if !confirmReset {
-			logger.Debug(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.log.debug.cancelledReset"))
+			opts.Logger.Debug(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.log.debug.cancelledReset"))
 			return nil
 		}
 	}
@@ -211,7 +206,7 @@ func runCmd(opts *Options) error {
 
 	defer httpRes.Body.Close()
 
-	logger.Info(opts.localizer.MustLocalize(
+	opts.Logger.Info(opts.localizer.MustLocalize(
 		"kafka.consumerGroup.resetOffset.log.info.successful",
 		localize.NewEntry("ConsumerGroupID", opts.id),
 		localize.NewEntry("InstanceName", kafkaInstance.GetName())),
@@ -225,7 +220,7 @@ func runCmd(opts *Options) error {
 		data, _ := yaml.Marshal(updatedConsumers)
 		_ = dump.YAML(opts.IO.Out, data)
 	default:
-		logger.Info("")
+		opts.Logger.Info("")
 		consumers := updatedConsumers.GetItems()
 		rows := mapResetOffsetResultToTableFormat(consumers)
 		dump.Table(opts.IO.Out, rows)
