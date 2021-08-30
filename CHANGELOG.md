@@ -1,4 +1,59 @@
 
+<a name="v0.27.0"></a>
+## [v0.27.0](https://github.com/redhat-developer/app-services-cli/compare/v0.26.0...v0.27.0) (2021-08-30)
+
+### Bug Fixes
+
+* address review comments ([#937](https://github.com/redhat-developer/app-services-cli/issues/937))
+* remove print of Auth URL during login ([#983](https://github.com/redhat-developer/app-services-cli/issues/983))
+* moved SSO redirect paths into a variable section ([#979](https://github.com/redhat-developer/app-services-cli/issues/979))
+* print an error returned by RegisterNameFlagCompletionFunc in a debug mode ([#977](https://github.com/redhat-developer/app-services-cli/issues/977))
+* removed unnecessary fmt.Sprint ([#978](https://github.com/redhat-developer/app-services-cli/issues/978))
+* remove invalid CR from the connect command ([#967](https://github.com/redhat-developer/app-services-cli/issues/967))
+* update kafka admin to the latest SDK ([#848](https://github.com/redhat-developer/app-services-cli/issues/848))
+* add title and description to the flags ([#953](https://github.com/redhat-developer/app-services-cli/issues/953))
+* locale key err in cluster_kubernetes ([#900](https://github.com/redhat-developer/app-services-cli/issues/900))
+* remove invalid output flag from service registry artifacts delete cmd([#930](https://github.com/redhat-developer/app-services-cli/issues/930))
+* add -f flag shortcut to output file ([#935](https://github.com/redhat-developer/app-services-cli/issues/935))
+* rename flag for get and download commands ([#943](https://github.com/redhat-developer/app-services-cli/issues/943))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.2 ([#855](https://github.com/redhat-developer/app-services-cli/issues/855))
+* **deps:** update golang.org/x/oauth2 commit hash to 2bc19b1
+* **deps:** update all to v0.22.1
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go/registrymgmt to v0.1.1 ([#949](https://github.com/redhat-developer/app-services-cli/issues/949))
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.0
+* **deps:** update golang.org/x/oauth2 commit hash to 7df4dd6
+* **deps:** update module github.com/openconfig/goyang to v0.2.9
+* **deps:** update module github.com/aerogear/charmil to v0.8.2
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.5 ([#893](https://github.com/redhat-developer/app-services-cli/issues/893))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go/registryinstance to v0.1.1
+* **deps:** update module github.com/openconfig/goyang to v0.2.8
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.1
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.1 ([#849](https://github.com/redhat-developer/app-services-cli/issues/849))
+* **deps:** update all
+* **deps:** update all ([#885](https://github.com/redhat-developer/app-services-cli/issues/885))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.4 ([#869](https://github.com/redhat-developer/app-services-cli/issues/869))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.3 ([#862](https://github.com/redhat-developer/app-services-cli/issues/862))
+* **i18n:** set "locales" as root dir ([#847](https://github.com/redhat-developer/app-services-cli/issues/847))
+* **login:** use mas-sso host in login success message ([#889](https://github.com/redhat-developer/app-services-cli/issues/889))
+* **service-account:** remove period from description validation error ([#891](https://github.com/redhat-developer/app-services-cli/issues/891))
+* **topic:** condition should check if topic name is empty ([#985](https://github.com/redhat-developer/app-services-cli/issues/985))
+
+### Features
+
+* use --name flag instead of positional arg ([#963](https://github.com/redhat-developer/app-services-cli/issues/963))
+* display registry status in status cmd ([#936](https://github.com/redhat-developer/app-services-cli/issues/936))
+* service registry artifact commands ([#859](https://github.com/redhat-developer/app-services-cli/issues/859))
+* rename debug flag to verbose ([#845](https://github.com/redhat-developer/app-services-cli/issues/845))
+* **consumer-group describe:** show unconsumed partitions ([#835](https://github.com/redhat-developer/app-services-cli/issues/835))
+* **kafka:** add --wait flag to perform synchronous Kafka creation ([#960](https://github.com/redhat-developer/app-services-cli/issues/960))
+* **login:** add branding to login redirect page ([#853](https://github.com/redhat-developer/app-services-cli/issues/853))
+
+### BREAKING CHANGE
+
+
+This replaces the positional argument in `rhoas kafka use`, `rhoas kafka describe`, `rhoas kafka delete`, `rhoas kafka topic describe`, `rhoas kafka topic update`, `rhoas kafka topic delete` to a `--name` flag.
+
+
 <a name="v0.26.0"></a>
 ## [v0.26.0](https://github.com/redhat-developer/app-services-cli/compare/v0.25.0...v0.26.0) (2021-07-22)
 
