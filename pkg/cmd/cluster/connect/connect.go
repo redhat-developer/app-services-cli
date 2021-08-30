@@ -99,7 +99,7 @@ func runConnect(opts *Options) error {
 
 	if cfg.Services.ServiceRegistry == nil || opts.ignoreContext {
 		// nolint
-		selectedServiceRegistry, err := serviceregistry.InteractiveSelect(connection, logger)
+		selectedServiceRegistry, err := serviceregistry.InteractiveSelect(connection, opts.Logger)
 		if err != nil {
 			return err
 		}
