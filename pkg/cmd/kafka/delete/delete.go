@@ -121,7 +121,7 @@ func runDelete(opts *options) error {
 
 	if !opts.force {
 		promptConfirmName := &survey.Input{
-			Message: opts.localizer.MustLocalize("kafka.delete.input.confirmName.message"),
+			Message: opts.localizer.MustLocalize("kafka.delete.input.confirmName.message", localize.NewEntry("Name", kafkaName)),
 		}
 
 		var confirmedKafkaName string
