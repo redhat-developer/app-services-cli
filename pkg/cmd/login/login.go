@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"golang.org/x/oauth2"
@@ -103,7 +104,20 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 				opts.Logger.Info(opts.localizer.MustLocalize("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 			}
 
-			return runLogin(opts)
+			ch := make(chan error, 1)
+			defer close(ch)
+
+			go func() {
+				l := runLogin(opts)
+				ch <- l
+			}()
+
+			select {
+			case res := <-ch:
+				return res
+			case <-time.After(build.DefaultLoginTimeout):
+				return fmt.Errorf(opts.localizer.MustLocalize("login.error.timeout.expired"))
+			}
 		},
 	}
 

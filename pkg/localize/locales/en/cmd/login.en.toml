@@ -78,6 +78,9 @@ one = 'You are now logged in to <span style="font-weight:700">{{.Host}}</span> a
 description = 'Error message for when scheme is missing from the Auth URL'
 one = 'scheme missing from URL "{{.URL}}". Please add either "https" or "https"'
 
+[login.error.timeout.expired]
+one = 'login attempt has expired'
+
 [login.log.debug.createdAuthorizationUrl]
 description = 'Debug message to show the authorization URL'
 one = "Opening Authorization URL: {{.URL}}"

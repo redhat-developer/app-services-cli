@@ -3,6 +3,7 @@ package build
 import (
 	"context"
 	"runtime/debug"
+	"time"
 
 	"github.com/google/go-github/github"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
@@ -49,6 +50,7 @@ var (
 	StagingAPIURL               = "https://api.stage.openshift.com"
 	DefaultClientID             = "rhoas-cli-prod"
 	DefaultOfflineTokenClientID = "cloud-services"
+	DefaultLoginTimeout         = 30 * time.Second
 	// #nosec G101
 	OfflineTokenURL      = "https://console.redhat.com/openshift/token"
 	ProductionAuthURL    = "https://sso.redhat.com/auth/realms/redhat-external"
