@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
+	registryPkg "github.com/redhat-developer/app-services-cli/pkg/cluster/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
@@ -206,7 +208,7 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 	crName := kafkaInstance.GetName()
 	kafkaID := kafkaInstance.GetId()
 
-	kafkaConnectionCR := createKCObject(crName, namespace, kafkaID)
+	kafkaConnectionCR := kafka.CreateKCObject(crName, namespace, kafkaID)
 
 	crJSON, err := json.Marshal(kafkaConnectionCR)
 	if err != nil {
@@ -215,7 +217,7 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 
 	data := c.clientset.RESTClient().
 		Post().
-		AbsPath(getKafkaConnectionsAPIURL(namespace)).
+		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace)).
 		Body(crJSON).
 		Do(ctx)
 
@@ -233,7 +235,7 @@ func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Cont
 	crName := registryInstance.GetName()
 	registryId := registryInstance.GetId()
 
-	serviceRegistryCR := createSRObject(crName, namespace, registryId)
+	serviceRegistryCR := registryPkg.CreateSRObject(crName, namespace, registryId)
 
 	crJSON, err := json.Marshal(serviceRegistryCR)
 	if err != nil {
@@ -242,7 +244,7 @@ func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Cont
 
 	data := c.clientset.RESTClient().
 		Post().
-		AbsPath(getServiceRegistryAPIURL(namespace)).
+		AbsPath(registryPkg.GetServiceRegistryAPIURL(namespace)).
 		Body(crJSON).
 		Do(ctx)
 

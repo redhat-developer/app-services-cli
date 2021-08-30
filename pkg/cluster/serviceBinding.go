@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -91,7 +92,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 	}
 
 	// Check KafkaConnection
-	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(context.TODO(), options.ServiceName, metav1.GetOptions{})
+	_, err = clients.dynamicClient.Resource(kafka.AKCResource).Namespace(ns).Get(context.TODO(), options.ServiceName, metav1.GetOptions{})
 	if err != nil {
 		return errors.New(localizer.MustLocalize("cluster.serviceBinding.serviceMissing.message"))
 	}
@@ -110,9 +111,9 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 	serviceRef := v1alpha1.Service{
 		NamespacedRef: v1alpha1.NamespacedRef{
 			Ref: v1alpha1.Ref{
-				Group:    AKCResource.Group,
-				Version:  AKCResource.Version,
-				Resource: AKCResource.Resource,
+				Group:    kafka.AKCResource.Group,
+				Version:  kafka.AKCResource.Version,
+				Resource: kafka.AKCResource.Resource,
 				Name:     options.ServiceName,
 			},
 		},

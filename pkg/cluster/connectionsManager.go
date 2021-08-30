@@ -17,43 +17,10 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
 )
 
-var (
-	AKCGroup   = "rhoas.redhat.com"
-	AKCVersion = "v1alpha1"
-)
-
-var (
-	SRCGroup   = "rhoas.redhat.com"
-	SRCVersion = "v1alpha1"
-)
-
-var AKCRMeta = metav1.TypeMeta{
-	Kind:       "KafkaConnection",
-	APIVersion: AKCGroup + "/" + AKCVersion,
-}
-
-var RegistryResourceMeta = metav1.TypeMeta{
-	Kind:       "ServiceRegistryConnection",
-	APIVersion: SRCGroup + "/" + SRCVersion,
-}
-
-var AKCResource = schema.GroupVersionResource{
-	Group:    AKCGroup,
-	Version:  AKCVersion,
-	Resource: "kafkaconnections",
-}
-
-var SRCResource = schema.GroupVersionResource{
-	Group:    SRCGroup,
-	Version:  SRCVersion,
-	Resource: "serviceregistryconnections",
-}
-
-// checks the cluster to see if a KafkaConnection CRD is installed
+// IsKCInstalledOnCluster checks the cluster to see if a KafkaConnection CRD is installed
 func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
@@ -63,7 +30,7 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 	data := c.clientset.
 		RESTClient().
 		Get().
-		AbsPath(getKafkaConnectionsAPIURL(namespace)).
+		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace)).
 		Do(ctx)
 
 	if data.Error() == nil {
@@ -78,11 +45,12 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 	return true, data.Error()
 }
 
+// CheckIfConnectionsExist checks if the Kafka connections exist
 func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespace string, k *kafkamgmtclient.KafkaRequest) error {
 	data := c.clientset.
 		RESTClient().
 		Get().
-		AbsPath(getKafkaConnectionsAPIURL(namespace), k.GetName()).
+		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace), k.GetName()).
 		Do(ctx)
 
 	var status int
@@ -97,19 +65,10 @@ func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespac
 	return nil
 }
 
-func getKafkaConnectionsAPIURL(namespace string) string {
-	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
-}
-
-// Encapsulate things like these in their respective packages
-func getServiceRegistryAPIURL(namespace string) string {
-	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/serviceregistryconnections", namespace)
-}
-
 func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.wait"))
 
-	w, err := c.dynamicClient.Resource(AKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+	w, err := c.dynamicClient.Resource(kafka.AKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
 	})
 	if err != nil {
@@ -162,7 +121,7 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 func watchForServiceRegistryStatus(c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForRegistryStatus.log.info.wait"))
 
-	w, err := c.dynamicClient.Resource(SRCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+	w, err := c.dynamicClient.Resource(serviceregistry.SRCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
 	})
 	if err != nil {
@@ -210,42 +169,4 @@ func watchForServiceRegistryStatus(c *KubernetesCluster, crName string, namespac
 			return fmt.Errorf(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.error.timeout"))
 		}
 	}
-}
-
-func createKCObject(crName string, namespace string, kafkaID string) *kafka.KafkaConnection {
-	kafkaConnectionCR := &kafka.KafkaConnection{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      crName,
-			Namespace: namespace,
-		},
-		TypeMeta: AKCRMeta,
-		Spec: kafka.KafkaConnectionSpec{
-			KafkaID:               kafkaID,
-			AccessTokenSecretName: tokenSecretName,
-			Credentials: kafka.CredentialsSpec{
-				SecretName: serviceAccountSecretName,
-			},
-		},
-	}
-
-	return kafkaConnectionCR
-}
-
-func createSRObject(crName string, namespace string, registryID string) *serviceregistry.ServiceRegsitryConnection {
-	serviceRegistryCR := &serviceregistry.ServiceRegsitryConnection{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      crName,
-			Namespace: namespace,
-		},
-		TypeMeta: RegistryResourceMeta,
-		Spec: serviceregistry.ServiceRegsitryConnectionSpec{
-			ServiceRegistryId:     registryID,
-			AccessTokenSecretName: tokenSecretName,
-			Credentials: serviceregistry.CredentialsSpec{
-				SecretName: serviceAccountSecretName,
-			},
-		},
-	}
-
-	return serviceRegistryCR
 }
