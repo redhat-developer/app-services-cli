@@ -56,7 +56,10 @@ Editable metadata includes fields like name and description
 `,
 		Example: `
 ##  Update the metadata for an artifact
-rhoas service-registry artifact metadata-set
+rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group --name=my-name --description=my-description
+
+##  Update the metadata for an artifact using your editor
+rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group
 		`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
