@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/x509"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net"
 	"net/http"
 	"net/url"
@@ -282,6 +283,7 @@ func (c *KeycloakConnection) createKafkaAPIClient() *kafkamgmtclient.APIClient {
 		BaseURL:    c.apiURL.String(),
 		Debug:      c.logger.DebugEnabled(),
 		HTTPClient: tc,
+		UserAgent:  build.DefaultUserAgentPrefix + build.Version,
 	})
 
 	return client
@@ -294,6 +296,7 @@ func (c *KeycloakConnection) createServiceRegistryAPIClient() *registrymgmtclien
 		BaseURL:    c.apiURL.String(),
 		Debug:      c.logger.DebugEnabled(),
 		HTTPClient: tc,
+		UserAgent:  build.DefaultUserAgentPrefix + build.Version,
 	})
 
 	return client
@@ -326,6 +329,7 @@ func (c *KeycloakConnection) createKafkaAdminAPI(bootstrapURL string) *kafkainst
 		BaseURL:    apiURL.String(),
 		Debug:      c.logger.DebugEnabled(),
 		HTTPClient: c.createOAuthTransport(c.MASToken.AccessToken),
+		UserAgent:  build.DefaultUserAgentPrefix + build.Version,
 	})
 
 	return client
@@ -354,6 +358,7 @@ func (c *KeycloakConnection) createServiceRegistryInstanceAPI(registryUrl string
 		BaseURL:    baseURL,
 		Debug:      c.logger.DebugEnabled(),
 		HTTPClient: c.createOAuthTransport(c.MASToken.AccessToken),
+		UserAgent:  build.DefaultUserAgentPrefix + build.Version,
 	})
 
 	return client
@@ -364,6 +369,7 @@ func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {
 
 	cfg.Scheme = c.apiURL.Scheme
 	cfg.Host = c.apiURL.Host
+	cfg.UserAgent = build.DefaultUserAgentPrefix + build.Version
 
 	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
 
