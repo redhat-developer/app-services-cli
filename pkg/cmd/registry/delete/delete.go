@@ -97,7 +97,7 @@ func runDelete(opts *options) error {
 
 	api := connection.API()
 
-	var registry *srsmgmtv1client.RegistryRest
+	var registry *srsmgmtv1client.Registry
 	ctx := context.Background()
 	if opts.name != "" {
 		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)

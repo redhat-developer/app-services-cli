@@ -95,13 +95,13 @@ func (e *Error) Unwrap() error {
 }
 
 // GetAPIError gets a strongly typed error from an error
-func GetAPIError(err error) (e registrymgmtclient.ErrorRest, ok bool) {
+func GetAPIError(err error) (e registrymgmtclient.Error, ok bool) {
 	var apiError registrymgmtclient.GenericOpenAPIError
 
 	if ok = errors.As(err, &apiError); ok {
 		errModel := apiError.Model()
 
-		e, ok = errModel.(registrymgmtclient.ErrorRest)
+		e, ok = errModel.(registrymgmtclient.Error)
 	}
 
 	return e, ok
