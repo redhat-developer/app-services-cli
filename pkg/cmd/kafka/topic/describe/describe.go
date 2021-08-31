@@ -114,7 +114,7 @@ func runCmd(opts *Options) error {
 
 		topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 		kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
-		operationTmplPair := localize.NewEntry("Operation", "delete")
+		operationTmplPair := localize.NewEntry("Operation", "describe")
 
 		switch httpRes.StatusCode {
 		case http.StatusNotFound:
