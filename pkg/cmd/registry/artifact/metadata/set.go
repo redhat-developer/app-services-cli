@@ -58,8 +58,11 @@ Editable metadata includes fields like name and description
 ##  Update the metadata for an artifact
 rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group --name=my-name --description=my-description
 
-##  Update the metadata for an artifact using your editor
-rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group
+##  Update the metadata for an artifact using your default editor ($EDITOR)
+rhoas service-registry artifact metadata-set --artifact-id=my-artifact
+
+##  Update the metadata for an artifact using visual studio code
+EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-artifact
 		`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -143,7 +146,7 @@ func runSet(opts *SetOptions) error {
 			editableMedata.Description = &opts.description
 		}
 	} else {
-		opts.Logger.Info("Running edito to let you edit metadata. Please close editor to continue...")
+		opts.Logger.Info("Running editor with editable metadata. Please save contents and close editor to continue...")
 		editableMedata, err = runEditor(editableMedata)
 		if err != nil {
 			return err
