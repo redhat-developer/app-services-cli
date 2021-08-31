@@ -124,7 +124,7 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(registries *[]srsmgmtv1.RegistryRest) []RegistryRow {
+func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry) []RegistryRow {
 	rows := []RegistryRow{}
 
 	for i := range *registries {

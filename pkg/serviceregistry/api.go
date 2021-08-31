@@ -8,7 +8,7 @@ import (
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
-func GetServiceRegistryByID(ctx context.Context, api srsmgmtv1.RegistriesApi, registryID string) (*srsmgmtv1.RegistryRest, *http.Response, error) {
+func GetServiceRegistryByID(ctx context.Context, api srsmgmtv1.RegistriesApi, registryID string) (*srsmgmtv1.Registry, *http.Response, error) {
 	request := api.GetRegistry(ctx, registryID)
 	registry, _, err := request.Execute()
 	if err != nil {
@@ -17,7 +17,7 @@ func GetServiceRegistryByID(ctx context.Context, api srsmgmtv1.RegistriesApi, re
 	return &registry, nil, err
 }
 
-func GetServiceRegistryByName(ctx context.Context, api srsmgmtv1.RegistriesApi, name string) (*srsmgmtv1.RegistryRest, *http.Response, error) {
+func GetServiceRegistryByName(ctx context.Context, api srsmgmtv1.RegistriesApi, name string) (*srsmgmtv1.Registry, *http.Response, error) {
 	r := api.GetRegistries(ctx)
 	r = r.Search(fmt.Sprintf("name=%v", name))
 	registryList, httpResponse, err := r.Execute()
