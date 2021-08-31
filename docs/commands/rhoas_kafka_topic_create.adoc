@@ -10,7 +10,7 @@ Create a topic
 
 Create a topic in the current Apache Kafka instance.
 
-This command lets you create a topic, set a desired number of 
+This command lets you create a topic, set a desired number of
 partitions, retention size and retention period or else use the default values.
 
 
