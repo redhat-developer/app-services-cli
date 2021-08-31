@@ -33,7 +33,7 @@ type Options struct {
 	outputFormat string
 
 	version     string
-	title       string
+	name        string
 	description string
 
 	IO         *iostreams.IOStreams
@@ -115,7 +115,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 
 	cmd.Flags().StringVar(&opts.version, "version", "", "Custom version of the artifact (for example 1.0.0)")
-	cmd.Flags().StringVar(&opts.title, "title", "", "Custom title of the artifact")
+	cmd.Flags().StringVar(&opts.name, "name", "", "Custom name of the artifact")
 	cmd.Flags().StringVar(&opts.description, "description", "", "Custom description of the artifact")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
@@ -159,8 +159,8 @@ func runUpdate(opts *Options) error {
 	if opts.version != "" {
 		request = request.XRegistryVersion(opts.version)
 	}
-	if opts.title != "" {
-		request = request.XRegistryName(opts.title)
+	if opts.name != "" {
+		request = request.XRegistryName(opts.name)
 	}
 
 	if opts.description != "" {

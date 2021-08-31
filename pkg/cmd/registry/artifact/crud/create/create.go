@@ -33,7 +33,7 @@ type Options struct {
 	artifactType string
 
 	version     string
-	title       string
+	name        string
 	description string
 
 	registryID   string
@@ -135,7 +135,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 
 	cmd.Flags().StringVar(&opts.version, "version", "", "Custom version of the artifact (for example 1.0.0)")
-	cmd.Flags().StringVar(&opts.title, "title", "", "Custom title of the artifact")
+	cmd.Flags().StringVar(&opts.name, "name", "", "Custom name of the artifact")
 	cmd.Flags().StringVar(&opts.description, "description", "", "Custom description of the artifact")
 
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", "Type of artifact. Choose from:  "+util.GetAllowedArtifactTypeEnumValuesAsString())
@@ -193,8 +193,8 @@ func runCreate(opts *Options) error {
 		request = request.XRegistryVersion(opts.version)
 	}
 
-	if opts.title != "" {
-		request = request.XRegistryName(opts.title)
+	if opts.name != "" {
+		request = request.XRegistryName(opts.name)
 	}
 
 	if opts.description != "" {
