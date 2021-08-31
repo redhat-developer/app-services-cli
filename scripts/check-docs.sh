@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -uo pipefail
+set -uox pipefail
 commands=$(git diff --stat docs/commands | wc -l)
 if [[ $(($commands)) != 0 ]]; then
   echo "./docs/commands has changes"
