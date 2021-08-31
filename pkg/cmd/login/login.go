@@ -116,6 +116,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 			case res := <-ch:
 				return res
 			case <-time.After(build.DefaultLoginTimeout):
+				//nolint
 				return fmt.Errorf(opts.localizer.MustLocalize("login.error.timeout.expired"))
 			}
 		},

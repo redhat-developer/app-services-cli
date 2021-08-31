@@ -79,7 +79,7 @@ description = 'Error message for when scheme is missing from the Auth URL'
 one = 'scheme missing from URL "{{.URL}}". Please add either "https" or "https"'
 
 [login.error.timeout.expired]
-one = 'login attempt has expired'
+one = 'login operation took too long. Please try again'
 
 [login.log.debug.createdAuthorizationUrl]
 description = 'Debug message to show the authorization URL'

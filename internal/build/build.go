@@ -50,7 +50,7 @@ var (
 	StagingAPIURL               = "https://api.stage.openshift.com"
 	DefaultClientID             = "rhoas-cli-prod"
 	DefaultOfflineTokenClientID = "cloud-services"
-	DefaultLoginTimeout         = 30 * time.Second
+	DefaultLoginTimeout         = 60 * time.Second
 	// #nosec G101
 	OfflineTokenURL      = "https://console.redhat.com/openshift/token"
 	ProductionAuthURL    = "https://sso.redhat.com/auth/realms/redhat-external"
