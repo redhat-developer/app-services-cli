@@ -7,11 +7,12 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
+	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
+	"github.com/redhat-developer/app-services-cli/pkg/telemetry"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 
@@ -37,6 +38,12 @@ func main() {
 	}
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
+
+	telemetry := telemetry.CreateTelemetry(cmdFactory)
+	rootCmd.PersistentPostRunE = func(cmd *cobra.Command, args []string) error {
+		telemetry.Finish(cmd.CommandPath(), err)
+		return nil
+	}
 
 	rootCmd.InitDefaultHelpCmd()
 
