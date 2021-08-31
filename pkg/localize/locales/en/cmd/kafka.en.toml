@@ -372,7 +372,7 @@ one = 'Skip confirmation to forcibly delete this Kafka instance'
 
 [kafka.delete.input.confirmName.message]
 description = 'Input title for Kafka name confirmation'
-one = 'Confirm the name of the instance you want to delete:'
+one = 'Confirm the name of the instance you want to delete ({{.Name}}):'
 
 [kafka.delete.log.info.incorrectNameConfirmation]
 description = 'Info message when user incorrectly confirms the name'
