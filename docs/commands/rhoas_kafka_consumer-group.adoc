@@ -9,7 +9,7 @@ Describe, list, and delete consumer groups for the current Kafka instance.
 == Synopsis
 
 Use these commands to describe, list, and delete consumer groups for the current Kafka instance.'
- 
+
 Commands are executed on the currently selected Kafka instance.
 
 

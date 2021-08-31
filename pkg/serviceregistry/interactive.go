@@ -14,7 +14,7 @@ const (
 	queryLimit = 1000
 )
 
-func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*srsmgmtv1.RegistryRest, error) {
+func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*srsmgmtv1.Registry, error) {
 	api := connection.API()
 
 	response, _, err := api.ServiceRegistryMgmt().GetRegistries(context.Background()).Size(queryLimit).Execute()

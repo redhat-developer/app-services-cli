@@ -93,7 +93,7 @@ func runDescribe(opts *Options) error {
 
 	api := connection.API()
 
-	var registry *srsmgmtv1.RegistryRest
+	var registry *srsmgmtv1.Registry
 	ctx := context.Background()
 	if opts.name != "" {
 		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)

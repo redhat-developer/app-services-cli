@@ -13,7 +13,7 @@ type API struct {
 	Kafka                   func() kafkamgmtclient.DefaultApi
 	ServiceAccount          func() kafkamgmtclient.SecurityApi
 	KafkaAdmin              func(kafkaID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
-	ServiceRegistryInstance func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.RegistryRest, error)
+	ServiceRegistryInstance func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
 	AccountMgmt             func() amsclient.DefaultApi
 
 	ServiceRegistryMgmt func() registrymgmtclient.RegistriesApi
