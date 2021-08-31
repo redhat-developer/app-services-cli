@@ -78,7 +78,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.describe.flag.name.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.common.flag.id"))
+	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.describe.flag.id"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
