@@ -48,6 +48,7 @@ var (
 	ProductionAPIURL            = "https://api.openshift.com"
 	StagingAPIURL               = "https://api.stage.openshift.com"
 	DefaultClientID             = "rhoas-cli-prod"
+	DefaultUserAgentPrefix      = "rhoas-cli_"
 	DefaultOfflineTokenClientID = "cloud-services"
 	// #nosec G101
 	OfflineTokenURL      = "https://console.redhat.com/openshift/token"
