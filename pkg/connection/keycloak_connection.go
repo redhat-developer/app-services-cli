@@ -227,7 +227,7 @@ func (c *KeycloakConnection) API() *api.API {
 		return client, &kafkaInstance, nil
 	}
 
-	registryInstanceAPIFunc := func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.RegistryRest, error) {
+	registryInstanceAPIFunc := func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error) {
 		api := registryAPIFunc()
 
 		instance, resp, err := api.GetRegistry(context.Background(), registryID).Execute()

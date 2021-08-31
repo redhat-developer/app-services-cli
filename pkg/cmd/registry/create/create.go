@@ -95,7 +95,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	var payload *srsmgmtv1.RegistryCreateRest
+	var payload *srsmgmtv1.RegistryCreate
 	if opts.interactive {
 		opts.Logger.Debug()
 
@@ -104,7 +104,7 @@ func runCreate(opts *Options) error {
 			return err
 		}
 	} else {
-		payload = &srsmgmtv1.RegistryCreateRest{
+		payload = &srsmgmtv1.RegistryCreate{
 			Name: &opts.name,
 		}
 	}
@@ -130,7 +130,7 @@ func runCreate(opts *Options) error {
 	response, _, err := connection.API().
 		ServiceRegistryMgmt().
 		CreateRegistry(context.Background()).
-		RegistryCreateRest(*payload).
+		RegistryCreate(*payload).
 		Execute()
 	if err != nil {
 		return err
@@ -159,7 +159,7 @@ func runCreate(opts *Options) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data
-func promptPayload(opts *Options) (payload *srsmgmtv1.RegistryCreateRest, err error) {
+func promptPayload(opts *Options) (payload *srsmgmtv1.RegistryCreate, err error) {
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +179,7 @@ func promptPayload(opts *Options) (payload *srsmgmtv1.RegistryCreateRest, err er
 		return nil, err
 	}
 
-	payload = &srsmgmtv1.RegistryCreateRest{
+	payload = &srsmgmtv1.RegistryCreate{
 		Name: &answers.Name,
 	}
 
