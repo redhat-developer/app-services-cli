@@ -253,16 +253,16 @@ func (c *KeycloakConnection) API() *api.API {
 		// nolint
 		switch status {
 		case "provisioning", "accepted":
-			err = fmt.Errorf(`Service Registry instance "%v" is not ready yet`, instance.GetName())
+			err = fmt.Errorf(`service registry instance "%v" is not ready yet`, instance.GetName())
 			return nil, nil, err
 		case "failed":
-			err = fmt.Errorf(`Service Registry instance "%v" has failed`, instance.GetName())
+			err = fmt.Errorf(`service registry instance "%v" has failed`, instance.GetName())
 			return nil, nil, err
 		case "deprovision":
-			err = fmt.Errorf(`Service Registry instance "%v" is being deprovisioned`, instance.GetName())
+			err = fmt.Errorf(`service registry instance "%v" is being deprovisioned`, instance.GetName())
 			return nil, nil, err
 		case "deleting":
-			err = fmt.Errorf(`Service Registry instance "%v" is being deleted`, instance.GetName())
+			err = fmt.Errorf(`service registry instance "%v" is being deleted`, instance.GetName())
 			return nil, nil, err
 		}
 
