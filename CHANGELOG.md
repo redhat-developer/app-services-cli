@@ -1,4 +1,12 @@
 
+<a name="v0.27.2"></a>
+## [v0.27.2](https://github.com/redhat-developer/app-services-cli/compare/v0.27.1...v0.27.2) (2021-09-01)
+
+### Bug Fixes
+
+* fixed NPR when validating Kafka name ([#1009](https://github.com/redhat-developer/app-services-cli/issues/1009))
+
+
 <a name="v0.27.1"></a>
 ## [v0.27.1](https://github.com/redhat-developer/app-services-cli/compare/v0.27.0...v0.27.1) (2021-09-01)
 
