@@ -105,20 +105,13 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 
 	api := conn.API()
 
-	_, httpRes, err := GetKafkaByName(context.Background(), api.Kafka(), name)
+	_, httpRes, _ := GetKafkaByName(context.Background(), api.Kafka(), name)
+
 	if httpRes != nil {
 		defer httpRes.Body.Close()
-	}
-	if err != nil {
-		return err
-	}
-
-	if httpRes != nil && httpRes.StatusCode == http.StatusOK {
-		return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
-	}
-
-	if httpRes != nil && httpRes.Body != nil {
-		httpRes.Body.Close()
+		if httpRes.StatusCode == http.StatusOK {
+			return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
+		}
 	}
 
 	return nil
