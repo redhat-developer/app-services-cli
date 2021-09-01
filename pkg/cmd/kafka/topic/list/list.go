@@ -192,19 +192,19 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 			Name:            t.GetName(),
 			PartitionsCount: len(t.GetPartitions()),
 		}
-		for _, config := range t.GetConfig() {
+		for _, conf := range t.GetConfig() {
 			unlimitedVal := "-1 (Unlimited)"
 
-			if *config.Key == topicutil.RetentionMsKey {
-				val := config.GetValue()
+			if *conf.Key == topicutil.RetentionMsKey {
+				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionTime = unlimitedVal
 				} else {
 					row.RetentionTime = val
 				}
 			}
-			if *config.Key == topicutil.RetentionSizeKey {
-				val := config.GetValue()
+			if *conf.Key == topicutil.RetentionSizeKey {
+				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionSize = unlimitedVal
 				} else {
