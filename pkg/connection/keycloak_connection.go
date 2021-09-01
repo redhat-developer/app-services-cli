@@ -266,15 +266,15 @@ func (c *KeycloakConnection) API() *api.API {
 			return nil, nil, err
 		}
 
-		url := instance.GetRegistryUrl()
-		if url == "" {
+		registryUrl := instance.GetRegistryUrl()
+		if registryUrl == "" {
 			err = fmt.Errorf(`URL is missing for Service Registry instance "%v"`, instance.GetName())
 
 			return nil, nil, err
 		}
 
 		// create the client
-		client := c.createServiceRegistryInstanceAPI(url)
+		client := c.createServiceRegistryInstanceAPI(registryUrl)
 
 		return client, &instance, nil
 	}
