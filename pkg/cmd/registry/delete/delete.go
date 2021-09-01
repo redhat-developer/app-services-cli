@@ -90,12 +90,12 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	var registry *srsmgmtv1client.Registry
 	ctx := context.Background()

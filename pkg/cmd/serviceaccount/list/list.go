@@ -72,12 +72,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *Options) (err error) {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	res, _, err := connection.API().ServiceAccount().GetServiceAccounts(context.Background()).Execute()
+	res, _, err := conn.API().ServiceAccount().GetServiceAccounts(context.Background()).Execute()
 	if err != nil {
 		return err
 	}

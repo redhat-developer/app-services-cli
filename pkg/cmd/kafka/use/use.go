@@ -91,12 +91,12 @@ func runUse(opts *Options) error {
 		return err
 	}
 
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	var res *kafkamgmtclient.KafkaRequest
 	ctx := context.Background()
@@ -130,14 +130,14 @@ func runUse(opts *Options) error {
 }
 
 func runInteractivePrompt(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedKafka, err := kafka.InteractiveSelect(connection, opts.Logger)
+	selectedKafka, err := kafka.InteractiveSelect(conn, opts.Logger)
 	if err != nil {
 		return err
 	}

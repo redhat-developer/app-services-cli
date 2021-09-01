@@ -81,12 +81,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	a := api.ServiceRegistryMgmt().GetRegistries(context.Background())
 	a = a.Page(opts.page)

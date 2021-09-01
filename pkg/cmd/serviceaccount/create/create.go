@@ -104,7 +104,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCreate(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -130,7 +130,7 @@ func runCreate(opts *Options) error {
 	// create the service account
 	serviceAccountPayload := &kafkamgmtclient.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
-	a := connection.API().ServiceAccount().CreateServiceAccount(context.Background())
+	a := conn.API().ServiceAccount().CreateServiceAccount(context.Background())
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, err := a.Execute()
 	if err != nil {

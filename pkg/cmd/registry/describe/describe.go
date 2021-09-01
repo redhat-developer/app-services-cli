@@ -86,12 +86,12 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDescribe(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	var registry *srsmgmtv1.Registry
 	ctx := context.Background()
