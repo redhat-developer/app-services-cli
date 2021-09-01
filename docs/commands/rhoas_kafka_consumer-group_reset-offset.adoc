@@ -8,7 +8,7 @@ Reset offset for a consumer group
 [discrete]
 == Synopsis
 
-Reset the offset for a consumer group.
+Reset the offset for consumers in a consumer group reading from a given topic.
 
 
 ....
@@ -33,7 +33,7 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest 
       `--id` _string_::               The unique ID of the consumer group to reset-offset
       `--offset` _string_::           Offset type (choose from: "earliest", "latest", "absolute", "timestamp")
   `-o`, `--output` _string_::         Format in which to display reset offset result (choose from: "json", "yml", "yaml")
-      `--partitions` _int32Slice_::   Partitions on which to reset the consumer group offset (space separated integers) (default [])
+      `--partitions` _int32Slice_::   Partitions on which to reset the consumer group offset (comma-separated integers) (default [])
       `--topic` _string_::            Select topic for which consumer group offsets are to be reset
       `--value` _string_::            Custom offset value (required when offset is "absolute" or "timestamp")
   `-y`, `--yes`::                     Skip confirmation to forcibly reset the offset for the consumer group

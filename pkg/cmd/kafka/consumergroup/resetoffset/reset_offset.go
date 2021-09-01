@@ -2,9 +2,9 @@ package resetoffset
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -15,11 +15,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 type Options struct {
@@ -73,7 +73,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			if opts.value == "" && (opts.offset == "absolute" || opts.offset == "timestamp") {
+			if opts.value == "" && (opts.offset == consumergroup.AbsoluteOffset || opts.offset == consumergroup.TimestampOffset) {
 				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset)))
 			}
 
@@ -147,7 +147,53 @@ func runCmd(opts *Options) error {
 		offsetResetParams.Value = &opts.value
 	}
 
+	if opts.offset == consumergroup.AbsoluteOffset {
+		if _, parseErr := strconv.Atoi(opts.value); parseErr != nil {
+			offsetValueTmplPair := localize.NewEntry("Value", opts.value)
+			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset", offsetValueTmplPair))
+		}
+	}
+
+	if opts.offset == consumergroup.TimestampOffset {
+		err = consumergroup.ValidateTimestampValue(opts.localizer, opts.value)
+		if err != nil {
+			return err
+		}
+	}
+
+	if opts.id != "" {
+		_, httpRes, newErr := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
+		defer httpRes.Body.Close()
+
+		if newErr != nil {
+			cgIDPair := localize.NewEntry("ID", opts.id)
+			kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
+			if httpRes == nil {
+				return newErr
+			}
+			if httpRes.StatusCode == http.StatusNotFound {
+				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair))
+			}
+			return newErr
+		}
+	}
+
 	if opts.topic != "" {
+		_, httpRes, newErr := api.TopicsApi.GetTopic(context.Background(), opts.topic).Execute()
+		defer httpRes.Body.Close()
+
+		if newErr != nil {
+			if httpRes == nil {
+				return newErr
+			}
+			topicNameTmplPair := localize.NewEntry("TopicName", opts.topic)
+			kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
+			if httpRes.StatusCode == http.StatusNotFound {
+				return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			}
+			return newErr
+		}
+
 		topicToReset := kafkainstanceclient.TopicsToResetOffset{
 			Topic: opts.topic,
 		}
@@ -212,20 +258,13 @@ func runCmd(opts *Options) error {
 		localize.NewEntry("InstanceName", kafkaInstance.GetName())),
 	)
 
-	switch opts.output {
-	case "json":
-		data, _ := json.Marshal(updatedConsumers)
-		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
-		data, _ := yaml.Marshal(updatedConsumers)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
+	if opts.output != "" {
+		dump.PrintDataInFormat(opts.output, updatedConsumers, opts.IO.Out)
+	} else {
 		opts.Logger.Info("")
 		consumers := updatedConsumers.GetItems()
 		rows := mapResetOffsetResultToTableFormat(consumers)
 		dump.Table(opts.IO.Out, rows)
-
-		return nil
 	}
 
 	return nil

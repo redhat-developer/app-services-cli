@@ -3,7 +3,7 @@ one = 'Reset offset for a consumer group'
 
 [kafka.consumerGroup.resetOffset.cmd.longDescription]
 one = '''
-Reset the offset for a consumer group.
+Reset the offset for consumers in a consumer group reading from a given topic.
 '''
 
 [kafka.consumerGroup.resetOffset.cmd.example]
@@ -28,7 +28,7 @@ one = 'Offset type (choose from: "earliest", "latest", "absolute", "timestamp")'
 one = 'Custom offset value (required when offset is "absolute" or "timestamp")'
 
 [kafka.consumerGroup.resetOffset.flag.partitions]
-one = 'Partitions on which to reset the consumer group offset (space separated integers)'
+one = 'Partitions on which to reset the consumer group offset (comma-separated integers)'
 
 [kafka.consumerGroup.resetOffset.flag.output]
 one = 'Format in which to display reset offset result (choose from: "json", "yml", "yaml")'
@@ -44,3 +44,9 @@ one = 'Offset has been reset for consumers of Consumer group with ID "{{.Consume
 
 [kafka.consumerGroup.resetOffset.error.valueRequired]
 one = 'value is required  when "{{.Offset}}" offset is used'
+
+[kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset]
+one = 'invalid value "{{.Value}}" for absolute offset, should be an integer'
+
+[kafka.consumerGroup.resetOffset.error.invalidTimestampOffset]
+one = "invalid value \"{{.Value}}\" for timestamp offset, must be in format \"yyyy-MM-dd'T'HH:mm:ssz\""
