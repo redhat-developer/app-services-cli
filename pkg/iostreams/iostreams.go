@@ -104,7 +104,7 @@ func System() *IOStreams {
 	stdoutIsTTY := isTerminal(os.Stdout)
 	stderrIsTTY := isTerminal(os.Stderr)
 
-	io := &IOStreams{
+	ioStreams := &IOStreams{
 		In:          os.Stdin,
 		originalOut: os.Stdout,
 		Out:         color.Output,
@@ -112,8 +112,8 @@ func System() *IOStreams {
 	}
 
 	// prevent duplicate isTerminal queries now that we know the answer
-	io.SetStdoutTTY(stdoutIsTTY)
-	io.SetStderrTTY(stderrIsTTY)
+	ioStreams.SetStdoutTTY(stdoutIsTTY)
+	ioStreams.SetStderrTTY(stderrIsTTY)
 
-	return io
+	return ioStreams
 }
