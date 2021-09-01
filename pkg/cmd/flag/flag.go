@@ -31,6 +31,21 @@ func InvalidValueError(flag string, val interface{}, validOptions ...string) *Er
 	return &Error{Err: fmt.Errorf(`invalid value "%v" for --%v%v`, val, flag, chooseFromStr)}
 }
 
-func RequiredWhenNonInteractiveError(arg string) error {
-	return fmt.Errorf("%v required when not running interactively", arg)
+func RequiredWhenNonInteractiveError(flags ...string) error {
+	var flagsF string
+	for i := 0; i < len(flags); i++ {
+		delimiter := ","
+		switch i {
+		case len(flags) - 1:
+			delimiter = ""
+		case len(flags) - 2:
+			delimiter = " and "
+		}
+		flagsF += fmt.Sprintf("--%v%v", flags[i], delimiter)
+	}
+	flagTitle := "flag"
+	if len(flags) > 1 {
+		flagTitle = "flags"
+	}
+	return fmt.Errorf("%v %v required when not running interactively", flagsF, flagTitle)
 }

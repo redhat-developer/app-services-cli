@@ -43,3 +43,9 @@ func Italic(s string) string {
 	c := color.New(color.Italic)
 	return c.Sprintf(s)
 }
+
+// Underline returns an underlined string
+func Underline(s string) string {
+	c := color.New(color.Underline)
+	return c.Sprintf(s)
+}

@@ -1,0 +1,52 @@
+[kafka.update.cmd.shortDescription]
+description = "Short description for command"
+one = "Update configuration details of a Kafka instance."
+
+[kafka.update.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Update certain configuration details of a Kafka instance.
+
+Currently it is possible to update the "owner" field. The new owner 
+will have super-user privileges and will be authorized to manage this instance.
+'''
+
+[kafka.update.cmd.examples]
+description = 'Examples of how to use the command'
+one = '''
+# update the Kafka instance owner
+$ rhoas kafka update --name=my-kafka --owner=other-user
+
+# update the owner of the current Kafka instance
+$ rhoas kafka update --name=my-kafka --owner=other-user
+'''
+
+[kafka.update.flag.id]
+description = 'Description for the --id flag'
+one = 'Unique ID of the Kafka instance you want to update'
+
+[kafka.update.flag.name]
+description = 'Description for the --name flag'
+one = 'Name of the Kafka instance you want to update'
+
+[kafka.update.flag.owner]
+description = 'Description for the --owner flag'
+one = 'ID of the user you want to set as the owner of this Kafka instance'
+
+[kafka.update.flag.yes]
+one = 'Forcibly update the Kafka instance without confirmation'
+
+[kafka.update.summaryTitle]
+one = 'Summary of Proposed Changes'
+
+[kafka.update.confirmDialog.message]
+one = 'Are you sure you want to update the Kafka instance "{{.Name}}"?'
+
+[kafka.update.log.info.sameOwnerNoChanges]
+one = 'Nothing to update: user "{{.Owner}}" is already the owner of the Kafka instance "{{.InstanceName}}".'
+
+[kafka.update.log.info.updating]
+one = 'Updating Kafka instance "{{.Name}}"...'
+
+[kafka.update.log.info.updateSuccess]
+one = 'Kafka instance "{{.Name}}" has been updated:'

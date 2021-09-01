@@ -34,6 +34,7 @@ type Builder struct {
 	apiURL            string
 	authURL           string
 	masAuthURL        string
+	consoleURL        string
 	config            config.IConfig
 	logger            logging.Logger
 	transportWrapper  TransportWrapper
@@ -93,6 +94,11 @@ func (b *Builder) WithLogger(logger logging.Logger) *Builder {
 
 func (b *Builder) WithURL(url string) *Builder {
 	b.apiURL = url
+	return b
+}
+
+func (b *Builder) WithConsoleURL(url string) *Builder {
+	b.consoleURL = url
 	return b
 }
 
@@ -213,7 +219,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	}
 	apiURL, err := url.Parse(rawAPIURL)
 	if err != nil {
-		err = AuthErrorf("unable to parse API URL '%s': %w", rawAPIURL, err)
+		err = fmt.Errorf("unable to parse API URL '%s': %w", rawAPIURL, err)
 		return
 	}
 
@@ -227,6 +233,11 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	if err != nil {
 		err = AuthErrorf("unable to parse Auth URL '%s': %w", b.masAuthURL, err)
 		return
+	}
+
+	consoleURL, err := url.Parse(b.consoleURL)
+	if err != nil {
+		err = fmt.Errorf("unable to parse Console URL '%s': %w", b.consoleURL, err)
 	}
 
 	// Create the transport:
@@ -269,6 +280,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 		insecure:          b.insecure,
 		trustedCAs:        b.trustedCAs,
 		clientID:          b.clientID,
+		consoleURL:        consoleURL,
 		scopes:            scopes,
 		apiURL:            apiURL,
 		defaultHTTPClient: client,
