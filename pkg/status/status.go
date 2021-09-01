@@ -144,9 +144,9 @@ func printServiceStatus(w io.Writer, name string, v reflect.Value) {
 
 		if !getOmitEmpty(&fieldType) || !fieldValue.IsZero() {
 			// print the row and take note of its character length
-			len, _ := fmt.Fprintf(tw, "%v:\t\t%v\n", title, fieldValue)
-			if len > maxRowLen {
-				maxRowLen = len
+			charLen, _ := fmt.Fprintf(tw, "%v:\t\t%v\n", title, fieldValue)
+			if charLen > maxRowLen {
+				maxRowLen = charLen
 			}
 		}
 	}
