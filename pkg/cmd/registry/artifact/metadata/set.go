@@ -177,8 +177,8 @@ func runEditor(currentMetadata *registryinstanceclient.EditableMetaData) (*regis
 	if err != nil {
 		return nil, err
 	}
-	edit := editor.New(metadataJson, "metadata.json")
-	output, err := edit.Run()
+	systemEditor := editor.New(metadataJson, "metadata.json")
+	output, err := systemEditor.Run()
 	if err != nil {
 		return nil, err
 	}
