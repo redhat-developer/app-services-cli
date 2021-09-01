@@ -106,7 +106,9 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	api := connection.API()
 
 	_, httpRes, err := GetKafkaByName(context.Background(), api.Kafka(), name)
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		return err
 	}
