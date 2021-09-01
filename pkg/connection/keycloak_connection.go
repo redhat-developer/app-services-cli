@@ -200,9 +200,9 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	kafkaAdminAPIFunc := func(kafkaID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error) {
-		api := kafkaAPIFunc()
+		kafkaAPI := kafkaAPIFunc()
 
-		kafkaInstance, resp, err := api.GetKafkaById(context.Background(), kafkaID).Execute()
+		kafkaInstance, resp, err := kafkaAPI.GetKafkaById(context.Background(), kafkaID).Execute()
 		defer resp.Body.Close()
 		if kas.IsErr(err, kas.ErrorNotFound) {
 			return nil, nil, kafkaerr.NotFoundByIDError(kafkaID)
@@ -241,9 +241,9 @@ func (c *KeycloakConnection) API() *api.API {
 	}
 
 	registryInstanceAPIFunc := func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error) {
-		api := registryAPIFunc()
+		registryAPI := registryAPIFunc()
 
-		instance, resp, err := api.GetRegistry(context.Background(), registryID).Execute()
+		instance, resp, err := registryAPI.GetRegistry(context.Background(), registryID).Execute()
 		defer resp.Body.Close()
 		if err != nil {
 			return nil, nil, fmt.Errorf("%w", err)
