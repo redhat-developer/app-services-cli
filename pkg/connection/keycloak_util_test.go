@@ -34,8 +34,8 @@ func TestSplitKeycloakRealmURL(t *testing.T) {
 	for _, tt := range tests {
 		// nolint:scopelint
 		t.Run(tt.name, func(t *testing.T) {
-			url, _ := url.Parse(tt.args.url)
-			gotProvider, gotRealm, gotOk := SplitKeycloakRealmURL(url)
+			parsedUrl, _ := url.Parse(tt.args.url)
+			gotProvider, gotRealm, gotOk := SplitKeycloakRealmURL(parsedUrl)
 			if gotProvider != tt.wantProvider {
 				t.Errorf("SplitKeycloakRealmURL() gotProvider = %v, want %v", gotProvider, tt.wantProvider)
 			}
