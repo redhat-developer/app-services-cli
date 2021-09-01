@@ -76,10 +76,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
-			}
-
-			if opts.name != "" && opts.id != "" {
 				return errors.New(opts.localizer.MustLocalize("service.error.idAndNameCannotBeUsed"))
 			}
 
