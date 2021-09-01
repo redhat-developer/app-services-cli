@@ -137,6 +137,9 @@ func runCmd(opts *Options) error {
 	a = a.Page(opts.page)
 
 	topicData, httpRes, err := a.Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -157,8 +160,6 @@ func runCmd(opts *Options) error {
 			return err
 		}
 	}
-
-	defer httpRes.Body.Close()
 
 	if topicData.GetTotal() == 0 && opts.output == "" {
 		opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))

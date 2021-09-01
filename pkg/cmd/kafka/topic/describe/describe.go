@@ -105,7 +105,9 @@ func runCmd(opts *Options) error {
 
 	// fetch the topic
 	topicResponse, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	if err != nil {
 		if httpRes == nil {

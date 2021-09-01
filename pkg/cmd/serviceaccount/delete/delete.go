@@ -77,7 +77,9 @@ func runDelete(opts *Options) (err error) {
 	}
 
 	_, httpRes, err := conn.API().ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -115,7 +117,9 @@ func deleteServiceAccount(opts *Options) error {
 	}
 
 	_, httpRes, err := conn.API().ServiceAccount().DeleteServiceAccountById(context.Background(), opts.id).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		if httpRes == nil {
 			return err

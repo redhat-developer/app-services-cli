@@ -71,7 +71,9 @@ func runDescribe(opts *Options) error {
 	api := conn.API()
 
 	res, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		if httpRes == nil {
 			return err

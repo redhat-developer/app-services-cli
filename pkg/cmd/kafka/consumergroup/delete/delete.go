@@ -92,7 +92,9 @@ func runCmd(opts *Options) error {
 	ctx := context.Background()
 
 	_, httpRes, err := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	cgIDPair := localize.NewEntry("ID", opts.id)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -122,13 +124,14 @@ func runCmd(opts *Options) error {
 	}
 
 	httpRes, err = api.GroupsApi.DeleteConsumerGroupById(ctx, opts.id).Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	if err != nil {
 		if httpRes == nil {
 			return err
 		}
-
-		defer httpRes.Body.Close()
 
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 
