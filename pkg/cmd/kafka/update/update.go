@@ -146,7 +146,7 @@ func run(opts *options) error {
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
 
 	opts.logger.Infof(`
- %v 🗒️
+%v 🗒️
 
  %v`, color.Underline(color.Bold(opts.localizer.MustLocalize("kafka.update.summaryTitle"))), updateSummary)
 
@@ -172,18 +172,18 @@ func run(opts *options) error {
 		UpdateKafkaById(opts.Context, kafkaInstance.GetId()).
 		KafkaUpdateRequest(*updateObj).
 		Execute()
-		
-		if httpRes != nil {
-	defer httpRes.Body.Close()
-		}
+
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	spinner.Stop()
 
-	if apiError, ok := kas.GetAPIError(err); ok {
-		return errors.New(apiError.GetReason())
-	}
-
 	if err != nil {
+		opts.logger.Info("\n") // Needed to ensure there is a newline after the spinner has stopped
+		if apiError, ok := kas.GetAPIError(err); ok {
+			return errors.New(apiError.GetReason())
+		}
 		return err
 	}
 
