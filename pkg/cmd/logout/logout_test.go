@@ -74,7 +74,7 @@ func TestNewLogoutCommand(t *testing.T) {
 		logger, _ := loggerBuilder.Build()
 
 		t.Run(tt.name, func(t *testing.T) {
-			factory := &factory.Factory{
+			fact := &factory.Factory{
 				Config: mockutil.NewConfigMock(tt.args.cfg),
 				Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
 					return mockutil.NewConnectionMock(tt.args.connection, nil), nil
@@ -83,12 +83,12 @@ func TestNewLogoutCommand(t *testing.T) {
 				Logger:    logger,
 			}
 
-			cmd := NewLogoutCommand(factory)
+			cmd := NewLogoutCommand(fact)
 			b := bytes.NewBufferString("")
 			cmd.SetOut(b)
 			_ = cmd.Execute()
 
-			cfg, _ := factory.Config.Load()
+			cfg, _ := fact.Config.Load()
 			if cfg.AccessToken != tt.wantAccessToken && cfg.RefreshToken != tt.wantRefreshToken {
 				t.Errorf("Expected access token and refresh tokens to be cleared in config")
 			}
