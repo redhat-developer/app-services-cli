@@ -32,8 +32,6 @@ type Options struct {
 
 	outputFormat string
 
-	// interactive bool
-
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -145,7 +143,7 @@ func run(opts *Options) error {
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
 
 	opts.logger.Infof(`
- %v 🗒️
+%v 🗒️
 
  %v`, color.Underline(color.Bold(opts.localizer.MustLocalize("kafka.update.summaryTitle"))), updateSummary)
 
@@ -174,13 +172,14 @@ func run(opts *Options) error {
 
 	spinner.Stop()
 
-	if apiError, ok := kas.GetAPIError(err); ok {
-		return errors.New(apiError.GetReason())
-	}
-
 	if err != nil {
+		opts.logger.Info("\n") // Needed to ensure there is a newline after the spinner has stopped
+		if apiError, ok := kas.GetAPIError(err); ok {
+			return errors.New(apiError.GetReason())
+		}
 		return err
 	}
+
 	defer httpRes.Body.Close()
 
 	opts.logger.Infof(`
