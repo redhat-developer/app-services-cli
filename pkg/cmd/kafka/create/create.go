@@ -133,14 +133,14 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a kafka instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(connection)
+	termsAccepted, termsURL, err := ams.CheckTermsAccepted(conn)
 	if err != nil {
 		return err
 	}
@@ -174,7 +174,7 @@ func runCreate(opts *Options) error {
 		}
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	a := api.Kafka().CreateKafka(context.Background())
 	a = a.KafkaRequestPayload(*payload)
@@ -261,12 +261,12 @@ func runCreate(opts *Options) error {
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
 func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	validator := &pkgKafka.Validator{
 		Localizer:  opts.localizer,

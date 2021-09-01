@@ -56,12 +56,12 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(connection, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
+	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
 	if err != nil {
 		return err
 	}

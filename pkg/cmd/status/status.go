@@ -92,14 +92,14 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
 	pkgOpts := &pkgStatus.Options{
 		Config:     opts.Config,
-		Connection: connection,
+		Connection: conn,
 		Logger:     opts.Logger,
 		Services:   opts.services,
 	}

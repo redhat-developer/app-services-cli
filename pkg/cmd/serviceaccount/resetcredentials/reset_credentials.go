@@ -100,12 +100,12 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runResetCredentials(opts *Options) (err error) {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	serviceacct, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
 	defer httpRes.Body.Close()
@@ -171,13 +171,13 @@ func runResetCredentials(opts *Options) (err error) {
 }
 
 func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccount, error) {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
 
 	// check if the service account exists
-	api := connection.API()
+	api := conn.API()
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 

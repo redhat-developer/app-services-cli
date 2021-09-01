@@ -98,12 +98,12 @@ func (v *Validator) ValidateSearchInput(val interface{}) error {
 func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	name, _ := val.(string)
 
-	connection, err := v.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := v.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	_, httpRes, err := GetKafkaByName(context.Background(), api.Kafka(), name)
 	if httpRes != nil {

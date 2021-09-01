@@ -84,12 +84,12 @@ func runUse(opts *Options) error {
 		return err
 	}
 
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	var registry *srsmgmtv1.Registry
 	ctx := context.Background()
@@ -123,14 +123,14 @@ func runUse(opts *Options) error {
 }
 
 func runInteractivePrompt(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedRegistry, err := serviceregistry.InteractiveSelect(connection, opts.Logger)
+	selectedRegistry, err := serviceregistry.InteractiveSelect(conn, opts.Logger)
 	if err != nil {
 		return err
 	}

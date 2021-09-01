@@ -127,12 +127,12 @@ func runList(opts *Options) error {
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	connection, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	a, _, err := api.ServiceRegistryInstance(opts.registryID)
 	if err != nil {

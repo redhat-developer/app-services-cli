@@ -109,14 +109,14 @@ func runCreate(opts *Options) error {
 		}
 	}
 
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a registry instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(connection)
+	termsAccepted, termsURL, err := ams.CheckTermsAccepted(conn)
 	if err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func runCreate(opts *Options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", payload.GetName())))
 
-	response, _, err := connection.API().
+	response, _, err := conn.API().
 		ServiceRegistryMgmt().
 		CreateRegistry(context.Background()).
 		RegistryCreate(*payload).

@@ -71,12 +71,12 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *Options) (err error) {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	_, httpRes, err := connection.API().ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
 	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {
@@ -109,12 +109,12 @@ func runDelete(opts *Options) (err error) {
 }
 
 func deleteServiceAccount(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	_, httpRes, err := connection.API().ServiceAccount().DeleteServiceAccountById(context.Background(), opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccount().DeleteServiceAccountById(context.Background(), opts.id).Execute()
 	defer httpRes.Body.Close()
 	if err != nil {
 		if httpRes == nil {

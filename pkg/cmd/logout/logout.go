@@ -45,12 +45,12 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runLogout(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	err = connection.Logout(context.TODO())
+	err = conn.Logout(context.TODO())
 
 	if err != nil {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("logout.error.unableToLogout"), err)

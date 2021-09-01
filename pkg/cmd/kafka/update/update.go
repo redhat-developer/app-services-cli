@@ -111,12 +111,12 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func run(opts *Options) error {
-	connection, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
 
-	api := connection.API()
+	api := conn.API()
 
 	var kafkaInstance *kafkamgmtclient.KafkaRequest
 	ctx := context.Background()
