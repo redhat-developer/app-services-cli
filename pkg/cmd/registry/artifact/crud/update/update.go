@@ -108,7 +108,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-	cmd.Flags().StringVarP(&opts.file, "file", "f", "", "File location of the artifact")
+	cmd.Flags().StringVarP(&opts.file, "output-file", "f", "", "File location of the artifact")
 
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")

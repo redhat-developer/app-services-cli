@@ -66,7 +66,7 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 rhoas service-registry artifact download --content-id=183282932983
 
 ## Get latest artifact by content id to specific file
-rhoas service-registry artifact download --content-id=183282932983 --file-location=schema.json
+rhoas service-registry artifact download --content-id=183282932983 --output-file=schema.json
 
 ## Get latest artifact by global id
 rhoas service-registry artifact download --global-id=383282932983
@@ -99,7 +99,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 	cmd.Flags().Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, "Global ID of the artifact")
 	cmd.Flags().Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, "ContentId of the artifact")
 
-	cmd.Flags().StringVarP(&opts.outputFile, "file-location", "", "", "Location of the output file")
+	cmd.Flags().StringVar(&opts.outputFile, "output-file", "", "Location of the output file")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
