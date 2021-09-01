@@ -26,7 +26,7 @@ func GetServiceRegistryByName(ctx context.Context, api srsmgmtv1.RegistriesApi, 
 	}
 
 	if registryList.GetTotal() == 0 {
-		return nil, nil, fmt.Errorf(`Instance "%v" not found`, name)
+		return nil, nil, fmt.Errorf(`instance "%v" not found`, name)
 	}
 
 	items := registryList.GetItems()

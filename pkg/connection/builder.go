@@ -162,7 +162,7 @@ func (b *Builder) BuildContext(ctx context.Context) (connection *KeycloakConnect
 	}
 
 	if b.config == nil {
-		return nil, fmt.Errorf("Missing IConfig")
+		return nil, fmt.Errorf("missing IConfig")
 	}
 
 	if b.logger == nil {

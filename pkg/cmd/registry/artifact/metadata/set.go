@@ -67,7 +67,7 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name == "" && opts.description == "" && !opts.IO.CanPrompt() {
-				return errors.New("Editor mode cannot be started in non-interactive mode. Please use --name and --description flags")
+				return errors.New("editor mode cannot be started in non-interactive mode. Please use --name and --description flags")
 			}
 
 			if opts.artifact == "" {
