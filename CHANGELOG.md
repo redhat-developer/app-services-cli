@@ -1,4 +1,21 @@
 
+<a name="v0.27.1"></a>
+## [v0.27.1](https://github.com/redhat-developer/app-services-cli/compare/v0.27.0...v0.27.1) (2021-09-01)
+
+### Bug Fixes
+
+* fixed an error message displayed for kafka topic describe ([#1007](https://github.com/redhat-developer/app-services-cli/issues/1007))
+* invalid i18n strings ([#996](https://github.com/redhat-developer/app-services-cli/issues/996))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.10.0
+* **topic:** only return error on http.StatusOK ([#1004](https://github.com/redhat-developer/app-services-cli/issues/1004))
+
+### Features
+
+* added a custom user-agent ([#1006](https://github.com/redhat-developer/app-services-cli/issues/1006))
+* merged kafka i18n messages into a single file ([#997](https://github.com/redhat-developer/app-services-cli/issues/997))
+* add name to confirmation dialog on delete ([#987](https://github.com/redhat-developer/app-services-cli/issues/987))
+
+
 <a name="v0.27.0"></a>
 ## [v0.27.0](https://github.com/redhat-developer/app-services-cli/compare/v0.26.0...v0.27.0) (2021-08-30)
 
