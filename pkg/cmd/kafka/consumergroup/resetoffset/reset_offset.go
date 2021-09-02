@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -68,12 +67,12 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.offset != "" {
-				if err = flag.ValidateOffset(opts.offset); err != nil {
+				if err = consumergroup.ValidateOffset(opts.offset); err != nil {
 					return err
 				}
 			}
 
-			if opts.value == "" && (opts.offset == consumergroup.AbsoluteOffset || opts.offset == consumergroup.TimestampOffset) {
+			if opts.value == "" && (opts.offset == consumergroup.OffsetAbssolute || opts.offset == consumergroup.OffsetTimestamp) {
 				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset)))
 			}
 
@@ -119,7 +118,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)
-	flagutil.EnableStaticFlagCompletion(cmd, "offset", flagutil.ValidOffsets)
+	flagutil.EnableStaticFlagCompletion(cmd, "offset", consumergroup.ValidOffsets)
 
 	return cmd
 }
@@ -139,6 +138,10 @@ func runCmd(opts *Options) error {
 
 	ctx := context.Background()
 
+	validator := consumergroup.Validator{
+		Localizer: opts.localizer,
+	}
+
 	offsetResetParams := kafkainstanceclient.ConsumerGroupResetOffsetParameters{
 		Offset: opts.offset,
 	}
@@ -147,23 +150,17 @@ func runCmd(opts *Options) error {
 		offsetResetParams.Value = &opts.value
 	}
 
-	if opts.offset == consumergroup.AbsoluteOffset {
-		if _, parseErr := strconv.Atoi(opts.value); parseErr != nil {
-			offsetValueTmplPair := localize.NewEntry("Value", opts.value)
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset", offsetValueTmplPair))
-		}
-	}
-
-	if opts.offset == consumergroup.TimestampOffset {
-		err = consumergroup.ValidateTimestampValue(opts.localizer, opts.value)
-		if err != nil {
+	if opts.offset == consumergroup.OffsetAbssolute || opts.offset == consumergroup.OffsetTimestamp {
+		if err = validator.ValidateOffsetValue(opts.offset, opts.value); err != nil {
 			return err
 		}
 	}
 
 	if opts.id != "" {
 		_, httpRes, newErr := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
-		defer httpRes.Body.Close()
+		if httpRes != nil {
+			defer httpRes.Body.Close()
+		}
 
 		if newErr != nil {
 			cgIDPair := localize.NewEntry("ID", opts.id)
@@ -180,7 +177,9 @@ func runCmd(opts *Options) error {
 
 	if opts.topic != "" {
 		_, httpRes, newErr := api.TopicsApi.GetTopic(context.Background(), opts.topic).Execute()
-		defer httpRes.Body.Close()
+		if httpRes != nil {
+			defer httpRes.Body.Close()
+		}
 
 		if newErr != nil {
 			if httpRes == nil {
@@ -227,6 +226,9 @@ func runCmd(opts *Options) error {
 	}
 
 	updatedConsumers, httpRes, err := a.Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	if err != nil {
 
@@ -258,9 +260,10 @@ func runCmd(opts *Options) error {
 		localize.NewEntry("InstanceName", kafkaInstance.GetName())),
 	)
 
-	if opts.output != "" {
+	switch opts.output {
+	case "":
 		dump.PrintDataInFormat(opts.output, updatedConsumers, opts.IO.Out)
-	} else {
+	default:
 		opts.Logger.Info("")
 		consumers := updatedConsumers.GetItems()
 		rows := mapResetOffsetResultToTableFormat(consumers)

@@ -1,20 +1,22 @@
 package consumergroup
 
 import (
-	"errors"
 	"regexp"
 
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 // valid values for consumer group reset offset operaion
 const (
-	AbsoluteOffset  = "absolute"
-	EarliestOffset  = "earliest"
-	TimestampOffset = "timestamp"
-	LatestOffset    = "latest"
+	OffsetAbssolute = "absolute"
+	OffsetEarliest  = "earliest"
+	OffsetTimestamp = "timestamp"
+	OffsetLatest    = "latest"
 )
+
+var ValidOffsets = []string{OffsetAbssolute, OffsetEarliest, OffsetTimestamp, OffsetLatest}
 
 var timestampOffsetRegExp = regexp.MustCompile(`^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}-\d{2}:\d{2})$`)
 
@@ -47,15 +49,13 @@ func GetUnassignedPartitions(consumers []kafkainstanceclient.Consumer) (unassign
 	return unassignedPartitions
 }
 
-// ValidateTimestampValue validates the value for timestamp offset
-// value should be in format "yyyy-MM-dd'T'HH:mm:ss"
-func ValidateTimestampValue(localizer localize.Localizer, time string) error {
-	offsetValueTmplPair := localize.NewEntry("Value", time)
-	matched := timestampOffsetRegExp.MatchString(time)
+// ValidateOffset checks if value v is a valid value for --offset
+func ValidateOffset(v string) error {
+	isValid := flagutil.IsValidInput(v, ValidOffsets...)
 
-	if matched {
+	if isValid {
 		return nil
 	}
 
-	return errors.New(localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidTimestampOffset", offsetValueTmplPair))
+	return flag.InvalidValueError("output", v, ValidOffsets...)
 }

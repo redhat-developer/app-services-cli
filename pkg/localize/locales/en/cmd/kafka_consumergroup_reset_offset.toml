@@ -40,7 +40,7 @@ one = 'Are you sure you want to reset the offset for consumer group "{{.ID}}"?'
 one = 'You have chosen not to reset the consumer group offset.'
 
 [kafka.consumerGroup.resetOffset.log.info.successful]
-one = 'Offset has been reset for consumers of Consumer group with ID "{{.ConsumerGroupID}}" in the Kafka instance "{{.InstanceName}}"'
+one = 'Offset has been reset for members of consumer group with ID "{{.ConsumerGroupID}}" in the Kafka instance "{{.InstanceName}}"'
 
 [kafka.consumerGroup.resetOffset.error.valueRequired]
 one = 'value is required  when "{{.Offset}}" offset is used'

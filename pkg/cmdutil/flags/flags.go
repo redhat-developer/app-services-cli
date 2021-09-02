@@ -3,14 +3,12 @@ package flags
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/spf13/cobra"
 )
 
 var (
 	ValidOutputFormats       = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
 	CredentialsOutputFormats = []string{"env", "json", "properties"}
-	ValidOffsets             = []string{consumergroup.AbsoluteOffset, consumergroup.EarliestOffset, consumergroup.TimestampOffset, consumergroup.LatestOffset}
 )
 
 // IsValidInput checks if the input value is in the range of valid values

@@ -14,14 +14,3 @@ func ValidateOutput(v string) error {
 
 	return InvalidValueError("output", v, flagutil.ValidOutputFormats...)
 }
-
-// ValidateOffset checks if value v is a valid value for --offset
-func ValidateOffset(v string) error {
-	isValid := flagutil.IsValidInput(v, flagutil.ValidOffsets...)
-
-	if isValid {
-		return nil
-	}
-
-	return InvalidValueError("output", v, flagutil.ValidOffsets...)
-}
