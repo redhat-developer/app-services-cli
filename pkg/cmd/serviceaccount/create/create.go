@@ -94,7 +94,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("serviceAccount.create.flag.name.description"))
 	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("serviceAccount.create.flag.description.description"))
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
-	cmd.Flags().StringVar(&opts.filename, "file-location", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
+	cmd.Flags().StringVar(&opts.filename, "output-file", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
 	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
 
 	flagutil.EnableStaticFlagCompletion(cmd, "file-format", flagutil.CredentialsOutputFormats)
