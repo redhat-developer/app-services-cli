@@ -113,7 +113,7 @@ func runUse(opts *Options) error {
 	}
 
 	// build Kafka config object from the response
-	var kafkaConfig config.KafkaConfig = config.KafkaConfig{
+	var kafkaConfig = config.KafkaConfig{
 		ClusterID: res.GetId(),
 	}
 
