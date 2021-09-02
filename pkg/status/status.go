@@ -16,7 +16,7 @@ import (
 
 	"github.com/openconfig/goyang/pkg/indent"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	kas "github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
