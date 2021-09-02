@@ -44,23 +44,14 @@ func NewGetMetadataCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "metadata-get",
-		Short: "Get artifact metadata",
-		Long: `
-Gets the metadata for an artifact in the service registry. 
-The returned metadata includes both generated (read-only) and editable metadata (such as name and description).
-`,
-		Example: `
-## Get latest artifact metadata for default group
-rhoas service-registry artifact metadata --artifact-id=my-artifact
-
-## Get latest artifact metadata for my-group group
-rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygroup 
-		`,
-		Args: cobra.NoArgs,
+		Use:     f.Localizer.MustLocalize("artifact.cmd.metadata.get.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.metadata.get.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.metadata.get.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.metadata.get.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.artifact == "" {
-				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
+				return errors.New(f.Localizer.MustLocalize("artifact.common.message.artifactIdRequired"))
 			}
 
 			if opts.registryID != "" {
@@ -73,7 +64,7 @@ rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygro
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
+				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -81,10 +72,10 @@ rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygro
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -103,11 +94,11 @@ func runGet(opts *GetOptions) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using 'default' artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	opts.Logger.Info("Fetching artifact metadata")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetching"))
 
 	ctx := context.Background()
 	request := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact)
@@ -116,7 +107,7 @@ func runGet(opts *GetOptions) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info("Successfully fetched artifact metadata")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

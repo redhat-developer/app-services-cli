@@ -46,32 +46,14 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "get",
-		Short: "Get artifact by id and group",
-		Long: `Get artifact by specifying id and group.
-Command will fetch the latest artifact from the registry based on the artifact-id and group.
-
-When --version is specified command will fetch the specific version of the artifact.
-Get command will fetch artifacts based on --group and --artifact-id and --version.
-For fetching artifacts using global identifiers please use "service-registry download" command
-`,
-		Example: `
-## Get latest artifact with name "my-artifact" and print it out to standard out
-rhoas service-registry artifact get --artifact-id=my-artifact
-
-## Get latest artifact with name "my-artifact" from group "my-group" and save it to artifact.json file
-rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
-
-## Get latest artifact and pipe it to other command 
-rhoas service-registry artifact get --artifact-id=my-artifact | grep -i 'user'
-
-## Get artifact with custom version and print it out to standard out
-rhoas service-registry artifact get --artifact-id=myartifact --version=4
-`,
-		Args: cobra.NoArgs,
+		Use:     f.Localizer.MustLocalize("artifact.cmd.get.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.get.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.get.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.get.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.artifact == "" {
-				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
+				return errors.New(f.Localizer.MustLocalize("artifact.common.message.artifactIdRequired"))
 			}
 
 			if opts.registryID != "" {
@@ -84,7 +66,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
+				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -92,11 +74,11 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVar(&opts.outputFile, "output-file", "", "Location of the output file")
-	cmd.Flags().StringVar(&opts.version, "version", "", "Version of the artifact")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVar(&opts.outputFile, "output-file", "", opts.localizer.MustLocalize("artifact.common.message.file.location"))
+	cmd.Flags().StringVar(&opts.version, "version", "", opts.localizer.MustLocalize("artifact.common.version"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -115,18 +97,18 @@ func runGet(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
 	ctx := context.Background()
 	var dataFile *os.File
 	if opts.version != "" {
-		opts.Logger.Info("Fetching artifact with version: " + opts.version)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.with.version", localize.NewEntry("Version", opts.version)))
 		request := dataAPI.VersionsApi.GetArtifactVersion(ctx, opts.group, opts.artifact, opts.version)
 		dataFile, _, err = request.Execute()
 	} else {
-		opts.Logger.Info("Fetching latest artifact")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.latest"))
 		request := dataAPI.ArtifactsApi.GetLatestArtifact(ctx, opts.group, opts.artifact)
 		dataFile, _, err = request.Execute()
 	}
@@ -147,6 +129,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	opts.Logger.Info("Successfully fetched artifact")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 	return nil
 }

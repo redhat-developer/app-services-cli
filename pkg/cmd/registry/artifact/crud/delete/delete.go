@@ -45,23 +45,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "delete",
-		Short: "Deletes single or all artifacts in a given group",
-		Long: `
-Deletes single or all artifacts in a given group. 
-
-When called without arguments delete will delete all artifacts in the group
-When --artifact-id is specified delete deletes only single artifact and its version
-When --group parameter is missing the command will use "default" group.
-		`,
-		Example: `
-## Delete all artifacts in the group "default"
-rhoas service-registry artifact delete
-
-## Delete artifact in the group "default" with name "my-artifact"
-rhoas service-registry artifact delete --artifact-id=my-artifact
-		`,
-		Args: cobra.NoArgs,
+		Use:     f.Localizer.MustLocalize("artifact.cmd.delete.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.delete.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.delete.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.delete.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return flag.RequiredWhenNonInteractiveError("yes")
@@ -77,7 +65,7 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
+				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -85,10 +73,10 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, "Delete without prompt")
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("artifact.common.delete.without.prompt"))
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.registryIdToUse"))
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
@@ -106,14 +94,14 @@ func runDelete(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
 	ctx := context.Background()
 	if opts.artifact == "" {
-		opts.Logger.Info("Artifact was not specified. Command will delete all artifacts in the group")
-		err = confirmDelete(opts, "Do you want to delete ALL ARTIFACTS from group "+opts.group)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleteAllArtifactsInGroup"))
+		err = confirmDelete(opts, opts.localizer.MustLocalize("artifact.common.message.deleteAllArtifactsFromGroup", localize.NewEntry("GroupName", opts.group)))
 		if err != nil {
 			return err
 		}
@@ -122,14 +110,14 @@ func runDelete(opts *Options) error {
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
-		opts.Logger.Info("Artifacts in group " + opts.group + " deleted")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.AllArtifactsInGroupDeleted", localize.NewEntry("GroupName", opts.group)))
 	} else {
 		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact).Execute()
 		if err != nil {
-			return errors.New("artifact " + opts.artifact + " not found")
+			return errors.New(opts.localizer.MustLocalize("artifact.common.error.artifact.notFound", localize.NewEntry("Name", opts.artifact)))
 		}
-		opts.Logger.Info("Deleting artifact " + opts.artifact)
-		err = confirmDelete(opts, "Do you want to delete artifact "+opts.artifact+" from group "+opts.group)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleting.artifact", localize.NewEntry("Name", opts.artifact)))
+		err = confirmDelete(opts, opts.localizer.MustLocalize("artifact.common.message.deleting.artifactFromGroup", localize.NewEntry("Name", opts.artifact), localize.NewEntry("Group", opts.group)))
 		if err != nil {
 			return err
 		}
@@ -139,7 +127,7 @@ func runDelete(opts *Options) error {
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
-		opts.Logger.Info("Artifact deleted: " + opts.artifact)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleted", localize.NewEntry("Name", opts.artifact)))
 	}
 
 	return nil

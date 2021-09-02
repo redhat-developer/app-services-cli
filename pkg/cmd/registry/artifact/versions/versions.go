@@ -42,21 +42,15 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "versions",
-		Short: "Get latest artifact versions by artifact-id and group",
-		Long:  "Get latest artifact versions by specifying group and artifact-id",
-		Example: `
-## Get latest artifact versions for default group
-rhoas service-registry artifact versions --artifact-id=my-artifact
-
-## Get latest artifact versions for my-group group
-rhoas service-registry artifact versions --artifact-id=my-artifact --group mygroup 
-		`,
-		Args: cobra.NoArgs,
+		Use:     f.Localizer.MustLocalize("artifact.cmd.versions.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.versions.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.versions.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.versions.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if opts.artifact == "" {
-				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
+				return errors.New(f.Localizer.MustLocalize("artifact.common.message.artifactIdRequired"))
 			}
 
 			if opts.registryID != "" {
@@ -69,7 +63,7 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
+				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -77,10 +71,10 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -99,11 +93,11 @@ func runGet(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using 'default' artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	opts.Logger.Info("Fetching artifact versions")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetching"))
 
 	ctx := context.Background()
 	request := dataAPI.VersionsApi.ListArtifactVersions(ctx, opts.group, opts.artifact)
@@ -112,7 +106,7 @@ func runGet(opts *Options) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info("Successfully fetched artifact versions")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetched"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 
