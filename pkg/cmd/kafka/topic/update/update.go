@@ -220,7 +220,9 @@ func runCmd(opts *Options) error {
 	var needsUpdate bool
 
 	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -274,7 +276,9 @@ func runCmd(opts *Options) error {
 
 	// update the topic
 	response, httpRes, err := updateTopicReq.Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	// handle error
 	if err != nil {
@@ -326,7 +330,9 @@ func runInteractivePrompt(opts *Options) (err error) {
 
 	// check if topic exists
 	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.name)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())

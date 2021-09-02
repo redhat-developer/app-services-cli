@@ -180,7 +180,9 @@ func runCreate(opts *Options) error {
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, httpRes, err := a.Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	if httpRes.StatusCode == http.StatusBadRequest {
 		return errors.New(opts.localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name)))
@@ -295,7 +297,10 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 
 	// fetch all cloud available providers
 	cloudProviderResponse, httpRes, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
+
 	if err != nil {
 		return nil, err
 	}

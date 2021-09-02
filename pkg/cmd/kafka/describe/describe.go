@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -103,14 +104,21 @@ func runDescribe(opts *Options) error {
 	api := conn.API()
 
 	var kafkaInstance *kafkamgmtclient.KafkaRequest
+	var httpRes *http.Response
 	ctx := context.Background()
 	if opts.name != "" {
-		kafkaInstance, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		kafkaInstance, httpRes, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		if httpRes != nil {
+			defer httpRes.Body.Close()
+		}
 		if err != nil {
 			return err
 		}
 	} else {
-		kafkaInstance, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		kafkaInstance, httpRes, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		if httpRes != nil {
+			defer httpRes.Body.Close()
+		}
 		if err != nil {
 			return err
 		}

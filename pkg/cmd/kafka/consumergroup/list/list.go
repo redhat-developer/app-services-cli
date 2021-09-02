@@ -133,7 +133,9 @@ func runList(opts *Options) (err error) {
 	req = req.Page(opts.page)
 
 	consumerGroupData, httpRes, err := req.Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		if httpRes == nil {
 			return err

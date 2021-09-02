@@ -97,7 +97,9 @@ func runCmd(opts *Options) error {
 
 	// perform delete topic API request
 	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
 	topicNameTmplPair := localize.NewEntry("TopicName", opts.topicName)
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
@@ -126,6 +128,9 @@ func runCmd(opts *Options) error {
 
 	// perform delete topic API request
 	httpRes, err = api.TopicsApi.DeleteTopic(context.Background(), opts.topicName).Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		if httpRes == nil {
 			return err
@@ -147,7 +152,6 @@ func runCmd(opts *Options) error {
 			return err
 		}
 	}
-	defer httpRes.Body.Close()
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.delete.log.info.topicDeleted", topicNameTmplPair, kafkaNameTmplPair))
 

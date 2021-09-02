@@ -114,7 +114,10 @@ func runCmd(opts *Options) error {
 	ctx := context.Background()
 
 	consumerGroupData, httpRes, err := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
-	defer httpRes.Body.Close()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
+
 	if err != nil {
 		if httpRes == nil {
 			return err
