@@ -1,4 +1,16 @@
 
+<a name="v0.27.3"></a>
+## [v0.27.3](https://github.com/redhat-developer/app-services-cli/compare/v0.27.2...v0.27.3) (2021-09-02)
+
+### Bug Fixes
+
+* check if http.Response is nil before closing body ([#1011](https://github.com/redhat-developer/app-services-cli/issues/1011))
+
+### Features
+
+* **kafka:** add "kafka update" command ([#898](https://github.com/redhat-developer/app-services-cli/issues/898))
+
+
 <a name="v0.27.2"></a>
 ## [v0.27.2](https://github.com/redhat-developer/app-services-cli/compare/v0.27.1...v0.27.2) (2021-09-01)
 
