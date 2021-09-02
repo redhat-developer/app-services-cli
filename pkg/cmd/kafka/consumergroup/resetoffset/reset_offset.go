@@ -72,7 +72,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			if opts.value == "" && (opts.offset == consumergroup.OffsetAbssolute || opts.offset == consumergroup.OffsetTimestamp) {
+			if opts.value == "" && (opts.offset == consumergroup.OffsetAbsolute || opts.offset == consumergroup.OffsetTimestamp) {
 				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset)))
 			}
 
@@ -150,7 +150,7 @@ func runCmd(opts *Options) error {
 		offsetResetParams.Value = &opts.value
 	}
 
-	if opts.offset == consumergroup.OffsetAbssolute || opts.offset == consumergroup.OffsetTimestamp {
+	if opts.offset == consumergroup.OffsetAbsolute || opts.offset == consumergroup.OffsetTimestamp {
 		if err = validator.ValidateOffsetValue(opts.offset, opts.value); err != nil {
 			return err
 		}

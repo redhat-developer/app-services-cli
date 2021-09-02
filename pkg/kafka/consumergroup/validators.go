@@ -21,7 +21,7 @@ func (v *Validator) ValidateOffsetValue(offset string, value string) error {
 		if !matched {
 			return errors.New(v.Localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidTimestampOffset", offsetValueTmplPair))
 		}
-	case OffsetAbssolute:
+	case OffsetAbsolute:
 		if _, parseErr := strconv.Atoi(value); parseErr != nil {
 			offsetValueTmplPair := localize.NewEntry("Value", value)
 			return errors.New(v.Localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset", offsetValueTmplPair))

@@ -10,13 +10,13 @@ import (
 
 // valid values for consumer group reset offset operaion
 const (
-	OffsetAbssolute = "absolute"
+	OffsetAbsolute  = "absolute"
 	OffsetEarliest  = "earliest"
 	OffsetTimestamp = "timestamp"
 	OffsetLatest    = "latest"
 )
 
-var ValidOffsets = []string{OffsetAbssolute, OffsetEarliest, OffsetTimestamp, OffsetLatest}
+var ValidOffsets = []string{OffsetAbsolute, OffsetEarliest, OffsetTimestamp, OffsetLatest}
 
 var timestampOffsetRegExp = regexp.MustCompile(`^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}-\d{2}:\d{2})$`)
 
