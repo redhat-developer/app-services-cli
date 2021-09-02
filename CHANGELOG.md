@@ -1,4 +1,12 @@
 
+<a name="v0.27.4"></a>
+## [v0.27.4](https://github.com/redhat-developer/app-services-cli/compare/v0.27.3...v0.27.4) (2021-09-02)
+
+### Bug Fixes
+
+* use a consistent flag name for output files ([#1008](https://github.com/redhat-developer/app-services-cli/issues/1008))
+
+
 <a name="v0.27.3"></a>
 ## [v0.27.3](https://github.com/redhat-developer/app-services-cli/compare/v0.27.2...v0.27.3) (2021-09-02)
 
