@@ -60,7 +60,7 @@ For fetching artifacts using global identifiers please use "service-registry dow
 rhoas service-registry artifact get --artifact-id=my-artifact
 
 ## Get latest artifact with name "my-artifact" from group "my-group" and save it to artifact.json file
-rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --file=artifact.json
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
 
 ## Get latest artifact and pipe it to other command 
 rhoas service-registry artifact get --artifact-id=my-artifact | grep -i 'user'
@@ -95,7 +95,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVar(&opts.outputFile, "file", "", "Location of the output file")
+	cmd.Flags().StringVar(&opts.outputFile, "output-file", "", "Location of the output file")
 	cmd.Flags().StringVar(&opts.version, "version", "", "Version of the artifact")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
