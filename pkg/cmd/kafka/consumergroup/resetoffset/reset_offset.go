@@ -262,12 +262,12 @@ func runCmd(opts *Options) error {
 
 	switch opts.output {
 	case "":
-		dump.PrintDataInFormat(opts.output, updatedConsumers, opts.IO.Out)
-	default:
 		opts.Logger.Info("")
 		consumers := updatedConsumers.GetItems()
 		rows := mapResetOffsetResultToTableFormat(consumers)
 		dump.Table(opts.IO.Out, rows)
+	default:
+		dump.PrintDataInFormat(opts.output, updatedConsumers, opts.IO.Out)
 	}
 
 	return nil
