@@ -67,27 +67,18 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "List artifacts",
-		Long:  "List all artifacts for the group by specified output format (by default table)",
-		Example: `
-## List all artifacts for the "default" artifacts group
-rhoas service-registry artifact list
-
-## List all artifacts with "my-group" group 
-rhoas service-registry artifact list --group=my-group
-
-## List all artifacts with limit and group
-rhoas service-registry artifact list --page=2 --limit=10
-		`,
-		Args: cobra.NoArgs,
+		Use:     f.Localizer.MustLocalize("artifact.cmd.list.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.list.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.list.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.list.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
 			if opts.page < 1 || opts.limit < 1 {
-				return errors.New("page and limit values should be bigger than 1")
+				return errors.New(opts.localizer.MustLocalize("artifact.common.error.page.and.limit.too.small"))
 			}
 
 			if opts.registryID != "" {
@@ -100,7 +91,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service Registry selected. Use rhoas registry use to select your registry")
+				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -109,12 +100,12 @@ rhoas service-registry artifact list --page=2 --limit=10
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, "Page number")
-	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, "Page limit")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("artifact.common.page.number"))
+	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("artifact.common.page.limit"))
 
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -123,7 +114,7 @@ rhoas service-registry artifact list --page=2 --limit=10
 
 func runList(opts *Options) error {
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
@@ -151,7 +142,7 @@ func runList(opts *Options) error {
 	}
 
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {
-		opts.Logger.Info("No artifacts available for " + opts.group + " group and registry id " + opts.registryID)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.artifact.available.for.group.and.registry", localize.NewEntry("Group", opts.group), localize.NewEntry("Registry", opts.registryID)))
 		return nil
 	}
 

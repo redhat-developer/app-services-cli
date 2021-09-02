@@ -112,6 +112,9 @@ rhoas service-registry use --id <id>
 
 # Errors
 
+[registry.no.service.selected.use.instance.id.flag]
+one = 'no service registry selected. Please specify registry by using --instance-id flag'
+
 [registry.cmd.create.error.name.requiredWhenNonInteractive]
 one = 'Name argument is required when not in interactive'
 

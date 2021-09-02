@@ -19,7 +19,7 @@ var AllowedArtifactTypeEnumValues = []string{
 	"XML",
 }
 
-// GetAllowedArtifactTypeEnumValues gets artifact types as string.
+// GetAllowedArtifactTypeEnumValuesAsString gets artifact types as string.
 func GetAllowedArtifactTypeEnumValuesAsString() string {
 	return strings.Join(AllowedArtifactTypeEnumValues, ", ")
 }

@@ -54,27 +54,11 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update artifact",
-		Long: `
-Update artifact from file or directly standard input
-
-Artifacts can be typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
-The type of the content should be compatible with the current artifact's type.
-
-When successful, this creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
-
-An artifact is update using the content provided in the body of the request.  
-This content is updated under a unique artifactId provided by user.
-		`,
-		Example: `
-## update artifact from group and artifact-id
-rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json 
-
-## update artifact from group and artifact-id
-rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json 
-`,
-		Args: cobra.RangeArgs(0, 1),
+		Use:     f.Localizer.MustLocalize("artifact.cmd.update.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.update.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.update.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.update.example"),
+		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
@@ -82,7 +66,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 			}
 
 			if opts.artifact == "" {
-				return errors.New("artifact is required. Please specify artifact by using --artifact-id flag")
+				return errors.New(opts.localizer.MustLocalize("artifact.common.error.artifact.id.required"))
 			}
 
 			if len(args) > 0 {
@@ -99,7 +83,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service Registry selected. Use 'rhoas service-registry use' use to select your registry")
+				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -108,15 +92,15 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 	}
 
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-	cmd.Flags().StringVarP(&opts.file, "file", "f", "", "File location of the artifact")
+	cmd.Flags().StringVarP(&opts.file, "file", "f", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
-	cmd.Flags().StringVar(&opts.version, "version", "", "Custom version of the artifact (for example 1.0.0)")
-	cmd.Flags().StringVar(&opts.name, "name", "", "Custom name of the artifact")
-	cmd.Flags().StringVar(&opts.description, "description", "", "Custom description of the artifact")
+	cmd.Flags().StringVar(&opts.version, "version", "", opts.localizer.MustLocalize("artifact.common.custom.version"))
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.common.custom.name"))
+	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.common.custom.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -135,19 +119,19 @@ func runUpdate(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using", util.DefaultArtifactGroup, "artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
 	var specifiedFile *os.File
 	if opts.file != "" {
-		opts.Logger.Info("Opening file: " + opts.file)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
 		specifiedFile, err = os.Open(opts.file)
 		if err != nil {
 			return err
 		}
 	} else {
-		opts.Logger.Info("Reading file content from stdin")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.reading.file"))
 		specifiedFile, err = util.CreateFileFromStdin()
 		if err != nil {
 			return err
@@ -172,7 +156,7 @@ func runUpdate(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	opts.Logger.Info("Artifact updated")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.updated"))
 
 	dump.PrintDataInFormat(opts.outputFormat, metadata, opts.IO.Out)
 

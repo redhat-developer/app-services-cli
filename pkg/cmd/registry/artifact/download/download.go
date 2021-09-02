@@ -51,30 +51,11 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "download",
-		Short: "Download artifacts from registry by using global identifiers",
-		Long: `Get single or more artifacts by group, content, hash or globalIds. 
-		NOTE: Use "service-registry get" command if you wish to download artifact by artifactId.
-
-		Flags are used to specify the artifact to download:
-
-		--contentId - id if the content from metadata
-		--globalId - globalId of the content from metadata
-		--hash - SHA-256 hash of the content`,
-		Example: `
-## Get latest artifact by content id
-rhoas service-registry artifact download --content-id=183282932983
-
-## Get latest artifact by content id to specific file
-rhoas service-registry artifact download --content-id=183282932983 --output-file=schema.json
-
-## Get latest artifact by global id
-rhoas service-registry artifact download --global-id=383282932983
-
-## Get latest artifact by hash
-rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4
-`,
-		Args: cobra.RangeArgs(0, 1),
+		Use:     f.Localizer.MustLocalize("artifact.cmd.download.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.download.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.download.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.download.example"),
+		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.registryID != "" {
 				return runGet(opts)
@@ -86,7 +67,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
+				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -94,13 +75,13 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.hash, "hash", "", "SHA-256 hash of the artifact")
-	cmd.Flags().Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, "Global ID of the artifact")
-	cmd.Flags().Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, "ContentId of the artifact")
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.hash, "hash", "", opts.localizer.MustLocalize("artifact.common.sha"))
+	cmd.Flags().Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, opts.localizer.MustLocalize("artifact.common.global.id"))
+	cmd.Flags().Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, opts.localizer.MustLocalize("artifact.common.content.id"))
 
-	cmd.Flags().StringVarP(&opts.outputFile, "output-file", "", "", "Location of the output file")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
+	cmd.Flags().StringVarP(&opts.outputFile, "output-file", "", "", opts.localizer.MustLocalize("artifact.common.message.file.location"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.registryIdToUse"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -119,11 +100,11 @@ func runGet(opts *Options) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using 'default' artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	opts.Logger.Info("Fetching artifact")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.artifact"))
 
 	ctx := context.Background()
 	var dataFile *os.File
@@ -138,7 +119,7 @@ func runGet(opts *Options) error {
 		request := dataAPI.ArtifactsApi.GetContentByHash(ctx, opts.hash)
 		dataFile, _, err = request.Execute()
 	} else {
-		return errors.New("please specify at least one flag: [contentId, global-id, hash]")
+		return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.specify.contentId.globalId.hash"))
 	}
 
 	if err != nil {
@@ -159,6 +140,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	opts.Logger.Info("Successfully fetched artifact")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 	return nil
 }

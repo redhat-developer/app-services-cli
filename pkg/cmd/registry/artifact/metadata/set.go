@@ -48,30 +48,18 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "metadata-set",
-		Short: "Update artifact metadata",
-		Long: `
-Updates the metadata for an artifact in the service registry. 
-Editable metadata includes fields like name and description
-`,
-		Example: `
-##  Update the metadata for an artifact
-rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group --name=my-name --description=my-description
-
-##  Update the metadata for an artifact using your default editor ($EDITOR)
-rhoas service-registry artifact metadata-set --artifact-id=my-artifact
-
-##  Update the metadata for an artifact using visual studio code
-EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-artifact
-		`,
-		Args: cobra.NoArgs,
+		Use:     f.Localizer.MustLocalize("artifact.cmd.metadata.set.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.metadata.set.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.metadata.set.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.metadata.set.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name == "" && opts.description == "" && !opts.IO.CanPrompt() {
-				return errors.New("editor mode cannot be started in non-interactive mode. Please use --name and --description flags")
+				return errors.New(f.Localizer.MustLocalize("artifact.cmd.common.error.no.editor.mode.in.non.interactive"))
 			}
 
 			if opts.artifact == "" {
-				return errors.New("artifact id is required. Please specify artifact by using --artifact-id flag")
+				return errors.New(f.Localizer.MustLocalize("artifact.common.message.artifactIdRequired"))
 			}
 
 			if opts.registryID != "" {
@@ -84,7 +72,7 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New("no service registry selected. Please specify registry by using --instance-id flag")
+				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -92,13 +80,13 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", "Id of the artifact")
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, "Artifact group")
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", "Id of the registry to be used. By default uses currently selected registry")
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", "Output format (json, yaml, yml)")
+	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
 
-	cmd.Flags().StringVar(&opts.name, "name", "", "Custom name of the artifact")
-	cmd.Flags().StringVar(&opts.description, "description", "", "Custom description of the artifact")
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.common.custom.name"))
+	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.common.custom.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -117,11 +105,11 @@ func runSet(opts *SetOptions) error {
 	}
 
 	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info("Group was not specified. Using 'default' artifacts group.")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	opts.Logger.Info("Fetching current artifact metadata")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetching"))
 
 	ctx := context.Background()
 	request := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact)
@@ -146,14 +134,14 @@ func runSet(opts *SetOptions) error {
 			editableMedata.Description = &opts.description
 		}
 	} else {
-		opts.Logger.Info("Running editor with editable metadata. Please save contents and close editor to continue...")
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.running.editor.with.editable.metadata"))
 		editableMedata, err = runEditor(editableMedata)
 		if err != nil {
 			return err
 		}
 	}
 
-	opts.Logger.Info("Updating artifact metadata")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updating"))
 
 	editRequest := dataAPI.MetadataApi.UpdateArtifactMetaData(ctx, opts.group, opts.artifact)
 	_, err = editRequest.EditableMetaData(*editableMedata).Execute()
@@ -161,7 +149,7 @@ func runSet(opts *SetOptions) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info("Successfully updated artifact metadata")
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))
 	return nil
 }
 

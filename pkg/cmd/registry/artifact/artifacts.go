@@ -15,47 +15,11 @@ import (
 
 func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "artifact",
-		Short: "Manage Service Registry Artifacts",
-		Long: `
-Manage Service Registry Artifacts using the currently selected Service Registry.
-
-Commands are executed on the currently selected Service Registry instance that can be overridden by --instance-id flag.
-
-Apicurio Registry Artifacts enables developers to manage and share the structure of their data. 
-For example, client applications can dynamically push or pull the latest updates to or from the registry without needing to redeploy.
-Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. 
-For example, this includes rules for content validation and version compatibility.
-
-Artifact commands enable client applications to manage the artifacts in the registry. 
-This set of commands provide create, read, update, and delete operations for schema and API artifacts, rules, versions, and metadata.
-`,
-		Example: `
-## Create artifact in my-group from schema.json file
-rhoas service-registry artifact create --artifact-id=my-artifact --group=my-group artifact.json
-
-## Get artifact content
-rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
-
-## Get artifact content by hash
-rhoas service-registry artifact download --hash=cab4...al9 --output-file=artifact.json
-
-## Delete artifact
-rhoas service-registry artifact delete --artifact-id=my-artifact
-
-## Get artifact metadata
-rhoas service-registry artifact metadata --artifact-id=my-artifact --group=my-group
-
-## Update artifact
-rhoas service-registry artifact update --artifact-id=my-artifact artifact-new.json
-
-## List Artifacts
-rhoas service-registry artifact list --group=my-group --limit=10 page=1
-
-## View artifact versions
-rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-group
-		`,
-		Args: cobra.MinimumNArgs(1),
+		Use:     f.Localizer.MustLocalize("artifact.cmd.use"),
+		Short:   f.Localizer.MustLocalize("artifact.cmd.description.short"),
+		Long:    f.Localizer.MustLocalize("artifact.cmd.description.long"),
+		Example: f.Localizer.MustLocalize("artifact.cmd.example"),
+		Args:    cobra.MinimumNArgs(1),
 	}
 
 	// add sub-commands
