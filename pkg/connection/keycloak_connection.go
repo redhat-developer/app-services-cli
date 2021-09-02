@@ -355,7 +355,7 @@ func (c *KeycloakConnection) createServiceRegistryInstanceAPI(registryUrl string
 
 	var baseURL string
 	if host == "localhost" {
-		var apiURL *url.URL = &url.URL{
+		var apiURL = &url.URL{
 			Scheme: "http",
 			Host:   fmt.Sprintf("localhost:%v", port),
 		}

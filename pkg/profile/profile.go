@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var DevPreviewEnv string = "RHOAS_DEV"
+const DevPreviewEnv = "RHOAS_DEV"
 
 // ApplyDevPreviewLabel adds visual element displayed in help
 func ApplyDevPreviewLabel(cmd *cobra.Command) {
