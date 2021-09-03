@@ -4,14 +4,26 @@ one = 'Reset offset for a consumer group'
 [kafka.consumerGroup.resetOffset.cmd.longDescription]
 one = '''
 Reset the offset for consumers in a consumer group reading from a given topic.
+
+Offset types: earliest, latest, absolute, timestamp
+You can choose specific partition to reset offset from (advanced usage)
 '''
 
 [kafka.consumerGroup.resetOffset.cmd.example]
 one = '''
-# reset offset for a consumer group
+# reset offset for a consumer group to latest
 $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest
 
-# reset offset for specific consumers in a consumer group
+# reset offset for a consumer group to earliest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset earliest
+
+# reset offset for a consumer group to an absolute value
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset absolute --value 0
+
+# reset offset for a consumer group to a timestamp
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset timestamp --value "2016-06-23T09:07:21-07:00"
+
+# reset offset for specific partitions in a consumer group
 $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions 0,1
 '''
 
