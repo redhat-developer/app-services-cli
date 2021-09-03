@@ -169,9 +169,9 @@ func runLogin(opts *Options) (err error) {
 		if err = loginExec.Execute(ctx, ssoCfg, masSsoCfg); err != nil {
 			if errors.Is(err, context.DeadlineExceeded) {
 				return errors.New(opts.localizer.MustLocalize("login.error.context.deadline.exceeded"))
-			} else {
-				return err
 			}
+
+			return err
 		}
 	}
 
