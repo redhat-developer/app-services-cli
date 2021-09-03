@@ -44,6 +44,8 @@ type updatedConsumerRow struct {
 	Offset    int32  `json:"lag,omitempty" header:"Offset"`
 }
 
+var validator consumergroup.Validator
+
 // NewResetOffsetConsumerGroupCommand gets a new command for resetting offset for a consumer group.
 func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
@@ -66,8 +68,12 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
 			}
 
+			validator = consumergroup.Validator{
+				Localizer: opts.localizer,
+			}
+
 			if opts.offset != "" {
-				if err = consumergroup.ValidateOffset(opts.offset); err != nil {
+				if err = validator.ValidateOffset(opts.offset); err != nil {
 					return err
 				}
 			}
@@ -137,10 +143,6 @@ func runCmd(opts *Options) error {
 	}
 
 	ctx := context.Background()
-
-	validator := consumergroup.Validator{
-		Localizer: opts.localizer,
-	}
 
 	offsetResetParams := kafkainstanceclient.ConsumerGroupResetOffsetParameters{
 		Offset: opts.offset,
