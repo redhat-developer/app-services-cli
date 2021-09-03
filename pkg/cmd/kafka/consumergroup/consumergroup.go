@@ -5,6 +5,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/resetoffset"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +23,7 @@ func NewConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		list.NewListConsumerGroupCommand(f),
 		delete.NewDeleteConsumerGroupCommand(f),
 		describe.NewDescribeConsumerGroupCommand(f),
+		resetoffset.NewResetOffsetConsumerGroupCommand(f),
 	)
 
 	return cmd

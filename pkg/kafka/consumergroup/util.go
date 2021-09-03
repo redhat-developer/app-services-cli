@@ -4,6 +4,16 @@ import (
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
+// valid values for consumer group reset offset operaion
+const (
+	OffsetAbsolute  = "absolute"
+	OffsetEarliest  = "earliest"
+	OffsetTimestamp = "timestamp"
+	OffsetLatest    = "latest"
+)
+
+var ValidOffsets = []string{OffsetAbsolute, OffsetEarliest, OffsetTimestamp, OffsetLatest}
+
 // GetPartitionsWithLag returns the number of partitions having lag for a consumer group
 func GetPartitionsWithLag(consumers []kafkainstanceclient.Consumer) (partitionsWithLag int) {
 	for _, consumer := range consumers {
