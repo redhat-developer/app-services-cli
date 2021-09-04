@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -135,7 +136,7 @@ func deleteServiceAccount(opts *Options) error {
 		}
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.delete.log.info.deleteSuccess"))
+	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("serviceAccount.delete.log.info.deleteSuccess"))
 
 	return nil
 }

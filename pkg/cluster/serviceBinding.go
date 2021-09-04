@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"os"
 	"path/filepath"
 
@@ -102,7 +103,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 		return err
 	}
 
-	logger.Info(fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
+	logger.Info(build.EmojiSuccess, fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
 	return nil
 }
 

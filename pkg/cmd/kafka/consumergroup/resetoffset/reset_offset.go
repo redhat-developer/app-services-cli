@@ -3,6 +3,7 @@ package resetoffset
 import (
 	"context"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -256,7 +257,7 @@ func runCmd(opts *Options) error {
 
 	defer httpRes.Body.Close()
 
-	opts.Logger.Info(opts.localizer.MustLocalize(
+	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize(
 		"kafka.consumerGroup.resetOffset.log.info.successful",
 		localize.NewEntry("ConsumerGroupID", opts.id),
 		localize.NewEntry("InstanceName", kafkaInstance.GetName())),

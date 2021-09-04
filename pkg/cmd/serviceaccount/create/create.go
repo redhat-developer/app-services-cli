@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -137,7 +138,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
+	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),

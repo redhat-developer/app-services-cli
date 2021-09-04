@@ -3,6 +3,7 @@ package metadata
 import (
 	"context"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -107,7 +108,7 @@ func runGet(opts *GetOptions) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
+	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

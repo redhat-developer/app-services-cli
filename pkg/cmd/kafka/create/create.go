@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net/http"
 	"os"
 	"os/signal"
@@ -241,7 +242,7 @@ func runCreate(opts *Options) error {
 		}
 		s.Stop()
 		opts.Logger.Info("\n")
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
+		opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
 	switch opts.outputFormat {
@@ -255,7 +256,7 @@ func runCreate(opts *Options) error {
 
 	if !opts.wait {
 		opts.Logger.Info()
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
+		opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
 	}
 
 	return nil

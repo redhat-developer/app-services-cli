@@ -3,6 +3,7 @@ package login
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"log"
 	"net/http"
 	"net/url"
@@ -44,7 +45,7 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedIn"))
+	a.Logger.Info(build.EmojiSuccess, a.Localizer.MustLocalize("login.log.info.loggedIn"))
 
 	masSSOHost := masSSOCfg.AuthURL.Host
 
@@ -53,7 +54,7 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
+	a.Logger.Info(build.EmojiSuccess, a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
 
 	return nil
 }

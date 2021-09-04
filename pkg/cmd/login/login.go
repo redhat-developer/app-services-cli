@@ -194,9 +194,9 @@ func runLogin(opts *Options) (err error) {
 	opts.Logger.Info("")
 
 	if !ok {
-		opts.Logger.Info(opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
+		opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {
-		opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username))
+		opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username)))
 	}
 
 	// debug mode checks this for a version update also.
