@@ -57,6 +57,12 @@ var (
 	StagingMasAuthURL           = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
 )
 
+// The emoji sequences
+var (
+	EmojiSuccess = "\u2714\ufe0f"
+	EmojiError   = "\u274c"
+)
+
 func init() {
 	if isDevBuild() {
 		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "(devel)" {
