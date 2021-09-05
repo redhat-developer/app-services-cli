@@ -142,7 +142,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
+	opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
 
 	currentContextRegistry := cfg.Services.ServiceRegistry
 	// this is not the current cluster, our work here is done

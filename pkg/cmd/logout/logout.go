@@ -57,7 +57,7 @@ func runLogout(opts *Options) error {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("logout.error.unableToLogout"), err)
 	}
 
-	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("logout.log.info.logoutSuccess"))
+	opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("logout.log.info.logoutSuccess"))
 
 	return nil
 }

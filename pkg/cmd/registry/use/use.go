@@ -118,7 +118,7 @@ func runUse(opts *Options) error {
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("registry.use.log.info.useSuccess", nameTmplEntry))
+	opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("registry.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }

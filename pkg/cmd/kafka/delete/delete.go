@@ -147,7 +147,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
+	opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

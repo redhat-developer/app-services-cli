@@ -112,5 +112,5 @@ func initConfig(f *factory.Factory) error {
 }
 
 func wrapErrorf(err error, localizer localize.Localizer) error {
-	return fmt.Errorf("%v %w. %v", build.EmojiError, err, localizer.MustLocalize("common.log.error.verboseModeHint"))
+	return fmt.Errorf("%v  %w. %v", build.GetEmojiError(), err, localizer.MustLocalize("common.log.error.verboseModeHint"))
 }

@@ -242,7 +242,7 @@ func runCreate(opts *Options) error {
 		}
 		s.Stop()
 		opts.Logger.Info("\n")
-		opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
+		opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
 	switch opts.outputFormat {
@@ -256,7 +256,7 @@ func runCreate(opts *Options) error {
 
 	if !opts.wait {
 		opts.Logger.Info()
-		opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
+		opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
 	}
 
 	return nil

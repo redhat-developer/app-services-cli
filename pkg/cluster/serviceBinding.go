@@ -103,7 +103,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 		return err
 	}
 
-	logger.Info(build.EmojiSuccess, fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
+	logger.Info(build.GetEmojiSuccess(), fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
 	return nil
 }
 

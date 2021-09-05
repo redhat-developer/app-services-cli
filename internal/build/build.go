@@ -2,6 +2,7 @@ package build
 
 import (
 	"context"
+	"runtime"
 	"runtime/debug"
 
 	"github.com/google/go-github/github"
@@ -57,11 +58,21 @@ var (
 	StagingMasAuthURL           = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
 )
 
-// The emoji sequences
-var (
-	EmojiSuccess = "\u2714\ufe0f"
-	EmojiError   = "\u274c"
-)
+// GetEmojiSuccess returns check mark emoji on every platform, but Windows
+func GetEmojiSuccess() string {
+	if runtime.GOOS != "windows" {
+		return "\u2714\ufe0f"
+	}
+	return ""
+}
+
+// GetEmojiError returns cross mark emoji on every platform, but Windows
+func GetEmojiError() string {
+	if runtime.GOOS != "windows" {
+		return "\u274c"
+	}
+	return "Error:"
+}
 
 func init() {
 	if isDevBuild() {

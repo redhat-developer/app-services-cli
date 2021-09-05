@@ -137,7 +137,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
+	opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

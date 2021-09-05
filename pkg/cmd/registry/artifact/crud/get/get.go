@@ -130,6 +130,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	opts.Logger.Info(build.EmojiSuccess, opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
+	opts.Logger.Info(build.GetEmojiSuccess(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 	return nil
 }
