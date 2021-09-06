@@ -407,3 +407,40 @@ rhoas service-registry artifact versions --artifact-id=my-artifact
 ## Get latest artifact versions for my-group group
 rhoas service-registry artifact versions --artifact-id=my-artifact --group mygroup
 '''
+
+[artifact.cmd.import.description.short]
+one = 'Import data into service registry'
+
+[artifact.cmd.import.description.long]
+one = '''
+Import all artifacts and metadata from export file to service registry instance.'
+'''
+
+[artifact.cmd.import.example]
+one = '''
+## Import all artifacts and metadata from export file to new service registry instance
+rhoas service-registry artifact import --file=export.zip
+'''
+
+[artifact.cmd.export.description.short]
+one = 'Export data from service registry instance'
+
+[artifact.cmd.export.description.long]
+one = '''
+## Export all artifacts and metadata from service registry instance to export file
+rhoas service-registry artifact export --file=export.zip
+'''
+
+
+[artifact.cmd.export.example]
+one = '''
+## Import all artifacts and metadata from export file to new service registry instance
+rhoas service-registry artifact import --file=export.zip
+'''
+
+
+[artifact.export.success]
+one = 'All data exported successfully'
+
+[artifact.import.success]
+one = 'All data imported successfully'

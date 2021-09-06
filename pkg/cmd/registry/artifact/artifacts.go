@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/crud/update"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/download"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/metadata"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/migrate"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/versions"
 	"github.com/spf13/cobra"
 )
@@ -36,6 +37,8 @@ func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 		metadata.NewSetMetadataCommand(f),
 		versions.NewVersionsCommand(f),
 		download.NewDownloadCommand(f),
+		migrate.NewExportCommand(f),
+		migrate.NewImportCommand(f),
 	)
 
 	return cmd
