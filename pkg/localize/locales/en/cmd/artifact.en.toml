@@ -1,6 +1,4 @@
-[artifact.cmd.use]
-one = 'artifact'
-
+ 
 [artifact.cmd.description.short]
 one = 'Manage Service Registry Artifacts'
 
@@ -190,9 +188,6 @@ one = 'please specify at least one flag: [contentId, global-id, hash]'
 [artifact.cmd.common.error.no.editor.mode.in.non.interactive]
 one = 'editor mode cannot be started in non-interactive mode. Please use --name and --description flags'
 
-[artifact.cmd.create.use]
-one = 'create'
-
 [artifact.cmd.create.description.short]
 one = 'Creates new artifact from file or standard input'
 
@@ -236,9 +231,6 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 [artifact.cmd.create.error.invalidArtifactType]
 one = 'invalid artifact type. Please use one of following values: {{.AllowedTypes}}'
 
-[artifact.cmd.delete.use]
-one = 'delete'
-
 [artifact.cmd.delete.description.short]
 one = 'Deletes single or all artifacts in a given group'
 
@@ -259,9 +251,6 @@ rhoas service-registry artifact delete
 ## Delete artifact in the group "default" with name "my-artifact"
 rhoas service-registry artifact delete --artifact-id=my-artifact
 '''
-
-[artifact.cmd.get.use]
-one = 'get'
 
 [artifact.cmd.get.description.short]
 one = 'Get artifact by id and group'
@@ -291,9 +280,6 @@ rhoas service-registry artifact get --artifact-id=my-artifact | grep -i 'user'
 rhoas service-registry artifact get --artifact-id=myartifact --version=4
 '''
 
-[artifact.cmd.list.use]
-one = 'list'
-
 [artifact.cmd.list.description.short]
 one = 'List artifacts'
 
@@ -311,9 +297,6 @@ rhoas service-registry artifact list --group=my-group
 ## List all artifacts with limit and group
 rhoas service-registry artifact list --page=2 --limit=10
 '''
-
-[artifact.cmd.update.use]
-one = 'update'
 
 [artifact.cmd.update.description.short]
 one = 'Update artifact'
@@ -339,9 +322,6 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 ## update artifact from group and artifact-id
 rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json
 '''
-
-[artifact.cmd.download.use]
-one = 'download'
 
 [artifact.cmd.download.description.short]
 one = 'Download artifacts from registry by using global identifiers'
@@ -373,9 +353,6 @@ rhoas service-registry artifact download --global-id=383282932983
 rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4
 '''
 
-[artifact.cmd.metadata.get.use]
-one = 'metadata-get'
-
 [artifact.cmd.metadata.get.description.short]
 one = 'Get artifact metadata'
 
@@ -394,8 +371,6 @@ rhoas service-registry artifact metadata --artifact-id=my-artifact
 rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygroup
 '''
 
-[artifact.cmd.metadata.set.use]
-one = 'metadata-set'
 
 [artifact.cmd.metadata.set.description.short]
 one = 'Update artifact metadata'
@@ -417,9 +392,6 @@ rhoas service-registry artifact metadata-set --artifact-id=my-artifact
 ##  Update the metadata for an artifact using visual studio code
 EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-artifact
 '''
-
-[artifact.cmd.versions.use]
-one = 'versions'
 
 [artifact.cmd.versions.description.short]
 one = 'Get latest artifact versions by artifact-id and group'

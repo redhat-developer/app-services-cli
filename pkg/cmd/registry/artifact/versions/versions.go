@@ -3,6 +3,7 @@ package versions
 import (
 	"context"
 	"errors"
+
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -42,7 +43,7 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.versions.use"),
+		Use:     "versions",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.versions.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.versions.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.versions.example"),

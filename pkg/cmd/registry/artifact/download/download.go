@@ -51,7 +51,7 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.download.use"),
+		Use:     "download",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.download.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.download.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.download.example"),

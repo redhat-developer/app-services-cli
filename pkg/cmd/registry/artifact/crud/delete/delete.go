@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 	"errors"
+
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -45,7 +46,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.delete.use"),
+		Use:     "delete",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.delete.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.delete.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.delete.example"),

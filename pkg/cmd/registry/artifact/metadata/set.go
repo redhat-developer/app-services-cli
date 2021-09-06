@@ -48,7 +48,7 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.metadata.set.use"),
+		Use:     "metadata-set",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.metadata.set.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.metadata.set.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.metadata.set.example"),

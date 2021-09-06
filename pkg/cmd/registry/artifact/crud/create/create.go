@@ -56,7 +56,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.create.use"),
+		Use:     "create",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.create.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.create.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.create.example"),

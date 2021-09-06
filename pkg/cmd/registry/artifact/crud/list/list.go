@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -67,7 +68,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.list.use"),
+		Use:     "list",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.list.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.list.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.list.example"),

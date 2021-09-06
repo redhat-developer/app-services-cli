@@ -54,7 +54,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.update.use"),
+		Use:     "update",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.update.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.update.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.update.example"),
