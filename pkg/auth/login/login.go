@@ -47,13 +47,13 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 
 	masSSOHost := masSSOCfg.AuthURL.Host
 
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingInMAS", localize.NewEntry("Host", masSSOHost)))
+	a.Logger.Debug(a.Localizer.MustLocalize("login.log.info.loggingInMAS", localize.NewEntry("Host", masSSOHost)))
 	// log in to MAS-SSO
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
 	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedIn"))
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
+	a.Logger.Debug(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
 
 	return nil
 }
@@ -96,7 +96,7 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
 	authCodeURL := oauthConfig.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
 	a.Logger.Debug("Opening Authorization URL:", authCodeURL)
-	a.Logger.Info()
+	a.Logger.Debug()
 
 	// create a localhost server to handle redirects and exchange tokens securely
 	sm := http.NewServeMux()
@@ -183,7 +183,7 @@ func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) e
 
 	authCodeURL := oauthConfig.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
 	a.Logger.Debug("Opening Authorization URL:", authCodeURL)
-	a.Logger.Info()
+	a.Logger.Debug()
 
 	sm := http.NewServeMux()
 	server := http.Server{
