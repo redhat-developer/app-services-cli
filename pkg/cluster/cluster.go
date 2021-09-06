@@ -11,6 +11,8 @@ type ConnectArguments struct {
 	SelectedKafka           string
 	SelectedRegistry        string
 	Namespace               string
+	SelectedService         string
+	SelectedServiceID       string
 }
 
 // Cluster defines methods used to interact with a cluster

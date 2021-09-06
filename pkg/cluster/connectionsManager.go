@@ -12,7 +12,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/fields"
@@ -45,12 +44,12 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 	return true, data.Error()
 }
 
-// CheckIfConnectionsExist checks if the Kafka connections exist
-func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespace string, k *kafkamgmtclient.KafkaRequest) error {
+// CheckIfKafkaConnectionExists checks if the Kafka connections exist
+func CheckIfKafkaConnectionExists(ctx context.Context, c *KubernetesCluster, namespace string, k string) error {
 	data := c.clientset.
 		RESTClient().
 		Get().
-		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace), k.GetName()).
+		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace), k).
 		Do(ctx)
 
 	var status int
@@ -59,7 +58,27 @@ func CheckIfConnectionsExist(ctx context.Context, c *KubernetesCluster, namespac
 	}
 
 	if data.Error() == nil {
-		return fmt.Errorf("%v: %s", c.localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), k.GetName())
+		return fmt.Errorf("%v: %s", c.localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), k)
+	}
+
+	return nil
+}
+
+// CheckIfRegistryConnectionExists checks if the Service registry connection exists
+func CheckIfRegistryConnectionExists(ctx context.Context, c *KubernetesCluster, namespace string, registry string) error {
+	data := c.clientset.
+		RESTClient().
+		Get().
+		AbsPath(serviceregistry.GetServiceRegistryAPIURL(namespace), registry).
+		Do(ctx)
+
+	var status int
+	if data.StatusCode(&status); status == http.StatusNotFound {
+		return nil
+	}
+
+	if data.Error() == nil {
+		return fmt.Errorf("%v: %s", c.localizer.MustLocalize("cluster.kubernetes.checkIfServiceRegistryConnectionExist.existError"), registry)
 	}
 
 	return nil

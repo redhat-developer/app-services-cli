@@ -122,3 +122,6 @@ one = 'Service account secret already exist.'
 
 [cluster.kubernetes.checkIfConnectionExist.existError]
 one = 'KafkaConnection already exist'
+
+[cluster.kubernetes.checkIfServiceRegistryConnectionExist.existError]
+one = 'ServiceRegistryConnection already exist'
