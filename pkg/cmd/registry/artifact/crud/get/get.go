@@ -46,7 +46,7 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.get.use"),
+		Use:     "get",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.get.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.get.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.get.example"),

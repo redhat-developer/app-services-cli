@@ -15,7 +15,7 @@ import (
 
 func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.use"),
+		Use:     "artifact",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.example"),

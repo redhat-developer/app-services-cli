@@ -44,7 +44,7 @@ func NewGetMetadataCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("artifact.cmd.metadata.get.use"),
+		Use:     "metadata-get",
 		Short:   f.Localizer.MustLocalize("artifact.cmd.metadata.get.description.short"),
 		Long:    f.Localizer.MustLocalize("artifact.cmd.metadata.get.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.metadata.get.example"),
