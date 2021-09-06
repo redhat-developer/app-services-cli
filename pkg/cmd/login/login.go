@@ -6,11 +6,10 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"net/http"
-	"net/url"
-
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"golang.org/x/oauth2"
+	"net/http"
+	"net/url"
 
 	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
@@ -163,7 +162,15 @@ func runLogin(opts *Options) (err error) {
 			RedirectPath: build.MASSSORedirectPath,
 		}
 
-		if err = loginExec.Execute(context.Background(), ssoCfg, masSsoCfg); err != nil {
+		// Creating a global context with timeout
+		ctx, cancel := context.WithTimeout(context.Background(), build.DefaultLoginTimeout)
+		defer cancel()
+
+		if err = loginExec.Execute(ctx, ssoCfg, masSsoCfg); err != nil {
+			if errors.Is(err, context.DeadlineExceeded) {
+				return errors.New(opts.localizer.MustLocalize("login.error.context.deadline.exceeded"))
+			}
+
 			return err
 		}
 	}
