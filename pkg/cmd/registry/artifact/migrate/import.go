@@ -69,7 +69,6 @@ func NewImportCommand(f *factory.Factory) *cobra.Command {
 	}
 	cmd.Flags().StringVar(&opts.file, "file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
-	_ = cmd.MarkFlagRequired("file")
 
 	return cmd
 }
