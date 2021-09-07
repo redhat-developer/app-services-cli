@@ -4,10 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/editor"
+
+	survey "github.com/AlecAivazis/survey/v2"
+
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
@@ -165,13 +168,19 @@ func runEditor(currentMetadata *registryinstanceclient.EditableMetaData) (*regis
 	if err != nil {
 		return nil, err
 	}
-	systemEditor := editor.New(metadataJson, "metadata.json")
-	output, err := systemEditor.Run()
+	prompt := &survey.Editor{
+		Message:  "Editing metadata in your default editor",
+		FileName: "*.json",
+	}
+	editorData := string(metadataJson)
+	fmt.Println(editorData)
+	err = survey.AskOne(prompt, &editorData)
+
 	if err != nil {
 		return nil, err
 	}
 	var resultData registryinstanceclient.EditableMetaData
-	err = json.Unmarshal(output, &resultData)
+	err = json.Unmarshal([]byte(editorData), &resultData)
 
 	if err != nil {
 		return nil, err
