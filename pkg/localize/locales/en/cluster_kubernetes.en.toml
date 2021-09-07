@@ -95,7 +95,7 @@ Created ServiceRegistryConnection can be already injected to your application.
 To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
 
-You can bind KafkaConnection to your application by executing "rhoas cluster bind" 
+You can bind ServiceRegistryConnection to your application by executing "rhoas cluster bind" 
 or directly in the OpenShift Console topology view.
 '''
 
