@@ -135,11 +135,13 @@ func run(opts *options) error {
 		if err != nil {
 			return err
 		}
+		opts.id = kafkaInstance.GetName()
 	} else {
 		kafkaInstance, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
 		if err != nil {
 			return err
 		}
+		opts.name = kafkaInstance.GetName()
 	}
 
 	if opts.interactive {
@@ -169,14 +171,12 @@ func run(opts *options) error {
 	)
 
 	if !opts.skipConfirm {
-		promptConfirm := survey.Confirm{
-			Message: opts.localizer.MustLocalize("kafka.update.confirmDialog.message", localize.NewEntry("Name", kafkaInstance.GetName())),
-		}
-		var confirmUpdate bool
-		if err = survey.AskOne(&promptConfirm, &confirmUpdate); err != nil {
+		//nolint:govet
+		confirm, err := promptConfirmUpdate(opts)
+		if err != nil {
 			return err
 		}
-		if !confirmUpdate {
+		if !confirm {
 			opts.logger.Debug("User has chosen to not update Kafka instance")
 			return nil
 		}
@@ -264,6 +264,18 @@ func selectOwnerInteractive(ctx context.Context, opts *Options) (string, error) 
 	opts.owner, err = promptOwnerSelect(opts.localizer, users)
 
 	return opts.owner, err
+}
+
+func promptConfirmUpdate(opts *Options) (bool, error) {
+	promptConfirm := survey.Confirm{
+		Message: opts.localizer.MustLocalize("kafka.update.confirmDialog.message", localize.NewEntry("Name", opts.name)),
+	}
+
+	var confirmUpdate bool
+	if err := survey.AskOne(&promptConfirm, &confirmUpdate); err != nil {
+		return false, err
+	}
+	return confirmUpdate, nil
 }
 
 // creates a summary of what values will be changed in this update
