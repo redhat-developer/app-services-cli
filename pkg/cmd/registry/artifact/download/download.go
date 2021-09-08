@@ -141,6 +141,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 	return nil
 }

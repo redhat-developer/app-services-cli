@@ -11,12 +11,12 @@ func Emoji(emoji string, fallback string) string {
 	return fallback
 }
 
-// Success returns check mark emoji
-func Success() string {
+// SuccessPrefix returns check mark emoji prefix
+func SuccessPrefix() string {
 	return Emoji("\u2714\ufe0f", "")
 }
 
-// Error returns cross mark emoji
-func Error() string {
+// ErrorPrefix returns cross mark emoji prefix or default "Error:"
+func ErrorPrefix() string {
 	return Emoji("\u274c", "Error:")
 }

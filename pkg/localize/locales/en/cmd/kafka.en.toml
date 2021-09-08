@@ -384,7 +384,7 @@ one = 'The name you entered does not match the name of the Kafka instance that y
 description = 'Debug message when deleting Kafka'
 one = 'Deleting Kafka instance'
 
-[kafka.delete.log.info.deleteSuccess]
+[kafka.delete.log.info.deleting]
 description = 'Info message when instance was deleted'
 one = 'Kafka instance "{{.Name}}" is being deleted'
 

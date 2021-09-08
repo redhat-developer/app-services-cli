@@ -136,7 +136,7 @@ func deleteServiceAccount(opts *Options) error {
 		}
 	}
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("serviceAccount.delete.log.info.deleteSuccess"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.delete.log.info.deleteSuccess"))
 
 	return nil
 }
