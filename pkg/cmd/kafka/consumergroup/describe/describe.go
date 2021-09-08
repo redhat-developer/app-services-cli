@@ -38,7 +38,7 @@ type Options struct {
 }
 
 type consumerRow struct {
-	MemberID      string `json:"memberId,omitempty" header:"Member ID"`
+	MemberID      string `json:"memberId,omitempty" header:"Consumer ID"`
 	Partition     int    `json:"partition,omitempty" header:"Partition"`
 	Topic         string `json:"topic,omitempty" header:"Topic"`
 	LogEndOffset  int    `json:"logEndOffset,omitempty" header:"Log end offset"`
