@@ -52,10 +52,7 @@ var (
 	DefaultClientID             = "rhoas-cli-prod"
 	DefaultUserAgentPrefix      = "rhoas-cli_"
 	DefaultOfflineTokenClientID = "cloud-services"
-<<<<<<< HEAD
 	DefaultLoginTimeout         = 60 * time.Second
-=======
->>>>>>> 39811b7f (feat(kafka): add ability to update Kafka instance)
 	OfflineTokenURL             = ConsoleURL + "/openshift/token"
 	ProductionAuthURL           = "https://sso.redhat.com/auth/realms/redhat-external"
 	ProductionMasAuthURL        = "https://identity.api.openshift.com/auth/realms/rhoas"

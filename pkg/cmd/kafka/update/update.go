@@ -19,6 +19,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
@@ -158,11 +159,14 @@ func run(opts *options) error {
 	// create a text block with a summary of what is being updated
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
 
-	// TODO: Use the new `icon` package when it is merged
 	opts.logger.Infof(`
-%v 🗒️
+ %v %v
 
- %v`, color.Underline(color.Bold(opts.localizer.MustLocalize("kafka.update.summaryTitle"))), updateSummary)
+   %v`,
+		color.Underline(color.Bold(opts.localizer.MustLocalize("kafka.update.summaryTitle"))),
+		icon.Emoji("\U0001f50e", ""),
+		updateSummary,
+	)
 
 	if !opts.skipConfirm {
 		promptConfirm := survey.Confirm{
@@ -278,7 +282,7 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 		oldVal := getElementValue(current.FieldByName(fieldName)).String()
 		newVal := getElementValue(new.FieldByName(fieldName)).String()
 
-		summary += fmt.Sprintf("%v: %v   ➡️ ️	%v\n", color.Bold(fieldTag), oldVal, newVal)
+		summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTag), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
 	}
 
 	return summary
