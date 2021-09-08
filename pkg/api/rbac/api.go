@@ -73,6 +73,7 @@ type APIClient struct {
 	AccessToken string
 }
 
+// GetPrincipals returns the list of user's in the current users organization/tenant
 func (c *APIClient) GetPrincipals(ctx context.Context, opts ...QueryParam) (*PrincipalList, *http.Response, error) {
 	u := resolveURI(c.baseURL, "/api/rbac/v1/principals/", opts...)
 
@@ -84,9 +85,6 @@ func (c *APIClient) GetPrincipals(ctx context.Context, opts ...QueryParam) (*Pri
 	req = req.WithContext(ctx)
 
 	req.Header.Set("Accept", "application/json")
-	// if c.AccessToken != "" {
-	// 	req.Header.Set("Authorization", "Bearer "+c.AccessToken)
-	// }
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
