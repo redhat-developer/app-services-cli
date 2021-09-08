@@ -137,7 +137,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

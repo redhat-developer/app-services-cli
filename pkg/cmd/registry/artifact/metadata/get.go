@@ -108,7 +108,7 @@ func runGet(opts *GetOptions) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

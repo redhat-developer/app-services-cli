@@ -125,7 +125,7 @@ func runUse(opts *Options) error {
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }

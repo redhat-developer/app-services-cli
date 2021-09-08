@@ -150,7 +150,7 @@ func runSet(opts *SetOptions) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))
 	return nil
 }
 

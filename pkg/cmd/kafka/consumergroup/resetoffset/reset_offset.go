@@ -257,7 +257,7 @@ func runCmd(opts *Options) error {
 
 	defer httpRes.Body.Close()
 
-	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize(
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize(
 		"kafka.consumerGroup.resetOffset.log.info.successful",
 		localize.NewEntry("ConsumerGroupID", opts.id),
 		localize.NewEntry("InstanceName", kafkaInstance.GetName())),

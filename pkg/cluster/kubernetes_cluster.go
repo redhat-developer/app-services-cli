@@ -264,7 +264,7 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
 	}
 
-	c.logger.Info(icon.Success(), c.localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
+	c.logger.Info(icon.SuccessPrefix(), c.localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
 
 	return nil
 }
@@ -302,7 +302,7 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
 
-	c.logger.Info(icon.Success(), c.localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
+	c.logger.Info(icon.SuccessPrefix(), c.localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
 
 	return nil
 }
