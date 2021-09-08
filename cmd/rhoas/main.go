@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
+	"strings"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -54,7 +56,7 @@ func main() {
 		}
 		return
 	}
-	cmdFactory.Logger.Error(wrapErrorf(err, localizer))
+	cmdFactory.Logger.Error(rootError(err, localizer))
 	build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
 	os.Exit(1)
 }
@@ -112,6 +114,18 @@ func initConfig(f *factory.Factory) error {
 	return nil
 }
 
-func wrapErrorf(err error, localizer localize.Localizer) error {
-	return fmt.Errorf("%v %w. %v", icon.ErrorPrefix(), err, localizer.MustLocalize("common.log.error.verboseModeHint"))
+// rootError creates the root error which is printed to the console
+// it wraps the error which has been returned from subcommands with a prefix
+func rootError(err error, localizer localize.Localizer) error {
+	prefix := icon.ErrorPrefix()
+	errMessage := err.Error()
+	if prefix == icon.CrossMark {
+		errMessage = firstCharToUpper(errMessage)
+	}
+	return fmt.Errorf("%v %v. %v", icon.ErrorPrefix(), errMessage, localizer.MustLocalize("common.log.error.verboseModeHint"))
+}
+
+// Ensure that the first character in the string is capitalized
+func firstCharToUpper(message string) string {
+	return strings.ToUpper(message[:1]) + message[1:]
 }
