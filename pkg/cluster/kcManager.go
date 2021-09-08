@@ -6,6 +6,7 @@ package cluster
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
 	"time"
 
@@ -118,7 +119,7 @@ func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) 
 								return fmt.Errorf(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.error.status"), typedCondition["message"])
 							}
 							if typedCondition["status"].(string) == "True" {
-								c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.success", localize.NewEntry("Name", crName), localize.NewEntry("Namespace", namespace)))
+								c.logger.Info(icon.Success(), c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.success", localize.NewEntry("Name", crName), localize.NewEntry("Namespace", namespace)))
 
 								w.Stop()
 								return nil

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -141,7 +142,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
+	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
 
 	currentContextRegistry := cfg.Services.ServiceRegistry
 	// this is not the current cluster, our work here is done

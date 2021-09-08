@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
@@ -146,7 +147,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
+	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("kafka.delete.log.info.deleteSuccess", localize.NewEntry("Name", kafkaName)))
 
 	currentKafka := cfg.Services.Kafka
 	// this is not the current cluster, our work here is done

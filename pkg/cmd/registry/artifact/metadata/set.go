@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -149,7 +150,7 @@ func runSet(opts *SetOptions) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))
+	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))
 	return nil
 }
 
