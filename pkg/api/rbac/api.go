@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type PrincipalList struct {
@@ -30,12 +31,14 @@ type Principal struct {
 	IsOrgAdmin bool   `json:"is_org_admin"`
 }
 
+// RbacAPI defines a collection of APIs grouped under the RBAC API
 type RbacAPI struct {
 	PrincipalAPI func() PrincipalAPI
 }
 
+// PrincipalAPI is the API definition for the RBAC Principal API
 type PrincipalAPI interface {
-	GetPrincipals(ctx context.Context) (*PrincipalList, *http.Response, error)
+	GetPrincipals(ctx context.Context, opts ...QueryParam) (*PrincipalList, *http.Response, error)
 }
 
 // APIConfig defines the available configuration options
@@ -46,8 +49,7 @@ type Config struct {
 	// Debug enables debug-level logging
 	Debug bool
 	// BaseURL sets a custom API server base URL
-	BaseURL     *url.URL
-	AccessToken string
+	BaseURL *url.URL
 }
 
 // NewPrincipalAPIClient returns a new v1 API client
@@ -58,9 +60,8 @@ func NewPrincipalAPIClient(cfg *Config) PrincipalAPI {
 	}
 
 	c := APIClient{
-		baseURL:     cfg.BaseURL,
-		AccessToken: cfg.AccessToken,
-		httpClient:  cfg.HTTPClient,
+		baseURL:    cfg.BaseURL,
+		httpClient: cfg.HTTPClient,
 	}
 
 	return &c
@@ -72,20 +73,20 @@ type APIClient struct {
 	AccessToken string
 }
 
-func (c *APIClient) GetPrincipals(ctx context.Context) (*PrincipalList, *http.Response, error) {
-	rel := url.URL{Path: "/api/rbac/v1/principals/"}
-	u := c.baseURL.ResolveReference(&rel)
+func (c *APIClient) GetPrincipals(ctx context.Context, opts ...QueryParam) (*PrincipalList, *http.Response, error) {
+	u := resolveURI(c.baseURL, "/api/rbac/v1/principals/", opts...)
+
 	req, err := http.NewRequest("GET", u.String(), nil)
-
-	req = req.WithContext(ctx)
-
 	if err != nil {
 		return nil, nil, err
 	}
+
+	req = req.WithContext(ctx)
+
 	req.Header.Set("Accept", "application/json")
-	if c.AccessToken != "" {
-		req.Header.Set("Authorization", "Bearer "+c.AccessToken)
-	}
+	// if c.AccessToken != "" {
+	// 	req.Header.Set("Authorization", "Bearer "+c.AccessToken)
+	// }
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -99,4 +100,45 @@ func (c *APIClient) GetPrincipals(ctx context.Context) (*PrincipalList, *http.Re
 	var principalList PrincipalList
 	err = json.NewDecoder(resp.Body).Decode(&principalList)
 	return &principalList, resp, err
+}
+
+// QueryParam is a function defining the query param options return signature
+type QueryParam func() (key string, value string)
+
+// WithIntQueryParam accepts an integer query parameter and formats it as a string
+func WithIntQueryParam(key string, value int) QueryParam {
+	val := strconv.Itoa(value)
+
+	return WithQueryParam(key, val)
+}
+
+// WithIntParam accepts a boolean query parameter and formats it as a string
+func WithBoolQueryParam(key string, value bool) QueryParam {
+	val := strconv.FormatBool(value)
+
+	return WithQueryParam(key, val)
+}
+
+// WithQueryParam accepts a string query parameter
+func WithQueryParam(key string, value string) QueryParam {
+	return func() (string, string) {
+		return key, value
+	}
+}
+
+// resolveURI builds and returns a URI with query parameters
+func resolveURI(baseURL *url.URL, path string, opts ...QueryParam) *url.URL {
+	rel := url.URL{Path: path}
+	u := baseURL.ResolveReference(&rel)
+	q := u.Query()
+	for _, opt := range opts {
+		if opt == nil {
+			continue
+		}
+		key, val := opt()
+		q.Set(key, val)
+	}
+	u.RawQuery = q.Encode()
+
+	return u
 }

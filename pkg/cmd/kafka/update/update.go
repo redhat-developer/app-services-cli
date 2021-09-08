@@ -5,10 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -71,6 +75,9 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 					return flag.RequiredWhenNonInteractiveError(missingFlags...)
 				}
 			}
+			if opts.owner == "" {
+				opts.interactive = true
+			}
 
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
@@ -107,15 +114,14 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, opts.localizer.MustLocalize("kafka.update.flag.yes"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
-	_ = cmd.MarkFlagRequired("owner")
-
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	_ = kafkacmdutil.RegisterOwnerFlagCompletionFunc(cmd, f)
 
 	return cmd
 }
 
 func run(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -135,6 +141,13 @@ func run(opts *options) error {
 		}
 	}
 
+	if opts.interactive {
+		opts.owner, err = selectOwnerInteractive(ctx, opts)
+		if err != nil {
+			return err
+		}
+	}
+
 	if opts.owner == kafkaInstance.GetOwner() {
 		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.sameOwnerNoChanges", localize.NewEntry("Owner", opts.owner), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 		return nil
@@ -145,6 +158,7 @@ func run(opts *options) error {
 	// create a text block with a summary of what is being updated
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
 
+	// TODO: Use the new `icon` package when it is merged
 	opts.logger.Infof(`
 %v 🗒️
 
@@ -194,6 +208,58 @@ func run(opts *options) error {
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 
 	return nil
+}
+
+func promptOwnerSelect(localizer localize.Localizer, users []rbac.Principal) (string, error) {
+	var usernames []string
+	var displayNameUsernameMap = make(map[string]string)
+
+	if len(users) > 0 {
+		for _, p := range users {
+			displayName := fmt.Sprintf("%v (%v %v)", p.Username, p.FirstName, p.LastName)
+			displayNameUsernameMap[displayName] = p.Username
+			usernames = append(usernames, displayName)
+		}
+	}
+	prompt := survey.Select{
+		Message: localizer.MustLocalize("kafka.update.input.message.selectOwner"),
+		Options: usernames,
+	}
+
+	var response string
+	pageSize, err := strconv.Atoi(build.DefaultPageSize)
+	if err != nil {
+		pageSize = 10
+	}
+	if err = survey.AskOne(&prompt, &response, survey.WithPageSize(pageSize)); err != nil {
+		return "", err
+	}
+
+	username := displayNameUsernameMap[response]
+
+	return username, err
+}
+
+func selectOwnerInteractive(ctx context.Context, opts *Options) (string, error) {
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return "", err
+	}
+	spinner := opts.IO.NewSpinner()
+	spinner.Suffix = " " + opts.localizer.MustLocalize("kafka.update.log.info.loadingUsers")
+	spinner.Start()
+
+	//nolint:govet
+	users, err := rbacutil.FetchAllUsers(ctx, conn.API().RBAC.PrincipalAPI)
+
+	spinner.Stop()
+	opts.logger.Info()
+	if err != nil {
+		return "", fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.update.error.loadUsersError"), err)
+	}
+	opts.owner, err = promptOwnerSelect(opts.localizer, users)
+
+	return opts.owner, err
 }
 
 // creates a summary of what values will be changed in this update
