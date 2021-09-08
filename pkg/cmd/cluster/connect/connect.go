@@ -42,7 +42,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("cluster.connect.cmd.use"),
+		Use:     "connect",
 		Short:   opts.localizer.MustLocalize("cluster.connect.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("cluster.connect.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("cluster.connect.cmd.example"),

@@ -1,7 +1,3 @@
-[kafka.cmd.use]
-description = "Use is the one-line usage message"
-one = "kafka"
-
 [kafka.cmd.shortDescription]
 description = "Short description for command"
 one = "Create, view, use, and manage your Kafka instances"
@@ -72,10 +68,6 @@ one = 'invalid value for size {{.Size}}, minimum value is -1'
 [kafka.common.error.load.completions.name.flag]
 one = 'failed to load completions for --name:'
 
-[kafka.consumerGroup.cmd.use]
-description = "Use is the one-line usage message"
-one = "consumer-group"
-
 [kafka.consumerGroup.cmd.shortDescription]
 one = 'Describe, list, and delete consumer groups for the current Apache Kafka instance'
 
@@ -131,9 +123,6 @@ one = 'you are unauthorized to {{.Operation}} these consumer groups'
 one = 'you are forbidden to {{.Operation}} these consumer groups'
 
 
-[kafka.consumerGroup.delete.cmd.use]
-one = 'delete'
-
 [kafka.consumerGroup.delete.cmd.shortDescription]
 one = 'Delete a consumer group'
 
@@ -167,9 +156,6 @@ one = 'Consumer group with ID "{{.ConsumerGroupID}}" has been deleted from the K
 [kafka.consumerGroup.delete.error.locked]
 one = "a consumer group with active members cannot be deleted"
 
-[kafka.consumerGroup.describe.cmd.use]
-one = 'describe'
-
 [kafka.consumerGroup.describe.cmd.shortDescription]
 one = 'Describe a consumer group'
 
@@ -198,10 +184,6 @@ one = 'PARTITIONS WITH LAG:'
 
 [kafka.consumerGroup.describe.output.unassignedPartitions]
 one = 'UNASSIGNED PARTITIONS:'
-
-[kafka.consumerGroup.list.cmd.use]
-description = "Use is the one-line usage message"
-one = "list"
 
 [kafka.consumerGroup.list.cmd.shortDescription]
 one = 'List all consumer groups'
@@ -239,10 +221,6 @@ one = 'Kafka instance "{{.InstanceName}}" has no consumer groups'
 
 [kafka.consumerGroup.list.log.info.noConsumerGroupsForTopic]
 one = 'Kafka instance "{{.InstanceName}}" has no consumer groups for topic "{{.TopicName}}"'
-
-[kafka.create.cmd.use]
-description = "Use is the one-line usage message"
-one = "create"
 
 [kafka.create.cmd.shortDescription]
 description = "Short description for command"
@@ -330,10 +308,6 @@ one = 'name is required. Run "rhoas kafka create --name <name>"'
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
 
-[kafka.delete.cmd.use]
-description = "Use is the one-line usage message"
-one = "delete"
-
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
 one = "Delete an Apache Kafka instance"
@@ -388,10 +362,6 @@ one = 'Deleting Kafka instance'
 description = 'Info message when instance was deleted'
 one = 'Kafka instance "{{.Name}}" is being deleted'
 
-[kafka.describe.cmd.use]
-description = "Use is the one-line usage message"
-one = "describe"
-
 [kafka.describe.cmd.shortDescription]
 description = "Short description for command"
 one = "View configuration details of an Apache Kafka instance"
@@ -431,10 +401,6 @@ one = 'Unique ID of the Kafka instance you want to view'
 [kafka.describe.flag.name]
 description = 'Description for the --name flag'
 one = 'Name of the Kafka instance you want to view'
-
-[kafka.list.cmd.use]
-description = "Use is the one-line usage message"
-one = "list"
 
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"
@@ -581,9 +547,6 @@ one = 'invalid value for retention period: {{.RetentionMs}}'
 description = 'Error message when an invalid retention size is entered'
 one = 'invalid value for retention size: {{.RetentionBytes}}'
 
-[kafka.topic.create.cmd.use]
-one = 'create'
-
 [kafka.topic.create.cmd.shortDescription]
 one = 'Create a topic'
 
@@ -626,9 +589,6 @@ one = 'Number of Partitions:'
 description = 'Message for the Cleanup Policy input'
 one = 'Cleanup Policy:'
 
-[kafka.topic.delete.cmd.use]
-one = 'delete'
-
 [kafka.topic.delete.cmd.shortDescription]
 one = 'Delete a topic'
 
@@ -655,9 +615,6 @@ one = 'topic name entered "{{.ConfirmedName}}" does not match the name of the to
 [kafka.topic.delete.log.info.topicDeleted]
 one = 'Topic "{{.TopicName}}" has been deleted from the Kafka instance "{{.InstanceName}}"'
 
-[kafka.topic.describe.cmd.use]
-one = 'describe'
-
 [kafka.topic.describe.cmd.shortDescription]
 one = 'Describe a topic'
 
@@ -674,9 +631,6 @@ one = '''
 # describe a topic
 $ rhoas kafka topic describe --name topic-1
 '''
-
-[kafka.topic.list.cmd.use]
-one = 'list'
 
 [kafka.topic.list.cmd.shortDescription]
 one = 'List all topics'
@@ -717,9 +671,6 @@ one = 'Filtering Kafka topics with the query "{{.Search}}"'
 [kafka.topic.list.error.illegalSearchValue]
 description = 'Error message when invalid chars are used for search flag'
 one = 'illegal search value "{{.Search}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'
-
-[kafka.topic.update.cmd.use]
-one = 'update'
 
 [kafka.topic.update.cmd.shortDescription]
 one = 'Update a Kafka topic'
@@ -781,10 +732,6 @@ one = 'Number of Partitions [optional]:'
 [kafka.topic.update.input.partitions.help]
 description = 'Help for the Partitions input'
 one = 'The number of partitions in the topic. Leave blank to skip updating this value.'
-
-[kafka.use.cmd.use]
-description = "Use is the one-line usage message"
-one = "use"
 
 [kafka.use.cmd.shortDescription]
 description = "Short description for command"

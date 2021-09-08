@@ -42,7 +42,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.topic.delete.cmd.use"),
+		Use:     "delete",
 		Short:   opts.localizer.MustLocalize("kafka.topic.delete.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.topic.delete.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.delete.cmd.example"),

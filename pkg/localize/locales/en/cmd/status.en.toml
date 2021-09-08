@@ -1,6 +1,3 @@
-[status.cmd.use]
-one = 'status [args]'
-
 [status.cmd.shortDescription]
 one = 'View the status of all currently used services'
 

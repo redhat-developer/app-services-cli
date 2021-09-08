@@ -39,7 +39,7 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.consumerGroup.delete.cmd.use"),
+		Use:     "delete",
 		Short:   opts.localizer.MustLocalize("kafka.consumerGroup.delete.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.consumerGroup.delete.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.delete.cmd.example"),

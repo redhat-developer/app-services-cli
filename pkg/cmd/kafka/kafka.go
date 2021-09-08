@@ -19,7 +19,7 @@ import (
 
 func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("kafka.cmd.use"),
+		Use:     "kafka",
 		Short:   f.Localizer.MustLocalize("kafka.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("kafka.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("kafka.cmd.example"),

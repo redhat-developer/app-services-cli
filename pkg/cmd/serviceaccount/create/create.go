@@ -52,7 +52,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("serviceAccount.create.cmd.use"),
+		Use:     "create",
 		Short:   opts.localizer.MustLocalize("serviceAccount.create.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("serviceAccount.create.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("serviceAccount.create.cmd.example"),

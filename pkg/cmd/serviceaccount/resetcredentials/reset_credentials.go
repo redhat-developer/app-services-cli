@@ -52,7 +52,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.use"),
+		Use:     "reset-credentials",
 		Short:   opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.example"),

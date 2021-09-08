@@ -7,7 +7,7 @@ import (
 
 func NewCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                   f.Localizer.MustLocalize("completion.zsh.cmd.use"),
+		Use:                   "zsh",
 		Short:                 f.Localizer.MustLocalize("completion.zsh.cmd.shortDescription"),
 		Long:                  f.Localizer.MustLocalize("completion.zsh.cmd.longDescription"),
 		Example:               f.Localizer.MustLocalize("completion.zsh.cmd.example"),

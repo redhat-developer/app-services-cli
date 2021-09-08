@@ -1,6 +1,3 @@
-[cluster.connect.cmd.use]
-one = 'connect'
-
 [cluster.connect.cmd.shortDescription]
 one = 'Connect your services to Kubernetes or OpenShift'
 

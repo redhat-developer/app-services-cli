@@ -32,7 +32,7 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.MustLocalize("whoami.cmd.use"),
+		Use:     "whoami",
 		Short:   f.Localizer.MustLocalize("whoami.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("whoami.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("whoami.cmd.example"),

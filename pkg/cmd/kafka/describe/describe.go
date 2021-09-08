@@ -48,7 +48,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.describe.cmd.use"),
+		Use:     "describe",
 		Short:   opts.localizer.MustLocalize("kafka.describe.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.describe.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.describe.cmd.example"),

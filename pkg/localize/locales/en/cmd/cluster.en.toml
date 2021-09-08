@@ -1,6 +1,3 @@
-[cluster.cmd.use]
-one = 'cluster'
-
 [cluster.cmd.shortDescription]
 one = 'View and perform operations on your Kubernetes or OpenShift cluster'
 

@@ -1,6 +1,3 @@
-[root.cmd.use]
-one = 'rhoas <command> <subcommand> [flags]'
-
 [root.cmd.shortDescription]
 one = 'RHOAS CLI'
 

@@ -64,7 +64,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.list.cmd.use"),
+		Use:     "list",
 		Short:   opts.localizer.MustLocalize("kafka.list.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.list.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.list.cmd.example"),

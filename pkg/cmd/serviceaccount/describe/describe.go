@@ -37,7 +37,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("serviceAccount.describe.cmd.use"),
+		Use:     "describe",
 		Short:   opts.localizer.MustLocalize("serviceAccount.describe.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("serviceAccount.describe.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("serviceAccount.describe.cmd.example"),
