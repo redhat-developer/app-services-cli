@@ -2,6 +2,7 @@ package root
 
 import (
 	"flag"
+	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
@@ -41,6 +42,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.Version = version
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	fs.Parse(os.Args[1:])
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))
