@@ -65,7 +65,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.topic.update.cmd.use"),
+		Use:     "update",
 		Short:   opts.localizer.MustLocalize("kafka.topic.update.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.topic.update.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.update.cmd.example"),

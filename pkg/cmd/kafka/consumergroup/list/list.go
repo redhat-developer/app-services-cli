@@ -57,7 +57,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.use"),
+		Use:     "list",
 		Short:   opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.example"),

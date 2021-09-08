@@ -1,7 +1,3 @@
-[completion.cmd.use]
-description = "Use is the one-line usage message"
-one = "completion"
-
 [completion.cmd.shortDescription]
 description = "Short description for command"
 one = "Outputs command completion for the given shell (bash, zsh, or fish)"
@@ -33,10 +29,6 @@ rhoas completion zsh
 [completion.cmd.error.subcommandRequired]
 one = 'a subcommand of either "bash", "zsh", "fish" is required'
 
-[completion.bash.cmd.use]
-description = "Use is the one-line usage message"
-one = "bash"
-
 [completion.bash.cmd.shortDescription]
 description = "Short description for command"
 one = "Generate command completion script for Bash shell"
@@ -62,10 +54,6 @@ one = '''
 rhoas completion bash
 '''
 
-[completion.zsh.cmd.use]
-description = "Use is the one-line usage message"
-one = "zsh"
-
 [completion.zsh.cmd.shortDescription]
 description = "Short description for command"
 one = "Generate command completion script for Zsh shell"
@@ -83,10 +71,6 @@ Generate command completion script for Zsh shell.
 one = '''
 rhoas completion zsh
 '''
-
-[completion.fish.cmd.use]
-description = "Use is the one-line usage message"
-one = "fish"
 
 [completion.fish.cmd.shortDescription]
 description = "Short description for command"

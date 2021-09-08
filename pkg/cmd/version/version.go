@@ -27,7 +27,7 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:    opts.localizer.MustLocalize("version.cmd.use"),
+		Use:    "version",
 		Short:  opts.localizer.MustLocalize("version.cmd.shortDescription"),
 		Hidden: true,
 		Args:   cobra.NoArgs,

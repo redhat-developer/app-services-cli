@@ -58,7 +58,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:       opts.localizer.MustLocalize("status.cmd.use"),
+		Use:       "status [args]",
 		Short:     opts.localizer.MustLocalize("status.cmd.shortDescription"),
 		Long:      opts.localizer.MustLocalize("status.cmd.longDescription"),
 		Example:   opts.localizer.MustLocalize("status.cmd.example"),

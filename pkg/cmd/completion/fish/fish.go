@@ -7,7 +7,7 @@ import (
 
 func NewCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                   f.Localizer.MustLocalize("completion.fish.cmd.use"),
+		Use:                   "fish",
 		Short:                 f.Localizer.MustLocalize("completion.fish.cmd.shortDescription"),
 		Long:                  f.Localizer.MustLocalize("completion.fish.cmd.longDescription"),
 		Example:               f.Localizer.MustLocalize("completion.fish.cmd.example"),

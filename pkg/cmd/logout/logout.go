@@ -33,7 +33,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("logout.cmd.use"),
+		Use:     "logout",
 		Short:   opts.localizer.MustLocalize("logout.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("logout.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("logout.cmd.example"),

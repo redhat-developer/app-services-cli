@@ -25,7 +25,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
 		SilenceErrors: true,
-		Use:           f.Localizer.MustLocalize("root.cmd.use"),
+		Use:           "rhoas <command> <subcommand> [flags]",
 		Short:         f.Localizer.MustLocalize("root.cmd.shortDescription"),
 		Long:          f.Localizer.MustLocalize("root.cmd.longDescription"),
 		Example:       f.Localizer.MustLocalize("root.cmd.example"),

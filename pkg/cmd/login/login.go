@@ -88,7 +88,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("login.cmd.use"),
+		Use:     "login",
 		Short:   opts.localizer.MustLocalize("login.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("login.cmd.longDescription", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
 		Example: opts.localizer.MustLocalize("login.cmd.example"),

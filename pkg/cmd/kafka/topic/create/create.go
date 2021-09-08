@@ -63,7 +63,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("kafka.topic.create.cmd.use"),
+		Use:     "create",
 		Short:   opts.localizer.MustLocalize("kafka.topic.create.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("kafka.topic.create.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.create.cmd.example"),

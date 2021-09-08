@@ -50,7 +50,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     opts.localizer.MustLocalize("serviceAccount.list.cmd.use"),
+		Use:     "list",
 		Short:   opts.localizer.MustLocalize("serviceAccount.list.cmd.shortDescription"),
 		Long:    opts.localizer.MustLocalize("serviceAccount.list.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("serviceAccount.list.cmd.example"),

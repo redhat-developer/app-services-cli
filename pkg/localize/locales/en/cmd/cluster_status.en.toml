@@ -1,6 +1,3 @@
-[cluster.status.cmd.use]
-one = 'status'
-
 [cluster.status.cmd.shortDescription]
 one = 'View status of the current Kubernetes or OpenShift cluster'
 

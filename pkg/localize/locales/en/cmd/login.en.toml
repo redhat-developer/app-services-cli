@@ -1,7 +1,3 @@
-[login.cmd.use]
-description = "Use is the one-line usage message"
-one = "login"
-
 [login.cmd.shortDescription]
 description = "Short description for command"
 one = "Log in to RHOAS"
