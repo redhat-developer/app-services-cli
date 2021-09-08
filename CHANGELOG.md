@@ -1,4 +1,24 @@
 
+<a name="v0.29.0"></a>
+## [v0.29.0](https://github.com/redhat-developer/app-services-cli/compare/v0.28.0...v0.29.0) (2021-09-08)
+
+### Bug Fixes
+
+* remove space after prefix from root error ([#1047](https://github.com/redhat-developer/app-services-cli/issues/1047))
+* remove mark flag required ([#1045](https://github.com/redhat-developer/app-services-cli/issues/1045))
+* remove double-login messages ([#1031](https://github.com/redhat-developer/app-services-cli/issues/1031))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go/registryinstance to v0.3.1
+* **deps:** update module github.com/mattn/go-isatty to v0.0.14
+
+### Features
+
+* emoji support for both error and success messages ([#1046](https://github.com/redhat-developer/app-services-cli/issues/1046))
+* added a global timeout to the login command ([#1027](https://github.com/redhat-developer/app-services-cli/issues/1027))
+* i18n support for service registry art Artifact commands ([#1026](https://github.com/redhat-developer/app-services-cli/issues/1026))
+* **consumer-group:** add reset-offset command ([#876](https://github.com/redhat-developer/app-services-cli/issues/876))
+* **registry-artifacts:** import export commands ([#1037](https://github.com/redhat-developer/app-services-cli/issues/1037))
+
+
 <a name="v0.28.0"></a>
 ## [v0.28.0](https://github.com/redhat-developer/app-services-cli/compare/v0.27.3...v0.28.0) (2021-09-02)
 
