@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
@@ -136,7 +137,7 @@ func runCreate(opts *Options) error {
 		return err
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
+	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

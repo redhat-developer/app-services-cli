@@ -3,6 +3,7 @@ package versions
 import (
 	"context"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -107,7 +108,7 @@ func runGet(opts *Options) error {
 		return registryinstanceerror.TransformError(err)
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetched"))
+	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetched"))
 
 	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 

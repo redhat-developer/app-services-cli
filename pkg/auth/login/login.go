@@ -3,6 +3,7 @@ package login
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"log"
 	"net/http"
 	"net/url"
@@ -52,7 +53,7 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggedIn"))
+	a.Logger.Info(icon.Success(), a.Localizer.MustLocalize("login.log.info.loggedIn"))
 	a.Logger.Debug(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
 
 	return nil

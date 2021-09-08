@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"io/ioutil"
 	"os"
 
@@ -140,6 +141,6 @@ func runGet(opts *Options) error {
 		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
+	opts.Logger.Info(icon.Success(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 	return nil
 }
