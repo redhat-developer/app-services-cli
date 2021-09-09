@@ -402,6 +402,10 @@ one = 'Unique ID of the Kafka instance you want to view'
 description = 'Description for the --name flag'
 one = 'Name of the Kafka instance you want to view'
 
+[kafka.describe.flag.bootstrapserver]
+description = 'Description for the --bootstrapserver flag'
+one = 'If specified, only bootstrap server host of the Kafka instance will be displayed'
+
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"
 one = "List all Apache Kafka instances"
