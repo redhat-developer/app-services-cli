@@ -29,6 +29,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDeleteTopicCommand gets a new command for deleting a kafka topic.
@@ -39,6 +40,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -96,7 +98,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.topicName).Execute()
+	_, httpRes, err := api.TopicsApi.GetTopic(opts.Context, opts.topicName).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -127,7 +129,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// perform delete topic API request
-	httpRes, err = api.TopicsApi.DeleteTopic(context.Background(), opts.topicName).Execute()
+	httpRes, err = api.TopicsApi.DeleteTopic(opts.Context, opts.topicName).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

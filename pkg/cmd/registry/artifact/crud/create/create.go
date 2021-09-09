@@ -44,6 +44,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
@@ -53,6 +54,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -148,8 +150,7 @@ func runCreate(opts *Options) error {
 		}
 	}
 
-	ctx := context.Background()
-	request := dataAPI.ArtifactsApi.CreateArtifact(ctx, opts.group)
+	request := dataAPI.ArtifactsApi.CreateArtifact(opts.Context, opts.group)
 	if opts.artifactType != "" {
 		request = request.XRegistryArtifactType(registryinstanceclient.ArtifactType(opts.artifactType))
 	}

@@ -31,6 +31,7 @@ type Options struct {
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
+	Context    context.Context
 
 	output  string
 	kafkaID string
@@ -54,6 +55,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -112,14 +114,12 @@ func runList(opts *Options) (err error) {
 		return err
 	}
 
-	ctx := context.Background()
-
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
 
-	req := api.GroupsApi.GetConsumerGroups(ctx)
+	req := api.GroupsApi.GetConsumerGroups(opts.Context)
 
 	if opts.topic != "" {
 		req = req.Topic(opts.topic)

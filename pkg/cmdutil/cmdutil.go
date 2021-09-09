@@ -1,7 +1,6 @@
 package cmdutil
 
 import (
-	"context"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -33,7 +32,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 	if err != nil {
 		return validNames, directive
 	}
-	req := api.TopicsApi.GetTopics(context.Background())
+	req := api.TopicsApi.GetTopics(f.Context)
 	if toComplete != "" {
 		req = req.Filter(toComplete)
 	}
@@ -74,7 +73,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 	if err != nil {
 		return validIDs, directive
 	}
-	req := api.GroupsApi.GetConsumerGroups(context.Background())
+	req := api.GroupsApi.GetConsumerGroups(f.Context)
 	if toComplete != "" {
 		req = req.GroupIdFilter(toComplete)
 	}

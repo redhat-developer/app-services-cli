@@ -213,7 +213,7 @@ func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Cont
 
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
 
-	return watchForKafkaStatus(c, crName, namespace)
+	return watchForKafkaStatus(ctx, c, crName, namespace)
 }
 
 // IsRhoasOperatorAvailableOnCluster checks the cluster to see if a KafkaConnection CRD is installed
@@ -222,7 +222,7 @@ func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Contex
 }
 
 func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, opts *ConnectArguments) error {
-	_, err := c.clientset.CoreV1().Secrets(namespace).Get(context.TODO(), tokenSecretName, metav1.GetOptions{})
+	_, err := c.clientset.CoreV1().Secrets(namespace).Get(ctx, tokenSecretName, metav1.GetOptions{})
 	if err == nil {
 		c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), tokenSecretName)
 		return nil
@@ -271,7 +271,7 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
 func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string) error {
-	_, err := c.clientset.CoreV1().Secrets(namespace).Get(context.TODO(), serviceAccountSecretName, metav1.GetOptions{})
+	_, err := c.clientset.CoreV1().Secrets(namespace).Get(ctx, serviceAccountSecretName, metav1.GetOptions{})
 	if err == nil {
 		c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
 		return nil
@@ -297,7 +297,7 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 		},
 	}
 
-	createdSecret, err := c.clientset.CoreV1().Secrets(namespace).Create(context.TODO(), secret, metav1.CreateOptions{})
+	createdSecret, err := c.clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	if err != nil {
 		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}

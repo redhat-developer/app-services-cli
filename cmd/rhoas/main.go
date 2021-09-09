@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -52,12 +51,12 @@ func main() {
 	err = rootCmd.Execute()
 	if err == nil {
 		if debug.Enabled() {
-			build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
+			build.CheckForUpdate(cmdFactory.Context, cmdFactory.Logger, localizer)
 		}
 		return
 	}
 	cmdFactory.Logger.Error(rootError(err, localizer))
-	build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
+	build.CheckForUpdate(cmdFactory.Context, cmdFactory.Logger, localizer)
 	os.Exit(1)
 }
 

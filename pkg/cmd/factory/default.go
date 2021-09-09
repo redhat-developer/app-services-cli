@@ -34,6 +34,8 @@ func New(localizer localize.Localizer) *Factory {
 
 	logger, _ = loggerBuilder.Build()
 
+	ctx := context.Background()
+
 	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
 		if conn != nil {
 			return conn, nil
@@ -99,7 +101,7 @@ func New(localizer localize.Localizer) *Factory {
 			return nil, err
 		}
 
-		err = conn.RefreshTokens(context.TODO())
+		err = conn.RefreshTokens(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -113,5 +115,6 @@ func New(localizer localize.Localizer) *Factory {
 		Connection: connectionFunc,
 		Logger:     logger,
 		Localizer:  localizer,
+		Context:    ctx,
 	}
 }

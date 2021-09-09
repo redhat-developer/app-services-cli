@@ -55,6 +55,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewListCommand creates a new command for listing registry artifacts.
@@ -65,6 +66,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -130,7 +132,7 @@ func runList(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	request := a.ArtifactsApi.ListArtifactsInGroup(context.Background(), opts.group)
+	request := a.ArtifactsApi.ListArtifactsInGroup(opts.Context, opts.group)
 
 	request = request.Offset((opts.page - 1) * opts.limit)
 	request = request.Limit(opts.limit)

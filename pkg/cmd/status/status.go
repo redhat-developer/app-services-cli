@@ -37,6 +37,7 @@ type Options struct {
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 
 	outputFormat string
 	services     []string
@@ -55,6 +56,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		services:   validServices,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -108,7 +110,7 @@ func runStatus(opts *Options) error {
 		opts.Logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
-	status, ok, err := pkgStatus.Get(context.Background(), pkgOpts)
+	status, ok, err := pkgStatus.Get(opts.Context, pkgOpts)
 	if err != nil {
 		return err
 	}

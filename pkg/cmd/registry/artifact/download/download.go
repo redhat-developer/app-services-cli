@@ -39,6 +39,7 @@ type Options struct {
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDownloadCommand creates a new command for downloading binary content for registry artifacts.
@@ -49,6 +50,7 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
 		Logger:     f.Logger,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -107,17 +109,16 @@ func runGet(opts *Options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.artifact"))
 
-	ctx := context.Background()
 	var dataFile *os.File
 	// nolint
 	if opts.contentId != unusedFlagIdValue {
-		request := dataAPI.ArtifactsApi.GetContentById(ctx, opts.contentId)
+		request := dataAPI.ArtifactsApi.GetContentById(opts.Context, opts.contentId)
 		dataFile, _, err = request.Execute()
 	} else if opts.globalId != unusedFlagIdValue {
-		request := dataAPI.ArtifactsApi.GetContentByGlobalId(ctx, opts.globalId)
+		request := dataAPI.ArtifactsApi.GetContentByGlobalId(opts.Context, opts.globalId)
 		dataFile, _, err = request.Execute()
 	} else if opts.hash != "" {
-		request := dataAPI.ArtifactsApi.GetContentByHash(ctx, opts.hash)
+		request := dataAPI.ArtifactsApi.GetContentByHash(opts.Context, opts.hash)
 		dataFile, _, err = request.Execute()
 	} else {
 		return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.specify.contentId.globalId.hash"))

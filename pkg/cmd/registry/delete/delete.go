@@ -32,6 +32,7 @@ type options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
@@ -41,6 +42,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -99,14 +101,13 @@ func runDelete(opts *options) error {
 	api := conn.API()
 
 	var registry *srsmgmtv1client.Registry
-	ctx := context.Background()
 	if opts.name != "" {
-		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)
+		registry, _, err = serviceregistry.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		registry, _, err = serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), opts.id)
+		registry, _, err = serviceregistry.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -135,7 +136,7 @@ func runDelete(opts *options) error {
 
 	opts.Logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
 
-	a := api.ServiceRegistryMgmt().DeleteRegistry(context.Background(), registry.GetId())
+	a := api.ServiceRegistryMgmt().DeleteRegistry(opts.Context, registry.GetId())
 	_, err = a.Execute()
 
 	if err != nil {

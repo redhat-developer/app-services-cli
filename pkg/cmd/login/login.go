@@ -66,6 +66,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
+	Context    context.Context
 
 	url                   string
 	authURL               string
@@ -85,6 +86,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -139,7 +141,7 @@ func runLogin(opts *Options) (err error) {
 
 	if opts.offlineToken == "" {
 		tr := createTransport(opts.insecureSkipTLSVerify)
-		httpClient := oauth2.NewClient(context.Background(), nil)
+		httpClient := oauth2.NewClient(opts.Context, nil)
 		httpClient.Transport = tr
 
 		loginExec := &login.AuthorizationCodeGrant{
@@ -210,7 +212,7 @@ func runLogin(opts *Options) (err error) {
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
 	if !debug.Enabled() {
-		build.CheckForUpdate(context.Background(), opts.Logger, opts.localizer)
+		build.CheckForUpdate(opts.Context, opts.Logger, opts.localizer)
 	}
 
 	return nil

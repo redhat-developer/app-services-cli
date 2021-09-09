@@ -41,6 +41,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewUpdateCommand creates a new command for updating binary content of registry artifacts.
@@ -51,6 +52,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -138,8 +140,7 @@ func runUpdate(opts *Options) error {
 		}
 	}
 
-	ctx := context.Background()
-	request := dataAPI.ArtifactsApi.UpdateArtifact(ctx, opts.group, opts.artifact)
+	request := dataAPI.ArtifactsApi.UpdateArtifact(opts.Context, opts.group, opts.artifact)
 	if opts.version != "" {
 		request = request.XRegistryVersion(opts.version)
 	}

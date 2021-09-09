@@ -17,6 +17,7 @@ type Options struct {
 	IO        *iostreams.IOStreams
 	Logger    logging.Logger
 	localizer localize.Localizer
+	Context   context.Context
 }
 
 func NewVersionCmd(f *factory.Factory) *cobra.Command {
@@ -24,6 +25,7 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 		IO:        f.IOStreams,
 		Logger:    f.Logger,
 		localizer: f.Localizer,
+		Context:   f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -45,7 +47,7 @@ func runCmd(opts *Options) (err error) {
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
 	if !debug.Enabled() {
-		build.CheckForUpdate(context.Background(), opts.Logger, opts.localizer)
+		build.CheckForUpdate(opts.Context, opts.Logger, opts.localizer)
 	}
 	return nil
 }

@@ -9,9 +9,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 )
 
-func CheckTermsAccepted(conn connection.Connection) (accepted bool, redirectURI string, err error) {
+func CheckTermsAccepted(ctx context.Context, conn connection.Connection) (accepted bool, redirectURI string, err error) {
 	termsReview, _, err := conn.API().AccountMgmt().
-		ApiAuthorizationsV1SelfTermsReviewPost(context.Background()).
+		ApiAuthorizationsV1SelfTermsReviewPost(ctx).
 		SelfTermsReview(amsclient.SelfTermsReview{
 			EventCode: &build.TermsReviewEventCode,
 			SiteCode:  &build.TermsReviewSiteCode,

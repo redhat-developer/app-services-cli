@@ -31,6 +31,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
@@ -40,6 +41,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -100,14 +102,13 @@ func runUse(opts *Options) error {
 	api := conn.API()
 
 	var res *kafkamgmtclient.KafkaRequest
-	ctx := context.Background()
 	if opts.name != "" {
-		res, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		res, _, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		res, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		res, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -138,7 +139,7 @@ func runInteractivePrompt(opts *Options) error {
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedKafka, err := kafka.InteractiveSelect(conn, opts.Logger)
+	selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger)
 	if err != nil {
 		return err
 	}

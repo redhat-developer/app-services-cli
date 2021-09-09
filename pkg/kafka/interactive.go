@@ -14,10 +14,10 @@ const (
 	queryLimit = "1000"
 )
 
-func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*kafkamgmtclient.KafkaRequest, error) {
+func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger) (*kafkamgmtclient.KafkaRequest, error) {
 	api := connection.API()
 
-	response, _, err := api.Kafka().GetKafkas(context.Background()).Size(queryLimit).Execute()
+	response, _, err := api.Kafka().GetKafkas(ctx).Size(queryLimit).Execute()
 	if err != nil {
 		return nil, fmt.Errorf("unable to list Kafka instances: %w", err)
 	}

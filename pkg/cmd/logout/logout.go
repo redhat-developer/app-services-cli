@@ -21,6 +21,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewLogoutCommand gets the command that's logs the current logged in user
@@ -30,6 +31,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -51,7 +53,7 @@ func runLogout(opts *Options) error {
 		return err
 	}
 
-	err = conn.Logout(context.TODO())
+	err = conn.Logout(opts.Context)
 
 	if err != nil {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("logout.error.unableToLogout"), err)

@@ -35,6 +35,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 type consumerRow struct {
@@ -53,6 +54,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 	cmd := &cobra.Command{
 		Use:     "describe",
@@ -111,9 +113,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	ctx := context.Background()
-
-	consumerGroupData, httpRes, err := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
+	consumerGroupData, httpRes, err := api.GroupsApi.GetConsumerGroupById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

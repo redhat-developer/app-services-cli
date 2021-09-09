@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"context"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -21,6 +22,8 @@ type Factory struct {
 	Logger logging.Logger
 	// Localizer provides text to the commands
 	Localizer localize.Localizer
+	// Context returns the default context for the application
+	Context context.Context
 }
 
 type ConnectionFunc func(cfg *connection.Config) (connection.Connection, error)

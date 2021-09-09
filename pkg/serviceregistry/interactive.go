@@ -14,10 +14,10 @@ const (
 	queryLimit = 1000
 )
 
-func InteractiveSelect(connection connection.Connection, logger logging.Logger) (*srsmgmtv1.Registry, error) {
+func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger) (*srsmgmtv1.Registry, error) {
 	api := connection.API()
 
-	response, _, err := api.ServiceRegistryMgmt().GetRegistries(context.Background()).Size(queryLimit).Execute()
+	response, _, err := api.ServiceRegistryMgmt().GetRegistries(ctx).Size(queryLimit).Execute()
 	if err != nil {
 		return nil, fmt.Errorf("unable to list Service Registry instances: %w", err)
 	}

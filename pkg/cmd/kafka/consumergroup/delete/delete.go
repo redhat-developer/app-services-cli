@@ -26,6 +26,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDeleteConsumerGroupCommand gets a new command for deleting a consumer group.
@@ -36,6 +37,7 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -88,9 +90,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	ctx := context.Background()
-
-	_, httpRes, err := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
+	_, httpRes, err := api.GroupsApi.GetConsumerGroupById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -122,7 +122,7 @@ func runCmd(opts *Options) error {
 		}
 	}
 
-	httpRes, err = api.GroupsApi.DeleteConsumerGroupById(ctx, opts.id).Execute()
+	httpRes, err = api.GroupsApi.DeleteConsumerGroupById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

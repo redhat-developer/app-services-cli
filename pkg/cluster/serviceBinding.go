@@ -46,7 +46,7 @@ type ServiceBindingOptions struct {
 	BindAsFiles             bool
 }
 
-func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, options *ServiceBindingOptions) error {
+func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, options *ServiceBindingOptions) error {
 	clients, err := client(localizer)
 	if err != nil {
 		return err
@@ -62,12 +62,12 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 
 	// Get proper deployment
 	if options.AppName == "" {
-		options.AppName, err = fetchAppNameFromCluster(clients, localizer, ns)
+		options.AppName, err = fetchAppNameFromCluster(ctx, clients, localizer, ns)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err = clients.dynamicClient.Resource(deploymentResource).Namespace(ns).Get(context.TODO(), options.AppName, metav1.GetOptions{})
+		_, err = clients.dynamicClient.Resource(deploymentResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
@@ -92,13 +92,13 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 	}
 
 	// Check KafkaConnection
-	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(context.TODO(), options.ServiceName, metav1.GetOptions{})
+	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(ctx, options.ServiceName, metav1.GetOptions{})
 	if err != nil {
 		return errors.New(localizer.MustLocalize("cluster.serviceBinding.serviceMissing.message"))
 	}
 
 	// Execute binding
-	err = performBinding(options, ns, clients, logger, localizer)
+	err = performBinding(ctx, options, ns, clients, logger, localizer)
 	if err != nil {
 		return err
 	}
@@ -107,7 +107,7 @@ func ExecuteServiceBinding(logger logging.Logger, localizer localize.Localizer, 
 	return nil
 }
 
-func performBinding(options *ServiceBindingOptions, ns string, clients *KubernetesClients, logger logging.Logger, localizer localize.Localizer) error {
+func performBinding(ctx context.Context, options *ServiceBindingOptions, ns string, clients *KubernetesClients, logger logging.Logger, localizer localize.Localizer) error {
 	serviceRef := v1alpha1.Service{
 		NamespacedRef: v1alpha1.NamespacedRef{
 			Ref: v1alpha1.Ref{
@@ -156,7 +156,7 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 
 	// Check of operator is installed
 	_, err := clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
-		List(context.TODO(), metav1.ListOptions{Limit: 1})
+		List(ctx, metav1.ListOptions{Limit: 1})
 	if err != nil {
 		if options.ForceUseOperator {
 			return errors.New(localizer.MustLocalize("cluster.serviceBinding.operatorMissing") + err.Error())
@@ -165,10 +165,10 @@ func performBinding(options *ServiceBindingOptions, ns string, clients *Kubernet
 		return useSDKForBinding(clients, sb)
 	}
 
-	return useOperatorForBinding(logger, localizer, sb, clients, ns)
+	return useOperatorForBinding(ctx, logger, localizer, sb, clients, ns)
 }
 
-func useOperatorForBinding(logger logging.Logger, localizer localize.Localizer, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
+func useOperatorForBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
 	logger.Info(localizer.MustLocalize("cluster.serviceBinding.usingOperator"))
 	sbData, err := runtime.DefaultUnstructuredConverter.ToUnstructured(sb)
 	if err != nil {
@@ -177,7 +177,7 @@ func useOperatorForBinding(logger logging.Logger, localizer localize.Localizer, 
 
 	unstructuredSB := unstructured.Unstructured{Object: sbData}
 	_, err = clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
-		Create(context.TODO(), &unstructuredSB, metav1.CreateOptions{})
+		Create(ctx, &unstructuredSB, metav1.CreateOptions{})
 
 	return err
 }
@@ -199,8 +199,8 @@ func useSDKForBinding(clients *KubernetesClients, sb *v1alpha1.ServiceBinding) e
 	return err
 }
 
-func fetchAppNameFromCluster(clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
-	list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(context.TODO(), metav1.ListOptions{})
+func fetchAppNameFromCluster(ctx context.Context, clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
+	list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return "", err
 	}

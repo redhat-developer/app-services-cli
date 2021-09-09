@@ -36,6 +36,7 @@ type SetOptions struct {
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewSetMetadataCommand creates a new command for updating metadata for registry artifacts.
@@ -46,6 +47,7 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
 		Logger:     f.Logger,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -112,8 +114,7 @@ func runSet(opts *SetOptions) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetching"))
 
-	ctx := context.Background()
-	request := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact)
+	request := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	currentMetadata, _, err := request.Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)
@@ -144,7 +145,7 @@ func runSet(opts *SetOptions) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updating"))
 
-	editRequest := dataAPI.MetadataApi.UpdateArtifactMetaData(ctx, opts.group, opts.artifact)
+	editRequest := dataAPI.MetadataApi.UpdateArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	_, err = editRequest.EditableMetaData(*editableMedata).Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)
