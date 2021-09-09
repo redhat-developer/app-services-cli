@@ -145,7 +145,7 @@ func run(opts *options) error {
 	}
 
 	if opts.interactive {
-		opts.owner, err = selectOwnerInteractive(ctx, opts)
+		opts.owner, err = selectOwnerInteractive(opts.Context, opts)
 		if err != nil {
 			return err
 		}
@@ -244,7 +244,7 @@ func promptOwnerSelect(localizer localize.Localizer, users []rbac.Principal) (st
 	return username, err
 }
 
-func selectOwnerInteractive(ctx context.Context, opts *Options) (string, error) {
+func selectOwnerInteractive(ctx context.Context, opts *options) (string, error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return "", err
@@ -266,7 +266,7 @@ func selectOwnerInteractive(ctx context.Context, opts *Options) (string, error) 
 	return opts.owner, err
 }
 
-func promptConfirmUpdate(opts *Options) (bool, error) {
+func promptConfirmUpdate(opts *options) (bool, error) {
 	promptConfirm := survey.Confirm{
 		Message: opts.localizer.MustLocalize("kafka.update.confirmDialog.message", localize.NewEntry("Name", opts.name)),
 	}
