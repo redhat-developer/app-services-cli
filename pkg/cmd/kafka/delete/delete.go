@@ -32,6 +32,7 @@ type options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDeleteCommand command for deleting kafkas.
@@ -42,6 +43,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -104,14 +106,13 @@ func runDelete(opts *options) error {
 	api := conn.API()
 
 	var response *kafkamgmtclient.KafkaRequest
-	ctx := context.Background()
 	if opts.name != "" {
-		response, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		response, _, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		response, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		response, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -138,7 +139,7 @@ func runDelete(opts *options) error {
 
 	// delete the Kafka
 	opts.Logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
-	a := api.Kafka().DeleteKafkaById(context.Background(), response.GetId())
+	a := api.Kafka().DeleteKafkaById(opts.Context, response.GetId())
 	a = a.Async(true)
 	_, _, err = a.Execute()
 

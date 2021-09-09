@@ -1,8 +1,6 @@
 package kafkacmdutil
 
 import (
-	"context"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -20,7 +18,7 @@ func RegisterNameFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) erro
 			return validNames, directive
 		}
 
-		req := conn.API().Kafka().GetKafkas(context.Background())
+		req := conn.API().Kafka().GetKafkas(f.Context)
 		if toComplete != "" {
 			searchQ := "name like " + toComplete + "%"
 			req = req.Search(searchQ)
@@ -50,7 +48,7 @@ func GetCloudProviderCompletionValues(f *factory.Factory) (validProviders []stri
 		return validProviders, directive
 	}
 
-	cloudProviderResponse, _, err := conn.API().Kafka().GetCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, _, err := conn.API().Kafka().GetCloudProviders(f.Context).Execute()
 	if err != nil {
 		return validProviders, directive
 	}

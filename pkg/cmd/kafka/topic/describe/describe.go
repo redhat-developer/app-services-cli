@@ -35,6 +35,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDescribeTopicCommand gets a new command for describing a kafka topic.
@@ -45,6 +46,7 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -104,7 +106,7 @@ func runCmd(opts *Options) error {
 	}
 
 	// fetch the topic
-	topicResponse, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
+	topicResponse, httpRes, err := api.TopicsApi.GetTopic(opts.Context, opts.name).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

@@ -24,6 +24,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 
 	id    string
 	force bool
@@ -37,6 +38,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -77,7 +79,7 @@ func runDelete(opts *Options) (err error) {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -117,7 +119,7 @@ func deleteServiceAccount(opts *Options) error {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccount().DeleteServiceAccountById(context.Background(), opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccount().DeleteServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

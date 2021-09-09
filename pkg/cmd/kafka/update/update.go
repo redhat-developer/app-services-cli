@@ -37,6 +37,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
@@ -46,6 +47,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		localizer:  f.Localizer,
 		logger:     f.Logger,
 		Connection: f.Connection,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -119,14 +121,13 @@ func run(opts *Options) error {
 	api := conn.API()
 
 	var kafkaInstance *kafkamgmtclient.KafkaRequest
-	ctx := context.Background()
 	if opts.name != "" {
-		kafkaInstance, _, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		kafkaInstance, _, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		kafkaInstance, _, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		kafkaInstance, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -166,7 +167,7 @@ func run(opts *Options) error {
 	spinner.Start()
 
 	response, httpRes, err := api.Kafka().
-		UpdateKafkaById(context.Background(), kafkaInstance.GetId()).
+		UpdateKafkaById(opts.Context, kafkaInstance.GetId()).
 		KafkaUpdateRequest(*updateObj).
 		Execute()
 

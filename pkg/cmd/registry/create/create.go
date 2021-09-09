@@ -41,6 +41,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewCreateCommand creates a new command for creating registry.
@@ -51,6 +52,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -117,7 +119,7 @@ func runCreate(opts *Options) error {
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a registry instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(conn)
+	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, conn)
 	if err != nil {
 		return err
 	}
@@ -130,7 +132,7 @@ func runCreate(opts *Options) error {
 
 	response, _, err := conn.API().
 		ServiceRegistryMgmt().
-		CreateRegistry(context.Background()).
+		CreateRegistry(opts.Context).
 		RegistryCreate(*payload).
 		Execute()
 	if err != nil {

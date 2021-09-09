@@ -32,6 +32,7 @@ type GetOptions struct {
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewGetMetadataCommand creates a new command for fetching metadata for registry artifacts.
@@ -42,6 +43,7 @@ func NewGetMetadataCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
 		Logger:     f.Logger,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -101,8 +103,7 @@ func runGet(opts *GetOptions) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetching"))
 
-	ctx := context.Background()
-	request := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact)
+	request := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	response, _, err := request.Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)

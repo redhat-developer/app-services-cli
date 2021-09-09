@@ -35,6 +35,7 @@ type Options struct {
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewGetCommand(f *factory.Factory) *cobra.Command {
@@ -44,6 +45,7 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
 		Logger:     f.Logger,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -102,15 +104,14 @@ func runGet(opts *Options) error {
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	ctx := context.Background()
 	var dataFile *os.File
 	if opts.version != "" {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.with.version", localize.NewEntry("Version", opts.version)))
-		request := dataAPI.VersionsApi.GetArtifactVersion(ctx, opts.group, opts.artifact, opts.version)
+		request := dataAPI.VersionsApi.GetArtifactVersion(opts.Context, opts.group, opts.artifact, opts.version)
 		dataFile, _, err = request.Execute()
 	} else {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.latest"))
-		request := dataAPI.ArtifactsApi.GetLatestArtifact(ctx, opts.group, opts.artifact)
+		request := dataAPI.ArtifactsApi.GetLatestArtifact(opts.Context, opts.group, opts.artifact)
 		dataFile, _, err = request.Execute()
 	}
 	if err != nil {

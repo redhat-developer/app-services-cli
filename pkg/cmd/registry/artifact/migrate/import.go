@@ -28,6 +28,7 @@ type ImportOptions struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewImportCommand(f *factory.Factory) *cobra.Command {
@@ -37,6 +38,7 @@ func NewImportCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -90,8 +92,7 @@ func runImport(opts *ImportOptions) error {
 		return err
 	}
 
-	ctx := context.Background()
-	request := dataAPI.AdminApi.ImportData(ctx)
+	request := dataAPI.AdminApi.ImportData(opts.Context)
 	_, err = request.Body(specifiedFile).Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)

@@ -21,6 +21,7 @@ type Options struct {
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
+	Context    context.Context
 
 	kubeconfigLocation string
 	namespace          string
@@ -42,6 +43,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -85,7 +87,7 @@ func runBind(opts *Options) error {
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint:govet
-		selectedKafka, err := kafka.InteractiveSelect(apiConnection, opts.Logger)
+		selectedKafka, err := kafka.InteractiveSelect(opts.Context, apiConnection, opts.Logger)
 		if err != nil {
 			return err
 		}
@@ -98,7 +100,7 @@ func runBind(opts *Options) error {
 	}
 
 	api := apiConnection.API()
-	kafkaInstance, _, err := api.Kafka().GetKafkaById(context.Background(), opts.selectedKafka).Execute()
+	kafkaInstance, _, err := api.Kafka().GetKafkaById(opts.Context, opts.selectedKafka).Execute()
 	if err != nil {
 		return err
 	}
@@ -107,7 +109,7 @@ func runBind(opts *Options) error {
 		return errors.New(opts.localizer.MustLocalize("cluster.bind.error.emptyResponse"))
 	}
 
-	err = cluster.ExecuteServiceBinding(opts.Logger, opts.localizer, &cluster.ServiceBindingOptions{
+	err = cluster.ExecuteServiceBinding(opts.Context, opts.Logger, opts.localizer, &cluster.ServiceBindingOptions{
 		ServiceName:             kafkaInstance.GetName(),
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,

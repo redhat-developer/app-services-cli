@@ -37,6 +37,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 type updatedConsumerRow struct {
@@ -55,6 +56,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -143,8 +145,6 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	ctx := context.Background()
-
 	offsetResetParams := kafkainstanceclient.ConsumerGroupResetOffsetParameters{
 		Offset: opts.offset,
 	}
@@ -160,7 +160,7 @@ func runCmd(opts *Options) error {
 	}
 
 	if opts.id != "" {
-		_, httpRes, newErr := api.GroupsApi.GetConsumerGroupById(ctx, opts.id).Execute()
+		_, httpRes, newErr := api.GroupsApi.GetConsumerGroupById(opts.Context, opts.id).Execute()
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
@@ -179,7 +179,7 @@ func runCmd(opts *Options) error {
 	}
 
 	if opts.topic != "" {
-		_, httpRes, newErr := api.TopicsApi.GetTopic(context.Background(), opts.topic).Execute()
+		_, httpRes, newErr := api.TopicsApi.GetTopic(opts.Context, opts.topic).Execute()
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
@@ -209,7 +209,7 @@ func runCmd(opts *Options) error {
 		offsetResetParams.Topics = &topicsToResetArr
 	}
 
-	a := api.GroupsApi.ResetConsumerGroupOffset(ctx, opts.id).ConsumerGroupResetOffsetParameters(offsetResetParams)
+	a := api.GroupsApi.ResetConsumerGroupOffset(opts.Context, opts.id).ConsumerGroupResetOffsetParameters(offsetResetParams)
 
 	if !opts.skipConfirm {
 

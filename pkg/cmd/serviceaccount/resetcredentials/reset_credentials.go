@@ -31,6 +31,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 
 	id         string
 	fileFormat string
@@ -49,6 +50,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -107,7 +109,7 @@ func runResetCredentials(opts *Options) (err error) {
 
 	api := conn.API()
 
-	serviceacct, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -184,7 +186,7 @@ func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccou
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
 
-	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(context.Background(), opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

@@ -55,6 +55,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 const (
@@ -72,6 +73,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 
 		multiAZ: defaultMultiAZ,
 	}
@@ -141,7 +143,7 @@ func runCreate(opts *Options) error {
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a kafka instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(conn)
+	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, conn)
 	if err != nil {
 		return err
 	}
@@ -177,7 +179,7 @@ func runCreate(opts *Options) error {
 
 	api := conn.API()
 
-	a := api.Kafka().CreateKafka(context.Background())
+	a := api.Kafka().CreateKafka(opts.Context)
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 	response, httpRes, err := a.Execute()
@@ -230,7 +232,7 @@ func runCreate(opts *Options) error {
 		for svcstatus.IsCreating(response.GetStatus()) {
 			time.Sleep(cmdutil.DefaultPollTime)
 
-			response, httpRes, err = api.Kafka().GetKafkaById(context.Background(), response.GetId()).Execute()
+			response, httpRes, err = api.Kafka().GetKafkaById(opts.Context, response.GetId()).Execute()
 			if err != nil {
 				return err
 			}
@@ -297,7 +299,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, httpRes, err := api.Kafka().GetCloudProviders(context.Background()).Execute()
+	cloudProviderResponse, httpRes, err := api.Kafka().GetCloudProviders(opts.Context).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -323,7 +325,7 @@ func promptKafkaPayload(opts *Options) (payload *kafkamgmtclient.KafkaRequestPay
 	selectedCloudProvider := kafkacmdutil.FindCloudProviderByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, err := api.Kafka().GetCloudProviderRegions(context.Background(), selectedCloudProvider.GetId()).Execute()
+	cloudRegionResponse, _, err := api.Kafka().GetCloudProviderRegions(opts.Context, selectedCloudProvider.GetId()).Execute()
 	if err != nil {
 		return nil, err
 	}

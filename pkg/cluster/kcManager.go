@@ -84,10 +84,10 @@ func getKafkaConnectionsAPIURL(namespace string) string {
 	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
 }
 
-func watchForKafkaStatus(c *KubernetesCluster, crName string, namespace string) error {
+func watchForKafkaStatus(ctx context.Context, c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.wait"))
 
-	w, err := c.dynamicClient.Resource(AKCResource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+	w, err := c.dynamicClient.Resource(AKCResource).Namespace(namespace).Watch(ctx, metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", crName).String(),
 	})
 	if err != nil {

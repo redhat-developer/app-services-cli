@@ -22,6 +22,7 @@ type Options struct {
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
+	Context    context.Context
 
 	kubeconfigLocation string
 	namespace          string
@@ -39,6 +40,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -83,7 +85,7 @@ func runConnect(opts *Options) error {
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(conn, opts.Logger)
+		selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger)
 		if err != nil {
 			return err
 		}
@@ -103,7 +105,7 @@ func runConnect(opts *Options) error {
 		Namespace:               opts.namespace,
 	}
 
-	err = clusterConn.Connect(context.Background(), arguments)
+	err = clusterConn.Connect(opts.Context, arguments)
 	if err != nil {
 		return err
 	}

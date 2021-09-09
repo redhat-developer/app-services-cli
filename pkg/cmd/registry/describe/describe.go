@@ -28,6 +28,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDescribeCommand describes a service instance, either by passing an `--id flag`
@@ -38,6 +39,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -94,14 +96,13 @@ func runDescribe(opts *Options) error {
 	api := conn.API()
 
 	var registry *srsmgmtv1.Registry
-	ctx := context.Background()
 	if opts.name != "" {
-		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)
+		registry, _, err = serviceregistry.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		registry, _, err = serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), opts.id)
+		registry, _, err = serviceregistry.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
 		if err != nil {
 			return err
 		}

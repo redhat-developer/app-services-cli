@@ -34,6 +34,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
@@ -45,6 +46,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -105,9 +107,8 @@ func runDescribe(opts *Options) error {
 
 	var kafkaInstance *kafkamgmtclient.KafkaRequest
 	var httpRes *http.Response
-	ctx := context.Background()
 	if opts.name != "" {
-		kafkaInstance, httpRes, err = kafka.GetKafkaByName(ctx, api.Kafka(), opts.name)
+		kafkaInstance, httpRes, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
@@ -115,7 +116,7 @@ func runDescribe(opts *Options) error {
 			return err
 		}
 	} else {
-		kafkaInstance, httpRes, err = kafka.GetKafkaByID(ctx, api.Kafka(), opts.id)
+		kafkaInstance, httpRes, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}

@@ -26,7 +26,7 @@ type Options struct {
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
-
+	Context    context.Context
 	kubeconfig string
 }
 
@@ -37,6 +37,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -68,7 +69,7 @@ func runStatus(opts *Options) error {
 
 	var operatorStatus string
 	// Add versioning in future
-	isCRDInstalled, err := clusterConn.IsRhoasOperatorAvailableOnCluster(context.Background())
+	isCRDInstalled, err := clusterConn.IsRhoasOperatorAvailableOnCluster(opts.Context)
 	if isCRDInstalled && err != nil {
 		opts.Logger.Debug(err)
 	}

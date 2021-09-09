@@ -44,6 +44,7 @@ type options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewListCommand creates a new command for listing service registries.
@@ -54,6 +55,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -88,7 +90,7 @@ func runList(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ServiceRegistryMgmt().GetRegistries(context.Background())
+	a := api.ServiceRegistryMgmt().GetRegistries(opts.Context)
 	a = a.Page(opts.page)
 	a = a.Size(opts.limit)
 

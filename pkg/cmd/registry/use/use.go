@@ -28,6 +28,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
@@ -37,6 +38,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -93,14 +95,13 @@ func runUse(opts *Options) error {
 	api := conn.API()
 
 	var registry *srsmgmtv1.Registry
-	ctx := context.Background()
 	if opts.name != "" {
-		registry, _, err = serviceregistry.GetServiceRegistryByName(ctx, api.ServiceRegistryMgmt(), opts.name)
+		registry, _, err = serviceregistry.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		registry, _, err = serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), opts.id)
+		registry, _, err = serviceregistry.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -131,7 +132,7 @@ func runInteractivePrompt(opts *Options) error {
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedRegistry, err := serviceregistry.InteractiveSelect(conn, opts.Logger)
+	selectedRegistry, err := serviceregistry.InteractiveSelect(opts.Context, conn, opts.Logger)
 	if err != nil {
 		return err
 	}

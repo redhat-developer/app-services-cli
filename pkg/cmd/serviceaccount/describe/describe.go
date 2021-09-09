@@ -26,6 +26,7 @@ type Options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
@@ -34,6 +35,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -70,7 +72,7 @@ func runDescribe(opts *Options) error {
 
 	api := conn.API()
 
-	res, httpRes, err := api.ServiceAccount().GetServiceAccountById(context.Background(), opts.id).Execute()
+	res, httpRes, err := api.ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

@@ -32,6 +32,7 @@ type Options struct {
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewVersionsCommand(f *factory.Factory) *cobra.Command {
@@ -41,6 +42,7 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
 		Logger:     f.Logger,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -101,8 +103,7 @@ func runGet(opts *Options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetching"))
 
-	ctx := context.Background()
-	request := dataAPI.VersionsApi.ListArtifactVersions(ctx, opts.group, opts.artifact)
+	request := dataAPI.VersionsApi.ListArtifactVersions(opts.Context, opts.group, opts.artifact)
 	response, _, err := request.Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)

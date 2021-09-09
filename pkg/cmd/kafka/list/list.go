@@ -48,6 +48,7 @@ type options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewListCommand creates a new command for listing kafkas.
@@ -61,6 +62,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -104,7 +106,7 @@ func runList(opts *options) error {
 
 	api := conn.API()
 
-	a := api.Kafka().GetKafkas(context.Background())
+	a := api.Kafka().GetKafkas(opts.Context)
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 

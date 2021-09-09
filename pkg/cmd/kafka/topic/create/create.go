@@ -50,6 +50,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewCreateTopicCommand gets a new command for creating kafka topic.
@@ -60,6 +61,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -154,13 +156,12 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	ctx := context.Background()
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
 
-	createTopicReq := api.TopicsApi.CreateTopic(ctx)
+	createTopicReq := api.TopicsApi.CreateTopic(opts.Context)
 
 	topicInput := kafkainstanceclient.NewTopicInput{
 		Name: opts.topicName,

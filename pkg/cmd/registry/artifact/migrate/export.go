@@ -29,6 +29,7 @@ type ExportOptions struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewExportCommand(f *factory.Factory) *cobra.Command {
@@ -38,6 +39,7 @@ func NewExportCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -87,8 +89,7 @@ func runExport(opts *ExportOptions) error {
 		return err
 	}
 
-	ctx := context.Background()
-	request := dataAPI.AdminApi.ExportData(ctx)
+	request := dataAPI.AdminApi.ExportData(opts.Context)
 	file, _, err := request.Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)

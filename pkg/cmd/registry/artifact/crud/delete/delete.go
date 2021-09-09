@@ -34,6 +34,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
@@ -43,6 +44,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -99,21 +101,20 @@ func runDelete(opts *Options) error {
 		opts.group = util.DefaultArtifactGroup
 	}
 
-	ctx := context.Background()
 	if opts.artifact == "" {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleteAllArtifactsInGroup"))
 		err = confirmDelete(opts, opts.localizer.MustLocalize("artifact.common.message.deleteAllArtifactsFromGroup", localize.NewEntry("GroupName", opts.group)))
 		if err != nil {
 			return err
 		}
-		request := dataAPI.ArtifactsApi.DeleteArtifactsInGroup(ctx, opts.group)
+		request := dataAPI.ArtifactsApi.DeleteArtifactsInGroup(opts.Context, opts.group)
 		_, err = request.Execute()
 		if err != nil {
 			return registryinstanceerror.TransformError(err)
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.AllArtifactsInGroupDeleted", localize.NewEntry("GroupName", opts.group)))
 	} else {
-		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(ctx, opts.group, opts.artifact).Execute()
+		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact).Execute()
 		if err != nil {
 			return errors.New(opts.localizer.MustLocalize("artifact.common.error.artifact.notFound", localize.NewEntry("Name", opts.artifact)))
 		}
@@ -122,7 +123,7 @@ func runDelete(opts *Options) error {
 		if err != nil {
 			return err
 		}
-		request := dataAPI.ArtifactsApi.DeleteArtifact(ctx, opts.group, opts.artifact)
+		request := dataAPI.ArtifactsApi.DeleteArtifact(opts.Context, opts.group, opts.artifact)
 
 		_, err = request.Execute()
 		if err != nil {

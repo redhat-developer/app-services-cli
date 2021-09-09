@@ -34,6 +34,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 
 	kafkaID string
 	output  string
@@ -57,6 +58,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -125,7 +127,7 @@ func runCmd(opts *Options) error {
 		return err
 	}
 
-	a := api.TopicsApi.GetTopics(context.Background())
+	a := api.TopicsApi.GetTopics(opts.Context)
 
 	if opts.search != "" {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.topic.list.log.debug.filteringTopicList", localize.NewEntry("Search", opts.search)))

@@ -31,6 +31,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 
 	fileFormat  string
 	overwrite   bool
@@ -49,6 +50,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -131,7 +133,7 @@ func runCreate(opts *Options) error {
 	// create the service account
 	serviceAccountPayload := &kafkamgmtclient.ServiceAccountRequest{Name: opts.name, Description: &opts.description}
 
-	a := conn.API().ServiceAccount().CreateServiceAccount(context.Background())
+	a := conn.API().ServiceAccount().CreateServiceAccount(opts.Context)
 	a = a.ServiceAccountRequest(*serviceAccountPayload)
 	serviceacct, _, err := a.Execute()
 	if err != nil {

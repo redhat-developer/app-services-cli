@@ -51,6 +51,7 @@ type Options struct {
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
+	Context    context.Context
 }
 
 // NewUpdateTopicCommand gets a new command for updating a kafka topic.
@@ -62,6 +63,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
+		Context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -219,7 +221,7 @@ func runCmd(opts *Options) error {
 	// track if any values have changed
 	var needsUpdate bool
 
-	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
+	topic, httpRes, err := api.TopicsApi.GetTopic(opts.Context, opts.name).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -238,7 +240,7 @@ func runCmd(opts *Options) error {
 	// map to store the config entries which will be updated
 	configEntryMap := map[string]*string{}
 
-	updateTopicReq := api.TopicsApi.UpdateTopic(context.Background(), opts.name)
+	updateTopicReq := api.TopicsApi.UpdateTopic(opts.Context, opts.name)
 
 	topicSettings := &kafkainstanceclient.UpdateTopicInput{}
 
@@ -329,7 +331,7 @@ func runInteractivePrompt(opts *Options) (err error) {
 	}
 
 	// check if topic exists
-	topic, httpRes, err := api.TopicsApi.GetTopic(context.Background(), opts.name).Execute()
+	topic, httpRes, err := api.TopicsApi.GetTopic(opts.Context, opts.name).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
