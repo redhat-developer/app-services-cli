@@ -36,7 +36,7 @@ func (v *Validator) ValidateName(val interface{}) error {
 	}
 
 	if len(name) < 1 || len(name) > 32 {
-		return errors.New(v.Localizer.MustLocalize("kafka.validation.name.error.lengthError"))
+		return errors.New(v.Localizer.MustLocalize("kafka.validation.name.error.lengthError", localize.NewEntry("MaxLength", 32)))
 	}
 
 	matched := validNameRegexp.MatchString(name)

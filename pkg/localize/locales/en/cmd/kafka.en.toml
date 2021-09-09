@@ -504,7 +504,7 @@ one = 'topic name is required'
 one = 'topic name cannot exceed {{.MaxNameLen}} characters'
 
 [kafka.topic.common.validation.name.error.dotsError]
-one = 'topic name can not be "." or ".."'
+one = 'Must contain at least 3 periods ( ... ) if periods are the only characters used'
 
 [kafka.topic.common.validation.name.error.invalidChars]
 one = 'invalid topic name "{{.Name}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'
@@ -788,7 +788,7 @@ Invalid instance name. Valid names must satisfy the following conditions:
 '''
 
 [kafka.validation.name.error.lengthError]
-one = 'Kafka instance name must be between 1 and 32 characters'
+one = 'Cannot exceed {{.MaxLength}} characters'
 
 [kafka.validation.error.invalidSearchValue]
 description = 'Error message when invalid search input is provided'
