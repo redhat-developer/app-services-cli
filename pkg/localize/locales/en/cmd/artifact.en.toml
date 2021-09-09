@@ -413,7 +413,7 @@ one = 'Import data into service registry'
 
 [artifact.cmd.import.description.long]
 one = '''
-Import all artifacts and metadata from export file to service registry instance.'
+Import all artifacts and metadata from export file to service registry instance.
 '''
 
 [artifact.cmd.import.example]
@@ -427,20 +427,46 @@ one = 'Export data from service registry instance'
 
 [artifact.cmd.export.description.long]
 one = '''
-## Export all artifacts and metadata from service registry instance to export file
-rhoas service-registry artifact export --file=export.zip
+Export all artifacts and metadata from service registry instance to specified file
 '''
-
 
 [artifact.cmd.export.example]
 one = '''
 ## Import all artifacts and metadata from export file to new service registry instance
-rhoas service-registry artifact import --file=export.zip
+rhoas service-registry artifact export --file=export.zip
 '''
-
 
 [artifact.export.success]
 one = 'All data exported successfully'
 
 [artifact.import.success]
 one = 'All data imported successfully'
+
+
+[artifact.cmd.stateset.description.short]
+one = 'Set artifact state'
+
+[artifact.cmd.stateset.description.long]
+one = '''
+Set artifact state by setting one of possible values
+- ENABLED (Enable artifact)
+- DISABLED (Disable artifact usage)
+- DEPRECATED (Deprecate artifact)
+'''
+
+[artifact.cmd.stateset.example]
+one = '''
+## Set artifact state to DISABLED
+rhoas service-registry artifact state-set --artifact-id=my-artifact --state=DISABLED
+'''
+
+[artifact.flag.state.description]
+one = 'new artifact state'
+
+[artifact.common.message.artifact.state.updated]
+one = 'Successfully updated artifact state'
+
+[artifact.cmd.state.error.invalidArtifactState]
+one = 'invalid artifact state. Please use one of following values: {{.AllowedTypes}}'
+
+
