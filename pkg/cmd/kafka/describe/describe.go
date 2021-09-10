@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -89,7 +91,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
-	cmd.Flags().BoolVar(&opts.bootstrapServer, "bootstrapserver", false, opts.localizer.MustLocalize("kafka.describe.flag.bootstrapserver"))
+	cmd.Flags().BoolVar(&opts.bootstrapServer, "bootstrap-server", false, opts.localizer.MustLocalize("kafka.describe.flag.bootstrapserver"))
 
 	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
@@ -127,11 +129,12 @@ func runDescribe(opts *Options) error {
 		}
 	}
 
-	if !opts.bootstrapServer {
-		return printKafka(kafkaInstance, opts)
+	if opts.bootstrapServer {
+		fmt.Fprintf(os.Stdout, "%v", *kafkaInstance.BootstrapServerHost)
+		return nil
 	}
-	opts.Logger.Info(*kafkaInstance.BootstrapServerHost)
-	return nil
+
+	return printKafka(kafkaInstance, opts)
 }
 
 func printKafka(kafka *kafkamgmtclient.KafkaRequest, opts *Options) error {
