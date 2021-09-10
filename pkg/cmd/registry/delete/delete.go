@@ -22,7 +22,7 @@ import (
 	srsmgmtv1client "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
-type args struct {
+type options struct {
 	id    string
 	name  string
 	force bool
@@ -36,7 +36,7 @@ type args struct {
 }
 
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -87,7 +87,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDelete(opts *args) error {
+func runDelete(opts *options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err

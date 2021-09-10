@@ -26,7 +26,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type args struct {
+type options struct {
 	kafkaID      string
 	outputFormat string
 	id           string
@@ -49,7 +49,7 @@ type consumerRow struct {
 
 // NewDescribeConsumerGroupCommand gets a new command for describing a consumer group.
 func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		IO:         f.IOStreams,
@@ -102,7 +102,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCmd(opts *args) error {
+func runCmd(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

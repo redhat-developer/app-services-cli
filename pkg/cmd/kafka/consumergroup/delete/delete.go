@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type args struct {
+type options struct {
 	kafkaID     string
 	id          string
 	skipConfirm bool
@@ -31,7 +31,7 @@ type args struct {
 
 // NewDeleteConsumerGroupCommand gets a new command for deleting a consumer group.
 func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		IO:         f.IOStreams,
@@ -79,7 +79,7 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCmd(opts *args) error {
+func runCmd(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

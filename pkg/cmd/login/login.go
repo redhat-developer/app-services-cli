@@ -58,7 +58,7 @@ var masAuthURLAliases = map[string]string{
 	"stg":        build.StagingMasAuthURL,
 }
 
-type args struct {
+type options struct {
 	Config     config.IConfig
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
@@ -78,7 +78,7 @@ type args struct {
 
 // NewLoginCmd gets the command that's log the user in
 func NewLoginCmd(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -119,7 +119,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runLogin(opts *args) (err error) {
+func runLogin(opts *options) (err error) {
 	gatewayURL, err := getURLFromAlias(opts.url, apiGatewayAliases, opts.localizer)
 	if err != nil {
 		return err
@@ -216,7 +216,7 @@ func runLogin(opts *args) (err error) {
 	return nil
 }
 
-func loginWithOfflineToken(opts *args) (err error) {
+func loginWithOfflineToken(opts *options) (err error) {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err

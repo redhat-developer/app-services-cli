@@ -14,7 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-type args struct {
+type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
@@ -24,7 +24,7 @@ type args struct {
 
 // NewLogoutCommand gets the command that's logs the current logged in user
 func NewLogoutCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -45,7 +45,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runLogout(opts *args) error {
+func runLogout(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

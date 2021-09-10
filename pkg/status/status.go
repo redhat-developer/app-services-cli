@@ -43,7 +43,7 @@ type RegistryStatus struct {
 	RegistryUrl string `json:"registryUrl,omitempty" title:"Registry URL"`
 }
 
-type Args struct {
+type Options struct {
 	Config     config.IConfig
 	Logger     logging.Logger
 	Connection connection.Connection
@@ -53,7 +53,7 @@ type Args struct {
 }
 
 // Get gets the status of all services currently set in the user config
-func Get(ctx context.Context, opts *Args) (status *Status, ok bool, err error) {
+func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error) {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return nil, false, err

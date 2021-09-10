@@ -19,7 +19,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type args struct {
+type options struct {
 	topicName string
 	kafkaID   string
 	force     bool
@@ -34,7 +34,7 @@ type args struct {
 
 // NewDeleteTopicCommand gets a new command for deleting a kafka topic.
 func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		Logger:     f.Logger,
@@ -86,7 +86,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCmd(opts *args) error {
+func runCmd(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

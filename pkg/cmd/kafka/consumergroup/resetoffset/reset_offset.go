@@ -22,7 +22,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type args struct {
+type options struct {
 	kafkaID     string
 	id          string
 	skipConfirm bool
@@ -50,7 +50,7 @@ var validator consumergroup.Validator
 
 // NewResetOffsetConsumerGroupCommand gets a new command for resetting offset for a consumer group.
 func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		IO:         f.IOStreams,
@@ -133,7 +133,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCmd(opts *args) error {
+func runCmd(opts *options) error {
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {

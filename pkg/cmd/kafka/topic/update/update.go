@@ -36,7 +36,7 @@ var (
 	retentionSizeBytes int
 )
 
-type args struct {
+type options struct {
 	name              string
 	partitionsStr     string
 	retentionMsStr    string
@@ -57,7 +57,7 @@ type args struct {
 // NewUpdateTopicCommand gets a new command for updating a kafka topic.
 // nolint:funlen
 func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		Logger:     f.Logger,
@@ -177,7 +177,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCmd(opts *args) error {
+func runCmd(opts *options) error {
 	if opts.interactive {
 		// run the update command interactively
 		err := runInteractivePrompt(opts)
@@ -319,7 +319,7 @@ func runCmd(opts *args) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *args) (err error) {
+func runInteractivePrompt(opts *options) (err error) {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

@@ -38,7 +38,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 )
 
-type args struct {
+type options struct {
 	name     string
 	provider string
 	region   string
@@ -67,7 +67,7 @@ const (
 
 // NewCreateCommand creates a new command for creating kafkas.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -130,7 +130,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCreate(opts *args) error {
+func runCreate(opts *options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -265,7 +265,7 @@ func runCreate(opts *args) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *args) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err

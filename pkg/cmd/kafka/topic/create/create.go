@@ -35,7 +35,7 @@ const (
 	defaultCleanupPolicy     = "delete"
 )
 
-type args struct {
+type options struct {
 	topicName      string
 	partitions     int32
 	retentionMs    int
@@ -55,7 +55,7 @@ type args struct {
 
 // NewCreateTopicCommand gets a new command for creating kafka topic.
 func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		Logger:     f.Logger,
@@ -142,7 +142,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCmd(opts *args) error {
+func runCmd(opts *options) error {
 	if opts.interactive {
 		// run the create command interactively
 		err := runInteractivePrompt(opts)
@@ -213,7 +213,7 @@ func runCmd(opts *args) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *args) (err error) {
+func runInteractivePrompt(opts *options) (err error) {
 	validator := topicutil.Validator{
 		Localizer:  opts.localizer,
 		InstanceID: opts.kafkaID,
@@ -287,7 +287,7 @@ func runInteractivePrompt(opts *args) (err error) {
 	return nil
 }
 
-func createConfigEntries(opts *args) *[]kafkainstanceclient.ConfigEntry {
+func createConfigEntries(opts *options) *[]kafkainstanceclient.ConfigEntry {
 	retentionMsStr := strconv.Itoa(opts.retentionMs)
 	retentionBytesStr := strconv.Itoa(opts.retentionBytes)
 	cleanupPolicyStr := opts.cleanupPolicy

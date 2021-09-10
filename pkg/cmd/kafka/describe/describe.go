@@ -24,7 +24,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type args struct {
+type options struct {
 	id           string
 	name         string
 	outputFormat string
@@ -40,7 +40,7 @@ type args struct {
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
 // or by using the kafka instance set in the config, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
-	opts := &args{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -97,7 +97,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDescribe(opts *args) error {
+func runDescribe(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -128,7 +128,7 @@ func runDescribe(opts *args) error {
 	return printKafka(kafkaInstance, opts)
 }
 
-func printKafka(kafka *kafkamgmtclient.KafkaRequest, opts *args) error {
+func printKafka(kafka *kafkamgmtclient.KafkaRequest, opts *options) error {
 	switch opts.outputFormat {
 	case dump.YAMLFormat, dump.YMLFormat:
 		data, err := yaml.Marshal(kafka)
