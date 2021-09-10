@@ -128,7 +128,7 @@ func runDescribe(opts *options) error {
 	}
 
 	if opts.bootstrapServer {
-		fmt.Fprintf(opts.IO.Out, kafkaInstance.GetBootstrapServerHost())
+		fmt.Fprintln(opts.IO.Out, kafkaInstance.GetBootstrapServerHost())
 		return nil
 	}
 
