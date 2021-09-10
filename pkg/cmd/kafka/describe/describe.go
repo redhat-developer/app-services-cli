@@ -5,14 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
-	"os"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
@@ -130,7 +128,7 @@ func runDescribe(opts *Options) error {
 	}
 
 	if opts.bootstrapServer {
-		fmt.Fprintf(os.Stdout, "%v", *kafkaInstance.BootstrapServerHost)
+		fmt.Fprintf(opts.IO.Out, kafkaInstance.GetBootstrapServerHost())
 		return nil
 	}
 
