@@ -25,7 +25,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type options struct {
 	name         string
 	kafkaID      string
 	outputFormat string
@@ -40,7 +40,7 @@ type Options struct {
 
 // NewDescribeTopicCommand gets a new command for describing a kafka topic.
 func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Connection: f.Connection,
 		Config:     f.Config,
 		Logger:     f.Logger,
@@ -94,7 +94,7 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCmd(opts *Options) error {
+func runCmd(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

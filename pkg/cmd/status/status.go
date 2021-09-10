@@ -31,7 +31,7 @@ const (
 
 var validServices = []string{kafkaSvcName}
 
-type Options struct {
+type options struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Logger     logging.Logger
@@ -49,7 +49,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		validServices = append(validServices, registrySvcName)
 	}
 
-	opts := &Options{
+	opts := &options{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -93,7 +93,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runStatus(opts *Options) error {
+func runStatus(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

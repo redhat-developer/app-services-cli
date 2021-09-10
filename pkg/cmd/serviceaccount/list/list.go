@@ -19,7 +19,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Options struct {
+type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
@@ -42,7 +42,7 @@ type svcAcctRow struct {
 
 // NewListCommand creates a new command to list service accounts
 func NewListCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -73,7 +73,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runList(opts *Options) (err error) {
+func runList(opts *options) (err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

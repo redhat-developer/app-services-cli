@@ -20,7 +20,7 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
-type Options struct {
+type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
@@ -31,7 +31,7 @@ type Options struct {
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -56,7 +56,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runStatus(opts *Options) error {
+func runStatus(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
