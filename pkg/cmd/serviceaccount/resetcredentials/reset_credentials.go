@@ -25,7 +25,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -44,7 +44,7 @@ type Options struct {
 
 // NewResetCredentialsCommand creates a new command to delete a service account
 func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -101,7 +101,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runResetCredentials(opts *Options) (err error) {
+func runResetCredentials(opts *args) (err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -175,7 +175,7 @@ func runResetCredentials(opts *Options) (err error) {
 	return nil
 }
 
-func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccount, error) {
+func resetCredentials(name string, opts *args) (*kafkamgmtclient.ServiceAccount, error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -209,7 +209,7 @@ func resetCredentials(name string, opts *Options) (*kafkamgmtclient.ServiceAccou
 	return &serviceacct, nil
 }
 
-func runInteractivePrompt(opts *Options) (err error) {
+func runInteractivePrompt(opts *args) (err error) {
 	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

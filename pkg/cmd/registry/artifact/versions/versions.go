@@ -20,7 +20,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-type Options struct {
+type args struct {
 	artifact     string
 	group        string
 	outputFormat string
@@ -36,7 +36,7 @@ type Options struct {
 }
 
 func NewVersionsCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -85,7 +85,7 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runGet(opts *Options) error {
+func runGet(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

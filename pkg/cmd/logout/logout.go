@@ -1,5 +1,3 @@
-// Package cluster contains commands for interacting with cluster logic of the service directly instead of through the
-// REST API exposed via the serve command.
 package logout
 
 import (
@@ -16,7 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-type Options struct {
+type args struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
@@ -26,7 +24,7 @@ type Options struct {
 
 // NewLogoutCommand gets the command that's logs the current logged in user
 func NewLogoutCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -47,7 +45,7 @@ func NewLogoutCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runLogout(opts *Options) error {
+func runLogout(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

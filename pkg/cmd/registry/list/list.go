@@ -33,7 +33,7 @@ type RegistryRow struct {
 	Status string `json:"status" header:"Status"`
 }
 
-type options struct {
+type args struct {
 	outputFormat string
 	page         int32
 	limit        int32
@@ -49,7 +49,7 @@ type options struct {
 
 // NewListCommand creates a new command for listing service registries.
 func NewListCommand(f *factory.Factory) *cobra.Command {
-	opts := &options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -82,7 +82,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runList(opts *options) error {
+func runList(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

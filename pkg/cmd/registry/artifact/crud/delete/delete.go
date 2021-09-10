@@ -22,7 +22,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	artifact string
 	group    string
 
@@ -38,7 +38,7 @@ type Options struct {
 }
 
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -85,7 +85,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDelete(opts *Options) error {
+func runDelete(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -135,7 +135,7 @@ func runDelete(opts *Options) error {
 	return nil
 }
 
-func confirmDelete(opts *Options, message string) error {
+func confirmDelete(opts *args, message string) error {
 	if !opts.force {
 		var shouldContinue bool
 		confirm := &survey.Confirm{

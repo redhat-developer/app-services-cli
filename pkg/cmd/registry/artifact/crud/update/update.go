@@ -23,7 +23,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
-type Options struct {
+type args struct {
 	artifact string
 	group    string
 
@@ -46,7 +46,7 @@ type Options struct {
 
 // NewUpdateCommand creates a new command for updating binary content of registry artifacts.
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -109,7 +109,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runUpdate(opts *Options) error {
+func runUpdate(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

@@ -25,7 +25,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -44,7 +44,7 @@ type Options struct {
 
 // NewCreateCommand creates a new command to create service accounts
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -106,7 +106,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runCreate(opts *Options) error {
+func runCreate(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -158,7 +158,7 @@ func runCreate(opts *Options) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *Options) (err error) {
+func runInteractivePrompt(opts *args) (err error) {
 	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	IO        *iostreams.IOStreams
 	Logger    logging.Logger
 	localizer localize.Localizer
@@ -21,7 +21,7 @@ type Options struct {
 }
 
 func NewVersionCmd(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		IO:        f.IOStreams,
 		Logger:    f.Logger,
 		localizer: f.Localizer,
@@ -41,7 +41,7 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCmd(opts *Options) (err error) {
+func runCmd(opts *args) (err error) {
 	fmt.Fprintln(opts.IO.Out, opts.localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 
 	// debug mode checks this for a version update also.

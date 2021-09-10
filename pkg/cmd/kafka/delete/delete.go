@@ -22,7 +22,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type options struct {
+type args struct {
 	id    string
 	name  string
 	force bool
@@ -37,7 +37,7 @@ type options struct {
 
 // NewDeleteCommand command for deleting kafkas.
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
-	opts := &options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -92,7 +92,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDelete(opts *options) error {
+func runDelete(opts *args) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err

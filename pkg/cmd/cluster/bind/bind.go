@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	Config     config.IConfig
 	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
 	Logger     logging.Logger
@@ -37,7 +37,7 @@ type Options struct {
 }
 
 func NewBindCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -73,7 +73,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runBind(opts *Options) error {
+func runBind(opts *args) error {
 	apiConnection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

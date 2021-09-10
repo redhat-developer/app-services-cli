@@ -18,7 +18,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -32,7 +32,7 @@ type Options struct {
 
 // NewDeleteCommand creates a new command to delete a service account
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -73,7 +73,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDelete(opts *Options) (err error) {
+func runDelete(opts *args) (err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -113,7 +113,7 @@ func runDelete(opts *Options) (err error) {
 	return deleteServiceAccount(opts)
 }
 
-func deleteServiceAccount(opts *Options) error {
+func deleteServiceAccount(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

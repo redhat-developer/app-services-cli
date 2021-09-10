@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	Config     config.IConfig
 	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
 	Logger     logging.Logger
@@ -34,7 +34,7 @@ type Options struct {
 }
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -66,7 +66,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runConnect(opts *Options) error {
+func runConnect(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

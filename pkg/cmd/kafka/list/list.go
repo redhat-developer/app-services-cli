@@ -37,7 +37,7 @@ type kafkaRow struct {
 	Region        string `json:"region" header:"Region"`
 }
 
-type options struct {
+type args struct {
 	outputFormat string
 	page         int
 	limit        int
@@ -53,7 +53,7 @@ type options struct {
 
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand(f *factory.Factory) *cobra.Command {
-	opts := &options{
+	opts := &args{
 		page:       0,
 		limit:      100,
 		search:     "",
@@ -98,7 +98,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runList(opts *options) error {
+func runList(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

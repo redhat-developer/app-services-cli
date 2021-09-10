@@ -24,7 +24,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	name        string
 	id          string
 	owner       string
@@ -41,7 +41,7 @@ type Options struct {
 }
 
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
-	opts := Options{
+	opts := args{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		localizer:  f.Localizer,
@@ -112,7 +112,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func run(opts *Options) error {
+func run(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

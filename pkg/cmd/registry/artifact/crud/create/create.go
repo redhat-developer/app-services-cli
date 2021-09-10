@@ -25,7 +25,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
-type Options struct {
+type args struct {
 	artifact string
 	group    string
 
@@ -48,7 +48,7 @@ type Options struct {
 }
 
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -119,7 +119,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCreate(opts *Options) error {
+func runCreate(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

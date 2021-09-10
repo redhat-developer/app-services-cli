@@ -18,7 +18,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Options struct {
+type args struct {
 	id           string
 	outputFormat string
 
@@ -30,7 +30,7 @@ type Options struct {
 }
 
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -64,7 +64,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDescribe(opts *Options) error {
+func runDescribe(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

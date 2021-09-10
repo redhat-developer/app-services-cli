@@ -24,7 +24,7 @@ import (
 
 var unusedFlagIdValue int64 = -1
 
-type Options struct {
+type args struct {
 	group string
 
 	contentId  int64
@@ -44,7 +44,7 @@ type Options struct {
 
 // NewDownloadCommand creates a new command for downloading binary content for registry artifacts.
 func NewDownloadCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -91,7 +91,7 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runGet(opts *Options) error {
+func runGet(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err

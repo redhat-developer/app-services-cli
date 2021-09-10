@@ -28,7 +28,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type args struct {
 	Config     config.IConfig
 	IO         *iostreams.IOStreams
 	Connection factory.ConnectionFunc
@@ -52,7 +52,7 @@ type topicRow struct {
 
 // NewListTopicCommand gets a new command for getting kafkas.
 func NewListTopicCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &args{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -116,7 +116,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCmd(opts *Options) error {
+func runCmd(opts *args) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
