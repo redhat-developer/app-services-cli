@@ -19,7 +19,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type options struct {
 	id           string
 	name         string
 	outputFormat string
@@ -34,7 +34,7 @@ type Options struct {
 // NewDescribeCommand describes a service instance, either by passing an `--id flag`
 // or by using the service instance set in the config, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -87,7 +87,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDescribe(opts *Options) error {
+func runDescribe(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

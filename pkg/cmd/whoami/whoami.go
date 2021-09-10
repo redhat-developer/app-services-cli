@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	IO         *iostreams.IOStreams
@@ -23,7 +23,7 @@ type Options struct {
 }
 
 func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
@@ -45,7 +45,7 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCmd(opts *Options) (err error) {
+func runCmd(opts *options) (err error) {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err

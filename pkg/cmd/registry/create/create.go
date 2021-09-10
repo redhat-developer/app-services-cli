@@ -28,7 +28,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
-type Options struct {
+type options struct {
 	name string
 
 	outputFormat string
@@ -46,7 +46,7 @@ type Options struct {
 
 // NewCreateCommand creates a new command for creating registry.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		IO:         f.IOStreams,
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -92,7 +92,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCreate(opts *Options) error {
+func runCreate(opts *options) error {
 	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
@@ -162,7 +162,7 @@ func runCreate(opts *Options) error {
 }
 
 // Show a prompt to allow the user to interactively insert the data
-func promptPayload(opts *Options) (payload *srsmgmtv1.RegistryCreate, err error) {
+func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error) {
 	if err != nil {
 		return nil, err
 	}

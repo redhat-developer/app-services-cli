@@ -21,7 +21,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-type Options struct {
+type options struct {
 	id          string
 	name        string
 	interactive bool
@@ -35,7 +35,7 @@ type Options struct {
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -76,7 +76,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runUse(opts *Options) error {
+func runUse(opts *options) error {
 	if opts.interactive {
 		// run the use command interactively
 		err := runInteractivePrompt(opts)
@@ -131,7 +131,7 @@ func runUse(opts *Options) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *Options) error {
+func runInteractivePrompt(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err

@@ -25,7 +25,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Options struct {
+type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
@@ -49,7 +49,7 @@ type consumerGroupRow struct {
 
 // NewListConsumerGroupCommand creates a new command to list consumer groups
 func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -108,7 +108,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runList(opts *Options) (err error) {
+func runList(opts *options) (err error) {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -198,7 +198,7 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 
 // checks if there are any consumer groups available
 // prints to stderr if not
-func checkForConsumerGroups(count int, opts *Options, kafkaName string) (hasCount bool) {
+func checkForConsumerGroups(count int, opts *options, kafkaName string) (hasCount bool) {
 	kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaName)
 	if count == 0 && opts.output == "" {
 		if opts.topic == "" {

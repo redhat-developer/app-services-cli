@@ -41,7 +41,7 @@ type artifactRow struct {
 	State registryinstanceclient.ArtifactState `json:"state" header:"State"`
 }
 
-type Options struct {
+type options struct {
 	group string
 
 	registryID   string
@@ -60,7 +60,7 @@ type Options struct {
 
 // NewListCommand creates a new command for listing registry artifacts.
 func NewListCommand(f *factory.Factory) *cobra.Command {
-	opts := &Options{
+	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -115,7 +115,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runList(opts *Options) error {
+func runList(opts *options) error {
 	if opts.group == util.DefaultArtifactGroup {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
 		opts.group = util.DefaultArtifactGroup
