@@ -25,9 +25,10 @@ import (
 )
 
 type options struct {
-	id           string
-	name         string
-	outputFormat string
+	id              string
+	name            string
+	bootstrapServer bool
+	outputFormat    string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
