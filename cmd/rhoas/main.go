@@ -49,6 +49,8 @@ func main() {
 	}
 
 	err = rootCmd.Execute()
+	cmdFactory.Logger.SetDebug(debug.Enabled())
+
 	if err == nil {
 		if debug.Enabled() {
 			build.CheckForUpdate(cmdFactory.Context, cmdFactory.Logger, localizer)

@@ -87,6 +87,11 @@ func (b *StdLoggerBuilder) Build() (logger *StdLogger, err error) {
 	return
 }
 
+// SetDebug sets/unsets the debug level for the logger
+func (l *StdLogger) SetDebug(b bool) {
+	l.debugEnabled = b
+}
+
 // DebugEnabled returns true iff the debug level is enabled.
 func (l *StdLogger) DebugEnabled() bool {
 	return l.debugEnabled

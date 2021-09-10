@@ -6,7 +6,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/httputil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -28,10 +27,6 @@ func New(localizer localize.Localizer) *Factory {
 
 	loggerBuilder := logging.NewStdLoggerBuilder()
 	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
-
-	debugEnabled := debug.Enabled()
-	loggerBuilder = loggerBuilder.Debug(debugEnabled)
-
 	logger, _ = loggerBuilder.Build()
 
 	ctx := context.Background()
