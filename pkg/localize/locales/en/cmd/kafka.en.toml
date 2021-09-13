@@ -407,7 +407,7 @@ description = 'Description for the --bootstrap-server flag'
 one = 'If specified, only bootstrap server host of the Kafka instance will be displayed'
 
 [kafka.describe.bootstrapserver.not.available]
-one = 'Unable to get Kafka bootstrapServerHost url'
+one = 'Kafka instance "{{.Name}}" does not have a bootstrap server URL.'
 
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"

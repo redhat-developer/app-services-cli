@@ -132,7 +132,7 @@ func runDescribe(opts *options) error {
 			fmt.Fprintln(opts.IO.Out, *host)
 			return nil
 		}
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.describe.bootstrapserver.not.available"))
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.describe.bootstrapserver.not.available", localize.NewEntry("Name", kafkaInstance.GetName())))
 		return nil
 	}
 
