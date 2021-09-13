@@ -128,7 +128,11 @@ func runDescribe(opts *options) error {
 	}
 
 	if opts.bootstrapServer {
-		fmt.Fprintln(opts.IO.Out, kafkaInstance.GetBootstrapServerHost())
+		if host, ok := kafkaInstance.GetBootstrapServerHostOk(); ok {
+			fmt.Fprintln(opts.IO.Out, *host)
+			return nil
+		}
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.describe.bootstrapserver.not.available"))
 		return nil
 	}
 
