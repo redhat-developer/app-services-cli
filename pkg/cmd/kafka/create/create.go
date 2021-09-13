@@ -193,7 +193,7 @@ func runCreate(opts *options) error {
 	}
 
 	if err != nil {
-		return kafka.TransformError(err, opts.Logger)
+		return kafka.TransformError(err)
 	}
 
 	kafkaCfg := &config.KafkaConfig{
