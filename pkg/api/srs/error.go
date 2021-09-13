@@ -120,3 +120,13 @@ func IsErr(err error, errCode ServiceErrorCode) bool {
 func getCode(code ServiceErrorCode) string {
 	return fmt.Sprintf("%v-%v", ErrCodePrefix, code)
 }
+
+// TransformError code contains message that can be returned to the user
+func TransformError(err error) error {
+	mappedErr, ok := GetAPIError(err)
+	if !ok {
+		return err
+	}
+
+	return errors.New(mappedErr.GetCode() + ": " + err.Error() + ". Reason: " + mappedErr.GetReason())
+}

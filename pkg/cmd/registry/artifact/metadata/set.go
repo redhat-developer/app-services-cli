@@ -11,7 +11,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/editor"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -117,7 +116,7 @@ func runSet(opts *SetOptions) error {
 	request := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	currentMetadata, _, err := request.Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 
 	editableMedata := &registryinstanceclient.EditableMetaData{
@@ -148,7 +147,7 @@ func runSet(opts *SetOptions) error {
 	editRequest := dataAPI.MetadataApi.UpdateArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	_, err = editRequest.EditableMetaData(*editableMedata).Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))

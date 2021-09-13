@@ -8,7 +8,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -172,7 +171,7 @@ func runCreate(opts *options) error {
 	request = request.Body(specifiedFile)
 	metadata, _, err := request.Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 

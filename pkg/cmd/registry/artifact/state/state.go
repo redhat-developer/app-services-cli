@@ -7,7 +7,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -114,7 +113,7 @@ func runSet(opts *options) error {
 	request := dataAPI.ArtifactsApi.UpdateArtifactState(opts.context, opts.group, opts.artifact)
 	_, err = request.UpdateState(*registryinstanceclient.NewUpdateState(*updateState)).Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.state.updated"))

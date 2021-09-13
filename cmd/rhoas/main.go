@@ -4,7 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/api/srs"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"os"
 	"strings"
 
@@ -121,9 +125,19 @@ func initConfig(f *factory.Factory) error {
 // it wraps the error which has been returned from subcommands with a prefix
 func rootError(err error, localizer localize.Localizer) error {
 	var kafkaAPIError kafkamgmtclient.GenericOpenAPIError
+	var registryInstanceAPIError registryinstanceclient.GenericOpenAPIError
+	var registryMgmtAPIError registrymgmtclient.GenericOpenAPIError
 
 	if errors.As(err, &kafkaAPIError) {
 		err = kafka.TransformError(err)
+	}
+
+	if errors.As(err, &registryInstanceAPIError) {
+		err = registryinstanceerror.TransformError(err)
+	}
+
+	if errors.As(err, &registryMgmtAPIError) {
+		err = srs.TransformError(err)
 	}
 
 	errMessage := err.Error()

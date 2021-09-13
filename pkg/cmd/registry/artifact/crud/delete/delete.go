@@ -10,8 +10,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -110,7 +108,7 @@ func runDelete(opts *options) error {
 		request := dataAPI.ArtifactsApi.DeleteArtifactsInGroup(opts.Context, opts.group)
 		_, err = request.Execute()
 		if err != nil {
-			return registryinstanceerror.TransformError(err)
+			return err
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.AllArtifactsInGroupDeleted", localize.NewEntry("GroupName", opts.group)))
 	} else {
@@ -127,7 +125,7 @@ func runDelete(opts *options) error {
 
 		_, err = request.Execute()
 		if err != nil {
-			return registryinstanceerror.TransformError(err)
+			return err
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleted", localize.NewEntry("Name", opts.artifact)))
 	}

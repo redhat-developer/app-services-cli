@@ -6,10 +6,8 @@ import (
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
@@ -95,7 +93,7 @@ func runImport(opts *ImportOptions) error {
 	request := dataAPI.AdminApi.ImportData(opts.Context)
 	_, err = request.Body(specifiedFile).Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.import.success"))

@@ -12,7 +12,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -115,7 +114,7 @@ func runGet(opts *options) error {
 		dataFile, _, err = request.Execute()
 	}
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 	fileContent, err := ioutil.ReadFile(dataFile.Name())
 	if err != nil {

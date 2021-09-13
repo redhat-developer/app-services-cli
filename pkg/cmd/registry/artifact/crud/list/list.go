@@ -9,7 +9,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -141,7 +140,7 @@ func runList(opts *options) error {
 
 	response, _, err := request.Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {

@@ -10,7 +10,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -106,7 +105,7 @@ func runGet(opts *options) error {
 	request := dataAPI.VersionsApi.ListArtifactVersions(opts.Context, opts.group, opts.artifact)
 	response, _, err := request.Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return err
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetched"))
