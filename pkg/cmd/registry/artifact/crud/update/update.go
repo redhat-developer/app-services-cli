@@ -96,7 +96,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 

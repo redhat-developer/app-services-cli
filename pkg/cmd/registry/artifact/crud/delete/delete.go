@@ -77,7 +77,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("artifact.common.delete.without.prompt"))
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.registryIdToUse"))
 	flagutil.EnableOutputFlagCompletion(cmd)

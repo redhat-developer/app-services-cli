@@ -79,7 +79,7 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.artifact, "artifact-id", "a", "", opts.localizer.MustLocalize("artifact.common.id"))
+	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
 	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 	cmd.Flags().StringVar(&opts.state, "state", "", opts.localizer.MustLocalize("artifact.flag.state.description"))
