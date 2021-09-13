@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/api/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
 	"os"
@@ -193,7 +192,7 @@ func runCreate(opts *options) error {
 	}
 
 	if err != nil {
-		return kafka.TransformError(err)
+		return err
 	}
 
 	kafkaCfg := &config.KafkaConfig{

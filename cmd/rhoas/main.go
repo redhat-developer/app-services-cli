@@ -1,7 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/api/kafka"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"os"
 	"strings"
 
@@ -117,8 +120,15 @@ func initConfig(f *factory.Factory) error {
 // rootError creates the root error which is printed to the console
 // it wraps the error which has been returned from subcommands with a prefix
 func rootError(err error, localizer localize.Localizer) error {
-	prefix := icon.ErrorPrefix()
+	var kafkaAPIError kafkamgmtclient.GenericOpenAPIError
+
+	if errors.As(err, &kafkaAPIError) {
+		err = kafka.TransformError(err)
+	}
+
 	errMessage := err.Error()
+
+	prefix := icon.ErrorPrefix()
 	if prefix == icon.CrossMark {
 		errMessage = firstCharToUpper(errMessage)
 	}
