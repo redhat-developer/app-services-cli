@@ -1,4 +1,4 @@
-package kafkaerror
+package kafka
 
 import (
 	"encoding/json"
