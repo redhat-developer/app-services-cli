@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"net/http"
-
+	"fmt"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
@@ -25,9 +25,10 @@ import (
 )
 
 type options struct {
-	id           string
-	name         string
-	outputFormat string
+	id              string
+	name            string
+	bootstrapServer bool
+	outputFormat    string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -88,6 +89,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
+	cmd.Flags().BoolVar(&opts.bootstrapServer, "bootstrap-server", false, opts.localizer.MustLocalize("kafka.describe.flag.bootstrapserver"))
 
 	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
@@ -123,6 +125,15 @@ func runDescribe(opts *options) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	if opts.bootstrapServer {
+		if host, ok := kafkaInstance.GetBootstrapServerHostOk(); ok {
+			fmt.Fprintln(opts.IO.Out, *host)
+			return nil
+		}
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.describe.bootstrapserver.not.available", localize.NewEntry("Name", kafkaInstance.GetName())))
+		return nil
 	}
 
 	return printKafka(kafkaInstance, opts)
