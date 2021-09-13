@@ -7,6 +7,9 @@ type Logger interface {
 	// InfoEnabled returns true if the information level is enabled.
 	InfoEnabled() bool
 
+	// SetDebug sets/unsets the debug level for the logger
+	SetDebug(b bool)
+
 	// Debug sends to the log a debug message formatted using the fmt.Sprintf function and the
 	// given format and arguments.
 	Debug(args ...interface{})

@@ -2,6 +2,7 @@ package root
 
 import (
 	"flag"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
@@ -29,6 +30,9 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 		Short:         f.Localizer.MustLocalize("root.cmd.shortDescription"),
 		Long:          f.Localizer.MustLocalize("root.cmd.longDescription"),
 		Example:       f.Localizer.MustLocalize("root.cmd.example"),
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			f.Logger.SetDebug(debug.Enabled())
+		},
 	}
 	fs := cmd.PersistentFlags()
 	arguments.AddDebugFlag(fs)
