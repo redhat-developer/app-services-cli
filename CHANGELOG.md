@@ -1,4 +1,21 @@
 
+<a name="v0.29.1"></a>
+## [v0.29.1](https://github.com/redhat-developer/app-services-cli/compare/v0.29.0...v0.29.1) (2021-09-14)
+
+### Bug Fixes
+
+* fixed the problem with a verbose flag ([#1061](https://github.com/redhat-developer/app-services-cli/issues/1061))
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.2
+* **deps:** update module github.com/aerogear/charmil to v0.8.3
+
+### Features
+
+* added an option to show bootstrap server host of the Kafka instance ([#1055](https://github.com/redhat-developer/app-services-cli/issues/1055))
+* made Context a part of the factory object ([#1053](https://github.com/redhat-developer/app-services-cli/issues/1053))
+* **kafka:** add ability to update Kafka instance ([#1050](https://github.com/redhat-developer/app-services-cli/issues/1050))
+* **registry-artifact:** set state command ([#1054](https://github.com/redhat-developer/app-services-cli/issues/1054))
+
+
 <a name="v0.29.0"></a>
 ## [v0.29.0](https://github.com/redhat-developer/app-services-cli/compare/v0.28.0...v0.29.0) (2021-09-08)
 
