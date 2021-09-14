@@ -25,6 +25,12 @@ var AllowedArtifactStateEnumValues = []string{
 	"DEPRECATED",
 }
 
+var AllowedRoleTypeEnumValues = []string{
+	"READ_ONLY",
+	"DEVELOPER",
+	"ADMIN",
+}
+
 // GetAllowedArtifactTypeEnumValuesAsString gets artifact types as string.
 func GetAllowedArtifactTypeEnumValuesAsString() string {
 	return strings.Join(AllowedArtifactTypeEnumValues, ", ")
@@ -33,4 +39,9 @@ func GetAllowedArtifactTypeEnumValuesAsString() string {
 // GetAllowedArtifactTypeEnumValuesAsString gets artifact types as string.
 func GetAllowedArtifactStateEnumValuesAsString() string {
 	return strings.Join(AllowedArtifactStateEnumValues, ", ")
+}
+
+// GetAllowedRoleTypeEnumValuesAsString gets types of roles as string.
+func GetAllowedRoleTypeEnumValuesAsString() string {
+	return strings.Join(AllowedRoleTypeEnumValues, ", ")
 }
