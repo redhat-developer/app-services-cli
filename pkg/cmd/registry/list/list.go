@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -105,8 +106,34 @@ func runList(opts *options) error {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	switch opts.outputFormat {
+	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
+		dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	default:
+		rows := mapResponseItemsToRows(&response.Items)
+		dump.Table(opts.IO.Out, rows)
+		opts.Logger.Info("")
+	}
+
 	return nil
+}
+
+func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry) []RegistryRow {
+	rows := []RegistryRow{}
+
+	for i := range *registries {
+		k := (*registries)[i]
+		row := RegistryRow{
+			ID:     fmt.Sprint(k.Id),
+			Name:   k.GetName(),
+			Status: string(k.GetStatus()),
+			Owner:  k.GetOwner(),
+		}
+
+		rows = append(rows, row)
+	}
+
+	return rows
 }
 
 func buildQuery(search string) string {

@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -21,6 +22,16 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
+
+// row is the details of a Kafka instance needed to print to a table
+type kafkaRow struct {
+	ID            string `json:"id" header:"ID"`
+	Name          string `json:"name" header:"Name"`
+	Owner         string `json:"owner" header:"Owner"`
+	Status        string `json:"status" header:"Status"`
+	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
+	Region        string `json:"region" header:"Region"`
+}
 
 type options struct {
 	outputFormat string
@@ -111,8 +122,34 @@ func runList(opts *options) error {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	switch opts.outputFormat {
+	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
+		dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	default:
+		rows := mapResponseItemsToRows(response.GetItems())
+		dump.Table(opts.IO.Out, rows)
+		opts.Logger.Info("")
+	}
 	return nil
+}
+
+func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
+	rows := []kafkaRow{}
+
+	for _, k := range kafkas {
+		row := kafkaRow{
+			ID:            k.GetId(),
+			Name:          k.GetName(),
+			Owner:         k.GetOwner(),
+			Status:        k.GetStatus(),
+			CloudProvider: k.GetCloudProvider(),
+			Region:        k.GetRegion(),
+		}
+
+		rows = append(rows, row)
+	}
+
+	return rows
 }
 
 func buildQuery(search string) string {

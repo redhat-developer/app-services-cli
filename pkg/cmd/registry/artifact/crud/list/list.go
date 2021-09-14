@@ -22,6 +22,22 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
+// row is the details of a Service Registry instance needed to print to a table
+type artifactRow struct {
+	// The ID of a single artifact.
+	Id string `json:"id" header:"ID"`
+
+	Name string `json:"name,omitempty" header:"Name"`
+
+	CreatedOn string `json:"createdOn" header:"Created on"`
+
+	CreatedBy string `json:"createdBy" header:"Created By"`
+
+	Type registryinstanceclient.ArtifactType `json:"type" header:"Type"`
+
+	State registryinstanceclient.ArtifactState `json:"state" header:"State"`
+}
+
 type options struct {
 	group string
 
@@ -130,6 +146,34 @@ func runList(opts *options) error {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	switch opts.outputFormat {
+	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
+		dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	default:
+		rows := mapResponseItemsToRows(response.Artifacts)
+		dump.Table(opts.IO.Out, rows)
+		opts.Logger.Info("")
+	}
+
 	return nil
+}
+
+func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact) []artifactRow {
+	rows := []artifactRow{}
+
+	for i := range artifacts {
+		k := (artifacts)[i]
+		row := artifactRow{
+			Id:        k.GetId(),
+			Name:      k.GetName(),
+			CreatedOn: k.GetCreatedOn(),
+			CreatedBy: k.GetCreatedBy(),
+			Type:      k.GetType(),
+			State:     k.GetState(),
+		}
+
+		rows = append(rows, row)
+	}
+
+	return rows
 }

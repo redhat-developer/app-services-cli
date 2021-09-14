@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"errors"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -36,6 +37,13 @@ type options struct {
 	search  string
 	page    int32
 	size    int32
+}
+
+type topicRow struct {
+	Name            string `json:"name,omitempty" header:"Name"`
+	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
+	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time (ms)"`
+	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size (bytes)"`
 }
 
 // NewListTopicCommand gets a new command for getting kafkas.
@@ -157,6 +165,51 @@ func runCmd(opts *options) error {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.output, topicData, opts.IO.Out)
+	stdout := opts.IO.Out
+	switch opts.output {
+	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
+		dump.PrintDataInFormat(opts.output, topicData, stdout)
+	default:
+		topics := topicData.GetItems()
+		rows := mapTopicResultsToTableFormat(topics)
+		dump.Table(stdout, rows)
+	}
+
 	return nil
+}
+
+func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow {
+	rows := []topicRow{}
+
+	for _, t := range topics {
+
+		row := topicRow{
+			Name:            t.GetName(),
+			PartitionsCount: len(t.GetPartitions()),
+		}
+		for _, conf := range t.GetConfig() {
+			unlimitedVal := "-1 (Unlimited)"
+
+			if *conf.Key == topicutil.RetentionMsKey {
+				val := conf.GetValue()
+				if val == "-1" {
+					row.RetentionTime = unlimitedVal
+				} else {
+					row.RetentionTime = val
+				}
+			}
+			if *conf.Key == topicutil.RetentionSizeKey {
+				val := conf.GetValue()
+				if val == "-1" {
+					row.RetentionSize = unlimitedVal
+				} else {
+					row.RetentionSize = val
+				}
+			}
+		}
+
+		rows = append(rows, row)
+	}
+
+	return rows
 }

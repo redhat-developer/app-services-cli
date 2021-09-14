@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 
@@ -23,6 +24,16 @@ type options struct {
 	Context    context.Context
 
 	output string
+}
+
+// svcAcctRow contains the properties used to
+// populate the list of service accounts into a table row
+type svcAcctRow struct {
+	ID        string `json:"id" header:"ID"`
+	Name      string `json:"name" header:"Name"`
+	ClientID  string `json:"clientID" header:"Client ID"`
+	Owner     string `json:"owner" header:"Owner"`
+	CreatedAt string `json:"createdAt" header:"Created At"`
 }
 
 // NewListCommand creates a new command to list service accounts
@@ -75,6 +86,32 @@ func runList(opts *options) (err error) {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.output, res, opts.IO.Out)
+	outStream := opts.IO.Out
+	switch opts.output {
+	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
+		dump.PrintDataInFormat(opts.output, res, opts.IO.Out)
+	default:
+		rows := mapResponseItemsToRows(serviceaccounts)
+		dump.Table(outStream, rows)
+	}
+
 	return nil
+}
+
+func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {
+	rows := []svcAcctRow{}
+
+	for _, sa := range svcAccts {
+		row := svcAcctRow{
+			ID:        sa.GetId(),
+			Name:      sa.GetName(),
+			ClientID:  sa.GetClientId(),
+			Owner:     sa.GetOwner(),
+			CreatedAt: sa.GetCreatedAt().String(),
+		}
+
+		rows = append(rows, row)
+	}
+
+	return rows
 }

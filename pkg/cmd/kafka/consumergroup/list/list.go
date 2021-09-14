@@ -3,6 +3,8 @@ package list
 import (
 	"context"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -34,6 +36,12 @@ type options struct {
 	search  string
 	page    int32
 	size    int32
+}
+
+type consumerGroupRow struct {
+	ConsumerGroupID   string `json:"groupId,omitempty" header:"Consumer group ID"`
+	ActiveMembers     int    `json:"active_members,omitempty" header:"Active members"`
+	PartitionsWithLag int    `json:"lag,omitempty" header:"Partitions with lag"`
 }
 
 // NewListConsumerGroupCommand creates a new command to list consumer groups
@@ -150,8 +158,33 @@ func runList(opts *options) (err error) {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
+	switch opts.output {
+	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
+		dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
+	default:
+		opts.Logger.Info("")
+		consumerGroups := consumerGroupData.GetItems()
+		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
+		dump.Table(opts.IO.Out, rows)
+	}
+
 	return nil
+}
+
+func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {
+	rows := []consumerGroupRow{}
+
+	for _, t := range consumerGroups {
+		consumers := t.GetConsumers()
+		row := consumerGroupRow{
+			ConsumerGroupID:   t.GetGroupId(),
+			ActiveMembers:     consumergroup.GetActiveConsumersCount(consumers),
+			PartitionsWithLag: consumergroup.GetPartitionsWithLag(consumers),
+		}
+		rows = append(rows, row)
+	}
+
+	return rows
 }
 
 // checks if there are any consumer groups available
