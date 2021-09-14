@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -56,8 +57,8 @@ func main() {
 		}
 		return
 	}
-	cmdFactory.Logger.Error(rootError(err, localizer))
-	build.CheckForUpdate(cmdFactory.Context, cmdFactory.Logger, localizer)
+	cmdFactory.Logger.Errorf("%v\n", rootError(err, localizer))
+	build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
 	os.Exit(1)
 }
 

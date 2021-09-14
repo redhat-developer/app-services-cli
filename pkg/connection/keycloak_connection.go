@@ -190,10 +190,11 @@ func (c *KeycloakConnection) API() *api.API {
 
 	rbacAPI := rbac.RbacAPI{
 		PrincipalAPI: func() rbac.PrincipalAPI {
+			cl := c.createOAuthTransport(c.Token.AccessToken)
 			cfg := rbac.Config{
-				Debug:       c.logger.DebugEnabled(),
-				BaseURL:     c.consoleURL,
-				AccessToken: c.Token.AccessToken,
+				HTTPClient: cl,
+				Debug:      c.logger.DebugEnabled(),
+				BaseURL:    c.consoleURL,
 			}
 			return rbac.NewPrincipalAPIClient(&cfg)
 		},
