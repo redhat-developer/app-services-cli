@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -13,11 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
-
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -41,13 +36,6 @@ type options struct {
 	search  string
 	page    int32
 	size    int32
-}
-
-type topicRow struct {
-	Name            string `json:"name,omitempty" header:"Name"`
-	PartitionsCount int    `json:"partitions_count,omitempty" header:"Partitions"`
-	RetentionTime   string `json:"retention.ms,omitempty" header:"Retention time (ms)"`
-	RetentionSize   string `json:"retention.bytes,omitempty" header:"Retention size (bytes)"`
 }
 
 // NewListTopicCommand gets a new command for getting kafkas.
@@ -169,55 +157,6 @@ func runCmd(opts *options) error {
 		return nil
 	}
 
-	stdout := opts.IO.Out
-	switch opts.output {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(topicData)
-		_ = dump.JSON(stdout, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(topicData)
-		_ = dump.YAML(stdout, data)
-	default:
-		topics := topicData.GetItems()
-		rows := mapTopicResultsToTableFormat(topics)
-		dump.Table(stdout, rows)
-	}
-
+	dump.PrintDataInFormat(opts.output, topicData, opts.IO.Out)
 	return nil
-}
-
-func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow {
-	rows := []topicRow{}
-
-	for _, t := range topics {
-
-		row := topicRow{
-			Name:            t.GetName(),
-			PartitionsCount: len(t.GetPartitions()),
-		}
-		for _, conf := range t.GetConfig() {
-			unlimitedVal := "-1 (Unlimited)"
-
-			if *conf.Key == topicutil.RetentionMsKey {
-				val := conf.GetValue()
-				if val == "-1" {
-					row.RetentionTime = unlimitedVal
-				} else {
-					row.RetentionTime = val
-				}
-			}
-			if *conf.Key == topicutil.RetentionSizeKey {
-				val := conf.GetValue()
-				if val == "-1" {
-					row.RetentionSize = unlimitedVal
-				} else {
-					row.RetentionSize = val
-				}
-			}
-		}
-
-		rows = append(rows, row)
-	}
-
-	return rows
 }

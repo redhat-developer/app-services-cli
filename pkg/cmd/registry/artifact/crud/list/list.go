@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -21,25 +20,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
-	"gopkg.in/yaml.v2"
 )
-
-// row is the details of a Service Registry instance needed to print to a table
-type artifactRow struct {
-	// The ID of a single artifact.
-	Id string `json:"id" header:"ID"`
-
-	Name string `json:"name,omitempty" header:"Name"`
-
-	CreatedOn string `json:"createdOn" header:"Created on"`
-
-	CreatedBy string `json:"createdBy" header:"Created By"`
-
-	Type registryinstanceclient.ArtifactType `json:"type" header:"Type"`
-
-	State registryinstanceclient.ArtifactState `json:"state" header:"State"`
-}
 
 type options struct {
 	group string
@@ -149,38 +130,6 @@ func runList(opts *options) error {
 		return nil
 	}
 
-	switch opts.outputFormat {
-	case "json":
-		data, _ := json.Marshal(response)
-		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
-		rows := mapResponseItemsToRows(response.Artifacts)
-		dump.Table(opts.IO.Out, rows)
-		opts.Logger.Info("")
-	}
-
+	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 	return nil
-}
-
-func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact) []artifactRow {
-	rows := []artifactRow{}
-
-	for i := range artifacts {
-		k := (artifacts)[i]
-		row := artifactRow{
-			Id:        k.GetId(),
-			Name:      k.GetName(),
-			CreatedOn: k.GetCreatedOn(),
-			CreatedBy: k.GetCreatedBy(),
-			Type:      k.GetType(),
-			State:     k.GetState(),
-		}
-
-		rows = append(rows, row)
-	}
-
-	return rows
 }

@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -17,13 +16,11 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"gopkg.in/yaml.v2"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
@@ -201,14 +198,7 @@ func runCmd(opts *options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
-	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(response)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 
 	return nil
 }

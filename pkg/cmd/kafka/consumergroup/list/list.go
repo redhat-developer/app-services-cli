@@ -2,11 +2,8 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
-
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -18,10 +15,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -39,12 +34,6 @@ type options struct {
 	search  string
 	page    int32
 	size    int32
-}
-
-type consumerGroupRow struct {
-	ConsumerGroupID   string `json:"groupId,omitempty" header:"Consumer group ID"`
-	ActiveMembers     int    `json:"active_members,omitempty" header:"Active members"`
-	PartitionsWithLag int    `json:"lag,omitempty" header:"Partitions with lag"`
 }
 
 // NewListConsumerGroupCommand creates a new command to list consumer groups
@@ -161,39 +150,8 @@ func runList(opts *options) (err error) {
 		return nil
 	}
 
-	switch opts.output {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(consumerGroupData)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(consumerGroupData)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
-		opts.Logger.Info("")
-		consumerGroups := consumerGroupData.GetItems()
-		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
-		dump.Table(opts.IO.Out, rows)
-
-		return nil
-	}
-
+	dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
 	return nil
-}
-
-func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {
-	rows := []consumerGroupRow{}
-
-	for _, t := range consumerGroups {
-		consumers := t.GetConsumers()
-		row := consumerGroupRow{
-			ConsumerGroupID:   t.GetGroupId(),
-			ActiveMembers:     consumergroup.GetActiveConsumersCount(consumers),
-			PartitionsWithLag: consumergroup.GetPartitionsWithLag(consumers),
-		}
-		rows = append(rows, row)
-	}
-
-	return rows
 }
 
 // checks if there are any consumer groups available
