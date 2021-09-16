@@ -3,19 +3,17 @@ package cluster
 import (
 	"context"
 	"crypto/rand"
-	"errors"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
 	"path/filepath"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/redhat-developer/service-binding-operator/api/v1alpha1"
-	"github.com/redhat-developer/service-binding-operator/pkg/reconcile/pipeline/builder"
-	sboContext "github.com/redhat-developer/service-binding-operator/pkg/reconcile/pipeline/context"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -24,7 +22,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
-	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 )
 
 type KubernetesClients struct {
@@ -33,17 +30,19 @@ type KubernetesClients struct {
 	clientConfig  *clientcmd.ClientConfig
 }
 
-var deploymentResource = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
+var (
+	deploymentResource       = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
+	deploymentConfigResource = schema.GroupVersionResource{Group: "apps.openshift.io", Version: "v1", Resource: "deploymentconfigs"}
+)
 
 type ServiceBindingOptions struct {
 	ServiceName             string
 	Namespace               string
 	AppName                 string
 	ForceCreationWithoutAsk bool
-	ForceUseOperator        bool
-	ForceUseSDK             bool
 	BindingName             string
 	BindAsFiles             bool
+	DeploymentConfig        bool
 }
 
 func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, options *ServiceBindingOptions) error {
@@ -60,14 +59,20 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 		logger.Info(localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
+	var clusterResource schema.GroupVersionResource
+	if options.DeploymentConfig {
+		clusterResource = deploymentConfigResource
+	} else {
+		clusterResource = deploymentResource
+	}
 	// Get proper deployment
 	if options.AppName == "" {
-		options.AppName, err = fetchAppNameFromCluster(ctx, clients, localizer, ns)
+		options.AppName, err = fetchAppNameFromCluster(ctx, clusterResource, clients, localizer, ns)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err = clients.dynamicClient.Resource(deploymentResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
+		_, err = clients.dynamicClient.Resource(clusterResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
@@ -145,24 +150,16 @@ func performBinding(ctx context.Context, options *ServiceBindingOptions, ns stri
 		Spec: v1alpha1.ServiceBindingSpec{
 			BindAsFiles: true,
 			Services:    []v1alpha1.Service{serviceRef},
-			Application: &appRef,
+			Application: appRef,
 		},
 	}
 	sb.SetGroupVersionKind(v1alpha1.GroupVersionKind)
-
-	if options.ForceUseSDK {
-		return useSDKForBinding(clients, sb)
-	}
 
 	// Check of operator is installed
 	_, err := clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
 		List(ctx, metav1.ListOptions{Limit: 1})
 	if err != nil {
-		if options.ForceUseOperator {
-			return localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing", localize.NewEntry("Error", err))
-		}
-		logger.Debug("Service binding Operator not available. Will use SDK option for binding")
-		return useSDKForBinding(clients, sb)
+		return fmt.Errorf("%s: %w", localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing"), err)
 	}
 
 	return useOperatorForBinding(ctx, logger, localizer, sb, clients, ns)
@@ -182,25 +179,8 @@ func useOperatorForBinding(ctx context.Context, logger logging.Logger, localizer
 	return err
 }
 
-func useSDKForBinding(clients *KubernetesClients, sb *v1alpha1.ServiceBinding) error {
-	restMapper, err := apiutil.NewDynamicRESTMapper(clients.restConfig)
-	if err != nil {
-		return err
-	}
-	typeLookup := sboContext.ResourceLookup(restMapper)
-
-	p := builder.DefaultBuilder.WithContextProvider(sboContext.Provider(clients.dynamicClient, typeLookup)).Build()
-
-	retry, err := p.Process(sb)
-
-	if retry {
-		_, err = p.Process(sb)
-	}
-	return err
-}
-
-func fetchAppNameFromCluster(ctx context.Context, clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
-	list, err := clients.dynamicClient.Resource(deploymentResource).Namespace(ns).List(ctx, metav1.ListOptions{})
+func fetchAppNameFromCluster(ctx context.Context, resource schema.GroupVersionResource, clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
+	list, err := clients.dynamicClient.Resource(resource).Namespace(ns).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return "", err
 	}
@@ -214,7 +194,7 @@ func fetchAppNameFromCluster(ctx context.Context, clients *KubernetesClients, lo
 	}
 
 	if len(appNames) == 0 {
-		return "", errors.New("selected namespace has no deployments")
+		return "", localizer.MustLocalizeError("cluster.serviceBinding.error.noapps")
 	}
 
 	prompt := &survey.Select{

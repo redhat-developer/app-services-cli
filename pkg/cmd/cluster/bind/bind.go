@@ -2,6 +2,7 @@ package bind
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -29,9 +30,9 @@ type options struct {
 	appName                 string
 	selectedKafka           string
 
-	forceOperator bool
-	forceSDK      bool
-	bindingName   string
+	deploymentConfig bool
+	bindAsEnv        bool
+	bindingName      string
 }
 
 func NewBindCommand(f *factory.Factory) *cobra.Command {
@@ -66,8 +67,8 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
-	cmd.Flags().BoolVar(&opts.forceOperator, "force-operator", false, opts.localizer.MustLocalize("cluster.bind.flag.forceOperator.description"))
-	cmd.Flags().BoolVar(&opts.forceSDK, "force-sdk", false, opts.localizer.MustLocalize("cluster.bind.flag.forceSDK.description"))
+	cmd.Flags().BoolVar(&opts.deploymentConfig, "deployment-config", false, opts.localizer.MustLocalize("cluster.bind.flag.useDeploymentConfig.description"))
+	cmd.Flags().BoolVar(&opts.bindAsEnv, "bind-env", false, opts.localizer.MustLocalize("cluster.bind.flag.bindenv.description"))
 	return cmd
 }
 
@@ -82,7 +83,7 @@ func runBind(opts *options) error {
 		return err
 	}
 
-	// In future config will include Id's of other services
+	// Multiservice support: use cluster CR's instead of all kafkas
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint:govet
 		selectedKafka, err := kafka.InteractiveSelect(opts.Context, apiConnection, opts.Logger)
@@ -112,10 +113,9 @@ func runBind(opts *options) error {
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
-		ForceUseOperator:        opts.forceOperator,
-		ForceUseSDK:             opts.forceSDK,
 		BindingName:             opts.bindingName,
-		BindAsFiles:             true,
+		BindAsFiles:             !opts.bindAsEnv,
+		DeploymentConfig:        opts.deploymentConfig,
 	})
 
 	return err
