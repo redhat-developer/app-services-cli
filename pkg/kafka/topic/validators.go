@@ -2,7 +2,6 @@ package topic
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -37,13 +36,13 @@ func (v *Validator) ValidateName(val interface{}) error {
 	}
 
 	if len(name) < 1 {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.name.error.required"))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.name.error.required")
 	} else if len(name) > maxNameLength {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.name.error.lengthError", localize.NewEntry("MaxNameLen", maxNameLength)))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.name.error.lengthError", localize.NewEntry("MaxNameLen", maxNameLength))
 	}
 
 	if (name == ".") || (name == "..") {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.name.error.dotsError"))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.name.error.dotsError")
 	}
 
 	matched, _ := regexp.Match(legalNameChars, []byte(name))
@@ -52,7 +51,7 @@ func (v *Validator) ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.name.error.invalidChars", localize.NewEntry("Name", name)))
+	return v.Localizer.MustLocalizeError("kafka.topic.common.validation.name.error.invalidChars", localize.NewEntry("Name", name))
 }
 
 func (v *Validator) ValidateSearchInput(val interface{}) error {
@@ -67,7 +66,7 @@ func (v *Validator) ValidateSearchInput(val interface{}) error {
 		return nil
 	}
 
-	return errors.New(v.Localizer.MustLocalize("kafka.topic.list.error.illegalSearchValue", localize.NewEntry("Search", search)))
+	return v.Localizer.MustLocalizeError("kafka.topic.list.error.illegalSearchValue", localize.NewEntry("Search", search))
 }
 
 // ValidatePartitionsN performs validation on the number of partitions v
@@ -84,15 +83,15 @@ func (v *Validator) ValidatePartitionsN(val interface{}) error {
 	}
 
 	if partitions < minPartitions {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.partitions.error.invalid.minValue", localize.NewEntry("Partitions", partitions), localize.NewEntry("Min", minPartitions)))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.partitions.error.invalid.minValue", localize.NewEntry("Partitions", partitions), localize.NewEntry("Min", minPartitions))
 	}
 
 	if partitions < v.CurPartitions {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.partitions.error.invalid.lesserValue", localize.NewEntry("CurrPartitions", v.CurPartitions), localize.NewEntry("Partitions", partitions)))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.partitions.error.invalid.lesserValue", localize.NewEntry("CurrPartitions", v.CurPartitions), localize.NewEntry("Partitions", partitions))
 	}
 
 	if partitions > maxPartitions {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.partitions.error.invalid.maxValue", localize.NewEntry("Partitions", partitions), localize.NewEntry("Max", maxPartitions)))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.partitions.error.invalid.maxValue", localize.NewEntry("Partitions", partitions), localize.NewEntry("Max", maxPartitions))
 	}
 
 	return nil
@@ -113,7 +112,7 @@ func (v *Validator) ValidateMessageRetentionPeriod(val interface{}) error {
 	}
 
 	if retentionPeriodMs < -1 {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.retentionPeriod.error.invalid", localize.NewEntry("RetentionPeriod", retentionPeriodMs)))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.retentionPeriod.error.invalid", localize.NewEntry("RetentionPeriod", retentionPeriodMs))
 	}
 
 	return nil
@@ -134,7 +133,7 @@ func (v *Validator) ValidateMessageRetentionSize(val interface{}) error {
 	}
 
 	if retentionPeriodBytes < -1 {
-		return errors.New(v.Localizer.MustLocalize("kafka.topic.common.validation.retentionSize.error.invalid", localize.NewEntry("RetentionSize", retentionPeriodBytes)))
+		return v.Localizer.MustLocalizeError("kafka.topic.common.validation.retentionSize.error.invalid", localize.NewEntry("RetentionSize", retentionPeriodBytes))
 	}
 
 	return nil
@@ -158,7 +157,7 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 		if httpRes.StatusCode == http.StatusOK {
-			return errors.New(v.Localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+			return v.Localizer.MustLocalizeError("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", name), localize.NewEntry("InstanceName", kafkaInstance.GetName()))
 		}
 	}
 

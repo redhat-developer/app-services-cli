@@ -2,7 +2,6 @@ package kafka
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -36,7 +35,7 @@ func (v *Validator) ValidateName(val interface{}) error {
 	}
 
 	if len(name) < 1 || len(name) > 32 {
-		return errors.New(v.Localizer.MustLocalize("kafka.validation.name.error.lengthError", localize.NewEntry("MaxLength", 32)))
+		return v.Localizer.MustLocalizeError("kafka.validation.name.error.lengthError", localize.NewEntry("MaxLength", 32))
 	}
 
 	matched := validNameRegexp.MatchString(name)
@@ -110,7 +109,7 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 		if httpRes.StatusCode == http.StatusOK {
-			return errors.New(v.Localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", name)))
+			return v.Localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", name))
 		}
 	}
 

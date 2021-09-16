@@ -1,7 +1,6 @@
 package consumergroup
 
 import (
-	"errors"
 	"regexp"
 	"strconv"
 
@@ -35,12 +34,12 @@ func (v *Validator) ValidateOffsetValue(offset string, value string) error {
 	case OffsetTimestamp:
 		matched := timestampOffsetRegExp.MatchString(value)
 		if !matched {
-			return errors.New(v.Localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidTimestampOffset", offsetValueTmplPair))
+			return v.Localizer.MustLocalizeError("kafka.consumerGroup.resetOffset.error.invalidTimestampOffset", offsetValueTmplPair)
 		}
 	case OffsetAbsolute:
 		if _, parseErr := strconv.Atoi(value); parseErr != nil {
 			offsetValueTmplPair := localize.NewEntry("Value", value)
-			return errors.New(v.Localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset", offsetValueTmplPair))
+			return v.Localizer.MustLocalizeError("kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset", offsetValueTmplPair)
 		}
 	}
 	return nil
