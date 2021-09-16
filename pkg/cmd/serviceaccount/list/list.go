@@ -92,7 +92,7 @@ func runList(opts *options) (err error) {
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:
-		dump.PrintDataInFormat(opts.output, res, opts.IO.Out)
+		return dump.Formatted(opts.IO.Out, opts.output, res)
 	}
 
 	return nil

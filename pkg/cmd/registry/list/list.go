@@ -112,7 +112,7 @@ func runList(opts *options) error {
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
 	default:
-		dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 	}
 
 	return nil

@@ -243,7 +243,9 @@ func runCreate(opts *options) error {
 		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, response); err != nil {
+		return err
+	}
 
 	if !opts.wait {
 		opts.Logger.Info()

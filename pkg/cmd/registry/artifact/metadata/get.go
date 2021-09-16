@@ -110,7 +110,5 @@ func runGet(opts *GetOptions) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 }

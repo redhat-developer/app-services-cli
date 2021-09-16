@@ -140,7 +140,9 @@ func runCreate(opts *options) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
+	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, response); err != nil {
+		return err
+	}
 
 	registryConfig := &config.ServiceRegistryConfig{
 		InstanceID: response.GetId(),

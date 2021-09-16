@@ -164,7 +164,7 @@ func runList(opts *options) (err error) {
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
 		dump.Table(opts.IO.Out, rows)
 	default:
-		dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
+		return dump.Formatted(opts.IO.Out, opts.output, consumerGroupData)
 	}
 
 	return nil

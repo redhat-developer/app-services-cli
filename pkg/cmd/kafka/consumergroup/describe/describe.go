@@ -145,7 +145,7 @@ func runCmd(opts *options) error {
 	case dump.EmptyFormat:
 		printConsumerGroupDetails(stdout, consumerGroupData, opts.localizer)
 	default:
-		dump.PrintDataInFormat(opts.outputFormat, consumerGroupData, stdout)
+		return dump.Formatted(stdout, opts.outputFormat, consumerGroupData)
 	}
 
 	return nil

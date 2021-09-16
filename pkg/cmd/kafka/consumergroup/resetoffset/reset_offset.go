@@ -269,7 +269,7 @@ func runCmd(opts *options) error {
 		rows := mapResetOffsetResultToTableFormat(consumers)
 		dump.Table(opts.IO.Out, rows)
 	default:
-		dump.PrintDataInFormat(opts.output, updatedConsumers, opts.IO.Out)
+		return dump.Formatted(opts.IO.Out, opts.output, updatedConsumers)
 	}
 
 	return nil

@@ -138,14 +138,20 @@ func haveYQ(minVersion int) bool {
 	return false
 }
 
-// PrintDataInFormat prints the given data to the given format
-func PrintDataInFormat(format string, data interface{}, writter io.Writer) {
+// Formatted prints the given data to the given format
+func Formatted(writer io.Writer, format string, data interface{}) error {
 	switch format {
 	case YAMLFormat, YMLFormat:
-		data, _ := yaml.Marshal(data)
-		_ = YAML(writter, data)
+		data, err := yaml.Marshal(data)
+		if err != nil {
+			return err
+		}
+		return YAML(writer, data)
 	default:
-		data, _ := json.Marshal(data)
-		_ = JSON(writter, data)
+		data, err := json.Marshal(data)
+		if err != nil {
+			return err
+		}
+		return JSON(writer, data)
 	}
 }

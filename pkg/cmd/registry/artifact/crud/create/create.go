@@ -175,7 +175,5 @@ func runCreate(opts *options) error {
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 
-	dump.PrintDataInFormat(opts.outputFormat, metadata, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
 }

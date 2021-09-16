@@ -158,7 +158,5 @@ func runUpdate(opts *options) error {
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.updated"))
 
-	dump.PrintDataInFormat(opts.outputFormat, metadata, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
 }
