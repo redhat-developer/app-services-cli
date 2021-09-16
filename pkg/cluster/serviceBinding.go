@@ -159,7 +159,7 @@ func performBinding(ctx context.Context, options *ServiceBindingOptions, ns stri
 		List(ctx, metav1.ListOptions{Limit: 1})
 	if err != nil {
 		if options.ForceUseOperator {
-			return err
+			return localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing", localize.NewEntry("Error", err))
 		}
 		logger.Debug("Service binding Operator not available. Will use SDK option for binding")
 		return useSDKForBinding(clients, sb)
