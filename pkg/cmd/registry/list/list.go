@@ -107,7 +107,7 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case "table":
+	case dump.TableFormat:
 		rows := mapResponseItemsToRows(&response.Items)
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")

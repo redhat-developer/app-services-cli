@@ -159,7 +159,7 @@ func runList(opts *options) (err error) {
 	}
 
 	switch opts.output {
-	case "table":
+	case dump.TableFormat:
 		opts.Logger.Info("")
 		consumerGroups := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)

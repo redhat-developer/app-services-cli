@@ -88,7 +88,7 @@ func runList(opts *options) (err error) {
 
 	outStream := opts.IO.Out
 	switch opts.output {
-	case "table":
+	case dump.TableFormat:
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:

@@ -143,7 +143,7 @@ func runCmd(opts *options) error {
 	stdout := opts.IO.Out
 
 	switch opts.outputFormat {
-	case "table":
+	case dump.TableFormat:
 		printConsumerGroupDetails(stdout, consumerGroupData, opts.localizer)
 	default:
 		dump.PrintDataInFormat(opts.outputFormat, consumerGroupData, stdout)

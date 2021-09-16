@@ -167,7 +167,7 @@ func runCmd(opts *options) error {
 
 	stdout := opts.IO.Out
 	switch opts.output {
-	case "table":
+	case dump.TableFormat:
 		topics := topicData.GetItems()
 		rows := mapTopicResultsToTableFormat(topics)
 		dump.Table(stdout, rows)
