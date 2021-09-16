@@ -143,10 +143,10 @@ func runCmd(opts *options) error {
 	stdout := opts.IO.Out
 
 	switch opts.outputFormat {
-	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
-		dump.PrintDataInFormat(opts.outputFormat, consumerGroupData, stdout)
-	default:
+	case "table":
 		printConsumerGroupDetails(stdout, consumerGroupData, opts.localizer)
+	default:
+		dump.PrintDataInFormat(opts.outputFormat, consumerGroupData, stdout)
 	}
 
 	return nil

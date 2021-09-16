@@ -159,13 +159,13 @@ func runList(opts *options) (err error) {
 	}
 
 	switch opts.output {
-	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
-		dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
-	default:
+	case "table":
 		opts.Logger.Info("")
 		consumerGroups := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
 		dump.Table(opts.IO.Out, rows)
+	default:
+		dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
 	}
 
 	return nil

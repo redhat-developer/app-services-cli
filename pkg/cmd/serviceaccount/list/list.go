@@ -88,11 +88,11 @@ func runList(opts *options) (err error) {
 
 	outStream := opts.IO.Out
 	switch opts.output {
-	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
-		dump.PrintDataInFormat(opts.output, res, opts.IO.Out)
-	default:
+	case "table":
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
+	default:
+		dump.PrintDataInFormat(opts.output, res, opts.IO.Out)
 	}
 
 	return nil

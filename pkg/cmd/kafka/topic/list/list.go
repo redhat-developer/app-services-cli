@@ -167,12 +167,12 @@ func runCmd(opts *options) error {
 
 	stdout := opts.IO.Out
 	switch opts.output {
-	case dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat:
-		dump.PrintDataInFormat(opts.output, topicData, stdout)
-	default:
+	case "table":
 		topics := topicData.GetItems()
 		rows := mapTopicResultsToTableFormat(topics)
 		dump.Table(stdout, rows)
+	default:
+		dump.PrintDataInFormat(opts.output, topicData, stdout)
 	}
 
 	return nil
