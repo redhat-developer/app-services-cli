@@ -2,7 +2,6 @@ package describe
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -21,7 +20,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 type options struct {
@@ -136,22 +134,6 @@ func runDescribe(opts *options) error {
 		return nil
 	}
 
-	return printKafka(kafkaInstance, opts)
-}
-
-func printKafka(kafka *kafkamgmtclient.KafkaRequest, opts *options) error {
-	switch opts.outputFormat {
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, err := yaml.Marshal(kafka)
-		if err != nil {
-			return err
-		}
-		return dump.YAML(opts.IO.Out, data)
-	default:
-		data, err := json.Marshal(kafka)
-		if err != nil {
-			return err
-		}
-		return dump.JSON(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, kafkaInstance, opts.IO.Out)
+	return nil
 }

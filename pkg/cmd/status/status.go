@@ -2,7 +2,6 @@ package status
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -21,7 +20,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -122,17 +120,7 @@ func runStatus(opts *options) error {
 	}
 
 	stdout := opts.IO.Out
-	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(status)
-		_ = dump.JSON(stdout, data)
-		return nil
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(status)
-		_ = dump.YAML(stdout, data)
-		return nil
-	}
-
+	dump.PrintDataInFormat(opts.outputFormat, status, stdout)
 	pkgStatus.Print(stdout, status)
 
 	return nil

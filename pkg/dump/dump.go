@@ -18,9 +18,10 @@ import (
 )
 
 const (
-	JSONFormat = "json"
-	YAMLFormat = "yaml"
-	YMLFormat  = "yml"
+	JSONFormat  = "json"
+	YAMLFormat  = "yaml"
+	YMLFormat   = "yml"
+	EmptyFormat = ""
 )
 
 // JSON dumps the given data to the given stream so that it looks pretty. If the data is a valid

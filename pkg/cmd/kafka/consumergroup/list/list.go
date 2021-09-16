@@ -2,11 +2,10 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
-
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -18,10 +17,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -162,19 +159,13 @@ func runList(opts *options) (err error) {
 	}
 
 	switch opts.output {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(consumerGroupData)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(consumerGroupData)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
+	case dump.EmptyFormat:
 		opts.Logger.Info("")
 		consumerGroups := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
 		dump.Table(opts.IO.Out, rows)
-
-		return nil
+	default:
+		dump.PrintDataInFormat(opts.output, consumerGroupData, opts.IO.Out)
 	}
 
 	return nil

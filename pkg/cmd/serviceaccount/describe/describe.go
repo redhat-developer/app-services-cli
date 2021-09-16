@@ -2,7 +2,6 @@ package describe
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -15,7 +14,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 type options struct {
@@ -89,14 +87,7 @@ func runDescribe(opts *options) error {
 		}
 	}
 
-	switch opts.outputFormat {
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(res)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
-		data, _ := json.Marshal(res)
-		_ = dump.JSON(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, res, opts.IO.Out)
 
 	return nil
 }

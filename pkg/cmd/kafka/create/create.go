@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
@@ -11,13 +10,11 @@ import (
 	"os/signal"
 	"time"
 
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	"gopkg.in/yaml.v2"
-
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -247,14 +244,7 @@ func runCreate(opts *options) error {
 		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
-	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(response)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 
 	if !opts.wait {
 		opts.Logger.Info()

@@ -2,17 +2,15 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 
 	"github.com/spf13/cobra"
 
@@ -21,8 +19,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
-	"gopkg.in/yaml.v2"
 )
 
 // row is the details of a Service Registry instance needed to print to a table
@@ -111,16 +107,12 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(response)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
+	case dump.EmptyFormat:
 		rows := mapResponseItemsToRows(&response.Items)
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
+	default:
+		dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
 	}
 
 	return nil

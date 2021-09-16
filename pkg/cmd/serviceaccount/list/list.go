@@ -2,12 +2,9 @@ package list
 
 import (
 	"context"
-	"encoding/json"
-
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -16,7 +13,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 type options struct {
@@ -92,15 +88,11 @@ func runList(opts *options) (err error) {
 
 	outStream := opts.IO.Out
 	switch opts.output {
-	case dump.JSONFormat:
-		data, _ := json.MarshalIndent(res, "", cmdutil.DefaultJSONIndent)
-		_ = dump.JSON(outStream, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(res)
-		_ = dump.YAML(outStream, data)
-	default:
+	case dump.EmptyFormat:
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
+	default:
+		dump.PrintDataInFormat(opts.output, res, opts.IO.Out)
 	}
 
 	return nil

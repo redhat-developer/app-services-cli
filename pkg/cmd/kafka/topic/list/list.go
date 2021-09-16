@@ -2,8 +2,8 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -13,11 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
-
-	"gopkg.in/yaml.v2"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -171,16 +167,12 @@ func runCmd(opts *options) error {
 
 	stdout := opts.IO.Out
 	switch opts.output {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(topicData)
-		_ = dump.JSON(stdout, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(topicData)
-		_ = dump.YAML(stdout, data)
-	default:
+	case dump.EmptyFormat:
 		topics := topicData.GetItems()
 		rows := mapTopicResultsToTableFormat(topics)
 		dump.Table(stdout, rows)
+	default:
+		dump.PrintDataInFormat(opts.output, topicData, stdout)
 	}
 
 	return nil

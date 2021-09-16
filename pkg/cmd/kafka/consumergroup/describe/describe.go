@@ -2,16 +2,15 @@ package describe
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"sort"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+	"io"
+	"net/http"
+	"sort"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -21,9 +20,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 type options struct {
@@ -144,15 +141,12 @@ func runCmd(opts *options) error {
 	}
 
 	stdout := opts.IO.Out
+
 	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(consumerGroupData)
-		_ = dump.JSON(stdout, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(consumerGroupData)
-		_ = dump.YAML(stdout, data)
-	default:
+	case dump.EmptyFormat:
 		printConsumerGroupDetails(stdout, consumerGroupData, opts.localizer)
+	default:
+		dump.PrintDataInFormat(opts.outputFormat, consumerGroupData, stdout)
 	}
 
 	return nil
@@ -187,7 +181,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 	return rows
 }
 
-// print the consumer grooup details
+// print the consumer group details
 func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclient.ConsumerGroup, localizer localize.Localizer) {
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()

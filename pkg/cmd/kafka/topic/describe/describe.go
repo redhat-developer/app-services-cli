@@ -2,7 +2,6 @@ package describe
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -12,12 +11,10 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"gopkg.in/yaml.v2"
-
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -136,14 +133,7 @@ func runCmd(opts *options) error {
 		}
 	}
 
-	switch opts.outputFormat {
-	case dump.JSONFormat:
-		data, _ := json.Marshal(topicResponse)
-		_ = dump.JSON(opts.IO.Out, data)
-	case dump.YAMLFormat, dump.YMLFormat:
-		data, _ := yaml.Marshal(topicResponse)
-		_ = dump.YAML(opts.IO.Out, data)
-	}
+	dump.PrintDataInFormat(opts.outputFormat, topicResponse, opts.IO.Out)
 
 	return nil
 }
