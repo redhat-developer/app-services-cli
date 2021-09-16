@@ -100,7 +100,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
+				return opts.localizer.MustLocalizeError("kafka.common.error.noKafkaSelected")
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID

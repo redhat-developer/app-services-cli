@@ -2,7 +2,6 @@ package update
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"strings"
 
@@ -75,7 +74,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.IO.CanPrompt() && opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" {
-				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
+				return opts.localizer.MustLocalizeError("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name"))
 			} else if opts.retentionMsStr == "" && opts.partitionsStr == "" && opts.retentionBytesStr == "" && opts.cleanupPolicy == "" {
 				opts.interactive = true
 			}
@@ -230,7 +229,7 @@ func runCmd(opts *options) error {
 			return err
 		}
 		if httpRes.StatusCode == http.StatusNotFound {
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair)
 		}
 	}
 
@@ -288,15 +287,15 @@ func runCmd(opts *options) error {
 		operationTmplPair := localize.NewEntry("Operation", "update")
 		switch httpRes.StatusCode {
 		case http.StatusNotFound:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair)
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unauthorized", operationTmplPair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.forbidden", operationTmplPair)
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}
@@ -332,7 +331,7 @@ func runInteractivePrompt(opts *options) (err error) {
 			return err
 		}
 		if httpRes.StatusCode == http.StatusNotFound {
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair)
 		}
 	}
 

@@ -2,7 +2,6 @@ package migrate
 
 import (
 	"context"
-	"errors"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -62,7 +61,7 @@ func NewImportCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
+				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID

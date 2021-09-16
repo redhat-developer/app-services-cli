@@ -2,8 +2,6 @@ package list
 
 import (
 	"context"
-	"errors"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -78,7 +76,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.page < 1 || opts.limit < 1 {
-				return errors.New(opts.localizer.MustLocalize("artifact.common.error.page.and.limit.too.small"))
+				return opts.localizer.MustLocalizeError("artifact.common.error.page.and.limit.too.small")
 			}
 
 			if opts.registryID != "" {
@@ -91,7 +89,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
+				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID

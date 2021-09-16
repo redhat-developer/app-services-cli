@@ -2,7 +2,6 @@ package delete
 
 import (
 	"context"
-	"errors"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
 
@@ -89,7 +88,7 @@ func runDelete(opts *options) (err error) {
 		}
 
 		if httpRes.StatusCode == http.StatusNotFound {
-			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id)))
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		}
 	}
 
@@ -130,9 +129,9 @@ func deleteServiceAccount(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete")))
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete"))
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.internalServerError")
 		default:
 			return err
 		}

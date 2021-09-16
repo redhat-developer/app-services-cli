@@ -2,7 +2,6 @@ package describe
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -81,7 +80,7 @@ func runDescribe(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusNotFound:
-			return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id)))
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return err
 		}

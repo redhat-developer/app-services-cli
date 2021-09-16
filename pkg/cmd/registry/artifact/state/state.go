@@ -57,7 +57,7 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 
 			if opts.state != "" {
 				if _, err := registryinstanceclient.NewArtifactStateFromValue(opts.state); err != nil {
-					return errors.New(opts.localizer.MustLocalize("artifact.cmd.state.error.invalidArtifactState", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactStateEnumValuesAsString())))
+					return opts.localizer.MustLocalizeError("artifact.cmd.state.error.invalidArtifactState", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactStateEnumValuesAsString()))
 				}
 			}
 
@@ -71,7 +71,7 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
+				return opts.localizer.MustLocalizeError("registry.no.service.selected.use.instance.id.flag")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID

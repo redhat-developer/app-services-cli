@@ -2,7 +2,6 @@ package use
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
@@ -50,13 +49,13 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.id == "" && opts.name == "" {
 				if !opts.IO.CanPrompt() {
-					return errors.New(opts.localizer.MustLocalize("registry.use.error.idOrNameRequired"))
+					return opts.localizer.MustLocalizeError("registry.use.error.idOrNameRequired")
 				}
 				opts.interactive = true
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.MustLocalize("service.error.idAndNameCannotBeUsed"))
+				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			return runUse(opts)

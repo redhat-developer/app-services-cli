@@ -2,8 +2,6 @@ package bind
 
 import (
 	"context"
-	"errors"
-
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -53,10 +51,10 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("cluster.bind.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context"))
 			}
 			if opts.appName == "" && !opts.IO.CanPrompt() {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "appName")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "appName"))
 			}
 			return runBind(opts)
 		},
@@ -106,7 +104,7 @@ func runBind(opts *options) error {
 	}
 
 	if kafkaInstance.Name == nil {
-		return errors.New(opts.localizer.MustLocalize("cluster.bind.error.emptyResponse"))
+		return opts.localizer.MustLocalizeError("cluster.bind.error.emptyResponse")
 	}
 
 	err = cluster.ExecuteServiceBinding(opts.Context, opts.Logger, opts.localizer, &cluster.ServiceBindingOptions{

@@ -68,7 +68,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
+				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -116,7 +116,7 @@ func runDelete(opts *options) error {
 	} else {
 		_, _, err := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact).Execute()
 		if err != nil {
-			return errors.New(opts.localizer.MustLocalize("artifact.common.error.artifact.notFound", localize.NewEntry("Name", opts.artifact)))
+			return opts.localizer.MustLocalizeError("artifact.common.error.artifact.notFound", localize.NewEntry("Name", opts.artifact))
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleting.artifact", localize.NewEntry("Name", opts.artifact)))
 		err = confirmDelete(opts, opts.localizer.MustLocalize("artifact.common.message.deleting.artifactFromGroup", localize.NewEntry("Name", opts.artifact), localize.NewEntry("Group", opts.group)))

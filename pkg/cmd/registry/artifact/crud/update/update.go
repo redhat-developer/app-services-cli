@@ -2,7 +2,6 @@ package update
 
 import (
 	"context"
-	"errors"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -68,7 +67,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.artifact == "" {
-				return errors.New(opts.localizer.MustLocalize("artifact.common.error.artifact.id.required"))
+				return opts.localizer.MustLocalizeError("artifact.common.error.artifact.id.required")
 			}
 
 			if len(args) > 0 {
@@ -85,7 +84,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.noServiceRegistrySelected"))
+				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID

@@ -67,7 +67,7 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
+				return opts.localizer.MustLocalizeError("registry.no.service.selected.use.instance.id.flag")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID

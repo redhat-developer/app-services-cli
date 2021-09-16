@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-	"errors"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
@@ -67,11 +66,11 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.page < 1 {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
+				return opts.localizer.MustLocalizeError("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page))
 			}
 
 			if opts.size < 1 {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.validation.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
+				return opts.localizer.MustLocalizeError("kafka.common.validation.size.error.invalid.minValue", localize.NewEntry("Size", opts.size))
 			}
 
 			cfg, err := opts.Config.Load()
@@ -142,13 +141,13 @@ func runList(opts *options) (err error) {
 
 		switch httpRes.StatusCode {
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.unauthorized", operationTmplPair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.forbidden", operationTmplPair)
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}

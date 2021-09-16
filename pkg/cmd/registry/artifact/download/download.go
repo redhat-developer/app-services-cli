@@ -2,7 +2,6 @@ package download
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"io/ioutil"
@@ -70,7 +69,7 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
+				return opts.localizer.MustLocalizeError("registry.no.service.selected.use.instance.id.flag")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
@@ -121,7 +120,7 @@ func runGet(opts *options) error {
 		request := dataAPI.ArtifactsApi.GetContentByHash(opts.Context, opts.hash)
 		dataFile, _, err = request.Execute()
 	} else {
-		return errors.New(opts.localizer.MustLocalize("artifact.cmd.common.error.specify.contentId.globalId.hash"))
+		return opts.localizer.MustLocalizeError("artifact.cmd.common.error.specify.contentId.globalId.hash")
 	}
 
 	if err != nil {

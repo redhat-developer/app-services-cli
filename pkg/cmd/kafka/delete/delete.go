@@ -2,7 +2,6 @@ package delete
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -58,7 +57,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.MustLocalize("service.error.idAndNameCannotBeUsed"))
+				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -72,7 +71,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var kafkaConfig *config.KafkaConfig
 			if cfg.Services.Kafka == kafkaConfig || cfg.Services.Kafka.ClusterID == "" {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.error.noKafkaSelected"))
+				return opts.localizer.MustLocalizeError("kafka.common.error.noKafkaSelected")
 			}
 
 			opts.id = cfg.Services.Kafka.ClusterID

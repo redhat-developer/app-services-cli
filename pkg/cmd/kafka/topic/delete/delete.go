@@ -2,7 +2,6 @@ package delete
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -51,7 +50,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.force {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes"))
 			}
 
 			if opts.kafkaID != "" {
@@ -110,7 +109,7 @@ func runCmd(opts *options) error {
 			return err
 		}
 		if httpRes.StatusCode == http.StatusNotFound {
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.topicNotFoundError", topicNameTmplPair, kafkaNameTmplPair)
 		}
 	}
 
@@ -124,7 +123,7 @@ func runCmd(opts *options) error {
 		}
 
 		if userConfirmedName != opts.topicName {
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.delete.error.mismatchedNameConfirmation", localize.NewEntry("ConfirmedName", userConfirmedName), localize.NewEntry("ActualName", opts.topicName)))
+			return opts.localizer.MustLocalizeError("kafka.topic.delete.error.mismatchedNameConfirmation", localize.NewEntry("ConfirmedName", userConfirmedName), localize.NewEntry("ActualName", opts.topicName))
 		}
 	}
 
@@ -141,15 +140,15 @@ func runCmd(opts *options) error {
 		operationTmplPair := localize.NewEntry("Operation", "delete")
 		switch httpRes.StatusCode {
 		case http.StatusNotFound:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair)
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unauthorized", operationTmplPair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.forbidden", operationTmplPair)
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}

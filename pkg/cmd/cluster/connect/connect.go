@@ -2,8 +2,6 @@ package connect
 
 import (
 	"context"
-	"errors"
-
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
@@ -51,7 +49,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context"))
 			}
 			return runConnect(opts)
 		},

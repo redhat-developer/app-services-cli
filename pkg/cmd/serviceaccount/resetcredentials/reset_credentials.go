@@ -2,7 +2,6 @@ package resetcredentials
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -60,13 +59,13 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("serviceAccount.resetCredentials.cmd.example"),
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && opts.id == "" {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "id")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "id"))
 			} else if opts.id == "" {
 				opts.interactive = true
 			}
 
 			if !opts.interactive && opts.fileFormat == "" {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format"))
 			}
 
 			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
@@ -132,7 +131,7 @@ func runResetCredentials(opts *options) (err error) {
 	// If the credentials file already exists, and the --overwrite flag is not set then return an error
 	// indicating that the user should explicitly request overwriting of the file
 	if _, err = os.Stat(opts.filename); err == nil && !opts.overwrite {
-		return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename)))
+		return opts.localizer.MustLocalizeError("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename))
 	}
 
 	if !opts.force {
@@ -200,7 +199,7 @@ func resetCredentials(name string, opts *options) (*kafkamgmtclient.ServiceAccou
 			opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update"))
 			return nil, fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update")), err)
 		case http.StatusInternalServerError:
-			return nil, errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.internalServerError"))
+			return nil, opts.localizer.MustLocalizeError("serviceAccount.common.error.internalServerError")
 		default:
 			return nil, err
 		}
