@@ -123,7 +123,7 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.TableFormat:
+	case dump.EmptyFormat:
 		rows := mapResponseItemsToRows(response.GetItems())
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
