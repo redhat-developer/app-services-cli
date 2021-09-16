@@ -2,8 +2,6 @@ package describe
 
 import (
 	"context"
-	"errors"
-
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -55,7 +53,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.MustLocalize("service.error.idAndNameCannotBeUsed"))
+				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -69,7 +67,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 			var registryConfig *config.ServiceRegistryConfig
 			if cfg.Services.ServiceRegistry == registryConfig || cfg.Services.ServiceRegistry.InstanceID == "" {
-				return errors.New(opts.localizer.MustLocalize("registry.common.error.noServiceSelected"))
+				return opts.localizer.MustLocalizeError("registry.common.error.noServiceSelected")
 			}
 
 			opts.id = cfg.Services.ServiceRegistry.InstanceID

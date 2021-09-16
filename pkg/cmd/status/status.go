@@ -2,8 +2,6 @@ package status
 
 import (
 	"context"
-	"errors"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -68,7 +66,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 			if len(args) > 0 {
 				for _, s := range args {
 					if !flags.IsValidInput(s, validServices...) {
-						return errors.New(opts.localizer.MustLocalize("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s)))
+						return opts.localizer.MustLocalizeError("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s))
 					}
 				}
 

@@ -2,7 +2,6 @@ package resetoffset
 
 import (
 	"context"
-	"errors"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
 
@@ -82,7 +81,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.value == "" && (opts.offset == consumergroup.OffsetAbsolute || opts.offset == consumergroup.OffsetTimestamp) {
-				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset)))
+				return opts.localizer.MustLocalizeError("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset))
 			}
 
 			if opts.kafkaID != "" {
@@ -95,7 +94,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.noKafkaSelected"))
+				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.noKafkaSelected")
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -172,7 +171,7 @@ func runCmd(opts *options) error {
 				return newErr
 			}
 			if httpRes.StatusCode == http.StatusNotFound {
-				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair))
+				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair)
 			}
 			return newErr
 		}
@@ -191,7 +190,7 @@ func runCmd(opts *options) error {
 			topicNameTmplPair := localize.NewEntry("TopicName", opts.topic)
 			kafkaNameTmplPair := localize.NewEntry("InstanceName", kafkaInstance.GetName())
 			if httpRes.StatusCode == http.StatusNotFound {
-				return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair))
+				return opts.localizer.MustLocalizeError("kafka.topic.common.error.notFoundError", topicNameTmplPair, kafkaNameTmplPair)
 			}
 			return newErr
 		}
@@ -243,13 +242,13 @@ func runCmd(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.unauthorized", operationTmplPair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.forbidden", operationTmplPair)
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}

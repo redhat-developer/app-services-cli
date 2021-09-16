@@ -2,7 +2,6 @@ package delete
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -57,7 +56,7 @@ func NewDeleteConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.noKafkaSelected"))
+				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.noKafkaSelected")
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -102,7 +101,7 @@ func runCmd(opts *options) error {
 			return err
 		}
 		if httpRes.StatusCode == http.StatusNotFound {
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.notFoundError", cgIDPair, kafkaNameTmplPair)
 		}
 	}
 
@@ -118,7 +117,7 @@ func runCmd(opts *options) error {
 		}
 
 		if confirmedID != opts.id {
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.delete.error.mismatchedIDConfirmation", localize.NewEntry("ConfirmedID", confirmedID), cgIDPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.delete.error.mismatchedIDConfirmation", localize.NewEntry("ConfirmedID", confirmedID), cgIDPair)
 		}
 	}
 
@@ -136,15 +135,15 @@ func runCmd(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unauthorized", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.unauthorized", operationTmplPair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.forbidden", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.forbidden", operationTmplPair)
 		case http.StatusLocked:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.delete.error.locked"))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.delete.error.locked")
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}

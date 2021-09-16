@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
@@ -61,7 +60,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "name")))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "name"))
 			} else if opts.name == "" && opts.description == "" {
 				opts.interactive = true
 			}
@@ -73,7 +72,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				}
 
 				if opts.fileFormat == "" {
-					return errors.New(opts.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format")))
+					return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format"))
 				}
 
 				if err = validator.ValidateName(opts.name); err != nil {
@@ -127,7 +126,7 @@ func runCreate(opts *options) error {
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(opts.filename)
 	if err == nil && !opts.overwrite {
-		return errors.New(opts.localizer.MustLocalize("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename)))
+		return opts.localizer.MustLocalizeError("serviceAccount.common.error.credentialsFileAlreadyExists", localize.NewEntry("FilePath", opts.filename))
 	}
 
 	// create the service account

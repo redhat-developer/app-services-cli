@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"strconv"
 
@@ -69,7 +68,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && opts.topicName == "" {
-				return errors.New(opts.localizer.MustLocalize("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name")))
+				return opts.localizer.MustLocalizeError("argument.error.requiredWhenNonInteractive", localize.NewEntry("Argument", "name"))
 			} else if opts.topicName == "" {
 				opts.interactive = true
 			}
@@ -182,15 +181,15 @@ func runCmd(opts *options) error {
 		operationTmplPair := localize.NewEntry("Operation", "create")
 		switch httpRes.StatusCode {
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unauthorized", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unauthorized", operationTmplPair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.forbidden", operationTmplPair))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.forbidden", operationTmplPair)
 		case http.StatusConflict:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", opts.topicName), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.topic.create.error.conflictError", localize.NewEntry("TopicName", opts.topicName), localize.NewEntry("InstanceName", kafkaInstance.GetName()))
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}

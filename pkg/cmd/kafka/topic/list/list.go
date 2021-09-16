@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-	"errors"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
 
@@ -71,11 +70,11 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.page < 1 {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.page.error.invalid.minValue", localize.NewEntry("Page", opts.page)))
+				return opts.localizer.MustLocalizeError("kafka.common.page.error.invalid.minValue", localize.NewEntry("Page", opts.page))
 			}
 
 			if opts.size < 1 {
-				return errors.New(opts.localizer.MustLocalize("kafka.common.size.error.invalid.minValue", localize.NewEntry("Size", opts.size)))
+				return opts.localizer.MustLocalizeError("kafka.common.size.error.invalid.minValue", localize.NewEntry("Size", opts.size))
 			}
 
 			if opts.search != "" {
@@ -93,7 +92,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasKafka() {
-				return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.noKafkaSelected"))
+				return opts.localizer.MustLocalizeError("kafka.topic.common.error.noKafkaSelected")
 			}
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
@@ -147,13 +146,13 @@ func runCmd(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusUnauthorized:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.unauthorized", operationTemplatePair))
+			return opts.localizer.MustLocalizeError("kafka.topic.list.error.unauthorized", operationTemplatePair)
 		case http.StatusForbidden:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.list.error.forbidden", operationTemplatePair))
+			return opts.localizer.MustLocalizeError("kafka.topic.list.error.forbidden", operationTemplatePair)
 		case http.StatusInternalServerError:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.internalServerError"))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return errors.New(opts.localizer.MustLocalize("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName())))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
 		default:
 			return err
 		}

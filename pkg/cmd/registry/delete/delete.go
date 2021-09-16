@@ -2,7 +2,6 @@ package delete
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
@@ -57,7 +56,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return errors.New(opts.localizer.MustLocalize("service.error.idAndNameCannotBeUsed"))
+				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			if opts.id != "" || opts.name != "" {
@@ -71,7 +70,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var serviceRegistryConfig *config.ServiceRegistryConfig
 			if cfg.Services.ServiceRegistry == serviceRegistryConfig || cfg.Services.ServiceRegistry.InstanceID == "" {
-				return errors.New(opts.localizer.MustLocalize("registry.common.error.noServiceSelected"))
+				return opts.localizer.MustLocalizeError("registry.common.error.noServiceSelected")
 			}
 
 			opts.id = cfg.Services.ServiceRegistry.InstanceID

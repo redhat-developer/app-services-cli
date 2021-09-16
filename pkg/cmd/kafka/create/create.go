@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
@@ -93,10 +92,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return errors.New(opts.localizer.MustLocalize("kafka.create.argument.name.error.requiredWhenNonInteractive"))
+				return opts.localizer.MustLocalizeError("kafka.create.argument.name.error.requiredWhenNonInteractive")
 			} else if opts.name == "" {
 				if opts.provider != "" || opts.region != "" {
-					return errors.New(opts.localizer.MustLocalize("kafka.create.argument.name.error.requiredWhenNonInteractive"))
+					return opts.localizer.MustLocalizeError("kafka.create.argument.name.error.requiredWhenNonInteractive")
 				}
 				opts.interactive = true
 			}
@@ -185,7 +184,7 @@ func runCreate(opts *options) error {
 	}
 
 	if httpRes.StatusCode == http.StatusBadRequest {
-		return errors.New(opts.localizer.MustLocalize("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name)))
+		return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
 	}
 
 	if err != nil {

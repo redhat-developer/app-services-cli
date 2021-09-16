@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
@@ -69,7 +68,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.IO.CanPrompt() && opts.name == "" {
-				return errors.New(opts.localizer.MustLocalize("registry.cmd.create.error.name.requiredWhenNonInteractive"))
+				return opts.localizer.MustLocalizeError("registry.cmd.create.error.name.requiredWhenNonInteractive")
 			} else if opts.name == "" {
 				opts.interactive = true
 			}

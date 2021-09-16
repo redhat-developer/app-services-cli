@@ -58,7 +58,7 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name == "" && opts.description == "" && !opts.IO.CanPrompt() {
-				return errors.New(f.Localizer.MustLocalize("artifact.cmd.common.error.no.editor.mode.in.non.interactive"))
+				return f.Localizer.MustLocalizeError("artifact.cmd.common.error.no.editor.mode.in.non.interactive")
 			}
 
 			if opts.artifact == "" {
@@ -75,7 +75,7 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !cfg.HasServiceRegistry() {
-				return errors.New(opts.localizer.MustLocalize("registry.no.service.selected.use.instance.id.flag"))
+				return opts.localizer.MustLocalizeError("registry.no.service.selected.use.instance.id.flag")
 			}
 
 			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
