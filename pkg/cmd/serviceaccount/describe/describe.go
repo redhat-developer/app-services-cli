@@ -86,7 +86,5 @@ func runDescribe(opts *options) error {
 		}
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, res, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, res)
 }

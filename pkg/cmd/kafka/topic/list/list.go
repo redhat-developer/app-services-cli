@@ -171,7 +171,7 @@ func runCmd(opts *options) error {
 		rows := mapTopicResultsToTableFormat(topics)
 		dump.Table(stdout, rows)
 	default:
-		dump.PrintDataInFormat(opts.output, topicData, stdout)
+		return dump.Formatted(stdout, opts.output, topicData)
 	}
 
 	return nil

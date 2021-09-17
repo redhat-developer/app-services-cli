@@ -302,9 +302,7 @@ func runCmd(opts *options) error {
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 }
 
 func runInteractivePrompt(opts *options) (err error) {

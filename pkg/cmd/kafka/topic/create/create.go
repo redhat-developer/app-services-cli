@@ -197,9 +197,7 @@ func runCmd(opts *options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.create.log.info.topicCreated", localize.NewEntry("TopicName", response.GetName()), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 }
 
 func runInteractivePrompt(opts *options) (err error) {

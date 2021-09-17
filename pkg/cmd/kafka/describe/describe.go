@@ -133,6 +133,5 @@ func runDescribe(opts *options) error {
 		return nil
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, kafkaInstance, opts.IO.Out)
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, kafkaInstance)
 }

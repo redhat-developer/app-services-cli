@@ -132,7 +132,5 @@ func runCmd(opts *options) error {
 		}
 	}
 
-	dump.PrintDataInFormat(opts.outputFormat, topicResponse, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, topicResponse)
 }

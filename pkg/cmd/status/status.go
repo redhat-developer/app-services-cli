@@ -5,13 +5,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/profile"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	pkgStatus "github.com/redhat-developer/app-services-cli/pkg/status"
@@ -118,7 +118,9 @@ func runStatus(opts *options) error {
 	}
 
 	stdout := opts.IO.Out
-	dump.PrintDataInFormat(opts.outputFormat, status, stdout)
+	if err = dump.Formatted(stdout, opts.outputFormat, status); err != nil {
+		return err
+	}
 	pkgStatus.Print(stdout, status)
 
 	return nil

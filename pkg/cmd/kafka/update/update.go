@@ -209,9 +209,7 @@ func run(opts *options) error {
 
 %v`, opts.localizer.MustLocalize("kafka.update.log.info.updateSuccess", localize.NewEntry("Name", response.GetName())))
 
-	dump.PrintDataInFormat(opts.outputFormat, response, opts.IO.Out)
-
-	return nil
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 }
 
 func promptOwnerSelect(localizer localize.Localizer, users []rbac.Principal) (string, error) {
