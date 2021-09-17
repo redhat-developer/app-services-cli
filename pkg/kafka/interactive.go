@@ -3,9 +3,9 @@ package kafka
 import (
 	"context"
 	"fmt"
-
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
@@ -14,7 +14,7 @@ const (
 	queryLimit = "1000"
 )
 
-func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger) (*kafkamgmtclient.KafkaRequest, error) {
+func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger, localizer localize.Localizer) (*kafkamgmtclient.KafkaRequest, error) {
 	api := connection.API()
 
 	response, _, err := api.Kafka().GetKafkas(ctx).Size(queryLimit).Execute()
@@ -23,7 +23,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 	}
 
 	if response.Size == 0 {
-		logger.Info("No Kafka instances were found.")
+		logger.Info(localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
 		return nil, nil
 	}
 
@@ -33,7 +33,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 	}
 
 	prompt := &survey.Select{
-		Message:  "Select Kafka instance to connect:",
+		Message:  localizer.MustLocalize("kafka.common.input.instanceName.message"),
 		Options:  kafkas,
 		PageSize: 10,
 	}

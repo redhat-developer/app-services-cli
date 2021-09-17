@@ -138,7 +138,7 @@ func runInteractivePrompt(opts *options) error {
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger)
+	selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
 	if err != nil {
 		return err
 	}

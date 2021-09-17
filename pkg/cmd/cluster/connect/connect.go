@@ -83,7 +83,7 @@ func runConnect(opts *options) error {
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint
-		selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger)
+		selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
 		if err != nil {
 			return err
 		}
