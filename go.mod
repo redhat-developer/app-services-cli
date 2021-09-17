@@ -34,8 +34,8 @@ require (
 	golang.org/x/sys v0.0.0-20210915083310-ed5796bab164 // indirect
 	golang.org/x/text v0.3.7
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/api v0.22.1
-	k8s.io/apimachinery v0.22.1
-	k8s.io/client-go v0.22.1
+	k8s.io/api v0.22.2
+	k8s.io/apimachinery v0.22.2
+	k8s.io/client-go v0.22.2
 	sigs.k8s.io/controller-runtime v0.10.0 // indirect
 )
