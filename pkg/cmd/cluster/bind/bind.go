@@ -85,7 +85,7 @@ func runBind(opts *options) error {
 	// In future config will include Id's of other services
 	if cfg.Services.Kafka == nil || opts.ignoreContext {
 		// nolint:govet
-		selectedKafka, err := kafka.InteractiveSelect(opts.Context, apiConnection, opts.Logger)
+		selectedKafka, err := kafka.InteractiveSelect(opts.Context, apiConnection, opts.Logger, opts.localizer)
 		if err != nil {
 			return err
 		}
