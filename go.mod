@@ -9,7 +9,7 @@ require (
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
 	github.com/briandowns/spinner v1.16.0
-	github.com/coreos/go-oidc/v3 v3.0.0
+	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/fatih/color v1.12.0
 	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/google/go-github v17.0.0+incompatible
