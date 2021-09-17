@@ -170,7 +170,7 @@ func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact)
 			State:     k.GetState(),
 		}
 
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows
