@@ -44,10 +44,6 @@ one = 'Format in which to display the Kafka instance (choose from: "json", "yml"
 [kafkas.common.flag.output.description]
 one = 'Format in which to display the Kafka instances (choose from: "json", "yml", "yaml")'
 
-[kafka.common.error.couldNotFetchKafkas]
-description = 'Error message when list of Kafka instances could not be fetched'
-one = 'unable to list Kafka instances'
-
 [kafka.common.input.instanceName.message]
 one = 'Select Kafka instance:'
 
