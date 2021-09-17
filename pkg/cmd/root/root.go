@@ -1,7 +1,7 @@
 package root
 
 import (
-	"flag"
+	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
@@ -10,7 +10,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
 
-	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -19,7 +18,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
@@ -44,7 +42,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	cmd.Version = version
 
-	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	// pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))

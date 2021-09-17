@@ -8,16 +8,19 @@ Connect your RHOAS services to Kubernetes or OpenShift applications
 [discrete]
 == Synopsis
 
-Command allows you to connect services created by connect command to your application
+Command allows you to connect services created by "rhoas cluster connect" command to your application
 running on OpenShift or Kubernetes platform.
 Bind will scan your namespace and detect all application deployments that you can connect your
-services with.
+services with. 
+
+If your application uses DeploymentConfig --deployment-config flag needs to be supplied in order to detect it.
+When deployment-config flag is used binding will not take effect until application is manually redeployed by user.
 
 Bind command detects Kubernetes deployments and inject managed services credentials to them.
 For information about what credentials are injected please refer to individual services
-Command will inject credentials as files into `/bindings` folder inside your application.
+By default the command will inject credentials as files into `/bindings` folder inside your application.
 
-Bind command will create volume inside your deployment or
+Bind command will create volume inside your deployment.
 ServiceBindingOperator resource if you have it installed on your cluster
 
 
@@ -41,9 +44,9 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
 == Options
 
       `--app-name` _string_::       Name of the kubernetes deployment to bind
+      `--bind-env`::                Bind service as environment variables
       `--binding-name` _string_::   Name of the Service binding object to create when using operator
-      `--force-operator`::          Use ServiceBindingOperator only and fail if Operator is not installed
-      `--force-sdk`::               Use Service Binding SDK and skip ServiceBindingOperator even if installed on the cluster
+      `--deployment-config`::       Use DeploymentConfig to detect your application
       `--ignore-context`::          Ignore currently selected services and ask to select each service separately
       `--kubeconfig` _string_::     Location of the kubeconfig file
   `-n`, `--namespace` _string_::    Custom Kubernetes namespace (if not set current namespace will be used)
