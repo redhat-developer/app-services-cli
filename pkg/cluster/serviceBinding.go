@@ -94,7 +94,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	// Check KafkaConnection
 	_, err = clients.dynamicClient.Resource(AKCResource).Namespace(ns).Get(ctx, options.ServiceName, metav1.GetOptions{})
 	if err != nil {
-		return errors.New(localizer.MustLocalize("cluster.serviceBinding.serviceMissing.message"))
+		return localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
 
 	// Execute binding
@@ -159,7 +159,7 @@ func performBinding(ctx context.Context, options *ServiceBindingOptions, ns stri
 		List(ctx, metav1.ListOptions{Limit: 1})
 	if err != nil {
 		if options.ForceUseOperator {
-			return errors.New(localizer.MustLocalize("cluster.serviceBinding.operatorMissing") + err.Error())
+			return localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing", localize.NewEntry("Error", err))
 		}
 		logger.Debug("Service binding Operator not available. Will use SDK option for binding")
 		return useSDKForBinding(clients, sb)

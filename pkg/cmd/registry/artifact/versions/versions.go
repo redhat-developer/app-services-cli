@@ -2,7 +2,6 @@ package versions
 
 import (
 	"context"
-	"errors"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -54,7 +53,7 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if opts.artifact == "" {
-				return errors.New(f.Localizer.MustLocalize("artifact.common.message.artifactIdRequired"))
+				return f.Localizer.MustLocalizeError("artifact.common.message.artifactIdRequired")
 			}
 
 			if opts.registryID != "" {

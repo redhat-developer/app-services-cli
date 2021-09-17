@@ -3,7 +3,6 @@ package cluster
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
@@ -229,7 +228,7 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 	}
 
 	if opts.OfflineAccessToken == "" && !c.io.CanPrompt() {
-		return errors.New(c.localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token")))
+		return c.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token"))
 	}
 
 	if opts.OfflineAccessToken == "" {

@@ -3,7 +3,6 @@ package metadata
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -62,7 +61,7 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.artifact == "" {
-				return errors.New(f.Localizer.MustLocalize("artifact.common.message.artifactIdRequired"))
+				return f.Localizer.MustLocalizeError("artifact.common.message.artifactIdRequired")
 			}
 
 			if opts.registryID != "" {

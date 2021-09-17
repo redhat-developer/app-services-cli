@@ -259,7 +259,7 @@ func getURLFromAlias(urlOrAlias string, urlAliasMap map[string]string, localizer
 		return nil, err
 	}
 	if gatewayURL.Scheme != "http" && gatewayURL.Scheme != "https" {
-		err = errors.New(localizer.MustLocalize("login.error.schemeMissingFromUrl", localize.NewEntry("URL", gatewayURL.String())))
+		err = localizer.MustLocalizeError("login.error.schemeMissingFromUrl", localize.NewEntry("URL", gatewayURL.String()))
 		return nil, err
 	}
 
