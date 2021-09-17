@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"fmt"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -18,7 +19,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 
 	response, _, err := api.Kafka().GetKafkas(ctx).Size(queryLimit).Execute()
 	if err != nil {
-		return nil, localizer.MustLocalizeError("kafka.common.error.couldNotFetchKafkas", localize.NewEntry("Error", err))
+		return nil, fmt.Errorf("unable to list Kafka instances: %w", err)
 	}
 
 	if response.Size == 0 {
