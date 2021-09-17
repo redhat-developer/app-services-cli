@@ -42,7 +42,7 @@ type ServiceBindingOptions struct {
 	ForceCreationWithoutAsk bool
 	BindingName             string
 	BindAsFiles             bool
-	DeploymentConfig        bool
+	DeploymentConfigEnabled bool
 }
 
 func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, options *ServiceBindingOptions) error {
@@ -60,7 +60,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	}
 
 	var clusterResource schema.GroupVersionResource
-	if options.DeploymentConfig {
+	if options.DeploymentConfigEnabled {
 		clusterResource = deploymentConfigResource
 	} else {
 		clusterResource = deploymentResource

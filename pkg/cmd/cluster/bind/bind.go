@@ -30,9 +30,9 @@ type options struct {
 	appName                 string
 	selectedKafka           string
 
-	deploymentConfig bool
-	bindAsEnv        bool
-	bindingName      string
+	deploymentConfigEnabled bool
+	bindAsEnv               bool
+	bindingName             string
 }
 
 func NewBindCommand(f *factory.Factory) *cobra.Command {
@@ -67,7 +67,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
-	cmd.Flags().BoolVar(&opts.deploymentConfig, "deployment-config", false, opts.localizer.MustLocalize("cluster.bind.flag.useDeploymentConfig.description"))
+	cmd.Flags().BoolVar(&opts.deploymentConfigEnabled, "deployment-config", false, opts.localizer.MustLocalize("cluster.bind.flag.deploymentConfig.description"))
 	cmd.Flags().BoolVar(&opts.bindAsEnv, "bind-env", false, opts.localizer.MustLocalize("cluster.bind.flag.bindenv.description"))
 	return cmd
 }
@@ -115,7 +115,7 @@ func runBind(opts *options) error {
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		BindingName:             opts.bindingName,
 		BindAsFiles:             !opts.bindAsEnv,
-		DeploymentConfig:        opts.deploymentConfig,
+		DeploymentConfigEnabled: opts.deploymentConfigEnabled,
 	})
 
 	return err
