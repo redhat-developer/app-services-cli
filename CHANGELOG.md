@@ -214,11 +214,6 @@ This replaces the positional argument in `rhoas kafka use`, `rhoas kafka describ
 * **kafka topic update:** add cleanup policy flag ([#776](https://github.com/redhat-developer/app-services-cli/issues/776))
 
 
-<<<<<<< HEAD
-=======
->>>>>>> chore: update CHANGELOG
-=======
->>>>>>> chore: update CHANGELOG
 <a name="v0.24.4"></a>
 ## [v0.24.4](https://github.com/redhat-developer/app-services-cli/compare/0.24.3...v0.24.4) (2021-06-14)
 
