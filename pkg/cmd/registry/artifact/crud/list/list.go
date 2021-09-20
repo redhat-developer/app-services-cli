@@ -157,7 +157,7 @@ func runList(opts *options) error {
 }
 
 func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact) []artifactRow {
-	rows := []artifactRow{}
+	rows := make([]artifactRow, len(artifacts))
 
 	for i := range artifacts {
 		k := (artifacts)[i]
@@ -170,7 +170,7 @@ func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact)
 			State:     k.GetState(),
 		}
 
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows
