@@ -119,7 +119,7 @@ func runList(opts *options) error {
 }
 
 func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry) []RegistryRow {
-	rows := []RegistryRow{}
+	rows := make([]RegistryRow, len(*registries))
 
 	for i := range *registries {
 		k := (*registries)[i]
@@ -130,7 +130,7 @@ func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry) []RegistryRow {
 			Owner:  k.GetOwner(),
 		}
 
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows

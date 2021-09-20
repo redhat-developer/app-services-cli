@@ -152,9 +152,9 @@ func runCmd(opts *options) error {
 }
 
 func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consumer) []consumerRow {
-	rows := []consumerRow{}
+	rows := make([]consumerRow, len(consumers))
 
-	for _, consumer := range consumers {
+	for i, consumer := range consumers {
 
 		row := consumerRow{
 			Partition:     int(consumer.GetPartition()),
@@ -169,7 +169,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 			row.MemberID = color.Italic("unassigned")
 		}
 
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	// sort members by partition number

@@ -134,9 +134,9 @@ func runList(opts *options) error {
 }
 
 func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
-	rows := []kafkaRow{}
+	rows := make([]kafkaRow, len(kafkas))
 
-	for _, k := range kafkas {
+	for i, k := range kafkas {
 		row := kafkaRow{
 			ID:            k.GetId(),
 			Name:          k.GetName(),
@@ -146,7 +146,7 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
 			Region:        k.GetRegion(),
 		}
 
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows

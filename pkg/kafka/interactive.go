@@ -27,9 +27,9 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 		return nil, nil
 	}
 
-	kafkas := []string{}
+	kafkas := make([]string, len(response.Items))
 	for index := 0; index < len(response.Items); index++ {
-		kafkas = append(kafkas, *response.Items[index].Name)
+		kafkas[index] = *response.Items[index].Name
 	}
 
 	prompt := &survey.Select{

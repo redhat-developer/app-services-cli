@@ -99,9 +99,9 @@ func runList(opts *options) (err error) {
 }
 
 func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {
-	rows := []svcAcctRow{}
+	rows := make([]svcAcctRow, len(svcAccts))
 
-	for _, sa := range svcAccts {
+	for i, sa := range svcAccts {
 		row := svcAcctRow{
 			ID:        sa.GetId(),
 			Name:      sa.GetName(),
@@ -110,7 +110,7 @@ func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) [
 			CreatedAt: sa.GetCreatedAt().String(),
 		}
 
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows

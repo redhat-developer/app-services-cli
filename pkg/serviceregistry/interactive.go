@@ -27,9 +27,9 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 		return nil, nil
 	}
 
-	regisries := []string{}
+	regisries := make([]string, len(response.Items))
 	for index := 0; index < len(response.Items); index++ {
-		regisries = append(regisries, *response.Items[index].Name)
+		regisries[index] = *response.Items[index].Name
 	}
 
 	prompt := &survey.Select{
