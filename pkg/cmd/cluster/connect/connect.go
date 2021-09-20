@@ -87,7 +87,15 @@ func runConnect(opts *options) error {
 		SelectedServiceID:       opts.serviceID,
 	}
 
-	err = clusterConn.Connect(opts.Context, arguments)
+	connectOpts := cluster.Options{
+		IO:         opts.IO,
+		Logger:     opts.Logger,
+		Localizer:  opts.localizer,
+		Config:     opts.Config,
+		Connection: conn,
+	}
+
+	err = clusterConn.Connect(context.Background(), arguments, connectOpts)
 	if err != nil {
 		return err
 	}

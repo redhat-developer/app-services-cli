@@ -17,7 +17,7 @@ type ConnectArguments struct {
 
 // Cluster defines methods used to interact with a cluster
 type Cluster interface {
-	Connect(ctx context.Context, opts *ConnectArguments) error
+	Connect(ctx context.Context, connectOpts *ConnectArguments, opts Options) error
 	IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error)
 	CurrentNamespace() (string, error)
 }

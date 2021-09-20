@@ -2,22 +2,15 @@ package cluster
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
 
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
-	registryPkg "github.com/redhat-developer/app-services-cli/pkg/cluster/serviceregistry"
 	kafkaUtil "github.com/redhat-developer/app-services-cli/pkg/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -41,17 +34,19 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-// KubernetesCluster is a type which represents a Kubernetes cluster
-type KubernetesCluster struct {
-	connection connection.Connection
-	config     config.IConfig
-	logger     logging.Logger
+// Options object
+type Options struct {
+	Connection connection.Connection
+	Config     config.IConfig
+	Logger     logging.Logger
+	IO         *iostreams.IOStreams
+	Localizer  localize.Localizer
+}
 
+type KubernetesCluster struct {
 	clientset          *kubernetes.Clientset
 	clientconfig       clientcmd.ClientConfig
 	dynamicClient      dynamic.Interface
-	io                 *iostreams.IOStreams
-	localizer          localize.Localizer
 	kubeconfigLocation string
 }
 
@@ -103,14 +98,9 @@ func NewKubernetesClusterConnection(connection connection.Connection,
 	}
 
 	k8sCluster := &KubernetesCluster{
-		connection,
-		config,
-		logger,
 		clientset,
 		clientconfig,
 		dynamicClient,
-		io,
-		localizer,
 		kubeconfig,
 	}
 
@@ -126,7 +116,7 @@ func (c *KubernetesCluster) CurrentNamespace() (string, error) {
 
 // nolint:funlen
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments) error {
+func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments, opts Options) error {
 
 	var currentNamespace string
 	var err error
@@ -140,9 +130,9 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	}
 
 	// print status
-	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
+	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
-	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.statusInfo",
+	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.statusInfo",
 		localize.NewEntry("InstanceName", color.Info("random name")),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
 		localize.NewEntry("RegistryInstanceName", color.Info("random-name")),
@@ -151,7 +141,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	if cmdOptions.ForceCreationWithoutAsk == false {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
-			Message: c.localizer.MustLocalize("cluster.kubernetes.connect.input.confirm.message"),
+			Message: opts.Localizer.MustLocalize("cluster.kubernetes.connect.input.confirm.message"),
 		}
 		err = survey.AskOne(confirm, &shouldContinue)
 		if err != nil {
@@ -159,30 +149,35 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		}
 
 		if !shouldContinue {
-			c.logger.Debug(c.localizer.MustLocalize("cluster.kubernetes.connect.log.debug.cancellingConnect"))
+			opts.Logger.Debug(opts.Localizer.MustLocalize("cluster.kubernetes.connect.log.debug.cancellingConnect"))
 			return nil
 		}
 	}
 
 	// Token with auth for operator to pick
-	err = c.createTokenSecretIfNeeded(ctx, currentNamespace, cmdOptions)
+	err = c.createTokenSecretIfNeeded(ctx, currentNamespace, cmdOptions, opts)
 	if err != nil {
 		return err
 	}
 
-	err = c.createServiceAccountSecretIfNeeded(ctx, currentNamespace)
+	err = c.createServiceAccountSecretIfNeeded(ctx, currentNamespace, opts)
 	if err != nil {
 		return err
 	}
+
+	var service Service
 
 	switch cmdOptions.SelectedService {
+
 	case "kafka":
-		err = c.checkAndCreateKafkaConnectionCustomResource(ctx, currentNamespace, cmdOptions.SelectedServiceID)
+		service = &Kafka{}
+		err = c.createConnectionCustomResource(ctx, currentNamespace, cmdOptions.SelectedServiceID, service, opts)
 		if err != nil {
 			return err
 		}
 	case "service-registry":
-		err = c.checkAndCreateServiceRegistryConnectionCustomResource(ctx, currentNamespace, cmdOptions.SelectedServiceID)
+		service = &ServiceRegistry{}
+		err = c.createConnectionCustomResource(ctx, currentNamespace, cmdOptions.SelectedServiceID, service, opts)
 		if err != nil {
 			return err
 		}
@@ -190,14 +185,14 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		var selectedKafkaInstance string
 		var selectedRegistryInstance string
 
-		cfg, err := c.config.Load()
+		cfg, err := opts.Config.Load()
 		if err != nil {
 			return err
 		}
 
 		if cfg.Services.Kafka == nil || cmdOptions.IgnoreContext {
 			// nolint
-			selectedKafka, err := kafkaUtil.InteractiveSelect(ctx, c.connection, c.logger, c.localizer)
+			selectedKafka, err := kafkaUtil.InteractiveSelect(ctx, opts.Connection, opts.Logger, opts.Localizer)
 			if err != nil {
 				return err
 			}
@@ -209,14 +204,16 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 			selectedKafkaInstance = cfg.Services.Kafka.ClusterID
 		}
 
-		err = c.checkAndCreateKafkaConnectionCustomResource(ctx, currentNamespace, selectedKafkaInstance)
+		service = &Kafka{}
+
+		err = c.createConnectionCustomResource(ctx, currentNamespace, selectedKafkaInstance, service, opts)
 		if err != nil {
 			return err
 		}
 
 		if cfg.Services.ServiceRegistry == nil || cmdOptions.IgnoreContext {
 			// nolint
-			selectedServiceRegistry, err := serviceregistry.InteractiveSelect(ctx, c.connection, c.logger)
+			selectedServiceRegistry, err := serviceregistry.InteractiveSelect(ctx, opts.Connection, opts.Logger)
 			if err != nil {
 				return err
 			}
@@ -228,7 +225,9 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 			selectedRegistryInstance = cfg.Services.ServiceRegistry.InstanceID
 		}
 
-		err = c.checkAndCreateServiceRegistryConnectionCustomResource(ctx, currentNamespace, selectedRegistryInstance)
+		service = &ServiceRegistry{}
+
+		err = c.createConnectionCustomResource(ctx, currentNamespace, selectedRegistryInstance, service, opts)
 		if err != nil {
 			return err
 		}
@@ -238,106 +237,21 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	return nil
 }
 
-func (c *KubernetesCluster) checkAndCreateKafkaConnectionCustomResource(ctx context.Context, namespace string, kafkaID string) error {
+// createConnectionCustomResource
+func (c *KubernetesCluster) createConnectionCustomResource(ctx context.Context, namespace string, serviceID string, service Service, opts Options) error {
 
-	api := c.connection.API()
-
-	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, kafkaID).Execute()
-	if kas.IsErr(err, kas.ErrorNotFound) {
-		return kafkaerr.NotFoundByIDError(kafkaID)
-	}
-
-	if err != nil {
-		return err
-	}
-	err = CheckIfKafkaConnectionExists(ctx, c, namespace, kafkaInstance.GetName())
+	err := service.ResourceExists(ctx, c, namespace, serviceID, opts)
 	if err != nil {
 		return err
 	}
 
-	err = c.createKafkaConnectionCustomResource(ctx, namespace, &kafkaInstance)
+	err = service.CreateResource(ctx, c, namespace, serviceID, opts)
+
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-// createKafkaConnectionCustomResource creates a new "KafkaConnection" CR
-func (c *KubernetesCluster) createKafkaConnectionCustomResource(ctx context.Context, namespace string, kafkaInstance *kafkamgmtclient.KafkaRequest) error {
-	crName := kafkaInstance.GetName()
-	kafkaID := kafkaInstance.GetId()
-
-	kafkaConnectionCR := kafka.CreateKCObject(crName, namespace, kafkaID)
-
-	crJSON, err := json.Marshal(kafkaConnectionCR)
-	if err != nil {
-		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.error.marshalError"), err)
-	}
-
-	data := c.clientset.RESTClient().
-		Post().
-		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace)).
-		Body(crJSON).
-		Do(ctx)
-
-	if data.Error() != nil {
-		return data.Error()
-	}
-
-	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
-
-	return watchForKafkaStatus(ctx, c, crName, namespace)
-}
-
-func (c *KubernetesCluster) checkAndCreateServiceRegistryConnectionCustomResource(ctx context.Context, namespace string, registryID string) error {
-
-	api := c.connection.API()
-
-	registryInstance, _, err := serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), registryID)
-	if err != nil {
-		return err
-	}
-
-	err = CheckIfRegistryConnectionExists(ctx, c, namespace, registryInstance.GetName())
-	if err != nil {
-		return err
-	}
-
-	err = c.createServiceRegistryCustomResource(ctx, namespace, registryInstance)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// createServiceRegistryCustomResource creates a new "ServiceRegistryConnection" CR
-func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Context, namespace string, registryInstance *srsmgmtv1.Registry) error {
-	crName := registryInstance.GetName()
-	registryId := registryInstance.GetId()
-
-	serviceRegistryCR := registryPkg.CreateSRObject(crName, namespace, registryId)
-
-	crJSON, err := json.Marshal(serviceRegistryCR)
-	if err != nil {
-		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createRegistryCR.error.marshalError"), err)
-	}
-
-	data := c.clientset.RESTClient().
-		Post().
-		AbsPath(registryPkg.GetServiceRegistryAPIURL(namespace)).
-		Body(crJSON).
-		Do(ctx)
-
-	if data.Error() != nil {
-		return data.Error()
-	}
-
-	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.createRegistryCR.log.info.customResourceCreated", localize.NewEntry("Name", crName)))
-	// c.logger.Info("KafkaConnection resource some-registry-name has been created'")
-
-	return watchForServiceRegistryStatus(c, crName, namespace)
 }
 
 // IsRhoasOperatorAvailableOnCluster checks the cluster to see if a KafkaConnection CRD is installed
@@ -345,28 +259,28 @@ func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Contex
 	return IsKCInstalledOnCluster(ctx, c)
 }
 
-func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, opts *ConnectArguments) error {
-	_, err := c.clientset.CoreV1().Secrets(namespace).Get(ctx, tokenSecretName, metav1.GetOptions{})
+func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, connectOpts *ConnectArguments, opts Options) error {
+	_, err := c.clientset.CoreV1().Secrets(namespace).Get(context.TODO(), tokenSecretName, metav1.GetOptions{})
 	if err == nil {
-		c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), tokenSecretName)
+		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), tokenSecretName)
 		return nil
 	}
 
-	if opts.OfflineAccessToken == "" && !c.io.CanPrompt() {
-		return c.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token"))
+	if connectOpts.OfflineAccessToken == "" && !opts.IO.CanPrompt() {
+		return errors.New(opts.Localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token")))
 	}
 
-	if opts.OfflineAccessToken == "" {
+	if connectOpts.OfflineAccessToken == "" {
 		apiTokenInput := &survey.Input{
-			Message: c.localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
+			Message: opts.Localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
 		}
-		surveyErr := survey.AskOne(apiTokenInput, &opts.OfflineAccessToken)
+		surveyErr := survey.AskOne(apiTokenInput, &connectOpts.OfflineAccessToken)
 		if surveyErr != nil {
 			return err
 		}
 	}
 	parser := new(jwt.Parser)
-	_, _, err = parser.ParseUnverified(opts.OfflineAccessToken, jwt.MapClaims{})
+	_, _, err = parser.ParseUnverified(connectOpts.OfflineAccessToken, jwt.MapClaims{})
 	if err != nil {
 		return err
 	}
@@ -378,34 +292,30 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 			Namespace: namespace,
 		},
 		StringData: map[string]string{
-			"value": opts.OfflineAccessToken,
+			"value": connectOpts.OfflineAccessToken,
 		},
 	}
 
 	_, err = c.clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	tokenSecretNameTmplEntry := localize.NewEntry("Name", tokenSecretName)
 	if err != nil {
-		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
+		return fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
 	}
 
-	c.logger.Info(icon.SuccessPrefix(), c.localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
+	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
 
 	return nil
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string) error {
-	_, err := c.clientset.CoreV1().Secrets(namespace).Get(ctx, serviceAccountSecretName, metav1.GetOptions{})
+func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string, opts Options) error {
+	_, err := c.clientset.CoreV1().Secrets(namespace).Get(context.TODO(), serviceAccountSecretName, metav1.GetOptions{})
 	if err == nil {
-		c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
+		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
 		return nil
 	}
 
-	serviceAcct, err := c.createServiceAccount(ctx)
-	if err != nil {
-		return err
-	}
-
+	serviceAcct, err := c.createServiceAccount(ctx, opts)
 	if err != nil {
 		return err
 	}
@@ -423,25 +333,25 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 
 	createdSecret, err := c.clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	if err != nil {
-		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
+		return fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
 
-	c.logger.Info(icon.SuccessPrefix(), c.localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
+	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
 
 	return nil
 }
 
 // createServiceAccount creates a service account
-func (c *KubernetesCluster) createServiceAccount(ctx context.Context) (*kafkamgmtclient.ServiceAccount, error) {
+func (c *KubernetesCluster) createServiceAccount(ctx context.Context, opts Options) (*kafkamgmtclient.ServiceAccount, error) {
 	t := time.Now()
 
-	api := c.connection.API()
+	api := opts.Connection.API()
 	serviceAcct := &kafkamgmtclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
 	req := api.ServiceAccount().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
 	res, _, err := req.Execute()
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createServiceAccount.error.createError"), err)
+		return nil, fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.createServiceAccount.error.createError"), err)
 	}
 
 	return &res, nil
