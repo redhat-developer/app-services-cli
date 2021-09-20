@@ -18,7 +18,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -273,7 +272,7 @@ func runCmd(opts *options) error {
 	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
 
 	// update the topic
-	response, httpRes, err := updateTopicReq.Execute()
+	_, httpRes, err = updateTopicReq.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -302,7 +301,8 @@ func runCmd(opts *options) error {
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+
+	return nil
 }
 
 func runInteractivePrompt(opts *options) (err error) {
