@@ -86,14 +86,14 @@ func CheckIfRegistryConnectionExists(ctx context.Context, c *KubernetesCluster, 
 	return nil
 }
 
-func getKafkaConnectionsAPIURL(namespace string) string {
-	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
-}
+// func getKafkaConnectionsAPIURL(namespace string) string {
+// 	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/kafkaconnections", namespace)
+// }
 
-// Encapsulate things like these in their respective packages
-func getServiceRegistryAPIURL(namespace string) string {
-	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/serviceregistryconnections", namespace)
-}
+// // Encapsulate things like these in their respective packages
+// func getServiceRegistryAPIURL(namespace string) string {
+// 	return fmt.Sprintf("/apis/rhoas.redhat.com/v1alpha1/namespaces/%v/serviceregistryconnections", namespace)
+// }
 
 func watchForKafkaStatus(ctx context.Context, c *KubernetesCluster, crName string, namespace string) error {
 	c.logger.Info(c.localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.log.info.wait"))

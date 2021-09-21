@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
@@ -196,7 +197,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 
 		if cfg.Services.Kafka == nil || cmdOptions.IgnoreContext {
 			// nolint
-			selectedKafka, err := kafkaUtil.InteractiveSelect(c.connection, c.logger)
+			selectedKafka, err := kafkaUtil.InteractiveSelect(ctx, c.connection, c.logger, c.localizer)
 			if err != nil {
 				return err
 			}
@@ -215,7 +216,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 
 		if cfg.Services.ServiceRegistry == nil || cmdOptions.IgnoreContext {
 			// nolint
-			selectedServiceRegistry, err := serviceregistry.InteractiveSelect(c.connection, c.logger)
+			selectedServiceRegistry, err := serviceregistry.InteractiveSelect(ctx, c.connection, c.logger)
 			if err != nil {
 				return err
 			}
@@ -312,7 +313,7 @@ func (c *KubernetesCluster) checkAndCreateServiceRegistryConnectionCustomResourc
 }
 
 // createServiceRegistryCustomResource creates a new "ServiceRegistryConnection" CR
-func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Context, namespace string, registryInstance *srsmgmtv1.RegistryRest) error {
+func (c *KubernetesCluster) createServiceRegistryCustomResource(ctx context.Context, namespace string, registryInstance *srsmgmtv1.Registry) error {
 	crName := registryInstance.GetName()
 	registryId := registryInstance.GetId()
 
