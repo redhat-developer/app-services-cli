@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
@@ -37,7 +38,8 @@ type options struct {
 
 	outputFormat string
 
-	interactive bool
+	interactive    bool
+	userIsOrgAdmin bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -64,11 +66,23 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.update.cmd.examples"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			_, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+			if err != nil {
+				return err
+			}
+			cfg, err := opts.Config.Load()
+			if err != nil {
+				return err
+			}
+
+			opts.userIsOrgAdmin = token.IsOrgAdmin(cfg.AccessToken)
+			if !opts.userIsOrgAdmin {
+				opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.onlyOrgAdminsCanUpdate"))
+				return nil
+			}
+
 			if !opts.IO.CanPrompt() {
 				var missingFlags []string
-				if opts.owner == "" {
-					missingFlags = append(missingFlags, "owner")
-				}
 				if !opts.skipConfirm {
 					missingFlags = append(missingFlags, "yes")
 				}
@@ -91,11 +105,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 			if opts.id != "" || opts.name != "" {
 				return run(&opts)
-			}
-
-			cfg, err := opts.Config.Load()
-			if err != nil {
-				return err
 			}
 
 			var kafkaConfig *config.KafkaConfig

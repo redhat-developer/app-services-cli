@@ -8,7 +8,7 @@ one = '''
 Update certain configuration details of a Kafka instance.
 
 Currently it is possible to update the "owner" field. The new owner 
-will have super-user privileges and will be authorized to manage this instance.
+will be authorized to manage this instance.
 '''
 
 [kafka.update.cmd.examples]
@@ -62,3 +62,6 @@ one = "Select new owner:"
 
 [kafka.update.error.loadUsersError]
 one = 'unable to load users'
+
+[kafka.update.log.info.onlyOrgAdminsCanUpdate]
+one = "Only organization administrators have the ability to update a Kafka instance."
