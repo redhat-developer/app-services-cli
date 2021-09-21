@@ -1,4 +1,18 @@
 
+<a name="v0.30.0"></a>
+## [v0.30.0](https://github.com/redhat-developer/app-services-cli/compare/v0.29.1...v0.30.0) (2021-09-21)
+
+### Bug Fixes
+
+* **deps:** update all to v0.22.2
+* **deps:** update module github.com/coreos/go-oidc/v3 to v3.1.0
+
+### Features
+
+* enable kafka update command ([#1099](https://github.com/redhat-developer/app-services-cli/issues/1099))
+* service binding supporting deployment config ([#1077](https://github.com/redhat-developer/app-services-cli/issues/1077))
+
+
 <a name="v0.29.1"></a>
 ## [v0.29.1](https://github.com/redhat-developer/app-services-cli/compare/v0.29.0...v0.29.1) (2021-09-14)
 
