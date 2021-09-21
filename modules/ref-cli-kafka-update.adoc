@@ -1,0 +1,61 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-kafka-update_{context}']
+= rhoas kafka update
+
+[role="_abstract"]
+Update configuration details of a Kafka instance.
+
+[discrete]
+== Synopsis
+
+Update certain configuration details of a Kafka instance.
+
+Currently it is possible to update the "owner" field. The new owner 
+will be authorized to manage this instance.
+
+
+....
+rhoas kafka update [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# update the Kafka instance owner
+$ rhoas kafka update --name=my-kafka --owner=other-user
+
+# update the owner of the current Kafka instance
+$ rhoas kafka update --owner=other-user
+
+# update the current Kafka instance in interactive mode
+$ rhoas kafka update
+
+....
+
+[discrete]
+== Options
+
+      `--id` _string_::         Unique ID of the Kafka instance you want to update
+      `--name` _string_::       Name of the Kafka instance you want to update
+  `-o`, `--output` _string_::   Format in which to display the Kafka instance (choose from: "json", "yml", "yaml") (default "json")
+      `--owner` _string_::      ID of the user you want to set as the owner of this Kafka instance
+  `-y`, `--yes`::               Forcibly update the Kafka instance without confirmation
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
+endif::[]
+

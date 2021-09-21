@@ -52,6 +52,8 @@ include::../modules/ref-cli-kafka-topic-update.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-kafka-topic.adoc[leveloffset=+1]
 
+include::../modules/ref-cli-kafka-update.adoc[leveloffset=+1]
+
 include::../modules/ref-cli-kafka-use.adoc[leveloffset=+1]
 
 include::../modules/ref-cli-kafka.adoc[leveloffset=+1]
