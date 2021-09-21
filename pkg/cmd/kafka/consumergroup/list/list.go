@@ -171,16 +171,16 @@ func runList(opts *options) (err error) {
 }
 
 func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {
-	rows := []consumerGroupRow{}
+	rows := make([]consumerGroupRow, len(consumerGroups))
 
-	for _, t := range consumerGroups {
+	for i, t := range consumerGroups {
 		consumers := t.GetConsumers()
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetGroupId(),
 			ActiveMembers:     consumergroup.GetActiveConsumersCount(consumers),
 			PartitionsWithLag: consumergroup.GetPartitionsWithLag(consumers),
 		}
-		rows = append(rows, row)
+		rows[i] = row
 	}
 
 	return rows
