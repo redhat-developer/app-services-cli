@@ -11,7 +11,7 @@ Update configuration details of a Kafka instance.
 Update certain configuration details of a Kafka instance.
 
 Currently it is possible to update the "owner" field. The new owner 
-will have super-user privileges and will be authorized to manage this instance.
+will be authorized to manage this instance.
 
 
 ....

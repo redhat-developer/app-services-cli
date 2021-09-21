@@ -134,3 +134,15 @@ func GetUsername(tokenStr string) (username string, ok bool) {
 
 	return username, ok
 }
+
+// IsOrgAdmin returns the value of the `is_org_admin` claim
+func IsOrgAdmin(tokenStr string) bool {
+	accessTkn, _ := Parse(tokenStr)
+	tknClaims, _ := MapClaims(accessTkn)
+	isAdminClaim, ok := tknClaims["is_org_admin"]
+	if !ok {
+		return false
+	}
+	orgAdmin, _ := isAdminClaim.(bool)
+	return orgAdmin
+}
