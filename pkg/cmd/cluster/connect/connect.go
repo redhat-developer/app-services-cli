@@ -61,8 +61,8 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
-	cmd.Flags().StringVar(&opts.serviceID, "service-name", "", opts.localizer.MustLocalize("cluster.common.flag.serviceId.description"))
-	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceName.description"))
+	cmd.Flags().StringVar(&opts.serviceID, "service-id", "", opts.localizer.MustLocalize("cluster.common.flag.serviceId.description"))
+	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceType.description"))
 
 	return cmd
 }
