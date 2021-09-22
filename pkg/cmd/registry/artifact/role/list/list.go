@@ -54,6 +54,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("registry.role.cmd.list.shortDescription"),
 		Long:    f.Localizer.MustLocalize("registry.role.cmd.list.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.role.cmd.list.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
