@@ -1,4 +1,12 @@
 
+<a name="v0.30.1"></a>
+## [v0.30.1](https://github.com/redhat-developer/app-services-cli/compare/v0.30.0...v0.30.1) (2021-09-22)
+
+### Bug Fixes
+
+* **deps:** update module github.com/fatih/color to v1.13.0
+
+
 <a name="v0.30.0"></a>
 ## [v0.30.0](https://github.com/redhat-developer/app-services-cli/compare/v0.29.1...v0.30.0) (2021-09-21)
 
