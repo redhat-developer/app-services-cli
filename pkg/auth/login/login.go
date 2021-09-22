@@ -3,7 +3,6 @@ package login
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"log"
 	"net/http"
 	"net/url"
@@ -40,8 +39,6 @@ type SSOConfig struct {
 // enabling the user to log in to SSO and MAS-SSO in succession
 // https://tools.ietf.org/html/rfc6749#section-4.1
 func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) error {
-	// log in to SSO
-	a.Logger.Info(a.Localizer.MustLocalize("login.log.info.loggingIn"))
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
@@ -53,7 +50,6 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig,
 	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
 		return err
 	}
-	a.Logger.Info(icon.SuccessPrefix(), a.Localizer.MustLocalize("login.log.info.loggedIn"))
 	a.Logger.Debug(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
 
 	return nil

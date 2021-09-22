@@ -22,6 +22,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -191,9 +192,9 @@ func run(opts *options) error {
 		}
 	}
 
-	spinner := opts.IO.NewSpinner()
-	spinner.Suffix = " " + opts.localizer.MustLocalize("kafka.update.log.info.updating", localize.NewEntry("Name", kafkaInstance.GetName()))
-	spinner.Start()
+	s := spinner.New(opts.IO.ErrOut, opts.localizer)
+	s.SetLocalizedSuffix("kafka.update.log.info.updating", localize.NewEntry("Name", kafkaInstance.GetName()))
+	s.Start()
 
 	response, httpRes, err := api.Kafka().
 		UpdateKafkaById(opts.Context, kafkaInstance.GetId()).
@@ -204,19 +205,17 @@ func run(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	spinner.Stop()
+	s.Stop()
 
 	if err != nil {
-		opts.logger.Info("\n") // Needed to ensure there is a newline after the spinner has stopped
 		if apiError, ok := kas.GetAPIError(err); ok {
 			return errors.New(apiError.GetReason())
 		}
 		return err
 	}
 
-	opts.logger.Infof(`
-
-%v`, opts.localizer.MustLocalize("kafka.update.log.info.updateSuccess", localize.NewEntry("Name", response.GetName())))
+	opts.logger.Info()
+	opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.updateSuccess", localize.NewEntry("Name", response.GetName())))
 
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 }
@@ -256,14 +255,14 @@ func selectOwnerInteractive(ctx context.Context, opts *options) (string, error) 
 	if err != nil {
 		return "", err
 	}
-	spinner := opts.IO.NewSpinner()
-	spinner.Suffix = " " + opts.localizer.MustLocalize("kafka.update.log.info.loadingUsers")
-	spinner.Start()
+	s := spinner.New(opts.IO.ErrOut, opts.localizer)
+	s.SetLocalizedSuffix("kafka.update.log.info.loadingUsers")
+	s.Start()
 
 	//nolint:govet
 	users, err := rbacutil.FetchAllUsers(ctx, conn.API().RBAC.PrincipalAPI)
 
-	spinner.Stop()
+	s.Stop()
 	opts.logger.Info()
 	if err != nil {
 		return "", fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.update.error.loadUsersError"), err)
