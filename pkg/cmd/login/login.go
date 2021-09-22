@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"net/http"
+	"net/url"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"golang.org/x/oauth2"
-	"net/http"
-	"net/url"
 
 	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
@@ -21,6 +22,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 
 	"github.com/spf13/cobra"
 )
@@ -137,6 +139,10 @@ func runLogin(opts *options) (err error) {
 	}
 	opts.masAuthURL = masAuthURL.String()
 
+	// log in to SSO
+	spinner := spinner.New(opts.IO.ErrOut, opts.localizer)
+	spinner.SetLocalizedSuffix("login.log.info.loggingIn")
+	spinner.Start()
 	if opts.offlineToken == "" {
 		tr := createTransport(opts.insecureSkipTLSVerify)
 		httpClient := oauth2.NewClient(opts.Context, nil)
@@ -181,6 +187,7 @@ func runLogin(opts *options) (err error) {
 			return err
 		}
 	}
+	spinner.Stop()
 
 	cfg, err := opts.Config.Load()
 	if err != nil {
@@ -199,8 +206,8 @@ func runLogin(opts *options) (err error) {
 	}
 
 	username, ok := token.GetUsername(cfg.AccessToken)
-	opts.Logger.Info("")
 
+	opts.Logger.Info()
 	if !ok {
 		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
 	} else {

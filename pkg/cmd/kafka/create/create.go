@@ -3,11 +3,13 @@ package create
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -209,8 +211,8 @@ func runCreate(opts *options) error {
 
 	if opts.wait {
 		opts.Logger.Debug("--wait flag is enabled, waiting for Kafka to finish creating")
-		s := opts.IO.NewSpinner()
-		s.Suffix = fmt.Sprintf(" %v", opts.localizer.MustLocalize("kafka.create.log.info.creatingKafka", nameTemplateEntry))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("kafka.create.log.info.creatingKafka", nameTemplateEntry)
 		s.Start()
 
 		// when there is a SIGINT, display a message informing the user that this does not cancel the creation
@@ -235,11 +237,11 @@ func runCreate(opts *options) error {
 			defer httpRes.Body.Close()
 			opts.Logger.Debug("Checking Kafka status:", response.GetStatus())
 
-			s.Suffix = createSpinnerSuffix(opts.localizer, response.GetName(), response.GetStatus())
+			s.SetSuffix(createSpinnerSuffix(opts.localizer, response.GetName(), response.GetStatus()))
 
 		}
 		s.Stop()
-		opts.Logger.Info("\n")
+		opts.Logger.Info()
 		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.create.info.successSync", nameTemplateEntry))
 	}
 
