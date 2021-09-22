@@ -26,7 +26,7 @@ func (k *Kafka) ResourceExists(ctx context.Context, c *KubernetesCluster, namesp
 
 	path := kafka.GetKafkaConnectionsAPIURL(namespace)
 
-	err := makeRequest(ctx, c.clientset, path, serviceName, opts.Localizer)
+	err := c.makeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
 
 	return err
 
@@ -54,7 +54,7 @@ func (k *Kafka) CreateResource(ctx context.Context, c *KubernetesCluster, namesp
 
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", serviceName)))
 
-	err = createResourceRequest(ctx, c.clientset, path, serviceName, CRJson)
+	err = c.makeKubernetesPostRequest(ctx, path, serviceName, CRJson)
 
 	if err != nil {
 		return err
@@ -63,13 +63,13 @@ func (k *Kafka) CreateResource(ctx context.Context, c *KubernetesCluster, namesp
 	resource := kafka.AKCResource
 
 	w, err := c.dynamicClient.Resource(resource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
-		FieldSelector: fields.OneTermEqualSelector("metadata.name", serviceID).String(),
+		FieldSelector: fields.OneTermEqualSelector("metadata.name", serviceName).String(),
 	})
 	if err != nil {
 		return err
 	}
 
-	return watchGeneric(w, namespace, serviceID, opts)
+	return watchCustomResourceStatus(w, namespace, serviceID, opts)
 
 }
 
@@ -79,7 +79,7 @@ func (r *ServiceRegistry) ResourceExists(ctx context.Context, c *KubernetesClust
 
 	path := serviceregistry.GetServiceRegistryAPIURL(namespace)
 
-	err := makeRequest(ctx, c.clientset, path, serviceName, opts.Localizer)
+	err := c.makeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
 
 	return err
 
@@ -107,7 +107,7 @@ func (r *ServiceRegistry) CreateResource(ctx context.Context, c *KubernetesClust
 
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createKafkaCR.log.info.customResourceCreated", localize.NewEntry("Name", serviceName)))
 
-	err = createResourceRequest(ctx, c.clientset, path, namespace, crJSON)
+	err = c.makeKubernetesPostRequest(ctx, path, namespace, crJSON)
 	if err != nil {
 		return err
 	}
@@ -122,5 +122,5 @@ func (r *ServiceRegistry) CreateResource(ctx context.Context, c *KubernetesClust
 		return err
 	}
 
-	return watchGeneric(w, namespace, serviceName, opts)
+	return watchCustomResourceStatus(w, namespace, serviceName, opts)
 }

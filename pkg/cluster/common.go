@@ -1,56 +1,16 @@
 package cluster
 
 import (
-	"context"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/kubernetes"
 )
 
-func makeRequest(ctx context.Context, clientSet *kubernetes.Clientset, path string, serviceName string, localizer localize.Localizer) error {
-
-	var status int
-
-	data := clientSet.
-		RESTClient().
-		Get().
-		AbsPath(path, serviceName).
-		Do(ctx)
-
-	if data.StatusCode(&status); status == http.StatusNotFound {
-		return nil
-	}
-
-	if data.Error() == nil {
-		return fmt.Errorf("%v: %s", localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), serviceName)
-	}
-
-	return nil
-}
-
-func createResourceRequest(ctx context.Context, clientSet *kubernetes.Clientset, path string, serviceName string, crJSON []byte) error {
-
-	data := clientSet.
-		RESTClient().
-		Post().
-		AbsPath(path, serviceName).
-		Body(crJSON).
-		Do(ctx)
-
-	if data.Error() != nil {
-		return data.Error()
-	}
-
-	return nil
-}
-
-func watchGeneric(w watch.Interface, namespace string, crName string, opts Options) error {
+func watchCustomResourceStatus(w watch.Interface, namespace string, crName string, opts Options) error {
 	for {
 		select {
 		case event := <-w.ResultChan():
