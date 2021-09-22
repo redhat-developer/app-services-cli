@@ -72,6 +72,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.file = args[0]
 			}
 
+			if opts.artifactType != "" {
+				if _, err := registryinstanceclient.NewArtifactTypeFromValue(opts.artifactType); err != nil {
+					return opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidArtifactType", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString()))
+				}
+			}
+
 			if opts.registryID != "" {
 				return runCreate(opts)
 			}
@@ -79,12 +85,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
-			}
-
-			if opts.artifactType != "" {
-				if _, err = registryinstanceclient.NewArtifactTypeFromValue(opts.artifactType); err != nil {
-					return opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidArtifactType", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString()))
-				}
 			}
 
 			if !cfg.HasServiceRegistry() {

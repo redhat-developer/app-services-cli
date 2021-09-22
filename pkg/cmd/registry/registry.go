@@ -4,6 +4,7 @@ package registry
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/role"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/describe"
@@ -33,6 +34,7 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		list.NewListCommand(f),
 		use.NewUseCommand(f),
 		artifact.NewArtifactsCommand(f),
+		role.NewRoleCommand(f),
 	)
 
 	profile.ApplyDevPreviewLabel(cmd)
