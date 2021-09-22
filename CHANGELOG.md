@@ -937,4 +937,3 @@ This change will mean that old Kafka instances are inaccessible without overridi
 * **cmd:** Display message if there are no clusters ([#45](https://github.com/redhat-developer/app-services-cli/issues/45))
 * **kafka:** add mocked version of topics command
 * **login:** login using the --token flow
-
