@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"time"
@@ -349,10 +350,49 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context, opts Optio
 	serviceAcct := &kafkamgmtclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
 	req := api.ServiceAccount().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
-	res, _, err := req.Execute()
+	serviceAcctRes, httpRes, err := req.Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		return nil, fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.createServiceAccount.error.createError"), err)
 	}
 
-	return &res, nil
+	return &serviceAcctRes, nil
+}
+
+func (c *KubernetesCluster) makeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) error {
+	var status int
+
+	data := c.clientset.
+		RESTClient().
+		Get().
+		AbsPath(path, serviceName).
+		Do(ctx)
+
+	if data.StatusCode(&status); status == http.StatusNotFound {
+		return nil
+	}
+
+	if data.Error() == nil {
+		return fmt.Errorf("%v: %s", localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), serviceName)
+	}
+
+	return nil
+}
+
+func (c *KubernetesCluster) makeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
+
+	data := c.clientset.
+		RESTClient().
+		Post().
+		AbsPath(path, serviceName).
+		Body(crJSON).
+		Do(ctx)
+
+	if data.Error() != nil {
+		return data.Error()
+	}
+
+	return nil
 }
