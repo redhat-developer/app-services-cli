@@ -237,7 +237,10 @@ func runCreate(opts *options) error {
 			defer httpRes.Body.Close()
 			opts.Logger.Debug("Checking Kafka status:", response.GetStatus())
 
-			s.SetSuffix(createSpinnerSuffix(opts.localizer, response.GetName(), response.GetStatus()))
+			s.SetLocalizedSuffix("kafka.create.log.info.creationInProgress",
+				localize.NewEntry("Name", response.GetName()),
+				localize.NewEntry("Status", color.Info(response.GetStatus())),
+			)
 
 		}
 		s.Stop()
@@ -345,10 +348,4 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	return payload, nil
-}
-
-func createSpinnerSuffix(localizer localize.Localizer, name string, status string) string {
-	return " " + localizer.MustLocalize("kafka.create.log.info.creationInProgress",
-		localize.NewEntry("Name", name),
-		localize.NewEntry("Status", color.Info(status)))
 }

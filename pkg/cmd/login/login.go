@@ -174,6 +174,8 @@ func runLogin(opts *options) (err error) {
 		defer cancel()
 
 		if err = loginExec.Execute(ctx, ssoCfg, masSsoCfg); err != nil {
+			spinner.Stop()
+			opts.Logger.Info()
 			if errors.Is(err, context.DeadlineExceeded) {
 				return opts.localizer.MustLocalizeError("login.error.context.deadline.exceeded")
 			}
@@ -184,6 +186,8 @@ func runLogin(opts *options) (err error) {
 
 	if opts.offlineToken != "" {
 		if err = loginWithOfflineToken(opts); err != nil {
+			spinner.Stop()
+			opts.Logger.Info()
 			return err
 		}
 	}
