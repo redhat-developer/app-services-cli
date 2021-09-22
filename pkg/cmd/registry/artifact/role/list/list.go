@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-	"encoding/json"
 
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -19,8 +18,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
-	"gopkg.in/yaml.v2"
 )
 
 // row is the details of a Service Registry instance needed to print to a table
@@ -102,7 +99,7 @@ func runList(opts *options) error {
 	if err != nil {
 		return err
 	}
-	mappings, response, err := a.AdminApi.ListRoleMappings(opts.Context).Execute()
+	mappings, _, err := a.AdminApi.ListRoleMappings(opts.Context).Execute()
 	if err != nil {
 		return registryinstanceerror.TransformError(err)
 	}
@@ -112,17 +109,15 @@ func runList(opts *options) error {
 		return nil
 	}
 
+	stdout := opts.IO.Out
+
 	switch opts.outputFormat {
-	case "json":
-		data, _ := json.Marshal(response)
-		_ = dump.JSON(opts.IO.Out, data)
-	case "yaml", "yml":
-		data, _ := yaml.Marshal(response)
-		_ = dump.YAML(opts.IO.Out, data)
-	default:
+	case dump.EmptyFormat:
 		rows := mapResponseItemsToRows(mappings)
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
+	default:
+		return dump.Formatted(stdout, opts.outputFormat, mappings)
 	}
 
 	return nil
