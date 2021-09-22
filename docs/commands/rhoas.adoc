@@ -82,6 +82,13 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [alpha] Service Registry commands
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [alpha] Service Registry commands
+endif::[]
+
+ifdef::env-github,env-browser[]
 * link:rhoas_status.adoc#rhoas-status[rhoas status]	 - View the status of all currently used services
 endif::[]
 ifdef::pantheonenv[]

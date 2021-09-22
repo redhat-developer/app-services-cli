@@ -1,0 +1,51 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-service-registry-artifact-export_{context}']
+= rhoas service-registry artifact export
+
+[role="_abstract"]
+[alpha] Export data from Service Registry instance
+
+[discrete]
+== Synopsis
+
+Export all artifacts and metadata from Service Registry instance to specified file
+
+This command is available as part of the developer preview
+
+
+....
+rhoas service-registry artifact export [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Export all artifacts and metadata to export file for another Service Registry instance
+rhoas service-registry artifact export --file=export.zip
+
+....
+
+[discrete]
+== Options
+
+      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--output-file` _string_::   File location of the artifact
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [alpha] Manage Service Registry artifacts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [alpha] Manage Service Registry artifacts
+endif::[]
+
