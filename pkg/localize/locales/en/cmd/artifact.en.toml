@@ -311,6 +311,8 @@ When successful, this creates a new version of the artifact, making it the most 
 
 An artifact is updated using the content provided in the request body.
 This content is updated under a unique artifactId provided by user.
+
+Updated artifact content should conform to validity and compatibility rules set for the registry instance.
 '''
 
 [artifact.cmd.update.example]
