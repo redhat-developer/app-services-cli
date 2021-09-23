@@ -364,12 +364,11 @@ The returned metadata includes both generated (read-only) and editable metadata 
 [artifact.cmd.metadata.get.example]
 one = '''
 ## Get latest artifact metadata for default group
-rhoas service-registry artifact metadata --artifact-id=my-artifact
+rhoas service-registry artifact metadata-get --artifact-id=my-artifact
 
 ## Get latest artifact metadata for my-group group
-rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygroup
+rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group mygroup
 '''
-
 
 [artifact.cmd.metadata.set.description.short]
 one = 'Update artifact metadata'
@@ -382,10 +381,10 @@ Editable metadata includes fields like name and description
 
 [artifact.cmd.metadata.set.example]
 one = '''
-##  Update the metadata for an artifact
+## Update the metadata for an artifact
 rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group --name=my-name --description=my-description
 
-##  Update the metadata for an artifact using your default editor ($EDITOR)
+## Update the metadata for an artifact using your default editor ($EDITOR)
 rhoas service-registry artifact metadata-set --artifact-id=my-artifact
 
 ##  Update the metadata for an artifact using Visual Studio Code
