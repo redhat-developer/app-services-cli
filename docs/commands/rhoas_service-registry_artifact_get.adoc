@@ -15,7 +15,7 @@ When --version is specified, the command fetches the specific artifact version.
 Get command fetches artifacts based on --group and --artifact-id and --version.
 For fetching artifacts using global identifiers, use the "service-registry download" command
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

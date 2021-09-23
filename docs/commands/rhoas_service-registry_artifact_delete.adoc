@@ -14,7 +14,7 @@ When called without arguments, deletes all artifacts in the group
 When --artifact-id is specified, deletes only a single artifact and its version
 When --group parameter is missing, the command uses the "default" group.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

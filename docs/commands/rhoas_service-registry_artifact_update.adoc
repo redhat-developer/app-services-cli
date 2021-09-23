@@ -18,7 +18,7 @@ When successful, this creates a new version of the artifact, making it the most 
 An artifact is updated using the content provided in the request body.
 This content is updated under a unique artifactId provided by user.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

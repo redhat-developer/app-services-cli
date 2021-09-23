@@ -11,7 +11,7 @@ ifdef::env-github,env-browser[:context: cmd]
 Updates the metadata for an artifact in a Service Registry instance
 Editable metadata includes fields like name and description
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....
@@ -22,10 +22,10 @@ rhoas service-registry artifact metadata-set [flags]
 == Examples
 
 ....
-##  Update the metadata for an artifact
+## Update the metadata for an artifact
 rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group --name=my-name --description=my-description
 
-##  Update the metadata for an artifact using your default editor ($EDITOR)
+## Update the metadata for an artifact using your default editor ($EDITOR)
 rhoas service-registry artifact metadata-set --artifact-id=my-artifact
 
 ##  Update the metadata for an artifact using Visual Studio Code

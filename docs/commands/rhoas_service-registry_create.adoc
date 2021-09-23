@@ -10,7 +10,7 @@ ifdef::env-github,env-browser[:context: cmd]
 
 Create a Service Registry instance to store and manage your schema and API artifacts. 
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

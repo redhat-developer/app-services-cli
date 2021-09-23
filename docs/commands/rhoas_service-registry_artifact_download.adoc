@@ -17,7 +17,7 @@ Flags are used to specify the artifact to download:
 --globalId - globalId of the content from metadata
 --hash - SHA-256 hash of the content
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

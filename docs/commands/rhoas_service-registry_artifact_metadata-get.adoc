@@ -11,7 +11,7 @@ ifdef::env-github,env-browser[:context: cmd]
 Gets the metadata for an artifact in a Service Registry instance
 The returned metadata includes both generated (read-only) and editable metadata (such as name and description).
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....
@@ -23,10 +23,10 @@ rhoas service-registry artifact metadata-get [flags]
 
 ....
 ## Get latest artifact metadata for default group
-rhoas service-registry artifact metadata --artifact-id=my-artifact
+rhoas service-registry artifact metadata-get --artifact-id=my-artifact
 
 ## Get latest artifact metadata for my-group group
-rhoas service-registry artifact metadata --artifact-id=my-artifact --group mygroup
+rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group mygroup
 
 ....
 

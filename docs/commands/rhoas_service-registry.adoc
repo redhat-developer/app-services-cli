@@ -18,7 +18,7 @@ Commands are divided into the following categories:
  - commands executed on selected instance: artifacts
  - "use" command that selects the current instance
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 [discrete]

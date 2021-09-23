@@ -9,7 +9,7 @@ ifdef::env-github,env-browser[:context: cmd]
 == Synopsis
 
 Get latest artifact versions by specifying group and artifact-id
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

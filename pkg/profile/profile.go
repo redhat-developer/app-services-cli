@@ -13,7 +13,7 @@ const DevPreviewEnv = "RHOAS_DEV"
 // ApplyDevPreviewLabel adds visual element displayed in help
 func ApplyDevPreviewLabel(cmd *cobra.Command) {
 	cmd.Short = "[alpha] " + cmd.Short
-	cmd.Long += "\nThis command is available as part of the developer preview\n"
+	cmd.Long += "\nThis command is available as part of the Development Preview release.\n"
 
 	for _, child := range cmd.Commands() {
 		ApplyDevPreviewLabel(child)

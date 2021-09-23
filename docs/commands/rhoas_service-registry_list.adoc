@@ -11,7 +11,7 @@ ifdef::env-github,env-browser[:context: cmd]
  
 List all Service Registry instances for your account and paginate over the results.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

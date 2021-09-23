@@ -11,7 +11,7 @@ ifdef::env-github,env-browser[:context: cmd]
 Revoke role for principal
 When revoking role of the owner of the instance user will still have ADMIN rights.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

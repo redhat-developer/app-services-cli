@@ -9,7 +9,7 @@ ifdef::env-github,env-browser[:context: cmd]
 == Synopsis
 
 Add or update role for user or service account
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

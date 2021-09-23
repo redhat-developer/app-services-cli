@@ -9,7 +9,7 @@ ifdef::env-github,env-browser[:context: cmd]
 == Synopsis
 
 List all artifacts for the group by specified output format (by default, table)
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

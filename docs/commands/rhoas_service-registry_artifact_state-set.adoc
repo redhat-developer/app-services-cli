@@ -13,7 +13,7 @@ Set artifact state by setting one of possible values
 - DISABLED (Disable artifact usage)
 - DEPRECATED (Deprecate artifact)
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

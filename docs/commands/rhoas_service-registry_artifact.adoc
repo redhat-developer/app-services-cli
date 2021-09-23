@@ -20,7 +20,7 @@ For example, this includes rules for content validation and version compatibilit
 Artifact commands enable client applications to manage the schema and API artifacts in the registry instance.
 This set of commands provide create, read, update, and delete operations for artifacts, rules, versions, and metadata.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 [discrete]

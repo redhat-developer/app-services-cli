@@ -10,7 +10,7 @@ ifdef::env-github,env-browser[:context: cmd]
 
 Import all artifacts and metadata from export file to another Service Segistry instance
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

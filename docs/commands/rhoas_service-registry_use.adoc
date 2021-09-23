@@ -14,7 +14,7 @@ You can specify a Service Registry instance by --name or --id.
 
 When you set the Service Registry instance to be used, it is set as the current instance for all rhoas service-registry artifact commands.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

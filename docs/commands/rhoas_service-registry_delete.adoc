@@ -11,7 +11,7 @@ ifdef::env-github,env-browser[:context: cmd]
  
 Delete a Service Registry instance along with all of its schema and API artifacts.
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....

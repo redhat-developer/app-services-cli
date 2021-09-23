@@ -10,7 +10,7 @@ ifdef::env-github,env-browser[:context: cmd]
 
 Export all artifacts and metadata from Service Registry instance to specified file
 
-This command is available as part of the developer preview
+This command is available as part of the Development Preview release.
 
 
 ....
