@@ -48,6 +48,9 @@ const (
 	// Invalid Search Query
 	ErrorFailedToParseSearch ServiceErrorCode = 23
 
+	// Only one eval instance is allowed
+	OneEvalInstanceAllowed ServiceErrorCode = 24
+
 	// Failed to create service account
 	ErrorFailedToCreateServiceAccount ServiceErrorCode = 110
 
