@@ -1,0 +1,156 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-service-registry-artifact_{context}']
+= rhoas service-registry artifact
+
+[role="_abstract"]
+[alpha] Manage Service Registry artifacts
+
+[discrete]
+== Synopsis
+
+Manage Service Registry schema and API artifacts in the currently selected Service Registry instance.
+
+Commands are executed on the currently selected Service Registry instance, which can be overridden using the --instance-id flag.
+
+Service Registry enables developers to manage and share the structure of their data.
+For example, client applications can dynamically push or pull the latest schema or API updates to or from the registry without needing to redeploy.
+Service Registry also enables developers to create rules that govern how registry content can evolve over time.
+For example, this includes rules for content validation and version compatibility.
+
+Artifact commands enable client applications to manage the schema and API artifacts in the registry instance.
+This set of commands provide create, read, update, and delete operations for artifacts, rules, versions, and metadata.
+
+This command is available as part of the Development Preview release.
+
+
+[discrete]
+== Examples
+
+....
+## Create artifact in my-group from schema.json file
+rhoas service-registry artifact create --artifact-id=my-artifact --group=my-group artifact.json
+
+## Get artifact content
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
+
+## Get artifact content by hash
+rhoas service-registry artifact download --hash=cab4...al9 --output-file=artifact.json
+
+## Delete artifact
+rhoas service-registry artifact delete --artifact-id=my-artifact
+
+## Get artifact metadata
+rhoas service-registry artifact metadata --artifact-id=my-artifact --group=my-group
+
+## Update artifact
+rhoas service-registry artifact update --artifact-id=my-artifact artifact-new.json
+
+## List artifacts
+rhoas service-registry artifact list --group=my-group --limit=10 page=1
+
+## View artifact versions
+rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-group
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [alpha] Service Registry commands
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [alpha] Service Registry commands
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_create.adoc#rhoas-service-registry-artifact-create[rhoas service-registry artifact create]	 - [alpha] Creates new artifact from file or standard input
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-create_{context}[rhoas service-registry artifact create]	 - [alpha] Creates new artifact from file or standard input
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_delete.adoc#rhoas-service-registry-artifact-delete[rhoas service-registry artifact delete]	 - [alpha] Deletes single or all artifacts in a given group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-delete_{context}[rhoas service-registry artifact delete]	 - [alpha] Deletes single or all artifacts in a given group
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_download.adoc#rhoas-service-registry-artifact-download[rhoas service-registry artifact download]	 - [alpha] Download artifacts from Service Registry using global identifiers
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-download_{context}[rhoas service-registry artifact download]	 - [alpha] Download artifacts from Service Registry using global identifiers
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_export.adoc#rhoas-service-registry-artifact-export[rhoas service-registry artifact export]	 - [alpha] Export data from Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-export_{context}[rhoas service-registry artifact export]	 - [alpha] Export data from Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_get.adoc#rhoas-service-registry-artifact-get[rhoas service-registry artifact get]	 - [alpha] Get artifact by ID and group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-get_{context}[rhoas service-registry artifact get]	 - [alpha] Get artifact by ID and group
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_import.adoc#rhoas-service-registry-artifact-import[rhoas service-registry artifact import]	 - [alpha] Import data into a Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-import_{context}[rhoas service-registry artifact import]	 - [alpha] Import data into a Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_list.adoc#rhoas-service-registry-artifact-list[rhoas service-registry artifact list]	 - [alpha] List artifacts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-list_{context}[rhoas service-registry artifact list]	 - [alpha] List artifacts
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_metadata-get.adoc#rhoas-service-registry-artifact-metadata-get[rhoas service-registry artifact metadata-get]	 - [alpha] Get artifact metadata
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-metadata-get_{context}[rhoas service-registry artifact metadata-get]	 - [alpha] Get artifact metadata
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_metadata-set.adoc#rhoas-service-registry-artifact-metadata-set[rhoas service-registry artifact metadata-set]	 - [alpha] Update artifact metadata
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-metadata-set_{context}[rhoas service-registry artifact metadata-set]	 - [alpha] Update artifact metadata
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_state-set.adoc#rhoas-service-registry-artifact-state-set[rhoas service-registry artifact state-set]	 - [alpha] Set artifact state
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-state-set_{context}[rhoas service-registry artifact state-set]	 - [alpha] Set artifact state
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_update.adoc#rhoas-service-registry-artifact-update[rhoas service-registry artifact update]	 - [alpha] Update artifact
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-update_{context}[rhoas service-registry artifact update]	 - [alpha] Update artifact
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact_versions.adoc#rhoas-service-registry-artifact-versions[rhoas service-registry artifact versions]	 - [alpha] Get latest artifact versions by artifact-id and group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact-versions_{context}[rhoas service-registry artifact versions]	 - [alpha] Get latest artifact versions by artifact-id and group
+endif::[]
+
