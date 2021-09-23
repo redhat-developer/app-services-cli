@@ -93,7 +93,7 @@ one = 'Page limit'
 one = 'ID of the Service Registry instance to be used. By default, uses the currently selected instance'
 
 [artifact.common.message.no.group]
-one = 'Group was not specified. Using {{.DefaultArtifactGroup}} artifacts group.'
+one = 'Using {{.DefaultArtifactGroup}} artifacts group.'
 
 [artifact.common.message.opening.file]
 one = 'Opening file: {{.FileName}}'
