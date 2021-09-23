@@ -10,7 +10,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
-	"github.com/redhat-developer/app-services-cli/pkg/profile"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -82,7 +81,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 		}
 	}
 
-	if profile.DevModeEnabled() && stringInSlice("service-registry", opts.Services) {
+	if stringInSlice("service-registry", opts.Services) {
 		registryCfg := cfg.Services.ServiceRegistry
 		if registryCfg != nil && registryCfg.InstanceID != "" {
 			// nolint:govet
