@@ -2,12 +2,12 @@ package status
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/profile"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
@@ -25,7 +25,7 @@ const (
 	registrySvcName = "service-registry"
 )
 
-var validServices = []string{kafkaSvcName}
+var validServices = []string{kafkaSvcName, registrySvcName}
 
 type options struct {
 	IO         *iostreams.IOStreams
@@ -40,11 +40,6 @@ type options struct {
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
-
-	if profile.DevModeEnabled() {
-		validServices = append(validServices, registrySvcName)
-	}
-
 	opts := &options{
 		IO:         f.IOStreams,
 		Config:     f.Config,
@@ -118,10 +113,13 @@ func runStatus(opts *options) error {
 	}
 
 	stdout := opts.IO.Out
-	if err = dump.Formatted(stdout, opts.outputFormat, status); err != nil {
-		return err
+	if opts.outputFormat != "" {
+		if err = dump.Formatted(stdout, opts.outputFormat, status); err != nil {
+			return err
+		}
+	} else {
+		pkgStatus.Print(stdout, status)
 	}
-	pkgStatus.Print(stdout, status)
 
 	return nil
 }
