@@ -153,7 +153,7 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 		return err
 	}
 
-	_, httpRes, err := api.TopicsApi.GetTopic(context.Background(), name).Execute()
+	_, httpRes, _ := api.TopicsApi.GetTopic(context.Background(), name).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 		if httpRes.StatusCode == http.StatusOK {
@@ -161,5 +161,5 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 		}
 	}
 
-	return err
+	return nil
 }
