@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	queryLimit = 1000
+	queryLimit = 100
 )
 
 func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger) (*srsmgmtv1.Registry, error) {
