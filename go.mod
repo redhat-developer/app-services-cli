@@ -11,7 +11,7 @@ require (
 	github.com/briandowns/spinner v1.16.0
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/fatih/color v1.13.0
-	github.com/golang-jwt/jwt/v4 v4.0.0
+	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
