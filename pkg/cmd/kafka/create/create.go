@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 
@@ -190,7 +189,7 @@ func runCreate(opts *options) error {
 		return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
 	}
 
-	if kas.IsErr(err, kas.OneEvalInstanceAllowed) {
+	if httpRes.StatusCode == http.StatusTooManyRequests {
 		return opts.localizer.MustLocalizeError("kafka.create.error.oneinstance")
 	}
 
