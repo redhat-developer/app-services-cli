@@ -155,7 +155,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", dump.EmptyFormat, opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
 	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
@@ -275,7 +275,7 @@ func runCmd(opts *options) error {
 	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
 
 	// update the topic
-	response, httpRes, err := updateTopicReq.Execute()
+	_, httpRes, err = updateTopicReq.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -304,14 +304,7 @@ func runCmd(opts *options) error {
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
-
-	stdout := opts.IO.Out
-	switch opts.outputFormat {
-	case dump.EmptyFormat:
-		return nil
-	default:
-		return dump.Formatted(stdout, opts.outputFormat, response)
-	}
+	return nil
 }
 
 func runInteractivePrompt(opts *options) (err error) {

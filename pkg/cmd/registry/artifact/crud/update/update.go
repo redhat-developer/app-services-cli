@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -92,7 +91,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 
 	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
@@ -152,11 +150,11 @@ func runUpdate(opts *options) error {
 	}
 
 	request = request.Body(specifiedFile)
-	metadata, _, err := request.Execute()
-	if err != nil {
+	if _, _, err = request.Execute(); err != nil {
 		return err
 	}
+
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.updated"))
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
+	return nil
 }

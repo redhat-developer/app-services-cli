@@ -52,7 +52,7 @@ one = 'Nothing to update: user "{{.Owner}}" is already the owner of the Kafka in
 one = 'Updating Kafka instance "{{.Name}}"...'
 
 [kafka.update.log.info.updateSuccess]
-one = 'Kafka instance "{{.Name}}" has been updated:'
+one = 'Kafka instance "{{.Name}}" has been updated. Run "rhoas kafka describe --name {{.Name}}" to view its configuration.'
 
 [kafka.update.log.info.loadingUsers]
 one = 'Loading users...'

@@ -702,7 +702,7 @@ one = 'Topic "{{.Name}}" already has {{.Count}} partitions.'
 one = 'Nothing to update'
 
 [kafka.topic.update.log.info.topicUpdated]
-one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}}" has been updated. Run "rhoas kafka describe --name {{.TopicName}} to view configuration details."'
+one = 'Topic "{{.TopicName}}" in Kafka instance "{{.InstanceName}}" has been updated. Run "rhoas kafka topic describe --name {{.TopicName}} to view its configuration."'
 
 [kafka.topic.update.input.retentionMs.message]
 description = 'Message for the Retention period input'

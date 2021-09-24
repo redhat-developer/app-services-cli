@@ -2,8 +2,9 @@ package resetoffset
 
 import (
 	"context"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"net/http"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -12,7 +13,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -37,12 +37,6 @@ type options struct {
 	Logger     logging.Logger
 	localizer  localize.Localizer
 	Context    context.Context
-}
-
-type updatedConsumerRow struct {
-	Topic     string `json:"groupId,omitempty" header:"Topic"`
-	Partition int32  `json:"active_members,omitempty" header:"Partition"`
-	Offset    int32  `json:"lag,omitempty" header:"Offset"`
 }
 
 var validator consumergroup.Validator
@@ -109,7 +103,6 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.offset, "offset", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.offset"))
 	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.topic"))
 	cmd.Flags().Int32SliceVar(&opts.partitions, "partitions", []int32{}, opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.partitions"))
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.output"))
 
 	_ = cmd.MarkFlagRequired("id")
 	_ = cmd.MarkFlagRequired("offset")
@@ -227,7 +220,7 @@ func runCmd(opts *options) error {
 		}
 	}
 
-	updatedConsumers, httpRes, err := a.Execute()
+	_, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -262,32 +255,5 @@ func runCmd(opts *options) error {
 		localize.NewEntry("InstanceName", kafkaInstance.GetName())),
 	)
 
-	switch opts.output {
-	case "":
-		opts.Logger.Info("")
-		consumers := updatedConsumers.GetItems()
-		rows := mapResetOffsetResultToTableFormat(consumers)
-		dump.Table(opts.IO.Out, rows)
-	default:
-		return dump.Formatted(opts.IO.Out, opts.output, updatedConsumers)
-	}
-
 	return nil
-
-}
-
-func mapResetOffsetResultToTableFormat(consumers []kafkainstanceclient.ConsumerGroupResetOffsetResultItem) []updatedConsumerRow {
-	rows := make([]updatedConsumerRow, len(consumers))
-
-	for i, t := range consumers {
-
-		row := updatedConsumerRow{
-			Topic:     t.GetTopic(),
-			Partition: t.GetPartition(),
-			Offset:    t.GetOffset(),
-		}
-		rows[i] = row
-	}
-
-	return rows
 }
