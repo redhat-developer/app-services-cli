@@ -99,6 +99,7 @@ func NewAddCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.role, "role", "", opts.localizer.MustLocalize("registry.role.cmd.flag.role.description"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
+	_ = cmd.MarkFlagRequired("role")
 	_ = cmd.RegisterFlagCompletionFunc("role", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return util.AllowedRoleTypeEnumValues, cobra.ShellCompDirectiveNoSpace
 	})
