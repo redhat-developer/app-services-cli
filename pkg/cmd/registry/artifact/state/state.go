@@ -2,6 +2,7 @@ package state
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -53,10 +54,8 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 				return f.Localizer.MustLocalizeError("artifact.common.message.artifactIdRequired")
 			}
 
-			if opts.state != "" {
-				if _, err := registryinstanceclient.NewArtifactStateFromValue(opts.state); err != nil {
-					return opts.localizer.MustLocalizeError("artifact.cmd.state.error.invalidArtifactState", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactStateEnumValuesAsString()))
-				}
+			if _, err := registryinstanceclient.NewArtifactStateFromValue(opts.state); err != nil {
+				return opts.localizer.MustLocalizeError("artifact.cmd.state.error.invalidArtifactState", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactStateEnumValuesAsString()))
 			}
 
 			if opts.registryID != "" {
