@@ -21,9 +21,9 @@ the Service Binding operator (https://github.com/redhat-developer/service-bindin
 
 [cluster.connect.cmd.example]
 one = '''
-# connect the current Kafka instance to your cluster
-$ rhoas cluster connect
-'''
+# connect a Kafka instance to your cluster
+$ rhoas cluster connect --service-type kafka --service-id c58n9lbcuru04a0e0oog
 
-[cluster.connect.flag.secretName.description]
-one = 'Name of the secret that holds the Kafka credentials'
+# connect a Service registry instance to your cluster
+$ rhoas cluster connect --service-type service-registry --service-id d64f6893-9bde-4524-b3d3-0e39d0fd130e
+'''

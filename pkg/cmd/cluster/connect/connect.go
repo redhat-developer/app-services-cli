@@ -32,7 +32,6 @@ type options struct {
 
 	offlineAccessToken      string
 	forceCreationWithoutAsk bool
-	ignoreContext           bool
 	serviceID               string
 	serviceType             string
 }
@@ -54,9 +53,6 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("cluster.connect.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
-				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context"))
-			}
 			return runConnect(opts)
 		},
 	}
@@ -65,9 +61,11 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.offlineAccessToken, "token", "", opts.localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
-	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 	cmd.Flags().StringVar(&opts.serviceID, "service-id", "", opts.localizer.MustLocalize("cluster.common.flag.serviceId.description"))
 	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceType.description"))
+
+	_ = cmd.MarkFlagRequired("service-type")
+	_ = cmd.MarkFlagRequired("service-id")
 
 	return cmd
 }
@@ -93,7 +91,6 @@ func runConnect(opts *options) error {
 	arguments := &cluster.ConnectArguments{
 		OfflineAccessToken:      opts.offlineAccessToken,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
-		IgnoreContext:           opts.ignoreContext,
 		Namespace:               opts.namespace,
 		SelectedService:         opts.serviceType,
 		SelectedServiceID:       opts.serviceID,
