@@ -8,7 +8,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
-	"github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 
@@ -19,10 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
-	"github.com/spf13/cobra"
 )
-
-var generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 
 func main() {
 	localizer, err := goi18n.New(nil)
@@ -44,11 +40,6 @@ func main() {
 
 	rootCmd.InitDefaultHelpCmd()
 
-	if generateDocs {
-		generateDocumentation(rootCmd)
-		os.Exit(0)
-	}
-
 	err = rootCmd.Execute()
 
 	if err == nil {
@@ -60,26 +51,6 @@ func main() {
 	cmdFactory.Logger.Errorf("%v\n", rootError(err, localizer))
 	build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
 	os.Exit(1)
-}
-
-/**
-* Generates documentation files
- */
-func generateDocumentation(rootCommand *cobra.Command) {
-	fmt.Fprintln(os.Stderr, "\n🛠️  Generating rhoas command-line reference documentation...")
-	filePrepender := func(filename string) string {
-		return ""
-	}
-
-	rootCommand.DisableAutoGenTag = true
-
-	linkHandler := func(s string) string { return s }
-
-	if err := doc.GenAsciidocTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-	fmt.Fprintln(os.Stderr, "\n✅ Command-line reference documentation has been generated successfully")
 }
 
 func initConfig(f *factory.Factory) error {

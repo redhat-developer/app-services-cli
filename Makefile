@@ -113,7 +113,7 @@ docs/check: docs/generate
 
 docs/generate:
 	rm -rf ./docs/commands/*
-	GENERATE_DOCS=true RHOAS_DEV=false go run ./cmd/rhoas
+	go run ./cmd/rhoas docs -d ./docs/commands -f adoc
 .PHONY: docs/generate
 
 docs/generate-modular-docs: docs/generate
