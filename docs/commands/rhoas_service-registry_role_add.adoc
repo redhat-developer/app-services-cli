@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry role add
 
 [role="_abstract"]
-[alpha] Add or update principal role
+[beta] Add or update principal role
 
 [discrete]
 == Synopsis
@@ -44,9 +44,9 @@ rhoas service-registry role add --role=ADMIN --username=joedough
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role.adoc#rhoas-service-registry-role[rhoas service-registry role]	 - [alpha] Service Registry role management
+* link:rhoas_service-registry_role.adoc#rhoas-service-registry-role[rhoas service-registry role]	 - [beta] Service Registry role management
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role_{context}[rhoas service-registry role]	 - [alpha] Service Registry role management
+* link:{path}#ref-rhoas-service-registry-role_{context}[rhoas service-registry role]	 - [beta] Service Registry role management
 endif::[]
 

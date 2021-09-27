@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry role
 
 [role="_abstract"]
-[alpha] Service Registry role management
+[beta] Service Registry role management
 
 [discrete]
 == Synopsis
@@ -48,30 +48,30 @@ rhoas service-registry role revoke --username=janedough
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [alpha] Service Registry commands
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [beta] Service Registry commands
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [alpha] Service Registry commands
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [beta] Service Registry commands
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role_add.adoc#rhoas-service-registry-role-add[rhoas service-registry role add]	 - [alpha] Add or update principal role
+* link:rhoas_service-registry_role_add.adoc#rhoas-service-registry-role-add[rhoas service-registry role add]	 - [beta] Add or update principal role
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role-add_{context}[rhoas service-registry role add]	 - [alpha] Add or update principal role
+* link:{path}#ref-rhoas-service-registry-role-add_{context}[rhoas service-registry role add]	 - [beta] Add or update principal role
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role_list.adoc#rhoas-service-registry-role-list[rhoas service-registry role list]	 - [alpha] List roles
+* link:rhoas_service-registry_role_list.adoc#rhoas-service-registry-role-list[rhoas service-registry role list]	 - [beta] List roles
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role-list_{context}[rhoas service-registry role list]	 - [alpha] List roles
+* link:{path}#ref-rhoas-service-registry-role-list_{context}[rhoas service-registry role list]	 - [beta] List roles
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role_revoke.adoc#rhoas-service-registry-role-revoke[rhoas service-registry role revoke]	 - [alpha] Revoke role for principal
+* link:rhoas_service-registry_role_revoke.adoc#rhoas-service-registry-role-revoke[rhoas service-registry role revoke]	 - [beta] Revoke role for principal
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role-revoke_{context}[rhoas service-registry role revoke]	 - [alpha] Revoke role for principal
+* link:{path}#ref-rhoas-service-registry-role-revoke_{context}[rhoas service-registry role revoke]	 - [beta] Revoke role for principal
 endif::[]
 
