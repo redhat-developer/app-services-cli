@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry role revoke
 
 [role="_abstract"]
-[alpha] Revoke role for principal
+[beta] Revoke role for principal
 
 [discrete]
 == Synopsis
@@ -45,9 +45,9 @@ rhoas service-registry role revoke --username=janedough
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role.adoc#rhoas-service-registry-role[rhoas service-registry role]	 - [alpha] Service Registry role management
+* link:rhoas_service-registry_role.adoc#rhoas-service-registry-role[rhoas service-registry role]	 - [beta] Service Registry role management
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role_{context}[rhoas service-registry role]	 - [alpha] Service Registry role management
+* link:{path}#ref-rhoas-service-registry-role_{context}[rhoas service-registry role]	 - [beta] Service Registry role management
 endif::[]
 
