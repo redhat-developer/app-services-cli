@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -259,6 +260,11 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 
 	_, err = c.clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	tokenSecretNameTmplEntry := localize.NewEntry("Name", tokenSecretName)
+
+	if err.Error() == "Unauthorized" {
+		return c.localizer.MustLocalizeError("cluster.kubernetes.createTokenSecret.error.info.unauthorized")
+	}
+
 	if err != nil {
 		return fmt.Errorf("%v: %w", c.localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
 	}

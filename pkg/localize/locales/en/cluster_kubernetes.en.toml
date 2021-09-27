@@ -78,6 +78,13 @@ one = 'Service Account Secret "{{.Name}}" created successfully'
 [cluster.kubernetes.createTokenSecret.log.info.createFailed]
 one = 'Creation of the "{{.Name}}" secret failed:'
 
+[cluster.kubernetes.createTokenSecret.error.info.unauthorized]
+one = '''
+oc token provided has expired or user is not authorized
+
+You need to login using the `oc login` command provided by the cluster console
+'''
+
 [cluster.kubernetes.createServiceAccount.error.createError]
 one = 'could not create service account'
 
