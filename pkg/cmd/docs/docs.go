@@ -40,8 +40,8 @@ func NewDocsCmd(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.format, "format", "f", "md", "Output format of the generated documentation. Valid options are: 'md' (markdown), 'adoc' (Asciidoc) and 'man'")
-	cmd.Flags().StringVarP(&opts.dir, "docs", "d", "./docs", "The directory to output the generated documentation files")
+	cmd.Flags().StringVar(&opts.format, "file-format", "md", "Output format of the generated documentation. Valid options are: 'md' (markdown), 'adoc' (Asciidoc) and 'man'")
+	cmd.Flags().StringVar(&opts.dir, "dir", "./docs", "The directory to output the generated documentation files")
 
 	return cmd
 }
