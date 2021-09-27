@@ -1,4 +1,16 @@
 
+<a name="v0.31.1"></a>
+## [v0.31.1](https://github.com/redhat-developer/app-services-cli/compare/v0.31.0...v0.31.1) (2021-09-27)
+
+### Bug Fixes
+
+* update devpreview to beta ([#1141](https://github.com/redhat-developer/app-services-cli/issues/1141))
+
+### Features
+
+* add hidden docs command ([#1143](https://github.com/redhat-developer/app-services-cli/issues/1143))
+
+
 <a name="v0.31.0"></a>
 ## [v0.31.0](https://github.com/redhat-developer/app-services-cli/compare/v0.30.2...v0.31.0) (2021-09-27)
 
