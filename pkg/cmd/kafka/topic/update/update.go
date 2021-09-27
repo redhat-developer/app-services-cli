@@ -18,7 +18,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -38,7 +37,6 @@ type options struct {
 	retentionMsStr    string
 	retentionBytesStr string
 	kafkaID           string
-	outputFormat      string
 	interactive       bool
 	cleanupPolicy     string
 
@@ -99,10 +97,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 			}
 
-			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
-				return err
-			}
-
 			// check if the partition flag is set
 			if opts.partitionsStr != "" {
 				// nolint:govet
@@ -153,7 +147,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
 	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
@@ -273,7 +266,7 @@ func runCmd(opts *options) error {
 	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
 
 	// update the topic
-	response, httpRes, err := updateTopicReq.Execute()
+	_, httpRes, err = updateTopicReq.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -302,7 +295,7 @@ func runCmd(opts *options) error {
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.update.log.info.topicUpdated", topicNameTmplPair, kafkaNameTmplPair))
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+	return nil
 }
 
 func runInteractivePrompt(opts *options) (err error) {

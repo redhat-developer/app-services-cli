@@ -5,10 +5,8 @@ import (
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
@@ -28,8 +26,7 @@ type options struct {
 
 	file string
 
-	registryID   string
-	outputFormat string
+	registryID string
 
 	version     string
 	name        string
@@ -61,11 +58,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("artifact.cmd.update.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
 			if opts.artifact == "" {
 				return opts.localizer.MustLocalizeError("artifact.common.error.artifact.id.required")
 			}
@@ -92,7 +84,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
 	cmd.Flags().StringVarP(&opts.file, "file", "f", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 
 	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
@@ -152,11 +143,11 @@ func runUpdate(opts *options) error {
 	}
 
 	request = request.Body(specifiedFile)
-	metadata, _, err := request.Execute()
-	if err != nil {
+	if _, _, err = request.Execute(); err != nil {
 		return err
 	}
+
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.updated"))
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
+	return nil
 }

@@ -16,10 +16,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
@@ -36,8 +34,6 @@ type options struct {
 	id          string
 	owner       string
 	skipConfirm bool
-
-	outputFormat string
 
 	interactive    bool
 	userIsOrgAdmin bool
@@ -95,11 +91,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
 			if opts.name != "" && opts.id != "" {
 				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
@@ -119,7 +110,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", dump.JSONFormat, opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.update.flag.id"))
 	cmd.Flags().StringVar(&opts.owner, "owner", "", opts.localizer.MustLocalize("kafka.update.flag.owner"))
 	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, opts.localizer.MustLocalize("kafka.update.flag.yes"))
@@ -217,7 +207,7 @@ func run(opts *options) error {
 	opts.logger.Info()
 	opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.updateSuccess", localize.NewEntry("Name", response.GetName())))
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+	return nil
 }
 
 func promptOwnerSelect(localizer localize.Localizer, users []rbac.Principal) (string, error) {
