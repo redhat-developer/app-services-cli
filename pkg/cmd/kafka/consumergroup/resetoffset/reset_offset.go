@@ -9,7 +9,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -29,7 +28,6 @@ type options struct {
 	offset      string
 	topic       string
 	partitions  []int32
-	output      string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -59,11 +57,6 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-
-			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
-				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
-			}
-
 			validator = consumergroup.Validator{
 				Localizer: opts.localizer,
 			}

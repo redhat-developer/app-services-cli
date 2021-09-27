@@ -37,7 +37,6 @@ type options struct {
 	retentionMsStr    string
 	retentionBytesStr string
 	kafkaID           string
-	outputFormat      string
 	interactive       bool
 	cleanupPolicy     string
 
@@ -96,12 +95,6 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					}
 				}
 
-			}
-
-			if opts.outputFormat != "" {
-				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
-					return err
-				}
 			}
 
 			// check if the partition flag is set

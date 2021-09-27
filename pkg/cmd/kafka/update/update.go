@@ -16,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
@@ -35,8 +34,6 @@ type options struct {
 	id          string
 	owner       string
 	skipConfirm bool
-
-	outputFormat string
 
 	interactive    bool
 	userIsOrgAdmin bool
@@ -92,11 +89,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			}
 			if opts.owner == "" {
 				opts.interactive = true
-			}
-
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			if opts.name != "" && opts.id != "" {

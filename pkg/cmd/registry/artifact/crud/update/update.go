@@ -7,7 +7,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
@@ -27,8 +26,7 @@ type options struct {
 
 	file string
 
-	registryID   string
-	outputFormat string
+	registryID string
 
 	version     string
 	name        string
@@ -60,11 +58,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("artifact.cmd.update.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
 			if opts.artifact == "" {
 				return opts.localizer.MustLocalizeError("artifact.common.error.artifact.id.required")
 			}
