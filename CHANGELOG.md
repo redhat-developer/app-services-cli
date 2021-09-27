@@ -1,4 +1,19 @@
 
+<a name="v0.31.0"></a>
+## [v0.31.0](https://github.com/redhat-developer/app-services-cli/compare/v0.30.2...v0.31.0) (2021-09-27)
+
+### Bug Fixes
+
+* set --role flag as required ([#1137](https://github.com/redhat-developer/app-services-cli/issues/1137))
+* add proper validation for state ([#1134](https://github.com/redhat-developer/app-services-cli/issues/1134))
+* registry use command interactive mode ([#1132](https://github.com/redhat-developer/app-services-cli/issues/1132))
+* print service registry status in rhoas status command ([#1131](https://github.com/redhat-developer/app-services-cli/issues/1131))
+* service registry commands - group message update ([#1127](https://github.com/redhat-developer/app-services-cli/issues/1127))
+* interactive mode for creating topic returns error ([#1113](https://github.com/redhat-developer/app-services-cli/issues/1113))
+* **deps:** update module github.com/golang-jwt/jwt/v4 to v4.1.0
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go/registrymgmt to v0.3.0 ([#1124](https://github.com/redhat-developer/app-services-cli/issues/1124))
+
+
 <a name="v0.30.2"></a>
 ## [v0.30.2](https://github.com/redhat-developer/app-services-cli/compare/v0.30.1...v0.30.2) (2021-09-22)
 
