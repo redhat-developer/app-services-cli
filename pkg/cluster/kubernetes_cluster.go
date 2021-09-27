@@ -2,7 +2,6 @@ package cluster
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -189,7 +188,7 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 	}
 
 	if connectOpts.OfflineAccessToken == "" && !opts.IO.CanPrompt() {
-		return errors.New(opts.Localizer.MustLocalize("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token")))
+		return opts.Localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token"))
 	}
 
 	if connectOpts.OfflineAccessToken == "" {
