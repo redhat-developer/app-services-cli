@@ -51,6 +51,9 @@ rhoas service-registry artifact list --group=my-group --limit=10 page=1
 ## View artifact versions
 rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-group
 
+Artifacts file can be instance of any schema like OpenAPI, Avro etc.
+For example: https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/docs/resources/avro-userInfo.json
+
 ....
 
 [discrete]
