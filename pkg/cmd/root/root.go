@@ -3,6 +3,7 @@ package root
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/docs"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
@@ -57,6 +58,8 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	// Registry commands
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
+
+	cmd.AddCommand(docs.NewDocsCmd(f))
 
 	return cmd
 }
