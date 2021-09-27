@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"time"
 
-	kafkaUtil "github.com/redhat-developer/app-services-cli/pkg/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -47,7 +45,7 @@ type Options struct {
 type KubernetesCluster struct {
 	clientset          *kubernetes.Clientset
 	clientconfig       clientcmd.ClientConfig
-	dynamicClient      dynamic.Interface
+	DynamicClient      dynamic.Interface
 	kubeconfigLocation string
 }
 
@@ -117,7 +115,7 @@ func (c *KubernetesCluster) CurrentNamespace() (string, error) {
 
 // nolint:funlen
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments, opts Options) error {
+func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments, connection CustomConnection, opts Options) error {
 
 	var currentNamespace string
 	var err error
@@ -134,9 +132,9 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.statusInfo",
-		localize.NewEntry("InstanceName", color.Info("random name")),
+		localize.NewEntry("ServiceType", color.Info(cmdOptions.SelectedService)),
+		localize.NewEntry("ServiceID", color.Info(cmdOptions.SelectedServiceID)),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
-		localize.NewEntry("RegistryInstanceName", color.Info("random-name")),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(serviceAccountSecretName))))
 
 	if cmdOptions.ForceCreationWithoutAsk == false {
@@ -166,88 +164,11 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		return err
 	}
 
-	var service Service
-
-	switch cmdOptions.SelectedService {
-
-	case "kafka":
-		service = &Kafka{}
-		err = c.createConnectionCustomResource(ctx, currentNamespace, cmdOptions.SelectedServiceID, service, opts)
-		if err != nil {
-			return err
-		}
-	case "service-registry":
-		service = &ServiceRegistry{}
-		err = c.createConnectionCustomResource(ctx, currentNamespace, cmdOptions.SelectedServiceID, service, opts)
-		if err != nil {
-			return err
-		}
-	case "":
-		var selectedKafkaInstance string
-		var selectedRegistryInstance string
-
-		cfg, err := opts.Config.Load()
-		if err != nil {
-			return err
-		}
-
-		if cfg.Services.Kafka == nil || cmdOptions.IgnoreContext {
-			// nolint
-			selectedKafka, err := kafkaUtil.InteractiveSelect(ctx, opts.Connection, opts.Logger, opts.Localizer)
-			if err != nil {
-				return err
-			}
-			if selectedKafka == nil {
-				return nil
-			}
-			selectedKafkaInstance = selectedKafka.GetId()
-		} else {
-			selectedKafkaInstance = cfg.Services.Kafka.ClusterID
-		}
-
-		service = &Kafka{}
-
-		err = c.createConnectionCustomResource(ctx, currentNamespace, selectedKafkaInstance, service, opts)
-		if err != nil {
-			return err
-		}
-
-		if cfg.Services.ServiceRegistry == nil || cmdOptions.IgnoreContext {
-			// nolint
-			selectedServiceRegistry, err := serviceregistry.InteractiveSelect(ctx, opts.Connection, opts.Logger)
-			if err != nil {
-				return err
-			}
-			if selectedServiceRegistry == nil {
-				return nil
-			}
-			selectedRegistryInstance = selectedServiceRegistry.GetId()
-		} else {
-			selectedRegistryInstance = cfg.Services.ServiceRegistry.InstanceID
-		}
-
-		service = &ServiceRegistry{}
-
-		err = c.createConnectionCustomResource(ctx, currentNamespace, selectedRegistryInstance, service, opts)
-		if err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// createConnectionCustomResource
-func (c *KubernetesCluster) createConnectionCustomResource(ctx context.Context, namespace string, serviceID string, service Service, opts Options) error {
-
-	err := service.ResourceExists(ctx, c, namespace, serviceID, opts)
+	err = connection.CustomResourceExists(ctx, c, currentNamespace, cmdOptions.SelectedServiceID, opts)
 	if err != nil {
 		return err
 	}
-
-	err = service.CreateResource(ctx, c, namespace, serviceID, opts)
-
+	err = connection.CreateCustomResource(ctx, c, cmdOptions.SelectedServiceID, currentNamespace, opts)
 	if err != nil {
 		return err
 	}
@@ -361,7 +282,7 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context, opts Optio
 	return &serviceAcctRes, nil
 }
 
-func (c *KubernetesCluster) makeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) error {
+func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) error {
 	var status int
 
 	data := c.clientset.
@@ -381,7 +302,7 @@ func (c *KubernetesCluster) makeKubernetesGetRequest(ctx context.Context, path s
 	return nil
 }
 
-func (c *KubernetesCluster) makeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
+func (c *KubernetesCluster) MakeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
 
 	data := c.clientset.
 		RESTClient().

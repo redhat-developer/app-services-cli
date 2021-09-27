@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"

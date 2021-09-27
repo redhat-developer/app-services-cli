@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/serviceregistry"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/serviceregistry"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )

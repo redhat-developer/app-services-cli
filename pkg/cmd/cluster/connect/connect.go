@@ -5,12 +5,17 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/api"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/spf13/cobra"
 )
 
@@ -73,6 +78,13 @@ func runConnect(opts *options) error {
 		return err
 	}
 
+	conn.API()
+
+	err = validateServiceID(opts.Context, conn.API(), opts.serviceType, opts.serviceID)
+	if err != nil {
+		return err
+	}
+
 	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
 	if err != nil {
 		return err
@@ -95,10 +107,36 @@ func runConnect(opts *options) error {
 		Connection: conn,
 	}
 
-	err = clusterConn.Connect(context.Background(), arguments, connectOpts)
+	var service cluster.CustomConnection
+
+	switch opts.serviceType {
+	case "kafka":
+		service = &kafkaservice.KafkaConnection{}
+	case "service-registry":
+		service = &registryservice.ServiceRegistryConnection{}
+	}
+
+	err = clusterConn.Connect(context.Background(), arguments, service, connectOpts)
 	if err != nil {
 		return err
 	}
 
+	return nil
+}
+
+func validateServiceID(ctx context.Context, api *api.API, serviceType string, serviceID string) error {
+
+	switch serviceType {
+	case "kafka":
+		_, _, err := kafka.GetKafkaByID(ctx, api.Kafka(), serviceID)
+		if err != nil {
+			return err
+		}
+	case "service-registry":
+		_, _, err := serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), serviceID)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }

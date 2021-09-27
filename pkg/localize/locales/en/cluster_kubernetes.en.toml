@@ -8,8 +8,8 @@ In case of problems please execute "rhoas cluster status" to check if your clust
 one = '''
 Connection Details:
 
-Apache Kafka instance:  {{.InstanceName}}
-Service Registry Name:  {{.RegistryInstanceName}}
+Service Type:           {{.ServiceType}}
+Service ID:             {{.ServiceID}}
 Kubernetes Namespace:   {{.Namespace}}
 Service Account Secret: {{.ServiceAccountSecretName}}
 '''
@@ -38,21 +38,14 @@ one = 'KafkaConnection resource "{{.Name}}" has been created'
 [cluster.kubernetes.createRegistryCR.log.info.customResourceCreated]
 one = 'ServiceRegistryConnection resource "{{.Name}}" has been created'
 
-[cluster.kubernetes.watchForKafkaStatus.error.format]
-one = '''invalid result from operator. Status object is not compatible with expected result from CLI.
-'''
-
-[cluster.kubernetes.watchForRegistryStatus.error.format]
-one = '''invalid result from operator. Status object is not compatible with expected result from CLI.
-'''
+[cluster.kubernetes.watchForConnectionStatus.error.format]
+one = 'invalid result from operator. Status object is not compatible with expected result from CLI.'
 
 [cluster.kubernetes.watchForKafkaStatus.error.status]
-one = '''error when processing KafkaConnection: %v
-'''
+one = 'error when processing KafkaConnection: %v'
 
 [cluster.kubernetes.watchForRegistryStatus.error.status]
-one = '''error when processing ServiceRegistryConnection: %v
-'''
+one = 'error when processing ServiceRegistryConnection: %v'
 
 [cluster.kubernetes.watchForKafkaStatus.log.info.success]
 one = '''
