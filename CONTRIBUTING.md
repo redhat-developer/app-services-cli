@@ -22,6 +22,15 @@ You can run the CLI commands files directly with `go run`. All commands and subc
 go run ./cmd/rhoas kafka create "test" --provider=aws --region=us-east-1
 ```
 
+## Connecting to stage env instead of production
+
+To use QA environment we need to login using following arguments
+
+```
+rhoas login --api-gateway=stage --mas-auth-url=stage
+```
+
+
 ### Development features
 
 To enable development and early access commands please set environment variable in your terminal:
