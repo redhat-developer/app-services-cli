@@ -14,20 +14,30 @@ import (
 type ServiceRegistryConnection struct {
 }
 
-func (r *ServiceRegistryConnection) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, namespace string, serviceName string, opts cluster.Options) error {
+func (r *ServiceRegistryConnection) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string, opts cluster.Options) error {
 
-	path := serviceregistry.GetServiceRegistryAPIURL(namespace)
+	ns, err := c.CurrentNamespace()
+	if err != nil {
+		return err
+	}
 
-	err := utils.ResourceExists(ctx, c, path, serviceName, opts)
+	path := serviceregistry.GetServiceRegistryAPIURL(ns)
+
+	err = utils.ResourceExists(ctx, c, path, serviceName, opts)
 
 	return err
 }
 
-func (r *ServiceRegistryConnection) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string, namespace string, opts cluster.Options) error {
+func (r *ServiceRegistryConnection) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string, opts cluster.Options) error {
+
+	ns, err := c.CurrentNamespace()
+	if err != nil {
+		return err
+	}
 
 	api := opts.Connection.API()
 
-	path := serviceregistry.GetServiceRegistryAPIURL(namespace)
+	path := serviceregistry.GetServiceRegistryAPIURL(ns)
 
 	registryInstance, _, err := registryPkg.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), serviceID)
 	if err != nil {
@@ -36,7 +46,7 @@ func (r *ServiceRegistryConnection) CreateCustomResource(ctx context.Context, c 
 
 	serviceName := registryInstance.GetName()
 
-	serviceRegistryCR := serviceregistry.CreateSRObject(serviceName, namespace, serviceID)
+	serviceRegistryCR := serviceregistry.CreateSRObject(serviceName, ns, serviceID)
 
 	crJSON, err := json.Marshal(serviceRegistryCR)
 	if err != nil {
@@ -45,7 +55,7 @@ func (r *ServiceRegistryConnection) CreateCustomResource(ctx context.Context, c 
 
 	resource := serviceregistry.SRCResource
 
-	err = utils.CreateResource(ctx, c, path, serviceName, namespace, crJSON, resource, opts, getWatchErrorMessages())
+	err = utils.CreateResource(ctx, c, path, serviceName, ns, crJSON, resource, opts, getWatchErrorMessages())
 
 	return err
 }

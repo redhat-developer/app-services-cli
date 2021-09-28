@@ -15,6 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 )
 
+// ResourceExists checks if the service already exists in the cluster
 func ResourceExists(ctx context.Context, c *cluster.KubernetesCluster, path string, serviceName string, opts cluster.Options) error {
 
 	err := c.MakeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
@@ -23,6 +24,7 @@ func ResourceExists(ctx context.Context, c *cluster.KubernetesCluster, path stri
 
 }
 
+// CreateResource creates a new custom resource
 func CreateResource(ctx context.Context, c *cluster.KubernetesCluster, path string, serviceName string, namespace string, crJSON []byte, resource schema.GroupVersionResource, opts cluster.Options, errorMessages map[string]string) error {
 
 	err := c.MakeKubernetesPostRequest(ctx, path, serviceName, crJSON)

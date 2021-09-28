@@ -15,20 +15,30 @@ import (
 type KafkaConnection struct {
 }
 
-func (k *KafkaConnection) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, namespace string, serviceName string, opts cluster.Options) error {
+func (k *KafkaConnection) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string, opts cluster.Options) error {
 
-	path := kafka.GetKafkaConnectionsAPIURL(namespace)
+	ns, err := c.CurrentNamespace()
+	if err != nil {
+		return err
+	}
 
-	err := utils.ResourceExists(ctx, c, path, serviceName, opts)
+	path := kafka.GetKafkaConnectionsAPIURL(ns)
+
+	err = utils.ResourceExists(ctx, c, path, serviceName, opts)
 
 	return err
 }
 
-func (k *KafkaConnection) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string, namespace string, opts cluster.Options) error {
+func (k *KafkaConnection) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string, opts cluster.Options) error {
+
+	ns, err := c.CurrentNamespace()
+	if err != nil {
+		return err
+	}
 
 	api := opts.Connection.API()
 
-	path := kafka.GetKafkaConnectionsAPIURL(namespace)
+	path := kafka.GetKafkaConnectionsAPIURL(ns)
 
 	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, serviceID).Execute()
 	if kas.IsErr(err, kas.ErrorNotFound) {
@@ -37,7 +47,7 @@ func (k *KafkaConnection) CreateCustomResource(ctx context.Context, c *cluster.K
 
 	serviceName := kafkaInstance.GetName()
 
-	kafkaConnectionCR := kafka.CreateKCObject(serviceName, namespace, serviceID)
+	kafkaConnectionCR := kafka.CreateKCObject(serviceName, ns, serviceID)
 
 	crJSON, err := json.Marshal(kafkaConnectionCR)
 	if err != nil {
@@ -46,7 +56,7 @@ func (k *KafkaConnection) CreateCustomResource(ctx context.Context, c *cluster.K
 
 	resource := kafka.AKCResource
 
-	err = utils.CreateResource(ctx, c, path, serviceName, namespace, crJSON, resource, opts, GetWatchErrorMessages())
+	err = utils.CreateResource(ctx, c, path, serviceName, ns, crJSON, resource, opts, GetWatchErrorMessages())
 
 	return err
 }

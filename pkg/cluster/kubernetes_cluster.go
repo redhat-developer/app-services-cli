@@ -163,11 +163,11 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		return err
 	}
 
-	err = connection.CustomResourceExists(ctx, c, currentNamespace, cmdOptions.SelectedServiceID, opts)
+	err = connection.CustomResourceExists(ctx, c, cmdOptions.SelectedServiceID, opts)
 	if err != nil {
 		return err
 	}
-	err = connection.CreateCustomResource(ctx, c, cmdOptions.SelectedServiceID, currentNamespace, opts)
+	err = connection.CreateCustomResource(ctx, c, cmdOptions.SelectedServiceID, opts)
 	if err != nil {
 		return err
 	}
