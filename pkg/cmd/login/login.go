@@ -32,10 +32,8 @@ import (
 var apiGatewayAliases = map[string]string{
 	"production": build.ProductionAPIURL,
 	"prod":       build.ProductionAPIURL,
-	"prd":        build.ProductionAPIURL,
 	"staging":    build.StagingAPIURL,
 	"stage":      build.StagingAPIURL,
-	"stg":        build.StagingAPIURL,
 }
 
 // When the value of the `--auth-url` option is one of the keys of this map it will be replaced by the
@@ -43,10 +41,8 @@ var apiGatewayAliases = map[string]string{
 var authURLAliases = map[string]string{
 	"production": build.ProductionAuthURL,
 	"prod":       build.ProductionAuthURL,
-	"prd":        build.ProductionAuthURL,
 	"staging":    build.ProductionAuthURL,
 	"stage":      build.ProductionAuthURL,
-	"stg":        build.ProductionAuthURL,
 }
 
 // When the value of the `--mas-auth-url` option is one of the keys of this map it will be replaced by the
@@ -54,10 +50,8 @@ var authURLAliases = map[string]string{
 var masAuthURLAliases = map[string]string{
 	"production": build.ProductionMasAuthURL,
 	"prod":       build.ProductionMasAuthURL,
-	"prd":        build.ProductionMasAuthURL,
 	"staging":    build.StagingMasAuthURL,
 	"stage":      build.StagingMasAuthURL,
-	"stg":        build.StagingMasAuthURL,
 }
 
 type options struct {
