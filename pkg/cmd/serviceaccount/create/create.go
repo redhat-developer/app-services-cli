@@ -3,8 +3,9 @@ package create
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
@@ -144,6 +145,7 @@ func runCreate(opts *options) error {
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetClientSecret(),
+		TokenURL:     "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
