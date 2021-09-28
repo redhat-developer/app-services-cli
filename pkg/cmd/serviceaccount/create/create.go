@@ -67,7 +67,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !opts.interactive {
-
 				validator := &validation.Validator{
 					Localizer: opts.localizer,
 				}
@@ -142,10 +141,15 @@ func runCreate(opts *options) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId()), localize.NewEntry("Name", serviceacct.GetName())))
 
+	cfg, err := opts.Config.Load()
+	if err != nil {
+		return err
+	}
+
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetClientSecret(),
-		TokenURL:     "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token",
+		TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
