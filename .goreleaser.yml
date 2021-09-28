@@ -15,7 +15,7 @@ env:
   
 builds:
   - <<: &build_defaults
-      binary: bin/rhoas
+      binary: rhoas
       main: ./cmd/rhoas
       ldflags:
         - -s -w -X github.com/redhat-developer/app-services-cli/internal/build.Version={{.Version}}
