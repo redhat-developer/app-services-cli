@@ -1,4 +1,14 @@
 
+<a name="v0.32.0"></a>
+## [v0.32.0](https://github.com/redhat-developer/app-services-cli/compare/v0.31.1...v0.32.0) (2021-09-28)
+
+### Bug Fixes
+
+* use masAuthUrl
+* reduce number of aliases
+* corrected build path for rhoas executable ([#1153](https://github.com/redhat-developer/app-services-cli/issues/1153))
+
+
 <a name="v0.31.1"></a>
 ## [v0.31.1](https://github.com/redhat-developer/app-services-cli/compare/v0.31.0...v0.31.1) (2021-09-27)
 
