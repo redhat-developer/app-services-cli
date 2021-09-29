@@ -73,6 +73,11 @@ linters-settings:
     locale: US
     ignore-words:
       - rhoas
+  custom:
+    goi18linter:
+      path: ./golangci/goi18nlinter.so
+      description: go-i18n-linter plugin analyze source tree of Go files and validates the availability of i18n strings in *.toml files.
+      original-url: github.com/alexal/go-i18n-linter
 linters:
   disable:
     - scopelint
@@ -86,6 +91,7 @@ linters:
     - govet
     - gocritic
     - misspell
+    - goi18linter
   presets:
     - bugs
     - unused
