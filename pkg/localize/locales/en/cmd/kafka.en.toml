@@ -69,7 +69,7 @@ one = 'Describe, list, and delete consumer groups for the current Apache Kafka i
 
 [kafka.consumerGroup.cmd.longDescription]
 one = '''
-Use these commands to describe, list, and delete consumer groups for the current Kafka instance.'
+Use these commands to describe, list, and delete consumer groups for the current Kafka instance.
 
 Commands are executed on the currently selected Kafka instance.
 '''
