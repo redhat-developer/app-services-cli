@@ -11,8 +11,4 @@ See our [Guides](https://github.com/redhat-developer/app-services-guides/tree/ma
 
 ## Commands
 
-See the [Command-Line Reference](./docs/commands/rhoas.adoc) section for details of all available commands and options.
-
-## Contributing
-
-Check out the [Contributing Guide](./CONTRIBUTING.md) to learn more about the repository and how you can contribute.
+See the [Command-Line Reference](https://github.com/redhat-developer/app-services-cli/blob/main/docs/commands/rhoas.adoc) section for details of all available commands and options.
