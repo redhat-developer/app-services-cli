@@ -18,4 +18,5 @@ type Cluster interface {
 	Connect(ctx context.Context, connectOpts *ConnectArguments, c CustomConnection, opts Options) error
 	IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error)
 	CurrentNamespace() (string, error)
+	ExecuteServiceBinding(ctx context.Context, service CustomConnection, opts Options, options *ServiceBindingOptions) error
 }

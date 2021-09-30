@@ -93,6 +93,11 @@ func runBind(opts *options) error {
 
 	var service cluster.CustomConnection
 
+	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
+	if err != nil {
+		return err
+	}
+
 	switch opts.serviceType {
 	case "kafka":
 		service = &kafkaservice.KafkaService{
@@ -104,7 +109,7 @@ func runBind(opts *options) error {
 		}
 	}
 
-	err = cluster.ExecuteServiceBinding(opts.Context, opts.Logger, opts.localizer, service, &cluster.ServiceBindingOptions{
+	err = clusterConn.ExecuteServiceBinding(opts.Context, service, bindOpts, &cluster.ServiceBindingOptions{
 		ServiceName:             opts.serviceName,
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,

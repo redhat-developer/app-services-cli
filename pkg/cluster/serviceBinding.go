@@ -12,7 +12,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -42,8 +41,8 @@ type ServiceBindingOptions struct {
 	DeploymentConfigEnabled bool
 }
 
-func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, service CustomConnection, options *ServiceBindingOptions) error {
-	clients, err := client(localizer)
+func (c *KubernetesCluster) ExecuteServiceBinding(ctx context.Context, service CustomConnection, opts Options, options *ServiceBindingOptions) error {
+	clients, err := client(opts.Localizer)
 	if err != nil {
 		return err
 	}
@@ -53,7 +52,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 		if err != nil {
 			return err
 		}
-		logger.Info(localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
+		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
 	var clusterResource schema.GroupVersionResource
@@ -64,7 +63,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	}
 	// Get proper deployment
 	if options.AppName == "" {
-		options.AppName, err = fetchAppNameFromCluster(ctx, clusterResource, clients, localizer, ns)
+		options.AppName, err = fetchAppNameFromCluster(ctx, clusterResource, clients, opts.Localizer, ns)
 		if err != nil {
 			return err
 		}
@@ -76,12 +75,12 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	}
 
 	// Print desired action
-	logger.Info(fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
+	opts.Logger.Info(fmt.Sprintf(opts.Localizer.MustLocalize("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
 
 	if !options.ForceCreationWithoutAsk {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
-			Message: localizer.MustLocalize("cluster.serviceBinding.confirm.message"),
+			Message: opts.Localizer.MustLocalize("cluster.serviceBinding.confirm.message"),
 		}
 		err = survey.AskOne(confirm, &shouldContinue)
 		if err != nil {
@@ -96,7 +95,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	// Check if connection exists
 	err = service.CustomConnectionExists(ctx, clients.DynamicClient, options.ServiceName, ns)
 	if err != nil {
-		return localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
+		return opts.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
 
 	// Execute binding
@@ -105,7 +104,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 		return err
 	}
 
-	logger.Info(icon.SuccessPrefix(), fmt.Sprintf(localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
+	opts.Logger.Info(icon.SuccessPrefix(), fmt.Sprintf(opts.Localizer.MustLocalize("cluster.serviceBinding.bindingSuccess"), options.ServiceName, options.AppName))
 	return nil
 }
 
