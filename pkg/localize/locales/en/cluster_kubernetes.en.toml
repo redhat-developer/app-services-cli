@@ -30,10 +30,10 @@ one = 'Cancelling cluster connection'
 one = 'could not marshal KafkaConnection to JSON object'
 
 [cluster.kubernetes.createRegistryCR.error.marshalError]
-one = 'could not marshal ServiceRegsitryConnection to JSON object'
+one = 'could not marshal ServiceRegistryConnection to JSON object'
 
-[cluster.kubernetes.createKafkaCR.log.info.customResourceCreated]
-one = 'KafkaConnection resource "{{.Name}}" has been created'
+[cluster.kubernetes.createCR.log.info.customResourceCreated]
+one = '{{.Resource}} resource "{{.Name}}" has been created'
 
 [cluster.kubernetes.createRegistryCR.log.info.customResourceCreated]
 one = 'ServiceRegistryConnection resource "{{.Name}}" has been created'
@@ -41,42 +41,24 @@ one = 'ServiceRegistryConnection resource "{{.Name}}" has been created'
 [cluster.kubernetes.watchForConnectionStatus.error.format]
 one = 'invalid result from operator. Status object is not compatible with expected result from CLI.'
 
-[cluster.kubernetes.watchForKafkaStatus.error.status]
-one = 'error when processing KafkaConnection: %v'
+[cluster.kubernetes.watchForResourceStatus.error.status]
+one = 'error when processing {{.Resource}}: %v'
 
-[cluster.kubernetes.watchForRegistryStatus.error.status]
-one = 'error when processing ServiceRegistryConnection: %v'
+[cluster.kubernetes.watchForResourceStatus.log.info.success]
+one = '{{.Resource}} successfully installed on your cluster.'
 
-[cluster.kubernetes.watchForKafkaStatus.log.info.success]
+[cluster.kubernetes.watchForResourceStatus.error.timeout]
+one = 'process of watching {{.Resource}} timed out'
+
+[cluster.kubernetes.watchForResourceStatus.log.info.wait]
 one = '''
-KafkaConnection successfully installed on your cluster.
-To view it execute:
-
-oc get kafkaconnection -o=yaml -n {{.Namespace}} {{.Name}}
-
-'''
-
-[cluster.kubernetes.watchForRegistryStatus.log.info.success]
-one = '''
-ServiceRegistryConnection successfully installed on your cluster.
-To view it execute:
-
-oc get src -o=yaml -n {{.Namespace}} {{.Name}}
-
-'''
-
-[cluster.kubernetes.watchForKafkaStatus.error.timeout]
-one = '''process of watching KafkaConnection timed out'''
-
-[cluster.kubernetes.watchForKafkaStatus.log.info.wait]
-one = '''
-Waiting for status from KafkaConnection resource.
-Created KafkaConnection can be already injected to your application.
+Waiting for status from {{.Resource}} resource.
+Created {{.Resource}} can be already injected to your application.
 
 To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
 
-You can bind KafkaConnection to your application by executing "rhoas cluster bind" 
+You can bind {{.Resource}} to your application by executing "rhoas cluster bind" 
 or directly in the OpenShift Console topology view.
 '''
 

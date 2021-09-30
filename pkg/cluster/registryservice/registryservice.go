@@ -2,19 +2,26 @@ package registryservice
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/utils"
 	registryPkg "github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
+	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/dynamic"
 )
 
-type ServiceRegistryConnection struct {
+// RegistryService contains methods to connect and bind Service registry instance to cluster
+type RegistryService struct {
+	Opts cluster.Options
 }
 
-func (r *ServiceRegistryConnection) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string, opts cluster.Options) error {
+func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) error {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
@@ -23,21 +30,19 @@ func (r *ServiceRegistryConnection) CustomResourceExists(ctx context.Context, c 
 
 	path := serviceregistry.GetServiceRegistryAPIURL(ns)
 
-	err = utils.ResourceExists(ctx, c, path, serviceName, opts)
+	err = c.ResourceExists(ctx, path, serviceName, r.Opts)
 
 	return err
 }
 
-func (r *ServiceRegistryConnection) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string, opts cluster.Options) error {
+func (r *RegistryService) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string) error {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
 		return err
 	}
 
-	api := opts.Connection.API()
-
-	path := serviceregistry.GetServiceRegistryAPIURL(ns)
+	api := r.Opts.Connection.API()
 
 	registryInstance, _, err := registryPkg.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), serviceID)
 	if err != nil {
@@ -46,29 +51,88 @@ func (r *ServiceRegistryConnection) CreateCustomResource(ctx context.Context, c 
 
 	serviceName := registryInstance.GetName()
 
-	serviceRegistryCR := serviceregistry.CreateSRObject(serviceName, ns, serviceID)
+	serviceRegistryCR := createSRObject(serviceName, ns, serviceID)
 
 	crJSON, err := json.Marshal(serviceRegistryCR)
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.createKafkaCR.error.marshalError"), err)
+		return fmt.Errorf("%v: %w", r.Opts.Localizer.MustLocalize("cluster.kubernetes.createKafkaCR.error.marshalError"), err)
 	}
 
-	resource := serviceregistry.SRCResource
+	resourceOpts := &cluster.CustomResourceOptions{
+		CRName:      serviceregistry.RegistryResourceMeta.Kind,
+		Resource:    serviceregistry.SRCResource,
+		CRJSON:      crJSON,
+		ServiceName: serviceName,
+		Path:        serviceregistry.GetServiceRegistryAPIURL(ns),
+	}
 
-	err = utils.CreateResource(ctx, c, path, serviceName, ns, crJSON, resource, opts, getWatchErrorMessages())
+	err = c.CreateResource(ctx, resourceOpts, r.Opts)
 
 	return err
 }
 
-func getWatchErrorMessages() map[string]string {
+func (r *RegistryService) CustomConnectionExists(ctx context.Context, dynamicClient dynamic.Interface, serviceName string, ns string) error {
+	_, err := dynamicClient.Resource(serviceregistry.SRCResource).Namespace(ns).Get(ctx, serviceName, metav1.GetOptions{})
+	if err != nil {
+		return r.Opts.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
+	}
+	return nil
+}
 
-	errorMessages := make(map[string]string)
+func (r *RegistryService) BindCustomConnection(ctx context.Context, serviceName string, options cluster.ServiceBindingOptions, clients *cluster.KubernetesClients) error {
 
-	errorMessages["statusError"] = "cluster.kubernetes.watchForRegistryStatus.error.status"
-	errorMessages["timeoutError"] = "cluster.kubernetes.watchForRegistryStatus.error.timeout"
-	errorMessages["awaitStatus"] = "cluster.kubernetes.watchForRegistryStatus.log.info.wait"
-	errorMessages["successfullyCreated"] = "cluster.kubernetes.watchForRegistryStatus.log.info.success"
-	errorMessages["customResourceCreated"] = "cluster.kubernetes.createRegistryCR.log.info.customResourceCreated"
+	serviceRef := createSRCServiceRef(serviceName)
 
-	return errorMessages
+	appRef := constants.CreateAppRef(options.AppName)
+
+	if options.BindingName == "" {
+		randomValue := make([]byte, 2)
+		_, err := rand.Read(randomValue)
+		if err != nil {
+			return err
+		}
+		options.BindingName = fmt.Sprintf("%v-%x", serviceName, randomValue)
+	}
+
+	sb := constants.CreateSBObject(options.BindingName, options.Namespace, &serviceRef, &appRef)
+
+	err := utils.CheckIfOperatorIsInstalled(ctx, clients.DynamicClient, options.Namespace)
+	if err != nil {
+		return fmt.Errorf("%s: %w", r.Opts.Localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing"), err)
+	}
+
+	return utils.UseOperatorForBinding(ctx, r.Opts, sb, clients.DynamicClient, options.Namespace)
+}
+
+func createSRObject(crName string, namespace string, registryID string) *serviceregistry.ServiceRegistryConnection {
+	serviceRegistryCR := &serviceregistry.ServiceRegistryConnection{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      crName,
+			Namespace: namespace,
+		},
+		TypeMeta: serviceregistry.RegistryResourceMeta,
+		Spec: serviceregistry.ServiceRegistryConnectionSpec{
+			ServiceRegistryId:     registryID,
+			AccessTokenSecretName: constants.TokenSecretName,
+			Credentials: serviceregistry.CredentialsSpec{
+				SecretName: constants.ServiceAccountSecretName,
+			},
+		},
+	}
+
+	return serviceRegistryCR
+}
+
+func createSRCServiceRef(serviceName string) v1alpha1.Service {
+	serviceRef := v1alpha1.Service{
+		NamespacedRef: v1alpha1.NamespacedRef{
+			Ref: v1alpha1.Ref{
+				Group:    serviceregistry.SRCResource.Group,
+				Version:  serviceregistry.SRCResource.Version,
+				Resource: serviceregistry.SRCResource.Resource,
+				Name:     serviceName,
+			},
+		},
+	}
+	return serviceRef
 }

@@ -2,22 +2,19 @@ package cluster
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/rest"
@@ -26,13 +23,12 @@ import (
 )
 
 type KubernetesClients struct {
-	dynamicClient dynamic.Interface
+	DynamicClient dynamic.Interface
 	restConfig    *rest.Config
 	clientConfig  *clientcmd.ClientConfig
 }
 
 var (
-	deploymentResource       = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
 	deploymentConfigResource = schema.GroupVersionResource{Group: "apps.openshift.io", Version: "v1", Resource: "deploymentconfigs"}
 )
 
@@ -46,7 +42,7 @@ type ServiceBindingOptions struct {
 	DeploymentConfigEnabled bool
 }
 
-func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, options *ServiceBindingOptions) error {
+func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, service CustomConnection, options *ServiceBindingOptions) error {
 	clients, err := client(localizer)
 	if err != nil {
 		return err
@@ -64,7 +60,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	if options.DeploymentConfigEnabled {
 		clusterResource = deploymentConfigResource
 	} else {
-		clusterResource = deploymentResource
+		clusterResource = constants.DeploymentResource
 	}
 	// Get proper deployment
 	if options.AppName == "" {
@@ -73,7 +69,7 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 			return err
 		}
 	} else {
-		_, err = clients.dynamicClient.Resource(clusterResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
+		_, err = clients.DynamicClient.Resource(clusterResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
@@ -97,14 +93,14 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 		}
 	}
 
-	// Check KafkaConnection
-	_, err = clients.dynamicClient.Resource(kafka.AKCResource).Namespace(ns).Get(ctx, options.ServiceName, metav1.GetOptions{})
+	// Check if connection exists
+	err = service.CustomConnectionExists(ctx, clients.DynamicClient, options.ServiceName, ns)
 	if err != nil {
 		return localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
 
 	// Execute binding
-	err = performBinding(ctx, options, ns, clients, logger, localizer)
+	err = service.BindCustomConnection(ctx, options.ServiceName, *options, clients)
 	if err != nil {
 		return err
 	}
@@ -113,75 +109,8 @@ func ExecuteServiceBinding(ctx context.Context, logger logging.Logger, localizer
 	return nil
 }
 
-func performBinding(ctx context.Context, options *ServiceBindingOptions, ns string, clients *KubernetesClients, logger logging.Logger, localizer localize.Localizer) error {
-	serviceRef := v1alpha1.Service{
-		NamespacedRef: v1alpha1.NamespacedRef{
-			Ref: v1alpha1.Ref{
-				Group:    kafka.AKCResource.Group,
-				Version:  kafka.AKCResource.Version,
-				Resource: kafka.AKCResource.Resource,
-				Name:     options.ServiceName,
-			},
-		},
-	}
-
-	appRef := v1alpha1.Application{
-		Ref: v1alpha1.Ref{
-			Group:    deploymentResource.Group,
-			Version:  deploymentResource.Version,
-			Resource: deploymentResource.Resource,
-			Name:     options.AppName,
-		},
-	}
-
-	if options.BindingName == "" {
-		randomValue := make([]byte, 2)
-		_, err := rand.Read(randomValue)
-		if err != nil {
-			return err
-		}
-		options.BindingName = fmt.Sprintf("%v-%x", options.ServiceName, randomValue)
-	}
-
-	sb := &v1alpha1.ServiceBinding{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      options.BindingName,
-			Namespace: ns,
-		},
-		Spec: v1alpha1.ServiceBindingSpec{
-			BindAsFiles: true,
-			Services:    []v1alpha1.Service{serviceRef},
-			Application: appRef,
-		},
-	}
-	sb.SetGroupVersionKind(v1alpha1.GroupVersionKind)
-
-	// Check of operator is installed
-	_, err := clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
-		List(ctx, metav1.ListOptions{Limit: 1})
-	if err != nil {
-		return fmt.Errorf("%s: %w", localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing"), err)
-	}
-
-	return useOperatorForBinding(ctx, logger, localizer, sb, clients, ns)
-}
-
-func useOperatorForBinding(ctx context.Context, logger logging.Logger, localizer localize.Localizer, sb *v1alpha1.ServiceBinding, clients *KubernetesClients, ns string) error {
-	logger.Info(localizer.MustLocalize("cluster.serviceBinding.usingOperator"))
-	sbData, err := runtime.DefaultUnstructuredConverter.ToUnstructured(sb)
-	if err != nil {
-		return err
-	}
-
-	unstructuredSB := unstructured.Unstructured{Object: sbData}
-	_, err = clients.dynamicClient.Resource(v1alpha1.GroupVersionResource).Namespace(ns).
-		Create(ctx, &unstructuredSB, metav1.CreateOptions{})
-
-	return err
-}
-
 func fetchAppNameFromCluster(ctx context.Context, resource schema.GroupVersionResource, clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
-	list, err := clients.dynamicClient.Resource(resource).Namespace(ns).List(ctx, metav1.ListOptions{})
+	list, err := clients.DynamicClient.Resource(resource).Namespace(ns).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return "", err
 	}

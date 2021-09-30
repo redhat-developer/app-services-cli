@@ -5,10 +5,11 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
@@ -28,7 +29,8 @@ type options struct {
 	forceCreationWithoutAsk bool
 	ignoreContext           bool
 	appName                 string
-	selectedKafka           string
+	serviceType             string
+	serviceName             string
 
 	deploymentConfigEnabled bool
 	bindAsEnv               bool
@@ -69,47 +71,41 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 	cmd.Flags().BoolVar(&opts.deploymentConfigEnabled, "deployment-config", false, opts.localizer.MustLocalize("cluster.bind.flag.deploymentConfig.description"))
 	cmd.Flags().BoolVar(&opts.bindAsEnv, "bind-env", false, opts.localizer.MustLocalize("cluster.bind.flag.bindenv.description"))
+	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceType.description"))
+	cmd.Flags().StringVar(&opts.serviceName, "service-id", "", opts.localizer.MustLocalize("cluster.common.flag.serviceId.description"))
+
 	return cmd
 }
 
 func runBind(opts *options) error {
-	apiConnection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
+	bindOpts := cluster.Options{
+		IO:         opts.IO,
+		Logger:     opts.Logger,
+		Localizer:  opts.localizer,
+		Config:     opts.Config,
+		Connection: conn,
 	}
 
-	// Multiservice support: use cluster CR's instead of all kafkas
-	if cfg.Services.Kafka == nil || opts.ignoreContext {
-		// nolint:govet
-		selectedKafka, err := kafka.InteractiveSelect(opts.Context, apiConnection, opts.Logger, opts.localizer)
-		if err != nil {
-			return err
+	var service cluster.CustomConnection
+
+	switch opts.serviceType {
+	case "kafka":
+		service = &kafkaservice.KafkaService{
+			Opts: bindOpts,
 		}
-		if selectedKafka == nil {
-			return nil
+	case "service-registry":
+		service = &registryservice.RegistryService{
+			Opts: bindOpts,
 		}
-		opts.selectedKafka = selectedKafka.GetId()
-	} else {
-		opts.selectedKafka = cfg.Services.Kafka.ClusterID
 	}
 
-	api := apiConnection.API()
-	kafkaInstance, _, err := api.Kafka().GetKafkaById(opts.Context, opts.selectedKafka).Execute()
-	if err != nil {
-		return err
-	}
-
-	if kafkaInstance.Name == nil {
-		return opts.localizer.MustLocalizeError("cluster.bind.error.emptyResponse")
-	}
-
-	err = cluster.ExecuteServiceBinding(opts.Context, opts.Logger, opts.localizer, &cluster.ServiceBindingOptions{
-		ServiceName:             kafkaInstance.GetName(),
+	err = cluster.ExecuteServiceBinding(opts.Context, opts.Logger, opts.localizer, service, &cluster.ServiceBindingOptions{
+		ServiceName:             opts.serviceName,
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,

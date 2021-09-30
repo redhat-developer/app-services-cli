@@ -53,13 +53,3 @@ type KafkaConnection struct {
 	Spec   KafkaConnectionSpec   `json:"spec,omitempty"`
 	Status KafkaConnectionStatus `json:"status,omitempty"`
 }
-
-// +kubebuilder:object:root=true
-// +k8s:openapi-gen=true
-
-// KafkaConnectionList contains a list of KafkaConnection
-type KafkaConnectionList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []KafkaConnection `json:"items"`
-}

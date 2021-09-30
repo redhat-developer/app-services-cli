@@ -5,7 +5,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/api"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
@@ -76,13 +75,6 @@ func runConnect(opts *options) error {
 		return err
 	}
 
-	conn.API()
-
-	err = validateServiceID(opts.Context, conn.API(), opts.serviceType, opts.serviceID)
-	if err != nil {
-		return err
-	}
-
 	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
 	if err != nil {
 		return err
@@ -104,13 +96,27 @@ func runConnect(opts *options) error {
 		Connection: conn,
 	}
 
+	api := conn.API()
+
 	var service cluster.CustomConnection
 
 	switch opts.serviceType {
 	case "kafka":
-		service = &kafkaservice.KafkaConnection{}
+		service = &kafkaservice.KafkaService{
+			Opts: connectOpts,
+		}
+		_, _, err = kafka.GetKafkaByID(context.Background(), api.Kafka(), opts.serviceID)
+		if err != nil {
+			return err
+		}
 	case "service-registry":
-		service = &registryservice.ServiceRegistryConnection{}
+		service = &registryservice.RegistryService{
+			Opts: connectOpts,
+		}
+		_, _, err = serviceregistry.GetServiceRegistryByID(context.Background(), api.ServiceRegistryMgmt(), opts.serviceID)
+		if err != nil {
+			return err
+		}
 	}
 
 	err = clusterConn.Connect(context.Background(), arguments, service, connectOpts)
@@ -118,22 +124,5 @@ func runConnect(opts *options) error {
 		return err
 	}
 
-	return nil
-}
-
-func validateServiceID(ctx context.Context, api *api.API, serviceType string, serviceID string) error {
-
-	switch serviceType {
-	case "kafka":
-		_, _, err := kafka.GetKafkaByID(ctx, api.Kafka(), serviceID)
-		if err != nil {
-			return err
-		}
-	case "service-registry":
-		_, _, err := serviceregistry.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), serviceID)
-		if err != nil {
-			return err
-		}
-	}
 	return nil
 }

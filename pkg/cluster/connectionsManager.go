@@ -10,8 +10,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/serviceregistry"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 // IsKCInstalledOnCluster checks the cluster to see if a KafkaConnection CRD is installed
@@ -21,7 +19,7 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 		return false, err
 	}
 
-	data := c.clientset.
+	data := c.Clientset.
 		RESTClient().
 		Get().
 		AbsPath(kafka.GetKafkaConnectionsAPIURL(namespace)).
@@ -39,30 +37,54 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 	return true, data.Error()
 }
 
-func CheckIfConnectionExists(ctx context.Context, c *KubernetesCluster, namespace string, service interface{}, serviceName string, opts Options) error {
-	var path string
-	var status int
-
-	switch service.(type) {
-	case *srsmgmtv1.Registry:
-		path = serviceregistry.GetServiceRegistryAPIURL(namespace)
-	case kafkamgmtclient.KafkaRequest:
-		path = kafka.GetKafkaConnectionsAPIURL(namespace)
+// IsSRCInstalledOnCluster checks the cluster to see if a ServiceRegistry CRD is installed
+func IsSRCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
+	namespace, err := c.CurrentNamespace()
+	if err != nil {
+		return false, err
 	}
 
-	data := c.clientset.
+	data := c.Clientset.
 		RESTClient().
 		Get().
-		AbsPath(path, serviceName).
+		AbsPath(serviceregistry.GetServiceRegistryAPIURL(namespace)).
 		Do(ctx)
 
-	if data.StatusCode(&status); status == http.StatusNotFound {
-		return nil
+	if data.Error() == nil {
+		return true, nil
 	}
+
+	var status int
+	if data.StatusCode(&status); status == http.StatusNotFound {
+		return false, nil
+	}
+
+	return true, data.Error()
+}
+
+// IsSBOInstalledOnCluster checks the cluster to see if ServiceBinding CRD is installed
+func IsSBOInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
+
+	namespace, err := c.CurrentNamespace()
+	if err != nil {
+		return false, err
+	}
+
+	data := c.Clientset.
+		RESTClient().
+		Get().
+		AbsPath(fmt.Sprintf("/apis/binding.operators.coreos.com/v1alpha1/namespaces/%v/servicebindings", namespace)).
+		Do(ctx)
 
 	if data.Error() == nil {
-		return fmt.Errorf("%v: %s", opts.Localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), serviceName)
+		return true, nil
 	}
 
-	return nil
+	var status int
+	if data.StatusCode(&status); status == http.StatusNotFound {
+		return false, nil
+	}
+
+	return true, data.Error()
+
 }
