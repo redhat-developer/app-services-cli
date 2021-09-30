@@ -68,6 +68,10 @@ nfpms:
   - file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     description: Command line tool for RHOAS
     bindir: /usr/bin
+    license: Apache 2.0
+    contents:
+      - src: ./LICENSE
+        dst: /usr/share/licenses/rhoas/LICENSE
     formats:
       - deb
       - rpm
