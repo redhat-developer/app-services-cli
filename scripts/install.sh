@@ -90,7 +90,7 @@
     exit 1
   fi
 
-  cp "${ASSET_NAME}/bin/${BINARY_NAME}" "${BINARY_DEST}/${BINARY_NAME}"
+  cp "${ASSET_NAME}/${BINARY_NAME}" "${BINARY_DEST}/${BINARY_NAME}"
   if [ "$?" -ne 0 ]; then
     exit 1
   fi
