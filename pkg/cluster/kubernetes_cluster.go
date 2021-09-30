@@ -338,6 +338,7 @@ func (c *KubernetesCluster) MakeKubernetesPostRequest(ctx context.Context, path 
 	return nil
 }
 
+// CreateResource creates a CustomResource connection in the cluster
 func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions, opts Options) error {
 
 	namespace, err := c.CurrentNamespace()
@@ -363,12 +364,12 @@ func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *Cu
 	return watchCustomResourceStatus(w, opts, resourceOpts.CRName)
 }
 
+// ResourceExists checks if a CustomResource connection already exists in the cluster
 func (c *KubernetesCluster) ResourceExists(ctx context.Context, path string, serviceName string, opts Options) error {
 
 	err := c.MakeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
 
 	return err
-
 }
 
 func watchCustomResourceStatus(w watch.Interface, opts Options, crName string) error {

@@ -21,6 +21,7 @@ type RegistryService struct {
 	Opts cluster.Options
 }
 
+// CustomResourceExists checks if the given ServiceRegistryConnection already exists in cluster
 func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) error {
 
 	ns, err := c.CurrentNamespace()
@@ -35,6 +36,7 @@ func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.K
 	return err
 }
 
+// CreateCustomResource creates a ServiceRegistryConnection in cluster
 func (r *RegistryService) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string) error {
 
 	ns, err := c.CurrentNamespace()
@@ -79,6 +81,7 @@ func (r *RegistryService) CustomConnectionExists(ctx context.Context, dynamicCli
 	return nil
 }
 
+// BindCustomConnection binds a ServiceRegistryConnection to specified project
 func (r *RegistryService) BindCustomConnection(ctx context.Context, serviceName string, options cluster.ServiceBindingOptions, clients *cluster.KubernetesClients) error {
 
 	serviceRef := createSRCServiceRef(serviceName)

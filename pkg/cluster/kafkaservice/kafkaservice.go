@@ -22,6 +22,7 @@ type KafkaService struct {
 	Opts cluster.Options
 }
 
+// CustomResourceExists checks if the given KafkaConnection already exists in cluster
 func (k *KafkaService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) error {
 
 	ns, err := c.CurrentNamespace()
@@ -36,6 +37,7 @@ func (k *KafkaService) CustomResourceExists(ctx context.Context, c *cluster.Kube
 	return err
 }
 
+// CreateCustomResource creates a KafkaConnection in cluster
 func (k *KafkaService) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string) error {
 
 	ns, err := c.CurrentNamespace()
@@ -44,8 +46,6 @@ func (k *KafkaService) CreateCustomResource(ctx context.Context, c *cluster.Kube
 	}
 
 	api := k.Opts.Connection.API()
-
-	// path := kafka.GetKafkaConnectionsAPIURL(ns)
 
 	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, serviceID).Execute()
 	if kas.IsErr(err, kas.ErrorNotFound) {
@@ -82,6 +82,7 @@ func (k *KafkaService) CustomConnectionExists(ctx context.Context, dynamicClient
 	return nil
 }
 
+// BindCustomConnection binds a KafkaConnection to specified project
 func (k *KafkaService) BindCustomConnection(ctx context.Context, serviceName string, options cluster.ServiceBindingOptions, clients *cluster.KubernetesClients) error {
 
 	serviceRef := createKCServiceRef(serviceName)

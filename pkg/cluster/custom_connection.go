@@ -6,6 +6,7 @@ import (
 	"k8s.io/client-go/dynamic"
 )
 
+// CustomConnection interface defines type for custom resource structs
 type CustomConnection interface {
 	CreateCustomResource(ctx context.Context, c *KubernetesCluster, serviceID string) error
 	CustomResourceExists(ctx context.Context, c *KubernetesCluster, serviceID string) error
