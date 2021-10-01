@@ -49,3 +49,7 @@ func RequiredWhenNonInteractiveError(flags ...string) error {
 	}
 	return fmt.Errorf("%v %v required when not running interactively", flagsF, flagTitle)
 }
+
+func OutOfRangeError(flag string, value int32) *Error {
+	return &Error{Err: fmt.Errorf("out of range value of %d for %v, only positive values are allowed", value, flag)}
+}

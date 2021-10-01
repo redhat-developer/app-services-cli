@@ -35,3 +35,7 @@ func EnableOutputFlagCompletion(cmd *cobra.Command) {
 		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
 	})
 }
+
+func IsInputInRange(input int32) bool {
+	return input > 0
+}
