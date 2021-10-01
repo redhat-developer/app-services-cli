@@ -94,22 +94,22 @@ func (client *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Conn
 	}
 
 	// Token with auth for operator to pick
-	err = client.createTokenSecretIfNeeded(ctx, currentNamespace, connectOpts, cliOpts)
+	err = client.createTokenSecretIfNeeded(currentNamespace, connectOpts)
 	if err != nil {
 		return err
 	}
 
-	err = c.createServiceAccountSecretIfNeeded(ctx, currentNamespace, cliOpts)
+	err = client.createServiceAccountSecretIfNeeded(currentNamespace)
 	if err != nil {
 		return err
 	}
 
-	status, err := currentService.CustomResourceExists(ctx, c, connectOpts.SelectedServiceID)
+	status, err := currentService.CustomResourceExists(connectOpts.SelectedServiceID)
 	if status != http.StatusNotFound {
 		return err
 	}
 
-	err = currentService.CreateCustomResource(ctx, c, connectOpts.SelectedServiceID)
+	err = currentService.CreateCustomResource(connectOpts.SelectedServiceID)
 	if err != nil {
 		return err
 	}
@@ -117,8 +117,14 @@ func (client *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Conn
 	return nil
 }
 
-func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(ctx context.Context, namespace string, connectOpts *ConnectArguments, cliOpts Options) error {
-	_, err := c.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.TokenSecretName, metav1.GetOptions{})
+// Everthing below makes no sense
+
+func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, connectOpts *v1alpha.ConnectOperationOptions) error {
+	cliOpts := c.CommandEnvironment
+	kClients := c.KubernetesClients
+	ctx := cliOpts.Context
+
+	_, err := kClients.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.TokenSecretName, metav1.GetOptions{})
 	if err == nil {
 		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), constants.TokenSecretName)
 		return nil
@@ -154,7 +160,7 @@ func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(ctx context.Context
 		},
 	}
 
-	_, err = c.Clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
+	_, err = kClients.Clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	tokenSecretNameTmplEntry := localize.NewEntry("Name", constants.TokenSecretName)
 	if err != nil {
 		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
@@ -166,8 +172,12 @@ func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(ctx context.Context
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string, cliOpts Options) error {
-	_, err := c.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.ServiceAccountSecretName, metav1.GetOptions{})
+func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace string) error {
+	cliOpts := c.CommandEnvironment
+	kClients := c.KubernetesClients
+	ctx := cliOpts.Context
+
+	_, err := kClients.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.ServiceAccountSecretName, metav1.GetOptions{})
 	if err == nil {
 		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
 		return nil
@@ -189,7 +199,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(ctx contex
 		},
 	}
 
-	createdSecret, err := c.Clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
+	createdSecret, err := kClients.Clientset.CoreV1().Secrets(namespace).Create(cliOpts.Context, secret, metav1.CreateOptions{})
 	if err != nil {
 		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
@@ -200,7 +210,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(ctx contex
 }
 
 // createServiceAccount creates a service account
-func (c *KubernetesCluster) createServiceAccount(ctx context.Context, cliOpts Options) (*kafkamgmtclient.ServiceAccount, error) {
+func (c *KubernetesClusterAPIImpl) createServiceAccount(ctx context.Context, cliOpts *v1alpha.CommandEnvironment) (*kafkamgmtclient.ServiceAccount, error) {
 	t := time.Now()
 
 	api := cliOpts.Connection.API()
@@ -218,10 +228,12 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context, cliOpts Op
 	return &serviceAcctRes, nil
 }
 
-func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) (int, error) {
+func (c *KubernetesClusterAPIImpl) MakeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) (int, error) {
+	kClients := c.KubernetesClients
+
 	var status int
 
-	data := c.Clientset.
+	data := kClients.Clientset.
 		RESTClient().
 		Get().
 		AbsPath(path, serviceName).
@@ -237,8 +249,8 @@ func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path s
 }
 
 func (c *KubernetesClusterAPIImpl) makeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
-
-	data := c.Clientset.
+	kClients := c.KubernetesClients
+	data := kClients.Clientset.
 		RESTClient().
 		Post().
 		AbsPath(path, serviceName).
@@ -253,14 +265,16 @@ func (c *KubernetesClusterAPIImpl) makeKubernetesPostRequest(ctx context.Context
 }
 
 // CreateResource creates a CustomResource connection in the cluster
-func (c *KubernetesClusterAPIImpl) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions, cliOpts Options) error {
+func (c *KubernetesClusterAPIImpl) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions) error {
+	cliOpts := c.CommandEnvironment
+	kClients := c.KubernetesClients
 
-	namespace, err := c.CurrentNamespace()
+	namespace, err := kClients.CurrentNamespace()
 	if err != nil {
 		return err
 	}
 
-	err = c.MakeKubernetesPostRequest(ctx, resourceOpts.Path, resourceOpts.ServiceName, resourceOpts.CRJSON)
+	err = c.makeKubernetesPostRequest(ctx, resourceOpts.Path, resourceOpts.ServiceName, resourceOpts.CRJSON)
 
 	if err != nil {
 		return err
@@ -268,7 +282,7 @@ func (c *KubernetesClusterAPIImpl) CreateResource(ctx context.Context, resourceO
 
 	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createCR.log.info.customResourceCreated", localize.NewEntry("Resource", resourceOpts.CRName), localize.NewEntry("Name", resourceOpts.ServiceName)))
 
-	w, err := c.DynamicClient.Resource(resourceOpts.Resource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
+	w, err := kClients.DynamicClient.Resource(resourceOpts.Resource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", resourceOpts.ServiceName).String(),
 	})
 	if err != nil {
@@ -279,7 +293,7 @@ func (c *KubernetesClusterAPIImpl) CreateResource(ctx context.Context, resourceO
 }
 
 // ResourceExists checks if a CustomResource connection already exists in the cluster
-func (c *KubernetesCluster) ResourceExists(ctx context.Context, path string, serviceName string, cliOpts Options) (int, error) {
+func (c *KubernetesClusterAPIImpl) ResourceExists(ctx context.Context, path string, serviceName string, cliOpts Options) (int, error) {
 
 	status, err := c.MakeKubernetesGetRequest(ctx, path, serviceName, cliOpts.Localizer)
 

@@ -3,7 +3,7 @@ package utils
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,8 +12,10 @@ import (
 	"k8s.io/client-go/dynamic"
 )
 
+// TODO This should be gone
+
 // UseOperatorForBinding performs binding using ServiceBinding operator
-func UseOperatorForBinding(ctx context.Context, opts cluster.Options, sb *v1alpha1.ServiceBinding, dynamicClient dynamic.Interface, ns string) error {
+func UseOperatorForBinding(ctx context.Context, opts v1alpha.CommandEnvironment, sb *v1alpha1.ServiceBinding, dynamicClient dynamic.Interface, ns string) error {
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.serviceBinding.usingOperator"))
 	sbData, err := runtime.DefaultUnstructuredConverter.ToUnstructured(sb)
 	if err != nil {
