@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
+
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -65,13 +66,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 			if opts.page < 1 {
-				return opts.localizer.MustLocalizeError("registry.list.flag.page",
-					localize.NewEntry("Page", opts.page))
+				return opts.localizer.MustLocalizeError("common.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page))
 			}
 
 			if opts.limit < 1 {
-				return opts.localizer.MustLocalizeError("registry.list.flag.limit",
-					localize.NewEntry("Limit", opts.limit))
+				return opts.localizer.MustLocalizeError("common.validation.limit.error.invalid.minValue", localize.NewEntry("Limit", opts.limit))
 			}
 
 			return runList(opts)
