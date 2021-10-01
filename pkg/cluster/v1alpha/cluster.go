@@ -1,11 +1,24 @@
 package v1alpha
 
 import (
-	"context"
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-// TODO rename options
-type ConnectArguments struct {
+// CommandEnvironment provides number of abstractions provided by CLI
+type CommandEnvironment struct {
+	Connection connection.Connection
+	Config     config.IConfig
+	Logger     logging.Logger
+	IO         *iostreams.IOStreams
+	Localizer  localize.Localizer
+}
+
+// ConnectOperationOptions contains input flags for connect method
+type ConnectOperationOptions struct {
 	OfflineAccessToken      string
 	ForceCreationWithoutAsk bool
 	IgnoreContext           bool
@@ -14,7 +27,8 @@ type ConnectArguments struct {
 	SelectedServiceID       string
 }
 
-type ServiceBindingOptions struct {
+// BindOperationOptions contains input flags for bind method
+type BindOperationOptions struct {
 	ServiceName             string
 	Namespace               string
 	AppName                 string
@@ -24,11 +38,10 @@ type ServiceBindingOptions struct {
 	DeploymentConfigEnabled bool
 }
 
-// Cluster defines methods used to interact with a cluster
-// TODO rename to Cluster API
-type Cluster interface {
-	Connect(ctx context.Context, connectOpts *ConnectArguments, opts InputOptions) error
-	ExecuteServiceBinding(ctx context.Context, service CustomConnection, opts InputOptions, options *ServiceBindingOptions) error
-	IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error)
-	CurrentNamespace() (string, error)
+// Methods supported to interact with kuberentes clusters in order to connect and bind resources
+type KubernetesClusterAPI interface {
+	ExecuteConnect(connectOpts *ConnectOperationOptions) error
+	ExecuteServiceBinding(options *BindOperationOptions) error
+	IsRhoasOperatorAvailableOnCluster() (bool, error)
+	IsSBOOperatorAvailableOnCluster() (bool, error)
 }

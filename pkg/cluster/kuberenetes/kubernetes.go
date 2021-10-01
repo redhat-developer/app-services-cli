@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -18,27 +17,21 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
-// TODO missing comment
-type KubernetesCluster struct {
+// TODO missing comment KubernetesClients and KubernetesCluster
+type KubernetesClients struct {
 	Clientset          *kubernetes.Clientset
-	clientconfig       clientcmd.ClientConfig
 	DynamicClient      dynamic.Interface
+	RestConfig         *rest.Config
+	ClientConfig       *clientcmd.ClientConfig
 	kubeconfigLocation string
 }
 
-// TODO unify with KubernetesCluster this is used in binding
-type KubernetesClients struct {
-	DynamicClient dynamic.Interface
-	restConfig    *rest.Config
-	clientConfig  *clientcmd.ClientConfig
-}
-
-// NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
-func NewKubernetesClusterConnection(connection connection.Connection,
+// NewKubernetesClusterClients configures and returns clients for kubernetes cluster
+func NewKubernetesClusterClients(connection connection.Connection,
 	config config.IConfig,
 	logger logging.Logger,
 	kubeconfig string,
-	io *iostreams.IOStreams, localizer localize.Localizer) (v1alpha.Cluster, error) {
+	io *iostreams.IOStreams, localizer localize.Localizer) (*KubernetesClients, error) {
 	if kubeconfig == "" {
 		kubeconfig = os.Getenv("KUBECONFIG")
 	}
@@ -74,7 +67,7 @@ func NewKubernetesClusterConnection(connection connection.Connection,
 		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
-	k8sCluster := &KubernetesCluster{
+	k8sCluster := &KubernetesClients{
 		clientset,
 		clientconfig,
 		dynamicClient,
@@ -85,8 +78,8 @@ func NewKubernetesClusterConnection(connection connection.Connection,
 }
 
 // CurrentNamespace returns the currently set namespace
-func (c *KubernetesCluster) CurrentNamespace() (string, error) {
-	namespace, _, err := c.clientconfig.Namespace()
+func (c *KubernetesClients) CurrentNamespace() (string, error) {
+	namespace, _, err := c.ClientConfig.Namespace()
 
 	return namespace, err
 }

@@ -71,12 +71,7 @@ func runConnect(opts *options) error {
 		return err
 	}
 
-	clusterConn, err := kubernetes.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
-	if err != nil {
-		return err
-	}
-
-	arguments := &v1alpha.ConnectArguments{
+	arguments := &v1alpha.ConnectOperationOptions{
 		OfflineAccessToken:      opts.offlineAccessToken,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		Namespace:               opts.namespace,
@@ -84,7 +79,8 @@ func runConnect(opts *options) error {
 		SelectedServiceID:       opts.serviceID,
 	}
 
-	connectOpts := v1alpha.InputOptions{
+	// TODO replace with factory
+	cliProperties := v1alpha.CommandEnvironment{
 		IO:         opts.IO,
 		Logger:     opts.Logger,
 		Localizer:  opts.localizer,
@@ -92,7 +88,7 @@ func runConnect(opts *options) error {
 		Connection: conn,
 	}
 
-	err = clusterConn.Connect(context.Background(), arguments, connectOpts)
+	err = clusterAPI.ExecuteConnect(context.Background(), arguments, cliProperties)
 	if err != nil {
 		return err
 	}

@@ -40,6 +40,24 @@ func (c *KubernetesCluster) ExecuteServiceBinding(ctx context.Context, service C
 		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
+	// var service cluster.CustomConnection
+
+	// clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// switch opts.serviceType {
+	// case "kafka":
+	// 	service = &kafkaservice.KafkaService{
+	// 		Opts: bindOpts,
+	// 	}
+	// case "service-registry":
+	// 	service = &registryservice.RegistryService{
+	// 		Opts: bindOpts,
+	// 	}
+	// }
+
 	var clusterResource schema.GroupVersionResource
 	if options.DeploymentConfigEnabled {
 		clusterResource = deploymentConfigResource

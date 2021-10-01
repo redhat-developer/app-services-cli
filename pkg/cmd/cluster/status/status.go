@@ -9,9 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
@@ -57,39 +55,44 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return err
-	}
+	// conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	// if err != nil {
+	// 	return err
+	// }
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
-	if err != nil {
-		return err
-	}
+	// clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
+	// if err != nil {
+	// 	return err
+	// }
 
-	var operatorStatus string
 	// Add versioning in future
-	isCRDInstalled, err := clusterConn.IsRhoasOperatorAvailableOnCluster(opts.Context)
-	if isCRDInstalled && err != nil {
+	isRHOASCRDInstalled, err := clusterAPI.IsRhoasOperatorAvailableOnCluster(opts.Context)
+	if err != nil {
 		opts.Logger.Debug(err)
 	}
-
-	if isCRDInstalled {
-		operatorStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
+	var rhoasStatus string
+	if isRHOASCRDInstalled {
+		rhoasStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
 	} else {
-		operatorStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
+		rhoasStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
-	currentNamespace, err := clusterConn.CurrentNamespace()
+	isSBOCRDInstalled, err := clusterAPI.IsSBOOperatorAvailableOnCluster(opts.Context)
 	if err != nil {
-		return err
+		opts.Logger.Debug(err)
+	}
+	var sboStatus string
+	if isSBOCRDInstalled {
+		sboStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
+	} else {
+		sboStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
 	fmt.Fprintln(
 		opts.IO.Out,
 		opts.localizer.MustLocalize("cluster.status.statusMessage",
-			localize.NewEntry("Namespace", color.Info(currentNamespace)),
-			localize.NewEntry("OperatorStatus", operatorStatus)),
+			localize.NewEntry("RHOASOperatorStatus", rhoasStatus),
+			localize.NewEntry("SBOOperatorStatus", sboStatus)),
 	)
 
 	return nil

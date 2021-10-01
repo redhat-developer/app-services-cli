@@ -31,7 +31,7 @@ import (
 
 // nolint:funlen
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments, opts Options) error {
+func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArguments, opts Options) error {
 
 	var currentNamespace string
 	var err error

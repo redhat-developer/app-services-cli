@@ -4,9 +4,6 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -84,7 +81,7 @@ func runBind(opts *options) error {
 		return err
 	}
 
-	bindOpts := v1alpha.InputOptions{
+	bindOpts := v1alpha.CommandEnvironment{
 		IO:         opts.IO,
 		Logger:     opts.Logger,
 		Localizer:  opts.localizer,
@@ -92,25 +89,7 @@ func runBind(opts *options) error {
 		Connection: conn,
 	}
 
-	var service cluster.CustomConnection
-
-	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
-	if err != nil {
-		return err
-	}
-
-	switch opts.serviceType {
-	case "kafka":
-		service = &kafkaservice.KafkaService{
-			Opts: bindOpts,
-		}
-	case "service-registry":
-		service = &registryservice.RegistryService{
-			Opts: bindOpts,
-		}
-	}
-
-	err = clusterConn.ExecuteServiceBinding(opts.Context, service, bindOpts, &cluster.ServiceBindingOptions{
+	err = clusterApi.ExecuteServiceBinding(opts.Context, bindOpts, &v1alpha.BindOperationOptions{
 		ServiceName:             opts.serviceName,
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,

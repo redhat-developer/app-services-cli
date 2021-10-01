@@ -24,8 +24,8 @@ one = 'Not installed'
 
 [cluster.status.statusMessage]
 one = '''
-Namespace: {{.Namespace}}
-RHOAS Operator: {{.OperatorStatus}}
+RHOAS Operator: {{.RHOASOperatorStatus}}
+Service Binding Operator: {{.SBOOperatorStatus}}
 
 Before using this command, you must be logged into a Kubernetes or OpenShift cluster in which the RHOAS Operator is installed.
 
