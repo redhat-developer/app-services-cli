@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -81,7 +83,7 @@ func runBind(opts *options) error {
 		return err
 	}
 
-	bindOpts := v1alpha.CommandEnvironment{
+	cliProperties := v1alpha.CommandEnvironment{
 		IO:         opts.IO,
 		Logger:     opts.Logger,
 		Localizer:  opts.localizer,
@@ -89,7 +91,17 @@ func runBind(opts *options) error {
 		Connection: conn,
 	}
 
-	err = clusterApi.ExecuteServiceBinding(opts.Context, bindOpts, &v1alpha.BindOperationOptions{
+	kubeClients, err := kubeclient.NewKubernetesClusterClients(cliProperties, opts.kubeconfigLocation)
+	if err != nil {
+		return err
+	}
+
+	clusterAPI := cluster.KubernetesClusterAPIImpl{
+		KubernetesClients:  kubeClients,
+		CommandEnvironment: &cliProperties,
+	}
+
+	err = clusterAPI.ExecuteServiceBinding(&v1alpha.BindOperationOptions{
 		ServiceName:             opts.serviceName,
 		Namespace:               opts.namespace,
 		AppName:                 opts.appName,

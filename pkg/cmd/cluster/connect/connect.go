@@ -5,6 +5,8 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -71,14 +73,6 @@ func runConnect(opts *options) error {
 		return err
 	}
 
-	arguments := &v1alpha.ConnectOperationOptions{
-		OfflineAccessToken:      opts.offlineAccessToken,
-		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
-		Namespace:               opts.namespace,
-		SelectedServiceType:     opts.serviceType,
-		SelectedServiceID:       opts.serviceID,
-	}
-
 	// TODO replace with factory
 	cliProperties := v1alpha.CommandEnvironment{
 		IO:         opts.IO,
@@ -88,7 +82,25 @@ func runConnect(opts *options) error {
 		Connection: conn,
 	}
 
-	err = clusterAPI.ExecuteConnect(context.Background(), arguments, cliProperties)
+	kubeClients, err := kubeclient.NewKubernetesClusterClients(cliProperties, opts.kubeconfigLocation)
+	if err != nil {
+		return err
+	}
+
+	clusterAPI := cluster.KubernetesClusterAPIImpl{
+		KubernetesClients:  kubeClients,
+		CommandEnvironment: &cliProperties,
+	}
+
+	arguments := &v1alpha.ConnectOperationOptions{
+		OfflineAccessToken:      opts.offlineAccessToken,
+		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
+		Namespace:               opts.namespace,
+		SelectedServiceType:     opts.serviceType,
+		SelectedServiceID:       opts.serviceID,
+	}
+
+	err = clusterAPI.ExecuteConnect(arguments)
 	if err != nil {
 		return err
 	}

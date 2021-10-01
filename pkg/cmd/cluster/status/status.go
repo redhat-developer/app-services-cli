@@ -4,7 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
@@ -55,18 +59,31 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runStatus(opts *options) error {
-	// conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	// if err != nil {
-	// 	return err
-	// }
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return err
+	}
 
-	// clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
-	// if err != nil {
-	// 	return err
-	// }
+	// TODO replace with factory
+	cliProperties := v1alpha.CommandEnvironment{
+		IO:         opts.IO,
+		Logger:     opts.Logger,
+		Localizer:  opts.localizer,
+		Config:     opts.Config,
+		Connection: conn,
+		Context:    opts.Context,
+	}
 
+	kubeClients, err := kubeclient.NewKubernetesClusterClients(cliProperties, opts.kubeconfig)
+	if err != nil {
+		return err
+	}
+	clusterAPI := cluster.KubernetesClusterAPIImpl{
+		KubernetesClients:  kubeClients,
+		CommandEnvironment: &cliProperties,
+	}
 	// Add versioning in future
-	isRHOASCRDInstalled, err := clusterAPI.IsRhoasOperatorAvailableOnCluster(opts.Context)
+	isRHOASCRDInstalled, err := clusterAPI.IsRhoasOperatorAvailableOnCluster()
 	if err != nil {
 		opts.Logger.Debug(err)
 	}
@@ -77,7 +94,7 @@ func runStatus(opts *options) error {
 		rhoasStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
-	isSBOCRDInstalled, err := clusterAPI.IsSBOOperatorAvailableOnCluster(opts.Context)
+	isSBOCRDInstalled, err := clusterAPI.IsSBOOperatorAvailableOnCluster()
 	if err != nil {
 		opts.Logger.Debug(err)
 	}

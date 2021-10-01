@@ -1,15 +1,11 @@
-package kubernetes
+package kubeclient
 
 import (
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -17,21 +13,18 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
-// TODO missing comment KubernetesClients and KubernetesCluster
+// TODO missing comment
+// TODO moved from KubernetesClients and KubernetesCluster
 type KubernetesClients struct {
 	Clientset          *kubernetes.Clientset
-	DynamicClient      dynamic.Interface
 	RestConfig         *rest.Config
-	ClientConfig       *clientcmd.ClientConfig
+	DynamicClient      dynamic.Interface
+	ClientConfig       clientcmd.ClientConfig
 	kubeconfigLocation string
 }
 
 // NewKubernetesClusterClients configures and returns clients for kubernetes cluster
-func NewKubernetesClusterClients(connection connection.Connection,
-	config config.IConfig,
-	logger logging.Logger,
-	kubeconfig string,
-	io *iostreams.IOStreams, localizer localize.Localizer) (*KubernetesClients, error) {
+func NewKubernetesClusterClients(env v1alpha.CommandEnvironment, kubeconfig string) (*KubernetesClients, error) {
 	if kubeconfig == "" {
 		kubeconfig = os.Getenv("KUBECONFIG")
 	}
@@ -43,34 +36,40 @@ func NewKubernetesClusterClients(connection connection.Connection,
 
 	_, err := os.Stat(kubeconfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.configNotFoundError"), err)
+		return nil, fmt.Errorf("%v: %w", env.Localizer.MustLocalize("cluster.kubernetes.error.configNotFoundError"), err)
 	}
 
 	kubeClientConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", env.Localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	// create the clientset for using Rest Client
 	clientset, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", env.Localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	// Used for namespaces and general queries
-	clientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+	clientConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
 		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: ""}})
 
 	dynamicClient, err := dynamic.NewForConfig(kubeClientConfig)
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
+		return nil, fmt.Errorf("%v: %w", env.Localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
+	}
+
+	restConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", env.Localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
 	}
 
 	k8sCluster := &KubernetesClients{
 		clientset,
-		clientconfig,
+		restConfig,
 		dynamicClient,
+		clientConfig,
 		kubeconfig,
 	}
 
@@ -80,6 +79,5 @@ func NewKubernetesClusterClients(connection connection.Connection,
 // CurrentNamespace returns the currently set namespace
 func (c *KubernetesClients) CurrentNamespace() (string, error) {
 	namespace, _, err := c.ClientConfig.Namespace()
-
 	return namespace, err
 }

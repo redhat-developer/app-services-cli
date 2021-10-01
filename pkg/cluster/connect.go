@@ -47,7 +47,7 @@ func Connect(cliOpts v1alpha.CommandEnvironment, cmdOptions v1alpha.ConnectOpera
 
 	api := cliOpts.Connection.API()
 	// TODO replace connection to service
-	var connection CustomConnection
+	var connection v1alpha.RHOASKubernetesService
 
 	switch cmdOptions.SelectedServiceType {
 	case kafkaservice.ServiceName:

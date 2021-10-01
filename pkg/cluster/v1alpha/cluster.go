@@ -1,6 +1,8 @@
 package v1alpha
 
 import (
+	"context"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -15,6 +17,7 @@ type CommandEnvironment struct {
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	Localizer  localize.Localizer
+	Context    context.Context
 }
 
 // ConnectOperationOptions contains input flags for connect method

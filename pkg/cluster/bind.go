@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
-	"path/filepath"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
@@ -16,9 +14,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/client-go/dynamic"
-	"k8s.io/client-go/tools/clientcmd"
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
 var (
@@ -143,37 +138,14 @@ func fetchAppNameFromCluster(ctx context.Context, resource schema.GroupVersionRe
 	return appNames[selectedAppIndex], nil
 }
 
-func client(localizer localize.Localizer) (*KubernetesClients, error) {
-	kubeconfig := os.Getenv("KUBECONFIG")
+// Replaced
+// func client(localizer localize.Localizer) (*KubernetesClients, error) {
+// 	kubeconfig := os.Getenv("KUBECONFIG")
 
-	if kubeconfig == "" {
-		home, _ := os.UserHomeDir()
-		kubeconfig = filepath.Join(home, ".kube", "config")
-	}
+// 	if kubeconfig == "" {
+// 		home, _ := os.UserHomeDir()
+// 		kubeconfig = filepath.Join(home, ".kube", "config")
+// 	}
 
-	_, err := os.Stat(kubeconfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.configNotFoundError"), err)
-	}
-
-	restConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	dynamicClient, err := dynamic.NewForConfig(restConfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	// Used for namespaces and general queries
-	clientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
-		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: ""}})
-
-	return &KubernetesClients{dynamicClient, restConfig, &clientconfig}, nil
-}
+// 	return &KubernetesClients{dynamicClient, restConfig, &clientconfig}, nil
+// }
