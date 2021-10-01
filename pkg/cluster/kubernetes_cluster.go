@@ -185,7 +185,7 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 	return nil
 }
 
-// IsRhoasOperatorAvailableOnCluster checks the cluster for availability of RHOAS operator in cluster
+// IsRhoasOperatorAvailableOnCluster checks the cluster for availability of RHOAS and Service Binding operator in cluster
 func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error) {
 	installed, err := IsKCInstalledOnCluster(ctx, c)
 	if !installed {

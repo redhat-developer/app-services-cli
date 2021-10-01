@@ -50,7 +50,7 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
       `--ignore-context`::          Ignore currently selected services and ask to select each service separately
       `--kubeconfig` _string_::     Location of the kubeconfig file
   `-n`, `--namespace` _string_::    Custom Kubernetes namespace (if not set current namespace will be used)
-      `--service-id` _string_::     ID of service to connect to
+      `--service-name` _string_::   Name of service to connect to
       `--service-type` _string_::   Type of custom resource connection
   `-y`, `--yes`::                   Forcibly create a binding without confirmation
 
