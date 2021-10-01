@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
@@ -13,7 +14,6 @@ import (
 	registryPkg "github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/dynamic"
 )
 
 // RegistryService contains methods to connect and bind Service registry instance to cluster
@@ -22,18 +22,22 @@ type RegistryService struct {
 }
 
 // CustomResourceExists checks if the given ServiceRegistryConnection already exists in cluster
-func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) error {
+func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) (status int, err error) {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
-		return err
+		return status, err
 	}
 
 	path := serviceregistry.GetServiceRegistryAPIURL(ns)
 
-	err = c.ResourceExists(ctx, path, serviceName, r.Opts)
+	status, err = c.ResourceExists(ctx, path, serviceName, r.Opts)
 
-	return err
+	if status == http.StatusNotFound {
+		return status, fmt.Errorf("%v: %s", r.Opts.Localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), serviceName)
+	}
+
+	return status, err
 }
 
 // CreateCustomResource creates a ServiceRegistryConnection in cluster
@@ -46,7 +50,10 @@ func (r *RegistryService) CreateCustomResource(ctx context.Context, c *cluster.K
 
 	api := r.Opts.Connection.API()
 
-	registryInstance, _, err := registryPkg.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), serviceID)
+	registryInstance, httpRes, err := registryPkg.GetServiceRegistryByID(ctx, api.ServiceRegistryMgmt(), serviceID)
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if err != nil {
 		return err
 	}
@@ -71,14 +78,6 @@ func (r *RegistryService) CreateCustomResource(ctx context.Context, c *cluster.K
 	err = c.CreateResource(ctx, resourceOpts, r.Opts)
 
 	return err
-}
-
-func (r *RegistryService) CustomConnectionExists(ctx context.Context, dynamicClient dynamic.Interface, serviceName string, ns string) error {
-	_, err := dynamicClient.Resource(serviceregistry.SRCResource).Namespace(ns).Get(ctx, serviceName, metav1.GetOptions{})
-	if err != nil {
-		return r.Opts.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
-	}
-	return nil
 }
 
 // BindCustomConnection binds a ServiceRegistryConnection to specified project

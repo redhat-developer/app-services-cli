@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
@@ -14,7 +15,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/dynamic"
 )
 
 // KafkaService contains methods to connect and bind Kafka instance to cluster
@@ -23,18 +23,22 @@ type KafkaService struct {
 }
 
 // CustomResourceExists checks if the given KafkaConnection already exists in cluster
-func (k *KafkaService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) error {
+func (k *KafkaService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) (status int, err error) {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
-		return err
+		return status, err
 	}
 
 	path := kafka.GetKafkaConnectionsAPIURL(ns)
 
-	err = c.ResourceExists(ctx, path, serviceName, k.Opts)
+	status, err = c.ResourceExists(ctx, path, serviceName, k.Opts)
 
-	return err
+	if status == http.StatusNotFound {
+		return status, fmt.Errorf("%v: %s", k.Opts.Localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), serviceName)
+	}
+
+	return status, err
 }
 
 // CreateCustomResource creates a KafkaConnection in cluster
@@ -47,7 +51,10 @@ func (k *KafkaService) CreateCustomResource(ctx context.Context, c *cluster.Kube
 
 	api := k.Opts.Connection.API()
 
-	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, serviceID).Execute()
+	kafkaInstance, httpRes, err := api.Kafka().GetKafkaById(ctx, serviceID).Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 	if kas.IsErr(err, kas.ErrorNotFound) {
 		return kafkaerr.NotFoundByIDError(serviceID)
 	}
@@ -72,14 +79,6 @@ func (k *KafkaService) CreateCustomResource(ctx context.Context, c *cluster.Kube
 	err = c.CreateResource(ctx, resourceOpts, k.Opts)
 
 	return err
-}
-
-func (k *KafkaService) CustomConnectionExists(ctx context.Context, dynamicClient dynamic.Interface, serviceName string, ns string) error {
-	_, err := dynamicClient.Resource(kafka.AKCResource).Namespace(ns).Get(ctx, serviceName, metav1.GetOptions{})
-	if err != nil {
-		return k.Opts.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
-	}
-	return nil
 }
 
 // BindCustomConnection binds a KafkaConnection to specified project

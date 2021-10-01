@@ -172,10 +172,11 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		return err
 	}
 
-	err = connection.CustomResourceExists(ctx, c, cmdOptions.SelectedServiceID)
-	if err != nil {
+	status, err := connection.CustomResourceExists(ctx, c, cmdOptions.SelectedServiceID)
+	if status != http.StatusNotFound {
 		return err
 	}
+
 	err = connection.CreateCustomResource(ctx, c, cmdOptions.SelectedServiceID)
 	if err != nil {
 		return err
@@ -302,7 +303,7 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context, opts Optio
 	return &serviceAcctRes, nil
 }
 
-func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) error {
+func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path string, serviceName string, localizer localize.Localizer) (int, error) {
 	var status int
 
 	data := c.Clientset.
@@ -311,15 +312,13 @@ func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path s
 		AbsPath(path, serviceName).
 		Do(ctx)
 
-	if data.StatusCode(&status); status == http.StatusNotFound {
-		return nil
+	data.StatusCode(&status)
+
+	if data.Error() != nil {
+		return status, data.Error()
 	}
 
-	if data.Error() == nil {
-		return fmt.Errorf("%v: %s", localizer.MustLocalize("cluster.kubernetes.checkIfConnectionExist.existError"), serviceName)
-	}
-
-	return nil
+	return status, nil
 }
 
 func (c *KubernetesCluster) MakeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
@@ -365,11 +364,11 @@ func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *Cu
 }
 
 // ResourceExists checks if a CustomResource connection already exists in the cluster
-func (c *KubernetesCluster) ResourceExists(ctx context.Context, path string, serviceName string, opts Options) error {
+func (c *KubernetesCluster) ResourceExists(ctx context.Context, path string, serviceName string, opts Options) (int, error) {
 
-	err := c.MakeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
+	status, err := c.MakeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
 
-	return err
+	return status, err
 }
 
 func watchCustomResourceStatus(w watch.Interface, opts Options, crName string) error {

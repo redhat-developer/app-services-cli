@@ -3,6 +3,7 @@ package cluster
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -93,8 +94,8 @@ func (c *KubernetesCluster) ExecuteServiceBinding(ctx context.Context, service C
 	}
 
 	// Check if connection exists
-	err = service.CustomConnectionExists(ctx, clients.DynamicClient, options.ServiceName, ns)
-	if err != nil {
+	status, err := service.CustomResourceExists(ctx, c, options.ServiceName)
+	if status != http.StatusOK && err != nil {
 		return opts.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
 
