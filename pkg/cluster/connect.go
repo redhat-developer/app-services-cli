@@ -4,22 +4,20 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"k8s.io/client-go/dynamic"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 
 	"github.com/golang-jwt/jwt/v4"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
@@ -28,102 +26,12 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
-
-// Options object
-type Options struct {
-	Connection connection.Connection
-	Config     config.IConfig
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
-	Localizer  localize.Localizer
-}
-
-type KubernetesCluster struct {
-	Clientset          *kubernetes.Clientset
-	clientconfig       clientcmd.ClientConfig
-	DynamicClient      dynamic.Interface
-	kubeconfigLocation string
-}
-
-// CustomResourceOptions object contains the data required to create a custom connection
-type CustomResourceOptions struct {
-	Path        string
-	CRName      string
-	ServiceName string
-	CRJSON      []byte
-	Resource    schema.GroupVersionResource
-}
-
-// NewKubernetesClusterConnection configures and connects to a Kubernetes cluster
-func NewKubernetesClusterConnection(connection connection.Connection,
-	config config.IConfig,
-	logger logging.Logger,
-	kubeconfig string,
-	io *iostreams.IOStreams, localizer localize.Localizer) (Cluster, error) {
-	if kubeconfig == "" {
-		kubeconfig = os.Getenv("KUBECONFIG")
-	}
-
-	if kubeconfig == "" {
-		home, _ := os.UserHomeDir()
-		kubeconfig = filepath.Join(home, ".kube", "config")
-	}
-
-	_, err := os.Stat(kubeconfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.configNotFoundError"), err)
-	}
-
-	kubeClientConfig, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	// create the clientset for using Rest Client
-	clientset, err := kubernetes.NewForConfig(kubeClientConfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	// Used for namespaces and general queries
-	clientconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
-		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: ""}})
-
-	dynamicClient, err := dynamic.NewForConfig(kubeClientConfig)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", localizer.MustLocalize("cluster.kubernetes.error.loadConfigError"), err)
-	}
-
-	k8sCluster := &KubernetesCluster{
-		clientset,
-		clientconfig,
-		dynamicClient,
-		kubeconfig,
-	}
-
-	return k8sCluster, nil
-}
-
-// CurrentNamespace returns the currently set namespace
-func (c *KubernetesCluster) CurrentNamespace() (string, error) {
-	namespace, _, err := c.clientconfig.Namespace()
-
-	return namespace, err
-}
 
 // nolint:funlen
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments, connection CustomConnection, opts Options) error {
+func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments, opts Options) error {
 
 	var currentNamespace string
 	var err error
@@ -136,11 +44,34 @@ func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArgu
 		}
 	}
 
+	api := opts.Connection.API()
+	// TODO replace connection to service
+	var connection CustomConnection
+
+	switch cmdOptions.SelectedServiceType {
+	case kafkaservice.ServiceName:
+		connection = &kafkaservice.KafkaService{
+			Opts: opts,
+		}
+		_, _, err = kafka.GetKafkaByID(context.Background(), api.Kafka(), cmdOptions.SelectedServiceID)
+		if err != nil {
+			return err
+		}
+	case registryservice.ServiceName:
+		connection = &registryservice.RegistryService{
+			Opts: opts,
+		}
+		_, _, err = serviceregistry.GetServiceRegistryByID(context.Background(), api.ServiceRegistryMgmt(), cmdOptions.SelectedServiceID)
+		if err != nil {
+			return err
+		}
+	}
+
 	// print status
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
 	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.statusInfo",
-		localize.NewEntry("ServiceType", color.Info(cmdOptions.SelectedService)),
+		localize.NewEntry("ServiceType", color.Info(cmdOptions.SelectedServiceType)),
 		localize.NewEntry("ServiceID", color.Info(cmdOptions.SelectedServiceID)),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(constants.ServiceAccountSecretName))))

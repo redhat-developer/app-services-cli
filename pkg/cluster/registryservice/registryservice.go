@@ -16,6 +16,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+const ServiceName = "service-registry"
+
 // RegistryService contains methods to connect and bind Service registry instance to cluster
 type RegistryService struct {
 	Opts cluster.Options

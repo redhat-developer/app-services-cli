@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -83,7 +84,7 @@ func runBind(opts *options) error {
 		return err
 	}
 
-	bindOpts := cluster.Options{
+	bindOpts := v1alpha.InputOptions{
 		IO:         opts.IO,
 		Logger:     opts.Logger,
 		Localizer:  opts.localizer,

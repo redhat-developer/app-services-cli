@@ -17,30 +17,13 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
-type KubernetesClients struct {
-	DynamicClient dynamic.Interface
-	restConfig    *rest.Config
-	clientConfig  *clientcmd.ClientConfig
-}
-
 var (
 	deploymentConfigResource = schema.GroupVersionResource{Group: "apps.openshift.io", Version: "v1", Resource: "deploymentconfigs"}
 )
-
-type ServiceBindingOptions struct {
-	ServiceName             string
-	Namespace               string
-	AppName                 string
-	ForceCreationWithoutAsk bool
-	BindingName             string
-	BindAsFiles             bool
-	DeploymentConfigEnabled bool
-}
 
 func (c *KubernetesCluster) ExecuteServiceBinding(ctx context.Context, service CustomConnection, opts Options, options *ServiceBindingOptions) error {
 	clients, err := client(opts.Localizer)

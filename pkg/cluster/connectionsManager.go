@@ -10,10 +10,13 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/serviceregistry"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 )
 
+// TODO kafka stuff
+
 // IsKCInstalledOnCluster checks the cluster to see if a KafkaConnection CRD is installed
-func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
+func IsKCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -38,7 +41,7 @@ func IsKCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, er
 }
 
 // IsSRCInstalledOnCluster checks the cluster to see if a ServiceRegistry CRD is installed
-func IsSRCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
+func IsSRCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -63,7 +66,7 @@ func IsSRCInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, e
 }
 
 // IsSBOInstalledOnCluster checks the cluster to see if ServiceBinding CRD is installed
-func IsSBOInstalledOnCluster(ctx context.Context, c *KubernetesCluster) (bool, error) {
+func IsSBOInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (bool, error) {
 
 	namespace, err := c.CurrentNamespace()
 	if err != nil {

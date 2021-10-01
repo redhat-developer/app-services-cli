@@ -17,6 +17,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+const ServiceName = "kafka"
+
 // KafkaService contains methods to connect and bind Kafka instance to cluster
 type KafkaService struct {
 	Opts cluster.Options

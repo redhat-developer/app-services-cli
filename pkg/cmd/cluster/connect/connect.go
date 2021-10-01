@@ -5,16 +5,12 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/spf13/cobra"
 )
 
@@ -75,20 +71,20 @@ func runConnect(opts *options) error {
 		return err
 	}
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
+	clusterConn, err := kubernetes.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
 	if err != nil {
 		return err
 	}
 
-	arguments := &cluster.ConnectArguments{
+	arguments := &v1alpha.ConnectArguments{
 		OfflineAccessToken:      opts.offlineAccessToken,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		Namespace:               opts.namespace,
-		SelectedService:         opts.serviceType,
+		SelectedServiceType:     opts.serviceType,
 		SelectedServiceID:       opts.serviceID,
 	}
 
-	connectOpts := cluster.Options{
+	connectOpts := v1alpha.InputOptions{
 		IO:         opts.IO,
 		Logger:     opts.Logger,
 		Localizer:  opts.localizer,
@@ -96,30 +92,7 @@ func runConnect(opts *options) error {
 		Connection: conn,
 	}
 
-	api := conn.API()
-
-	var service cluster.CustomConnection
-
-	switch opts.serviceType {
-	case "kafka":
-		service = &kafkaservice.KafkaService{
-			Opts: connectOpts,
-		}
-		_, _, err = kafka.GetKafkaByID(context.Background(), api.Kafka(), opts.serviceID)
-		if err != nil {
-			return err
-		}
-	case "service-registry":
-		service = &registryservice.RegistryService{
-			Opts: connectOpts,
-		}
-		_, _, err = serviceregistry.GetServiceRegistryByID(context.Background(), api.ServiceRegistryMgmt(), opts.serviceID)
-		if err != nil {
-			return err
-		}
-	}
-
-	err = clusterConn.Connect(context.Background(), arguments, service, connectOpts)
+	err = clusterConn.Connect(context.Background(), arguments, connectOpts)
 	if err != nil {
 		return err
 	}

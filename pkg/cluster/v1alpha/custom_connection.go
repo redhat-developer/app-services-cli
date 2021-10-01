@@ -1,4 +1,4 @@
-package cluster
+package v1alpha
 
 import (
 	"context"
