@@ -64,12 +64,14 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
-			if !flagutil.IsInputInRange(opts.page) {
-				return flag.OutOfRangeError("page", opts.page)
+			if opts.page < 1 {
+				return opts.localizer.MustLocalizeError("registry.list.flag.page",
+					localize.NewEntry("Page", opts.page))
 			}
 
-			if !flagutil.IsInputInRange(opts.limit) {
-				return flag.OutOfRangeError("limit", opts.limit)
+			if opts.limit < 1 {
+				return opts.localizer.MustLocalizeError("registry.list.flag.limit",
+					localize.NewEntry("Limit", opts.limit))
 			}
 
 			return runList(opts)
