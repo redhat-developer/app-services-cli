@@ -5,3 +5,9 @@ one = 'could not set the current Kafka instance as default: {{.ErrorMessage}}'
 [common.log.debug.startingInteractivePrompt]
 description = 'Debug message when starting an interactive prompt'
 one = 'Starting interactive prompt'
+
+[common.validation.page.error.invalid.minValue]
+one = 'invalid page number {{.Page}}, minimum value is -1'
+
+[common.validation.limit.error.invalid.minValue]
+one = 'invalid value for limit {{.Limit}}, minimum value is -1'
