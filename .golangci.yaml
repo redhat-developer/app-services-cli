@@ -75,9 +75,9 @@ linters-settings:
       - rhoas
   custom:
     goi18linter:
-      path: ./golangci/goi18nlinter.so
-      description: go-i18n-linter plugin analyze source tree of Go files and validates the availability of i18n strings in *.toml files.
-      original-url: github.com/alexal/go-i18n-linter
+      path: ./golangci/appservicesgolinter.so
+      description: app-services-go-linter plugin analyze source tree of Go files and validates the availability of i18n strings in *.toml files.
+      original-url: github.com/redhat-developer/app-services-go-linter
 linters:
   disable:
     - scopelint
