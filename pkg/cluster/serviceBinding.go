@@ -53,6 +53,7 @@ func (c *KubernetesCluster) ExecuteServiceBinding(ctx context.Context, service C
 		if err != nil {
 			return err
 		}
+		options.Namespace = ns
 		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
