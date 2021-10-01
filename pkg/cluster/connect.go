@@ -32,52 +32,52 @@ import (
 
 // nolint:funlen
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func Connect(cliOpts v1alpha.CommandEnvironment, cmdOptions v1alpha.ConnectOperationOptions) error {
-
+func (client *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.ConnectOperationOptions) error {
 	var currentNamespace string
 	var err error
-	if cmdOptions.Namespace != "" {
-		currentNamespace = cmdOptions.Namespace
+	if connectOpts.Namespace != "" {
+		currentNamespace = connectOpts.Namespace
 	} else {
-		currentNamespace, err = c.CurrentNamespace()
+		currentNamespace, err = client.KubernetesClients.CurrentNamespace()
 		if err != nil {
 			return err
 		}
 	}
-
+	cliOpts := client.CommandEnvironment
 	api := cliOpts.Connection.API()
-	// TODO replace connection to service
-	var connection v1alpha.RHOASKubernetesService
 
-	switch cmdOptions.SelectedServiceType {
+	var currentService v1alpha.RHOASKubernetesService
+
+	switch connectOpts.SelectedServiceType {
 	case kafkaservice.ServiceName:
-		connection = &kafkaservice.KafkaService{
+		currentService = &kafkaservice.KafkaService{
 			Opts: cliOpts,
 		}
-		_, _, err = kafka.GetKafkaByID(context.Background(), api.Kafka(), cmdOptions.SelectedServiceID)
+		_, _, err = kafka.GetKafkaByID(context.Background(), api.Kafka(), connectOpts.SelectedServiceID)
 		if err != nil {
 			return err
 		}
 	case registryservice.ServiceName:
-		connection = &registryservice.RegistryService{
+		currentService = &registryservice.RegistryService{
 			Opts: cliOpts,
 		}
-		_, _, err = serviceregistry.GetServiceRegistryByID(context.Background(), api.ServiceRegistryMgmt(), cmdOptions.SelectedServiceID)
+		_, _, err = serviceregistry.GetServiceRegistryByID(context.Background(), api.ServiceRegistryMgmt(), connectOpts.SelectedServiceID)
 		if err != nil {
 			return err
 		}
 	}
+	// TODO add default for interactive mode
 
 	// print status
 	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
 	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.statusInfo",
-		localize.NewEntry("ServiceType", color.Info(cmdOptions.SelectedServiceType)),
-		localize.NewEntry("ServiceID", color.Info(cmdOptions.SelectedServiceID)),
+		localize.NewEntry("ServiceType", color.Info(connectOpts.SelectedServiceType)),
+		localize.NewEntry("ServiceID", color.Info(connectOpts.SelectedServiceID)),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(constants.ServiceAccountSecretName))))
 
-	if cmdOptions.ForceCreationWithoutAsk == false {
+	if connectOpts.ForceCreationWithoutAsk == false {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
 			Message: cliOpts.Localizer.MustLocalize("cluster.kubernetes.connect.input.confirm.message"),
@@ -94,7 +94,7 @@ func Connect(cliOpts v1alpha.CommandEnvironment, cmdOptions v1alpha.ConnectOpera
 	}
 
 	// Token with auth for operator to pick
-	err = c.createTokenSecretIfNeeded(ctx, currentNamespace, cmdOptions, cliOpts)
+	err = client.createTokenSecretIfNeeded(ctx, currentNamespace, connectOpts, cliOpts)
 	if err != nil {
 		return err
 	}
@@ -104,12 +104,12 @@ func Connect(cliOpts v1alpha.CommandEnvironment, cmdOptions v1alpha.ConnectOpera
 		return err
 	}
 
-	status, err := connection.CustomResourceExists(ctx, c, cmdOptions.SelectedServiceID)
+	status, err := currentService.CustomResourceExists(ctx, c, connectOpts.SelectedServiceID)
 	if status != http.StatusNotFound {
 		return err
 	}
 
-	err = connection.CreateCustomResource(ctx, c, cmdOptions.SelectedServiceID)
+	err = currentService.CreateCustomResource(ctx, c, connectOpts.SelectedServiceID)
 	if err != nil {
 		return err
 	}
@@ -117,24 +117,7 @@ func Connect(cliOpts v1alpha.CommandEnvironment, cmdOptions v1alpha.ConnectOpera
 	return nil
 }
 
-// IsRhoasOperatorAvailableOnCluster checks the cluster for availability of RHOAS and Service Binding operator in cluster
-func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Context) (bool, error) {
-	installed, err := IsKCInstalledOnCluster(ctx, c)
-	if !installed {
-		return installed, err
-	}
-
-	installed, err = IsSRCInstalledOnCluster(ctx, c)
-	if !installed {
-		return installed, err
-	}
-
-	installed, err = IsSBOInstalledOnCluster(ctx, c)
-
-	return installed, err
-}
-
-func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, connectOpts *ConnectArguments, cliOpts Options) error {
+func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(ctx context.Context, namespace string, connectOpts *ConnectArguments, cliOpts Options) error {
 	_, err := c.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.TokenSecretName, metav1.GetOptions{})
 	if err == nil {
 		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), constants.TokenSecretName)
@@ -183,7 +166,7 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string, cliOpts Options) error {
+func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string, cliOpts Options) error {
 	_, err := c.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.ServiceAccountSecretName, metav1.GetOptions{})
 	if err == nil {
 		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
@@ -253,7 +236,7 @@ func (c *KubernetesCluster) MakeKubernetesGetRequest(ctx context.Context, path s
 	return status, nil
 }
 
-func (c *KubernetesCluster) MakeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
+func (c *KubernetesClusterAPIImpl) makeKubernetesPostRequest(ctx context.Context, path string, serviceName string, crJSON []byte) error {
 
 	data := c.Clientset.
 		RESTClient().
@@ -270,7 +253,7 @@ func (c *KubernetesCluster) MakeKubernetesPostRequest(ctx context.Context, path 
 }
 
 // CreateResource creates a CustomResource connection in the cluster
-func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions, cliOpts Options) error {
+func (c *KubernetesClusterAPIImpl) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions, cliOpts Options) error {
 
 	namespace, err := c.CurrentNamespace()
 	if err != nil {

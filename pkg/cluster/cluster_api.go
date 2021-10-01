@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/utils"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 )
 
@@ -11,18 +12,17 @@ type KubernetesClusterAPIImpl struct {
 	CommandEnvironment *v1alpha.CommandEnvironment
 }
 
-func (KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.ConnectOperationOptions) error {
-	return nil
+func (api *KubernetesClusterAPIImpl) IsRhoasOperatorAvailableOnCluster() (bool, error) {
+	installed, err := utils.IsKCInstalledOnCluster(api.CommandEnvironment.Context, api.KubernetesClients)
+	if !installed {
+		return installed, err
+	}
+
+	// TODO replace boolean and return v1 and v2 versions for user
+	return utils.IsSRCInstalledOnCluster(api.CommandEnvironment.Context, api.KubernetesClients)
+
 }
 
-func (KubernetesClusterAPIImpl) ExecuteServiceBinding(bindinOptions *v1alpha.BindOperationOptions) error {
-	return nil
-}
-
-func (KubernetesClusterAPIImpl) IsRhoasOperatorAvailableOnCluster() (bool, error) {
-	return true, nil
-}
-
-func (KubernetesClusterAPIImpl) IsSBOOperatorAvailableOnCluster() (bool, error) {
-	return true, nil
+func (api *KubernetesClusterAPIImpl) IsSBOOperatorAvailableOnCluster() (bool, error) {
+	return utils.IsSBOInstalledOnCluster(api.CommandEnvironment.Context, api.KubernetesClients)
 }

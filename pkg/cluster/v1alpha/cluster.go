@@ -41,8 +41,8 @@ type BindOperationOptions struct {
 	DeploymentConfigEnabled bool
 }
 
-// Methods supported to interact with kuberentes clusters in order to connect and bind resources
-type KubernetesClusterAPI interface {
+// ClusterUserAPI -  interact with kuberentes clusters in order to connect and bind resources
+type ClusterUserAPI interface {
 	ExecuteConnect(connectOpts *ConnectOperationOptions) error
 	ExecuteServiceBinding(options *BindOperationOptions) error
 	IsRhoasOperatorAvailableOnCluster() (bool, error)

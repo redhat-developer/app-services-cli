@@ -1,7 +1,4 @@
-/**
- * Handles specific operations for Kafka Connection resource
- */
-package cluster
+package utils
 
 import (
 	"context"
@@ -10,13 +7,12 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/serviceregistry"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"k8s.io/apimachinery/pkg/api/errors"
 )
 
-// TODO kafka stuff
-
 // IsKCInstalledOnCluster checks the cluster to see if a KafkaConnection CRD is installed
-func IsKCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (bool, error) {
+func IsKCInstalledOnCluster(ctx context.Context, c *kubeclient.KubernetesClients) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -41,7 +37,7 @@ func IsKCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (
 }
 
 // IsSRCInstalledOnCluster checks the cluster to see if a ServiceRegistry CRD is installed
-func IsSRCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (bool, error) {
+func IsSRCInstalledOnCluster(ctx context.Context, c *kubeclient.KubernetesClients) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -57,6 +53,11 @@ func IsSRCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) 
 		return true, nil
 	}
 
+	// TODO verify if this handling works
+	if errors.IsNotFound(err) {
+		return false, nil
+	}
+
 	var status int
 	if data.StatusCode(&status); status == http.StatusNotFound {
 		return false, nil
@@ -66,8 +67,7 @@ func IsSRCInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) 
 }
 
 // IsSBOInstalledOnCluster checks the cluster to see if ServiceBinding CRD is installed
-func IsSBOInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) (bool, error) {
-
+func IsSBOInstalledOnCluster(ctx context.Context, c *kubeclient.KubernetesClients) (bool, error) {
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
 		return false, err
@@ -81,6 +81,10 @@ func IsSBOInstalledOnCluster(ctx context.Context, c *v1alpha.KubernetesCluster) 
 
 	if data.Error() == nil {
 		return true, nil
+	}
+	// TODO verify if this handling works
+	if errors.IsNotFound(err) {
+		return false, nil
 	}
 
 	var status int

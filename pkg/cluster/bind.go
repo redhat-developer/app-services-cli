@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -20,14 +21,12 @@ var (
 	deploymentConfigResource = schema.GroupVersionResource{Group: "apps.openshift.io", Version: "v1", Resource: "deploymentconfigs"}
 )
 
-func (c *KubernetesCluster) ExecuteServiceBinding(ctx context.Context, service CustomConnection, opts Options, options *ServiceBindingOptions) error {
-	clients, err := client(opts.Localizer)
-	if err != nil {
-		return err
-	}
+func (c *KubernetesClusterAPIImpl) ExecuteServiceBinding(options *v1alpha.BindOperationOptions) error {
+	clients := c.KubernetesClients
+	opts := c.CommandEnvironment
 	ns := options.Namespace
 	if ns == "" {
-		ns, _, err = (*clients.clientConfig).Namespace()
+		ns, _, err := clients.ClientConfig.Namespace()
 		if err != nil {
 			return err
 		}
