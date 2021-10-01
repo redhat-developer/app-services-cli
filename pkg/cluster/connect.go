@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kafkaservice"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/registryservice"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
@@ -31,7 +32,7 @@ import (
 
 // nolint:funlen
 // Connect connects a remote Kafka instance to the Kubernetes cluster
-func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArguments, opts Options) error {
+func Connect(cliOpts v1alpha.CommandEnvironment, cmdOptions v1alpha.ConnectOperationOptions) error {
 
 	var currentNamespace string
 	var err error
@@ -44,14 +45,14 @@ func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArgument
 		}
 	}
 
-	api := opts.Connection.API()
+	api := cliOpts.Connection.API()
 	// TODO replace connection to service
 	var connection CustomConnection
 
 	switch cmdOptions.SelectedServiceType {
 	case kafkaservice.ServiceName:
 		connection = &kafkaservice.KafkaService{
-			Opts: opts,
+			Opts: cliOpts,
 		}
 		_, _, err = kafka.GetKafkaByID(context.Background(), api.Kafka(), cmdOptions.SelectedServiceID)
 		if err != nil {
@@ -59,7 +60,7 @@ func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArgument
 		}
 	case registryservice.ServiceName:
 		connection = &registryservice.RegistryService{
-			Opts: opts,
+			Opts: cliOpts,
 		}
 		_, _, err = serviceregistry.GetServiceRegistryByID(context.Background(), api.ServiceRegistryMgmt(), cmdOptions.SelectedServiceID)
 		if err != nil {
@@ -68,9 +69,9 @@ func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArgument
 	}
 
 	// print status
-	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.log.info.statusMessage"))
 
-	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.statusInfo",
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.statusInfo",
 		localize.NewEntry("ServiceType", color.Info(cmdOptions.SelectedServiceType)),
 		localize.NewEntry("ServiceID", color.Info(cmdOptions.SelectedServiceID)),
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
@@ -79,7 +80,7 @@ func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArgument
 	if cmdOptions.ForceCreationWithoutAsk == false {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
-			Message: opts.Localizer.MustLocalize("cluster.kubernetes.connect.input.confirm.message"),
+			Message: cliOpts.Localizer.MustLocalize("cluster.kubernetes.connect.input.confirm.message"),
 		}
 		err = survey.AskOne(confirm, &shouldContinue)
 		if err != nil {
@@ -87,18 +88,18 @@ func (c *CLIClusterAPI) Connect(ctx context.Context, cmdOptions *ConnectArgument
 		}
 
 		if !shouldContinue {
-			opts.Logger.Debug(opts.Localizer.MustLocalize("cluster.kubernetes.connect.log.debug.cancellingConnect"))
+			cliOpts.Logger.Debug(cliOpts.Localizer.MustLocalize("cluster.kubernetes.connect.log.debug.cancellingConnect"))
 			return nil
 		}
 	}
 
 	// Token with auth for operator to pick
-	err = c.createTokenSecretIfNeeded(ctx, currentNamespace, cmdOptions, opts)
+	err = c.createTokenSecretIfNeeded(ctx, currentNamespace, cmdOptions, cliOpts)
 	if err != nil {
 		return err
 	}
 
-	err = c.createServiceAccountSecretIfNeeded(ctx, currentNamespace, opts)
+	err = c.createServiceAccountSecretIfNeeded(ctx, currentNamespace, cliOpts)
 	if err != nil {
 		return err
 	}
@@ -133,20 +134,20 @@ func (c *KubernetesCluster) IsRhoasOperatorAvailableOnCluster(ctx context.Contex
 	return installed, err
 }
 
-func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, connectOpts *ConnectArguments, opts Options) error {
+func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, namespace string, connectOpts *ConnectArguments, cliOpts Options) error {
 	_, err := c.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.TokenSecretName, metav1.GetOptions{})
 	if err == nil {
-		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), constants.TokenSecretName)
+		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), constants.TokenSecretName)
 		return nil
 	}
 
-	if connectOpts.OfflineAccessToken == "" && !opts.IO.CanPrompt() {
-		return opts.Localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token"))
+	if connectOpts.OfflineAccessToken == "" && !cliOpts.IO.CanPrompt() {
+		return cliOpts.Localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token"))
 	}
 
 	if connectOpts.OfflineAccessToken == "" {
 		apiTokenInput := &survey.Input{
-			Message: opts.Localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
+			Message: cliOpts.Localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
 		}
 		surveyErr := survey.AskOne(apiTokenInput, &connectOpts.OfflineAccessToken)
 		if surveyErr != nil {
@@ -173,23 +174,23 @@ func (c *KubernetesCluster) createTokenSecretIfNeeded(ctx context.Context, names
 	_, err = c.Clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	tokenSecretNameTmplEntry := localize.NewEntry("Name", constants.TokenSecretName)
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
+		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
 	}
 
-	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
 
 	return nil
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string, opts Options) error {
+func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Context, namespace string, cliOpts Options) error {
 	_, err := c.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.ServiceAccountSecretName, metav1.GetOptions{})
 	if err == nil {
-		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
+		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
 		return nil
 	}
 
-	serviceAcct, err := c.createServiceAccount(ctx, opts)
+	serviceAcct, err := c.createServiceAccount(ctx, cliOpts)
 	if err != nil {
 		return err
 	}
@@ -207,19 +208,19 @@ func (c *KubernetesCluster) createServiceAccountSecretIfNeeded(ctx context.Conte
 
 	createdSecret, err := c.Clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
+		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
 
-	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
 
 	return nil
 }
 
 // createServiceAccount creates a service account
-func (c *KubernetesCluster) createServiceAccount(ctx context.Context, opts Options) (*kafkamgmtclient.ServiceAccount, error) {
+func (c *KubernetesCluster) createServiceAccount(ctx context.Context, cliOpts Options) (*kafkamgmtclient.ServiceAccount, error) {
 	t := time.Now()
 
-	api := opts.Connection.API()
+	api := cliOpts.Connection.API()
 	serviceAcct := &kafkamgmtclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
 	req := api.ServiceAccount().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
@@ -228,7 +229,7 @@ func (c *KubernetesCluster) createServiceAccount(ctx context.Context, opts Optio
 		defer httpRes.Body.Close()
 	}
 	if err != nil {
-		return nil, fmt.Errorf("%v: %w", opts.Localizer.MustLocalize("cluster.kubernetes.createServiceAccount.error.createError"), err)
+		return nil, fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.createServiceAccount.error.createError"), err)
 	}
 
 	return &serviceAcctRes, nil
@@ -269,7 +270,7 @@ func (c *KubernetesCluster) MakeKubernetesPostRequest(ctx context.Context, path 
 }
 
 // CreateResource creates a CustomResource connection in the cluster
-func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions, opts Options) error {
+func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions, cliOpts Options) error {
 
 	namespace, err := c.CurrentNamespace()
 	if err != nil {
@@ -282,7 +283,7 @@ func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *Cu
 		return err
 	}
 
-	opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.createCR.log.info.customResourceCreated", localize.NewEntry("Resource", resourceOpts.CRName), localize.NewEntry("Name", resourceOpts.ServiceName)))
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createCR.log.info.customResourceCreated", localize.NewEntry("Resource", resourceOpts.CRName), localize.NewEntry("Name", resourceOpts.ServiceName)))
 
 	w, err := c.DynamicClient.Resource(resourceOpts.Resource).Namespace(namespace).Watch(context.TODO(), metav1.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("metadata.name", resourceOpts.ServiceName).String(),
@@ -291,18 +292,18 @@ func (c *KubernetesCluster) CreateResource(ctx context.Context, resourceOpts *Cu
 		return err
 	}
 
-	return watchCustomResourceStatus(w, opts, resourceOpts.CRName)
+	return watchCustomResourceStatus(w, cliOpts, resourceOpts.CRName)
 }
 
 // ResourceExists checks if a CustomResource connection already exists in the cluster
-func (c *KubernetesCluster) ResourceExists(ctx context.Context, path string, serviceName string, opts Options) (int, error) {
+func (c *KubernetesCluster) ResourceExists(ctx context.Context, path string, serviceName string, cliOpts Options) (int, error) {
 
-	status, err := c.MakeKubernetesGetRequest(ctx, path, serviceName, opts.Localizer)
+	status, err := c.MakeKubernetesGetRequest(ctx, path, serviceName, cliOpts.Localizer)
 
 	return status, err
 }
 
-func watchCustomResourceStatus(w watch.Interface, opts Options, crName string) error {
+func watchCustomResourceStatus(w watch.Interface, cliOpts Options, crName string) error {
 	for {
 		select {
 		case event := <-w.ResultChan():
@@ -320,15 +321,15 @@ func watchCustomResourceStatus(w watch.Interface, opts Options, crName string) e
 					for _, condition := range conditions {
 						typedCondition, ok := condition.(map[string]interface{})
 						if !ok {
-							return fmt.Errorf(opts.Localizer.MustLocalize("cluster.kubernetes.watchForConnectionStatus.error.format"), typedCondition)
+							return fmt.Errorf(cliOpts.Localizer.MustLocalize("cluster.kubernetes.watchForConnectionStatus.error.format"), typedCondition)
 						}
 						if typedCondition["type"].(string) == "Finished" {
 							if typedCondition["status"].(string) == "False" {
 								w.Stop()
-								return fmt.Errorf(opts.Localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.status", localize.NewEntry("Resource", crName)), typedCondition["message"])
+								return fmt.Errorf(cliOpts.Localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.status", localize.NewEntry("Resource", crName)), typedCondition["message"])
 							}
 							if typedCondition["status"].(string) == "True" {
-								opts.Logger.Info(opts.Localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.log.info.success", localize.NewEntry("Resource", crName)))
+								cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.log.info.success", localize.NewEntry("Resource", crName)))
 
 								w.Stop()
 								return nil
@@ -341,7 +342,7 @@ func watchCustomResourceStatus(w watch.Interface, opts Options, crName string) e
 
 		case <-time.After(60 * time.Second):
 			w.Stop()
-			return fmt.Errorf(opts.Localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.timeout", localize.NewEntry("Resource", crName)))
+			return fmt.Errorf(cliOpts.Localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.timeout", localize.NewEntry("Resource", crName)))
 		}
 	}
 }
