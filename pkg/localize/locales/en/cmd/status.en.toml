@@ -6,7 +6,7 @@ one = '''
 View status information of your currently used services.
 Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
 
-To use a different service run "rhoas <service> use [args] [flags]".
+To use a different service run "rhoas [service] use [args] [flags]".
 '''
 
 [status.cmd.example]
@@ -31,10 +31,10 @@ one = 'Format in which to display the status of your services (choose from: "jso
 one = 'Requesting status of the following services:'
 
 [status.log.info.noStatusesAreUsed]
-one = 'No services are currently being used. To set a service in context, run "rhoas <service> use [args]".'
+one = 'No services are currently being used. To set a service in context, run "rhoas [service] use [args]".'
 
 [status.log.debug.noKafkaSelected]
 one = 'No Kafka instance is currently used, skipping status check'
 
 [status.log.info.selectAnotherKafka]
-one = 'Run rhoas kafka use --id=<kafka-instance-id> to use another Kafka instance.'
+one = 'Run rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg to use another Kafka instance.'

@@ -53,10 +53,10 @@ Delete a Service Registry instance along with all of its schema and API artifact
 [registry.cmd.delete.example]
 one = '''
 # Delete a Service Registry instance by name
-rhoas service-registry delete --name <name>
+rhoas service-registry delete --name my-service-registry
 
 # Delete a Service Registry instance by ID
-rhoas service-registry delete --id <id>
+rhoas service-registry delete --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [registry.cmd.describe.shortDescription]
@@ -70,11 +70,11 @@ Describe a Service Registry instance. Fetch all required fields including the re
 [registry.cmd.describe.example]
 one = '''
 # Describe a Service Registry instance by name
-rhoas service-registry describe --name <name>
+rhoas service-registry describe --name my-service-regisrty
 
 
 # Describe a Service Registry instance by ID
-rhoas service-registry describe --id <id>
+rhoas service-registry describe --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [registry.cmd.list.shortDescription]
@@ -104,10 +104,10 @@ When you set the Service Registry instance to be used, it is set as the current 
 [registry.cmd.use.example]
 one = '''
 # Use a Service Registry instance by name
-rhoas service-registry use --name <name>
+rhoas service-registry use --name my-service-registry
 
 # Use a Service Registry instance by ID
-rhoas service-registry use --id <id>
+rhoas service-registry use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 # Errors

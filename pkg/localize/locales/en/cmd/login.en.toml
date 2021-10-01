@@ -24,7 +24,7 @@ $ rhoas login
 $ rhoas login --print-sso-url
 
 # log in using an offline token
-$ rhoas login --token <your-token>
+$ rhoas login --token f5cgc...
 '''
 
 [login.flag.apiGateway]

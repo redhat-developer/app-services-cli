@@ -299,7 +299,7 @@ description = 'Help text for Cloud Region'
 one = "Geographical region where the Kafka instance will be deployed"
 
 [kafka.create.argument.name.error.requiredWhenNonInteractive]
-one = 'name is required. Run "rhoas kafka create --name <name>"'
+one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
@@ -568,7 +568,7 @@ $ rhoas kafka topic create --name topic-1
 '''
 
 [kafka.topic.create.error.topicNameIsRequired]
-one = 'topic name is required. Run "rhoas kafka topic create --name <topic-name>"'
+one = 'topic name is required. Run "rhoas kafka topic create --name my-topic"'
 
 [kafka.topic.create.error.conflictError]
 one = 'topic "{{.TopicName}}" already exists in Kafka instance "{{.InstanceName}}"'
