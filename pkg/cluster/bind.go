@@ -136,15 +136,3 @@ func fetchAppNameFromCluster(ctx context.Context, resource schema.GroupVersionRe
 	}
 	return appNames[selectedAppIndex], nil
 }
-
-// Replaced
-// func client(localizer localize.Localizer) (*KubernetesClients, error) {
-// 	kubeconfig := os.Getenv("KUBECONFIG")
-
-// 	if kubeconfig == "" {
-// 		home, _ := os.UserHomeDir()
-// 		kubeconfig = filepath.Join(home, ".kube", "config")
-// 	}
-
-// 	return &KubernetesClients{dynamicClient, restConfig, &clientconfig}, nil
-// }

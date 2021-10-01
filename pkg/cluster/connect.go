@@ -264,6 +264,8 @@ func (c *KubernetesClusterAPIImpl) makeKubernetesPostRequest(ctx context.Context
 	return nil
 }
 
+// TODO What the hell is this about?
+
 // CreateResource creates a CustomResource connection in the cluster
 func (c *KubernetesClusterAPIImpl) CreateResource(ctx context.Context, resourceOpts *CustomResourceOptions) error {
 	cliOpts := c.CommandEnvironment

@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/utils"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	registryPkg "github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -20,11 +21,11 @@ const ServiceName = "service-registry"
 
 // RegistryService contains methods to connect and bind Service registry instance to cluster
 type RegistryService struct {
-	Opts cluster.Options
+	Opts v1alpha.CommandEnvironment
 }
 
 // CustomResourceExists checks if the given ServiceRegistryConnection already exists in cluster
-func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) (status int, err error) {
+func (r *RegistryService) CustomResourceExists( /** WTF c *cluster.KubernetesCluster ,**/ serviceName string) (status int, err error) {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
@@ -43,7 +44,7 @@ func (r *RegistryService) CustomResourceExists(ctx context.Context, c *cluster.K
 }
 
 // CreateCustomResource creates a ServiceRegistryConnection in cluster
-func (r *RegistryService) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string) error {
+func (r *RegistryService) CreateCustomResource( /** WTF c *cluster.KubernetesCluster ,**/ serviceID string) error {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {

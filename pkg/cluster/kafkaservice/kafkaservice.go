@@ -8,10 +8,11 @@ import (
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/utils"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,11 +22,11 @@ const ServiceName = "kafka"
 
 // KafkaService contains methods to connect and bind Kafka instance to cluster
 type KafkaService struct {
-	Opts cluster.Options
+	Opts v1alpha.CommandEnvironment
 }
 
 // CustomResourceExists checks if the given KafkaConnection already exists in cluster
-func (k *KafkaService) CustomResourceExists(ctx context.Context, c *cluster.KubernetesCluster, serviceName string) (status int, err error) {
+func (k *KafkaService) CustomResourceExists(ctx context.Context /** WTF c *cluster.KubernetesCluster ,**/, serviceName string) (status int, err error) {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
@@ -44,7 +45,7 @@ func (k *KafkaService) CustomResourceExists(ctx context.Context, c *cluster.Kube
 }
 
 // CreateCustomResource creates a KafkaConnection in cluster
-func (k *KafkaService) CreateCustomResource(ctx context.Context, c *cluster.KubernetesCluster, serviceID string) error {
+func (k *KafkaService) CreateCustomResource(ctx context.Context /** WTF c *cluster.KubernetesCluster ,**/, serviceID string) error {
 
 	ns, err := c.CurrentNamespace()
 	if err != nil {
@@ -84,7 +85,7 @@ func (k *KafkaService) CreateCustomResource(ctx context.Context, c *cluster.Kube
 }
 
 // BindCustomConnection binds a KafkaConnection to specified project
-func (k *KafkaService) BindCustomConnection(ctx context.Context, serviceName string, options cluster.ServiceBindingOptions, clients *cluster.KubernetesClients) error {
+func (k *KafkaService) BindCustomConnection(ctx context.Context, serviceName string, options v1alpha.BindOperationOptions, clients *cluster.KubernetesClients) error {
 
 	serviceRef := createKCServiceRef(serviceName)
 
