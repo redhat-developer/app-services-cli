@@ -111,7 +111,6 @@ func (client *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Conn
 	return nil
 }
 
-// Everthing below makes no sense
 
 func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, connectOpts *v1alpha.ConnectOperationOptions) error {
 	cliOpts := c.CommandEnvironment
