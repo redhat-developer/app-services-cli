@@ -11,6 +11,8 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 )
 
+// THIS IS WRONG - should be part of the service
+
 // IsKCInstalledOnCluster checks the cluster to see if a KafkaConnection CRD is installed
 func IsKCInstalledOnCluster(ctx context.Context, c *kubeclient.KubernetesClients) (bool, error) {
 	namespace, err := c.CurrentNamespace()

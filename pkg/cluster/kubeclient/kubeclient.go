@@ -13,8 +13,7 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
-// TODO missing comment
-// TODO moved from KubernetesClients and KubernetesCluster
+// KubernetesClients - contains all sorts of kubernetes clients that can be used to contact with cluster
 type KubernetesClients struct {
 	Clientset          *kubernetes.Clientset
 	RestConfig         *rest.Config

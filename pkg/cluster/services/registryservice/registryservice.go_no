@@ -43,6 +43,8 @@ func (r *RegistryService) CustomResourceExists( /** WTF c *cluster.KubernetesClu
 	return status, err
 }
 
+// TODO WHY? WE use dynamic client so all we need is to get resource and creation can happen in connect.
+
 // CreateCustomResource creates a ServiceRegistryConnection in cluster
 func (r *RegistryService) CreateCustomResource( /** WTF c *cluster.KubernetesCluster ,**/ serviceID string) error {
 
@@ -82,6 +84,9 @@ func (r *RegistryService) CreateCustomResource( /** WTF c *cluster.KubernetesClu
 
 	return err
 }
+
+// TODO WHY? all we need is to get resource and creation can happen in bind.
+
 
 // BindCustomConnection binds a ServiceRegistryConnection to specified project
 func (r *RegistryService) BindCustomConnection(ctx context.Context, serviceName string, options cluster.ServiceBindingOptions, clients *cluster.KubernetesClients) error {

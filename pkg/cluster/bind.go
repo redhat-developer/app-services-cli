@@ -1,7 +1,6 @@
 package cluster
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -34,6 +33,45 @@ func (c *KubernetesClusterAPIImpl) ExecuteServiceBinding(options *v1alpha.BindOp
 		opts.Logger.Info(opts.Localizer.MustLocalize("cluster.serviceBinding.namespaceInfo", localize.NewEntry("Namespace", color.Info(ns))))
 	}
 
+	var clusterResource schema.GroupVersionResource
+	if options.DeploymentConfigEnabled {
+		clusterResource = deploymentConfigResource
+	} else {
+		clusterResource = constants.DeploymentResource
+	}
+	// Get proper deployment
+	if options.AppName == "" {
+		appName, err := fetchAppNameFromCluster(c, clusterResource, ns)
+		if err != nil {
+			return err
+		}
+		options.AppName = appName
+	} else {
+		_, err := clients.DynamicClient.Resource(clusterResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
+		if err != nil {
+			return err
+		}
+	}
+
+	// Print desired action
+	opts.Logger.Info(fmt.Sprintf(opts.Localizer.MustLocalize("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
+
+	if !options.ForceCreationWithoutAsk {
+		var shouldContinue bool
+		confirm := &survey.Confirm{
+			Message: opts.Localizer.MustLocalize("cluster.serviceBinding.confirm.message"),
+		}
+		err := survey.AskOne(confirm, &shouldContinue)
+		if err != nil {
+			return err
+		}
+
+		if !shouldContinue {
+			return nil
+		}
+	}
+
+	// TODO
 	// var service cluster.CustomConnection
 
 	// clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfigLocation, opts.IO, opts.localizer)
@@ -52,51 +90,15 @@ func (c *KubernetesClusterAPIImpl) ExecuteServiceBinding(options *v1alpha.BindOp
 	// 	}
 	// }
 
-	var clusterResource schema.GroupVersionResource
-	if options.DeploymentConfigEnabled {
-		clusterResource = deploymentConfigResource
-	} else {
-		clusterResource = constants.DeploymentResource
-	}
-	// Get proper deployment
-	if options.AppName == "" {
-		options.AppName, err = fetchAppNameFromCluster(ctx, clusterResource, clients, opts.Localizer, ns)
-		if err != nil {
-			return err
-		}
-	} else {
-		_, err = clients.DynamicClient.Resource(clusterResource).Namespace(ns).Get(ctx, options.AppName, metav1.GetOptions{})
-		if err != nil {
-			return err
-		}
-	}
-
-	// Print desired action
-	opts.Logger.Info(fmt.Sprintf(opts.Localizer.MustLocalize("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
-
-	if !options.ForceCreationWithoutAsk {
-		var shouldContinue bool
-		confirm := &survey.Confirm{
-			Message: opts.Localizer.MustLocalize("cluster.serviceBinding.confirm.message"),
-		}
-		err = survey.AskOne(confirm, &shouldContinue)
-		if err != nil {
-			return err
-		}
-
-		if !shouldContinue {
-			return nil
-		}
-	}
-
-	// Check if connection exists
-	status, err := service.CustomResourceExists(ctx, c, options.ServiceName)
+	// THIS IS NOT NEEDED - Check if connection exists
+	// We need to also check for resources
+	status, err := service.CustomResourceExists(c, options.ServiceName)
 	if status != http.StatusOK && err != nil {
 		return opts.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
 
-	// Execute binding
-	err = service.BindCustomConnection(ctx, options.ServiceName, *options, clients)
+	// THIS IS WRONG - binding should happen here - all we need is resource from service
+	err = service.BindCustomConnection(options.ServiceName, *options, clients)
 	if err != nil {
 		return err
 	}
@@ -105,8 +107,10 @@ func (c *KubernetesClusterAPIImpl) ExecuteServiceBinding(options *v1alpha.BindOp
 	return nil
 }
 
-func fetchAppNameFromCluster(ctx context.Context, resource schema.GroupVersionResource, clients *KubernetesClients, localizer localize.Localizer, ns string) (string, error) {
-	list, err := clients.DynamicClient.Resource(resource).Namespace(ns).List(ctx, metav1.ListOptions{})
+func fetchAppNameFromCluster(c *KubernetesClusterAPIImpl, resource schema.GroupVersionResource, ns string) (string, error) {
+	clients := c.KubernetesClients
+	opts := c.CommandEnvironment
+	list, err := clients.DynamicClient.Resource(resource).Namespace(ns).List(opts.Context, metav1.ListOptions{})
 	if err != nil {
 		return "", err
 	}
@@ -120,11 +124,11 @@ func fetchAppNameFromCluster(ctx context.Context, resource schema.GroupVersionRe
 	}
 
 	if len(appNames) == 0 {
-		return "", localizer.MustLocalizeError("cluster.serviceBinding.error.noapps")
+		return "", opts.Localizer.MustLocalizeError("cluster.serviceBinding.error.noapps")
 	}
 
 	prompt := &survey.Select{
-		Message:  localizer.MustLocalize("cluster.serviceBinding.connect.survey.message"),
+		Message:  opts.Localizer.MustLocalize("cluster.serviceBinding.connect.survey.message"),
 		Options:  appNames,
 		PageSize: 10,
 	}

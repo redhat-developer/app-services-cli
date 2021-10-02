@@ -12,7 +12,7 @@ import (
 	"k8s.io/client-go/dynamic"
 )
 
-// TODO This should be gone
+// TODO This should be gone/ Not needed.
 
 // UseOperatorForBinding performs binding using ServiceBinding operator
 func UseOperatorForBinding(ctx context.Context, opts v1alpha.CommandEnvironment, sb *v1alpha1.ServiceBinding, dynamicClient dynamic.Interface, ns string) error {
