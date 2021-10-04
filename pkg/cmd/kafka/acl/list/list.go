@@ -97,6 +97,8 @@ func runList(opts *options) (err error) {
 
 	req.Page(float32(opts.page))
 
+	req.Size(float32(opts.size))
+
 	permissionsData, httpRes, err := req.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
