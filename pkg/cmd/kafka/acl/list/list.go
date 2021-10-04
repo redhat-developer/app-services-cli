@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/acl"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
@@ -77,7 +78,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
 	cmd.Flags().Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.acl.list.flag.output.description"))
+	cmd.Flags().StringVarP(&opts.output, "output", "o", dump.EmptyFormat, opts.localizer.MustLocalize("kafka.acl.list.flag.output.description"))
 
 	return cmd
 }
@@ -158,7 +159,7 @@ func mapPermissionListResultsToTableFormat(permissions []kafkainstanceclient.Acl
 func formatPrincipal(principal string, localizer localize.Localizer) string {
 	s := strings.Split(principal, ":")[1]
 
-	if s == "*" {
+	if s == acl.Wildcard {
 		return localizer.MustLocalize("kafka.acl.list.allAccounts")
 	}
 

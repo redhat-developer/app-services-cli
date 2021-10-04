@@ -9,8 +9,8 @@ By default, every users and service account have limited access to their Kafka i
 
 [kafka.acl.cmd.example]
 one = '''
-## List ACL rules for a Kafka instance
-rhoas kafka acl list
+# List ACL rules for a Kafka instance
+$ rhoas kafka acl list
 '''
 
 
@@ -43,21 +43,18 @@ The instances are displayed by default in a table, but can also be displayed as 
 
 [kafka.acl.list.cmd.example]
 one = '''
-## Display Kafka ACL rules for the instance
-rhoas kafka acl list
+# Display Kafka ACL rules for the instance
+$ rhoas kafka acl list
 '''
 
 
 [kafka.acl.list.flag.output.description]
-description = "Description for --output flag"
 one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
 
 [kafka.acl.list.flag.page.description]
-description = 'Description for the --page flag'
 one = 'Current page number for list of Kafka ACL rules'
 
 [kafka.acl.list.flag.size.description]
-description = 'Description for the --size flag'
 one = 'Maximum number of items to be returned per page'
 
 [kafka.acl.list.allAccounts]
