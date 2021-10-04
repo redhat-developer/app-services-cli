@@ -208,7 +208,7 @@ func run(opts *options) error {
 	s.Stop()
 
 	if err != nil {
-		if apiError, ok := kas.GetAPIError(err); ok {
+		if apiError := kas.GetAPIError(err); apiError != nil {
 			return errors.New(apiError.GetReason())
 		}
 		return err

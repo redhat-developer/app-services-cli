@@ -14,7 +14,7 @@ func GetKafkaByID(ctx context.Context, api kafkamgmtclient.DefaultApi, id string
 	r := api.GetKafkaById(ctx, id)
 
 	kafkaReq, httpResponse, err := r.Execute()
-	if kas.IsErr(err, kas.ErrorNotFound) {
+	if kas.IsErr(err, kas.ErrorCode7) {
 		return nil, httpResponse, kafkaerr.NotFoundByIDError(id)
 	}
 
