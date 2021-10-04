@@ -4,10 +4,11 @@ import (
 	"context"
 	"crypto/x509"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"net"
 	"net/http"
 	"net/url"
+
+	"github.com/redhat-developer/app-services-cli/internal/build"
 
 	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -38,6 +39,8 @@ import (
 	"github.com/Nerzal/gocloak/v7"
 
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+
+	svcstatus "github.com/redhat-developer/app-services-cli/pkg/service/status"
 )
 
 var DefaultScopes = []string{
@@ -214,16 +217,16 @@ func (c *KeycloakConnection) API() *api.API {
 		kafkaStatus := kafkaInstance.GetStatus()
 
 		switch kafkaStatus {
-		case "provisioning", "accepted":
+		case svcstatus.StatusProvisioning, svcstatus.StatusAccepted:
 			err = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
 			return nil, nil, err
-		case "failed":
+		case svcstatus.StatusFailed:
 			err = fmt.Errorf(`Kafka instance "%v" has failed`, kafkaInstance.GetName())
 			return nil, nil, err
-		case "deprovision":
+		case svcstatus.StatusDeprovision:
 			err = fmt.Errorf(`Kafka instance "%v" is being deprovisioned`, kafkaInstance.GetName())
 			return nil, nil, err
-		case "deleting":
+		case svcstatus.StatusDeleting:
 			err = fmt.Errorf(`Kafka instance "%v" is being deleted`, kafkaInstance.GetName())
 			return nil, nil, err
 		}
@@ -250,19 +253,19 @@ func (c *KeycloakConnection) API() *api.API {
 			return nil, nil, fmt.Errorf("%w", err)
 		}
 
-		status := instance.GetStatus()
+		status := svcstatus.ServiceStatus(instance.GetStatus())
 		// nolint
 		switch status {
-		case "provisioning", "accepted":
+		case svcstatus.StatusProvisioning, svcstatus.StatusAccepted:
 			err = fmt.Errorf(`service registry instance "%v" is not ready yet`, instance.GetName())
 			return nil, nil, err
-		case "failed":
+		case svcstatus.StatusFailed:
 			err = fmt.Errorf(`service registry instance "%v" has failed`, instance.GetName())
 			return nil, nil, err
-		case "deprovision":
+		case svcstatus.StatusDeprovision:
 			err = fmt.Errorf(`service registry instance "%v" is being deprovisioned`, instance.GetName())
 			return nil, nil, err
-		case "deleting":
+		case svcstatus.StatusDeleting:
 			err = fmt.Errorf(`service registry instance "%v" is being deleted`, instance.GetName())
 			return nil, nil, err
 		}

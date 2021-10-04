@@ -1,4 +1,4 @@
-package svcstatus
+package status
 
 type ServiceStatus = string
 
