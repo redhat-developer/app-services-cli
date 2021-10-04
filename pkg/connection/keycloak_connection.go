@@ -205,7 +205,7 @@ func (c *KeycloakConnection) API() *api.API {
 
 		kafkaInstance, resp, err := kafkaAPI.GetKafkaById(context.Background(), kafkaID).Execute()
 		defer resp.Body.Close()
-		if kas.IsErr(err, kas.ErrorNotFound) {
+		if kas.IsErr(err, kas.ErrorCode7) {
 			return nil, nil, kafkaerr.NotFoundByIDError(kafkaID)
 		} else if err != nil {
 			return nil, nil, fmt.Errorf("%w", err)
