@@ -1,0 +1,5 @@
+package acl
+
+const (
+	Wildcard = "*"
+)
