@@ -67,7 +67,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 			// nolint:govet
 			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka(), kafkaCfg.ClusterID)
 			if err != nil {
-				if kas.IsErr(err, kas.ErrorNotFound) {
+				if kas.IsErr(err, kas.ErrorCode7) {
 					err = kafkaerr.NotFoundByIDError(kafkaCfg.ClusterID)
 					opts.Logger.Error(err)
 					opts.Logger.Info(`Run "rhoas kafka use" to use another Kafka instance.`)
@@ -192,7 +192,7 @@ func createDivider(n int) string {
 
 func getKafkaStatus(ctx context.Context, api kafkamgmtclient.DefaultApi, id string) (status *KafkaStatus, err error) {
 	kafkaResponse, _, err := api.GetKafkaById(ctx, id).Execute()
-	if kas.IsErr(err, kas.ErrorNotFound) {
+	if kas.IsErr(err, kas.ErrorCode7) {
 		return nil, kafkaerr.NotFoundByIDError(id)
 	}
 	if err != nil {

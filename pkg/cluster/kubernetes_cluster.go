@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -122,7 +123,7 @@ func (c *KubernetesCluster) CurrentNamespace() (string, error) {
 func (c *KubernetesCluster) Connect(ctx context.Context, cmdOptions *ConnectArguments) error {
 	api := c.connection.API()
 	kafkaInstance, _, err := api.Kafka().GetKafkaById(ctx, cmdOptions.SelectedKafka).Execute()
-	if kas.IsErr(err, kas.ErrorNotFound) {
+	if kas.IsErr(err, kas.ErrorCode7) {
 		return kafkaerr.NotFoundByIDError(cmdOptions.SelectedKafka)
 	}
 
