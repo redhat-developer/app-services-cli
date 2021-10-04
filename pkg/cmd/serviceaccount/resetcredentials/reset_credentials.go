@@ -158,9 +158,15 @@ func runResetCredentials(opts *options) (err error) {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
 
+	cfg, err := opts.Config.Load()
+	if err != nil {
+		return err
+	}
+
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
 		ClientSecret: updatedServiceAccount.GetClientSecret(),
+		TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
