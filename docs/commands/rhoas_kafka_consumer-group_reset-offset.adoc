@@ -11,7 +11,7 @@ Reset partition offsets for a consumer group
 Reset the offset for consumers in a consumer group reading from a given topic.
 
 Reset to the earliest or latest offset. Or base the reset on a specific offset value or timestamp.
-You can also choose partitions to reset offsets from
+You can also choose partitions to reset offsets from.
 
 
 ....
@@ -34,7 +34,7 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset absolut
 # reset partition offsets for a consumer group to a timestamp
 $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset timestamp --value "2016-06-23T09:07:21-07:00"
 
-# reset partition offsets by specifying partitions for a consumer group
+# reset specific partition offsets for a consumer group
 $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions 0,1
 
 ....
