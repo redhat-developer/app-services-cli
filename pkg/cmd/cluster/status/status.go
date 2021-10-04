@@ -4,14 +4,16 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
@@ -62,34 +64,52 @@ func runStatus(opts *options) error {
 		return err
 	}
 
-	clusterConn, err := cluster.NewKubernetesClusterConnection(conn, opts.Config, opts.Logger, opts.kubeconfig, opts.IO, opts.localizer)
+	cliProperties := v1alpha.CommandEnvironment{
+		IO:         opts.IO,
+		Logger:     opts.Logger,
+		Localizer:  opts.localizer,
+		Config:     opts.Config,
+		Connection: conn,
+		Context:    opts.Context,
+	}
+
+	kubeClients, err := kubeclient.NewKubernetesClusterClients(&cliProperties, opts.kubeconfig)
 	if err != nil {
 		return err
 	}
-
-	var operatorStatus string
-	// Add versioning in future
-	isCRDInstalled, err := clusterConn.IsRhoasOperatorAvailableOnCluster(opts.Context)
-	if isCRDInstalled && err != nil {
-		opts.Logger.Debug(err)
+	clusterAPI := cluster.KubernetesClusterAPIImpl{
+		KubernetesClients:  kubeClients,
+		CommandEnvironment: &cliProperties,
 	}
 
-	if isCRDInstalled {
-		operatorStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
+	status, err := clusterAPI.ExecuteStatus()
+	if err != nil {
+		return err
+	}
+	var rhoasStatus string
+	//nolint:gocritic
+	if status.RHOASOperatorAvailable {
+		if status.LatestRHOASVersionAvailable {
+			rhoasStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
+		} else {
+			rhoasStatus = color.Info(opts.localizer.MustLocalize("cluster.common.operatorOutdatedMessage"))
+		}
 	} else {
-		operatorStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
+		rhoasStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
-	currentNamespace, err := clusterConn.CurrentNamespace()
-	if err != nil {
-		return err
+	var sboStatus string
+	if status.ServiceBindingOperatorAvailable {
+		sboStatus = color.Success(opts.localizer.MustLocalize("cluster.common.operatorInstalledMessage"))
+	} else {
+		sboStatus = color.Error(opts.localizer.MustLocalize("cluster.common.operatorNotInstalledMessage"))
 	}
 
 	fmt.Fprintln(
 		opts.IO.Out,
 		opts.localizer.MustLocalize("cluster.status.statusMessage",
-			localize.NewEntry("Namespace", color.Info(currentNamespace)),
-			localize.NewEntry("OperatorStatus", operatorStatus)),
+			localize.NewEntry("RHOASOperatorStatus", rhoasStatus),
+			localize.NewEntry("SBOOperatorStatus", sboStatus)),
 	)
 
 	return nil
