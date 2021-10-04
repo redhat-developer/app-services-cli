@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/describe"
@@ -35,6 +36,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		topic.NewTopicCommand(f),
 		consumergroup.NewConsumerGroupCommand(f),
 		update.NewUpdateCommand(f),
+		acl.NewAclCommand(f),
 	)
 
 	return cmd

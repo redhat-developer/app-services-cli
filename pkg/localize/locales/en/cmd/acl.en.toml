@@ -1,0 +1,70 @@
+[kafka.acl.cmd.shortDescription]
+one = 'Kafka ACL management for users and service accounts'
+
+[kafka.acl.cmd.longDescription]
+one = '''
+Set of commands that will let you manage Kafka ACLs.
+By default, every users and service account have limited access to their Kafka instance (Only DESCRIBE permission is enabled for TOPIC, ACL, and GROUP).
+'''
+
+[kafka.acl.cmd.example]
+one = '''
+## List ACL rules for a Kafka instance
+rhoas kafka acl list
+'''
+
+
+[kafka.acl.common.error.unauthorized]
+one = 'you are unauthorized to {{.Operation}} these Kafka ACL rules'
+
+[kafka.acl.common.error.forbidden]
+one = 'you are forbidden to {{.Operation}} this consumer group'
+
+[kafka.acl.common.error.internalServerError]
+one = 'internal server error'
+
+[kafka.acl.common.error.unableToConnectToKafka]
+one = 'unable to connect to Kafka instance "{{.Name}}"'
+
+[kafka.acl.common.error.noKafkaSelected]
+one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
+
+
+
+[kafka.acl.list.cmd.shortDescription]
+one = 'List all Kafka ACL rules.'
+
+[kafka.acl.list.cmd.longDescription]
+one = '''
+This command will display list of Kafka ACL rules
+
+The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+'''
+
+[kafka.acl.list.cmd.example]
+one = '''
+## Display Kafka ACL rules for the instance
+rhoas kafka acl list
+'''
+
+
+[kafka.acl.list.flag.output.description]
+description = "Description for --output flag"
+one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
+
+[kafka.acl.list.flag.page.description]
+description = 'Description for the --page flag'
+one = 'Current page number for list of Kafka ACL rules'
+
+[kafka.acl.list.flag.size.description]
+description = 'Description for the --size flag'
+one = 'Maximum number of items to be returned per page'
+
+[kafka.acl.list.allAccounts]
+one = 'All accounts'
+
+[kafka.acl.list.is]
+one = 'is'
+
+[kafka.acl.list.startsWith]
+one = 'starts with'
