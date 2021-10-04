@@ -10,6 +10,9 @@ Describe, list, and delete consumer groups for the current Apache Kafka instance
 
 Use these commands to describe, list, and delete consumer groups for the current Kafka instance.
 
+Commands are executed on the currently selected Kafka instance.
+
+
 [discrete]
 == Examples
 
@@ -61,9 +64,9 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group_reset-offset.adoc#rhoas-kafka-consumer-group-reset-offset[rhoas kafka consumer-group reset-offset]	 - Reset offset for a consumer group
+* link:rhoas_kafka_consumer-group_reset-offset.adoc#rhoas-kafka-consumer-group-reset-offset[rhoas kafka consumer-group reset-offset]	 - Reset partition offsets for a consumer group
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group-reset-offset_{context}[rhoas kafka consumer-group reset-offset]	 - Reset offset for a consumer group
+* link:{path}#ref-rhoas-kafka-consumer-group-reset-offset_{context}[rhoas kafka consumer-group reset-offset]	 - Reset partition offsets for a consumer group
 endif::[]
 
