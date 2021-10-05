@@ -23,10 +23,10 @@ rhoas service-registry delete [flags]
 
 ....
 # Delete a Service Registry instance by name
-rhoas service-registry delete --name <name>
+rhoas service-registry delete --name my-service-registry
 
 # Delete a Service Registry instance by ID
-rhoas service-registry delete --id <id>
+rhoas service-registry delete --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
 

@@ -26,10 +26,10 @@ rhoas service-registry use [flags]
 
 ....
 # Use a Service Registry instance by name
-rhoas service-registry use --name <name>
+rhoas service-registry use --name my-service-registry
 
 # Use a Service Registry instance by ID
-rhoas service-registry use --id <id>
+rhoas service-registry use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
 
