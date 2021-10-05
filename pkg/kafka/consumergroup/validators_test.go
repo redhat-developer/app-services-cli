@@ -137,10 +137,10 @@ func TestValidateOffsetValue(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "Should throw an error when value for timestamp offset is not in format 'yyyy-MM-dd'T'HH:mm:ssz'",
+			name: "Should throw an error when value for timestamp offset is not in ISO 8601 format",
 			args: args{
 				offset: "timestamp",
-				value:  "2016-06-23T09:07:21",
+				value:  "2016-06-23TZ09:07:21",
 			},
 			wantErr: true,
 		},
