@@ -74,9 +74,9 @@ linters-settings:
     ignore-words:
       - rhoas
   custom:
-    goi18linter:
+    appservicesgolinter:
       path: ./golangci/appservicesgolinter.so
-      description: app-services-go-linter plugin analyze source tree of Go files and validates the availability of i18n strings in *.toml files.
+      description: app-services-go-linter plugin analyzes source tree of Go files and validates the availability of i18n strings in *.toml files.
       original-url: github.com/redhat-developer/app-services-go-linter
 linters:
   disable:
@@ -91,7 +91,7 @@ linters:
     - govet
     - gocritic
     - misspell
-    - goi18linter
+    - appservicesgolinter
   presets:
     - bugs
     - unused
