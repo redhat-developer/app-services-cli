@@ -11,7 +11,7 @@ View the status of all currently used services
 View status information of your currently used services.
 Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
 
-To use a different service run "rhoas <service> use [args] [flags]".
+To use a different service run "rhoas [service] use [args] [flags]".
 
 
 ....

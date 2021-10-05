@@ -23,11 +23,11 @@ rhoas service-registry describe [flags]
 
 ....
 # Describe a Service Registry instance by name
-rhoas service-registry describe --name <name>
+rhoas service-registry describe --name my-service-regisrty
 
 
 # Describe a Service Registry instance by ID
-rhoas service-registry describe --id <id>
+rhoas service-registry describe --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
 
