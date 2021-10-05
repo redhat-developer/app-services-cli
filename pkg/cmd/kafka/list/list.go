@@ -31,6 +31,7 @@ type kafkaRow struct {
 	Status        string `json:"status" header:"Status"`
 	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
 	Region        string `json:"region" header:"Region"`
+	Selected      string `header:"Selected"`
 }
 
 type options struct {
@@ -124,7 +125,13 @@ func runList(opts *options) error {
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
-		rows := mapResponseItemsToRows(response.GetItems())
+		var rows []kafkaRow
+		serviceConfig, _ := opts.Config.Load()
+		if serviceConfig != nil && serviceConfig.Services.Kafka != nil {
+			rows = mapResponseItemsToRows(response.GetItems(), serviceConfig.Services.Kafka.ClusterID)
+		} else {
+			rows = mapResponseItemsToRows(response.GetItems(), "-")
+		}
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
 	default:
@@ -133,10 +140,14 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
+func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string) []kafkaRow {
 	rows := make([]kafkaRow, len(kafkas))
 
 	for i, k := range kafkas {
+		s := ""
+		if k.GetId() == selectedId {
+			s = "*"
+		}
 		row := kafkaRow{
 			ID:            k.GetId(),
 			Name:          k.GetName(),
@@ -144,6 +155,7 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
 			Status:        k.GetStatus(),
 			CloudProvider: k.GetCloudProvider(),
 			Region:        k.GetRegion(),
+			Selected:      s,
 		}
 
 		rows[i] = row

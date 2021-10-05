@@ -24,10 +24,11 @@ import (
 
 // row is the details of a Service Registry instance needed to print to a table
 type RegistryRow struct {
-	ID     string `json:"id" header:"ID"`
-	Name   string `json:"name" header:"Name"`
-	Owner  string `json:"owner" header:"Owner"`
-	Status string `json:"status" header:"Status"`
+	ID       string `json:"id" header:"ID"`
+	Name     string `json:"name" header:"Name"`
+	Owner    string `json:"owner" header:"Owner"`
+	Status   string `json:"status" header:"Status"`
+	Selected string `header:"Selected"`
 }
 
 type options struct {
@@ -116,7 +117,13 @@ func runList(opts *options) error {
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
-		rows := mapResponseItemsToRows(&response.Items)
+		var rows []RegistryRow
+		serviceConfig, _ := opts.Config.Load()
+		if serviceConfig != nil && serviceConfig.Services.ServiceRegistry != nil {
+			rows = mapResponseItemsToRows(&response.Items, serviceConfig.Services.ServiceRegistry.InstanceID)
+		} else {
+			rows = mapResponseItemsToRows(&response.Items, "-")
+		}
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
 	default:
@@ -126,16 +133,21 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry) []RegistryRow {
+func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry, selectedId string) []RegistryRow {
 	rows := make([]RegistryRow, len(*registries))
 
 	for i := range *registries {
 		k := (*registries)[i]
+		s := ""
+		if k.Id == selectedId {
+			s = "*"
+		}
 		row := RegistryRow{
-			ID:     fmt.Sprint(k.Id),
-			Name:   k.GetName(),
-			Status: string(k.GetStatus()),
-			Owner:  k.GetOwner(),
+			ID:       fmt.Sprint(k.Id),
+			Name:     k.GetName(),
+			Status:   string(k.GetStatus()),
+			Owner:    k.GetOwner(),
+			Selected: s,
 		}
 
 		rows[i] = row
