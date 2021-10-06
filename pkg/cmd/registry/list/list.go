@@ -3,7 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
-
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -22,7 +22,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-// row is the details of a Service Registry instance needed to print to a table
+// RegistryRow is the details of a Service Registry instance needed to print to a table
 type RegistryRow struct {
 	ID     string `json:"id" header:"ID"`
 	Name   string `json:"name" header:"Name"`
@@ -116,7 +116,13 @@ func runList(opts *options) error {
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
-		rows := mapResponseItemsToRows(&response.Items)
+		var rows []RegistryRow
+		serviceConfig, _ := opts.Config.Load()
+		if serviceConfig != nil && serviceConfig.Services.ServiceRegistry != nil {
+			rows = mapResponseItemsToRows(&response.Items, serviceConfig.Services.ServiceRegistry.InstanceID)
+		} else {
+			rows = mapResponseItemsToRows(&response.Items, "-")
+		}
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
 	default:
@@ -126,14 +132,18 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry) []RegistryRow {
+func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry, selectedId string) []RegistryRow {
 	rows := make([]RegistryRow, len(*registries))
 
 	for i := range *registries {
 		k := (*registries)[i]
+		name := k.GetName()
+		if k.Id == selectedId {
+			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))
+		}
 		row := RegistryRow{
 			ID:     fmt.Sprint(k.Id),
-			Name:   k.GetName(),
+			Name:   name,
 			Status: string(k.GetStatus()),
 			Owner:  k.GetOwner(),
 		}

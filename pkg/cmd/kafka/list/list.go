@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"strconv"
 
@@ -124,7 +125,13 @@ func runList(opts *options) error {
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
-		rows := mapResponseItemsToRows(response.GetItems())
+		var rows []kafkaRow
+		serviceConfig, _ := opts.Config.Load()
+		if serviceConfig != nil && serviceConfig.Services.Kafka != nil {
+			rows = mapResponseItemsToRows(response.GetItems(), serviceConfig.Services.Kafka.ClusterID)
+		} else {
+			rows = mapResponseItemsToRows(response.GetItems(), "-")
+		}
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
 	default:
@@ -133,13 +140,17 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest) []kafkaRow {
+func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string) []kafkaRow {
 	rows := make([]kafkaRow, len(kafkas))
 
 	for i, k := range kafkas {
+		name := k.GetName()
+		if k.GetId() == selectedId {
+			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))
+		}
 		row := kafkaRow{
 			ID:            k.GetId(),
-			Name:          k.GetName(),
+			Name:          name,
 			Owner:         k.GetOwner(),
 			Status:        k.GetStatus(),
 			CloudProvider: k.GetCloudProvider(),
