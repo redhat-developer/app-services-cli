@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"strconv"
 
@@ -31,7 +32,6 @@ type kafkaRow struct {
 	Status        string `json:"status" header:"Status"`
 	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
 	Region        string `json:"region" header:"Region"`
-	Selected      string `header:"Selected"`
 }
 
 type options struct {
@@ -144,18 +144,17 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 	rows := make([]kafkaRow, len(kafkas))
 
 	for i, k := range kafkas {
-		s := ""
+		name := k.GetName()
 		if k.GetId() == selectedId {
-			s = "*"
+			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))
 		}
 		row := kafkaRow{
 			ID:            k.GetId(),
-			Name:          k.GetName(),
+			Name:          name,
 			Owner:         k.GetOwner(),
 			Status:        k.GetStatus(),
 			CloudProvider: k.GetCloudProvider(),
 			Region:        k.GetRegion(),
-			Selected:      s,
 		}
 
 		rows[i] = row
