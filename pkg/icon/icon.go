@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	CrossMark = "\u274c"
-	CheckMark = "\u2714\ufe0f"
+	ErrorSymbol     = "\u274c"
+	checkMarkSymbol = "\u2714\ufe0f"
+	warningSymbol   = "\u26A0"
 )
 
 // Emoji accepts two arguments, emoji sequence code, and fallback string, for the cases when emoji isn't supported.
@@ -22,10 +23,16 @@ func Emoji(emoji string, fallback string) string {
 
 // SuccessPrefix returns check mark emoji prefix
 func SuccessPrefix() string {
-	return color.Success(Emoji(CheckMark, ""))
+	return color.Success(Emoji(checkMarkSymbol, ""))
 }
 
 // ErrorPrefix returns cross mark emoji prefix or default "Error:"
 func ErrorPrefix() string {
-	return Emoji(CrossMark, "Error:")
+	return Emoji(ErrorSymbol, "Error:")
+}
+
+// Warning returns an emoji icon indicating a warning
+// Ref: https://emojipedia.org/warning/
+func Warning() string {
+	return Emoji(warningSymbol, "")
 }

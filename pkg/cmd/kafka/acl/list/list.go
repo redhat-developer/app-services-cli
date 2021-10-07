@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -12,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/acl"
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
@@ -74,7 +73,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32Var(&opts.page, "page", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
 	cmd.Flags().Int32Var(&opts.size, "size", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
 	cmd.Flags().StringVarP(&opts.output, "output", "o", dump.EmptyFormat, opts.localizer.MustLocalize("kafka.acl.list.flag.output.description"))
-	cmd.Flags().StringVar(&opts.kafkaID, "instance-id", "", opts.localizer.MustLocalize("kafka.acl.common.flag.instance.id"))
+	cmd.Flags().StringVar(&opts.kafkaID, "instance-id", "", opts.localizer.MustLocalize("kafka.common.flag.instanceID.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -102,32 +101,15 @@ func runList(opts *options) (err error) {
 		defer httpRes.Body.Close()
 	}
 
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
-
-		operationTmplPair := localize.NewEntry("Operation", "list")
-
-		switch httpRes.StatusCode {
-		case http.StatusUnauthorized:
-			return opts.localizer.MustLocalizeError("kafka.acl.common.error.unauthorized", operationTmplPair)
-		case http.StatusForbidden:
-			return opts.localizer.MustLocalizeError("kafka.acl.common.error.forbidden", operationTmplPair)
-		case http.StatusInternalServerError:
-			return opts.localizer.MustLocalizeError("kafka.acl.common.error.internalServerError")
-		case http.StatusServiceUnavailable:
-			return opts.localizer.MustLocalizeError("kafka.acl.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
-		default:
-			return err
-		}
+	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
+		return err
 	}
 
 	switch opts.output {
 	case dump.EmptyFormat:
 		opts.Logger.Info("")
 		permissions := permissionsData.GetItems()
-		rows := acl.MapPermissionListToTableFormat(permissions, opts.localizer)
+		rows := aclutil.MapACLsToTableRows(permissions, opts.localizer)
 		dump.Table(opts.IO.Out, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.output, permissionsData)

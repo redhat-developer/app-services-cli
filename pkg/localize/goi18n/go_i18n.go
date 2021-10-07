@@ -85,6 +85,22 @@ func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry)
 	return l.localizer.MustLocalize(cfg)
 }
 
+// MustLocalize loads a i18n message from the file system
+// You can pass dynamic values using template entries
+// Examples:
+//
+// `localizer.MustLocalizePlural("my-message-id", 2)`
+//
+func (l *Goi18n) MustLocalizePlural(id string, pluralCount int, tmplEntries ...*localize.TemplateEntry) string {
+	templateData := map[string]interface{}{}
+	// map the template entries to the go-i18n format
+	for _, t := range tmplEntries {
+		templateData[t.Key] = t.Value
+	}
+	cfg := &i18n.LocalizeConfig{MessageID: id, PluralCount: pluralCount, TemplateData: templateData}
+	return l.localizer.MustLocalize(cfg)
+}
+
 // MustLocalizeError loads a i18n message from the file system
 // and returns an error
 // Examples:
