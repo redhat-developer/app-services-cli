@@ -17,7 +17,7 @@ type RegistryService struct {
 	KubernetesClients  *kubeclient.KubernetesClients
 }
 
-func (s RegistryService) BuildServiceDetails(serviceId string, namespace string, ignoreContext bool) (*v1alpha.ServiceDetails, error) {
+func (s RegistryService) BuildServiceDetails(serviceId string, namespace string, ignoreContext bool) (*ServiceDetails, error) {
 	cliOpts := s.CommandEnvironment
 	if serviceId == "" {
 		cfg, err := s.CommandEnvironment.Config.Load()
@@ -67,7 +67,7 @@ func (s RegistryService) BuildServiceDetails(serviceId string, namespace string,
 		},
 	}
 
-	serviceDetails := v1alpha.ServiceDetails{
+	serviceDetails := ServiceDetails{
 		ID:                 serviceId,
 		Name:               resourceName,
 		KubernetesResource: serviceRegistryCR,

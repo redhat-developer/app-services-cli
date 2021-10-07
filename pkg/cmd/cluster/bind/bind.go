@@ -98,6 +98,7 @@ func runBind(opts *options) error {
 		Localizer:  opts.localizer,
 		Config:     opts.Config,
 		Connection: conn,
+		Context:    opts.Context,
 	}
 
 	kubeClients, err := kubeclient.NewKubernetesClusterClients(&cliProperties, opts.kubeconfigLocation)

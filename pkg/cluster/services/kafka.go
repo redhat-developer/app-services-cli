@@ -18,7 +18,7 @@ type KafkaService struct {
 	KubernetesClients  *kubeclient.KubernetesClients
 }
 
-func (s KafkaService) BuildServiceDetails(serviceId string, namespace string, ignoreContext bool) (*v1alpha.ServiceDetails, error) {
+func (s KafkaService) BuildServiceDetails(serviceId string, namespace string, ignoreContext bool) (*ServiceDetails, error) {
 	cliOpts := s.CommandEnvironment
 	if serviceId == "" {
 		cfg, err := s.CommandEnvironment.Config.Load()
@@ -68,7 +68,7 @@ func (s KafkaService) BuildServiceDetails(serviceId string, namespace string, ig
 		},
 	}
 
-	serviceDetails := v1alpha.ServiceDetails{
+	serviceDetails := ServiceDetails{
 		ID:                 serviceId,
 		Name:               resourceName,
 		KubernetesResource: kafkaConnectionCR,

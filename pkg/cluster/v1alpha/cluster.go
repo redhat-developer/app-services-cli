@@ -43,6 +43,11 @@ type BindOperationOptions struct {
 	IgnoreContext           bool
 }
 
+type CleanOperationOptions struct {
+	ForceDeleteWithoutAsk bool
+	Namespace             string
+}
+
 // status of the Operator
 type OperatorStatus struct {
 	ServiceBindingOperatorAvailable bool
@@ -55,4 +60,5 @@ type ClusterUserAPI interface {
 	ExecuteConnect(connectOpts *ConnectOperationOptions) error
 	ExecuteServiceBinding(options *BindOperationOptions) error
 	ExecuteStatus() (OperatorStatus, error)
+	ExecuteClean(cleanOptions *CleanOperationOptions) error
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/services"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
@@ -68,7 +69,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 	if connectOpts.ForceCreationWithoutAsk == false {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
-			Message: cliOpts.Localizer.MustLocalize("cluster.kubernetes.connect.input.confirm.message"),
+			Message: cliOpts.Localizer.MustLocalize("cluster.kubernetes.input.confirm.message"),
 		}
 		err = survey.AskOne(confirm, &shouldContinue)
 		if err != nil {
@@ -76,13 +77,13 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 		}
 
 		if !shouldContinue {
-			cliOpts.Logger.Debug(cliOpts.Localizer.MustLocalize("cluster.kubernetes.connect.log.debug.cancellingConnect"))
+			cliOpts.Logger.Debug(cliOpts.Localizer.MustLocalize("cluster.kubernetes.log.debug.cancellingOperation"))
 			return nil
 		}
 	}
 
 	// Token with auth for operator to pick
-	err = api.createTokenSecretIfNeeded(currentNamespace, connectOpts)
+	err = api.createTokenSecretIfNeeded(currentNamespace, connectOpts.OfflineAccessToken)
 	if err != nil {
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 	}
@@ -100,7 +101,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 }
 
 // createCustomResource
-func (api *KubernetesClusterAPIImpl) createCustomResource(serviceDetails *v1alpha.ServiceDetails, namespace string) error {
+func (api *KubernetesClusterAPIImpl) createCustomResource(serviceDetails *services.ServiceDetails, namespace string) error {
 	crJSON, err := json.Marshal(serviceDetails.KubernetesResource)
 	if err != nil {
 		return fmt.Errorf("%v: %w", api.CommandEnvironment.Localizer.MustLocalize("cluster.kubernetes.createCR.error.marshalError"), err)
@@ -113,37 +114,38 @@ func (api *KubernetesClusterAPIImpl) createCustomResource(serviceDetails *v1alph
 
 	api.CommandEnvironment.Logger.Info(
 		api.CommandEnvironment.Localizer.MustLocalize("cluster.kubernetes.createCR.log.info.customResourceCreated",
+			localize.NewEntry("Resource", serviceDetails.Type),
 			localize.NewEntry("Name", serviceDetails.Name)))
 
 	return api.watchForServiceStatus(serviceDetails, namespace)
 }
 
-func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, connectOpts *v1alpha.ConnectOperationOptions) error {
+func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, accessToken string) error {
 	cliOpts := c.CommandEnvironment
 	kClients := c.KubernetesClients
 	ctx := cliOpts.Context
 
-	_, err := kClients.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.TokenSecretName, metav1.GetOptions{})
+	_, err := kClients.Clientset.CoreV1().Secrets(namespace).Get(ctx, constants.TokenSecretName, metav1.GetOptions{})
 	if err == nil {
 		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.tokensecret.log.info.found"), constants.TokenSecretName)
 		return nil
 	}
 
-	if connectOpts.OfflineAccessToken == "" && !cliOpts.IO.CanPrompt() {
+	if accessToken == "" && !cliOpts.IO.CanPrompt() {
 		return cliOpts.Localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "token"))
 	}
 
-	if connectOpts.OfflineAccessToken == "" {
+	if accessToken == "" {
 		apiTokenInput := &survey.Input{
 			Message: cliOpts.Localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)),
 		}
-		surveyErr := survey.AskOne(apiTokenInput, &connectOpts.OfflineAccessToken)
+		surveyErr := survey.AskOne(apiTokenInput, &accessToken)
 		if surveyErr != nil {
 			return surveyErr
 		}
 	}
 	parser := new(jwt.Parser)
-	_, _, err = parser.ParseUnverified(connectOpts.OfflineAccessToken, jwt.MapClaims{})
+	_, _, err = parser.ParseUnverified(accessToken, jwt.MapClaims{})
 	if err != nil {
 		return err
 	}
@@ -155,7 +157,7 @@ func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, c
 			Namespace: namespace,
 		},
 		StringData: map[string]string{
-			"value": connectOpts.OfflineAccessToken,
+			"value": accessToken,
 		},
 	}
 
@@ -228,10 +230,11 @@ func (c *KubernetesClusterAPIImpl) createServiceAccount(ctx context.Context, cli
 }
 
 func (api *KubernetesClusterAPIImpl) watchForServiceStatus(
-	serviceDetails *v1alpha.ServiceDetails, namespace string) error {
+	serviceDetails *services.ServiceDetails, namespace string) error {
 	localizer := api.CommandEnvironment.Localizer
 	logger := api.CommandEnvironment.Logger
-	logger.Info(localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.log.info.wait"))
+	logger.Info(localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.log.info.wait",
+		localize.NewEntry("Resource", serviceDetails.Type)))
 
 	w, err := api.KubernetesClients.DynamicClient.
 		Resource(serviceDetails.GroupMetadata).
@@ -259,17 +262,20 @@ func (api *KubernetesClusterAPIImpl) watchForServiceStatus(
 					for _, condition := range conditions {
 						typedCondition, ok := condition.(map[string]interface{})
 						if !ok {
-							return fmt.Errorf(localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.format"), typedCondition)
+							return fmt.Errorf(
+								localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.format"), typedCondition)
 						}
 						if typedCondition["type"].(string) == "Finished" {
 							if typedCondition["status"].(string) == "False" {
 								w.Stop()
-								return fmt.Errorf(localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.status"),
+								return fmt.Errorf(
+									localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.status",
+										localize.NewEntry("Resource", serviceDetails.Type)),
 									typedCondition["message"])
 							}
 							if typedCondition["status"].(string) == "True" {
-								logger.Info(icon.SuccessPrefix(), localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.log.info.success",
-									localize.NewEntry("Name", serviceDetails.Name), localize.NewEntry("Namespace", namespace)))
+								logger.Info(icon.SuccessPrefix(),
+									localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.log.info.success"))
 
 								w.Stop()
 								return nil

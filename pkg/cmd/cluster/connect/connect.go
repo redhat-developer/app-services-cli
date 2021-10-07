@@ -63,6 +63,8 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceType.description"))
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 
+	// TODO service-type suggestions
+	// TODO service-id vs service name
 	return cmd
 }
 
@@ -78,6 +80,7 @@ func runConnect(opts *options) error {
 		Localizer:  opts.localizer,
 		Config:     opts.Config,
 		Connection: conn,
+		Context:    opts.Context,
 	}
 
 	kubeClients, err := kubeclient.NewKubernetesClusterClients(&cliProperties, opts.kubeconfigLocation)

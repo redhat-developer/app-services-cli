@@ -16,8 +16,8 @@ type KubernetesClusterAPIImpl struct {
 
 // see bind.go cluster.go status.go for interface implementations
 
-func (c *KubernetesClusterAPIImpl) createServiceInstance(serviceType string) (v1alpha.RHOASKubernetesService, error) {
-	var service v1alpha.RHOASKubernetesService
+func (c *KubernetesClusterAPIImpl) createServiceInstance(serviceType string) (services.RHOASKubernetesService, error) {
+	var service services.RHOASKubernetesService
 	if serviceType == "" {
 		serviceTypeInput := &survey.Select{
 			Message: c.CommandEnvironment.Localizer.MustLocalize("cluster.common.input.servicetype"),
@@ -40,6 +40,8 @@ func (c *KubernetesClusterAPIImpl) createServiceInstance(serviceType string) (v1
 			CommandEnvironment: c.CommandEnvironment,
 			KubernetesClients:  c.KubernetesClients,
 		}
+	default:
+		return nil, c.CommandEnvironment.Localizer.MustLocalizeError("cluster.common.error.servicetype")
 	}
 
 	return service, nil

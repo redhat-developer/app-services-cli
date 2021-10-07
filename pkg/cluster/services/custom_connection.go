@@ -1,4 +1,4 @@
-package v1alpha
+package services
 
 import "k8s.io/apimachinery/pkg/runtime/schema"
 

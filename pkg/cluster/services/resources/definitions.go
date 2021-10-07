@@ -41,4 +41,11 @@ const ServiceRegistryServiceName = "service-registry"
 
 const KafkaServiceName = "kafka"
 
+// All services as labels
 var AllServices = []string{"kafka", "service-registry"}
+
+// All services defined as resources
+var AllResources []schema.GroupVersionResource = []schema.GroupVersionResource{
+	AKCResource,
+	SRCResource,
+}
