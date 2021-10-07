@@ -13,7 +13,6 @@ one = '''
 $ rhoas kafka acl list
 '''
 
-
 [kafka.acl.common.error.unauthorized]
 one = 'you are unauthorized to {{.Operation}} these Kafka ACL rules'
 
@@ -29,7 +28,20 @@ one = 'unable to connect to Kafka instance "{{.Name}}"'
 [kafka.acl.common.error.noKafkaSelected]
 one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
 
+[kafka.acl.common.error.resourceTypeMissingOrIncorrect]
+one = 'resource type "{{.ResourceType}}" was selected, but no value was provided. Provide a value using the "--{{.Flag}}" flag'
 
+[kafka.acl.common.error.invalidResourceOperation]
+one = 'invalid operation "{{.Operation}}" for resource type "{{.ResourceType}}". Valid operations are: {{.ValidOperationList}}'
+
+[kafka.acl.common.flag.resourceType]
+one = 'ACL resource type'
+
+[kafka.acl.common.flag.operation]
+one = 'ACL operation'
+
+[kafka.acl.common.flag.permission]
+one = 'ACL permission'
 
 [kafka.acl.list.cmd.shortDescription]
 one = 'List all Kafka ACL rules.'
@@ -46,7 +58,6 @@ one = '''
 # Display Kafka ACL rules for the instance
 $ rhoas kafka acl list
 '''
-
 
 [kafka.acl.list.flag.output.description]
 one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'

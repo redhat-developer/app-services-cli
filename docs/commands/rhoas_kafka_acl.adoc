@@ -16,8 +16,8 @@ By default, every users and service account have limited access to their Kafka i
 == Examples
 
 ....
-## List ACL rules for a Kafka instance
-rhoas kafka acl list
+# List ACL rules for a Kafka instance
+$ rhoas kafka acl list
 
 ....
 
@@ -36,6 +36,13 @@ ifdef::env-github,env-browser[]
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_acl_delete.adoc#rhoas-kafka-acl-delete[rhoas kafka acl delete]	 - List all Kafka ACL rules.
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-acl-delete_{context}[rhoas kafka acl delete]	 - List all Kafka ACL rules.
 endif::[]
 
 ifdef::env-github,env-browser[]

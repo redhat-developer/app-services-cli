@@ -21,8 +21,8 @@ rhoas kafka acl list [flags]
 == Examples
 
 ....
-## Display Kafka ACL rules for the instance
-rhoas kafka acl list
+# Display Kafka ACL rules for the instance
+$ rhoas kafka acl list
 
 ....
 

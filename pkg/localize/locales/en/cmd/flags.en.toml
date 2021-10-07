@@ -13,6 +13,12 @@ one = ', valid options are: '
 description = 'Required flag error message'
 one = '--{{.Flag}} is a required flag'
 
+[flag.common.chooseFrom]
+one = 'Choose from: '
+
+[flag.common.output.description]
+one = 'Specify the output format'
+
 [argument.error.requiredWhenNonInteractive]
 description = "Argument is required when not running interactively"
 one = "{{.Argument}} required when not running interactively"

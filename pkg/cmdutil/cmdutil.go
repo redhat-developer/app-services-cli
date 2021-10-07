@@ -1,6 +1,7 @@
 package cmdutil
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -109,4 +110,17 @@ func ConvertSizeValueToInt32(s string) int32 {
 	}
 
 	return int32(val)
+}
+
+// StringSliceToListStringWithQuotes converts a string slice to a comma-separated list with each value in quotes.
+// Example: "a", "b", "c"
+func StringSliceToListStringWithQuotes(validOptions []string) string {
+	var listF string
+	for i, val := range validOptions {
+		listF += fmt.Sprintf("\"%v\"", val)
+		if i < len(validOptions)-1 {
+			listF += ", "
+		}
+	}
+	return listF
 }
