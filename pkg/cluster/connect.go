@@ -42,13 +42,13 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 	cliOpts := api.CommandEnvironment
 
 	// Creates abstraction of the service
-	currentService, err := api.createServiceInstance(connectOpts.SelectedServiceType)
+	currentService, err := api.createServiceInstance(connectOpts.ServiceType)
 	if err != nil {
 		return err
 	}
 
 	serviceDetails, err := currentService.BuildServiceDetails(
-		connectOpts.SelectedServiceID, currentNamespace, connectOpts.IgnoreContext)
+		connectOpts.ServiceName, currentNamespace, connectOpts.IgnoreContext)
 	if err != nil {
 		return err
 	}

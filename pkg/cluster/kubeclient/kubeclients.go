@@ -109,7 +109,7 @@ func (kClients *KubernetesClients) MakeCrGetRequest(resource *schema.GroupVersio
 	return data, nil
 }
 
-// MakeCrGetRequest - perform kubernetes api post request for CustomResource
+// MakeCRPostRequest - perform kubernetes api post request for CustomResource
 func (kClients *KubernetesClients) MakeCRPostRequest(resource *schema.GroupVersionResource,
 	name string, crJSON []byte,
 ) error {

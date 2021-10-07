@@ -85,8 +85,8 @@ one = 'Please select application you want to connect with'
 
 [cluster.serviceBinding.serviceMissing.message]
 one = '''
-Selected service is missing on the specified namespace.
-Please run "rhoas cluster connect" command before binding your service.
+Resource for selected service is missing on the specified namespace.
+Please run "rhoas cluster connect" command before binding your service
 '''
 
 [cluster.serviceBinding.bindingSuccess]
@@ -124,7 +124,7 @@ Please review if you have set the right namespace and are connected into right c
 one = 'Failed to communicate with your kubernetes cluster. Please check if you are logged into cluster and can reach it.'
 
 [cluster.common.flag.yes.description]
-one = 'Forcibly perform operatipn without confirmation'
+one = 'Forcibly perform operation without confirmation'
 
 [cluster.common.flag.namespace.description]
 one = 'Custom Kubernetes namespace (if not set current namespace will be used)'
@@ -134,9 +134,6 @@ one = 'Ignore currently selected services and ask to select each service separat
 
 [cluster.common.flag.serviceType.description]
 one = 'Type of custom resource connection'
-
-[cluster.common.flag.serviceId.description]
-one = 'ID of service to connect to'
 
 [cluster.common.flag.serviceName.description]
 one = 'Name of service to connect to'
@@ -171,10 +168,10 @@ the Service Binding operator (https://github.com/redhat-developer/service-bindin
 [cluster.connect.cmd.example]
 one = '''
 # connect a Kafka instance to your cluster
-$ rhoas cluster connect --service-type kafka --service-id c58n9lbcuru04a0e0oog
+$ rhoas cluster connect --service-type kafka --service-name kafka
 
 # connect a Service registry instance to your cluster
-$ rhoas cluster connect --service-type service-registry --service-id d64f6893-9bde-4524-b3d3-0e39d0fd130e
+$ rhoas cluster connect --service-type service-registry --service-name registry
 '''
 
 [cluster.status.cmd.shortDescription]
@@ -234,7 +231,7 @@ one = '''
 Connection Details:
 
 Service Type:           {{.ServiceType}}
-Service ID:             {{.ServiceName}}
+Service Name:             {{.ServiceName}}
 Kubernetes Namespace:   {{.Namespace}}
 Service Account Secret: {{.ServiceAccountSecretName}}
 '''

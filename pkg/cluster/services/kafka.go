@@ -1,15 +1,12 @@
 package services
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 // KafkaService contains methods to connect and bind Kafka Service instance to cluster
@@ -18,14 +15,17 @@ type KafkaService struct {
 	KubernetesClients  *kubeclient.KubernetesClients
 }
 
-func (s KafkaService) BuildServiceDetails(serviceId string, namespace string, ignoreContext bool) (*ServiceDetails, error) {
+func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, ignoreContext bool) (*ServiceDetails, error) {
 	cliOpts := s.CommandEnvironment
-	if serviceId == "" {
-		cfg, err := s.CommandEnvironment.Config.Load()
-		if err != nil {
-			return nil, err
-		}
+	cfg, err := cliOpts.Config.Load()
+	if err != nil {
+		return nil, err
+	}
 
+	api := cliOpts.Connection.API()
+	var serviceId string
+
+	if serviceName == "" {
 		if cfg.Services.Kafka == nil || ignoreContext {
 			// nolint
 			selectedService, err := kafka.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger, cliOpts.Localizer)
@@ -36,26 +36,26 @@ func (s KafkaService) BuildServiceDetails(serviceId string, namespace string, ig
 				return nil, nil
 			}
 			serviceId = selectedService.GetId()
+			serviceName = selectedService.GetName()
 		} else {
 			serviceId = cfg.Services.Kafka.ClusterID
+			selectedService, _, err := kafka.GetKafkaByID(cliOpts.Context, api.Kafka(), serviceId)
+			if err != nil {
+				return nil, err
+			}
+			serviceName = selectedService.GetName()
 		}
+	} else {
+		selectedService, _, err := kafka.GetKafkaByName(cliOpts.Context, api.Kafka(), serviceName)
+		if err != nil {
+			return nil, err
+		}
+		serviceId = selectedService.GetId()
 	}
-	api := cliOpts.Connection.API()
-	serviceInstance, _, err := api.Kafka().GetKafkaById(cliOpts.Context, serviceId).Execute()
-
-	if kas.IsErr(err, kas.ErrorCode7) {
-		return nil, kafkaerr.NotFoundByIDError(serviceId)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	resourceName := serviceInstance.GetName()
 
 	kafkaConnectionCR := &resources.KafkaConnection{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resourceName,
+			Name:      serviceName,
 			Namespace: namespace,
 		},
 		TypeMeta: resources.AKCRMeta,
@@ -70,15 +70,11 @@ func (s KafkaService) BuildServiceDetails(serviceId string, namespace string, ig
 
 	serviceDetails := ServiceDetails{
 		ID:                 serviceId,
-		Name:               resourceName,
+		Name:               serviceName,
 		KubernetesResource: kafkaConnectionCR,
 		GroupMetadata:      resources.AKCResource,
 		Type:               resources.KafkaServiceName,
 	}
 
 	return &serviceDetails, nil
-}
-
-func (s KafkaService) BuildServiceCustomResourceMetadata() (schema.GroupVersionResource, error) {
-	return resources.AKCResource, nil
 }

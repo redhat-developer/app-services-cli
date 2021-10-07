@@ -16,8 +16,5 @@ type ServiceDetails struct {
 type RHOASKubernetesService interface {
 
 	// Build Custom Resource representing desired service that should be created
-	BuildServiceDetails(serviceId string, namespace string, ignoreConfigContext bool) (*ServiceDetails, error)
-
-	// Returns kubernetes custom resource metadata for service
-	BuildServiceCustomResourceMetadata() (schema.GroupVersionResource, error)
+	BuildServiceDetails(serviceName string, namespace string, ignoreConfigContext bool) (*ServiceDetails, error)
 }

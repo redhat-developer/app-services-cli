@@ -44,7 +44,7 @@
 // 2. Add new file with Structure that represent your own service CRD.
 // For example see services/resources/KafkaConnection.go
 // 3. Copy ./services/kafka.go and implement it for your own service.
-// 4. Add refernece to the latest resource in status.go to check if operator is up to date
+// 4. Add reference to the latest resource in status.go to check if operator is up to date
 //
 // After service is created you need to review `createServiceInstance`
 // method that assings specific instance of service depending of string provided by user.

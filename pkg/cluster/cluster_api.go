@@ -21,7 +21,7 @@ func (c *KubernetesClusterAPIImpl) createServiceInstance(serviceType string) (se
 	if serviceType == "" {
 		serviceTypeInput := &survey.Select{
 			Message: c.CommandEnvironment.Localizer.MustLocalize("cluster.common.input.servicetype"),
-			Options: resources.AllServices,
+			Options: resources.AllServiceLabels,
 		}
 		surveyErr := survey.AskOne(serviceTypeInput, &serviceType)
 		if surveyErr != nil {

@@ -89,18 +89,20 @@ func (c *KubernetesClusterAPIImpl) performBinding(
 	}
 
 	// Build service metadata
-	serviceMetadata, err := service.BuildServiceCustomResourceMetadata()
+	serviceMetadata, err := service.BuildServiceDetails(options.ServiceName, ns, options.IgnoreContext)
 	if err != nil {
 		return err
 	}
 
 	// Validate if service exist on the cluster
-	_, err = clients.DynamicClient.Resource(serviceMetadata).Namespace(ns).Get(cliEnv.Context, options.ServiceName, metav1.GetOptions{})
+	_, err = clients.DynamicClient.Resource(serviceMetadata.GroupMetadata).Namespace(ns).Get(cliEnv.Context,
+		serviceMetadata.Name, metav1.GetOptions{})
 	if err != nil {
 		return cliEnv.Localizer.MustLocalizeError("cluster.serviceBinding.serviceMissing.message")
 	}
 
-	cliEnv.Logger.Info(fmt.Sprintf(cliEnv.Localizer.MustLocalize("cluster.serviceBinding.status.message"), options.ServiceName, options.AppName))
+	cliEnv.Logger.Info(fmt.Sprintf(cliEnv.Localizer.MustLocalize("cluster.serviceBinding.status.message"),
+		serviceMetadata.Name, options.AppName))
 
 	if !options.ForceCreationWithoutAsk {
 		var shouldContinue bool
@@ -116,7 +118,12 @@ func (c *KubernetesClusterAPIImpl) performBinding(
 			return nil
 		}
 	}
-	sb, err := createBindingCR(options, serviceMetadata, appResource, ns)
+
+	if options.ServiceName == "" {
+		options.ServiceName = serviceMetadata.Name
+	}
+
+	sb, err := createBindingCR(options, serviceMetadata.GroupMetadata, appResource, ns)
 	if err != nil {
 		return err
 	}

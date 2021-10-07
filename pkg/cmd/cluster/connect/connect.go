@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -29,7 +30,7 @@ type options struct {
 
 	offlineAccessToken      string
 	forceCreationWithoutAsk bool
-	serviceID               string
+	serviceName             string
 	serviceType             string
 	ignoreContext           bool
 }
@@ -59,12 +60,14 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.offlineAccessToken, "token", "", opts.localizer.MustLocalize("cluster.common.flag.offline.token.description", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", "", opts.localizer.MustLocalize("cluster.common.flag.namespace.description"))
 	cmd.Flags().BoolVarP(&opts.forceCreationWithoutAsk, "yes", "y", false, opts.localizer.MustLocalize("cluster.common.flag.yes.description"))
-	cmd.Flags().StringVar(&opts.serviceID, "service-id", "", opts.localizer.MustLocalize("cluster.common.flag.serviceId.description"))
+	cmd.Flags().StringVar(&opts.serviceName, "service-name", "", opts.localizer.MustLocalize("cluster.common.flag.serviceName.description"))
 	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceType.description"))
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 
-	// TODO service-type suggestions
-	// TODO service-id vs service name
+	_ = cmd.RegisterFlagCompletionFunc("service-type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return resources.AllServiceLabels, cobra.ShellCompDirectiveNoSpace
+	})
+
 	return cmd
 }
 
@@ -97,8 +100,8 @@ func runConnect(opts *options) error {
 		OfflineAccessToken:      opts.offlineAccessToken,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		Namespace:               opts.namespace,
-		SelectedServiceType:     opts.serviceType,
-		SelectedServiceID:       opts.serviceID,
+		ServiceType:             opts.serviceType,
+		ServiceName:             opts.serviceName,
 		IgnoreContext:           opts.ignoreContext,
 	}
 

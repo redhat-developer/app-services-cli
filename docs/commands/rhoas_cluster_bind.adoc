@@ -52,7 +52,7 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
   `-n`, `--namespace` _string_::    Custom Kubernetes namespace (if not set current namespace will be used)
       `--service-name` _string_::   Name of service to connect to
       `--service-type` _string_::   Type of custom resource connection
-  `-y`, `--yes`::                   Forcibly create a binding without confirmation
+  `-y`, `--yes`::                   Forcibly perform operation without confirmation
 
 [discrete]
 == Options inherited from parent commands

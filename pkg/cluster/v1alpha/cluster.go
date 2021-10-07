@@ -25,8 +25,8 @@ type ConnectOperationOptions struct {
 	OfflineAccessToken      string
 	ForceCreationWithoutAsk bool
 	Namespace               string
-	SelectedServiceType     string
-	SelectedServiceID       string
+	ServiceType             string
+	ServiceName             string
 	IgnoreContext           bool
 }
 
