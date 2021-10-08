@@ -74,7 +74,7 @@ func TestValidateName(t *testing.T) {
 	// nolint:scopelint
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := validator.ValidateName(tt.args.val); (err != nil) != tt.wantErr {
+			if err := validator.ValidateShortDescription(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

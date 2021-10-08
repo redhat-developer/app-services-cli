@@ -1,6 +1,10 @@
 package icon
 
-import "runtime"
+import (
+	"runtime"
+
+	"github.com/redhat-developer/app-services-cli/pkg/color"
+)
 
 const (
 	CrossMark = "\u274c"
@@ -18,7 +22,7 @@ func Emoji(emoji string, fallback string) string {
 
 // SuccessPrefix returns check mark emoji prefix
 func SuccessPrefix() string {
-	return Emoji(CheckMark, "")
+	return color.Success(Emoji(CheckMark, ""))
 }
 
 // ErrorPrefix returns cross mark emoji prefix or default "Error:"

@@ -30,8 +30,8 @@ type options struct {
 // populate the list of service accounts into a table row
 type svcAcctRow struct {
 	ID        string `json:"id" header:"ID"`
-	Name      string `json:"name" header:"Name"`
 	ClientID  string `json:"clientID" header:"Client ID"`
+	Name      string `json:"name" header:"Short Description"`
 	Owner     string `json:"owner" header:"Owner"`
 	CreatedAt string `json:"createdAt" header:"Created At"`
 }

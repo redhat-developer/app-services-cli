@@ -10,6 +10,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -154,10 +155,10 @@ func runResetCredentials(opts *options) (err error) {
 
 	updatedServiceAccount, err := resetCredentials(serviceAcctName, opts)
 	if err != nil {
-		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("Name", updatedServiceAccount.GetName())), err)
+		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("ID", opts.id)), err)
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("Name", updatedServiceAccount.GetName())))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("ID", updatedServiceAccount.GetId())))
 
 	cfg, err := opts.Config.Load()
 	if err != nil {
@@ -176,7 +177,7 @@ func runResetCredentials(opts *options) (err error) {
 		return err
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
 
 	return nil
 }
@@ -190,7 +191,7 @@ func resetCredentials(name string, opts *options) (*kafkamgmtclient.ServiceAccou
 	// check if the service account exists
 	api := conn.API()
 
-	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("Name", name)))
+	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("ID", opts.id)))
 
 	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(opts.Context, opts.id).Execute()
 	if httpRes != nil {
