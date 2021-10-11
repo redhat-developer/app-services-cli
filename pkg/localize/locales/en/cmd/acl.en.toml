@@ -49,7 +49,7 @@ $ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "
 one = 'flags "user" and "service-account" can not be provided simultaneously'
 
 [kafka.acl.grantPermissions.error.noPrincipalsSelected]
-one = 'principal is missing, provide "user" or "service-account" flag'
+one = 'principal is missing, provide "--user" or "--service-account" flag'
 
 [kafka.acl.common.error.noOperationSpecified]
 one = 'no operation specified: need to pass one among --admin, --producer or --consumer'
