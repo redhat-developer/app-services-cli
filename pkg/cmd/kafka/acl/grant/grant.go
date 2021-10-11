@@ -296,14 +296,14 @@ func validateFlagInputCombination(opts *options) error {
 	// checks if "--topic" and "--topic-prefix" are provided together
 	if opts.topicPrefix != "" && opts.topic != "" {
 		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
-			localize.NewEntry("Resource", kafkainstanceclient.ACLRESOURCETYPE_TOPIC),
+			localize.NewEntry("Resource", "topic"),
 		)
 	}
 
 	// checks if "--group" and "--group-prefix" are provided together
 	if opts.groupPrefix != "" && opts.group != "" {
 		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
-			localize.NewEntry("Resource", kafkainstanceclient.ACLRESOURCETYPE_GROUP),
+			localize.NewEntry("Resource", "group"),
 		)
 	}
 
