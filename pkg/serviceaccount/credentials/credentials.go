@@ -7,12 +7,16 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 
 	"github.com/MakeNowJust/heredoc"
+)
+
+const (
+	EnvFormat        = "env"
+	JSONFormat       = "json"
+	PropertiesFormat = "properties"
 )
 
 // Templates
@@ -50,11 +54,11 @@ type Credentials struct {
 // GetDefaultPath returns the default absolute path for the credentials file
 func GetDefaultPath(outputFormat string) (filePath string) {
 	switch outputFormat {
-	case "env":
+	case EnvFormat:
 		filePath = ".env"
-	case "properties":
+	case PropertiesFormat:
 		filePath = "credentials.properties"
-	case dump.JSONFormat:
+	case JSONFormat:
 		filePath = "credentials.json"
 	}
 
@@ -85,11 +89,11 @@ func Write(output string, filepath string, credentials *Credentials) error {
 
 func getFileFormat(output string) (format string) {
 	switch output {
-	case "env":
+	case EnvFormat:
 		format = templateEnv
-	case "properties":
+	case PropertiesFormat:
 		format = templateProperties
-	case dump.JSONFormat:
+	case JSONFormat:
 		format = templateJSON
 	}
 
