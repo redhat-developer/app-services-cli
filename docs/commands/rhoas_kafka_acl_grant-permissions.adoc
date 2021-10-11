@@ -19,13 +19,13 @@ rhoas kafka acl grant-permissions [flags]
 
 ....
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic *
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*"
 
 # Grant access to principal for consuming messages from topics starting with "abc"
 $ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc"
 
 # Grant access to all users for consuming messages from topic "my-topic"
-$ rhoas kafka acl grant-permissions --consumer --user * --topic *
+$ rhoas kafka acl grant-permissions --consumer --user "*" --topic my-topic
 
 ....
 

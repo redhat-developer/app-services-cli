@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/acl"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -66,36 +67,8 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 
 			opts.kafkaID = cfg.Services.Kafka.ClusterID
 
-			if !opts.consumer && !opts.producer {
-				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noOperationSpecified")
-			}
-
-			if opts.user == "" && opts.svcAccount == "" {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.error.noPrincipalsSelected")
-			}
-
-			if opts.user != "" && opts.svcAccount != "" {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.error.bothPrincipalsSelected")
-			}
-
-			if !opts.consumer && (opts.group != "" || opts.groupPrefix != "") {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.notAllowed")
-			}
-
-			if (opts.topic == "" && opts.topicPrefix == "") && (opts.consumer || opts.producer) {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.topic.error.required")
-			}
-
-			if opts.consumer && opts.group == "" && opts.groupPrefix == "" {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.required")
-			}
-
-			if opts.topicPrefix != "" && opts.topic != "" {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed")
-			}
-
-			if opts.groupPrefix != "" && opts.group != "" {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed")
+			if err = validateFlagInputCombination(opts); err != nil {
+				return err
 			}
 
 			return runGrantPermissions(opts)
@@ -176,8 +149,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = req.AclBinding(aclBindTopicDescribe)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 	}
@@ -195,8 +167,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = req.AclBinding(aclBindTopicRead)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
@@ -211,12 +182,11 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = api.AclsApi.CreateAcl(opts.Context).AclBinding(aclBindGroupRead)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.consumer.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
+		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.grantPermissions.consumer.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
 	}
 
 	if opts.producer {
@@ -232,8 +202,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = req.AclBinding(aclBindTopicWrite)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
@@ -248,8 +217,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = req.AclBinding(aclBindTopicCreate)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
@@ -265,8 +233,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = req.AclBinding(aclBindTransactionIDWrite)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
@@ -281,12 +248,11 @@ func runGrantPermissions(opts *options) (err error) {
 
 		req = req.AclBinding(aclBindTransactionIDDescribe)
 
-		err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
-		if err != nil {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.producer.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
+		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.grantPermissions.producer.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
 	}
 
 	return nil
@@ -295,4 +261,49 @@ func runGrantPermissions(opts *options) (err error) {
 
 func buildPrincipal(user string) string {
 	return fmt.Sprintf("User:%s", user)
+}
+
+// validateFlagInputCombination checks if appropriate flags are provided for specified operation
+func validateFlagInputCombination(opts *options) error {
+	// check if any operation is specified
+	if !opts.consumer && !opts.producer {
+		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noOperationSpecified")
+	}
+
+	// check if priincipal is provided
+	if opts.user == "" && opts.svcAccount == "" {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.error.noPrincipalsSelected")
+	}
+
+	// user and service account should not be provided together
+	if opts.user != "" && opts.svcAccount != "" {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.error.bothPrincipalsSelected")
+	}
+
+	// checks if group resource name is provided when operation is not consumer
+	if !opts.consumer && (opts.group != "" || opts.groupPrefix != "") {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.notAllowed")
+	}
+
+	// checks if topic flag is provided
+	if (opts.topic == "" && opts.topicPrefix == "") && (opts.consumer || opts.producer) {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.topic.error.required")
+	}
+
+	// checks if group resource name is provided for consumer operation
+	if opts.consumer && opts.group == "" && opts.groupPrefix == "" {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.required")
+	}
+
+	// checks if "--topic" and "--topic-prefix" are provided together
+	if opts.topicPrefix != "" && opts.topic != "" {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed")
+	}
+
+	// checks if "--group" and "--group-prefix" are provided together
+	if opts.groupPrefix != "" && opts.group != "" {
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed")
+	}
+
+	return nil
 }
