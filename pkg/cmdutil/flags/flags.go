@@ -1,14 +1,15 @@
-// flags package is a helper package for processing and interactive command line flags
+// Package flags is a helper package for processing and interactive command line flags
 package flags
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
 	"github.com/spf13/cobra"
 )
 
 var (
 	ValidOutputFormats       = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
-	CredentialsOutputFormats = []string{"env", "json", "properties"}
+	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat}
 )
 
 // IsValidInput checks if the input value is in the range of valid values
@@ -29,7 +30,7 @@ func EnableStaticFlagCompletion(cmd *cobra.Command, flagName string, validValues
 	})
 }
 
-// // EnableOutputFlagCompletion enables autocompletion for output flag
+// EnableOutputFlagCompletion enables autocompletion for output flag
 func EnableOutputFlagCompletion(cmd *cobra.Command) {
 	_ = cmd.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace

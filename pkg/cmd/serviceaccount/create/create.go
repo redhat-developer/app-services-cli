@@ -200,7 +200,7 @@ func runInteractivePrompt(opts *options) (err error) {
 			Message: opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.message"),
 			Help:    opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.help"),
 			Options: flagutil.CredentialsOutputFormats,
-			Default: "env",
+			Default: credentials.EnvFormat,
 		}
 
 		err = survey.AskOne(fileFormatPrompt, &opts.fileFormat)
