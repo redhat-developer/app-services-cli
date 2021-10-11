@@ -10,9 +10,9 @@ import (
 const (
 	// name validation rules
 	legalShortDescriptionChars = "^[a-z]([-a-z0-9]*[a-z0-9])?$"
-	maxNameLength  = 50
-	minNameLength  = 1
-	legalUUID      = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+	maxNameLength              = 50
+	minNameLength              = 1
+	legalUUID                  = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 )
 
 // Validator is a type for validating service account configuration values

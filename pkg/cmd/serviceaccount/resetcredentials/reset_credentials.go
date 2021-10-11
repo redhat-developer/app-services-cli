@@ -110,7 +110,7 @@ func runResetCredentials(opts *options) (err error) {
 
 	api := conn.API()
 
-	serviceacct, httpRes, err := api.ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
+	_, httpRes, err := api.ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -118,8 +118,6 @@ func runResetCredentials(opts *options) (err error) {
 	if err != nil {
 		return err
 	}
-	serviceAcctName := serviceacct.GetName()
-
 	if opts.interactive {
 		err = runInteractivePrompt(opts)
 		if err != nil {
@@ -153,7 +151,7 @@ func runResetCredentials(opts *options) (err error) {
 		}
 	}
 
-	updatedServiceAccount, err := resetCredentials(serviceAcctName, opts)
+	updatedServiceAccount, err := resetCredentials(opts)
 	if err != nil {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.resetCredentials.error.resetError", localize.NewEntry("ID", opts.id)), err)
 	}
@@ -182,7 +180,7 @@ func runResetCredentials(opts *options) (err error) {
 	return nil
 }
 
-func resetCredentials(name string, opts *options) (*kafkamgmtclient.ServiceAccount, error) {
+func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err

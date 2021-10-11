@@ -16,7 +16,7 @@ func init() {
 	}
 }
 
-func TestValidateName(t *testing.T) {
+func TestValidateShortDescription(t *testing.T) {
 	type args struct {
 		val interface{}
 	}
@@ -75,7 +75,7 @@ func TestValidateName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := validator.ValidateShortDescription(tt.args.val); (err != nil) != tt.wantErr {
-				t.Errorf("ValidateName() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ValidateShortDescription() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -127,57 +127,6 @@ func TestValidateUUID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := validator.ValidateUUID(tt.args.val); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateUUID() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
-func TestValidateDescription(t *testing.T) {
-	type args struct {
-		val interface{}
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{
-			name:    "passes when empty",
-			args:    args{""},
-			wantErr: false,
-		},
-		{
-			name:    "passes on max length (255)",
-			args:    args{"trl1rmcyl6dp4xxqy0rwudhodbpjc4crja8ibf2yco6obalko6qor9n2a1wsqruolg0ewrndumw2xkezzuwg8pjo6ntsmi1cjw99hjcko4t2kjkxmaswzgk8ko75pcs4js0pzypuyjxxnld4dijxadzs8peioi6d5jjxxtfl9vicufmxuacvu7m8ycbwhsbiu9ipw5fxplf0ojs8bxd7hwt4rn4phbcdgivxdzprhyfjamkgjzytjz25cmqagtw"},
-			wantErr: false,
-		},
-		{
-			name:    "fails when exceeds max length",
-			args:    args{"trl1rmcyl6dp4xxqy0rwudhodbpjc4crja8ibf2yco6obalko6qor9n2a1wsqruolg0ewrndumw2xkezzuwg8pjo6ntsmi1cjw99hjcko4t2kjkxmaswzgk8ko75pcs4js0pzypuyjxxnld4dijxadzs8peioi6d5jjxxtfl9vicufmxuacvu7m8ycbwhsbiu9ipw5fxplf0ojs8bxd7hwt4rn4phbcdgivxdzprhyfjamkgjzytjz25cmqagtwa"},
-			wantErr: true,
-		},
-		{
-			name:    "passes with spaces",
-			args:    args{"here is a description"},
-			wantErr: false,
-		},
-		{
-			name:    "fails with special character",
-			args:    args{"here is a description!"},
-			wantErr: true,
-		},
-		{
-			name:    "passes with capital letters",
-			args:    args{"Hello"},
-			wantErr: false,
-		},
-	}
-
-	for _, tt := range tests {
-		// nolint:scopelint
-		t.Run(tt.name, func(t *testing.T) {
-			if err := validator.ValidateDescription(tt.args.val); (err != nil) != tt.wantErr {
-				t.Errorf("ValidateDescription() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
