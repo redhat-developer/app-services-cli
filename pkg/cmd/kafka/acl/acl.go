@@ -2,6 +2,7 @@ package acl
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/grant"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/list"
 	"github.com/spf13/cobra"
 )
@@ -18,6 +19,7 @@ func NewAclCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.AddCommand(
 		list.NewListACLCommand(f),
+		grant.NewGrantPermissionsACLCommand(f),
 	)
 
 	return cmd

@@ -18,7 +18,7 @@ $ rhoas kafka acl list
 one = 'you are unauthorized to {{.Operation}} these Kafka ACL rules'
 
 [kafka.acl.common.error.forbidden]
-one = 'you are forbidden to {{.Operation}} this consumer group'
+one = 'you are forbidden to {{.Operation}} this Kafka ACL rule'
 
 [kafka.acl.common.error.internalServerError]
 one = 'internal server error'
@@ -29,6 +29,58 @@ one = 'unable to connect to Kafka instance "{{.Name}}"'
 [kafka.acl.common.error.noKafkaSelected]
 one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
 
+
+[kafka.acl.grantPermissions.cmd.shortDescription]
+one = 'Add ACL rules to grant users access to produce/consume from topics and admin access'
+
+[kafka.acl.grantPermissions.cmd.longDescription]
+one = 'This command creates ACL rules that grant the specified user access to produce/consume from topics and admin access'
+
+[kafka.acl.grantPermissions.cmd.example]
+one = '''
+# Grant access to principal for consuming messages from all topics
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic *
+
+# Grant access to principal for consuming messages from topics starting with "abc"
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc"
+'''
+
+[kafka.acl.grantPermissions.error.bothPricipalsSelected]
+one = 'flags "user" and "service-account" can not be provided simultaneously'
+
+[kafka.acl.grantPermissions.error.noPrincipalsSelected]
+one = 'principal is missing, provide "user" or "service-account" flag'
+
+[kafka.acl.common.error.noOperationSpecified]
+one = 'no operation specified: need to pass one among --admin, --producer or --consumer'
+
+
+[kafka.acl.common.flag.user.description]
+one = 'Username to be used as principal'
+
+[kafka.acl.common.flag.serviceAccount.description]
+one = 'Service account ID to be used as principal'
+
+[kafka.acl.common.flag.topic.description]
+one = 'Topic name to define ACL rules for'
+
+[kafka.acl.common.flag.group.description]
+one = 'Consumer group ID to define ACL rules for'
+
+[kafka.acl.common.flag.topicPrefix.description]
+one = 'Prefix name for topics to be selected'
+
+[kafka.acl.common.flag.groupPrefix.description]
+one = 'Prefix name for groups to be selected'
+
+[kafka.acl.grantPermissions.flag.producer.description]
+one = 'Add ACL rules that grant the specified principal access to produce messages to topics'
+
+[kafka.acl.grantPermissions.flag.consumer.description]
+one = 'Add ACL rules that grant the specified principal access to consume messages from topics'
+
+[kafka.acl.grantPermissions.flag.admin.description]
+one = 'Allow user to manage ACLs for the Kafka instance'
 
 
 [kafka.acl.list.cmd.shortDescription]
@@ -65,3 +117,33 @@ one = 'is'
 
 [kafka.acl.list.startsWith]
 one = 'starts with'
+
+[kafka.acl.grantPermissions.producer.log.info.aclsCreated]
+one = 'ACLs created to enable principal to write messages to topics'
+
+[kafka.acl.grantPermissions.consumer.log.info.aclsCreated]
+one = 'ACLs created to enable principal to consume messages from topics'
+
+[kafka.acl.grantPermissions.admin.log.info.aclsCreated]
+one = 'User is now allowed to manage ACLs for given Kafka instance'
+
+[kafka.acl.grantPermissions.error.user.required]
+one = 'User is required while giving admin rights'
+
+[kafka.acl.grantPermissions.admin.error.notAllowed]
+one = 'admin ACLs can not be added simultaneously with producer/consumer ACLs'
+
+[kafka.acl.grantPermissions.admin.flags.error.notAllowed]
+one = 'invalid flags provided for admin operation. Only --user flag is required for admin'
+
+[kafka.acl.grantPermissions.group.error.notAllowed]
+one = 'group flag is allowed only when consumer ACLs are to be added'
+
+[kafka.acl.grantPermissions.group.error.required]
+one = 'group flag is required for --consumer operation'
+
+[kafka.acl.grantPermissions.topic.error.required]
+one = 'topic flag is required for --consumer and --producer operations'
+
+[kafka.acl.grantPermissions.prefix.error.notAllowed]
+one = 'can not use prefix and resource name flag together'
