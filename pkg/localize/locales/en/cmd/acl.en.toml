@@ -31,10 +31,10 @@ one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the
 
 
 [kafka.acl.grantPermissions.cmd.shortDescription]
-one = 'Add ACL rules to grant users access to produce/consume from topics and admin access'
+one = 'Add ACL rules to grant users access to produce/consume from topics'
 
 [kafka.acl.grantPermissions.cmd.longDescription]
-one = 'This command creates ACL rules that grant the specified user access to produce/consume from topics and admin access'
+one = 'This command creates ACL rules that grant the specified user access to produce/consume from topics'
 
 [kafka.acl.grantPermissions.cmd.example]
 one = '''
@@ -45,14 +45,14 @@ $ rhoas kafka acl grant-permissions --consumer --user user_name --topic *
 $ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc"
 '''
 
-[kafka.acl.grantPermissions.error.bothPricipalsSelected]
-one = 'flags "user" and "service-account" can not be provided simultaneously'
+[kafka.acl.grantPermissions.error.bothPrincipalsSelected]
+one = 'flags "--user" and "--service-account" can not be provided simultaneously'
 
 [kafka.acl.grantPermissions.error.noPrincipalsSelected]
 one = 'principal is missing, provide "--user" or "--service-account" flag'
 
 [kafka.acl.common.error.noOperationSpecified]
-one = 'no operation specified: need to pass one among --admin, --producer or --consumer'
+one = 'no operation specified: need to pass one among "--producer" or "--consumer" flag'
 
 
 [kafka.acl.common.flag.user.description]
@@ -78,9 +78,6 @@ one = 'Add ACL rules that grant the specified principal access to produce messag
 
 [kafka.acl.grantPermissions.flag.consumer.description]
 one = 'Add ACL rules that grant the specified principal access to consume messages from topics'
-
-[kafka.acl.grantPermissions.flag.admin.description]
-one = 'Allow user to manage ACLs for the Kafka instance'
 
 
 [kafka.acl.list.cmd.shortDescription]
@@ -123,18 +120,6 @@ one = 'ACLs created to enable principal to write messages to topics'
 
 [kafka.acl.grantPermissions.consumer.log.info.aclsCreated]
 one = 'ACLs created to enable principal to consume messages from topics'
-
-[kafka.acl.grantPermissions.admin.log.info.aclsCreated]
-one = 'User is now allowed to manage ACLs for given Kafka instance'
-
-[kafka.acl.grantPermissions.error.user.required]
-one = 'User is required while giving admin rights'
-
-[kafka.acl.grantPermissions.admin.error.notAllowed]
-one = 'admin ACLs can not be added simultaneously with producer/consumer ACLs'
-
-[kafka.acl.grantPermissions.admin.flags.error.notAllowed]
-one = 'invalid flags provided for admin operation. Only --user flag is required for admin'
 
 [kafka.acl.grantPermissions.group.error.notAllowed]
 one = 'group flag is allowed only when consumer ACLs are to be added'

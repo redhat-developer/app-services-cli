@@ -39,10 +39,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl_grant-permissions.adoc#rhoas-kafka-acl-grant-permissions[rhoas kafka acl grant-permissions]	 - Add ACL rules to grant users access 
+* link:rhoas_kafka_acl_grant-permissions.adoc#rhoas-kafka-acl-grant-permissions[rhoas kafka acl grant-permissions]	 - Add ACL rules to grant users access to produce/consume from topics
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-acl-grant-permissions_{context}[rhoas kafka acl grant-permissions]	 - Add ACL rules to grant users access 
+* link:{path}#ref-rhoas-kafka-acl-grant-permissions_{context}[rhoas kafka acl grant-permissions]	 - Add ACL rules to grant users access to produce/consume from topics
 endif::[]
 
 ifdef::env-github,env-browser[]

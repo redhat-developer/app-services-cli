@@ -3,12 +3,12 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas kafka acl grant-permissions
 
 [role="_abstract"]
-Add ACL rules to grant users access 
+Add ACL rules to grant users access to produce/consume from topics
 
 [discrete]
 == Synopsis
 
-This command creates ACL rules that grant the specified user access to 
+This command creates ACL rules that grant the specified user access to produce/consume from topics
 
 ....
 rhoas kafka acl grant-permissions [flags]
@@ -19,23 +19,26 @@ rhoas kafka acl grant-permissions [flags]
 
 ....
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic *
 
 # Grant access to principal for consuming messages from topics starting with "abc"
 $ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc"
+
+# Grant access to all users for consuming messages from topic "my-topic"
+$ rhoas kafka acl grant-permissions --consumer --user * --topic *
 
 ....
 
 [discrete]
 == Options
 
-      `--admin`::                      Allow user to manage ACLs for the Kafka instance
       `--consumer`::                   Add ACL rules that grant the specified principal access to consume messages from topics
       `--group` _string_::             Consumer group ID to define ACL rules for
-      `--prefix`::                     Determines if resource name should be exact or prefix
+      `--group-prefix` _string_::      Prefix name for groups to be selected
       `--producer`::                   Add ACL rules that grant the specified principal access to produce messages to topics
       `--service-account` _string_::   Service account ID to be used as principal
       `--topic` _string_::             Topic name to define ACL rules for
+      `--topic-prefix` _string_::      Prefix name for topics to be selected
       `--user` _string_::              Username to be used as principal
 
 [discrete]
