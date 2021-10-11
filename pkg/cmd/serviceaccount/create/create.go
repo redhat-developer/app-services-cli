@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -158,7 +159,7 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
+	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", color.CodeSnippet(opts.filename))))
 
 	return nil
 }
