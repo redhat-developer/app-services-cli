@@ -36,6 +36,9 @@ $ rhoas kafka acl grant-permissions --consumer --user "*" --topic my-topic --gro
 # Grant access to all users for producing messages to topic "my-topic"
 $ rhoas kafka acl grant-permissions --producer --user "*" --topic my-topic
 
+# Grant access to principal for produce and consume messages from all topics 
+$ rhoas kafka acl grant-permissions --producer --consumer --user user_name --topic "*" --group "*"
+
 ....
 
 [discrete]
