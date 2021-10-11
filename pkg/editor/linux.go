@@ -1,3 +1,5 @@
+// nolint
+
 // +build !windows
 
 package editor
