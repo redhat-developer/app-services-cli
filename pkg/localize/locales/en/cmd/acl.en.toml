@@ -9,10 +9,15 @@ By default, every users and service account have limited access to their Kafka i
 
 [kafka.acl.cmd.example]
 one = '''
+# Grant access to principal for consuming messages from all topics
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*" --group "*"
+
+# Grant access to principal for producing messages to all topics
+$ rhoas kafka acl grant-permissions --producer --user user_name --topic "*"
+
 # List ACL rules for a Kafka instance
 $ rhoas kafka acl list
 '''
-
 
 [kafka.acl.common.error.unauthorized]
 one = 'you are unauthorized to {{.Operation}} these Kafka ACL rules'
@@ -39,13 +44,22 @@ one = 'This command creates ACL rules that grant the specified user access to pr
 [kafka.acl.grantPermissions.cmd.example]
 one = '''
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*"
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*" --group "*"
+
+# Grant access to principal for producing messages to all topics
+$ rhoas kafka acl grant-permissions --producer --user user_name --topic "*"
 
 # Grant access to principal for consuming messages from topics starting with "abc"
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc"
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc" --group my-group
+
+# Grant access to principal for producing messages to topics starting with "abc"
+$ rhoas kafka acl grant-permissions --producer --user user_name --topic-prefix "abc"
 
 # Grant access to all users for consuming messages from topic "my-topic"
-$ rhoas kafka acl grant-permissions --consumer --user "*" --topic my-topic
+$ rhoas kafka acl grant-permissions --consumer --user "*" --topic my-topic --group my-group
+
+# Grant access to all users for producing messages to topic "my-topic"
+$ rhoas kafka acl grant-permissions --producer --user "*" --topic my-topic
 '''
 
 [kafka.acl.grantPermissions.error.bothPrincipalsSelected]
@@ -55,7 +69,7 @@ one = 'flags "--user" and "--service-account" can not be provided simultaneously
 one = 'principal is missing, provide "--user" or "--service-account" flag'
 
 [kafka.acl.common.error.noOperationSpecified]
-one = 'no operation specified: need to pass one among "--producer" or "--consumer" flag'
+one = 'no operation specified: must provide one of "--producer" or "--consumer" flag'
 
 
 [kafka.acl.common.flag.user.description]
@@ -128,10 +142,10 @@ one = 'ACLs created to enable principal to consume messages from topics'
 one = 'group flag is allowed only when consumer ACLs are to be added'
 
 [kafka.acl.grantPermissions.group.error.required]
-one = 'group flag is required for --consumer operation'
+one = '"--group" flag is required for consumer operation'
 
 [kafka.acl.grantPermissions.topic.error.required]
 one = 'topic flag is required for --consumer and --producer operations'
 
 [kafka.acl.grantPermissions.prefix.error.notAllowed]
-one = 'can not use prefix and resource name flag together'
+one = 'can not use "--{{.Resource}-prefix" and "--{{.Resource}}" flag together'

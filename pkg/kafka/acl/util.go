@@ -7,6 +7,7 @@ import (
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
+// ExecuteACLRuleCreate makes request to create an ACL rule
 func ExecuteACLRuleCreate(req kafkainstanceclient.ApiCreateAclRequest, localizer localize.Localizer, kafkaInstanceName string) error {
 
 	httpRes, err := req.Execute()

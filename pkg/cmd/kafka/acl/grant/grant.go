@@ -137,21 +137,19 @@ func runGrantPermissions(opts *options) (err error) {
 
 	req := api.AclsApi.CreateAcl(opts.Context)
 
-	if opts.producer || opts.consumer {
-		aclBindTopicDescribe := *kafkainstanceclient.NewAclBinding(
-			kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
-			topicNameArg,
-			topicPatternArg,
-			userArg,
-			kafkainstanceclient.ACLOPERATION_DESCRIBE,
-			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
-		)
+	aclBindTopicDescribe := *kafkainstanceclient.NewAclBinding(
+		kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
+		topicNameArg,
+		topicPatternArg,
+		userArg,
+		kafkainstanceclient.ACLOPERATION_DESCRIBE,
+		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
+	)
 
-		req = req.AclBinding(aclBindTopicDescribe)
+	req = req.AclBinding(aclBindTopicDescribe)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-			return err
-		}
+	if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
+		return err
 	}
 
 	if opts.consumer {
@@ -297,12 +295,16 @@ func validateFlagInputCombination(opts *options) error {
 
 	// checks if "--topic" and "--topic-prefix" are provided together
 	if opts.topicPrefix != "" && opts.topic != "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed")
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
+			localize.NewEntry("Resource", kafkainstanceclient.ACLRESOURCETYPE_TOPIC),
+		)
 	}
 
 	// checks if "--group" and "--group-prefix" are provided together
 	if opts.groupPrefix != "" && opts.group != "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed")
+		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
+			localize.NewEntry("Resource", kafkainstanceclient.ACLRESOURCETYPE_GROUP),
+		)
 	}
 
 	return nil
