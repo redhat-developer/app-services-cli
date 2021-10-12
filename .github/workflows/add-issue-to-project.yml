@@ -14,9 +14,7 @@ jobs:
     - name: Assign triaged issues to app-services project
       uses: srggrs/assign-one-project-github-action@1.3.1
       if: |
-        contains(github.event.issue.labels.*.name, 'priority/critical-urgent') ||
-        contains(github.event.issue.labels.*.name, 'priority/important-soon') ||
-        contains(github.event.issue.labels.*.name, 'priority/important-longterm')
+        contains(github.event.issue.labels.*.name, 'triage/accepted')
       with:
         project: 'https://github.com/orgs/redhat-developer/projects/3'
         column_name: 'To do'
