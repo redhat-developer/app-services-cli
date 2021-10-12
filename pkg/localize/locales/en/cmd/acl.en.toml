@@ -148,7 +148,7 @@ one = 'group flag is allowed only when consumer ACLs are to be added'
 one = '"--group" flag is required for consumer operation'
 
 [kafka.acl.grantPermissions.topic.error.required]
-one = 'topic flag is required for --consumer and --producer operations'
+one = '"--topic" flag is required for consumer and producer operations'
 
 [kafka.acl.grantPermissions.prefix.error.notAllowed]
 one = 'can not use "--{{.Resource}}-prefix" and "--{{.Resource}}" flag together'

@@ -137,7 +137,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 	req := api.AclsApi.CreateAcl(opts.Context)
 
-	aclBindTopicDescribe := *kafkainstanceclient.NewAclBinding(
+	aclBindTopicDescribe := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
 		topicNameArg,
 		topicPatternArg,
@@ -146,7 +146,7 @@ func runGrantPermissions(opts *options) (err error) {
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
 
-	req = req.AclBinding(aclBindTopicDescribe)
+	req = req.AclBinding(*aclBindTopicDescribe)
 
 	if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 		return err
@@ -154,7 +154,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 	if opts.consumer {
 
-		aclBindTopicRead := *kafkainstanceclient.NewAclBinding(
+		aclBindTopicRead := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
 			topicNameArg,
 			topicPatternArg,
@@ -163,13 +163,13 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(aclBindTopicRead)
+		req = req.AclBinding(*aclBindTopicRead)
 
 		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
-		aclBindGroupRead := *kafkainstanceclient.NewAclBinding(
+		aclBindGroupRead := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_GROUP,
 			groupIdArg,
 			groupPatternArg,
@@ -178,7 +178,7 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = api.AclsApi.CreateAcl(opts.Context).AclBinding(aclBindGroupRead)
+		req = api.AclsApi.CreateAcl(opts.Context).AclBinding(*aclBindGroupRead)
 
 		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
@@ -189,7 +189,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 	if opts.producer {
 
-		aclBindTopicWrite := *kafkainstanceclient.NewAclBinding(
+		aclBindTopicWrite := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
 			topicNameArg,
 			topicPatternArg,
@@ -198,13 +198,13 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(aclBindTopicWrite)
+		req = req.AclBinding(*aclBindTopicWrite)
 
 		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
-		aclBindTopicCreate := *kafkainstanceclient.NewAclBinding(
+		aclBindTopicCreate := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
 			topicNameArg,
 			topicPatternArg,
@@ -213,14 +213,14 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(aclBindTopicCreate)
+		req = req.AclBinding(*aclBindTopicCreate)
 
 		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
 		// Add ACLs for transactional IDs
-		aclBindTransactionIDWrite := *kafkainstanceclient.NewAclBinding(
+		aclBindTransactionIDWrite := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TRANSACTIONAL_ID,
 			acl.Wildcard,
 			kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
@@ -229,13 +229,13 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(aclBindTransactionIDWrite)
+		req = req.AclBinding(*aclBindTransactionIDWrite)
 
 		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 
-		aclBindTransactionIDDescribe := *kafkainstanceclient.NewAclBinding(
+		aclBindTransactionIDDescribe := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TRANSACTIONAL_ID,
 			acl.Wildcard,
 			kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
@@ -244,7 +244,7 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(aclBindTransactionIDDescribe)
+		req = req.AclBinding(*aclBindTransactionIDDescribe)
 
 		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
