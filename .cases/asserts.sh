@@ -11,7 +11,6 @@ cli_code_non_zero() {
 }
 
 cli_code_zero() {
-  echo $?
   echo "---------"
   if [ $? -ne 0 ]; then 
     echo "FAIL: Command should succeed" && exit 1
