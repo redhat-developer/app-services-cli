@@ -11,6 +11,7 @@
 ## Framework
 
 source ./asserts.sh
+alias rhoas=$(go env GOPATH)/bin/rhoas
 
 ## Cases
 rhoas kafka acl grant-permissions 
