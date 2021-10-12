@@ -142,7 +142,7 @@ one = 'ACLs created to enable principal to write messages to topics'
 one = 'ACLs created to enable principal to consume messages from topics'
 
 [kafka.acl.grantPermissions.group.error.notAllowed]
-one = 'group flag is allowed only when consumer ACLs are to be added'
+one = '"--group" or "--group-prefix" flag is allowed only when consumer ACLs are to be added'
 
 [kafka.acl.grantPermissions.group.error.required]
 one = '"--group" flag is required for consumer operation'
