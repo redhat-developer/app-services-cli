@@ -76,8 +76,8 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
-	cmd.Flags().Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
+	cmd.Flags().Int32Var(&opts.page, "page", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
+	cmd.Flags().Int32Var(&opts.size, "size", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
 	cmd.Flags().StringVarP(&opts.output, "output", "o", dump.EmptyFormat, opts.localizer.MustLocalize("kafka.acl.list.flag.output.description"))
 
 	return cmd
@@ -96,9 +96,8 @@ func runList(opts *options) (err error) {
 
 	req := api.AclsApi.GetAcls(opts.Context)
 
-	req = req.Page(float32(opts.page))
-
-	req = req.Size(float32(opts.size))
+	req = req.Page(float32(opts.page)).Size(float32(opts.size))
+	req = req.Order("asc").OrderKey("principal")
 
 	permissionsData, httpRes, err := req.Execute()
 	if httpRes != nil {
