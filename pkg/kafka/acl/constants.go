@@ -1,5 +1,6 @@
 package acl
 
 const (
-	Wildcard = "*"
+	Wildcard     = "*"
+	KafkaCluster = "kafka-cluster"
 )
