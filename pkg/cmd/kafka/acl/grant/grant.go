@@ -17,6 +17,12 @@ import (
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
+// When the value of the `--topic`, `--group`, `user` or `service-account` option is one of
+// the keys of this map, it will be replaced by the corresponding value.
+var commonArgAliases = map[string]string{
+	"all": acl.Wildcard,
+}
+
 type options struct {
 	Config     config.IConfig
 	Connection factory.ConnectionFunc
@@ -56,6 +62,10 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
+			if opts.kafkaID != "" {
+				return runGrantPermissions(opts)
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
@@ -83,6 +93,7 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.producer, "producer", false, opts.localizer.MustLocalize("kafka.acl.grantPermissions.flag.producer.description"))
 	cmd.Flags().StringVar(&opts.topicPrefix, "topic-prefix", "", opts.localizer.MustLocalize("kafka.acl.common.flag.topicPrefix.description"))
 	cmd.Flags().StringVar(&opts.groupPrefix, "group-prefix", "", opts.localizer.MustLocalize("kafka.acl.common.flag.groupPrefix.description"))
+	cmd.Flags().StringVar(&opts.kafkaID, "instance-id", "", opts.localizer.MustLocalize("kafka.acl.common.flag.instance.id"))
 
 	return cmd
 }
@@ -110,7 +121,7 @@ func runGrantPermissions(opts *options) (err error) {
 	var userArg string
 
 	if opts.topic != "" {
-		topicNameArg = opts.topic
+		topicNameArg = getArgumentFromAlias(opts.topic)
 	}
 
 	if opts.topicPrefix != "" {
@@ -119,7 +130,7 @@ func runGrantPermissions(opts *options) (err error) {
 	}
 
 	if opts.group != "" {
-		groupIdArg = opts.group
+		groupIdArg = getArgumentFromAlias(opts.group)
 	}
 
 	if opts.groupPrefix != "" {
@@ -128,11 +139,13 @@ func runGrantPermissions(opts *options) (err error) {
 	}
 
 	if opts.user != "" {
-		userArg = buildPrincipal(opts.user)
+		user := getArgumentFromAlias(opts.user)
+		userArg = buildPrincipal(user)
 	}
 
 	if opts.svcAccount != "" {
-		userArg = buildPrincipal(opts.svcAccount)
+		serviceAccount := getArgumentFromAlias(opts.svcAccount)
+		userArg = buildPrincipal(serviceAccount)
 	}
 
 	req := api.AclsApi.CreateAcl(opts.Context)
@@ -308,4 +321,14 @@ func validateFlagInputCombination(opts *options) error {
 	}
 
 	return nil
+}
+
+func getArgumentFromAlias(argOrAlias string) string {
+
+	argument, ok := commonArgAliases[argOrAlias]
+	if !ok {
+		return argOrAlias
+	}
+
+	return argument
 }

@@ -93,6 +93,9 @@ one = 'Prefix name for topics to be selected'
 [kafka.acl.common.flag.groupPrefix.description]
 one = 'Prefix name for groups to be selected'
 
+[kafka.acl.common.flag.instance.id]
+one = 'ID of the Kafka instance to be used. By default, uses the currently selected instance'
+
 [kafka.acl.grantPermissions.flag.producer.description]
 one = 'Add ACL rules that grant the specified principal access to produce messages to topics'
 
