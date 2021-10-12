@@ -72,7 +72,7 @@ one = 'flags "--user" and "--service-account" can not be provided simultaneously
 one = 'principal is missing, provide "--user" or "--service-account" flag'
 
 [kafka.acl.common.error.noOperationSpecified]
-one = 'no operation specified: must provide one of "--producer" or "--consumer" flag'
+one = 'no operation specified: must provide atleast one of "--producer" or "--consumer" flag'
 
 
 [kafka.acl.common.flag.user.description]
