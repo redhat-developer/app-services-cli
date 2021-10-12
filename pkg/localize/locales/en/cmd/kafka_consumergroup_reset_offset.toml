@@ -12,19 +12,19 @@ You can also choose partitions to reset offsets from.
 [kafka.consumerGroup.resetOffset.cmd.example]
 one = '''
 # reset partition offsets for a consumer group to latest
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset latest
 
 # reset partition offsets for a consumer group to earliest
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset earliest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset earliest
 
 # reset partition offsets for a consumer group to an absolute value
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset absolute --value 0
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset absolute --value 0
 
 # reset partition offsets for a consumer group to a timestamp
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset timestamp --value "2016-06-23T09:07:21-07:00"
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset timestamp --value "2016-06-23T09:07:21-07:00"
 
 # reset specific partition offsets for a consumer group
-$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --offset latest --topic my-topic --partitions 0,1
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset latest --partitions 0,1
 '''
 
 [kafka.consumerGroup.resetOffset.flag.topic]
