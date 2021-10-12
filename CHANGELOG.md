@@ -1,4 +1,27 @@
 
+<a name="v0.33.0"></a>
+## [v0.33.0](https://github.com/redhat-developer/app-services-cli/compare/v0.32.0...v0.33.0) (2021-10-12)
+
+### Bug Fixes
+
+* use pre-defined service status constant values
+* replace service account "name" with "short description" ([#1193](https://github.com/redhat-developer/app-services-cli/issues/1193))
+* check HTTP code as instance quota check
+* detect and  handle API error code
+* changed the source path for rhoas binary
+* use pre-defined service status constant values (generate docs)
+* use realistic values and remove <> characters
+* add token endpoint URL to credentials file ([#1177](https://github.com/redhat-developer/app-services-cli/issues/1177))
+* **deps:** update golang.org/x/oauth2 commit hash to 6b3c2da
+* **kafka acl:** address review comments for list command
+* **service-registry list:** adding input validation ([#1163](https://github.com/redhat-developer/app-services-cli/issues/1163))
+
+### Features
+
+* **kafka acl:** add acl grant-permissions command ([#1179](https://github.com/redhat-developer/app-services-cli/issues/1179))
+* **kafka acl:** add base and list command ([#1173](https://github.com/redhat-developer/app-services-cli/issues/1173))
+
+
 <a name="v0.32.0"></a>
 ## [v0.32.0](https://github.com/redhat-developer/app-services-cli/compare/v0.31.1...v0.32.0) (2021-09-28)
 
