@@ -21,17 +21,21 @@ rhoas kafka acl list [flags]
 == Examples
 
 ....
-# Display Kafka ACL rules for the instance
+# Display Kafka ACL rules for the Kafka instance
 $ rhoas kafka acl list
+
+# Display Kafka ACL rules for a specific Kafka instance
+$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
 
 ....
 
 [discrete]
 == Options
 
-  `-o`, `--output` _string_::   Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")
-      `--page` _int32_::        Current page number for list of Kafka ACL rules (default 1)
-      `--size` _int32_::        Maximum number of items to be returned per page (default 10)
+      `--instance-id` _string_::   ID of the Kafka instance to be used. By default, uses the currently selected instance
+  `-o`, `--output` _string_::      Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")
+      `--page` _int32_::           Current page number for list of Kafka ACL rules (default 1)
+      `--size` _int32_::           Maximum number of items to be returned per page (default 10)
 
 [discrete]
 == Options inherited from parent commands
