@@ -10,6 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -61,6 +62,10 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
+			if opts.kafkaID != "" {
+				return runList(opts)
+			}
+
 			cfg, err := opts.Config.Load()
 			if err != nil {
 				return err
@@ -79,6 +84,9 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32Var(&opts.page, "page", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
 	cmd.Flags().Int32Var(&opts.size, "size", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
 	cmd.Flags().StringVarP(&opts.output, "output", "o", dump.EmptyFormat, opts.localizer.MustLocalize("kafka.acl.list.flag.output.description"))
+	cmd.Flags().StringVar(&opts.kafkaID, "instance-id", "", opts.localizer.MustLocalize("kafka.acl.common.flag.instance.id"))
+
+	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }

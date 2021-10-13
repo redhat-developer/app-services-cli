@@ -10,10 +10,10 @@ By default, every users and service account have limited access to their Kafka i
 [kafka.acl.cmd.example]
 one = '''
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*" --group "*"
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all
 
 # Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-permissions --producer --user user_name --topic "*"
+$ rhoas kafka acl grant-permissions --producer --user user_name --topic all
 
 # List ACL rules for a Kafka instance
 $ rhoas kafka acl list
@@ -44,10 +44,13 @@ one = 'This command creates ACL rules that grant the specified user access to pr
 [kafka.acl.grantPermissions.cmd.example]
 one = '''
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*" --group "*"
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all
+
+# Grant access to principal for consuming messages from all topics in a specified instance
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all --instance-id c5hv7iru4an1g84pogp0
 
 # Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-permissions --producer --user user_name --topic "*"
+$ rhoas kafka acl grant-permissions --producer --user user_name --topic all
 
 # Grant access to principal for consuming messages from topics starting with "abc"
 $ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc" --group my-group
@@ -56,13 +59,13 @@ $ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "
 $ rhoas kafka acl grant-permissions --producer --user user_name --topic-prefix "abc"
 
 # Grant access to all users for consuming messages from topic "my-topic"
-$ rhoas kafka acl grant-permissions --consumer --user "*" --topic my-topic --group my-group
+$ rhoas kafka acl grant-permissions --consumer --user all --topic my-topic --group my-group
 
 # Grant access to all users for producing messages to topic "my-topic"
-$ rhoas kafka acl grant-permissions --producer --user "*" --topic my-topic
+$ rhoas kafka acl grant-permissions --producer --user all --topic my-topic
 
 # Grant access to principal for produce and consume messages from all topics 
-$ rhoas kafka acl grant-permissions --producer --consumer --user user_name --topic "*" --group "*"
+$ rhoas kafka acl grant-permissions --producer --consumer --user user_name --topic all --group all
 '''
 
 [kafka.acl.grantPermissions.error.bothPrincipalsSelected]
@@ -93,6 +96,9 @@ one = 'Prefix name for topics to be selected'
 [kafka.acl.common.flag.groupPrefix.description]
 one = 'Prefix name for groups to be selected'
 
+[kafka.acl.common.flag.instance.id]
+one = 'ID of the Kafka instance to be used. By default, uses the currently selected instance'
+
 [kafka.acl.grantPermissions.flag.producer.description]
 one = 'Add ACL rules that grant the specified principal access to produce messages to topics'
 
@@ -112,8 +118,11 @@ The instances are displayed by default in a table, but can also be displayed as 
 
 [kafka.acl.list.cmd.example]
 one = '''
-# Display Kafka ACL rules for the instance
+# Display Kafka ACL rules for the Kafka instance
 $ rhoas kafka acl list
+
+# Display Kafka ACL rules for a specific Kafka instance
+$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
 '''
 
 

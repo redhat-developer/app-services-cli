@@ -17,10 +17,10 @@ By default, every users and service account have limited access to their Kafka i
 
 ....
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic "*" --group "*"
+$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all
 
 # Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-permissions --producer --user user_name --topic "*"
+$ rhoas kafka acl grant-permissions --producer --user user_name --topic all
 
 # List ACL rules for a Kafka instance
 $ rhoas kafka acl list
