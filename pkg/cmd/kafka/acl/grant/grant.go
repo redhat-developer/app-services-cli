@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/acl"
@@ -40,6 +42,7 @@ type options struct {
 	consumer    bool
 	topicPrefix string
 	groupPrefix string
+	force       bool
 }
 
 // NewGrantPermissionsACLCommand creates a series of ACL rules
@@ -94,6 +97,7 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.topicPrefix, "topic-prefix", "", opts.localizer.MustLocalize("kafka.acl.common.flag.topicPrefix.description"))
 	cmd.Flags().StringVar(&opts.groupPrefix, "group-prefix", "", opts.localizer.MustLocalize("kafka.acl.common.flag.groupPrefix.description"))
 	cmd.Flags().StringVar(&opts.kafkaID, "instance-id", "", opts.localizer.MustLocalize("kafka.acl.common.flag.instance.id"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("kafka.acl.grantPermissions.flag.yes"))
 
 	return cmd
 }
@@ -148,6 +152,9 @@ func runGrantPermissions(opts *options) (err error) {
 		userArg = buildPrincipal(serviceAccount)
 	}
 
+	var aclBindRequests []kafkainstanceclient.ApiCreateAclRequest
+	var aclBindingList []kafkainstanceclient.AclBinding
+
 	req := api.AclsApi.CreateAcl(opts.Context)
 
 	aclBindTopicDescribe := kafkainstanceclient.NewAclBinding(
@@ -159,11 +166,9 @@ func runGrantPermissions(opts *options) (err error) {
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
 
-	req = req.AclBinding(*aclBindTopicDescribe)
+	aclBindingList = append(aclBindingList, *aclBindTopicDescribe)
 
-	if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-		return err
-	}
+	aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTopicDescribe))
 
 	if opts.consumer {
 
@@ -176,11 +181,9 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(*aclBindTopicRead)
+		aclBindingList = append(aclBindingList, *aclBindTopicRead)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-			return err
-		}
+		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTopicRead))
 
 		aclBindGroupRead := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_GROUP,
@@ -191,13 +194,10 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = api.AclsApi.CreateAcl(opts.Context).AclBinding(*aclBindGroupRead)
+		aclBindingList = append(aclBindingList, *aclBindGroupRead)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-			return err
-		}
+		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindGroupRead))
 
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.grantPermissions.consumer.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
 	}
 
 	if opts.producer {
@@ -211,11 +211,9 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(*aclBindTopicWrite)
+		aclBindingList = append(aclBindingList, *aclBindTopicWrite)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-			return err
-		}
+		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTopicWrite))
 
 		aclBindTopicCreate := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
@@ -226,11 +224,9 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(*aclBindTopicCreate)
+		aclBindingList = append(aclBindingList, *aclBindTopicCreate)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-			return err
-		}
+		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTopicCreate))
 
 		// Add ACLs for transactional IDs
 		aclBindTransactionIDWrite := kafkainstanceclient.NewAclBinding(
@@ -242,11 +238,9 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(*aclBindTransactionIDWrite)
+		aclBindingList = append(aclBindingList, *aclBindTransactionIDWrite)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
-			return err
-		}
+		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTransactionIDWrite))
 
 		aclBindTransactionIDDescribe := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TRANSACTIONAL_ID,
@@ -257,14 +251,43 @@ func runGrantPermissions(opts *options) (err error) {
 			kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 		)
 
-		req = req.AclBinding(*aclBindTransactionIDDescribe)
+		aclBindingList = append(aclBindingList, *aclBindTransactionIDDescribe)
 
-		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
+		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTransactionIDDescribe))
+
+	}
+
+	opts.Logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
+	opts.Logger.Info()
+
+	rows := acl.MapPermissionListToTableFormat(aclBindingList, opts.localizer)
+	dump.Table(opts.IO.Out, rows)
+
+	if !opts.force {
+		var confirmDelete bool
+		promptConfirmDelete := &survey.Confirm{
+			Message: opts.localizer.MustLocalize("kafka.acl.grantPermissions.input.confirmGrant.message"),
+		}
+
+		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
+		if err != nil {
 			return err
 		}
 
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.grantPermissions.producer.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
+		if !confirmDelete {
+			opts.Logger.Debug(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.debug.deleteNotConfirmed"))
+			return nil
+		}
 	}
+
+	// Execute ACL rule creations
+	for _, req := range aclBindRequests {
+		if err = acl.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
+			return err
+		}
+	}
+
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsCreated", localize.NewEntry("InstanceName", kafkaName)))
 
 	return nil
 
