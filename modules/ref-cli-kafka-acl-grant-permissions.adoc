@@ -56,6 +56,7 @@ $ rhoas kafka acl grant-permissions --producer --consumer --user user_name --top
       `--topic` _string_::             Topic name to define ACL rules for
       `--topic-prefix` _string_::      Prefix name for topics to be selected
       `--user` _string_::              Username to be used as principal
+  `-y`, `--yes`::                      Skip confirmation to add ACL rules
 
 [discrete]
 == Options inherited from parent commands
