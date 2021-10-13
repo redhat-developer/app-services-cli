@@ -262,6 +262,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 	rows := acl.MapPermissionListToTableFormat(aclBindingList, opts.localizer)
 	dump.Table(opts.IO.Out, rows)
+	opts.Logger.Info()
 
 	if !opts.force {
 		var confirmDelete bool
