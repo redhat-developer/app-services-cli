@@ -105,6 +105,9 @@ one = 'Add ACL rules that grant the specified principal access to produce messag
 [kafka.acl.grantPermissions.flag.consumer.description]
 one = 'Add ACL rules that grant the specified principal access to consume messages from topics'
 
+[kafka.acl.grantPermissions.flag.yes]
+one = 'Skip confirmation to add ACL rules'
+
 
 [kafka.acl.list.cmd.shortDescription]
 one = 'List all Kafka ACL rules.'
@@ -135,20 +138,26 @@ one = 'Current page number for list of Kafka ACL rules'
 [kafka.acl.list.flag.size.description]
 one = 'Maximum number of items to be returned per page'
 
-[kafka.acl.list.allAccounts]
+[kafka.acl.common.allAccounts]
 one = 'All accounts'
 
-[kafka.acl.list.is]
+[kafka.acl.common.is]
 one = 'is'
 
-[kafka.acl.list.startsWith]
+[kafka.acl.common.startsWith]
 one = 'starts with'
 
-[kafka.acl.grantPermissions.producer.log.info.aclsCreated]
-one = 'ACLs created to enable principal to write messages to topics'
+[kafka.acl.grantPermissions.log.info.aclsPreview]
+one = 'The following ACL rules are to be created:'
 
-[kafka.acl.grantPermissions.consumer.log.info.aclsCreated]
-one = 'ACLs created to enable principal to consume messages from topics'
+[kafka.acl.grantPermissions.log.info.aclsCreated]
+one = 'ACLs successfully created in the Kafka instance "{{.InstanceName}}"'
+
+[kafka.acl.grantPermissions.input.confirmGrant.message]
+one = 'Are you sure you want to create the listed ACL rules'
+
+[kafka.acl.grantPermissions.log.debug.deleteNotConfirmed]
+one = 'Kafka ACLs grant permission action was not confirmed. Exiting silently'
 
 [kafka.acl.grantPermissions.group.error.notAllowed]
 one = '"--group" or "--group-prefix" flag is allowed only when consumer ACLs are to be added'

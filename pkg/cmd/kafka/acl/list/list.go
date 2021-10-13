@@ -2,9 +2,7 @@ package list
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
@@ -18,8 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
-
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
 type options struct {
@@ -34,12 +30,6 @@ type options struct {
 	size    int32
 	kafkaID string
 	output  string
-}
-
-type permissionsRow struct {
-	Principal   string `json:"principal,omitempty" header:"Principal"`
-	Permission  string `json:"permission,omitempty" header:"permission"`
-	Description string `json:"description,omitempty" header:"description"`
 }
 
 // NewListACLCommand creates a new command to list Kafka ACL rules
@@ -137,46 +127,11 @@ func runList(opts *options) (err error) {
 	case dump.EmptyFormat:
 		opts.Logger.Info("")
 		permissions := permissionsData.GetItems()
-		rows := mapPermissionListResultsToTableFormat(permissions, opts.localizer)
+		rows := acl.MapPermissionListToTableFormat(permissions, opts.localizer)
 		dump.Table(opts.IO.Out, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.output, permissionsData)
 	}
 
 	return nil
-}
-
-func mapPermissionListResultsToTableFormat(permissions []kafkainstanceclient.AclBinding, localizer localize.Localizer) []permissionsRow {
-
-	rows := make([]permissionsRow, len(permissions))
-
-	for i, p := range permissions {
-
-		description := buildDescription(p.PatternType, localizer)
-		row := permissionsRow{
-			Principal:   formatPrincipal(p.GetPrincipal(), localizer),
-			Permission:  fmt.Sprintf("%s | %s", p.GetPermission(), p.GetOperation()),
-			Description: fmt.Sprintf("%s %s \"%s\"", p.GetResourceType(), description, p.GetResourceName()),
-		}
-		rows[i] = row
-	}
-	return rows
-}
-
-func formatPrincipal(principal string, localizer localize.Localizer) string {
-	s := strings.Split(principal, ":")[1]
-
-	if s == acl.Wildcard {
-		return localizer.MustLocalize("kafka.acl.list.allAccounts")
-	}
-
-	return s
-}
-
-func buildDescription(patternType kafkainstanceclient.AclPatternType, localizer localize.Localizer) string {
-	if patternType == kafkainstanceclient.ACLPATTERNTYPE_LITERAL {
-		return localizer.MustLocalize("kafka.acl.list.is")
-	}
-
-	return localizer.MustLocalize("kafka.acl.list.startsWith")
 }
