@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/bind"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/clean"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/connect"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -22,6 +23,7 @@ func NewClusterCommand(f *factory.Factory) *cobra.Command {
 		status.NewStatusCommand(f),
 		connect.NewConnectCommand(f),
 		bind.NewBindCommand(f),
+		clean.NewCleanCommand(f),
 	)
 
 	return cmd

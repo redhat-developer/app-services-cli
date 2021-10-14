@@ -5,10 +5,12 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
@@ -28,7 +30,8 @@ type options struct {
 	forceCreationWithoutAsk bool
 	ignoreContext           bool
 	appName                 string
-	selectedKafka           string
+	serviceType             string
+	serviceName             string
 
 	deploymentConfigEnabled bool
 	bindAsEnv               bool
@@ -54,8 +57,17 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 			if opts.ignoreContext == true && !opts.IO.CanPrompt() {
 				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "ignore-context"))
 			}
+
 			if opts.appName == "" && !opts.IO.CanPrompt() {
-				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "appName"))
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "app-name"))
+			}
+
+			if opts.serviceType == "" && !opts.IO.CanPrompt() {
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "service-type"))
+			}
+
+			if opts.serviceName == "" && !opts.IO.CanPrompt() {
+				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "service-name"))
 			}
 			return runBind(opts)
 		},
@@ -69,53 +81,51 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 	cmd.Flags().BoolVar(&opts.deploymentConfigEnabled, "deployment-config", false, opts.localizer.MustLocalize("cluster.bind.flag.deploymentConfig.description"))
 	cmd.Flags().BoolVar(&opts.bindAsEnv, "bind-env", false, opts.localizer.MustLocalize("cluster.bind.flag.bindenv.description"))
+	cmd.Flags().StringVar(&opts.serviceType, "service-type", "", opts.localizer.MustLocalize("cluster.common.flag.serviceType.description"))
+	cmd.Flags().StringVar(&opts.serviceName, "service-name", "", opts.localizer.MustLocalize("cluster.common.flag.serviceName.description"))
+
+	_ = cmd.RegisterFlagCompletionFunc("service-type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return resources.AllServiceLabels, cobra.ShellCompDirectiveNoSpace
+	})
+
 	return cmd
 }
 
 func runBind(opts *options) error {
-	apiConnection, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
 
-	cfg, err := opts.Config.Load()
+	cliProperties := v1alpha.CommandEnvironment{
+		IO:         opts.IO,
+		Logger:     opts.Logger,
+		Localizer:  opts.localizer,
+		Config:     opts.Config,
+		Connection: conn,
+		Context:    opts.Context,
+	}
+
+	kubeClients, err := kubeclient.NewKubernetesClusterClients(&cliProperties, opts.kubeconfigLocation)
 	if err != nil {
 		return err
 	}
 
-	// Multiservice support: use cluster CR's instead of all kafkas
-	if cfg.Services.Kafka == nil || opts.ignoreContext {
-		// nolint:govet
-		selectedKafka, err := kafka.InteractiveSelect(opts.Context, apiConnection, opts.Logger, opts.localizer)
-		if err != nil {
-			return err
-		}
-		if selectedKafka == nil {
-			return nil
-		}
-		opts.selectedKafka = selectedKafka.GetId()
-	} else {
-		opts.selectedKafka = cfg.Services.Kafka.ClusterID
+	clusterAPI := cluster.KubernetesClusterAPIImpl{
+		KubernetesClients:  kubeClients,
+		CommandEnvironment: &cliProperties,
 	}
 
-	api := apiConnection.API()
-	kafkaInstance, _, err := api.Kafka().GetKafkaById(opts.Context, opts.selectedKafka).Execute()
-	if err != nil {
-		return err
-	}
-
-	if kafkaInstance.Name == nil {
-		return opts.localizer.MustLocalizeError("cluster.bind.error.emptyResponse")
-	}
-
-	err = cluster.ExecuteServiceBinding(opts.Context, opts.Logger, opts.localizer, &cluster.ServiceBindingOptions{
-		ServiceName:             kafkaInstance.GetName(),
+	err = clusterAPI.ExecuteServiceBinding(&v1alpha.BindOperationOptions{
 		Namespace:               opts.namespace,
+		ServiceName:             opts.serviceName,
+		ServiceType:             opts.serviceType,
 		AppName:                 opts.appName,
 		ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
 		BindingName:             opts.bindingName,
 		BindAsFiles:             !opts.bindAsEnv,
 		DeploymentConfigEnabled: opts.deploymentConfigEnabled,
+		IgnoreContext:           opts.ignoreContext,
 	})
 
 	return err

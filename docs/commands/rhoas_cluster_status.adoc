@@ -11,7 +11,7 @@ View status of the current Kubernetes or OpenShift cluster
 View information about the current Kubernetes or OpenShift cluster.
 You can use this information to connect your application service to the cluster.
 
-Before using this command, you must be logged into a Kubernetes or OpenShift
+Before using cluster commands, you must be authenticated into a Kubernetes or OpenShift
 cluster. The command uses your kubeconfig file to identify the cluster context.
 
 
