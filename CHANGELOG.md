@@ -1,4 +1,16 @@
 
+<a name="v0.34.0"></a>
+## [v0.34.0](https://github.com/redhat-developer/app-services-cli/compare/v0.33.1...v0.34.0) (2021-10-14)
+
+### Bug Fixes
+
+* cleanup .cases
+
+### Features
+
+* service registry integration with cluster commands ([#1187](https://github.com/redhat-developer/app-services-cli/issues/1187))
+
+
 <a name="v0.33.1"></a>
 ## [v0.33.1](https://github.com/redhat-developer/app-services-cli/compare/v0.33.0...v0.33.1) (2021-10-13)
 
