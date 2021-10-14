@@ -58,7 +58,7 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "grant-permissions",
+		Use:     "grant-access",
 		Short:   f.Localizer.MustLocalize("kafka.acl.grantPermissions.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("kafka.acl.grantPermissions.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("kafka.acl.grantPermissions.cmd.example"),

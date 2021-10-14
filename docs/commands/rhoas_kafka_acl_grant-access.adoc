@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-acl-grant-permissions_{context}']
-= rhoas kafka acl grant-permissions
+[id='ref-rhoas-kafka-acl-grant-access_{context}']
+= rhoas kafka acl grant-access
 
 [role="_abstract"]
 Add ACL rules to grant users access to produce/consume from topics
@@ -11,7 +11,7 @@ Add ACL rules to grant users access to produce/consume from topics
 This command creates ACL rules that grant the specified user access to produce/consume from topics
 
 ....
-rhoas kafka acl grant-permissions [flags]
+rhoas kafka acl grant-access [flags]
 ....
 
 [discrete]
@@ -19,28 +19,28 @@ rhoas kafka acl grant-permissions [flags]
 
 ....
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all
+$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
 
 # Grant access to principal for consuming messages from all topics in a specified instance
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all --instance-id c5hv7iru4an1g84pogp0
+$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all --instance-id c5hv7iru4an1g84pogp0
 
 # Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-permissions --producer --user user_name --topic all
+$ rhoas kafka acl grant-access --producer --user user_name --topic all
 
 # Grant access to principal for consuming messages from topics starting with "abc"
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic-prefix "abc" --group my-group
+$ rhoas kafka acl grant-access --consumer --user user_name --topic-prefix "abc" --group my-group
 
 # Grant access to principal for producing messages to topics starting with "abc"
-$ rhoas kafka acl grant-permissions --producer --user user_name --topic-prefix "abc"
+$ rhoas kafka acl grant-access --producer --user user_name --topic-prefix "abc"
 
 # Grant access to all users for consuming messages from topic "my-topic"
-$ rhoas kafka acl grant-permissions --consumer --user all --topic my-topic --group my-group
+$ rhoas kafka acl grant-access --consumer --user all --topic my-topic --group my-group
 
 # Grant access to all users for producing messages to topic "my-topic"
-$ rhoas kafka acl grant-permissions --producer --user all --topic my-topic
+$ rhoas kafka acl grant-access --producer --user all --topic my-topic
 
 # Grant access to principal for produce and consume messages from all topics 
-$ rhoas kafka acl grant-permissions --producer --consumer --user user_name --topic all --group all
+$ rhoas kafka acl grant-access --producer --consumer --user user_name --topic all --group all
 
 ....
 
