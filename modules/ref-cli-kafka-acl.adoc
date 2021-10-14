@@ -17,10 +17,10 @@ By default, every users and service account have limited access to their Kafka i
 
 ....
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-permissions --consumer --user user_name --topic all --group all
+$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
 
 # Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-permissions --producer --user user_name --topic all
+$ rhoas kafka acl grant-access --producer --user user_name --topic all
 
 # List ACL rules for a Kafka instance
 $ rhoas kafka acl list
@@ -45,10 +45,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl_grant-permissions.adoc#rhoas-kafka-acl-grant-permissions[rhoas kafka acl grant-permissions]	 - Add ACL rules to grant users access to produce/consume from topics
+* link:rhoas_kafka_acl_grant-access.adoc#rhoas-kafka-acl-grant-access[rhoas kafka acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-acl-grant-permissions_{context}[rhoas kafka acl grant-permissions]	 - Add ACL rules to grant users access to produce/consume from topics
+* link:{path}#ref-rhoas-kafka-acl-grant-access_{context}[rhoas kafka acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
 endif::[]
 
 ifdef::env-github,env-browser[]
