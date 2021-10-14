@@ -1,4 +1,17 @@
 
+<a name="v0.33.1"></a>
+## [v0.33.1](https://github.com/redhat-developer/app-services-cli/compare/v0.33.0...v0.33.1) (2021-10-13)
+
+### Bug Fixes
+
+* address review comment
+
+### Features
+
+* **kafka acl:** add instance-id flag and use all alias ([#1217](https://github.com/redhat-developer/app-services-cli/issues/1217))
+* **kafka acl grant-permissions:** add preview and confirmation
+
+
 <a name="v0.33.0"></a>
 ## [v0.33.0](https://github.com/redhat-developer/app-services-cli/compare/v0.32.0...v0.33.0) (2021-10-12)
 
