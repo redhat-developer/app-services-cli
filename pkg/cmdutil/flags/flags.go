@@ -3,6 +3,7 @@ package flags
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -29,6 +30,9 @@ func IsValidInput(input string, validValues ...string) bool {
 
 // FlagDescription creates a flag description and adds a list of valid options (if any)
 func FlagDescription(localizer localize.Localizer, messageID string, validOptions ...string) string {
+	// ensure consistent order
+	sort.Strings(validOptions)
+
 	description := localizer.MustLocalize(messageID)
 	if description[len(description)-1:] != "." {
 		description += "."
