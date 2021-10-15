@@ -195,8 +195,8 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 			Namespace: namespace,
 		},
 		StringData: map[string]string{
-			"api-id":     serviceAcct.GetClientId(),
-			"api-secret": serviceAcct.GetClientSecret(),
+			"client-id":     serviceAcct.GetClientId(),
+			"client-secret": serviceAcct.GetClientSecret(),
 		},
 	}
 
