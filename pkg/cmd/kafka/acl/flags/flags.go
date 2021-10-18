@@ -157,7 +157,7 @@ func (fs *flagSet) AddPrefix(prefix *bool) {
 	)
 }
 
-// AddPrefix adds a flag for sertting the "cluster" ACL resource type
+// AddCluster adds a flag for setting the "cluster" ACL resource type
 func (fs *flagSet) AddCluster(prefix *bool) {
 	flagName := ClusterFlagName
 
@@ -185,7 +185,7 @@ func (fs *flagSet) AddUser(userID *string) *markRequiredOpt {
 	return withMarkRequiredFunc(fs.cmd, flagName)
 }
 
-// AddUser adds a flag to pass a user ID principal
+// AddServiceAccount adds a flag to pass a service account client ID principal
 func (fs *flagSet) AddServiceAccount(serviceAccountID *string) *markRequiredOpt {
 	flagName := "service-account"
 

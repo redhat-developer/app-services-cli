@@ -73,7 +73,7 @@ func New(cfg *Config) (localize.Localizer, error) {
 // You can pass dynamic values using template entries
 // Examples:
 //
-// `localizer.MustLocalize("my-message-id", &localize.TemplateEntry{"Name", "Danny"}`
+// `localizer.MustLocalize("my-message-id", &localize.TemplateEntry{"Name", "Danny"})`
 //
 func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry) string {
 	templateData := map[string]interface{}{}
@@ -85,7 +85,7 @@ func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry)
 	return l.localizer.MustLocalize(cfg)
 }
 
-// MustLocalize loads a i18n message from the file system
+// MustLocalizePlural loads a pluralized i18n message from the file system
 // You can pass dynamic values using template entries
 // Examples:
 //

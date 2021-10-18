@@ -39,6 +39,25 @@ func GetResourceName(resourceName string) string {
 	return resourceName
 }
 
+// IsValidResourceOperation checks if the operation is valid, and returns the list valid operations when invalid
+func IsValidResourceOperation(resourceType string, operation string, resourceOperationsMap map[string][]string) (bool, []string) {
+	resourceTypeMapped := resourceTypeOperationKeyMap[resourceType]
+	resourceOperations := resourceOperationsMap[resourceTypeMapped]
+
+	for i, op := range resourceOperations {
+		if operationMapped, ok := validOperationsResponseMap[op]; ok {
+			resourceOperations[i] = operationMapped
+		} else {
+			resourceOperations[i] = op
+		}
+		if resourceOperations[i] == operation {
+			return true, nil
+		}
+	}
+
+	return false, resourceOperations
+}
+
 // ValidateAPIError checks for a HTTP error and maps it to a user friendly error
 func ValidateAPIError(httpRes *http.Response, localizer localize.Localizer, err error, operation string, instanceName string) error {
 	if err == nil {

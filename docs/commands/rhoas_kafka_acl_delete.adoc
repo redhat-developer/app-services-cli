@@ -37,7 +37,7 @@ rhoas kafka acl delete [flags]
       `--cluster`::                     Set the resource type to cluster
       `--group` _string_::              Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
       `--instance-id` _string_::        Kafka instance ID. Uses the current instance if not set
-      `--operation` _string_::          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "describe", "describe-config", "read", "write" (default "any")
+      `--operation` _string_::          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write" (default "any")
   `-o`, `--output` _string_::           Specify the output format. Choose from: "json", "yaml", "yml"
       `--permission` _string_::         Set the ACL permission. Choose from: "allow", "any", "deny" (default "any")
       `--prefix`::                      Determine if the resource should be exact match or prefix

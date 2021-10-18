@@ -133,8 +133,7 @@ func runDelete(instanceID string, opts *options) error {
 		return err
 	}
 
-	validResourceOperations := aclutil.FilterValidResourceOperations(opts.resourceType, resourceOperations)
-	if !aclutil.IsValidResourceOperation(opts.operation, validResourceOperations) {
+	if isValidOp, validResourceOperations := aclutil.IsValidResourceOperation(opts.resourceType, opts.operation, resourceOperations); !isValidOp {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
 			localize.NewEntry("ResourceType", opts.resourceType),
 			localize.NewEntry("Operation", opts.operation),
@@ -210,7 +209,7 @@ func runDelete(instanceID string, opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
+	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "delete", kafkaInstance.GetName()); err != nil {
 		return err
 	}
 

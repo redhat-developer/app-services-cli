@@ -27,7 +27,7 @@ const (
 	OperationFilterDELETE           = "delete"
 	OperationFilterALTER            = "alter"
 	OperationFilterDESCRIBE         = "describe"
-	OperationFilterDESCRIBE_CONFIGS = "describe-config"
+	OperationFilterDESCRIBE_CONFIGS = "describe-configs"
 	OperationFilterALTER_CONFIGS    = "alter-configs"
 )
 

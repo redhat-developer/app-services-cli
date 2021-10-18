@@ -42,8 +42,8 @@ var resourceTypeOperationKeyMap = map[string]string{
 }
 
 var validOperationsResponseMap = map[string]string{
-	OperationFilterALTER_CONFIGS:    "alter_configs",
-	OperationFilterDESCRIBE_CONFIGS: "describe_configs",
+	"alter_configs":    OperationFilterALTER_CONFIGS,
+	"describe_configs": OperationFilterDESCRIBE_CONFIGS,
 }
 
 // GetOperationTypeFilterMap gets the mappings for ACL type filters
@@ -89,28 +89,4 @@ func GetMappedResourceTypeFilterValue(resourceType string) kafkainstanceclient.A
 // GetResourceTypeOperationKeyMap gets the mappings for ACL operations
 func GetResourceTypeOperationKeyMap() map[string]string {
 	return resourceTypeOperationKeyMap
-}
-
-// FilterValidResourceOperations gets a filtered list of the valid operations for this resource type
-func FilterValidResourceOperations(resourceType string, resourceOperationsMap map[string][]string) []string {
-	resourceTypeMapped := resourceTypeOperationKeyMap[resourceType]
-	resourceOperations := resourceOperationsMap[resourceTypeMapped]
-
-	for i, operation := range resourceOperations {
-		if operationMapped, ok := validOperationsResponseMap[operation]; ok {
-			resourceOperations[i] = operationMapped
-		}
-	}
-
-	return resourceOperations
-}
-
-// IsValidResourceOperation returns true if the operation is valid
-func IsValidResourceOperation(operation string, validOperations []string) bool {
-	for _, op := range validOperations {
-		if operation == op {
-			return true
-		}
-	}
-	return false
 }
