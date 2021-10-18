@@ -7,7 +7,7 @@ var resourceTypeFilterMap = map[string]kafkainstanceclient.AclResourceTypeFilter
 	ResourceTypeFilterCLUSTER:          kafkainstanceclient.ACLRESOURCETYPEFILTER_CLUSTER,
 	ResourceTypeFilterTOPIC:            kafkainstanceclient.ACLRESOURCETYPEFILTER_TOPIC,
 	ResourceTypeFilterGROUP:            kafkainstanceclient.ACLRESOURCETYPEFILTER_GROUP,
-	ResourceTypeFilterTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPEFILTER_TOPIC,
+	ResourceTypeFilterTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPEFILTER_TRANSACTIONAL_ID,
 }
 
 var operationFilterMap = map[string]kafkainstanceclient.AclOperationFilter{
