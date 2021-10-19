@@ -208,7 +208,6 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess",
 		localize.NewEntry("Name", createdSecret.Name),
 		localize.NewEntry("ClientID", serviceAcct.GetClientId()),
-		localize.NewEntry("ClientSecret", serviceAcct.GetClientSecret()),
 	))
 
 	return nil

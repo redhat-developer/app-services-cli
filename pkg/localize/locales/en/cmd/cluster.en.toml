@@ -292,14 +292,12 @@ one = '''
 Service Account Secret "{{.Name}}" created successfully
 
 Client ID:     {{.ClientID}}
-Client Secret: {{.ClientSecret}}
 
-Make a copy of the client ID and secret to store in a safe place. Credentials won't appear again after closing the terminal.
+Make a copy of the client ID to store in a safe place. Credentials won't appear again after closing the terminal.
 
-Execute the following command to grant access to the service-account using rhoas cli
+Execute the following command to grant access to the service account using rhoas cli:
 
-rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic "*" --group "*"
-
+  $ rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic "*" --group "*"
 '''
 
 [cluster.kubernetes.createTokenSecret.log.info.createFailed]
