@@ -205,7 +205,10 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
 
-	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess", localize.NewEntry("Name", createdSecret.Name)))
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess",
+		localize.NewEntry("Name", createdSecret.Name),
+		localize.NewEntry("ClientID", serviceAcct.GetClientId()),
+	))
 
 	return nil
 }
@@ -288,7 +291,7 @@ func (api *KubernetesClusterAPIImpl) watchForServiceStatus(
 
 		case <-time.After(60 * time.Second):
 			w.Stop()
-			return fmt.Errorf(localizer.MustLocalize("cluster.kubernetes.watchForKafkaStatus.error.timeout"))
+			return fmt.Errorf(localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.timeout", localize.NewEntry("Resource", serviceDetails.Type)))
 		}
 	}
 }

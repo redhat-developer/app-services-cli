@@ -231,7 +231,7 @@ one = '''
 Connection Details:
 
 Service Type:           {{.ServiceType}}
-Service Name:             {{.ServiceName}}
+Service Name:           {{.ServiceName}}
 Kubernetes Namespace:   {{.Namespace}}
 Service Account Secret: {{.ServiceAccountSecretName}}
 '''
@@ -288,7 +288,17 @@ one = 'Access token already exist on the specified namespace'
 one = 'Token Secret "{{.Name}}" created successfully'
 
 [cluster.kubernetes.createSASecret.log.info.createSuccess]
-one = 'Service Account Secret "{{.Name}}" created successfully'
+one = '''
+Service Account Secret "{{.Name}}" created successfully
+
+Client ID:     {{.ClientID}}
+
+Make a copy of the client ID to store in a safe place. Credentials won't appear again after closing the terminal.
+
+Execute the following command to grant access to the service account using rhoas cli:
+
+  $ rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic "*" --group "*"
+'''
 
 [cluster.kubernetes.createTokenSecret.log.info.createFailed]
 one = 'Creation of the "{{.Name}}" secret failed:'
