@@ -8,16 +8,18 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/kafkaerr"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/openconfig/goyang/pkg/indent"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 const tagTitle = "title"
@@ -62,13 +64,12 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 	api := opts.Connection.API()
 
 	if stringInSlice("kafka", opts.Services) {
-		kafkaCfg := cfg.Services.Kafka
-		if cfg.HasKafka() {
+		if instanceID, ok := cfg.HasKafka(); ok {
 			// nolint:govet
-			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka(), kafkaCfg.ClusterID)
+			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka(), instanceID)
 			if err != nil {
 				if kas.IsErr(err, kas.ErrorCode7) {
-					err = kafkaerr.NotFoundByIDError(kafkaCfg.ClusterID)
+					err = kafkaerr.NotFoundByIDError(instanceID)
 					opts.Logger.Error(err)
 					opts.Logger.Info(`Run "rhoas kafka use" to use another Kafka instance.`)
 				}

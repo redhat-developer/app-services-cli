@@ -7,6 +7,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/AlecAivazis/survey/v2"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -16,8 +19,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -80,11 +81,12 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasKafka() {
+			instanceID, ok := cfg.HasKafka()
+			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.noKafkaSelected")
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
+			opts.kafkaID = instanceID
 
 			return runCmd(opts)
 		},

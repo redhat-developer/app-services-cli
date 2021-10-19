@@ -3,6 +3,8 @@ package list
 import (
 	"context"
 
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -14,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -60,11 +61,12 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasKafka() {
+			instanceID, ok := cfg.HasKafka()
+			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
+			opts.kafkaID = instanceID
 
 			return runList(opts)
 		},
