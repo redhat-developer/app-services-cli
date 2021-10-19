@@ -2,9 +2,11 @@ package list
 
 import (
 	"context"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"net/http"
+
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+
+	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -12,13 +14,14 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -78,11 +81,12 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasKafka() {
+			instanceID, ok := cfg.HasKafka()
+			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.noKafkaSelected")
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
+			opts.kafkaID = instanceID
 
 			return runList(opts)
 		},

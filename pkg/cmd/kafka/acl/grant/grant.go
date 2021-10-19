@@ -5,6 +5,8 @@ import (
 	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -14,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/acl"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/spf13/cobra"
 
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
@@ -74,11 +75,12 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasKafka() {
+			instanceID, ok := cfg.HasKafka()
+			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
+			opts.kafkaID = instanceID
 
 			if err = validateFlagInputCombination(opts); err != nil {
 				return err

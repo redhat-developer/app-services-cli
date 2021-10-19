@@ -3,9 +3,10 @@ package cmdutil
 import (
 	"strconv"
 
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/spf13/cobra"
 )
 
 // FilterValidTopicNameArgs filters topics from the API and returns the names
@@ -19,7 +20,8 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	if !cfg.HasKafka() {
+	instanceID, ok := cfg.HasKafka()
+	if !ok {
 		return validNames, directive
 	}
 
@@ -28,7 +30,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	api, _, err := conn.API().KafkaAdmin(cfg.Services.Kafka.ClusterID)
+	api, _, err := conn.API().KafkaAdmin(instanceID)
 	if err != nil {
 		return validNames, directive
 	}
@@ -60,7 +62,8 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	if !cfg.HasKafka() {
+	instanceID, ok := cfg.HasKafka()
+	if !ok {
 		return validIDs, directive
 	}
 
@@ -69,7 +72,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	api, _, err := conn.API().KafkaAdmin(cfg.Services.Kafka.ClusterID)
+	api, _, err := conn.API().KafkaAdmin(instanceID)
 	if err != nil {
 		return validIDs, directive
 	}
