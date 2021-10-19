@@ -228,7 +228,7 @@ func getRequestParams(opts *options) *requestParams {
 	return &requestParams{
 		resourceType: aclutil.GetMappedResourceTypeFilterValue(opts.resourceType),
 		principal:    aclutil.FormatPrincipal(opts.principal),
-		resourceName: aclutil.GetResourceName(opts.resourceName),
+		resourceName: opts.resourceName,
 		patternType:  aclutil.GetMappedPatternTypeFilterValue(opts.patternType),
 		operation:    aclutil.GetMappedOperationFilterValue(opts.operation),
 		permission:   aclutil.GetMappedPermissionTypeFilterValue(opts.permission),
@@ -270,7 +270,12 @@ func validateAndSetOpts(opts *options) error {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", resourceTypeFlagEntries...)
 	}
 
-	if aclutil.GetResourceName(userID) == aclutil.Wildcard || aclutil.GetResourceName(serviceAccount) == aclutil.Wildcard {
+	// user and service account should not be provided together
+	if userID != "" && serviceAccount != "" {
+		return opts.localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
+	}
+
+	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 
@@ -284,11 +289,6 @@ func validateAndSetOpts(opts *options) error {
 	// check if priincipal is provided
 	if !allAccounts && (userID == "" && serviceAccount == "") {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
-	}
-
-	// user and service account should not be provided together
-	if userID != "" && serviceAccount != "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
 	}
 
 	if userID != "" {
