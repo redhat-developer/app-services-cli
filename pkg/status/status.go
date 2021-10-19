@@ -64,7 +64,7 @@ func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error
 	api := opts.Connection.API()
 
 	if stringInSlice("kafka", opts.Services) {
-		if instanceID, exists := cfg.HasKafka(); exists {
+		if instanceID, exists := cfg.GetKafkaInstanceID(); exists {
 			// nolint:govet
 			kafkaStatus, err := getKafkaStatus(ctx, api.Kafka(), instanceID)
 			if err != nil {

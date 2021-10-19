@@ -62,7 +62,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			instanceID, ok := cfg.HasKafka()
+			instanceID, ok := cfg.GetKafkaInstanceID()
 			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
 			}

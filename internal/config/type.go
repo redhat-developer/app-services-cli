@@ -41,7 +41,7 @@ type ServiceRegistryConfig struct {
 	Name       string `json:"name"`
 }
 
-func (c *Config) HasKafka() (string, bool) {
+func (c *Config) GetKafkaInstanceID() (string, bool) {
 	if c.Services.Kafka != nil && c.Services.Kafka.ClusterID != "" {
 		return c.Services.Kafka.ClusterID, true
 	}
