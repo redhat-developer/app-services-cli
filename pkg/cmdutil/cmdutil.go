@@ -21,7 +21,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	instanceID, ok := cfg.HasKafka()
+	instanceID, ok := cfg.GetKafkaInstanceID()
 	if !ok {
 		return validNames, directive
 	}
@@ -63,7 +63,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	instanceID, ok := cfg.HasKafka()
+	instanceID, ok := cfg.GetKafkaInstanceID()
 	if !ok {
 		return validIDs, directive
 	}
