@@ -1,10 +1,6 @@
 
 <a name="v0.34.1"></a>
-## [v0.34.1](https://github.com/redhat-developer/app-services-cli/compare/0.34.1...v0.34.1) (2021-10-15)
-
-
-<a name="0.34.1"></a>
-## [0.34.1](https://github.com/redhat-developer/app-services-cli/compare/v0.34.0...0.34.1) (2021-10-15)
+## [v0.34.1](https://github.com/redhat-developer/app-services-cli/compare/v0.34.0...v0.34.1) (2021-10-15)
 
 
 <a name="v0.34.0"></a>
