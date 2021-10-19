@@ -1,172 +1,265 @@
-[kafka.acl.cmd.shortDescription]
-one = 'Kafka ACL management for users and service accounts'
+[kafka.acl.cmd]
+	[kafka.acl.cmd.shortDescription]
+	one = 'Kafka ACL management for users and service accounts'
 
-[kafka.acl.cmd.longDescription]
-one = '''
-Set of commands that will let you manage Kafka ACLs.
-By default, every users and service account have limited access to their Kafka instance (Only DESCRIBE permission is enabled for TOPIC, ACL, and GROUP).
-'''
+	[kafka.acl.cmd.longDescription]
+	one = '''
+	Set of commands that will let you manage Kafka ACLs.
+	By default, every users and service account have limited access to their Kafka instance (Only DESCRIBE permission is enabled for TOPIC, ACL, and GROUP).
+	'''
 
-[kafka.acl.cmd.example]
-one = '''
-# Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
+	[kafka.acl.cmd.example]
+	one = '''
+	# Grant access to principal for consuming messages from all topics
+	$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
 
-# Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-access --producer --user user_name --topic all
+	# Grant access to principal for producing messages to all topics
+	$ rhoas kafka acl grant-access --producer --user user_name --topic all
 
-# List ACL rules for a Kafka instance
-$ rhoas kafka acl list
-'''
+	# List ACL rules for a Kafka instance
+	$ rhoas kafka acl list
+	'''
 
-[kafka.acl.common.error.unauthorized]
-one = 'you are unauthorized to {{.Operation}} these Kafka ACL rules'
+[kafka.acl.common]
+	[kafka.acl.common.error.unauthorized]
+	one = 'you are unauthorized to {{.Operation}} these Kafka ACL rules'
 
-[kafka.acl.common.error.forbidden]
-one = 'you are forbidden to {{.Operation}} this Kafka ACL rule'
+	[kafka.acl.common.error.forbidden]
+	one = 'you are forbidden to {{.Operation}} this Kafka ACL rule'
 
-[kafka.acl.common.error.internalServerError]
-one = 'internal server error'
+	[kafka.acl.common.error.internalServerError]
+	one = 'internal server error'
 
-[kafka.acl.common.error.unableToConnectToKafka]
-one = 'unable to connect to Kafka instance "{{.Name}}"'
+	[kafka.acl.common.error.unableToConnectToKafka]
+	one = 'unable to connect to Kafka instance "{{.Name}}"'
 
-[kafka.acl.common.error.noKafkaSelected]
-one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
+	[kafka.acl.common.error.noKafkaSelected]
+	one = 'no Kafka instance is currently selected, run "rhoas kafka use" to set the current instance'
 
+	[kafka.acl.common.error.resourceTypeMissingOrIncorrect]
+	one = 'resource type "{{.ResourceType}}" was selected, but no value was provided. Provide a value using the "--{{.Flag}}" flag'
 
-[kafka.acl.grantPermissions.cmd.shortDescription]
-one = 'Add ACL rules to grant users access to produce/consume from topics'
+	[kafka.acl.common.error.invalidResourceOperation]
+	one = 'invalid operation "{{.Operation}}" for resource type "{{.ResourceType}}". Valid operations are: {{.ValidOperationList}}'
 
-[kafka.acl.grantPermissions.cmd.longDescription]
-one = 'This command creates ACL rules that grant the specified user access to produce/consume from topics'
+	[kafka.acl.common.error.oneResourceTypeAllowed]
+	one = 'provide only one resource type from "--{{.ClusterFlag}}", "--{{.TopicFlag}}", "--{{.GroupFlag}}", or "--{{.TransactionalIDFlag}}"'
 
-[kafka.acl.grantPermissions.cmd.example]
-one = '''
-# Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
+	[kafka.acl.common.error.bothPrincipalsSelected]
+	one = 'flags "--user" and "--service-account" can not be provided simultaneously'
 
-# Grant access to principal for consuming messages from all topics in a specified instance
-$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all --instance-id c5hv7iru4an1g84pogp0
+	[kafka.acl.common.error.noPrincipalsSelected]
+	one = 'principal is missing, provide one of "--user", "--service-account" or "--all-accounts" flags'
 
-# Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-access --producer --user user_name --topic all
+	[kafka.acl.common.error.noOperationSpecified]
+	one = 'no operation specified: must provide at least one of "--producer" or "--consumer" flag'
 
-# Grant access to principal for consuming messages from topics starting with "abc"
-$ rhoas kafka acl grant-access --consumer --user user_name --topic-prefix "abc" --group my-group
+	[kafka.acl.common.flag.user.description]
+	one = 'User ID to be use as principal'
 
-# Grant access to principal for producing messages to topics starting with "abc"
-$ rhoas kafka acl grant-access --producer --user user_name --topic-prefix "abc"
+	[kafka.acl.common.flag.allAccounts.description]
+	one = 'Set the ACL principal to match all accounts (wildcard). Cannot be used in conjunction with --service-account or --user'
 
-# Grant access to all users for consuming messages from topic "my-topic"
-$ rhoas kafka acl grant-access --consumer --user all --topic my-topic --group my-group
+	[kafka.acl.common.flag.serviceAccount.description]
+	one = 'Service account client ID to use as principal for this operation'
 
-# Grant access to all users for producing messages to topic "my-topic"
-$ rhoas kafka acl grant-access --producer --user all --topic my-topic
+	[kafka.acl.common.flag.operation.description]
+	one = 'Set the ACL operation'
 
-# Grant access to principal for produce and consume messages from all topics 
-$ rhoas kafka acl grant-access --producer --consumer --user user_name --topic all --group all
-'''
+	[kafka.acl.common.flag.permission.description]
+	one = 'Set the ACL permission'
 
-[kafka.acl.grantPermissions.error.bothPrincipalsSelected]
-one = 'flags "--user" and "--service-account" can not be provided simultaneously'
+	[kafka.acl.common.flag.cluster.description]
+	one = 'Set the resource type to cluster'
 
-[kafka.acl.grantPermissions.error.noPrincipalsSelected]
-one = 'principal is missing, provide "--user" or "--service-account" flag'
+	[kafka.acl.common.flag.prefix.description]
+	one = 'Determine if the resource should be exact match or prefix'
 
-[kafka.acl.common.error.noOperationSpecified]
-one = 'no operation specified: must provide atleast one of "--producer" or "--consumer" flag'
+	[kafka.acl.common.flag.topic.description]
+	one = 'Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix'
 
+	[kafka.acl.common.flag.group.description]
+	one = 'Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix'
 
-[kafka.acl.common.flag.user.description]
-one = 'Username to be used as principal'
+	[kafka.acl.common.flag.transactionalID.description]
+	one = 'Set the transactional ID resource'
 
-[kafka.acl.common.flag.serviceAccount.description]
-one = 'Service account ID to be used as principal'
+	[kafka.acl.common.log.info.noACLsMatchingFilters]
+	one = 'Kafka instance "{{.Name}}" has no ACLs matching the provided filters'
 
-[kafka.acl.common.flag.topic.description]
-one = 'Topic name to define ACL rules for'
+	[kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag]
+	one = '"--all-accounts" flag cannot be used in conjunction with "--user" or "--service-account" flags'
 
-[kafka.acl.common.flag.group.description]
-one = 'Consumer group ID to define ACL rules for'
+	[kafka.acl.common.error.useAllAccountsFlag]
+	one = 'to set a wilcard on the ACL principal, pass "--all-accounts"'
 
-[kafka.acl.common.flag.topicPrefix.description]
-one = 'Prefix name for topics to be selected'
+	[kafka.acl.common.error.serviceAccount404]
+	one = 'service account "{{.ClientID}}" does not exist'
 
-[kafka.acl.common.flag.groupPrefix.description]
-one = 'Prefix name for groups to be selected'
+	[kafka.acl.common.error.couldNotFindServiceAccount]
+	one = 'could not find service account "{{.ClientID}}"'
 
-[kafka.acl.common.flag.instance.id]
-one = 'ID of the Kafka instance to be used. By default, uses the currently selected instance'
+	[kafka.acl.common.allAccounts]
+	one = 'All accounts'
 
-[kafka.acl.grantPermissions.flag.producer.description]
-one = 'Add ACL rules that grant the specified principal access to produce messages to topics'
+	[kafka.acl.common.is]
+	one = 'is'
 
-[kafka.acl.grantPermissions.flag.consumer.description]
-one = 'Add ACL rules that grant the specified principal access to consume messages from topics'
+	[kafka.acl.common.startsWith]
+	one = 'starts with'
 
-[kafka.acl.grantPermissions.flag.yes]
-one = 'Skip confirmation to add ACL rules'
+[kafka.acl.list]
 
+	[kafka.acl.list.cmd.example]
+	one = '''
+	# Display Kafka ACL rules for the Kafka instance
+	$ rhoas kafka acl list
 
-[kafka.acl.list.cmd.shortDescription]
-one = 'List all Kafka ACL rules.'
+	# Display Kafka ACL rules for a specific Kafka instance
+	$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
+	'''
 
-[kafka.acl.list.cmd.longDescription]
-one = '''
-This command will display list of Kafka ACL rules
+	[kafka.acl.list.cmd.shortDescription]
+	one = 'List all Kafka ACL rules.'
 
-The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
-'''
+	[kafka.acl.list.cmd.longDescription]
+	one = '''
+	This command will display list of Kafka ACL rules
 
-[kafka.acl.list.cmd.example]
-one = '''
-# Display Kafka ACL rules for the Kafka instance
-$ rhoas kafka acl list
+	The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+	'''
 
-# Display Kafka ACL rules for a specific Kafka instance
-$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
-'''
+	[kafka.acl.list.flag.output.description]
+	one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
 
+	[kafka.acl.list.flag.page.description]
+	one = 'Current page number for list of Kafka ACL rules'
 
-[kafka.acl.list.flag.output.description]
-one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
+	[kafka.acl.list.flag.size.description]
+	one = 'Maximum number of items to be returned per page'
 
-[kafka.acl.list.flag.page.description]
-one = 'Current page number for list of Kafka ACL rules'
+	[kafka.acl.list.allAccounts]
+	one = 'All accounts'
 
-[kafka.acl.list.flag.size.description]
-one = 'Maximum number of items to be returned per page'
+	[kafka.acl.list.is]
+	one = 'is'
 
-[kafka.acl.common.allAccounts]
-one = 'All accounts'
+	[kafka.acl.list.startsWith]
+	one = 'starts with'
 
-[kafka.acl.common.is]
-one = 'is'
+[kafka.acl.grantPermissions]
 
-[kafka.acl.common.startsWith]
-one = 'starts with'
+	[kafka.acl.grantPermissions.cmd.shortDescription]
+	one = 'Add ACL rules to grant users access to produce/consume from topics'
 
-[kafka.acl.grantPermissions.log.info.aclsPreview]
-one = 'The following ACL rules are to be created:'
+	[kafka.acl.grantPermissions.cmd.longDescription]
+	one = 'This command creates ACL rules that grant the specified user access to produce/consume from topics'
 
-[kafka.acl.grantPermissions.log.info.aclsCreated]
-one = 'ACLs successfully created in the Kafka instance "{{.InstanceName}}"'
+	[kafka.acl.grantPermissions.cmd.example]
+	one = '''
+	# Grant access to principal for consuming messages from all topics
+	$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
 
-[kafka.acl.grantPermissions.input.confirmGrant.message]
-one = 'Are you sure you want to create the listed ACL rules'
+	# Grant access to principal for consuming messages from all topics in a specified instance
+	$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all --instance-id c5hv7iru4an1g84pogp0
 
-[kafka.acl.grantPermissions.log.debug.deleteNotConfirmed]
-one = 'Kafka ACLs grant permission action was not confirmed. Exiting silently'
+	# Grant access to principal for producing messages to all topics
+	$ rhoas kafka acl grant-access --producer --user user_name --topic all
 
-[kafka.acl.grantPermissions.group.error.notAllowed]
-one = '"--group" or "--group-prefix" flag is allowed only when consumer ACLs are to be added'
+	# Grant access to principal for consuming messages from topics starting with "abc"
+	$ rhoas kafka acl grant-access --consumer --user user_name --topic-prefix "abc" --group my-group
 
-[kafka.acl.grantPermissions.group.error.required]
-one = '"--group" flag is required for consumer operation'
+	# Grant access to principal for producing messages to topics starting with "abc"
+	$ rhoas kafka acl grant-access --producer --user user_name --topic-prefix "abc"
 
-[kafka.acl.grantPermissions.topic.error.required]
-one = '"--topic" flag is required for consumer and producer operations'
+	# Grant access to all users for consuming messages from topic "my-topic"
+	$ rhoas kafka acl grant-access --consumer --user all --topic my-topic --group my-group
 
-[kafka.acl.grantPermissions.prefix.error.notAllowed]
-one = 'can not use "--{{.Resource}}-prefix" and "--{{.Resource}}" flag together'
+	# Grant access to all users for producing messages to topic "my-topic"
+	$ rhoas kafka acl grant-access --producer --user all --topic my-topic
+
+	# Grant access to principal for produce and consume messages from all topics 
+	$ rhoas kafka acl grant-access --producer --consumer --user user_name --topic all --group all
+	'''
+
+	[kafka.acl.grantPermissions.flag.producer.description]
+	one = 'Add ACL rules that grant the specified principal access to produce messages to topics'
+
+	[kafka.acl.grantPermissions.flag.consumer.description]
+	one = 'Add ACL rules that grant the specified principal access to consume messages from topics'
+
+	[kafka.acl.grantPermissions.producer.log.info.aclsCreated]
+	one = 'ACLs created to enable principal to write messages to topics'
+
+	[kafka.acl.grantPermissions.consumer.log.info.aclsCreated]
+	one = 'ACLs created to enable principal to consume messages from topics'
+
+	[kafka.acl.grantPermissions.group.error.notAllowed]
+	one = '"--group" or "--group-prefix" flag is allowed only when consumer ACLs are to be added'
+
+	[kafka.acl.grantPermissions.group.error.required]
+	one = '"--group" flag is required for consumer operation'
+
+	[kafka.acl.grantPermissions.topic.error.required]
+	one = '"--topic" flag is required for consumer and producer operations'
+
+	[kafka.acl.grantPermissions.prefix.error.notAllowed]
+	one = 'can not use "--{{.Resource}}-prefix" and "--{{.Resource}}" flag together'
+
+	[kafka.acl.grantPermissions.common.flag.topic.description]
+	one = 'Topic name to define ACL rules for'
+
+	[kafka.acl.grantPermissions.common.flag.group.description]
+	one = 'Consumer group ID to define ACL rules for'
+
+	[kafka.acl.grantPermissions.common.flag.topicPrefix.description]
+	one = 'Prefix name for topics to be selected'
+
+	[kafka.acl.grantPermissions.common.flag.groupPrefix.description]
+	one = 'Prefix name for groups to be selected'
+
+	[kafka.acl.grantPermissions.log.info.aclsPreview]
+	one = 'The following ACL rules are to be created:'
+
+	[kafka.acl.grantPermissions.log.info.aclsCreated]
+	one = 'ACLs successfully created in the Kafka instance "{{.InstanceName}}"'
+
+	[kafka.acl.grantPermissions.input.confirmGrant.message]
+	one = 'Are you sure you want to create the listed ACL rules'
+
+	[kafka.acl.grantPermissions.log.debug.deleteNotConfirmed]
+	one = 'Kafka ACLs grant permission action was not confirmed. Exiting silently'
+
+[kafka.acl.delete]
+	[kafka.acl.delete.cmd.shortDescription]
+	one = 'Delete Kafka ACLs matching the provided filters'
+
+	[kafka.acl.delete.cmd.longDescription]
+	one = '''
+	Delete all ACLs from a Kafka instance which match the filter criteria provided
+	'''
+
+	[kafka.acl.delete.cmd.example]
+	one = '''
+	# delete an ACL for user "joe_bloggs" on all topics
+	$ rhoas kafka acl delete --operation write --permission allow --topic "*" --user joe_bloggs
+
+	# delete an ACL for a service account
+	$ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+
+	# delete an ACL for all users on the consumer group resource
+	$ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
+	'''
+
+	[kafka.acl.delete.log.info.theFollowingACLSwillBeDeleted]
+	one = 'The following ACLs will be deleted from Kafka instance "{{.Name}}":'
+
+	[kafka.acl.delete.input.confirmDeleteMessage]
+	one = 'Are you sure you want to delete these ACLs?'
+
+	[kafka.acl.delete.successMessage]
+	one = 'Deleted {{.Count}} ACL from Kafka instance "{{.Name}}"'
+	other = 'Deleted {{.Count}} ACLs from Kafka instance "{{.Name}}"'
+
+	[kafka.acl.delete.log.info.deletingACLs]
+	one = 'Deleting ACLs from Kafka instance "{{.Name}}"'

@@ -1,10 +1,6 @@
 package kafkacmdutil
 
 import (
-	"context"
-
-	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
-	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -38,31 +34,6 @@ func RegisterNameFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) erro
 		}
 
 		return validNames, directive
-	})
-}
-
-// RegisterNameFlagCompletionFunc adds dynamic completion for the --name flag
-func RegisterOwnerFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
-	return cmd.RegisterFlagCompletionFunc("owner", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var usernames []string
-		directive := cobra.ShellCompDirectiveNoSpace
-
-		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
-		if err != nil {
-			return usernames, directive
-		}
-
-		queryParams := []rbac.QueryParam{rbac.WithQueryParam("match_criteria", "partial"), rbac.WithQueryParam("usernames", toComplete)}
-		principals, err := rbacutil.FetchAllUsers(context.Background(), conn.API().RBAC.PrincipalAPI, queryParams...)
-		if err != nil || len(principals) == 0 {
-			return usernames, directive
-		}
-
-		for _, p := range principals {
-			usernames = append(usernames, p.Username)
-		}
-
-		return usernames, directive
 	})
 }
 

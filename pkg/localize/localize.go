@@ -17,6 +17,7 @@ var (
 // which defines methods to load i18n messages
 type Localizer interface {
 	MustLocalize(id string, templateEntries ...*TemplateEntry) string
+	MustLocalizePlural(id string, pluralCount int, templateEntries ...*TemplateEntry) string
 	MustLocalizeError(id string, templateEntries ...*TemplateEntry) error
 }
 

@@ -12,6 +12,8 @@ run:
   # from this option's value (see skip-dirs-use-default).
   # "/" will be replaced by current OS file path separator to properly work
   # on Windows.
+  skip-files:
+    - '.*_test.go'
   #skip-dirs:
   #  - .chglog
 # output configuration options

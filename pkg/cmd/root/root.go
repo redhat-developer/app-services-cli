@@ -33,6 +33,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 			f.Logger.SetDebug(debug.Enabled())
 		},
 	}
+
 	fs := cmd.PersistentFlags()
 	arguments.AddDebugFlag(fs)
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that

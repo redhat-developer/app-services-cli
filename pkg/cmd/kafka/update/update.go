@@ -16,6 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
@@ -116,7 +117,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
-	_ = kafkacmdutil.RegisterOwnerFlagCompletionFunc(cmd, f)
+	_ = flags.RegisterUserCompletionFunc(cmd, "owner", f.Connection)
 
 	return cmd
 }

@@ -91,7 +91,7 @@ func initConfig(f *factory.Factory) error {
 func rootError(err error, localizer localize.Localizer) error {
 	prefix := icon.ErrorPrefix()
 	errMessage := err.Error()
-	if prefix == icon.CrossMark {
+	if prefix == icon.ErrorSymbol {
 		errMessage = firstCharToUpper(errMessage)
 	}
 	return fmt.Errorf("%v %v. %v", icon.ErrorPrefix(), errMessage, localizer.MustLocalize("common.log.error.verboseModeHint"))
