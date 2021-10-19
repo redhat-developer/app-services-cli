@@ -108,8 +108,6 @@
 	[kafka.acl.common.startsWith]
 	one = 'starts with'
 
-[kafka.acl.list]
-
 	[kafka.acl.list.cmd.example]
 	one = '''
 	# Display Kafka ACL rules for the Kafka instance

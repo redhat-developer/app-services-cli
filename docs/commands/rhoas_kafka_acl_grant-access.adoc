@@ -47,6 +47,7 @@ rhoas kafka acl grant-access [flags]
 [discrete]
 == Options
 
+      `--all-accounts`::               Set the ACL principal to match all accounts (wildcard). Cannot be used in conjunction with --service-account or --user
       `--consumer`::                   Add ACL rules that grant the specified principal access to consume messages from topics
       `--group` _string_::             Consumer group ID to define ACL rules for
       `--group-prefix` _string_::      Prefix name for groups to be selected

@@ -44,7 +44,7 @@ rhoas kafka acl grant-access --producer --user test_user --topic-prefix test_
 
 rhoas kafka acl grant-access --producer --user test_user --topic test_topic
 
-rhoas kafka acl grant-access --producer --user all --topic all
+rhoas kafka acl grant-access --producer --all-accounts --topic all
 
 rhoas kafka acl grant-access --consumer --service-account test_prefix --topic-prefix test_ 
 
