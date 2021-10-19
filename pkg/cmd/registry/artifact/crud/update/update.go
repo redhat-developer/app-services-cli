@@ -8,7 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 

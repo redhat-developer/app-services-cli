@@ -19,7 +19,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	svcstatus "github.com/redhat-developer/app-services-cli/pkg/service/status"
 
@@ -32,7 +32,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 )
 
@@ -102,8 +102,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+			validOutputFormats := cmdFlagUtil.ValidOutputFormats
+			if opts.outputFormat != "" && !cmdFlagUtil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
@@ -112,17 +112,17 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.create.flag.name.description"))
-	cmd.Flags().StringVar(&opts.provider, flags.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
-	cmd.Flags().StringVar(&opts.region, flags.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
+	cmd.Flags().StringVar(&opts.provider, flagutil.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
+	cmd.Flags().StringVar(&opts.region, flagutil.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
 	cmd.Flags().BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	cmd.Flags().BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
 
-	_ = cmd.RegisterFlagCompletionFunc(flags.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+	_ = cmd.RegisterFlagCompletionFunc(flagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return kafkacmdutil.GetCloudProviderCompletionValues(f)
 	})
 
-	flagutil.EnableOutputFlagCompletion(cmd)
+	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }

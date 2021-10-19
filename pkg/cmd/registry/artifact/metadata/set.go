@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/editor"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"

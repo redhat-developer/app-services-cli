@@ -344,10 +344,6 @@ one = 'Unique ID of the Kafka instance you want to delete'
 description = 'Description for the --name flag'
 one = 'Name of the Kafka instance you want to delete'
 
-[kafka.delete.flag.yes]
-description = 'Description for the --yes flag'
-one = 'Skip confirmation to forcibly delete this Kafka instance'
-
 [kafka.delete.input.confirmName.message]
 description = 'Input title for Kafka name confirmation'
 one = 'Confirm the name of the instance you want to delete ({{.Name}}):'

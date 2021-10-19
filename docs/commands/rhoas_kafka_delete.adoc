@@ -38,7 +38,7 @@ $ rhoas kafka delete --name=my-kafka
 
       `--id` _string_::     Unique ID of the Kafka instance you want to delete
       `--name` _string_::   Name of the Kafka instance you want to delete
-  `-y`, `--yes`::           Skip confirmation to forcibly delete this Kafka instance
+  `-y`, `--yes`::           Skip confirmation dialog. 
 
 [discrete]
 == Options inherited from parent commands
