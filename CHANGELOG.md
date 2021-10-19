@@ -1,4 +1,17 @@
 
+<a name="v0.34.2"></a>
+## [v0.34.2](https://github.com/redhat-developer/app-services-cli/compare/v0.34.1...v0.34.2) (2021-10-19)
+
+### Bug Fixes
+
+* **cluster connect:** display service account credentials ([#1237](https://github.com/redhat-developer/app-services-cli/issues/1237))
+
+### Features
+
+* **kafka acl:** add `acl delete` command ([#1218](https://github.com/redhat-developer/app-services-cli/issues/1218))
+* **kafka acl grant-access:** add --all-accounts flag ([#1222](https://github.com/redhat-developer/app-services-cli/issues/1222))
+
+
 <a name="v0.34.1"></a>
 ## [v0.34.1](https://github.com/redhat-developer/app-services-cli/compare/v0.34.0...v0.34.1) (2021-10-15)
 
