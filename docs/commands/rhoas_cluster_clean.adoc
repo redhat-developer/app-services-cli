@@ -21,10 +21,10 @@ rhoas cluster clean [flags]
 
 ....
 ## Remove all resources
-rhoas cluster clean
+$ rhoas cluster clean
 
 ## Remove all resources in custom namespace
-rhoas cluster clean --namespace=myspace
+$ rhoas cluster clean --namespace=myspace
 
 ....
 

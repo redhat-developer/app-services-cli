@@ -5,6 +5,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -23,7 +24,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteClean(opts *v1alpha.CleanOperationOp
 	}
 	api.CommandEnvironment.Logger.Info(api.CommandEnvironment.Localizer.MustLocalize("cluster.clean.confirmation",
 		&localize.TemplateEntry{Key: "Namespace", Value: opts.Namespace}))
-	if opts.ForceDeleteWithoutAsk == false {
+	if !opts.ForceDeleteWithoutAsk {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
 			Message: api.CommandEnvironment.Localizer.MustLocalize("cluster.kubernetes.input.confirm.message"),
@@ -78,6 +79,6 @@ func (api *KubernetesClusterAPIImpl) ExecuteClean(opts *v1alpha.CleanOperationOp
 
 	}
 
-	api.CommandEnvironment.Logger.Info(api.CommandEnvironment.Localizer.MustLocalize("cluster.clean.success"))
+	api.CommandEnvironment.Logger.Info(icon.SuccessPrefix(), api.CommandEnvironment.Localizer.MustLocalize("cluster.clean.success"))
 	return nil
 }
