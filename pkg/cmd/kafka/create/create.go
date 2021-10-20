@@ -8,11 +8,10 @@ import (
 	"time"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
-
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -111,12 +110,13 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.create.flag.name.description"))
-	cmd.Flags().StringVar(&opts.provider, flagutil.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
-	cmd.Flags().StringVar(&opts.region, flagutil.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
-	cmd.Flags().BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
-	cmd.Flags().BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.create.flag.name.description"))
+	flags.StringVar(&opts.provider, flagutil.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
+	flags.StringVar(&opts.region, flagutil.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
+	flags.StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
+	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
+	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(flagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return kafkacmdutil.GetCloudProviderCompletionValues(f)
