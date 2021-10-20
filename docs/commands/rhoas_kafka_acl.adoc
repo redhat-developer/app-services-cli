@@ -26,7 +26,7 @@ $ rhoas kafka acl grant-access --producer --user user_name --topic "*"
 $ rhoas kafka acl list
 
 # Give admin rights to user "abc"
-$ rhoas kafka acl admin --user abc
+$ rhoas kafka acl grant-admin --user abc
 
 ....
 
@@ -48,13 +48,6 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl_admin.adoc#rhoas-kafka-acl-admin[rhoas kafka acl admin]	 - Give admin rights to the account
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-acl-admin_{context}[rhoas kafka acl admin]	 - Give admin rights to the account
-endif::[]
-
-ifdef::env-github,env-browser[]
 * link:rhoas_kafka_acl_delete.adoc#rhoas-kafka-acl-delete[rhoas kafka acl delete]	 - Delete Kafka ACLs matching the provided filters
 endif::[]
 ifdef::pantheonenv[]
@@ -66,6 +59,13 @@ ifdef::env-github,env-browser[]
 endif::[]
 ifdef::pantheonenv[]
 * link:{path}#ref-rhoas-kafka-acl-grant-access_{context}[rhoas kafka acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_acl_grant-admin.adoc#rhoas-kafka-acl-grant-admin[rhoas kafka acl grant-admin]	 - Give admin rights to the account
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-acl-grant-admin_{context}[rhoas kafka acl grant-admin]	 - Give admin rights to the account
 endif::[]
 
 ifdef::env-github,env-browser[]

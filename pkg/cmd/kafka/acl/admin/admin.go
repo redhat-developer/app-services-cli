@@ -2,7 +2,6 @@ package admin
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -14,6 +13,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 
+	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flags"
+
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
 
@@ -24,12 +25,12 @@ var (
 )
 
 type options struct {
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
+	config     config.IConfig
+	connection factory.ConnectionFunc
+	logger     logging.Logger
+	io         *iostreams.IOStreams
 	localizer  localize.Localizer
-	Context    context.Context
+	context    context.Context
 
 	kafkaID   string
 	principal string
@@ -39,23 +40,23 @@ type options struct {
 func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
+		config:     f.Config,
+		connection: f.Connection,
+		logger:     f.Logger,
+		io:         f.IOStreams,
 		localizer:  f.Localizer,
-		Context:    f.Context,
+		context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
-		Use:     "admin",
-		Short:   f.Localizer.MustLocalize("kafka.acl.admin.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("kafka.acl.admin.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("kafka.acl.admin.cmd.example"),
+		Use:     "grant-admin",
+		Short:   f.Localizer.MustLocalize("kafka.acl.grantAdmin.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.acl.grantAdmin.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.acl.grantAdmin.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
-			cfg, err := opts.Config.Load()
+			cfg, err := opts.config.Load()
 			if err != nil {
 				return err
 			}
@@ -68,28 +69,42 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 
 			// check if priincipal is provided
 			if userID == "" && serviceAccount == "" && !allAccounts {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.error.noPrincipalsSelected")
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 			}
 
 			// user and service account can't be along with "--all-accounts" flag
 			if allAccounts && (serviceAccount != "" || userID != "") {
-				return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.allPrinciapls.error.notAllowed")
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
+			}
+
+			if userID != "" {
+				opts.principal = userID
+			}
+
+			if serviceAccount != "" {
+				opts.principal = serviceAccount
+			}
+
+			if allAccounts {
+				opts.principal = aclutil.Wildcard
 			}
 
 			return runAdmin(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&userID, "user", "", opts.localizer.MustLocalize("kafka.acl.common.flag.user.description"))
-	cmd.Flags().StringVar(&serviceAccount, "service-account", "", opts.localizer.MustLocalize("kafka.acl.common.flag.serviceAccount.description"))
-	cmd.Flags().BoolVar(&allAccounts, "all-accounts", false, opts.localizer.MustLocalize("kafka.acl.common.flag.allAccounts.description"))
+	fs := flagset.NewFlagSet(cmd, opts.localizer, opts.connection)
+
+	fs.AddUser(&userID)
+	fs.AddServiceAccount(&serviceAccount)
+	fs.AddAllAccounts(&allAccounts)
 
 	return cmd
 }
 
 func runAdmin(opts *options) (err error) {
 
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
@@ -101,41 +116,25 @@ func runAdmin(opts *options) (err error) {
 
 	kafkaName := kafkaInstance.GetName()
 
-	if userID != "" {
-		opts.principal = userID
-	}
+	req := api.AclsApi.CreateAcl(opts.context)
 
-	if serviceAccount != "" {
-		opts.principal = serviceAccount
-	}
-
-	if allAccounts {
-		opts.principal = aclutil.Wildcard
-	}
-
-	req := api.AclsApi.CreateAcl(opts.Context)
-
-	aclBindClusterAlter := *kafkainstanceclient.NewAclBinding(
+	aclBindClusterAlter := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.ACLRESOURCETYPE_CLUSTER,
 		aclutil.KafkaCluster,
 		kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
-		buildPrincipal(opts.principal),
+		aclutil.FormatPrincipal(opts.principal),
 		kafkainstanceclient.ACLOPERATION_ALTER,
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
 
-	req = req.AclBinding(aclBindClusterAlter)
+	req = req.AclBinding(*aclBindClusterAlter)
 
 	err = aclutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
 	if err != nil {
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.admin.log.info.successful", localize.NewEntry("Account", opts.principal), localize.NewEntry("InstanceName", kafkaName)))
+	opts.logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.acl.grantAdmin.log.info.successful", localize.NewEntry("Account", opts.principal), localize.NewEntry("InstanceName", kafkaName)))
 
 	return nil
-}
-
-func buildPrincipal(user string) string {
-	return fmt.Sprintf("User:%s", user)
 }

@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-acl-admin_{context}']
-= rhoas kafka acl admin
+[id='ref-rhoas-kafka-acl-grant-admin_{context}']
+= rhoas kafka acl grant-admin
 
 [role="_abstract"]
 Give admin rights to the account
@@ -11,7 +11,7 @@ Give admin rights to the account
 This command will give specified account permission to create and delete ACLs in a Kafka instance.
 
 ....
-rhoas kafka acl admin [flags]
+rhoas kafka acl grant-admin [flags]
 ....
 
 [discrete]
@@ -19,13 +19,13 @@ rhoas kafka acl admin [flags]
 
 ....
 # Give admin rights to user "abc"
-$ rhoas kafka acl admin --user abc    
+$ rhoas kafka acl grant-admin --user abc
 
 # Give admin rights to a service account
-$ rhoas kafka acl admin --service-account srvc-acct-0837725a-4e69-44e1-af3b-29da30aa85ce
+$ rhoas kafka acl grant-admin --service-account srvc-acct-0837725a-4e69-44e1-af3b-29da30aa85ce
 
 # Give admin rights to all accounts for a specific kafka instance
-$ rhoas kafka acl admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
+$ rhoas kafka acl grant-admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
 
 ....
 

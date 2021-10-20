@@ -20,7 +20,7 @@ $ rhoas kafka acl grant-access --producer --user user_name --topic "*"
 $ rhoas kafka acl list
 
 # Give admin rights to user "abc"
-$ rhoas kafka acl admin --user abc
+$ rhoas kafka acl grant-admin --user abc
 '''
 
 [kafka.acl.common]
@@ -265,25 +265,25 @@ other = 'Deleted {{.Count}} ACLs from Kafka instance "{{.Name}}"'
 [kafka.acl.delete.log.info.deletingACLs]
 one = 'Deleting ACLs from Kafka instance "{{.Name}}"'
 
-[kafka.acl.admin]
+[kafka.acl.grantAdmin]
 
-[kafka.acl.admin.cmd.shortDescription]
+[kafka.acl.grantAdmin.cmd.shortDescription]
 one = 'Give admin rights to the account'
 
-[kafka.acl.admin.cmd.longDescription]
+[kafka.acl.grantAdmin.cmd.longDescription]
 one = 'This command will give specified account permission to create and delete ACLs in a Kafka instance.'
 
-[kafka.acl.admin.cmd.example]
+[kafka.acl.grantAdmin.cmd.example]
 one = '''
 # Give admin rights to user "abc"
-$ rhoas kafka acl admin --user abc    
+$ rhoas kafka acl grant-admin --user abc
 
 # Give admin rights to a service account
-$ rhoas kafka acl admin --service-account srvc-acct-0837725a-4e69-44e1-af3b-29da30aa85ce
+$ rhoas kafka acl grant-admin --service-account srvc-acct-0837725a-4e69-44e1-af3b-29da30aa85ce
 
 # Give admin rights to all accounts for a specific kafka instance
-$ rhoas kafka acl admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
+$ rhoas kafka acl grant-admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
 '''
 
-[kafka.acl.admin.log.info.successful]
+[kafka.acl.grantAdmin.log.info.successful]
 one = 'Account "{{.Account}}" is now allowed to create and delete ACLs for Kafka instance "{{.InstanceName}}"'
