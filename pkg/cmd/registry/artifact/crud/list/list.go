@@ -2,12 +2,14 @@ package list
 
 import (
 	"context"
+
+	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 
@@ -88,11 +90,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasServiceRegistry() {
+			instanceID, ok := cfg.GetServiceRegistryIdOk()
+			if !ok {
 				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
 			}
 
-			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
+			opts.registryID = instanceID
 
 			return runList(opts)
 		},

@@ -60,11 +60,12 @@ func NewImportCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasServiceRegistry() {
+			instanceID, ok := cfg.GetServiceRegistryIdOk()
+			if !ok {
 				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
 			}
 
-			opts.registryID = cfg.Services.ServiceRegistry.InstanceID
+			opts.registryID = instanceID
 			return runImport(opts)
 		},
 	}
