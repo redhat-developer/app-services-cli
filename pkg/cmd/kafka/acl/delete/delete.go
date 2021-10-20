@@ -303,11 +303,13 @@ func validateAndSetOpts(opts *options) error {
 			return err
 		}
 
-		if !cfg.HasKafka() {
+		instanceID, ok := cfg.GetKafkaIdOk()
+
+		if !ok {
 			return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
 		}
 
-		opts.instanceID = cfg.Services.Kafka.ClusterID
+		opts.instanceID = instanceID
 	}
 	return nil
 }
