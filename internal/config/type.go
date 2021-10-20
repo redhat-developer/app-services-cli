@@ -41,7 +41,8 @@ type ServiceRegistryConfig struct {
 	Name       string `json:"name"`
 }
 
-func (c *Config) GetKafkaInstanceID() (string, bool) {
+// GetKafkaIdOk returns the current Kafka instance ID and whether it exists
+func (c *Config) GetKafkaIdOk() (string, bool) {
 	if c.Services.Kafka != nil && c.Services.Kafka.ClusterID != "" {
 		return c.Services.Kafka.ClusterID, true
 	}

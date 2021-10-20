@@ -81,7 +81,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			instanceID, ok := cfg.GetKafkaInstanceID()
+			instanceID, ok := cfg.GetKafkaIdOk()
 			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.noKafkaSelected")
 			}
