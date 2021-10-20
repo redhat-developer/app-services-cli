@@ -24,12 +24,12 @@ func FlagDescription(localizer localize.Localizer, messageID string, validOption
 	sort.Strings(validOptions)
 
 	description := localizer.MustLocalize(messageID)
-	if description[len(description)-1:] != "." {
-		description += "."
-	}
 
 	var chooseFrom string
 	if len(validOptions) > 0 {
+		if description[len(description)-1:] != "." {
+			description += "."
+		}
 		chooseFrom = localizer.MustLocalize("flag.common.chooseFrom")
 
 		for i, val := range validOptions {

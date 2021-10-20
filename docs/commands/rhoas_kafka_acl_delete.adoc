@@ -44,7 +44,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
       `--topic` _string_::              Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix
       `--transactional-id` _string_::   Set the transactional ID resource
       `--user` _string_::               User ID to be use as principal
-  `-y`, `--yes`::                       Skip confirmation of this action. 
+  `-y`, `--yes`::                       Skip confirmation of this action 
 
 [discrete]
 == Options inherited from parent commands
