@@ -61,11 +61,13 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if !cfg.HasKafka() {
+			instanceID, ok := cfg.GetKafkaIdOk()
+
+			if !ok {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
 			}
 
-			opts.kafkaID = cfg.Services.Kafka.ClusterID
+			opts.kafkaID = instanceID
 
 			// check if priincipal is provided
 			if userID == "" && serviceAccount == "" && !allAccounts {
