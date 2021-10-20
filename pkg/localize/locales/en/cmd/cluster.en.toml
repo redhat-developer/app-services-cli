@@ -230,10 +230,10 @@ In case of problems please execute "rhoas cluster status" to check if your clust
 one = '''
 Connection Details:
 
-Service Type:           {{.ServiceType}}
-Service Name:           {{.ServiceName}}
-Kubernetes Namespace:   {{.Namespace}}
-Service Account Secret: {{.ServiceAccountSecretName}}
+Service Type:           	{{.ServiceType}}
+Service Name:			{{.ServiceName}}
+Kubernetes Namespace:   	{{.Namespace}}
+Service Account Secret: 	{{.ServiceAccountSecretName}}
 '''
 
 [cluster.kubernetes.error.configNotFoundError]
@@ -307,13 +307,13 @@ one = 'Creation of the "{{.Name}}" secret failed:'
 one = 'could not create service account'
 
 [cluster.kubernetes.serviceaccountsecret.log.info.exist]
-one = 'Service account secret already exist.'
+one = 'Service account secret already exists.'
 
 [cluster.kubernetes.checkIfConnectionExist.existError]
-one = 'KafkaConnection already exist'
+one = 'KafkaConnection already exists'
 
 [cluster.kubernetes.checkIfServiceRegistryConnectionExist.existError]
-one = 'ServiceRegistryConnection already exist'
+one = 'ServiceRegistryConnection already exists'
 
 [cluster.clean.shortDescription]
 one = 'Removes all resources created by cluster extensions'
@@ -326,10 +326,10 @@ Clean command will remove all secrets and service connections created in your na
 [cluster.clean.example]
 one = '''
 ## Remove all resources
-rhoas cluster clean
+$ rhoas cluster clean
 
 ## Remove all resources in custom namespace
-rhoas cluster clean --namespace=myspace
+$ rhoas cluster clean --namespace=myspace
 '''
 
 [cluster.clean.success]

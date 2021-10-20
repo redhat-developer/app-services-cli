@@ -112,7 +112,7 @@ func (api *KubernetesClusterAPIImpl) createCustomResource(serviceDetails *servic
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 	}
 
-	api.CommandEnvironment.Logger.Info(
+	api.CommandEnvironment.Logger.Info(icon.SuccessPrefix(),
 		api.CommandEnvironment.Localizer.MustLocalize("cluster.kubernetes.createCR.log.info.customResourceCreated",
 			localize.NewEntry("Resource", serviceDetails.Type),
 			localize.NewEntry("Name", serviceDetails.Name)))
@@ -167,7 +167,7 @@ func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, a
 		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createFailed", tokenSecretNameTmplEntry), err)
 	}
 
-	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
+	cliOpts.Logger.Info(icon.SuccessPrefix(), cliOpts.Localizer.MustLocalize("cluster.kubernetes.createTokenSecret.log.info.createSuccess", tokenSecretNameTmplEntry))
 
 	return nil
 }
@@ -205,7 +205,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
 
-	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess",
+	cliOpts.Logger.Info(icon.SuccessPrefix(), cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess",
 		localize.NewEntry("Name", createdSecret.Name),
 		localize.NewEntry("ClientID", serviceAcct.GetClientId()),
 	))

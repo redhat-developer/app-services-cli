@@ -19,7 +19,7 @@ import (
 
 type options struct {
 	Config     config.IConfig
-	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
+	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
