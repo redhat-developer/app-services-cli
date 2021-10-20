@@ -3,11 +3,12 @@ package list
 import (
 	"context"
 	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"

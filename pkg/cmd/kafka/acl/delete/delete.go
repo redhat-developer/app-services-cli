@@ -7,7 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
@@ -91,22 +91,22 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	fs := flagset.NewFlagSet(cmd, opts.localizer, opts.connection)
+	flags := flagutil.NewFlagSet(cmd, opts.localizer, opts.connection)
 
-	_ = fs.AddPermission(&opts.permission).Required()
-	_ = fs.AddOperation(&opts.operation).Required()
+	_ = flags.AddPermission(&opts.permission).Required()
+	_ = flags.AddOperation(&opts.operation).Required()
 
-	fs.AddCluster(&opts.cluster)
-	fs.AddPrefix(&prefix)
-	fs.AddTopic(&opts.topic)
-	fs.AddConsumerGroup(&opts.group)
-	fs.AddTransactionalID(&opts.transactionalID)
-	fs.AddOutput(&opts.output)
-	fs.AddInstanceID(&opts.instanceID)
-	fs.AddUser(&userID)
-	fs.AddServiceAccount(&serviceAccount)
-	fs.AddAllAccounts(&allAccounts)
-	fs.AddYes(&opts.skipConfirm)
+	flags.AddCluster(&opts.cluster)
+	flags.AddPrefix(&prefix)
+	flags.AddTopic(&opts.topic)
+	flags.AddConsumerGroup(&opts.group)
+	flags.AddTransactionalID(&opts.transactionalID)
+	flags.AddOutput(&opts.output)
+	flags.AddInstanceID(&opts.instanceID)
+	flags.AddUser(&userID)
+	flags.AddServiceAccount(&serviceAccount)
+	flags.AddAllAccounts(&allAccounts)
+	flags.AddYes(&opts.skipConfirm)
 
 	return cmd
 }
@@ -260,10 +260,10 @@ func validateAndSetOpts(opts *options) error {
 	}
 
 	resourceTypeFlagEntries := []*localize.TemplateEntry{
-		localize.NewEntry("ClusterFlag", flagset.ClusterFlagName),
-		localize.NewEntry("TopicFlag", flagset.TopicFlagName),
-		localize.NewEntry("TransactionalIDFlag", flagset.TransactionalIDFlagName),
-		localize.NewEntry("GroupFlag", flagset.GroupFlagName),
+		localize.NewEntry("ClusterFlag", flagutil.ClusterFlagName),
+		localize.NewEntry("TopicFlag", flagutil.TopicFlagName),
+		localize.NewEntry("TransactionalIDFlag", flagutil.TransactionalIDFlagName),
+		localize.NewEntry("GroupFlag", flagutil.GroupFlagName),
 	}
 
 	if selectedResourceTypeCount != 1 {

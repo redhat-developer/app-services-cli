@@ -3,12 +3,14 @@ package list
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"strconv"
 
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -69,8 +71,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
+			if opts.outputFormat != "" && !cmdFlagUtil.IsValidInput(opts.outputFormat, cmdFlagUtil.ValidOutputFormats...) {
+				return flag.InvalidValueError("output", opts.outputFormat, cmdFlagUtil.ValidOutputFormats...)
 			}
 
 			validator := &kafka.Validator{
@@ -85,12 +87,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafkas.common.flag.output.description"))
+	flagSet := flagutil.NewFlagSet(cmd, opts.localizer)
+	flagSet.AddOutput(&opts.outputFormat)
+
 	cmd.Flags().IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
 	cmd.Flags().IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
 	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
-
-	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }

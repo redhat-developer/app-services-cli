@@ -3,12 +3,13 @@ package describe
 import (
 	"context"
 	"fmt"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"net/http"
+
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 

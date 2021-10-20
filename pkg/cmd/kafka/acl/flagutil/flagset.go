@@ -1,12 +1,11 @@
-package flagset
+package flagutil
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 const (
@@ -17,25 +16,24 @@ const (
 )
 
 type flagSet struct {
-	flags     *pflag.FlagSet
 	cmd       *cobra.Command
 	localizer localize.Localizer
 	conn      factory.ConnectionFunc
-	*flags.FlagSet
+	*flagutil.FlagSet
 }
 
+// NewFlagSet returns a new flag set with common Kafka ACL flags
 func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer, conn factory.ConnectionFunc) *flagSet {
 	return &flagSet{
 		cmd:       cmd,
-		flags:     cmd.Flags(),
 		localizer: localizer,
 		conn:      conn,
-		FlagSet:   flags.NewFlagSet(cmd, localizer),
+		FlagSet:   flagutil.NewFlagSet(cmd, localizer),
 	}
 }
 
 // AddResourceType adds a flag for ACL resource type and registers completion options
-func (fs *flagSet) AddResourceType(resourceType *string) *markRequiredOpt {
+func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 	flagName := "resource-type"
 
 	resourceTypeFilterMap := aclutil.GetResourceTypeFilterMap()
@@ -45,22 +43,22 @@ func (fs *flagSet) AddResourceType(resourceType *string) *markRequiredOpt {
 		resourceTypes = append(resourceTypes, i)
 	}
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		resourceType,
 		flagName,
 		aclutil.ResourceTypeFilterANY,
-		flags.FlagDescription(fs.localizer, "kafka.acl.common.flag.resourceType", resourceTypes...),
+		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.resourceType", resourceTypes...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return resourceTypes, cobra.ShellCompDirectiveNoSpace
 	})
 
-	return withMarkRequiredFunc(fs.cmd, flagName)
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
 // AddOperation adds a flag for ACL operations and registers completion options
-func (fs *flagSet) AddOperation(operationType *string) *markRequiredOpt {
+func (fs *flagSet) AddOperation(operationType *string) *flagutil.FlagOptions {
 	flagName := "operation"
 
 	operationFilterMap := aclutil.GetOperationFilterMap()
@@ -70,22 +68,22 @@ func (fs *flagSet) AddOperation(operationType *string) *markRequiredOpt {
 		operations = append(operations, i)
 	}
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		operationType,
 		flagName,
 		aclutil.ResourceTypeFilterANY,
-		flags.FlagDescription(fs.localizer, "kafka.acl.common.flag.operation.description", operations...),
+		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.operation.description", operations...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return operations, cobra.ShellCompDirectiveNoSpace
 	})
 
-	return withMarkRequiredFunc(fs.cmd, flagName)
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
 // AddPermission adds a flag for ACL permissions
-func (fs *flagSet) AddPermission(permission *string) *markRequiredOpt {
+func (fs *flagSet) AddPermission(permission *string) *flagutil.FlagOptions {
 	flagName := "permission"
 
 	permissionTypeFilterMap := aclutil.GetPermissionTypeFilterMap()
@@ -95,25 +93,25 @@ func (fs *flagSet) AddPermission(permission *string) *markRequiredOpt {
 		permissions = append(permissions, i)
 	}
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		permission,
 		flagName,
 		aclutil.ResourceTypeFilterANY,
-		flags.FlagDescription(fs.localizer, "kafka.acl.common.flag.permission.description", permissions...),
+		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.permission.description", permissions...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return permissions, cobra.ShellCompDirectiveNoSpace
 	})
 
-	return withMarkRequiredFunc(fs.cmd, flagName)
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
 // AddTopic adds a flag for setting the topic name
 func (fs *flagSet) AddTopic(topic *string) {
 	flagName := TopicFlagName
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		topic,
 		flagName,
 		"",
@@ -125,7 +123,7 @@ func (fs *flagSet) AddTopic(topic *string) {
 func (fs *flagSet) AddConsumerGroup(group *string) {
 	flagName := GroupFlagName
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		group,
 		flagName,
 		"",
@@ -137,7 +135,7 @@ func (fs *flagSet) AddConsumerGroup(group *string) {
 func (fs *flagSet) AddTransactionalID(id *string) {
 	flagName := TransactionalIDFlagName
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		id,
 		flagName,
 		"",
@@ -149,7 +147,7 @@ func (fs *flagSet) AddTransactionalID(id *string) {
 func (fs *flagSet) AddPrefix(prefix *bool) {
 	flagName := "prefix"
 
-	fs.flags.BoolVar(
+	fs.BoolVar(
 		prefix,
 		flagName,
 		false,
@@ -161,7 +159,7 @@ func (fs *flagSet) AddPrefix(prefix *bool) {
 func (fs *flagSet) AddCluster(prefix *bool) {
 	flagName := ClusterFlagName
 
-	fs.flags.BoolVar(
+	fs.BoolVar(
 		prefix,
 		flagName,
 		false,
@@ -170,42 +168,42 @@ func (fs *flagSet) AddCluster(prefix *bool) {
 }
 
 // AddUser adds a flag to pass a user ID principal
-func (fs *flagSet) AddUser(userID *string) *markRequiredOpt {
+func (fs *flagSet) AddUser(userID *string) *flagutil.FlagOptions {
 	flagName := "user"
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		userID,
 		flagName,
 		"",
 		fs.localizer.MustLocalize("kafka.acl.common.flag.user.description"),
 	)
 
-	_ = flags.RegisterUserCompletionFunc(fs.cmd, flagName, fs.conn)
+	_ = flagutil.RegisterUserCompletionFunc(fs.cmd, flagName, fs.conn)
 
-	return withMarkRequiredFunc(fs.cmd, flagName)
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
 // AddServiceAccount adds a flag to pass a service account client ID principal
-func (fs *flagSet) AddServiceAccount(serviceAccountID *string) *markRequiredOpt {
+func (fs *flagSet) AddServiceAccount(serviceAccountID *string) *flagutil.FlagOptions {
 	flagName := "service-account"
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		serviceAccountID,
 		flagName,
 		"",
 		fs.localizer.MustLocalize("kafka.acl.common.flag.serviceAccount.description"),
 	)
 
-	_ = flags.RegisterServiceAccountCompletionFunc(fs.cmd, flagName, fs.conn)
+	_ = flagutil.RegisterServiceAccountCompletionFunc(fs.cmd, flagName, fs.conn)
 
-	return withMarkRequiredFunc(fs.cmd, flagName)
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
 // AddInstanceID adds a flag for the Kafka instance ID
 func (fs *flagSet) AddInstanceID(id *string) {
 	flagName := "instance-id"
 
-	fs.flags.StringVar(
+	fs.StringVar(
 		id,
 		flagName,
 		"",
@@ -217,22 +215,10 @@ func (fs *flagSet) AddInstanceID(id *string) {
 func (fs *flagSet) AddAllAccounts(allAccounts *bool) {
 	flagName := "all-accounts"
 
-	fs.flags.BoolVar(
+	fs.BoolVar(
 		allAccounts,
 		flagName,
 		false,
 		fs.localizer.MustLocalize("kafka.acl.common.flag.allAccounts.description"),
 	)
-}
-
-func withMarkRequiredFunc(cmd *cobra.Command, flagName string) *markRequiredOpt {
-	return &markRequiredOpt{
-		Required: func() error {
-			return cmd.MarkFlagRequired(flagName)
-		},
-	}
-}
-
-type markRequiredOpt struct {
-	Required func() error
 }

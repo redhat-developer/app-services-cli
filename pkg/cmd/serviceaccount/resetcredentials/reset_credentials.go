@@ -14,7 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/AlecAivazis/survey/v2"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"

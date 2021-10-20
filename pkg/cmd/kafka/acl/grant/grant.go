@@ -8,6 +8,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
@@ -88,17 +89,19 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&userID, "user", "", opts.localizer.MustLocalize("kafka.acl.common.flag.user.description"))
-	cmd.Flags().StringVar(&serviceAccount, "service-account", "", opts.localizer.MustLocalize("kafka.acl.common.flag.serviceAccount.description"))
-	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.topic.description"))
-	cmd.Flags().StringVar(&opts.group, "group", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.group.description"))
-	cmd.Flags().BoolVar(&opts.consumer, "consumer", false, opts.localizer.MustLocalize("kafka.acl.grantPermissions.flag.consumer.description"))
-	cmd.Flags().BoolVar(&opts.producer, "producer", false, opts.localizer.MustLocalize("kafka.acl.grantPermissions.flag.producer.description"))
-	cmd.Flags().StringVar(&opts.kafkaID, "instance-id", "", opts.localizer.MustLocalize("kafka.common.flag.instanceID.description"))
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("flag.common.yes.description"))
-	cmd.Flags().StringVar(&opts.topicPrefix, "topic-prefix", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.topicPrefix.description"))
-	cmd.Flags().StringVar(&opts.groupPrefix, "group-prefix", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.groupPrefix.description"))
-	cmd.Flags().BoolVar(&allAccounts, "all-accounts", false, opts.localizer.MustLocalize("kafka.acl.common.flag.allAccounts.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer, f.Connection)
+	flags.AddInstanceID(&opts.kafkaID)
+	flags.AddYes(&opts.force)
+
+	flags.StringVar(&userID, "user", "", opts.localizer.MustLocalize("kafka.acl.common.flag.user.description"))
+	flags.StringVar(&serviceAccount, "service-account", "", opts.localizer.MustLocalize("kafka.acl.common.flag.serviceAccount.description"))
+	flags.StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.topic.description"))
+	flags.StringVar(&opts.group, "group", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.group.description"))
+	flags.BoolVar(&opts.consumer, "consumer", false, opts.localizer.MustLocalize("kafka.acl.grantPermissions.flag.consumer.description"))
+	flags.BoolVar(&opts.producer, "producer", false, opts.localizer.MustLocalize("kafka.acl.grantPermissions.flag.producer.description"))
+	flags.StringVar(&opts.topicPrefix, "topic-prefix", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.topicPrefix.description"))
+	flags.StringVar(&opts.groupPrefix, "group-prefix", "", opts.localizer.MustLocalize("kafka.acl.grantPermissions.common.flag.groupPrefix.description"))
+	flags.BoolVar(&allAccounts, "all-accounts", false, opts.localizer.MustLocalize("kafka.acl.common.flag.allAccounts.description"))
 
 	return cmd
 }

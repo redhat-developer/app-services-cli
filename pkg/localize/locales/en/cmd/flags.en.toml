@@ -20,7 +20,7 @@ one = 'Choose from: '
 one = 'Specify the output format'
 
 [flag.common.yes.description]
-one = 'Skip confirmation dialog'
+one = 'Skip confirmation of this action'
 
 [argument.error.requiredWhenNonInteractive]
 description = "Argument is required when not running interactively"

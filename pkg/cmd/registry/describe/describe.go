@@ -2,7 +2,8 @@ package describe
 
 import (
 	"context"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+
+	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"

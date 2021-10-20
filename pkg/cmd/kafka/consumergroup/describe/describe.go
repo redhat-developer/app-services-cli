@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"sort"
 
+	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/spf13/cobra"
@@ -18,7 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"

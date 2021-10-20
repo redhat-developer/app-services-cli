@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flags"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -60,7 +59,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				for _, s := range args {
-					if !flags.IsValidInput(s, validServices...) {
+					if !flagutil.IsValidInput(s, validServices...) {
 						return opts.localizer.MustLocalizeError("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s))
 					}
 				}

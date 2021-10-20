@@ -1,10 +1,7 @@
-// Package flags is a helper package for processing and interactive command line flags
-package flags
+// Package flagutil is a helper package for processing and interactive command line flags
+package flagutil
 
 import (
-	"fmt"
-	"sort"
-
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
@@ -17,51 +14,16 @@ var (
 	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat}
 )
 
-// IsValidInput checks if the input value is in the range of valid values
-func IsValidInput(input string, validValues ...string) bool {
-	for _, b := range validValues {
-		if input == b {
-			return true
-		}
-	}
-
-	return false
-}
-
-// FlagDescription creates a flag description and adds a list of valid options (if any)
-func FlagDescription(localizer localize.Localizer, messageID string, validOptions ...string) string {
-	// ensure consistent order
-	sort.Strings(validOptions)
-
-	description := localizer.MustLocalize(messageID)
-	if description[len(description)-1:] != "." {
-		description += "."
-	}
-
-	var chooseFrom string
-	if len(validOptions) > 0 {
-		chooseFrom = localizer.MustLocalize("flag.common.chooseFrom")
-
-		for i, val := range validOptions {
-			chooseFrom += fmt.Sprintf("\"%v\"", val)
-			if i < len(validOptions)-1 {
-				chooseFrom += ", "
-			}
-		}
-	}
-
-	return fmt.Sprintf("%v %v", description, chooseFrom)
-}
-
 type FlagSet struct {
-	flags     *pflag.FlagSet
+	*pflag.FlagSet
 	cmd       *cobra.Command
 	localizer localize.Localizer
 }
 
+// NewFlagSet returns a new flag set with some common flags
 func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 	return &FlagSet{
-		flags:     cmd.Flags(),
+		FlagSet:   cmd.Flags(),
 		cmd:       cmd,
 		localizer: localizer,
 	}
@@ -71,7 +33,7 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 func (fs *FlagSet) AddOutput(output *string) {
 	flagName := "output"
 
-	fs.flags.StringVarP(
+	fs.StringVarP(
 		output,
 		flagName,
 		"o",
@@ -88,7 +50,7 @@ func (fs *FlagSet) AddOutput(output *string) {
 func (fs *FlagSet) AddYes(yes *bool) {
 	flagName := "yes"
 
-	fs.flags.BoolVarP(
+	fs.BoolVarP(
 		yes,
 		flagName,
 		"y",
@@ -99,4 +61,18 @@ func (fs *FlagSet) AddYes(yes *bool) {
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
 	})
+}
+
+// WithFlagOptions returns additional functions to custom the default flag settings
+func WithFlagOptions(cmd *cobra.Command, flagName string) *FlagOptions {
+	return &FlagOptions{
+		Required: func() error {
+			return cmd.MarkFlagRequired(flagName)
+		},
+	}
+}
+
+// FlagOptions defines additional flag options
+type FlagOptions struct {
+	Required func() error
 }
