@@ -8,10 +8,10 @@ List all Kafka ACL rules.
 [discrete]
 == Synopsis
 
-	This command will display list of Kafka ACL rules
+This command will display list of Kafka ACL rules
 
-	The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
-	
+The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+
 
 ....
 rhoas kafka acl list [flags]
@@ -21,12 +21,12 @@ rhoas kafka acl list [flags]
 == Examples
 
 ....
-	# Display Kafka ACL rules for the Kafka instance
-	$ rhoas kafka acl list
+# Display Kafka ACL rules for the Kafka instance
+$ rhoas kafka acl list
 
-	# Display Kafka ACL rules for a specific Kafka instance
-	$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
-	
+# Display Kafka ACL rules for a specific Kafka instance
+$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
+
 ....
 
 [discrete]

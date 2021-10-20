@@ -8,8 +8,7 @@ Delete Kafka ACLs matching the provided filters
 [discrete]
 == Synopsis
 
-	Delete all ACLs from a Kafka instance which match the filter criteria provided
-	
+Delete all ACLs from a Kafka instance which match the filter criteria provided
 
 ....
 rhoas kafka acl delete [flags]
@@ -19,15 +18,15 @@ rhoas kafka acl delete [flags]
 == Examples
 
 ....
-	# delete an ACL for user "joe_bloggs" on all topics
-	$ rhoas kafka acl delete --operation write --permission allow --topic "*" --user joe_bloggs
+# delete an ACL for user "joe_bloggs" on all topics
+$ rhoas kafka acl delete --operation write --permission allow --topic "*" --user joe_bloggs
 
-	# delete an ACL for a service account
-	$ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+# delete an ACL for a service account
+$ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
 
-	# delete an ACL for all users on the consumer group resource
-	$ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
-	
+# delete an ACL for all users on the consumer group resource
+$ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
+
 ....
 
 [discrete]
