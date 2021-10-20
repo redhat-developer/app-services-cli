@@ -69,7 +69,7 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			instanceID, ok := cfg.HasServiceRegistry()
+			instanceID, ok := cfg.GetServiceRegistryIdOk()
 			if !ok {
 				return opts.localizer.MustLocalizeError("registry.no.service.selected.use.instance.id.flag")
 			}

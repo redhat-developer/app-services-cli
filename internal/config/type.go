@@ -46,7 +46,8 @@ func (c *Config) HasKafka() bool {
 		c.Services.Kafka.ClusterID != ""
 }
 
-func (c *Config) HasServiceRegistry() (string, bool) {
+// GetServiceRegistryIdOk returns the service registry instance ID and whether it exists or not
+func (c *Config) GetServiceRegistryIdOk() (string, bool) {
 	if c.Services.ServiceRegistry != nil && c.Services.ServiceRegistry.InstanceID != "" {
 		return c.Services.ServiceRegistry.InstanceID, true
 	}
