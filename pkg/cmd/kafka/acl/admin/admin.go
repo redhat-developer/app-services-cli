@@ -15,7 +15,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 
-	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flags"
+	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )

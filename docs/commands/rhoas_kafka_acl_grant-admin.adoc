@@ -35,7 +35,7 @@ $ rhoas kafka acl grant-admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
       `--all-accounts`::               Set the ACL principal to match all accounts (wildcard). Cannot be used in conjunction with --service-account or --user
       `--service-account` _string_::   Service account client ID to use as principal for this operation
       `--user` _string_::              User ID to be use as principal
-  `-y`, `--yes`::                      Skip confirmation dialog. 
+  `-y`, `--yes`::                      Skip confirmation of this action 
 
 [discrete]
 == Options inherited from parent commands
