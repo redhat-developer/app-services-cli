@@ -7,12 +7,12 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
@@ -90,7 +90,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 				// check that a valid --cleanup-policy flag value is used
 				if opts.cleanupPolicy != "" {
-					validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
+					validPolicy := cmdFlagUtil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 					if !validPolicy {
 						return flag.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 					}
@@ -149,20 +149,21 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
-	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
-	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
-	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
+	flags.StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
+	flags.StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
+	flags.StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})
 	_ = cmd.MarkFlagRequired("name")
 
-	flagutil.EnableOutputFlagCompletion(cmd)
+	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
 
-	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
+	cmdFlagUtil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
 
 	return cmd
 }
