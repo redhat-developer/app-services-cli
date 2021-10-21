@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"sort"
 
-	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+
+	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -88,8 +89,10 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "view")))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.AddOutput(&opts.outputFormat)
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "view")))
 	_ = cmd.MarkFlagRequired("id")
 
 	// flag based completions for ID

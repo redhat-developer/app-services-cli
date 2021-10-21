@@ -36,7 +36,7 @@ $ rhoas kafka create -o yaml
 == Options
 
       `--name` _string_::       Unique name of the Kafka instance
-  `-o`, `--output` _string_::   Format in which to display the Kafka instance (choose from: "json", "yml", "yaml") (default "json")
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
       `--provider` _string_::   Cloud Provider ID
       `--region` _string_::     Cloud Provider Region ID
       `--use`::                 Set the new Kafka instance to the current instance (default true)
