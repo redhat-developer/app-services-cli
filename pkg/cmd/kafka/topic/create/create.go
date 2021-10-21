@@ -12,12 +12,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -78,7 +77,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// check that a valid --cleanup-policy flag value is used
-			validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
+			validPolicy := cmdFlagUtil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 			if !validPolicy {
 				return flag.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 			}
@@ -125,15 +124,16 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.topicName, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
-	cmd.Flags().Int32Var(&opts.partitions, "partitions", 1, opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
-	cmd.Flags().IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
-	cmd.Flags().IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
-	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", defaultCleanupPolicy, opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	flags := flagutil.NewFlagSet(cmd, f.Localizer)
+	flags.StringVar(&opts.topicName, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
+	flags.Int32Var(&opts.partitions, "partitions", 1, opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
+	flags.IntVar(&opts.retentionMs, "retention-ms", defaultRetentionPeriodMS, opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
+	flags.IntVar(&opts.retentionBytes, "retention-bytes", defaultRetentionSize, opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
+	flags.StringVar(&opts.cleanupPolicy, "cleanup-policy", defaultCleanupPolicy, opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
+	flags.StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 
-	flagutil.EnableOutputFlagCompletion(cmd)
-	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
+	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
+	cmdFlagUtil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topicutil.ValidCleanupPolicies)
 
 	return cmd
 }
