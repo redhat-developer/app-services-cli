@@ -6,14 +6,14 @@ import (
 
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 
@@ -64,8 +64,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("artifact.cmd.create.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+			validOutputFormats := cmdFlagUtil.ValidOutputFormats
+			if opts.outputFormat != "" && !cmdFlagUtil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
@@ -98,20 +98,21 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-	cmd.Flags().StringVar(&opts.file, "file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
+	flags.StringVar(&opts.file, "file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 
-	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	flags.StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
+	flags.StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 
-	cmd.Flags().StringVar(&opts.version, "version", "", opts.localizer.MustLocalize("artifact.common.custom.version"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.common.custom.name"))
-	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.common.custom.description"))
+	flags.StringVar(&opts.version, "version", "", opts.localizer.MustLocalize("artifact.common.custom.version"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.common.custom.name"))
+	flags.StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.common.custom.description"))
 
-	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString())))
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	flags.StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString())))
+	flags.StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
-	flagutil.EnableOutputFlagCompletion(cmd)
+	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
 
 	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return util.AllowedArtifactTypeEnumValues, cobra.ShellCompDirectiveNoSpace
