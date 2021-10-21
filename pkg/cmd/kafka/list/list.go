@@ -90,9 +90,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flagSet := flagutil.NewFlagSet(cmd, opts.localizer)
 	flagSet.AddOutput(&opts.outputFormat)
 
-	cmd.Flags().IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
-	cmd.Flags().IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
-	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
+	flagSet.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
+	flagSet.IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
+	flagSet.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
 
 	return cmd
 }
