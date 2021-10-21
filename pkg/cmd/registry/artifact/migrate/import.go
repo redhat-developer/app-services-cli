@@ -4,11 +4,11 @@ import (
 	"context"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
@@ -69,8 +69,9 @@ func NewImportCommand(f *factory.Factory) *cobra.Command {
 			return runImport(opts)
 		},
 	}
-	cmd.Flags().StringVar(&opts.file, "file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVar(&opts.file, "file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
+	flags.StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
 	return cmd
 }

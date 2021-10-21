@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -62,8 +62,9 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.use.flag.id"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.use.flag.name"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("registry.use.flag.id"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.use.flag.name"))
 
 	return cmd
 }

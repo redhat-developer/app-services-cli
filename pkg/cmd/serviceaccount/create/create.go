@@ -9,14 +9,14 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-
 	"github.com/AlecAivazis/survey/v2"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
 
@@ -82,21 +82,22 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// check that a valid --file-format flag value is used
-			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
+			validOutput := cmdFlagUtil.IsValidInput(opts.fileFormat, cmdFlagUtil.CredentialsOutputFormats...)
 			if !validOutput && opts.fileFormat != "" {
-				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
+				return flag.InvalidValueError("file-format", opts.fileFormat, cmdFlagUtil.CredentialsOutputFormats...)
 			}
 
 			return runCreate(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.shortDescription, "short-description", "", opts.localizer.MustLocalize("serviceAccount.create.flag.shortDescription.description"))
-	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
-	cmd.Flags().StringVar(&opts.filename, "output-file", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
-	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVar(&opts.shortDescription, "short-description", "", opts.localizer.MustLocalize("serviceAccount.create.flag.shortDescription.description"))
+	flags.BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
+	flags.StringVar(&opts.filename, "output-file", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
+	flags.StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
 
-	flagutil.EnableStaticFlagCompletion(cmd, "file-format", flagutil.CredentialsOutputFormats)
+	cmdFlagUtil.EnableStaticFlagCompletion(cmd, "file-format", cmdFlagUtil.CredentialsOutputFormats)
 
 	return cmd
 }
@@ -199,7 +200,7 @@ func runInteractivePrompt(opts *options) (err error) {
 		fileFormatPrompt := &survey.Select{
 			Message: opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.message"),
 			Help:    opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.help"),
-			Options: flagutil.CredentialsOutputFormats,
+			Options: cmdFlagUtil.CredentialsOutputFormats,
 			Default: credentials.EnvFormat,
 		}
 

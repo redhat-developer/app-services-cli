@@ -4,7 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/arguments"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/docs"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
@@ -40,7 +40,8 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	var help bool
 
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.MustLocalize("root.cmd.flag.help.description"))
-	cmd.Flags().Bool("version", false, f.Localizer.MustLocalize("root.cmd.flag.version.description"))
+	flags := flagutil.NewFlagSet(cmd, f.Localizer)
+	flags.Bool("version", false, f.Localizer.MustLocalize("root.cmd.flag.version.description"))
 
 	cmd.Version = version
 

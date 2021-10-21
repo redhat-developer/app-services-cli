@@ -8,8 +8,8 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/spf13/cobra"
-
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -79,15 +79,16 @@ func NewDownloadCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
-	cmd.Flags().StringVar(&opts.hash, "hash", "", opts.localizer.MustLocalize("artifact.common.sha"))
-	cmd.Flags().Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, opts.localizer.MustLocalize("artifact.common.global.id"))
-	cmd.Flags().Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, opts.localizer.MustLocalize("artifact.common.content.id"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	flags.StringVar(&opts.hash, "hash", "", opts.localizer.MustLocalize("artifact.common.sha"))
+	flags.Int64VarP(&opts.globalId, "global-id", "", unusedFlagIdValue, opts.localizer.MustLocalize("artifact.common.global.id"))
+	flags.Int64VarP(&opts.contentId, "content-id", "", unusedFlagIdValue, opts.localizer.MustLocalize("artifact.common.content.id"))
 
-	cmd.Flags().StringVarP(&opts.outputFile, "output-file", "", "", opts.localizer.MustLocalize("artifact.common.message.file.location"))
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.registryIdToUse"))
+	flags.StringVarP(&opts.outputFile, "output-file", "", "", opts.localizer.MustLocalize("artifact.common.message.file.location"))
+	flags.StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.registryIdToUse"))
 
-	flagutil.EnableOutputFlagCompletion(cmd)
+	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }
