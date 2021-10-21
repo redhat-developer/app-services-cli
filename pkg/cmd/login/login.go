@@ -11,14 +11,14 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"golang.org/x/oauth2"
 
+	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -102,14 +102,15 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, opts.localizer.MustLocalize("login.flag.apiGateway"))
-	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, opts.localizer.MustLocalize("login.flag.insecure"))
-	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, opts.localizer.MustLocalize("login.flag.clientId"))
-	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.MustLocalize("login.flag.authUrl"))
-	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.MustLocalize("login.flag.masAuthUrl"))
-	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
-	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.StringVar(&opts.url, "api-gateway", build.ProductionAPIURL, opts.localizer.MustLocalize("login.flag.apiGateway"))
+	flags.BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, opts.localizer.MustLocalize("login.flag.insecure"))
+	flags.StringVar(&opts.clientID, "client-id", build.DefaultClientID, opts.localizer.MustLocalize("login.flag.clientId"))
+	flags.StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.MustLocalize("login.flag.authUrl"))
+	flags.StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.MustLocalize("login.flag.masAuthUrl"))
+	flags.BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
+	flags.StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
+	flags.StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 
 	return cmd
 }
