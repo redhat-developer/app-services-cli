@@ -3,9 +3,11 @@ package admin
 import (
 	"context"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
@@ -32,8 +34,9 @@ type options struct {
 	localizer  localize.Localizer
 	context    context.Context
 
-	kafkaID   string
-	principal string
+	kafkaID     string
+	principal   string
+	skipConfirm bool
 }
 
 // NewAdminACLCommand creates ACL rule to aloow user to add and delete ACL rules
@@ -100,6 +103,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 	fs.AddUser(&userID)
 	fs.AddServiceAccount(&serviceAccount)
 	fs.AddAllAccounts(&allAccounts)
+	fs.AddYes(&opts.skipConfirm)
 
 	return cmd
 }
@@ -128,6 +132,27 @@ func runAdmin(opts *options) (err error) {
 		kafkainstanceclient.ACLOPERATION_ALTER,
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
+
+	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
+	dump.Table(opts.io.Out, rows)
+	opts.logger.Info()
+
+	if !opts.skipConfirm {
+		var confirmGrant bool
+		promptConfirmGrant := &survey.Confirm{
+			Message: opts.localizer.MustLocalize("kafka.acl.common.input.confirmGrant.message"),
+		}
+
+		err = survey.AskOne(promptConfirmGrant, &confirmGrant)
+		if err != nil {
+			return err
+		}
+
+		if !confirmGrant {
+			opts.logger.Debug(opts.localizer.MustLocalize("kafka.acl.grantAdmin.log.debug.grantNotConfirmed"))
+			return nil
+		}
+	}
 
 	req = req.AclBinding(*aclBindClusterAlter)
 

@@ -270,18 +270,18 @@ func runGrantPermissions(opts *options) (err error) {
 	opts.Logger.Info()
 
 	if !opts.force {
-		var confirmDelete bool
-		promptConfirmDelete := &survey.Confirm{
-			Message: opts.localizer.MustLocalize("kafka.acl.grantPermissions.input.confirmGrant.message"),
+		var confirmGrant bool
+		promptConfirmGrant := &survey.Confirm{
+			Message: opts.localizer.MustLocalize("kafka.acl.common.input.confirmGrant.message"),
 		}
 
-		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
+		err = survey.AskOne(promptConfirmGrant, &confirmGrant)
 		if err != nil {
 			return err
 		}
 
-		if !confirmDelete {
-			opts.Logger.Debug(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.debug.deleteNotConfirmed"))
+		if !confirmGrant {
+			opts.Logger.Debug(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.debug.grantNotConfirmed"))
 			return nil
 		}
 	}

@@ -111,6 +111,9 @@ one = 'is'
 [kafka.acl.common.startsWith]
 one = 'starts with'
 
+[kafka.acl.common.input.confirmGrant.message]
+one = 'Are you sure you want to create the listed ACL rules'
+
 [kafka.acl.list]
 
 [kafka.acl.list.cmd.example]
@@ -227,10 +230,7 @@ one = 'The following ACL rules are to be created:'
 [kafka.acl.grantPermissions.log.info.aclsCreated]
 one = 'ACLs successfully created in the Kafka instance "{{.InstanceName}}"'
 
-[kafka.acl.grantPermissions.input.confirmGrant.message]
-one = 'Are you sure you want to create the listed ACL rules'
-
-[kafka.acl.grantPermissions.log.debug.deleteNotConfirmed]
+[kafka.acl.grantPermissions.log.debug.grantNotConfirmed]
 one = 'Kafka ACLs grant permission action was not confirmed. Exiting silently'
 
 [kafka.acl.delete]
@@ -287,3 +287,6 @@ $ rhoas kafka acl grant-admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
 
 [kafka.acl.grantAdmin.log.info.successful]
 one = 'Account "{{.Account}}" is now allowed to create and delete ACLs for Kafka instance "{{.InstanceName}}"'
+
+[kafka.acl.grantAdmin.log.debug.grantNotConfirmed]
+one = 'Kafka ACLs grant admin action was not confirmed. Exiting silently'
