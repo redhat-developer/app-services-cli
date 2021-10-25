@@ -336,7 +336,7 @@ $ rhoas cluster clean --namespace=myspace
 one = 'Successfully removed all resources managed by rhoas cluster command'
 
 [cluster.clean.confirmation]
-one = '''Do you want to remove all secrets and RHOAS operator resources in your current namespace: "{{.Namespace}}"
+one = '''Removing all secrets and operator resources in namespace "{{.Namespace}}"
 
 To not affect your running applications service account and service binding objects 
 will still be present and need to be removed manually.
