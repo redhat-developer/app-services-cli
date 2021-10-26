@@ -10,7 +10,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
@@ -141,45 +140,11 @@ func runDelete(instanceID string, opts *options) error {
 		)
 	}
 
-	opts.patternType = aclutil.PatternTypeFilterLITERAL
-	if prefix {
-		opts.patternType = aclutil.PatternTypeFilterPREFIX
-	}
-
-	requestParams := getRequestParams(opts)
-
-	aclList, httpRes, err := adminAPI.AclsApi.GetAcls(ctx).
-		ResourceType(requestParams.resourceType).
-		Principal(requestParams.principal).
-		PatternType(requestParams.patternType).
-		ResourceName(requestParams.resourceName).
-		Operation(requestParams.operation).
-		Permission(requestParams.permission).
-		Execute()
-
-	if httpRes != nil {
-		defer httpRes.Body.Close()
-	}
-
-	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
-		return err
-	}
-
 	kafkaNameTmplEntry := localize.NewEntry("Name", kafkaInstance.GetName())
-	if aclList.GetTotal() == 0 {
-		opts.logger.Info(opts.localizer.MustLocalize("kafka.acl.common.log.info.noACLsMatchingFilters", kafkaNameTmplEntry))
-		return nil
-	}
-
-	rows := aclutil.MapACLsToTableRows(aclList.GetItems(), opts.localizer)
-	opts.logger.Info(icon.Warning(), opts.localizer.MustLocalize("kafka.acl.delete.log.info.theFollowingACLSwillBeDeleted", kafkaNameTmplEntry))
-	opts.logger.Info()
-	dump.Table(opts.io.ErrOut, rows)
-	opts.logger.Info()
 
 	if !opts.skipConfirm {
 		prompt := &survey.Confirm{
-			Message: opts.localizer.MustLocalize("kafka.acl.delete.input.confirmDeleteMessage"),
+			Message: opts.localizer.MustLocalize("kafka.acl.delete.input.confirmDeleteMessage", kafkaNameTmplEntry),
 		}
 		if err = survey.AskOne(prompt, &opts.skipConfirm); err != nil {
 			return err
@@ -195,6 +160,8 @@ func runDelete(instanceID string, opts *options) error {
 	spinnr := spinner.New(opts.io.ErrOut, opts.localizer)
 	spinnr.SetLocalizedSuffix("kafka.acl.delete.log.info.deletingACLs", kafkaNameTmplEntry)
 	spinnr.Start()
+
+	requestParams := getRequestParams(opts)
 
 	deletedACLs, httpRes, err := adminAPI.AclsApi.DeleteAcls(ctx).
 		ResourceType(requestParams.resourceType).
@@ -215,10 +182,17 @@ func runDelete(instanceID string, opts *options) error {
 
 	spinnr.Stop()
 
+	deletedCount := int(deletedACLs.GetTotal())
+
+	if deletedCount == 0 {
+		opts.logger.Info(icon.InfoPrefix(), opts.localizer.MustLocalize("kafka.acl.delete.noACLsDeleted", kafkaNameTmplEntry))
+		return nil
+	}
+
 	opts.logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalizePlural("kafka.acl.delete.successMessage",
-		int(deletedACLs.GetTotal()),
+		deletedCount,
 		kafkaNameTmplEntry,
-		localize.NewEntry("Count", aclList.GetTotal()),
+		localize.NewEntry("Count", deletedCount),
 	))
 
 	return nil
@@ -291,6 +265,11 @@ func validateAndSetOpts(opts *options) error {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
 
+	opts.patternType = aclutil.PatternTypeFilterLITERAL
+	if prefix {
+		opts.patternType = aclutil.PatternTypeFilterPREFIX
+	}
+
 	if userID != "" {
 		opts.principal = userID
 	} else if serviceAccount != "" {
@@ -311,5 +290,6 @@ func validateAndSetOpts(opts *options) error {
 
 		opts.instanceID = instanceID
 	}
+
 	return nil
 }
