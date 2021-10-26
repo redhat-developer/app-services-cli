@@ -24,6 +24,9 @@ rhoas kafka acl list [flags]
 # Display Kafka ACL rules for the Kafka instance
 $ rhoas kafka acl list
 
+# Display Kafka ACL rules for a specific principal
+$ rhoas kafka acl list --principal username
+
 # Display Kafka ACL rules for a specific Kafka instance
 $ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
 
