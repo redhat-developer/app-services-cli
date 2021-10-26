@@ -240,7 +240,7 @@ one = 'Delete all ACLs from a Kafka instance which match the filter criteria pro
 [kafka.acl.delete.cmd.example]
 one = '''
 # delete an ACL for user "joe_bloggs" on all topics
-$ rhoas kafka acl delete --operation write --permission allow --topic "*" --user joe_bloggs
+$ rhoas kafka acl delete --operation write --permission allow --topic all --user joe_bloggs
 
 # delete an ACL for a service account
 $ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
