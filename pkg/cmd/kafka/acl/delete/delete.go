@@ -228,7 +228,7 @@ func getRequestParams(opts *options) *requestParams {
 	return &requestParams{
 		resourceType: aclutil.GetMappedResourceTypeFilterValue(opts.resourceType),
 		principal:    aclutil.FormatPrincipal(opts.principal),
-		resourceName: opts.resourceName,
+		resourceName: aclutil.GetResourceName(opts.resourceName),
 		patternType:  aclutil.GetMappedPatternTypeFilterValue(opts.patternType),
 		operation:    aclutil.GetMappedOperationFilterValue(opts.operation),
 		permission:   aclutil.GetMappedPermissionTypeFilterValue(opts.permission),
