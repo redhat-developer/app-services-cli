@@ -13,7 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
@@ -92,12 +92,14 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.yes"))
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "reset-offset")))
-	cmd.Flags().StringVar(&opts.value, "value", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.value"))
-	cmd.Flags().StringVar(&opts.offset, "offset", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.offset"))
-	cmd.Flags().StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.topic"))
-	cmd.Flags().Int32SliceVar(&opts.partitions, "partitions", []int32{}, opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.partitions"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.AddYes(&opts.skipConfirm)
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.consumerGroup.common.flag.id.description", localize.NewEntry("Action", "reset-offset")))
+	flags.StringVar(&opts.value, "value", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.value"))
+	flags.StringVar(&opts.offset, "offset", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.offset"))
+	flags.StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.topic"))
+	flags.Int32SliceVar(&opts.partitions, "partitions", []int32{}, opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.flag.partitions"))
 
 	_ = cmd.MarkFlagRequired("id")
 	_ = cmd.MarkFlagRequired("offset")

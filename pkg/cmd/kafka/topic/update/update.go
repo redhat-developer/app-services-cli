@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -149,12 +149,14 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
-	cmd.Flags().StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
-	cmd.Flags().StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
-	cmd.Flags().StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
+	flags.StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
+	flags.StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))
+	flags.StringVar(&opts.cleanupPolicy, "cleanup-policy", "", opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"))
+	flags.StringVar(&opts.partitionsStr, "partitions", "", opts.localizer.MustLocalize("kafka.topic.common.input.partitions.description"))
+
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})

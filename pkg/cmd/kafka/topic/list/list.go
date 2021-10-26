@@ -13,7 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/spf13/cobra"
 
@@ -104,10 +104,12 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("kafka.topic.list.flag.output.description"))
-	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
-	cmd.Flags().Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
-	cmd.Flags().Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.AddOutput(&opts.output)
+	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
+	flags.Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
+	flags.Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 

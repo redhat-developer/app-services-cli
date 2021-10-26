@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+
 	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
@@ -87,12 +88,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flagSet := flagutil.NewFlagSet(cmd, opts.localizer)
-	flagSet.AddOutput(&opts.outputFormat)
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
-	cmd.Flags().IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
-	cmd.Flags().IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
-	cmd.Flags().StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
+	flags.AddOutput(&opts.outputFormat)
+	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
+	flags.IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
+	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
 
 	return cmd
 }

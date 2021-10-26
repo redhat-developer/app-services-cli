@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
@@ -13,13 +13,14 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -85,10 +86,12 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.common.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
-	cmd.Flags().BoolVar(&opts.bootstrapServer, "bootstrap-server", false, opts.localizer.MustLocalize("kafka.describe.flag.bootstrapserver"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.AddOutput(&opts.outputFormat)
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.describe.flag.id"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.describe.flag.name"))
+	flags.BoolVar(&opts.bootstrapServer, "bootstrap-server", false, opts.localizer.MustLocalize("kafka.describe.flag.bootstrapserver"))
 
 	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)

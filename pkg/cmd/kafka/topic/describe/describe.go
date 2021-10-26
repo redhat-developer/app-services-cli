@@ -16,7 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/spf13/cobra"
 )
@@ -78,9 +78,11 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
+	flags.AddOutput(&opts.outputFormat)
+
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -12,14 +12,16 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
 
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
+
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/spf13/cobra"
+
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -80,11 +82,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flagSet := flagutil.NewFlagSet(cmd, opts.localizer)
-	flagSet.AddYes(&opts.skipConfirm)
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
+	flags.AddYes(&opts.skipConfirm)
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
 
 	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)

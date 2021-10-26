@@ -39,7 +39,7 @@ $ rhoas kafka update
       `--id` _string_::      Unique ID of the Kafka instance you want to update
       `--name` _string_::    Name of the Kafka instance you want to update
       `--owner` _string_::   ID of the user you want to set as the owner of this Kafka instance
-  `-y`, `--yes`::            Forcibly update the Kafka instance without confirmation
+  `-y`, `--yes`::            Skip confirmation of this action 
 
 [discrete]
 == Options inherited from parent commands
