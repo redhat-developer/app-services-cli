@@ -47,7 +47,7 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic
       `--partitions` _int32Slice_::   Reset consumer group offsets on specified partitions (comma-separated integers) (default [])
       `--topic` _string_::            Reset consumer group offsets on a specified topic
       `--value` _string_::            Custom offset value (required when offset is "absolute" or "timestamp")
-  `-y`, `--yes`::                     Skip confirmation to forcibly reset the offset for the consumer group
+  `-y`, `--yes`::                     Skip confirmation of this action 
 
 [discrete]
 == Options inherited from parent commands
