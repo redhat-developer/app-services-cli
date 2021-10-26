@@ -26,10 +26,11 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	page    int32
-	size    int32
-	kafkaID string
-	output  string
+	page      int32
+	size      int32
+	kafkaID   string
+	principal string
+	output    string
 }
 
 // NewListACLCommand creates a new command to list Kafka ACL rules
@@ -78,6 +79,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 	flags.Int32Var(&opts.page, "page", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
 	flags.Int32Var(&opts.size, "size", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
+	flags.StringVar(&opts.principal, "principal", "", opts.localizer.MustLocalize("kafka.acl.list.flag.principal.description"))
 
 	return cmd
 }
@@ -97,6 +99,11 @@ func runList(opts *options) (err error) {
 
 	req = req.Page(float32(opts.page)).Size(float32(opts.size))
 	req = req.Order("asc").OrderKey("principal")
+
+	if opts.principal != "" {
+		principalQuery := aclutil.FormatPrincipal(opts.principal)
+		req = req.Principal(principalQuery)
+	}
 
 	permissionsData, httpRes, err := req.Execute()
 	if httpRes != nil {

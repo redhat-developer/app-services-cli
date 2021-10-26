@@ -35,6 +35,7 @@ $ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
       `--instance-id` _string_::   Kafka instance ID. Uses the current instance if not set 
   `-o`, `--output` _string_::      Specify the output format. Choose from: "json", "yaml", "yml"
       `--page` _int32_::           Current page number for list of Kafka ACL rules (default 1)
+      `--principal` _string_::     Filter Kafka ACL rules by principal
       `--size` _int32_::           Maximum number of items to be returned per page (default 10)
 
 [discrete]

@@ -144,6 +144,9 @@ one = 'Current page number for list of Kafka ACL rules'
 [kafka.acl.list.flag.size.description]
 one = 'Maximum number of items to be returned per page'
 
+[kafka.acl.list.flag.principal.description]
+one = 'Filter Kafka ACL rules by principal'
+
 [kafka.acl.list.allAccounts]
 one = 'All accounts'
 
