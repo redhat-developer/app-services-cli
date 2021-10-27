@@ -62,10 +62,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl_grant-admin.adoc#rhoas-kafka-acl-grant-admin[rhoas kafka acl grant-admin]	 - Give admin rights to the account
+* link:rhoas_kafka_acl_grant-admin.adoc#rhoas-kafka-acl-grant-admin[rhoas kafka acl grant-admin]	 - Grant an account permissions to create and delete ACLs in the Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-acl-grant-admin_{context}[rhoas kafka acl grant-admin]	 - Give admin rights to the account
+* link:{path}#ref-rhoas-kafka-acl-grant-admin_{context}[rhoas kafka acl grant-admin]	 - Grant an account permissions to create and delete ACLs in the Kafka instance
 endif::[]
 
 ifdef::env-github,env-browser[]

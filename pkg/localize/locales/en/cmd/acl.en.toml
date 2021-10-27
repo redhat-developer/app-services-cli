@@ -268,10 +268,10 @@ one = 'Deleting ACLs from Kafka instance "{{.Name}}"'
 [kafka.acl.grantAdmin]
 
 [kafka.acl.grantAdmin.cmd.shortDescription]
-one = 'Give admin rights to the account'
+one = 'Grant an account permissions to create and delete ACLs in the Kafka instance'
 
 [kafka.acl.grantAdmin.cmd.longDescription]
-one = 'This command will give specified account permission to create and delete ACLs in a Kafka instance.'
+one = 'This command grants a specified account permission to create and delete ACLs in a Kafka instance.'
 
 [kafka.acl.grantAdmin.cmd.example]
 one = '''
