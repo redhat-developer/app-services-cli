@@ -163,6 +163,11 @@ If the cluster has a service account, it will be refreshed.
 2. Create a Kafka Request object that can be used to create a ServiceBinding object using
 the Service Binding operator (https://github.com/redhat-developer/service-binding-operator).
 
+NOTE: Created service account will need to be given permissions to specified service
+For example for Kafka service you should execute the following command to grant access to the service account
+
+  $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic "*" --group "*"
+
 '''
 
 [cluster.connect.cmd.example]
@@ -295,10 +300,12 @@ Client ID:     {{.ClientID}}
 
 Make a copy of the client ID to store in a safe place. Credentials won't appear again after closing the terminal.
 
-Execute the following command to grant access to the service account using rhoas cli:
+You will need to assign permissions to service account in order to use it. 
+For example for Kafka service you should execute the following command to grant access to the service account:
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic "*" --group "*"
 '''
+ 
 
 [cluster.kubernetes.createTokenSecret.log.info.createFailed]
 one = 'Creation of the "{{.Name}}" secret failed:'
