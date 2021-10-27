@@ -6,133 +6,163 @@
 You use the `rhoas` CLI to manage your application services from the command line.
 
 
-include::../modules/ref-cli-cluster-bind.adoc[leveloffset=+1]
+== General commands
 
-include::../modules/ref-cli-cluster-clean.adoc[leveloffset=+1]
+include::../modules/ref-cli-completion.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-cluster-connect.adoc[leveloffset=+1]
+include::../modules/ref-cli-completion-bash.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-cluster-status.adoc[leveloffset=+1]
+include::../modules/ref-cli-completion-fish.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-cluster.adoc[leveloffset=+1]
+include::../modules/ref-cli-completion-zsh.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-completion-bash.adoc[leveloffset=+1]
+include::../modules/ref-cli-login.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-completion-fish.adoc[leveloffset=+1]
+include::../modules/ref-cli-logout.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-completion-zsh.adoc[leveloffset=+1]
+include::../modules/ref-cli-status.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-completion.adoc[leveloffset=+1]
+include::../modules/ref-cli-whoami.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-acl-delete.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-kafka-acl-grant-access.adoc[leveloffset=+1]
+== Cluster commands
 
-include::../modules/ref-cli-kafka-acl-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-cluster.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-acl.adoc[leveloffset=+1]
+include::../modules/ref-cli-cluster-bind.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-consumer-group-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-cluster-clean.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-consumer-group-describe.adoc[leveloffset=+1]
+include::../modules/ref-cli-cluster-connect.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-consumer-group-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-cluster-status.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-consumer-group-reset-offset.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-kafka-consumer-group.adoc[leveloffset=+1]
+== Kafka commands
 
-include::../modules/ref-cli-kafka-create.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-acl.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-describe.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-acl-create.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-acl-delete.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-topic-create.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-acl-grant-access.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-topic-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-acl-grant-admin.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-topic-describe.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-acl-list.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-topic-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-topic-update.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-delete.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-topic.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-describe.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-update.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-list.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka-use.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-consumer-group-reset-offset.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-kafka.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-create.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-login.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-delete.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-logout.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-describe.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-account-create.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-list.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-account-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-topic.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-account-describe.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-topic-create.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-account-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-topic-delete.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-account-reset-credentials.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-topic-describe.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-account.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-topic-list.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-create.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-topic-update.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-update.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-download.adoc[leveloffset=+1]
+include::../modules/ref-cli-kafka-use.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-export.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-service-registry-artifact-get.adoc[leveloffset=+1]
+== Service account commands
 
-include::../modules/ref-cli-service-registry-artifact-import.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-account.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-account-create.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-metadata-get.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-account-delete.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-metadata-set.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-account-describe.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-state-set.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-account-list.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-update.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-account-reset-credentials.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-artifact-versions.adoc[leveloffset=+1]
 
-include::../modules/ref-cli-service-registry-artifact.adoc[leveloffset=+1]
+== Service Registry commands
 
-include::../modules/ref-cli-service-registry-create.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-delete.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-describe.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-create.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-delete.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-role-add.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-download.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-role-list.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-export.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-role-revoke.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-get.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-role.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-import.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-list.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-service-registry.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-metadata-get.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-status.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-metadata-set.adoc[leveloffset=+2]
 
-include::../modules/ref-cli-whoami.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-state-set.adoc[leveloffset=+2]
 
-include::../modules/ref-cli.adoc[leveloffset=+1]
+include::../modules/ref-cli-service-registry-artifact-update.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-artifact-versions.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-create.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-delete.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-describe.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-role.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-role-add.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-role-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-role-revoke.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-describe.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-disable.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-enable.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-update.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+2]
+
+
 

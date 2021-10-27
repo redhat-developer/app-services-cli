@@ -1,23 +1,23 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-download_{context}']
-= rhoas service-registry artifact download
+[id='ref-service-registry-artifact-download_{context}']
+= service-registry artifact download
 
 [role="_abstract"]
-[beta] Download artifacts from Service Registry using global identifiers
+Download artifacts from Service Registry using global identifiers
 
 [discrete]
 == Synopsis
 
-Get single or more artifacts by group, content, hash or globalIds.
-NOTE: Use "service-registry get" command to download artifacts by artifactId.
+Get one or more artifacts by group, content, hash, or globalId.
 
-Flags are used to specify the artifact to download:
+NOTE: To download artifacts by artifactId, use the "service-registry artifact get" command.
 
---contentId - ID if the content is from metadata
---globalId - globalId of the content from metadata
---hash - SHA-256 hash of the content
+Use the following flags to specify the artifacts to download:
 
-This command is available as part of the Development Preview release.
+* --contentId (ID if the content is from metadata)
+* --globalId (globalId of the content from metadata)
+* --hash (SHA-256 hash of the content)
+* --group (artifact group)
 
 
 ....
@@ -49,7 +49,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
       `--global-id` _int_::        Global ID of the artifact (default -1)
   `-g`, `--group` _string_::       Artifact group (default "default")
       `--hash` _string_::          SHA-256 hash of the artifact
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       `--output-file` _string_::   Location of the output file
 
 [discrete]
@@ -62,10 +62,6 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
-endif::[]
+ 
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 

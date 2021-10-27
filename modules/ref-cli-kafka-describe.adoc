@@ -1,20 +1,22 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-describe_{context}']
-= rhoas kafka describe
+[id='ref-kafka-describe_{context}']
+= kafka describe
 
 [role="_abstract"]
-View configuration details of an Apache Kafka instance
+View configuration details of a Kafka instance
 
 [discrete]
 == Synopsis
 
-View configuration fields and their values for an Apache Kafka instance.
+View configuration details for a Kafka instance.
 
-Pass the "--id" flag to specify which instance you would like to view.
+Use the "--id" flag to specify which instance you would like to view.
 
-If the "--id" flag is not passed then the selected Kafka instance will be used, if available.
+If the "--id" flag is not used then the selected Kafka instance will be used, if available.
 
-You can view the output as either as JSON or YAML.
+You can view the output either as JSON or YAML.
+
+To view a list of all Kafka instances, use the “rhoas kafka list” command.
 
 
 ....
@@ -25,16 +27,16 @@ rhoas kafka describe [flags]
 == Examples
 
 ....
-# view the current Kafka instance instance
+# View the current Kafka instance
 $ rhoas kafka describe
 
-# view a specific instance by passing the --id flag
+# View a specific instance by ID
 $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
-# view a specific instance by passing the --name flag
+# View a specific instance by name
 $ rhoas kafka describe --name=my-kafka
 
-# customise the output format
+# Customize the output format
 $ rhoas kafka describe -o yaml
 
 ....
@@ -42,7 +44,7 @@ $ rhoas kafka describe -o yaml
 [discrete]
 == Options
 
-      `--bootstrap-server`::    If specified, only bootstrap server host of the Kafka instance will be displayed
+      `--bootstrap-server`::    If specified, only the bootstrap server host of the Kafka instance will be displayed
       `--id` _string_::         Unique ID of the Kafka instance you want to view
       `--name` _string_::       Name of the Kafka instance you want to view
   `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
@@ -57,10 +59,6 @@ $ rhoas kafka describe -o yaml
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
 

@@ -1,20 +1,18 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-delete_{context}']
-= rhoas service-registry artifact delete
+[id='ref-service-registry-artifact-delete_{context}']
+= service-registry artifact delete
 
 [role="_abstract"]
-[beta] Deletes single or all artifacts in a given group
+Deletes an artifact or all artifacts in a given group
 
 [discrete]
 == Synopsis
 
-Deletes single or all artifacts in a given group.
+Deletes a single artifact or all artifacts in a given group:
 
-When called without arguments, deletes all artifacts in the group
-When --artifact-id is specified, deletes only a single artifact and its version
-When --group parameter is missing, the command uses the "default" group.
-
-This command is available as part of the Development Preview release.
+* When called without arguments, deletes all artifacts in the group.
+* When --artifact-id is specified, deletes only a single artifact and its version.
+* When --group is omitted, the command uses the "default" group.
 
 
 ....
@@ -38,7 +36,7 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 
       `--artifact-id` _string_::   ID of the artifact
   `-g`, `--group` _string_::       Artifact group (default "default")
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   `-y`, `--yes`::                  Delete artifact without prompt
 
 [discrete]
@@ -51,10 +49,6 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
-endif::[]
+ 
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 

@@ -1,17 +1,14 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-describe_{context}']
-= rhoas service-registry describe
+[id='ref-service-registry-describe_{context}']
+= service-registry describe
 
 [role="_abstract"]
-[beta] Describe a Service Registry instance
+Describe a Service Registry instance
 
 [discrete]
 == Synopsis
 
- 
-Describe a Service Registry instance. Fetch all required fields including the registry URL. 
-
-This command is available as part of the Development Preview release.
+Describe a Service Registry instance. Fetch all required fields including the registry URL.
 
 
 ....
@@ -48,10 +45,6 @@ rhoas service-registry describe --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [beta] Service Registry commands
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [beta] Service Registry commands
-endif::[]
+ 
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
 

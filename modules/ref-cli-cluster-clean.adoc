@@ -1,16 +1,14 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-cluster-clean_{context}']
-= rhoas cluster clean
+[id='ref-cluster-clean_{context}']
+= cluster clean
 
 [role="_abstract"]
-Removes all resources created by cluster extensions
+Remove all resources created by cluster extensions
 
 [discrete]
 == Synopsis
 
-Removes all resources created by cluster extensions
-Clean command will remove all secrets and service connections created in your namespace
-
+Remove all resources created by cluster extensions. This command removes all secrets and application service connections in your Kubernetes or OpenShift namespace.
 
 ....
 rhoas cluster clean [flags]
@@ -32,7 +30,7 @@ $ rhoas cluster clean --namespace=myspace
 == Options
 
       `--kubeconfig` _string_::    Location of the kubeconfig file
-  `-n`, `--namespace` _string_::   Custom Kubernetes namespace (if not set current namespace will be used)
+  `-n`, `--namespace` _string_::   Use a custom Kubernetes namespace (if not set, the current namespace will be used)
   `-y`, `--yes`::                  Forcibly perform operation without confirmation
 
 [discrete]
@@ -45,10 +43,6 @@ $ rhoas cluster clean --namespace=myspace
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_cluster.adoc#rhoas-cluster[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
-endif::[]
 

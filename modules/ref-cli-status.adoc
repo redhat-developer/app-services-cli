@@ -1,17 +1,18 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-status_{context}']
-= rhoas status
+[id='ref-status_{context}']
+= status
 
 [role="_abstract"]
-View the status of all currently used services
+View the status of your application services
 
 [discrete]
 == Synopsis
 
-View status information of your currently used services.
-Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
+View the status of your application services. This command shows the status of the current instance for each of your application services.
 
-To use a different service run "rhoas [service] use [args] [flags]".
+To view the status of a specific application service, use "rhoas status [service]".
+
+Note: You can change the current instance for an application service with the "rhoas [service] use” command.
 
 
 ....
@@ -22,13 +23,13 @@ rhoas status [args] [flags]
 == Examples
 
 ....
-# view the status of all services
+# View the status of all application services
 $ rhoas status
 
-# view the status of the used Kafka
+# View the status of the current Kafka instance
 $ rhoas status kafka
 
-# view the status of your services in JSON
+# View the status of your services in JSON format
 $ rhoas status -o json
 
 ....
@@ -48,10 +49,6 @@ $ rhoas status -o json
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
-endif::[]
 

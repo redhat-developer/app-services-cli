@@ -1,34 +1,31 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-kafka-acl-delete_{context}']
-= kafka acl delete
+[id='ref-kafka-acl-create_{context}']
+= kafka acl create
 
 [role="_abstract"]
-Delete Kafka ACLs matching the provided filters
+Create a Kafka ACL
 
 [discrete]
 == Synopsis
 
-Delete Access Control List (ACL) rules from a Kafka instance.
+Create Kafka Access Control List (ACL) rules. A Kafka ACL defines how other user accounts and service accounts can interact with a Kafka instance and its resources.
 
 ....
-rhoas kafka acl delete [flags]
+rhoas kafka acl create [flags]
 ....
 
 [discrete]
 == Examples
 
 ....
-# Delete an ACL for user "dev_user" on all topics
-$ rhoas kafka acl delete --operation write --permission allow --topic all --user dev_user
+# Create an ACL for user "dev_user" on all topics
+$ rhoas kafka acl create --operation all --permission allow --topic "*" --user dev_user
 
-# Delete an ACL for a service account
-$ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+# Create an ACL for a service account
+$ rhoas kafka acl create --operation all --permission allow --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
 
-# Delete all ACLs for a service account
-$ rhoas kafka acl delete --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81 --pattern-type=all"
-
-# Delete an ACL for all users on the consumer group resource
-$ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
+# Create an ACL for all users for the consumer group resource
+$ rhoas kafka acl create --operation all --permission allow --group "group-1" --all-accounts
 
 ....
 
@@ -40,9 +37,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
       `--group` _string_::              Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
       `--instance-id` _string_::        Kafka instance ID. Uses the current instance if not set
       `--operation` _string_::          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write"
-  `-o`, `--output` _string_::           Specify the output format. Choose from: "json", "yaml", "yml"
-      `--pattern-type` _string_::       Allows to specify arguments matching strategy [any literal prefix] (default "literal")
-      `--permission` _string_::         Set the ACL permission. Choose from: "allow", "any", "deny" (default "any")
+      `--permission` _string_::         Set the ACL permission. Choose from: "allow", "deny"
       `--prefix`::                      Determine if the resource should be exact match or prefix
       `--service-account` _string_::    Service account client ID used as principal for this operation
       `--topic` _string_::              Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix

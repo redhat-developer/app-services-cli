@@ -1,16 +1,14 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-versions_{context}']
-= rhoas service-registry artifact versions
+[id='ref-service-registry-artifact-versions_{context}']
+= service-registry artifact versions
 
 [role="_abstract"]
-[beta] Get latest artifact versions by artifact-id and group
+Get latest artifact versions by artifact-id and group
 
 [discrete]
 == Synopsis
 
-Get latest artifact versions by specifying group and artifact-id
-This command is available as part of the Development Preview release.
-
+Get the latest artifact versions by specifying the group and artifact-id
 
 ....
 rhoas service-registry artifact versions [flags]
@@ -33,7 +31,7 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 
       `--artifact-id` _string_::   ID of the artifact
   `-g`, `--group` _string_::       Artifact group (default "default")
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   `-o`, `--output` _string_::      Output format (json, yaml, yml)
 
 [discrete]
@@ -46,10 +44,6 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
-endif::[]
+ 
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 

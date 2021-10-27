@@ -1,20 +1,17 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-use_{context}']
-= rhoas service-registry use
+[id='ref-service-registry-use_{context}']
+= service-registry use
 
 [role="_abstract"]
-[beta] Use a Service Registry instance
+Use a Service Registry instance
 
 [discrete]
 == Synopsis
 
- 
 Select a Service Registry instance to use with all instance-specific commands.
 You can specify a Service Registry instance by --name or --id.
 
 When you set the Service Registry instance to be used, it is set as the current instance for all rhoas service-registry artifact commands.
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -49,10 +46,6 @@ rhoas service-registry use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [beta] Service Registry commands
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [beta] Service Registry commands
-endif::[]
+ 
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
 
