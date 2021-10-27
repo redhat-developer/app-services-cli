@@ -3,8 +3,10 @@ package use
 import (
 	"context"
 	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
@@ -65,8 +67,10 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
 
 	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
