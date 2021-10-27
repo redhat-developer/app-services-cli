@@ -9,7 +9,7 @@ import (
 const (
 	ErrorSymbol     = "\u274c"
 	checkMarkSymbol = "\u2714\ufe0f"
-	warningSymbol   = "\u26A0"
+	infoSymbol      = "\u2139"
 )
 
 // Emoji accepts two arguments, emoji sequence code, and fallback string, for the cases when emoji isn't supported.
@@ -21,18 +21,30 @@ func Emoji(emoji string, fallback string) string {
 	return fallback
 }
 
-// SuccessPrefix returns check mark emoji prefix
-func SuccessPrefix() string {
-	return color.Success(Emoji(checkMarkSymbol, ""))
-}
-
 // ErrorPrefix returns cross mark emoji prefix or default "Error:"
 func ErrorPrefix() string {
 	return Emoji(ErrorSymbol, "Error:")
 }
 
-// Warning returns an emoji icon indicating a warning
-// Ref: https://emojipedia.org/warning/
-func Warning() string {
-	return Emoji(warningSymbol, "")
+// SuccessPrefix returns check mark emoji prefix
+func SuccessPrefix() string {
+	emoji := rightPadPrefixIcon(checkMarkSymbol)
+
+	return color.Success(emoji)
+}
+
+// InfoPrefix returns an emoji indicating an info message
+func InfoPrefix() string {
+	emoji := rightPadPrefixIcon(infoSymbol)
+	return color.Info(emoji)
+}
+
+// Add a space after a prefix icon
+func rightPadPrefixIcon(emojiCode string) string {
+	fallback := ""
+	emoji := Emoji(emojiCode, fallback)
+	if emoji != fallback {
+		emoji += " "
+	}
+	return emoji
 }

@@ -253,7 +253,10 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
 one = 'The following ACLs will be deleted from Kafka instance "{{.Name}}":'
 
 [kafka.acl.delete.input.confirmDeleteMessage]
-one = 'Are you sure you want to delete these ACLs?'
+one = 'All ACLs matching the criteria provided will be deleted from the Kafka instance "{{.Name}}". Are you sure you want to proceed?'
+
+[kafka.acl.delete.noACLsDeleted]
+one = 'No ACLs match the specified criteria'
 
 [kafka.acl.delete.successMessage]
 one = 'Deleted {{.Count}} ACL from Kafka instance "{{.Name}}"'
