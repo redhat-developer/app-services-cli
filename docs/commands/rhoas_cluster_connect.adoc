@@ -25,7 +25,7 @@ the Service Binding operator (https://github.com/redhat-developer/service-bindin
 NOTE: Created service account will need to be given permissions to specified service
 For example for Kafka service you should execute the following command to grant access to the service account
 
-  $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic "*" --group "*"
+  $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic all --group all
 
 
 

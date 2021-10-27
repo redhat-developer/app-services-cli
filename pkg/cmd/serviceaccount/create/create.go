@@ -166,9 +166,9 @@ func runCreate(opts *options) error {
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved",
-		localize.NewEntry("FilePath", color.CodeSnippet(opts.filename))),
+		localize.NewEntry("FilePath", color.CodeSnippet(opts.filename)),
 		localize.NewEntry("ClientID", color.Success(creds.ClientID)),
-	)
+	))
 
 	return nil
 }
