@@ -350,5 +350,10 @@ func validateFlagInputCombination(opts *options) error {
 		)
 	}
 
+	// user and service account should not allow wildcard
+	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+		return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
+	}
+
 	return nil
 }

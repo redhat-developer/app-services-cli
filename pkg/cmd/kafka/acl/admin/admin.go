@@ -82,6 +82,11 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
 			}
 
+			// user and service account should not allow wildcard
+			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
+			}
+
 			if userID != "" {
 				opts.principal = userID
 			}
