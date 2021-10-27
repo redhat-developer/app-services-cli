@@ -25,21 +25,20 @@ rhoas kafka acl list [flags]
 $ rhoas kafka acl list
 
 # Display Kafka ACL rules for a specific principal
-$ rhoas kafka acl list --principal username
-
-# Display Kafka ACL rules for a specific Kafka instance
-$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
+$ rhoas kafka acl list --principal foo_user
 
 ....
 
 [discrete]
 == Options
 
-      `--instance-id` _string_::   Kafka instance ID. Uses the current instance if not set 
-  `-o`, `--output` _string_::      Specify the output format. Choose from: "json", "yaml", "yml"
-      `--page` _int32_::           Current page number for list of Kafka ACL rules (default 1)
-      `--principal` _string_::     Filter Kafka ACL rules by principal
-      `--size` _int32_::           Maximum number of items to be returned per page (default 10)
+      `--all-accounts`::               Set the ACL principal to match all accounts (wildcard). Cannot be used in conjunction with --service-account or --user
+      `--instance-id` _string_::       Kafka instance ID. Uses the current instance if not set
+  `-o`, `--output` _string_::          Specify the output format. Choose from: "json", "yaml", "yml"
+      `--page` _int32_::               Current page number for the list  (default 1)
+      `--service-account` _string_::   Service account client ID to use as principal for this operation
+      `--size` _int32_::               Maximum number of items to be returned per page  (default 10)
+      `--user` _string_::              User ID to be use as principal
 
 [discrete]
 == Options inherited from parent commands

@@ -5,11 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -18,13 +16,19 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
+var (
+	serviceAccount string
+	userID         string
+	allAccounts    bool
+)
+
 type options struct {
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
+	config     config.IConfig
+	connection factory.ConnectionFunc
+	logger     logging.Logger
+	io         *iostreams.IOStreams
 	localizer  localize.Localizer
-	Context    context.Context
+	context    context.Context
 
 	page      int32
 	size      int32
@@ -37,12 +41,12 @@ type options struct {
 func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
+		config:     f.Config,
+		connection: f.Connection,
+		logger:     f.Logger,
+		io:         f.IOStreams,
 		localizer:  f.Localizer,
-		Context:    f.Context,
+		context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -57,7 +61,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 				return runList(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			cfg, err := opts.config.Load()
 			if err != nil {
 				return err
 			}
@@ -73,19 +77,21 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := flagutil.NewFlagSet(cmd, opts.localizer, opts.connection)
+
 	flags.AddInstanceID(&opts.kafkaID)
 	flags.AddOutput(&opts.output)
-
-	flags.Int32Var(&opts.page, "page", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
-	flags.Int32Var(&opts.size, "size", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
-	flags.StringVar(&opts.principal, "principal", "", opts.localizer.MustLocalize("kafka.acl.list.flag.principal.description"))
+	flags.AddPage(&opts.page)
+	flags.AddSize(&opts.size)
+	flags.AddUser(&userID)
+	flags.AddServiceAccount(&serviceAccount)
+	flags.AddAllAccounts(&allAccounts)
 
 	return cmd
 }
 
 func runList(opts *options) (err error) {
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
@@ -95,7 +101,7 @@ func runList(opts *options) (err error) {
 		return err
 	}
 
-	req := api.AclsApi.GetAcls(opts.Context)
+	req := api.AclsApi.GetAcls(opts.context)
 
 	req = req.Page(float32(opts.page)).Size(float32(opts.size))
 	req = req.Order("asc").OrderKey("principal")
@@ -116,12 +122,12 @@ func runList(opts *options) (err error) {
 
 	switch opts.output {
 	case dump.EmptyFormat:
-		opts.Logger.Info("")
+		opts.logger.Info("")
 		permissions := permissionsData.GetItems()
 		rows := aclutil.MapACLsToTableRows(permissions, opts.localizer)
-		dump.Table(opts.IO.Out, rows)
+		dump.Table(opts.io.Out, rows)
 	default:
-		return dump.Formatted(opts.IO.Out, opts.output, permissionsData)
+		return dump.Formatted(opts.io.Out, opts.output, permissionsData)
 	}
 
 	return nil
