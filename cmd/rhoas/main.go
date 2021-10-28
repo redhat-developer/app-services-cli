@@ -39,8 +39,16 @@ func main() {
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
 
-	telemetry := telemetry.CreateTelemetry(cmdFactory)
+	telemetry, err := telemetry.CreateTelemetry(cmdFactory)
+	if err != nil {
+		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		os.Exit(1)
+	}
 	rootCmd.PersistentPostRunE = func(cmd *cobra.Command, args []string) error {
+		if !cmd.Runnable() || cmd.HasAvailableSubCommands() {
+			return nil
+		}
+		cmdFactory.Logger.Debug("Sending telemetery information")
 		telemetry.Finish(cmd.CommandPath(), err)
 		return nil
 	}

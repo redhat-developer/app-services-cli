@@ -14,5 +14,5 @@ Note that these commands do not include `--help` commands. We do not collect dat
 To disable collection of the usage data please set environment variable in your terminal:
 
 ```
-REDHAT_DISABLE_TELEMETRY=true
+RED_HAT_DISABLE_TELEMETRY=true
 ```
