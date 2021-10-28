@@ -32,6 +32,7 @@ rhoas service-registry list
       `--limit` _int32_::       The maximum number of Service Registry instances to be returned (default 100)
   `-o`, `--output` _string_::   Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml")
       `--page` _int32_::        Display the Service Registry instances from the specified page number (default 1)
+      `--search` _string_::     Text search to filter the Service Registry instances by name
 
 [discrete]
 == Options inherited from parent commands
