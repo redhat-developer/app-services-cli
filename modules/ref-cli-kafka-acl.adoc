@@ -48,6 +48,13 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
+* link:rhoas_kafka_acl_delete.adoc#rhoas-kafka-acl-delete[rhoas kafka acl delete]	 - Delete Kafka ACLs matching the provided filters
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-acl-delete_{context}[rhoas kafka acl delete]	 - Delete Kafka ACLs matching the provided filters
+endif::[]
+
+ifdef::env-github,env-browser[]
 * link:rhoas_kafka_acl_grant-access.adoc#rhoas-kafka-acl-grant-access[rhoas kafka acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
 endif::[]
 ifdef::pantheonenv[]
