@@ -61,7 +61,7 @@ one = 'no operation specified: must provide at least one of "--producer" or "--c
 one = 'User ID to be used as principal'
 
 [kafka.acl.common.flag.allAccounts.description]
-one = 'Set the ACL principal to match all accounts (wildcard). Cannot be used in conjunction with --service-account or --user'
+one = 'Set the ACL principal to match all principals (users and service accounts)'
 
 [kafka.acl.common.flag.serviceAccount.description]
 one = 'Service account client ID to used as principal for this operation'
