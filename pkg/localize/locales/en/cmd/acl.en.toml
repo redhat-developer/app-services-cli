@@ -64,7 +64,7 @@ one = 'User ID to be used as principal'
 one = 'Set the ACL principal to match all principals (users and service accounts)'
 
 [kafka.acl.common.flag.serviceAccount.description]
-one = 'Service account client ID to used as principal for this operation'
+one = 'Service account client ID used as principal for this operation'
 
 [kafka.acl.common.flag.operation.description]
 one = 'Set the ACL operation'

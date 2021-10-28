@@ -40,7 +40,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
   `-o`, `--output` _string_::           Specify the output format. Choose from: "json", "yaml", "yml"
       `--permission` _string_::         Set the ACL permission. Choose from: "allow", "any", "deny" (default "any")
       `--prefix`::                      Determine if the resource should be exact match or prefix
-      `--service-account` _string_::    Service account client ID to used as principal for this operation
+      `--service-account` _string_::    Service account client ID used as principal for this operation
       `--topic` _string_::              Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix
       `--transactional-id` _string_::   Set the transactional ID resource
       `--user` _string_::               User ID to be used as principal
