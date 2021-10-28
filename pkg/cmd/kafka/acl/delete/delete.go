@@ -16,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/profile"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
@@ -77,7 +76,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("kafka.acl.delete.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("kafka.acl.delete.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("kafka.acl.delete.cmd.example"),
-		Hidden:  !profile.DevModeEnabled(),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.io.CanPrompt() && !opts.skipConfirm {
