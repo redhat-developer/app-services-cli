@@ -24,8 +24,11 @@ rhoas kafka acl list [flags]
 # Display Kafka ACL rules for the Kafka instance
 $ rhoas kafka acl list
 
-# Display Kafka ACL rules for a specific principal
-$ rhoas kafka acl list --principal foo_user
+# Display Kafka ACL rules for a specific user
+$ rhoas kafka acl list --user foo_user
+
+# Display Kafka ACL rules for a specific service account
+$ rhoas kafka acl list --service-account srvc-acct-f20a7561-7426-4f5a-b5e7-0ef2db31e15b
 
 ....
 

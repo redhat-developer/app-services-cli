@@ -73,6 +73,28 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 			opts.kafkaID = instanceID
 
+			// user and service account can't be along with "--all-accounts" flag
+			if allAccounts && (serviceAccount != "" || userID != "") {
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
+			}
+
+			// user and service account should not allow wildcard
+			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
+			}
+
+			if userID != "" {
+				opts.principal = userID
+			}
+
+			if serviceAccount != "" {
+				opts.principal = serviceAccount
+			}
+
+			if allAccounts {
+				opts.principal = aclutil.Wildcard
+			}
+
 			return runList(opts)
 		},
 	}
