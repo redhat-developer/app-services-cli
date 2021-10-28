@@ -26,7 +26,7 @@ var (
 	RepositoryName = "app-services-cli"
 
 	// TermsReviewEventCode is the event code used when checking the terms review
-	TermsReviewEventCode = "onlineService"
+	TermsReviewEventCode = "register"
 
 	// TermsReviewSiteCode is the site code used when checking the terms review
 	TermsReviewSiteCode = "ocm"
