@@ -11,13 +11,16 @@ By default, every users and service account have limited access to their Kafka i
 [kafka.acl.cmd.example]
 one = '''
 # Grant access to principal for consuming messages from all topics
-$ rhoas kafka acl grant-access --consumer --user user_name --topic all --group all
+$ rhoas kafka acl grant-access --consumer --user foo_user --topic all --group all
 
 # Grant access to principal for producing messages to all topics
-$ rhoas kafka acl grant-access --producer --user user_name --topic all
+$ rhoas kafka acl grant-access --producer --user foo_user --topic all
 
 # List ACL rules for a Kafka instance
 $ rhoas kafka acl list
+
+# Give admin rights to user "abc"
+$ rhoas kafka acl grant-admin --user abc
 '''
 
 [kafka.acl.common]
@@ -108,6 +111,9 @@ one = 'is'
 [kafka.acl.common.startsWith]
 one = 'starts with'
 
+[kafka.acl.common.input.confirmGrant.message]
+one = 'Are you sure you want to create the listed ACL rules?'
+
 [kafka.acl.list]
 
 [kafka.acl.list.cmd.example]
@@ -173,10 +179,10 @@ $ rhoas kafka acl grant-access --consumer --user user_name --topic-prefix "abc" 
 $ rhoas kafka acl grant-access --producer --user user_name --topic-prefix "abc"
 
 # Grant access to all users for consuming messages from topic "my-topic"
-$ rhoas kafka acl grant-access --consumer --user all --topic my-topic --group my-group
+$ rhoas kafka acl grant-access --consumer --all-accounts --topic my-topic --group my-group
 
 # Grant access to all users for producing messages to topic "my-topic"
-$ rhoas kafka acl grant-access --producer --user all --topic my-topic
+$ rhoas kafka acl grant-access --producer --all-accounts --topic my-topic
 
 # Grant access to principal for produce and consume messages from all topics 
 $ rhoas kafka acl grant-access --producer --consumer --user user_name --topic all --group all
@@ -224,10 +230,7 @@ one = 'The following ACL rules are to be created:'
 [kafka.acl.grantPermissions.log.info.aclsCreated]
 one = 'ACLs successfully created in the Kafka instance "{{.InstanceName}}"'
 
-[kafka.acl.grantPermissions.input.confirmGrant.message]
-one = 'Are you sure you want to create the listed ACL rules'
-
-[kafka.acl.grantPermissions.log.debug.deleteNotConfirmed]
+[kafka.acl.grantPermissions.log.debug.grantNotConfirmed]
 one = 'Kafka ACLs grant permission action was not confirmed. Exiting silently'
 
 [kafka.acl.delete]
@@ -264,3 +267,29 @@ other = 'Deleted {{.Count}} ACLs from Kafka instance "{{.Name}}"'
 
 [kafka.acl.delete.log.info.deletingACLs]
 one = 'Deleting ACLs from Kafka instance "{{.Name}}"'
+
+[kafka.acl.grantAdmin]
+
+[kafka.acl.grantAdmin.cmd.shortDescription]
+one = 'Grant an account permissions to create and delete ACLs in the Kafka instance'
+
+[kafka.acl.grantAdmin.cmd.longDescription]
+one = 'This command grants a specified account permission to create and delete ACLs in a Kafka instance.'
+
+[kafka.acl.grantAdmin.cmd.example]
+one = '''
+# Give admin rights to user "abc"
+$ rhoas kafka acl grant-admin --user abc
+
+# Give admin rights to a service account
+$ rhoas kafka acl grant-admin --service-account srvc-acct-0837725a-4e69-44e1-af3b-29da30aa85ce
+
+# Give admin rights to all accounts for a specific kafka instance
+$ rhoas kafka acl grant-admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
+'''
+
+[kafka.acl.grantAdmin.log.info.successful]
+one = 'Account "{{.Account}}" is now allowed to create and delete ACLs for Kafka instance "{{.InstanceName}}"'
+
+[kafka.acl.grantAdmin.log.debug.grantNotConfirmed]
+one = 'Kafka ACLs grant admin action was not confirmed. Exiting silently'

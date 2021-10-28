@@ -270,18 +270,18 @@ func runGrantPermissions(opts *options) (err error) {
 	opts.Logger.Info()
 
 	if !opts.force {
-		var confirmDelete bool
-		promptConfirmDelete := &survey.Confirm{
-			Message: opts.localizer.MustLocalize("kafka.acl.grantPermissions.input.confirmGrant.message"),
+		var confirmGrant bool
+		promptConfirmGrant := &survey.Confirm{
+			Message: opts.localizer.MustLocalize("kafka.acl.common.input.confirmGrant.message"),
 		}
 
-		err = survey.AskOne(promptConfirmDelete, &confirmDelete)
+		err = survey.AskOne(promptConfirmGrant, &confirmGrant)
 		if err != nil {
 			return err
 		}
 
-		if !confirmDelete {
-			opts.Logger.Debug(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.debug.deleteNotConfirmed"))
+		if !confirmGrant {
+			opts.Logger.Debug(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.debug.grantNotConfirmed"))
 			return nil
 		}
 	}
@@ -306,7 +306,7 @@ func validateFlagInputCombination(opts *options) error {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noOperationSpecified")
 	}
 
-	// check if priincipal is provided
+	// check if principal is provided
 	if userID == "" && serviceAccount == "" && !allAccounts {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
@@ -348,6 +348,11 @@ func validateFlagInputCombination(opts *options) error {
 		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
 			localize.NewEntry("Resource", "group"),
 		)
+	}
+
+	// user and service account should not allow wildcard
+	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+		return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 
 	return nil
