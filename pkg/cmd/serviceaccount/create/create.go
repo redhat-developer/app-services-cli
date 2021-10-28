@@ -165,7 +165,10 @@ func runCreate(opts *options) error {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", color.CodeSnippet(opts.filename))))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved",
+		localize.NewEntry("FilePath", color.CodeSnippet(opts.filename)),
+		localize.NewEntry("ClientID", color.Success(creds.ClientID)),
+	))
 
 	return nil
 }
