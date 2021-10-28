@@ -158,7 +158,7 @@ func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry, selectedId string)
 
 func buildQuery(search string) string {
 	queryString := fmt.Sprintf(
-		"name=%v",
+		"name like %%%[1]v%% or status like %%%[1]v%%",
 		search,
 	)
 
