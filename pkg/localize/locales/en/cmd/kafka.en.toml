@@ -41,6 +41,12 @@ one = 'no Kafka instance is currently set, use the "--id" flag or set the curren
 description = "Description for --output flag"
 one = 'Format in which to display the Kafka instance (choose from: "json", "yml", "yaml")'
 
+[kafka.common.flag.page.description]
+one = 'Current page number for the list'
+
+[kafka.common.flag.size.description]
+one = 'Maximum number of items to be returned per page'
+
 [kafka.common.flag.instanceID.description]
 one = 'Kafka instance ID. Uses the current instance if not set'
 
@@ -59,10 +65,10 @@ one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}
 
 
 [kafka.common.validation.page.error.invalid.minValue]
-one = 'invalid page number {{.Page}}, minimum value is -1'
+one = 'invalid page number {{.Page}}, minimum value is 1'
 
 [kafka.common.validation.size.error.invalid.minValue]
-one = 'invalid value for size {{.Size}}, minimum value is -1'
+one = 'invalid value for size {{.Size}}, minimum value is 1'
 
 [kafka.common.error.load.completions.name.flag]
 one = 'failed to load completions for --name:'

@@ -2,6 +2,8 @@
 package flagutil
 
 import (
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
@@ -61,6 +63,32 @@ func (fs *FlagSet) AddYes(yes *bool) {
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
 	})
+}
+
+// AddPage adds a "page" flag to the command
+func (fs *FlagSet) AddPage(page *int32) {
+	flagName := "page"
+
+	fs.Int32Var(
+		page,
+		flagName,
+		cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber),
+		FlagDescription(fs.localizer, "kafka.common.flag.page.description"),
+	)
+
+}
+
+// AddSize adds a "size" flag to the command
+func (fs *FlagSet) AddSize(page *int32) {
+	flagName := "size"
+
+	fs.Int32Var(
+		page,
+		flagName,
+		cmdutil.ConvertPageValueToInt32(build.DefaultPageSize),
+		FlagDescription(fs.localizer, "kafka.common.flag.size.description"),
+	)
+
 }
 
 // WithFlagOptions returns additional functions to custom the default flag settings

@@ -5,11 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -18,30 +16,37 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
-type options struct {
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
-	localizer  localize.Localizer
-	Context    context.Context
+var (
+	serviceAccount string
+	userID         string
+	allAccounts    bool
+)
 
-	page    int32
-	size    int32
-	kafkaID string
-	output  string
+type options struct {
+	config     config.IConfig
+	connection factory.ConnectionFunc
+	logger     logging.Logger
+	io         *iostreams.IOStreams
+	localizer  localize.Localizer
+	context    context.Context
+
+	page      int32
+	size      int32
+	kafkaID   string
+	principal string
+	output    string
 }
 
 // NewListACLCommand creates a new command to list Kafka ACL rules
 func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
+		config:     f.Config,
+		connection: f.Connection,
+		logger:     f.Logger,
+		io:         f.IOStreams,
 		localizer:  f.Localizer,
-		Context:    f.Context,
+		context:    f.Context,
 	}
 
 	cmd := &cobra.Command{
@@ -52,11 +57,19 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
+			if opts.page < 1 {
+				return opts.localizer.MustLocalizeError("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page))
+			}
+
+			if opts.size < 1 {
+				return opts.localizer.MustLocalizeError("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Size", opts.size))
+			}
+
 			if opts.kafkaID != "" {
 				return runList(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			cfg, err := opts.config.Load()
 			if err != nil {
 				return err
 			}
@@ -68,22 +81,47 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 			opts.kafkaID = instanceID
 
+			// user and service account can't be along with "--all-accounts" flag
+			if allAccounts && (serviceAccount != "" || userID != "") {
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
+			}
+
+			// user and service account should not allow wildcard
+			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
+			}
+
+			if userID != "" {
+				opts.principal = userID
+			}
+
+			if serviceAccount != "" {
+				opts.principal = serviceAccount
+			}
+
+			if allAccounts {
+				opts.principal = aclutil.Wildcard
+			}
+
 			return runList(opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := flagutil.NewFlagSet(cmd, opts.localizer, opts.connection)
+
 	flags.AddInstanceID(&opts.kafkaID)
 	flags.AddOutput(&opts.output)
-
-	flags.Int32Var(&opts.page, "page", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.acl.list.flag.page.description"))
-	flags.Int32Var(&opts.size, "size", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.acl.list.flag.size.description"))
+	flags.AddPage(&opts.page)
+	flags.AddSize(&opts.size)
+	flags.AddUser(&userID)
+	flags.AddServiceAccount(&serviceAccount)
+	flags.AddAllAccounts(&allAccounts)
 
 	return cmd
 }
 
 func runList(opts *options) (err error) {
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
@@ -93,10 +131,15 @@ func runList(opts *options) (err error) {
 		return err
 	}
 
-	req := api.AclsApi.GetAcls(opts.Context)
+	req := api.AclsApi.GetAcls(opts.context)
 
 	req = req.Page(float32(opts.page)).Size(float32(opts.size))
 	req = req.Order("asc").OrderKey("principal")
+
+	if opts.principal != "" {
+		principalQuery := aclutil.FormatPrincipal(opts.principal)
+		req = req.Principal(principalQuery)
+	}
 
 	permissionsData, httpRes, err := req.Execute()
 	if httpRes != nil {
@@ -109,12 +152,12 @@ func runList(opts *options) (err error) {
 
 	switch opts.output {
 	case dump.EmptyFormat:
-		opts.Logger.Info("")
+		opts.logger.Info("")
 		permissions := permissionsData.GetItems()
 		rows := aclutil.MapACLsToTableRows(permissions, opts.localizer)
-		dump.Table(opts.IO.Out, rows)
+		dump.Table(opts.io.Out, rows)
 	default:
-		return dump.Formatted(opts.IO.Out, opts.output, permissionsData)
+		return dump.Formatted(opts.io.Out, opts.output, permissionsData)
 	}
 
 	return nil

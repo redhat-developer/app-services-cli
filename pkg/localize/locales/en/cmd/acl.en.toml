@@ -121,8 +121,11 @@ one = '''
 # Display Kafka ACL rules for the Kafka instance
 $ rhoas kafka acl list
 
-# Display Kafka ACL rules for a specific Kafka instance
-$ rhoas kafka acl list --instance-id c5hv7iru4an1g84pogp0
+# Display Kafka ACL rules for a specific user
+$ rhoas kafka acl list --user foo_user
+
+# Display Kafka ACL rules for a specific service account
+$ rhoas kafka acl list --service-account srvc-acct-f20a7561-7426-4f5a-b5e7-0ef2db31e15b
 '''
 
 [kafka.acl.list.cmd.shortDescription]
@@ -137,12 +140,6 @@ The instances are displayed by default in a table, but can also be displayed as 
 
 [kafka.acl.list.flag.output.description]
 one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
-
-[kafka.acl.list.flag.page.description]
-one = 'Current page number for list of Kafka ACL rules'
-
-[kafka.acl.list.flag.size.description]
-one = 'Maximum number of items to be returned per page'
 
 [kafka.acl.list.allAccounts]
 one = 'All accounts'
