@@ -57,6 +57,14 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
+			if opts.page < 1 {
+				return opts.localizer.MustLocalizeError("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Page", opts.page))
+			}
+
+			if opts.size < 1 {
+				return opts.localizer.MustLocalizeError("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Size", opts.size))
+			}
+
 			if opts.kafkaID != "" {
 				return runList(opts)
 			}
