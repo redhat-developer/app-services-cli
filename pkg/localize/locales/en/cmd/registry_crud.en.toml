@@ -180,7 +180,7 @@ one = 'The maximum number of Service Registry instances to be returned'
 
 [registry.list.flag.search]
 description = 'Description for the --search flag'
-one = 'Text search to filter the Service Registry instances by name'
+one = 'Text search to filter the Service Registry instances by name or status'
 
 [registry.list.log.debug.filteringList]
 description = 'Debug message when filtering the list of Service Registry instances'
