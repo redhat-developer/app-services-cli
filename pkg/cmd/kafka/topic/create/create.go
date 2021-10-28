@@ -73,8 +73,10 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			if err = flag.ValidateOutput(opts.outputFormat); err != nil {
-				return err
+			if opts.outputFormat != "" {
+				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
+					return err
+				}
 			}
 
 			// check that a valid --cleanup-policy flag value is used
