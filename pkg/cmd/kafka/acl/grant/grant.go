@@ -306,7 +306,7 @@ func validateFlagInputCombination(opts *options) error {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noOperationSpecified")
 	}
 
-	// check if priincipal is provided
+	// check if principal is provided
 	if userID == "" && serviceAccount == "" && !allAccounts {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}

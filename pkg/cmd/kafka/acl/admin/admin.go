@@ -72,7 +72,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 
 			opts.kafkaID = instanceID
 
-			// check if priincipal is provided
+			// check if principal is provided
 			if userID == "" && serviceAccount == "" && !allAccounts {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 			}

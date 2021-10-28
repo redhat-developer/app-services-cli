@@ -112,7 +112,7 @@ one = 'is'
 one = 'starts with'
 
 [kafka.acl.common.input.confirmGrant.message]
-one = 'Are you sure you want to create the listed ACL rules'
+one = 'Are you sure you want to create the listed ACL rules?'
 
 [kafka.acl.list]
 

@@ -286,7 +286,7 @@ func validateAndSetOpts(opts *options) error {
 		opts.principal = aclutil.Wildcard
 	}
 
-	// check if priincipal is provided
+	// check if principal is provided
 	if !allAccounts && (userID == "" && serviceAccount == "") {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
