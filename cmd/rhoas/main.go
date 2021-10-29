@@ -38,24 +38,9 @@ func main() {
 	}
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
-
-	telemetry, err := telemetry.CreateTelemetry(cmdFactory)
-	if err != nil {
-		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
-		os.Exit(1)
-	}
-	rootCmd.PersistentPostRunE = func(cmd *cobra.Command, args []string) error {
-		if !cmd.Runnable() || cmd.HasAvailableSubCommands() {
-			return nil
-		}
-		cmdFactory.Logger.Debug("Sending telemetery information")
-		telemetry.Finish(cmd.CommandPath(), err)
-		return nil
-	}
-
 	rootCmd.InitDefaultHelpCmd()
 
-	err = rootCmd.Execute()
+	err = executeCommandWithTelemetry(rootCmd, cmdFactory)
 
 	if err == nil {
 		if debug.Enabled() {
@@ -115,4 +100,25 @@ func rootError(err error, localizer localize.Localizer) error {
 // Ensure that the first character in the string is capitalized
 func firstCharToUpper(message string) string {
 	return strings.ToUpper(message[:1]) + message[1:]
+}
+
+func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Factory) error {
+	telemetry, err := telemetry.CreateTelemetry(cmdFactory)
+	if err != nil {
+		cmdFactory.Logger.Errorf(cmdFactory.Localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		os.Exit(1)
+	}
+	commandPath := ""
+	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+		if cmd.Runnable() {
+			commandPath = cmd.CommandPath()
+		}
+	}
+	err = rootCmd.Execute()
+
+	if commandPath != "" {
+		cmdFactory.Logger.Debug("Sending telemetery information for ", commandPath)
+		telemetry.Finish(commandPath, err)
+	}
+	return err
 }

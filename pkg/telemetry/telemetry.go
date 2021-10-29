@@ -3,6 +3,7 @@ package telemetry
 import (
 	"os"
 	"runtime"
+	"strconv"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -40,27 +41,39 @@ func CreateTelemetry(f *factory.Factory) (*Telemetry, error) {
 }
 
 func (t *Telemetry) Init() error {
-	// if we are in
-	if !t.factory.IOStreams.CanPrompt() {
-		t.enabled = false
+	// The env variable with any value
+	envVarEnablement := os.Getenv(DisableTelemetryEnv)
+	if envVarEnablement != "" {
+		enabled, err := strconv.ParseBool(envVarEnablement)
+		if err != nil {
+			t.factory.Logger.Info("Invalid value of environment variable " + DisableTelemetryEnv)
+		}
+		t.enabled = enabled
 		return nil
 	}
 
-	// The env variable with any value
-	if os.Getenv(DisableTelemetryEnv) != "" {
-		t.enabled = false
-		return nil
-	}
+	// if we are in non TTY mode - disable
+	// if !t.factory.IOStreams.CanPrompt() {
+	// 	t.enabled = false
+	// 	return nil
+	// }
+
+	// We have developer build - disable
+	// if build.IsDevBuild() {
+	// 	t.enabled = false
+	// 	return nil
+	// }
 
 	cfg, err := t.factory.Config.Load()
 	if err != nil {
 		return err
 	}
 
-	// Check if user had seen telemetry consent
+	// Check if device had seen telemetry consent
 	if cfg.Telemetry == "" {
 		var consentTelemetry bool
-		prompt := &survey.Confirm{Message: t.factory.Localizer.MustLocalize("common.telemetry.consent"), Default: false}
+		t.factory.Logger.Info(t.factory.Localizer.MustLocalize("common.telemetry.consent"))
+		prompt := &survey.Confirm{Message: t.factory.Localizer.MustLocalize("common.telemetry.question"), Default: false}
 		err = survey.AskOne(prompt, &consentTelemetry, nil)
 		if err != nil {
 			return err
