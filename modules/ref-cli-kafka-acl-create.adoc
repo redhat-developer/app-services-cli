@@ -1,31 +1,31 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-acl-delete_{context}']
-= rhoas kafka acl delete
+[id='ref-rhoas-kafka-acl-create_{context}']
+= rhoas kafka acl create
 
 [role="_abstract"]
-Delete Kafka ACLs matching the provided filters
+Create a Kafka ACL
 
 [discrete]
 == Synopsis
 
-Delete all ACLs from a Kafka instance which match the filter criteria provided
+Create a Kafka ACL from the options provided
 
 ....
-rhoas kafka acl delete [flags]
+rhoas kafka acl create [flags]
 ....
 
 [discrete]
 == Examples
 
 ....
-# delete an ACL for user "joe_bloggs" on all topics
-$ rhoas kafka acl delete --operation write --permission allow --topic all --user joe_bloggs
+# create an ACL for user "joe_bloggs" on all topics
+$ rhoas kafka acl create --operation all --permission allow --topic "*" --user joe_bloggs
 
-# delete an ACL for a service account
-$ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+# create an ACL for a service account
+$ rhoas kafka acl create --operation all --permission allow --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
 
-# delete an ACL for all users on the consumer group resource
-$ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
+# create an ACL for all users for the consumer group resource
+$ rhoas kafka acl create --operation all --permission allow --group "group-1" --all-accounts
 
 ....
 
@@ -37,8 +37,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
       `--group` _string_::              Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
       `--instance-id` _string_::        Kafka instance ID. Uses the current instance if not set
       `--operation` _string_::          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write"
-  `-o`, `--output` _string_::           Specify the output format. Choose from: "json", "yaml", "yml"
-      `--permission` _string_::         Set the ACL permission. Choose from: "allow", "any", "deny" (default "any")
+      `--permission` _string_::         Set the ACL permission. Choose from: "allow", "deny"
       `--prefix`::                      Determine if the resource should be exact match or prefix
       `--service-account` _string_::    Service account client ID used as principal for this operation
       `--topic` _string_::              Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix
