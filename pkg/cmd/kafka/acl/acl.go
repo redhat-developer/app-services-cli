@@ -3,6 +3,7 @@ package acl
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/admin"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/grant"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/list"
@@ -24,6 +25,7 @@ func NewAclCommand(f *factory.Factory) *cobra.Command {
 		grant.NewGrantPermissionsACLCommand(f),
 		delete.NewDeleteCommand(f),
 		admin.NewAdminACLCommand(f),
+		create.NewCreateCommand(f),
 	)
 
 	return cmd

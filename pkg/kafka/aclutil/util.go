@@ -1,12 +1,42 @@
 package aclutil
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/internal/config"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
+
+// CrudOptions is the interface used for options of create and delete command
+type CrudOptions struct {
+	Config     config.IConfig
+	Connection factory.ConnectionFunc
+	Logger     logging.Logger
+	IO         *iostreams.IOStreams
+	Localizer  localize.Localizer
+	Context    context.Context
+
+	Cluster         bool
+	PatternType     string
+	ResourceType    string
+	ResourceName    string
+	Permission      string
+	Operation       string
+	Group           string
+	Topic           string
+	TransactionalID string
+	Principal       string
+
+	SkipConfirm bool
+	Output      string
+	InstanceID  string
+}
 
 // When the value of the `--topic`, `--group`, `user` or `service-account` option is one of
 // the keys of this map, it will be replaced by the corresponding value.
@@ -56,6 +86,38 @@ func IsValidResourceOperation(resourceType string, operation string, resourceOpe
 	}
 
 	return false, resourceOperations
+}
+
+// ValidateAndSetResources validates and sets resources options
+func ValidateAndSetResources(opts *CrudOptions, resourceTypeFlagEntries []*localize.TemplateEntry) error {
+	var selectedResourceTypeCount int
+
+	if opts.Topic != "" {
+		selectedResourceTypeCount++
+		opts.ResourceType = ResourceTypeTOPIC
+		opts.ResourceName = opts.Topic
+	}
+	if opts.Group != "" {
+		selectedResourceTypeCount++
+		opts.ResourceType = ResourceTypeGROUP
+		opts.ResourceName = opts.Group
+	}
+	if opts.TransactionalID != "" {
+		selectedResourceTypeCount++
+		opts.ResourceType = ResourceTypeTRANSACTIONAL_ID
+		opts.ResourceName = opts.TransactionalID
+	}
+	if opts.Cluster {
+		selectedResourceTypeCount++
+		opts.ResourceType = ResourceTypeCLUSTER
+		opts.ResourceName = KafkaCluster
+	}
+
+	if selectedResourceTypeCount != 1 {
+		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", resourceTypeFlagEntries...)
+	}
+
+	return nil
 }
 
 // ValidateAPIError checks for a HTTP error and maps it to a user friendly error

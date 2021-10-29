@@ -290,3 +290,29 @@ one = 'Account "{{.Account}}" is now allowed to create and delete ACLs for Kafka
 
 [kafka.acl.grantAdmin.log.debug.grantNotConfirmed]
 one = 'Kafka ACLs grant admin action was not confirmed. Exiting silently'
+
+[kafka.acl.create]
+
+[kafka.acl.create.cmd.shortDescription]
+one = 'Create a Kafka ACL'
+
+[kafka.acl.create.cmd.longDescription]
+one = 'Create a Kafka ACL from the options provided'
+
+[kafka.acl.create.cmd.example]
+one = '''
+# create an ACL for user "joe_bloggs" on all topics
+$ rhoas kafka acl create --operation all --permission allow --topic "*" --user joe_bloggs
+
+# create an ACL for a service account
+$ rhoas kafka acl create --operation all --permission allow --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+
+# create an ACL for all users for the consumer group resource
+$ rhoas kafka acl create --operation all --permission allow --group "group-1" --all-accounts
+'''
+
+[kafka.acl.create.log.info.creatingACL]
+one = 'Adding ACL to Kafka instance "{{.Name}}"'
+
+[kafka.acl.create.input.confirmCreateMessage]
+one = 'Are you sure you want to create this ACL?'

@@ -3,23 +3,35 @@ package aclutil
 import kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
 var resourceTypeFilterMap = map[string]kafkainstanceclient.AclResourceTypeFilter{
-	ResourceTypeFilterANY:              kafkainstanceclient.ACLRESOURCETYPEFILTER_ANY,
-	ResourceTypeFilterCLUSTER:          kafkainstanceclient.ACLRESOURCETYPEFILTER_CLUSTER,
-	ResourceTypeFilterTOPIC:            kafkainstanceclient.ACLRESOURCETYPEFILTER_TOPIC,
-	ResourceTypeFilterGROUP:            kafkainstanceclient.ACLRESOURCETYPEFILTER_GROUP,
-	ResourceTypeFilterTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPEFILTER_TRANSACTIONAL_ID,
+	ResourceTypeANY:              kafkainstanceclient.ACLRESOURCETYPEFILTER_ANY,
+	ResourceTypeCLUSTER:          kafkainstanceclient.ACLRESOURCETYPEFILTER_CLUSTER,
+	ResourceTypeTOPIC:            kafkainstanceclient.ACLRESOURCETYPEFILTER_TOPIC,
+	ResourceTypeGROUP:            kafkainstanceclient.ACLRESOURCETYPEFILTER_GROUP,
+	ResourceTypeTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPEFILTER_TRANSACTIONAL_ID,
 }
 
 var operationFilterMap = map[string]kafkainstanceclient.AclOperationFilter{
-	OperationFilterALL:              kafkainstanceclient.ACLOPERATIONFILTER_ALL,
-	OperationFilterREAD:             kafkainstanceclient.ACLOPERATIONFILTER_READ,
-	OperationFilterWRITE:            kafkainstanceclient.ACLOPERATIONFILTER_WRITE,
-	OperationFilterCREATE:           kafkainstanceclient.ACLOPERATIONFILTER_CREATE,
-	OperationFilterDELETE:           kafkainstanceclient.ACLOPERATIONFILTER_DELETE,
-	OperationFilterALTER:            kafkainstanceclient.ACLOPERATIONFILTER_ALTER,
-	OperationFilterDESCRIBE:         kafkainstanceclient.ACLOPERATIONFILTER_DESCRIBE,
-	OperationFilterDESCRIBE_CONFIGS: kafkainstanceclient.ACLOPERATIONFILTER_DESCRIBE_CONFIGS,
-	OperationFilterALTER_CONFIGS:    kafkainstanceclient.ACLOPERATIONFILTER_ALTER_CONFIGS,
+	OperationALL:              kafkainstanceclient.ACLOPERATIONFILTER_ALL,
+	OperationREAD:             kafkainstanceclient.ACLOPERATIONFILTER_READ,
+	OperationWRITE:            kafkainstanceclient.ACLOPERATIONFILTER_WRITE,
+	OperationCREATE:           kafkainstanceclient.ACLOPERATIONFILTER_CREATE,
+	OperationDELETE:           kafkainstanceclient.ACLOPERATIONFILTER_DELETE,
+	OperationALTER:            kafkainstanceclient.ACLOPERATIONFILTER_ALTER,
+	OperationDESCRIBE:         kafkainstanceclient.ACLOPERATIONFILTER_DESCRIBE,
+	OperationDESCRIBE_CONFIGS: kafkainstanceclient.ACLOPERATIONFILTER_DESCRIBE_CONFIGS,
+	OperationALTER_CONFIGS:    kafkainstanceclient.ACLOPERATIONFILTER_ALTER_CONFIGS,
+}
+
+var operationMap = map[string]kafkainstanceclient.AclOperation{
+	OperationALL:              kafkainstanceclient.ACLOPERATION_ALL,
+	OperationREAD:             kafkainstanceclient.ACLOPERATION_READ,
+	OperationWRITE:            kafkainstanceclient.ACLOPERATION_WRITE,
+	OperationCREATE:           kafkainstanceclient.ACLOPERATION_CREATE,
+	OperationDELETE:           kafkainstanceclient.ACLOPERATION_DELETE,
+	OperationALTER:            kafkainstanceclient.ACLOPERATION_ALTER,
+	OperationDESCRIBE:         kafkainstanceclient.ACLOPERATION_DESCRIBE,
+	OperationDESCRIBE_CONFIGS: kafkainstanceclient.ACLOPERATION_DESCRIBE_CONFIGS,
+	OperationALTER_CONFIGS:    kafkainstanceclient.ACLOPERATION_ALTER_CONFIGS,
 }
 
 var permissionTypeFilterMap = map[string]kafkainstanceclient.AclPermissionTypeFilter{
@@ -28,22 +40,32 @@ var permissionTypeFilterMap = map[string]kafkainstanceclient.AclPermissionTypeFi
 	PermissionDENY:  kafkainstanceclient.ACLPERMISSIONTYPEFILTER_DENY,
 }
 
+var permissionTypeMap = map[string]kafkainstanceclient.AclPermissionType{
+	PermissionALLOW: kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
+	PermissionDENY:  kafkainstanceclient.ACLPERMISSIONTYPE_DENY,
+}
+
 var patternTypeFilterMap = map[string]kafkainstanceclient.AclPatternTypeFilter{
-	PatternTypeFilterANY:     kafkainstanceclient.ACLPATTERNTYPEFILTER_ANY,
-	PatternTypeFilterLITERAL: kafkainstanceclient.ACLPATTERNTYPEFILTER_LITERAL,
-	PatternTypeFilterPREFIX:  kafkainstanceclient.ACLPATTERNTYPEFILTER_PREFIXED,
+	PatternTypeANY:     kafkainstanceclient.ACLPATTERNTYPEFILTER_ANY,
+	PatternTypeLITERAL: kafkainstanceclient.ACLPATTERNTYPEFILTER_LITERAL,
+	PatternTypePREFIX:  kafkainstanceclient.ACLPATTERNTYPEFILTER_PREFIXED,
+}
+
+var patternTypeMap = map[string]kafkainstanceclient.AclPatternType{
+	PatternTypeLITERAL: kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
+	PatternTypePREFIX:  kafkainstanceclient.ACLPATTERNTYPE_PREFIXED,
 }
 
 var resourceTypeOperationKeyMap = map[string]string{
-	ResourceTypeFilterCLUSTER:          "cluster",
-	ResourceTypeFilterTOPIC:            "topic",
-	ResourceTypeFilterGROUP:            "group",
-	ResourceTypeFilterTRANSACTIONAL_ID: "transactional_id",
+	ResourceTypeCLUSTER:          "cluster",
+	ResourceTypeTOPIC:            "topic",
+	ResourceTypeGROUP:            "group",
+	ResourceTypeTRANSACTIONAL_ID: "transactional_id",
 }
 
 var validOperationsResponseMap = map[string]string{
-	"alter_configs":    OperationFilterALTER_CONFIGS,
-	"describe_configs": OperationFilterDESCRIBE_CONFIGS,
+	"alter_configs":    OperationALTER_CONFIGS,
+	"describe_configs": OperationDESCRIBE_CONFIGS,
 }
 
 // GetOperationTypeFilterMap gets the mappings for ACL type filters
@@ -51,9 +73,18 @@ func GetOperationFilterMap() map[string]kafkainstanceclient.AclOperationFilter {
 	return operationFilterMap
 }
 
+func GetOperationMap() map[string]kafkainstanceclient.AclOperation {
+	return operationMap
+}
+
 // GetMappedOperationFilterValue gets the mapped operation filter value
 func GetMappedOperationFilterValue(operation string) kafkainstanceclient.AclOperationFilter {
 	return operationFilterMap[operation]
+}
+
+// GetMappedOperationValue gets the mapped operation value
+func GetMappedOperationValue(operation string) kafkainstanceclient.AclOperation {
+	return operationMap[operation]
 }
 
 // GetPatternTypeFilterMap gets the mappings for ACL pattern type filters
@@ -61,9 +92,19 @@ func GetPatternTypeFilterMap() map[string]kafkainstanceclient.AclPatternTypeFilt
 	return patternTypeFilterMap
 }
 
+// GetPatternTypeMap gets the mappings for ACL pattern type
+func GetPatternTypeMap() map[string]kafkainstanceclient.AclPatternType {
+	return patternTypeMap
+}
+
 // GetMappedPatternTypeFilterValue gets the mapped pattern type filter value
 func GetMappedPatternTypeFilterValue(patternType string) kafkainstanceclient.AclPatternTypeFilter {
 	return patternTypeFilterMap[patternType]
+}
+
+// GetMappedPatternTypeValue gets the mapped pattern type value
+func GetMappedPatternTypeValue(patternType string) kafkainstanceclient.AclPatternType {
+	return patternTypeMap[patternType]
 }
 
 // GetPermissionTypeFilterMap gets the mappings for ACL permission type filters
@@ -71,9 +112,19 @@ func GetPermissionTypeFilterMap() map[string]kafkainstanceclient.AclPermissionTy
 	return permissionTypeFilterMap
 }
 
-// GetMappedPermissionTypeFilterValue gets the mapped permission type type filter value
+// GetPermissionTypeMap gets the mappings for ACL permission types
+func GetPermissionTypeMap() map[string]kafkainstanceclient.AclPermissionType {
+	return permissionTypeMap
+}
+
+// GetMappedPermissionTypeFilterValue gets the mapped permission type filter value
 func GetMappedPermissionTypeFilterValue(permission string) kafkainstanceclient.AclPermissionTypeFilter {
 	return permissionTypeFilterMap[permission]
+}
+
+// GetMappedPermissionTypeValue gets the mapped permission type value
+func GetMappedPermissionTypeValue(permission string) kafkainstanceclient.AclPermissionType {
+	return permissionTypeMap[permission]
 }
 
 // GetResourceTypeFilterMap gets the mappings for ACL resource type filters
@@ -86,7 +137,7 @@ func GetMappedResourceTypeFilterValue(resourceType string) kafkainstanceclient.A
 	return resourceTypeFilterMap[resourceType]
 }
 
-// GetResourceTypeOperationKeyMap gets the mappings for ACL operations
-func GetResourceTypeOperationKeyMap() map[string]string {
+// GetResourceTypeFilterKeyMap gets the mappings for ACL operations
+func GetResourceTypeFilterKeyMap() map[string]string {
 	return resourceTypeOperationKeyMap
 }
