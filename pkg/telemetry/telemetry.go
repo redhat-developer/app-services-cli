@@ -53,16 +53,16 @@ func (t *Telemetry) Init() error {
 	}
 
 	// if we are in non TTY mode - disable
-	// if !t.factory.IOStreams.CanPrompt() {
-	// 	t.enabled = false
-	// 	return nil
-	// }
+	if !t.factory.IOStreams.CanPrompt() {
+		t.enabled = false
+		return nil
+	}
 
 	// We have developer build - disable
-	// if build.IsDevBuild() {
-	// 	t.enabled = false
-	// 	return nil
-	// }
+	if build.IsDevBuild() {
+		t.enabled = false
+		return nil
+	}
 
 	cfg, err := t.factory.Config.Load()
 	if err != nil {
