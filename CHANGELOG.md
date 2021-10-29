@@ -1,4 +1,35 @@
 
+<a name="v0.35.0"></a>
+## [v0.35.0](https://github.com/redhat-developer/app-services-cli/compare/v0.34.2...v0.35.0) (2021-10-29)
+
+### Bug Fixes
+
+* remove ACL preview from delete command ([#1256](https://github.com/redhat-developer/app-services-cli/issues/1256))
+* restore delete command
+* missing i18n keys for kafka topics validation
+* address issues with acl documentation
+* enable dev mode for delete acl command
+* shorten very long documentation
+* documentation
+* typo in the help
+* service account creation printing extra steps ([#1262](https://github.com/redhat-developer/app-services-cli/issues/1262))
+* documentation for ACL in cluster connect ([#1259](https://github.com/redhat-developer/app-services-cli/issues/1259))
+* remove indentation in long descriptions ([#1240](https://github.com/redhat-developer/app-services-cli/issues/1240))
+* **command:** rhoas cluster clean -y command message ([#1252](https://github.com/redhat-developer/app-services-cli/issues/1252))
+* **deps:** update module github.com/openconfig/goyang to v0.3.1
+* **deps:** update module github.com/openconfig/goyang to v0.3.0
+* **deps:** update all to v0.22.3
+* **kafka topic create:** erroneous flag validation ([#1258](https://github.com/redhat-developer/app-services-cli/issues/1258))
+
+### Features
+
+* add wildcard alias for ACL resource name ([#1255](https://github.com/redhat-developer/app-services-cli/issues/1255))
+* **kafka:** replace online service with appendix 4 terms
+* **kafka acl:** add grant-admin command ([#1230](https://github.com/redhat-developer/app-services-cli/issues/1230))
+* **kafka acl list:** add principal flags for filter ([#1254](https://github.com/redhat-developer/app-services-cli/issues/1254))
+* **sbo:** upgrade SBO dependency to v1.0.0
+
+
 <a name="v0.34.2"></a>
 ## [v0.34.2](https://github.com/redhat-developer/app-services-cli/compare/v0.34.1...v0.34.2) (2021-10-19)
 
