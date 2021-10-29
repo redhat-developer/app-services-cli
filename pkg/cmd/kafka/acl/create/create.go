@@ -1,4 +1,4 @@
-package delete
+package create
 
 import (
 	"github.com/AlecAivazis/survey/v2"
@@ -7,7 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
@@ -25,14 +25,14 @@ var (
 type requestParams struct {
 	principal    string
 	resourceName string
-	resourceType kafkainstanceclient.AclResourceTypeFilter
-	patternType  kafkainstanceclient.AclPatternTypeFilter
-	operation    kafkainstanceclient.AclOperationFilter
-	permission   kafkainstanceclient.AclPermissionTypeFilter
+	resourceType kafkainstanceclient.AclResourceType
+	patternType  kafkainstanceclient.AclPatternType
+	operation    kafkainstanceclient.AclOperation
+	permission   kafkainstanceclient.AclPermissionType
 }
 
-// NewDeleteCommand creates a new command to delete Kafka ACLs
-func NewDeleteCommand(f *factory.Factory) *cobra.Command {
+// NewCreateCommand creates a new command to add Kafka ACLs
+func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &aclutil.CrudOptions{
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -43,10 +43,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "delete",
-		Short:   f.Localizer.MustLocalize("kafka.acl.delete.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("kafka.acl.delete.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("kafka.acl.delete.cmd.example"),
+		Use:     "create",
+		Short:   f.Localizer.MustLocalize("kafka.acl.create.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.acl.create.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.acl.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.SkipConfirm {
@@ -61,21 +61,20 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			return runDelete(opts.InstanceID, opts)
+			return runAdd(opts.InstanceID, opts)
 		},
 	}
 
 	flags := flagutil.NewFlagSet(cmd, opts.Localizer, opts.Connection)
 
-	_ = flags.AddPermissionFilter(&opts.Permission).Required()
-	_ = flags.AddOperationFilter(&opts.Operation).Required()
+	_ = flags.AddPermissionCreate(&opts.Permission).Required()
+	_ = flags.AddOperationCreate(&opts.Operation).Required()
 
 	flags.AddCluster(&opts.Cluster)
 	flags.AddPrefix(&prefix)
 	flags.AddTopic(&opts.Topic)
 	flags.AddConsumerGroup(&opts.Group)
 	flags.AddTransactionalID(&opts.TransactionalID)
-	flags.AddOutput(&opts.Output)
 	flags.AddInstanceID(&opts.InstanceID)
 	flags.AddUser(&userID)
 	flags.AddServiceAccount(&serviceAccount)
@@ -86,7 +85,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
+func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 	ctx := opts.Context
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
@@ -98,6 +97,8 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 	if err != nil {
 		return err
 	}
+
+	kafkaName := kafkaInstance.GetName()
 
 	resourceOperations, httpRes, err := adminAPI.AclsApi.GetAclResourceOperations(ctx).Execute()
 	if httpRes != nil {
@@ -115,72 +116,71 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 		)
 	}
 
-	kafkaNameTmplEntry := localize.NewEntry("Name", kafkaInstance.GetName())
+	opts.PatternType = aclutil.PatternTypeLITERAL
+	if prefix {
+		opts.PatternType = aclutil.PatternTypePREFIX
+	}
+
+	requestParams := getRequestParams(opts)
+
+	newAclBinding := kafkainstanceclient.NewAclBinding(
+		kafkainstanceclient.AclResourceType(requestParams.resourceType),
+		requestParams.resourceName,
+		kafkainstanceclient.AclPatternType(requestParams.patternType),
+		aclutil.FormatPrincipal(opts.Principal),
+		kafkainstanceclient.AclOperation(requestParams.operation),
+		kafkainstanceclient.AclPermissionType(requestParams.permission),
+	)
+
+	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
+	opts.Logger.Info()
+
+	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
+	dump.Table(opts.IO.Out, rows)
+	opts.Logger.Info()
 
 	if !opts.SkipConfirm {
 		prompt := &survey.Confirm{
-			Message: opts.Localizer.MustLocalize("kafka.acl.delete.input.confirmDeleteMessage", kafkaNameTmplEntry),
+			Message: opts.Localizer.MustLocalize("kafka.acl.create.input.confirmCreateMessage"),
 		}
 		if err = survey.AskOne(prompt, &opts.SkipConfirm); err != nil {
 			return err
 		}
 
 		if !opts.SkipConfirm {
-			opts.Logger.Debug("User has chosen to not delete ACLs")
+			opts.Logger.Debug("User has chosen to not create ACL")
 			return nil
 		}
 	}
 
+	kafkaNameTmplEntry := localize.NewEntry("Name", kafkaInstance.GetName())
+
 	opts.Logger.Info()
 	spinnr := spinner.New(opts.IO.ErrOut, opts.Localizer)
-	spinnr.SetLocalizedSuffix("kafka.acl.delete.log.info.deletingACLs", kafkaNameTmplEntry)
+	spinnr.SetLocalizedSuffix("kafka.acl.create.log.info.creatingACL", kafkaNameTmplEntry)
 	spinnr.Start()
 
-	requestParams := getRequestParams(opts)
+	req := adminAPI.AclsApi.CreateAcl(opts.Context)
 
-	deletedACLs, httpRes, err := adminAPI.AclsApi.DeleteAcls(ctx).
-		ResourceType(requestParams.resourceType).
-		Principal(requestParams.principal).
-		PatternType(requestParams.patternType).
-		ResourceName(requestParams.resourceName).
-		Operation(requestParams.operation).
-		Permission(requestParams.permission).
-		Execute()
+	req = req.AclBinding(*newAclBinding)
 
-	if httpRes != nil {
-		defer httpRes.Body.Close()
-	}
-
-	if err = aclutil.ValidateAPIError(httpRes, opts.Localizer, err, "delete", kafkaInstance.GetName()); err != nil {
+	if err = aclutil.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName); err != nil {
 		return err
 	}
 
 	spinnr.Stop()
-
-	deletedCount := int(deletedACLs.GetTotal())
-
-	if deletedCount == 0 {
-		opts.Logger.Info(icon.InfoPrefix(), opts.Localizer.MustLocalize("kafka.acl.delete.noACLsDeleted", kafkaNameTmplEntry))
-		return nil
-	}
-
-	opts.Logger.Info(icon.SuccessPrefix(), opts.Localizer.MustLocalizePlural("kafka.acl.delete.successMessage",
-		deletedCount,
-		kafkaNameTmplEntry,
-		localize.NewEntry("Count", deletedCount),
-	))
 
 	return nil
 }
 
 func getRequestParams(opts *aclutil.CrudOptions) *requestParams {
 	return &requestParams{
-		resourceType: aclutil.GetMappedResourceTypeFilterValue(opts.ResourceType),
+		resourceType: kafkainstanceclient.AclResourceType(aclutil.GetMappedResourceTypeFilterValue(opts.ResourceType)),
 		principal:    aclutil.FormatPrincipal(opts.Principal),
-		resourceName: aclutil.GetResourceName(opts.ResourceName),
-		patternType:  aclutil.GetMappedPatternTypeFilterValue(opts.PatternType),
-		operation:    aclutil.GetMappedOperationFilterValue(opts.Operation),
-		permission:   aclutil.GetMappedPermissionTypeFilterValue(opts.Permission),
+		resourceName: opts.ResourceName,
+		patternType:  aclutil.GetMappedPatternTypeValue(opts.PatternType),
+		operation:    aclutil.GetMappedOperationValue(opts.Operation),
+		permission:   aclutil.GetMappedPermissionTypeValue(opts.Permission),
 	}
 }
 
@@ -202,14 +202,9 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		opts.Principal = aclutil.Wildcard
 	}
 
-	// check if principal is provided
+	// check if priincipal is provided
 	if !allAccounts && (userID == "" && serviceAccount == "") {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
-	}
-
-	opts.PatternType = aclutil.PatternTypeLITERAL
-	if prefix {
-		opts.PatternType = aclutil.PatternTypePREFIX
 	}
 
 	if userID != "" {
@@ -232,6 +227,5 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 
 		opts.InstanceID = instanceID
 	}
-
 	return nil
 }

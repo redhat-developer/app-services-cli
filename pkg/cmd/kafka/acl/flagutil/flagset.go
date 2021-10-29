@@ -15,6 +15,13 @@ const (
 	TransactionalIDFlagName = "transactional-id"
 )
 
+var ResourceTypeFlagEntries []*localize.TemplateEntry = []*localize.TemplateEntry{
+	localize.NewEntry("ClusterFlag", ClusterFlagName),
+	localize.NewEntry("TopicFlag", TopicFlagName),
+	localize.NewEntry("TransactionalIDFlag", TransactionalIDFlagName),
+	localize.NewEntry("GroupFlag", GroupFlagName),
+}
+
 type flagSet struct {
 	cmd       *cobra.Command
 	localizer localize.Localizer
@@ -46,7 +53,7 @@ func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 	fs.StringVar(
 		resourceType,
 		flagName,
-		aclutil.ResourceTypeFilterANY,
+		aclutil.ResourceTypeANY,
 		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.resourceType", resourceTypes...),
 	)
 
@@ -57,8 +64,8 @@ func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
-// AddOperation adds a flag for ACL operations and registers completion options
-func (fs *flagSet) AddOperation(operationType *string) *flagutil.FlagOptions {
+// AddOperationFilter adds a flag for ACL operations filter and registers completion options
+func (fs *flagSet) AddOperationFilter(operationType *string) *flagutil.FlagOptions {
 	flagName := "operation"
 
 	operationFilterMap := aclutil.GetOperationFilterMap()
@@ -71,7 +78,7 @@ func (fs *flagSet) AddOperation(operationType *string) *flagutil.FlagOptions {
 	fs.StringVar(
 		operationType,
 		flagName,
-		aclutil.ResourceTypeFilterANY,
+		"",
 		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.operation.description", operations...),
 	)
 
@@ -82,8 +89,33 @@ func (fs *flagSet) AddOperation(operationType *string) *flagutil.FlagOptions {
 	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
 
-// AddPermission adds a flag for ACL permissions
-func (fs *flagSet) AddPermission(permission *string) *flagutil.FlagOptions {
+// AddOperationCreate adds a flag for ACL operations and registers completion options
+func (fs *flagSet) AddOperationCreate(operationType *string) *flagutil.FlagOptions {
+	flagName := "operation"
+
+	operationMap := aclutil.GetOperationMap()
+
+	operations := make([]string, 0, len(operationMap))
+	for i := range operationMap {
+		operations = append(operations, i)
+	}
+
+	fs.StringVar(
+		operationType,
+		flagName,
+		"",
+		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.operation.description", operations...),
+	)
+
+	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return operations, cobra.ShellCompDirectiveNoSpace
+	})
+
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
+}
+
+// AddPermissionFilter adds a flag for ACL permissions filters
+func (fs *flagSet) AddPermissionFilter(permission *string) *flagutil.FlagOptions {
 	flagName := "permission"
 
 	permissionTypeFilterMap := aclutil.GetPermissionTypeFilterMap()
@@ -96,7 +128,32 @@ func (fs *flagSet) AddPermission(permission *string) *flagutil.FlagOptions {
 	fs.StringVar(
 		permission,
 		flagName,
-		aclutil.ResourceTypeFilterANY,
+		aclutil.PermissionANY,
+		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.permission.description", permissions...),
+	)
+
+	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return permissions, cobra.ShellCompDirectiveNoSpace
+	})
+
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
+}
+
+// AddPermissionCreate adds a flag for ACL permissions
+func (fs *flagSet) AddPermissionCreate(permission *string) *flagutil.FlagOptions {
+	flagName := "permission"
+
+	permissionTypeMap := aclutil.GetPermissionTypeMap()
+
+	permissions := make([]string, 0, len(permissionTypeMap))
+	for i := range permissionTypeMap {
+		permissions = append(permissions, i)
+	}
+
+	fs.StringVar(
+		permission,
+		flagName,
+		"",
 		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.permission.description", permissions...),
 	)
 
