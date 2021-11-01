@@ -110,14 +110,13 @@ func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Fac
 	}
 	commandPath := ""
 	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-		if cmd.Runnable() {
+		if cmd.Runnable() && !cmd.Hidden {
 			commandPath = cmd.CommandPath()
 		}
 	}
 	err = rootCmd.Execute()
 
 	if commandPath != "" {
-		cmdFactory.Logger.Debug("Sending telemetery information for ", commandPath)
 		telemetry.Finish(commandPath, err)
 	}
 	return err

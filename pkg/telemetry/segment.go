@@ -9,7 +9,7 @@ import (
 )
 
 // writekey will be the API key used to send data to the correct source on Segment. Default is the dev key
-var writeKey = "sA4AgDR9a6kF8qUAgo7PIHEsaF6HXtD1"
+var writeKey = "DBNhpBzdrdof9K7g8OJcvfDfAJnBs1Sb"
 
 // TelemetryProperties contains all of the properties that are sent as the telemetry data
 type TelemetryProperties struct {

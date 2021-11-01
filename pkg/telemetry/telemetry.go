@@ -18,9 +18,9 @@ type Telemetry struct {
 	enabled       bool
 }
 
-// DisableTelemetryEnv is name of environment variable, if set to true it disables telemetry completely
+// ControlTelemetryEnv is name of environment variable, if set to false it disables telemetry completely
 // hiding even the question
-const DisableTelemetryEnv = "RED_HAT_DISABLE_TELEMETRY"
+const ControlTelemetryEnv = "RHOAS_TELEMETRY"
 
 // Start collecting telemetry data
 func CreateTelemetry(f *factory.Factory) (*Telemetry, error) {
@@ -41,12 +41,18 @@ func CreateTelemetry(f *factory.Factory) (*Telemetry, error) {
 }
 
 func (t *Telemetry) Init() error {
-	// The env variable with any value
-	envVarEnablement := os.Getenv(DisableTelemetryEnv)
+	// The env variable with telemetry enablement
+	envVarEnablement := os.Getenv(ControlTelemetryEnv)
+	// Temporary - disable telemetry unless environment var is created
+	if envVarEnablement == "" {
+		t.enabled = false
+		return nil
+	}
+	// End of temporary change
 	if envVarEnablement != "" {
 		enabled, err := strconv.ParseBool(envVarEnablement)
 		if err != nil {
-			t.factory.Logger.Info("Invalid value of environment variable " + DisableTelemetryEnv)
+			t.factory.Logger.Info("Invalid value of environment variable " + ControlTelemetryEnv)
 		}
 		t.enabled = enabled
 		return nil
@@ -101,6 +107,7 @@ func (t *Telemetry) Finish(event string, cmdError error) {
 	if !t.enabled {
 		return
 	}
+	t.factory.Logger.Info("Sending telemetery information for ", event)
 	t.telemetryData.Event = event
 	// convert to milliseconds
 	t.telemetryData.Properties.Duration = (time.Now().UnixNano() - t.telemetryData.Properties.Duration) / 1000000
