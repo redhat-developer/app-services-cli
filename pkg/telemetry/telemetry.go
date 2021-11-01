@@ -107,7 +107,7 @@ func (t *Telemetry) Finish(event string, cmdError error) {
 	if !t.enabled {
 		return
 	}
-	t.factory.Logger.Info("Sending telemetery information for ", event)
+	t.factory.Logger.Debug("Sending telemetery information for", event)
 	t.telemetryData.Event = event
 	// convert to milliseconds
 	t.telemetryData.Properties.Duration = (time.Now().UnixNano() - t.telemetryData.Properties.Duration) / 1000000
