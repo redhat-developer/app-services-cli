@@ -7,11 +7,12 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
+	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
+	"github.com/redhat-developer/app-services-cli/pkg/telemetry"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 
@@ -37,10 +38,9 @@ func main() {
 	}
 
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
-
 	rootCmd.InitDefaultHelpCmd()
 
-	err = rootCmd.Execute()
+	err = executeCommandWithTelemetry(rootCmd, cmdFactory)
 
 	if err == nil {
 		if debug.Enabled() {
@@ -100,4 +100,24 @@ func rootError(err error, localizer localize.Localizer) error {
 // Ensure that the first character in the string is capitalized
 func firstCharToUpper(message string) string {
 	return strings.ToUpper(message[:1]) + message[1:]
+}
+
+func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Factory) error {
+	telemetry, err := telemetry.CreateTelemetry(cmdFactory)
+	if err != nil {
+		cmdFactory.Logger.Errorf(cmdFactory.Localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		os.Exit(1)
+	}
+	commandPath := ""
+	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+		if cmd.Runnable() && !cmd.Hidden {
+			commandPath = cmd.CommandPath()
+		}
+	}
+	err = rootCmd.Execute()
+
+	if commandPath != "" {
+		telemetry.Finish(commandPath, err)
+	}
+	return err
 }

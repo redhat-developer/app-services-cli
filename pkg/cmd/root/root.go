@@ -56,7 +56,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(completion.NewCompletionCommand(f))
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
-
 	// Registry commands
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 

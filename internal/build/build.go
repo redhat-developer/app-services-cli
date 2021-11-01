@@ -60,7 +60,7 @@ var (
 )
 
 func init() {
-	if isDevBuild() {
+	if IsDevBuild() {
 		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "(devel)" {
 			Version = info.Main.Version
 		}
@@ -122,7 +122,7 @@ func getReleases(ctx context.Context) ([]*github.RepositoryRelease, error) {
 	return releases, nil
 }
 
-// isDevBuild returns true if the current build is "dev" (dev build)
-func isDevBuild() bool {
+// IsDevBuild returns true if the current build is "dev" (dev build)
+func IsDevBuild() bool {
 	return Version == "dev"
 }
