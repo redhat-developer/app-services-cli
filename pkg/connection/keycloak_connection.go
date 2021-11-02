@@ -24,7 +24,6 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 
@@ -166,11 +165,6 @@ func (c *KeycloakConnection) Logout(ctx context.Context) (err error) {
 // API Creates a new API type which is a single type for multiple APIs
 // nolint:funlen
 func (c *KeycloakConnection) API() *api.API {
-	amsAPIFunc := func() amsclient.DefaultApi {
-		amsAPIClient := c.createAmsAPIClient()
-
-		return amsAPIClient.DefaultApi
-	}
 
 	kafkaAPIFunc := func() kafkamgmtclient.DefaultApi {
 		// create the client
@@ -288,7 +282,6 @@ func (c *KeycloakConnection) API() *api.API {
 		ServiceAccount:          serviceAccountAPIFunc,
 		KafkaAdmin:              kafkaAdminAPIFunc,
 		ServiceRegistryInstance: registryInstanceAPIFunc,
-		AccountMgmt:             amsAPIFunc,
 		ServiceRegistryMgmt:     registryAPIFunc,
 		RBAC:                    rbacAPI,
 	}
@@ -380,20 +373,6 @@ func (c *KeycloakConnection) createServiceRegistryInstanceAPI(registryUrl string
 	})
 
 	return client
-}
-
-func (c *KeycloakConnection) createAmsAPIClient() *amsclient.APIClient {
-	cfg := amsclient.NewConfiguration()
-
-	cfg.Scheme = c.apiURL.Scheme
-	cfg.Host = c.apiURL.Host
-	cfg.UserAgent = build.DefaultUserAgentPrefix + build.Version
-
-	cfg.HTTPClient = c.createOAuthTransport(c.Token.AccessToken)
-
-	apiClient := amsclient.NewAPIClient(cfg)
-
-	return apiClient
 }
 
 // wraps the HTTP client with an OAuth2 Transport layer to provide automatic token refreshing

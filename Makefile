@@ -33,7 +33,6 @@ endif
 # The details of the application:
 binary:=rhoas
 
-amsapi_dir=./pkg/api/ams/amsclient
 rbacapi_dir=./pkg/api/rbac/rbacclient
 
 # Enable Go modules:
@@ -81,19 +80,12 @@ test/unit: install
 	go test ./pkg/...
 .PHONY: test/unit
 
-openapi/ams/generate:
-	openapi-generator-cli generate -i openapi/ams.json -g go --package-name amsclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${amsapi_dir}
-	# generate mock
-	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
-	gofmt -w ${amsapi_dir}
-.PHONY: openapi/ams/generate
-
 openapi/rbac/generate:
 	openapi-generator-cli generate -i https://console.redhat.com/api/rbac/v1/openapi.json -g go --package-name rbacclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${rbacapi_dir}
 	# generate mock
 	moq -out ${rbacapi_dir}/role_api_mock.go ${rbacapi_dir} RoleApi
 	gofmt -w ${rbacapi_dir}
-.PHONY: openapi/ams/generate
+.PHONY: openapi/rbac/generate
 
 mock-api/start: 
 	npm install -g @rhoas/api-mock

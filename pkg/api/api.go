@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -15,7 +14,6 @@ type API struct {
 	ServiceAccount          func() kafkamgmtclient.SecurityApi
 	KafkaAdmin              func(kafkaID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance func(registryID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
-	AccountMgmt             func() amsclient.DefaultApi
 	RBAC                    rbac.RbacAPI
 	ServiceRegistryMgmt     func() registrymgmtclient.RegistriesApi
 }

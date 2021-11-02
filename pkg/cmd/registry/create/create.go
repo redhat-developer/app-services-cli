@@ -9,7 +9,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 
-	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -115,17 +114,6 @@ func runCreate(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
-	}
-
-	// the user must have accepted the terms and conditions from the provider
-	// before they can create a registry instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, conn)
-	if err != nil {
-		return err
-	}
-	if !termsAccepted && termsURL != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
-		return nil
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", payload.GetName())))

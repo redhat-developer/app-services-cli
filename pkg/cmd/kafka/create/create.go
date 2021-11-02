@@ -18,7 +18,6 @@ import (
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
-	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -141,17 +140,6 @@ func runCreate(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
-	}
-
-	// the user must have accepted the terms and conditions from the provider
-	// before they can create a kafka instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, conn)
-	if err != nil {
-		return err
-	}
-	if !termsAccepted && termsURL != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
-		return nil
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
