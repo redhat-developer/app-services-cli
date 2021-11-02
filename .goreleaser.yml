@@ -21,12 +21,12 @@ builds:
         - -s -w -X github.com/redhat-developer/app-services-cli/internal/build.Version={{.Version}}
     id: macos
     goos: [darwin]
-    goarch: [amd64]
-
+    goarch: [amd64, arm64]
+    
   - <<: *build_defaults
     id: linux
     goos: [linux]
-    goarch: [amd64]
+    goarch: [amd64, arm64]
     env:
       - CGO_ENABLED=0
 
