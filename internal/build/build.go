@@ -25,11 +25,8 @@ var (
 	// RepositoryName is the remote GitHub repository for the releases
 	RepositoryName = "app-services-cli"
 
-	// TermsReviewEventCode is the event code used when checking the terms review
-	TermsReviewEventCode = "register"
-
-	// TermsReviewSiteCode is the site code used when checking the terms review
-	TermsReviewSiteCode = "ocm"
+	// TermsReviewSpecURL Url used to download terms and conditions specification
+	TermsReviewSpecURL = "https://raw.githubusercontent.com/redhat-developer/app-services-ui/6699c93c9d5f123a2c898d1a1d72a9c290a20820/static/configs/terms-conditions-spec.json"
 
 	// DefaultPageSize is the default number of items per page when using list commands
 	DefaultPageSize = "10"

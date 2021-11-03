@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 
-	"github.com/redhat-developer/app-services-cli/pkg/ams"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -119,7 +119,8 @@ func runCreate(opts *options) error {
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a registry instance
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, conn)
+	termsSpec := ams.GetRemoteTermsSpec()
+	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, termsSpec.ServiceRegistry, conn)
 	if err != nil {
 		return err
 	}
