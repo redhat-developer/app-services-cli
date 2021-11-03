@@ -26,7 +26,7 @@ var (
 	RepositoryName = "app-services-cli"
 
 	// TermsReviewSpecURL Url used to download terms and conditions specification
-	TermsReviewSpecURL = "https://raw.githubusercontent.com/redhat-developer/app-services-ui/6699c93c9d5f123a2c898d1a1d72a9c290a20820/static/configs/terms-conditions-spec.json"
+	TermsReviewSpecURL = "https://raw.githubusercontent.com/redhat-developer/app-services-ui/main/static/configs/terms-conditions-spec.json"
 
 	// DefaultPageSize is the default number of items per page when using list commands
 	DefaultPageSize = "10"

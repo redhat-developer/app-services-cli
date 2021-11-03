@@ -6,7 +6,7 @@ RHOAS_VERSION ?= "dev"
 REPOSITORY_OWNER ?= "redhat-developer"
 REPOSITORY_NAME ?= "app-services-cli"
 TERMS_REVIEW_EVENT_CODE ?= "register"
-TERMS_SPEC_URL ?= "https://raw.githubusercontent.com/redhat-developer/app-services-ui/6699c93c9d5f123a2c898d1a1d72a9c290a20820/static/configs/terms-conditions-spec.json"
+TERMS_SPEC_URL ?= "https://raw.githubusercontent.com/redhat-developer/app-services-ui/main/static/configs/terms-conditions-spec.json"
 SSO_REDIRECT_PATH ?= "sso-redhat-callback"
 MAS_SSO_REDIRECT_PATH ?= "mas-sso-callback"
 
