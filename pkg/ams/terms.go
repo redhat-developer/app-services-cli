@@ -1,6 +1,7 @@
 package ams
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -26,18 +27,21 @@ var fallbackTocSpec = TermsAndConditionsSpec{
 // GetRemoteTermsSpec fetch event and site code information associated with the services
 // Function is used to dynamically download new terms and conditions specifications
 // without forcing end users to update their CLI.
-func GetRemoteTermsSpec(logger logging.Logger) TermsAndConditionsSpec {
-
-	response, err := http.Get(build.TermsReviewSpecURL)
-
+func GetRemoteTermsSpec(context *context.Context, logger logging.Logger) TermsAndConditionsSpec {
+	client := &http.Client{}
+	req, err := http.NewRequestWithContext(*context, http.MethodGet, build.TermsReviewSpecURL, nil)
+	if err != nil {
+		logger.Debug("Fetching remote terms failed with error ", err)
+		return fallbackTocSpec
+	}
+	response, err := client.Do(req)
 	if err != nil || response.Body == nil {
 		logger.Debug("Fetching remote terms failed with error ", err)
 		return fallbackTocSpec
 	}
 	defer response.Body.Close()
 
-	var specJson []byte
-	specJson, err = ioutil.ReadAll(response.Body)
+	specJson, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		logger.Debug("Reading remote terms failed with error ", err)
 		return fallbackTocSpec

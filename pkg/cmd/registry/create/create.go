@@ -119,7 +119,7 @@ func runCreate(opts *options) error {
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a registry instance
-	termsSpec := ams.GetRemoteTermsSpec(opts.Logger)
+	termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
 	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, termsSpec.ServiceRegistry, conn)
 	if err != nil {
 		return err
