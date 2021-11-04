@@ -6,7 +6,6 @@ type TermsAndConditionsSpec struct {
 }
 
 type ServiceTermsSpec struct {
-	EventCode         string `json:"EventCode"`
-	SiteCode          string `json:"SiteCode"`
-	StopOnTermsChange bool   `json:"StopOnTermsChange"`
+	EventCode string `json:"EventCode"`
+	SiteCode  string `json:"SiteCode"`
 }
