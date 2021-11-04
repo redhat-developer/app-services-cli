@@ -31,11 +31,11 @@ func GetRemoteTermsSpec(context *context.Context, logger logging.Logger) TermsAn
 	client := &http.Client{}
 	req, err := http.NewRequestWithContext(*context, http.MethodGet, build.TermsReviewSpecURL, nil)
 	if err != nil {
-		logger.Debug("Fetching remote terms failed with error ", err)
+		logger.Debug("Fetching remote terms failed with error", err)
 		return fallbackTocSpec
 	}
 	response, err := client.Do(req)
-	if err != nil || response.Body == nil {
+	if err != nil || response == nil {
 		logger.Debug("Fetching remote terms failed with error ", err)
 		return fallbackTocSpec
 	}
