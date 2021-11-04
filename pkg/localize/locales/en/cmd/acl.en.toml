@@ -129,13 +129,26 @@ $ rhoas kafka acl list --service-account srvc-acct-f20a7561-7426-4f5a-b5e7-0ef2d
 '''
 
 [kafka.acl.list.cmd.shortDescription]
-one = 'List all Kafka ACL rules.'
+one = 'List all Kafka ACL rules'
 
 [kafka.acl.list.cmd.longDescription]
 one = '''
-This command will display list of Kafka ACL rules
+This command shows the level of access that other user accounts and service accounts have to a Kafka instance. This is displayed as a list of Access Control Lists (ACLs).
 
-The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+An ACL maps permitted operations on specified resources for a selected account or for all accounts in an organization. Each ACL shows a single named account (or all accounts), a permission (such as "Allow"), an operation (such as "Write"), and a Kafka resource type and identifier. The resource type is a Kafka resource (such as "Topic"), and the resource identifier identifies the occurrences of the resource (for example, "Is *" denotes any occurrences of the resource).
+
+By default, new Kafka instances contain the following ACLs:
+
+PRINCIPAL (4)    PERMISSION   OPERATION          DESCRIPTION
+---------------- ------------ ------------------ ----------------
+All accounts     ALLOW        DESCRIBE           GROUP is "*"
+All accounts     ALLOW        DESCRIBE           CLUSTER is "*"
+All accounts     ALLOW        DESCRIBE_CONFIGS   TOPIC is "*"
+All accounts     ALLOW        DESCRIBE           TOPIC is "*"
+
+These ACLs allow all accounts in the organization to view the Kafka instance permissions and to view topics and consumer groups in the instance, but not to produce or consume messages.
+
+The ACLs are displayed in a table by default. Alternatively, you can display them as JSON or YAML.
 '''
 
 [kafka.acl.list.flag.output.description]
@@ -181,7 +194,7 @@ $ rhoas kafka acl grant-access --consumer --all-accounts --topic my-topic --grou
 # Grant access to all users for producing messages to topic "my-topic"
 $ rhoas kafka acl grant-access --producer --all-accounts --topic my-topic
 
-# Grant access to principal for produce and consume messages from all topics 
+# Grant access to principal for produce and consume messages from all topics
 $ rhoas kafka acl grant-access --producer --consumer --user user_name --topic all --group all
 '''
 
