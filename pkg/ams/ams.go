@@ -4,17 +4,16 @@ import (
 	"context"
 	"errors"
 
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 )
 
-func CheckTermsAccepted(ctx context.Context, conn connection.Connection) (accepted bool, redirectURI string, err error) {
+func CheckTermsAccepted(ctx context.Context, spec ServiceTermsSpec, conn connection.Connection) (accepted bool, redirectURI string, err error) {
 	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(ctx).
 		SelfTermsReview(amsclient.SelfTermsReview{
-			EventCode: &build.TermsReviewEventCode,
-			SiteCode:  &build.TermsReviewSiteCode,
+			EventCode: &spec.EventCode,
+			SiteCode:  &spec.SiteCode,
 		}).
 		Execute()
 	if err != nil {
