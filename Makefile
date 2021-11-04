@@ -5,7 +5,6 @@ SHELL = bash
 RHOAS_VERSION ?= "dev"
 REPOSITORY_OWNER ?= "redhat-developer"
 REPOSITORY_NAME ?= "app-services-cli"
-TERMS_REVIEW_EVENT_CODE ?= "register"
 TERMS_SPEC_URL ?= "https://raw.githubusercontent.com/redhat-developer/app-services-ui/main/static/configs/terms-conditions-spec.json"
 SSO_REDIRECT_PATH ?= "sso-redhat-callback"
 MAS_SSO_REDIRECT_PATH ?= "mas-sso-callback"

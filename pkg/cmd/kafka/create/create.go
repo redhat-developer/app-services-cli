@@ -145,7 +145,7 @@ func runCreate(opts *options) error {
 
 	// the user must have accepted the terms and conditions from the provider
 	// before they can create a kafka instance
-	termsSpec := ams.GetRemoteTermsSpec()
+	termsSpec := ams.GetRemoteTermsSpec(opts.Logger)
 	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, termsSpec.Kafka, conn)
 	if err != nil {
 		return err
