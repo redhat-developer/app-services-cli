@@ -151,11 +151,12 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 		defer httpRes.Body.Close()
 	}
 
-	if err = aclutil.ValidateAPIError(httpRes, opts.Localizer, err, "delete", kafkaInstance.GetName()); err != nil {
+	err = aclutil.ValidateAPIError(httpRes, opts.Localizer, err, "delete", kafkaInstance.GetName())
+	spinnr.Stop()
+
+	if err != nil {
 		return err
 	}
-
-	spinnr.Stop()
 
 	deletedCount := int(deletedACLs.GetTotal())
 
