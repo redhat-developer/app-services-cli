@@ -10,6 +10,13 @@ var resourceTypeFilterMap = map[string]kafkainstanceclient.AclResourceTypeFilter
 	ResourceTypeTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPEFILTER_TRANSACTIONAL_ID,
 }
 
+var resourceTypeMap = map[string]kafkainstanceclient.AclResourceType {
+	ResourceTypeCLUSTER:          kafkainstanceclient.ACLRESOURCETYPE_CLUSTER,
+	ResourceTypeTOPIC:            kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
+	ResourceTypeGROUP:            kafkainstanceclient.ACLRESOURCETYPE_GROUP,
+	ResourceTypeTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPE_TRANSACTIONAL_ID,
+}
+
 var operationFilterMap = map[string]kafkainstanceclient.AclOperationFilter{
 	OperationALL:              kafkainstanceclient.ACLOPERATIONFILTER_ALL,
 	OperationREAD:             kafkainstanceclient.ACLOPERATIONFILTER_READ,
@@ -140,4 +147,9 @@ func GetMappedResourceTypeFilterValue(resourceType string) kafkainstanceclient.A
 // GetResourceTypeFilterKeyMap gets the mappings for ACL operations
 func GetResourceTypeFilterKeyMap() map[string]string {
 	return resourceTypeOperationKeyMap
+}
+
+// GetResourceTypeMap gets the mappings for ACL resource types
+func GetResourceTypeMap() map[string]kafkainstanceclient.AclResourceType {
+	return resourceTypeMap
 }

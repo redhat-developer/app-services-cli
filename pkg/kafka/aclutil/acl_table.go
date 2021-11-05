@@ -19,14 +19,34 @@ type permissionsRow struct {
 func MapACLsToTableRows(bindings []kafkainstanceclient.AclBinding, localizer localize.Localizer) []permissionsRow {
 	rows := make([]permissionsRow, len(bindings))
 
-	for i, p := range bindings {
+	// get the SDK => CLI key mappings
+	permissionMap := GetPermissionTypeMap()
+	flippedPermissionMap := make(map[kafkainstanceclient.AclPermissionType]string)
+	for k, v := range permissionMap {
+		flippedPermissionMap[v] = k
+	}
 
+	// get the SDK => CLI key mappings
+	operationMap := GetOperationMap()
+	flippedOperationMap := make(map[kafkainstanceclient.AclOperation]string)
+	for k, v := range operationMap {
+		flippedOperationMap[v] = k
+	}
+
+	// get the SDK => CLI key mappings
+	resourceTypeMap := GetResourceTypeMap()
+	flippedResourceTypeMap := make(map[kafkainstanceclient.AclResourceType]string)
+	for k, v := range resourceTypeMap {
+		flippedResourceTypeMap[v] = k
+	}
+
+	for i, p := range bindings {
 		description := formatTablePatternType(p.PatternType, localizer)
 		row := permissionsRow{
 			Principal:   formatTablePrincipal(p.GetPrincipal(), localizer),
-			Permission:  string(p.GetPermission()),
-			Operation:   string(p.GetOperation()),
-			Description: fmt.Sprintf("%s %s \"%s\"", p.GetResourceType(), description, p.GetResourceName()),
+			Permission:  flippedPermissionMap[p.GetPermission()],
+			Operation:   flippedOperationMap[p.GetOperation()],
+			Description: fmt.Sprintf("%s %s \"%s\"", flippedResourceTypeMap[p.GetResourceType()], description, p.GetResourceName()),
 		}
 		rows[i] = row
 	}
