@@ -120,7 +120,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 
 	newAclBinding := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.AclResourceType(requestParams.resourceType),
-		aclutil.GetResourceName(opts.ResourceName),
+		requestParams.resourceName,
 		kafkainstanceclient.AclPatternType(requestParams.patternType),
 		aclutil.FormatPrincipal(opts.Principal),
 		kafkainstanceclient.AclOperation(requestParams.operation),
@@ -172,7 +172,7 @@ func getRequestParams(opts *aclutil.CrudOptions) *requestParams {
 	return &requestParams{
 		resourceType: kafkainstanceclient.AclResourceType(aclutil.GetMappedResourceTypeFilterValue(opts.ResourceType)),
 		principal:    aclutil.FormatPrincipal(opts.Principal),
-		resourceName: opts.ResourceName,
+		resourceName: aclutil.GetResourceName(opts.ResourceName),
 		patternType:  aclutil.GetMappedPatternTypeValue(opts.PatternType),
 		operation:    aclutil.GetMappedOperationValue(opts.Operation),
 		permission:   aclutil.GetMappedPermissionTypeValue(opts.Permission),
