@@ -135,7 +135,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
 	opts.Logger.Info()
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
+	rows := aclutil.MapACLsToTableRows(&[]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
@@ -164,11 +164,11 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 
 	req = req.AclBinding(*newAclBinding)
 
-	if err = aclutil.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName); err != nil {
+	err = aclutil.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName)
+	spinnr.Stop()
+	if err != nil {
 		return err
 	}
-
-	spinnr.Stop()
 
 	return nil
 }
