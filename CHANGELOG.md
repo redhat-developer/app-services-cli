@@ -1,4 +1,26 @@
 
+<a name="v0.36.0"></a>
+## [v0.36.0](https://github.com/redhat-developer/app-services-cli/compare/v0.35.0...v0.36.0) (2021-11-05)
+
+### Bug Fixes
+
+* use value from request params instead
+* add support for wildcard
+* reorganize verification folder/cases
+* support printing out delete command output acls
+* broken spinner on error
+* use pointer for large structure call
+* update terms spec url ([#1291](https://github.com/redhat-developer/app-services-cli/issues/1291))
+* dynamic terms and conditions ([#1276](https://github.com/redhat-developer/app-services-cli/issues/1276))
+* enable debug logging for cli ([#1280](https://github.com/redhat-developer/app-services-cli/issues/1280))
+* add arm64 support ([#1273](https://github.com/redhat-developer/app-services-cli/issues/1273))
+
+### Features
+
+* user statistics for development/internal needs ([#1005](https://github.com/redhat-developer/app-services-cli/issues/1005))
+* **kafka acl:** add create command
+
+
 <a name="v0.35.0"></a>
 ## [v0.35.0](https://github.com/redhat-developer/app-services-cli/compare/v0.34.2...v0.35.0) (2021-10-29)
 
