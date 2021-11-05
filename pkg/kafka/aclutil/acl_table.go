@@ -16,10 +16,10 @@ type permissionsRow struct {
 }
 
 // MapACLsToTableRows converts a list of ACL bindings into a formatted table for printing
-func MapACLsToTableRows(bindings []kafkainstanceclient.AclBinding, localizer localize.Localizer) []permissionsRow {
-	rows := make([]permissionsRow, len(bindings))
+func MapACLsToTableRows(bindings *[]kafkainstanceclient.AclBinding, localizer localize.Localizer) []permissionsRow {
+	rows := make([]permissionsRow, len(*bindings))
 
-	for i, p := range bindings {
+	for i, p := range *bindings {
 
 		description := formatTablePatternType(p.PatternType, localizer)
 		row := permissionsRow{
