@@ -47,7 +47,7 @@ func GetRemoteTermsSpec(context *context.Context, logger logging.Logger) TermsAn
 		return fallbackTocSpec
 	}
 
-	logger.Debug("Terms spec: ", specJson)
+	logger.Debug("Terms spec: ", string(specJson))
 
 	var termsAndConditionsSpec TermsAndConditionsSpec
 	err = json.Unmarshal([]byte(specJson), &termsAndConditionsSpec)
