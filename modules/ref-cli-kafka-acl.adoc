@@ -76,9 +76,9 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl_list.adoc#rhoas-kafka-acl-list[rhoas kafka acl list]	 - List all Kafka ACL rules.
+* link:rhoas_kafka_acl_list.adoc#rhoas-kafka-acl-list[rhoas kafka acl list]	 - List all Kafka ACL rules
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-acl-list_{context}[rhoas kafka acl list]	 - List all Kafka ACL rules.
+* link:{path}#ref-rhoas-kafka-acl-list_{context}[rhoas kafka acl list]	 - List all Kafka ACL rules
 endif::[]
 
