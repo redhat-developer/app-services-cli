@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
@@ -170,6 +171,12 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 		kafkaNameTmplEntry,
 		localize.NewEntry("Count", deletedCount),
 	))
+
+	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.delete.info.aclsPreview"))
+	opts.Logger.Info()
+	rows := aclutil.MapACLsToTableRows(deletedACLs.Items, opts.Localizer)
+	dump.Table(opts.IO.Out, rows)
+	opts.Logger.Info()
 
 	return nil
 }
