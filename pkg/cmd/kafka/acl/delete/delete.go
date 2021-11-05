@@ -174,7 +174,7 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 
 	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.delete.info.aclsPreview"))
 	opts.Logger.Info()
-	rows := aclutil.MapACLsToTableRows(deletedACLs.Items, opts.Localizer)
+	rows := aclutil.MapACLsToTableRows(*deletedACLs.Items, opts.Localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
