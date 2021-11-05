@@ -5,7 +5,7 @@ one = 'Kafka ACL management for users and service accounts'
 [kafka.acl.cmd.longDescription]
 one = '''
 Set of commands that will let you manage Kafka ACLs.
-By default, every users and service account have limited access to their Kafka instance (Only DESCRIBE permission is enabled for TOPIC, ACL, and GROUP).
+By default, every users and service account have limited access to their Kafka instance (Only describe permission is enabled for TOPIC, ACL, and GROUP).
 '''
 
 [kafka.acl.cmd.example]
@@ -141,10 +141,10 @@ By default, new Kafka instances contain the following ACLs:
 
 PRINCIPAL (4)    PERMISSION   OPERATION          DESCRIPTION
 ---------------- ------------ ------------------ ----------------
-All accounts     ALLOW        DESCRIBE           GROUP is "*"
-All accounts     ALLOW        DESCRIBE           CLUSTER is "*"
-All accounts     ALLOW        DESCRIBE_CONFIGS   TOPIC is "*"
-All accounts     ALLOW        DESCRIBE           TOPIC is "*"
+All accounts     allow        describe           group is "*"
+All accounts     allow        describe           cluster is "*"
+All accounts     allow        describe-configs   topic is "*"
+All accounts     allow        describe           topic is "*"
 
 These ACLs allow all accounts in the organization to view the Kafka instance permissions and to view topics and consumer groups in the instance, but not to produce or consume messages.
 
@@ -155,7 +155,7 @@ The ACLs are displayed in a table by default. Alternatively, you can display the
 one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
 
 [kafka.acl.list.allAccounts]
-one = 'All accounts'
+one = 'All Accounts'
 
 [kafka.acl.list.is]
 one = 'is'
