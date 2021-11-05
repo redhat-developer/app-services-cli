@@ -116,16 +116,11 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 		)
 	}
 
-	opts.PatternType = aclutil.PatternTypeLITERAL
-	if prefix {
-		opts.PatternType = aclutil.PatternTypePREFIX
-	}
-
 	requestParams := getRequestParams(opts)
 
 	newAclBinding := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.AclResourceType(requestParams.resourceType),
-		requestParams.resourceName,
+		aclutil.GetResourceName(opts.ResourceName),
 		kafkainstanceclient.AclPatternType(requestParams.patternType),
 		aclutil.FormatPrincipal(opts.Principal),
 		kafkainstanceclient.AclOperation(requestParams.operation),
@@ -135,7 +130,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
 	opts.Logger.Info()
 
-	rows := aclutil.MapACLsToTableRows(&[]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
+	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
@@ -202,9 +197,14 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		opts.Principal = aclutil.Wildcard
 	}
 
-	// check if priincipal is provided
+	// check if principal is provided
 	if !allAccounts && (userID == "" && serviceAccount == "") {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
+	}
+
+	opts.PatternType = aclutil.PatternTypeLITERAL
+	if prefix {
+		opts.PatternType = aclutil.PatternTypePREFIX
 	}
 
 	if userID != "" {
@@ -227,5 +227,6 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 
 		opts.InstanceID = instanceID
 	}
+
 	return nil
 }

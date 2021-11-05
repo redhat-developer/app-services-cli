@@ -141,7 +141,7 @@ func runAdmin(opts *options) (err error) {
 	opts.logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
 	opts.logger.Info()
 
-	rows := aclutil.MapACLsToTableRows(&[]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
+	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
 	dump.Table(opts.io.Out, rows)
 	opts.logger.Info()
 
