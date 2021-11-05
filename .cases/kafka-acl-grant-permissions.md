@@ -1,20 +1,11 @@
-#!/bin/bash
+# Kafka ACL grant permissions
 
-## Kafka ACL grant permissions
-
-## Prerequisites
-## Kafka instance created and in context
-
-## Effects
-## This command will create various ACLs on the Kafka instance that needs to be cleaned up manually
-
-## Framework
-
-alias rhoas=$(go env GOPATH)/bin/rhoas
-
+## Requirements
+- Kafka instance created and in context
+ 
 ## Cases
-rhoas kafka acl grant-access 
 
+rhoas kafka acl grant-access 
 
 rhoas kafka acl grant-access --producer
 
@@ -31,7 +22,7 @@ rhoas kafka acl grant-access --consumer --service-account test_case --topic test
 rhoas kafka acl grant-access --producer --service-account test_case --topic test_case --topic-prefix test_case
 
 
-## Cases that require cleanup 
+### Cases that require cleanup 
 
 rhoas kafka acl grant-access --producer --service-account test_case --topic test_case 
 
