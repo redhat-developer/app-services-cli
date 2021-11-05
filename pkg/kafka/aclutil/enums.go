@@ -56,11 +56,12 @@ var patternTypeMap = map[string]kafkainstanceclient.AclPatternType{
 	PatternTypePREFIX:  kafkainstanceclient.ACLPATTERNTYPE_PREFIXED,
 }
 
-var resourceTypeOperationKeyMap = map[string]string{
-	ResourceTypeCLUSTER:          "cluster",
-	ResourceTypeTOPIC:            "topic",
-	ResourceTypeGROUP:            "group",
-	ResourceTypeTRANSACTIONAL_ID: "transactional_id",
+// for backwards-compatibility, two resource types are possible
+var resourceTypeOperationKeyMap = map[string][]string{
+	ResourceTypeCLUSTER:          {"cluster", string(kafkainstanceclient.ACLRESOURCETYPE_CLUSTER)},
+	ResourceTypeTOPIC:            {"topic", string(kafkainstanceclient.ACLRESOURCETYPE_TOPIC)},
+	ResourceTypeGROUP:            {"group", string(kafkainstanceclient.ACLRESOURCETYPE_GROUP)},
+	ResourceTypeTRANSACTIONAL_ID: {"transactional_id", string(kafkainstanceclient.ACLRESOURCETYPEFILTER_TRANSACTIONAL_ID)},
 }
 
 var validOperationsResponseMap = map[string]string{
@@ -75,6 +76,16 @@ func GetOperationFilterMap() map[string]kafkainstanceclient.AclOperationFilter {
 
 func GetOperationMap() map[string]kafkainstanceclient.AclOperation {
 	return operationMap
+}
+
+// GetReversedOperationMap returns a map of operations with the SDK enums as the keys
+func GetReversedOperationMap() map[kafkainstanceclient.AclOperation]string {
+	reversedMap := make(map[kafkainstanceclient.AclOperation]string)
+	for k, v := range operationMap {
+		reversedMap[v] = k
+	}
+
+	return reversedMap
 }
 
 // GetMappedOperationFilterValue gets the mapped operation filter value
@@ -137,7 +148,16 @@ func GetMappedResourceTypeFilterValue(resourceType string) kafkainstanceclient.A
 	return resourceTypeFilterMap[resourceType]
 }
 
-// GetResourceTypeFilterKeyMap gets the mappings for ACL operations
-func GetResourceTypeFilterKeyMap() map[string]string {
-	return resourceTypeOperationKeyMap
+// getValidOperationsResponseMap returns a map of the ACL
+// resource operations to the values used in this package
+// eg: "ALTER": "alter"
+func getValidOperationsResponseMap() map[string]string {
+	reverseOperationMap := GetReversedOperationMap()
+	// The API is returning internal Kafka operations, e.g describe_configs
+	// It will change to align with the API enums, eg: DESCRIBE_CONFIGS
+	// This will provide backwards compatibility for both and can be removed in a later release
+	for op, v := range reverseOperationMap {
+		validOperationsResponseMap[string(op)] = string(v)
+	}
+	return validOperationsResponseMap
 }
