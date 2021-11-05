@@ -154,7 +154,7 @@ func runList(opts *options) (err error) {
 	case dump.EmptyFormat:
 		opts.logger.Info("")
 		permissions := permissionsData.GetItems()
-		rows := aclutil.MapACLsToTableRows(permissions, opts.localizer)
+		rows := aclutil.MapACLsToTableRows(&permissions, opts.localizer)
 		dump.Table(opts.io.Out, rows)
 	default:
 		return dump.Formatted(opts.io.Out, opts.output, permissionsData)
