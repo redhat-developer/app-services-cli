@@ -155,7 +155,7 @@ The ACLs are displayed in a table by default. Alternatively, you can display the
 one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
 
 [kafka.acl.list.allAccounts]
-one = 'All accounts'
+one = 'All Accounts'
 
 [kafka.acl.list.is]
 one = 'is'

@@ -10,7 +10,7 @@ var resourceTypeFilterMap = map[string]kafkainstanceclient.AclResourceTypeFilter
 	ResourceTypeTRANSACTIONAL_ID: kafkainstanceclient.ACLRESOURCETYPEFILTER_TRANSACTIONAL_ID,
 }
 
-var resourceTypeMap = map[string]kafkainstanceclient.AclResourceType {
+var resourceTypeMap = map[string]kafkainstanceclient.AclResourceType{
 	ResourceTypeCLUSTER:          kafkainstanceclient.ACLRESOURCETYPE_CLUSTER,
 	ResourceTypeTOPIC:            kafkainstanceclient.ACLRESOURCETYPE_TOPIC,
 	ResourceTypeGROUP:            kafkainstanceclient.ACLRESOURCETYPE_GROUP,
