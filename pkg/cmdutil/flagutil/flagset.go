@@ -88,7 +88,21 @@ func (fs *FlagSet) AddSize(page *int32) {
 		cmdutil.ConvertPageValueToInt32(build.DefaultPageSize),
 		FlagDescription(fs.localizer, "kafka.common.flag.size.description"),
 	)
+}
 
+// AddBypassTermsCheck adds a flag to allow bypassing
+// of the terms check before creating an instance
+func (fs *FlagSet) AddBypassTermsCheck(bypass *bool) {
+	flagName := "bypass-terms-check"
+
+	fs.BoolVar(
+		bypass,
+		flagName,
+		false,
+		"Bypass the terms and conditions pre-check",
+	)
+
+	_ = fs.MarkHidden(flagName)
 }
 
 // WithFlagOptions returns additional functions to custom the default flag settings

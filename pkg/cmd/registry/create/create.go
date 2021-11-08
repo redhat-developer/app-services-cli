@@ -34,7 +34,8 @@ type options struct {
 	outputFormat string
 	autoUse      bool
 
-	interactive bool
+	interactive      bool
+	bypassTermsCheck bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -83,9 +84,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.create.flag.name.description"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
-	cmd.Flags().BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("registry.cmd.create.flag.use.description"))
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.create.flag.name.description"))
+	flags.StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
+	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("registry.cmd.create.flag.use.description"))
+	flags.AddBypassTermsCheck(&opts.bypassTermsCheck)
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -112,21 +116,26 @@ func runCreate(opts *options) error {
 		}
 	}
 
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
+	var conn connection.Connection
+	if conn, err = opts.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
 		return err
 	}
 
-	// the user must have accepted the terms and conditions from the provider
-	// before they can create a registry instance
-	termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, termsSpec.ServiceRegistry, conn)
-	if err != nil {
-		return err
-	}
-	if !termsAccepted && termsURL != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
-		return nil
+	if !opts.bypassTermsCheck {
+		opts.Logger.Debug("Checking if terms and conditions have been accepted")
+		// the user must have accepted the terms and conditions from the provider
+		// before they can create a registry instance
+		termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
+		var termsAccepted bool
+		var termsURL string
+		termsAccepted, termsURL, err = ams.CheckTermsAccepted(opts.Context, termsSpec.ServiceRegistry, conn)
+		if err != nil {
+			return err
+		}
+		if !termsAccepted && termsURL != "" {
+			opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
+			return nil
+		}
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.action", localize.NewEntry("Name", payload.GetName())))
