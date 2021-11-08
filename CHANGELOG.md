@@ -1,4 +1,12 @@
 
+<a name="v0.36.2"></a>
+## [v0.36.2](https://github.com/redhat-developer/app-services-cli/compare/v0.36.1...v0.36.2) (2021-11-08)
+
+### Bug Fixes
+
+* use mapped lowercase values in ACL table ([#1292](https://github.com/redhat-developer/app-services-cli/issues/1292))
+
+
 <a name="v0.36.1"></a>
 ## [v0.36.1](https://github.com/redhat-developer/app-services-cli/compare/v0.36.0...v0.36.1) (2021-11-05)
 
