@@ -34,7 +34,12 @@ type options struct {
 	size      int32
 	kafkaID   string
 	principal string
-	output    string
+
+	topic   string
+	group   string
+	cluster bool
+
+	output string
 }
 
 // NewListACLCommand creates a new command to list Kafka ACL rules
@@ -116,6 +121,9 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 	flags.AddUser(&userID)
 	flags.AddServiceAccount(&serviceAccount)
 	flags.AddAllAccounts(&allAccounts)
+	flags.AddCluster(&opts.cluster)
+	flags.AddTopic(&opts.topic)
+	flags.AddConsumerGroup(&opts.group)
 
 	return cmd
 }
@@ -141,6 +149,40 @@ func runList(opts *options) (err error) {
 		req = req.Principal(principalQuery)
 	}
 
+	var selectedResourceTypeCount int
+	var resourceType string
+	var resourceName string
+
+	if opts.topic != "" {
+		selectedResourceTypeCount++
+		resourceType = aclutil.ResourceTypeTOPIC
+		resourceName = opts.topic
+	}
+
+	if opts.group != "" {
+		selectedResourceTypeCount++
+		resourceType = aclutil.ResourceTypeGROUP
+		resourceName = opts.group
+	}
+
+	if opts.cluster {
+		selectedResourceTypeCount++
+		resourceType = aclutil.ResourceTypeCLUSTER
+		resourceName = aclutil.KafkaCluster
+	}
+
+	if selectedResourceTypeCount > 1 {
+		return opts.localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", flagutil.ResourceTypeFlagEntries...)
+	}
+
+	if resourceType != "" {
+		req = req.ResourceType(aclutil.GetMappedResourceTypeFilterValue(resourceType))
+	}
+
+	if resourceName != "" {
+		req = req.ResourceName(aclutil.GetResourceName(resourceName))
+	}
+
 	permissionsData, httpRes, err := req.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
@@ -148,6 +190,12 @@ func runList(opts *options) (err error) {
 
 	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
 		return err
+	}
+
+	if permissionsData.GetTotal() == 0 && opts.output == "" {
+		opts.logger.Info(opts.localizer.MustLocalize("kafka.acl.list.log.info.noACLs", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+
+		return nil
 	}
 
 	switch opts.output {

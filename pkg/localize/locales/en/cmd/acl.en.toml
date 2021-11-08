@@ -163,6 +163,9 @@ one = 'is'
 [kafka.acl.list.startsWith]
 one = 'starts with'
 
+[kafka.acl.list.log.info.noACLs]
+one = 'No ACLs found in Kafka instance "{{.InstanceName}}'
+
 [kafka.acl.grantPermissions]
 
 [kafka.acl.grantPermissions.cmd.shortDescription]
