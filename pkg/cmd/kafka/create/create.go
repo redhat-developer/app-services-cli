@@ -47,8 +47,9 @@ type options struct {
 	outputFormat string
 	autoUse      bool
 
-	interactive bool
-	wait        bool
+	interactive      bool
+	wait             bool
+	bypassTermsCheck bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -121,6 +122,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
+	flags.AddBypassTermsCheck(&opts.bypassTermsCheck)
 
 	_ = cmd.RegisterFlagCompletionFunc(flagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return kafkacmdutil.GetCloudProviderCompletionValues(f)
@@ -138,21 +140,26 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
+	var conn connection.Connection
+	if conn, err = opts.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
 		return err
 	}
 
-	// the user must have accepted the terms and conditions from the provider
-	// before they can create a kafka instance
-	termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
-	termsAccepted, termsURL, err := ams.CheckTermsAccepted(opts.Context, termsSpec.Kafka, conn)
-	if err != nil {
-		return err
-	}
-	if !termsAccepted && termsURL != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
-		return nil
+	if !opts.bypassTermsCheck {
+		opts.Logger.Debug("Checking if terms and conditions have been accepted")
+		// the user must have accepted the terms and conditions from the provider
+		// before they can create a kafka instance
+		termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
+		var termsAccepted bool
+		var termsURL string
+		termsAccepted, termsURL, err = ams.CheckTermsAccepted(opts.Context, termsSpec.Kafka, conn)
+		if err != nil {
+			return err
+		}
+		if !termsAccepted && termsURL != "" {
+			opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
+			return nil
+		}
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
