@@ -19,6 +19,7 @@ builds:
       main: ./cmd/rhoas
       ldflags:
         - -s -w -X github.com/redhat-developer/app-services-cli/internal/build.Version={{.Version}}
+        - -s -w -X github.com/redhat-developer/app-services-cli/internal/build.BuildSource="github"
     id: macos
     goos: [darwin]
     goarch: [amd64, arm64]

@@ -2,6 +2,7 @@ package build
 
 import (
 	"context"
+	"fmt"
 	"runtime/debug"
 	"time"
 
@@ -9,6 +10,12 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+)
+
+type buildSource string
+
+const (
+	githubBuildSource buildSource = "github"
 )
 
 // Define public variables here which you wish to be configurable at build time
@@ -39,6 +46,9 @@ var (
 
 	// MASSSORedirectPath is the default MAS-SSO redirect path
 	MASSSORedirectPath = "mas-sso-callback"
+
+	// BuildSource is a unique key which indicates the infrastructure on which the binary was built
+	BuildSource = "local"
 )
 
 // Auth Build variables
@@ -68,6 +78,11 @@ func init() {
 // the version currently being used. If so, it logs this information
 // to the console.
 func CheckForUpdate(ctx context.Context, logger logging.Logger, localizer localize.Localizer) {
+	if BuildSource != string(githubBuildSource) {
+		return
+	}
+	fmt.Println("Checking for a new version")
+
 	releases, err := getReleases(ctx)
 	if err != nil {
 		return
