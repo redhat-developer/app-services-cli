@@ -2,7 +2,6 @@ package build
 
 import (
 	"context"
-	"fmt"
 	"runtime/debug"
 	"time"
 
@@ -81,7 +80,6 @@ func CheckForUpdate(ctx context.Context, logger logging.Logger, localizer locali
 	if BuildSource != string(githubBuildSource) {
 		return
 	}
-	fmt.Println("Checking for a new version")
 
 	releases, err := getReleases(ctx)
 	if err != nil {
