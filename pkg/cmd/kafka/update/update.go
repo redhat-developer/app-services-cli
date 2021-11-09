@@ -159,7 +159,8 @@ func run(opts *options) error {
 		return nil
 	}
 
-	updateObj := kafkamgmtclient.NewKafkaUpdateRequest(opts.owner)
+	updateObj := kafkamgmtclient.NewKafkaUpdateRequest()
+	updateObj.SetOwner(opts.owner)
 
 	// create a text block with a summary of what is being updated
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
