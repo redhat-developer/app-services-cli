@@ -172,7 +172,7 @@ func runList(opts *options) (err error) {
 	}
 
 	if selectedResourceTypeCount > 1 {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", flagutil.ResourceTypeFlagEntries...)
+		return opts.localizer.MustLocalizeError("kafka.acl.list.error.oneResourceTypeAllowed", flagutil.ResourceTypeFlagEntries...)
 	}
 
 	if resourceType != "" {

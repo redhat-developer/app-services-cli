@@ -127,8 +127,14 @@ $ rhoas kafka acl list --user foo_user
 # Display Kafka ACL rules for a specific service account
 $ rhoas kafka acl list --service-account srvc-acct-f20a7561-7426-4f5a-b5e7-0ef2db31e15b
 
-# Display Kafka ACL rules for a specific resource
+# Display Kafka ACL rules for a specific topic
 $ rhoas kafka acl list --topic foo_topic_name
+
+# Display Kafka ACL rules for a specific consumer group
+$ rhoas kafka acl list --group foo_group_id
+
+# Display Kafka ACL rules for a specific consumer group and user
+$ rhoas kafka acl list --group foo_group_id --user foo_user
 '''
 
 [kafka.acl.list.cmd.shortDescription]
@@ -167,7 +173,10 @@ one = 'is'
 one = 'starts with'
 
 [kafka.acl.list.log.info.noACLs]
-one = 'No ACLs found in Kafka instance "{{.InstanceName}}'
+one = 'No ACLs found in Kafka instance "{{.InstanceName}}"'
+
+[kafka.acl.list.error.oneResourceTypeAllowed]
+one = 'provide only one resource type from "--{{.ClusterFlag}}", "--{{.TopicFlag}}" or "--{{.GroupFlag}}"'
 
 [kafka.acl.grantPermissions]
 
