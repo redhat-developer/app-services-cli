@@ -3,12 +3,19 @@ package build
 import (
 	"context"
 	"runtime/debug"
+	"strings"
 	"time"
 
 	"github.com/google/go-github/v39/github"
 	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
+)
+
+type buildSource string
+
+const (
+	githubBuildSource buildSource = "github"
 )
 
 // Define public variables here which you wish to be configurable at build time
@@ -39,6 +46,9 @@ var (
 
 	// MASSSORedirectPath is the default MAS-SSO redirect path
 	MASSSORedirectPath = "mas-sso-callback"
+
+	// BuildSource is a unique key which indicates the infrastructure on which the binary was built
+	BuildSource = "local"
 )
 
 // Auth Build variables
@@ -67,7 +77,15 @@ func init() {
 // CheckForUpdate checks if there is a newer version of the CLI than
 // the version currently being used. If so, it logs this information
 // to the console.
-func CheckForUpdate(ctx context.Context, logger logging.Logger, localizer localize.Localizer) {
+func CheckForUpdate(ctx context.Context, version string, logger logging.Logger, localizer localize.Localizer) {
+	if BuildSource != string(githubBuildSource) {
+		return
+	}
+	// prefix version with a v to correspond with Git tag
+	if !strings.HasPrefix(version, "v") {
+		version = "v" + version
+	}
+
 	releases, err := getReleases(ctx)
 	if err != nil {
 		return
@@ -84,12 +102,12 @@ func CheckForUpdate(ctx context.Context, logger logging.Logger, localizer locali
 		// create an tag:index map of the releases
 		// the first index (0) is the latest release
 		releaseTagIndexMap[release.GetTagName()] = i
-		if release.GetTagName() == Version {
+		if release.GetTagName() == version {
 			break
 		}
 	}
 
-	currentVersionIndex, ok := releaseTagIndexMap[Version]
+	currentVersionIndex, ok := releaseTagIndexMap[version]
 	if !ok {
 		// the currently used version does not exist as a public release
 		// assume it to be an unpublished or dev release

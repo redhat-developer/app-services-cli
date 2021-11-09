@@ -215,7 +215,7 @@ func runLogin(opts *options) (err error) {
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
 	if !debug.Enabled() {
-		build.CheckForUpdate(opts.Context, opts.Logger, opts.localizer)
+		build.CheckForUpdate(opts.Context, build.Version, opts.Logger, opts.localizer)
 	}
 
 	return nil

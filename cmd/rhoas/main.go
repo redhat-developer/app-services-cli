@@ -44,12 +44,12 @@ func main() {
 
 	if err == nil {
 		if debug.Enabled() {
-			build.CheckForUpdate(cmdFactory.Context, cmdFactory.Logger, localizer)
+			build.CheckForUpdate(cmdFactory.Context, build.Version, cmdFactory.Logger, localizer)
 		}
 		return
 	}
 	cmdFactory.Logger.Errorf("%v\n", rootError(err, localizer))
-	build.CheckForUpdate(context.Background(), cmdFactory.Logger, localizer)
+	build.CheckForUpdate(context.Background(), build.Version, cmdFactory.Logger, localizer)
 	os.Exit(1)
 }
 
