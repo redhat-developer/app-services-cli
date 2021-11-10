@@ -39,7 +39,6 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 			return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 		}
 	}
-
 	cliOpts := api.CommandEnvironment
 
 	// Creates abstraction of the service
@@ -109,7 +108,14 @@ func (api *KubernetesClusterAPIImpl) createCustomResource(serviceDetails *servic
 		return fmt.Errorf("%v: %w", api.CommandEnvironment.Localizer.MustLocalize("cluster.kubernetes.createCR.error.marshalError"), err)
 	}
 
-	err = api.KubernetesClients.MakeCRPostRequest(&serviceDetails.GroupMetadata, serviceDetails.Name, crJSON, namespace)
+	data := api.KubernetesClients.Clientset.
+		RESTClient().
+		Post().
+		AbsPath(kubeclient.APIURLForResource(&serviceDetails.GroupMetadata, namespace), serviceDetails.Name).
+		Body(crJSON).
+		Do(api.CommandEnvironment.Context)
+
+	err = data.Error()
 	if err != nil {
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 	}

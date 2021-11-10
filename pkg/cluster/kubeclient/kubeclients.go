@@ -87,42 +87,6 @@ func (c *KubernetesClients) CurrentNamespace() (string, error) {
 	return namespace, err
 }
 
-// MakeCrGetRequest - perform kubernetes api get request for CustomResource
-func (kClients *KubernetesClients) MakeCrGetRequest(resource *schema.GroupVersionResource,
-	name string, namespace string) (interface{}, error) {
-
-	data := kClients.Clientset.
-		RESTClient().
-		Get().
-		AbsPath(APIURLForResource(resource, namespace), name).
-		Do(kClients.CommandEnvironment.Context)
-
-	err := data.Error()
-	if err != nil {
-		return nil, TranslatedKubernetesErrors(kClients.CommandEnvironment, err)
-	}
-
-	return data, nil
-}
-
-// MakeCRPostRequest - perform kubernetes api post request for CustomResource
-func (kClients *KubernetesClients) MakeCRPostRequest(resource *schema.GroupVersionResource,
-	name string, crJSON []byte, namespace string) error {
-	data := kClients.Clientset.
-		RESTClient().
-		Post().
-		AbsPath(APIURLForResource(resource, namespace), name).
-		Body(crJSON).
-		Do(kClients.CommandEnvironment.Context)
-
-	err := data.Error()
-	if err != nil {
-		return TranslatedKubernetesErrors(kClients.CommandEnvironment, err)
-	}
-
-	return nil
-}
-
 // IsResourceAvailableOnCluster checks the cluster to see if specified CRD is installed
 func (c *KubernetesClients) IsResourceAvailableOnCluster(resource *schema.GroupVersionResource, namespace string) (bool, error) {
 	env := c.CommandEnvironment
