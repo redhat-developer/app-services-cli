@@ -89,11 +89,7 @@ func (c *KubernetesClients) CurrentNamespace() (string, error) {
 
 // MakeCrGetRequest - perform kubernetes api get request for CustomResource
 func (kClients *KubernetesClients) MakeCrGetRequest(resource *schema.GroupVersionResource,
-	name string) (interface{}, error) {
-	namespace, err := kClients.CurrentNamespace()
-	if err != nil {
-		return nil, err
-	}
+	name string, namespace string) (interface{}, error) {
 
 	data := kClients.Clientset.
 		RESTClient().
@@ -101,7 +97,7 @@ func (kClients *KubernetesClients) MakeCrGetRequest(resource *schema.GroupVersio
 		AbsPath(APIURLForResource(resource, namespace), name).
 		Do(kClients.CommandEnvironment.Context)
 
-	err = data.Error()
+	err := data.Error()
 	if err != nil {
 		return nil, TranslatedKubernetesErrors(kClients.CommandEnvironment, err)
 	}
@@ -111,12 +107,7 @@ func (kClients *KubernetesClients) MakeCrGetRequest(resource *schema.GroupVersio
 
 // MakeCRPostRequest - perform kubernetes api post request for CustomResource
 func (kClients *KubernetesClients) MakeCRPostRequest(resource *schema.GroupVersionResource,
-	name string, crJSON []byte,
-) error {
-	namespace, err := kClients.CurrentNamespace()
-	if err != nil {
-		return err
-	}
+	name string, crJSON []byte, namespace string) error {
 	data := kClients.Clientset.
 		RESTClient().
 		Post().
@@ -124,7 +115,7 @@ func (kClients *KubernetesClients) MakeCRPostRequest(resource *schema.GroupVersi
 		Body(crJSON).
 		Do(kClients.CommandEnvironment.Context)
 
-	err = data.Error()
+	err := data.Error()
 	if err != nil {
 		return TranslatedKubernetesErrors(kClients.CommandEnvironment, err)
 	}
@@ -133,14 +124,10 @@ func (kClients *KubernetesClients) MakeCRPostRequest(resource *schema.GroupVersi
 }
 
 // IsResourceAvailableOnCluster checks the cluster to see if specified CRD is installed
-func (c *KubernetesClients) IsResourceAvailableOnCluster(resource *schema.GroupVersionResource) (bool, error) {
-	namespace, err := c.CurrentNamespace()
+func (c *KubernetesClients) IsResourceAvailableOnCluster(resource *schema.GroupVersionResource, namespace string) (bool, error) {
 	env := c.CommandEnvironment
-	if err != nil {
-		return false, err
-	}
 
-	_, err = c.DynamicClient.Resource(*resource).Namespace(namespace).
+	_, err := c.DynamicClient.Resource(*resource).Namespace(namespace).
 		List(env.Context, metav1.ListOptions{Limit: 1})
 
 	if err == nil {
