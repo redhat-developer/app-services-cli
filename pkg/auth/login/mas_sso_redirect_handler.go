@@ -12,7 +12,6 @@ import (
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -79,19 +78,9 @@ func (h *masRedirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	userName, ok := token.GetUsername(resp.OAuth2Token.AccessToken)
-	if !ok {
-		userName = "unknown"
-	}
-
-	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
-	pageBody := h.Localizer.MustLocalize("login.masRedirectPage.body", localize.NewEntry("Host", h.AuthURL.Host), localize.NewEntry("Username", userName))
-
-	redirectPage := fmt.Sprintf(masSSOredirectHTMLPage, pageTitle, pageTitle, pageBody)
-
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, redirectPage)
+	fmt.Fprint(w, masSSOredirectHTMLPage)
 
 	cfg, err := h.Config.Load()
 	if err != nil {
