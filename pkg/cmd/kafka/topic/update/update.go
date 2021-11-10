@@ -7,8 +7,8 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
@@ -158,7 +158,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})
 	_ = cmd.MarkFlagRequired("name")
 

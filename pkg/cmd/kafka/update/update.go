@@ -119,7 +119,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
-	_ = flagutil.RegisterUserCompletionFunc(cmd, "owner", f.Connection)
+	_ = flagutil.RegisterUserCompletionFunc(cmd, "owner", f)
 
 	return cmd
 }

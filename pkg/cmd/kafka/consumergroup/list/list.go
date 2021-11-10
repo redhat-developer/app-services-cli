@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 
 	"github.com/spf13/cobra"
 
@@ -101,7 +102,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	flags.Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.size"))
 
 	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)

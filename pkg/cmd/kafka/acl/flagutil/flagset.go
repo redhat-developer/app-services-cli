@@ -23,19 +23,17 @@ var ResourceTypeFlagEntries []*localize.TemplateEntry = []*localize.TemplateEntr
 }
 
 type flagSet struct {
-	cmd       *cobra.Command
-	localizer localize.Localizer
-	conn      factory.ConnectionFunc
+	cmd     *cobra.Command
+	factory *factory.Factory
 	*flagutil.FlagSet
 }
 
 // NewFlagSet returns a new flag set with common Kafka ACL flags
-func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer, conn factory.ConnectionFunc) *flagSet {
+func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer, f *factory.Factory) *flagSet {
 	return &flagSet{
-		cmd:       cmd,
-		localizer: localizer,
-		conn:      conn,
-		FlagSet:   flagutil.NewFlagSet(cmd, localizer),
+		cmd:     cmd,
+		factory: f,
+		FlagSet: flagutil.NewFlagSet(cmd, localizer),
 	}
 }
 
@@ -54,7 +52,7 @@ func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 		resourceType,
 		flagName,
 		aclutil.ResourceTypeANY,
-		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.resourceType", resourceTypes...),
+		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.resourceType", resourceTypes...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -79,7 +77,7 @@ func (fs *flagSet) AddOperationFilter(operationType *string) *flagutil.FlagOptio
 		operationType,
 		flagName,
 		"",
-		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.operation.description", operations...),
+		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.operation.description", operations...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -104,7 +102,7 @@ func (fs *flagSet) AddOperationCreate(operationType *string) *flagutil.FlagOptio
 		operationType,
 		flagName,
 		"",
-		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.operation.description", operations...),
+		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.operation.description", operations...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -129,7 +127,7 @@ func (fs *flagSet) AddPermissionFilter(permission *string) *flagutil.FlagOptions
 		permission,
 		flagName,
 		aclutil.PermissionANY,
-		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.permission.description", permissions...),
+		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.permission.description", permissions...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -154,7 +152,7 @@ func (fs *flagSet) AddPermissionCreate(permission *string) *flagutil.FlagOptions
 		permission,
 		flagName,
 		"",
-		flagutil.FlagDescription(fs.localizer, "kafka.acl.common.flag.permission.description", permissions...),
+		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.permission.description", permissions...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -172,8 +170,10 @@ func (fs *flagSet) AddTopic(topic *string) {
 		topic,
 		flagName,
 		"",
-		fs.localizer.MustLocalize("kafka.acl.common.flag.topic.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.topic.description"),
 	)
+
+	_ = flagutil.RegisterTopicCompletionFunc(fs.cmd, fs.factory)
 }
 
 // AddConsumerGroup adds a flag for setting the consumer group ID
@@ -184,8 +184,10 @@ func (fs *flagSet) AddConsumerGroup(group *string) {
 		group,
 		flagName,
 		"",
-		fs.localizer.MustLocalize("kafka.acl.common.flag.group.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.group.description"),
 	)
+
+	_ = flagutil.RegisterGroupCompletionFunc(fs.cmd, fs.factory)
 }
 
 // AddTransactionalID adds a flag for setting the consumer group ID
@@ -196,7 +198,7 @@ func (fs *flagSet) AddTransactionalID(id *string) {
 		id,
 		flagName,
 		"",
-		fs.localizer.MustLocalize("kafka.acl.common.flag.transactionalID.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.transactionalID.description"),
 	)
 }
 
@@ -208,7 +210,7 @@ func (fs *flagSet) AddPrefix(prefix *bool) {
 		prefix,
 		flagName,
 		false,
-		fs.localizer.MustLocalize("kafka.acl.common.flag.prefix.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.prefix.description"),
 	)
 }
 
@@ -220,7 +222,7 @@ func (fs *flagSet) AddCluster(prefix *bool) {
 		prefix,
 		flagName,
 		false,
-		fs.localizer.MustLocalize("kafka.acl.common.flag.cluster.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.cluster.description"),
 	)
 }
 
@@ -232,10 +234,10 @@ func (fs *flagSet) AddUser(userID *string) *flagutil.FlagOptions {
 		userID,
 		flagName,
 		"",
-		fs.localizer.MustLocalize("kafka.acl.common.flag.user.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.user.description"),
 	)
 
-	_ = flagutil.RegisterUserCompletionFunc(fs.cmd, flagName, fs.conn)
+	_ = flagutil.RegisterUserCompletionFunc(fs.cmd, flagName, fs.factory)
 
 	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
@@ -248,10 +250,10 @@ func (fs *flagSet) AddServiceAccount(serviceAccountID *string) *flagutil.FlagOpt
 		serviceAccountID,
 		flagName,
 		"",
-		fs.localizer.MustLocalize("kafka.acl.common.flag.serviceAccount.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.serviceAccount.description"),
 	)
 
-	_ = flagutil.RegisterServiceAccountCompletionFunc(fs.cmd, flagName, fs.conn)
+	_ = flagutil.RegisterServiceAccountCompletionFunc(fs.cmd, fs.factory)
 
 	return flagutil.WithFlagOptions(fs.cmd, flagName)
 }
@@ -264,7 +266,7 @@ func (fs *flagSet) AddInstanceID(id *string) {
 		id,
 		flagName,
 		"",
-		fs.localizer.MustLocalize("kafka.common.flag.instanceID.description"),
+		fs.factory.Localizer.MustLocalize("kafka.common.flag.instanceID.description"),
 	)
 }
 
@@ -276,6 +278,6 @@ func (fs *flagSet) AddAllAccounts(allAccounts *bool) {
 		allAccounts,
 		flagName,
 		false,
-		fs.localizer.MustLocalize("kafka.acl.common.flag.allAccounts.description"),
+		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.allAccounts.description"),
 	)
 }

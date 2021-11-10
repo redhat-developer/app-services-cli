@@ -66,7 +66,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.Localizer, opts.Connection)
+	flags := flagutil.NewFlagSet(cmd, opts.Localizer, f)
 
 	_ = flags.AddPermissionFilter(&opts.Permission).Required()
 	_ = flags.AddOperationFilter(&opts.Operation).Required()

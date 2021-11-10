@@ -89,7 +89,7 @@ func NewGrantPermissionsACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer, f.Connection)
+	flags := flagutil.NewFlagSet(cmd, opts.localizer, f)
 	flags.AddInstanceID(&opts.kafkaID)
 	flags.AddYes(&opts.force)
 

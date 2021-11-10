@@ -7,8 +7,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -82,7 +82,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	_ = cmd.MarkFlagRequired("name")
 
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})
 	flags.AddYes(&opts.force)
 
