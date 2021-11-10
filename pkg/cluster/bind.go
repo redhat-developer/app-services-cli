@@ -74,7 +74,7 @@ func (c *KubernetesClusterAPIImpl) performBinding(
 	localizer := cliEnv.Localizer
 
 	// Check of operator is installed
-	installed, err := c.KubernetesClients.IsResourceAvailableOnCluster(&bindv1alpha1.GroupVersionResource)
+	installed, err := c.KubernetesClients.IsResourceAvailableOnCluster(&bindv1alpha1.GroupVersionResource, ns)
 	if !installed {
 		return fmt.Errorf("%s: %w", localizer.MustLocalizeError("cluster.serviceBinding.operatorMissing"), err)
 	}

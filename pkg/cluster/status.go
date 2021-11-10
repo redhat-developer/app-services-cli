@@ -15,8 +15,11 @@ func (api *KubernetesClusterAPIImpl) ExecuteStatus() (*v1alpha.OperatorStatus, e
 		RHOASOperatorAvailable:          false,
 		LatestRHOASVersionAvailable:     false,
 	}
-
-	installed, err := api.KubernetesClients.IsResourceAvailableOnCluster(&resources.SRCResource)
+	namespace, err := api.KubernetesClients.CurrentNamespace()
+	if err != nil {
+		return nil, err
+	}
+	installed, err := api.KubernetesClients.IsResourceAvailableOnCluster(&resources.SRCResource, namespace)
 	// If unhandled error return instantly
 	if err != nil {
 		return nil, err
@@ -25,7 +28,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteStatus() (*v1alpha.OperatorStatus, e
 	// Assign respective status otherwise
 	operatorStatus.LatestRHOASVersionAvailable = installed
 
-	installed, err = api.KubernetesClients.IsResourceAvailableOnCluster(&resources.AKCResource)
+	installed, err = api.KubernetesClients.IsResourceAvailableOnCluster(&resources.AKCResource, namespace)
 	// If unhandled error return instantly
 	if err != nil {
 		return nil, err
@@ -33,7 +36,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteStatus() (*v1alpha.OperatorStatus, e
 
 	operatorStatus.RHOASOperatorAvailable = installed
 
-	installed, err = api.KubernetesClients.IsResourceAvailableOnCluster(&bindv1alpha1.GroupVersionResource)
+	installed, err = api.KubernetesClients.IsResourceAvailableOnCluster(&bindv1alpha1.GroupVersionResource, namespace)
 	// If unhandled error return instantly
 	if err != nil {
 		return nil, err
