@@ -288,17 +288,19 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 
 	newT := new.Type()
 
-	for i := 0; i < 1; i++ {
+	for i := 0; i < new.NumField(); i++ {
 		field := newT.Field(i)
 		fieldTag := field.Tag.Get("json")
 		fieldName := field.Name
 
-		oldVal := getElementValue(current.FieldByName(fieldName)).String()
-		newVal := getUpdateObjValue(new.FieldByName(fieldName)).String()
+		oldVal := getElementValue(current.FieldByName(fieldName))
+		newVal := getUpdateObjValue(new.FieldByName(fieldName))
 
 		fieldTagDisp := strings.Split(fieldTag, ",")[0]
 
-		summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTagDisp), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
+		if newVal != reflect.ValueOf(nil) {
+			summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTagDisp), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
+		}
 	}
 
 	return summary
