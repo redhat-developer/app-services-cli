@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
@@ -121,9 +122,17 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 	flags.AddUser(&userID)
 	flags.AddServiceAccount(&serviceAccount)
 	flags.AddAllAccounts(&allAccounts)
-	flags.AddCluster(&opts.cluster)
-	flags.AddTopic(&opts.topic)
-	flags.AddConsumerGroup(&opts.group)
+	flags.BoolVar(&opts.cluster, "cluster", false, opts.localizer.MustLocalize("kafka.acl.list.flag.cluster.description"))
+	flags.StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.acl.list.flag.topic.description"))
+	flags.StringVar(&opts.group, "group", "", opts.localizer.MustLocalize("kafka.acl.list.flag.group.description"))
+
+	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("group", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+	})
 
 	return cmd
 }

@@ -58,14 +58,14 @@ $ rhoas kafka acl list --group foo_group_id --user foo_user
 == Options
 
       `--all-accounts`::               Set the ACL principal to match all principals (users and service accounts)
-      `--cluster`::                    Set the resource type to cluster
-      `--group` _string_::             Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
+      `--cluster`::                    Set filter to cluster resource
+      `--group` _string_::             Text search to filter ACL rules for consumer groups by id
       `--instance-id` _string_::       Kafka instance ID. Uses the current instance if not set
   `-o`, `--output` _string_::          Specify the output format. Choose from: "json", "yaml", "yml"
       `--page` _int32_::               Current page number for the list  (default 1)
       `--service-account` _string_::   Service account client ID used as principal for this operation
       `--size` _int32_::               Maximum number of items to be returned per page  (default 10)
-      `--topic` _string_::             Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix
+      `--topic` _string_::             Text search to filter ACL rules for topics by name
       `--user` _string_::              User ID to be used as principal
 
 [discrete]

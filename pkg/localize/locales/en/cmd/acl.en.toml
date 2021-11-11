@@ -163,6 +163,15 @@ The ACLs are displayed in a table by default. Alternatively, you can display the
 [kafka.acl.list.flag.output.description]
 one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
 
+[kafka.acl.list.flag.cluster.description]
+one = 'Set filter to cluster resource'
+
+[kafka.acl.list.flag.topic.description]
+one = 'Text search to filter ACL rules for topics by name'
+
+[kafka.acl.list.flag.group.description]
+one = 'Text search to filter ACL rules for consumer groups by id'
+
 [kafka.acl.list.allAccounts]
 one = 'All Accounts'
 
