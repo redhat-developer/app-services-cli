@@ -120,5 +120,8 @@ func runStatus(opts *options) error {
 		pkgStatus.Print(stdout, status)
 	}
 
+	opts.Logger.Info("")
+	opts.Logger.Info("Using 'default' configuration profile")
+	opts.Logger.Info("")
 	return nil
 }
