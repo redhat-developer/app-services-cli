@@ -160,9 +160,6 @@ These ACLs allow all accounts in the organization to view the Kafka instance per
 The ACLs are displayed in a table by default. Alternatively, you can display them as JSON or YAML.
 '''
 
-[kafka.acl.list.flag.output.description]
-one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
-
 [kafka.acl.list.flag.cluster.description]
 one = 'Set filter to cluster resource'
 
