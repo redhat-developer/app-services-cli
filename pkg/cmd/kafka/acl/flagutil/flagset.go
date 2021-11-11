@@ -29,11 +29,11 @@ type flagSet struct {
 }
 
 // NewFlagSet returns a new flag set with common Kafka ACL flags
-func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer, f *factory.Factory) *flagSet {
+func NewFlagSet(cmd *cobra.Command, f *factory.Factory) *flagSet {
 	return &flagSet{
 		cmd:     cmd,
 		factory: f,
-		FlagSet: flagutil.NewFlagSet(cmd, localizer),
+		FlagSet: flagutil.NewFlagSet(cmd, f.Localizer),
 	}
 }
 

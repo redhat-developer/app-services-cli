@@ -103,7 +103,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	fs := flagset.NewFlagSet(cmd, opts.localizer, f)
+	fs := flagset.NewFlagSet(cmd, f)
 
 	fs.AddUser(&userID)
 	fs.AddServiceAccount(&serviceAccount)

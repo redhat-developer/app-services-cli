@@ -113,7 +113,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer, f)
+	flags := flagutil.NewFlagSet(cmd, f)
 
 	flags.AddInstanceID(&opts.kafkaID)
 	flags.AddOutput(&opts.output)

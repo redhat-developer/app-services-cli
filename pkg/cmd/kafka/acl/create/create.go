@@ -65,7 +65,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.Localizer, f)
+	flags := flagutil.NewFlagSet(cmd, f)
 
 	_ = flags.AddPermissionCreate(&opts.Permission).Required()
 	_ = flags.AddOperationCreate(&opts.Operation).Required()
