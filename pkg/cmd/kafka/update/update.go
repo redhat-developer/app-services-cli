@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -281,20 +282,23 @@ func promptConfirmUpdate(opts *options) (bool, error) {
 // creates a summary of what values will be changed in this update
 // returns a formatted string. Example:
 // owner: foo_user	➡️	bar_user
+// to do: Needs update once reauthentication_enabled is incorporated
 func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 	var summary string
 
 	newT := new.Type()
 
-	for i := 0; i < new.NumField(); i++ {
+	for i := 0; i < 1; i++ {
 		field := newT.Field(i)
 		fieldTag := field.Tag.Get("json")
 		fieldName := field.Name
 
 		oldVal := getElementValue(current.FieldByName(fieldName)).String()
-		newVal := getElementValue(new.FieldByName(fieldName)).String()
+		newVal := getUpdateObjValue(new.FieldByName(fieldName)).String()
 
-		summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTag), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
+		fieldTagDisp := strings.Split(fieldTag, ",")[0]
+
+		summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTagDisp), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
 	}
 
 	return summary
@@ -305,6 +309,16 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 func getElementValue(v reflect.Value) reflect.Value {
 	if v.Kind() == reflect.Ptr {
 		return v.Elem()
+	}
+	return v
+}
+
+// get the true value from a reflect.Value for KafkaUpdateRequest struct
+// to do: Needs update once reauthentication_enabled is incorporated
+func getUpdateObjValue(v reflect.Value) reflect.Value {
+	if v.Kind() == reflect.Struct {
+		vstruct := v.Field(0)
+		return vstruct.Elem()
 	}
 	return v
 }
