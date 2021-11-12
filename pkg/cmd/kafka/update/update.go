@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -291,10 +292,14 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 		fieldTag := field.Tag.Get("json")
 		fieldName := field.Name
 
-		oldVal := getElementValue(current.FieldByName(fieldName)).String()
-		newVal := getElementValue(new.FieldByName(fieldName)).String()
+		oldVal := getElementValue(current.FieldByName(fieldName))
+		newVal := getUpdateObjValue(new.FieldByName(fieldName))
 
-		summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTag), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
+		fieldTagDisp := strings.Split(fieldTag, ",")[0]
+
+		if newVal != reflect.ValueOf(nil) {
+			summary += fmt.Sprintf("%v: %v    %v    %v\n", color.Bold(fieldTagDisp), oldVal, icon.Emoji("\u27A1", "=>"), newVal)
+		}
 	}
 
 	return summary
@@ -305,6 +310,15 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 func getElementValue(v reflect.Value) reflect.Value {
 	if v.Kind() == reflect.Ptr {
 		return v.Elem()
+	}
+	return v
+}
+
+// get the true value from a reflect.Value for KafkaUpdateRequest struct
+func getUpdateObjValue(v reflect.Value) reflect.Value {
+	if v.Kind() == reflect.Struct {
+		vstruct := v.FieldByName("value")
+		return vstruct.Elem()
 	}
 	return v
 }
