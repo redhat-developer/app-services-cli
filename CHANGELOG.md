@@ -1,4 +1,21 @@
 
+<a name="v0.36.3"></a>
+## [v0.36.3](https://github.com/redhat-developer/app-services-cli/compare/v0.36.2...v0.36.3) (2021-11-12)
+
+### Bug Fixes
+
+* add verification steps
+* remove redundant helper method
+* enable using user specified namespace
+* auto-close MAS-SSO redirect page ([#1307](https://github.com/redhat-developer/app-services-cli/issues/1307))
+* **deps:** update all ([#1297](https://github.com/redhat-developer/app-services-cli/issues/1297))
+* **kafka update:** broken preview ([#1311](https://github.com/redhat-developer/app-services-cli/issues/1311))
+
+### Features
+
+* **acl list:** add flags to filter by resource ([#1299](https://github.com/redhat-developer/app-services-cli/issues/1299))
+
+
 <a name="v0.36.2"></a>
 ## [v0.36.2](https://github.com/redhat-developer/app-services-cli/compare/v0.36.1...v0.36.2) (2021-11-08)
 
