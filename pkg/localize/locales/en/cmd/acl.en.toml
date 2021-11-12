@@ -214,10 +214,10 @@ one = 'ACLs created to enable principal to consume messages from topics'
 one = '"--group" or "--group-prefix" flag is allowed only when consumer ACLs are to be added'
 
 [kafka.acl.grantPermissions.group.error.required]
-one = '"--group" flag is required for consumer operation'
+one = '"--group" or "--group-prefix" flag is required for consumer operation'
 
 [kafka.acl.grantPermissions.topic.error.required]
-one = '"--topic" flag is required for consumer and producer operations'
+one = '"--topic" or "--topic-prefix" flag is required for consumer and producer operations'
 
 [kafka.acl.grantPermissions.prefix.error.notAllowed]
 one = 'can not use "--{{.Resource}}-prefix" and "--{{.Resource}}" flag together'
