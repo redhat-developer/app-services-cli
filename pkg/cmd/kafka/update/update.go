@@ -282,7 +282,6 @@ func promptConfirmUpdate(opts *options) (bool, error) {
 // creates a summary of what values will be changed in this update
 // returns a formatted string. Example:
 // owner: foo_user	➡️	bar_user
-// to do: Needs update once reauthentication_enabled is incorporated
 func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 	var summary string
 
@@ -316,10 +315,9 @@ func getElementValue(v reflect.Value) reflect.Value {
 }
 
 // get the true value from a reflect.Value for KafkaUpdateRequest struct
-// to do: Needs update once reauthentication_enabled is incorporated
 func getUpdateObjValue(v reflect.Value) reflect.Value {
 	if v.Kind() == reflect.Struct {
-		vstruct := v.Field(0)
+		vstruct := v.FieldByName("value")
 		return vstruct.Elem()
 	}
 	return v
