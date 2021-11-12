@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/spf13/cobra"
 )
 
@@ -29,12 +30,12 @@ func EnableOutputFlagCompletion(cmd *cobra.Command) {
 }
 
 // RegisterUserCompletionFunc adds the user list to flag dynamic completion
-func RegisterUserCompletionFunc(cmd *cobra.Command, flagName string, connFunc factory.ConnectionFunc) error {
+func RegisterUserCompletionFunc(cmd *cobra.Command, flagName string, f *factory.Factory) error {
 	return cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var usernames []string
 		directive := cobra.ShellCompDirectiveNoSpace
 
-		conn, err := connFunc(connection.DefaultConfigSkipMasAuth)
+		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 		if err != nil {
 			return usernames, directive
 		}
@@ -53,13 +54,13 @@ func RegisterUserCompletionFunc(cmd *cobra.Command, flagName string, connFunc fa
 	})
 }
 
-// RegisterNameFlagCompletionFunc adds the user list to flag dynamic completion
-func RegisterServiceAccountCompletionFunc(cmd *cobra.Command, flagName string, connFunc factory.ConnectionFunc) error {
-	return cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+// RegisterServiceAccountCompletionFunc adds the service account list to flag dynamic completion
+func RegisterServiceAccountCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
+	return cmd.RegisterFlagCompletionFunc("service-account", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var emptyList []string
 		directive := cobra.ShellCompDirectiveNoSpace
 
-		conn, err := connFunc(connection.DefaultConfigSkipMasAuth)
+		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 		if err != nil {
 			return emptyList, directive
 		}
@@ -82,5 +83,19 @@ func RegisterServiceAccountCompletionFunc(cmd *cobra.Command, flagName string, c
 		}
 
 		return cachedServiceAccounts, directive
+	})
+}
+
+// RegisterTopicCompletionFunc enables dynamic autocompletion for topic flag
+func RegisterTopicCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
+	return cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
+	})
+}
+
+// RegisterGroupCompletionFunc enables dynamic autocompletion for group flag
+func RegisterGroupCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
+	return cmd.RegisterFlagCompletionFunc("group", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.FilterValidConsumerGroupIDs(f, toComplete)
 	})
 }

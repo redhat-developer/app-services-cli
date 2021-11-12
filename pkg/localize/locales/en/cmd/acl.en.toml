@@ -126,6 +126,15 @@ $ rhoas kafka acl list --user foo_user
 
 # Display Kafka ACL rules for a specific service account
 $ rhoas kafka acl list --service-account srvc-acct-f20a7561-7426-4f5a-b5e7-0ef2db31e15b
+
+# Display Kafka ACL rules for a specific topic
+$ rhoas kafka acl list --topic foo_topic_name
+
+# Display Kafka ACL rules for a specific consumer group
+$ rhoas kafka acl list --group foo_group_id
+
+# Display Kafka ACL rules for a specific consumer group and user
+$ rhoas kafka acl list --group foo_group_id --user foo_user
 '''
 
 [kafka.acl.list.cmd.shortDescription]
@@ -151,8 +160,14 @@ These ACLs allow all accounts in the organization to view the Kafka instance per
 The ACLs are displayed in a table by default. Alternatively, you can display them as JSON or YAML.
 '''
 
-[kafka.acl.list.flag.output.description]
-one = 'Format in which to display the Kafka ACL rules (choose from: "json", "yml", "yaml")'
+[kafka.acl.list.flag.cluster.description]
+one = 'Set filter to cluster resource'
+
+[kafka.acl.list.flag.topic.description]
+one = 'Text search to filter ACL rules for topics by name'
+
+[kafka.acl.list.flag.group.description]
+one = 'Text search to filter ACL rules for consumer groups by id'
 
 [kafka.acl.list.allAccounts]
 one = 'All Accounts'
@@ -162,6 +177,12 @@ one = 'is'
 
 [kafka.acl.list.startsWith]
 one = 'starts with'
+
+[kafka.acl.list.log.info.noACLs]
+one = 'No ACLs found in Kafka instance "{{.InstanceName}}"'
+
+[kafka.acl.list.error.oneResourceTypeAllowed]
+one = 'provide only one resource type from "--{{.ClusterFlag}}", "--{{.TopicFlag}}" or "--{{.GroupFlag}}"'
 
 [kafka.acl.grantPermissions]
 

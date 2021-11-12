@@ -11,12 +11,12 @@ import (
 
 	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
@@ -24,6 +24,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 )
 
 type options struct {
@@ -97,7 +98,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 	// flag based completions for ID
 	_ = cmd.RegisterFlagCompletionFunc("id", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+		return kafkacmdutil.FilterValidConsumerGroupIDs(f, toComplete)
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)

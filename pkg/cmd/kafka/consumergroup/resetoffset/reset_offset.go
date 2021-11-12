@@ -7,12 +7,12 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/AlecAivazis/survey/v2"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
@@ -107,12 +107,12 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 	// flag based completions for ID
 	_ = cmd.RegisterFlagCompletionFunc("id", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+		return kafkacmdutil.FilterValidConsumerGroupIDs(f, toComplete)
 	})
 
 	// flag based completions for topic
 	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return cmdutil.FilterValidTopicNameArgs(f, toComplete)
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)

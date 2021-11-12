@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
@@ -34,7 +35,12 @@ type options struct {
 	size      int32
 	kafkaID   string
 	principal string
-	output    string
+
+	topic   string
+	group   string
+	cluster bool
+
+	output string
 }
 
 // NewListACLCommand creates a new command to list Kafka ACL rules
@@ -107,7 +113,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer, opts.connection)
+	flags := flagutil.NewFlagSet(cmd, f)
 
 	flags.AddInstanceID(&opts.kafkaID)
 	flags.AddOutput(&opts.output)
@@ -116,6 +122,17 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 	flags.AddUser(&userID)
 	flags.AddServiceAccount(&serviceAccount)
 	flags.AddAllAccounts(&allAccounts)
+	flags.BoolVar(&opts.cluster, "cluster", false, opts.localizer.MustLocalize("kafka.acl.list.flag.cluster.description"))
+	flags.StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.acl.list.flag.topic.description"))
+	flags.StringVar(&opts.group, "group", "", opts.localizer.MustLocalize("kafka.acl.list.flag.group.description"))
+
+	_ = cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("group", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.FilterValidConsumerGroupIDs(f, toComplete)
+	})
 
 	return cmd
 }
@@ -141,6 +158,40 @@ func runList(opts *options) (err error) {
 		req = req.Principal(principalQuery)
 	}
 
+	var selectedResourceTypeCount int
+	var resourceType string
+	var resourceName string
+
+	if opts.topic != "" {
+		selectedResourceTypeCount++
+		resourceType = aclutil.ResourceTypeTOPIC
+		resourceName = opts.topic
+	}
+
+	if opts.group != "" {
+		selectedResourceTypeCount++
+		resourceType = aclutil.ResourceTypeGROUP
+		resourceName = opts.group
+	}
+
+	if opts.cluster {
+		selectedResourceTypeCount++
+		resourceType = aclutil.ResourceTypeCLUSTER
+		resourceName = aclutil.KafkaCluster
+	}
+
+	if selectedResourceTypeCount > 1 {
+		return opts.localizer.MustLocalizeError("kafka.acl.list.error.oneResourceTypeAllowed", flagutil.ResourceTypeFlagEntries...)
+	}
+
+	if resourceType != "" {
+		req = req.ResourceType(aclutil.GetMappedResourceTypeFilterValue(resourceType))
+	}
+
+	if resourceName != "" {
+		req = req.ResourceName(aclutil.GetResourceName(resourceName))
+	}
+
 	permissionsData, httpRes, err := req.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
@@ -148,6 +199,12 @@ func runList(opts *options) (err error) {
 
 	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
 		return err
+	}
+
+	if permissionsData.GetTotal() == 0 && opts.output == "" {
+		opts.logger.Info(opts.localizer.MustLocalize("kafka.acl.list.log.info.noACLs", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+
+		return nil
 	}
 
 	switch opts.output {
