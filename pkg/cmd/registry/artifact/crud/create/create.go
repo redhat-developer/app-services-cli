@@ -203,10 +203,10 @@ func printBrowserUrl(opts *options, metadata *registryinstanceclient.ArtifactMet
 	group := metadata.GetGroupId()
 
 	if group == "" {
-		group = "default"
+		group = util.DefaultArtifactGroup
 	}
 
-	registryURL := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", *registry.BrowserUrl, group, metadata.Id, metadata.Version)
+	registryURL := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", registry.GetBrowserUrl(), group, metadata.Id, metadata.Version)
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(registryURL))))
 	return nil
