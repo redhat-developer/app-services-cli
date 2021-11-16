@@ -63,7 +63,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
   `-o`, `--output` _string_::      Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml") (default "json")
   `-t`, `--type` _string_::        Type of artifact. Choose from: AVRO, PROTOBUF, JSON, OPENAPI, ASYNCAPI, GRAPHQL, KCONNECT, WSDL, XSD, XML
       `--version` _string_::       Custom version of the artifact (for example 1.0.0)
-      `--web`::                    Display web URL of the artifact
+      `--web-url`::                Display web URL of the artifact
 
 [discrete]
 == Options inherited from parent commands

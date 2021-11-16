@@ -116,7 +116,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString())))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
-	cmd.Flags().BoolVar(&opts.web, "web", false, opts.localizer.MustLocalize("artifact.common.webURL"))
+	cmd.Flags().BoolVar(&opts.web, "web-url", false, opts.localizer.MustLocalize("artifact.common.webURL"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -185,7 +185,7 @@ func runCreate(opts *options) error {
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 
 	if opts.web {
-		err = printBrowserUrl(opts, metadata)
+		err = printBrowserUrl(opts, &metadata)
 		if err != nil {
 			return err
 		}
@@ -194,7 +194,7 @@ func runCreate(opts *options) error {
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
 }
 
-func printBrowserUrl(opts *options, metadata registryinstanceclient.ArtifactMetaData) error {
+func printBrowserUrl(opts *options, metadata *registryinstanceclient.ArtifactMetaData) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
