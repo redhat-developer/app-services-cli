@@ -3,6 +3,7 @@ package create
 import (
 	"context"
 	"fmt"
+
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
@@ -41,8 +42,6 @@ type options struct {
 
 	registryID   string
 	outputFormat string
-
-	web bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -116,8 +115,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString())))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
-	cmd.Flags().BoolVar(&opts.web, "web-url", false, opts.localizer.MustLocalize("artifact.common.webURL"))
-
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -184,11 +181,9 @@ func runCreate(opts *options) error {
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 
-	if opts.web {
-		err = printBrowserUrl(opts, &metadata)
-		if err != nil {
-			return err
-		}
+	err = printBrowserUrl(opts, &metadata)
+	if err != nil {
+		return err
 	}
 
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
@@ -211,9 +206,9 @@ func printBrowserUrl(opts *options, metadata *registryinstanceclient.ArtifactMet
 		group = "default"
 	}
 
-	finalUrl := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", *registry.BrowserUrl, group, metadata.Id, metadata.Version)
+	registryURL := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", *registry.BrowserUrl, group, metadata.Id, metadata.Version)
 
-	opts.Logger.Info("URL:", color.Info(finalUrl))
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(registryURL))))
 	return nil
 
 }
