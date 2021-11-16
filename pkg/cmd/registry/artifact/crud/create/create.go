@@ -2,8 +2,12 @@ package create
 
 import (
 	"context"
+	"fmt"
+
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -177,5 +181,34 @@ func runCreate(opts *options) error {
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 
+	err = printBrowserUrl(opts, &metadata)
+	if err != nil {
+		return err
+	}
+
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
+}
+
+func printBrowserUrl(opts *options, metadata *registryinstanceclient.ArtifactMetaData) error {
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return err
+	}
+
+	registry, _, err := serviceregistry.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
+	if err != nil {
+		return err
+	}
+
+	group := metadata.GetGroupId()
+
+	if group == "" {
+		group = util.DefaultArtifactGroup
+	}
+
+	registryURL := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", registry.GetBrowserUrl(), group, metadata.Id, metadata.Version)
+
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(registryURL))))
+	return nil
+
 }

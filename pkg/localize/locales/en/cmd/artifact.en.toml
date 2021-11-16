@@ -80,6 +80,11 @@ one = 'Custom description of the artifact'
 [artifact.common.type]
 one = 'Type of artifact. Choose from: {{.AllowedTypes}}'
 
+[artifact.common.webURL]
+one = '''
+You can view or manage this artifact in your browser by accessing:
+{{.URL}}
+'''
 [artifact.common.global.id]
 one = 'Global ID of the artifact'
 
