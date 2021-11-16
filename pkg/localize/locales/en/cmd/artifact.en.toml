@@ -80,6 +80,9 @@ one = 'Custom description of the artifact'
 [artifact.common.type]
 one = 'Type of artifact. Choose from: {{.AllowedTypes}}'
 
+[artifact.common.webURL]
+one = 'Display web URL of the artifact'
+
 [artifact.common.global.id]
 one = 'Global ID of the artifact'
 

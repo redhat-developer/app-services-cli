@@ -2,8 +2,11 @@ package create
 
 import (
 	"context"
+	"fmt"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/color"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
@@ -38,6 +41,8 @@ type options struct {
 
 	registryID   string
 	outputFormat string
+
+	web bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -111,6 +116,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString())))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 
+	cmd.Flags().BoolVar(&opts.web, "web", false, opts.localizer.MustLocalize("artifact.common.webURL"))
+
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -177,5 +184,36 @@ func runCreate(opts *options) error {
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 
+	if opts.web {
+		err = printBrowserUrl(opts, metadata)
+		if err != nil {
+			return err
+		}
+	}
+
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
+}
+
+func printBrowserUrl(opts *options, metadata registryinstanceclient.ArtifactMetaData) error {
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return err
+	}
+
+	registry, _, err := serviceregistry.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
+	if err != nil {
+		return err
+	}
+
+	group := metadata.GetGroupId()
+
+	if group == "" {
+		group = "default"
+	}
+
+	finalUrl := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", *registry.BrowserUrl, group, metadata.Id, metadata.Version)
+
+	opts.Logger.Info("URL:", color.Info(finalUrl))
+	return nil
+
 }
