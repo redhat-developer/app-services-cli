@@ -60,7 +60,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
   `-g`, `--group` _string_::       Artifact group (default "default")
       `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
       `--name` _string_::          Custom name of the artifact
-  `-o`, `--output` _string_::      Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml") (default "json")
+  `-o`, `--output` _string_::      Output format (json, yaml, yml) (default "json")
   `-t`, `--type` _string_::        Type of artifact. Choose from: AVRO, PROTOBUF, JSON, OPENAPI, ASYNCAPI, GRAPHQL, KCONNECT, WSDL, XSD, XML
       `--version` _string_::       Custom version of the artifact (for example 1.0.0)
 
