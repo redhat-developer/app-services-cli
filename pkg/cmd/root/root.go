@@ -6,16 +6,16 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/config/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/logout"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
 	"github.com/spf13/cobra"
@@ -46,7 +46,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))
 	cmd.AddCommand(logout.NewLogoutCommand(f))
-	cmd.AddCommand(config.NewConfigCommand(f))
+	cmd.AddCommand(profile.NewConfigCommand(f))
 	cmd.AddCommand(kafka.NewKafkaCommand(f))
 	cmd.AddCommand(serviceaccount.NewServiceAccountCommand(f))
 	cmd.AddCommand(cluster.NewClusterCommand(f))
