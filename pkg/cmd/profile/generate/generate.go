@@ -25,12 +25,8 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	fileFormat       string
-	overwrite        bool
-	shortDescription string
-	filename         string
-
-	interactive bool
+	fileFormat string
+	folder     string
 }
 
 func NewGenerateCommand(f *factory.Factory) *cobra.Command {
@@ -76,6 +72,8 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "json", "type of configuration to generate [env, kube, json, helm, rhoas]")
 
+	cmd.Flags().StringVar(&opts.folder, "folder", ".rhoas", "folder used to hold configuration. Folder should not be pushed to git")
+
 	flagutil.EnableStaticFlagCompletion(cmd, "file-format", []string{"env", "kube", "json", "helm", "rhoas"})
 
 	return cmd
@@ -88,23 +86,26 @@ func runCmd(opts *options) error {
             "kafka": {
                "id": "c694a89bbdnrh1nhmhj0",
                "name": "target",
-               "bootstrapHostUrl": "target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org",
+               "bootstrapServerHosts": "target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org",
                "clientId": "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e",
                "clientSecret": "14a3d17-2ca9-4b67-b12c-192cfee1eca5",
-			   "oauthTokenUrl": "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
+               "oauthTokenUrl": "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
             },
             "service-registry": {
                "id": "c4b2efb1-7360-4ef1-bc15-b5a5c13c93f7",
                "name": "test",
                "url": "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e",
                "clientId": "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e",
-               "clientSecret": "14a3d17-2ca9-4b67-b12c-192cfee1eca5"
-			   "oauthTokenUrl": "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
+               "clientSecret": "14a3d17-2ca9-4b67-b12c-192cfee1eca5",
+               "oauthTokenUrl": "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
             }
          }
       `)
 
-		ioutil.WriteFile("config.json", []byte(fileData), 0o600)
+		err := ioutil.WriteFile(opts.folder+"/config.json", []byte(fileData), 0o600)
+		if err != nil {
+			return err
+		}
 		opts.Logger.Info("Successfully generated configuration for json format into config.json file")
 		return nil
 	}
@@ -113,7 +114,7 @@ func runCmd(opts *options) error {
 		fileData := heredoc.Doc(`
          ## RHOAS KAFKA
          KAFKA_ID=c694a89bbdnrh1nhmhj0
-         KAFKA_HOSTS=target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org
+         KAFKA_BOOSTRAP_SERVER_HOSTS=target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org
          KAFKA_CLIENT_ID=srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e
          KAFKA_CLIENT_SECRET=14a3d17-2ca9-4b67-b12c-192cfee1eca5
 
@@ -123,11 +124,14 @@ func runCmd(opts *options) error {
          SERVICE_REGISTRY_CLIENT_ID=srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e
          SERVICE_REGISTRY_CLIENT_SECRET=14a3d17-2ca9-4b67-b12c-192cfee1eca5
 
-		 TOKEN_URL=https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
+         OAUTH_TOKEN_URL=https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
       `)
 
-		ioutil.WriteFile("services.env", []byte(fileData), 0o600)
-		opts.Logger.Info("Successfully generated configuration env format into services.env file")
+		err := ioutil.WriteFile(opts.folder+"/rhoas.env", []byte(fileData), 0o600)
+		if err != nil {
+			return err
+		}
+		opts.Logger.Info("Successfully generated configuration env format into rhoas.env file")
 		return nil
 	}
 
@@ -139,12 +143,12 @@ func runCmd(opts *options) error {
         name: rhoas-service-config
       data:
          kafka-id: "c694a89bbdnrh1nhmhj0"
-         kafka-bootstrapHostUrl: "target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
+         kafka-bootstrapServerHosts: "target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
          kafka-auth-secret: "rhoasall-services"
          registry-id: "c4b2efb1-7360-4ef1-bc15-b5a5c13c93f7"
          registry-url: "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e"
          registry-auth-secret: "rhoasall-services"
-		 oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
+         oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
       ---
       apiVersion: v1
       kind: Secret
@@ -155,8 +159,8 @@ func runCmd(opts *options) error {
          client-secret: 14a3d17-2ca9-4b67-b12c-192cfee1eca5
       `)
 
-		ioutil.WriteFile("resources.yaml", []byte(fileData), 0o600)
-		opts.Logger.Info("Successfully generated configuration rhoas operator kube format into resources.yaml file")
+		ioutil.WriteFile(opts.folder+"/kubernetes.yaml", []byte(fileData), 0o600)
+		opts.Logger.Info("Successfully generated configuration rhoas operator kube format into kubernetes.yaml file")
 		return nil
 	}
 
@@ -170,14 +174,14 @@ func runCmd(opts *options) error {
          app.kubernetes.io/component: external-service
          app.kubernetes.io/managed-by: rhoas
       spec:
-	  	 oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
+         oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
          services:
-           - name: "kafka"
-            id: "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e"
-            serviceAccountSecretName: "rhoasall-services"
+         - name: "kafka"
+           id: "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e"
+           serviceAccountSecretName: "rhoasall-services"
          - name: "service-registry"
-            id: "c4b2efb1-7360-4ef1-bc15-b5a5c13c93f7"
-            serviceAccountSecretName: "rhoasall-services"
+           id: "c4b2efb1-7360-4ef1-bc15-b5a5c13c93f7"
+           serviceAccountSecretName: "rhoasall-services"
       ---
       apiVersion: v1
       kind: Secret
@@ -188,27 +192,32 @@ func runCmd(opts *options) error {
          client-secret: 14a3d17-2ca9-4b67-b12c-192cfee1eca5
       `)
 
-		ioutil.WriteFile("rhoas-config-cr.yaml", []byte(fileData), 0o600)
+		err := ioutil.WriteFile(opts.folder+"/rhoas-config-cr.yaml", []byte(fileData), 0o600)
+		if err != nil {
+			return err
+		}
 		opts.Logger.Info("Successfully generated configuration rhoas operator CR format into rhoas-config-cr.yaml file")
 	}
 
 	if opts.fileFormat == "helm" {
 		fileData := heredoc.Doc(`
       kafka:
-         bootstrapHostUrl: "target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org",
-         clientId: "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e",
+         bootstrapServerHosts: "target-1isy6rq3jki8q0otmjqfd3ocfrg.apps.mk-bttg0jn170hp.x5u8.s1.devshift.org"
+         clientId: "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e"
          clientSecret: "14a3d17-2ca9-4b67-b12c-192cfee1eca5"
-
+         oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
       service-registry: 
          url: "https://registry.apps.example.com/t/5213600b-afc9-487e-8cc3-srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e"
-         clientId: "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e",
+         clientId: "srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e"
          clientSecret: "14a3d17-2ca9-4b67-b12c-192cfee1eca5"
-
-	  oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
+         oauth-token-url: "https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token"
       `)
 
-		ioutil.WriteFile("rhoas-values.yaml", []byte(fileData), 0o600)
-		opts.Logger.Info("Successfully generated configuration for helm into rhoas-values.yaml file")
+		err := ioutil.WriteFile(opts.folder+"/rhoas-helm-values.yaml", []byte(fileData), 0o600)
+		if err != nil {
+			return err
+		}
+		opts.Logger.Info("Successfully generated configuration for helm into rhoas-helm-values.yaml file")
 	}
 
 	return nil
