@@ -2,17 +2,16 @@ package create
 
 import (
 	"context"
-	"fmt"
 
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
@@ -130,6 +129,11 @@ func runCreate(opts *options) error {
 		return err
 	}
 
+	registry, _, err := serviceregistry.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
+	if err != nil {
+		return err
+	}
+
 	dataAPI, _, err := conn.API().ServiceRegistryInstance(opts.registryID)
 	if err != nil {
 		return err
@@ -181,38 +185,11 @@ func runCreate(opts *options) error {
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 
-	err = printBrowserUrl(opts, &metadata)
-	if err != nil {
-		return err
+	artifactURL, ok := util.GetArtifactURL(registry, &metadata)
+
+	if ok {
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(artifactURL))))
 	}
 
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
-}
-
-func printBrowserUrl(opts *options, metadata *registryinstanceclient.ArtifactMetaData) error {
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-	if err != nil {
-		return err
-	}
-
-	registry, _, err := serviceregistry.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
-	if err != nil {
-		return err
-	}
-
-	group := metadata.GetGroupId()
-
-	if group == "" {
-		group = util.DefaultArtifactGroup
-	}
-
-	homeURL, ok := registry.GetBrowserUrlOk()
-
-	if ok {
-		registryURL := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", *homeURL, group, metadata.Id, metadata.Version)
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(registryURL))))
-	}
-
-	return nil
-
 }
