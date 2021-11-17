@@ -16,13 +16,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 
 	"github.com/AlecAivazis/survey/v2"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -35,7 +33,6 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	fileFormat       string
 	overwrite        bool
 	shortDescription string
 	filename         string
@@ -72,19 +69,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 					Localizer: opts.localizer,
 				}
 
-				if opts.fileFormat == "" {
-					return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format"))
-				}
-
 				if err = validator.ValidateShortDescription(opts.shortDescription); err != nil {
 					return err
 				}
-			}
-
-			// check that a valid --file-format flag value is used
-			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
-			if !validOutput && opts.fileFormat != "" {
-				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			}
 
 			return runCreate(opts)
@@ -94,9 +81,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.shortDescription, "short-description", "", opts.localizer.MustLocalize("serviceAccount.create.flag.shortDescription.description"))
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
 	cmd.Flags().StringVar(&opts.filename, "output-file", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
-	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
-
-	flagutil.EnableStaticFlagCompletion(cmd, "file-format", flagutil.CredentialsOutputFormats)
 
 	return cmd
 }
@@ -120,7 +104,7 @@ func runCreate(opts *options) error {
 		}
 	} else if opts.filename == "" {
 		// obtain the absolute path to where credentials will be saved
-		opts.filename = credentials.GetDefaultPath(opts.fileFormat)
+		opts.filename = credentials.GetDefaultPath("json")
 	}
 
 	// If the credentials file already exists, and the --overwrite flag is not set then return an error
@@ -160,7 +144,7 @@ func runCreate(opts *options) error {
 	}
 
 	// save the credentials to a file
-	err = credentials.Write(opts.fileFormat, opts.filename, creds)
+	err = credentials.Write(credentials.JSONFormat, opts.filename, creds)
 	if err != nil {
 		return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.couldNotSaveCredentialsFile"), err)
 	}
@@ -195,24 +179,7 @@ func runInteractivePrompt(opts *options) (err error) {
 		return err
 	}
 
-	// if the --file-format flag was not used, ask in the prompt
-	if opts.fileFormat == "" {
-		opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
-
-		fileFormatPrompt := &survey.Select{
-			Message: opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.message"),
-			Help:    opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.help"),
-			Options: flagutil.CredentialsOutputFormats,
-			Default: credentials.EnvFormat,
-		}
-
-		err = survey.AskOne(fileFormatPrompt, &opts.fileFormat)
-		if err != nil {
-			return err
-		}
-	}
-
-	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.fileFormat, opts.filename, opts.overwrite)
+	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(credentials.JSONFormat, opts.filename, opts.overwrite)
 	if err != nil {
 		return err
 	}

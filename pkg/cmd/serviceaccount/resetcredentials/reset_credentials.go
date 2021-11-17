@@ -14,14 +14,12 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/AlecAivazis/survey/v2"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
@@ -34,10 +32,9 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	id         string
-	fileFormat string
-	overwrite  bool
-	filename   string
+	id        string
+	overwrite bool
+	filename  string
 
 	interactive bool
 	force       bool
@@ -66,15 +63,6 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			if !opts.interactive && opts.fileFormat == "" {
-				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format"))
-			}
-
-			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
-			if !validOutput && opts.fileFormat != "" {
-				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
-			}
-
 			if !opts.interactive {
 				validator := &validation.Validator{
 					Localizer: opts.localizer,
@@ -93,10 +81,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("serviceAccount.resetCredentials.flag.id.description"))
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("serviceAccount.common.flag.overwrite.description"))
 	cmd.Flags().StringVar(&opts.filename, "output-file", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
-	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("serviceAccount.resetCredentials.flag.yes.description"))
-
-	flagutil.EnableStaticFlagCompletion(cmd, "file-format", flagutil.CredentialsOutputFormats)
 
 	return cmd
 }
@@ -125,7 +110,7 @@ func runResetCredentials(opts *options) (err error) {
 		}
 	} else if opts.filename == "" {
 		// obtain the default absolute path to where credentials will be saved
-		opts.filename = credentials.GetDefaultPath(opts.fileFormat)
+		opts.filename = credentials.GetDefaultPath(credentials.JSONFormat)
 	}
 
 	// If the credentials file already exists, and the --overwrite flag is not set then return an error
@@ -170,7 +155,7 @@ func runResetCredentials(opts *options) (err error) {
 	}
 
 	// save the credentials to a file
-	err = credentials.Write(opts.fileFormat, opts.filename, creds)
+	err = credentials.Write(credentials.JSONFormat, opts.filename, creds)
 	if err != nil {
 		return err
 	}
@@ -236,24 +221,7 @@ func runInteractivePrompt(opts *options) (err error) {
 		return err
 	}
 
-	// if the --output flag was not used, ask in the prompt
-	if opts.fileFormat == "" {
-		opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.common.log.debug.interactive.fileFormatNotSet"))
-
-		fileFormatPrompt := &survey.Select{
-			Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.message"),
-			Help:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.help"),
-			Options: flagutil.CredentialsOutputFormats,
-			Default: credentials.EnvFormat,
-		}
-
-		err = survey.AskOne(fileFormatPrompt, &opts.fileFormat)
-		if err != nil {
-			return err
-		}
-	}
-
-	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(opts.fileFormat, opts.filename, opts.overwrite)
+	opts.filename, opts.overwrite, err = credentials.ChooseFileLocation(credentials.JSONFormat, opts.filename, opts.overwrite)
 	if err != nil {
 		return err
 	}
