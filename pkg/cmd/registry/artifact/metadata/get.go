@@ -2,7 +2,9 @@ package metadata
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/icon"
 
 	"github.com/spf13/cobra"
@@ -12,7 +14,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
+	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
@@ -113,5 +117,38 @@ func runGet(opts *GetOptions) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.fetched"))
 
+	err = printBrowserUrl(opts, &response)
+	if err != nil {
+		return err
+	}
+
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+}
+
+func printBrowserUrl(opts *GetOptions, metadata *registryinstanceclient.ArtifactMetaData) error {
+	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return err
+	}
+
+	registry, _, err := serviceregistry.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
+	if err != nil {
+		return err
+	}
+
+	group := metadata.GetGroupId()
+
+	if group == "" {
+		group = util.DefaultArtifactGroup
+	}
+
+	homeURL, ok := registry.GetBrowserUrlOk()
+
+	if ok {
+		registryURL := fmt.Sprintf("%s/artifacts/%s/%s/versions/%s", *homeURL, group, metadata.Id, metadata.Version)
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(registryURL))))
+	}
+
+	return nil
+
 }
