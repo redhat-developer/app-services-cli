@@ -168,6 +168,10 @@ For example for Kafka service you should execute the following command to grant 
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic all --group all
 
+Similarly for service registry you should execute the following command:
+
+  $ rhoas service-registry role add --role=DEVELOPER --service-account your-sa
+
 '''
 
 [cluster.connect.cmd.example]
@@ -301,11 +305,21 @@ Client ID:     {{.ClientID}}
 Make a copy of the client ID to store in a safe place. Credentials won't appear again after closing the terminal.
 
 You will need to assign permissions to service account in order to use it. 
-For example for Kafka service you should execute the following command to grant access to the service account:
+'''
+
+[cluster.kubernetes.printKafkaAccessCommands]
+one = '''
+For Kafka service you should execute the following command to grant access to the service account:
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic all --group all
 '''
- 
+
+[cluster.kubernetes.printRegistryAccessCommands]
+one = '''
+For service registry you should execute the following command to grant access to the service account:
+
+  $ rhoas service-registry role add --role=DEVELOPER --service-account {{.ClientID}}
+'''
 
 [cluster.kubernetes.createTokenSecret.log.info.createFailed]
 one = 'Creation of the "{{.Name}}" secret failed:'

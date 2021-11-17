@@ -89,7 +89,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 	}
 
-	err = api.createServiceAccountSecretIfNeeded(currentNamespace)
+	err = api.createServiceAccountSecretIfNeeded(currentNamespace, currentService)
 	if err != nil {
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 	}
@@ -181,7 +181,7 @@ func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, a
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace string) error {
+func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace string, currentService services.RHOASKubernetesService) error {
 	cliOpts := c.CommandEnvironment
 	kClients := c.KubernetesClients
 	ctx := cliOpts.Context
@@ -217,6 +217,8 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 		localize.NewEntry("Name", createdSecret.Name),
 		localize.NewEntry("ClientID", serviceAcct.GetClientId()),
 	))
+
+	currentService.PrintAccessCommands(serviceAcct.GetClientId())
 
 	return nil
 }
