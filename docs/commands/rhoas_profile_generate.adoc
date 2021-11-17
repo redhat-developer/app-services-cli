@@ -1,0 +1,57 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-profile-generate_{context}']
+= rhoas profile generate
+
+[role="_abstract"]
+Generate configuration for current profile and active services
+
+[discrete]
+== Synopsis
+
+Command lets you to configure access to all services in one place, 
+by generating or reusing service account and embedding configuration 
+for various services. Configuration is designed to he automatically reusable and
+discoverable by various frameworks like Quarkus, Node.js and Python.
+
+This command will
+1. Reuse or create service account to be used for service authentication
+2. Provide configuration details for each service 
+3. Let you to drop configuration into your project to autoconfigure it.
+For examples please check https://github.com/rhoas-examples organization
+
+Supported configuration formats:
+
+- Local Dev (Environment variables)
+- Kubernetes (configmap and secret)
+- Thrid Party Integrations (JSON format) 
+- Helm (with ArgoCD)
+- RHOAS Operator Config CR
+
+
+
+....
+rhoas profile generate [flags]
+....
+
+[discrete]
+== Options
+
+      `--file-format` _string_::   type of configuration to generate [env, kube, json, helm, rhoas] (default "json")
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_profile.adoc#rhoas-profile[rhoas profile]	 - Generates and manages services profiles
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile_{context}[rhoas profile]	 - Generates and manages services profiles
+endif::[]
+

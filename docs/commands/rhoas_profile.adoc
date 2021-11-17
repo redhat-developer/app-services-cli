@@ -1,0 +1,69 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-profile_{context}']
+= rhoas profile
+
+[role="_abstract"]
+Generates and manages services profiles
+
+[discrete]
+== Synopsis
+
+Group of command that provide abstraction for managed services configuration.
+
+Config commands give users ability to:
+
+- Manage profiles of configurations containing multiple services
+Profiles 
+
+- Generate various service confiurations for local development and kubernetes
+	
+Generates and manages services configurations that can be used 
+to configure your application deployments to be able to
+connect with RHOAS managed services.
+
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_profile_generate.adoc#rhoas-profile-generate[rhoas profile generate]	 - Generate configuration for current profile and active services
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile-generate_{context}[rhoas profile generate]	 - Generate configuration for current profile and active services
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_profile_manage.adoc#rhoas-profile-manage[rhoas profile manage]	 - manage configuration profiles. What services are enabled
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile-manage_{context}[rhoas profile manage]	 - manage configuration profiles. What services are enabled
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_profile_status.adoc#rhoas-profile-status[rhoas profile status]	 - View the status of all currently used services
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile-status_{context}[rhoas profile status]	 - View the status of all currently used services
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:rhoas_profile_view.adoc#rhoas-profile-view[rhoas profile view]	 - view configuration profiles
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile-view_{context}[rhoas profile view]	 - view configuration profiles
+endif::[]
+

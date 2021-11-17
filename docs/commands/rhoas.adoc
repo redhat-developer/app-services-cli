@@ -75,6 +75,13 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
+* link:rhoas_profile.adoc#rhoas-profile[rhoas profile]	 - Generates and manages services profiles
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile_{context}[rhoas profile]	 - Generates and manages services profiles
+endif::[]
+
+ifdef::env-github,env-browser[]
 * link:rhoas_service-account.adoc#rhoas-service-account[rhoas service-account]	 - Create, list, describe, delete and update service accounts
 endif::[]
 ifdef::pantheonenv[]

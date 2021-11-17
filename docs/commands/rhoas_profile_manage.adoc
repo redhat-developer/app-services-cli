@@ -1,0 +1,41 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-profile-manage_{context}']
+= rhoas profile manage
+
+[role="_abstract"]
+manage configuration profiles. What services are enabled
+
+[discrete]
+== Synopsis
+
+Manage command lets you select groups of services. 
+Selected services will be used in the RHOAS CLI to generate config and 
+to perform specific actions like creation of topics.
+
+
+....
+rhoas profile manage [flags]
+....
+
+[discrete]
+== Options
+
+      `--profile` _string_::   name of the profile to be use or create (default "default")
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_profile.adoc#rhoas-profile[rhoas profile]	 - Generates and manages services profiles
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-profile_{context}[rhoas profile]	 - Generates and manages services profiles
+endif::[]
+
