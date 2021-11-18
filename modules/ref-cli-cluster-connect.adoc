@@ -27,6 +27,10 @@ For example for Kafka service you should execute the following command to grant 
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic all --group all
 
+Similarly for service registry you should execute the following command:
+
+  $ rhoas service-registry role add --role=DEVELOPER --service-account your-sa
+
 
 
 ....
