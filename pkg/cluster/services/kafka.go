@@ -80,6 +80,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 	return &serviceDetails, nil
 }
 
+// Print command to grant service account acccess to the Kafka instance
 func (s KafkaService) PrintAccessCommands(clientID string) {
 	cliOpts := s.CommandEnvironment
 	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.printKafkaAccessCommands", localize.NewEntry("ClientID", clientID)))
