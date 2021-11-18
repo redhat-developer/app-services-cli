@@ -1,4 +1,20 @@
 
+<a name="v0.36.4"></a>
+## [v0.36.4](https://github.com/redhat-developer/app-services-cli/compare/v0.36.3...v0.36.4) (2021-11-18)
+
+### Bug Fixes
+
+* output format for create artifact cmd
+* **cluster connect:** print access commands separately for services ([#1327](https://github.com/redhat-developer/app-services-cli/issues/1327))
+* **deps:** update all to v0.22.4
+* **deps:** update golang.org/x/oauth2 commit hash to d3ed0bb ([#1317](https://github.com/redhat-developer/app-services-cli/issues/1317))
+
+### Features
+
+* **artifact metadata-get:** print url to UI
+* **service-registry artifact create:** print url to UI ([#1322](https://github.com/redhat-developer/app-services-cli/issues/1322))
+
+
 <a name="v0.36.3"></a>
 ## [v0.36.3](https://github.com/redhat-developer/app-services-cli/compare/v0.36.2...v0.36.3) (2021-11-12)
 
