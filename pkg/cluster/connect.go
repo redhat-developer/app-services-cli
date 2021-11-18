@@ -89,9 +89,13 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
 	}
 
-	err = api.createServiceAccountSecretIfNeeded(currentNamespace)
+	clientID, err := api.createServiceAccountSecretIfNeeded(currentNamespace)
 	if err != nil {
 		return kubeclient.TranslatedKubernetesErrors(api.CommandEnvironment, err)
+	}
+
+	if clientID != "" {
+		currentService.PrintAccessCommands(clientID)
 	}
 
 	err = api.createCustomResource(serviceDetails, currentNamespace)
@@ -181,7 +185,7 @@ func (c *KubernetesClusterAPIImpl) createTokenSecretIfNeeded(namespace string, a
 }
 
 // createSecret creates a new secret to store the SASL/PLAIN credentials from the service account
-func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace string) error {
+func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace string) (string, error) {
 	cliOpts := c.CommandEnvironment
 	kClients := c.KubernetesClients
 	ctx := cliOpts.Context
@@ -189,12 +193,12 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 	_, err := kClients.Clientset.CoreV1().Secrets(namespace).Get(context.TODO(), constants.ServiceAccountSecretName, metav1.GetOptions{})
 	if err == nil {
 		cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.log.info.exist"))
-		return nil
+		return "", nil
 	}
 
 	serviceAcct, err := c.createServiceAccount(ctx, cliOpts)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	secret := &apiv1.Secret{
@@ -210,7 +214,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 
 	createdSecret, err := kClients.Clientset.CoreV1().Secrets(namespace).Create(cliOpts.Context, secret, metav1.CreateOptions{})
 	if err != nil {
-		return fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
+		return "", fmt.Errorf("%v: %w", cliOpts.Localizer.MustLocalize("cluster.kubernetes.serviceaccountsecret.error.createError"), err)
 	}
 
 	cliOpts.Logger.Info(icon.SuccessPrefix(), cliOpts.Localizer.MustLocalize("cluster.kubernetes.createSASecret.log.info.createSuccess",
@@ -218,7 +222,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 		localize.NewEntry("ClientID", serviceAcct.GetClientId()),
 	))
 
-	return nil
+	return serviceAcct.GetClientId(), nil
 }
 
 // createServiceAccount creates a service account

@@ -6,6 +6,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -77,4 +78,10 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 	}
 
 	return &serviceDetails, nil
+}
+
+// PrintAccessCommands prints command to grant service account acccess to the Kafka instance
+func (s KafkaService) PrintAccessCommands(clientID string) {
+	cliOpts := s.CommandEnvironment
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.printKafkaAccessCommands", localize.NewEntry("ClientID", clientID)))
 }

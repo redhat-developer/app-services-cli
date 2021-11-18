@@ -17,4 +17,7 @@ type RHOASKubernetesService interface {
 
 	// Build Custom Resource representing desired service that should be created
 	BuildServiceDetails(serviceName string, namespace string, ignoreConfigContext bool) (*ServiceDetails, error)
+
+	// Print commands to be executed to grant access to the service
+	PrintAccessCommands(clientID string)
 }

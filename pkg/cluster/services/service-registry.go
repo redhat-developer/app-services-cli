@@ -5,6 +5,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -78,4 +79,10 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 	}
 
 	return &serviceDetails, nil
+}
+
+// PrintAccessCommands prints command to assign service account roles in the service registry instance
+func (s RegistryService) PrintAccessCommands(clientID string) {
+	cliOpts := s.CommandEnvironment
+	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.printRegistryAccessCommands", localize.NewEntry("ClientID", clientID)))
 }
