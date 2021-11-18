@@ -309,14 +309,14 @@ You will need to assign permissions to service account in order to use it.
 
 [cluster.kubernetes.printKafkaAccessCommands]
 one = '''
-For Kafka service you should execute the following command to grant access to the service account:
+You need to separately grant service account access to Kafka by issuing following command 
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic all --group all
 '''
 
 [cluster.kubernetes.printRegistryAccessCommands]
 one = '''
-For service registry you should execute the following command to grant access to the service account:
+You might need to assign non-readonly roles for the service account based on the use case (READ_ONLY by default):
 
   $ rhoas service-registry role add --role=DEVELOPER --service-account {{.ClientID}}
 '''
