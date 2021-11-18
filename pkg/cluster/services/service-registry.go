@@ -81,7 +81,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 	return &serviceDetails, nil
 }
 
-// Print commands to assign service account roles in the service registry instance
+// PrintAccessCommands prints command to assign service account roles in the service registry instance
 func (s RegistryService) PrintAccessCommands(clientID string) {
 	cliOpts := s.CommandEnvironment
 	cliOpts.Logger.Info(cliOpts.Localizer.MustLocalize("cluster.kubernetes.printRegistryAccessCommands", localize.NewEntry("ClientID", clientID)))
