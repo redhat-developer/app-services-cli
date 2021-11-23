@@ -94,7 +94,7 @@ one = 'Kafka instance "{{.Name}}" has no ACLs matching the provided filters'
 one = '"--all-accounts" flag cannot be used in conjunction with "--user" or "--service-account" flags'
 
 [kafka.acl.common.error.useAllAccountsFlag]
-one = 'to set a wilcard on the ACL principal, pass "--all-accounts"'
+one = 'to set a wildcard on the ACL principal, pass "--all-accounts"'
 
 [kafka.acl.common.error.serviceAccount404]
 one = 'service account "{{.ClientID}}" does not exist'

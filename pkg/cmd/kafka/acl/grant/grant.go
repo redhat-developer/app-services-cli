@@ -318,7 +318,7 @@ func validateFlagInputCombination(opts *options) error {
 
 	// user and service account can't be along with "--all-accounts" flag
 	if allAccounts && (serviceAccount != "" || userID != "") {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.allPrinciapls.error.notAllowed")
+		return opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
 	}
 
 	// checks if group resource name is provided when operation is not consumer
@@ -351,7 +351,7 @@ func validateFlagInputCombination(opts *options) error {
 	}
 
 	// user and service account should not allow wildcard
-	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
 		return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 

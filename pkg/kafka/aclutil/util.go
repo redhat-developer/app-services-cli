@@ -41,7 +41,7 @@ type CrudOptions struct {
 // When the value of the `--topic`, `--group`, `user` or `service-account` option is one of
 // the keys of this map, it will be replaced by the corresponding value.
 var commonArgAliases = map[string]string{
-	"all": Wildcard,
+	AllAlias: Wildcard,
 }
 
 // ExecuteACLRuleCreate makes request to create an ACL rule

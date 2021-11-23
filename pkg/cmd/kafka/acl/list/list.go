@@ -93,7 +93,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// user and service account should not allow wildcard
-			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 			}
 

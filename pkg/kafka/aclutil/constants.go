@@ -3,6 +3,7 @@ package aclutil
 const (
 	Wildcard     = "*"
 	KafkaCluster = "kafka-cluster"
+	AllAlias     = "all"
 )
 
 const (
