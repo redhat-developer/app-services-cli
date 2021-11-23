@@ -39,83 +39,60 @@ rbacapi_dir=./pkg/api/rbac/rbacclient
 # Enable Go modules:
 export GO111MODULE=on
 
-# Prints a list of useful targets.
-help:
-	@echo ""
-	@echo "RHOAS CLI"
-	@echo ""
-	@echo "make lint                 	run golangci-lint"
-	@echo "make binary               	compile binaries"
-	@echo "make test                 	run  tests"
-	@echo "make format             		format files"
-	@echo "make openapi/pull					pull openapi definition"
-	@echo "make openapi/generate     	generate openapi modules"
-	@echo "make openapi/validate     	validate openapi schema"
-	@echo "make pkger									bundle static assets"
-	@echo "make docs/check						check if docs need to be updated"
-	@echo "make docs/generate					generate the docs"
-
-	@echo "$(fake)"
-.PHONY: help
-
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
-lint:
+lint: ## Lint Go files for errors
 	golangci-lint run cmd/... pkg/... internal/...
-.PHONY: lint
 
-generate:
+generate: ## Scan code for generate comments and run generators
 	go generate ./...
 
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
-binary:
+binary: ## Compile the rhoas binary into the local project directory
 	go build $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" -o ${binary} ./cmd/rhoas
 .PHONY: binary
 
-install:
+install: ## Compile and install rhoas and add it to the PAth 
 	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/rhoas
 .PHONY: install
 
-test/unit: install
+test: ## Run unit tests
 	go test ./pkg/...
-.PHONY: test/unit
+.PHONY: test
 
-openapi/ams/generate:
+generate-ams-sdk: ## Generate the Account Management Service SDK
 	openapi-generator-cli generate -i openapi/ams.json -g go --package-name amsclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${amsapi_dir}
 	# generate mock
 	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
 	gofmt -w ${amsapi_dir}
-.PHONY: openapi/ams/generate
+.PHONY: generate-ams-sdk
 
-openapi/rbac/generate:
-	openapi-generator-cli generate -i https://console.redhat.com/api/rbac/v1/openapi.json -g go --package-name rbacclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${rbacapi_dir}
-	# generate mock
-	moq -out ${rbacapi_dir}/role_api_mock.go ${rbacapi_dir} RoleApi
-	gofmt -w ${rbacapi_dir}
-.PHONY: openapi/ams/generate
-
-mock-api/start: 
+start-mock-api: ## Start the mock rhoas server
 	npm install -g @rhoas/api-mock
 	asapi --pre-seed
 .PHONY: mock-api/start
 
-# clean up code and dependencies
-format:
+format: ## Clean up code and dependencies
 	@go mod tidy
 
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 
-docs/check: docs/generate
+check-docs: docs/generate ## Check whether reference documentation needs to be generated
 	./scripts/check-docs.sh
-.PHONY: docs/check
+.PHONY: check-docs
 
-docs/generate:
+generate-docs: ## Generate command-line reference documentation
 	rm -rf ./docs/commands/*
 	go run ./cmd/rhoas docs --dir ./docs/commands --file-format adoc
-.PHONY: docs/generate
+.PHONY: generate-docs
 
-docs/generate-modular-docs: docs/generate
+generate-modular-docs: docs/generate ## Generate modular command-line reference documentation
 	SRC_DIR=$$(pwd)/docs/commands DEST_DIR=$$(pwd)/dist go run ./cmd/modular-docs
-.PHONY: docs/generate-modular-docs
+.PHONY: generate-modular-docs
+
+# Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+help:
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+.PHONY: help

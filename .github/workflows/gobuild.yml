@@ -31,8 +31,8 @@ jobs:
           # skip-build-cache: true
           args: --timeout 2m0s  
       - name: Check documentation
-        run: make docs/check
+        run: make check-docs
       - name: Build
         run: make binary
       - name: Unit tests
-        run: make test/unit
+        run: make test
