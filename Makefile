@@ -79,7 +79,7 @@ format: ## Clean up code and dependencies
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
 
-check-docs: docs/generate ## Check whether reference documentation needs to be generated
+check-docs: generate-docs ## Check whether reference documentation needs to be generated
 	./scripts/check-docs.sh
 .PHONY: check-docs
 
@@ -88,7 +88,7 @@ generate-docs: ## Generate command-line reference documentation
 	go run ./cmd/rhoas docs --dir ./docs/commands --file-format adoc
 .PHONY: generate-docs
 
-generate-modular-docs: docs/generate ## Generate modular command-line reference documentation
+generate-modular-docs: generate-docs ## Generate modular command-line reference documentation
 	SRC_DIR=$$(pwd)/docs/commands DEST_DIR=$$(pwd)/dist go run ./cmd/modular-docs
 .PHONY: generate-modular-docs
 
