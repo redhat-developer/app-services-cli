@@ -73,7 +73,7 @@ Generates code based on comments in code. This is primarily used to generate int
 
 If you have the Go extension for VS Code, you can generate test stubs for a file, package or function. See [Go#Test](https://code.visualstudio.com/docs/languages/go#_test)
 
-### `make test/unit`
+### `make test`
 
 Runs unit tests
 
@@ -111,17 +111,11 @@ The CLI documentation output is generated in the `./docs` directory.
 
 ### Generating documentation
 
-Documentation can be generated from the CLI commands.
-
-```shell
-make docs/generate
-```
-
-#### `make docs/generate`
+#### `make generate-docs`
 
 After running the command, the documentation should be generated in AsciiDoc format.
 
-#### `make docs/generate-modular-docs`
+#### `make generate-modular-docs`
 
 After running the command, the `dist` directory will contain the documentation conforming to the modular docs specification.
 
