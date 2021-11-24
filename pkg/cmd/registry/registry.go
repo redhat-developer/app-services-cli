@@ -18,7 +18,6 @@ import (
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "service-registry",
-		Annotations: profile.DevPreviewAnnotation(),
 		Short:       f.Localizer.MustLocalize("registry.cmd.shortDescription"),
 		Long:        f.Localizer.MustLocalize("registry.cmd.longDescription"),
 		Example:     f.Localizer.MustLocalize("registry.cmd.example"),
@@ -35,8 +34,6 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		artifact.NewArtifactsCommand(f),
 		role.NewRoleCommand(f),
 	)
-
-	profile.ApplyDevPreviewLabel(cmd)
 
 	return cmd
 }
