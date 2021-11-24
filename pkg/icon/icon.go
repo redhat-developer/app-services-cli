@@ -10,6 +10,7 @@ const (
 	ErrorSymbol     = "\u274c"
 	checkMarkSymbol = "\u2714\ufe0f"
 	infoSymbol      = "\u2139"
+	arrowSymbol     = "\u2192"
 )
 
 // Emoji accepts two arguments, emoji sequence code, and fallback string, for the cases when emoji isn't supported.
@@ -39,12 +40,28 @@ func InfoPrefix() string {
 	return color.Info(emoji)
 }
 
+// ArrowPrefix returns an emoji indicating a bullet point
+func ArrowPrefix() string {
+	emoji := horizontalPadPrefixIcon(arrowSymbol)
+	return color.Error(emoji)
+}
+
 // Add a space after a prefix icon
 func rightPadPrefixIcon(emojiCode string) string {
 	fallback := ""
 	emoji := Emoji(emojiCode, fallback)
 	if emoji != fallback {
 		emoji += " "
+	}
+	return emoji
+}
+
+// Add a space on either side of a prefix icon
+func horizontalPadPrefixIcon(emojiCode string) string {
+	fallback := ""
+	emoji := Emoji(emojiCode, fallback)
+	if emoji != fallback {
+		emoji = " " + emoji + " "
 	}
 	return emoji
 }

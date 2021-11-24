@@ -301,58 +301,71 @@ func runGrantPermissions(opts *options) (err error) {
 
 // validateFlagInputCombination checks if appropriate flags are provided for specified operation
 func validateFlagInputCombination(opts *options) error {
+
+	var errorCollection []error
 	// check if any operation is specified
 	if !opts.consumer && !opts.producer {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noOperationSpecified")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.common.error.noOperationSpecified"))
 	}
 
 	// check if principal is provided
 	if userID == "" && serviceAccount == "" && !allAccounts {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected"))
 	}
 
 	// user and service account should not be provided together
 	if userID != "" && serviceAccount != "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected"))
 	}
 
 	// user and service account can't be along with "--all-accounts" flag
 	if allAccounts && (serviceAccount != "" || userID != "") {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag"))
 	}
 
 	// checks if group resource name is provided when operation is not consumer
 	if !opts.consumer && (opts.group != "" || opts.groupPrefix != "") {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.notAllowed")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.notAllowed"))
+
 	}
 
 	// checks if topic flag is provided
-	if (opts.topic == "" && opts.topicPrefix == "") && (opts.consumer || opts.producer) {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.topic.error.required")
+	if opts.topic == "" && opts.topicPrefix == "" {
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.topic.error.required"))
 	}
 
 	// checks if group resource name is provided for consumer operation
 	if opts.consumer && opts.group == "" && opts.groupPrefix == "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.required")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.required"))
+	}
+
+	if (!opts.consumer && !opts.producer) && (opts.group == "" && opts.groupPrefix == "") {
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.group.error.required"))
 	}
 
 	// checks if "--topic" and "--topic-prefix" are provided together
 	if opts.topicPrefix != "" && opts.topic != "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
+		topicErr := opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
 			localize.NewEntry("Resource", "topic"),
 		)
+		errorCollection = append(errorCollection, topicErr)
 	}
 
 	// checks if "--group" and "--group-prefix" are provided together
 	if opts.groupPrefix != "" && opts.group != "" {
-		return opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
+		groupErr := opts.localizer.MustLocalizeError("kafka.acl.grantPermissions.prefix.error.notAllowed",
 			localize.NewEntry("Resource", "group"),
 		)
+		errorCollection = append(errorCollection, groupErr)
 	}
 
 	// user and service account should not allow wildcard
 	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
-		return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
+		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag"))
+	}
+
+	if len(errorCollection) > 0 {
+		return aclutil.BuildInstructions(errorCollection)
 	}
 
 	return nil

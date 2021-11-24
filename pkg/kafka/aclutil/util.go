@@ -2,6 +2,7 @@ package aclutil
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -152,4 +153,16 @@ func ValidateAPIError(httpRes *http.Response, localizer localize.Localizer, err 
 	default:
 		return err
 	}
+}
+
+// BuildInstructions accepts a slice of errors and creates a single formatted error object
+func BuildInstructions(errorCollection []error) error {
+
+	errString := "invalid or missing option(s):" + "\n"
+
+	for _, err := range errorCollection {
+		errString += "  " + err.Error() + "\n"
+	}
+
+	return errors.New(errString)
 }

@@ -69,8 +69,14 @@ one = 'Service account client ID used as principal for this operation'
 [kafka.acl.common.flag.operation.description]
 one = 'Set the ACL operation'
 
+[kafka.acl.common.flag.operation.required]
+one = '"--operation" flag is required'
+
 [kafka.acl.common.flag.permission.description]
 one = 'Set the ACL permission'
+
+[kafka.acl.common.flag.permission.required]
+one = '"--permission" flag is required'
 
 [kafka.acl.common.flag.cluster.description]
 one = 'Set the resource type to cluster'
