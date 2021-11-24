@@ -161,7 +161,7 @@ func BuildInstructions(errorCollection []error) error {
 	errString := "invalid or missing option(s):" + "\n"
 
 	for _, err := range errorCollection {
-		errString += "  " + err.Error() + "\n"
+		errString += fmt.Sprintf("   * ") + err.Error() + "\n"
 	}
 
 	return errors.New(errString)
