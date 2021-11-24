@@ -186,7 +186,7 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
 	}
 
-	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard {
+	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 
