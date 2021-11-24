@@ -88,6 +88,7 @@ linters:
     - govet
     - gocritic
     - misspell
+    - asciicheck
   presets:
     - bugs
     - unused
