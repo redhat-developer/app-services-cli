@@ -8,6 +8,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/color"
 	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
@@ -161,7 +162,7 @@ func BuildInstructions(errorCollection []error) error {
 	errString := "invalid or missing option(s):" + "\n"
 
 	for _, err := range errorCollection {
-		errString += fmt.Sprintf("   * ") + err.Error() + "\n"
+		errString += fmt.Sprintf("   %s ", color.Error("*")) + err.Error() + "\n"
 	}
 
 	return errors.New(errString)

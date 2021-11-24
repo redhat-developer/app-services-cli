@@ -94,6 +94,10 @@ func rootError(err error, localizer localize.Localizer) error {
 	if prefix == icon.ErrorSymbol {
 		errMessage = firstCharToUpper(errMessage)
 	}
+
+	if strings.Contains(errMessage, "\n") {
+		return fmt.Errorf("%v %v\n%v", icon.ErrorPrefix(), errMessage, localizer.MustLocalize("common.log.error.verboseModeHint"))
+	}
 	return fmt.Errorf("%v %v. %v", icon.ErrorPrefix(), errMessage, localizer.MustLocalize("common.log.error.verboseModeHint"))
 }
 
