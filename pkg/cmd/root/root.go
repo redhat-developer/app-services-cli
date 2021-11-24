@@ -6,16 +6,16 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
+	profile "github.com/redhat-developer/app-services-cli/pkg/cmd/context"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/logout"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
 	"github.com/spf13/cobra"

@@ -2,19 +2,19 @@ package profile
 
 import (
 	"github.com/MakeNowJust/heredoc"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/generate"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/manage"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/status"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/view"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile/generate"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile/manage"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile/status"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/profile/view"
 
 	"github.com/spf13/cobra"
 )
 
 func NewConfigCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "profile",
-		Short: "Generates and manages services profiles",
+		Use:   "context",
+		Short: "Generates and manages services context",
 		Long: heredoc.Doc(`
 		Group of command that provide abstraction for managed services configuration.
 

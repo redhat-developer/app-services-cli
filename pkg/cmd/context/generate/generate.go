@@ -51,16 +51,16 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
       This command will
       1. Reuse or create service account to be used for service authentication
       2. Provide configuration details for each service 
-      3. Let you to drop configuration into your project to autoconfigure it.
-      For examples please check https://github.com/rhoas-examples organization
+      3. Let you to create configuration into your project to autoconfigure it.
 
       Supported configuration formats:
 
       - Local Dev (Environment variables)
+      - Properties (Properties files for CLI, Kafka, Java)
       - Kubernetes (configmap and secret)
       - Thrid Party Integrations (JSON format) 
       - Helm (with ArgoCD)
-      - RHOAS Operator Config CR
+      - RHOAS Operator CRs
 
 `),
 		Example: "",
@@ -70,11 +70,11 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "json", "type of configuration to generate [env, kube, json, helm, rhoas]")
+	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "json", "type of configuration to generate [env, properties, kube, json, helm, rhoas]")
 
 	cmd.Flags().StringVar(&opts.folder, "folder", ".rhoas", "folder used to hold configuration. Folder should not be pushed to git")
 
-	flagutil.EnableStaticFlagCompletion(cmd, "file-format", []string{"env", "kube", "json", "helm", "rhoas"})
+	flagutil.EnableStaticFlagCompletion(cmd, "file-format", []string{"env", "kube", "json", "helm", "rhoas", "properties"})
 
 	return cmd
 }
