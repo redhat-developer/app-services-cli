@@ -54,12 +54,22 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return flag.RequiredWhenNonInteractiveError("yes")
 			}
 
-			if err := aclutil.ValidateAndSetResources(opts, flagutil.ResourceTypeFlagEntries); err != nil {
-				return err
+			var errorCollection []error
+
+			if opts.Operation == "" {
+				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
 			}
 
-			if err := validateAndSetOpts(opts); err != nil {
-				return err
+			if resourceErrors := aclutil.ValidateAndSetResources(opts, flagutil.ResourceTypeFlagEntries); resourceErrors != nil {
+				errorCollection = append(errorCollection, resourceErrors)
+			}
+
+			if principalErrors := validateAndSetOpts(opts); principalErrors != nil {
+				errorCollection = append(errorCollection, principalErrors)
+			}
+
+			if len(errorCollection) > 0 {
+				return aclutil.BuildInstructions(errorCollection)
 			}
 
 			return runDelete(opts.InstanceID, opts)
@@ -68,8 +78,8 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 	flags := flagutil.NewFlagSet(cmd, f)
 
-	_ = flags.AddPermissionFilter(&opts.Permission).Required()
-	_ = flags.AddOperationFilter(&opts.Operation).Required()
+	flags.AddPermissionFilter(&opts.Permission)
+	flags.AddOperationFilter(&opts.Operation)
 
 	flags.AddCluster(&opts.Cluster)
 	flags.AddPrefix(&prefix)
