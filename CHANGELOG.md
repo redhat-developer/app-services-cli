@@ -1,4 +1,15 @@
 
+<a name="0.36.5"></a>
+## [0.36.5](https://github.com/redhat-developer/app-services-cli/compare/v0.36.4...0.36.5) (2021-11-26)
+
+### Bug Fixes
+
+* broken mock make target ([#1336](https://github.com/redhat-developer/app-services-cli/issues/1336))
+* remove dev preview help for service registry commands ([#1335](https://github.com/redhat-developer/app-services-cli/issues/1335))
+* add ascicheck
+* **kafka acl:** disallow all alias for pricipal ([#1333](https://github.com/redhat-developer/app-services-cli/issues/1333))
+
+
 <a name="v0.36.4"></a>
 ## [v0.36.4](https://github.com/redhat-developer/app-services-cli/compare/v0.36.3...v0.36.4) (2021-11-18)
 
