@@ -19,7 +19,7 @@ jobs:
       - run: make generate-modular-docs
         name: Generate modular-docs
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.6
+        uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
           branch: modular-docs # The branch the action should deploy to.
           folder: dist # The folder the action should deploy.
