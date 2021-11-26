@@ -87,7 +87,7 @@ To work and test CLI locally please follow the [mock readme](https://github.com/
 rhoas login --api-gateway=http://localhost:8000
 ```
 
-### `make mock-api/start`
+### `make start-mock-api`
 
 Starts the mock all services Manager API and Instance API at [`http://localhost:8000`](http://localhost:8000).
 
