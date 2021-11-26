@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry artifact get
 
 [role="_abstract"]
-[beta] Get artifact by ID and group
+Get artifact by ID and group
 
 [discrete]
 == Synopsis
@@ -14,8 +14,6 @@ Command fetches the latest artifact from the registry based on the artifact-id a
 When --version is specified, the command fetches the specific artifact version.
 Get command fetches artifacts based on --group and --artifact-id and --version.
 For fetching artifacts using global identifiers, use the "service-registry download" command
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -60,9 +58,9 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 

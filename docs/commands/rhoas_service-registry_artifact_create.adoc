@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry artifact create
 
 [role="_abstract"]
-[beta] Creates new artifact from file or standard input
+Creates new artifact from file or standard input
 
 [discrete]
 == Synopsis
@@ -31,8 +31,6 @@ If an artifact with the provided artifact ID already exists, the command will fa
 
 When the --group parameter is missing, the command uses the "default" group.
 when the --instance-id is missing, the command creates a new artifact for the currently active Service Registry instance (displayed in rhoas service-registry describe)
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -75,9 +73,9 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 

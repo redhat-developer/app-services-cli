@@ -3,14 +3,12 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry artifact list
 
 [role="_abstract"]
-[beta] List artifacts
+List artifacts
 
 [discrete]
 == Synopsis
 
 List all artifacts for the group by specified output format (by default, table)
-This command is available as part of the Development Preview release.
-
 
 ....
 rhoas service-registry artifact list [flags]
@@ -51,9 +49,9 @@ rhoas service-registry artifact list --page=2 --limit=10
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 

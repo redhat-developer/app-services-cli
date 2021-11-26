@@ -3,15 +3,13 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry delete
 
 [role="_abstract"]
-[beta] Delete a Service Registry instance
+Delete a Service Registry instance
 
 [discrete]
 == Synopsis
 
  
 Delete a Service Registry instance along with all of its schema and API artifacts.
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -48,9 +46,9 @@ rhoas service-registry delete --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [beta] Service Registry commands
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - Service Registry commands
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [beta] Service Registry commands
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
 endif::[]
 
