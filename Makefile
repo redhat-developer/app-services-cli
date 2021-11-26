@@ -71,7 +71,7 @@ generate-ams-sdk: ## Generate the Account Management Service SDK
 start-mock-api: ## Start the mock rhoas server
 	npm install -g @rhoas/api-mock
 	asapi --pre-seed
-.PHONY: mock-api/start
+.PHONY: start-mock-api
 
 format: ## Clean up code and dependencies
 	@go mod tidy
