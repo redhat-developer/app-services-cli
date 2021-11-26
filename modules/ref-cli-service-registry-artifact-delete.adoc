@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry artifact delete
 
 [role="_abstract"]
-[beta] Deletes single or all artifacts in a given group
+Deletes single or all artifacts in a given group
 
 [discrete]
 == Synopsis
@@ -13,8 +13,6 @@ Deletes single or all artifacts in a given group.
 When called without arguments, deletes all artifacts in the group
 When --artifact-id is specified, deletes only a single artifact and its version
 When --group parameter is missing, the command uses the "default" group.
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -52,9 +50,9 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 
