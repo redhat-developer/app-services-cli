@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry artifact update
 
 [role="_abstract"]
-[beta] Update artifact
+Update artifact
 
 [discrete]
 == Synopsis
@@ -19,8 +19,6 @@ An artifact is updated using the content provided in the request body.
 This content is updated under a unique artifactId provided by user.
 
 Updated artifact content should conform to validity and compatibility rules set for the registry instance.
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -61,9 +59,9 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 

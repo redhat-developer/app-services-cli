@@ -3,14 +3,12 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry artifact versions
 
 [role="_abstract"]
-[beta] Get latest artifact versions by artifact-id and group
+Get latest artifact versions by artifact-id and group
 
 [discrete]
 == Synopsis
 
 Get latest artifact versions by specifying group and artifact-id
-This command is available as part of the Development Preview release.
-
 
 ....
 rhoas service-registry artifact versions [flags]
@@ -47,9 +45,9 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - [beta] Manage Service Registry artifacts
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
 endif::[]
 

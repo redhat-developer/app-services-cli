@@ -3,15 +3,13 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas service-registry list
 
 [role="_abstract"]
-[beta] List Service Registry instances
+List Service Registry instances
 
 [discrete]
 == Synopsis
 
  
 List all Service Registry instances for your account and paginate over the results.
-
-This command is available as part of the Development Preview release.
 
 
 ....
@@ -44,9 +42,9 @@ rhoas service-registry list
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - [beta] Service Registry commands
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - Service Registry commands
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - [beta] Service Registry commands
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
 endif::[]
 
