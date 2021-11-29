@@ -92,7 +92,14 @@ generate-modular-docs: generate-docs ## Generate modular command-line reference 
 	SRC_DIR=$$(pwd)/docs/commands DEST_DIR=$$(pwd)/dist go run ./cmd/modular-docs
 .PHONY: generate-modular-docs
 
+lint-lang:
+	git clone git@github.com:redhat-developer/app-services-go-linter
+	cd app-services-go-linter && make binary
+	app-services-go-linter/rhoas-lint
+.PHONY: lint-lang
+
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 .PHONY: help
+
