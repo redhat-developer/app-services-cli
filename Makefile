@@ -93,9 +93,8 @@ generate-modular-docs: generate-docs ## Generate modular command-line reference 
 .PHONY: generate-modular-docs
 
 lint-lang:
-	git clone git@github.com:redhat-developer/app-services-go-linter
-	cd app-services-go-linter && make binary
-	app-services-go-linter/rhoas-lint
+	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
+	app-services-go-linter
 .PHONY: lint-lang
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
