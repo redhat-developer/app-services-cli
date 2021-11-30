@@ -5,22 +5,19 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/topicutil"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
 	"github.com/AlecAivazis/survey/v2"
-
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/spf13/cobra"
 )
@@ -74,7 +71,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.outputFormat != "" {
-				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
+				if err = flagutil.ValidateOutput(opts.outputFormat); err != nil {
 					return err
 				}
 			}
@@ -82,7 +79,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			// check that a valid --cleanup-policy flag value is used
 			validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 			if !validPolicy {
-				return flag.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
+				return flagutil.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topicutil.ValidCleanupPolicies...)
 			}
 
 			if !opts.interactive {

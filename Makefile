@@ -33,15 +33,14 @@ endif
 # The details of the application:
 binary:=rhoas
 
-amsapi_dir=./pkg/api/ams/amsclient
-rbacapi_dir=./pkg/api/rbac/rbacclient
+amsapi_dir=./pkg/apis/ams/amsclient
 
 # Enable Go modules:
 export GO111MODULE=on
 
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
-lint: ## Lint Go files for errors
+lint: lint-lang ## Lint Go files for errors
 	golangci-lint run cmd/... pkg/... internal/...
 
 generate: ## Scan code for generate comments and run generators
@@ -58,7 +57,7 @@ install: ## Compile and install rhoas and add it to the PAth
 .PHONY: install
 
 test: ## Run unit tests
-	go test ./pkg/...
+	go test ./pkg/... ./internal/...
 .PHONY: test
 
 generate-ams-sdk: ## Generate the Account Management Service SDK
@@ -94,7 +93,7 @@ generate-modular-docs: generate-docs ## Generate modular command-line reference 
 
 lint-lang: ## Lint i18n files
 	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
-	app-services-go-linter ./...
+	app-services-go-linter -path ./pkg/core/localize/locales ./...
 .PHONY: lint-lang
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html

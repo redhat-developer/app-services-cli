@@ -5,7 +5,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/clean"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/connect"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster/status"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/spf13/cobra"
 )
 

@@ -2,23 +2,17 @@ package add
 
 import (
 	"context"
-
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 )
 
 type options struct {
@@ -128,7 +122,7 @@ func runAdd(opts *options) error {
 			Role: *role,
 		}).Execute()
 		if err != nil {
-			return registryinstanceerror.TransformError(err)
+			return serviceregistryutil.TransformInstanceError(err)
 		}
 	} else {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.role.cmd.creating"))
@@ -139,7 +133,7 @@ func runAdd(opts *options) error {
 		request := dataAPI.AdminApi.CreateRoleMapping(opts.Context)
 		_, err = request.RoleMapping(roleMapping).Execute()
 		if err != nil {
-			return registryinstanceerror.TransformError(err)
+			return serviceregistryutil.TransformInstanceError(err)
 		}
 	}
 
@@ -152,7 +146,7 @@ func runAdd(opts *options) error {
 func principalHasRole(opts *options, admin registryinstanceclient.AdminApi) bool {
 	_, _, err := admin.GetRoleMapping(opts.Context, opts.principal).Execute()
 	if err != nil {
-		apiError, _ := registryinstanceerror.GetAPIError(err)
+		apiError, _ := serviceregistryutil.GetInstanceAPIError(err)
 		return apiError.GetErrorCode() != 404
 	}
 	return true

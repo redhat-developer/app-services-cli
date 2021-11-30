@@ -2,16 +2,16 @@ package delete
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	aclFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/aclutil"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
@@ -51,7 +51,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.SkipConfirm {
-				return flag.RequiredWhenNonInteractiveError("yes")
+				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
 			var errorCollection []error
@@ -60,7 +60,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
 			}
 
-			if resourceErrors := aclutil.ValidateAndSetResources(opts, flagutil.ResourceTypeFlagEntries); resourceErrors != nil {
+			if resourceErrors := aclutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
 				errorCollection = append(errorCollection, resourceErrors)
 			}
 
@@ -76,7 +76,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, f)
+	flags := aclFlagUtil.NewFlagSet(cmd, f)
 
 	flags.AddPermissionFilter(&opts.Permission)
 	flags.AddOperationFilter(&opts.Operation)
