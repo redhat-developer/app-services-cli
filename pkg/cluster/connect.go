@@ -278,7 +278,8 @@ func (api *KubernetesClusterAPIImpl) watchForServiceStatus(
 						typedCondition, ok := condition.(map[string]interface{})
 						if !ok {
 							return fmt.Errorf(
-								localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.format"), typedCondition)
+								localizer.MustLocalize("cluster.kubernetes.watchForResourceStatus.error.status",
+									localize.NewEntry("Resource", serviceDetails.Type)), typedCondition)
 						}
 						if typedCondition["type"].(string) == "Finished" {
 							if typedCondition["status"].(string) == "False" {

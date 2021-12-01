@@ -32,6 +32,8 @@ jobs:
           args: --timeout 2m0s  
       - name: Check documentation
         run: make check-docs
+      - name: Check i18n
+        run: make lint-lang
       - name: Build
         run: make binary
       - name: Unit tests
