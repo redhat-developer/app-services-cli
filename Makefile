@@ -94,7 +94,7 @@ generate-modular-docs: generate-docs ## Generate modular command-line reference 
 
 lint-lang: ## Lint i18n files
 	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
-	app-services-go-linter
+	app-services-go-linter ./...
 .PHONY: lint-lang
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
