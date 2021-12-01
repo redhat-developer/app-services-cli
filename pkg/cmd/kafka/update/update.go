@@ -40,7 +40,7 @@ type options struct {
 
 	interactive    bool
 	userIsOrgAdmin bool
-	enableReauth   string
+	reauth         string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -49,6 +49,10 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 }
+
+var (
+	validAuthOptions = []string{"true", "false"}
+)
 
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	opts := options{
@@ -82,6 +86,10 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 				return nil
 			}
 
+			if opts.reauth != "" && !flagutil.IsValidInput(opts.reauth, validAuthOptions...) {
+				return flag.InvalidValueError("reauthentication", opts.reauth, validAuthOptions...)
+			}
+
 			if !opts.IO.CanPrompt() {
 				var missingFlags []string
 				if !opts.skipConfirm {
@@ -91,7 +99,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 					return flag.RequiredWhenNonInteractiveError(missingFlags...)
 				}
 			}
-			if opts.owner == "" && opts.enableReauth == "" {
+			if opts.owner == "" && opts.reauth == "" {
 				opts.interactive = true
 			}
 
@@ -117,12 +125,14 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.update.flag.id"))
 	flags.StringVar(&opts.owner, "owner", "", opts.localizer.MustLocalize("kafka.update.flag.owner"))
-	flags.StringVar(&opts.enableReauth, "enable-reauth", "", opts.localizer.MustLocalize("kafka.update.flag.enableReauth"))
+	flags.StringVar(&opts.reauth, "reauthentication", "", opts.localizer.MustLocalize("kafka.update.flag.reauthentication"))
 	flags.AddYes(&opts.skipConfirm)
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
 	_ = flagutil.RegisterUserCompletionFunc(cmd, "owner", f)
+
+	flagutil.EnableStaticFlagCompletion(cmd, "reauthentication", validAuthOptions)
 
 	return cmd
 }
@@ -160,13 +170,13 @@ func run(opts *options) error {
 			return err
 		}
 
-		enableReauthPrompt := &survey.Select{
-			Message: opts.localizer.MustLocalize("kafka.update.input.message.enableReauth"),
+		reauthenticationPrompt := &survey.Select{
+			Message: opts.localizer.MustLocalize("kafka.update.input.message.reauthentication"),
 			Options: []string{"true", "false"},
 			Default: strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()),
 		}
 
-		err = survey.AskOne(enableReauthPrompt, &opts.enableReauth)
+		err = survey.AskOne(reauthenticationPrompt, &opts.reauth)
 		if err != nil {
 			return err
 		}
@@ -179,8 +189,8 @@ func run(opts *options) error {
 		needsUpdate = true
 	}
 
-	if opts.enableReauth != "" && opts.enableReauth != strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()) {
-		enableBool, newErr := strconv.ParseBool(opts.enableReauth)
+	if opts.reauth != "" && opts.reauth != strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()) {
+		enableBool, newErr := strconv.ParseBool(opts.reauth)
 		if newErr != nil {
 			return newErr
 		}
