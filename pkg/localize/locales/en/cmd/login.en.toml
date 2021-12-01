@@ -113,7 +113,7 @@ one = 'Logged in successfully to {{.Host}}'
 [login.error.noRealmInURL]
 one = 'the authentication URL is missing a realm'
 
-[login.log.debug.sshLoginDetected]
+[login.log.info.sshLoginDetected]
 one = '''
 SSH session detected: you may experience issues attempting to log in through a web browser. 
 You can log in using an offline-token by passing the "--token" flag instead, which can be obtained at {{.OfflineTokenURL}}.
@@ -121,7 +121,3 @@ You can log in using an offline-token by passing the "--token" flag instead, whi
 
 [login.error.context.deadline.exceeded]
 one = 'login operation took too long. Please try again'
-
-
-[login.log.info.sshLoginDetected]
-one = 'SSH login detected without --token provided. You can generate your token in {{.OfflineTokenURL}}'
