@@ -95,7 +95,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.IO.IsSSHSession() && opts.offlineToken == "" {
-				opts.Logger.Info(opts.localizer.MustLocalize("login.log.info.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+				opts.Logger.Debug(opts.localizer.MustLocalize("login.log.debug.sshLoginDetected", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 			}
 
 			return runLogin(opts)
