@@ -1,4 +1,12 @@
 
+<a name="v0.36.6"></a>
+## [v0.36.6](https://github.com/redhat-developer/app-services-cli/compare/v0.36.5...v0.36.6) (2021-12-01)
+
+### Bug Fixes
+
+* remove non read only docs for srs ([#1339](https://github.com/redhat-developer/app-services-cli/issues/1339))
+
+
 <a name="v0.36.5"></a>
 ## [v0.36.5](https://github.com/redhat-developer/app-services-cli/compare/v0.36.4...v0.36.5) (2021-11-26)
 
