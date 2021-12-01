@@ -36,6 +36,9 @@ one = 'Name of the Kafka instance you want to update'
 description = 'Description for the --owner flag'
 one = 'ID of the user you want to set as the owner of this Kafka instance'
 
+[kafka.update.flag.enableReauth]
+one = 'Enable connection reauthentication for the Kafka instance'
+
 [kafka.update.flag.yes]
 one = 'Forcibly update the Kafka instance without confirmation'
 
@@ -45,11 +48,11 @@ one = 'Summary of Proposed Changes'
 [kafka.update.confirmDialog.message]
 one = 'Are you sure you want to update the Kafka instance "{{.Name}}"?'
 
-[kafka.update.log.info.sameOwnerNoChanges]
-one = 'Nothing to update: user "{{.Owner}}" is already the owner of the Kafka instance "{{.InstanceName}}".'
-
 [kafka.update.log.info.updating]
 one = 'Updating Kafka instance "{{.Name}}"...'
+
+[kafka.update.log.info.nothingToUpdate]
+one = 'Nothing to update'
 
 [kafka.update.log.info.updateSuccess]
 one = 'Kafka instance "{{.Name}}" has been updated. Run "rhoas kafka describe --name {{.Name}}" to view its configuration.'
@@ -59,6 +62,9 @@ one = 'Loading users...'
 
 [kafka.update.input.message.selectOwner]
 one = "Select new owner:"
+
+[kafka.update.input.message.enableReauth]
+one = "Enable connection reauthentication [optional]:"
 
 [kafka.update.error.loadUsersError]
 one = 'unable to load users'

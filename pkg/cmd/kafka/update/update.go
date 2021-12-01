@@ -40,6 +40,7 @@ type options struct {
 
 	interactive    bool
 	userIsOrgAdmin bool
+	enableReauth   string
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -90,7 +91,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 					return flag.RequiredWhenNonInteractiveError(missingFlags...)
 				}
 			}
-			if opts.owner == "" {
+			if opts.owner == "" && opts.enableReauth == "" {
 				opts.interactive = true
 			}
 
@@ -116,6 +117,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.update.flag.id"))
 	flags.StringVar(&opts.owner, "owner", "", opts.localizer.MustLocalize("kafka.update.flag.owner"))
+	flags.StringVar(&opts.enableReauth, "enable-reauth", "", opts.localizer.MustLocalize("kafka.update.flag.enableReauth"))
 	flags.AddYes(&opts.skipConfirm)
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
@@ -125,6 +127,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
+// nolint:funlen
 func run(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
@@ -132,6 +135,9 @@ func run(opts *options) error {
 	}
 
 	api := conn.API()
+
+	// track if any values have changed
+	var needsUpdate bool
 
 	var kafkaInstance *kafkamgmtclient.KafkaRequest
 	if opts.name != "" {
@@ -153,15 +159,40 @@ func run(opts *options) error {
 		if err != nil {
 			return err
 		}
-	}
 
-	if opts.owner == kafkaInstance.GetOwner() {
-		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.sameOwnerNoChanges", localize.NewEntry("Owner", opts.owner), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
-		return nil
+		enableReauthPrompt := &survey.Select{
+			Message: opts.localizer.MustLocalize("kafka.update.input.message.enableReauth"),
+			Options: []string{"true", "false"},
+			Default: strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()),
+		}
+
+		err = survey.AskOne(enableReauthPrompt, &opts.enableReauth)
+		if err != nil {
+			return err
+		}
 	}
 
 	updateObj := kafkamgmtclient.NewKafkaUpdateRequest()
-	updateObj.SetOwner(opts.owner)
+
+	if opts.owner != "" && opts.owner != kafkaInstance.GetOwner() {
+		updateObj.SetOwner(opts.owner)
+		needsUpdate = true
+	}
+
+	if opts.enableReauth != "" && opts.enableReauth != strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()) {
+		enableBool, newErr := strconv.ParseBool(opts.enableReauth)
+		if newErr != nil {
+			return newErr
+		}
+
+		updateObj.SetReauthenticationEnabled(enableBool)
+		needsUpdate = true
+	}
+
+	if !needsUpdate {
+		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.nothingToUpdate"))
+		return nil
+	}
 
 	// create a text block with a summary of what is being updated
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
