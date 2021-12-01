@@ -316,7 +316,7 @@ You need to separately grant service account access to Kafka by issuing followin
 
 [cluster.kubernetes.printRegistryAccessCommands]
 one = '''
-You need to assign role for the service account:
+You need to assign one of the roles for the service account in order to use it with service registry. For example:
 
   $ rhoas service-registry role add --role=DEVELOPER --service-account {{.ClientID}}
 '''
