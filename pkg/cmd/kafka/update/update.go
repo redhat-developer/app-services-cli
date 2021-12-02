@@ -216,6 +216,10 @@ func run(opts *options) error {
 		updateSummary,
 	)
 
+	if opts.reauth == "false" {
+		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.reauthentication.disclaimer"))
+	}
+
 	if !opts.skipConfirm {
 		//nolint:govet
 		confirm, err := promptConfirmUpdate(opts)

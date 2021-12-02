@@ -48,6 +48,16 @@ one = 'Forcibly update the Kafka instance without confirmation'
 [kafka.update.summaryTitle]
 one = 'Summary of Proposed Changes'
 
+[kafka.update.reauthentication.disclaimer]
+one = '''
+A suspected incident of credential leak for a Kafka instance with disabled
+reauthentication needs to be handled by disconnecting the clients.
+
+Options to disconnect client:
+- Use ACLs to prevent unauthorized connections from performing any operation
+- Contact Red Hat support
+'''
+
 [kafka.update.confirmDialog.message]
 one = 'Are you sure you want to update the Kafka instance "{{.Name}}"?'
 
