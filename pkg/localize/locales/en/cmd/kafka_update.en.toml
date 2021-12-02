@@ -60,6 +60,9 @@ one = 'Nothing to update'
 [kafka.update.log.info.updateSuccess]
 one = 'Kafka instance "{{.Name}}" has been updated. Run "rhoas kafka describe --name {{.Name}}" to view its configuration.'
 
+[kafka.update.log.info.updateFailed]
+one = 'Kafka instance could not be updated.'
+
 [kafka.update.log.info.loadingUsers]
 one = 'Loading users...'
 

@@ -244,6 +244,7 @@ func run(opts *options) error {
 	s.Stop()
 
 	if err != nil {
+		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.updateFailed"))
 		if apiError := kas.GetAPIError(err); apiError != nil {
 			return errors.New(apiError.GetReason())
 		}
