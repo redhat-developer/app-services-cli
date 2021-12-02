@@ -50,12 +50,12 @@ one = 'Summary of Proposed Changes'
 
 [kafka.update.reauthentication.disclaimer]
 one = '''
-A suspected incident of credential leak for a Kafka instance with disabled
-reauthentication needs to be handled by disconnecting the clients.
+If a bad actor obtains credentials or service account to Kafka instance that has disabled reauthentication,
+deactivating the user account or service account will not disconnect already established connections.
 
-Options to disconnect client:
-- Use ACLs to prevent unauthorized connections from performing any operation
+Options to disconnect client when reauthentication is disabled:
 - Contact Red Hat support
+- Use ACLs to prevent unauthorized connections from performing any operation
 '''
 
 [kafka.update.confirmDialog.message]
