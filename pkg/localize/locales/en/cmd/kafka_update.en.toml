@@ -21,7 +21,7 @@ $ rhoas kafka update --name=my-kafka --owner=other-user
 $ rhoas kafka update --owner=other-user
 
 # update the reauthentication configuration of the current Kafka instance
-$ rhoas kafka update --reauthentication true
+$ rhoas kafka update --reauthentication=true
 
 # update the current Kafka instance in interactive mode
 $ rhoas kafka update
@@ -54,8 +54,8 @@ If a bad actor obtains credentials or service account to Kafka instance that has
 deactivating the user account or service account will not disconnect already established connections.
 
 Options to disconnect client when reauthentication is disabled:
-- Contact Red Hat support
 - Use ACLs to prevent unauthorized connections from performing any operation
+- Create support case for RHOSAK product
 '''
 
 [kafka.update.confirmDialog.message]
@@ -65,7 +65,7 @@ one = 'Are you sure you want to update the Kafka instance "{{.Name}}"?'
 one = 'Updating Kafka instance "{{.Name}}"...'
 
 [kafka.update.log.info.nothingToUpdate]
-one = 'Nothing to update'
+one = 'Provided values match current Kafka configuration'
 
 [kafka.update.log.info.updateSuccess]
 one = 'Kafka instance "{{.Name}}" has been updated. Run "rhoas kafka describe --name {{.Name}}" to view its configuration.'
