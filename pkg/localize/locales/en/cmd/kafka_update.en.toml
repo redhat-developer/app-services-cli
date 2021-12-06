@@ -71,7 +71,7 @@ one = 'Provided values match current Kafka configuration'
 one = 'Kafka instance "{{.Name}}" has been updated. Run "rhoas kafka describe --name {{.Name}}" to view its configuration.'
 
 [kafka.update.log.info.updateFailed]
-one = 'Kafka instance could not be updated.'
+one = 'Kafka instance could not be updated: {{.Reason}}'
 
 [kafka.update.log.info.loadingUsers]
 one = 'Loading users...'

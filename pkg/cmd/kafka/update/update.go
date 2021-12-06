@@ -2,7 +2,6 @@ package update
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -221,10 +220,9 @@ func run(opts *options) error {
 	}
 
 	if !opts.skipConfirm {
-		//nolint:govet
-		confirm, err := promptConfirmUpdate(opts)
-		if err != nil {
-			return err
+		confirm, promptErr := promptConfirmUpdate(opts)
+		if promptErr != nil {
+			return promptErr
 		}
 		if !confirm {
 			opts.logger.Debug("User has chosen to not update Kafka instance")
@@ -248,9 +246,8 @@ func run(opts *options) error {
 	s.Stop()
 
 	if err != nil {
-		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.updateFailed"))
 		if apiError := kas.GetAPIError(err); apiError != nil {
-			return errors.New(apiError.GetReason())
+			return opts.localizer.MustLocalizeError("kafka.update.log.info.updateFailed", localize.NewEntry("Reason", apiError.GetReason()))
 		}
 		return err
 	}

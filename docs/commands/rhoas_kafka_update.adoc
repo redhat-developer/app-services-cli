@@ -29,7 +29,7 @@ $ rhoas kafka update --name=my-kafka --owner=other-user
 $ rhoas kafka update --owner=other-user
 
 # update the reauthentication configuration of the current Kafka instance
-$ rhoas kafka update --reauthentication true
+$ rhoas kafka update --reauthentication=true
 
 # update the current Kafka instance in interactive mode
 $ rhoas kafka update
