@@ -12,25 +12,29 @@ const (
 	TRIBOOL_DEFAULT = ""
 )
 
-var validTribools = []string{
+// ValidTribools is an array of valid tribool string values
+var ValidTribools = []string{
 	TRIBOOL_TRUE,
 	TRIBOOL_FALSE,
 	TRIBOOL_DEFAULT,
 }
 
-func isTriboolValid(val string) error {
+// IsTriboolValid validates if a string corresponds to a valid tribool value
+func IsTriboolValid(val string) error {
 	switch Tribool(val) {
-	case TRIBOOL_FALSE, TRIBOOL_TRUE:
+	case TRIBOOL_FALSE, TRIBOOL_TRUE, TRIBOOL_DEFAULT:
 		return nil
 	}
 
 	return errors.New("invalid tribool")
 }
 
+// Tribool is a tri-state boolean where extra state corresponds to ""
 type Tribool string
 
+// Set accepts the CLI input as string and assigns it to the tribool variable
 func (s *Tribool) Set(val string) error {
-	err := isTriboolValid(val)
+	err := IsTriboolValid(val)
 	if err != nil {
 		return err
 	}
@@ -38,10 +42,12 @@ func (s *Tribool) Set(val string) error {
 	return nil
 }
 
+// Type returns the type of flag
 func (s *Tribool) Type() string {
 	return "Tribool"
 }
 
+// String returns the tribool as a string
 func (s *Tribool) String() string { return string(*s) }
 
 // TriBoolVar defines a tribool flag with specified name, default value, and usage string.
@@ -50,7 +56,7 @@ func (fs *FlagSet) TriBoolVar(p *Tribool, name string, value Tribool, usage stri
 	fs.VarP(newTriBoolValue(value, p), name, "", usage)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(name, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return validTribools, cobra.ShellCompDirectiveNoSpace
+		return ValidTribools, cobra.ShellCompDirectiveNoSpace
 	})
 }
 

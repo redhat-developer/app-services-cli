@@ -80,7 +80,7 @@ one = 'Loading users...'
 one = "Select new owner:"
 
 [kafka.update.input.message.reauthentication]
-one = "Enable connection reauthentication [optional]:"
+one = "Enable connection reauthentication:"
 
 [kafka.update.error.loadUsersError]
 one = 'unable to load users'
