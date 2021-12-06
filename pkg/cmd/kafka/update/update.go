@@ -39,7 +39,7 @@ type options struct {
 
 	interactive    bool
 	userIsOrgAdmin bool
-	reauth         string
+	reauth         flagutil.Tribool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -48,10 +48,6 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 }
-
-var (
-	validAuthOptions = []string{"true", "false"}
-)
 
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	opts := options{
@@ -83,10 +79,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			if !opts.userIsOrgAdmin {
 				opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.onlyOrgAdminsCanUpdate"))
 				return nil
-			}
-
-			if opts.reauth != "" && !flagutil.IsValidInput(opts.reauth, validAuthOptions...) {
-				return flag.InvalidValueError("reauthentication", opts.reauth, validAuthOptions...)
 			}
 
 			if !opts.IO.CanPrompt() {
@@ -124,14 +116,12 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.update.flag.id"))
 	flags.StringVar(&opts.owner, "owner", "", opts.localizer.MustLocalize("kafka.update.flag.owner"))
-	flags.StringVar(&opts.reauth, "reauthentication", "", opts.localizer.MustLocalize("kafka.update.flag.reauthentication"))
+	flags.TriBoolVar(&opts.reauth, "reauthentication", flagutil.TRIBOOL_DEFAULT, opts.localizer.MustLocalize("kafka.update.flag.reauthentication"))
 	flags.AddYes(&opts.skipConfirm)
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
 	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
 	_ = flagutil.RegisterUserCompletionFunc(cmd, "owner", f)
-
-	flagutil.EnableStaticFlagCompletion(cmd, "reauthentication", validAuthOptions)
 
 	return cmd
 }
@@ -188,8 +178,8 @@ func run(opts *options) error {
 		needsUpdate = true
 	}
 
-	if opts.reauth != "" && opts.reauth != strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()) {
-		enableBool, newErr := strconv.ParseBool(opts.reauth)
+	if opts.reauth != flagutil.TRIBOOL_DEFAULT && string(opts.reauth) != strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()) {
+		enableBool, newErr := strconv.ParseBool(string(opts.reauth))
 		if newErr != nil {
 			return newErr
 		}
@@ -215,7 +205,7 @@ func run(opts *options) error {
 		updateSummary,
 	)
 
-	if opts.reauth == "false" {
+	if opts.reauth == flagutil.TRIBOOL_FALSE {
 		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.reauthentication.disclaimer"))
 	}
 

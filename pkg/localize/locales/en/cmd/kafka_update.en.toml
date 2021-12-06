@@ -50,12 +50,12 @@ one = 'Summary of Proposed Changes'
 
 [kafka.update.reauthentication.disclaimer]
 one = '''
-If a bad actor obtains credentials or service account to Kafka instance that has disabled reauthentication,
+This change can affect your Kafka security if a bad actor obtains credentials or service account to Kafka instance that has disabled reauthentication,
 deactivating the user account or service account will not disconnect already established connections.
 
 Options to disconnect client when reauthentication is disabled:
-- Use ACLs to prevent unauthorized connections from performing any operation
-- Create support case for RHOSAK product
+* Use ACLs to prevent unauthorized connections from performing any operation
+* Create support case for RHOSAK product
 '''
 
 [kafka.update.confirmDialog.message]

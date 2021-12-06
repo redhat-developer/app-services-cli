@@ -39,11 +39,11 @@ $ rhoas kafka update
 [discrete]
 == Options
 
-      `--id` _string_::                 Unique ID of the Kafka instance you want to update
-      `--name` _string_::               Name of the Kafka instance you want to update
-      `--owner` _string_::              ID of the user you want to set as the owner of this Kafka instance
-      `--reauthentication` _string_::   Enable connection reauthentication for the Kafka instance
-  `-y`, `--yes`::                       Skip confirmation of this action 
+      `--id` _string_::                  Unique ID of the Kafka instance you want to update
+      `--name` _string_::                Name of the Kafka instance you want to update
+      `--owner` _string_::               ID of the user you want to set as the owner of this Kafka instance
+      `--reauthentication` _Tribool_::   Enable connection reauthentication for the Kafka instance
+  `-y`, `--yes`::                        Skip confirmation of this action 
 
 [discrete]
 == Options inherited from parent commands
