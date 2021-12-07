@@ -20,6 +20,9 @@ $ rhoas kafka update --name=my-kafka --owner=other-user
 # update the owner of the current Kafka instance
 $ rhoas kafka update --owner=other-user
 
+# update the reauthentication configuration of the current Kafka instance
+$ rhoas kafka update --reauthentication=true
+
 # update the current Kafka instance in interactive mode
 $ rhoas kafka update
 '''
@@ -36,29 +39,48 @@ one = 'Name of the Kafka instance you want to update'
 description = 'Description for the --owner flag'
 one = 'ID of the user you want to set as the owner of this Kafka instance'
 
+[kafka.update.flag.reauthentication]
+one = 'Enable connection reauthentication for the Kafka instance'
+
 [kafka.update.flag.yes]
 one = 'Forcibly update the Kafka instance without confirmation'
 
 [kafka.update.summaryTitle]
 one = 'Summary of Proposed Changes'
 
+[kafka.update.reauthentication.disclaimer]
+one = '''
+This change can affect your Kafka security if a bad actor obtains credentials or service account to Kafka instance that has disabled reauthentication,
+deactivating the user account or service account will not disconnect already established connections.
+
+Options to disconnect client when reauthentication is disabled:
+* Use ACLs to prevent unauthorized connections from performing any operation
+* Create support case for RHOSAK product
+'''
+
 [kafka.update.confirmDialog.message]
 one = 'Are you sure you want to update the Kafka instance "{{.Name}}"?'
-
-[kafka.update.log.info.sameOwnerNoChanges]
-one = 'Nothing to update: user "{{.Owner}}" is already the owner of the Kafka instance "{{.InstanceName}}".'
 
 [kafka.update.log.info.updating]
 one = 'Updating Kafka instance "{{.Name}}"...'
 
+[kafka.update.log.info.nothingToUpdate]
+one = 'Provided values match current Kafka configuration'
+
 [kafka.update.log.info.updateSuccess]
 one = 'Kafka instance "{{.Name}}" has been updated. Run "rhoas kafka describe --name {{.Name}}" to view its configuration.'
+
+[kafka.update.log.info.updateFailed]
+one = 'Kafka instance could not be updated: {{.Reason}}'
 
 [kafka.update.log.info.loadingUsers]
 one = 'Loading users...'
 
 [kafka.update.input.message.selectOwner]
 one = "Select new owner:"
+
+[kafka.update.input.message.reauthentication]
+one = "Enable connection reauthentication:"
 
 [kafka.update.error.loadUsersError]
 one = 'unable to load users'

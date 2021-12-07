@@ -2,7 +2,6 @@ package update
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -40,6 +39,7 @@ type options struct {
 
 	interactive    bool
 	userIsOrgAdmin bool
+	reauth         flagutil.Tribool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -90,7 +90,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 					return flag.RequiredWhenNonInteractiveError(missingFlags...)
 				}
 			}
-			if opts.owner == "" {
+			if opts.owner == "" && opts.reauth == "" {
 				opts.interactive = true
 			}
 
@@ -116,6 +116,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.update.flag.id"))
 	flags.StringVar(&opts.owner, "owner", "", opts.localizer.MustLocalize("kafka.update.flag.owner"))
+	flags.TriBoolVar(&opts.reauth, "reauthentication", flagutil.TRIBOOL_DEFAULT, opts.localizer.MustLocalize("kafka.update.flag.reauthentication"))
 	flags.AddYes(&opts.skipConfirm)
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
@@ -133,35 +134,22 @@ func run(opts *options) error {
 
 	api := conn.API()
 
-	var kafkaInstance *kafkamgmtclient.KafkaRequest
-	if opts.name != "" {
-		kafkaInstance, _, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
-		if err != nil {
-			return err
-		}
-		opts.id = kafkaInstance.GetName()
-	} else {
-		kafkaInstance, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
-		if err != nil {
-			return err
-		}
-		opts.name = kafkaInstance.GetName()
+	kafkaInstance, err := getCurrentKafkaInstance(opts, api.Kafka())
+	if err != nil {
+		return err
 	}
 
 	if opts.interactive {
-		opts.owner, err = selectOwnerInteractive(opts.Context, opts)
+		err = runInteractivePrompt(opts, kafkaInstance)
 		if err != nil {
 			return err
 		}
 	}
 
-	if opts.owner == kafkaInstance.GetOwner() {
-		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.sameOwnerNoChanges", localize.NewEntry("Owner", opts.owner), localize.NewEntry("InstanceName", kafkaInstance.GetName())))
-		return nil
+	updateObj, err := getUpdateObj(opts, kafkaInstance)
+	if err != nil {
+		return err
 	}
-
-	updateObj := kafkamgmtclient.NewKafkaUpdateRequest()
-	updateObj.SetOwner(opts.owner)
 
 	// create a text block with a summary of what is being updated
 	updateSummary := generateUpdateSummary(reflect.ValueOf(*updateObj), reflect.ValueOf(*kafkaInstance))
@@ -175,11 +163,14 @@ func run(opts *options) error {
 		updateSummary,
 	)
 
+	if opts.reauth == flagutil.TRIBOOL_FALSE {
+		opts.logger.Info(opts.localizer.MustLocalize("kafka.update.reauthentication.disclaimer"))
+	}
+
 	if !opts.skipConfirm {
-		//nolint:govet
-		confirm, err := promptConfirmUpdate(opts)
-		if err != nil {
-			return err
+		confirm, promptErr := promptConfirmUpdate(opts)
+		if promptErr != nil {
+			return promptErr
 		}
 		if !confirm {
 			opts.logger.Debug("User has chosen to not update Kafka instance")
@@ -204,13 +195,37 @@ func run(opts *options) error {
 
 	if err != nil {
 		if apiError := kas.GetAPIError(err); apiError != nil {
-			return errors.New(apiError.GetReason())
+			return opts.localizer.MustLocalizeError("kafka.update.log.info.updateFailed", localize.NewEntry("Reason", apiError.GetReason()))
 		}
 		return err
 	}
 
 	opts.logger.Info()
 	opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.updateSuccess", localize.NewEntry("Name", response.GetName())))
+
+	return nil
+}
+
+func runInteractivePrompt(opts *options, kafkaInstance *kafkamgmtclient.KafkaRequest) (err error) {
+	opts.owner, err = selectOwnerInteractive(opts.Context, opts)
+	if err != nil {
+		return err
+	}
+
+	reauthenticationPrompt := &survey.Select{
+		Message: opts.localizer.MustLocalize("kafka.update.input.message.reauthentication"),
+		Options: flagutil.ValidTribools,
+		Default: strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()),
+	}
+
+	var reauthStr string
+
+	err = survey.AskOne(reauthenticationPrompt, &reauthStr)
+	if err != nil {
+		return err
+	}
+
+	opts.reauth = flagutil.Tribool(reauthStr)
 
 	return nil
 }
@@ -303,6 +318,55 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 	}
 
 	return summary
+}
+
+func getCurrentKafkaInstance(opts *options, api kafkamgmtclient.DefaultApi) (kafkaInstance *kafkamgmtclient.KafkaRequest, err error) {
+
+	if opts.name != "" {
+		kafkaInstance, _, err = kafka.GetKafkaByName(opts.Context, api, opts.name)
+		if err != nil {
+			return nil, err
+		}
+		opts.id = kafkaInstance.GetName()
+	} else {
+		kafkaInstance, _, err = kafka.GetKafkaByID(opts.Context, api, opts.id)
+		if err != nil {
+			return nil, err
+		}
+		opts.name = kafkaInstance.GetName()
+	}
+
+	return kafkaInstance, nil
+}
+
+func getUpdateObj(opts *options, kafkaInstance *kafkamgmtclient.KafkaRequest) (*kafkamgmtclient.KafkaUpdateRequest, error) {
+
+	// track if values have been changed
+	var needsUpdate bool
+
+	updateObj := kafkamgmtclient.NewKafkaUpdateRequest()
+
+	if opts.owner != "" && opts.owner != kafkaInstance.GetOwner() {
+		updateObj.SetOwner(opts.owner)
+		needsUpdate = true
+	}
+
+	if opts.reauth != flagutil.TRIBOOL_DEFAULT && string(opts.reauth) != strconv.FormatBool(kafkaInstance.GetReauthenticationEnabled()) {
+		enableBool, newErr := strconv.ParseBool(string(opts.reauth))
+		if newErr != nil {
+			return nil, newErr
+		}
+
+		updateObj.SetReauthenticationEnabled(enableBool)
+		needsUpdate = true
+	}
+
+	if !needsUpdate {
+		return nil, opts.localizer.MustLocalizeError("kafka.update.log.info.nothingToUpdate")
+	}
+
+	return updateObj, nil
+
 }
 
 // get the true value from a reflect.Value
