@@ -34,6 +34,9 @@ Create a Service Registry instance to store and manage your schema and API artif
 one = '''
 ## Create Service Registry instance
 rhoas service-registry create --name myregistry
+
+## Create Service Registry instance with description
+rhoas service-registry create --name myregistry --description "description of instance"
 '''
 
 [registry.cmd.create.info.successMessage]
@@ -121,6 +124,10 @@ one = 'Name argument is required when not running interactively'
 [registry.cmd.create.flag.use.description]
 one = 'Set the new Service Registry instance to the current instance'
 
+[registry.cmd.create.flag.description.description]
+description = "Description for --description flag"
+one = 'User-provided description of the new Service Registry instance'
+
 [registry.cmd.create.flag.name.description]
 one = 'Unique name of the Service Registry instance'
 
@@ -129,6 +136,12 @@ one = 'Name of Service Registry instance:'
 
 [registry.cmd.create.input.name.help]
 one = 'Name can be any alphanumeric characters'
+
+[registry.cmd.create.input.description.message]
+one = 'Description of Service Registry instance:'
+
+[registry.cmd.create.input.description.help]
+one = 'Description can be any alphanumeric characters'
 
 [registry.cmd.create.error.couldNotUse]
 description = 'Error message when Service Registry instance could not be set to the current instance'

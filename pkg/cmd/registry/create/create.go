@@ -29,7 +29,8 @@ import (
 )
 
 type options struct {
-	name string
+	name        string
+	description string
 
 	outputFormat string
 	autoUse      bool
@@ -88,6 +89,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("registry.cmd.create.flag.name.description"))
 	flags.StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("registry.cmd.flag.output.description"))
+	flags.StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("registry.cmd.create.flag.description.description"))
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("registry.cmd.create.flag.use.description"))
 	flags.AddBypassTermsCheck(&opts.bypassTermsCheck)
 
@@ -112,7 +114,8 @@ func runCreate(opts *options) error {
 		}
 	} else {
 		payload = &srsmgmtv1.RegistryCreate{
-			Name: &opts.name,
+			Name:        &opts.name,
+			Description: &opts.description,
 		}
 	}
 
@@ -181,7 +184,8 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 
 	// set type to store the answers from the prompt with defaults
 	answers := struct {
-		Name string
+		Name        string
+		Description string
 	}{}
 
 	promptName := &survey.Input{
@@ -194,8 +198,19 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 		return nil, err
 	}
 
+	promptDescription := &survey.Input{
+		Message: opts.localizer.MustLocalize("registry.cmd.create.input.description.message"),
+		Help:    opts.localizer.MustLocalize("registry.cmd.create.input.description.help"),
+	}
+
+	err = survey.AskOne(promptDescription, &answers.Description)
+	if err != nil {
+		return nil, err
+	}
+
 	payload = &srsmgmtv1.RegistryCreate{
-		Name: &answers.Name,
+		Name:        &answers.Name,
+		Description: &answers.Description,
 	}
 
 	return payload, nil
