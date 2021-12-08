@@ -138,10 +138,10 @@ one = 'Name of Service Registry instance:'
 one = 'Name can be any alphanumeric characters'
 
 [registry.cmd.create.input.description.message]
-one = 'Description of Service Registry instance:'
+one = 'Description of Service Registry instance [optional]:'
 
 [registry.cmd.create.input.description.help]
-one = 'Description can be any alphanumeric characters'
+one = 'Description can be any alphanumeric characters. Leave blank to skip setting this value'
 
 [registry.cmd.create.error.couldNotUse]
 description = 'Error message when Service Registry instance could not be set to the current instance'

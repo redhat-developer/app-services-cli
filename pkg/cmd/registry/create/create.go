@@ -114,8 +114,11 @@ func runCreate(opts *options) error {
 		}
 	} else {
 		payload = &srsmgmtv1.RegistryCreate{
-			Name:        &opts.name,
-			Description: &opts.description,
+			Name: &opts.name,
+		}
+
+		if opts.description != "" {
+			payload.SetDescription(opts.description)
 		}
 	}
 
@@ -209,8 +212,11 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 	}
 
 	payload = &srsmgmtv1.RegistryCreate{
-		Name:        &answers.Name,
-		Description: &answers.Description,
+		Name: &answers.Name,
+	}
+
+	if answers.Description != "" {
+		payload.SetDescription(answers.Description)
 	}
 
 	return payload, nil
