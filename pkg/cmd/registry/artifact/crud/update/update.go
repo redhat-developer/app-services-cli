@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
@@ -118,10 +119,18 @@ func runUpdate(opts *options) error {
 
 	var specifiedFile *os.File
 	if opts.file != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
-		specifiedFile, err = os.Open(opts.file)
-		if err != nil {
-			return err
+		if cmdutil.IsURL(opts.file) {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
+			specifiedFile, err = cmdutil.GetContentFromFileURL(opts.file, opts.Context)
+			if err != nil {
+				return err
+			}
+		} else {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
+			specifiedFile, err = os.Open(opts.file)
+			if err != nil {
+				return err
+			}
 		}
 	} else {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.reading.file"))
