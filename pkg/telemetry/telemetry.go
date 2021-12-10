@@ -43,12 +43,7 @@ func CreateTelemetry(f *factory.Factory) (*Telemetry, error) {
 func (t *Telemetry) Init() error {
 	// The env variable with telemetry enablement
 	envVarEnablement := os.Getenv(ControlTelemetryEnv)
-	// Temporary - disable telemetry unless environment var is created
-	if envVarEnablement == "" {
-		t.enabled = false
-		return nil
-	}
-	// End of temporary change
+
 	if envVarEnablement != "" {
 		enabled, err := strconv.ParseBool(envVarEnablement)
 		if err != nil {
