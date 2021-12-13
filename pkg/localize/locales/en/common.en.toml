@@ -14,9 +14,9 @@ one = 'A new version of rhoas is available:'
 one = 'Run the command in verbose mode using the -v flag to see more information'
 
 [common.telemetry.consent]
-one = '''Help us to improve RHOAS cli by allowing it to collect annonymous usage data. 
-Read about our privacy statement: https://developers.redhat.com/article/tool-data-collection 
-You can also disable telemetry by using RHOAS_TELEMETRY=false environment variable
+one = '''Help us to improve RHOAS CLI by allowing it to collect anonymous usage data. 
+Read our Telemetry data collection notice: https://developers.redhat.com/article/tool-data-collection 
+You can also disable telemetry by setting the "RHOAS_TELEMETRY" environment variable to false.
 '''
 
 [common.telemetry.question]
