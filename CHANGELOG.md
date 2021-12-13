@@ -1,4 +1,18 @@
 
+<a name="v0.37.0"></a>
+## [v0.37.0](https://github.com/redhat-developer/app-services-cli/compare/v0.36.6...v0.37.0) (2021-12-13)
+
+### Bug Fixes
+
+* remove linter link
+* **deps:** update module github.com/golang-jwt/jwt/v4 to v4.2.0
+
+### Features
+
+* enable command history collection ([#1349](https://github.com/redhat-developer/app-services-cli/issues/1349))
+* **kafka update:** add reauthentication flag ([#1340](https://github.com/redhat-developer/app-services-cli/issues/1340))
+
+
 <a name="v0.36.6"></a>
 ## [v0.36.6](https://github.com/redhat-developer/app-services-cli/compare/v0.36.5...v0.36.6) (2021-12-01)
 
