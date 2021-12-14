@@ -174,9 +174,7 @@ func runCreate(opts *options) error {
 		request = request.XRegistryName(opts.name)
 	}
 
-	if opts.description != "" {
-		request = request.XRegistryDescription(opts.description)
-	}
+	request = request.XRegistryDescription(opts.description)
 
 	request = request.Body(specifiedFile)
 	metadata, _, err := request.Execute()

@@ -166,6 +166,9 @@ func runEditor(currentMetadata *registryinstanceclient.EditableMetaData) (*regis
 	if currentMetadata.Properties == nil {
 		currentMetadata.Properties = &map[string]string{}
 	}
+	if currentMetadata.Description == nil {
+		currentMetadata.Description = new(string)
+	}
 	metadataJson, err := json.MarshalIndent(currentMetadata, "", " ")
 	if err != nil {
 		return nil, err

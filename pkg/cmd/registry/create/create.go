@@ -201,7 +201,7 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 		return nil, err
 	}
 
-	promptDescription := &survey.Input{
+	promptDescription := &survey.Multiline{
 		Message: opts.localizer.MustLocalize("registry.cmd.create.input.description.message"),
 		Help:    opts.localizer.MustLocalize("registry.cmd.create.input.description.help"),
 	}

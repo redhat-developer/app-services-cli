@@ -132,13 +132,13 @@ one = 'User-provided description of the new Service Registry instance'
 one = 'Unique name of the Service Registry instance'
 
 [registry.cmd.create.input.name.message]
-one = 'Name of Service Registry instance:'
+one = 'Name:'
 
 [registry.cmd.create.input.name.help]
 one = 'Name can be any alphanumeric characters'
 
 [registry.cmd.create.input.description.message]
-one = 'Description of Service Registry instance [optional]:'
+one = 'Description [optional]:'
 
 [registry.cmd.create.input.description.help]
 one = 'Description can be any alphanumeric characters. Leave blank to skip setting this value'
