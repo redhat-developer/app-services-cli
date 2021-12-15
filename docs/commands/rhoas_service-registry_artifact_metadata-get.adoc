@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-metadata-get_{context}']
-= rhoas service-registry artifact metadata-get
+= service-registry artifact metadata-get
 
 [role="_abstract"]
 Get artifact metadata

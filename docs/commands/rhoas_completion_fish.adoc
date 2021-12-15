@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-completion-fish_{context}']
-= rhoas completion fish
+= completion fish
 
 [role="_abstract"]
 Generate command completion script for fish shell

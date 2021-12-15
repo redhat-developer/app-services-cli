@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry_{context}']
-= rhoas service-registry
+= service-registry
 
 [role="_abstract"]
 Service Registry commands

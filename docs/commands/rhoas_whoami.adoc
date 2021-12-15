@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-whoami_{context}']
-= rhoas whoami
+= whoami
 
 [role="_abstract"]
 Output the current username

@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-delete_{context}']
-= rhoas service-registry artifact delete
+= service-registry artifact delete
 
 [role="_abstract"]
 Deletes single or all artifacts in a given group

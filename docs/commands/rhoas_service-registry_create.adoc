@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-create_{context}']
-= rhoas service-registry create
+= service-registry create
 
 [role="_abstract"]
 Create a Service Registry instance

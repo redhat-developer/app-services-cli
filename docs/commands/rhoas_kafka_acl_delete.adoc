@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-acl-delete_{context}']
-= rhoas kafka acl delete
+= kafka acl delete
 
 [role="_abstract"]
 Delete Kafka ACLs matching the provided filters

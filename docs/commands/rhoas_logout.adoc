@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-logout_{context}']
-= rhoas logout
+= logout
 
 [role="_abstract"]
 Log out from RHOAS

@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-create_{context}']
-= rhoas service-registry artifact create
+= service-registry artifact create
 
 [role="_abstract"]
 Creates new artifact from file or standard input

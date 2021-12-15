@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-state-set_{context}']
-= rhoas service-registry artifact state-set
+= service-registry artifact state-set
 
 [role="_abstract"]
 Set artifact state

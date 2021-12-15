@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-cluster-connect_{context}']
-= rhoas cluster connect
+= cluster connect
 
 [role="_abstract"]
 Connect your services to Kubernetes or OpenShift

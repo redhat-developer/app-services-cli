@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact_{context}']
-= rhoas service-registry artifact
+= service-registry artifact
 
 [role="_abstract"]
 Manage Service Registry artifacts

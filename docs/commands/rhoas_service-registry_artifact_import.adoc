@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-import_{context}']
-= rhoas service-registry artifact import
+= service-registry artifact import
 
 [role="_abstract"]
 Import data into a Service Registry instance

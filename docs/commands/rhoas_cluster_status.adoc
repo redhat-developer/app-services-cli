@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-cluster-status_{context}']
-= rhoas cluster status
+= cluster status
 
 [role="_abstract"]
 View the status of the current Kubernetes or OpenShift cluster

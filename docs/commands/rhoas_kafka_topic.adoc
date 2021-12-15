@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-topic_{context}']
-= rhoas kafka topic
+= kafka topic
 
 [role="_abstract"]
 Create, describe, update, list, and delete topics

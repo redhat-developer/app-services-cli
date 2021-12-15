@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-use_{context}']
-= rhoas service-registry use
+= service-registry use
 
 [role="_abstract"]
 Use a Service Registry instance

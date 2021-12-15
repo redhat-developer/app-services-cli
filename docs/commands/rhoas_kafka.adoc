@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka_{context}']
-= rhoas kafka
+= kafka
 
 [role="_abstract"]
 Create, view, use, and manage your Kafka instances

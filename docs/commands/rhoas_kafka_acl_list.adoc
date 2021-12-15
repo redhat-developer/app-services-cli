@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-acl-list_{context}']
-= rhoas kafka acl list
+= kafka acl list
 
 [role="_abstract"]
 List all Kafka ACL rules

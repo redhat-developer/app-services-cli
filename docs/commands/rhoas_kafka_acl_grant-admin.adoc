@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-acl-grant-admin_{context}']
-= rhoas kafka acl grant-admin
+= kafka acl grant-admin
 
 [role="_abstract"]
 Grant an account permissions to create and delete ACLs in the Kafka instance

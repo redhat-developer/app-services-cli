@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-create_{context}']
-= rhoas kafka create
+= kafka create
 
 [role="_abstract"]
 Create a Kafka instance

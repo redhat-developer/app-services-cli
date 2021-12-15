@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-completion-zsh_{context}']
-= rhoas completion zsh
+= completion zsh
 
 [role="_abstract"]
 Generate command completion script for Zsh shell

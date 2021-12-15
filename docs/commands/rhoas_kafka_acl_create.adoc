@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-acl-create_{context}']
-= rhoas kafka acl create
+= kafka acl create
 
 [role="_abstract"]
 Create a Kafka ACL

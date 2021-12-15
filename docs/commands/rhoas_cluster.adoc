@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-cluster_{context}']
-= rhoas cluster
+= cluster
 
 [role="_abstract"]
 View and perform operations on your Kubernetes or OpenShift cluster

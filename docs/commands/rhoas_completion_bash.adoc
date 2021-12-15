@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-completion-bash_{context}']
-= rhoas completion bash
+= completion bash
 
 [role="_abstract"]
 Generate command completion script for Bash shell

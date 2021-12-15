@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-download_{context}']
-= rhoas service-registry artifact download
+= service-registry artifact download
 
 [role="_abstract"]
 Download artifacts from Service Registry using global identifiers

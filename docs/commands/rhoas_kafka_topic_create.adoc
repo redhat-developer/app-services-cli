@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-topic-create_{context}']
-= rhoas kafka topic create
+= kafka topic create
 
 [role="_abstract"]
 Create a topic

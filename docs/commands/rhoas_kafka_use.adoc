@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-use_{context}']
-= rhoas kafka use
+= kafka use
 
 [role="_abstract"]
 Set the current Kafka instance

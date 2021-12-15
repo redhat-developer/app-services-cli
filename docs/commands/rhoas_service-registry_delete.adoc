@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-delete_{context}']
-= rhoas service-registry delete
+= service-registry delete
 
 [role="_abstract"]
 Delete a Service Registry instance

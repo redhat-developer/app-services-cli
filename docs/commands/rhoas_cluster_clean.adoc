@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-cluster-clean_{context}']
-= rhoas cluster clean
+= cluster clean
 
 [role="_abstract"]
 Remove all resources created by cluster extensions

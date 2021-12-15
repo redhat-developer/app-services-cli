@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-completion_{context}']
-= rhoas completion
+= completion
 
 [role="_abstract"]
 Install command completion for your shell (bash, zsh, or fish)

@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-role-add_{context}']
-= rhoas service-registry role add
+= service-registry role add
 
 [role="_abstract"]
 Add or update principal role

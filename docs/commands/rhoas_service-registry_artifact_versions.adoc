@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-artifact-versions_{context}']
-= rhoas service-registry artifact versions
+= service-registry artifact versions
 
 [role="_abstract"]
 Get latest artifact versions by artifact-id and group

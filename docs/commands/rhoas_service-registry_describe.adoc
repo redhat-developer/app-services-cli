@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-describe_{context}']
-= rhoas service-registry describe
+= service-registry describe
 
 [role="_abstract"]
 Describe a Service Registry instance

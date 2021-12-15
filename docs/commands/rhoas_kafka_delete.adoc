@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-delete_{context}']
-= rhoas kafka delete
+= kafka delete
 
 [role="_abstract"]
 Delete a Kafka instance

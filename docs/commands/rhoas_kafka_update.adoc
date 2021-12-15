@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-update_{context}']
-= rhoas kafka update
+= kafka update
 
 [role="_abstract"]
 Update configuration details of a Kafka instance.

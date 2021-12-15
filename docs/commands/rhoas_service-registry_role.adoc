@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-service-registry-role_{context}']
-= rhoas service-registry role
+= service-registry role
 
 [role="_abstract"]
 Service Registry role management

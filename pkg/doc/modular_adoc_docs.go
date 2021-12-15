@@ -17,7 +17,6 @@ package doc
 import (
 	"bytes"
 	"fmt"
-	"github.com/spf13/pflag"
 	"io"
 	"os"
 	"path/filepath"
@@ -25,6 +24,8 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/spf13/pflag"
 
 	"github.com/spf13/cobra"
 )
@@ -208,9 +209,10 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 
 	buf := new(bytes.Buffer)
 	name := cmd.CommandPath()
+	shortName := strings.Replace(name, "rhoas ", "", 1)
 	buf.WriteString("ifdef::env-github,env-browser[:context: cmd]\n")
 	buf.WriteString(fmt.Sprintf("[id='%s']\n", nameToPantheonId(name)))
-	buf.WriteString(fmt.Sprintf("= %s\n\n", name))
+	buf.WriteString(fmt.Sprintf("= %s\n\n", shortName))
 	buf.WriteString("[role=\"_abstract\"]\n")
 	buf.WriteString(cmd.Short + "\n\n")
 	if len(cmd.Long) > 0 {

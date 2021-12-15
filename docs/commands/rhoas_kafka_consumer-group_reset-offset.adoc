@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-consumer-group-reset-offset_{context}']
-= rhoas kafka consumer-group reset-offset
+= kafka consumer-group reset-offset
 
 [role="_abstract"]
 Reset partition offsets for a consumer group

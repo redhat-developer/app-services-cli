@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas-kafka-consumer-group-delete_{context}']
-= rhoas kafka consumer-group delete
+= kafka consumer-group delete
 
 [role="_abstract"]
 Delete a consumer group
