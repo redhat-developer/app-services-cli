@@ -71,8 +71,6 @@ type KeycloakConnection struct {
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
-	c.logger.Debug("Refreshing tokens")
-
 	cfg, err := c.Config.Load()
 	if err != nil {
 		return err
@@ -80,7 +78,8 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 
 	// track if we need to update the config with new token values
 	var cfgChanged bool
-	if c.connectionConfig.RequireAuth {
+	if c.connectionConfig.RequireAuth && c.Token.NeedsRefresh() {
+		c.logger.Debug("Refreshing token")
 		// nolint:govet
 		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
 		if err != nil {
@@ -99,7 +98,8 @@ func (c *KeycloakConnection) RefreshTokens(ctx context.Context) (err error) {
 		}
 	}
 
-	if c.connectionConfig.RequireMASAuth {
+	if c.connectionConfig.RequireMASAuth && c.MASToken.NeedsRefresh() {
+		c.logger.Debug("Refreshing MAS token")
 		// nolint:govet
 		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
 		if err != nil {
