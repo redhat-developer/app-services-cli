@@ -5,7 +5,6 @@ import (
 
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/color"
@@ -147,9 +146,9 @@ func runCreate(opts *options) error {
 
 	var specifiedFile *os.File
 	if opts.file != "" {
-		if cmdutil.IsURL(opts.file) {
+		if util.IsURL(opts.file) {
 			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
-			specifiedFile, err = cmdutil.GetContentFromFileURL(opts.file, opts.Context)
+			specifiedFile, err = util.GetContentFromFileURL(opts.Context, opts.file)
 			if err != nil {
 				return err
 			}
