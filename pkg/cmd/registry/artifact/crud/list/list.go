@@ -43,6 +43,10 @@ type options struct {
 
 	registryID   string
 	outputFormat string
+	name         string
+	description  string
+	labels       []string
+	properties   []string
 
 	page  int32
 	limit int32
@@ -105,6 +109,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("artifact.common.page.number"))
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("artifact.common.page.limit"))
 
+	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.cmd.list.flag.name.description"))
+	cmd.Flags().StringArrayVar(&opts.labels, "labels", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.labels.description"))
+	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.cmd.list.flag.description.description"))
+	cmd.Flags().StringArrayVar(&opts.properties, "properties", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.properties.description"))
+
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
 
@@ -130,12 +139,29 @@ func runList(opts *options) error {
 	if err != nil {
 		return err
 	}
-	request := a.ArtifactsApi.ListArtifactsInGroup(opts.Context, opts.group)
+	request := a.ArtifactsApi.SearchArtifacts(opts.Context)
 
+	request = request.Group(opts.group)
 	request = request.Offset((opts.page - 1) * opts.limit)
 	request = request.Limit(opts.limit)
 	request = request.Orderby(registryinstanceclient.SORTBY_CREATED_ON)
 	request = request.Order(registryinstanceclient.SORTORDER_ASC)
+
+	if opts.name != "" {
+		request = request.Name(opts.name)
+	}
+
+	if len(opts.labels) > 0 {
+		request = request.Labels(opts.labels)
+	}
+
+	if opts.description != "" {
+		request = request.Description(opts.description)
+	}
+
+	if len(opts.properties) > 0 {
+		request = request.Properties(opts.properties)
+	}
 
 	response, _, err := request.Execute()
 	if err != nil {

@@ -303,6 +303,15 @@ rhoas service-registry artifact list --group=my-group
 
 ## List all artifacts with limit and group
 rhoas service-registry artifact list --page=2 --limit=10
+
+## List all artifacts for the "default" artifact group with name containing "sample"
+rhoas service-registry artifact list --name sample
+
+## List all artifacts for the "default" artifact group having label "my-label"
+rhoas service-registry artifact list --label "my-label"
+
+## List all artifacts for the "default" artifact group with description containing "sample"
+rhoas service-registry artifact list --description sample
 '''
 
 [artifact.cmd.update.description.short]
@@ -476,3 +485,15 @@ one = 'Successfully updated artifact state'
 
 [artifact.cmd.state.error.invalidArtifactState]
 one = 'invalid artifact state. Please use one of following values: {{.AllowedTypes}}'
+
+[artifact.cmd.list.flag.name.description]
+one = 'Text search to filter artifacts by topic name'
+
+[artifact.cmd.list.flag.labels.description]
+one = 'Text search to filter artifacts by labels'
+
+[artifact.cmd.list.flag.description.description]
+one = 'Text search to filter artifacts by description'
+
+[artifact.cmd.list.flag.properties.description]
+one = 'Text search to filter artifacts by properties (separate each name/value pair using a colon)'
