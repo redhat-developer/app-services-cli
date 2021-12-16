@@ -22,14 +22,18 @@ rhoas service-registry create [flags]
 ## Create Service Registry instance
 rhoas service-registry create --name myregistry
 
+## Create Service Registry instance with description
+rhoas service-registry create --name myregistry --description "description of instance"
+
 ....
 
 [discrete]
 == Options
 
-      `--name` _string_::       Unique name of the Service Registry instance
-  `-o`, `--output` _string_::   Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml") (default "json")
-      `--use`::                 Set the new Service Registry instance to the current instance (default true)
+      `--description` _string_::   User-provided description of the new Service Registry instance
+      `--name` _string_::          Unique name of the Service Registry instance
+  `-o`, `--output` _string_::      Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml") (default "json")
+      `--use`::                    Set the new Service Registry instance to the current instance (default true)
 
 [discrete]
 == Options inherited from parent commands
