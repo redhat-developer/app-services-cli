@@ -88,10 +88,6 @@ generate-docs: ## Generate command-line reference documentation
 	go run ./cmd/rhoas docs --dir ./docs/commands --file-format adoc
 .PHONY: generate-docs
 
-generate-modular-docs: generate-docs ## Generate modular command-line reference documentation
-	SRC_DIR=$$(pwd)/docs/commands DEST_DIR=$$(pwd)/dist go run ./cmd/modular-docs
-.PHONY: generate-modular-docs
-
 lint-lang: ## Lint i18n files
 	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
 	app-services-go-linter ./...
