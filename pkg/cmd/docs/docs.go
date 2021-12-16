@@ -2,10 +2,11 @@ package docs
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
+	rhoasdoc "github.com/redhat-developer/app-services-cli/internal/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	rhoasdoc "github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
@@ -61,10 +62,15 @@ func runCmd(cmd *cobra.Command, opts *options) (err error) {
 		}
 		err = doc.GenManTree(cmd.Root(), header, opts.dir)
 	case asciidoc:
-		filePrepender := func(filename string) string { return "" }
+		filePrepender := func(filename string) string { return strings.Replace(filename, "rhoas", "", -1) }
 		linkHandler := func(s string) string { return s }
 
-		err = rhoasdoc.GenAsciidocTreeCustom(cmd.Root(), opts.dir, filePrepender, linkHandler)
+		err = rhoasdoc.GenAsciidocTreeCustom(cmd.Root(), rhoasdoc.GeneratorOptions{
+			Dir:           opts.dir,
+			FilePrepender: filePrepender,
+			LinkHandler:   linkHandler,
+			GenerateIndex: true,
+			IndexLocation: "./README.adoc"})
 	}
 
 	if err != nil {

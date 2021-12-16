@@ -1,0 +1,54 @@
+docs/commands/-kafka-consumer-group-list.adocifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-kafka-consumer-group-list_{context}']
+= kafka consumer-group list
+
+[role="_abstract"]
+List all consumer groups
+
+[discrete]
+== Synopsis
+
+List the consumer groups in the current Kafka instance. You can view a list of all consumer groups in the Kafka instance, view a specific consumer group, or view the consumer groups for a particular topic.
+
+....
+rhoas kafka consumer-group list [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# List all consumer groups
+$ rhoas kafka consumer-group list
+
+# List all consumer groups in JSON format
+$ rhoas kafka consumer-group list -o json
+
+....
+
+[discrete]
+== Options
+
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
+      `--page` _int32_::        View the specified page number in the list of consumer groups (default 1)
+      `--search` _string_::     Text search to filter consumer groups by ID
+      `--size` _int32_::        Maximum number of consumer groups to be returned per page (default 10)
+      `--topic` _string_::      Fetch the consumer groups for a specific Kafka topic
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
+endif::[]
+

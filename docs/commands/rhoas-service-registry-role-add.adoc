@@ -1,0 +1,50 @@
+docs/commands/-service-registry-role-add.adocifdef::env-github,env-browser[:context: cmd]
+[id='ref-rhoas-service-registry-role-add_{context}']
+= service-registry role add
+
+[role="_abstract"]
+Add or update principal role
+
+[discrete]
+== Synopsis
+
+Add or update role for user or service account
+
+....
+rhoas service-registry role add [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Create or update user role
+rhoas service-registry role add --role=ADMIN --username=joedough
+
+....
+
+[discrete]
+== Options
+
+      `--instance-id` _string_::       ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--role` _string_::              Role to apply
+      `--service-account` _string_::   ServiceAccount name
+      `--username` _string_::          Username of the user within organization
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_role.adoc#rhoas-service-registry-role[rhoas service-registry role]	 - Service Registry role management
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-role_{context}[rhoas service-registry role]	 - Service Registry role management
+endif::[]
+
