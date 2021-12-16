@@ -113,7 +113,7 @@ one = 'Location of the output file'
 one = 'Output format (json, yaml, yml)'
 
 [artifact.common.message.no.artifact.available.for.group.and.registry]
-one = 'No artifacts available for {{.Group}} group and registry ID {{.Registry}}'
+one = 'No artifacts found for {{.Group}} group and registry ID {{.Registry}}'
 
 [artifact.common.message.reading.file]
 one = 'Reading file content from standard input'
@@ -307,8 +307,8 @@ rhoas service-registry artifact list --page=2 --limit=10
 ## List all artifacts for the "default" artifact group with name containing "sample"
 rhoas service-registry artifact list --name sample
 
-## List all artifacts for the "default" artifact group having label "my-label"
-rhoas service-registry artifact list --label "my-label"
+## List all artifacts for the "default" artifact group having labels "my-label" and "sample"
+rhoas service-registry artifact list --label "my-label" --labels "sample"
 
 ## List all artifacts for the "default" artifact group with description containing "sample"
 rhoas service-registry artifact list --description sample

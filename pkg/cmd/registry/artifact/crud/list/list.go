@@ -110,9 +110,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("artifact.common.page.limit"))
 
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.cmd.list.flag.name.description"))
-	cmd.Flags().StringArrayVar(&opts.labels, "labels", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.labels.description"))
+	cmd.Flags().StringArrayVar(&opts.labels, "label", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.labels.description"))
 	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.cmd.list.flag.description.description"))
-	cmd.Flags().StringArrayVar(&opts.properties, "properties", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.properties.description"))
+	cmd.Flags().StringArrayVar(&opts.properties, "property", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.properties.description"))
 
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))

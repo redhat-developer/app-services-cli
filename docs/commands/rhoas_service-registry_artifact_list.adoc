@@ -30,8 +30,8 @@ rhoas service-registry artifact list --page=2 --limit=10
 ## List all artifacts for the "default" artifact group with name containing "sample"
 rhoas service-registry artifact list --name sample
 
-## List all artifacts for the "default" artifact group having label "my-label"
-rhoas service-registry artifact list --label "my-label"
+## List all artifacts for the "default" artifact group having labels "my-label" and "sample"
+rhoas service-registry artifact list --label "my-label" --labels "sample"
 
 ## List all artifacts for the "default" artifact group with description containing "sample"
 rhoas service-registry artifact list --description sample
@@ -41,15 +41,15 @@ rhoas service-registry artifact list --description sample
 [discrete]
 == Options
 
-      `--description` _string_::       Text search to filter artifacts by description
-  `-g`, `--group` _string_::           Artifact group (default "default")
-      `--instance-id` _string_::       ID of the Service Registry instance to be used. By default, uses the currently selected instance
-      `--labels` _stringArray_::       Text search to filter artifacts by labels
-      `--limit` _int32_::              Page limit (default 100)
-      `--name` _string_::              Text search to filter artifacts by topic name
-  `-o`, `--output` _string_::          Output format (json, yaml, yml)
-      `--page` _int32_::               Page number (default 1)
-      `--properties` _stringArray_::   Text search to filter artifacts by properties (separate each name/value pair using a colon)
+      `--description` _string_::     Text search to filter artifacts by description
+  `-g`, `--group` _string_::         Artifact group (default "default")
+      `--instance-id` _string_::     ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--label` _stringArray_::      Text search to filter artifacts by labels
+      `--limit` _int32_::            Page limit (default 100)
+      `--name` _string_::            Text search to filter artifacts by topic name
+  `-o`, `--output` _string_::        Output format (json, yaml, yml)
+      `--page` _int32_::             Page number (default 1)
+      `--property` _stringArray_::   Text search to filter artifacts by properties (separate each name/value pair using a colon)
 
 [discrete]
 == Options inherited from parent commands
