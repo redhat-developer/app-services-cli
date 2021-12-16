@@ -487,7 +487,7 @@ one = 'Successfully updated artifact state'
 one = 'invalid artifact state. Please use one of following values: {{.AllowedTypes}}'
 
 [artifact.cmd.list.flag.name.description]
-one = 'Text search to filter artifacts by topic name'
+one = 'Text search to filter artifacts by name'
 
 [artifact.cmd.list.flag.labels.description]
 one = 'Text search to filter artifacts by labels'

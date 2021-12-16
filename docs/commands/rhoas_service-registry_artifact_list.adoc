@@ -46,7 +46,7 @@ rhoas service-registry artifact list --description sample
       `--instance-id` _string_::     ID of the Service Registry instance to be used. By default, uses the currently selected instance
       `--label` _stringArray_::      Text search to filter artifacts by labels
       `--limit` _int32_::            Page limit (default 100)
-      `--name` _string_::            Text search to filter artifacts by topic name
+      `--name` _string_::            Text search to filter artifacts by name
   `-o`, `--output` _string_::        Output format (json, yaml, yml)
       `--page` _int32_::             Page number (default 1)
       `--property` _stringArray_::   Text search to filter artifacts by properties (separate each name/value pair using a colon)
