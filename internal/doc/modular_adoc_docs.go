@@ -278,7 +278,14 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 // and `sub` has a subcommand called `third`, it is undefined which
 // help output will be in the file `cmd-sub-third.1`.
 func GenAsciidocTree(cmd *cobra.Command, options GeneratorOptions) error {
-	return GenAsciidocTreeCustom(cmd, options)
+	err := GenAsciidocTreeCustom(cmd, options)
+	if err != nil {
+		return err
+	}
+	if options.GenerateIndex && options.IndexLocation != "" {
+		return CreateIndexFile(cmd, options.IndexLocation)
+	}
+	return nil
 }
 
 // GeneratorOptions options for the generator

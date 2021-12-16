@@ -1,0 +1,116 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-kafka_{context}']
+= kafka
+
+[role="_abstract"]
+Create, view, use, and manage your Kafka instances
+
+[discrete]
+== Synopsis
+
+Commands for managing and interacting with Kafka instances.
+
+Commands are divided into the following categories:
+ - instance management commands: create, list, and so on
+ - commands executed on the selected instance: topic, consumer-group
+ - "use" command that selects the current instance
+
+
+[discrete]
+== Examples
+
+....
+## Create an Kafka instance
+rhoas kafka create --name my-kafka-instance
+
+## View configuration details of an Kafka instance
+rhoas kafka describe
+
+## List all Kafka instances
+rhoas kafka list
+
+## Create an Kafka Topic
+rhoas kafka topic create --name mytopic 
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_acl.adoc#kafka-acl[kafka acl]	 - Kafka ACL management for users and service accounts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-acl_{context}[kafka acl]	 - Kafka ACL management for users and service accounts
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_consumer-group.adoc#kafka-consumer-group[kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-consumer-group_{context}[kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_create.adoc#kafka-create[kafka create]	 - Create an Apache Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-create_{context}[kafka create]	 - Create an Apache Kafka instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_delete.adoc#kafka-delete[kafka delete]	 - Delete an Apache Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-delete_{context}[kafka delete]	 - Delete an Apache Kafka instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_describe.adoc#kafka-describe[kafka describe]	 - View configuration details of an Apache Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-describe_{context}[kafka describe]	 - View configuration details of an Apache Kafka instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_list.adoc#kafka-list[kafka list]	 - List all Apache Kafka instances
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-list_{context}[kafka list]	 - List all Apache Kafka instances
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_topic.adoc#kafka-topic[kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-topic_{context}[kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_update.adoc#kafka-update[kafka update]	 - Update configuration details of a Kafka instance.
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-update_{context}[kafka update]	 - Update configuration details of a Kafka instance.
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_use.adoc#kafka-use[kafka use]	 - Set the current Apache Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka-use_{context}[kafka use]	 - Set the current Apache Kafka instance
+endif::[]
+

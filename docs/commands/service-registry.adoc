@@ -1,0 +1,99 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-service-registry_{context}']
+= service-registry
+
+[role="_abstract"]
+Service Registry commands
+
+[discrete]
+== Synopsis
+
+ 
+Manage and interact with your Service Registry instances directly from the command line.
+
+Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
+
+Commands are divided into the following categories:
+ - instance management commands: create, list, and so on
+ - commands executed on selected instance: artifacts
+ - "use" command that selects the current instance
+
+
+[discrete]
+== Examples
+
+....
+## Create Service Registry instance
+rhoas service-registry create --name myregistry
+
+## List Service Registry instances
+rhoas service-registry list 
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_artifact.adoc#service-registry-artifact[service-registry artifact]	 - Manage Service Registry artifacts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact_{context}[service-registry artifact]	 - Manage Service Registry artifacts
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_create.adoc#service-registry-create[service-registry create]	 - Create a Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-create_{context}[service-registry create]	 - Create a Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_delete.adoc#service-registry-delete[service-registry delete]	 - Delete a Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-delete_{context}[service-registry delete]	 - Delete a Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_describe.adoc#service-registry-describe[service-registry describe]	 - Describe a Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-describe_{context}[service-registry describe]	 - Describe a Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_list.adoc#service-registry-list[service-registry list]	 - List Service Registry instances
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-list_{context}[service-registry list]	 - List Service Registry instances
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_role.adoc#service-registry-role[service-registry role]	 - Service Registry role management
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-role_{context}[service-registry role]	 - Service Registry role management
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_use.adoc#service-registry-use[service-registry use]	 - Use a Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-use_{context}[service-registry use]	 - Use a Service Registry instance
+endif::[]
+

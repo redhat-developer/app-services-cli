@@ -1,0 +1,84 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-kafka_acl_{context}']
+= kafka_acl
+
+[role="_abstract"]
+Kafka ACL management for users and service accounts
+
+[discrete]
+== Synopsis
+
+Set of commands that will let you manage Kafka ACLs.
+By default, every user and service account has limited access to their Kafka instance (Only describe permission is enabled for TOPIC, ACL, and GROUP).
+
+
+[discrete]
+== Examples
+
+....
+# Grant access to principal for consuming messages from all topics
+$ rhoas kafka acl grant-access --consumer --user foo_user --topic all --group all
+
+# Grant access to principal for producing messages to all topics
+$ rhoas kafka acl grant-access --producer --user foo_user --topic all
+
+# List ACL rules for a Kafka instance
+$ rhoas kafka acl list
+
+# Give admin rights to user "abc"
+$ rhoas kafka acl grant-admin --user abc
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_acl_create.adoc#kafka_acl-create[kafka_acl create]	 - Create a Kafka ACL
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka_acl-create_{context}[kafka_acl create]	 - Create a Kafka ACL
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_acl_delete.adoc#kafka_acl-delete[kafka_acl delete]	 - Delete Kafka ACLs matching the provided filters
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka_acl-delete_{context}[kafka_acl delete]	 - Delete Kafka ACLs matching the provided filters
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_acl_grant-access.adoc#kafka_acl-grant-access[kafka_acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka_acl-grant-access_{context}[kafka_acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_acl_grant-admin.adoc#kafka_acl-grant-admin[kafka_acl grant-admin]	 - Grant an account permissions to create and delete ACLs in the Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka_acl-grant-admin_{context}[kafka_acl grant-admin]	 - Grant an account permissions to create and delete ACLs in the Kafka instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:kafka_acl_list.adoc#kafka_acl-list[kafka_acl list]	 - List all Kafka ACL rules
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-kafka_acl-list_{context}[kafka_acl list]	 - List all Kafka ACL rules
+endif::[]
+

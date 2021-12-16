@@ -1,0 +1,75 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-service-registry_role_{context}']
+= service-registry_role
+
+[role="_abstract"]
+Service Registry role management
+
+[discrete]
+== Synopsis
+
+
+Service Registry role management
+Set of commands that give users one of following permissions:
+
+- READ_ONLY (read artifacts)
+- DEVELOPER (write access to all resources)
+- ADMIN (Export/Import artifacts, Manage Roles)
+
+Roles can be applied to users (e.g martin_redhat) and Service Account Client IDs (e.g srvc-acct-03ddedba-5b49-4aa0-9b68-02e8b8c31add).
+These commands are only accessible to users with the organization admin role or owners of the Service Registry instance.
+
+
+[discrete]
+== Examples
+
+....
+## Create or update user role
+rhoas service-registry role add --role=ADMIN --username=joedough
+
+## List user and service account roles
+rhoas service-registry role list
+
+## Revoke role for user
+rhoas service-registry role revoke --username=janedough
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - Service Registry commands
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_role_add.adoc#service-registry_role-add[service-registry_role add]	 - Add or update principal role
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry_role-add_{context}[service-registry_role add]	 - Add or update principal role
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_role_list.adoc#service-registry_role-list[service-registry_role list]	 - List roles
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry_role-list_{context}[service-registry_role list]	 - List roles
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry_role_revoke.adoc#service-registry_role-revoke[service-registry_role revoke]	 - Revoke role for principal
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry_role-revoke_{context}[service-registry_role revoke]	 - Revoke role for principal
+endif::[]
+

@@ -1,4 +1,4 @@
-docs/commands/.adocifdef::env-github,env-browser[:context: cmd]
+ifdef::env-github,env-browser[:context: cmd]
 [id='ref-rhoas_{context}']
 = rhoas
 

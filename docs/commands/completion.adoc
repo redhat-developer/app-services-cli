@@ -1,0 +1,72 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-completion_{context}']
+= completion
+
+[role="_abstract"]
+Outputs command completion for the given shell (bash, zsh, or fish)
+
+[discrete]
+== Synopsis
+
+Outputs command completion for the given shell (bash, zsh, or fish).
+
+To find what shell you are currently running, run `echo $0`.
+
+Run `rhoas completion [bash|zsh|fish] -h` for instructions on installing command completions for your shell.
+
+When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
+
+
+[discrete]
+== Examples
+
+....
+## Generate command completion script for Bash shell
+rhoas completion bash
+
+## Generate command completion script for fish shell
+rhoas completion fish
+
+## Generate command completion script for Zsh shell
+rhoas completion zsh
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:completion_bash.adoc#completion-bash[completion bash]	 - Generate command completion script for Bash shell
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-completion-bash_{context}[completion bash]	 - Generate command completion script for Bash shell
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:completion_fish.adoc#completion-fish[completion fish]	 - Generate command completion script for fish shell
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-completion-fish_{context}[completion fish]	 - Generate command completion script for fish shell
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:completion_zsh.adoc#completion-zsh[completion zsh]	 - Generate command completion script for Zsh shell
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-completion-zsh_{context}[completion zsh]	 - Generate command completion script for Zsh shell
+endif::[]
+

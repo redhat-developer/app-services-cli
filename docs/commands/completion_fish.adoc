@@ -1,0 +1,44 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-completion_fish_{context}']
+= completion_fish
+
+[role="_abstract"]
+Generate command completion script for fish shell
+
+[discrete]
+== Synopsis
+
+Generate command completion script for fish shell.
+
+Run `rhoas command completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+
+
+....
+rhoas completion fish
+....
+
+[discrete]
+== Examples
+
+....
+rhoas completion fish
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+endif::[]
+
