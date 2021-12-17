@@ -106,6 +106,9 @@ one = 'Using {{.DefaultArtifactGroup}} artifacts group.'
 [artifact.common.message.opening.file]
 one = 'Opening file: {{.FileName}}'
 
+[artifact.common.message.loading.file]
+one = 'Loading file from url: {{.FileName}}'
+
 [artifact.common.message.file.location]
 one = 'Location of the output file'
 

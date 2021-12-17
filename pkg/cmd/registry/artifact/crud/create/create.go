@@ -146,10 +146,18 @@ func runCreate(opts *options) error {
 
 	var specifiedFile *os.File
 	if opts.file != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
-		specifiedFile, err = os.Open(opts.file)
-		if err != nil {
-			return err
+		if util.IsURL(opts.file) {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
+			specifiedFile, err = util.GetContentFromFileURL(opts.Context, opts.file)
+			if err != nil {
+				return err
+			}
+		} else {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
+			specifiedFile, err = os.Open(opts.file)
+			if err != nil {
+				return err
+			}
 		}
 	} else {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.reading.file"))
