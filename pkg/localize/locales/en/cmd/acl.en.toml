@@ -1,11 +1,12 @@
 [kafka.acl.cmd]
 [kafka.acl.cmd.shortDescription]
-one = 'Kafka ACL management for users and service accounts'
+one = 'Manage Kafka ACLs for users and service accounts'
 
 [kafka.acl.cmd.longDescription]
 one = '''
-Set of commands that will let you manage Kafka ACLs.
-By default, every user and service account has limited access to their Kafka instance (Only describe permission is enabled for TOPIC, ACL, and GROUP).
+Manage Kafka Access Control Lists (ACLs). An ACL maps permitted operations on specified resources for a selected account or for all accounts in an organization.
+
+You can use these commands to manage how other user accounts and service accounts are permitted to access Kafka resources. You can manage access for only the Kafka instances that you create or for instances that the owner has enabled you to access and alter.
 '''
 
 [kafka.acl.cmd.example]
@@ -148,7 +149,7 @@ one = 'List all Kafka ACL rules'
 
 [kafka.acl.list.cmd.longDescription]
 one = '''
-This command shows the level of access that other user accounts and service accounts have to a Kafka instance. This is displayed as a list of Access Control Lists (ACLs).
+View the level of access that other user accounts and service accounts have to a Kafka instance. This is displayed as a list of Access Control Lists (ACLs).
 
 An ACL maps permitted operations on specified resources for a selected account or for all accounts in an organization. Each ACL shows a single named account (or all accounts), a permission (such as "Allow"), an operation (such as "Write"), and a Kafka resource type and identifier. The resource type is a Kafka resource (such as "Topic"), and the resource identifier identifies the occurrences of the resource (for example, "Is *" denotes any occurrences of the resource).
 
@@ -173,7 +174,7 @@ one = 'Set filter to cluster resource'
 one = 'Text search to filter ACL rules for topics by name'
 
 [kafka.acl.list.flag.group.description]
-one = 'Text search to filter ACL rules for consumer groups by id'
+one = 'Text search to filter ACL rules for consumer groups by ID'
 
 [kafka.acl.list.allAccounts]
 one = 'All Accounts'
@@ -193,10 +194,10 @@ one = 'provide only one resource type from "--{{.ClusterFlag}}", "--{{.TopicFlag
 [kafka.acl.grantPermissions]
 
 [kafka.acl.grantPermissions.cmd.shortDescription]
-one = 'Add ACL rules to grant users access to produce/consume from topics'
+one = 'Add ACL rules to grant users access to produce and consume from topics'
 
 [kafka.acl.grantPermissions.cmd.longDescription]
-one = 'This command creates ACL rules that grant the specified user access to produce/consume from topics'
+one = 'Create Access Control List (ACL) rules that grant the specified user access to produce and consume from topics.'
 
 [kafka.acl.grantPermissions.cmd.example]
 one = '''
@@ -278,17 +279,17 @@ one = 'Kafka ACLs grant permission action was not confirmed. Exiting silently'
 one = 'Delete Kafka ACLs matching the provided filters'
 
 [kafka.acl.delete.cmd.longDescription]
-one = 'Delete all ACLs from a Kafka instance which match the filter criteria provided'
+one = 'Delete Access Control List (ACL) rules from a Kafka instance.'
 
 [kafka.acl.delete.cmd.example]
 one = '''
-# delete an ACL for user "joe_bloggs" on all topics
-$ rhoas kafka acl delete --operation write --permission allow --topic all --user joe_bloggs
+# Delete an ACL for user "dev_user" on all topics
+$ rhoas kafka acl delete --operation write --permission allow --topic all --user dev_user
 
-# delete an ACL for a service account
+# Delete an ACL for a service account
 $ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
 
-# delete an ACL for all users on the consumer group resource
+# Delete an ACL for all users on the consumer group resource
 $ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
 '''
 
@@ -314,7 +315,7 @@ one = 'Deleting ACLs from Kafka instance "{{.Name}}"'
 one = 'Grant an account permissions to create and delete ACLs in the Kafka instance'
 
 [kafka.acl.grantAdmin.cmd.longDescription]
-one = 'This command grants a specified account permission to create and delete ACLs in a Kafka instance.'
+one = 'Grant admin rights to a user. Admin rights enable the user to create and delete Access Control Lists (ACLs) in a Kafka instance.'
 
 [kafka.acl.grantAdmin.cmd.example]
 one = '''
@@ -340,17 +341,17 @@ one = 'Kafka ACLs grant admin action was not confirmed. Exiting silently'
 one = 'Create a Kafka ACL'
 
 [kafka.acl.create.cmd.longDescription]
-one = 'Create a Kafka ACL from the options provided'
+one = 'Create Kafka Access Control List (ACL) rules. A Kafka ACL defines how other user accounts and service accounts can interact with a Kafka instance and its resources.'
 
 [kafka.acl.create.cmd.example]
 one = '''
-# create an ACL for user "joe_bloggs" on all topics
-$ rhoas kafka acl create --operation all --permission allow --topic "*" --user joe_bloggs
+# Create an ACL for user "dev_user" on all topics
+$ rhoas kafka acl create --operation all --permission allow --topic "*" --user dev_user
 
-# create an ACL for a service account
+# Create an ACL for a service account
 $ rhoas kafka acl create --operation all --permission allow --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
 
-# create an ACL for all users for the consumer group resource
+# Create an ACL for all users for the consumer group resource
 $ rhoas kafka acl create --operation all --permission allow --group "group-1" --all-accounts
 '''
 

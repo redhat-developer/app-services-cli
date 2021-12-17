@@ -1,17 +1,21 @@
 [completion.cmd.shortDescription]
 description = "Short description for command"
-one = "Outputs command completion for the given shell (bash, zsh, or fish)"
+one = "Install command completion for your shell (bash, zsh, or fish)"
 
 [completion.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Outputs command completion for the given shell (bash, zsh, or fish).
+Install rhoas command completion for your shell (bash, zsh, or fish).
 
-To find what shell you are currently running, run `echo $0`.
+To find what shell you are currently running:
 
-Run `rhoas completion [bash|zsh|fish] -h` for instructions on installing command completions for your shell.
+  $ echo $0
 
-When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
+For instructions on installing command completions for your shell:
+
+  $ rhoas completion [bash|zsh|fish] -h
+
+When you have installed the command completion script, restart your shell for the changes to take effect.
 '''
 
 [completion.cmd.example]
@@ -36,17 +40,31 @@ one = "Generate command completion script for Bash shell"
 [completion.bash.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Generate command completion script for Bash shell.
+Install rhoas command completion for the Bash shell.
 
 Installing on Linux:
 
-1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
+  1. Create the script file:
+
+     $ rhoas completion bash > rhoas_completions
+
+  2. Place the script in a special Bash completions directory:
+
+     $ sudo mv rhoas_completions /etc/bash_completion.d/rhoas
+
+  3. Restart your shell for the changes to take effect.
 
 Installing on macOS:
 
-1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
+  1. Create the script file:
+
+     $ rhoas completion bash > rhoas_completions
+
+  2. Place the script in a special Bash completions directory:
+
+     $ sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas
+
+  3. Restart your shell for the changes to take effect.
 '''
 
 [completion.bash.cmd.example]
@@ -60,11 +78,17 @@ one = "Generate command completion script for Zsh shell"
 
 [completion.zsh.cmd.longDescription]
 one = '''
-Generate command completion script for Zsh shell.
+Install rhoas command completion  for the Zsh shell.
 
-1. Run `rhoas completion zsh > "${fpath[1]}/_rhoas"` to install the completion script.
-2. Unless already installed, run `echo "autoload -U compinit; compinit" >> ~/.zshrc` to enable shell completions for Zsh.
+1. Install the completion script:
 
+   $ rhoas completion zsh > "${fpath[1]}/_rhoas"
+
+2. Unless already installed, enable shell completions for Zsh:
+
+   $ echo "autoload -U compinit; compinit" >> ~/.zshrc
+
+3. Restart your shell for the changes to take effect.
 '''
 
 [completion.zsh.cmd.example]
@@ -78,9 +102,13 @@ one = "Generate command completion script for fish shell"
 
 [completion.fish.cmd.longDescription]
 one = '''
-Generate command completion script for fish shell.
+Install rhoas command completion for the fish shell.
 
-Run `rhoas command completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+1. Install fish completions:
+
+   $ rhoas command completion -s fish > ~/.config/fish/completion/gh.fish
+
+2. Restart your shell for the changes to take effect.
 '''
 
 [completion.fish.cmd.example]

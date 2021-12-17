@@ -1,5 +1,5 @@
 [kafka.topic.cmd.shortDescription]
-one = 'Create, describe, update, list and delete topics'
+one = 'Create, describe, update, list, and delete topics'
 
 [kafka.topic.cmd.longDescription]
 one = '''
@@ -10,9 +10,9 @@ Commands are executed on the currently selected Kafka instance.
 
 [kafka.topic.cmd.example]
 one = '''
-## Create a topic
+# Create a topic
 rhoas kafka topic create --name mytopic
 
-## List all topics
-rhoas kafka topic list 
+# List all topics
+rhoas kafka topic list
 '''

@@ -4,7 +4,7 @@ one = "Log out from RHOAS"
 
 [logout.cmd.longDescription]
 description = "Long description for command"
-one = 'Log out from RHOAS. To manage your services again, log in using "rhoas login".'
+one = 'Log out from RHOAS. To manage your application services again, log in using ”rhoas login”.'
 
 [logout.cmd.example]
 one = '''
