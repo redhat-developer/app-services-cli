@@ -2,46 +2,39 @@
 one = 'View and perform operations on your Kubernetes or OpenShift cluster'
 
 [cluster.cmd.longDescription]
-one = 'Use these commands to connect and bind your services to Kubernetes or OpenShift applications. You can also check if the Kubernetes or OpenShift cluster has the required Operators to perform this operation.'
+one = 'Connect and bind your services to Kubernetes or OpenShift applications. You can also check if the Kubernetes or OpenShift cluster has the required Operators to perform this operation.'
 
 [cluster.cmd.example]
 one = '''
-# check status of the connection to your cluster
-$ rhoas cluster status 
+# Check the status of the connection to your cluster
+$ rhoas cluster status
 
-# connect with cluster without including currently selected services
+# Connect to cluster without including currently selected services
 $ rhoas cluster connect --ignore-context
 
-# connect with cluster using specified token
+# Connect to cluster using the specified token
 $ rhoas cluster connect --token=value
 
-# connect with cluster and save script to create service binding
+# Connect to cluster and save script to create service binding
 $ rhoas cluster connect --yes > create_service_binding.sh
 
-# connect managed service with your application
-$ rhoas cluster bind 
+# Connect managed service with your application
+$ rhoas cluster bind
 '''
- 
+
 
 [cluster.bind.cmd.shortDescription]
 one = 'Connect your RHOAS services to Kubernetes or OpenShift applications'
 
 [cluster.bind.cmd.longDescription]
 one = '''
-Command allows you to connect services created by "rhoas cluster connect" command to your application
-running on OpenShift or Kubernetes platform.
-Bind will scan your namespace and detect all application deployments that you can connect your
-services with. 
+Connect an application service to your application running on OpenShift or Kubernetes. This command uses the Service Binding Operator to inject an application running on the cluster with the parameters required to connect to the application service.
 
-If your application uses DeploymentConfig --deployment-config flag needs to be supplied in order to detect it.
-When deployment-config flag is used binding will not take effect until application is manually redeployed by user.
+When you perform service binding, the Service Binding Operator automatically injects connection parameters as files into the pod for the application (you can see these files in the “/bindings” directory in your application). This means that the application automatically detects and uses the injected connection parameters.
 
-Bind command detects Kubernetes deployments and inject managed services credentials to them.
-For information about what credentials are injected please refer to individual services
-By default the command will inject credentials as files into `/bindings` folder inside your application.
+In general, this automatic injection and detection of connection parameters eliminates the need to manually configure an application to connect to an application service. This is a particular advantage if you have many applications in your project that you want to connect to the application service.
 
-Bind command will create volume inside your deployment.
-ServiceBindingOperator resource if you have it installed on your cluster
+If your application uses a “DeploymentConfig”, you must use the “--deployment-config" flag so that your application can be detected.
 '''
 
 [cluster.bind.cmd.example]
@@ -54,17 +47,17 @@ $ rhoas cluster bind --namespace=ns --app-name=myapp
 '''
 
 [cluster.bind.flag.appName]
-one = '''Name of the kubernetes deployment to bind'''
+one = '''Name of the Kubernetes deployment to bind'''
 
 [cluster.bind.flag.bindName]
-one = 'Name of the Service binding object to create when using operator'
+one = 'Name of the Service Binding object to create when using the Service Binding Operator'
 
 [cluster.bind.flag.deploymentConfig.description]
-one = '''Use DeploymentConfig to detect your application'''
+one = '''Use DeploymentConfig to detect your application (you must manually redeploy your application for the binding to take effect)'''
 
 [cluster.bind.flag.bindenv.description]
 one = '''Bind service as environment variables'''
- 
+
 [cluster.bind.error.emptyResponse]
 one = '''Server returned empty response for service'''
 
@@ -108,14 +101,14 @@ one = 'Location of the kubeconfig file'
 
 [cluster.common.flag.offline.token.description]
 one = '''
-Provide an offline token to be used by the operator (to get a token, visit {{.OfflineTokenURL}})
+Provide an offline token to be used by the Operator (to get a token, visit {{.OfflineTokenURL}})
 '''
 
 [cluster.common.kube.resourcemissing]
 one = 'Kubernetes API doesnt provide required API. Please execute "rhoas cluster status" for more information'
 
 [cluster.common.kube.unauthorized]
-one = '''Unauthorized to perform operation in kubernetes API. 
+one = '''Unauthorized to perform operation in kubernetes API.
 Please run "rhoas cluster status" to ensure that you have all dependencies installed.
 Please review if you have set the right namespace and are connected into right cluster'
 '''
@@ -127,16 +120,16 @@ one = 'Failed to communicate with your kubernetes cluster. Please check if you a
 one = 'Forcibly perform operation without confirmation'
 
 [cluster.common.flag.namespace.description]
-one = 'Custom Kubernetes namespace (if not set current namespace will be used)'
+one = 'Use a custom Kubernetes namespace (if not set, the current namespace will be used)'
 
 [cluster.common.flag.ignoreContext.description]
-one = 'Ignore currently selected services and ask to select each service separately'
+one = 'Ignore currently-selected services and ask to select each service separately'
 
 [cluster.common.flag.serviceType.description]
 one = 'Type of custom resource connection'
 
 [cluster.common.flag.serviceName.description]
-one = 'Name of service to connect to'
+one = 'Name of the application service to connect to'
 
 [cluster.common.input.servicetype]
 one = 'Select type of service'
@@ -149,50 +142,42 @@ one = 'Connect your services to Kubernetes or OpenShift'
 
 [cluster.connect.cmd.longDescription]
 one = '''
-Connect your application services to your Kubernetes or OpenShift cluster.
-The kubeconfig file is used to connect to the cluster and identify the context.
-Alternatively, you can use the KUBECONFIG environment variable to read your configuration.
+Connect your application services to an Kubernetes or OpenShift cluster.
 
-NOTE: This command requires the RHOAS operator to be running on your cluster.
+Note: Before you can connect your application service to OpenShift, you need to install the RHOAS Operator in your OpenShift cluster. For installation instructions, see https://github.com/redhat-developer/app-services-guides/tree/main/service-discovery#installing-the-rhoas-operator-on-openshift.
 
-This command will:
+When you connect an application service to a Kubernetes or OpenShift cluster, this command uses the kubeconfig file (or the KUBECONFIG environment variable) to connect to the cluster and identify the context.
 
-1. Create a service account and mount it as a secret into your cluster.
-If the cluster has a service account, it will be refreshed.
+After identifying the context, the RHOAS Operator creates a service account and mounts it as a secret in your cluster. If your cluster has a service account already, the service account is refreshed.
 
-2. Create a Kafka Request object that can be used to create a ServiceBinding object using
-the Service Binding operator (https://github.com/redhat-developer/service-binding-operator).
+Finally, the RHOAS Operator creates a Kafka Request Object, which the Service Binding Operator (https://github.com/redhat-developer/service-binding-operator) uses to create a "ServiceBinding" object.
 
-NOTE: Created service account will need to be given permissions to specified service
-For example for Kafka service you should execute the following command to grant access to the service account
+After running this command, you need to grant access for the service account that was created by the RHOAS Operator to access your application service. For the Kafka application service, enter the following command:
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic all --group all
 
-Similarly for service registry you should execute the following command:
+For the Service Registry application service, enter this command:
 
   $ rhoas service-registry role add --role=DEVELOPER --service-account your-sa
-
 '''
 
 [cluster.connect.cmd.example]
 one = '''
-# connect a Kafka instance to your cluster
+# Connect a Kafka instance to your cluster
 $ rhoas cluster connect --service-type kafka --service-name kafka
 
-# connect a Service registry instance to your cluster
+# Connect a Service Registry instance to your cluster
 $ rhoas cluster connect --service-type service-registry --service-name registry
 '''
 
 [cluster.status.cmd.shortDescription]
-one = 'View status of the current Kubernetes or OpenShift cluster'
+one = 'View the status of the current Kubernetes or OpenShift cluster'
 
 [cluster.status.cmd.longDescription]
 one = '''
-View information about the current Kubernetes or OpenShift cluster.
-You can use this information to connect your application service to the cluster.
+View information about the current Kubernetes or OpenShift cluster. You can use this information to connect your application service to the cluster.
 
-Before using cluster commands, you must be authenticated into a Kubernetes or OpenShift
-cluster. The command uses your kubeconfig file to identify the cluster context.
+Before using this command, you must be logged in to a Kubernetes or OpenShift cluster. The command uses your kubeconfig file to identify the cluster context.
 '''
 
 [cluster.status.cmd.example]
@@ -283,7 +268,7 @@ Created {{.Resource}} can be already injected to your application.
 To bind you need to have Service Binding Operator installed:
 https://github.com/redhat-developer/service-binding-operator
 
-You can bind {{.Resource}} to your application by executing "rhoas cluster bind" 
+You can bind {{.Resource}} to your application by executing "rhoas cluster bind"
 or directly in the OpenShift Console topology view.
 '''
 
@@ -304,12 +289,12 @@ Client ID:     {{.ClientID}}
 
 Make a copy of the client ID to store in a safe place. Credentials won't appear again after closing the terminal.
 
-You will need to assign permissions to service account in order to use it. 
+You will need to assign permissions to service account in order to use it.
 '''
 
 [cluster.kubernetes.printKafkaAccessCommands]
 one = '''
-You need to separately grant service account access to Kafka by issuing following command 
+You need to separately grant service account access to Kafka by issuing following command
 
   $ rhoas kafka acl grant-access --producer --consumer --service-account {{.ClientID}} --topic all --group all
 '''
@@ -337,12 +322,10 @@ one = 'KafkaConnection already exists'
 one = 'ServiceRegistryConnection already exists'
 
 [cluster.clean.shortDescription]
-one = 'Removes all resources created by cluster extensions'
+one = 'Remove all resources created by cluster extensions'
 
 [cluster.clean.longDescription]
-one = '''Removes all resources created by cluster extensions
-Clean command will remove all secrets and service connections created in your namespace
-'''
+one = 'Remove all resources created by cluster extensions. This command removes all secrets and application service connections in your Kubernetes or OpenShift namespace.'
 
 [cluster.clean.example]
 one = '''
@@ -359,8 +342,6 @@ one = 'Successfully removed all resources managed by rhoas cluster command'
 [cluster.clean.confirmation]
 one = '''Removing all secrets and operator resources in namespace "{{.Namespace}}"
 
-To not affect your running applications service account and service binding objects 
+To not affect your running applications service account and service binding objects
 will still be present and need to be removed manually.
 '''
-
-
