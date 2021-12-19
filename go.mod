@@ -9,7 +9,7 @@ require (
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
-	github.com/briandowns/spinner v1.17.0
+	github.com/briandowns/spinner v1.18.0
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/fatih/color v1.13.0
 	github.com/golang-jwt/jwt/v4 v4.2.0
