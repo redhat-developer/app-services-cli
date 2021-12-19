@@ -1,0 +1,68 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-kafka-consumer-group-reset-offset_{context}']
+= kafka consumer-group reset-offset
+
+[role="_abstract"]
+Reset partition offsets for a consumer group
+
+[discrete]
+== Synopsis
+
+Reset the offset for consumers in a consumer group reading from a given topic.
+
+Reset to the earliest or latest offset. Or base the reset on a specific offset value or timestamp.
+You can also choose partitions to reset offsets from.
+
+
+....
+rhoas kafka consumer-group reset-offset [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# reset partition offsets for a consumer group to latest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset latest
+
+# reset partition offsets for a consumer group to earliest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset earliest
+
+# reset partition offsets for a consumer group to an absolute value
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset absolute --value 0
+
+# reset partition offsets for a consumer group to a timestamp
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset timestamp --value "2016-06-23T09:07:21-07:00"
+
+# reset specific partition offsets for a consumer group
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset latest --partitions 0,1
+
+....
+
+[discrete]
+== Options
+
+      `--id` _string_::               The unique ID of the consumer group to reset-offset
+      `--offset` _string_::           Offset type (choose from: "earliest", "latest", "absolute", "timestamp")
+      `--partitions` _int32Slice_::   Reset consumer group offsets on specified partitions (comma-separated integers) (default [])
+      `--topic` _string_::            Reset consumer group offsets on a specified topic
+      `--value` _string_::            Custom offset value (required when offset is "absolute" or "timestamp")
+  `-y`, `--yes`::                     Skip confirmation of this action 
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+endif::[]
+

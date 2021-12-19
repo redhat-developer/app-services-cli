@@ -1,0 +1,157 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-service-registry-artifact_{context}']
+= service-registry artifact
+
+[role="_abstract"]
+Manage Service Registry artifacts
+
+[discrete]
+== Synopsis
+
+Manage Service Registry schema and API artifacts in the currently selected Service Registry instance.
+
+Commands are executed on the currently selected Service Registry instance, which can be overridden using the --instance-id flag.
+
+Service Registry enables developers to manage and share the structure of their data.
+For example, client applications can dynamically push or pull the latest schema or API updates to or from the registry without needing to redeploy.
+Service Registry also enables developers to create rules that govern how registry content can evolve over time.
+For example, this includes rules for content validation and version compatibility.
+
+Artifact commands enable client applications to manage the schema and API artifacts in the registry instance.
+This set of commands provide create, read, update, and delete operations for artifacts, rules, versions, and metadata.
+
+
+[discrete]
+== Examples
+
+....
+## Create artifact in my-group from schema.json file
+rhoas service-registry artifact create --artifact-id=my-artifact --group=my-group artifact.json
+
+## Get artifact content
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
+
+## Get artifact content by hash
+rhoas service-registry artifact download --hash=cab4...al9 --output-file=artifact.json
+
+## Delete artifact
+rhoas service-registry artifact delete --artifact-id=my-artifact
+
+## Get artifact metadata
+rhoas service-registry artifact metadata --artifact-id=my-artifact --group=my-group
+
+## Update artifact
+rhoas service-registry artifact update --artifact-id=my-artifact artifact-new.json
+
+## List artifacts
+rhoas service-registry artifact list --group=my-group --limit=10 page=1
+
+## View artifact versions
+rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-group
+
+Artifacts file can be instance of any schema like OpenAPI, Avro etc.
+For example: https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/docs/resources/avro-userInfo.json
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - Service Registry commands
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_create.adoc#service-registry-artifact-create[service-registry-artifact create]	 - Creates new artifact from file or standard input
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-create_{context}[service-registry-artifact create]	 - Creates new artifact from file or standard input
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_delete.adoc#service-registry-artifact-delete[service-registry-artifact delete]	 - Deletes single or all artifacts in a given group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-delete_{context}[service-registry-artifact delete]	 - Deletes single or all artifacts in a given group
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_download.adoc#service-registry-artifact-download[service-registry-artifact download]	 - Download artifacts from Service Registry using global identifiers
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-download_{context}[service-registry-artifact download]	 - Download artifacts from Service Registry using global identifiers
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_export.adoc#service-registry-artifact-export[service-registry-artifact export]	 - Export data from Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-export_{context}[service-registry-artifact export]	 - Export data from Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_get.adoc#service-registry-artifact-get[service-registry-artifact get]	 - Get artifact by ID and group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-get_{context}[service-registry-artifact get]	 - Get artifact by ID and group
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_import.adoc#service-registry-artifact-import[service-registry-artifact import]	 - Import data into a Service Registry instance
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-import_{context}[service-registry-artifact import]	 - Import data into a Service Registry instance
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_list.adoc#service-registry-artifact-list[service-registry-artifact list]	 - List artifacts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-list_{context}[service-registry-artifact list]	 - List artifacts
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_metadata-get.adoc#service-registry-artifact-metadata-get[service-registry-artifact metadata-get]	 - Get artifact metadata
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-metadata-get_{context}[service-registry-artifact metadata-get]	 - Get artifact metadata
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_metadata-set.adoc#service-registry-artifact-metadata-set[service-registry-artifact metadata-set]	 - Update artifact metadata
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-metadata-set_{context}[service-registry-artifact metadata-set]	 - Update artifact metadata
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_state-set.adoc#service-registry-artifact-state-set[service-registry-artifact state-set]	 - Set artifact state
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-state-set_{context}[service-registry-artifact state-set]	 - Set artifact state
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_update.adoc#service-registry-artifact-update[service-registry-artifact update]	 - Update artifact
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-update_{context}[service-registry-artifact update]	 - Update artifact
+endif::[]
+
+ifdef::env-github,env-browser[]
+* link:service-registry-artifact_versions.adoc#service-registry-artifact-versions[service-registry-artifact versions]	 - Get latest artifact versions by artifact-id and group
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-service-registry-artifact-versions_{context}[service-registry-artifact versions]	 - Get latest artifact versions by artifact-id and group
+endif::[]
+

@@ -1,0 +1,87 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-kafka-acl-list_{context}']
+= kafka acl list
+
+[role="_abstract"]
+List all Kafka ACL rules
+
+[discrete]
+== Synopsis
+
+This command shows the level of access that other user accounts and service accounts have to a Kafka instance. This is displayed as a list of Access Control Lists (ACLs).
+
+An ACL maps permitted operations on specified resources for a selected account or for all accounts in an organization. Each ACL shows a single named account (or all accounts), a permission (such as "Allow"), an operation (such as "Write"), and a Kafka resource type and identifier. The resource type is a Kafka resource (such as "Topic"), and the resource identifier identifies the occurrences of the resource (for example, "Is *" denotes any occurrences of the resource).
+
+By default, new Kafka instances contain the following ACLs:
+
+PRINCIPAL (4)    PERMISSION   OPERATION          DESCRIPTION
+---------------- ------------ ------------------ ----------------
+All accounts     allow        describe           group is "*"
+All accounts     allow        describe           cluster is "*"
+All accounts     allow        describe-configs   topic is "*"
+All accounts     allow        describe           topic is "*"
+
+These ACLs allow all accounts in the organization to view the Kafka instance permissions and to view topics and consumer groups in the instance, but not to produce or consume messages.
+
+The ACLs are displayed in a table by default. Alternatively, you can display them as JSON or YAML.
+
+
+....
+rhoas kafka acl list [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Display Kafka ACL rules for the Kafka instance
+$ rhoas kafka acl list
+
+# Display Kafka ACL rules for a specific user
+$ rhoas kafka acl list --user foo_user
+
+# Display Kafka ACL rules for a specific service account
+$ rhoas kafka acl list --service-account srvc-acct-f20a7561-7426-4f5a-b5e7-0ef2db31e15b
+
+# Display Kafka ACL rules for a specific topic
+$ rhoas kafka acl list --topic foo_topic_name
+
+# Display Kafka ACL rules for a specific consumer group
+$ rhoas kafka acl list --group foo_group_id
+
+# Display Kafka ACL rules for a specific consumer group and user
+$ rhoas kafka acl list --group foo_group_id --user foo_user
+
+....
+
+[discrete]
+== Options
+
+      `--all-accounts`::               Set the ACL principal to match all principals (users and service accounts)
+      `--cluster`::                    Set filter to cluster resource
+      `--group` _string_::             Text search to filter ACL rules for consumer groups by id
+      `--instance-id` _string_::       Kafka instance ID. Uses the current instance if not set
+  `-o`, `--output` _string_::          Specify the output format. Choose from: "json", "yaml", "yml"
+      `--page` _int32_::               Current page number for the list  (default 1)
+      `--service-account` _string_::   Service account client ID used as principal for this operation
+      `--size` _int32_::               Maximum number of items to be returned per page  (default 10)
+      `--topic` _string_::             Text search to filter ACL rules for topics by name
+      `--user` _string_::              User ID to be used as principal
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_acl.adoc#rhoas-kafka-acl[rhoas kafka acl]	 - Kafka ACL management for users and service accounts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-acl_{context}[rhoas kafka acl]	 - Kafka ACL management for users and service accounts
+endif::[]
+

@@ -1,0 +1,56 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-kafka-topic-create_{context}']
+= kafka topic create
+
+[role="_abstract"]
+Create a topic
+
+[discrete]
+== Synopsis
+
+Create a topic in the current Apache Kafka instance.
+
+This command lets you create a topic, set a desired number of
+partitions, retention size and retention period or else use the default values.
+
+
+....
+rhoas kafka topic create [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# create a topic
+$ rhoas kafka topic create --name topic-1
+
+....
+
+[discrete]
+== Options
+
+      `--cleanup-policy` _string_::   Determines whether log messages are deleted, compacted, or both (default "delete")
+      `--name` _string_::             Topic name
+  `-o`, `--output` _string_::         Specify the output format. Choose from: "json", "yaml", "yml"
+      `--partitions` _int32_::        The number of partitions in the topic (default 1)
+      `--retention-bytes` _int_::     The maximum total size of a partition log segments before old log segments are deleted to free up space (default -1)
+      `--retention-ms` _int_::        The period of time in milliseconds the broker will retain a partition log before deleting it (default 604800000)
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+endif::[]
+

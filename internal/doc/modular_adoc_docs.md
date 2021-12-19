@@ -17,7 +17,10 @@ func main() {
 		Use:   "test",
 		Short: "my test program",
 	}
-	err := doc.GenAsciidocTree(cmd, "/tmp")
+	options := GeneratorOptions{
+		Dir: "/tmp/test.adoc",
+	}
+	err := doc.GenAsciidocTree(cmd, options)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,6 +28,10 @@ func main() {
 ```
 
 That will get you a AsciiDoc document `/tmp/test.adoc`
+
+## Generating AsciiDoc TOC with support for chapters
+
+TODO
 
 ## Generate AsciiDoc docs for the entire command tree
 

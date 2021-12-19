@@ -268,5 +268,18 @@
         "--yes"
       ]
     },
+    {
+      "name": "Docs",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "docs",
+        "--file-format", "adoc",
+        "--dir", "./docs/commands"
+      ]
+    },
   ]
 }

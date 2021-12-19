@@ -197,22 +197,22 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 	return nil
 }
 
-// GenAsciidoc creates markdown output.
-func GenAsciidoc(cmd *cobra.Command, w io.Writer) error {
-	return GenAsciidocCustom(cmd, w, func(s string) string { return s })
+// GenAsciidoc creates asciidocs documentation
+func GenAsciidoc(cmd *cobra.Command, w io.Writer, options *GeneratorOptions) error {
+	return GenAsciidocCustom(cmd, w, options)
 }
 
-// GenAsciidocCustom creates custom markdown output.
-func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string) error {
+// GenAsciidocCustom creates custom asciidoc documentation
+func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, options *GeneratorOptions) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 
 	buf := new(bytes.Buffer)
-	name := cmd.CommandPath()
-	shortName := strings.Replace(name, "rhoas ", "", 1)
+	path := GetNormalizedCommandPath(cmd)
+	headerName := GetShortCommandPath(cmd)
 	buf.WriteString("ifdef::env-github,env-browser[:context: cmd]\n")
-	buf.WriteString(fmt.Sprintf("[id='%s']\n", nameToPantheonId(name)))
-	buf.WriteString(fmt.Sprintf("= %s\n\n", shortName))
+	buf.WriteString(fmt.Sprintf("[id='%s']\n", nameToPantheonId(path)))
+	buf.WriteString(fmt.Sprintf("= %s\n\n", headerName))
 	buf.WriteString("[role=\"_abstract\"]\n")
 	buf.WriteString(cmd.Short + "\n\n")
 	if len(cmd.Long) > 0 {
@@ -257,7 +257,7 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 			if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 				continue
 			}
-			cname := name + " " + child.Name()
+			cname := path + " " + child.Name()
 			if err := writeXref(buf, cname, child.Short); err != nil {
 				return err
 			}
@@ -271,27 +271,34 @@ func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	return err
 }
 
-// GenAsciidocTree will generate a markdown page for this command and all
-// descendants in the directory given. The header may be nil.
-// This function may not work correctly if your command names have `-` in them.
-// If you have `cmd` with two subcmds, `sub` and `sub-third`,
-// and `sub` has a subcommand called `third`, it is undefined which
-// help output will be in the file `cmd-sub-third.1`.
-func GenAsciidocTree(cmd *cobra.Command, options GeneratorOptions) error {
-	err := GenAsciidocTreeCustom(cmd, options)
-	if err != nil {
-		return err
+// GetNormalizedCommandPath returns name of the command without cmd name and with underscore instead of spaces
+func GetNormalizedCommandPath(c *cobra.Command) string {
+	commands := strings.Split(c.CommandPath(), " ")
+
+	if len(commands) == 1 {
+		return commands[0]
 	}
-	if options.GenerateIndex && options.IndexLocation != "" {
-		return CreateIndexFile(cmd, options.IndexLocation)
+
+	return strings.Join(commands[1:], "-")
+}
+
+func GetShortCommandPath(c *cobra.Command) string {
+	commands := strings.Split(c.CommandPath(), " ")
+
+	if len(commands) == 1 {
+		return commands[0]
 	}
-	return nil
+
+	return strings.Join(commands[1:], " ")
 }
 
 // GeneratorOptions options for the generator
 type GeneratorOptions struct {
 	// Directory to write the file to.
 	Dir string
+
+	// FileNameGenerator - provides custom file name for the file we use
+	FileNameGenerator func(cmd *cobra.Command) string
 
 	// FilePrepender - Prepend content to the generated file.
 	FilePrepender func(string) string
@@ -306,20 +313,39 @@ type GeneratorOptions struct {
 	IndexLocation string
 }
 
-// GenAsciidocTreeCustom is the the same as GenAsciidocTree, but
-// with custom filePrepender and linkHandler.
-func GenAsciidocTreeCustom(cmd *cobra.Command, options GeneratorOptions) error {
-	if options.FilePrepender == nil {
-		options.FilePrepender = func(filename string) string {
-			return filename
-		}
-	}
+// GenAsciidocTree will generate a markdown page for this command and all
+// descendants in the directory given. The header may be nil.
+// This function may not work correctly if your command names have `-` in them.
+// If you have `cmd` with two subcmds, `sub` and `sub-third`,
+// and `sub` has a subcommand called `third`, it is undefined which
+// help output will be in the file `cmd-sub-third.1`.
+func GenAsciidocTree(cmd *cobra.Command, options *GeneratorOptions) error {
 	if options.LinkHandler == nil {
 		options.LinkHandler = func(name string) string {
 			return name
 		}
 	}
 
+	if options.FileNameGenerator == nil {
+		options.FileNameGenerator = func(c *cobra.Command) string {
+			basename := GetNormalizedCommandPath(c) + ".adoc"
+			return filepath.Join(options.Dir, basename)
+		}
+	}
+
+	err := GenAsciidocTreeCustom(cmd, options)
+	if err != nil {
+		return err
+	}
+
+	if options.GenerateIndex && options.IndexLocation != "" {
+		return CreateIndexFile(cmd, options)
+	}
+	return nil
+}
+
+// GenAsciidocTreeCustom
+func GenAsciidocTreeCustom(cmd *cobra.Command, options *GeneratorOptions) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
 			continue
@@ -329,18 +355,20 @@ func GenAsciidocTreeCustom(cmd *cobra.Command, options GeneratorOptions) error {
 		}
 	}
 
-	nonWhitespaced := strings.ReplaceAll(cmd.CommandPath(), " ", "-")
-	basename := nonWhitespaced + ".adoc"
-	filename := filepath.Join(options.Dir, basename)
+	filename := options.FileNameGenerator(cmd)
+	fmt.Println("Generating Command", cmd.CommandPath(), "to", filename)
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	if _, err := io.WriteString(f, options.FilePrepender(filename)); err != nil {
-		return err
+	if options.FilePrepender != nil {
+		outputFile := options.FilePrepender(filename)
+		if _, err := io.WriteString(f, outputFile); err != nil {
+			return err
+		}
 	}
 
-	return GenAsciidocCustom(cmd, f, options.LinkHandler)
+	return GenAsciidocCustom(cmd, f, options)
 }

@@ -2,7 +2,6 @@ package docs
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	rhoasdoc "github.com/redhat-developer/app-services-cli/internal/doc"
@@ -43,7 +42,6 @@ func NewDocsCmd(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.format, "file-format", "md", "Output format of the generated documentation. Valid options are: 'md' (markdown), 'adoc' (Asciidoc) and 'man'")
 	cmd.Flags().StringVar(&opts.dir, "dir", "./docs", "The directory to output the generated documentation files")
-
 	return cmd
 }
 
@@ -62,15 +60,10 @@ func runCmd(cmd *cobra.Command, opts *options) (err error) {
 		}
 		err = doc.GenManTree(cmd.Root(), header, opts.dir)
 	case asciidoc:
-		filePrepender := func(filename string) string { return strings.Replace(filename, "rhoas", "", -1) }
-		linkHandler := func(s string) string { return s }
-
-		err = rhoasdoc.GenAsciidocTreeCustom(cmd.Root(), rhoasdoc.GeneratorOptions{
+		err = rhoasdoc.GenAsciidocTree(cmd.Root(), &rhoasdoc.GeneratorOptions{
 			Dir:           opts.dir,
-			FilePrepender: filePrepender,
-			LinkHandler:   linkHandler,
 			GenerateIndex: true,
-			IndexLocation: "./README.adoc"})
+			IndexLocation: opts.dir + "/README.adoc"})
 	}
 
 	if err != nil {

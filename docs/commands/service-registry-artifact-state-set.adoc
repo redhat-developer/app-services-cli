@@ -1,0 +1,54 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-service-registry-artifact-state-set_{context}']
+= service-registry artifact state-set
+
+[role="_abstract"]
+Set artifact state
+
+[discrete]
+== Synopsis
+
+Set artifact state by setting one of possible values
+- ENABLED (Enable artifact)
+- DISABLED (Disable artifact usage)
+- DEPRECATED (Deprecate artifact)
+
+
+....
+rhoas service-registry artifact state-set [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Set artifact state to DISABLED
+rhoas service-registry artifact state-set --artifact-id=my-artifact --state=DISABLED
+
+....
+
+[discrete]
+== Options
+
+      `--artifact-id` _string_::   ID of the artifact
+  `-g`, `--group` _string_::       Artifact group (default "default")
+      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--state` _string_::         new artifact state
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ifdef::env-github,env-browser[]
+* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
+endif::[]
+ifdef::pantheonenv[]
+* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
+endif::[]
+
