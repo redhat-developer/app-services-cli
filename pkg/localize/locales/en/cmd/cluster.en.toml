@@ -152,9 +152,13 @@ After identifying the context, the RHOAS Operator creates a service account and 
 
 Finally, the RHOAS Operator creates a Kafka Request Object, which the Service Binding Operator (https://github.com/redhat-developer/service-binding-operator) uses to create a "ServiceBinding" object.
 
-After running this command, you need to grant access for the service account that was created by the RHOAS Operator to access your application service:
+After running this command, you need to grant access for the service account that was created by the RHOAS Operator to access your application service. For the Kafka application service, enter the following command:
 
-$ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic all --group all
+  $ rhoas kafka acl grant-access --producer --consumer --service-account your-sa --topic all --group all
+
+For the Service Registry application service, enter this command:
+
+  $ rhoas service-registry role add --role=DEVELOPER --service-account your-sa
 '''
 
 [cluster.connect.cmd.example]
