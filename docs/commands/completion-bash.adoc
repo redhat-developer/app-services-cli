@@ -8,17 +8,31 @@ Generate command completion script for Bash shell
 [discrete]
 == Synopsis
 
-Generate command completion script for Bash shell.
+Install rhoas command completion for the Bash shell.
 
 Installing on Linux:
 
-1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
+  1. Create the script file:
+
+     $ rhoas completion bash > rhoas_completions
+
+  2. Place the script in a special Bash completions directory:
+
+     $ sudo mv rhoas_completions /etc/bash_completion.d/rhoas
+
+  3. Restart your shell for the changes to take effect.
 
 Installing on macOS:
 
-1. Run `rhoas completion bash > rhoas_completions` to create the script file.
-2. Run `sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas` to place the script in a special Bash completions directory.
+  1. Create the script file:
+
+     $ rhoas completion bash > rhoas_completions
+
+  2. Place the script in a special Bash completions directory:
+
+     $ sudo mv rhoas_completions /usr/local/etc/bash_completion.d/rhoas
+
+  3. Restart your shell for the changes to take effect.
 
 
 ....
@@ -44,9 +58,9 @@ rhoas completion bash
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 

@@ -8,7 +8,7 @@ List all topics
 [discrete]
 == Synopsis
 
-List all topics in the current Apache Kafka instance.
+List all topics in the current Kafka instance.
 
 
 ....
@@ -19,10 +19,10 @@ rhoas kafka topic list [flags]
 == Examples
 
 ....
-# list all topics
+# List all topics
 $ rhoas kafka topic list
 
-# list all topics as JSON
+# List all topics in JSON format
 $ rhoas kafka topic list -o json
 
 ....
@@ -46,9 +46,9 @@ $ rhoas kafka topic list -o json
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
 endif::[]
 

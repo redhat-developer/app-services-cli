@@ -3,13 +3,14 @@ ifdef::env-github,env-browser[:context: cmd]
 = kafka acl
 
 [role="_abstract"]
-Kafka ACL management for users and service accounts
+Manage Kafka ACLs for users and service accounts
 
 [discrete]
 == Synopsis
 
-Set of commands that will let you manage Kafka ACLs.
-By default, every user and service account has limited access to their Kafka instance (Only describe permission is enabled for TOPIC, ACL, and GROUP).
+Manage Kafka Access Control Lists (ACLs). An ACL maps permitted operations on specified resources for a specified principal (username or service account) or for all accounts in an organization.
+
+You can use these commands to manage how other user accounts and service accounts are permitted to access Kafka resources. You can manage access for only the Kafka instances that you create or for instances that the owner has enabled you to access and alter.
 
 
 [discrete]
@@ -62,10 +63,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:kafka-acl_grant-access.adoc#kafka-acl-grant-access[kafka-acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
+* link:kafka-acl_grant-access.adoc#kafka-acl-grant-access[kafka-acl grant-access]	 - Add ACL rules to grant users access to produce and consume from topics
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-kafka-acl-grant-access_{context}[kafka-acl grant-access]	 - Add ACL rules to grant users access to produce/consume from topics
+* link:{path}#ref-kafka-acl-grant-access_{context}[kafka-acl grant-access]	 - Add ACL rules to grant users access to produce and consume from topics
 endif::[]
 
 ifdef::env-github,env-browser[]

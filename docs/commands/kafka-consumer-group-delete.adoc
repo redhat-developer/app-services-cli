@@ -8,7 +8,9 @@ Delete a consumer group
 [discrete]
 == Synopsis
 
-Delete a consumer group from the Kafka instance.
+Delete a consumer group from the current Kafka instance.
+
+To select a different Kafka instance, use the “rhoas kafka use” command.
 
 
 ....
@@ -41,9 +43,9 @@ $ rhoas kafka consumer-group delete --id consumer_group_1
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
 endif::[]
 

@@ -8,9 +8,13 @@ Generate command completion script for fish shell
 [discrete]
 == Synopsis
 
-Generate command completion script for fish shell.
+Install rhoas command completion for the fish shell.
 
-Run `rhoas command completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+1. Install fish completions:
+
+   $ rhoas command completion -s fish > ~/.config/fish/completion/gh.fish
+
+2. Restart your shell for the changes to take effect.
 
 
 ....
@@ -36,9 +40,9 @@ rhoas completion fish
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 

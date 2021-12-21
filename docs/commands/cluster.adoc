@@ -8,26 +8,26 @@ View and perform operations on your Kubernetes or OpenShift cluster
 [discrete]
 == Synopsis
 
-Use these commands to connect and bind your services to Kubernetes or OpenShift applications. You can also check if the Kubernetes or OpenShift cluster has the required Operators to perform this operation.
+Connect and bind your services to Kubernetes or OpenShift applications. You can also check if the Kubernetes or OpenShift cluster has the required Operators to perform this operation.
 
 [discrete]
 == Examples
 
 ....
-# check status of the connection to your cluster
-$ rhoas cluster status 
+# Check the status of the connection to your cluster
+$ rhoas cluster status
 
-# connect with cluster without including currently selected services
+# Connect to cluster without including currently selected services
 $ rhoas cluster connect --ignore-context
 
-# connect with cluster using specified token
+# Connect to cluster using the specified token
 $ rhoas cluster connect --token=value
 
-# connect with cluster and save script to create service binding
+# Connect to cluster and save script to create service binding
 $ rhoas cluster connect --yes > create_service_binding.sh
 
-# connect managed service with your application
-$ rhoas cluster bind 
+# Connect managed service with your application
+$ rhoas cluster bind
 
 ....
 
@@ -56,10 +56,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:cluster_clean.adoc#cluster-clean[cluster clean]	 - Removes all resources created by cluster extensions
+* link:cluster_clean.adoc#cluster-clean[cluster clean]	 - Remove all resources created by cluster extensions
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-cluster-clean_{context}[cluster clean]	 - Removes all resources created by cluster extensions
+* link:{path}#ref-cluster-clean_{context}[cluster clean]	 - Remove all resources created by cluster extensions
 endif::[]
 
 ifdef::env-github,env-browser[]
@@ -70,9 +70,9 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:cluster_status.adoc#cluster-status[cluster status]	 - View status of the current Kubernetes or OpenShift cluster
+* link:cluster_status.adoc#cluster-status[cluster status]	 - View the status of the current Kubernetes or OpenShift cluster
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-cluster-status_{context}[cluster status]	 - View status of the current Kubernetes or OpenShift cluster
+* link:{path}#ref-cluster-status_{context}[cluster status]	 - View the status of the current Kubernetes or OpenShift cluster
 endif::[]
 

@@ -3,14 +3,14 @@ ifdef::env-github,env-browser[:context: cmd]
 = whoami
 
 [role="_abstract"]
-Print current username
+Output the current username
 
 [discrete]
 == Synopsis
 
-Print the username of the currently active user.
+View the username of the current user.
 
-This command prints the username associated with the user currently logged in.
+This command outputs the username for the user currently logged in.
 
 
 ....
@@ -21,7 +21,7 @@ rhoas whoami [flags]
 == Examples
 
 ....
-# print current username
+# Output the current username
 $ rhoas whoami
 
 ....
