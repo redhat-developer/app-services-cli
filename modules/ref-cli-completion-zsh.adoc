@@ -8,11 +8,17 @@ Generate command completion script for Zsh shell
 [discrete]
 == Synopsis
 
-Generate command completion script for Zsh shell.
+Install rhoas command completion  for the Zsh shell.
 
-1. Run `rhoas completion zsh > "${fpath[1]}/_rhoas"` to install the completion script.
-2. Unless already installed, run `echo "autoload -U compinit; compinit" >> ~/.zshrc` to enable shell completions for Zsh.
+1. Install the completion script:
 
+   $ rhoas completion zsh > "${fpath[1]}/_rhoas"
+
+2. Unless already installed, enable shell completions for Zsh:
+
+   $ echo "autoload -U compinit; compinit" >> ~/.zshrc
+
+3. Restart your shell for the changes to take effect.
 
 
 ....
@@ -38,9 +44,9 @@ rhoas completion zsh
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 

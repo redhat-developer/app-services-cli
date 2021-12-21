@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas kafka topic
 
 [role="_abstract"]
-Create, describe, update, list and delete topics
+Create, describe, update, list, and delete topics
 
 [discrete]
 == Synopsis
@@ -17,11 +17,11 @@ Commands are executed on the currently selected Kafka instance.
 == Examples
 
 ....
-## Create a topic
+# Create a topic
 rhoas kafka topic create --name mytopic
 
-## List all topics
-rhoas kafka topic list 
+# List all topics
+rhoas kafka topic list
 
 ....
 
@@ -71,9 +71,9 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic_update.adoc#rhoas-kafka-topic-update[rhoas kafka topic update]	 - Update a Kafka topic
+* link:rhoas_kafka_topic_update.adoc#rhoas-kafka-topic-update[rhoas kafka topic update]	 - Update configuration details for a Kafka topic
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic-update_{context}[rhoas kafka topic update]	 - Update a Kafka topic
+* link:{path}#ref-rhoas-kafka-topic-update_{context}[rhoas kafka topic update]	 - Update configuration details for a Kafka topic
 endif::[]
 
