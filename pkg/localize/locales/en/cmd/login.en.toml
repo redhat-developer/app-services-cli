@@ -9,21 +9,21 @@ Log in securely to RHOAS through a web browser.
 
 This command opens your web browser, where you can enter your credentials.
 
-When using the rhoas CLI in an environment without a web browser, 
-you can log in using an offline-token by passing the "--token" flag, which can be obtained at {{.OfflineTokenURL}}.
-Note: token-based login is not supported by the Kafka "topic" and "consumer-group" subcommands.
+When using RHOAS in an environment without a web browser, you can log in using an offline-token by using the "--token" flag, which can be obtained at https://console.redhat.com/openshift/token.
+
+Note: Token-based login is not supported by the "rhoas kafka topic" and “rhoas kafka consumer-group" commands.
 '''
 
 [login.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# securely log in to RHOAS by using a web browser
+# Securely log in to RHOAS by using a web browser
 $ rhoas login
 
-# print the authentication URL instead of automatically opening the browser
+# Print the authentication URL instead of automatically opening a web browser
 $ rhoas login --print-sso-url
 
-# log in using an offline token
+# Log in using an offline token
 $ rhoas login --token f5cgc...
 '''
 
@@ -33,7 +33,7 @@ one = 'URL of the API gateway'
 
 [login.flag.insecure]
 description = 'Description for --insecure flag'
-one = 'Enables insecure communication with the server by disabling TLS certificate and host name verification'
+one = 'Allow insecure communication with the server by disabling TLS certificate and host name verification'
 
 [login.flag.clientId]
 description = '--client-id flag description'
@@ -52,7 +52,7 @@ one = "Log in using an offline token, which can be obtained at {{.OfflineTokenUR
 
 [login.flag.printSsoUrl]
 description = 'Description for the --print-sso-url'
-one = "Prints the console login URL, which you can use to log in to RHOAS from a different web browser (this is useful if you need to log in with different credentials than the credentials you used in your default web browser)"
+one = "Print the console login URL, which you can use to log in to RHOAS from a different web browser (this is useful if you need to log in with different credentials than the credentials you used in your default web browser)"
 
 [login.flag.scope]
 description = 'Description for the --scope flag'
@@ -115,7 +115,7 @@ one = 'the authentication URL is missing a realm'
 
 [login.log.debug.sshLoginDetected]
 one = '''
-SSH session detected: you may experience issues attempting to log in through a web browser. 
+SSH session detected: you may experience issues attempting to log in through a web browser.
 You can log in using an offline-token by passing the "--token" flag instead, which can be obtained at {{.OfflineTokenURL}}.
 '''
 

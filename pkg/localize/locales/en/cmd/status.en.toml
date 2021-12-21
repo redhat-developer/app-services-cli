@@ -1,23 +1,24 @@
 [status.cmd.shortDescription]
-one = 'View the status of all currently used services'
+one = 'View the status of your application services'
 
 [status.cmd.longDescription]
 one = '''
-View status information of your currently used services.
-Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
+View the status of your application services. This command shows the status of the current instance for each of your application services.
 
-To use a different service run "rhoas [service] use [args] [flags]".
+To view the status of a specific application service, use "rhoas status [service]".
+
+Note: You can change the current instance for an application service with the "rhoas [service] use” command.
 '''
 
 [status.cmd.example]
 one = '''
-# view the status of all services
+# View the status of all application services
 $ rhoas status
 
-# view the status of the used Kafka
+# View the status of the current Kafka instance
 $ rhoas status kafka
 
-# view the status of your services in JSON
+# View the status of your services in JSON format
 $ rhoas status -o json
 '''
 

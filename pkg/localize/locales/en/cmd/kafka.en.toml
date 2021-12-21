@@ -5,28 +5,29 @@ one = "Create, view, use, and manage your Kafka instances"
 [kafka.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Commands for managing and interacting with Kafka instances.
+Manage and interact with Kafka instances.
 
-Commands are divided into the following categories:
- - instance management commands: create, list, and so on
- - commands executed on the selected instance: topic, consumer-group
- - "use" command that selects the current instance
+A Kafka instance includes an Apache Kafka cluster, bootstrap server, and the configurations needed to connect to producer and consumer services.
+
+You can create, view, select, and delete Kafka instances.
+
+For each Kafka instance, you can manage ACLs, consumer groups, and topics.
 '''
 
 [kafka.cmd.example]
 description = "Examples for command"
 one = '''
-## Create an Kafka instance
+# Create a Kafka instance
 rhoas kafka create --name my-kafka-instance
 
-## View configuration details of an Kafka instance
+# View configuration details of a Kafka instance
 rhoas kafka describe
 
-## List all Kafka instances
+# List all Kafka instances
 rhoas kafka list
 
-## Create an Kafka Topic
-rhoas kafka topic create --name mytopic 
+# Create a Kafka topic
+rhoas kafka topic create --name mytopic
 '''
 
 [kafka.common.error.couldNotUseKafka]
@@ -74,21 +75,21 @@ one = 'invalid value for size {{.Size}}, minimum value is 1'
 one = 'failed to load completions for --name:'
 
 [kafka.consumerGroup.cmd.shortDescription]
-one = 'Describe, list, and delete consumer groups for the current Apache Kafka instance'
+one = 'Describe, list, and delete consumer groups for the current Kafka instance'
 
 [kafka.consumerGroup.cmd.longDescription]
 one = '''
-Use these commands to describe, list, and delete consumer groups for the current Kafka instance.
+View and delete consumer groups for the current Kafka instance.
 
-Commands are executed on the currently selected Kafka instance.
+These commands operate on the current Kafka instance. To select the Kafka instance, use the “rhoas kafka use” command.
 '''
 
 [kafka.consumerGroup.cmd.example]
 one = '''
-## Delete a consumer group
+# Delete a consumer group
 rhoas kafka consumer-group delete --id consumer_group_1
 
-## List all consumer groups
+# List all consumer groups
 rhoas kafka consumer-group list
 '''
 
@@ -133,7 +134,9 @@ one = 'Delete a consumer group'
 
 [kafka.consumerGroup.delete.cmd.longDescription]
 one = '''
-Delete a consumer group from the Kafka instance.
+Delete a consumer group from the current Kafka instance.
+
+To select a different Kafka instance, use the “rhoas kafka use” command.
 '''
 
 [kafka.consumerGroup.delete.cmd.example]
@@ -166,7 +169,7 @@ one = 'Describe a consumer group'
 
 [kafka.consumerGroup.describe.cmd.longDescription]
 one = '''
-Print detailed information for a consumer group and its members.
+View detailed information for a consumer group and its members.
 '''
 
 [kafka.consumerGroup.list.flag.topic.description]
@@ -194,14 +197,14 @@ one = 'UNASSIGNED PARTITIONS:'
 one = 'List all consumer groups'
 
 [kafka.consumerGroup.list.cmd.longDescription]
-one = 'List all consumer groups in the current Apache Kafka instance.'
+one = 'List the consumer groups in the current Kafka instance. You can view a list of all consumer groups in the Kafka instance, view a specific consumer group, or view the consumer groups for a particular topic.'
 
 [kafka.consumerGroup.list.cmd.example]
 one =  '''
-# list all consumer groups
+# List all consumer groups
 $ rhoas kafka consumer-group list
 
-# list all consumer groups as JSON
+# List all consumer groups in JSON format
 $ rhoas kafka consumer-group list -o json
 '''
 
@@ -215,7 +218,7 @@ one = 'Text search to filter consumer groups by ID'
 
 [kafka.consumerGroup.list.flag.page]
 description = 'Description for the --page flag'
-one = 'Current page number for list of consumer groups'
+one = 'View the specified page number in the list of consumer groups'
 
 [kafka.consumerGroup.list.flag.size]
 description = 'Description for the --size flag'
@@ -229,12 +232,12 @@ one = 'Kafka instance "{{.InstanceName}}" has no consumer groups for topic "{{.T
 
 [kafka.create.cmd.shortDescription]
 description = "Short description for command"
-one = "Create an Apache Kafka instance"
+one = "Create a Kafka instance"
 
 [kafka.create.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Create an Apache Kafka instance on a particular cloud provider and region.
+Create a Kafka instance on a particular cloud provider and region.
 
 After creating the instance you can view it by running "rhoas kafka describe".
 '''
@@ -242,13 +245,13 @@ After creating the instance you can view it by running "rhoas kafka describe".
 [kafka.create.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# start an interactive prompt to fill out the configuration values for the instance
+# Start an interactive prompt to fill out the configuration values for the instance
 $ rhoas kafka create
 
-# create a Kafka instance
+# Create a Kafka instance
 $ rhoas kafka create --name my-kafka-instance
 
-# create a Kafka instance and output the result in YAML
+# Create a Kafka instance and output the result in YAML format
 $ rhoas kafka create -o yaml
 '''
 
@@ -318,27 +321,26 @@ one = 'unable to create new Kafka instance. Only one instance is allowed with an
 
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
-one = "Delete an Apache Kafka instance"
+one = "Delete a Kafka instance"
 
 [kafka.delete.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Permanently delete an Apache Kafka instance, including all topics.
+Permanently delete a Kafka instance, including all topics.
 
-When this command is run, you will be asked to confirm the name of the instance you want to delete.
-Otherwise you can pass "--yes" to skip confirmation and forcibly delete the instance.
+When this command is run, you will be asked to confirm the name of the instance you want to delete. Otherwise you can use "--yes" to skip confirmation and forcibly delete the instance.
 '''
 
 [kafka.delete.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# delete the current Kafka instance
+# Delete the current Kafka instance
 $ rhoas kafka delete
 
-# delete a Kafka instance with a specific ID
+# Delete a Kafka instance with a specific ID
 $ rhoas kafka delete --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
-# delete a Kafka instance with a specific name
+# Delete a Kafka instance with a specific name
 $ rhoas kafka delete --name=my-kafka
 '''
 
@@ -368,33 +370,35 @@ one = 'Kafka instance "{{.Name}}" is being deleted'
 
 [kafka.describe.cmd.shortDescription]
 description = "Short description for command"
-one = "View configuration details of an Apache Kafka instance"
+one = "View configuration details of a Kafka instance"
 
 [kafka.describe.cmd.longDescription]
 description = "Long description for command"
 one = '''
-View configuration fields and their values for an Apache Kafka instance.
+View configuration details for a Kafka instance.
 
-Pass the "--id" flag to specify which instance you would like to view.
+Use the "--id" flag to specify which instance you would like to view.
 
-If the "--id" flag is not passed then the selected Kafka instance will be used, if available.
+If the "--id" flag is not used then the selected Kafka instance will be used, if available.
 
-You can view the output as either as JSON or YAML.
+You can view the output either as JSON or YAML.
+
+To view a list of all Kafka instances, use the “rhoas kafka list” command.
 '''
 
 [kafka.describe.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# view the current Kafka instance instance
+# View the current Kafka instance
 $ rhoas kafka describe
 
-# view a specific instance by passing the --id flag
+# View a specific instance by ID
 $ rhoas kafka describe --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
-# view a specific instance by passing the --name flag
+# View a specific instance by name
 $ rhoas kafka describe --name=my-kafka
 
-# customise the output format
+# Customize the output format
 $ rhoas kafka describe -o yaml
 '''
 
@@ -408,34 +412,32 @@ one = 'Name of the Kafka instance you want to view'
 
 [kafka.describe.flag.bootstrapserver]
 description = 'Description for the --bootstrap-server flag'
-one = 'If specified, only bootstrap server host of the Kafka instance will be displayed'
+one = 'If specified, only the bootstrap server host of the Kafka instance will be displayed'
 
 [kafka.describe.bootstrapserver.not.available]
 one = 'Kafka instance "{{.Name}}" does not have a bootstrap server URL.'
 
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"
-one = "List all Apache Kafka instances"
+one = "List all Kafka instances"
 
 [kafka.list.cmd.longDescription]
 description = "Long description for command"
 one = '''
-List all Apache Kafka instances.
+List all Kafka instances.
 
-This command will provide a high level view of all Kafka instances.
-The fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
-Use the describe command to view all fields for a specific instance.
+By default, this command lists the Kafka instances in a table, showing the ID, name, owner, status, cloud provider, and region. You can also view the instances in JSON or YAML format.
 
-The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+To view additional details for a particular Kafka instance, use the “rhoas kafka describe” command.
 '''
 
 [kafka.list.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# list all Kafka instances using the default output format
+# List all Kafka instances using the default output format
 $ rhoas kafka list
 
-# list all Kafka instances using JSON as the output format
+# List all Kafka instances in JSON format
 $ rhoas kafka list -o json
 '''
 
@@ -563,15 +565,14 @@ one = 'Create a topic'
 
 [kafka.topic.create.cmd.longDescription]
 one = '''
-Create a topic in the current Apache Kafka instance.
+Create a topic in the current Kafka instance. You can specify the cleanup policy, number of partitions, retention size, and retention time.
 
-This command lets you create a topic, set a desired number of
-partitions, retention size and retention period or else use the default values.
+The replicas are preconfigured. The number of partition replicas for the topic is set to 3 and the minimum number of follower replicas that must be in sync with a partition leader is set to 2.
 '''
 
 [kafka.topic.create.cmd.example]
 one = '''
-# create a topic
+# Create a topic
 $ rhoas kafka topic create --name topic-1
 '''
 
@@ -605,12 +606,12 @@ one = 'Delete a topic'
 
 [kafka.topic.delete.cmd.longDescription]
 one = '''
-Delete a topic in the current Apache Kafka instance.
+Delete a topic in the current Kafka instance.
 '''
 
 [kafka.topic.delete.cmd.example]
 one = '''
-# delete a topic
+# Delete a topic
 $ rhoas kafka topic delete --name topic-1
 '''
 
@@ -631,7 +632,7 @@ one = 'Describe a topic'
 
 [kafka.topic.describe.cmd.longDescription]
 one = '''
-Print detailed configuration information for a Kafka topic.
+View configuration details for a Kafka topic.
 '''
 
 [kafka.topic.describe.flag.name]
@@ -639,7 +640,7 @@ one = 'Name of the Kafka topic you want to view'
 
 [kafka.topic.describe.cmd.example]
 one = '''
-# describe a topic
+# Describe a topic
 $ rhoas kafka topic describe --name topic-1
 '''
 
@@ -648,15 +649,15 @@ one = 'List all topics'
 
 [kafka.topic.list.cmd.longDescription]
 one = '''
-List all topics in the current Apache Kafka instance.
+List all topics in the current Kafka instance.
 '''
 
 [kafka.topic.list.cmd.example]
 one = '''
-# list all topics
+# List all topics
 $ rhoas kafka topic list
 
-# list all topics as JSON
+# List all topics in JSON format
 $ rhoas kafka topic list -o json
 '''
 
@@ -684,16 +685,16 @@ description = 'Error message when invalid chars are used for search flag'
 one = 'illegal search value "{{.Search}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'
 
 [kafka.topic.update.cmd.shortDescription]
-one = 'Update a Kafka topic'
+one = 'Update configuration details for a Kafka topic'
 
 [kafka.topic.update.cmd.longDescription]
 one = '''
-Update a topic in the current Apache Kafka instance.
+Update a topic in the current Kafka instance. You can update the cleanup policy, number of partitions, retention size, and retention time.
 '''
 
 [kafka.topic.update.cmd.example]
 one = '''
-# update the message retention period for a topic
+# Update the message retention period for a topic
 $ rhoas kafka topic update --name topic-1 --retention-ms -1
 '''
 
@@ -746,25 +747,23 @@ one = 'The number of partitions in the topic. Leave blank to skip updating this 
 
 [kafka.use.cmd.shortDescription]
 description = "Short description for command"
-one = "Set the current Apache Kafka instance"
+one = "Set the current Kafka instance"
 
 [kafka.use.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Select an Apache Kafka instance and set it as the current instance.
-You can specify a Apache Kafka instance by --name or --id.
+Select a Kafka instance to be the current instance. When you set the Kafka instance to be used, it is set as the current instance for all “rhoas kafka topic” and “rhoas kafka consumer-group” commands.
 
-When you set the Kafka instance to be used, it is set as the current instance for all rhoas kafka topics and rhoas kafka consumer-group commands.
-
+You can select a  Kafka instance by name or ID.
 '''
 
 [kafka.use.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# set a kafka instance to be the current instance
+# Select a Kafka instance to be the current instance
 $ rhoas kafka use --name=my-kafka
 
-# set a kafka instance to be the current instance
+# Select a Kafka instance to be the current instance
 $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
