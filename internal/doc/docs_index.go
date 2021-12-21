@@ -1,6 +1,5 @@
 package doc
 
-// TODO remove
 import (
 	"os"
 	"text/template"

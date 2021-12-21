@@ -17,8 +17,8 @@ func main() {
 		Use:   "test",
 		Short: "my test program",
 	}
-	options := GeneratorOptions{
-		Dir: "/tmp/test.adoc",
+	options := doc.GeneratorOptions{
+		Dir: "/tmp/",
 	}
 	err := doc.GenAsciidocTree(cmd, options)
 	if err != nil {
@@ -29,9 +29,28 @@ func main() {
 
 That will get you a AsciiDoc document `/tmp/test.adoc`
 
-## Generating AsciiDoc TOC with support for chapters
+## Generation options
 
-TODO
+
+```golang
+	// Directory to write the documentation files
+	Dir string
+
+	// FileNameGenerator - provides custom file name for each documentation file
+	FileNameGenerator func(cmd *cobra.Command) string
+
+	// FilePrepender - Prepend content to the generated file (add header)
+	FilePrepender func(string) string
+
+	// LinkHandler - function to handle links that lets you to transform them to different format
+	LinkHandler func(string) string
+
+	// GenerateIndex - generate index file
+	GenerateIndex bool
+
+	// IndexLocation - name and folder of the assembly file (typically ./README.adoc)
+	IndexLocation string
+```	
 
 ## Generate AsciiDoc docs for the entire command tree
 
@@ -53,7 +72,9 @@ import (
 
 func main() {
 	kubectl := cmd.NewKubectlCommand(cmdutil.NewFactory(nil), os.Stdin, ioutil.Discard, ioutil.Discard)
-	err := doc.GenAsciidocTree(kubectl, "./")
+	err := doc.GenAsciidocTree(kubectl, doc.GeneratorOptions{
+		Dir: "/.",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,21 +99,16 @@ This will write the AsciiDoc doc for ONLY "cmd" into the out, buffer.
 
 ## Customize the output
 
-Both `GenAsciidoc` and `GenAsciidocTree` have alternate versions with callbacks to get some control of the output:
+Both `GenAsciidocTree` GeneratorOptions object provides number of customizations we can execute.
+By default only Dir folder is required to be present.
 
 ```go
-func GenAsciidocTreeCustom(cmd *Command, dir string, filePrepender, linkHandler func(string) string) error {
-	//...
+options := doc.GeneratorOptions{
+		Dir: "/.",
 }
 ```
-
-```go
-func GenAsciidocCustom(cmd *Command, out *bytes.Buffer, linkHandler func(string) string) error {
-	//...
-}
-```
-
-The `filePrepender` will prepend the return value given the full filepath to the rendered Asciidoc file. A common use case is to add front matter to use the generated documentation with [Hugo](http://gohugo.io/):
+ 
+The `FilePrepender` field will prepend the return value given the full filepath to the rendered Asciidoc file. A common use case is to add front matter to use the generated documentation with [Hugo](http://gohugo.io/):
 
 ```go
 const fmTemplate = `---
@@ -103,7 +119,7 @@ url: %s
 ---
 `
 
-filePrepender := func(filename string) string {
+options.FilePrepender := func(filename string) string {
 	now := time.Now().Format(time.RFC3339)
 	name := filepath.Base(filename)
 	base := strings.TrimSuffix(name, path.Ext(name))
@@ -112,11 +128,20 @@ filePrepender := func(filename string) string {
 }
 ```
 
-The `linkHandler` can be used to customize the rendered internal links to the commands, given a filename:
+The `LinkHandler` can be used to customize the rendered internal links to the commands, given a filename:
 
 ```go
-linkHandler := func(name string) string {
+options.LinkHandler := func(name string) string {
 	base := strings.TrimSuffix(name, path.Ext(name))
 	return "/commands/" + strings.ToLower(base) + "/"
+}
+```
+
+The `FileNameGenerator` can be used to customize file names: 
+
+```go
+options.FileNameGenerator = func(c *cobra.Command) string {
+		basename := c.CommandPath() + ".adoc"
+		return filepath.Join(options.Dir, basename)
 }
 ```

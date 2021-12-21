@@ -16,6 +16,7 @@ package doc
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -198,12 +199,12 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 }
 
 // GenAsciidoc creates asciidocs documentation
-func GenAsciidoc(cmd *cobra.Command, w io.Writer, options *GeneratorOptions) error {
-	return GenAsciidocCustom(cmd, w, options)
+func GenAsciidoc(cmd *cobra.Command, w io.Writer) error {
+	return GenAsciidocCustom(cmd, w, func(s string) string { return s })
 }
 
 // GenAsciidocCustom creates custom asciidoc documentation
-func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, options *GeneratorOptions) error {
+func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 
@@ -292,27 +293,6 @@ func GetShortCommandPath(c *cobra.Command) string {
 	return strings.Join(commands[1:], " ")
 }
 
-// GeneratorOptions options for the generator
-type GeneratorOptions struct {
-	// Directory to write the file to.
-	Dir string
-
-	// FileNameGenerator - provides custom file name for the file we use
-	FileNameGenerator func(cmd *cobra.Command) string
-
-	// FilePrepender - Prepend content to the generated file.
-	FilePrepender func(string) string
-
-	// LinkHandler - function to handle links
-	LinkHandler func(string) string
-
-	// GenerateIndex - generate index file
-	GenerateIndex bool
-
-	// IndexLocation - name and folder of the assembly file (typically ./README.adoc)
-	IndexLocation string
-}
-
 // GenAsciidocTree will generate a markdown page for this command and all
 // descendants in the directory given. The header may be nil.
 // This function may not work correctly if your command names have `-` in them.
@@ -320,6 +300,10 @@ type GeneratorOptions struct {
 // and `sub` has a subcommand called `third`, it is undefined which
 // help output will be in the file `cmd-sub-third.1`.
 func GenAsciidocTree(cmd *cobra.Command, options *GeneratorOptions) error {
+	if options.Dir == "" {
+		return errors.New("dir must be specified")
+	}
+
 	if options.LinkHandler == nil {
 		options.LinkHandler = func(name string) string {
 			return name
@@ -370,5 +354,5 @@ func GenAsciidocTreeCustom(cmd *cobra.Command, options *GeneratorOptions) error 
 		}
 	}
 
-	return GenAsciidocCustom(cmd, f, options)
+	return GenAsciidocCustom(cmd, f, options.LinkHandler)
 }

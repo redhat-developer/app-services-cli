@@ -88,7 +88,7 @@ func TestGenMdTree(t *testing.T) {
 	options := GeneratorOptions{
 		Dir: tmpdir,
 	}
-	if err := GenAsciidocTree(c, options); err != nil {
+	if err := GenAsciidocTree(c, &options); err != nil {
 		t.Fatalf("GenAsciidocTree failed: %v", err)
 	}
 
