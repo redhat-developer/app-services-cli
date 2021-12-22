@@ -128,6 +128,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return kafkacmdutil.GetCloudProviderCompletionValues(f)
 	})
 
+	_ = cmd.RegisterFlagCompletionFunc(flagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return kafkacmdutil.GetCloudProviderRegionCompletionValues(f, opts.provider)
+	})
+
 	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
 
 	return cmd

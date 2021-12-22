@@ -59,6 +59,34 @@ func GetCloudProviderCompletionValues(f *factory.Factory) (validProviders []stri
 	return validProviders, directive
 }
 
+// GetCloudProviderCompletionValues returns the list of region IDs for a particular cloud provider
+func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID string) (validRegions []string, directive cobra.ShellCompDirective) {
+	validRegions = []string{}
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	if providerID == "" {
+		return
+	}
+
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return validRegions, directive
+	}
+
+	cloudProviderResponse, _, err := conn.API().
+		Kafka().
+		GetCloudProviderRegions(f.Context, providerID).
+		Execute()
+	if err != nil {
+		return validRegions, directive
+	}
+
+	cloudProviders := cloudProviderResponse.GetItems()
+	validRegions = GetEnabledCloudRegionIDs(cloudProviders)
+
+	return validRegions, directive
+}
+
 // GetEnabledCloudProviderNames returns a list of cloud provider names from the enabled cloud providers
 func GetEnabledCloudProviderNames(cloudProviders []kafkamgmtclient.CloudProvider) []string {
 	cloudProviderNames := []string{}
