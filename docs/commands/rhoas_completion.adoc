@@ -3,18 +3,22 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas completion
 
 [role="_abstract"]
-Outputs command completion for the given shell (bash, zsh, or fish)
+Install command completion for your shell (bash, zsh, or fish)
 
 [discrete]
 == Synopsis
 
-Outputs command completion for the given shell (bash, zsh, or fish).
+Install rhoas command completion for your shell (bash, zsh, or fish).
 
-To find what shell you are currently running, run `echo $0`.
+To find what shell you are currently running:
 
-Run `rhoas completion [bash|zsh|fish] -h` for instructions on installing command completions for your shell.
+  $ echo $0
 
-When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
+For instructions on installing command completions for your shell:
+
+  $ rhoas completion [bash|zsh|fish] -h
+
+When you have installed the command completion script, restart your shell for the changes to take effect.
 
 
 [discrete]

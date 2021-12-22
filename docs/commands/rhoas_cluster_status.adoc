@@ -3,16 +3,14 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas cluster status
 
 [role="_abstract"]
-View status of the current Kubernetes or OpenShift cluster
+View the status of the current Kubernetes or OpenShift cluster
 
 [discrete]
 == Synopsis
 
-View information about the current Kubernetes or OpenShift cluster.
-You can use this information to connect your application service to the cluster.
+View information about the current Kubernetes or OpenShift cluster. You can use this information to connect your application service to the cluster.
 
-Before using cluster commands, you must be authenticated into a Kubernetes or OpenShift
-cluster. The command uses your kubeconfig file to identify the cluster context.
+Before using this command, you must be logged in to a Kubernetes or OpenShift cluster. The command uses your kubeconfig file to identify the cluster context.
 
 
 ....

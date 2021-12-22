@@ -8,22 +8,25 @@ RHOAS CLI
 [discrete]
 == Synopsis
 
-Manage your application services directly from the command line.
+Red Hat OpenShift Application Services
+
+Manage your application services from the command line. You can manage service accounts, Kafka instances, and Service Registry instances, and connect them to your OpenShift clusters and applications.
+
 
 [discrete]
 == Examples
 
 ....
-# authenticate securely through your web browser
+# Authenticate securely through your web browser
 $ rhoas login
 
-# create a Kafka instance
+# Create a Kafka instance
 $ rhoas kafka create --name my-kafka-instance
 
-# create a service account and save credentials to a JSON file
+# Create a service account and save credentials to a JSON file
 $ rhoas service-account create -o json
 
-# connect your Kubernetes/OpenShift cluster to a service
+# Connect your Kubernetes/OpenShift cluster to a service
 $ rhoas cluster connect
 
 ....
@@ -47,10 +50,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Outputs command completion for the given shell (bash, zsh, or fish)
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 endif::[]
 
 ifdef::env-github,env-browser[]
@@ -75,10 +78,10 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_service-account.adoc#rhoas-service-account[rhoas service-account]	 - Create, list, describe, delete and update service accounts
+* link:rhoas_service-account.adoc#rhoas-service-account[rhoas service-account]	 - Create, list, describe, delete, and update service accounts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-account_{context}[rhoas service-account]	 - Create, list, describe, delete and update service accounts
+* link:{path}#ref-rhoas-service-account_{context}[rhoas service-account]	 - Create, list, describe, delete, and update service accounts
 endif::[]
 
 ifdef::env-github,env-browser[]
@@ -89,16 +92,16 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_status.adoc#rhoas-status[rhoas status]	 - View the status of all currently used services
+* link:rhoas_status.adoc#rhoas-status[rhoas status]	 - View the status of your application services
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-status_{context}[rhoas status]	 - View the status of all currently used services
+* link:{path}#ref-rhoas-status_{context}[rhoas status]	 - View the status of your application services
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_whoami.adoc#rhoas-whoami[rhoas whoami]	 - Print current username
+* link:rhoas_whoami.adoc#rhoas-whoami[rhoas whoami]	 - Output the current username
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-whoami_{context}[rhoas whoami]	 - Print current username
+* link:{path}#ref-rhoas-whoami_{context}[rhoas whoami]	 - Output the current username
 endif::[]
 
