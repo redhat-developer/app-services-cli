@@ -3,12 +3,12 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas kafka create
 
 [role="_abstract"]
-Create an Apache Kafka instance
+Create a Kafka instance
 
 [discrete]
 == Synopsis
 
-Create an Apache Kafka instance on a particular cloud provider and region.
+Create a Kafka instance on a particular cloud provider and region.
 
 After creating the instance you can view it by running "rhoas kafka describe".
 
@@ -21,13 +21,13 @@ rhoas kafka create [flags]
 == Examples
 
 ....
-# start an interactive prompt to fill out the configuration values for the instance
+# Start an interactive prompt to fill out the configuration values for the instance
 $ rhoas kafka create
 
-# create a Kafka instance
+# Create a Kafka instance
 $ rhoas kafka create --name my-kafka-instance
 
-# create a Kafka instance and output the result in YAML
+# Create a Kafka instance and output the result in YAML format
 $ rhoas kafka create -o yaml
 
 ....

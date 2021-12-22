@@ -8,10 +8,9 @@ Create a topic
 [discrete]
 == Synopsis
 
-Create a topic in the current Apache Kafka instance.
+Create a topic in the current Kafka instance. You can specify the cleanup policy, number of partitions, retention size, and retention time.
 
-This command lets you create a topic, set a desired number of
-partitions, retention size and retention period or else use the default values.
+The replicas are preconfigured. The number of partition replicas for the topic is set to 3 and the minimum number of follower replicas that must be in sync with a partition leader is set to 2.
 
 
 ....
@@ -22,7 +21,7 @@ rhoas kafka topic create [flags]
 == Examples
 
 ....
-# create a topic
+# Create a topic
 $ rhoas kafka topic create --name topic-1
 
 ....
@@ -48,9 +47,9 @@ $ rhoas kafka topic create --name topic-1
 
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
 endif::[]
 

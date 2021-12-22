@@ -8,29 +8,30 @@ Create, view, use, and manage your Kafka instances
 [discrete]
 == Synopsis
 
-Commands for managing and interacting with Kafka instances.
+Manage and interact with Kafka instances.
 
-Commands are divided into the following categories:
- - instance management commands: create, list, and so on
- - commands executed on the selected instance: topic, consumer-group
- - "use" command that selects the current instance
+A Kafka instance includes an Apache Kafka cluster, bootstrap server, and the configurations needed to connect to producer and consumer services.
+
+You can create, view, select, and delete Kafka instances.
+
+For each Kafka instance, you can manage ACLs, consumer groups, and topics.
 
 
 [discrete]
 == Examples
 
 ....
-## Create an Kafka instance
+# Create a Kafka instance
 rhoas kafka create --name my-kafka-instance
 
-## View configuration details of an Kafka instance
+# View configuration details of a Kafka instance
 rhoas kafka describe
 
-## List all Kafka instances
+# List all Kafka instances
 rhoas kafka list
 
-## Create an Kafka Topic
-rhoas kafka topic create --name mytopic 
+# Create a Kafka topic
+rhoas kafka topic create --name mytopic
 
 ....
 
@@ -52,52 +53,52 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl.adoc#rhoas-kafka-acl[rhoas kafka acl]	 - Kafka ACL management for users and service accounts
+* link:rhoas_kafka_acl.adoc#rhoas-kafka-acl[rhoas kafka acl]	 - Manage Kafka ACLs for users and service accounts
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-acl_{context}[rhoas kafka acl]	 - Kafka ACL management for users and service accounts
+* link:{path}#ref-rhoas-kafka-acl_{context}[rhoas kafka acl]	 - Manage Kafka ACLs for users and service accounts
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Apache Kafka instance
+* link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_create.adoc#rhoas-kafka-create[rhoas kafka create]	 - Create an Apache Kafka instance
+* link:rhoas_kafka_create.adoc#rhoas-kafka-create[rhoas kafka create]	 - Create a Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-create_{context}[rhoas kafka create]	 - Create an Apache Kafka instance
+* link:{path}#ref-rhoas-kafka-create_{context}[rhoas kafka create]	 - Create a Kafka instance
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_delete.adoc#rhoas-kafka-delete[rhoas kafka delete]	 - Delete an Apache Kafka instance
+* link:rhoas_kafka_delete.adoc#rhoas-kafka-delete[rhoas kafka delete]	 - Delete a Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-delete_{context}[rhoas kafka delete]	 - Delete an Apache Kafka instance
+* link:{path}#ref-rhoas-kafka-delete_{context}[rhoas kafka delete]	 - Delete a Kafka instance
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_describe.adoc#rhoas-kafka-describe[rhoas kafka describe]	 - View configuration details of an Apache Kafka instance
+* link:rhoas_kafka_describe.adoc#rhoas-kafka-describe[rhoas kafka describe]	 - View configuration details of a Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-describe_{context}[rhoas kafka describe]	 - View configuration details of an Apache Kafka instance
+* link:{path}#ref-rhoas-kafka-describe_{context}[rhoas kafka describe]	 - View configuration details of a Kafka instance
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_list.adoc#rhoas-kafka-list[rhoas kafka list]	 - List all Apache Kafka instances
+* link:rhoas_kafka_list.adoc#rhoas-kafka-list[rhoas kafka list]	 - List all Kafka instances
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-list_{context}[rhoas kafka list]	 - List all Apache Kafka instances
+* link:{path}#ref-rhoas-kafka-list_{context}[rhoas kafka list]	 - List all Kafka instances
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list and delete topics
+* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
 endif::[]
 
 ifdef::env-github,env-browser[]
@@ -108,9 +109,9 @@ ifdef::pantheonenv[]
 endif::[]
 
 ifdef::env-github,env-browser[]
-* link:rhoas_kafka_use.adoc#rhoas-kafka-use[rhoas kafka use]	 - Set the current Apache Kafka instance
+* link:rhoas_kafka_use.adoc#rhoas-kafka-use[rhoas kafka use]	 - Set the current Kafka instance
 endif::[]
 ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-use_{context}[rhoas kafka use]	 - Set the current Apache Kafka instance
+* link:{path}#ref-rhoas-kafka-use_{context}[rhoas kafka use]	 - Set the current Kafka instance
 endif::[]
 

@@ -3,18 +3,16 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas kafka list
 
 [role="_abstract"]
-List all Apache Kafka instances
+List all Kafka instances
 
 [discrete]
 == Synopsis
 
-List all Apache Kafka instances.
+List all Kafka instances.
 
-This command will provide a high level view of all Kafka instances.
-The fields displayed are: ID, Name, Owner, Status, Cloud Provider, Region.
-Use the describe command to view all fields for a specific instance.
+By default, this command lists the Kafka instances in a table, showing the ID, name, owner, status, cloud provider, and region. You can also view the instances in JSON or YAML format.
 
-The instances are displayed by default in a table, but can also be displayed as JSON or YAML.
+To view additional details for a particular Kafka instance, use the “rhoas kafka describe” command.
 
 
 ....
@@ -25,10 +23,10 @@ rhoas kafka list [flags]
 == Examples
 
 ....
-# list all Kafka instances using the default output format
+# List all Kafka instances using the default output format
 $ rhoas kafka list
 
-# list all Kafka instances using JSON as the output format
+# List all Kafka instances in JSON format
 $ rhoas kafka list -o json
 
 ....

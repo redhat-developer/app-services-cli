@@ -3,24 +3,24 @@ ifdef::env-github,env-browser[:context: cmd]
 = rhoas kafka consumer-group
 
 [role="_abstract"]
-Describe, list, and delete consumer groups for the current Apache Kafka instance
+Describe, list, and delete consumer groups for the current Kafka instance
 
 [discrete]
 == Synopsis
 
-Use these commands to describe, list, and delete consumer groups for the current Kafka instance.
+View and delete consumer groups for the current Kafka instance.
 
-Commands are executed on the currently selected Kafka instance.
+These commands operate on the current Kafka instance. To select the Kafka instance, use the “rhoas kafka use” command.
 
 
 [discrete]
 == Examples
 
 ....
-## Delete a consumer group
+# Delete a consumer group
 rhoas kafka consumer-group delete --id consumer_group_1
 
-## List all consumer groups
+# List all consumer groups
 rhoas kafka consumer-group list
 
 ....
