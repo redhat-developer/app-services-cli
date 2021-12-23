@@ -4,8 +4,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/shared"
 )
 
 // KubernetesClusterAPIImpl	implements KubernetesClusterAPI
@@ -21,7 +21,7 @@ func (c *KubernetesClusterAPIImpl) createServiceInstance(serviceType string) (se
 	if serviceType == "" {
 		serviceTypeInput := &survey.Select{
 			Message: c.CommandEnvironment.Localizer.MustLocalize("cluster.common.input.servicetype"),
-			Options: resources.AllServiceLabels,
+			Options: shared.AllServiceLabels,
 		}
 		surveyErr := survey.AskOne(serviceTypeInput, &serviceType)
 		if surveyErr != nil {
@@ -30,12 +30,12 @@ func (c *KubernetesClusterAPIImpl) createServiceInstance(serviceType string) (se
 	}
 
 	switch serviceType {
-	case resources.KafkaServiceName:
+	case shared.KafkaServiceName:
 		service = &services.KafkaService{
 			CommandEnvironment: c.CommandEnvironment,
 			KubernetesClients:  c.KubernetesClients,
 		}
-	case resources.ServiceRegistryServiceName:
+	case shared.ServiceRegistryServiceName:
 		service = &services.RegistryService{
 			CommandEnvironment: c.CommandEnvironment,
 			KubernetesClients:  c.KubernetesClients,

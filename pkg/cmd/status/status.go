@@ -12,6 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 
+	"github.com/redhat-developer/app-services-cli/pkg/shared"
+
 	"github.com/spf13/cobra"
 )
 
@@ -33,7 +35,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
-		services:   validServices,
+		services:   shared.AllServiceLabels,
 		localizer:  f.Localizer,
 		Context:    f.Context,
 	}
@@ -43,12 +45,12 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Short:     opts.localizer.MustLocalize("status.cmd.shortDescription"),
 		Long:      opts.localizer.MustLocalize("status.cmd.longDescription"),
 		Example:   opts.localizer.MustLocalize("status.cmd.example"),
-		ValidArgs: validServices,
-		Args:      cobra.RangeArgs(0, len(validServices)),
+		ValidArgs: shared.AllServiceLabels,
+		Args:      cobra.RangeArgs(0, len(shared.AllServiceLabels)),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				for _, s := range args {
-					if !flagutil.IsValidInput(s, validServices...) {
+					if !flagutil.IsValidInput(s, shared.AllServiceLabels...) {
 						return opts.localizer.MustLocalizeError("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s))
 					}
 				}

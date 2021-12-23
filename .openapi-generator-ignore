@@ -1,2 +1,9 @@
 pkg/api/**/go.mod
 pkg/api/**/go.sum
+
+pkg/api/ams/amsclient/docs/*
+pkg/api/ams/amsclient/api/*
+pkg/api/ams/amsclient/.openapi-generator-ignore
+pkg/api/ams/amsclient/.openapi-generator
+pkg/api/ams/amsclient/.travis.yml
+pkg/api/ams/amsclient/README.md

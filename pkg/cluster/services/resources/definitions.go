@@ -37,13 +37,6 @@ var SRCResource = schema.GroupVersionResource{
 	Resource: "serviceregistryconnections",
 }
 
-const ServiceRegistryServiceName = "service-registry"
-
-const KafkaServiceName = "kafka"
-
-// All services as labels
-var AllServiceLabels = []string{KafkaServiceName, ServiceRegistryServiceName}
-
 // All services defined as resources
 var AllResources = []schema.GroupVersionResource{
 	AKCResource,

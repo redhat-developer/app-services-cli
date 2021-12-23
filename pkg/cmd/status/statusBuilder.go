@@ -16,6 +16,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 
+	"github.com/redhat-developer/app-services-cli/pkg/shared"
+
 	"github.com/openconfig/goyang/pkg/indent"
 )
 
@@ -82,7 +84,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 
 	status = &serviceStatus{}
 
-	if stringInSlice(kafkaSvcName, services) {
+	if stringInSlice(shared.ServiceRegistryServiceName, services) {
 		if instanceID, exists := cfg.GetKafkaIdOk(); exists {
 			// nolint:govet
 			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
@@ -101,7 +103,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 		}
 	}
 
-	if stringInSlice(registrySvcName, services) {
+	if stringInSlice(shared.ServiceRegistryServiceName, services) {
 		registryCfg := cfg.Services.ServiceRegistry
 		if registryCfg != nil && registryCfg.InstanceID != "" {
 			// nolint:govet
