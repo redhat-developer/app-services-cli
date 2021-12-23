@@ -126,8 +126,8 @@ func runCreate(opts *options) error {
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a registry instance
-		err, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
-		if err != nil {
+		err1, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
+		if err1 != nil {
 			return err
 		}
 		var termsAccepted bool

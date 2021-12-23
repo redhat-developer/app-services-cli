@@ -14,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	"github.com/redhat-developer/app-services-cli/pkg/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	"k8s.io/utils/strings/slices"
 
 	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -154,12 +155,6 @@ func runCreate(opts *options) error {
 	}
 
 	if !opts.bypassTermsCheck {
-		opts.Logger.Debug("Validating provider and reqions")
-		err := validateProviderAndRegion(opts, constants, conn)
-		if err != nil {
-			return err
-		}
-
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a kafka instance
@@ -174,7 +169,6 @@ func runCreate(opts *options) error {
 			opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
 			return nil
 		}
-
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
@@ -200,6 +194,11 @@ func runCreate(opts *options) error {
 			CloudProvider: &opts.provider,
 			MultiAz:       &opts.multiAZ,
 		}
+	}
+
+	err = validateProviderAndRegion(opts, constants, conn)
+	if err != nil {
+		return err
 	}
 
 	api := conn.API()
@@ -293,7 +292,7 @@ func runCreate(opts *options) error {
 }
 
 func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
-
+	opts.Logger.Debug("Validating provider and region")
 	cloudProviders, _, err := conn.API().
 		KafkaMgmt().
 		GetCloudProviders(opts.Context).
@@ -303,18 +302,23 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 		return err
 	}
 
-	var selectedProvider *kafkamgmtclient.CloudProvider
-	providerNames := make([]string, len(cloudProviders.Items))
+	var selectedProvider kafkamgmtclient.CloudProvider
+	providerNames := make([]string, 0)
 	for _, item := range cloudProviders.Items {
-		providerNames = append(providerNames, item.GetName())
-		if item.GetName() == opts.provider {
-			selectedProvider = &item
+		if !item.GetEnabled() {
+			continue
 		}
+		if item.GetId() == opts.provider {
+			selectedProvider = item
+		}
+		providerNames = append(providerNames, item.GetId())
 	}
 
-	if selectedProvider == nil {
+	opts.Logger.Debug("Validating cloud provider", opts.provider, ". Enabled providers: ", providerNames)
+
+	if !selectedProvider.Enabled {
 		providers := strings.Join(providerNames, ",")
-		return errors.New(opts.provider + " is not a valid provider name. Valid names are : " + providers)
+		return errors.New(opts.provider + " is not a valid or currently enabled cloud provider name.\nValid providers: " + providers)
 	}
 
 	cloudRegion, _, err := conn.API().
@@ -322,17 +326,56 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).
 		Execute()
 
-	regionNames := make([]string, len(cloudRegion.Items))
-	var selectedRegion *kafkamgmtclient.CloudRegion
+	if err != nil {
+		return err
+	}
+
+	var selectedRegion kafkamgmtclient.CloudRegion
+	regionNames := make([]string, 0)
 	for _, item := range cloudRegion.Items {
-		providerNames = append(regionNames, item.GetDisplayName())
-		if item.GetDisplayName() == opts.provider {
-			selectedRegion = &item
+		if !item.GetEnabled() {
+			continue
+		}
+		regionNames = append(regionNames, item.GetId())
+		if item.GetId() == opts.region {
+			selectedRegion = item
 		}
 	}
-	regionsString := strings.Join(regionNames, ",")
-	if selectedRegion == nil || selectedRegion.Enabled == false {
-		return errors.New(opts.provider + " is not a valid region name. Valid names are : " + regionsString)
+
+	if len(regionNames) != 0 {
+		opts.Logger.Debug("Validating region", opts.region, ". Enabled providers: ", regionNames)
+		regionsString := strings.Join(regionNames, ",")
+		if !selectedRegion.Enabled {
+			return errors.New(opts.region + " is not a valid or enabled region name.\nValid regions: " + regionsString)
+		}
+
+		// TODO - get info why this fails with 403?
+		fmt.Print("TEMP Kafka.Ams.Region", constants.Kafka.Ams.InstanceQuotaID)
+		// err, userInstanceTypes := ams.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+		// if err != nil {
+		// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+		// 	return nil
+		// }
+		// TODO temporary fix for AMS issue
+		userInstanceTypes := []string{accountmgmtutil.QuotaTrialType}
+
+		var supportedRegion bool = false
+		for _, item := range selectedRegion.GetSupportedInstanceTypes() {
+			if slices.Contains(userInstanceTypes, item) {
+				supportedRegion = true
+				break
+			}
+		}
+
+		if !supportedRegion {
+			return errors.New("Selected region does not support the instance types that you can create." +
+				" Your region: " + opts.region +
+				" Your instance types: " + strings.Join(userInstanceTypes, ",") +
+				" Region supported instance types: " + strings.Join(selectedRegion.GetSupportedInstanceTypes(), ","))
+		}
+
+	} else {
+		opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
 	}
 
 	userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
@@ -348,6 +391,7 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 				return nil
 			}
 		}
+
 	}
 
 	return errors.New("Selected region does not support the instance types that you can create." +
