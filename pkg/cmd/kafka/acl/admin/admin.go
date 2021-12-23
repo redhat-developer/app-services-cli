@@ -59,18 +59,20 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
-			cfg, err := opts.config.Load()
-			if err != nil {
-				return err
+			if opts.kafkaID == "" {
+				cfg, err := opts.config.Load()
+				if err != nil {
+					return err
+				}
+
+				instanceID, ok := cfg.GetKafkaIdOk()
+
+				if !ok {
+					return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
+				}
+
+				opts.kafkaID = instanceID
 			}
-
-			instanceID, ok := cfg.GetKafkaIdOk()
-
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
-			}
-
-			opts.kafkaID = instanceID
 
 			// check if principal is provided
 			if userID == "" && serviceAccount == "" && !allAccounts {
@@ -108,6 +110,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 	fs.AddUser(&userID)
 	fs.AddServiceAccount(&serviceAccount)
 	fs.AddAllAccounts(&allAccounts)
+	fs.AddInstanceID(&opts.kafkaID)
 	fs.AddYes(&opts.skipConfirm)
 
 	return cmd
