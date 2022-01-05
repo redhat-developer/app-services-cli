@@ -349,15 +349,11 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 			return errors.New(opts.region + " is not a valid or enabled region name.\nValid regions: " + regionsString)
 		}
 
-		// TODO - get info why this fails with 403?
-		fmt.Print("TEMP Kafka.Ams.Region", constants.Kafka.Ams.InstanceQuotaID)
-		// err, userInstanceTypes := ams.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-		// if err != nil {
-		// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-		// 	return nil
-		// }
-		// TODO temporary fix for AMS issue
-		userInstanceTypes := []string{accountmgmtutil.QuotaTrialType}
+		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+		if err != nil {
+			opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+			return err
+		}
 
 		var supportedRegion bool = false
 		for _, item := range selectedRegion.GetSupportedInstanceTypes() {
