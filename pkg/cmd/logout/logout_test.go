@@ -2,26 +2,24 @@ package logout
 
 import (
 	"bytes"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"testing"
 
-	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 
 	"github.com/redhat-developer/app-services-cli/internal/mockutil"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
 func TestNewLogoutCommand(t *testing.T) {
 	localizer, _ := goi18n.New(nil)
 	type args struct {
 		cfg        *config.Config
-		connection *connection.KeycloakConnection
+		connection *kcconnection.Connection
 	}
 	tests := []struct {
 		name             string
@@ -38,7 +36,7 @@ func TestNewLogoutCommand(t *testing.T) {
 					AccessToken:  "valid",
 					RefreshToken: "valid",
 				},
-				connection: &connection.KeycloakConnection{
+				connection: &kcconnection.Connection{
 					Token: &token.Token{
 						AccessToken:  "valid",
 						RefreshToken: "valid",
@@ -55,7 +53,7 @@ func TestNewLogoutCommand(t *testing.T) {
 					AccessToken:  "expired",
 					RefreshToken: "expired",
 				},
-				connection: &connection.KeycloakConnection{
+				connection: &kcconnection.Connection{
 					Token: &token.Token{
 						AccessToken:  "expired",
 						RefreshToken: "expired",

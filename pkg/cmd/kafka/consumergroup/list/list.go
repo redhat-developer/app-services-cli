@@ -4,25 +4,23 @@ import (
 	"context"
 	"net/http"
 
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/consumergrouputil"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type options struct {
@@ -66,7 +64,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
-				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
+				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
 			}
 
 			if opts.page < 1 {
@@ -184,8 +182,8 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 		consumers := t.GetConsumers()
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetGroupId(),
-			ActiveMembers:     consumergroup.GetActiveConsumersCount(consumers),
-			PartitionsWithLag: consumergroup.GetPartitionsWithLag(consumers),
+			ActiveMembers:     consumergrouputil.GetActiveConsumersCount(consumers),
+			PartitionsWithLag: consumergrouputil.GetPartitionsWithLag(consumers),
 		}
 		rows[i] = row
 	}

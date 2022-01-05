@@ -3,15 +3,14 @@ package list
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
@@ -56,7 +55,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
-				return flag.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
+				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
 			}
 
 			return runList(opts)
@@ -76,7 +75,7 @@ func runList(opts *options) (err error) {
 		return err
 	}
 
-	res, _, err := conn.API().ServiceAccount().GetServiceAccounts(opts.Context).Execute()
+	res, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context).Execute()
 	if err != nil {
 		return err
 	}

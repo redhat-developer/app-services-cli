@@ -3,22 +3,22 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
 	"os"
 	"strings"
 
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/app-services-cli/internal/telemetry"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory/defaultfactory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
+
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
-	"github.com/redhat-developer/app-services-cli/pkg/telemetry"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 	}
 
 	buildVersion := build.Version
-	cmdFactory := factory.New(localizer)
+	cmdFactory := defaultfactory.New(localizer)
 
 	err = initConfig(cmdFactory)
 	if err != nil {

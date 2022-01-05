@@ -60,8 +60,8 @@ This program can actually generate docs for the kubectl command in the kubernete
 package main
 
 import (
-	"log"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"k8s.io/kubernetes/pkg/kubectl/cmd"
@@ -85,14 +85,15 @@ This will generate a whole series of files, one for each command in the tree, in
 
 ## Generate AsciiDoc docs for a single command
 
-You may wish to have more control over the output, or only generate for a single command, instead of the entire command tree. If this is the case you may prefer to `GenAsciidoc` instead of `GenAsciidocTree`
+You may wish to have more control over the output, or only generate for a single command, instead of the entire command
+tree. If this is the case you may prefer to `GenAsciidoc` instead of `GenAsciidocTree`
 
 ```go
-	out := new(bytes.Buffer)
-	err := doc.GenAsciidoc(cmd, out)
-	if err != nil {
-		log.Fatal(err)
-	}
+out := new(bytes.Buffer)
+err := doc.GenAsciidoc(cmd, out)
+if err != nil {
+	log.Fatal(err)
+}
 ```
 
 This will write the AsciiDoc doc for ONLY "cmd" into the out, buffer.

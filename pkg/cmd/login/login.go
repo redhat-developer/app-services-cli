@@ -4,25 +4,24 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"net/http"
 	"net/url"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
 	"golang.org/x/oauth2"
-
-	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
 
 	"github.com/spf13/cobra"
 )
@@ -108,7 +107,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.MustLocalize("login.flag.authUrl"))
 	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.MustLocalize("login.flag.masAuthUrl"))
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
-	cmd.Flags().StringArrayVar(&opts.scopes, "scope", connection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
+	cmd.Flags().StringArrayVar(&opts.scopes, "scope", kcconnection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
 	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
 
 	return cmd

@@ -7,28 +7,26 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type options struct {
@@ -87,7 +85,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 					missingFlags = append(missingFlags, "yes")
 				}
 				if len(missingFlags) > 0 {
-					return flag.RequiredWhenNonInteractiveError(missingFlags...)
+					return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
 				}
 			}
 			if opts.owner == "" && opts.reauth == "" {
@@ -120,7 +118,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddYes(&opts.skipConfirm)
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
-	_ = kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f)
+	_ = kafkautil.RegisterNameFlagCompletionFunc(cmd, f)
 	_ = flagutil.RegisterUserCompletionFunc(cmd, "owner", f)
 
 	return cmd
@@ -134,7 +132,7 @@ func run(opts *options) error {
 
 	api := conn.API()
 
-	kafkaInstance, err := getCurrentKafkaInstance(opts, api.Kafka())
+	kafkaInstance, err := getCurrentKafkaInstance(opts, api.KafkaMgmt())
 	if err != nil {
 		return err
 	}
@@ -182,7 +180,7 @@ func run(opts *options) error {
 	s.SetLocalizedSuffix("kafka.update.log.info.updating", localize.NewEntry("Name", kafkaInstance.GetName()))
 	s.Start()
 
-	response, httpRes, err := api.Kafka().
+	response, httpRes, err := api.KafkaMgmt().
 		UpdateKafkaById(opts.Context, kafkaInstance.GetId()).
 		KafkaUpdateRequest(*updateObj).
 		Execute()
@@ -194,7 +192,7 @@ func run(opts *options) error {
 	s.Stop()
 
 	if err != nil {
-		if apiError := kas.GetAPIError(err); apiError != nil {
+		if apiError := kafkautil.GetAPIError(err); apiError != nil {
 			return opts.localizer.MustLocalizeError("kafka.update.log.info.updateFailed", localize.NewEntry("Reason", apiError.GetReason()))
 		}
 		return err
@@ -270,7 +268,7 @@ func selectOwnerInteractive(ctx context.Context, opts *options) (string, error) 
 	s.Start()
 
 	//nolint:govet
-	users, err := rbacutil.FetchAllUsers(ctx, conn.API().RBAC.PrincipalAPI)
+	users, err := rbacutil.FetchAllUsers(ctx, conn.API().RBAC().PrincipalAPI)
 
 	s.Stop()
 	opts.logger.Info()
@@ -323,13 +321,13 @@ func generateUpdateSummary(new reflect.Value, current reflect.Value) string {
 func getCurrentKafkaInstance(opts *options, api kafkamgmtclient.DefaultApi) (kafkaInstance *kafkamgmtclient.KafkaRequest, err error) {
 
 	if opts.name != "" {
-		kafkaInstance, _, err = kafka.GetKafkaByName(opts.Context, api, opts.name)
+		kafkaInstance, _, err = kafkautil.GetKafkaByName(opts.Context, api, opts.name)
 		if err != nil {
 			return nil, err
 		}
 		opts.id = kafkaInstance.GetName()
 	} else {
-		kafkaInstance, _, err = kafka.GetKafkaByID(opts.Context, api, opts.id)
+		kafkaInstance, _, err = kafkautil.GetKafkaByID(opts.Context, api, opts.id)
 		if err != nil {
 			return nil, err
 		}

@@ -2,18 +2,18 @@ package delete
 
 import (
 	"context"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/validation"
 	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
 	"github.com/spf13/cobra"
 )
 
@@ -48,7 +48,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
-				return flag.RequiredWhenNonInteractiveError("yes")
+				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
 			validator := &validation.Validator{
@@ -78,7 +78,7 @@ func runDelete(opts *options) (err error) {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -118,7 +118,7 @@ func deleteServiceAccount(opts *options) error {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccount().DeleteServiceAccountById(opts.Context, opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccountMgmt().DeleteServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
