@@ -38,3 +38,6 @@ one = 'No Kafka instance is currently used, skipping status check'
 
 [status.log.info.selectAnotherKafka]
 one = 'Run rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg to use another Kafka instance.'
+
+[status.log.info.rhoasKafkaUse]
+one = 'Run "rhoas kafka use" to use another Kafka instance.'

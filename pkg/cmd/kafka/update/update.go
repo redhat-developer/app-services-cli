@@ -25,8 +25,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/apis/rbac"
-	"github.com/redhat-developer/app-services-cli/pkg/apis/rbac/rbacutil"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
 )
 
 type options struct {

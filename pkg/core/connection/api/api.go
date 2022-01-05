@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/apis/ams/amsclient"
-	"github.com/redhat-developer/app-services-cli/pkg/apis/rbac"
+	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"

@@ -11,17 +11,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	pkgStatus "github.com/redhat-developer/app-services-cli/pkg/core/status"
 
 	"github.com/spf13/cobra"
 )
-
-const (
-	kafkaSvcName    = "kafka"
-	registrySvcName = "service-registry"
-)
-
-var validServices = []string{kafkaSvcName, registrySvcName}
 
 type options struct {
 	IO         *iostreams.IOStreams
@@ -86,18 +78,18 @@ func runStatus(opts *options) error {
 		return err
 	}
 
-	pkgOpts := &pkgStatus.Options{
-		Config:     opts.Config,
-		Connection: conn,
-		Logger:     opts.Logger,
-		Services:   opts.services,
-	}
-
 	if len(opts.services) > 0 {
 		opts.Logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
-	status, ok, err := pkgStatus.Get(opts.Context, pkgOpts)
+	statusClient := newStatusClient(&clientConfig{
+		config:     opts.Config,
+		connection: conn,
+		Logger:     opts.Logger,
+		localizer:  opts.localizer,
+	})
+
+	status, ok, err := statusClient.BuildStatus(opts.Context, opts.services)
 	if err != nil {
 		return err
 	}
@@ -114,7 +106,7 @@ func runStatus(opts *options) error {
 			return err
 		}
 	} else {
-		pkgStatus.Print(stdout, status)
+		Print(stdout, status)
 	}
 
 	return nil

@@ -9,26 +9,31 @@ import (
 	"text/tabwriter"
 
 	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
-
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/openconfig/goyang/pkg/indent"
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
+
+const (
+	kafkaSvcName    = "kafka"
+	registrySvcName = "service-registry"
+)
+
+var validServices = []string{kafkaSvcName, registrySvcName}
 
 const tagTitle = "title"
 
-type Status struct {
-	Kafka    *KafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
-	Registry *RegistryStatus `json:"registry,omitempty" title:"Service Registry"`
+type serviceStatus struct {
+	Kafka    *kafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
+	Registry *registryStatus `json:"registry,omitempty" title:"Service Registry"`
 }
 
-type KafkaStatus struct {
+type kafkaStatus struct {
 	ID                  string `json:"id,omitempty"`
 	Name                string `json:"name,omitempty"`
 	Status              string `json:"status,omitempty"`
@@ -36,71 +41,122 @@ type KafkaStatus struct {
 	FailedReason        string `json:"failed_reason,omitempty" title:"Failed Reason"`
 }
 
-type RegistryStatus struct {
+type registryStatus struct {
 	ID          string `json:"id,omitempty"`
 	Name        string `json:"name,omitempty"`
 	Status      string `json:"status,omitempty"`
 	RegistryUrl string `json:"registryUrl,omitempty" title:"Registry URL"`
 }
 
-type Options struct {
-	Config     config.IConfig
+type clientConfig struct {
+	config     config.IConfig
 	Logger     logging.Logger
-	Connection connection.Connection
-
-	// request specific services
-	Services []string
+	connection connection.Connection
+	localizer  localize.Localizer
 }
 
-// Get gets the status of all services currently set in the user config
-func Get(ctx context.Context, opts *Options) (status *Status, ok bool, err error) {
-	cfg, err := opts.Config.Load()
+type statusClient struct {
+	config    config.IConfig
+	Logger    logging.Logger
+	conn      connection.Connection
+	localizer localize.Localizer
+}
+
+// newStatusClient returns a new client to fetch service statuses
+// and build it into a service status config object
+func newStatusClient(cfg *clientConfig) *statusClient {
+	return &statusClient{
+		config:    cfg.config,
+		Logger:    cfg.Logger,
+		conn:      cfg.connection,
+		localizer: cfg.localizer,
+	}
+}
+
+// BuildStatus gets the status of all services currently set in the user config
+func (c *statusClient) BuildStatus(ctx context.Context, services []string) (status *serviceStatus, ok bool, err error) {
+	cfg, err := c.config.Load()
 	if err != nil {
 		return nil, false, err
 	}
 
-	status = &Status{}
-	api := opts.Connection.API()
+	status = &serviceStatus{}
 
-	if stringInSlice("kafka", opts.Services) {
+	if stringInSlice(kafkaSvcName, services) {
 		if instanceID, exists := cfg.GetKafkaIdOk(); exists {
 			// nolint:govet
-			kafkaStatus, err := getKafkaStatus(ctx, api.KafkaMgmt(), instanceID)
+			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
 			if err != nil {
 				if kafkautil.IsErr(err, kafkautil.ErrorCode7) {
 					err = kafkautil.NotFoundByIDError(instanceID)
-					opts.Logger.Error(err)
-					opts.Logger.Info(`Run "rhoas kafka use" to use another Kafka instance.`)
+					c.Logger.Error(err)
+					c.Logger.Info(c.localizer.MustLocalize("status.log.info.rhoasKafkaUse"))
 				}
 			} else {
 				status.Kafka = kafkaStatus
 				ok = true
 			}
 		} else {
-			opts.Logger.Debug("No Kafka instance is currently used, skipping status check")
+			c.Logger.Debug("No Kafka instance is currently used, skipping status check")
 		}
 	}
 
-	if stringInSlice("service-registry", opts.Services) {
+	if stringInSlice(registrySvcName, services) {
 		registryCfg := cfg.Services.ServiceRegistry
 		if registryCfg != nil && registryCfg.InstanceID != "" {
 			// nolint:govet
-			registry, newErr := getRegistryStatus(ctx, api.ServiceRegistryMgmt(), registryCfg.InstanceID)
+			registry, newErr := c.getRegistryStatus(ctx, registryCfg.InstanceID)
 			if newErr != nil {
 				return status, ok, err
 			}
 			status.Registry = registry
 			ok = true
 		} else {
-			opts.Logger.Debug("No service registry is currently used, skipping status check")
+			c.Logger.Debug("No service registry is currently used, skipping status check")
 		}
 	}
 
 	return status, ok, err
 }
 
+func (c *statusClient) getKafkaStatus(ctx context.Context, id string) (status *kafkaStatus, err error) {
+	kafkaResponse, _, err := c.conn.API().KafkaMgmt().GetKafkaById(ctx, id).Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	status = &kafkaStatus{
+		ID:                  kafkaResponse.GetId(),
+		Name:                kafkaResponse.GetName(),
+		Status:              kafkaResponse.GetStatus(),
+		BootstrapServerHost: kafkaResponse.GetBootstrapServerHost(),
+	}
+
+	if kafkaResponse.GetStatus() == svcstatus.StatusFailed {
+		status.FailedReason = kafkaResponse.GetFailedReason()
+	}
+
+	return status, err
+}
+
+func (c *statusClient) getRegistryStatus(ctx context.Context, id string) (status *registryStatus, err error) {
+	registry, _, err := c.conn.API().ServiceRegistryMgmt().GetRegistry(ctx, id).Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	status = &registryStatus{
+		ID:          registry.GetId(),
+		Name:        registry.GetName(),
+		RegistryUrl: registry.GetRegistryUrl(),
+		Status:      string(registry.GetStatus()),
+	}
+
+	return status, err
+}
+
 // Print prints the status information of all set services
-func Print(w io.Writer, status *Status) {
+func Print(w io.Writer, status *serviceStatus) {
 	v := reflect.ValueOf(status).Elem()
 
 	indirectVal := reflect.Indirect(v)
@@ -188,45 +244,6 @@ func createDivider(n int) string {
 	}
 
 	return b
-}
-
-func getKafkaStatus(ctx context.Context, api kafkamgmtclient.DefaultApi, id string) (status *KafkaStatus, err error) {
-	kafkaResponse, _, err := api.GetKafkaById(ctx, id).Execute()
-	if kafkautil.IsErr(err, kafkautil.ErrorCode7) {
-		return nil, kafkautil.NotFoundByIDError(id)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	status = &KafkaStatus{
-		ID:                  kafkaResponse.GetId(),
-		Name:                kafkaResponse.GetName(),
-		Status:              kafkaResponse.GetStatus(),
-		BootstrapServerHost: kafkaResponse.GetBootstrapServerHost(),
-	}
-
-	if kafkaResponse.GetStatus() == "failed" {
-		status.FailedReason = kafkaResponse.GetFailedReason()
-	}
-
-	return status, err
-}
-
-func getRegistryStatus(ctx context.Context, api srsmgmtv1.RegistriesApi, id string) (status *RegistryStatus, err error) {
-	registry, _, err := serviceregistryutil.GetServiceRegistryByID(ctx, api, id)
-	if err != nil {
-		return nil, err
-	}
-
-	status = &RegistryStatus{
-		ID:          registry.GetId(),
-		Name:        registry.GetName(),
-		RegistryUrl: registry.GetRegistryUrl(),
-		Status:      string(registry.GetStatus()),
-	}
-
-	return status, err
 }
 
 func stringInSlice(a string, list []string) bool {

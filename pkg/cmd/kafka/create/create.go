@@ -8,6 +8,7 @@ import (
 	"time"
 
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
 
 	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -22,7 +23,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/status"
 	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -235,7 +235,7 @@ func runCreate(opts *options) error {
 			}
 		}()
 
-		for status.IsInstanceCreating(response.GetStatus()) {
+		for svcstatus.IsInstanceCreating(response.GetStatus()) {
 			time.Sleep(cmdutil.DefaultPollTime)
 
 			response, httpRes, err = api.KafkaMgmt().GetKafkaById(opts.Context, response.GetId()).Execute()

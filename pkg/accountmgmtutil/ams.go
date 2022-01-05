@@ -6,7 +6,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 
-	"github.com/redhat-developer/app-services-cli/pkg/apis/ams/amsclient"
+	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 )
 
 func CheckTermsAccepted(ctx context.Context, spec ServiceTermsSpec, conn connection.Connection) (accepted bool, redirectURI string, err error) {

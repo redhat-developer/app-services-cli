@@ -3,7 +3,7 @@ package rbacutil
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/apis/rbac"
+	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 )
 
 // FetchAllUsers retrieves and returns every user within the current user's organization with the applied filters
