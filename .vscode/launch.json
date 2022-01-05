@@ -173,25 +173,6 @@
       ]
     },
     {
-      "name": "Delete Kafka ACLs",
-      "type": "go",
-      "request": "launch",
-      "mode": "auto",
-      "program": "${workspaceFolder}/cmd/rhoas",
-      "env": {},
-      "args": [
-        "kafka",
-        "acl",
-        "delete",
-        "--all-accounts",
-        "--topic",
-        "*",
-        "--operation=describe",
-        "--permission=allow",
-        "--yes"
-      ]
-    },
-    {
       "name": "List service accounts (JSON)",
       "type": "go",
       "request": "launch",
