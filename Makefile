@@ -91,8 +91,12 @@ generate-modular-docs: generate-docs ## Generate modular command-line reference 
 	SRC_DIR=$$(pwd)/docs/commands DEST_DIR=$$(pwd)/dist go run ./cmd/modular-docs
 .PHONY: generate-modular-docs
 
+I18N_LINTER_DEF := $(shell command -v app-services-go-linter 2> /dev/null)
+
 lint-lang: ## Lint i18n files
+ifndef I18N_LINTER_DEF # check if the linter is installed, install it if not
 	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
+endif
 	app-services-go-linter -path ./pkg/core/localize/locales ./...
 .PHONY: lint-lang
 
