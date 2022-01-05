@@ -33,7 +33,7 @@ endif
 # The details of the application:
 binary:=rhoas
 
-amsapi_dir=./pkg/apis/ams/amsclient
+amsapi_dir=./pkg/api/ams/amsclient
 
 # Enable Go modules:
 export GO111MODULE=on
