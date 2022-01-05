@@ -74,18 +74,10 @@ func GetResourceName(resourceName string) string {
 // IsValidResourceOperation checks if the operation is valid, and returns the list valid operations when invalid
 func IsValidResourceOperation(resourceType string, operation string, resourceOperationsMap map[string][]string) (bool, []string) {
 	resourceTypeMapped := resourceTypeOperationKeyMap[resourceType]
-	var resourceOperations []string
-	for _, v := range resourceTypeMapped {
-		var ok bool
-		resourceOperations, ok = resourceOperationsMap[v]
-		if ok {
-			break
-		}
-	}
+	resourceOperations := resourceOperationsMap[resourceTypeMapped]
 
-	validOperationsMap := getValidOperationsResponseMap()
 	for i, op := range resourceOperations {
-		if operationMapped, ok := validOperationsMap[op]; ok {
+		if operationMapped, ok := validOperationsResponseMap[op]; ok {
 			resourceOperations[i] = operationMapped
 		} else {
 			resourceOperations[i] = op
