@@ -1,16 +1,15 @@
-// REST API exposed via the serve command.
+// Package registry REST API exposed via the serve command.
 package registry
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/role"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/describe"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/spf13/cobra"
 )
 

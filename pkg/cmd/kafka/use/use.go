@@ -4,22 +4,19 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type options struct {
@@ -72,7 +69,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
 
-	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
+	if err := kafkautil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
 	}
 
@@ -106,12 +103,12 @@ func runUse(opts *options) error {
 
 	var res *kafkamgmtclient.KafkaRequest
 	if opts.name != "" {
-		res, _, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
+		res, _, err = kafkautil.GetKafkaByName(opts.Context, api.KafkaMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		res, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
+		res, _, err = kafkautil.GetKafkaByID(opts.Context, api.KafkaMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -142,7 +139,7 @@ func runInteractivePrompt(opts *options) error {
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedKafka, err := kafka.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
+	selectedKafka, err := kafkautil.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
 	if err != nil {
 		return err
 	}

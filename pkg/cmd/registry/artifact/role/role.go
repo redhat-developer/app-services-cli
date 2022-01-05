@@ -1,10 +1,10 @@
 package role
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/role/add"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/role/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/role/revoke"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/spf13/cobra"
 )
 

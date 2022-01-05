@@ -1,11 +1,11 @@
 package consumergroup
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/resetoffset"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/spf13/cobra"
 )
 

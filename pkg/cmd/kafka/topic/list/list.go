@@ -4,25 +4,22 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/topicutil"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type options struct {
@@ -66,7 +63,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" {
-				if err := flag.ValidateOutput(opts.output); err != nil {
+				if err := flagutil.ValidateOutput(opts.output); err != nil {
 					return err
 				}
 			}

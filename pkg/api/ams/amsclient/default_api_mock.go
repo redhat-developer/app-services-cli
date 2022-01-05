@@ -4,8 +4,8 @@
 package amsclient
 
 import (
-	"context"
-	"net/http"
+	_context "context"
+	_nethttp "net/http"
 	"sync"
 )
 
@@ -15,1079 +15,1079 @@ var _ DefaultApi = &DefaultApiMock{}
 
 // DefaultApiMock is a mock implementation of DefaultApi.
 //
-//     func TestSomethingThatUsesDefaultApi(t *testing.T) {
+// 	func TestSomethingThatUsesDefaultApi(t *testing.T) {
 //
-//         // make and configure a mocked DefaultApi
-//         mockedDefaultApi := &DefaultApiMock{
-//             ApiAccountsMgmtV1AccessTokenPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1AccessTokenPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccessTokenPost method")
-//             },
-//             ApiAccountsMgmtV1AccessTokenPostExecuteFunc: func(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccessTokenPostExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1AccountsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsGet method")
-//             },
-//             ApiAccountsMgmtV1AccountsGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdGet method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsGet method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyDelete method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyGet method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyPatch method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsPostFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsPost method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdPatchFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdPatch method")
-//             },
-//             ApiAccountsMgmtV1AccountsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsIdPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1AccountsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1AccountsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsPost method")
-//             },
-//             ApiAccountsMgmtV1AccountsPostExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1AccountsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1ClusterAuthorizationsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1ClusterAuthorizationsPost method")
-//             },
-//             ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc: func(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1ClusterAuthorizationsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1ClusterRegistrationsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1ClusterRegistrationsPost method")
-//             },
-//             ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc: func(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1ClusterRegistrationsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1CurrentAccountGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1CurrentAccountGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1CurrentAccountGet method")
-//             },
-//             ApiAccountsMgmtV1CurrentAccountGetExecuteFunc: func(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1CurrentAccountGetExecute method")
-//             },
-//             ApiAccountsMgmtV1ErrorsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1ErrorsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1ErrorsGet method")
-//             },
-//             ApiAccountsMgmtV1ErrorsGetExecuteFunc: func(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1ErrorsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1ErrorsIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1ErrorsIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1ErrorsIdGet method")
-//             },
-//             ApiAccountsMgmtV1ErrorsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1ErrorsIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1FeatureTogglesIdQueryPost method")
-//             },
-//             ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc: func(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute method")
-//             },
-//             ApiAccountsMgmtV1LabelsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1LabelsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1LabelsGet method")
-//             },
-//             ApiAccountsMgmtV1LabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1LabelsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1MetricsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1MetricsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1MetricsGet method")
-//             },
-//             ApiAccountsMgmtV1MetricsGetExecuteFunc: func(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1MetricsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1NotifyPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1NotifyPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1NotifyPost method")
-//             },
-//             ApiAccountsMgmtV1NotifyPostExecuteFunc: func(r ApiApiAccountsMgmtV1NotifyPostRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1NotifyPostExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1OrganizationsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsPost method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdPatchFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdPatch method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc: func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc: func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc: func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc: func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc: func(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc: func(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc: func(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1OrganizationsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsPost method")
-//             },
-//             ApiAccountsMgmtV1OrganizationsPostExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1OrganizationsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1PlansGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1PlansGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1PlansGet method")
-//             },
-//             ApiAccountsMgmtV1PlansGetExecuteFunc: func(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1PlansGetExecute method")
-//             },
-//             ApiAccountsMgmtV1PlansIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1PlansIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1PlansIdGet method")
-//             },
-//             ApiAccountsMgmtV1PlansIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1PlansIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc: func(ctx context.Context, externalResourceId string) ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete method")
-//             },
-//             ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1PullSecretsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1PullSecretsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1PullSecretsPost method")
-//             },
-//             ApiAccountsMgmtV1PullSecretsPostExecuteFunc: func(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1PullSecretsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistriesGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1RegistriesGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistriesGet method")
-//             },
-//             ApiAccountsMgmtV1RegistriesGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistriesGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistriesIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistriesIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistriesIdGet method")
-//             },
-//             ApiAccountsMgmtV1RegistriesIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistriesIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsGet method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdDelete method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdGet method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdPatch method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1RegistryCredentialsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsPost method")
-//             },
-//             ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RegistryCredentialsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1ReservedResourcesGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1ReservedResourcesGet method")
-//             },
-//             ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc: func(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1ReservedResourcesGetExecute method")
-//             },
-//             ApiAccountsMgmtV1ResourceQuotaGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1ResourceQuotaGet method")
-//             },
-//             ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc: func(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1ResourceQuotaGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsGet method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsGetExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsIdDeleteFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsIdDelete method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsIdGet method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsIdPatchFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsIdPatch method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsIdPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1RoleBindingsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsPost method")
-//             },
-//             ApiAccountsMgmtV1RoleBindingsPostExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RoleBindingsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1RolesGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1RolesGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RolesGet method")
-//             },
-//             ApiAccountsMgmtV1RolesGetExecuteFunc: func(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RolesGetExecute method")
-//             },
-//             ApiAccountsMgmtV1RolesIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1RolesIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1RolesIdGet method")
-//             },
-//             ApiAccountsMgmtV1RolesIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1RolesIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SkuRulesGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1SkuRulesGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SkuRulesGet method")
-//             },
-//             ApiAccountsMgmtV1SkuRulesGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SkuRulesGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SkuRulesIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SkuRulesIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SkuRulesIdGet method")
-//             },
-//             ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SkuRulesIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SkusGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1SkusGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SkusGet method")
-//             },
-//             ApiAccountsMgmtV1SkusGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SkusGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SkusIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SkusIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SkusIdGet method")
-//             },
-//             ApiAccountsMgmtV1SkusIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SkusIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsGetFunc: func(ctx context.Context) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdDeleteFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdDelete method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc: func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsPost method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdNotifyPost method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdPatchFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdPatch method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdPatchExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc: func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1SubscriptionsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsPost method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc: func(ctx context.Context, subId string, accountId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc: func(ctx context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc: func(ctx context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc: func(ctx context.Context, subId string, reservedResourceId string) ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet method")
-//             },
-//             ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute method")
-//             },
-//             ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc: func(ctx context.Context, caseId string) ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SupportCasesCaseIdDelete method")
-//             },
-//             ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute method")
-//             },
-//             ApiAccountsMgmtV1SupportCasesPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1SupportCasesPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1SupportCasesPost method")
-//             },
-//             ApiAccountsMgmtV1SupportCasesPostExecuteFunc: func(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1SupportCasesPostExecute method")
-//             },
-//             ApiAccountsMgmtV1TokenAuthorizationPostFunc: func(ctx context.Context) ApiApiAccountsMgmtV1TokenAuthorizationPostRequest {
-// 	               panic("mock out the ApiAccountsMgmtV1TokenAuthorizationPost method")
-//             },
-//             ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc: func(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAccountsMgmtV1TokenAuthorizationPostExecute method")
-//             },
-//             ApiAuthorizationsV1AccessReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1AccessReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1AccessReviewPost method")
-//             },
-//             ApiAuthorizationsV1AccessReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1AccessReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1CapabilityReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1CapabilityReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1CapabilityReviewPost method")
-//             },
-//             ApiAuthorizationsV1CapabilityReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1CapabilityReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1ExportControlReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1ExportControlReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1ExportControlReviewPost method")
-//             },
-//             ApiAuthorizationsV1ExportControlReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1ExportControlReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1ResourceReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1ResourceReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1ResourceReviewPost method")
-//             },
-//             ApiAuthorizationsV1ResourceReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1ResourceReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1SelfAccessReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1SelfAccessReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1SelfAccessReviewPost method")
-//             },
-//             ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1SelfAccessReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1SelfResourceReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1SelfResourceReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1SelfResourceReviewPost method")
-//             },
-//             ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1SelfResourceReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1SelfTermsReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1SelfTermsReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1SelfTermsReviewPost method")
-//             },
-//             ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1SelfTermsReviewPostExecute method")
-//             },
-//             ApiAuthorizationsV1TermsReviewPostFunc: func(ctx context.Context) ApiApiAuthorizationsV1TermsReviewPostRequest {
-// 	               panic("mock out the ApiAuthorizationsV1TermsReviewPost method")
-//             },
-//             ApiAuthorizationsV1TermsReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *http.Response, error) {
-// 	               panic("mock out the ApiAuthorizationsV1TermsReviewPostExecute method")
-//             },
-//         }
+// 		// make and configure a mocked DefaultApi
+// 		mockedDefaultApi := &DefaultApiMock{
+// 			ApiAccountsMgmtV1AccessTokenPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1AccessTokenPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccessTokenPost method")
+// 			},
+// 			ApiAccountsMgmtV1AccessTokenPostExecuteFunc: func(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccessTokenPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1AccountsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsGet method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsGet method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyDelete method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyGet method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyPatch method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsPostFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsPost method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdLabelsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdPatchFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdPatch method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsIdPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1AccountsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsPost method")
+// 			},
+// 			ApiAccountsMgmtV1AccountsPostExecuteFunc: func(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1AccountsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1ClusterAuthorizationsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1ClusterAuthorizationsPost method")
+// 			},
+// 			ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc: func(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1ClusterAuthorizationsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1ClusterRegistrationsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1ClusterRegistrationsPost method")
+// 			},
+// 			ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc: func(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1ClusterRegistrationsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1CurrentAccountGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1CurrentAccountGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1CurrentAccountGet method")
+// 			},
+// 			ApiAccountsMgmtV1CurrentAccountGetExecuteFunc: func(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1CurrentAccountGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1ErrorsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1ErrorsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1ErrorsGet method")
+// 			},
+// 			ApiAccountsMgmtV1ErrorsGetExecuteFunc: func(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1ErrorsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1ErrorsIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1ErrorsIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1ErrorsIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1ErrorsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1ErrorsIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1FeatureTogglesIdQueryPost method")
+// 			},
+// 			ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc: func(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1LabelsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1LabelsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1LabelsGet method")
+// 			},
+// 			ApiAccountsMgmtV1LabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1LabelsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1MetricsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1MetricsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1MetricsGet method")
+// 			},
+// 			ApiAccountsMgmtV1MetricsGetExecuteFunc: func(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1MetricsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1NotifyPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1NotifyPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1NotifyPost method")
+// 			},
+// 			ApiAccountsMgmtV1NotifyPostExecuteFunc: func(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1NotifyPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1OrganizationsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsPost method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdPatchFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdPatch method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc: func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc: func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc: func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc: func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc: func(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc: func(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc: func(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1OrganizationsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsPost method")
+// 			},
+// 			ApiAccountsMgmtV1OrganizationsPostExecuteFunc: func(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1OrganizationsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1PlansGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1PlansGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1PlansGet method")
+// 			},
+// 			ApiAccountsMgmtV1PlansGetExecuteFunc: func(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1PlansGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1PlansIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1PlansIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1PlansIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1PlansIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1PlansIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc: func(ctx _context.Context, externalResourceId string) ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1PullSecretsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1PullSecretsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1PullSecretsPost method")
+// 			},
+// 			ApiAccountsMgmtV1PullSecretsPostExecuteFunc: func(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1PullSecretsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistriesGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1RegistriesGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistriesGet method")
+// 			},
+// 			ApiAccountsMgmtV1RegistriesGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistriesGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistriesIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistriesIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistriesIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1RegistriesIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistriesIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsGet method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdPatch method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1RegistryCredentialsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsPost method")
+// 			},
+// 			ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc: func(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RegistryCredentialsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1ReservedResourcesGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1ReservedResourcesGet method")
+// 			},
+// 			ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc: func(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1ReservedResourcesGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1ResourceQuotaGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1ResourceQuotaGet method")
+// 			},
+// 			ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc: func(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1ResourceQuotaGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsGet method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsGetExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsIdDeleteFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsIdPatchFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsIdPatch method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsIdPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1RoleBindingsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsPost method")
+// 			},
+// 			ApiAccountsMgmtV1RoleBindingsPostExecuteFunc: func(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RoleBindingsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RolesGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1RolesGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RolesGet method")
+// 			},
+// 			ApiAccountsMgmtV1RolesGetExecuteFunc: func(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RolesGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1RolesIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RolesIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1RolesIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1RolesIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1RolesIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SkuRulesGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1SkuRulesGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SkuRulesGet method")
+// 			},
+// 			ApiAccountsMgmtV1SkuRulesGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SkuRulesGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SkuRulesIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SkuRulesIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SkuRulesIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SkuRulesIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SkusGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1SkusGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SkusGet method")
+// 			},
+// 			ApiAccountsMgmtV1SkusGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SkusGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SkusIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SkusIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SkusIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1SkusIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SkusIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsGetFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdDeleteFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc: func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsPost method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdNotifyPost method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdPatchFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdPatch method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdPatchExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc: func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1SubscriptionsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsPost method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc: func(ctx _context.Context, subId string, accountId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc: func(ctx _context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc: func(ctx _context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc: func(ctx _context.Context, subId string, reservedResourceId string) ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet method")
+// 			},
+// 			ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc: func(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc: func(ctx _context.Context, caseId string) ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SupportCasesCaseIdDelete method")
+// 			},
+// 			ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc: func(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute method")
+// 			},
+// 			ApiAccountsMgmtV1SupportCasesPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1SupportCasesPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1SupportCasesPost method")
+// 			},
+// 			ApiAccountsMgmtV1SupportCasesPostExecuteFunc: func(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1SupportCasesPostExecute method")
+// 			},
+// 			ApiAccountsMgmtV1TokenAuthorizationPostFunc: func(ctx _context.Context) ApiApiAccountsMgmtV1TokenAuthorizationPostRequest {
+// 				panic("mock out the ApiAccountsMgmtV1TokenAuthorizationPost method")
+// 			},
+// 			ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc: func(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAccountsMgmtV1TokenAuthorizationPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1AccessReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1AccessReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1AccessReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1AccessReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1AccessReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1CapabilityReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1CapabilityReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1CapabilityReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1CapabilityReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1CapabilityReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1ExportControlReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1ExportControlReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1ExportControlReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1ExportControlReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1ExportControlReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1ResourceReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1ResourceReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1ResourceReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1ResourceReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1ResourceReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1SelfAccessReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1SelfAccessReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1SelfAccessReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1SelfAccessReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1SelfResourceReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1SelfResourceReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1SelfResourceReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1SelfResourceReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1SelfTermsReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1SelfTermsReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1SelfTermsReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1SelfTermsReviewPostExecute method")
+// 			},
+// 			ApiAuthorizationsV1TermsReviewPostFunc: func(ctx _context.Context) ApiApiAuthorizationsV1TermsReviewPostRequest {
+// 				panic("mock out the ApiAuthorizationsV1TermsReviewPost method")
+// 			},
+// 			ApiAuthorizationsV1TermsReviewPostExecuteFunc: func(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error) {
+// 				panic("mock out the ApiAuthorizationsV1TermsReviewPostExecute method")
+// 			},
+// 		}
 //
-//         // use mockedDefaultApi in code that requires DefaultApi
-//         // and then make assertions.
+// 		// use mockedDefaultApi in code that requires DefaultApi
+// 		// and then make assertions.
 //
-//     }
+// 	}
 type DefaultApiMock struct {
 	// ApiAccountsMgmtV1AccessTokenPostFunc mocks the ApiAccountsMgmtV1AccessTokenPost method.
-	ApiAccountsMgmtV1AccessTokenPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1AccessTokenPostRequest
+	ApiAccountsMgmtV1AccessTokenPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1AccessTokenPostRequest
 
 	// ApiAccountsMgmtV1AccessTokenPostExecuteFunc mocks the ApiAccountsMgmtV1AccessTokenPostExecute method.
-	ApiAccountsMgmtV1AccessTokenPostExecuteFunc func(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *http.Response, error)
+	ApiAccountsMgmtV1AccessTokenPostExecuteFunc func(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsGetFunc mocks the ApiAccountsMgmtV1AccountsGet method.
-	ApiAccountsMgmtV1AccountsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1AccountsGetRequest
+	ApiAccountsMgmtV1AccountsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1AccountsGetRequest
 
 	// ApiAccountsMgmtV1AccountsGetExecuteFunc mocks the ApiAccountsMgmtV1AccountsGetExecute method.
-	ApiAccountsMgmtV1AccountsGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *http.Response, error)
+	ApiAccountsMgmtV1AccountsGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdGetFunc mocks the ApiAccountsMgmtV1AccountsIdGet method.
-	ApiAccountsMgmtV1AccountsIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdGetRequest
+	ApiAccountsMgmtV1AccountsIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdGetRequest
 
 	// ApiAccountsMgmtV1AccountsIdGetExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdGetExecute method.
-	ApiAccountsMgmtV1AccountsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *http.Response, error)
+	ApiAccountsMgmtV1AccountsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdLabelsGetFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsGet method.
-	ApiAccountsMgmtV1AccountsIdLabelsGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest
+	ApiAccountsMgmtV1AccountsIdLabelsGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest
 
 	// ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsGetExecute method.
-	ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *http.Response, error)
+	ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsKeyDelete method.
-	ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest
+	ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest
 
 	// ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute method.
-	ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsKeyGet method.
-	ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest
+	ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest
 
 	// ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute method.
-	ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsKeyPatch method.
-	ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest
+	ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest
 
 	// ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute method.
-	ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdLabelsPostFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsPost method.
-	ApiAccountsMgmtV1AccountsIdLabelsPostFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest
+	ApiAccountsMgmtV1AccountsIdLabelsPostFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest
 
 	// ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdLabelsPostExecute method.
-	ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsIdPatchFunc mocks the ApiAccountsMgmtV1AccountsIdPatch method.
-	ApiAccountsMgmtV1AccountsIdPatchFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdPatchRequest
+	ApiAccountsMgmtV1AccountsIdPatchFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdPatchRequest
 
 	// ApiAccountsMgmtV1AccountsIdPatchExecuteFunc mocks the ApiAccountsMgmtV1AccountsIdPatchExecute method.
-	ApiAccountsMgmtV1AccountsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *http.Response, error)
+	ApiAccountsMgmtV1AccountsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1AccountsPostFunc mocks the ApiAccountsMgmtV1AccountsPost method.
-	ApiAccountsMgmtV1AccountsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1AccountsPostRequest
+	ApiAccountsMgmtV1AccountsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1AccountsPostRequest
 
 	// ApiAccountsMgmtV1AccountsPostExecuteFunc mocks the ApiAccountsMgmtV1AccountsPostExecute method.
-	ApiAccountsMgmtV1AccountsPostExecuteFunc func(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *http.Response, error)
+	ApiAccountsMgmtV1AccountsPostExecuteFunc func(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1ClusterAuthorizationsPostFunc mocks the ApiAccountsMgmtV1ClusterAuthorizationsPost method.
-	ApiAccountsMgmtV1ClusterAuthorizationsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest
+	ApiAccountsMgmtV1ClusterAuthorizationsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest
 
 	// ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc mocks the ApiAccountsMgmtV1ClusterAuthorizationsPostExecute method.
-	ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc func(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *http.Response, error)
+	ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc func(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1ClusterRegistrationsPostFunc mocks the ApiAccountsMgmtV1ClusterRegistrationsPost method.
-	ApiAccountsMgmtV1ClusterRegistrationsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest
+	ApiAccountsMgmtV1ClusterRegistrationsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest
 
 	// ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc mocks the ApiAccountsMgmtV1ClusterRegistrationsPostExecute method.
-	ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc func(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *http.Response, error)
+	ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc func(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1CurrentAccountGetFunc mocks the ApiAccountsMgmtV1CurrentAccountGet method.
-	ApiAccountsMgmtV1CurrentAccountGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1CurrentAccountGetRequest
+	ApiAccountsMgmtV1CurrentAccountGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1CurrentAccountGetRequest
 
 	// ApiAccountsMgmtV1CurrentAccountGetExecuteFunc mocks the ApiAccountsMgmtV1CurrentAccountGetExecute method.
-	ApiAccountsMgmtV1CurrentAccountGetExecuteFunc func(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *http.Response, error)
+	ApiAccountsMgmtV1CurrentAccountGetExecuteFunc func(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1ErrorsGetFunc mocks the ApiAccountsMgmtV1ErrorsGet method.
-	ApiAccountsMgmtV1ErrorsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1ErrorsGetRequest
+	ApiAccountsMgmtV1ErrorsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1ErrorsGetRequest
 
 	// ApiAccountsMgmtV1ErrorsGetExecuteFunc mocks the ApiAccountsMgmtV1ErrorsGetExecute method.
-	ApiAccountsMgmtV1ErrorsGetExecuteFunc func(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *http.Response, error)
+	ApiAccountsMgmtV1ErrorsGetExecuteFunc func(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1ErrorsIdGetFunc mocks the ApiAccountsMgmtV1ErrorsIdGet method.
-	ApiAccountsMgmtV1ErrorsIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1ErrorsIdGetRequest
+	ApiAccountsMgmtV1ErrorsIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1ErrorsIdGetRequest
 
 	// ApiAccountsMgmtV1ErrorsIdGetExecuteFunc mocks the ApiAccountsMgmtV1ErrorsIdGetExecute method.
-	ApiAccountsMgmtV1ErrorsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *http.Response, error)
+	ApiAccountsMgmtV1ErrorsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc mocks the ApiAccountsMgmtV1FeatureTogglesIdQueryPost method.
-	ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest
+	ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest
 
 	// ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc mocks the ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute method.
-	ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc func(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *http.Response, error)
+	ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc func(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1LabelsGetFunc mocks the ApiAccountsMgmtV1LabelsGet method.
-	ApiAccountsMgmtV1LabelsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1LabelsGetRequest
+	ApiAccountsMgmtV1LabelsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1LabelsGetRequest
 
 	// ApiAccountsMgmtV1LabelsGetExecuteFunc mocks the ApiAccountsMgmtV1LabelsGetExecute method.
-	ApiAccountsMgmtV1LabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *http.Response, error)
+	ApiAccountsMgmtV1LabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1MetricsGetFunc mocks the ApiAccountsMgmtV1MetricsGet method.
-	ApiAccountsMgmtV1MetricsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1MetricsGetRequest
+	ApiAccountsMgmtV1MetricsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1MetricsGetRequest
 
 	// ApiAccountsMgmtV1MetricsGetExecuteFunc mocks the ApiAccountsMgmtV1MetricsGetExecute method.
-	ApiAccountsMgmtV1MetricsGetExecuteFunc func(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *http.Response, error)
+	ApiAccountsMgmtV1MetricsGetExecuteFunc func(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1NotifyPostFunc mocks the ApiAccountsMgmtV1NotifyPost method.
-	ApiAccountsMgmtV1NotifyPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1NotifyPostRequest
+	ApiAccountsMgmtV1NotifyPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1NotifyPostRequest
 
 	// ApiAccountsMgmtV1NotifyPostExecuteFunc mocks the ApiAccountsMgmtV1NotifyPostExecute method.
-	ApiAccountsMgmtV1NotifyPostExecuteFunc func(r ApiApiAccountsMgmtV1NotifyPostRequest) (*http.Response, error)
+	ApiAccountsMgmtV1NotifyPostExecuteFunc func(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsGetFunc mocks the ApiAccountsMgmtV1OrganizationsGet method.
-	ApiAccountsMgmtV1OrganizationsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1OrganizationsGetRequest
+	ApiAccountsMgmtV1OrganizationsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1OrganizationsGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsGetExecute method.
-	ApiAccountsMgmtV1OrganizationsGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdGetFunc mocks the ApiAccountsMgmtV1OrganizationsIdGet method.
-	ApiAccountsMgmtV1OrganizationsIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdGetRequest
+	ApiAccountsMgmtV1OrganizationsIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdGetExecute method.
-	ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsGet method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest
+	ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsPost method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest
+	ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute method.
-	ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdPatchFunc mocks the ApiAccountsMgmtV1OrganizationsIdPatch method.
-	ApiAccountsMgmtV1OrganizationsIdPatchFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdPatchRequest
+	ApiAccountsMgmtV1OrganizationsIdPatchFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdPatchRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdPatchExecute method.
-	ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc mocks the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet method.
-	ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest
+	ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute method.
-	ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet method.
-	ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet method.
-	ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc func(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc func(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc func(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc func(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc func(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc func(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc func(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc func(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest
 
 	// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute method.
-	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1OrganizationsPostFunc mocks the ApiAccountsMgmtV1OrganizationsPost method.
-	ApiAccountsMgmtV1OrganizationsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1OrganizationsPostRequest
+	ApiAccountsMgmtV1OrganizationsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1OrganizationsPostRequest
 
 	// ApiAccountsMgmtV1OrganizationsPostExecuteFunc mocks the ApiAccountsMgmtV1OrganizationsPostExecute method.
-	ApiAccountsMgmtV1OrganizationsPostExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *http.Response, error)
+	ApiAccountsMgmtV1OrganizationsPostExecuteFunc func(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1PlansGetFunc mocks the ApiAccountsMgmtV1PlansGet method.
-	ApiAccountsMgmtV1PlansGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1PlansGetRequest
+	ApiAccountsMgmtV1PlansGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1PlansGetRequest
 
 	// ApiAccountsMgmtV1PlansGetExecuteFunc mocks the ApiAccountsMgmtV1PlansGetExecute method.
-	ApiAccountsMgmtV1PlansGetExecuteFunc func(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *http.Response, error)
+	ApiAccountsMgmtV1PlansGetExecuteFunc func(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1PlansIdGetFunc mocks the ApiAccountsMgmtV1PlansIdGet method.
-	ApiAccountsMgmtV1PlansIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1PlansIdGetRequest
+	ApiAccountsMgmtV1PlansIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1PlansIdGetRequest
 
 	// ApiAccountsMgmtV1PlansIdGetExecuteFunc mocks the ApiAccountsMgmtV1PlansIdGetExecute method.
-	ApiAccountsMgmtV1PlansIdGetExecuteFunc func(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *http.Response, error)
+	ApiAccountsMgmtV1PlansIdGetExecuteFunc func(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc mocks the ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete method.
-	ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc func(ctx context.Context, externalResourceId string) ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest
+	ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc func(ctx _context.Context, externalResourceId string) ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest
 
 	// ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute method.
-	ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1PullSecretsPostFunc mocks the ApiAccountsMgmtV1PullSecretsPost method.
-	ApiAccountsMgmtV1PullSecretsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1PullSecretsPostRequest
+	ApiAccountsMgmtV1PullSecretsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1PullSecretsPostRequest
 
 	// ApiAccountsMgmtV1PullSecretsPostExecuteFunc mocks the ApiAccountsMgmtV1PullSecretsPostExecute method.
-	ApiAccountsMgmtV1PullSecretsPostExecuteFunc func(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *http.Response, error)
+	ApiAccountsMgmtV1PullSecretsPostExecuteFunc func(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistriesGetFunc mocks the ApiAccountsMgmtV1RegistriesGet method.
-	ApiAccountsMgmtV1RegistriesGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1RegistriesGetRequest
+	ApiAccountsMgmtV1RegistriesGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1RegistriesGetRequest
 
 	// ApiAccountsMgmtV1RegistriesGetExecuteFunc mocks the ApiAccountsMgmtV1RegistriesGetExecute method.
-	ApiAccountsMgmtV1RegistriesGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *http.Response, error)
+	ApiAccountsMgmtV1RegistriesGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistriesIdGetFunc mocks the ApiAccountsMgmtV1RegistriesIdGet method.
-	ApiAccountsMgmtV1RegistriesIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistriesIdGetRequest
+	ApiAccountsMgmtV1RegistriesIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistriesIdGetRequest
 
 	// ApiAccountsMgmtV1RegistriesIdGetExecuteFunc mocks the ApiAccountsMgmtV1RegistriesIdGetExecute method.
-	ApiAccountsMgmtV1RegistriesIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *http.Response, error)
+	ApiAccountsMgmtV1RegistriesIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistryCredentialsGetFunc mocks the ApiAccountsMgmtV1RegistryCredentialsGet method.
-	ApiAccountsMgmtV1RegistryCredentialsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest
+	ApiAccountsMgmtV1RegistryCredentialsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest
 
 	// ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc mocks the ApiAccountsMgmtV1RegistryCredentialsGetExecute method.
-	ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *http.Response, error)
+	ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc mocks the ApiAccountsMgmtV1RegistryCredentialsIdDelete method.
-	ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest
+	ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest
 
 	// ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute method.
-	ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistryCredentialsIdGetFunc mocks the ApiAccountsMgmtV1RegistryCredentialsIdGet method.
-	ApiAccountsMgmtV1RegistryCredentialsIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest
+	ApiAccountsMgmtV1RegistryCredentialsIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest
 
 	// ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc mocks the ApiAccountsMgmtV1RegistryCredentialsIdGetExecute method.
-	ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *http.Response, error)
+	ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc mocks the ApiAccountsMgmtV1RegistryCredentialsIdPatch method.
-	ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest
+	ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest
 
 	// ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc mocks the ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute method.
-	ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *http.Response, error)
+	ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RegistryCredentialsPostFunc mocks the ApiAccountsMgmtV1RegistryCredentialsPost method.
-	ApiAccountsMgmtV1RegistryCredentialsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1RegistryCredentialsPostRequest
+	ApiAccountsMgmtV1RegistryCredentialsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1RegistryCredentialsPostRequest
 
 	// ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc mocks the ApiAccountsMgmtV1RegistryCredentialsPostExecute method.
-	ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *http.Response, error)
+	ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc func(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1ReservedResourcesGetFunc mocks the ApiAccountsMgmtV1ReservedResourcesGet method.
-	ApiAccountsMgmtV1ReservedResourcesGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1ReservedResourcesGetRequest
+	ApiAccountsMgmtV1ReservedResourcesGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1ReservedResourcesGetRequest
 
 	// ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc mocks the ApiAccountsMgmtV1ReservedResourcesGetExecute method.
-	ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc func(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *http.Response, error)
+	ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc func(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1ResourceQuotaGetFunc mocks the ApiAccountsMgmtV1ResourceQuotaGet method.
-	ApiAccountsMgmtV1ResourceQuotaGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1ResourceQuotaGetRequest
+	ApiAccountsMgmtV1ResourceQuotaGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1ResourceQuotaGetRequest
 
 	// ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc mocks the ApiAccountsMgmtV1ResourceQuotaGetExecute method.
-	ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc func(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *http.Response, error)
+	ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc func(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RoleBindingsGetFunc mocks the ApiAccountsMgmtV1RoleBindingsGet method.
-	ApiAccountsMgmtV1RoleBindingsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1RoleBindingsGetRequest
+	ApiAccountsMgmtV1RoleBindingsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1RoleBindingsGetRequest
 
 	// ApiAccountsMgmtV1RoleBindingsGetExecuteFunc mocks the ApiAccountsMgmtV1RoleBindingsGetExecute method.
-	ApiAccountsMgmtV1RoleBindingsGetExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *http.Response, error)
+	ApiAccountsMgmtV1RoleBindingsGetExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RoleBindingsIdDeleteFunc mocks the ApiAccountsMgmtV1RoleBindingsIdDelete method.
-	ApiAccountsMgmtV1RoleBindingsIdDeleteFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest
+	ApiAccountsMgmtV1RoleBindingsIdDeleteFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest
 
 	// ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1RoleBindingsIdDeleteExecute method.
-	ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RoleBindingsIdGetFunc mocks the ApiAccountsMgmtV1RoleBindingsIdGet method.
-	ApiAccountsMgmtV1RoleBindingsIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdGetRequest
+	ApiAccountsMgmtV1RoleBindingsIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdGetRequest
 
 	// ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc mocks the ApiAccountsMgmtV1RoleBindingsIdGetExecute method.
-	ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *http.Response, error)
+	ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RoleBindingsIdPatchFunc mocks the ApiAccountsMgmtV1RoleBindingsIdPatch method.
-	ApiAccountsMgmtV1RoleBindingsIdPatchFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest
+	ApiAccountsMgmtV1RoleBindingsIdPatchFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest
 
 	// ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc mocks the ApiAccountsMgmtV1RoleBindingsIdPatchExecute method.
-	ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *http.Response, error)
+	ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RoleBindingsPostFunc mocks the ApiAccountsMgmtV1RoleBindingsPost method.
-	ApiAccountsMgmtV1RoleBindingsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1RoleBindingsPostRequest
+	ApiAccountsMgmtV1RoleBindingsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1RoleBindingsPostRequest
 
 	// ApiAccountsMgmtV1RoleBindingsPostExecuteFunc mocks the ApiAccountsMgmtV1RoleBindingsPostExecute method.
-	ApiAccountsMgmtV1RoleBindingsPostExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *http.Response, error)
+	ApiAccountsMgmtV1RoleBindingsPostExecuteFunc func(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RolesGetFunc mocks the ApiAccountsMgmtV1RolesGet method.
-	ApiAccountsMgmtV1RolesGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1RolesGetRequest
+	ApiAccountsMgmtV1RolesGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1RolesGetRequest
 
 	// ApiAccountsMgmtV1RolesGetExecuteFunc mocks the ApiAccountsMgmtV1RolesGetExecute method.
-	ApiAccountsMgmtV1RolesGetExecuteFunc func(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *http.Response, error)
+	ApiAccountsMgmtV1RolesGetExecuteFunc func(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1RolesIdGetFunc mocks the ApiAccountsMgmtV1RolesIdGet method.
-	ApiAccountsMgmtV1RolesIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1RolesIdGetRequest
+	ApiAccountsMgmtV1RolesIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1RolesIdGetRequest
 
 	// ApiAccountsMgmtV1RolesIdGetExecuteFunc mocks the ApiAccountsMgmtV1RolesIdGetExecute method.
-	ApiAccountsMgmtV1RolesIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *http.Response, error)
+	ApiAccountsMgmtV1RolesIdGetExecuteFunc func(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SkuRulesGetFunc mocks the ApiAccountsMgmtV1SkuRulesGet method.
-	ApiAccountsMgmtV1SkuRulesGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1SkuRulesGetRequest
+	ApiAccountsMgmtV1SkuRulesGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1SkuRulesGetRequest
 
 	// ApiAccountsMgmtV1SkuRulesGetExecuteFunc mocks the ApiAccountsMgmtV1SkuRulesGetExecute method.
-	ApiAccountsMgmtV1SkuRulesGetExecuteFunc func(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *http.Response, error)
+	ApiAccountsMgmtV1SkuRulesGetExecuteFunc func(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SkuRulesIdGetFunc mocks the ApiAccountsMgmtV1SkuRulesIdGet method.
-	ApiAccountsMgmtV1SkuRulesIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SkuRulesIdGetRequest
+	ApiAccountsMgmtV1SkuRulesIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SkuRulesIdGetRequest
 
 	// ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc mocks the ApiAccountsMgmtV1SkuRulesIdGetExecute method.
-	ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *http.Response, error)
+	ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SkusGetFunc mocks the ApiAccountsMgmtV1SkusGet method.
-	ApiAccountsMgmtV1SkusGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1SkusGetRequest
+	ApiAccountsMgmtV1SkusGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1SkusGetRequest
 
 	// ApiAccountsMgmtV1SkusGetExecuteFunc mocks the ApiAccountsMgmtV1SkusGetExecute method.
-	ApiAccountsMgmtV1SkusGetExecuteFunc func(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *http.Response, error)
+	ApiAccountsMgmtV1SkusGetExecuteFunc func(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SkusIdGetFunc mocks the ApiAccountsMgmtV1SkusIdGet method.
-	ApiAccountsMgmtV1SkusIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SkusIdGetRequest
+	ApiAccountsMgmtV1SkusIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SkusIdGetRequest
 
 	// ApiAccountsMgmtV1SkusIdGetExecuteFunc mocks the ApiAccountsMgmtV1SkusIdGetExecute method.
-	ApiAccountsMgmtV1SkusIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *http.Response, error)
+	ApiAccountsMgmtV1SkusIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsGetFunc mocks the ApiAccountsMgmtV1SubscriptionsGet method.
-	ApiAccountsMgmtV1SubscriptionsGetFunc func(ctx context.Context) ApiApiAccountsMgmtV1SubscriptionsGetRequest
+	ApiAccountsMgmtV1SubscriptionsGetFunc func(ctx _context.Context) ApiApiAccountsMgmtV1SubscriptionsGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdDeleteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdDelete method.
-	ApiAccountsMgmtV1SubscriptionsIdDeleteFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest
+	ApiAccountsMgmtV1SubscriptionsIdDeleteFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdDeleteExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdGetFunc mocks the ApiAccountsMgmtV1SubscriptionsIdGet method.
-	ApiAccountsMgmtV1SubscriptionsIdGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest
+	ApiAccountsMgmtV1SubscriptionsIdGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsGet method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest
+	ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc func(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc func(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsPost method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest
+	ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc mocks the ApiAccountsMgmtV1SubscriptionsIdNotifyPost method.
-	ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest
+	ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdPatchFunc mocks the ApiAccountsMgmtV1SubscriptionsIdPatch method.
-	ApiAccountsMgmtV1SubscriptionsIdPatchFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest
+	ApiAccountsMgmtV1SubscriptionsIdPatchFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdPatchExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc mocks the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet method.
-	ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest
+	ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc mocks the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet method.
-	ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc func(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest
+	ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc func(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsPostFunc mocks the ApiAccountsMgmtV1SubscriptionsPost method.
-	ApiAccountsMgmtV1SubscriptionsPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1SubscriptionsPostRequest
+	ApiAccountsMgmtV1SubscriptionsPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1SubscriptionsPostRequest
 
 	// ApiAccountsMgmtV1SubscriptionsPostExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsPostExecute method.
-	ApiAccountsMgmtV1SubscriptionsPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete method.
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc func(ctx context.Context, subId string, accountId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc func(ctx _context.Context, subId string, accountId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute method.
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet method.
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc func(ctx context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc func(ctx _context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost method.
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc func(ctx context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc func(ctx _context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute method.
-	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet method.
-	ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc func(ctx context.Context, subId string, reservedResourceId string) ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest
+	ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc func(ctx _context.Context, subId string, reservedResourceId string) ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest
 
 	// ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc mocks the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute method.
-	ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *http.Response, error)
+	ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc func(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc mocks the ApiAccountsMgmtV1SupportCasesCaseIdDelete method.
-	ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc func(ctx context.Context, caseId string) ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest
+	ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc func(ctx _context.Context, caseId string) ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest
 
 	// ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc mocks the ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute method.
-	ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*http.Response, error)
+	ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc func(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1SupportCasesPostFunc mocks the ApiAccountsMgmtV1SupportCasesPost method.
-	ApiAccountsMgmtV1SupportCasesPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1SupportCasesPostRequest
+	ApiAccountsMgmtV1SupportCasesPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1SupportCasesPostRequest
 
 	// ApiAccountsMgmtV1SupportCasesPostExecuteFunc mocks the ApiAccountsMgmtV1SupportCasesPostExecute method.
-	ApiAccountsMgmtV1SupportCasesPostExecuteFunc func(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *http.Response, error)
+	ApiAccountsMgmtV1SupportCasesPostExecuteFunc func(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, error)
 
 	// ApiAccountsMgmtV1TokenAuthorizationPostFunc mocks the ApiAccountsMgmtV1TokenAuthorizationPost method.
-	ApiAccountsMgmtV1TokenAuthorizationPostFunc func(ctx context.Context) ApiApiAccountsMgmtV1TokenAuthorizationPostRequest
+	ApiAccountsMgmtV1TokenAuthorizationPostFunc func(ctx _context.Context) ApiApiAccountsMgmtV1TokenAuthorizationPostRequest
 
 	// ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc mocks the ApiAccountsMgmtV1TokenAuthorizationPostExecute method.
-	ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc func(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *http.Response, error)
+	ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc func(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1AccessReviewPostFunc mocks the ApiAuthorizationsV1AccessReviewPost method.
-	ApiAuthorizationsV1AccessReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1AccessReviewPostRequest
+	ApiAuthorizationsV1AccessReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1AccessReviewPostRequest
 
 	// ApiAuthorizationsV1AccessReviewPostExecuteFunc mocks the ApiAuthorizationsV1AccessReviewPostExecute method.
-	ApiAuthorizationsV1AccessReviewPostExecuteFunc func(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *http.Response, error)
+	ApiAuthorizationsV1AccessReviewPostExecuteFunc func(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1CapabilityReviewPostFunc mocks the ApiAuthorizationsV1CapabilityReviewPost method.
-	ApiAuthorizationsV1CapabilityReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1CapabilityReviewPostRequest
+	ApiAuthorizationsV1CapabilityReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1CapabilityReviewPostRequest
 
 	// ApiAuthorizationsV1CapabilityReviewPostExecuteFunc mocks the ApiAuthorizationsV1CapabilityReviewPostExecute method.
-	ApiAuthorizationsV1CapabilityReviewPostExecuteFunc func(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *http.Response, error)
+	ApiAuthorizationsV1CapabilityReviewPostExecuteFunc func(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1ExportControlReviewPostFunc mocks the ApiAuthorizationsV1ExportControlReviewPost method.
-	ApiAuthorizationsV1ExportControlReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1ExportControlReviewPostRequest
+	ApiAuthorizationsV1ExportControlReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1ExportControlReviewPostRequest
 
 	// ApiAuthorizationsV1ExportControlReviewPostExecuteFunc mocks the ApiAuthorizationsV1ExportControlReviewPostExecute method.
-	ApiAuthorizationsV1ExportControlReviewPostExecuteFunc func(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *http.Response, error)
+	ApiAuthorizationsV1ExportControlReviewPostExecuteFunc func(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1ResourceReviewPostFunc mocks the ApiAuthorizationsV1ResourceReviewPost method.
-	ApiAuthorizationsV1ResourceReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1ResourceReviewPostRequest
+	ApiAuthorizationsV1ResourceReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1ResourceReviewPostRequest
 
 	// ApiAuthorizationsV1ResourceReviewPostExecuteFunc mocks the ApiAuthorizationsV1ResourceReviewPostExecute method.
-	ApiAuthorizationsV1ResourceReviewPostExecuteFunc func(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *http.Response, error)
+	ApiAuthorizationsV1ResourceReviewPostExecuteFunc func(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1SelfAccessReviewPostFunc mocks the ApiAuthorizationsV1SelfAccessReviewPost method.
-	ApiAuthorizationsV1SelfAccessReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1SelfAccessReviewPostRequest
+	ApiAuthorizationsV1SelfAccessReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1SelfAccessReviewPostRequest
 
 	// ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc mocks the ApiAuthorizationsV1SelfAccessReviewPostExecute method.
-	ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc func(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *http.Response, error)
+	ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc func(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1SelfResourceReviewPostFunc mocks the ApiAuthorizationsV1SelfResourceReviewPost method.
-	ApiAuthorizationsV1SelfResourceReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1SelfResourceReviewPostRequest
+	ApiAuthorizationsV1SelfResourceReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1SelfResourceReviewPostRequest
 
 	// ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc mocks the ApiAuthorizationsV1SelfResourceReviewPostExecute method.
-	ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc func(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *http.Response, error)
+	ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc func(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1SelfTermsReviewPostFunc mocks the ApiAuthorizationsV1SelfTermsReviewPost method.
-	ApiAuthorizationsV1SelfTermsReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1SelfTermsReviewPostRequest
+	ApiAuthorizationsV1SelfTermsReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1SelfTermsReviewPostRequest
 
 	// ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc mocks the ApiAuthorizationsV1SelfTermsReviewPostExecute method.
-	ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc func(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *http.Response, error)
+	ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc func(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error)
 
 	// ApiAuthorizationsV1TermsReviewPostFunc mocks the ApiAuthorizationsV1TermsReviewPost method.
-	ApiAuthorizationsV1TermsReviewPostFunc func(ctx context.Context) ApiApiAuthorizationsV1TermsReviewPostRequest
+	ApiAuthorizationsV1TermsReviewPostFunc func(ctx _context.Context) ApiApiAuthorizationsV1TermsReviewPostRequest
 
 	// ApiAuthorizationsV1TermsReviewPostExecuteFunc mocks the ApiAuthorizationsV1TermsReviewPostExecute method.
-	ApiAuthorizationsV1TermsReviewPostExecuteFunc func(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *http.Response, error)
+	ApiAuthorizationsV1TermsReviewPostExecuteFunc func(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
 		// ApiAccountsMgmtV1AccessTokenPost holds details about calls to the ApiAccountsMgmtV1AccessTokenPost method.
 		ApiAccountsMgmtV1AccessTokenPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1AccessTokenPostExecute holds details about calls to the ApiAccountsMgmtV1AccessTokenPostExecute method.
 		ApiAccountsMgmtV1AccessTokenPostExecute []struct {
@@ -1097,7 +1097,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsGet holds details about calls to the ApiAccountsMgmtV1AccountsGet method.
 		ApiAccountsMgmtV1AccountsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1AccountsGetExecute holds details about calls to the ApiAccountsMgmtV1AccountsGetExecute method.
 		ApiAccountsMgmtV1AccountsGetExecute []struct {
@@ -1107,7 +1107,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdGet holds details about calls to the ApiAccountsMgmtV1AccountsIdGet method.
 		ApiAccountsMgmtV1AccountsIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1119,7 +1119,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdLabelsGet holds details about calls to the ApiAccountsMgmtV1AccountsIdLabelsGet method.
 		ApiAccountsMgmtV1AccountsIdLabelsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1131,7 +1131,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdLabelsKeyDelete holds details about calls to the ApiAccountsMgmtV1AccountsIdLabelsKeyDelete method.
 		ApiAccountsMgmtV1AccountsIdLabelsKeyDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1145,7 +1145,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdLabelsKeyGet holds details about calls to the ApiAccountsMgmtV1AccountsIdLabelsKeyGet method.
 		ApiAccountsMgmtV1AccountsIdLabelsKeyGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1159,7 +1159,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdLabelsKeyPatch holds details about calls to the ApiAccountsMgmtV1AccountsIdLabelsKeyPatch method.
 		ApiAccountsMgmtV1AccountsIdLabelsKeyPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1173,7 +1173,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdLabelsPost holds details about calls to the ApiAccountsMgmtV1AccountsIdLabelsPost method.
 		ApiAccountsMgmtV1AccountsIdLabelsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1185,7 +1185,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsIdPatch holds details about calls to the ApiAccountsMgmtV1AccountsIdPatch method.
 		ApiAccountsMgmtV1AccountsIdPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1197,7 +1197,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1AccountsPost holds details about calls to the ApiAccountsMgmtV1AccountsPost method.
 		ApiAccountsMgmtV1AccountsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1AccountsPostExecute holds details about calls to the ApiAccountsMgmtV1AccountsPostExecute method.
 		ApiAccountsMgmtV1AccountsPostExecute []struct {
@@ -1207,7 +1207,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1ClusterAuthorizationsPost holds details about calls to the ApiAccountsMgmtV1ClusterAuthorizationsPost method.
 		ApiAccountsMgmtV1ClusterAuthorizationsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1ClusterAuthorizationsPostExecute holds details about calls to the ApiAccountsMgmtV1ClusterAuthorizationsPostExecute method.
 		ApiAccountsMgmtV1ClusterAuthorizationsPostExecute []struct {
@@ -1217,7 +1217,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1ClusterRegistrationsPost holds details about calls to the ApiAccountsMgmtV1ClusterRegistrationsPost method.
 		ApiAccountsMgmtV1ClusterRegistrationsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1ClusterRegistrationsPostExecute holds details about calls to the ApiAccountsMgmtV1ClusterRegistrationsPostExecute method.
 		ApiAccountsMgmtV1ClusterRegistrationsPostExecute []struct {
@@ -1227,7 +1227,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1CurrentAccountGet holds details about calls to the ApiAccountsMgmtV1CurrentAccountGet method.
 		ApiAccountsMgmtV1CurrentAccountGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1CurrentAccountGetExecute holds details about calls to the ApiAccountsMgmtV1CurrentAccountGetExecute method.
 		ApiAccountsMgmtV1CurrentAccountGetExecute []struct {
@@ -1237,7 +1237,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1ErrorsGet holds details about calls to the ApiAccountsMgmtV1ErrorsGet method.
 		ApiAccountsMgmtV1ErrorsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1ErrorsGetExecute holds details about calls to the ApiAccountsMgmtV1ErrorsGetExecute method.
 		ApiAccountsMgmtV1ErrorsGetExecute []struct {
@@ -1247,7 +1247,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1ErrorsIdGet holds details about calls to the ApiAccountsMgmtV1ErrorsIdGet method.
 		ApiAccountsMgmtV1ErrorsIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1259,7 +1259,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1FeatureTogglesIdQueryPost holds details about calls to the ApiAccountsMgmtV1FeatureTogglesIdQueryPost method.
 		ApiAccountsMgmtV1FeatureTogglesIdQueryPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1271,7 +1271,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1LabelsGet holds details about calls to the ApiAccountsMgmtV1LabelsGet method.
 		ApiAccountsMgmtV1LabelsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1LabelsGetExecute holds details about calls to the ApiAccountsMgmtV1LabelsGetExecute method.
 		ApiAccountsMgmtV1LabelsGetExecute []struct {
@@ -1281,7 +1281,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1MetricsGet holds details about calls to the ApiAccountsMgmtV1MetricsGet method.
 		ApiAccountsMgmtV1MetricsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1MetricsGetExecute holds details about calls to the ApiAccountsMgmtV1MetricsGetExecute method.
 		ApiAccountsMgmtV1MetricsGetExecute []struct {
@@ -1291,7 +1291,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1NotifyPost holds details about calls to the ApiAccountsMgmtV1NotifyPost method.
 		ApiAccountsMgmtV1NotifyPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1NotifyPostExecute holds details about calls to the ApiAccountsMgmtV1NotifyPostExecute method.
 		ApiAccountsMgmtV1NotifyPostExecute []struct {
@@ -1301,7 +1301,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsGet holds details about calls to the ApiAccountsMgmtV1OrganizationsGet method.
 		ApiAccountsMgmtV1OrganizationsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1OrganizationsGetExecute holds details about calls to the ApiAccountsMgmtV1OrganizationsGetExecute method.
 		ApiAccountsMgmtV1OrganizationsGetExecute []struct {
@@ -1311,7 +1311,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdGet holds details about calls to the ApiAccountsMgmtV1OrganizationsIdGet method.
 		ApiAccountsMgmtV1OrganizationsIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1323,7 +1323,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdLabelsGet holds details about calls to the ApiAccountsMgmtV1OrganizationsIdLabelsGet method.
 		ApiAccountsMgmtV1OrganizationsIdLabelsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1335,7 +1335,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete holds details about calls to the ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete method.
 		ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1349,7 +1349,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet holds details about calls to the ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet method.
 		ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1363,7 +1363,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch holds details about calls to the ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch method.
 		ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1377,7 +1377,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdLabelsPost holds details about calls to the ApiAccountsMgmtV1OrganizationsIdLabelsPost method.
 		ApiAccountsMgmtV1OrganizationsIdLabelsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1389,7 +1389,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdPatch holds details about calls to the ApiAccountsMgmtV1OrganizationsIdPatch method.
 		ApiAccountsMgmtV1OrganizationsIdPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1401,7 +1401,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet holds details about calls to the ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet method.
 		ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1413,7 +1413,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet method.
 		ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 		}
@@ -1425,7 +1425,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet method.
 		ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 		}
@@ -1437,7 +1437,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet method.
 		ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 		}
@@ -1449,7 +1449,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost method.
 		ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 		}
@@ -1461,7 +1461,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete method.
 		ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 			// QuotaId is the quotaId argument value.
@@ -1475,7 +1475,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet method.
 		ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 			// QuotaId is the quotaId argument value.
@@ -1489,7 +1489,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch holds details about calls to the ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch method.
 		ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// OrgId is the orgId argument value.
 			OrgId string
 			// QuotaId is the quotaId argument value.
@@ -1503,7 +1503,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1OrganizationsPost holds details about calls to the ApiAccountsMgmtV1OrganizationsPost method.
 		ApiAccountsMgmtV1OrganizationsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1OrganizationsPostExecute holds details about calls to the ApiAccountsMgmtV1OrganizationsPostExecute method.
 		ApiAccountsMgmtV1OrganizationsPostExecute []struct {
@@ -1513,7 +1513,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1PlansGet holds details about calls to the ApiAccountsMgmtV1PlansGet method.
 		ApiAccountsMgmtV1PlansGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1PlansGetExecute holds details about calls to the ApiAccountsMgmtV1PlansGetExecute method.
 		ApiAccountsMgmtV1PlansGetExecute []struct {
@@ -1523,7 +1523,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1PlansIdGet holds details about calls to the ApiAccountsMgmtV1PlansIdGet method.
 		ApiAccountsMgmtV1PlansIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1535,7 +1535,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete holds details about calls to the ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete method.
 		ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ExternalResourceId is the externalResourceId argument value.
 			ExternalResourceId string
 		}
@@ -1547,7 +1547,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1PullSecretsPost holds details about calls to the ApiAccountsMgmtV1PullSecretsPost method.
 		ApiAccountsMgmtV1PullSecretsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1PullSecretsPostExecute holds details about calls to the ApiAccountsMgmtV1PullSecretsPostExecute method.
 		ApiAccountsMgmtV1PullSecretsPostExecute []struct {
@@ -1557,7 +1557,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistriesGet holds details about calls to the ApiAccountsMgmtV1RegistriesGet method.
 		ApiAccountsMgmtV1RegistriesGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1RegistriesGetExecute holds details about calls to the ApiAccountsMgmtV1RegistriesGetExecute method.
 		ApiAccountsMgmtV1RegistriesGetExecute []struct {
@@ -1567,7 +1567,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistriesIdGet holds details about calls to the ApiAccountsMgmtV1RegistriesIdGet method.
 		ApiAccountsMgmtV1RegistriesIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1579,7 +1579,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistryCredentialsGet holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsGet method.
 		ApiAccountsMgmtV1RegistryCredentialsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1RegistryCredentialsGetExecute holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsGetExecute method.
 		ApiAccountsMgmtV1RegistryCredentialsGetExecute []struct {
@@ -1589,7 +1589,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistryCredentialsIdDelete holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsIdDelete method.
 		ApiAccountsMgmtV1RegistryCredentialsIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1601,7 +1601,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistryCredentialsIdGet holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsIdGet method.
 		ApiAccountsMgmtV1RegistryCredentialsIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1613,7 +1613,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistryCredentialsIdPatch holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsIdPatch method.
 		ApiAccountsMgmtV1RegistryCredentialsIdPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1625,7 +1625,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RegistryCredentialsPost holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsPost method.
 		ApiAccountsMgmtV1RegistryCredentialsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1RegistryCredentialsPostExecute holds details about calls to the ApiAccountsMgmtV1RegistryCredentialsPostExecute method.
 		ApiAccountsMgmtV1RegistryCredentialsPostExecute []struct {
@@ -1635,7 +1635,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1ReservedResourcesGet holds details about calls to the ApiAccountsMgmtV1ReservedResourcesGet method.
 		ApiAccountsMgmtV1ReservedResourcesGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1ReservedResourcesGetExecute holds details about calls to the ApiAccountsMgmtV1ReservedResourcesGetExecute method.
 		ApiAccountsMgmtV1ReservedResourcesGetExecute []struct {
@@ -1645,7 +1645,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1ResourceQuotaGet holds details about calls to the ApiAccountsMgmtV1ResourceQuotaGet method.
 		ApiAccountsMgmtV1ResourceQuotaGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1ResourceQuotaGetExecute holds details about calls to the ApiAccountsMgmtV1ResourceQuotaGetExecute method.
 		ApiAccountsMgmtV1ResourceQuotaGetExecute []struct {
@@ -1655,7 +1655,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RoleBindingsGet holds details about calls to the ApiAccountsMgmtV1RoleBindingsGet method.
 		ApiAccountsMgmtV1RoleBindingsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1RoleBindingsGetExecute holds details about calls to the ApiAccountsMgmtV1RoleBindingsGetExecute method.
 		ApiAccountsMgmtV1RoleBindingsGetExecute []struct {
@@ -1665,7 +1665,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RoleBindingsIdDelete holds details about calls to the ApiAccountsMgmtV1RoleBindingsIdDelete method.
 		ApiAccountsMgmtV1RoleBindingsIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1677,7 +1677,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RoleBindingsIdGet holds details about calls to the ApiAccountsMgmtV1RoleBindingsIdGet method.
 		ApiAccountsMgmtV1RoleBindingsIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1689,7 +1689,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RoleBindingsIdPatch holds details about calls to the ApiAccountsMgmtV1RoleBindingsIdPatch method.
 		ApiAccountsMgmtV1RoleBindingsIdPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1701,7 +1701,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RoleBindingsPost holds details about calls to the ApiAccountsMgmtV1RoleBindingsPost method.
 		ApiAccountsMgmtV1RoleBindingsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1RoleBindingsPostExecute holds details about calls to the ApiAccountsMgmtV1RoleBindingsPostExecute method.
 		ApiAccountsMgmtV1RoleBindingsPostExecute []struct {
@@ -1711,7 +1711,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RolesGet holds details about calls to the ApiAccountsMgmtV1RolesGet method.
 		ApiAccountsMgmtV1RolesGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1RolesGetExecute holds details about calls to the ApiAccountsMgmtV1RolesGetExecute method.
 		ApiAccountsMgmtV1RolesGetExecute []struct {
@@ -1721,7 +1721,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1RolesIdGet holds details about calls to the ApiAccountsMgmtV1RolesIdGet method.
 		ApiAccountsMgmtV1RolesIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1733,7 +1733,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SkuRulesGet holds details about calls to the ApiAccountsMgmtV1SkuRulesGet method.
 		ApiAccountsMgmtV1SkuRulesGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1SkuRulesGetExecute holds details about calls to the ApiAccountsMgmtV1SkuRulesGetExecute method.
 		ApiAccountsMgmtV1SkuRulesGetExecute []struct {
@@ -1743,7 +1743,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SkuRulesIdGet holds details about calls to the ApiAccountsMgmtV1SkuRulesIdGet method.
 		ApiAccountsMgmtV1SkuRulesIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1755,7 +1755,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SkusGet holds details about calls to the ApiAccountsMgmtV1SkusGet method.
 		ApiAccountsMgmtV1SkusGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1SkusGetExecute holds details about calls to the ApiAccountsMgmtV1SkusGetExecute method.
 		ApiAccountsMgmtV1SkusGetExecute []struct {
@@ -1765,7 +1765,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SkusIdGet holds details about calls to the ApiAccountsMgmtV1SkusIdGet method.
 		ApiAccountsMgmtV1SkusIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1777,7 +1777,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsGet method.
 		ApiAccountsMgmtV1SubscriptionsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1SubscriptionsGetExecute holds details about calls to the ApiAccountsMgmtV1SubscriptionsGetExecute method.
 		ApiAccountsMgmtV1SubscriptionsGetExecute []struct {
@@ -1787,7 +1787,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdDelete holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdDelete method.
 		ApiAccountsMgmtV1SubscriptionsIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1799,7 +1799,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdGet method.
 		ApiAccountsMgmtV1SubscriptionsIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1811,7 +1811,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdLabelsGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdLabelsGet method.
 		ApiAccountsMgmtV1SubscriptionsIdLabelsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1823,7 +1823,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete method.
 		ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1837,7 +1837,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet method.
 		ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1851,7 +1851,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch method.
 		ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 			// Key is the key argument value.
@@ -1865,7 +1865,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdLabelsPost holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdLabelsPost method.
 		ApiAccountsMgmtV1SubscriptionsIdLabelsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1877,7 +1877,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdNotifyPost holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdNotifyPost method.
 		ApiAccountsMgmtV1SubscriptionsIdNotifyPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1889,7 +1889,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdPatch holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdPatch method.
 		ApiAccountsMgmtV1SubscriptionsIdPatch []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1901,7 +1901,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet method.
 		ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1913,7 +1913,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet method.
 		ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// ID is the id argument value.
 			ID string
 		}
@@ -1925,7 +1925,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsPost holds details about calls to the ApiAccountsMgmtV1SubscriptionsPost method.
 		ApiAccountsMgmtV1SubscriptionsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1SubscriptionsPostExecute holds details about calls to the ApiAccountsMgmtV1SubscriptionsPostExecute method.
 		ApiAccountsMgmtV1SubscriptionsPostExecute []struct {
@@ -1935,7 +1935,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete holds details about calls to the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete method.
 		ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// SubId is the subId argument value.
 			SubId string
 			// AccountId is the accountId argument value.
@@ -1949,7 +1949,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet method.
 		ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// SubId is the subId argument value.
 			SubId string
 		}
@@ -1961,7 +1961,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost holds details about calls to the ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost method.
 		ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// SubId is the subId argument value.
 			SubId string
 		}
@@ -1973,7 +1973,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet holds details about calls to the ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet method.
 		ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// SubId is the subId argument value.
 			SubId string
 			// ReservedResourceId is the reservedResourceId argument value.
@@ -1987,7 +1987,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SupportCasesCaseIdDelete holds details about calls to the ApiAccountsMgmtV1SupportCasesCaseIdDelete method.
 		ApiAccountsMgmtV1SupportCasesCaseIdDelete []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 			// CaseId is the caseId argument value.
 			CaseId string
 		}
@@ -1999,7 +1999,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1SupportCasesPost holds details about calls to the ApiAccountsMgmtV1SupportCasesPost method.
 		ApiAccountsMgmtV1SupportCasesPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1SupportCasesPostExecute holds details about calls to the ApiAccountsMgmtV1SupportCasesPostExecute method.
 		ApiAccountsMgmtV1SupportCasesPostExecute []struct {
@@ -2009,7 +2009,7 @@ type DefaultApiMock struct {
 		// ApiAccountsMgmtV1TokenAuthorizationPost holds details about calls to the ApiAccountsMgmtV1TokenAuthorizationPost method.
 		ApiAccountsMgmtV1TokenAuthorizationPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAccountsMgmtV1TokenAuthorizationPostExecute holds details about calls to the ApiAccountsMgmtV1TokenAuthorizationPostExecute method.
 		ApiAccountsMgmtV1TokenAuthorizationPostExecute []struct {
@@ -2019,7 +2019,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1AccessReviewPost holds details about calls to the ApiAuthorizationsV1AccessReviewPost method.
 		ApiAuthorizationsV1AccessReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1AccessReviewPostExecute holds details about calls to the ApiAuthorizationsV1AccessReviewPostExecute method.
 		ApiAuthorizationsV1AccessReviewPostExecute []struct {
@@ -2029,7 +2029,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1CapabilityReviewPost holds details about calls to the ApiAuthorizationsV1CapabilityReviewPost method.
 		ApiAuthorizationsV1CapabilityReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1CapabilityReviewPostExecute holds details about calls to the ApiAuthorizationsV1CapabilityReviewPostExecute method.
 		ApiAuthorizationsV1CapabilityReviewPostExecute []struct {
@@ -2039,7 +2039,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1ExportControlReviewPost holds details about calls to the ApiAuthorizationsV1ExportControlReviewPost method.
 		ApiAuthorizationsV1ExportControlReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1ExportControlReviewPostExecute holds details about calls to the ApiAuthorizationsV1ExportControlReviewPostExecute method.
 		ApiAuthorizationsV1ExportControlReviewPostExecute []struct {
@@ -2049,7 +2049,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1ResourceReviewPost holds details about calls to the ApiAuthorizationsV1ResourceReviewPost method.
 		ApiAuthorizationsV1ResourceReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1ResourceReviewPostExecute holds details about calls to the ApiAuthorizationsV1ResourceReviewPostExecute method.
 		ApiAuthorizationsV1ResourceReviewPostExecute []struct {
@@ -2059,7 +2059,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1SelfAccessReviewPost holds details about calls to the ApiAuthorizationsV1SelfAccessReviewPost method.
 		ApiAuthorizationsV1SelfAccessReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1SelfAccessReviewPostExecute holds details about calls to the ApiAuthorizationsV1SelfAccessReviewPostExecute method.
 		ApiAuthorizationsV1SelfAccessReviewPostExecute []struct {
@@ -2069,7 +2069,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1SelfResourceReviewPost holds details about calls to the ApiAuthorizationsV1SelfResourceReviewPost method.
 		ApiAuthorizationsV1SelfResourceReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1SelfResourceReviewPostExecute holds details about calls to the ApiAuthorizationsV1SelfResourceReviewPostExecute method.
 		ApiAuthorizationsV1SelfResourceReviewPostExecute []struct {
@@ -2079,7 +2079,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1SelfTermsReviewPost holds details about calls to the ApiAuthorizationsV1SelfTermsReviewPost method.
 		ApiAuthorizationsV1SelfTermsReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1SelfTermsReviewPostExecute holds details about calls to the ApiAuthorizationsV1SelfTermsReviewPostExecute method.
 		ApiAuthorizationsV1SelfTermsReviewPostExecute []struct {
@@ -2089,7 +2089,7 @@ type DefaultApiMock struct {
 		// ApiAuthorizationsV1TermsReviewPost holds details about calls to the ApiAuthorizationsV1TermsReviewPost method.
 		ApiAuthorizationsV1TermsReviewPost []struct {
 			// Ctx is the ctx argument value.
-			Ctx context.Context
+			Ctx _context.Context
 		}
 		// ApiAuthorizationsV1TermsReviewPostExecute holds details about calls to the ApiAuthorizationsV1TermsReviewPostExecute method.
 		ApiAuthorizationsV1TermsReviewPostExecute []struct {
@@ -2276,12 +2276,12 @@ type DefaultApiMock struct {
 }
 
 // ApiAccountsMgmtV1AccessTokenPost calls ApiAccountsMgmtV1AccessTokenPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPost(ctx context.Context) ApiApiAccountsMgmtV1AccessTokenPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPost(ctx _context.Context) ApiApiAccountsMgmtV1AccessTokenPostRequest {
 	if mock.ApiAccountsMgmtV1AccessTokenPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccessTokenPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccessTokenPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -2295,10 +2295,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPost(ctx context.Context
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccessTokenPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1AccessTokenPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1AccessTokenPost
@@ -2307,7 +2307,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1AccessTokenPostExecute calls ApiAccountsMgmtV1AccessTokenPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPostExecute(r ApiApiAccountsMgmtV1AccessTokenPostRequest) (AccessTokenCfg, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccessTokenPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccessTokenPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccessTokenPostExecute was just called")
 	}
@@ -2338,12 +2338,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccessTokenPostExecuteCalls() []str
 }
 
 // ApiAccountsMgmtV1AccountsGet calls ApiAccountsMgmtV1AccountsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGet(ctx context.Context) ApiApiAccountsMgmtV1AccountsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGet(ctx _context.Context) ApiApiAccountsMgmtV1AccountsGetRequest {
 	if mock.ApiAccountsMgmtV1AccountsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -2357,10 +2357,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGet(ctx context.Context) Ap
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1AccountsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1AccountsGet
@@ -2369,7 +2369,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1AccountsGetExecute calls ApiAccountsMgmtV1AccountsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGetExecute(r ApiApiAccountsMgmtV1AccountsGetRequest) (AccountList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsGetExecute was just called")
 	}
@@ -2400,12 +2400,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsGetExecuteCalls() []struct 
 }
 
 // ApiAccountsMgmtV1AccountsIdGet calls ApiAccountsMgmtV1AccountsIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdGetRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -2421,11 +2421,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGet(ctx context.Context, 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1AccountsIdGet.RLock()
@@ -2435,7 +2435,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1AccountsIdGetExecute calls ApiAccountsMgmtV1AccountsIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGetExecute(r ApiApiAccountsMgmtV1AccountsIdGetRequest) (Account, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdGetExecute was just called")
 	}
@@ -2466,12 +2466,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdGetExecuteCalls() []struc
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsGet calls ApiAccountsMgmtV1AccountsIdLabelsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGet(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -2487,11 +2487,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGet(ctx context.Con
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdLabelsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1AccountsIdLabelsGet.RLock()
@@ -2501,7 +2501,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGetCalls() []struct
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsGetExecute calls ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsGetExecute was just called")
 	}
@@ -2532,12 +2532,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsGetExecuteCalls() [
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsKeyDelete calls ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDelete(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDelete(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyDelete was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -2555,12 +2555,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDelete(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -2571,7 +2571,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteCalls() []
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute calls ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecute was just called")
 	}
@@ -2602,12 +2602,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyDeleteExecuteCal
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsKeyGet calls ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGet(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGet(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsKeyGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -2625,12 +2625,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGet(ctx context.
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -2641,7 +2641,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGetCalls() []str
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute calls ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecute was just called")
 	}
@@ -2672,12 +2672,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyGetExecuteCalls(
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsKeyPatch calls ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatch(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatch(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -2695,12 +2695,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatch(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -2711,7 +2711,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchCalls() []s
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute calls ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecute was just called")
 	}
@@ -2742,12 +2742,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsKeyPatchExecuteCall
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsPost calls ApiAccountsMgmtV1AccountsIdLabelsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPost(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPost(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -2763,11 +2763,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPost(ctx context.Co
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdLabelsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1AccountsIdLabelsPost.RLock()
@@ -2777,7 +2777,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPostCalls() []struc
 }
 
 // ApiAccountsMgmtV1AccountsIdLabelsPostExecute calls ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPostExecute(r ApiApiAccountsMgmtV1AccountsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdLabelsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdLabelsPostExecute was just called")
 	}
@@ -2808,12 +2808,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdLabelsPostExecuteCalls() 
 }
 
 // ApiAccountsMgmtV1AccountsIdPatch calls ApiAccountsMgmtV1AccountsIdPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatch(ctx context.Context, id string) ApiApiAccountsMgmtV1AccountsIdPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatch(ctx _context.Context, id string) ApiApiAccountsMgmtV1AccountsIdPatchRequest {
 	if mock.ApiAccountsMgmtV1AccountsIdPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -2829,11 +2829,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatch(ctx context.Context
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsIdPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1AccountsIdPatch.RLock()
@@ -2843,7 +2843,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatchCalls() []struct {
 }
 
 // ApiAccountsMgmtV1AccountsIdPatchExecute calls ApiAccountsMgmtV1AccountsIdPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatchExecute(r ApiApiAccountsMgmtV1AccountsIdPatchRequest) (Account, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsIdPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsIdPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsIdPatchExecute was just called")
 	}
@@ -2874,12 +2874,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsIdPatchExecuteCalls() []str
 }
 
 // ApiAccountsMgmtV1AccountsPost calls ApiAccountsMgmtV1AccountsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPost(ctx context.Context) ApiApiAccountsMgmtV1AccountsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPost(ctx _context.Context) ApiApiAccountsMgmtV1AccountsPostRequest {
 	if mock.ApiAccountsMgmtV1AccountsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -2893,10 +2893,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPost(ctx context.Context) A
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1AccountsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1AccountsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1AccountsPost
@@ -2905,7 +2905,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1AccountsPostExecute calls ApiAccountsMgmtV1AccountsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPostExecute(r ApiApiAccountsMgmtV1AccountsPostRequest) (Account, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1AccountsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1AccountsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1AccountsPostExecute was just called")
 	}
@@ -2936,12 +2936,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1AccountsPostExecuteCalls() []struct
 }
 
 // ApiAccountsMgmtV1ClusterAuthorizationsPost calls ApiAccountsMgmtV1ClusterAuthorizationsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPost(ctx context.Context) ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPost(ctx _context.Context) ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest {
 	if mock.ApiAccountsMgmtV1ClusterAuthorizationsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ClusterAuthorizationsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ClusterAuthorizationsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -2955,10 +2955,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPost(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1ClusterAuthorizationsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1ClusterAuthorizationsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1ClusterAuthorizationsPost
@@ -2967,7 +2967,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPostCalls() []
 }
 
 // ApiAccountsMgmtV1ClusterAuthorizationsPostExecute calls ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPostExecute(r ApiApiAccountsMgmtV1ClusterAuthorizationsPostRequest) (ClusterAuthorizationResponse, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ClusterAuthorizationsPostExecute was just called")
 	}
@@ -2998,12 +2998,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterAuthorizationsPostExecuteCal
 }
 
 // ApiAccountsMgmtV1ClusterRegistrationsPost calls ApiAccountsMgmtV1ClusterRegistrationsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPost(ctx context.Context) ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPost(ctx _context.Context) ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest {
 	if mock.ApiAccountsMgmtV1ClusterRegistrationsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ClusterRegistrationsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ClusterRegistrationsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3017,10 +3017,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPost(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1ClusterRegistrationsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1ClusterRegistrationsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1ClusterRegistrationsPost
@@ -3029,7 +3029,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPostCalls() []s
 }
 
 // ApiAccountsMgmtV1ClusterRegistrationsPostExecute calls ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPostExecute(r ApiApiAccountsMgmtV1ClusterRegistrationsPostRequest) (ClusterRegistrationResponse, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ClusterRegistrationsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ClusterRegistrationsPostExecute was just called")
 	}
@@ -3060,12 +3060,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ClusterRegistrationsPostExecuteCall
 }
 
 // ApiAccountsMgmtV1CurrentAccountGet calls ApiAccountsMgmtV1CurrentAccountGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGet(ctx context.Context) ApiApiAccountsMgmtV1CurrentAccountGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGet(ctx _context.Context) ApiApiAccountsMgmtV1CurrentAccountGetRequest {
 	if mock.ApiAccountsMgmtV1CurrentAccountGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1CurrentAccountGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1CurrentAccountGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3079,10 +3079,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGet(ctx context.Conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1CurrentAccountGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1CurrentAccountGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1CurrentAccountGet
@@ -3091,7 +3091,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1CurrentAccountGetExecute calls ApiAccountsMgmtV1CurrentAccountGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGetExecute(r ApiApiAccountsMgmtV1CurrentAccountGetRequest) (Account, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1CurrentAccountGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1CurrentAccountGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1CurrentAccountGetExecute was just called")
 	}
@@ -3122,12 +3122,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1CurrentAccountGetExecuteCalls() []s
 }
 
 // ApiAccountsMgmtV1ErrorsGet calls ApiAccountsMgmtV1ErrorsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGet(ctx context.Context) ApiApiAccountsMgmtV1ErrorsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGet(ctx _context.Context) ApiApiAccountsMgmtV1ErrorsGetRequest {
 	if mock.ApiAccountsMgmtV1ErrorsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ErrorsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ErrorsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3141,10 +3141,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGet(ctx context.Context) ApiA
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1ErrorsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1ErrorsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1ErrorsGet
@@ -3153,7 +3153,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1ErrorsGetExecute calls ApiAccountsMgmtV1ErrorsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGetExecute(r ApiApiAccountsMgmtV1ErrorsGetRequest) (ErrorList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1ErrorsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ErrorsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ErrorsGetExecute was just called")
 	}
@@ -3184,12 +3184,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1ErrorsIdGet calls ApiAccountsMgmtV1ErrorsIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1ErrorsIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1ErrorsIdGetRequest {
 	if mock.ApiAccountsMgmtV1ErrorsIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ErrorsIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ErrorsIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -3205,11 +3205,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGet(ctx context.Context, id
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1ErrorsIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1ErrorsIdGet.RLock()
@@ -3219,7 +3219,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1ErrorsIdGetExecute calls ApiAccountsMgmtV1ErrorsIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGetExecute(r ApiApiAccountsMgmtV1ErrorsIdGetRequest) (Error, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1ErrorsIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ErrorsIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ErrorsIdGetExecute was just called")
 	}
@@ -3250,12 +3250,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ErrorsIdGetExecuteCalls() []struct 
 }
 
 // ApiAccountsMgmtV1FeatureTogglesIdQueryPost calls ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPost(ctx context.Context, id string) ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPost(ctx _context.Context, id string) ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest {
 	if mock.ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1FeatureTogglesIdQueryPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1FeatureTogglesIdQueryPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -3271,11 +3271,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPost(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1FeatureTogglesIdQueryPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1FeatureTogglesIdQueryPost.RLock()
@@ -3285,7 +3285,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPostCalls() []
 }
 
 // ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute calls ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute(r ApiApiAccountsMgmtV1FeatureTogglesIdQueryPostRequest) (FeatureToggle, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecute was just called")
 	}
@@ -3316,12 +3316,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1FeatureTogglesIdQueryPostExecuteCal
 }
 
 // ApiAccountsMgmtV1LabelsGet calls ApiAccountsMgmtV1LabelsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGet(ctx context.Context) ApiApiAccountsMgmtV1LabelsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGet(ctx _context.Context) ApiApiAccountsMgmtV1LabelsGetRequest {
 	if mock.ApiAccountsMgmtV1LabelsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1LabelsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1LabelsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3335,10 +3335,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGet(ctx context.Context) ApiA
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1LabelsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1LabelsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1LabelsGet
@@ -3347,7 +3347,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1LabelsGetExecute calls ApiAccountsMgmtV1LabelsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGetExecute(r ApiApiAccountsMgmtV1LabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1LabelsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1LabelsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1LabelsGetExecute was just called")
 	}
@@ -3378,12 +3378,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1LabelsGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1MetricsGet calls ApiAccountsMgmtV1MetricsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGet(ctx context.Context) ApiApiAccountsMgmtV1MetricsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGet(ctx _context.Context) ApiApiAccountsMgmtV1MetricsGetRequest {
 	if mock.ApiAccountsMgmtV1MetricsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1MetricsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1MetricsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3397,10 +3397,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGet(ctx context.Context) Api
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1MetricsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1MetricsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1MetricsGet
@@ -3409,7 +3409,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1MetricsGetExecute calls ApiAccountsMgmtV1MetricsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGetExecute(r ApiApiAccountsMgmtV1MetricsGetRequest) (MetricsList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1MetricsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1MetricsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1MetricsGetExecute was just called")
 	}
@@ -3440,12 +3440,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1MetricsGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1NotifyPost calls ApiAccountsMgmtV1NotifyPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPost(ctx context.Context) ApiApiAccountsMgmtV1NotifyPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPost(ctx _context.Context) ApiApiAccountsMgmtV1NotifyPostRequest {
 	if mock.ApiAccountsMgmtV1NotifyPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1NotifyPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1NotifyPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3459,10 +3459,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPost(ctx context.Context) Api
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1NotifyPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1NotifyPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1NotifyPost
@@ -3471,7 +3471,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1NotifyPostExecute calls ApiAccountsMgmtV1NotifyPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsMgmtV1NotifyPostRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPostExecute(r ApiApiAccountsMgmtV1NotifyPostRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1NotifyPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1NotifyPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1NotifyPostExecute was just called")
 	}
@@ -3502,12 +3502,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1NotifyPostExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1OrganizationsGet calls ApiAccountsMgmtV1OrganizationsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGet(ctx context.Context) ApiApiAccountsMgmtV1OrganizationsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGet(ctx _context.Context) ApiApiAccountsMgmtV1OrganizationsGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -3521,10 +3521,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGet(ctx context.Contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1OrganizationsGet
@@ -3533,7 +3533,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1OrganizationsGetExecute calls ApiAccountsMgmtV1OrganizationsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGetExecute(r ApiApiAccountsMgmtV1OrganizationsGetRequest) (OrganizationList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsGetExecute was just called")
 	}
@@ -3564,12 +3564,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsGetExecuteCalls() []st
 }
 
 // ApiAccountsMgmtV1OrganizationsIdGet calls ApiAccountsMgmtV1OrganizationsIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -3585,11 +3585,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGet(ctx context.Cont
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsIdGet.RLock()
@@ -3599,7 +3599,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGetCalls() []struct 
 }
 
 // ApiAccountsMgmtV1OrganizationsIdGetExecute calls ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdGetRequest) (Organization, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdGetExecute was just called")
 	}
@@ -3630,12 +3630,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdGetExecuteCalls() []
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsGet calls ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGet(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -3651,11 +3651,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGet(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsIdLabelsGet.RLock()
@@ -3665,7 +3665,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGetCalls() []s
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute calls ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsGetExecute was just called")
 	}
@@ -3696,12 +3696,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsGetExecuteCall
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete calls ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -3719,12 +3719,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDelete(ctx 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -3735,7 +3735,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteCalls
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute calls ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecute was just called")
 	}
@@ -3766,12 +3766,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyDeleteExecu
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet calls ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -3789,12 +3789,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGet(ctx con
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -3805,7 +3805,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetCalls() 
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute calls ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecute was just called")
 	}
@@ -3836,12 +3836,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyGetExecuteC
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch calls ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -3859,12 +3859,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatch(ctx c
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -3875,7 +3875,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchCalls(
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute calls ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecute was just called")
 	}
@@ -3906,12 +3906,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsKeyPatchExecut
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsPost calls ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPost(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPost(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -3927,11 +3927,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPost(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsIdLabelsPost.RLock()
@@ -3941,7 +3941,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPostCalls() []
 }
 
 // ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute calls ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute(r ApiApiAccountsMgmtV1OrganizationsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdLabelsPostExecute was just called")
 	}
@@ -3972,12 +3972,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdLabelsPostExecuteCal
 }
 
 // ApiAccountsMgmtV1OrganizationsIdPatch calls ApiAccountsMgmtV1OrganizationsIdPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatch(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatch(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdPatchRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -3993,11 +3993,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatch(ctx context.Co
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsIdPatch.RLock()
@@ -4007,7 +4007,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatchCalls() []struc
 }
 
 // ApiAccountsMgmtV1OrganizationsIdPatchExecute calls ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsIdPatchRequest) (Organization, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdPatchExecute was just called")
 	}
@@ -4038,12 +4038,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdPatchExecuteCalls() 
 }
 
 // ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet calls ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet(ctx context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -4059,11 +4059,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet(
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsIdSummaryDashboardGet.RLock()
@@ -4073,7 +4073,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetC
 }
 
 // ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute calls ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute(r ApiApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetRequest) (Summary, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetExecute was just called")
 	}
@@ -4104,12 +4104,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsIdSummaryDashboardGetE
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet calls ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet was just called")
 	}
 	callInfo := struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}{
 		Ctx:   ctx,
@@ -4125,11 +4125,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetCalls() []struct {
-	Ctx   context.Context
+	Ctx   _context.Context
 	OrgId string
 } {
 	var calls []struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet.RLock()
@@ -4139,7 +4139,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetCalls
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute calls ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetRequest) (QuotaCostList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecute was just called")
 	}
@@ -4170,12 +4170,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGetExecu
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet calls ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet was just called")
 	}
 	callInfo := struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}{
 		Ctx:   ctx,
@@ -4191,11 +4191,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet(c
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetCalls() []struct {
-	Ctx   context.Context
+	Ctx   _context.Context
 	OrgId string
 } {
 	var calls []struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGet.RLock()
@@ -4205,7 +4205,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetCa
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute calls ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetRequest) (QuotaSummaryList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetExecute was just called")
 	}
@@ -4236,12 +4236,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdQuotaSummaryGetEx
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet was just called")
 	}
 	callInfo := struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}{
 		Ctx:   ctx,
@@ -4257,11 +4257,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet(
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetCalls() []struct {
-	Ctx   context.Context
+	Ctx   _context.Context
 	OrgId string
 } {
 	var calls []struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGet.RLock()
@@ -4271,7 +4271,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetC
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetExecute was just called")
 	}
@@ -4302,12 +4302,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaGetE
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost(ctx context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost(ctx _context.Context, orgId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost was just called")
 	}
 	callInfo := struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}{
 		Ctx:   ctx,
@@ -4323,11 +4323,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostCalls() []struct {
-	Ctx   context.Context
+	Ctx   _context.Context
 	OrgId string
 } {
 	var calls []struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		OrgId string
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost.RLock()
@@ -4337,7 +4337,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostRequest) (ResourceQuota, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPostExecute was just called")
 	}
@@ -4368,12 +4368,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaPost
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx     context.Context
+		Ctx     _context.Context
 		OrgId   string
 		QuotaId string
 	}{
@@ -4391,12 +4391,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteCalls() []struct {
-	Ctx     context.Context
+	Ctx     _context.Context
 	OrgId   string
 	QuotaId string
 } {
 	var calls []struct {
-		Ctx     context.Context
+		Ctx     _context.Context
 		OrgId   string
 		QuotaId string
 	}
@@ -4407,7 +4407,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdDeleteExecute was just called")
 	}
@@ -4438,12 +4438,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx     context.Context
+		Ctx     _context.Context
 		OrgId   string
 		QuotaId string
 	}{
@@ -4461,12 +4461,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetCalls() []struct {
-	Ctx     context.Context
+	Ctx     _context.Context
 	OrgId   string
 	QuotaId string
 } {
 	var calls []struct {
-		Ctx     context.Context
+		Ctx     _context.Context
 		OrgId   string
 		QuotaId string
 	}
@@ -4477,7 +4477,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetRequest) (ResourceQuota, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdGetExecute was just called")
 	}
@@ -4508,12 +4508,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch(ctx context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch(ctx _context.Context, orgId string, quotaId string) ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatch was just called")
 	}
 	callInfo := struct {
-		Ctx     context.Context
+		Ctx     _context.Context
 		OrgId   string
 		QuotaId string
 	}{
@@ -4531,12 +4531,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchCalls() []struct {
-	Ctx     context.Context
+	Ctx     _context.Context
 	OrgId   string
 	QuotaId string
 } {
 	var calls []struct {
-		Ctx     context.Context
+		Ctx     _context.Context
 		OrgId   string
 		QuotaId string
 	}
@@ -4547,7 +4547,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 }
 
 // ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute calls ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute(r ApiApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchRequest) (ResourceQuota, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuotaIdPatchExecute was just called")
 	}
@@ -4578,12 +4578,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsOrgIdResourceQuotaQuot
 }
 
 // ApiAccountsMgmtV1OrganizationsPost calls ApiAccountsMgmtV1OrganizationsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPost(ctx context.Context) ApiApiAccountsMgmtV1OrganizationsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPost(ctx _context.Context) ApiApiAccountsMgmtV1OrganizationsPostRequest {
 	if mock.ApiAccountsMgmtV1OrganizationsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -4597,10 +4597,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPost(ctx context.Conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1OrganizationsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1OrganizationsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1OrganizationsPost
@@ -4609,7 +4609,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1OrganizationsPostExecute calls ApiAccountsMgmtV1OrganizationsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPostExecute(r ApiApiAccountsMgmtV1OrganizationsPostRequest) (Organization, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1OrganizationsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1OrganizationsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1OrganizationsPostExecute was just called")
 	}
@@ -4640,12 +4640,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1OrganizationsPostExecuteCalls() []s
 }
 
 // ApiAccountsMgmtV1PlansGet calls ApiAccountsMgmtV1PlansGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGet(ctx context.Context) ApiApiAccountsMgmtV1PlansGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGet(ctx _context.Context) ApiApiAccountsMgmtV1PlansGetRequest {
 	if mock.ApiAccountsMgmtV1PlansGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PlansGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PlansGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -4659,10 +4659,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGet(ctx context.Context) ApiAp
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1PlansGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1PlansGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1PlansGet
@@ -4671,7 +4671,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1PlansGetExecute calls ApiAccountsMgmtV1PlansGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGetExecute(r ApiApiAccountsMgmtV1PlansGetRequest) (PlanList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1PlansGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PlansGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PlansGetExecute was just called")
 	}
@@ -4702,12 +4702,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1PlansIdGet calls ApiAccountsMgmtV1PlansIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1PlansIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1PlansIdGetRequest {
 	if mock.ApiAccountsMgmtV1PlansIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PlansIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PlansIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -4723,11 +4723,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGet(ctx context.Context, id 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1PlansIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1PlansIdGet.RLock()
@@ -4737,7 +4737,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1PlansIdGetExecute calls ApiAccountsMgmtV1PlansIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGetExecute(r ApiApiAccountsMgmtV1PlansIdGetRequest) (Plan, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1PlansIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PlansIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PlansIdGetExecute was just called")
 	}
@@ -4768,12 +4768,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PlansIdGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete calls ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete(ctx context.Context, externalResourceId string) ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete(ctx _context.Context, externalResourceId string) ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx                context.Context
+		Ctx                _context.Context
 		ExternalResourceId string
 	}{
 		Ctx:                ctx,
@@ -4789,11 +4789,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteCalls() []struct {
-	Ctx                context.Context
+	Ctx                _context.Context
 	ExternalResourceId string
 } {
 	var calls []struct {
-		Ctx                context.Context
+		Ctx                _context.Context
 		ExternalResourceId string
 	}
 	mock.lockApiAccountsMgmtV1PullSecretsExternalResourceIdDelete.RLock()
@@ -4803,7 +4803,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete
 }
 
 // ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute calls ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute(r ApiApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PullSecretsExternalResourceIdDeleteExecute was just called")
 	}
@@ -4834,12 +4834,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsExternalResourceIdDelete
 }
 
 // ApiAccountsMgmtV1PullSecretsPost calls ApiAccountsMgmtV1PullSecretsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPost(ctx context.Context) ApiApiAccountsMgmtV1PullSecretsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPost(ctx _context.Context) ApiApiAccountsMgmtV1PullSecretsPostRequest {
 	if mock.ApiAccountsMgmtV1PullSecretsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PullSecretsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PullSecretsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -4853,10 +4853,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPost(ctx context.Context
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1PullSecretsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1PullSecretsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1PullSecretsPost
@@ -4865,7 +4865,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1PullSecretsPostExecute calls ApiAccountsMgmtV1PullSecretsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPostExecute(r ApiApiAccountsMgmtV1PullSecretsPostRequest) (AccessTokenCfg, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1PullSecretsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1PullSecretsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1PullSecretsPostExecute was just called")
 	}
@@ -4896,12 +4896,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1PullSecretsPostExecuteCalls() []str
 }
 
 // ApiAccountsMgmtV1RegistriesGet calls ApiAccountsMgmtV1RegistriesGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGet(ctx context.Context) ApiApiAccountsMgmtV1RegistriesGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGet(ctx _context.Context) ApiApiAccountsMgmtV1RegistriesGetRequest {
 	if mock.ApiAccountsMgmtV1RegistriesGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistriesGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistriesGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -4915,10 +4915,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGet(ctx context.Context) 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistriesGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1RegistriesGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1RegistriesGet
@@ -4927,7 +4927,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RegistriesGetExecute calls ApiAccountsMgmtV1RegistriesGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGetExecute(r ApiApiAccountsMgmtV1RegistriesGetRequest) (RegistryList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistriesGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistriesGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistriesGetExecute was just called")
 	}
@@ -4958,12 +4958,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesGetExecuteCalls() []struc
 }
 
 // ApiAccountsMgmtV1RegistriesIdGet calls ApiAccountsMgmtV1RegistriesIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistriesIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistriesIdGetRequest {
 	if mock.ApiAccountsMgmtV1RegistriesIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistriesIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistriesIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -4979,11 +4979,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGet(ctx context.Context
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistriesIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RegistriesIdGet.RLock()
@@ -4993,7 +4993,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RegistriesIdGetExecute calls ApiAccountsMgmtV1RegistriesIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGetExecute(r ApiApiAccountsMgmtV1RegistriesIdGetRequest) (Registry, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistriesIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistriesIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistriesIdGetExecute was just called")
 	}
@@ -5024,12 +5024,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistriesIdGetExecuteCalls() []str
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsGet calls ApiAccountsMgmtV1RegistryCredentialsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGet(ctx context.Context) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGet(ctx _context.Context) ApiApiAccountsMgmtV1RegistryCredentialsGetRequest {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5043,10 +5043,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGet(ctx context.
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistryCredentialsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1RegistryCredentialsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1RegistryCredentialsGet
@@ -5055,7 +5055,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGetCalls() []str
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsGetExecute calls ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsGetRequest) (RegistryCredentialList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsGetExecute was just called")
 	}
@@ -5086,12 +5086,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsGetExecuteCalls(
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsIdDelete calls ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDelete(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDelete(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5107,11 +5107,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDelete(ctx con
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDeleteCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RegistryCredentialsIdDelete.RLock()
@@ -5121,7 +5121,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDeleteCalls() 
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute calls ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecute was just called")
 	}
@@ -5152,12 +5152,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdDeleteExecuteC
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsIdGet calls ApiAccountsMgmtV1RegistryCredentialsIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5173,11 +5173,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGet(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RegistryCredentialsIdGet.RLock()
@@ -5187,7 +5187,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGetCalls() []s
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsIdGetExecute calls ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGetExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdGetRequest) (RegistryCredential, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdGetExecute was just called")
 	}
@@ -5218,12 +5218,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdGetExecuteCall
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsIdPatch calls ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatch(ctx context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatch(ctx _context.Context, id string) ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsIdPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5239,11 +5239,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatch(ctx cont
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RegistryCredentialsIdPatch.RLock()
@@ -5253,7 +5253,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatchCalls() [
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute calls ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute(r ApiApiAccountsMgmtV1RegistryCredentialsIdPatchRequest) (RegistryCredential, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsIdPatchExecute was just called")
 	}
@@ -5284,12 +5284,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsIdPatchExecuteCa
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsPost calls ApiAccountsMgmtV1RegistryCredentialsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPost(ctx context.Context) ApiApiAccountsMgmtV1RegistryCredentialsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPost(ctx _context.Context) ApiApiAccountsMgmtV1RegistryCredentialsPostRequest {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5303,10 +5303,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPost(ctx context
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RegistryCredentialsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1RegistryCredentialsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1RegistryCredentialsPost
@@ -5315,7 +5315,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPostCalls() []st
 }
 
 // ApiAccountsMgmtV1RegistryCredentialsPostExecute calls ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPostExecute(r ApiApiAccountsMgmtV1RegistryCredentialsPostRequest) (RegistryCredential, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RegistryCredentialsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RegistryCredentialsPostExecute was just called")
 	}
@@ -5346,12 +5346,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RegistryCredentialsPostExecuteCalls
 }
 
 // ApiAccountsMgmtV1ReservedResourcesGet calls ApiAccountsMgmtV1ReservedResourcesGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGet(ctx context.Context) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGet(ctx _context.Context) ApiApiAccountsMgmtV1ReservedResourcesGetRequest {
 	if mock.ApiAccountsMgmtV1ReservedResourcesGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ReservedResourcesGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ReservedResourcesGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5365,10 +5365,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGet(ctx context.Co
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1ReservedResourcesGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1ReservedResourcesGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1ReservedResourcesGet
@@ -5377,7 +5377,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGetCalls() []struc
 }
 
 // ApiAccountsMgmtV1ReservedResourcesGetExecute calls ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGetExecute(r ApiApiAccountsMgmtV1ReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ReservedResourcesGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ReservedResourcesGetExecute was just called")
 	}
@@ -5408,12 +5408,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ReservedResourcesGetExecuteCalls() 
 }
 
 // ApiAccountsMgmtV1ResourceQuotaGet calls ApiAccountsMgmtV1ResourceQuotaGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGet(ctx context.Context) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGet(ctx _context.Context) ApiApiAccountsMgmtV1ResourceQuotaGetRequest {
 	if mock.ApiAccountsMgmtV1ResourceQuotaGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ResourceQuotaGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ResourceQuotaGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5427,10 +5427,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGet(ctx context.Contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1ResourceQuotaGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1ResourceQuotaGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1ResourceQuotaGet
@@ -5439,7 +5439,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1ResourceQuotaGetExecute calls ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGetExecute(r ApiApiAccountsMgmtV1ResourceQuotaGetRequest) (ResourceQuotaList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1ResourceQuotaGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1ResourceQuotaGetExecute was just called")
 	}
@@ -5470,12 +5470,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1ResourceQuotaGetExecuteCalls() []st
 }
 
 // ApiAccountsMgmtV1RoleBindingsGet calls ApiAccountsMgmtV1RoleBindingsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGet(ctx context.Context) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGet(ctx _context.Context) ApiApiAccountsMgmtV1RoleBindingsGetRequest {
 	if mock.ApiAccountsMgmtV1RoleBindingsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5489,10 +5489,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGet(ctx context.Context
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RoleBindingsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1RoleBindingsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1RoleBindingsGet
@@ -5501,7 +5501,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RoleBindingsGetExecute calls ApiAccountsMgmtV1RoleBindingsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGetExecute(r ApiApiAccountsMgmtV1RoleBindingsGetRequest) (RoleBindingList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RoleBindingsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsGetExecute was just called")
 	}
@@ -5532,12 +5532,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsGetExecuteCalls() []str
 }
 
 // ApiAccountsMgmtV1RoleBindingsIdDelete calls ApiAccountsMgmtV1RoleBindingsIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDelete(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDelete(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1RoleBindingsIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5553,11 +5553,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDelete(ctx context.Co
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RoleBindingsIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDeleteCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RoleBindingsIdDelete.RLock()
@@ -5567,7 +5567,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDeleteCalls() []struc
 }
 
 // ApiAccountsMgmtV1RoleBindingsIdDeleteExecute calls ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDeleteExecute(r ApiApiAccountsMgmtV1RoleBindingsIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsIdDeleteExecute was just called")
 	}
@@ -5598,12 +5598,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdDeleteExecuteCalls() 
 }
 
 // ApiAccountsMgmtV1RoleBindingsIdGet calls ApiAccountsMgmtV1RoleBindingsIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdGetRequest {
 	if mock.ApiAccountsMgmtV1RoleBindingsIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5619,11 +5619,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGet(ctx context.Conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RoleBindingsIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RoleBindingsIdGet.RLock()
@@ -5633,7 +5633,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RoleBindingsIdGetExecute calls ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGetExecute(r ApiApiAccountsMgmtV1RoleBindingsIdGetRequest) (RoleBinding, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsIdGetExecute was just called")
 	}
@@ -5664,12 +5664,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdGetExecuteCalls() []s
 }
 
 // ApiAccountsMgmtV1RoleBindingsIdPatch calls ApiAccountsMgmtV1RoleBindingsIdPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatch(ctx context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatch(ctx _context.Context, id string) ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest {
 	if mock.ApiAccountsMgmtV1RoleBindingsIdPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsIdPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsIdPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5685,11 +5685,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatch(ctx context.Con
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RoleBindingsIdPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RoleBindingsIdPatch.RLock()
@@ -5699,7 +5699,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatchCalls() []struct
 }
 
 // ApiAccountsMgmtV1RoleBindingsIdPatchExecute calls ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatchExecute(r ApiApiAccountsMgmtV1RoleBindingsIdPatchRequest) (RoleBinding, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsIdPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsIdPatchExecute was just called")
 	}
@@ -5730,12 +5730,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsIdPatchExecuteCalls() [
 }
 
 // ApiAccountsMgmtV1RoleBindingsPost calls ApiAccountsMgmtV1RoleBindingsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPost(ctx context.Context) ApiApiAccountsMgmtV1RoleBindingsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPost(ctx _context.Context) ApiApiAccountsMgmtV1RoleBindingsPostRequest {
 	if mock.ApiAccountsMgmtV1RoleBindingsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5749,10 +5749,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPost(ctx context.Contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RoleBindingsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1RoleBindingsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1RoleBindingsPost
@@ -5761,7 +5761,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RoleBindingsPostExecute calls ApiAccountsMgmtV1RoleBindingsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPostExecute(r ApiApiAccountsMgmtV1RoleBindingsPostRequest) (RoleBinding, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RoleBindingsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RoleBindingsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RoleBindingsPostExecute was just called")
 	}
@@ -5792,12 +5792,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RoleBindingsPostExecuteCalls() []st
 }
 
 // ApiAccountsMgmtV1RolesGet calls ApiAccountsMgmtV1RolesGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGet(ctx context.Context) ApiApiAccountsMgmtV1RolesGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGet(ctx _context.Context) ApiApiAccountsMgmtV1RolesGetRequest {
 	if mock.ApiAccountsMgmtV1RolesGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RolesGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RolesGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5811,10 +5811,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGet(ctx context.Context) ApiAp
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RolesGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1RolesGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1RolesGet
@@ -5823,7 +5823,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RolesGetExecute calls ApiAccountsMgmtV1RolesGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGetExecute(r ApiApiAccountsMgmtV1RolesGetRequest) (RoleList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RolesGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RolesGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RolesGetExecute was just called")
 	}
@@ -5854,12 +5854,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RolesIdGet calls ApiAccountsMgmtV1RolesIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1RolesIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1RolesIdGetRequest {
 	if mock.ApiAccountsMgmtV1RolesIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RolesIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RolesIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -5875,11 +5875,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGet(ctx context.Context, id 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1RolesIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1RolesIdGet.RLock()
@@ -5889,7 +5889,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1RolesIdGetExecute calls ApiAccountsMgmtV1RolesIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGetExecute(r ApiApiAccountsMgmtV1RolesIdGetRequest) (Role, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1RolesIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1RolesIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1RolesIdGetExecute was just called")
 	}
@@ -5920,12 +5920,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1RolesIdGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SkuRulesGet calls ApiAccountsMgmtV1SkuRulesGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGet(ctx context.Context) ApiApiAccountsMgmtV1SkuRulesGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGet(ctx _context.Context) ApiApiAccountsMgmtV1SkuRulesGetRequest {
 	if mock.ApiAccountsMgmtV1SkuRulesGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkuRulesGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkuRulesGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -5939,10 +5939,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGet(ctx context.Context) Ap
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SkuRulesGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1SkuRulesGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1SkuRulesGet
@@ -5951,7 +5951,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SkuRulesGetExecute calls ApiAccountsMgmtV1SkuRulesGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGetExecute(r ApiApiAccountsMgmtV1SkuRulesGetRequest) (SkuRulesList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SkuRulesGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkuRulesGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkuRulesGetExecute was just called")
 	}
@@ -5982,12 +5982,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesGetExecuteCalls() []struct 
 }
 
 // ApiAccountsMgmtV1SkuRulesIdGet calls ApiAccountsMgmtV1SkuRulesIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1SkuRulesIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1SkuRulesIdGetRequest {
 	if mock.ApiAccountsMgmtV1SkuRulesIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkuRulesIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkuRulesIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6003,11 +6003,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGet(ctx context.Context, 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SkuRulesIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SkuRulesIdGet.RLock()
@@ -6017,7 +6017,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SkuRulesIdGetExecute calls ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGetExecute(r ApiApiAccountsMgmtV1SkuRulesIdGetRequest) (SkuRules, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkuRulesIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkuRulesIdGetExecute was just called")
 	}
@@ -6048,12 +6048,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkuRulesIdGetExecuteCalls() []struc
 }
 
 // ApiAccountsMgmtV1SkusGet calls ApiAccountsMgmtV1SkusGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGet(ctx context.Context) ApiApiAccountsMgmtV1SkusGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGet(ctx _context.Context) ApiApiAccountsMgmtV1SkusGetRequest {
 	if mock.ApiAccountsMgmtV1SkusGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkusGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkusGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -6067,10 +6067,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGet(ctx context.Context) ApiApi
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SkusGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1SkusGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1SkusGet
@@ -6079,7 +6079,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SkusGetExecute calls ApiAccountsMgmtV1SkusGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGetExecute(r ApiApiAccountsMgmtV1SkusGetRequest) (SkuList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SkusGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkusGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkusGetExecute was just called")
 	}
@@ -6110,12 +6110,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SkusIdGet calls ApiAccountsMgmtV1SkusIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1SkusIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1SkusIdGetRequest {
 	if mock.ApiAccountsMgmtV1SkusIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkusIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkusIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6131,11 +6131,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGet(ctx context.Context, id s
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SkusIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SkusIdGet.RLock()
@@ -6145,7 +6145,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SkusIdGetExecute calls ApiAccountsMgmtV1SkusIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGetExecute(r ApiApiAccountsMgmtV1SkusIdGetRequest) (SKU, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SkusIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SkusIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SkusIdGetExecute was just called")
 	}
@@ -6176,12 +6176,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SkusIdGetExecuteCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SubscriptionsGet calls ApiAccountsMgmtV1SubscriptionsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGet(ctx context.Context) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGet(ctx _context.Context) ApiApiAccountsMgmtV1SubscriptionsGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -6195,10 +6195,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGet(ctx context.Contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsGet.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1SubscriptionsGet
@@ -6207,7 +6207,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGetCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SubscriptionsGetExecute calls ApiAccountsMgmtV1SubscriptionsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsGetRequest) (SubscriptionList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsGetExecute was just called")
 	}
@@ -6238,12 +6238,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsGetExecuteCalls() []st
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdDelete calls ApiAccountsMgmtV1SubscriptionsIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDelete(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDelete(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6259,11 +6259,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDelete(ctx context.C
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDeleteCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdDelete.RLock()
@@ -6273,7 +6273,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDeleteCalls() []stru
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdDeleteExecute calls ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdDeleteExecute was just called")
 	}
@@ -6304,12 +6304,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdDeleteExecuteCalls()
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdGet calls ApiAccountsMgmtV1SubscriptionsIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGet(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6325,11 +6325,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGet(ctx context.Cont
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdGet.RLock()
@@ -6339,7 +6339,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGetCalls() []struct 
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdGetExecute calls ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdGetRequest) (Subscription, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdGetExecute was just called")
 	}
@@ -6370,12 +6370,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdGetExecuteCalls() []
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsGet calls ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGet(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6391,11 +6391,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGet(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdLabelsGet.RLock()
@@ -6405,7 +6405,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGetCalls() []s
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute calls ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsGetRequest) (LabelList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecute was just called")
 	}
@@ -6436,12 +6436,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsGetExecuteCall
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete calls ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -6459,12 +6459,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDelete(ctx 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -6475,7 +6475,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteCalls
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute calls ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecute was just called")
 	}
@@ -6506,12 +6506,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyDeleteExecu
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet calls ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -6529,12 +6529,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGet(ctx con
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -6545,7 +6545,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetCalls() 
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute calls ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecute was just called")
 	}
@@ -6576,12 +6576,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyGetExecuteC
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch calls ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch(ctx context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch(ctx _context.Context, id string, key string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}{
@@ -6599,12 +6599,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatch(ctx c
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 	Key string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 		Key string
 	}
@@ -6615,7 +6615,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchCalls(
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute calls ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecute was just called")
 	}
@@ -6646,12 +6646,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsKeyPatchExecut
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsPost calls ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPost(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPost(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6667,11 +6667,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPost(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdLabelsPost.RLock()
@@ -6681,7 +6681,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPostCalls() []
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute calls ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdLabelsPostRequest) (Label, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecute was just called")
 	}
@@ -6712,12 +6712,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdLabelsPostExecuteCal
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdNotifyPost calls ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPost(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPost(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdNotifyPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdNotifyPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6733,11 +6733,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPost(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdNotifyPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdNotifyPost.RLock()
@@ -6747,7 +6747,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPostCalls() []
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute calls ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute(r ApiApiAccountsMgmtV1SubscriptionsIdNotifyPostRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecute was just called")
 	}
@@ -6778,12 +6778,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdNotifyPostExecuteCal
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdPatch calls ApiAccountsMgmtV1SubscriptionsIdPatchFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatch(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatch(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdPatchFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdPatchFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdPatch was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6799,11 +6799,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatch(ctx context.Co
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdPatchCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatchCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdPatch.RLock()
@@ -6813,7 +6813,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatchCalls() []struc
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdPatchExecute calls ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatchExecute(r ApiApiAccountsMgmtV1SubscriptionsIdPatchRequest) (Subscription, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdPatchExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdPatchExecute was just called")
 	}
@@ -6844,12 +6844,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdPatchExecuteCalls() 
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet calls ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6865,11 +6865,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet.RLock()
@@ -6879,7 +6879,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute calls ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetRequest) (ReservedResourceList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGetExecute was just called")
 	}
@@ -6910,12 +6910,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdReservedResourcesGet
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet calls ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet(ctx context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet(ctx _context.Context, id string) ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}{
 		Ctx: ctx,
@@ -6931,11 +6931,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGet(ctx 
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 	ID  string
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 		ID  string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsIdSupportCasesGet.RLock()
@@ -6945,7 +6945,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetCalls
 }
 
 // ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute calls ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute(r ApiApiAccountsMgmtV1SubscriptionsIdSupportCasesGetRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecute was just called")
 	}
@@ -6976,12 +6976,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsIdSupportCasesGetExecu
 }
 
 // ApiAccountsMgmtV1SubscriptionsPost calls ApiAccountsMgmtV1SubscriptionsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPost(ctx context.Context) ApiApiAccountsMgmtV1SubscriptionsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPost(ctx _context.Context) ApiApiAccountsMgmtV1SubscriptionsPostRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -6995,10 +6995,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPost(ctx context.Conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1SubscriptionsPost
@@ -7007,7 +7007,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SubscriptionsPostExecute calls ApiAccountsMgmtV1SubscriptionsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsPostRequest) (Subscription, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsPostExecute was just called")
 	}
@@ -7038,12 +7038,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsPostExecuteCalls() []s
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete calls ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete(ctx context.Context, subId string, accountId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete(ctx _context.Context, subId string, accountId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		SubId     string
 		AccountId string
 	}{
@@ -7061,12 +7061,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteCalls() []struct {
-	Ctx       context.Context
+	Ctx       _context.Context
 	SubId     string
 	AccountId string
 } {
 	var calls []struct {
-		Ctx       context.Context
+		Ctx       _context.Context
 		SubId     string
 		AccountId string
 	}
@@ -7077,7 +7077,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute calls ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsAccountIdDeleteExecute was just called")
 	}
@@ -7108,12 +7108,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet calls ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet(ctx context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet(ctx _context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet was just called")
 	}
 	callInfo := struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		SubId string
 	}{
 		Ctx:   ctx,
@@ -7129,11 +7129,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetCalls() []struct {
-	Ctx   context.Context
+	Ctx   _context.Context
 	SubId string
 } {
 	var calls []struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		SubId string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGet.RLock()
@@ -7143,7 +7143,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute calls ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetRequest) (AccountList, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsGetExecute was just called")
 	}
@@ -7174,12 +7174,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost calls ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost(ctx context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost(ctx _context.Context, subId string) ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost was just called")
 	}
 	callInfo := struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		SubId string
 	}{
 		Ctx:   ctx,
@@ -7195,11 +7195,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostCalls() []struct {
-	Ctx   context.Context
+	Ctx   _context.Context
 	SubId string
 } {
 	var calls []struct {
-		Ctx   context.Context
+		Ctx   _context.Context
 		SubId string
 	}
 	mock.lockApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPost.RLock()
@@ -7209,7 +7209,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute calls ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostRequest) (Account, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdNotificationContactsPostExecute was just called")
 	}
@@ -7240,12 +7240,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdNotificationConta
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet calls ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet(ctx context.Context, subId string, reservedResourceId string) ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet(ctx _context.Context, subId string, reservedResourceId string) ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGet was just called")
 	}
 	callInfo := struct {
-		Ctx                context.Context
+		Ctx                _context.Context
 		SubId              string
 		ReservedResourceId string
 	}{
@@ -7263,12 +7263,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResources
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetCalls() []struct {
-	Ctx                context.Context
+	Ctx                _context.Context
 	SubId              string
 	ReservedResourceId string
 } {
 	var calls []struct {
-		Ctx                context.Context
+		Ctx                _context.Context
 		SubId              string
 		ReservedResourceId string
 	}
@@ -7279,7 +7279,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResources
 }
 
 // ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute calls ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute(r ApiApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetRequest) (ReservedResource, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SubscriptionsSubIdReservedResourcesReservedResourceIdGetExecute was just called")
 	}
@@ -7310,12 +7310,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SubscriptionsSubIdReservedResources
 }
 
 // ApiAccountsMgmtV1SupportCasesCaseIdDelete calls ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDelete(ctx context.Context, caseId string) ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDelete(ctx _context.Context, caseId string) ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest {
 	if mock.ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SupportCasesCaseIdDeleteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SupportCasesCaseIdDelete was just called")
 	}
 	callInfo := struct {
-		Ctx    context.Context
+		Ctx    _context.Context
 		CaseId string
 	}{
 		Ctx:    ctx,
@@ -7331,11 +7331,11 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDelete(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SupportCasesCaseIdDeleteCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDeleteCalls() []struct {
-	Ctx    context.Context
+	Ctx    _context.Context
 	CaseId string
 } {
 	var calls []struct {
-		Ctx    context.Context
+		Ctx    _context.Context
 		CaseId string
 	}
 	mock.lockApiAccountsMgmtV1SupportCasesCaseIdDelete.RLock()
@@ -7345,7 +7345,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDeleteCalls() []s
 }
 
 // ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute calls ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute(r ApiApiAccountsMgmtV1SupportCasesCaseIdDeleteRequest) (*_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecute was just called")
 	}
@@ -7376,12 +7376,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesCaseIdDeleteExecuteCall
 }
 
 // ApiAccountsMgmtV1SupportCasesPost calls ApiAccountsMgmtV1SupportCasesPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPost(ctx context.Context) ApiApiAccountsMgmtV1SupportCasesPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPost(ctx _context.Context) ApiApiAccountsMgmtV1SupportCasesPostRequest {
 	if mock.ApiAccountsMgmtV1SupportCasesPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SupportCasesPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SupportCasesPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7395,10 +7395,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPost(ctx context.Contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1SupportCasesPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1SupportCasesPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1SupportCasesPost
@@ -7407,7 +7407,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPostCalls() []struct {
 }
 
 // ApiAccountsMgmtV1SupportCasesPostExecute calls ApiAccountsMgmtV1SupportCasesPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPostExecute(r ApiApiAccountsMgmtV1SupportCasesPostRequest) (SupportCasesCreatedResponse, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1SupportCasesPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1SupportCasesPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1SupportCasesPostExecute was just called")
 	}
@@ -7438,12 +7438,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1SupportCasesPostExecuteCalls() []st
 }
 
 // ApiAccountsMgmtV1TokenAuthorizationPost calls ApiAccountsMgmtV1TokenAuthorizationPostFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPost(ctx context.Context) ApiApiAccountsMgmtV1TokenAuthorizationPostRequest {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPost(ctx _context.Context) ApiApiAccountsMgmtV1TokenAuthorizationPostRequest {
 	if mock.ApiAccountsMgmtV1TokenAuthorizationPostFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1TokenAuthorizationPostFunc: method is nil but DefaultApi.ApiAccountsMgmtV1TokenAuthorizationPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7457,10 +7457,10 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPost(ctx context.
 // Check the length with:
 //     len(mockedDefaultApi.ApiAccountsMgmtV1TokenAuthorizationPostCalls())
 func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAccountsMgmtV1TokenAuthorizationPost.RLock()
 	calls = mock.calls.ApiAccountsMgmtV1TokenAuthorizationPost
@@ -7469,7 +7469,7 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPostCalls() []str
 }
 
 // ApiAccountsMgmtV1TokenAuthorizationPostExecute calls ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPostExecute(r ApiApiAccountsMgmtV1TokenAuthorizationPostRequest) (TokenAuthorizationResponse, *_nethttp.Response, error) {
 	if mock.ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAccountsMgmtV1TokenAuthorizationPostExecuteFunc: method is nil but DefaultApi.ApiAccountsMgmtV1TokenAuthorizationPostExecute was just called")
 	}
@@ -7500,12 +7500,12 @@ func (mock *DefaultApiMock) ApiAccountsMgmtV1TokenAuthorizationPostExecuteCalls(
 }
 
 // ApiAuthorizationsV1AccessReviewPost calls ApiAuthorizationsV1AccessReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPost(ctx context.Context) ApiApiAuthorizationsV1AccessReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPost(ctx _context.Context) ApiApiAuthorizationsV1AccessReviewPostRequest {
 	if mock.ApiAuthorizationsV1AccessReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1AccessReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1AccessReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7519,10 +7519,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPost(ctx context.Cont
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1AccessReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1AccessReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1AccessReviewPost
@@ -7531,7 +7531,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPostCalls() []struct 
 }
 
 // ApiAuthorizationsV1AccessReviewPostExecute calls ApiAuthorizationsV1AccessReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPostExecute(r ApiApiAuthorizationsV1AccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1AccessReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1AccessReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1AccessReviewPostExecute was just called")
 	}
@@ -7562,12 +7562,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1AccessReviewPostExecuteCalls() []
 }
 
 // ApiAuthorizationsV1CapabilityReviewPost calls ApiAuthorizationsV1CapabilityReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPost(ctx context.Context) ApiApiAuthorizationsV1CapabilityReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPost(ctx _context.Context) ApiApiAuthorizationsV1CapabilityReviewPostRequest {
 	if mock.ApiAuthorizationsV1CapabilityReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1CapabilityReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1CapabilityReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7581,10 +7581,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPost(ctx context.
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1CapabilityReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1CapabilityReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1CapabilityReviewPost
@@ -7593,7 +7593,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPostCalls() []str
 }
 
 // ApiAuthorizationsV1CapabilityReviewPostExecute calls ApiAuthorizationsV1CapabilityReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPostExecute(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPostExecute(r ApiApiAuthorizationsV1CapabilityReviewPostRequest) (CapabilityReview, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1CapabilityReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1CapabilityReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1CapabilityReviewPostExecute was just called")
 	}
@@ -7624,12 +7624,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1CapabilityReviewPostExecuteCalls(
 }
 
 // ApiAuthorizationsV1ExportControlReviewPost calls ApiAuthorizationsV1ExportControlReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPost(ctx context.Context) ApiApiAuthorizationsV1ExportControlReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPost(ctx _context.Context) ApiApiAuthorizationsV1ExportControlReviewPostRequest {
 	if mock.ApiAuthorizationsV1ExportControlReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1ExportControlReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1ExportControlReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7643,10 +7643,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPost(ctx conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1ExportControlReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1ExportControlReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1ExportControlReviewPost
@@ -7655,7 +7655,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPostCalls() []
 }
 
 // ApiAuthorizationsV1ExportControlReviewPostExecute calls ApiAuthorizationsV1ExportControlReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPostExecute(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPostExecute(r ApiApiAuthorizationsV1ExportControlReviewPostRequest) (ExportControlReview, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1ExportControlReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1ExportControlReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1ExportControlReviewPostExecute was just called")
 	}
@@ -7686,12 +7686,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1ExportControlReviewPostExecuteCal
 }
 
 // ApiAuthorizationsV1ResourceReviewPost calls ApiAuthorizationsV1ResourceReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPost(ctx context.Context) ApiApiAuthorizationsV1ResourceReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPost(ctx _context.Context) ApiApiAuthorizationsV1ResourceReviewPostRequest {
 	if mock.ApiAuthorizationsV1ResourceReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1ResourceReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1ResourceReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7705,10 +7705,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPost(ctx context.Co
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1ResourceReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1ResourceReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1ResourceReviewPost
@@ -7717,7 +7717,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPostCalls() []struc
 }
 
 // ApiAuthorizationsV1ResourceReviewPostExecute calls ApiAuthorizationsV1ResourceReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPostExecute(r ApiApiAuthorizationsV1ResourceReviewPostRequest) (ResourceReview, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1ResourceReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1ResourceReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1ResourceReviewPostExecute was just called")
 	}
@@ -7748,12 +7748,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1ResourceReviewPostExecuteCalls() 
 }
 
 // ApiAuthorizationsV1SelfAccessReviewPost calls ApiAuthorizationsV1SelfAccessReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPost(ctx context.Context) ApiApiAuthorizationsV1SelfAccessReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPost(ctx _context.Context) ApiApiAuthorizationsV1SelfAccessReviewPostRequest {
 	if mock.ApiAuthorizationsV1SelfAccessReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1SelfAccessReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1SelfAccessReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7767,10 +7767,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPost(ctx context.
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1SelfAccessReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1SelfAccessReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1SelfAccessReviewPost
@@ -7779,7 +7779,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPostCalls() []str
 }
 
 // ApiAuthorizationsV1SelfAccessReviewPostExecute calls ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPostExecute(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPostExecute(r ApiApiAuthorizationsV1SelfAccessReviewPostRequest) (AccessReviewResponse, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1SelfAccessReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1SelfAccessReviewPostExecute was just called")
 	}
@@ -7810,12 +7810,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfAccessReviewPostExecuteCalls(
 }
 
 // ApiAuthorizationsV1SelfResourceReviewPost calls ApiAuthorizationsV1SelfResourceReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPost(ctx context.Context) ApiApiAuthorizationsV1SelfResourceReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPost(ctx _context.Context) ApiApiAuthorizationsV1SelfResourceReviewPostRequest {
 	if mock.ApiAuthorizationsV1SelfResourceReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1SelfResourceReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1SelfResourceReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7829,10 +7829,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPost(ctx contex
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1SelfResourceReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1SelfResourceReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1SelfResourceReviewPost
@@ -7841,7 +7841,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPostCalls() []s
 }
 
 // ApiAuthorizationsV1SelfResourceReviewPostExecute calls ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPostExecute(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPostExecute(r ApiApiAuthorizationsV1SelfResourceReviewPostRequest) (SelfResourceReview, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1SelfResourceReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1SelfResourceReviewPostExecute was just called")
 	}
@@ -7872,12 +7872,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfResourceReviewPostExecuteCall
 }
 
 // ApiAuthorizationsV1SelfTermsReviewPost calls ApiAuthorizationsV1SelfTermsReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPost(ctx context.Context) ApiApiAuthorizationsV1SelfTermsReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPost(ctx _context.Context) ApiApiAuthorizationsV1SelfTermsReviewPostRequest {
 	if mock.ApiAuthorizationsV1SelfTermsReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1SelfTermsReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1SelfTermsReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7891,10 +7891,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPost(ctx context.C
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1SelfTermsReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1SelfTermsReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1SelfTermsReviewPost
@@ -7903,7 +7903,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPostCalls() []stru
 }
 
 // ApiAuthorizationsV1SelfTermsReviewPostExecute calls ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPostExecute(r ApiApiAuthorizationsV1SelfTermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1SelfTermsReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1SelfTermsReviewPostExecute was just called")
 	}
@@ -7934,12 +7934,12 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1SelfTermsReviewPostExecuteCalls()
 }
 
 // ApiAuthorizationsV1TermsReviewPost calls ApiAuthorizationsV1TermsReviewPostFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPost(ctx context.Context) ApiApiAuthorizationsV1TermsReviewPostRequest {
+func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPost(ctx _context.Context) ApiApiAuthorizationsV1TermsReviewPostRequest {
 	if mock.ApiAuthorizationsV1TermsReviewPostFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1TermsReviewPostFunc: method is nil but DefaultApi.ApiAuthorizationsV1TermsReviewPost was just called")
 	}
 	callInfo := struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}{
 		Ctx: ctx,
 	}
@@ -7953,10 +7953,10 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPost(ctx context.Conte
 // Check the length with:
 //     len(mockedDefaultApi.ApiAuthorizationsV1TermsReviewPostCalls())
 func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPostCalls() []struct {
-	Ctx context.Context
+	Ctx _context.Context
 } {
 	var calls []struct {
-		Ctx context.Context
+		Ctx _context.Context
 	}
 	mock.lockApiAuthorizationsV1TermsReviewPost.RLock()
 	calls = mock.calls.ApiAuthorizationsV1TermsReviewPost
@@ -7965,7 +7965,7 @@ func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPostCalls() []struct {
 }
 
 // ApiAuthorizationsV1TermsReviewPostExecute calls ApiAuthorizationsV1TermsReviewPostExecuteFunc.
-func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *http.Response, error) {
+func (mock *DefaultApiMock) ApiAuthorizationsV1TermsReviewPostExecute(r ApiApiAuthorizationsV1TermsReviewPostRequest) (TermsReviewResponse, *_nethttp.Response, error) {
 	if mock.ApiAuthorizationsV1TermsReviewPostExecuteFunc == nil {
 		panic("DefaultApiMock.ApiAuthorizationsV1TermsReviewPostExecuteFunc: method is nil but DefaultApi.ApiAuthorizationsV1TermsReviewPostExecute was just called")
 	}

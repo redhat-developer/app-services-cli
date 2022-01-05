@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	rhoasdoc "github.com/redhat-developer/app-services-cli/pkg/doc"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	rhoasdoc "github.com/redhat-developer/app-services-cli/internal/doc"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )

@@ -1,10 +1,10 @@
 package flagutil
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/aclutil"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +15,7 @@ const (
 	TransactionalIDFlagName = "transactional-id"
 )
 
-var ResourceTypeFlagEntries []*localize.TemplateEntry = []*localize.TemplateEntry{
+var ResourceTypeFlagEntries = []*localize.TemplateEntry{
 	localize.NewEntry("ClusterFlag", ClusterFlagName),
 	localize.NewEntry("TopicFlag", TopicFlagName),
 	localize.NewEntry("TransactionalIDFlag", TransactionalIDFlagName),

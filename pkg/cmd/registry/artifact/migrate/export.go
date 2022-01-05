@@ -2,21 +2,17 @@ package migrate
 
 import (
 	"context"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	"io"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
 type ExportOptions struct {
@@ -92,7 +88,7 @@ func runExport(opts *ExportOptions) error {
 	request := dataAPI.AdminApi.ExportData(opts.Context)
 	file, _, err := request.Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return serviceregistryutil.TransformInstanceError(err)
 	}
 	_, err = io.Copy(fileContent, file)
 	if err != nil {

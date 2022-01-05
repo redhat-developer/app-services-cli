@@ -1,0 +1,43 @@
+[status.cmd.shortDescription]
+one = 'View the status of all currently used services'
+
+[status.cmd.longDescription]
+one = '''
+View status information of your currently used services.
+Choose to view the status of all services with "rhoas status" or specific services with "rhoas status [service]"
+
+To use a different service run "rhoas [service] use [args] [flags]".
+'''
+
+[status.cmd.example]
+one = '''
+# view the status of all services
+$ rhoas status
+
+# view the status of the used Kafka
+$ rhoas status kafka
+
+# view the status of your services in JSON
+$ rhoas status -o json
+'''
+
+[status.error.args.error.unknownServiceError]
+one = 'unknown service "{{.ServiceName}}"'
+
+[status.flag.output.description]
+one = 'Format in which to display the status of your services (choose from: "json", "yml", "yaml")'
+
+[status.log.debug.requestingStatusOfServices]
+one = 'Requesting status of the following services:'
+
+[status.log.info.noStatusesAreUsed]
+one = 'No services are currently being used. To set a service in context, run "rhoas [service] use [args]".'
+
+[status.log.debug.noKafkaSelected]
+one = 'No Kafka instance is currently used, skipping status check'
+
+[status.log.info.selectAnotherKafka]
+one = 'Run rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg to use another Kafka instance.'
+
+[status.log.info.rhoasKafkaUse]
+one = 'Run "rhoas kafka use" to use another Kafka instance.'
