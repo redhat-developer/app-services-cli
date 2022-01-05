@@ -6,23 +6,21 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/credentials"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/validation"
+
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
 	"github.com/AlecAivazis/survey/v2"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/credentials"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceaccount/validation"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
@@ -72,7 +70,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			if !validOutput && opts.fileFormat != "" {
-				return flag.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
+				return flagutil.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
 			}
 
 			if !opts.interactive {
@@ -110,7 +108,7 @@ func runResetCredentials(opts *options) (err error) {
 
 	api := conn.API()
 
-	_, httpRes, err := api.ServiceAccount().GetServiceAccountById(opts.Context, opts.id).Execute()
+	_, httpRes, err := api.ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -191,7 +189,7 @@ func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("ID", opts.id)))
 
-	serviceacct, httpRes, err := api.ServiceAccount().ResetServiceAccountCreds(opts.Context, opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccountMgmt().ResetServiceAccountCreds(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

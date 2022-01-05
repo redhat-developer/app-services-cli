@@ -1,22 +1,19 @@
 package root
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/arguments"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/docs"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/docs"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/logout"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +28,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	}
 
 	fs := cmd.PersistentFlags()
-	arguments.AddDebugFlag(fs)
+	flagutil.AddDebugFlag(fs)
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
 

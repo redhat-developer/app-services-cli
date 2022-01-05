@@ -8,8 +8,9 @@ import (
 	"time"
 
 	rhoasdoc "github.com/redhat-developer/app-services-cli/internal/doc"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )

@@ -1,8 +1,8 @@
 package flagutil
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )

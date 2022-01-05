@@ -1,4 +1,3 @@
-// Copyright 2015 Red Hat Inc. All rights reserved.
 // Copyright 2021 Red Hat Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

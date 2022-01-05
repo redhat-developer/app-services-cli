@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // Token contains the current access and refresh tokens from the Authorization server

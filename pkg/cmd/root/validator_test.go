@@ -2,16 +2,16 @@ package root
 
 import (
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory/defaultfactory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
 	"os"
 	"testing"
 
 	"github.com/aerogear/charmil/validator"
 	"github.com/aerogear/charmil/validator/rules"
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/internal/mockutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/localize/goi18n"
 )
 
 func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
@@ -22,7 +22,7 @@ func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
 	}
 
 	buildVersion := build.Version
-	cmdFactory := factory.New(localizer)
+	cmdFactory := defaultfactory.New(localizer)
 	if err != nil {
 		fmt.Println(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)

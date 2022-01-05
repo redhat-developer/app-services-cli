@@ -2,6 +2,14 @@ package login
 
 import (
 	"context"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	// embed static HTML file
 	_ "embed"
 	"encoding/json"
@@ -11,12 +19,6 @@ import (
 	"os"
 
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"golang.org/x/oauth2"
 )
 
@@ -93,7 +95,7 @@ func (h *redirectPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	pageTitle := h.Localizer.MustLocalize("login.redirectPage.title")
 	pageBody := h.Localizer.MustLocalize("login.redirectPage.body", localize.NewEntry("Username", username))
 
-	issuerURL, realm, ok := connection.SplitKeycloakRealmURL(h.AuthURL)
+	issuerURL, realm, ok := kcconnection.SplitKeycloakRealmURL(h.AuthURL)
 	if !ok {
 		h.Logger.Error(h.Localizer.MustLocalize("login.error.noRealmInURL"))
 		os.Exit(1)

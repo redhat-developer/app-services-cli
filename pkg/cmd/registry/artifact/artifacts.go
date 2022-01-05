@@ -1,7 +1,6 @@
 package artifact
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/crud/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/crud/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/crud/get"
@@ -9,9 +8,10 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/crud/update"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/download"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/metadata"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/migrate"
+	migrate "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/migrate"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/state"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/versions"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/spf13/cobra"
 )
 
