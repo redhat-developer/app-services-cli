@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/consumergrouputil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/consumergrouputil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"

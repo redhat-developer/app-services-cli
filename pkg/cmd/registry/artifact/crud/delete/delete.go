@@ -3,8 +3,10 @@ package delete
 import (
 	"context"
 	"errors"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -12,7 +14,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	"github.com/spf13/cobra"
 )
 
@@ -105,7 +106,7 @@ func runDelete(opts *options) error {
 		request := dataAPI.ArtifactsApi.DeleteArtifactsInGroup(opts.Context, opts.group)
 		_, err = request.Execute()
 		if err != nil {
-			return serviceregistryutil.TransformInstanceError(err)
+			return registryutil.TransformInstanceError(err)
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.AllArtifactsInGroupDeleted", localize.NewEntry("GroupName", opts.group)))
 	} else {
@@ -122,7 +123,7 @@ func runDelete(opts *options) error {
 
 		_, err = request.Execute()
 		if err != nil {
-			return serviceregistryutil.TransformInstanceError(err)
+			return registryutil.TransformInstanceError(err)
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleted", localize.NewEntry("Name", opts.artifact)))
 	}

@@ -3,9 +3,9 @@ package list
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/aclutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"

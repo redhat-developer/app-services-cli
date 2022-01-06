@@ -1,4 +1,4 @@
-package serviceregistryutil
+package registryutil
 
 import (
 	"errors"

@@ -6,6 +6,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -174,7 +175,7 @@ func runCreate(opts *options) error {
 	request = request.Body(specifiedFile)
 	metadata, _, err := request.Execute()
 	if err != nil {
-		return serviceregistryutil.TransformInstanceError(err)
+		return registryutil.TransformInstanceError(err)
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 

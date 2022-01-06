@@ -3,8 +3,8 @@ package admin
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/aclutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"

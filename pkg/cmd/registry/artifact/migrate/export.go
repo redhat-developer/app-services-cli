@@ -2,15 +2,16 @@ package migrate
 
 import (
 	"context"
+	"io"
+	"os"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
-	"io"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -88,7 +89,7 @@ func runExport(opts *ExportOptions) error {
 	request := dataAPI.AdminApi.ExportData(opts.Context)
 	file, _, err := request.Execute()
 	if err != nil {
-		return serviceregistryutil.TransformInstanceError(err)
+		return registryutil.TransformInstanceError(err)
 	}
 	_, err = io.Copy(fileContent, file)
 	if err != nil {

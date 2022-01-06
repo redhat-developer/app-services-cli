@@ -2,14 +2,15 @@ package add
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/spf13/cobra"
@@ -122,7 +123,7 @@ func runAdd(opts *options) error {
 			Role: *role,
 		}).Execute()
 		if err != nil {
-			return serviceregistryutil.TransformInstanceError(err)
+			return registryutil.TransformInstanceError(err)
 		}
 	} else {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.role.cmd.creating"))
@@ -133,7 +134,7 @@ func runAdd(opts *options) error {
 		request := dataAPI.AdminApi.CreateRoleMapping(opts.Context)
 		_, err = request.RoleMapping(roleMapping).Execute()
 		if err != nil {
-			return serviceregistryutil.TransformInstanceError(err)
+			return registryutil.TransformInstanceError(err)
 		}
 	}
 
@@ -146,7 +147,7 @@ func runAdd(opts *options) error {
 func principalHasRole(opts *options, admin registryinstanceclient.AdminApi) bool {
 	_, _, err := admin.GetRoleMapping(opts.Context, opts.principal).Execute()
 	if err != nil {
-		apiError, _ := serviceregistryutil.GetInstanceAPIError(err)
+		apiError, _ := registryutil.GetInstanceAPIError(err)
 		return apiError.GetErrorCode() != 404
 	}
 	return true

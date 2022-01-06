@@ -1,10 +1,10 @@
 package flagutil
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/aclutil"
 	"github.com/spf13/cobra"
 )
 

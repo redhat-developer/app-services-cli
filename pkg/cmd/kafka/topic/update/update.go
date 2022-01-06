@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topicutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/topicutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/topicutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topicutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"

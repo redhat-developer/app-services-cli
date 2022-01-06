@@ -3,7 +3,11 @@ package download
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
+	"os"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -12,9 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
-	"io/ioutil"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -123,7 +124,7 @@ func runGet(opts *options) error {
 	}
 
 	if err != nil {
-		return serviceregistryutil.TransformInstanceError(err)
+		return registryutil.TransformInstanceError(err)
 	}
 
 	fileContent, err := ioutil.ReadFile(dataFile.Name())
