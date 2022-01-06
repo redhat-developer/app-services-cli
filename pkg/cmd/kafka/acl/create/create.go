@@ -141,10 +141,11 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 		kafkainstanceclient.AclPermissionType(requestParams.permission),
 	)
 
-	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
+	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
+
+	opts.Logger.Info(opts.Localizer.MustLocalizePlural("kafka.acl.grantPermissions.log.info.aclsPreview", len(rows)))
 	opts.Logger.Info()
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
