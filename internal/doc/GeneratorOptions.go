@@ -20,5 +20,5 @@ type GeneratorOptions struct {
 	GenerateIndex bool
 
 	// IndexLocation - name and folder of the assembly file (typically ./README.adoc)
-	IndexLocation string
+	IndexFile string
 }

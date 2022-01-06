@@ -2,6 +2,8 @@ package doc
 
 import (
 	"os"
+	"path"
+	"path/filepath"
 	"text/template"
 
 	"github.com/pkg/errors"
@@ -64,7 +66,7 @@ func CreateIndexFile(rootCmd *cobra.Command, generationOptions *GeneratorOptions
 		Groups: groups,
 	}
 
-	output, err := os.Create(generationOptions.IndexLocation)
+	output, err := os.Create(generationOptions.IndexFile)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -83,6 +85,11 @@ func CreateIndexFile(rootCmd *cobra.Command, generationOptions *GeneratorOptions
 
 func CollectNames(cmd *cobra.Command, options *GeneratorOptions) []string {
 	filename := options.FileNameGenerator(cmd)
+
+	filename, err := filepath.Rel(path.Dir(options.IndexFile), filename)
+	if err != nil {
+		panic(err)
+	}
 	names := []string{filename}
 	if cmd.HasSubCommands() {
 		for _, sub := range cmd.Commands() {

@@ -322,7 +322,7 @@ func GenAsciidocTree(cmd *cobra.Command, options *GeneratorOptions) error {
 		return err
 	}
 
-	if options.GenerateIndex && options.IndexLocation != "" {
+	if options.GenerateIndex && options.IndexFile != "" {
 		return CreateIndexFile(cmd, options)
 	}
 	return nil

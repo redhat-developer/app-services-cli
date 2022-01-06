@@ -85,8 +85,13 @@ check-docs: generate-docs ## Check whether reference documentation needs to be g
 
 generate-docs: ## Generate command-line reference documentation
 	rm -rf ./docs/commands/*
-	go run ./cmd/rhoas docs --dir ./docs/commands --file-format adoc
+	go run ./cmd/rhoas docs --dir ./docs/commands --file-format md
 .PHONY: generate-docs
+
+generate-downstream-docs: ## Generate command-line reference documentation in adoc format
+	rm -rf ./docs/commands/*
+	go run ./cmd/rhoas docs --dir ./dist --file-format adoc
+.PHONY: generate-downstream-docs
 
 lint-lang: ## Lint i18n files
 	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
