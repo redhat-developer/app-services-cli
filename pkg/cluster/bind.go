@@ -4,9 +4,9 @@ import (
 	"crypto/rand"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/constants"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/kubeclient"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"

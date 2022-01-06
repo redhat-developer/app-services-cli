@@ -1,10 +1,10 @@
 package services
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/constants"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/kubeclient"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/services/resources"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

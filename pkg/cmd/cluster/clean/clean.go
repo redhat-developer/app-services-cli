@@ -3,9 +3,9 @@ package clean
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/kubeclient"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
