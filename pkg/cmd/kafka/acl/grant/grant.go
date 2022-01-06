@@ -262,10 +262,11 @@ func runGrantPermissions(opts *options) (err error) {
 		aclBindRequests = append(aclBindRequests, req.AclBinding(*aclBindTransactionIDDescribe))
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
+	rows := aclutil.MapACLsToTableRows(aclBindingList, opts.localizer)
+
+	opts.Logger.Info(opts.localizer.MustLocalizePlural("kafka.acl.grantPermissions.log.info.aclsPreview", len(rows)))
 	opts.Logger.Info()
 
-	rows := aclutil.MapACLsToTableRows(aclBindingList, opts.localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 

@@ -263,10 +263,12 @@ one = 'Prefix name for topics to be selected'
 one = 'Prefix name for groups to be selected'
 
 [kafka.acl.grantPermissions.log.info.aclsPreview]
-one = 'The following ACL rule is going to be created:'
+one = 'The following ACL rule will be created:'
+other = 'The following ACL rules will be created:'
 
 [kafka.acl.grantPermissions.log.delete.info.aclsPreview]
-one = 'The following ACL rules were deleted:'
+one = 'The following ACL rule was deleted:'
+other = 'The following ACL rules were deleted:'
 
 [kafka.acl.grantPermissions.log.info.aclsCreated]
 one = 'ACLs successfully created in the Kafka instance "{{.InstanceName}}"'
