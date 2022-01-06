@@ -2,7 +2,8 @@ package kubeclient
 
 import (
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cluster/v1alpha"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
