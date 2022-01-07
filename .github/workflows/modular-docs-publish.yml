@@ -2,15 +2,10 @@
 
 name: Downstream docs publish
 
-# on:
-#   push:
-#     tags:
-#       - 'v*'
-
-## For testing
 on:
   push:
-    branches: [ adoc-modular ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
