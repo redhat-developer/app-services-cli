@@ -1,4 +1,4 @@
- 
+
 [artifact.cmd.description.short]
 one = 'Manage Service Registry artifacts'
 
@@ -54,7 +54,7 @@ one = 'File location of the artifact'
 one = 'Delete artifact without prompt'
 
 [artifact.common.registryIdToUse]
-one = 'ID of the Service Registry instance to be used. By default, uses the currently selected instance'
+one = 'ID of the Service Registry instance to be used (by default, uses the currently selected instance)'
 
 [artifact.common.id]
 one = 'ID of the artifact'
@@ -98,7 +98,7 @@ one = 'Page number'
 one = 'Page limit'
 
 [artifact.common.instance.id]
-one = 'ID of the Service Registry instance to be used. By default, uses the currently selected instance'
+one = 'ID of the Service Registry instance to be used (by default, uses the currently selected instance)'
 
 [artifact.common.message.no.group]
 one = 'Using {{.DefaultArtifactGroup}} artifacts group.'
@@ -200,24 +200,25 @@ one = 'please specify at least one flag: [contentId, global-id, hash]'
 one = 'editor mode cannot be started in non-interactive mode. Please use --name and --description flags'
 
 [artifact.cmd.create.description.short]
-one = 'Creates new artifact from file or standard input'
+one = 'Create new artifact from file or standard input'
 
 [artifact.cmd.create.description.long]
 one = '''
-Creates a new artifact by posting the artifact content to the registry instance.
+Create a new artifact by posting the artifact content to the registry instance.
 
-Artifacts are typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
-Service Registry attempts to figure out what kind of artifact is being added from the following supported list:
+Artifacts are typically in JSON format for most of the supported types, but might be in another format for a few types (for example, PROTOBUF).
 
-- Avro (AVRO)
-- Protobuf (PROTOBUF)
-- JSON Schema (JSON)
-- Kafka Connect (KCONNECT)
-- OpenAPI (OPENAPI)
-- AsyncAPI (ASYNCAPI)
-- GraphQL (GRAPHQL)
-- Web Services Description Language (WSDL)
-- XML Schema (XSD)
+Service Registry attempts to identify what type of artifact is being added from the following supported list:
+
+* Avro (AVRO)
+* Protobuf (PROTOBUF)
+* JSON Schema (JSON)
+* Kafka Connect (KCONNECT)
+* OpenAPI (OPENAPI)
+* AsyncAPI (ASYNCAPI)
+* GraphQL (GRAPHQL)
+* Web Services Description Language (WSDL)
+* XML Schema (XSD)
 
 An artifact is created using the content provided in the request body.
 This content is created with a unique artifact ID that can be provided by user.
@@ -242,15 +243,15 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 one = 'invalid artifact type. Please use one of following values: {{.AllowedTypes}}'
 
 [artifact.cmd.delete.description.short]
-one = 'Deletes single or all artifacts in a given group'
+one = 'Deletes an artifact or all artifacts in a given group'
 
 [artifact.cmd.delete.description.long]
 one = '''
-Deletes single or all artifacts in a given group.
+Deletes a single artifact or all artifacts in a given group:
 
-When called without arguments, deletes all artifacts in the group
-When --artifact-id is specified, deletes only a single artifact and its version
-When --group parameter is missing, the command uses the "default" group.
+* When called without arguments, deletes all artifacts in the group.
+* When --artifact-id is specified, deletes only a single artifact and its version.
+* When --group is omitted, the command uses the "default" group.
 '''
 
 [artifact.cmd.delete.example]
@@ -263,16 +264,16 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 '''
 
 [artifact.cmd.get.description.short]
-one = 'Get artifact by ID and group'
+one = 'Get artifact by ID, group, and version'
 
 [artifact.cmd.get.description.long]
 one = '''
-Get artifact by specifying ID and group.
-Command fetches the latest artifact from the registry based on the artifact-id and group.
+Get an artifact from the registry based on the artifact ID, group, and version.
 
-When --version is specified, the command fetches the specific artifact version.
-Get command fetches artifacts based on --group and --artifact-id and --version.
-For fetching artifacts using global identifiers, use the "service-registry download" command
+NOTE: To fetch artifacts using global identifiers, use the "service-registry artifact download" command.
+
+When --version is specified, the command fetches the specified artifact version. When --version is not specified, the command fetches the latest artifact version.
+
 '''
 
 [artifact.cmd.get.example]
@@ -294,7 +295,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 one = 'List artifacts'
 
 [artifact.cmd.list.description.long]
-one = 'List all artifacts for the group by specified output format (by default, table)'
+one = 'List all artifacts for the group in the specified output format (by default, "table")'
 
 [artifact.cmd.list.example]
 one = '''
@@ -322,17 +323,17 @@ one = 'Update artifact'
 
 [artifact.cmd.update.description.long]
 one = '''
-Update artifact from file or directly standard input
+Update an artifact from a file or directly from standard input.
 
-Artifacts are typically in JSON format for most supported types, but may be in another format for a few (for example, PROTOBUF).
+Artifacts are typically in JSON format for most supported types, but might be in another format for some types (for example, PROTOBUF).
 The type of the content should be compatible with the current artifact type.
 
-When successful, this creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
+When successful, this command creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
 
 An artifact is updated using the content provided in the request body.
-This content is updated under a unique artifactId provided by user.
+This content is updated under a unique artifactId provided by the user.
 
-Updated artifact content should conform to validity and compatibility rules set for the registry instance.
+Updated artifact content should conform to the validity and compatibility rules set for the registry instance.
 '''
 
 [artifact.cmd.update.example]
@@ -349,14 +350,16 @@ one = 'Download artifacts from Service Registry using global identifiers'
 
 [artifact.cmd.download.description.long]
 one = '''
-Get single or more artifacts by group, content, hash or globalIds.
-NOTE: Use "service-registry get" command to download artifacts by artifactId.
+Get one or more artifacts by group, content, hash, or globalId.
 
-Flags are used to specify the artifact to download:
+NOTE: To download artifacts by artifactId, use the "service-registry artifact get" command.
 
---contentId - ID if the content is from metadata
---globalId - globalId of the content from metadata
---hash - SHA-256 hash of the content
+Use the following flags to specify the artifacts to download:
+
+* --contentId (ID if the content is from metadata)
+* --globalId (globalId of the content from metadata)
+* --hash (SHA-256 hash of the content)
+* --group (artifact group)
 '''
 
 [artifact.cmd.download.example]
@@ -379,7 +382,8 @@ one = 'Get artifact metadata'
 
 [artifact.cmd.metadata.get.description.long]
 one = '''
-Gets the metadata for an artifact in a Service Registry instance
+Get the metadata for an artifact in a Service Registry instance.
+
 The returned metadata includes both generated (read-only) and editable metadata (such as name and description).
 '''
 
@@ -397,8 +401,9 @@ one = 'Update artifact metadata'
 
 [artifact.cmd.metadata.set.description.long]
 one = '''
-Updates the metadata for an artifact in a Service Registry instance
-Editable metadata includes fields like name and description
+Update the metadata for an artifact in a Service Registry instance.
+
+Editable metadata includes fields such as name and description.
 '''
 
 [artifact.cmd.metadata.set.example]
@@ -417,7 +422,7 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
 one = 'Get latest artifact versions by artifact-id and group'
 
 [artifact.cmd.versions.description.long]
-one = 'Get latest artifact versions by specifying group and artifact-id'
+one = 'Get the latest artifact versions by specifying the group and artifact-id'
 
 [artifact.cmd.versions.example]
 one = '''
@@ -433,7 +438,7 @@ one = 'Import data into a Service Registry instance'
 
 [artifact.cmd.import.description.long]
 one = '''
-Import all artifacts and metadata from export file to another Service Segistry instance
+Import all artifacts and metadata from an export file to another Service Registry instance
 '''
 
 [artifact.cmd.import.example]
@@ -447,7 +452,7 @@ one = 'Export data from Service Registry instance'
 
 [artifact.cmd.export.description.long]
 one = '''
-Export all artifacts and metadata from Service Registry instance to specified file
+Export all artifacts and metadata from a Service Registry instance to a specified file
 '''
 
 [artifact.cmd.export.example]
@@ -468,10 +473,11 @@ one = 'Set artifact state'
 
 [artifact.cmd.stateset.description.long]
 one = '''
-Set artifact state by setting one of possible values
-- ENABLED (Enable artifact)
-- DISABLED (Disable artifact usage)
-- DEPRECATED (Deprecate artifact)
+Set the artifact state by setting one of the following values:
+
+* ENABLED (Enable artifact)
+* DISABLED (Disable artifact usage)
+* DEPRECATED (Deprecate artifact)
 '''
 
 [artifact.cmd.stateset.example]

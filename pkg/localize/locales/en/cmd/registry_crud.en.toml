@@ -2,15 +2,16 @@
 one = 'Service Registry commands'
 
 [registry.cmd.longDescription]
-one = ''' 
+one = '''
 Manage and interact with your Service Registry instances directly from the command line.
 
 Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
 
 Commands are divided into the following categories:
- - instance management commands: create, list, and so on
- - commands executed on selected instance: artifacts
- - "use" command that selects the current instance
+
+* Instance management commands: create, list, and so on
+* Commands executed on selected instance: artifacts
+* "use" command that selects the current instance
 '''
 
 [registry.cmd.example]
@@ -19,7 +20,7 @@ one = '''
 rhoas service-registry create --name myregistry
 
 ## List Service Registry instances
-rhoas service-registry list 
+rhoas service-registry list
 '''
 
 [registry.cmd.create.shortDescription]
@@ -27,7 +28,7 @@ one = 'Create a Service Registry instance'
 
 [registry.cmd.create.longDescription]
 one = '''
-Create a Service Registry instance to store and manage your schema and API artifacts. 
+Create a Service Registry instance to store and manage your schema and API artifacts
 '''
 
 [registry.cmd.create.example]
@@ -49,7 +50,7 @@ one = 'Creating Service Registry instance with name: {{.Name}}'
 one = 'Delete a Service Registry instance'
 
 [registry.cmd.delete.longDescription]
-one = ''' 
+one = '''
 Delete a Service Registry instance along with all of its schema and API artifacts.
 '''
 
@@ -66,8 +67,8 @@ rhoas service-registry delete --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 one = 'Describe a Service Registry instance'
 
 [registry.cmd.describe.longDescription]
-one = ''' 
-Describe a Service Registry instance. Fetch all required fields including the registry URL. 
+one = '''
+Describe a Service Registry instance. Fetch all required fields including the registry URL.
 '''
 
 [registry.cmd.describe.example]
@@ -84,7 +85,7 @@ rhoas service-registry describe --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 one = 'List Service Registry instances'
 
 [registry.cmd.list.longDescription]
-one = ''' 
+one = '''
 List all Service Registry instances for your account and paginate over the results.
 '''
 
@@ -97,7 +98,7 @@ rhoas service-registry list
 one = 'Use a Service Registry instance'
 
 [registry.cmd.use.longDescription]
-one = ''' 
+one = '''
 Select a Service Registry instance to use with all instance-specific commands.
 You can specify a Service Registry instance by --name or --id.
 
@@ -150,7 +151,7 @@ one = 'could not set the current Service Registry instance as default: {{.ErrorM
 [registry.common.error.noServiceSelected]
 description = 'Error message when no Service Registry instance is set'
 one = 'no Service Registry instance is currently set, use the "--id" flag or set the current instance with the "rhoas service-registry use" command'
- 
+
 [registry.delete.flag.id]
 description = 'Description for the --id flag'
 one = 'Unique ID of the Service Registry instance you want to delete (if not provided, the current Service Registry instance will be deleted)'
@@ -219,7 +220,7 @@ one = 'could not set "{{.Name}}" as the current Service Registry instance'
 one= 'either --id or --name flag is required when not running interactively'
 
 [registry.use.log.info.useSuccess]
-description = 'Info message when current Service Registry instance was set' 
+description = 'Info message when current Service Registry instance was set'
 one = 'Service Registry instance "{{.Name}}" has been set as the current instance.'
 
 [registry.cmd.describe.flag.name.description]
