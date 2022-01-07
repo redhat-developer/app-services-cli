@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -111,7 +111,7 @@ func runGet(opts *GetOptions) error {
 	request := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	response, _, err := request.Execute()
 	if err != nil {
-		return registryutil.TransformInstanceError(err)
+		return sdk.TransformInstanceError(err)
 	}
 
 	artifactURL, ok := util.GetArtifactURL(registry, &response)

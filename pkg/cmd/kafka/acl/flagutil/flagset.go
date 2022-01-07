@@ -1,7 +1,7 @@
 package flagutil
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -41,7 +41,7 @@ func NewFlagSet(cmd *cobra.Command, f *factory.Factory) *flagSet {
 func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 	flagName := "resource-type"
 
-	resourceTypeFilterMap := aclutil.GetResourceTypeFilterMap()
+	resourceTypeFilterMap := sdk.GetResourceTypeFilterMap()
 
 	resourceTypes := make([]string, 0, len(resourceTypeFilterMap))
 	for i := range resourceTypeFilterMap {
@@ -51,7 +51,7 @@ func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 	fs.StringVar(
 		resourceType,
 		flagName,
-		aclutil.ResourceTypeANY,
+		sdk.ResourceTypeANY,
 		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.resourceType", resourceTypes...),
 	)
 
@@ -66,7 +66,7 @@ func (fs *flagSet) AddResourceType(resourceType *string) *flagutil.FlagOptions {
 func (fs *flagSet) AddOperationFilter(operationType *string) *flagutil.FlagOptions {
 	flagName := "operation"
 
-	operationFilterMap := aclutil.GetOperationFilterMap()
+	operationFilterMap := sdk.GetOperationFilterMap()
 
 	operations := make([]string, 0, len(operationFilterMap))
 	for i := range operationFilterMap {
@@ -91,7 +91,7 @@ func (fs *flagSet) AddOperationFilter(operationType *string) *flagutil.FlagOptio
 func (fs *flagSet) AddOperationCreate(operationType *string) *flagutil.FlagOptions {
 	flagName := "operation"
 
-	operationMap := aclutil.GetOperationMap()
+	operationMap := sdk.GetOperationMap()
 
 	operations := make([]string, 0, len(operationMap))
 	for i := range operationMap {
@@ -116,7 +116,7 @@ func (fs *flagSet) AddOperationCreate(operationType *string) *flagutil.FlagOptio
 func (fs *flagSet) AddPermissionFilter(permission *string) *flagutil.FlagOptions {
 	flagName := "permission"
 
-	permissionTypeFilterMap := aclutil.GetPermissionTypeFilterMap()
+	permissionTypeFilterMap := sdk.GetPermissionTypeFilterMap()
 
 	permissions := make([]string, 0, len(permissionTypeFilterMap))
 	for i := range permissionTypeFilterMap {
@@ -126,7 +126,7 @@ func (fs *flagSet) AddPermissionFilter(permission *string) *flagutil.FlagOptions
 	fs.StringVar(
 		permission,
 		flagName,
-		aclutil.PermissionANY,
+		sdk.PermissionANY,
 		flagutil.FlagDescription(fs.factory.Localizer, "kafka.acl.common.flag.permission.description", permissions...),
 	)
 
@@ -141,7 +141,7 @@ func (fs *flagSet) AddPermissionFilter(permission *string) *flagutil.FlagOptions
 func (fs *flagSet) AddPermissionCreate(permission *string) *flagutil.FlagOptions {
 	flagName := "permission"
 
-	permissionTypeMap := aclutil.GetPermissionTypeMap()
+	permissionTypeMap := sdk.GetPermissionTypeMap()
 
 	permissions := make([]string, 0, len(permissionTypeMap))
 	for i := range permissionTypeMap {

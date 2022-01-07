@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
@@ -89,7 +89,7 @@ func runExport(opts *ExportOptions) error {
 	request := dataAPI.AdminApi.ExportData(opts.Context)
 	file, _, err := request.Execute()
 	if err != nil {
-		return registryutil.TransformInstanceError(err)
+		return sdk.TransformInstanceError(err)
 	}
 	_, err = io.Copy(fileContent, file)
 	if err != nil {

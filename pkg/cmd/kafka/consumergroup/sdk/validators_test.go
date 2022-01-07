@@ -1,4 +1,4 @@
-package consumergrouputil
+package sdk
 
 import (
 	"testing"

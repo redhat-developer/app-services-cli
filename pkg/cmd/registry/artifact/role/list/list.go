@@ -3,7 +3,7 @@ package list
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -100,7 +100,7 @@ func runList(opts *options) error {
 	}
 	mappings, _, err := a.AdminApi.ListRoleMappings(opts.Context).Execute()
 	if err != nil {
-		return registryutil.TransformInstanceError(err)
+		return sdk.TransformInstanceError(err)
 	}
 
 	if len(mappings) == 0 && opts.outputFormat == "" {

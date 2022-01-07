@@ -3,8 +3,8 @@ package grant
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/sdk"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
@@ -127,7 +127,7 @@ func runGrantPermissions(opts *options) (err error) {
 	var groupPatternArg = kafkainstanceclient.ACLPATTERNTYPE_LITERAL
 
 	if opts.topic != "" {
-		topicNameArg = aclutil.GetResourceName(opts.topic)
+		topicNameArg = sdk.GetResourceName(opts.topic)
 	}
 
 	if opts.topicPrefix != "" {
@@ -136,7 +136,7 @@ func runGrantPermissions(opts *options) (err error) {
 	}
 
 	if opts.group != "" {
-		groupIdArg = aclutil.GetResourceName(opts.group)
+		groupIdArg = sdk.GetResourceName(opts.group)
 	}
 
 	if opts.groupPrefix != "" {
@@ -153,13 +153,13 @@ func runGrantPermissions(opts *options) (err error) {
 	}
 
 	if allAccounts {
-		opts.principal = aclutil.Wildcard
+		opts.principal = sdk.Wildcard
 	}
 
 	var aclBindRequests []kafkainstanceclient.ApiCreateAclRequest
 	var aclBindingList []kafkainstanceclient.AclBinding
 
-	userArg := aclutil.FormatPrincipal(opts.principal)
+	userArg := sdk.FormatPrincipal(opts.principal)
 
 	req := api.AclsApi.CreateAcl(opts.Context)
 
@@ -237,7 +237,7 @@ func runGrantPermissions(opts *options) (err error) {
 		// Add ACLs for transactional IDs
 		aclBindTransactionIDWrite := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TRANSACTIONAL_ID,
-			aclutil.Wildcard,
+			sdk.Wildcard,
 			kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
 			userArg,
 			kafkainstanceclient.ACLOPERATION_WRITE,
@@ -250,7 +250,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 		aclBindTransactionIDDescribe := kafkainstanceclient.NewAclBinding(
 			kafkainstanceclient.ACLRESOURCETYPE_TRANSACTIONAL_ID,
-			aclutil.Wildcard,
+			sdk.Wildcard,
 			kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
 			userArg,
 			kafkainstanceclient.ACLOPERATION_DESCRIBE,
@@ -265,7 +265,7 @@ func runGrantPermissions(opts *options) (err error) {
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
 	opts.Logger.Info()
 
-	rows := aclutil.MapACLsToTableRows(aclBindingList, opts.localizer)
+	rows := sdk.MapACLsToTableRows(aclBindingList, opts.localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
@@ -288,7 +288,7 @@ func runGrantPermissions(opts *options) (err error) {
 
 	// Execute ACL rule creations
 	for _, req := range aclBindRequests {
-		if err = aclutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
+		if err = sdk.ExecuteACLRuleCreate(req, opts.localizer, kafkaName); err != nil {
 			return err
 		}
 	}
@@ -360,12 +360,12 @@ func validateFlagInputCombination(opts *options) error {
 	}
 
 	// user and service account should not allow wildcard
-	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+	if userID == sdk.Wildcard || serviceAccount == sdk.Wildcard || userID == sdk.AllAlias || serviceAccount == sdk.AllAlias {
 		errorCollection = append(errorCollection, opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag"))
 	}
 
 	if len(errorCollection) > 0 {
-		return aclutil.BuildInstructions(errorCollection)
+		return sdk.BuildInstructions(errorCollection)
 	}
 
 	return nil

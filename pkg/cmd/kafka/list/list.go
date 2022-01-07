@@ -7,7 +7,7 @@ import (
 
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/shared"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -75,7 +75,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
-			validator := &shared.Validator{
+			validator := &sdk.Validator{
 				Localizer: opts.localizer,
 			}
 

@@ -2,8 +2,8 @@ package delete
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	aclFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -34,7 +34,7 @@ type requestParams struct {
 
 // NewDeleteCommand creates a new command to delete Kafka ACLs
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
-	opts := &aclutil.CrudOptions{
+	opts := &sdk.CrudOptions{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -60,7 +60,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
 			}
 
-			if resourceErrors := aclutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
+			if resourceErrors := sdk.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
 				errorCollection = append(errorCollection, resourceErrors)
 			}
 
@@ -69,7 +69,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if len(errorCollection) > 0 {
-				return aclutil.BuildInstructions(errorCollection)
+				return sdk.BuildInstructions(errorCollection)
 			}
 
 			return runDelete(opts.InstanceID, opts)
@@ -97,7 +97,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
+func runDelete(instanceID string, opts *sdk.CrudOptions) error {
 	ctx := opts.Context
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
@@ -118,7 +118,7 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 		return err
 	}
 
-	if isValidOp, validResourceOperations := aclutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
+	if isValidOp, validResourceOperations := sdk.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
 			localize.NewEntry("ResourceType", opts.ResourceType),
 			localize.NewEntry("Operation", opts.Operation),
@@ -162,7 +162,7 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 		defer httpRes.Body.Close()
 	}
 
-	err = aclutil.ValidateAPIError(httpRes, opts.Localizer, err, "delete", kafkaInstance.GetName())
+	err = sdk.ValidateAPIError(httpRes, opts.Localizer, err, "delete", kafkaInstance.GetName())
 	spinnr.Stop()
 
 	if err != nil {
@@ -184,32 +184,32 @@ func runDelete(instanceID string, opts *aclutil.CrudOptions) error {
 
 	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.delete.info.aclsPreview"))
 	opts.Logger.Info()
-	rows := aclutil.MapACLsToTableRows(*deletedACLs.Items, opts.Localizer)
+	rows := sdk.MapACLsToTableRows(*deletedACLs.Items, opts.Localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
 	return nil
 }
 
-func getRequestParams(opts *aclutil.CrudOptions) *requestParams {
+func getRequestParams(opts *sdk.CrudOptions) *requestParams {
 	return &requestParams{
-		resourceType: aclutil.GetMappedResourceTypeFilterValue(opts.ResourceType),
-		principal:    aclutil.FormatPrincipal(opts.Principal),
-		resourceName: aclutil.GetResourceName(opts.ResourceName),
-		patternType:  aclutil.GetMappedPatternTypeFilterValue(opts.PatternType),
-		operation:    aclutil.GetMappedOperationFilterValue(opts.Operation),
-		permission:   aclutil.GetMappedPermissionTypeFilterValue(opts.Permission),
+		resourceType: sdk.GetMappedResourceTypeFilterValue(opts.ResourceType),
+		principal:    sdk.FormatPrincipal(opts.Principal),
+		resourceName: sdk.GetResourceName(opts.ResourceName),
+		patternType:  sdk.GetMappedPatternTypeFilterValue(opts.PatternType),
+		operation:    sdk.GetMappedOperationFilterValue(opts.Operation),
+		permission:   sdk.GetMappedPermissionTypeFilterValue(opts.Permission),
 	}
 }
 
-func validateAndSetOpts(opts *aclutil.CrudOptions) error {
+func validateAndSetOpts(opts *sdk.CrudOptions) error {
 
 	// user and service account should not be provided together
 	if userID != "" && serviceAccount != "" {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
 	}
 
-	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+	if userID == sdk.Wildcard || serviceAccount == sdk.Wildcard || userID == sdk.AllAlias || serviceAccount == sdk.AllAlias {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 
@@ -217,7 +217,7 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		if userID != "" || serviceAccount != "" {
 			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
 		}
-		opts.Principal = aclutil.Wildcard
+		opts.Principal = sdk.Wildcard
 	}
 
 	// check if principal is provided
@@ -225,9 +225,9 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
 
-	opts.PatternType = aclutil.PatternTypeLITERAL
+	opts.PatternType = sdk.PatternTypeLITERAL
 	if prefix {
-		opts.PatternType = aclutil.PatternTypePREFIX
+		opts.PatternType = sdk.PatternTypePREFIX
 	}
 
 	if userID != "" {

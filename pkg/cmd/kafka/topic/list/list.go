@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topicutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/sdk"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
@@ -77,7 +77,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.search != "" {
-				validator := topicutil.Validator{
+				validator := sdk.Validator{
 					Localizer: opts.localizer,
 				}
 				if err := validator.ValidateSearchInput(opts.search); err != nil {
@@ -191,7 +191,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 		for _, conf := range t.GetConfig() {
 			unlimitedVal := "-1 (Unlimited)"
 
-			if *conf.Key == topicutil.RetentionMsKey {
+			if *conf.Key == sdk.RetentionMsKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionTime = unlimitedVal
@@ -199,7 +199,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 					row.RetentionTime = val
 				}
 			}
-			if *conf.Key == topicutil.RetentionSizeKey {
+			if *conf.Key == sdk.RetentionSizeKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionSize = unlimitedVal

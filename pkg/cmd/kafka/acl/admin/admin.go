@@ -3,8 +3,8 @@ package admin
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/sdk"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
@@ -83,7 +83,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// user and service account should not allow wildcard
-			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+			if userID == sdk.Wildcard || serviceAccount == sdk.Wildcard || userID == sdk.AllAlias || serviceAccount == sdk.AllAlias {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 			}
 
@@ -96,7 +96,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if allAccounts {
-				opts.principal = aclutil.Wildcard
+				opts.principal = sdk.Wildcard
 			}
 
 			return runAdmin(opts)
@@ -131,9 +131,9 @@ func runAdmin(opts *options) (err error) {
 
 	aclBindClusterAlter := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.ACLRESOURCETYPE_CLUSTER,
-		aclutil.KafkaCluster,
+		sdk.KafkaCluster,
 		kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
-		aclutil.FormatPrincipal(opts.principal),
+		sdk.FormatPrincipal(opts.principal),
 		kafkainstanceclient.ACLOPERATION_ALTER,
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
@@ -141,7 +141,7 @@ func runAdmin(opts *options) (err error) {
 	opts.logger.Info(opts.localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
 	opts.logger.Info()
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
+	rows := sdk.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
 	dump.Table(opts.io.Out, rows)
 	opts.logger.Info()
 
@@ -164,7 +164,7 @@ func runAdmin(opts *options) (err error) {
 
 	req = req.AclBinding(*aclBindClusterAlter)
 
-	err = aclutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
+	err = sdk.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
 	if err != nil {
 		return err
 	}

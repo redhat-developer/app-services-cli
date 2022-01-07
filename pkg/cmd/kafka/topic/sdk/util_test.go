@@ -1,4 +1,4 @@
-package topicutil
+package sdk
 
 import (
 	"reflect"

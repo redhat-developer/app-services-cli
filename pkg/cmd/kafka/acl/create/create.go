@@ -2,8 +2,8 @@ package create
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	aclFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -33,7 +33,7 @@ type requestParams struct {
 
 // NewCreateCommand creates a new command to add Kafka ACLs
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &aclutil.CrudOptions{
+	opts := &sdk.CrudOptions{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -63,7 +63,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
 			}
 
-			if resourceErrors := aclutil.ValidateAndSetResources(opts, aclFlagutil.ResourceTypeFlagEntries); resourceErrors != nil {
+			if resourceErrors := sdk.ValidateAndSetResources(opts, aclFlagutil.ResourceTypeFlagEntries); resourceErrors != nil {
 				errorCollection = append(errorCollection, resourceErrors)
 			}
 
@@ -72,7 +72,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if len(errorCollection) > 0 {
-				return aclutil.BuildInstructions(errorCollection)
+				return sdk.BuildInstructions(errorCollection)
 			}
 
 			return runAdd(opts.InstanceID, opts)
@@ -99,7 +99,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
+func runAdd(instanceID string, opts *sdk.CrudOptions) error {
 	ctx := opts.Context
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
@@ -122,7 +122,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 		return err
 	}
 
-	if isValidOp, validResourceOperations := aclutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
+	if isValidOp, validResourceOperations := sdk.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
 			localize.NewEntry("ResourceType", opts.ResourceType),
 			localize.NewEntry("Operation", opts.Operation),
@@ -136,7 +136,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 		kafkainstanceclient.AclResourceType(requestParams.resourceType),
 		requestParams.resourceName,
 		kafkainstanceclient.AclPatternType(requestParams.patternType),
-		aclutil.FormatPrincipal(opts.Principal),
+		sdk.FormatPrincipal(opts.Principal),
 		kafkainstanceclient.AclOperation(requestParams.operation),
 		kafkainstanceclient.AclPermissionType(requestParams.permission),
 	)
@@ -144,7 +144,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 	opts.Logger.Info(opts.Localizer.MustLocalize("kafka.acl.grantPermissions.log.info.aclsPreview"))
 	opts.Logger.Info()
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
+	rows := sdk.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
 	dump.Table(opts.IO.Out, rows)
 	opts.Logger.Info()
 
@@ -173,7 +173,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 
 	req = req.AclBinding(*newAclBinding)
 
-	err = aclutil.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName)
+	err = sdk.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName)
 	spinnr.Stop()
 	if err != nil {
 		return err
@@ -182,25 +182,25 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 	return nil
 }
 
-func getRequestParams(opts *aclutil.CrudOptions) *requestParams {
+func getRequestParams(opts *sdk.CrudOptions) *requestParams {
 	return &requestParams{
-		resourceType: kafkainstanceclient.AclResourceType(aclutil.GetMappedResourceTypeFilterValue(opts.ResourceType)),
-		principal:    aclutil.FormatPrincipal(opts.Principal),
-		resourceName: aclutil.GetResourceName(opts.ResourceName),
-		patternType:  aclutil.GetMappedPatternTypeValue(opts.PatternType),
-		operation:    aclutil.GetMappedOperationValue(opts.Operation),
-		permission:   aclutil.GetMappedPermissionTypeValue(opts.Permission),
+		resourceType: kafkainstanceclient.AclResourceType(sdk.GetMappedResourceTypeFilterValue(opts.ResourceType)),
+		principal:    sdk.FormatPrincipal(opts.Principal),
+		resourceName: sdk.GetResourceName(opts.ResourceName),
+		patternType:  sdk.GetMappedPatternTypeValue(opts.PatternType),
+		operation:    sdk.GetMappedOperationValue(opts.Operation),
+		permission:   sdk.GetMappedPermissionTypeValue(opts.Permission),
 	}
 }
 
-func validateAndSetOpts(opts *aclutil.CrudOptions) error {
+func validateAndSetOpts(opts *sdk.CrudOptions) error {
 
 	// user and service account should not be provided together
 	if userID != "" && serviceAccount != "" {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
 	}
 
-	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+	if userID == sdk.Wildcard || serviceAccount == sdk.Wildcard || userID == sdk.AllAlias || serviceAccount == sdk.AllAlias {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 
@@ -208,7 +208,7 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		if userID != "" || serviceAccount != "" {
 			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
 		}
-		opts.Principal = aclutil.Wildcard
+		opts.Principal = sdk.Wildcard
 	}
 
 	// check if principal is provided
@@ -216,9 +216,9 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
 
-	opts.PatternType = aclutil.PatternTypeLITERAL
+	opts.PatternType = sdk.PatternTypeLITERAL
 	if prefix {
-		opts.PatternType = aclutil.PatternTypePREFIX
+		opts.PatternType = sdk.PatternTypePREFIX
 	}
 
 	if userID != "" {

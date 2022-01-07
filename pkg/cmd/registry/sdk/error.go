@@ -1,4 +1,4 @@
-package registryutil
+package sdk
 
 import (
 	"errors"

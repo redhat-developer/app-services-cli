@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/consumergrouputil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/sdk"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -182,8 +182,8 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 		consumers := t.GetConsumers()
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetGroupId(),
-			ActiveMembers:     consumergrouputil.GetActiveConsumersCount(consumers),
-			PartitionsWithLag: consumergrouputil.GetPartitionsWithLag(consumers),
+			ActiveMembers:     sdk.GetActiveConsumersCount(consumers),
+			PartitionsWithLag: sdk.GetPartitionsWithLag(consumers),
 		}
 		rows[i] = row
 	}

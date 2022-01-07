@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
 
 	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/shared"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -81,7 +81,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name != "" {
-				validator := &shared.Validator{
+				validator := &sdk.Validator{
 					Localizer:  opts.localizer,
 					Connection: opts.Connection,
 				}
@@ -278,7 +278,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 
 	api := conn.API()
 
-	validator := &shared.Validator{
+	validator := &sdk.Validator{
 		Localizer:  opts.localizer,
 		Connection: opts.Connection,
 	}

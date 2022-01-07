@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registryutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -58,7 +58,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name != "" {
-				if err := registryutil.ValidateName(opts.name); err != nil {
+				if err := sdk.ValidateName(opts.name); err != nil {
 					return err
 				}
 			}
@@ -183,7 +183,7 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 		Help:    opts.localizer.MustLocalize("registry.cmd.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(registryutil.ValidateName))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(sdk.ValidateName))
 	if err != nil {
 		return nil, err
 	}

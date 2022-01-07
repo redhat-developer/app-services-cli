@@ -3,8 +3,8 @@ package list
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/sdk"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
@@ -93,7 +93,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// user and service account should not allow wildcard
-			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+			if userID == sdk.Wildcard || serviceAccount == sdk.Wildcard || userID == sdk.AllAlias || serviceAccount == sdk.AllAlias {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 			}
 
@@ -106,7 +106,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if allAccounts {
-				opts.principal = aclutil.Wildcard
+				opts.principal = sdk.Wildcard
 			}
 
 			return runList(opts)
@@ -154,7 +154,7 @@ func runList(opts *options) (err error) {
 	req = req.Order("asc").OrderKey("principal")
 
 	if opts.principal != "" {
-		principalQuery := aclutil.FormatPrincipal(opts.principal)
+		principalQuery := sdk.FormatPrincipal(opts.principal)
 		req = req.Principal(principalQuery)
 	}
 
@@ -164,20 +164,20 @@ func runList(opts *options) (err error) {
 
 	if opts.topic != "" {
 		selectedResourceTypeCount++
-		resourceType = aclutil.ResourceTypeTOPIC
+		resourceType = sdk.ResourceTypeTOPIC
 		resourceName = opts.topic
 	}
 
 	if opts.group != "" {
 		selectedResourceTypeCount++
-		resourceType = aclutil.ResourceTypeGROUP
+		resourceType = sdk.ResourceTypeGROUP
 		resourceName = opts.group
 	}
 
 	if opts.cluster {
 		selectedResourceTypeCount++
-		resourceType = aclutil.ResourceTypeCLUSTER
-		resourceName = aclutil.KafkaCluster
+		resourceType = sdk.ResourceTypeCLUSTER
+		resourceName = sdk.KafkaCluster
 	}
 
 	if selectedResourceTypeCount > 1 {
@@ -185,11 +185,11 @@ func runList(opts *options) (err error) {
 	}
 
 	if resourceType != "" {
-		req = req.ResourceType(aclutil.GetMappedResourceTypeFilterValue(resourceType))
+		req = req.ResourceType(sdk.GetMappedResourceTypeFilterValue(resourceType))
 	}
 
 	if resourceName != "" {
-		req = req.ResourceName(aclutil.GetResourceName(resourceName))
+		req = req.ResourceName(sdk.GetResourceName(resourceName))
 	}
 
 	permissionsData, httpRes, err := req.Execute()
@@ -197,7 +197,7 @@ func runList(opts *options) (err error) {
 		defer httpRes.Body.Close()
 	}
 
-	if err = aclutil.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
+	if err = sdk.ValidateAPIError(httpRes, opts.localizer, err, "list", kafkaInstance.GetName()); err != nil {
 		return err
 	}
 
@@ -211,7 +211,7 @@ func runList(opts *options) (err error) {
 	case dump.EmptyFormat:
 		opts.logger.Info("")
 		permissions := permissionsData.GetItems()
-		rows := aclutil.MapACLsToTableRows(permissions, opts.localizer)
+		rows := sdk.MapACLsToTableRows(permissions, opts.localizer)
 		dump.Table(opts.io.Out, rows)
 	default:
 		return dump.Formatted(opts.io.Out, opts.output, permissionsData)
