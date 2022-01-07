@@ -32,37 +32,23 @@ import (
 )
 
 var linkTemplate = template.Must(template.New("linkTemplate").Parse(`
-ifdef::env-github,env-browser[]
-* link:{{.Link}}.adoc#{{.GitHubId}}[{{.Name}}]	 - {{.Short}}
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#{{.PantheonId}}[{{.Name}}]	 - {{.Short}}
-endif::[]
 `))
 
 func nameToPantheonId(name string) string {
 	return fmt.Sprintf("ref-%s_{context}", strings.ReplaceAll(name, " ", "-"))
 }
 
-func nameToGitHubId(name string) string {
-	return strings.ReplaceAll(name, " ", "-")
-}
-
 func writeXref(buf *bytes.Buffer, name string, short string) error {
 	pantheonId := nameToPantheonId(name)
-	gitHubId := nameToGitHubId(name)
-	link := strings.ReplaceAll(name, " ", "_")
 	err := linkTemplate.Execute(buf, struct {
 		PantheonId string
-		GitHubId   string
 		Name       string
-		Link       string
 		Short      string
 	}{
 		pantheonId,
-		gitHubId,
 		name,
-		link,
 		short,
 	})
 	if err != nil {
@@ -200,11 +186,13 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 
 // GenAsciidoc creates asciidocs documentation
 func GenAsciidoc(cmd *cobra.Command, w io.Writer) error {
-	return GenAsciidocCustom(cmd, w, func(s string) string { return s })
+	return GenAsciidocCustom(cmd, w, func(cmd *cobra.Command) string {
+		return GetNormalizedCommandPath(cmd)
+	}, func(s string) string { return s })
 }
 
 // GenAsciidocCustom creates custom asciidoc documentation
-func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string) error {
+func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, fileNameGenerator func(cmd *cobra.Command) string, linkHandler func(string) string) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 
@@ -354,5 +342,5 @@ func GenAsciidocTreeCustom(cmd *cobra.Command, options *GeneratorOptions) error 
 		}
 	}
 
-	return GenAsciidocCustom(cmd, f, options.LinkHandler)
+	return GenAsciidocCustom(cmd, f, options.FileNameGenerator, options.LinkHandler)
 }
