@@ -186,13 +186,11 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command) error {
 
 // GenAsciidoc creates asciidocs documentation
 func GenAsciidoc(cmd *cobra.Command, w io.Writer) error {
-	return GenAsciidocCustom(cmd, w, func(cmd *cobra.Command) string {
-		return GetNormalizedCommandPath(cmd)
-	}, func(s string) string { return s })
+	return GenAsciidocCustom(cmd, w, func(s string) string { return s })
 }
 
 // GenAsciidocCustom creates custom asciidoc documentation
-func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, fileNameGenerator func(cmd *cobra.Command) string, linkHandler func(string) string) error {
+func GenAsciidocCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 
@@ -342,5 +340,5 @@ func GenAsciidocTreeCustom(cmd *cobra.Command, options *GeneratorOptions) error 
 		}
 	}
 
-	return GenAsciidocCustom(cmd, f, options.FileNameGenerator, options.LinkHandler)
+	return GenAsciidocCustom(cmd, f, options.LinkHandler)
 }
