@@ -41,6 +41,8 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 
 	quotaCostGet, _, err := conn.API().AccountMgmt().
 		ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx, orgId).
+		Search("").
+		FetchRelatedResources(false).
 		Execute()
 	if err != nil {
 		return nil, err
