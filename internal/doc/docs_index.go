@@ -20,7 +20,7 @@ You use the ` + "`rhoas`" + ` CLI to manage your application services from the c
 {{ range .Groups}}
 == {{.Description}}
 {{ range .Commands}}
-include::{{.}}[leveloffset=+1]
+include::{{.}}[leveloffset=+2]
 {{ end }}
 {{ end }}
 
