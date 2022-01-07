@@ -2,10 +2,13 @@ package docs
 
 import (
 	"fmt"
+	"os"
+	"path"
+	"path/filepath"
 	"time"
 
+	rhoasdoc "github.com/redhat-developer/app-services-cli/internal/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	rhoasdoc "github.com/redhat-developer/app-services-cli/pkg/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/logging"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
@@ -18,10 +21,10 @@ const (
 )
 
 type options struct {
-	dir    string
-	format string
-
-	logger logging.Logger
+	dir        string
+	format     string
+	filePrefix string
+	logger     logging.Logger
 }
 
 // NewDocsCmd creates a new docs command
@@ -42,7 +45,7 @@ func NewDocsCmd(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.format, "file-format", "md", "Output format of the generated documentation. Valid options are: 'md' (markdown), 'adoc' (Asciidoc) and 'man'")
 	cmd.Flags().StringVar(&opts.dir, "dir", "./docs", "The directory to output the generated documentation files")
-
+	cmd.Flags().StringVar(&opts.filePrefix, "file-prefix", "ref-", "Prefix for each documentation file")
 	return cmd
 }
 
@@ -61,10 +64,28 @@ func runCmd(cmd *cobra.Command, opts *options) (err error) {
 		}
 		err = doc.GenManTree(cmd.Root(), header, opts.dir)
 	case asciidoc:
-		filePrepender := func(filename string) string { return "" }
-		linkHandler := func(s string) string { return s }
+		docsDir := path.Clean(opts.dir + "/modules")
+		assembliesDir := path.Clean(opts.dir + "/assemblies")
+		err = os.MkdirAll(docsDir, 0755)
+		if err != nil {
+			return err
+		}
+		err = os.MkdirAll(assembliesDir, 0755)
+		if err != nil {
+			return err
+		}
 
-		err = rhoasdoc.GenAsciidocTreeCustom(cmd.Root(), opts.dir, filePrepender, linkHandler)
+		options := rhoasdoc.GeneratorOptions{
+			Dir:           docsDir,
+			GenerateIndex: true,
+			IndexFile:     assembliesDir + "/assembly-cli-command-reference.adoc"}
+
+		options.FileNameGenerator = func(c *cobra.Command) string {
+			basename := opts.filePrefix + rhoasdoc.GetNormalizedCommandPath(c) + ".adoc"
+			return filepath.Join(options.Dir, basename)
+		}
+
+		err = rhoasdoc.GenAsciidocTree(cmd.Root(), &options)
 	}
 
 	if err != nil {
