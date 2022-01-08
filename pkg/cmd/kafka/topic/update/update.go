@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/sdk"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -63,7 +63,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.topic.update.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			validator := sdk.Validator{
+			validator := topiccmdutil.Validator{
 				Localizer: opts.localizer,
 			}
 
@@ -85,9 +85,9 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 				// check that a valid --cleanup-policy flag value is used
 				if opts.cleanupPolicy != "" {
-					validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, sdk.ValidCleanupPolicies...)
+					validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topiccmdutil.ValidCleanupPolicies...)
 					if !validPolicy {
-						return flagutil.InvalidValueError("cleanup-policy", opts.cleanupPolicy, sdk.ValidCleanupPolicies...)
+						return flagutil.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topiccmdutil.ValidCleanupPolicies...)
 					}
 				}
 
@@ -96,7 +96,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			// check if the partition flag is set
 			if opts.partitionsStr != "" {
 				// nolint:govet
-				partitionCount, err = sdk.ConvertPartitionsToInt(opts.partitionsStr)
+				partitionCount, err = topiccmdutil.ConvertPartitionsToInt(opts.partitionsStr)
 				if err != nil {
 					return err
 				}
@@ -107,7 +107,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.retentionMsStr != "" {
-				retentionPeriodMs, err = sdk.ConvertRetentionMsToInt(opts.retentionMsStr)
+				retentionPeriodMs, err = topiccmdutil.ConvertRetentionMsToInt(opts.retentionMsStr)
 				if err != nil {
 					return err
 				}
@@ -118,7 +118,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.retentionBytesStr != "" {
-				retentionSizeBytes, err = sdk.ConvertRetentionBytesToInt(opts.retentionBytesStr)
+				retentionSizeBytes, err = topiccmdutil.ConvertRetentionBytesToInt(opts.retentionBytesStr)
 				if err != nil {
 					return err
 				}
@@ -159,7 +159,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
-	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", sdk.ValidCleanupPolicies)
+	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topiccmdutil.ValidCleanupPolicies)
 
 	return cmd
 }
@@ -174,21 +174,21 @@ func runCmd(opts *options) error {
 		}
 
 		if opts.retentionMsStr != "" {
-			retentionPeriodMs, err = sdk.ConvertRetentionMsToInt(opts.retentionMsStr)
+			retentionPeriodMs, err = topiccmdutil.ConvertRetentionMsToInt(opts.retentionMsStr)
 			if err != nil {
 				return err
 			}
 		}
 
 		if opts.retentionBytesStr != "" {
-			retentionSizeBytes, err = sdk.ConvertRetentionBytesToInt(opts.retentionBytesStr)
+			retentionSizeBytes, err = topiccmdutil.ConvertRetentionBytesToInt(opts.retentionBytesStr)
 			if err != nil {
 				return err
 			}
 		}
 
 		if opts.partitionsStr != "" {
-			partitionCount, err = sdk.ConvertPartitionsToInt(opts.partitionsStr)
+			partitionCount, err = topiccmdutil.ConvertPartitionsToInt(opts.partitionsStr)
 			if err != nil {
 				return err
 			}
@@ -234,17 +234,17 @@ func runCmd(opts *options) error {
 
 	if opts.retentionMsStr != "" {
 		needsUpdate = true
-		configEntryMap[sdk.RetentionMsKey] = &opts.retentionMsStr
+		configEntryMap[topiccmdutil.RetentionMsKey] = &opts.retentionMsStr
 	}
 
 	if opts.retentionBytesStr != "" {
 		needsUpdate = true
-		configEntryMap[sdk.RetentionSizeKey] = &opts.retentionBytesStr
+		configEntryMap[topiccmdutil.RetentionSizeKey] = &opts.retentionBytesStr
 	}
 
-	if opts.cleanupPolicy != "" && strings.Compare(opts.cleanupPolicy, sdk.GetConfigValue(topic.GetConfig(), sdk.CleanupPolicy)) != 0 {
+	if opts.cleanupPolicy != "" && strings.Compare(opts.cleanupPolicy, topiccmdutil.GetConfigValue(topic.GetConfig(), topiccmdutil.CleanupPolicy)) != 0 {
 		needsUpdate = true
-		configEntryMap[sdk.CleanupPolicy] = &opts.cleanupPolicy
+		configEntryMap[topiccmdutil.CleanupPolicy] = &opts.cleanupPolicy
 	}
 
 	if opts.partitionsStr != "" {
@@ -258,7 +258,7 @@ func runCmd(opts *options) error {
 	}
 
 	if len(configEntryMap) > 0 {
-		configEntries := sdk.CreateConfigEntries(configEntryMap)
+		configEntries := topiccmdutil.CreateConfigEntries(configEntryMap)
 		topicSettings.SetConfig(*configEntries)
 	}
 
@@ -325,7 +325,7 @@ func runInteractivePrompt(opts *options) (err error) {
 		}
 	}
 
-	validator := sdk.Validator{
+	validator := topiccmdutil.Validator{
 		Localizer: opts.localizer,
 	}
 
@@ -366,8 +366,8 @@ func runInteractivePrompt(opts *options) (err error) {
 	cleanupPolicyPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.topic.update.input.cleanupPolicy.message"),
 		Help:    opts.localizer.MustLocalize("kafka.topic.update.input.cleanupPolicy.help"),
-		Options: sdk.ValidCleanupPolicies,
-		Default: sdk.GetConfigValue(topic.GetConfig(), sdk.CleanupPolicy),
+		Options: topiccmdutil.ValidCleanupPolicies,
+		Default: topiccmdutil.GetConfigValue(topic.GetConfig(), topiccmdutil.CleanupPolicy),
 	}
 
 	err = survey.AskOne(cleanupPolicyPrompt, &opts.cleanupPolicy)

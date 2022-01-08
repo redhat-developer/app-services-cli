@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -136,7 +136,7 @@ func runList(opts *options) error {
 
 	response, _, err := request.Execute()
 	if err != nil {
-		return sdk.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	if len(response.Artifacts) == 0 && opts.outputFormat == "" {

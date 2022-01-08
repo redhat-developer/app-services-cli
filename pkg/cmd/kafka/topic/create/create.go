@@ -5,8 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/sdk"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -77,13 +76,13 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// check that a valid --cleanup-policy flag value is used
-			validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, sdk.ValidCleanupPolicies...)
+			validPolicy := flagutil.IsValidInput(opts.cleanupPolicy, topiccmdutil.ValidCleanupPolicies...)
 			if !validPolicy {
-				return flagutil.InvalidValueError("cleanup-policy", opts.cleanupPolicy, sdk.ValidCleanupPolicies...)
+				return flagutil.InvalidValueError("cleanup-policy", opts.cleanupPolicy, topiccmdutil.ValidCleanupPolicies...)
 			}
 
 			if !opts.interactive {
-				validator := sdk.Validator{
+				validator := topiccmdutil.Validator{
 					Localizer: opts.localizer,
 				}
 
@@ -134,7 +133,7 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 
 	flagutil.EnableOutputFlagCompletion(cmd)
-	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", sdk.ValidCleanupPolicies)
+	flagutil.EnableStaticFlagCompletion(cmd, "cleanup-policy", topiccmdutil.ValidCleanupPolicies)
 
 	return cmd
 }
@@ -203,7 +202,7 @@ func runCmd(opts *options) error {
 }
 
 func runInteractivePrompt(opts *options) (err error) {
-	validator := sdk.Validator{
+	validator := topiccmdutil.Validator{
 		Localizer:  opts.localizer,
 		InstanceID: opts.kafkaID,
 		Connection: opts.Connection,
@@ -264,7 +263,7 @@ func runInteractivePrompt(opts *options) (err error) {
 	cleanupPolicyPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.topic.create.input.cleanupPolicy.message"),
 		Help:    opts.localizer.MustLocalize("kafka.topic.common.input.cleanupPolicy.description"),
-		Options: sdk.ValidCleanupPolicies,
+		Options: topiccmdutil.ValidCleanupPolicies,
 		Default: defaultCleanupPolicy,
 	}
 
@@ -281,9 +280,9 @@ func createConfigEntries(opts *options) *[]kafkainstanceclient.ConfigEntry {
 	retentionBytesStr := strconv.Itoa(opts.retentionBytes)
 	cleanupPolicyStr := opts.cleanupPolicy
 	configEntryMap := map[string]*string{
-		sdk.RetentionMsKey:   &retentionMsStr,
-		sdk.RetentionSizeKey: &retentionBytesStr,
-		sdk.CleanupPolicy:    &cleanupPolicyStr,
+		topiccmdutil.RetentionMsKey:   &retentionMsStr,
+		topiccmdutil.RetentionSizeKey: &retentionBytesStr,
+		topiccmdutil.CleanupPolicy:    &cleanupPolicyStr,
 	}
-	return sdk.CreateConfigEntries(configEntryMap)
+	return topiccmdutil.CreateConfigEntries(configEntryMap)
 }

@@ -3,7 +3,7 @@ package revoke
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
@@ -98,7 +98,7 @@ func runRevoke(opts *options) error {
 
 	_, err = dataAPI.AdminApi.DeleteRoleMapping(opts.Context, opts.principal).Execute()
 	if err != nil {
-		return sdk.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("registry.role.cmd.revoke.success"))
 

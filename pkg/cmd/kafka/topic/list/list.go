@@ -4,8 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/sdk"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -77,7 +76,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.search != "" {
-				validator := sdk.Validator{
+				validator := topiccmdutil.Validator{
 					Localizer: opts.localizer,
 				}
 				if err := validator.ValidateSearchInput(opts.search); err != nil {
@@ -191,7 +190,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 		for _, conf := range t.GetConfig() {
 			unlimitedVal := "-1 (Unlimited)"
 
-			if *conf.Key == sdk.RetentionMsKey {
+			if *conf.Key == topiccmdutil.RetentionMsKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionTime = unlimitedVal
@@ -199,7 +198,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 					row.RetentionTime = val
 				}
 			}
-			if *conf.Key == sdk.RetentionSizeKey {
+			if *conf.Key == topiccmdutil.RetentionSizeKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionSize = unlimitedVal

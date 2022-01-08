@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/sdk"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -37,7 +37,7 @@ type options struct {
 	Context    context.Context
 }
 
-var validator sdk.Validator
+var validator groupcmdutil.Validator
 
 // NewResetOffsetConsumerGroupCommand gets a new command for resetting offset for a consumer group.
 func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
@@ -57,7 +57,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			validator = sdk.Validator{
+			validator = groupcmdutil.Validator{
 				Localizer: opts.localizer,
 			}
 
@@ -67,7 +67,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			if opts.value == "" && (opts.offset == sdk.OffsetAbsolute || opts.offset == sdk.OffsetTimestamp) {
+			if opts.value == "" && (opts.offset == groupcmdutil.OffsetAbsolute || opts.offset == groupcmdutil.OffsetTimestamp) {
 				return opts.localizer.MustLocalizeError("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset))
 			}
 
@@ -115,7 +115,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)
-	flagutil.EnableStaticFlagCompletion(cmd, "offset", sdk.ValidOffsets)
+	flagutil.EnableStaticFlagCompletion(cmd, "offset", groupcmdutil.ValidOffsets)
 
 	return cmd
 }
@@ -141,7 +141,7 @@ func runCmd(opts *options) error {
 		offsetResetParams.Value = &opts.value
 	}
 
-	if opts.offset == sdk.OffsetAbsolute || opts.offset == sdk.OffsetTimestamp {
+	if opts.offset == groupcmdutil.OffsetAbsolute || opts.offset == groupcmdutil.OffsetTimestamp {
 		if err = validator.ValidateOffsetValue(opts.offset, opts.value); err != nil {
 			return err
 		}

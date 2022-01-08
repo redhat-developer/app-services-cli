@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -117,7 +117,7 @@ func runSet(opts *SetOptions) error {
 	request := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	currentMetadata, _, err := request.Execute()
 	if err != nil {
-		return sdk.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	editableMedata := &registryinstanceclient.EditableMetaData{
@@ -148,7 +148,7 @@ func runSet(opts *SetOptions) error {
 	editRequest := dataAPI.MetadataApi.UpdateArtifactMetaData(opts.Context, opts.group, opts.artifact)
 	_, err = editRequest.EditableMetaData(*editableMedata).Execute()
 	if err != nil {
-		return sdk.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.metadata.updated"))

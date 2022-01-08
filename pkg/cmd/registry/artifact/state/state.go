@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/sdk"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
@@ -112,7 +112,7 @@ func runSet(opts *options) error {
 	request := dataAPI.ArtifactsApi.UpdateArtifactState(opts.context, opts.group, opts.artifact)
 	_, err = request.UpdateState(*registryinstanceclient.NewUpdateState(*updateState)).Execute()
 	if err != nil {
-		return sdk.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.state.updated"))
