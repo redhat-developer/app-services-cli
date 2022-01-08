@@ -4,10 +4,10 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
-  title: 'App Services Contribution documentation',
-  tagline: 'App Services Contribution documentation',
-  url: 'https://redhat-developer.github.io',
-  baseUrl: '/app-services-cli/',
+  title: 'App Services RHOAS CLI documentation',
+  tagline: 'App Services RHOAS CLI documentation',
+  url: 'http://cli.appservices.tech',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
