@@ -699,6 +699,8 @@ github.com/prometheus/procfs v0.6.0/go.mod h1:cz+aTbrPOrUb4q7XlbU9ygM+/jj0fzG6c1
 github.com/prometheus/tsdb v0.7.1/go.mod h1:qhTCs0VvXwvX/y3TZrWD7rabWM+ijKTux40TwIPHuXU=
 github.com/redhat-developer/app-services-sdk-go v0.10.0 h1:zI0X5FR0NOj6IwBWk3y1TWn0JASEV8qoBPQjzkv8wbQ=
 github.com/redhat-developer/app-services-sdk-go v0.10.0/go.mod h1:enn8Zz6IT0HZYzS6LSttiME2apwnvfVWZnGRS81A4rk=
+github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0 h1:MOljVN8AKTM72Yed8ioAwhdW0KdWEhBZjjam3lY2lyY=
+github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0/go.mod h1:0LX7ZCEmMKAbncO05/zRYsV0K5wsds7AGPpOFC7KWGo=
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.4.0 h1:eAtKA1umUzWMCtfgC28k59xTYS4uAoxIOiSlzdF8NhU=
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.4.0/go.mod h1:6CxhBFDnXyrl5rWiLX2iBVs30o7Yhbt63SxGk4ZAnu0=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.6.0 h1:AcelHsQAWUSL2Mp9dmBkxeNicffoXdB6MLDAIENEluc=

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
+	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
@@ -15,6 +15,6 @@ type API interface {
 	ServiceAccountMgmt() kafkamgmtclient.SecurityApi
 	KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
-	AccountMgmt() amsclient.DefaultApi
+	AccountMgmt() amsclient.AppServicesApi
 	RBAC() rbac.RbacAPI
 }
