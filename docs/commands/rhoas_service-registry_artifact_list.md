@@ -4,7 +4,7 @@ List artifacts
 
 ### Synopsis
 
-List all artifacts for the group by specified output format (by default, table)
+List all artifacts for the group in the specified output format (by default, "table")
 
 ```
 rhoas service-registry artifact list [flags]
@@ -38,7 +38,7 @@ rhoas service-registry artifact list --description sample
 ```
       --description string     Text search to filter artifacts by description
   -g, --group string           Artifact group (default "default")
-      --instance-id string     ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string     ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --label stringArray      Text search to filter artifacts by labels
       --limit int32            Page limit (default 100)
       --name string            Text search to filter artifacts by name

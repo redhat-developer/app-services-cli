@@ -4,17 +4,17 @@ Update artifact
 
 ### Synopsis
 
-Update artifact from file or directly standard input
+Update an artifact from a file or directly from standard input.
 
-Artifacts are typically in JSON format for most supported types, but may be in another format for a few (for example, PROTOBUF).
+Artifacts are typically in JSON format for most supported types, but might be in another format for some types (for example, PROTOBUF).
 The type of the content should be compatible with the current artifact type.
 
-When successful, this creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
+When successful, this command creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
 
 An artifact is updated using the content provided in the request body.
-This content is updated under a unique artifactId provided by user.
+This content is updated under a unique artifactId provided by the user.
 
-Updated artifact content should conform to validity and compatibility rules set for the registry instance.
+Updated artifact content should conform to the validity and compatibility rules set for the registry instance.
 
 
 ```
@@ -39,7 +39,7 @@ rhoas service-registry artifact update --artifact-id=my-artifact --group my-grou
       --description string   Custom description of the artifact
   -f, --file string          File location of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --name string          Custom name of the artifact
       --version string       Custom version of the artifact (for example 1.0.0)
 ```

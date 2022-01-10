@@ -4,14 +4,16 @@ Download artifacts from Service Registry using global identifiers
 
 ### Synopsis
 
-Get single or more artifacts by group, content, hash or globalIds.
-NOTE: Use "service-registry get" command to download artifacts by artifactId.
+Get one or more artifacts by group, content, hash, or globalId.
 
-Flags are used to specify the artifact to download:
+NOTE: To download artifacts by artifactId, use the "service-registry artifact get" command.
 
---contentId - ID if the content is from metadata
---globalId - globalId of the content from metadata
---hash - SHA-256 hash of the content
+Use the following flags to specify the artifacts to download:
+
+* --contentId (ID if the content is from metadata)
+* --globalId (globalId of the content from metadata)
+* --hash (SHA-256 hash of the content)
+* --group (artifact group)
 
 
 ```
@@ -42,7 +44,7 @@ rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec6
       --global-id int        Global ID of the artifact (default -1)
   -g, --group string         Artifact group (default "default")
       --hash string          SHA-256 hash of the artifact
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --output-file string   Location of the output file
 ```
 

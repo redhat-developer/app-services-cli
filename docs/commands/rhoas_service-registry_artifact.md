@@ -59,11 +59,11 @@ For example: https://raw.githubusercontent.com/redhat-developer/app-services-cli
 ### SEE ALSO
 
 * [rhoas service-registry](rhoas_service-registry.md)	 - Service Registry commands
-* [rhoas service-registry artifact create](rhoas_service-registry_artifact_create.md)	 - Creates new artifact from file or standard input
-* [rhoas service-registry artifact delete](rhoas_service-registry_artifact_delete.md)	 - Deletes single or all artifacts in a given group
+* [rhoas service-registry artifact create](rhoas_service-registry_artifact_create.md)	 - Create new artifact from file or standard input
+* [rhoas service-registry artifact delete](rhoas_service-registry_artifact_delete.md)	 - Deletes an artifact or all artifacts in a given group
 * [rhoas service-registry artifact download](rhoas_service-registry_artifact_download.md)	 - Download artifacts from Service Registry using global identifiers
 * [rhoas service-registry artifact export](rhoas_service-registry_artifact_export.md)	 - Export data from Service Registry instance
-* [rhoas service-registry artifact get](rhoas_service-registry_artifact_get.md)	 - Get artifact by ID and group
+* [rhoas service-registry artifact get](rhoas_service-registry_artifact_get.md)	 - Get artifact by ID, group, and version
 * [rhoas service-registry artifact import](rhoas_service-registry_artifact_import.md)	 - Import data into a Service Registry instance
 * [rhoas service-registry artifact list](rhoas_service-registry_artifact_list.md)	 - List artifacts
 * [rhoas service-registry artifact metadata-get](rhoas_service-registry_artifact_metadata-get.md)	 - Get artifact metadata

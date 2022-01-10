@@ -1,23 +1,24 @@
 ## rhoas service-registry artifact create
 
-Creates new artifact from file or standard input
+Create new artifact from file or standard input
 
 ### Synopsis
 
-Creates a new artifact by posting the artifact content to the registry instance.
+Create a new artifact by posting the artifact content to the registry instance.
 
-Artifacts are typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
-Service Registry attempts to figure out what kind of artifact is being added from the following supported list:
+Artifacts are typically in JSON format for most of the supported types, but might be in another format for a few types (for example, PROTOBUF).
 
-- Avro (AVRO)
-- Protobuf (PROTOBUF)
-- JSON Schema (JSON)
-- Kafka Connect (KCONNECT)
-- OpenAPI (OPENAPI)
-- AsyncAPI (ASYNCAPI)
-- GraphQL (GRAPHQL)
-- Web Services Description Language (WSDL)
-- XML Schema (XSD)
+Service Registry attempts to identify what type of artifact is being added from the following supported list:
+
+* Avro (AVRO)
+* Protobuf (PROTOBUF)
+* JSON Schema (JSON)
+* Kafka Connect (KCONNECT)
+* OpenAPI (OPENAPI)
+* AsyncAPI (ASYNCAPI)
+* GraphQL (GRAPHQL)
+* Web Services Description Language (WSDL)
+* XML Schema (XSD)
 
 An artifact is created using the content provided in the request body.
 This content is created with a unique artifact ID that can be provided by user.
@@ -51,7 +52,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
       --description string   Custom description of the artifact
       --file string          File location of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --name string          Custom name of the artifact
   -o, --output string        Output format (json, yaml, yml) (default "json")
   -t, --type string          Type of artifact. Choose from: AVRO, PROTOBUF, JSON, OPENAPI, ASYNCAPI, GRAPHQL, KCONNECT, WSDL, XSD, XML

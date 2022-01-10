@@ -4,7 +4,7 @@ List roles
 
 ### Synopsis
 
-Listing all roles on selected instance
+List all roles on selected instance
 
 ```
 rhoas service-registry role list [flags]
@@ -21,7 +21,7 @@ rhoas service-registry role list
 ### Options
 
 ```
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   -o, --output string        Output format (json, yaml, yml)
 ```
 

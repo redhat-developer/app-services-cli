@@ -1,15 +1,15 @@
 ## rhoas service-registry artifact get
 
-Get artifact by ID and group
+Get artifact by ID, group, and version
 
 ### Synopsis
 
-Get artifact by specifying ID and group.
-Command fetches the latest artifact from the registry based on the artifact-id and group.
+Get an artifact from the registry based on the artifact ID, group, and version.
 
-When --version is specified, the command fetches the specific artifact version.
-Get command fetches artifacts based on --group and --artifact-id and --version.
-For fetching artifacts using global identifiers, use the "service-registry download" command
+NOTE: To fetch artifacts using global identifiers, use the "service-registry artifact download" command.
+
+When --version is specified, the command fetches the specified artifact version. When --version is not specified, the command fetches the latest artifact version.
+
 
 
 ```
@@ -38,7 +38,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 ```
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --output-file string   Location of the output file
       --version string       Version of the artifact
 ```

@@ -4,7 +4,6 @@ Use a Service Registry instance
 
 ### Synopsis
 
- 
 Select a Service Registry instance to use with all instance-specific commands.
 You can specify a Service Registry instance by --name or --id.
 

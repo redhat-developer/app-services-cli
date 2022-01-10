@@ -5,15 +5,14 @@ Service Registry role management
 ### Synopsis
 
 
-Service Registry role management
-Set of commands that give users one of following permissions:
+Manage Service Registry roles using a set of commands that give users one of following permissions:
 
-- READ_ONLY (read artifacts)
-- DEVELOPER (write access to all resources)
-- ADMIN (Export/Import artifacts, Manage Roles)
+* READ_ONLY (read artifacts)
+* DEVELOPER (write access to all resources)
+* ADMIN (export or import artifacts, manage roles)
 
-Roles can be applied to users (e.g martin_redhat) and Service Account Client IDs (e.g srvc-acct-03ddedba-5b49-4aa0-9b68-02e8b8c31add).
-These commands are only accessible to users with the organization admin role or owners of the Service Registry instance.
+Roles can be applied to users (for example, "martin_redhat") and Service Account Client IDs (for example, "srvc-acct-03ddedba-5b49-4aa0-9b68-02e8b8c31add").
+These commands are accessible only to users with the organization admin role or owners of the Service Registry instance.
 
 
 ### Examples

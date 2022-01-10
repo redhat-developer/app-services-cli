@@ -1,14 +1,14 @@
 ## rhoas service-registry artifact delete
 
-Deletes single or all artifacts in a given group
+Deletes an artifact or all artifacts in a given group
 
 ### Synopsis
 
-Deletes single or all artifacts in a given group.
+Deletes a single artifact or all artifacts in a given group:
 
-When called without arguments, deletes all artifacts in the group
-When --artifact-id is specified, deletes only a single artifact and its version
-When --group parameter is missing, the command uses the "default" group.
+* When called without arguments, deletes all artifacts in the group.
+* When --artifact-id is specified, deletes only a single artifact and its version.
+* When --group is omitted, the command uses the "default" group.
 
 
 ```
@@ -31,7 +31,7 @@ rhoas service-registry artifact delete --artifact-id=my-artifact
 ```
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   -y, --yes                  Delete artifact without prompt
 ```
 

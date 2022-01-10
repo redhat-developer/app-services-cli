@@ -4,8 +4,9 @@ Update artifact metadata
 
 ### Synopsis
 
-Updates the metadata for an artifact in a Service Registry instance
-Editable metadata includes fields like name and description
+Update the metadata for an artifact in a Service Registry instance.
+
+Editable metadata includes fields such as name and description.
 
 
 ```
@@ -32,7 +33,7 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
       --artifact-id string   ID of the artifact
       --description string   Custom description of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --name string          Custom name of the artifact
   -o, --output string        Output format (json, yaml, yml)
 ```
