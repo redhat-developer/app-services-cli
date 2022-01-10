@@ -33,8 +33,6 @@ endif
 # The details of the application:
 binary:=rhoas
 
-amsapi_dir=./pkg/api/ams/amsclient
-
 # Enable Go modules:
 export GO111MODULE=on
 
@@ -59,13 +57,6 @@ install: ## Compile and install rhoas and add it to the PAth
 test: ## Run unit tests
 	go test ./pkg/... ./internal/...
 .PHONY: test
-
-generate-ams-sdk: ## Generate the Account Management Service SDK
-	openapi-generator-cli generate -i openapi/ams.json -g go --package-name amsclient -p="generateInterfaces=true" --ignore-file-override=$$(pwd)/.openapi-generator-ignore -o ${amsapi_dir}
-	# generate mock
-	moq -out ${amsapi_dir}/default_api_mock.go ${amsapi_dir} DefaultApi
-	gofmt -w ${amsapi_dir}
-.PHONY: generate-ams-sdk
 
 start-mock-api: ## Start the mock rhoas server
 	npm install -g @rhoas/api-mock

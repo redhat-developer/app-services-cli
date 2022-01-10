@@ -12,11 +12,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/api/ams/amsclient"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -231,7 +231,7 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 }
 
 // AccountMgmt returns a new Account Management API client instance
-func (a *defaultAPI) AccountMgmt() amsclient.DefaultApi {
+func (a *defaultAPI) AccountMgmt() amsclient.AppServicesApi {
 	cfg := amsclient.NewConfiguration()
 
 	cfg.Scheme = a.ApiURL.Scheme
@@ -242,7 +242,7 @@ func (a *defaultAPI) AccountMgmt() amsclient.DefaultApi {
 
 	apiClient := amsclient.NewAPIClient(cfg)
 
-	return apiClient.DefaultApi
+	return apiClient.AppServicesApi
 }
 
 // RBAC returns a new RBAC API client instance
