@@ -4,7 +4,6 @@ List Service Registry instances
 
 ### Synopsis
 
- 
 List all Service Registry instances for your account and paginate over the results.
 
 

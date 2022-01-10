@@ -4,8 +4,9 @@ Revoke role for principal
 
 ### Synopsis
 
-Revoke role for principal
-When revoking role of the owner of the instance user will still have ADMIN rights.
+Revoke the role of a user or service account.
+
+NOTE: It is not possible to revoke the role of the owner of the instance. The instance owner always retains ADMIN rights.
 
 
 ```
@@ -23,7 +24,7 @@ rhoas service-registry role revoke --username=janedough
 ### Options
 
 ```
-      --instance-id string       ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string       ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --service-account string   ServiceAccount name
       --username string          Username of the user within organization
 ```

@@ -4,7 +4,7 @@ Import data into a Service Registry instance
 
 ### Synopsis
 
-Import all artifacts and metadata from export file to another Service Segistry instance
+Import all artifacts and metadata from an export file to another Service Registry instance
 
 
 ```
@@ -23,7 +23,7 @@ rhoas service-registry artifact import --file=export.zip
 
 ```
       --file string          File location of the artifact
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
 ```
 
 ### Options inherited from parent commands

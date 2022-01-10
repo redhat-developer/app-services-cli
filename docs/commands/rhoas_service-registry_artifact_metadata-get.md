@@ -4,7 +4,8 @@ Get artifact metadata
 
 ### Synopsis
 
-Gets the metadata for an artifact in a Service Registry instance
+Get the metadata for an artifact in a Service Registry instance.
+
 The returned metadata includes both generated (read-only) and editable metadata (such as name and description).
 
 
@@ -28,7 +29,7 @@ rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group m
 ```
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   -o, --output string        Output format (json, yaml, yml)
 ```
 

@@ -4,7 +4,7 @@ Get latest artifact versions by artifact-id and group
 
 ### Synopsis
 
-Get latest artifact versions by specifying group and artifact-id
+Get the latest artifact versions by specifying the group and artifact-id
 
 ```
 rhoas service-registry artifact versions [flags]
@@ -26,7 +26,7 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
 ```
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   -o, --output string        Output format (json, yaml, yml)
 ```
 

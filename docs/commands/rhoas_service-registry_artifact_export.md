@@ -4,7 +4,7 @@ Export data from Service Registry instance
 
 ### Synopsis
 
-Export all artifacts and metadata from Service Registry instance to specified file
+Export all artifacts and metadata from a Service Registry instance to a specified file
 
 
 ```
@@ -22,7 +22,7 @@ rhoas service-registry artifact export --file=export.zip
 ### Options
 
 ```
-      --instance-id string   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --output-file string   File location of the artifact
 ```
 

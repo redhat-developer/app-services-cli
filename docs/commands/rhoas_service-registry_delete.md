@@ -4,7 +4,6 @@ Delete a Service Registry instance
 
 ### Synopsis
 
- 
 Delete a Service Registry instance along with all of its schema and API artifacts.
 
 

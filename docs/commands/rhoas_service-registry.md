@@ -4,15 +4,15 @@ Service Registry commands
 
 ### Synopsis
 
- 
 Manage and interact with your Service Registry instances directly from the command line.
 
 Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
 
 Commands are divided into the following categories:
- - instance management commands: create, list, and so on
- - commands executed on selected instance: artifacts
- - "use" command that selects the current instance
+
+* Instance management commands: create, list, and so on
+* Commands executed on selected instance: artifacts
+* "use" command that selects the current instance
 
 
 ### Examples
@@ -22,7 +22,7 @@ Commands are divided into the following categories:
 rhoas service-registry create --name myregistry
 
 ## List Service Registry instances
-rhoas service-registry list 
+rhoas service-registry list
 
 ```
 

@@ -4,8 +4,7 @@ Describe a Service Registry instance
 
 ### Synopsis
 
- 
-Describe a Service Registry instance. Fetch all required fields including the registry URL. 
+Describe a Service Registry instance. Fetch all required fields including the registry URL.
 
 
 ```

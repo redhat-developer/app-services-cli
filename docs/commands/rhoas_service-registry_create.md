@@ -4,7 +4,7 @@ Create a Service Registry instance
 
 ### Synopsis
 
-Create a Service Registry instance to store and manage your schema and API artifacts. 
+Create a Service Registry instance to store and manage your schema and API artifacts
 
 
 ```
