@@ -2,14 +2,15 @@ package migrate
 
 import (
 	"context"
+	"os"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -91,7 +92,7 @@ func runImport(opts *ImportOptions) error {
 	request := dataAPI.AdminApi.ImportData(opts.Context)
 	_, err = request.Body(specifiedFile).Execute()
 	if err != nil {
-		return serviceregistryutil.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.import.success"))

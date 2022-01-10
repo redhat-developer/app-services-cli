@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/accountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -16,7 +17,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/credentials"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/validation"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 

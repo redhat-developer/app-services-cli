@@ -1,4 +1,4 @@
-package aclutil
+package aclcmdutil
 
 import kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 

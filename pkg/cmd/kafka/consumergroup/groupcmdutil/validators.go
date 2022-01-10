@@ -1,4 +1,4 @@
-package consumergrouputil
+package groupcmdutil
 
 import (
 	"regexp"

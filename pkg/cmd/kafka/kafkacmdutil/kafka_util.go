@@ -1,4 +1,4 @@
-package kafkautil
+package kafkacmdutil
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
@@ -43,7 +44,7 @@ func (v *Validator) ValidateName(val interface{}) error {
 		return nil
 	}
 
-	return InvalidNameError(name)
+	return kafkautil.InvalidNameError(name)
 }
 
 // TransformKafkaRequestListItems modifies fields fields from a list of kafka instances
@@ -89,7 +90,7 @@ func (v *Validator) ValidateSearchInput(val interface{}) error {
 		return nil
 	}
 
-	return InvalidSearchValueError(search)
+	return kafkautil.InvalidSearchValueError(search)
 }
 
 // ValidateNameIsAvailable checks if a kafka instance with the given name already exists
@@ -103,7 +104,7 @@ func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 
 	api := conn.API()
 
-	_, httpRes, _ := GetKafkaByName(context.Background(), api.KafkaMgmt(), name)
+	_, httpRes, _ := kafkautil.GetKafkaByName(context.Background(), api.KafkaMgmt(), name)
 
 	if httpRes != nil {
 		defer httpRes.Body.Close()

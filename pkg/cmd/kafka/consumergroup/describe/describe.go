@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/consumergrouputil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -189,9 +189,9 @@ func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclien
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()
 
-	activeMembersCount := consumergrouputil.GetActiveConsumersCount(consumers)
-	partitionsWithLagCount := consumergrouputil.GetPartitionsWithLag(consumers)
-	unassignedPartitions := consumergrouputil.GetUnassignedPartitions(consumers)
+	activeMembersCount := groupcmdutil.GetActiveConsumersCount(consumers)
+	partitionsWithLagCount := groupcmdutil.GetPartitionsWithLag(consumers)
+	unassignedPartitions := groupcmdutil.GetUnassignedPartitions(consumers)
 
 	fmt.Fprintln(w, color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.unassignedPartitions")), unassignedPartitions)
 	fmt.Fprintln(w, "")

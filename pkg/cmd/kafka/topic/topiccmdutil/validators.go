@@ -1,4 +1,4 @@
-package topicutil
+package topiccmdutil
 
 import (
 	"context"

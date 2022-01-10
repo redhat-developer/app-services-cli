@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -14,7 +15,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
@@ -59,7 +59,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name != "" {
-				if err := serviceregistryutil.ValidateName(opts.name); err != nil {
+				if err := registrycmdutil.ValidateName(opts.name); err != nil {
 					return err
 				}
 			}
@@ -190,7 +190,7 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 		Help:    opts.localizer.MustLocalize("registry.cmd.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(serviceregistryutil.ValidateName))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(registrycmdutil.ValidateName))
 	if err != nil {
 		return nil, err
 	}

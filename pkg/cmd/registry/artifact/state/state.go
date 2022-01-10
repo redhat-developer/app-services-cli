@@ -2,14 +2,15 @@ package state
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	"github.com/spf13/cobra"
 
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
@@ -111,7 +112,7 @@ func runSet(opts *options) error {
 	request := dataAPI.ArtifactsApi.UpdateArtifactState(opts.context, opts.group, opts.artifact)
 	_, err = request.UpdateState(*registryinstanceclient.NewUpdateState(*updateState)).Execute()
 	if err != nil {
-		return serviceregistryutil.TransformInstanceError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.artifact.state.updated"))
