@@ -1,4 +1,4 @@
-package kafkautil
+package kafkacmdutil
 
 import (
 	"testing"

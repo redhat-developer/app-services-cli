@@ -3,8 +3,8 @@ package admin
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil/aclutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
@@ -85,7 +85,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// user and service account should not allow wildcard
-			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+			if userID == aclcmdutil.Wildcard || serviceAccount == aclcmdutil.Wildcard || userID == aclcmdutil.AllAlias || serviceAccount == aclcmdutil.AllAlias {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 			}
 
@@ -98,7 +98,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if allAccounts {
-				opts.principal = aclutil.Wildcard
+				opts.principal = aclcmdutil.Wildcard
 			}
 
 			return runAdmin(opts)
@@ -134,14 +134,14 @@ func runAdmin(opts *options) (err error) {
 
 	aclBindClusterAlter := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.ACLRESOURCETYPE_CLUSTER,
-		aclutil.KafkaCluster,
+		aclcmdutil.KafkaCluster,
 		kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
-		aclutil.FormatPrincipal(opts.principal),
+		aclcmdutil.FormatPrincipal(opts.principal),
 		kafkainstanceclient.ACLOPERATION_ALTER,
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
+	rows := aclcmdutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
 
 	opts.logger.Info(opts.localizer.MustLocalizePlural("kafka.acl.grantPermissions.log.info.aclsPreview", len(rows)))
 	opts.logger.Info()
@@ -168,7 +168,7 @@ func runAdmin(opts *options) (err error) {
 
 	req = req.AclBinding(*aclBindClusterAlter)
 
-	err = aclutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
+	err = aclcmdutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
 	if err != nil {
 		return err
 	}

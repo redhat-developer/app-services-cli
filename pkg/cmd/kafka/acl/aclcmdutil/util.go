@@ -1,4 +1,4 @@
-package aclutil
+package aclcmdutil
 
 import (
 	"context"
