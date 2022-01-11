@@ -1,27 +1,28 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-create_{context}']
-= rhoas service-registry artifact create
+[id='ref-service-registry-artifact-create_{context}']
+= service-registry artifact create
 
 [role="_abstract"]
-Creates new artifact from file or standard input
+Create new artifact from file or standard input
 
 [discrete]
 == Synopsis
 
-Creates a new artifact by posting the artifact content to the registry instance.
+Create a new artifact by posting the artifact content to the registry instance.
 
-Artifacts are typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
-Service Registry attempts to figure out what kind of artifact is being added from the following supported list:
+Artifacts are typically in JSON format for most of the supported types, but might be in another format for a few types (for example, PROTOBUF).
 
-- Avro (AVRO)
-- Protobuf (PROTOBUF)
-- JSON Schema (JSON)
-- Kafka Connect (KCONNECT)
-- OpenAPI (OPENAPI)
-- AsyncAPI (ASYNCAPI)
-- GraphQL (GRAPHQL)
-- Web Services Description Language (WSDL)
-- XML Schema (XSD)
+Service Registry attempts to identify what type of artifact is being added from the following supported list:
+
+* Avro (AVRO)
+* Protobuf (PROTOBUF)
+* JSON Schema (JSON)
+* Kafka Connect (KCONNECT)
+* OpenAPI (OPENAPI)
+* AsyncAPI (ASYNCAPI)
+* GraphQL (GRAPHQL)
+* Web Services Description Language (WSDL)
+* XML Schema (XSD)
 
 An artifact is created using the content provided in the request body.
 This content is created with a unique artifact ID that can be provided by user.
@@ -56,7 +57,7 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
       `--description` _string_::   Custom description of the artifact
       `--file` _string_::          File location of the artifact
   `-g`, `--group` _string_::       Artifact group (default "default")
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       `--name` _string_::          Custom name of the artifact
   `-o`, `--output` _string_::      Output format (json, yaml, yml) (default "json")
   `-t`, `--type` _string_::        Type of artifact. Choose from: AVRO, PROTOBUF, JSON, OPENAPI, ASYNCAPI, GRAPHQL, KCONNECT, WSDL, XSD, XML
@@ -72,10 +73,6 @@ rhoas service-registry artifact create --type=JSON my-artifact.json
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
 

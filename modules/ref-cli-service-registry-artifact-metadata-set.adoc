@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-metadata-set_{context}']
-= rhoas service-registry artifact metadata-set
+[id='ref-service-registry-artifact-metadata-set_{context}']
+= service-registry artifact metadata-set
 
 [role="_abstract"]
 Update artifact metadata
@@ -8,8 +8,9 @@ Update artifact metadata
 [discrete]
 == Synopsis
 
-Updates the metadata for an artifact in a Service Registry instance
-Editable metadata includes fields like name and description
+Update the metadata for an artifact in a Service Registry instance.
+
+Editable metadata includes fields such as name and description.
 
 
 ....
@@ -37,7 +38,7 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
       `--artifact-id` _string_::   ID of the artifact
       `--description` _string_::   Custom description of the artifact
   `-g`, `--group` _string_::       Artifact group (default "default")
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       `--name` _string_::          Custom name of the artifact
   `-o`, `--output` _string_::      Output format (json, yaml, yml)
 
@@ -51,10 +52,6 @@ EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-a
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
 

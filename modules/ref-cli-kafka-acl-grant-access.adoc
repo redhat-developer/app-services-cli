@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-acl-grant-access_{context}']
-= rhoas kafka acl grant-access
+[id='ref-kafka-acl-grant-access_{context}']
+= kafka acl grant-access
 
 [role="_abstract"]
 Add ACL rules to grant users access to produce and consume from topics
@@ -69,10 +69,6 @@ $ rhoas kafka acl grant-access --producer --consumer --user user_name --topic al
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_acl.adoc#rhoas-kafka-acl[rhoas kafka acl]	 - Manage Kafka ACLs for users and service accounts
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka-acl_{context}[rhoas kafka acl]	 - Manage Kafka ACLs for users and service accounts
-endif::[]
 

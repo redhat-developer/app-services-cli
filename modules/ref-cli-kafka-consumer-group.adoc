@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-consumer-group_{context}']
-= rhoas kafka consumer-group
+[id='ref-kafka-consumer-group_{context}']
+= kafka consumer-group
 
 [role="_abstract"]
 Describe, list, and delete consumer groups for the current Kafka instance
@@ -35,38 +35,18 @@ rhoas kafka consumer-group list
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group_delete.adoc#rhoas-kafka-consumer-group-delete[rhoas kafka consumer-group delete]	 - Delete a consumer group
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group-delete_{context}[rhoas kafka consumer-group delete]	 - Delete a consumer group
-endif::[]
+ 
+* link:{path}#ref-kafka-consumer-group-delete_{context}[kafka-consumer-group delete]	 - Delete a consumer group
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group_describe.adoc#rhoas-kafka-consumer-group-describe[rhoas kafka consumer-group describe]	 - Describe a consumer group
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group-describe_{context}[rhoas kafka consumer-group describe]	 - Describe a consumer group
-endif::[]
+ 
+* link:{path}#ref-kafka-consumer-group-describe_{context}[kafka-consumer-group describe]	 - Describe a consumer group
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group_list.adoc#rhoas-kafka-consumer-group-list[rhoas kafka consumer-group list]	 - List all consumer groups
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group-list_{context}[rhoas kafka consumer-group list]	 - List all consumer groups
-endif::[]
+ 
+* link:{path}#ref-kafka-consumer-group-list_{context}[kafka-consumer-group list]	 - List all consumer groups
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group_reset-offset.adoc#rhoas-kafka-consumer-group-reset-offset[rhoas kafka consumer-group reset-offset]	 - Reset partition offsets for a consumer group
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-consumer-group-reset-offset_{context}[rhoas kafka consumer-group reset-offset]	 - Reset partition offsets for a consumer group
-endif::[]
+ 
+* link:{path}#ref-kafka-consumer-group-reset-offset_{context}[kafka-consumer-group reset-offset]	 - Reset partition offsets for a consumer group
 

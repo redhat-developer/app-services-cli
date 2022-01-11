@@ -1,19 +1,19 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-get_{context}']
-= rhoas service-registry artifact get
+[id='ref-service-registry-artifact-get_{context}']
+= service-registry artifact get
 
 [role="_abstract"]
-Get artifact by ID and group
+Get artifact by ID, group, and version
 
 [discrete]
 == Synopsis
 
-Get artifact by specifying ID and group.
-Command fetches the latest artifact from the registry based on the artifact-id and group.
+Get an artifact from the registry based on the artifact ID, group, and version.
 
-When --version is specified, the command fetches the specific artifact version.
-Get command fetches artifacts based on --group and --artifact-id and --version.
-For fetching artifacts using global identifiers, use the "service-registry download" command
+NOTE: To fetch artifacts using global identifiers, use the "service-registry artifact download" command.
+
+When --version is specified, the command fetches the specified artifact version. When --version is not specified, the command fetches the latest artifact version.
+
 
 
 ....
@@ -43,7 +43,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 
       `--artifact-id` _string_::   ID of the artifact
   `-g`, `--group` _string_::       Artifact group (default "default")
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       `--output-file` _string_::   Location of the output file
       `--version` _string_::       Version of the artifact
 
@@ -57,10 +57,6 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
 

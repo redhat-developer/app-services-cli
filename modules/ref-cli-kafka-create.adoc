@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-create_{context}']
-= rhoas kafka create
+[id='ref-kafka-create_{context}']
+= kafka create
 
 [role="_abstract"]
 Create a Kafka instance
@@ -52,10 +52,6 @@ $ rhoas kafka create -o yaml
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
 

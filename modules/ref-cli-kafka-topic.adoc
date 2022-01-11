@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-topic_{context}']
-= rhoas kafka topic
+[id='ref-kafka-topic_{context}']
+= kafka topic
 
 [role="_abstract"]
 Create, describe, update, list, and delete topics
@@ -35,45 +35,21 @@ rhoas kafka topic list
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka.adoc#rhoas-kafka[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
-endif::[]
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic_create.adoc#rhoas-kafka-topic-create[rhoas kafka topic create]	 - Create a topic
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic-create_{context}[rhoas kafka topic create]	 - Create a topic
-endif::[]
+ 
+* link:{path}#ref-kafka-topic-create_{context}[kafka-topic create]	 - Create a topic
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic_delete.adoc#rhoas-kafka-topic-delete[rhoas kafka topic delete]	 - Delete a topic
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic-delete_{context}[rhoas kafka topic delete]	 - Delete a topic
-endif::[]
+ 
+* link:{path}#ref-kafka-topic-delete_{context}[kafka-topic delete]	 - Delete a topic
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic_describe.adoc#rhoas-kafka-topic-describe[rhoas kafka topic describe]	 - Describe a topic
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic-describe_{context}[rhoas kafka topic describe]	 - Describe a topic
-endif::[]
+ 
+* link:{path}#ref-kafka-topic-describe_{context}[kafka-topic describe]	 - Describe a topic
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic_list.adoc#rhoas-kafka-topic-list[rhoas kafka topic list]	 - List all topics
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic-list_{context}[rhoas kafka topic list]	 - List all topics
-endif::[]
+ 
+* link:{path}#ref-kafka-topic-list_{context}[kafka-topic list]	 - List all topics
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic_update.adoc#rhoas-kafka-topic-update[rhoas kafka topic update]	 - Update configuration details for a Kafka topic
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-kafka-topic-update_{context}[rhoas kafka topic update]	 - Update configuration details for a Kafka topic
-endif::[]
+ 
+* link:{path}#ref-kafka-topic-update_{context}[kafka-topic update]	 - Update configuration details for a Kafka topic
 

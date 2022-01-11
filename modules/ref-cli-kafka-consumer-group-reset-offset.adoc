@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-consumer-group-reset-offset_{context}']
-= rhoas kafka consumer-group reset-offset
+[id='ref-kafka-consumer-group-reset-offset_{context}']
+= kafka consumer-group reset-offset
 
 [role="_abstract"]
 Reset partition offsets for a consumer group
@@ -66,10 +66,6 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
-endif::[]
 

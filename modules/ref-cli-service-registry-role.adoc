@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-role_{context}']
-= rhoas service-registry role
+[id='ref-service-registry-role_{context}']
+= service-registry role
 
 [role="_abstract"]
 Service Registry role management
@@ -9,15 +9,14 @@ Service Registry role management
 == Synopsis
 
 
-Service Registry role management
-Set of commands that give users one of following permissions:
+Manage Service Registry roles using a set of commands that give users one of following permissions:
 
-- READ_ONLY (read artifacts)
-- DEVELOPER (write access to all resources)
-- ADMIN (Export/Import artifacts, Manage Roles)
+* READ_ONLY (read artifacts)
+* DEVELOPER (write access to all resources)
+* ADMIN (export or import artifacts, manage roles)
 
-Roles can be applied to users (e.g martin_redhat) and Service Account Client IDs (e.g srvc-acct-03ddedba-5b49-4aa0-9b68-02e8b8c31add).
-These commands are only accessible to users with the organization admin role or owners of the Service Registry instance.
+Roles can be applied to users (for example, "martin_redhat") and Service Account Client IDs (for example, "srvc-acct-03ddedba-5b49-4aa0-9b68-02e8b8c31add").
+These commands are accessible only to users with the organization admin role or owners of the Service Registry instance.
 
 
 [discrete]
@@ -45,31 +44,15 @@ rhoas service-registry role revoke --username=janedough
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - Service Registry commands
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
-endif::[]
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role_add.adoc#rhoas-service-registry-role-add[rhoas service-registry role add]	 - Add or update principal role
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role-add_{context}[rhoas service-registry role add]	 - Add or update principal role
-endif::[]
+ 
+* link:{path}#ref-service-registry-role-add_{context}[service-registry-role add]	 - Add or update principal role
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role_list.adoc#rhoas-service-registry-role-list[rhoas service-registry role list]	 - List roles
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role-list_{context}[rhoas service-registry role list]	 - List roles
-endif::[]
+ 
+* link:{path}#ref-service-registry-role-list_{context}[service-registry-role list]	 - List roles
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role_revoke.adoc#rhoas-service-registry-role-revoke[rhoas service-registry role revoke]	 - Revoke role for principal
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role-revoke_{context}[rhoas service-registry role revoke]	 - Revoke role for principal
-endif::[]
+ 
+* link:{path}#ref-service-registry-role-revoke_{context}[service-registry-role revoke]	 - Revoke role for principal
 

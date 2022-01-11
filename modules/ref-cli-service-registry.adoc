@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry_{context}']
-= rhoas service-registry
+[id='ref-service-registry_{context}']
+= service-registry
 
 [role="_abstract"]
 Service Registry commands
@@ -8,15 +8,15 @@ Service Registry commands
 [discrete]
 == Synopsis
 
- 
 Manage and interact with your Service Registry instances directly from the command line.
 
 Create new Service Registry instances and interact with them by adding schema and API artifacts and downloading them to your computer.
 
 Commands are divided into the following categories:
- - instance management commands: create, list, and so on
- - commands executed on selected instance: artifacts
- - "use" command that selects the current instance
+
+* Instance management commands: create, list, and so on
+* Commands executed on selected instance: artifacts
+* "use" command that selects the current instance
 
 
 [discrete]
@@ -27,7 +27,7 @@ Commands are divided into the following categories:
 rhoas service-registry create --name myregistry
 
 ## List Service Registry instances
-rhoas service-registry list 
+rhoas service-registry list
 
 ....
 
@@ -41,59 +41,27 @@ rhoas service-registry list
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
-endif::[]
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
+ 
+* link:{path}#ref-service-registry-artifact_{context}[service-registry artifact]	 - Manage Service Registry artifacts
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_create.adoc#rhoas-service-registry-create[rhoas service-registry create]	 - Create a Service Registry instance
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-create_{context}[rhoas service-registry create]	 - Create a Service Registry instance
-endif::[]
+ 
+* link:{path}#ref-service-registry-create_{context}[service-registry create]	 - Create a Service Registry instance
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_delete.adoc#rhoas-service-registry-delete[rhoas service-registry delete]	 - Delete a Service Registry instance
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-delete_{context}[rhoas service-registry delete]	 - Delete a Service Registry instance
-endif::[]
+ 
+* link:{path}#ref-service-registry-delete_{context}[service-registry delete]	 - Delete a Service Registry instance
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_describe.adoc#rhoas-service-registry-describe[rhoas service-registry describe]	 - Describe a Service Registry instance
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-describe_{context}[rhoas service-registry describe]	 - Describe a Service Registry instance
-endif::[]
+ 
+* link:{path}#ref-service-registry-describe_{context}[service-registry describe]	 - Describe a Service Registry instance
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_list.adoc#rhoas-service-registry-list[rhoas service-registry list]	 - List Service Registry instances
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-list_{context}[rhoas service-registry list]	 - List Service Registry instances
-endif::[]
+ 
+* link:{path}#ref-service-registry-list_{context}[service-registry list]	 - List Service Registry instances
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_role.adoc#rhoas-service-registry-role[rhoas service-registry role]	 - Service Registry role management
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-role_{context}[rhoas service-registry role]	 - Service Registry role management
-endif::[]
+ 
+* link:{path}#ref-service-registry-role_{context}[service-registry role]	 - Service Registry role management
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_use.adoc#rhoas-service-registry-use[rhoas service-registry use]	 - Use a Service Registry instance
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-service-registry-use_{context}[rhoas service-registry use]	 - Use a Service Registry instance
-endif::[]
+ 
+* link:{path}#ref-service-registry-use_{context}[service-registry use]	 - Use a Service Registry instance
 

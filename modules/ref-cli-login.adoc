@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-login_{context}']
-= rhoas login
+[id='ref-login_{context}']
+= login
 
 [role="_abstract"]
 Log in to RHOAS
@@ -58,10 +58,6 @@ $ rhoas login --token f5cgc...
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
-endif::[]
 

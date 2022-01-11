@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-whoami_{context}']
-= rhoas whoami
+[id='ref-whoami_{context}']
+= whoami
 
 [role="_abstract"]
 Output the current username
@@ -36,10 +36,6 @@ $ rhoas whoami
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
-endif::[]
 

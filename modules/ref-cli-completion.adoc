@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-completion_{context}']
-= rhoas completion
+[id='ref-completion_{context}']
+= completion
 
 [role="_abstract"]
 Install command completion for your shell (bash, zsh, or fish)
@@ -46,31 +46,15 @@ rhoas completion zsh
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas.adoc#rhoas[rhoas]	 - RHOAS CLI
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
-endif::[]
 
-ifdef::env-github,env-browser[]
-* link:rhoas_completion_bash.adoc#rhoas-completion-bash[rhoas completion bash]	 - Generate command completion script for Bash shell
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion-bash_{context}[rhoas completion bash]	 - Generate command completion script for Bash shell
-endif::[]
+ 
+* link:{path}#ref-completion-bash_{context}[completion bash]	 - Generate command completion script for Bash shell
 
-ifdef::env-github,env-browser[]
-* link:rhoas_completion_fish.adoc#rhoas-completion-fish[rhoas completion fish]	 - Generate command completion script for fish shell
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion-fish_{context}[rhoas completion fish]	 - Generate command completion script for fish shell
-endif::[]
+ 
+* link:{path}#ref-completion-fish_{context}[completion fish]	 - Generate command completion script for fish shell
 
-ifdef::env-github,env-browser[]
-* link:rhoas_completion_zsh.adoc#rhoas-completion-zsh[rhoas completion zsh]	 - Generate command completion script for Zsh shell
-endif::[]
-ifdef::pantheonenv[]
-* link:{path}#ref-rhoas-completion-zsh_{context}[rhoas completion zsh]	 - Generate command completion script for Zsh shell
-endif::[]
+ 
+* link:{path}#ref-completion-zsh_{context}[completion zsh]	 - Generate command completion script for Zsh shell
 

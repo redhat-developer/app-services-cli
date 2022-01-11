@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-consumer-group-list_{context}']
-= rhoas kafka consumer-group list
+[id='ref-kafka-consumer-group-list_{context}']
+= kafka consumer-group list
 
 [role="_abstract"]
 List all consumer groups
@@ -45,10 +45,6 @@ $ rhoas kafka consumer-group list -o json
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_consumer-group.adoc#rhoas-kafka-consumer-group[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka-consumer-group_{context}[rhoas kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
-endif::[]
 

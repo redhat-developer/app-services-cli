@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-completion-bash_{context}']
-= rhoas completion bash
+[id='ref-completion-bash_{context}']
+= completion bash
 
 [role="_abstract"]
 Generate command completion script for Bash shell
@@ -57,10 +57,6 @@ rhoas completion bash
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_completion.adoc#rhoas-completion[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
-endif::[]
 

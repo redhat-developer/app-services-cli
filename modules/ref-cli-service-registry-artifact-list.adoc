@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-list_{context}']
-= rhoas service-registry artifact list
+[id='ref-service-registry-artifact-list_{context}']
+= service-registry artifact list
 
 [role="_abstract"]
 List artifacts
@@ -8,7 +8,7 @@ List artifacts
 [discrete]
 == Synopsis
 
-List all artifacts for the group by specified output format (by default, table)
+List all artifacts for the group in the specified output format (by default, "table")
 
 ....
 rhoas service-registry artifact list [flags]
@@ -43,7 +43,7 @@ rhoas service-registry artifact list --description sample
 
       `--description` _string_::     Text search to filter artifacts by description
   `-g`, `--group` _string_::         Artifact group (default "default")
-      `--instance-id` _string_::     ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::     ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       `--label` _stringArray_::      Text search to filter artifacts by labels
       `--limit` _int32_::            Page limit (default 100)
       `--name` _string_::            Text search to filter artifacts by name
@@ -61,10 +61,6 @@ rhoas service-registry artifact list --description sample
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
 

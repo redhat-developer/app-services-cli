@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-create_{context}']
-= rhoas service-registry create
+[id='ref-service-registry-create_{context}']
+= service-registry create
 
 [role="_abstract"]
 Create a Service Registry instance
@@ -8,7 +8,7 @@ Create a Service Registry instance
 [discrete]
 == Synopsis
 
-Create a Service Registry instance to store and manage your schema and API artifacts. 
+Create a Service Registry instance to store and manage your schema and API artifacts
 
 
 ....
@@ -45,10 +45,6 @@ rhoas service-registry create --name myregistry --description "description of in
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry.adoc#rhoas-service-registry[rhoas service-registry]	 - Service Registry commands
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
-endif::[]
 

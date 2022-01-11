@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-service-registry-artifact-metadata-get_{context}']
-= rhoas service-registry artifact metadata-get
+[id='ref-service-registry-artifact-metadata-get_{context}']
+= service-registry artifact metadata-get
 
 [role="_abstract"]
 Get artifact metadata
@@ -8,7 +8,8 @@ Get artifact metadata
 [discrete]
 == Synopsis
 
-Gets the metadata for an artifact in a Service Registry instance
+Get the metadata for an artifact in a Service Registry instance.
+
 The returned metadata includes both generated (read-only) and editable metadata (such as name and description).
 
 
@@ -33,7 +34,7 @@ rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group m
 
       `--artifact-id` _string_::   ID of the artifact
   `-g`, `--group` _string_::       Artifact group (default "default")
-      `--instance-id` _string_::   ID of the Service Registry instance to be used. By default, uses the currently selected instance
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
   `-o`, `--output` _string_::      Output format (json, yaml, yml)
 
 [discrete]
@@ -46,10 +47,6 @@ rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group m
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_service-registry_artifact.adoc#rhoas-service-registry-artifact[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-service-registry-artifact_{context}[rhoas service-registry artifact]	 - Manage Service Registry artifacts
-endif::[]
 

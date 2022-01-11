@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-rhoas-kafka-topic-delete_{context}']
-= rhoas kafka topic delete
+[id='ref-kafka-topic-delete_{context}']
+= kafka topic delete
 
 [role="_abstract"]
 Delete a topic
@@ -40,10 +40,6 @@ $ rhoas kafka topic delete --name topic-1
 == See also
 
 
-ifdef::env-github,env-browser[]
-* link:rhoas_kafka_topic.adoc#rhoas-kafka-topic[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
-endif::[]
-ifdef::pantheonenv[]
+ 
 * link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
-endif::[]
 
