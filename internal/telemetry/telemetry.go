@@ -1,11 +1,12 @@
 package telemetry
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"os"
 	"runtime"
 	"strconv"
 	"time"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -115,11 +116,7 @@ func (t *Telemetry) Finish(event string, cmdError error) {
 	}
 	defer telemetryClient.Close()
 
-	err = telemetryClient.Upload(t.telemetryData)
-	if err != nil {
-		t.factory.Logger.Info("Cannot send data to telemetry: %q", err)
-	}
-
+	telemetryClient.Upload(t.telemetryData)
 	telemetryClient.Close()
 
 }
