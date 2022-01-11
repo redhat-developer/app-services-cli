@@ -116,7 +116,7 @@ func (t *Telemetry) Finish(event string, cmdError error) {
 	}
 	defer telemetryClient.Close()
 
-	telemetryClient.Upload(t.telemetryData)
+	_ = telemetryClient.Upload(t.telemetryData)
 	telemetryClient.Close()
 
 }
