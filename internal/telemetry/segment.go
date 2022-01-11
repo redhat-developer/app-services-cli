@@ -48,6 +48,7 @@ func newCustomClient(telemetryFilePath string, segmentEndpoint string) (*Telemet
 	// DefaultContext has IP set to 0.0.0.0 so that it does not track user's IP, which it does in case no IP is set
 	client, err := analytics.NewWithConfig(writeKey, analytics.Config{
 		Endpoint: segmentEndpoint,
+		Logger:   silentLogger{},
 		Verbose:  false,
 		DefaultContext: &analytics.Context{
 			IP: net.IPv4(0, 0, 0, 0),
@@ -92,3 +93,11 @@ func (c *TelemetryClient) Upload(data *TelemetryData) error {
 		Properties: properties,
 	})
 }
+
+// Overrides segment logger to not print into stderr
+type silentLogger struct {
+}
+
+func (l silentLogger) Logf(format string, args ...interface{}) {}
+
+func (l silentLogger) Errorf(format string, args ...interface{}) {}
