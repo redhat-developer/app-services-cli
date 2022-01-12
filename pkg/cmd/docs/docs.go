@@ -46,7 +46,7 @@ func NewDocsCmd(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.format, "file-format", "md", "Output format of the generated documentation. Valid options are: 'md' (markdown), 'adoc' (Asciidoc) and 'man'")
 	cmd.Flags().StringVar(&opts.dir, "dir", "./docs", "The directory to output the generated documentation files")
-	cmd.Flags().StringVar(&opts.filePrefix, "file-prefix", "ref-", "Prefix for each documentation file")
+	cmd.Flags().StringVar(&opts.filePrefix, "file-prefix", "ref-cli-", "Prefix for each documentation file")
 	return cmd
 }
 
