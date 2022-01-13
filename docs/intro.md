@@ -1,7 +1,7 @@
 ---
+id: "intro"
+title: "Introduction"
 slug: /
-title: "Getting Started"
-position: 1
 ---
 
 ## App Services CLI Website
@@ -14,4 +14,3 @@ This website provides information about the components, development practices, t
 - RHOAS CLI (https://github.com/redhat-developer/app-services-cli)
 - RHOAS SDKS (https://github.com/topics/rhoas-sdk)
 - RHOAS Operator (https://github.com/redhat-developer/app-services-operator)
-

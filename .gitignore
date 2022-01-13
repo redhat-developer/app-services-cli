@@ -18,4 +18,3 @@ node_modules
 /*.properties
 .idea/
 .vscode/settings.json
-website/docs
