@@ -47,9 +47,9 @@ type options struct {
 	outputFormat string
 	autoUse      bool
 
-	interactive      bool
-	wait             bool
-	bypassTermsCheck bool
+	interactive    bool
+	wait           bool
+	bypassAmsCheck bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -122,7 +122,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
-	flags.AddBypassTermsCheck(&opts.bypassTermsCheck)
+	flags.AddBypassTermsCheck(&opts.bypassAmsCheck)
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return pkgKafka.GetCloudProviderCompletionValues(f)
@@ -154,7 +154,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	if !opts.bypassTermsCheck {
+	if !opts.bypassAmsCheck {
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a kafka instance
@@ -196,9 +196,11 @@ func runCreate(opts *options) error {
 		}
 	}
 
-	err = validateProviderAndRegion(opts, constants, conn)
-	if err != nil {
-		return err
+	if !opts.bypassAmsCheck {
+		err = validateProviderAndRegion(opts, constants, conn)
+		if err != nil {
+			return err
+		}
 	}
 
 	api := conn.API()
@@ -206,6 +208,8 @@ func runCreate(opts *options) error {
 	a := api.KafkaMgmt().CreateKafka(opts.Context)
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
+	return nil
+
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
@@ -346,7 +350,9 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 		opts.Logger.Debug("Validating region", opts.region, ". Enabled providers: ", regionNames)
 		regionsString := strings.Join(regionNames, ",")
 		if !selectedRegion.Enabled {
-			return errors.New(opts.region + " is not a valid or enabled region name.\nValid regions: " + regionsString)
+			regionEntry := localize.NewEntry("Region", opts.region)
+			validRegionsEntry := localize.NewEntry("Regions", regionsString)
+			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, validRegionsEntry)
 		}
 
 		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
@@ -363,36 +369,17 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 			}
 		}
 
-		return errors.New("Selected region does not support the instance types that you can create." +
-			" Your region: " + opts.region +
-			" Your instance types: " + strings.Join(userInstanceTypes, ",") +
-			" Region supported instance types: " + strings.Join(regionInstanceTypes, ","))
+		regionEntry := localize.NewEntry("Region", opts.region)
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ","))
+		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ","))
+
+		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
 	} else {
 		opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
 	}
 
-	userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-	if err != nil {
-		return err
-	}
-
-	regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
-	for _, instanceType := range userInstanceTypes {
-		for _, regionInstanceType := range regionInstanceTypes {
-			if instanceType == regionInstanceType {
-				opts.Logger.Debug("User instance type is supported by region", instanceType)
-				return nil
-			}
-		}
-
-	}
-
-	return errors.New("Selected region does not support the instance types that you can create." +
-		"Your region: " + opts.region +
-		" Your instance types: " + strings.Join(userInstanceTypes, ",") +
-		" Region supported instance types: " + strings.Join(regionInstanceTypes, ","))
-
+	return nil
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka

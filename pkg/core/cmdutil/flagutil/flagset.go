@@ -99,7 +99,7 @@ func (fs *FlagSet) AddBypassTermsCheck(bypass *bool) {
 		bypass,
 		flagName,
 		false,
-		"Bypass the terms and conditions pre-check",
+		"Bypass the terms and conditions pre-check and other AMS checks",
 	)
 
 	_ = fs.MarkHidden(flagName)

@@ -3,6 +3,7 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 
@@ -41,8 +42,7 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 
 	quotaCostGet, _, err := conn.API().AccountMgmt().
 		ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx, orgId).
-		Search("").
-		FetchRelatedResources(false).
+		FetchRelatedResources(true).
 		Execute()
 	if err != nil {
 		return nil, err
@@ -50,16 +50,16 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 
 	var quotas []string
 	for _, quota := range quotaCostGet.GetItems() {
-		if quota.Id == &spec.TrialQuotaID {
+		quotaId := strings.TrimSpace(quota.GetQuotaId())
+
+		if quotaId == spec.TrialQuotaID {
 			quotas = append(quotas, QuotaTrialType)
 		}
-		if quota.Id == &spec.InstanceQuotaID {
+		if quotaId == spec.InstanceQuotaID {
 			quotas = append(quotas, QuotaStandardType)
 		}
 	}
-	if len(quotas) == 0 {
-		return nil, errors.New("Your account missing quota for creating instance of specified type")
-	}
+
 	return quotas, err
 }
 
@@ -70,9 +70,5 @@ func GetOrganizationId(ctx context.Context, conn connection.Connection) (account
 		return "", err
 	}
 
-	if account.GetBanned() {
-		return "", errors.New("Your account has been banned from using the App Services. If you believe this is an error, please contact our support team.")
-	}
-
-	return account.GetOrganizationId(), nil
+	return account.Organization.GetId(), nil
 }
