@@ -74,5 +74,5 @@ func GetOrganizationId(ctx context.Context, conn connection.Connection) (account
 		return "", errors.New("Your account has been banned from using the App Services. If you believe this is an error, please contact our support team.")
 	}
 
-	return account.GetId(), nil
+	return account.GetOrganizationId(), nil
 }

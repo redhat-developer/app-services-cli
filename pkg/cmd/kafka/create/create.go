@@ -355,20 +355,18 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 			return err
 		}
 
-		var supportedRegion bool = false
-		for _, item := range selectedRegion.GetSupportedInstanceTypes() {
+		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
+
+		for _, item := range regionInstanceTypes {
 			if slices.Contains(userInstanceTypes, item) {
-				supportedRegion = true
-				break
+				return nil
 			}
 		}
 
-		if !supportedRegion {
-			return errors.New("Selected region does not support the instance types that you can create." +
-				" Your region: " + opts.region +
-				" Your instance types: " + strings.Join(userInstanceTypes, ",") +
-				" Region supported instance types: " + strings.Join(selectedRegion.GetSupportedInstanceTypes(), ","))
-		}
+		return errors.New("Selected region does not support the instance types that you can create." +
+			" Your region: " + opts.region +
+			" Your instance types: " + strings.Join(userInstanceTypes, ",") +
+			" Region supported instance types: " + strings.Join(regionInstanceTypes, ","))
 
 	} else {
 		opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
