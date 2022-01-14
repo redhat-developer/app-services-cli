@@ -5,8 +5,8 @@ SHELL = bash
 RHOAS_VERSION ?= "dev"
 REPOSITORY_OWNER ?= "redhat-developer"
 REPOSITORY_NAME ?= "app-services-cli"
-## TODO replace with the real value
-CONSTANTS_URL ?= "https://raw.githubusercontent.com/redhat-developer/app-services-ui/main/static/configs/service-constants.json"
+
+CONSTANTS_URL ?= "https://console.redhat.com/apps/application-services/service-constants.json"
 SSO_REDIRECT_PATH ?= "sso-redhat-callback"
 MAS_SSO_REDIRECT_PATH ?= "mas-sso-callback"
 BUILD_SOURCE ?= "local"

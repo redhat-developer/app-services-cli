@@ -208,7 +208,6 @@ func runCreate(opts *options) error {
 	a := api.KafkaMgmt().CreateKafka(opts.Context)
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
-	return nil
 
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
@@ -375,9 +374,8 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 
 		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
-	} else {
-		opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
 	}
+	opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
 
 	return nil
 }

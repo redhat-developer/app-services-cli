@@ -21,13 +21,6 @@ import (
 	"github.com/openconfig/goyang/pkg/indent"
 )
 
-const (
-	kafkaSvcName    = "kafka"
-	registrySvcName = "service-registry"
-)
-
-var validServices = []string{kafkaSvcName, registrySvcName}
-
 const tagTitle = "title"
 
 type serviceStatus struct {

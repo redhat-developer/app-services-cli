@@ -32,10 +32,9 @@ var (
 
 	// RepositoryName is the remote GitHub repository for the releases
 	RepositoryName = "app-services-cli"
-	// TODO replace with the real value
+
 	// DynamicConfigURL Url used to download dynamic service constants. If empty then static service constants are  used.
-	DynamicConfigURL = "https://raw.githubusercontent.com/redhat-developer/app-services-ui/main/static/configs/service-constants.json"
-	// "https://console.redhat.com/apps/application-services/service-constants.json"
+	DynamicConfigURL = "https://console.redhat.com/apps/application-services/service-constants.json"
 
 	// DefaultPageSize is the default number of items per page when using list commands
 	DefaultPageSize = "10"
