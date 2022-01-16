@@ -11,4 +11,4 @@ See our [Guides](https://github.com/redhat-developer/app-services-guides/tree/ma
 
 ## Commands
 
-See the [Command-Line Reference](https://github.com/redhat-developer/app-services-cli/blob/main/docs/commands/rhoas.adoc) section for details of all available commands and options.
+See the [Command-Line Reference](https://github.com/redhat-developer/app-services-cli/blob/main/docs/commands/rhoas.md) section for details of all available commands and options.
