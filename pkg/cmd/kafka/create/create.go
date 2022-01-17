@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -131,8 +130,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return kafkautil.GetCloudProviderRegionCompletionValues(f, opts.provider)
 	})
-
-	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }
@@ -306,24 +303,22 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 	}
 
 	var selectedProvider kafkamgmtclient.CloudProvider
-	providerNames := make([]string, 0)
-	for _, item := range cloudProviders.Items {
-		if !item.GetEnabled() {
-			continue
-		}
-		if item.GetId() == opts.provider {
-			selectedProvider = item
-		}
-		providerNames = append(providerNames, item.GetId())
-	}
+
+	providerNames := kafkautil.GetEnabledCloudProviderNames(cloudProviders.Items)
 
 	opts.Logger.Debug("Validating cloud provider", opts.provider, ". Enabled providers: ", providerNames)
 
 	if !selectedProvider.Enabled {
 		providers := strings.Join(providerNames, ",")
-		return errors.New(opts.provider + " is not a valid or currently enabled cloud provider name.\nValid providers: " + providers)
+		providerEntry := localize.NewEntry("Provider", opts.provider)
+		validProvidersEntry := localize.NewEntry("Providers", providers)
+		return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidProvider", providerEntry, validProvidersEntry)
 	}
 
+	return validateProviderRegion(conn, opts, selectedProvider, constants)
+}
+
+func validateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
 	cloudRegion, _, err := conn.API().
 		KafkaMgmt().
 		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).

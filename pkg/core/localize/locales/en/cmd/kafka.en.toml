@@ -327,8 +327,14 @@ Region instance types {{.CloudTypes}}
 
 [kafka.create.region.error.invalidRegion]
 one = '''
-{{.Region}} is not a valid or enabled region name.
-Valid regions: {{.Regions}}
+Invalid or not enabled cloud provider region: "{{.Region}}"
+Valid region ids: {{.Regions}}
+'''
+
+[kafka.create.region.error.invalidProvider]
+one = '''
+Invalid or not enabled cloud provider: "{{.Provider}}"
+nValid providers: {{.Providers}}
 '''
 
 [kafka.delete.cmd.shortDescription]

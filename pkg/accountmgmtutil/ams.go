@@ -35,7 +35,7 @@ func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connect
 }
 
 func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota []string, err error) {
-	orgId, err := GetOrganizationId(ctx, conn)
+	orgId, err := GetOrganizationID(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 	return quotas, err
 }
 
-func GetOrganizationId(ctx context.Context, conn connection.Connection) (accountId string, err error) {
+func GetOrganizationID(ctx context.Context, conn connection.Connection) (accountID string, err error) {
 	account, _, err := conn.API().AccountMgmt().ApiAccountsMgmtV1CurrentAccountGet(ctx).
 		Execute()
 	if err != nil {
