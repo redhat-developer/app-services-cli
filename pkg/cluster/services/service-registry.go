@@ -7,7 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -76,7 +76,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 		Name:               serviceName,
 		KubernetesResource: serviceRegistryCR,
 		GroupMetadata:      resources.SRCResource,
-		Type:               shared.ServiceRegistryServiceName,
+		Type:               servicespec.ServiceRegistryServiceName,
 	}
 
 	return &serviceDetails, nil

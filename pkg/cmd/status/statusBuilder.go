@@ -9,14 +9,13 @@ import (
 	"text/tabwriter"
 
 	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-
-	"github.com/redhat-developer/app-services-cli/pkg/shared"
 
 	"github.com/openconfig/goyang/pkg/indent"
 )
@@ -77,7 +76,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 
 	status = &serviceStatus{}
 
-	if stringInSlice(shared.ServiceRegistryServiceName, services) {
+	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
 		if instanceID, exists := cfg.GetKafkaIdOk(); exists {
 			// nolint:govet
 			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
@@ -96,7 +95,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 		}
 	}
 
-	if stringInSlice(shared.ServiceRegistryServiceName, services) {
+	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
 		registryCfg := cfg.Services.ServiceRegistry
 		if registryCfg != nil && registryCfg.InstanceID != "" {
 			// nolint:govet

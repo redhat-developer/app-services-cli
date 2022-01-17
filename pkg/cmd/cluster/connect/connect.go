@@ -13,8 +13,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared"
 	"github.com/spf13/cobra"
 )
 
@@ -66,7 +66,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.ignoreContext, "ignore-context", false, opts.localizer.MustLocalize("cluster.common.flag.ignoreContext.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc("service-type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return shared.AllServiceLabels, cobra.ShellCompDirectiveNoSpace
+		return servicespec.AllServiceLabels, cobra.ShellCompDirectiveNoSpace
 	})
 
 	return cmd

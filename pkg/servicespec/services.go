@@ -1,4 +1,4 @@
-package shared
+package servicespec
 
 const ServiceRegistryServiceName = "service-registry"
 
