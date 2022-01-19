@@ -5,11 +5,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 
 	"github.com/landoop/tableprinter"
 	"gitlab.com/c0b/go-ordered-json"
@@ -123,7 +124,13 @@ func haveYQ(minVersion int) bool {
 		return false
 	}
 
-	versionStr := strings.TrimSpace(strings.TrimLeft(string(versionOutput), "yq version"))
+	prefixes := []string{"yq", "(https://github.com/mikefarah/yq/)", "version"}
+
+	versionStr := string(versionOutput)
+	for _, p := range prefixes {
+		versionStr = strings.TrimSpace(strings.TrimLeft(string(versionStr), p))
+	}
+
 	if versionStr == "" {
 		return false
 	}
