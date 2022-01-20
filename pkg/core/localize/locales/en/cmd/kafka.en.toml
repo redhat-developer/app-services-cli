@@ -319,22 +319,20 @@ one = 'Kafka instance "{{.Name}}" already exists'
 [kafka.create.error.oneinstance]
 one = 'unable to create new Kafka instance. Only one instance is allowed with an eval account'
 
-[kafka.create.region.error.regionNotSupported]
-one = '''Selected region does not support the instance types that you can create. Region {{.Region}}
-Your instance types {{.MyTypes}}. 
-Region instance types {{.CloudTypes}}  
-'''
-
 [kafka.create.region.error.invalidRegion]
 one = '''
 Invalid or not enabled cloud provider region: "{{.Region}}"
-Valid region ids: {{.Regions}}
+Choose from: {{.Regions}}
 '''
 
-[kafka.create.region.error.invalidProvider]
+[kafka.create.provider.error.invalidProvider]
 one = '''
-Invalid or not enabled cloud provider: "{{.Provider}}"
-nValid providers: {{.Providers}}
+the cloud provider "{{.Provider}}" does not exist or is not available. Choose from: {{.Providers}}
+'''
+
+[kafka.create.region.error.regionNotSupported]
+one = '''the selected region "{{.Region}}" does not support the instance types that you can create
+({{.MyTypes}}). Supported types for this region are: "{{.CloudTypes}}" 
 '''
 
 [kafka.delete.cmd.shortDescription]

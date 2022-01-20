@@ -1,6 +1,8 @@
 package accountmgmtutil
 
+type QuotaType = string
+
 const (
-	QuotaTrialType    = "eval"
-	QuotaStandardType = "standard"
+	QuotaTrialType    QuotaType = "eval"
+	QuotaStandardType QuotaType = "standard"
 )

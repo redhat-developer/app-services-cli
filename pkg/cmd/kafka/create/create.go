@@ -206,6 +206,8 @@ func runCreate(opts *options) error {
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 
+	return nil
+
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
@@ -304,15 +306,23 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 
 	var selectedProvider kafkamgmtclient.CloudProvider
 
-	providerNames := kafkautil.GetEnabledCloudProviderNames(cloudProviders.Items)
-
+	providerNames := make([]string, 0)
+	for _, item := range cloudProviders.Items {
+		if !item.GetEnabled() {
+			continue
+		}
+		if item.GetId() == opts.provider {
+			selectedProvider = item
+		}
+		providerNames = append(providerNames, item.GetId())
+	}
 	opts.Logger.Debug("Validating cloud provider", opts.provider, ". Enabled providers: ", providerNames)
 
 	if !selectedProvider.Enabled {
 		providers := strings.Join(providerNames, ",")
 		providerEntry := localize.NewEntry("Provider", opts.provider)
 		validProvidersEntry := localize.NewEntry("Providers", providers)
-		return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidProvider", providerEntry, validProvidersEntry)
+		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
 	}
 
 	return validateProviderRegion(conn, opts, selectedProvider, constants)
@@ -346,7 +356,8 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 		if !selectedRegion.Enabled {
 			regionEntry := localize.NewEntry("Region", opts.region)
 			validRegionsEntry := localize.NewEntry("Regions", regionsString)
-			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, validRegionsEntry)
+			providerEntry := localize.NewEntry("Provider", opts.provider)
+			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
 		}
 
 		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)

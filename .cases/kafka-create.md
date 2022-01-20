@@ -14,6 +14,7 @@ rhoas kafka create --name=wtrocki --provider=azure
 
 rhoas kafka create --name=wtrocki --provider=aws --region="magentadrive"
 ❌ Magentadrive is not a valid or enabled region name.
-Valid regions: eu-west-1,us-east-1
+Valid regions: eu-west-1, us-east-1
+
 Run the command in verbose mode using the -v flag to see more information
 
