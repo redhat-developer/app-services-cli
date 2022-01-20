@@ -206,8 +206,6 @@ func runCreate(opts *options) error {
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
 
-	return nil
-
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
