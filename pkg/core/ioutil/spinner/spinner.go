@@ -2,9 +2,10 @@ package spinner
 
 import (
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"io"
 	"time"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
 	"github.com/briandowns/spinner"
 )
@@ -24,6 +25,7 @@ func New(w io.Writer, localizer localize.Localizer) *Spinner {
 			spinner.CharSets[11],
 			100*time.Millisecond,
 			spinner.WithWriter(w),
+			spinner.WithColor("cyan"),
 		),
 	}
 }
