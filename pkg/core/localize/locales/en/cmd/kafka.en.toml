@@ -321,7 +321,7 @@ one = 'unable to create new Kafka instance. Only one instance is allowed with an
 
 [kafka.create.region.error.invalidRegion]
 one = '''
-Invalid or not enabled cloud provider region: "{{.Region}}"
+the region "{{.Region}}" is not available for the cloud provider "{{.Provider}}".
 Choose from: {{.Regions}}
 '''
 
