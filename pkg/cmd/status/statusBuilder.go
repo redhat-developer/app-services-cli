@@ -9,6 +9,7 @@ import (
 	"text/tabwriter"
 
 	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -18,13 +19,6 @@ import (
 
 	"github.com/openconfig/goyang/pkg/indent"
 )
-
-const (
-	kafkaSvcName    = "kafka"
-	registrySvcName = "service-registry"
-)
-
-var validServices = []string{kafkaSvcName, registrySvcName}
 
 const tagTitle = "title"
 
@@ -82,7 +76,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 
 	status = &serviceStatus{}
 
-	if stringInSlice(kafkaSvcName, services) {
+	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
 		if instanceID, exists := cfg.GetKafkaIdOk(); exists {
 			// nolint:govet
 			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
@@ -101,7 +95,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 		}
 	}
 
-	if stringInSlice(registrySvcName, services) {
+	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
 		registryCfg := cfg.Services.ServiceRegistry
 		if registryCfg != nil && registryCfg.InstanceID != "" {
 			// nolint:govet

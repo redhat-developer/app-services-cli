@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	"k8s.io/utils/strings/slices"
 
 	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -25,6 +29,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -41,9 +46,9 @@ type options struct {
 	outputFormat string
 	autoUse      bool
 
-	interactive      bool
-	wait             bool
-	bypassTermsCheck bool
+	interactive    bool
+	wait           bool
+	bypassAmsCheck bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -116,10 +121,14 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
-	flags.AddBypassTermsCheck(&opts.bypassTermsCheck)
+	flags.AddBypassTermsCheck(&opts.bypassAmsCheck)
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return pkgKafka.GetCloudProviderCompletionValues(f)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return kafkautil.GetCloudProviderRegionCompletionValues(f, opts.provider)
 	})
 
 	return cmd
@@ -137,14 +146,19 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	if !opts.bypassTermsCheck {
+	err, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
+	if err != nil {
+		return err
+	}
+
+	if !opts.bypassAmsCheck {
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a kafka instance
-		termsSpec := accountmgmtutil.GetRemoteTermsSpec(&opts.Context, opts.Logger)
 		var termsAccepted bool
 		var termsURL string
-		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, termsSpec.Kafka, conn)
+		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.Kafka.Ams, conn)
+
 		if err != nil {
 			return err
 		}
@@ -179,11 +193,19 @@ func runCreate(opts *options) error {
 		}
 	}
 
+	if !opts.bypassAmsCheck {
+		err = validateProviderAndRegion(opts, constants, conn)
+		if err != nil {
+			return err
+		}
+	}
+
 	api := conn.API()
 
 	a := api.KafkaMgmt().CreateKafka(opts.Context)
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
+
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
@@ -265,6 +287,99 @@ func runCreate(opts *options) error {
 		opts.Logger.Info()
 		opts.Logger.Info(opts.localizer.MustLocalize("kafka.create.info.successAsync", nameTemplateEntry))
 	}
+
+	return nil
+}
+
+func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
+	opts.Logger.Debug("Validating provider and region")
+	cloudProviders, _, err := conn.API().
+		KafkaMgmt().
+		GetCloudProviders(opts.Context).
+		Execute()
+
+	if err != nil {
+		return err
+	}
+
+	var selectedProvider kafkamgmtclient.CloudProvider
+
+	providerNames := make([]string, 0)
+	for _, item := range cloudProviders.Items {
+		if !item.GetEnabled() {
+			continue
+		}
+		if item.GetId() == opts.provider {
+			selectedProvider = item
+		}
+		providerNames = append(providerNames, item.GetId())
+	}
+	opts.Logger.Debug("Validating cloud provider", opts.provider, ". Enabled providers: ", providerNames)
+
+	if !selectedProvider.Enabled {
+		providers := strings.Join(providerNames, ",")
+		providerEntry := localize.NewEntry("Provider", opts.provider)
+		validProvidersEntry := localize.NewEntry("Providers", providers)
+		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
+	}
+
+	return validateProviderRegion(conn, opts, selectedProvider, constants)
+}
+
+func validateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
+	cloudRegion, _, err := conn.API().
+		KafkaMgmt().
+		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).
+		Execute()
+
+	if err != nil {
+		return err
+	}
+
+	var selectedRegion kafkamgmtclient.CloudRegion
+	regionNames := make([]string, 0)
+	for _, item := range cloudRegion.Items {
+		if !item.GetEnabled() {
+			continue
+		}
+		regionNames = append(regionNames, item.GetId())
+		if item.GetId() == opts.region {
+			selectedRegion = item
+		}
+	}
+
+	if len(regionNames) != 0 {
+		opts.Logger.Debug("Validating region", opts.region, ". Enabled providers: ", regionNames)
+		regionsString := strings.Join(regionNames, ", ")
+		if !selectedRegion.Enabled {
+			regionEntry := localize.NewEntry("Region", opts.region)
+			validRegionsEntry := localize.NewEntry("Regions", regionsString)
+			providerEntry := localize.NewEntry("Provider", opts.provider)
+			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
+		}
+
+		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+		if err != nil {
+			opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+			return err
+		}
+
+		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
+
+		for _, item := range regionInstanceTypes {
+			if slices.Contains(userInstanceTypes, item) {
+				return nil
+			}
+		}
+
+		regionEntry := localize.NewEntry("Region", opts.region)
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
+		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
+
+		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
+
+	}
+	opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
 
 	return nil
 }

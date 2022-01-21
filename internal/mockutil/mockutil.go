@@ -8,6 +8,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
@@ -67,4 +69,21 @@ func NewConnectionMock(conn *kcconnection.Connection, apiClient *kafkamgmtclient
 			return nil
 		},
 	}
+}
+
+func NewKafkaRequestTypeMock(name string) kafkamgmtclient.KafkaRequest {
+	var kafkaReq kafkamgmtclient.KafkaRequest
+	kafkaReq.SetId("1")
+	kafkaReq.SetName(name)
+
+	return kafkaReq
+}
+
+func NewLoggerMock() logging.Logger {
+	io := iostreams.System()
+	var logger logging.Logger
+	loggerBuilder := logging.NewStdLoggerBuilder()
+	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
+	logger, _ = loggerBuilder.Build()
+	return logger
 }

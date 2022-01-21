@@ -33,8 +33,8 @@ var (
 	// RepositoryName is the remote GitHub repository for the releases
 	RepositoryName = "app-services-cli"
 
-	// TermsReviewSpecURL Url used to download terms and conditions specification
-	TermsReviewSpecURL = "https://console.redhat.com/apps/application-services/terms-conditions-spec.json"
+	// DynamicConfigURL Url used to download dynamic service constants. If empty then static service constants are  used.
+	DynamicConfigURL = "https://console.redhat.com/apps/application-services/service-constants.json"
 
 	// DefaultPageSize is the default number of items per page when using list commands
 	DefaultPageSize = "10"

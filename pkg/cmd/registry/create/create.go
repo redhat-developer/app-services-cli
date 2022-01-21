@@ -15,6 +15,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/remote"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
@@ -125,10 +126,13 @@ func runCreate(opts *options) error {
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a registry instance
-		termsSpec := accountmgmtutil.GetRemoteTermsSpec(&opts.Context, opts.Logger)
+		err1, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
+		if err1 != nil {
+			return err
+		}
 		var termsAccepted bool
 		var termsURL string
-		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, termsSpec.ServiceRegistry, conn)
+		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.ServiceRegistry.Ams, conn)
 		if err != nil {
 			return err
 		}
