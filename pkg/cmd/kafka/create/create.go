@@ -350,7 +350,7 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 
 	if len(regionNames) != 0 {
 		opts.Logger.Debug("Validating region", opts.region, ". Enabled providers: ", regionNames)
-		regionsString := strings.Join(regionNames, ",")
+		regionsString := strings.Join(regionNames, ", ")
 		if !selectedRegion.Enabled {
 			regionEntry := localize.NewEntry("Region", opts.region)
 			validRegionsEntry := localize.NewEntry("Regions", regionsString)
@@ -373,8 +373,8 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 		}
 
 		regionEntry := localize.NewEntry("Region", opts.region)
-		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ","))
-		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ","))
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
+		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
 		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
