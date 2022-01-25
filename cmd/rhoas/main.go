@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
 	"os"
 	"strings"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/telemetry"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
@@ -43,7 +44,7 @@ func main() {
 	err = executeCommandWithTelemetry(rootCmd, cmdFactory)
 
 	if err == nil {
-		if debug.Enabled() {
+		if flagutil.DebugEnabled() {
 			build.CheckForUpdate(cmdFactory.Context, build.Version, cmdFactory.Logger, localizer)
 		}
 		return
@@ -114,7 +115,7 @@ func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Fac
 	}
 	commandPath := ""
 	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-		cmdFactory.Logger.SetDebug(debug.Enabled())
+		cmdFactory.Logger.SetDebug(flagutil.DebugEnabled())
 		if cmd.Runnable() && !cmd.Hidden {
 			commandPath = cmd.CommandPath()
 		}

@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"net/http"
 	"net/url"
+
+	"github.com/redhat-developer/app-services-cli/pkg/auth/login"
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -213,7 +214,7 @@ func runLogin(opts *options) (err error) {
 
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
-	if !debug.Enabled() {
+	if !flagutil.DebugEnabled() {
 		build.CheckForUpdate(opts.Context, build.Version, opts.Logger, opts.localizer)
 	}
 

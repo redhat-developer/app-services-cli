@@ -5,10 +5,11 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
 	"net/http"
 	"net/url"
+
+	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
@@ -173,7 +174,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 
 	if b.logger == nil {
 		loggerBuilder := logging.NewStdLoggerBuilder()
-		debugEnabled := debug.Enabled()
+		debugEnabled := flagutil.DebugEnabled()
 		loggerBuilder = loggerBuilder.Debug(debugEnabled)
 
 		b.logger, err = loggerBuilder.Build()
