@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/accountcmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/accountcmdutil/credentials"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/accountcmdutil/validation"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -80,9 +80,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// check that a valid --file-format flag value is used
-			validOutput := flagutil.IsValidInput(opts.fileFormat, accountcmdutil.CredentialsOutputFormats...)
+			validOutput := flagutil.IsValidInput(opts.fileFormat, svcaccountcmdutil.CredentialsOutputFormats...)
 			if !validOutput && opts.fileFormat != "" {
-				return flagutil.InvalidValueError("file-format", opts.fileFormat, accountcmdutil.CredentialsOutputFormats...)
+				return flagutil.InvalidValueError("file-format", opts.fileFormat, svcaccountcmdutil.CredentialsOutputFormats...)
 			}
 
 			return runCreate(opts)
@@ -94,7 +94,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.filename, "output-file", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileLocation.description"))
 	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
 
-	flagutil.EnableStaticFlagCompletion(cmd, "file-format", accountcmdutil.CredentialsOutputFormats)
+	flagutil.EnableStaticFlagCompletion(cmd, "file-format", svcaccountcmdutil.CredentialsOutputFormats)
 
 	return cmd
 }
@@ -200,7 +200,7 @@ func runInteractivePrompt(opts *options) (err error) {
 		fileFormatPrompt := &survey.Select{
 			Message: opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.message"),
 			Help:    opts.localizer.MustLocalize("serviceAccount.create.input.fileFormat.help"),
-			Options: accountcmdutil.CredentialsOutputFormats,
+			Options: svcaccountcmdutil.CredentialsOutputFormats,
 			Default: credentials.EnvFormat,
 		}
 
