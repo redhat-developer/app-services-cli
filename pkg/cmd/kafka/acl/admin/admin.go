@@ -3,19 +3,19 @@ package admin
 import (
 	"context"
 
-	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	"github.com/spf13/cobra"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/spf13/cobra"
 
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
@@ -85,7 +85,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			// user and service account should not allow wildcard
-			if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+			if userID == aclcmdutil.Wildcard || serviceAccount == aclcmdutil.Wildcard || userID == aclcmdutil.AllAlias || serviceAccount == aclcmdutil.AllAlias {
 				return opts.localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 			}
 
@@ -98,7 +98,7 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if allAccounts {
-				opts.principal = aclutil.Wildcard
+				opts.principal = aclcmdutil.Wildcard
 			}
 
 			return runAdmin(opts)
@@ -134,14 +134,14 @@ func runAdmin(opts *options) (err error) {
 
 	aclBindClusterAlter := kafkainstanceclient.NewAclBinding(
 		kafkainstanceclient.ACLRESOURCETYPE_CLUSTER,
-		aclutil.KafkaCluster,
+		aclcmdutil.KafkaCluster,
 		kafkainstanceclient.ACLPATTERNTYPE_LITERAL,
-		aclutil.FormatPrincipal(opts.principal),
+		aclcmdutil.FormatPrincipal(opts.principal),
 		kafkainstanceclient.ACLOPERATION_ALTER,
 		kafkainstanceclient.ACLPERMISSIONTYPE_ALLOW,
 	)
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
+	rows := aclcmdutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*aclBindClusterAlter}, opts.localizer)
 
 	opts.logger.Info(opts.localizer.MustLocalizePlural("kafka.acl.grantPermissions.log.info.aclsPreview", len(rows)))
 	opts.logger.Info()
@@ -168,7 +168,7 @@ func runAdmin(opts *options) (err error) {
 
 	req = req.AclBinding(*aclBindClusterAlter)
 
-	err = aclutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
+	err = aclcmdutil.ExecuteACLRuleCreate(req, opts.localizer, kafkaName)
 	if err != nil {
 		return err
 	}

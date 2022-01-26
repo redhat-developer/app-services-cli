@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/api"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 func NewConfigMock(cfg *config.Config) config.IConfig {
@@ -30,7 +33,7 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 	}
 }
 
-func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmtclient.APIClient) connection.Connection {
+func NewConnectionMock(conn *kcconnection.Connection, apiClient *kafkamgmtclient.APIClient) connection.Connection {
 	return &connection.ConnectionMock{
 		RefreshTokensFunc: func(ctx context.Context) error {
 			if conn.Token.AccessToken == "" && conn.Token.RefreshToken == "" {
@@ -62,14 +65,8 @@ func NewConnectionMock(conn *connection.KeycloakConnection, apiClient *kafkamgmt
 
 			return conn.Config.Save(cfg)
 		},
-		APIFunc: func() *api.API {
-			a := &api.API{
-				Kafka: func() kafkamgmtclient.DefaultApi {
-					return apiClient.DefaultApi
-				},
-			}
-
-			return a
+		APIFunc: func() api.API {
+			return nil
 		},
 	}
 }
@@ -80,4 +77,13 @@ func NewKafkaRequestTypeMock(name string) kafkamgmtclient.KafkaRequest {
 	kafkaReq.SetName(name)
 
 	return kafkaReq
+}
+
+func NewLoggerMock() logging.Logger {
+	io := iostreams.System()
+	var logger logging.Logger
+	loggerBuilder := logging.NewStdLoggerBuilder()
+	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
+	logger, _ = loggerBuilder.Build()
+	return logger
 }

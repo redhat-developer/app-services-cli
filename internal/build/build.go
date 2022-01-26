@@ -6,10 +6,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/google/go-github/v39/github"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type buildSource string
@@ -32,8 +33,8 @@ var (
 	// RepositoryName is the remote GitHub repository for the releases
 	RepositoryName = "app-services-cli"
 
-	// TermsReviewSpecURL Url used to download terms and conditions specification
-	TermsReviewSpecURL = "https://console.redhat.com/apps/application-services/terms-conditions-spec.json"
+	// DynamicConfigURL Url used to download dynamic service constants. If empty then static service constants are  used.
+	DynamicConfigURL = "https://console.redhat.com/apps/application-services/service-constants.json"
 
 	// DefaultPageSize is the default number of items per page when using list commands
 	DefaultPageSize = "10"

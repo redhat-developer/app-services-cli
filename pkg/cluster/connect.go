@@ -6,17 +6,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/AlecAivazis/survey/v2"
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -231,7 +231,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccount(ctx context.Context, cli
 
 	api := cliOpts.Connection.API()
 	serviceAcct := &kafkamgmtclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
-	req := api.ServiceAccount().CreateServiceAccount(ctx)
+	req := api.ServiceAccountMgmt().CreateServiceAccount(ctx)
 	req = req.ServiceAccountRequest(*serviceAcct)
 	serviceAcctRes, httpRes, err := req.Execute()
 	if httpRes != nil {

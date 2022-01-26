@@ -3,28 +3,18 @@ package status
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-	pkgStatus "github.com/redhat-developer/app-services-cli/pkg/status"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 	"github.com/spf13/cobra"
 )
-
-const (
-	kafkaSvcName    = "kafka"
-	registrySvcName = "service-registry"
-)
-
-var validServices = []string{kafkaSvcName, registrySvcName}
 
 type options struct {
 	IO         *iostreams.IOStreams
@@ -44,7 +34,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
-		services:   validServices,
+		services:   servicespec.AllServiceLabels,
 		localizer:  f.Localizer,
 		Context:    f.Context,
 	}
@@ -54,12 +44,12 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		Short:     opts.localizer.MustLocalize("status.cmd.shortDescription"),
 		Long:      opts.localizer.MustLocalize("status.cmd.longDescription"),
 		Example:   opts.localizer.MustLocalize("status.cmd.example"),
-		ValidArgs: validServices,
-		Args:      cobra.RangeArgs(0, len(validServices)),
+		ValidArgs: servicespec.AllServiceLabels,
+		Args:      cobra.RangeArgs(0, len(servicespec.AllServiceLabels)),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				for _, s := range args {
-					if !flagutil.IsValidInput(s, validServices...) {
+					if !flagutil.IsValidInput(s, servicespec.AllServiceLabels...) {
 						return opts.localizer.MustLocalizeError("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s))
 					}
 				}
@@ -69,7 +59,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			return runStatus(opts)
@@ -89,18 +79,18 @@ func runStatus(opts *options) error {
 		return err
 	}
 
-	pkgOpts := &pkgStatus.Options{
-		Config:     opts.Config,
-		Connection: conn,
-		Logger:     opts.Logger,
-		Services:   opts.services,
-	}
-
 	if len(opts.services) > 0 {
 		opts.Logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
-	status, ok, err := pkgStatus.Get(opts.Context, pkgOpts)
+	statusClient := newStatusClient(&clientConfig{
+		config:     opts.Config,
+		connection: conn,
+		Logger:     opts.Logger,
+		localizer:  opts.localizer,
+	})
+
+	status, ok, err := statusClient.BuildStatus(opts.Context, opts.services)
 	if err != nil {
 		return err
 	}
@@ -117,7 +107,7 @@ func runStatus(opts *options) error {
 			return err
 		}
 	} else {
-		pkgStatus.Print(stdout, status)
+		Print(stdout, status)
 	}
 
 	return nil

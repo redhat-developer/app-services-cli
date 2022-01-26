@@ -2,15 +2,15 @@ package create
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/aclutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
+	aclFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
@@ -33,7 +33,7 @@ type requestParams struct {
 
 // NewCreateCommand creates a new command to add Kafka ACLs
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &aclutil.CrudOptions{
+	opts := &aclcmdutil.CrudOptions{
 		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
@@ -50,7 +50,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !opts.IO.CanPrompt() && !opts.SkipConfirm {
-				return flag.RequiredWhenNonInteractiveError("yes")
+				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
 			var errorCollection []error
@@ -63,7 +63,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
 			}
 
-			if resourceErrors := aclutil.ValidateAndSetResources(opts, flagutil.ResourceTypeFlagEntries); resourceErrors != nil {
+			if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagutil.ResourceTypeFlagEntries); resourceErrors != nil {
 				errorCollection = append(errorCollection, resourceErrors)
 			}
 
@@ -72,14 +72,14 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if len(errorCollection) > 0 {
-				return aclutil.BuildInstructions(errorCollection)
+				return aclcmdutil.BuildInstructions(errorCollection)
 			}
 
 			return runAdd(opts.InstanceID, opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, f)
+	flags := aclFlagutil.NewFlagSet(cmd, f)
 
 	flags.AddPermissionCreate(&opts.Permission)
 	flags.AddOperationCreate(&opts.Operation)
@@ -99,7 +99,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 // nolint:funlen
-func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
+func runAdd(instanceID string, opts *aclcmdutil.CrudOptions) error {
 	ctx := opts.Context
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
@@ -122,7 +122,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 		return err
 	}
 
-	if isValidOp, validResourceOperations := aclutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
+	if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
 			localize.NewEntry("ResourceType", opts.ResourceType),
 			localize.NewEntry("Operation", opts.Operation),
@@ -136,12 +136,12 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 		kafkainstanceclient.AclResourceType(requestParams.resourceType),
 		requestParams.resourceName,
 		kafkainstanceclient.AclPatternType(requestParams.patternType),
-		aclutil.FormatPrincipal(opts.Principal),
+		aclcmdutil.FormatPrincipal(opts.Principal),
 		kafkainstanceclient.AclOperation(requestParams.operation),
 		kafkainstanceclient.AclPermissionType(requestParams.permission),
 	)
 
-	rows := aclutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
+	rows := aclcmdutil.MapACLsToTableRows([]kafkainstanceclient.AclBinding{*newAclBinding}, opts.Localizer)
 
 	opts.Logger.Info(opts.Localizer.MustLocalizePlural("kafka.acl.grantPermissions.log.info.aclsPreview", len(rows)))
 	opts.Logger.Info()
@@ -174,7 +174,7 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 
 	req = req.AclBinding(*newAclBinding)
 
-	err = aclutil.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName)
+	err = aclcmdutil.ExecuteACLRuleCreate(req, opts.Localizer, kafkaName)
 	spinnr.Stop()
 	if err != nil {
 		return err
@@ -183,25 +183,25 @@ func runAdd(instanceID string, opts *aclutil.CrudOptions) error {
 	return nil
 }
 
-func getRequestParams(opts *aclutil.CrudOptions) *requestParams {
+func getRequestParams(opts *aclcmdutil.CrudOptions) *requestParams {
 	return &requestParams{
-		resourceType: kafkainstanceclient.AclResourceType(aclutil.GetMappedResourceTypeFilterValue(opts.ResourceType)),
-		principal:    aclutil.FormatPrincipal(opts.Principal),
-		resourceName: aclutil.GetResourceName(opts.ResourceName),
-		patternType:  aclutil.GetMappedPatternTypeValue(opts.PatternType),
-		operation:    aclutil.GetMappedOperationValue(opts.Operation),
-		permission:   aclutil.GetMappedPermissionTypeValue(opts.Permission),
+		resourceType: kafkainstanceclient.AclResourceType(aclcmdutil.GetMappedResourceTypeFilterValue(opts.ResourceType)),
+		principal:    aclcmdutil.FormatPrincipal(opts.Principal),
+		resourceName: aclcmdutil.GetResourceName(opts.ResourceName),
+		patternType:  aclcmdutil.GetMappedPatternTypeValue(opts.PatternType),
+		operation:    aclcmdutil.GetMappedOperationValue(opts.Operation),
+		permission:   aclcmdutil.GetMappedPermissionTypeValue(opts.Permission),
 	}
 }
 
-func validateAndSetOpts(opts *aclutil.CrudOptions) error {
+func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 
 	// user and service account should not be provided together
 	if userID != "" && serviceAccount != "" {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
 	}
 
-	if userID == aclutil.Wildcard || serviceAccount == aclutil.Wildcard || userID == aclutil.AllAlias || serviceAccount == aclutil.AllAlias {
+	if userID == aclcmdutil.Wildcard || serviceAccount == aclcmdutil.Wildcard || userID == aclcmdutil.AllAlias || serviceAccount == aclcmdutil.AllAlias {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
 	}
 
@@ -209,7 +209,7 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		if userID != "" || serviceAccount != "" {
 			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
 		}
-		opts.Principal = aclutil.Wildcard
+		opts.Principal = aclcmdutil.Wildcard
 	}
 
 	// check if principal is provided
@@ -217,9 +217,9 @@ func validateAndSetOpts(opts *aclutil.CrudOptions) error {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
 
-	opts.PatternType = aclutil.PatternTypeLITERAL
+	opts.PatternType = aclcmdutil.PatternTypeLITERAL
 	if prefix {
-		opts.PatternType = aclutil.PatternTypePREFIX
+		opts.PatternType = aclcmdutil.PatternTypePREFIX
 	}
 
 	if userID != "" {

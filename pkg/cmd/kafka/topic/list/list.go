@@ -4,25 +4,21 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	topicutil "github.com/redhat-developer/app-services-cli/pkg/kafka/topic"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
 
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type options struct {
@@ -66,7 +62,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" {
-				if err := flag.ValidateOutput(opts.output); err != nil {
+				if err := flagutil.ValidateOutput(opts.output); err != nil {
 					return err
 				}
 			}
@@ -80,7 +76,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.search != "" {
-				validator := topicutil.Validator{
+				validator := topiccmdutil.Validator{
 					Localizer: opts.localizer,
 				}
 				if err := validator.ValidateSearchInput(opts.search); err != nil {
@@ -194,7 +190,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 		for _, conf := range t.GetConfig() {
 			unlimitedVal := "-1 (Unlimited)"
 
-			if *conf.Key == topicutil.RetentionMsKey {
+			if *conf.Key == topiccmdutil.RetentionMsKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionTime = unlimitedVal
@@ -202,7 +198,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 					row.RetentionTime = val
 				}
 			}
-			if *conf.Key == topicutil.RetentionSizeKey {
+			if *conf.Key == topiccmdutil.RetentionSizeKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionSize = unlimitedVal

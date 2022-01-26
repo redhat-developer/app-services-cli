@@ -2,30 +2,24 @@ package create
 
 import (
 	"context"
-
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
 type options struct {
@@ -69,7 +63,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			if len(args) > 0 {
@@ -129,7 +123,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	registry, _, err := serviceregistry.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
+	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
 	if err != nil {
 		return err
 	}
@@ -187,7 +181,7 @@ func runCreate(opts *options) error {
 	request = request.Body(specifiedFile)
 	metadata, _, err := request.Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
 

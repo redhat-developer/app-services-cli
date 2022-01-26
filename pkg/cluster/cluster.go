@@ -3,7 +3,7 @@
 //
 // Structure:
 //
-// v1alpha - end user api
+// v1alpha - end user API
 // kubeclient - provides kubernetes clients
 // service - individual service implementations
 //

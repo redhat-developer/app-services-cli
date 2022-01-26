@@ -5,26 +5,25 @@ import (
 	"fmt"
 	"strconv"
 
+	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-
-	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
 
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // row is the details of a Kafka instance needed to print to a table
@@ -72,11 +71,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.outputFormat != "" && !cmdFlagUtil.IsValidInput(opts.outputFormat, cmdFlagUtil.ValidOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, cmdFlagUtil.ValidOutputFormats...)
+			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
+				return flagutil.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
-			validator := &kafka.Validator{
+			validator := &kafkacmdutil.Validator{
 				Localizer: opts.localizer,
 			}
 
@@ -88,7 +87,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaFlagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.AddOutput(&opts.outputFormat)
 	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
@@ -106,7 +105,7 @@ func runList(opts *options) error {
 
 	api := conn.API()
 
-	a := api.Kafka().GetKafkas(opts.Context)
+	a := api.KafkaMgmt().GetKafkas(opts.Context)
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 

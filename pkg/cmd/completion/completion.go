@@ -4,7 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion/bash"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion/fish"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion/zsh"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/spf13/cobra"
 )
 

@@ -5,8 +5,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -29,7 +30,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 	if serviceName == "" {
 		if cfg.Services.Kafka == nil || ignoreContext {
 			// nolint
-			selectedService, err := kafka.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger, cliOpts.Localizer)
+			selectedService, err := kafkautil.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger, cliOpts.Localizer)
 			if err != nil {
 				return nil, err
 			}
@@ -40,14 +41,14 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 			serviceName = selectedService.GetName()
 		} else {
 			serviceId = cfg.Services.Kafka.ClusterID
-			selectedService, _, err := kafka.GetKafkaByID(cliOpts.Context, api.Kafka(), serviceId)
+			selectedService, _, err := kafkautil.GetKafkaByID(cliOpts.Context, api.KafkaMgmt(), serviceId)
 			if err != nil {
 				return nil, err
 			}
 			serviceName = selectedService.GetName()
 		}
 	} else {
-		selectedService, _, err := kafka.GetKafkaByName(cliOpts.Context, api.Kafka(), serviceName)
+		selectedService, _, err := kafkautil.GetKafkaByName(cliOpts.Context, api.KafkaMgmt(), serviceName)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +75,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 		Name:               serviceName,
 		KubernetesResource: kafkaConnectionCR,
 		GroupMetadata:      resources.AKCResource,
-		Type:               resources.KafkaServiceName,
+		Type:               servicespec.KafkaServiceName,
 	}
 
 	return &serviceDetails, nil

@@ -4,28 +4,23 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/ams"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/remote"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
 )
 
 type options struct {
@@ -65,7 +60,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name != "" {
-				if err := serviceregistry.ValidateName(opts.name); err != nil {
+				if err := registrycmdutil.ValidateName(opts.name); err != nil {
 					return err
 				}
 			}
@@ -78,7 +73,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			return runCreate(opts)
@@ -131,10 +126,13 @@ func runCreate(opts *options) error {
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a registry instance
-		termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
+		err1, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
+		if err1 != nil {
+			return err
+		}
 		var termsAccepted bool
 		var termsURL string
-		termsAccepted, termsURL, err = ams.CheckTermsAccepted(opts.Context, termsSpec.ServiceRegistry, conn)
+		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.ServiceRegistry.Ams, conn)
 		if err != nil {
 			return err
 		}
@@ -196,7 +194,7 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 		Help:    opts.localizer.MustLocalize("registry.cmd.create.input.name.help"),
 	}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(serviceregistry.ValidateName))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(registrycmdutil.ValidateName))
 	if err != nil {
 		return nil, err
 	}

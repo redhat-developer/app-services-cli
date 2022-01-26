@@ -3,16 +3,17 @@ package bind
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/internal/config"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
+
 	"github.com/spf13/cobra"
 )
 
@@ -85,7 +86,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.serviceName, "service-name", "", opts.localizer.MustLocalize("cluster.common.flag.serviceName.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc("service-type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return resources.AllServiceLabels, cobra.ShellCompDirectiveNoSpace
+		return servicespec.AllServiceLabels, cobra.ShellCompDirectiveNoSpace
 	})
 
 	return cmd

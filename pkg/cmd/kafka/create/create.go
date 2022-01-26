@@ -5,37 +5,36 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
-	"github.com/redhat-developer/app-services-cli/pkg/api/kas"
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/ioutil/spinner"
+	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/remote"
+	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	"k8s.io/utils/strings/slices"
+
+	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/pkg/ams"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	cmdFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	svcstatus "github.com/redhat-developer/app-services-cli/pkg/service/status"
-
 	"github.com/AlecAivazis/survey/v2"
 
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/kafka"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil"
 )
 
 type options struct {
@@ -47,9 +46,9 @@ type options struct {
 	outputFormat string
 	autoUse      bool
 
-	interactive      bool
-	wait             bool
-	bypassTermsCheck bool
+	interactive    bool
+	wait           bool
+	bypassAmsCheck bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -87,7 +86,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.name != "" {
-				validator := &pkgKafka.Validator{
+				validator := &kafkacmdutil.Validator{
 					Localizer:  opts.localizer,
 					Connection: opts.Connection,
 				}
@@ -105,30 +104,32 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.interactive = true
 			}
 
-			validOutputFormats := cmdFlagUtil.ValidOutputFormats
-			if opts.outputFormat != "" && !cmdFlagUtil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+			validOutputFormats := flagutil.ValidOutputFormats
+			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
 			return runCreate(opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaFlagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.create.flag.name.description"))
-	flags.StringVar(&opts.provider, flagutil.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
-	flags.StringVar(&opts.region, flagutil.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
+	flags.StringVar(&opts.provider, kafkaFlagutil.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
+	flags.StringVar(&opts.region, kafkaFlagutil.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
-	flags.AddBypassTermsCheck(&opts.bypassTermsCheck)
+	flags.AddBypassTermsCheck(&opts.bypassAmsCheck)
 
-	_ = cmd.RegisterFlagCompletionFunc(flagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return kafkacmdutil.GetCloudProviderCompletionValues(f)
+	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return pkgKafka.GetCloudProviderCompletionValues(f)
 	})
 
-	cmdFlagUtil.EnableOutputFlagCompletion(cmd)
+	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return kafkautil.GetCloudProviderRegionCompletionValues(f, opts.provider)
+	})
 
 	return cmd
 }
@@ -145,14 +146,19 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	if !opts.bypassTermsCheck {
+	err, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
+	if err != nil {
+		return err
+	}
+
+	if !opts.bypassAmsCheck {
 		opts.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a kafka instance
-		termsSpec := ams.GetRemoteTermsSpec(&opts.Context, opts.Logger)
 		var termsAccepted bool
 		var termsURL string
-		termsAccepted, termsURL, err = ams.CheckTermsAccepted(opts.Context, termsSpec.Kafka, conn)
+		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.Kafka.Ams, conn)
+
 		if err != nil {
 			return err
 		}
@@ -187,21 +193,29 @@ func runCreate(opts *options) error {
 		}
 	}
 
+	if !opts.bypassAmsCheck {
+		err = validateProviderAndRegion(opts, constants, conn)
+		if err != nil {
+			return err
+		}
+	}
+
 	api := conn.API()
 
-	a := api.Kafka().CreateKafka(opts.Context)
+	a := api.KafkaMgmt().CreateKafka(opts.Context)
 	a = a.KafkaRequestPayload(*payload)
 	a = a.Async(true)
+
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
 
-	if apiErr := kas.GetAPIError(err); apiErr != nil {
+	if apiErr := pkgKafka.GetAPIError(err); apiErr != nil {
 		switch apiErr.GetCode() {
-		case kas.ErrorCode24:
+		case pkgKafka.ErrorCode24:
 			return opts.localizer.MustLocalizeError("kafka.create.error.oneinstance")
-		case kas.ErrorCode36:
+		case pkgKafka.ErrorCode36:
 			return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
 		}
 	}
@@ -244,10 +258,10 @@ func runCreate(opts *options) error {
 			}
 		}()
 
-		for svcstatus.IsCreating(response.GetStatus()) {
+		for svcstatus.IsInstanceCreating(response.GetStatus()) {
 			time.Sleep(cmdutil.DefaultPollTime)
 
-			response, httpRes, err = api.Kafka().GetKafkaById(opts.Context, response.GetId()).Execute()
+			response, httpRes, err = api.KafkaMgmt().GetKafkaById(opts.Context, response.GetId()).Execute()
 			if err != nil {
 				return err
 			}
@@ -277,6 +291,99 @@ func runCreate(opts *options) error {
 	return nil
 }
 
+func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
+	opts.Logger.Debug("Validating provider and region")
+	cloudProviders, _, err := conn.API().
+		KafkaMgmt().
+		GetCloudProviders(opts.Context).
+		Execute()
+
+	if err != nil {
+		return err
+	}
+
+	var selectedProvider kafkamgmtclient.CloudProvider
+
+	providerNames := make([]string, 0)
+	for _, item := range cloudProviders.Items {
+		if !item.GetEnabled() {
+			continue
+		}
+		if item.GetId() == opts.provider {
+			selectedProvider = item
+		}
+		providerNames = append(providerNames, item.GetId())
+	}
+	opts.Logger.Debug("Validating cloud provider", opts.provider, ". Enabled providers: ", providerNames)
+
+	if !selectedProvider.Enabled {
+		providers := strings.Join(providerNames, ",")
+		providerEntry := localize.NewEntry("Provider", opts.provider)
+		validProvidersEntry := localize.NewEntry("Providers", providers)
+		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
+	}
+
+	return validateProviderRegion(conn, opts, selectedProvider, constants)
+}
+
+func validateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
+	cloudRegion, _, err := conn.API().
+		KafkaMgmt().
+		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).
+		Execute()
+
+	if err != nil {
+		return err
+	}
+
+	var selectedRegion kafkamgmtclient.CloudRegion
+	regionNames := make([]string, 0)
+	for _, item := range cloudRegion.Items {
+		if !item.GetEnabled() {
+			continue
+		}
+		regionNames = append(regionNames, item.GetId())
+		if item.GetId() == opts.region {
+			selectedRegion = item
+		}
+	}
+
+	if len(regionNames) != 0 {
+		opts.Logger.Debug("Validating region", opts.region, ". Enabled providers: ", regionNames)
+		regionsString := strings.Join(regionNames, ", ")
+		if !selectedRegion.Enabled {
+			regionEntry := localize.NewEntry("Region", opts.region)
+			validRegionsEntry := localize.NewEntry("Regions", regionsString)
+			providerEntry := localize.NewEntry("Provider", opts.provider)
+			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
+		}
+
+		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+		if err != nil {
+			opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+			return err
+		}
+
+		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
+
+		for _, item := range regionInstanceTypes {
+			if slices.Contains(userInstanceTypes, item) {
+				return nil
+			}
+		}
+
+		regionEntry := localize.NewEntry("Region", opts.region)
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
+		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
+
+		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
+
+	}
+	opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
+
+	return nil
+}
+
 // Show a prompt to allow the user to interactively insert the data for their Kafka
 func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
@@ -286,7 +393,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 
 	api := conn.API()
 
-	validator := &pkgKafka.Validator{
+	validator := &kafkacmdutil.Validator{
 		Localizer:  opts.localizer,
 		Connection: opts.Connection,
 	}
@@ -312,7 +419,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	// fetch all cloud available providers
-	cloudProviderResponse, httpRes, err := api.Kafka().GetCloudProviders(opts.Context).Execute()
+	cloudProviderResponse, httpRes, err := api.KafkaMgmt().GetCloudProviders(opts.Context).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -322,7 +429,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	cloudProviders := cloudProviderResponse.GetItems()
-	cloudProviderNames := kafkacmdutil.GetEnabledCloudProviderNames(cloudProviders)
+	cloudProviderNames := pkgKafka.GetEnabledCloudProviderNames(cloudProviders)
 
 	cloudProviderPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
@@ -335,16 +442,16 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	// get the selected provider type from the name selected
-	selectedCloudProvider := kafkacmdutil.FindCloudProviderByName(cloudProviders, answers.CloudProvider)
+	selectedCloudProvider := pkgKafka.FindCloudProviderByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
-	cloudRegionResponse, _, err := api.Kafka().GetCloudProviderRegions(opts.Context, selectedCloudProvider.GetId()).Execute()
+	cloudRegionResponse, _, err := api.KafkaMgmt().GetCloudProviderRegions(opts.Context, selectedCloudProvider.GetId()).Execute()
 	if err != nil {
 		return nil, err
 	}
 
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := kafkacmdutil.GetEnabledCloudRegionIDs(regions)
+	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),

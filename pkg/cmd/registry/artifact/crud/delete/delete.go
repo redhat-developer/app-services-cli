@@ -4,23 +4,17 @@ import (
 	"context"
 	"errors"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
-
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -56,7 +50,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.force {
-				return flag.RequiredWhenNonInteractiveError("yes")
+				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
 			if opts.registryID != "" {
@@ -112,7 +106,7 @@ func runDelete(opts *options) error {
 		request := dataAPI.ArtifactsApi.DeleteArtifactsInGroup(opts.Context, opts.group)
 		_, err = request.Execute()
 		if err != nil {
-			return registryinstanceerror.TransformError(err)
+			return registrycmdutil.TransformInstanceError(err)
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.AllArtifactsInGroupDeleted", localize.NewEntry("GroupName", opts.group)))
 	} else {
@@ -129,7 +123,7 @@ func runDelete(opts *options) error {
 
 		_, err = request.Execute()
 		if err != nil {
-			return registryinstanceerror.TransformError(err)
+			return registrycmdutil.TransformInstanceError(err)
 		}
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.deleted", localize.NewEntry("Name", opts.artifact)))
 	}

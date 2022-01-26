@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.70.2/patternfly.css">
-  <title>%v</title>
-  <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+    <link href="https://unpkg.com/@patternfly/patternfly@4.70.2/patternfly.css" rel="stylesheet">
+    <title>%v</title>
+    <link href="/static/img/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 
 <body>
-  <div class="pf-c-empty-state">
+<div class="pf-c-empty-state">
     <div class="pf-c-empty-state__content">
-      <img src="/static/img/logo.svg" alt="Logo" width="180"/>
-      <h1 class="pf-c-title pf-m-lg">%v</h1>
-      <div class="pf-c-empty-state__body">%v</div>
+        <img alt="Logo" src="/static/img/logo.svg" width="180"/>
+        <h1 class="pf-c-title pf-m-lg">%v</h1>
+        <div class="pf-c-empty-state__body">%v</div>
     </div>
-  </div>
+</div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/keycloak-js@12.0.4/dist/keycloak.min.js"></script>
 <script>
-  const keycloak = new Keycloak({
-    url: '%v',
-    realm: '%v',
-    clientId: '%v',
-  });
+    const keycloak = new Keycloak({
+        url: '%v',
+        realm: '%v',
+        clientId: '%v',
+    });
 
-  keycloak.init()
+    keycloak.init()
 </script>

@@ -7,24 +7,20 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
-	cgutil "github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
-
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/color"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
 )
 
 type options struct {
@@ -65,7 +61,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if opts.outputFormat != "" {
-				if err = flag.ValidateOutput(opts.outputFormat); err != nil {
+				if err = flagutil.ValidateOutput(opts.outputFormat); err != nil {
 					return err
 				}
 			}
@@ -193,9 +189,9 @@ func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclien
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()
 
-	activeMembersCount := cgutil.GetActiveConsumersCount(consumers)
-	partitionsWithLagCount := cgutil.GetPartitionsWithLag(consumers)
-	unassignedPartitions := cgutil.GetUnassignedPartitions(consumers)
+	activeMembersCount := groupcmdutil.GetActiveConsumersCount(consumers)
+	partitionsWithLagCount := groupcmdutil.GetPartitionsWithLag(consumers)
+	unassignedPartitions := groupcmdutil.GetUnassignedPartitions(consumers)
 
 	fmt.Fprintln(w, color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.unassignedPartitions")), unassignedPartitions)
 	fmt.Fprintln(w, "")

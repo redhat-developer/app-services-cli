@@ -4,24 +4,19 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka"
-
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
 )
 
 type options struct {
@@ -56,7 +51,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !opts.IO.CanPrompt() && !opts.skipConfirm {
-				return flag.RequiredWhenNonInteractiveError("yes")
+				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
 			if opts.name != "" && opts.id != "" {
@@ -88,7 +83,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
 
-	if err := kafkacmdutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
+	if err := kafkautil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
 	}
 
@@ -110,12 +105,12 @@ func runDelete(opts *options) error {
 
 	var response *kafkamgmtclient.KafkaRequest
 	if opts.name != "" {
-		response, _, err = kafka.GetKafkaByName(opts.Context, api.Kafka(), opts.name)
+		response, _, err = kafkautil.GetKafkaByName(opts.Context, api.KafkaMgmt(), opts.name)
 		if err != nil {
 			return err
 		}
 	} else {
-		response, _, err = kafka.GetKafkaByID(opts.Context, api.Kafka(), opts.id)
+		response, _, err = kafkautil.GetKafkaByID(opts.Context, api.KafkaMgmt(), opts.id)
 		if err != nil {
 			return err
 		}
@@ -142,7 +137,7 @@ func runDelete(opts *options) error {
 
 	// delete the Kafka
 	opts.Logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
-	a := api.Kafka().DeleteKafkaById(opts.Context, response.GetId())
+	a := api.KafkaMgmt().DeleteKafkaById(opts.Context, response.GetId())
 	a = a.Async(true)
 	_, _, err = a.Execute()
 

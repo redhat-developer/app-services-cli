@@ -1,0 +1,19 @@
+{
+    "version": 1,
+    "kafka": {
+      "ams": {
+        "termsAndConditionsEventCode": "register",
+        "termsAndConditionsSiteCode": "ocm",
+        "instanceQuotaId": "cluster|rhinfra|rhosak|marketplace",
+        "trialQuotaId": "cluster|rhinfra|rhosaktrial|marketplace"
+      }
+    },
+    "serviceRegistry": {
+      "ams": {
+        "termsAndConditionsEventCode": "register",
+        "termsAndConditionsSiteCode": "ocm",
+        "instanceQuotaId": "cluster|rhinfra|rhosr|any",
+        "trialQuotaId": "cluster|rhinfra|rhosrtrial|any"
+      }
+    }
+  }

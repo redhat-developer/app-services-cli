@@ -3,22 +3,18 @@ package list
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
-	flagutil "github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry/registryinstanceerror"
-
-	"github.com/redhat-developer/app-services-cli/pkg/dump"
-
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/flag"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 // row is the details of a Service Registry instance needed to print to a table
@@ -58,7 +54,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
-				return flag.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
+				return flagutil.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
 			}
 
 			if opts.registryID != "" {
@@ -104,7 +100,7 @@ func runList(opts *options) error {
 	}
 	mappings, _, err := a.AdminApi.ListRoleMappings(opts.Context).Execute()
 	if err != nil {
-		return registryinstanceerror.TransformError(err)
+		return registrycmdutil.TransformInstanceError(err)
 	}
 
 	if len(mappings) == 0 && opts.outputFormat == "" {

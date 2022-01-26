@@ -5,8 +5,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistry"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
+	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -29,7 +30,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 	if serviceName == "" {
 		if cfg.Services.ServiceRegistry == nil || ignoreContext {
 			// nolint
-			selectedService, err := serviceregistry.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger)
+			selectedService, err := serviceregistryutil.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger)
 			if err != nil {
 				return nil, err
 			}
@@ -40,7 +41,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 			serviceName = selectedService.GetName()
 		} else {
 			serviceId = cfg.Services.ServiceRegistry.InstanceID
-			selectedService, _, err := serviceregistry.GetServiceRegistryByID(
+			selectedService, _, err := serviceregistryutil.GetServiceRegistryByID(
 				cliOpts.Context, api.ServiceRegistryMgmt(), serviceId)
 			if err != nil {
 				return nil, err
@@ -48,7 +49,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 			serviceName = selectedService.GetName()
 		}
 	} else {
-		selectedService, _, err := serviceregistry.GetServiceRegistryByName(cliOpts.Context, api.ServiceRegistryMgmt(), serviceName)
+		selectedService, _, err := serviceregistryutil.GetServiceRegistryByName(cliOpts.Context, api.ServiceRegistryMgmt(), serviceName)
 		if err != nil {
 			return nil, err
 		}
@@ -75,7 +76,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 		Name:               serviceName,
 		KubernetesResource: serviceRegistryCR,
 		GroupMetadata:      resources.SRCResource,
-		Type:               resources.ServiceRegistryServiceName,
+		Type:               servicespec.ServiceRegistryServiceName,
 	}
 
 	return &serviceDetails, nil

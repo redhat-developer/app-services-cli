@@ -4,21 +4,20 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
 
 	"github.com/AlecAivazis/survey/v2"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafka/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/internal/config"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/kafka/consumergroup"
-	"github.com/redhat-developer/app-services-cli/pkg/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/logging"
 )
 
 type options struct {
@@ -38,7 +37,7 @@ type options struct {
 	Context    context.Context
 }
 
-var validator consumergroup.Validator
+var validator groupcmdutil.Validator
 
 // NewResetOffsetConsumerGroupCommand gets a new command for resetting offset for a consumer group.
 func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
@@ -58,7 +57,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.resetOffset.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			validator = consumergroup.Validator{
+			validator = groupcmdutil.Validator{
 				Localizer: opts.localizer,
 			}
 
@@ -68,7 +67,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			if opts.value == "" && (opts.offset == consumergroup.OffsetAbsolute || opts.offset == consumergroup.OffsetTimestamp) {
+			if opts.value == "" && (opts.offset == groupcmdutil.OffsetAbsolute || opts.offset == groupcmdutil.OffsetTimestamp) {
 				return opts.localizer.MustLocalizeError("kafka.consumerGroup.resetOffset.error.valueRequired", localize.NewEntry("Offset", opts.offset))
 			}
 
@@ -116,7 +115,7 @@ func NewResetOffsetConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	})
 
 	flagutil.EnableOutputFlagCompletion(cmd)
-	flagutil.EnableStaticFlagCompletion(cmd, "offset", consumergroup.ValidOffsets)
+	flagutil.EnableStaticFlagCompletion(cmd, "offset", groupcmdutil.ValidOffsets)
 
 	return cmd
 }
@@ -142,7 +141,7 @@ func runCmd(opts *options) error {
 		offsetResetParams.Value = &opts.value
 	}
 
-	if opts.offset == consumergroup.OffsetAbsolute || opts.offset == consumergroup.OffsetTimestamp {
+	if opts.offset == groupcmdutil.OffsetAbsolute || opts.offset == groupcmdutil.OffsetTimestamp {
 		if err = validator.ValidateOffsetValue(opts.offset, opts.value); err != nil {
 			return err
 		}
