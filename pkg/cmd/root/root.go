@@ -28,7 +28,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	}
 
 	fs := cmd.PersistentFlags()
-	flagutil.AddDebugFlag(fs)
+	flagutil.VerboseFlag(fs)
 	// this flag comes out of the box, but has its own basic usage text, so this overrides that
 	var help bool
 

@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/accountcmdutil/validation"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -16,8 +18,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/credentials"
-
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -68,9 +68,9 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "file-format"))
 			}
 
-			validOutput := flagutil.IsValidInput(opts.fileFormat, flagutil.CredentialsOutputFormats...)
+			validOutput := flagutil.IsValidInput(opts.fileFormat, svcaccountcmdutil.CredentialsOutputFormats...)
 			if !validOutput && opts.fileFormat != "" {
-				return flagutil.InvalidValueError("file-format", opts.fileFormat, flagutil.CredentialsOutputFormats...)
+				return flagutil.InvalidValueError("file-format", opts.fileFormat, svcaccountcmdutil.CredentialsOutputFormats...)
 			}
 
 			if !opts.interactive {
@@ -94,7 +94,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.fileFormat, "file-format", "", opts.localizer.MustLocalize("serviceAccount.common.flag.fileFormat.description"))
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, opts.localizer.MustLocalize("serviceAccount.resetCredentials.flag.yes.description"))
 
-	flagutil.EnableStaticFlagCompletion(cmd, "file-format", flagutil.CredentialsOutputFormats)
+	flagutil.EnableStaticFlagCompletion(cmd, "file-format", svcaccountcmdutil.CredentialsOutputFormats)
 
 	return cmd
 }
@@ -241,7 +241,7 @@ func runInteractivePrompt(opts *options) (err error) {
 		fileFormatPrompt := &survey.Select{
 			Message: opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.message"),
 			Help:    opts.localizer.MustLocalize("serviceAccount.resetCredentials.input.fileFormat.help"),
-			Options: flagutil.CredentialsOutputFormats,
+			Options: svcaccountcmdutil.CredentialsOutputFormats,
 			Default: credentials.EnvFormat,
 		}
 
