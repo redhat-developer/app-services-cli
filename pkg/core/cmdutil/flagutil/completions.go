@@ -3,8 +3,6 @@ package flagutil
 import (
 	"context"
 
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -84,19 +82,5 @@ func RegisterServiceAccountCompletionFunc(cmd *cobra.Command, f *factory.Factory
 		}
 
 		return cachedServiceAccounts, directive
-	})
-}
-
-// RegisterTopicCompletionFunc enables dynamic autocompletion for topic flag
-func RegisterTopicCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
-	return cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
-	})
-}
-
-// RegisterGroupCompletionFunc enables dynamic autocompletion for group flag
-func RegisterGroupCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
-	return cmd.RegisterFlagCompletionFunc("group", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return kafkacmdutil.FilterValidConsumerGroupIDs(f, toComplete)
 	})
 }
