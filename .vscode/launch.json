@@ -235,7 +235,7 @@
       ]
     },
     {
-      "name": "Artifact Delete",
+      "name": "Describe srs",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -243,10 +243,9 @@
       "env": {},
       "args": [
         "service-registry",
-        "artifact",
-        "delete",
-        "--group=tgdsfgdfg",
-        "--yes"
+        "describe",
+        "--id=fdsfs",
+        "-v"
       ]
     },
     {

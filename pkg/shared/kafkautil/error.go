@@ -4,22 +4,6 @@ import (
 	"fmt"
 )
 
-// TODO - this methods should not be deifned here - or even defined this way.
-type Error struct {
-	Err error
-}
-
-// TODO - this methods should not be deifned here - or even defined this way.
-func (e *Error) Error() string {
-	return fmt.Sprint(e.Err)
-}
-
-// TODO - this methods should not be deifned here - or even defined this way.
-func (e *Error) Unwrap() error {
-	return e.Err
-}
-
-// TODO - we are mixing definitions of errors here and inline in many different occurences
 func NotFoundByIDError(id string) error {
 	NotFoundByIDErr := fmt.Errorf(`Kafka instance with ID "%v" not found`, id)
 	return NotFoundByIDErr

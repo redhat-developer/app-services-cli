@@ -707,8 +707,8 @@ github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.8.2 h1:kpLSSOqMTd+a
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.8.2/go.mod h1:Bs/YQI9ZuZLzBoeBAWV6KmkO8Jwm8NcrUn3VFp8eleo=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1 h1:xRq5XJzRDs/Z7e/9SDt6zbNRIyesC4LTqN9ajHKwjHo=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1/go.mod h1:Z/gr/snlpsqYg4vftmcx97vCR3qMQJhALGelDHx4pMA=
-github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.0 h1:70G6ldIdQggOrcxkzckhsKxWvSvudRWhpJDfj7uw4SQ=
-github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.0/go.mod h1:w6MhtwfivfTB0KUpRFBiXfZROOvPeigGsR6RZt7F1Qg=
+github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1 h1:3sUmQ3nAawsYWg7ZCO2Q8HF2J7MW6YA38h/YFL3ao6o=
+github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1/go.mod h1:w6MhtwfivfTB0KUpRFBiXfZROOvPeigGsR6RZt7F1Qg=
 github.com/redhat-developer/service-binding-operator v0.9.0 h1:CS+eEtzu/PtWuyvYQFQpZXd6ukSuFtN+U0EKKtTsvlA=
 github.com/redhat-developer/service-binding-operator v0.9.0/go.mod h1:D415gZQiz5Q8zyRbmrNrlieb6Xp73oFtCb+nCuTL6GA=
 github.com/rivo/uniseg v0.2.0 h1:S1pD9weZBuJdFmowNwbpi7BJ8TNftyUImj/0WQi72jY=
