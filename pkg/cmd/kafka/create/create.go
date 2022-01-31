@@ -31,7 +31,7 @@ import (
 	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	apiErrors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
+	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 
@@ -212,11 +212,11 @@ func runCreate(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if apiErr := apiErrors.GetAPIError(err); apiErr != nil {
+	if apiErr := kafkamgmtv1errors.GetAPIError(err); apiErr != nil {
 		switch apiErr.GetCode() {
-		case string(apiErrors.ERROR_24):
+		case kafkamgmtv1errors.ERROR_24:
 			return opts.localizer.MustLocalizeError("kafka.create.error.oneinstance")
-		case string(apiErrors.ERROR_36):
+		case kafkamgmtv1errors.ERROR_36:
 			return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
 		}
 	}

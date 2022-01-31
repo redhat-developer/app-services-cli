@@ -24,12 +24,8 @@ func GetServiceRegistryByName(ctx context.Context, api srsmgmtv1.RegistriesApi, 
 	r := api.GetRegistries(ctx)
 	r = r.Search(fmt.Sprintf("name=%v", name))
 	registryList, httpResponse, err := r.Execute()
-	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_2) {
-		return nil, httpResponse, NotFoundByNameError(name)
-	}
-
 	if registryList.GetTotal() == 0 {
-		return nil, nil, fmt.Errorf(`instance "%v" not found`, name)
+		return nil, nil, NotFoundByNameError(name)
 	}
 
 	items := registryList.GetItems()

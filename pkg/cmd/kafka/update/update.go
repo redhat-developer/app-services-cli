@@ -22,7 +22,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	apiErrors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
+	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 
 	"github.com/spf13/cobra"
 
@@ -194,7 +194,7 @@ func run(opts *options) error {
 	s.Stop()
 
 	if err != nil {
-		if apiError := apiErrors.GetAPIError(err); apiError != nil {
+		if apiError := kafkamgmtv1errors.GetAPIError(err); apiError != nil {
 			return opts.localizer.MustLocalizeError("kafka.update.log.info.updateFailed", localize.NewEntry("Reason", apiError.GetReason()))
 		}
 		return err

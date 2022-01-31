@@ -12,7 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 
-	apiErrors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
+	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -83,7 +83,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 			// nolint:govet
 			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
 			if err != nil {
-				if apiErrors.IsAPIError(err, apiErrors.ERROR_7) {
+				if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
 					err = kafkautil.NotFoundByIDError(instanceID)
 					c.Logger.Error(err)
 					c.Logger.Info(c.localizer.MustLocalize("status.log.info.rhoasKafkaUse"))

@@ -122,6 +122,13 @@ one = 'no Service Registry instance selected. Please specify instance by using -
 [registry.cmd.create.error.name.requiredWhenNonInteractive]
 one = 'Name argument is required when not running interactively'
 
+[registry.cmd.create.error.limitreached]
+one = '''
+Instance cannot be created. You have reached the limit of service registry instances per user.
+Please contact your administrator to increase the limit or remove one of the existing instances.
+'''
+
+
 [registry.cmd.create.flag.use.description]
 one = 'Set the new Service Registry instance to the current instance'
 
