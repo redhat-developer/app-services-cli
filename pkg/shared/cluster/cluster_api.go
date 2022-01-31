@@ -2,10 +2,10 @@ package cluster
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/services"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 )
 
 // KubernetesClusterAPIImpl	implements KubernetesClusterAPI

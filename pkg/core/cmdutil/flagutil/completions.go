@@ -8,7 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/spf13/cobra"
 )
 

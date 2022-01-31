@@ -6,11 +6,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )

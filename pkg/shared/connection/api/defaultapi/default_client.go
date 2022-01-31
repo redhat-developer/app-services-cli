@@ -13,8 +13,8 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"

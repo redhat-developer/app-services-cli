@@ -1,8 +1,8 @@
 package cluster
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services/resources"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 	bindv1alpha1 "github.com/redhat-developer/service-binding-operator/apis/binding/v1alpha1"
 )
 

@@ -2,11 +2,12 @@ package factory
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 )
 
 // Factory is an abstract type which provides access to

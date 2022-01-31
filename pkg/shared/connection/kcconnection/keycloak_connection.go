@@ -9,10 +9,10 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api/defaultapi"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/defaultapi"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 

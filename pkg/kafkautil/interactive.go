@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/AlecAivazis/survey/v2"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"

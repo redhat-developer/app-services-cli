@@ -5,11 +5,11 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/remote"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 )
 
 func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (accepted bool, redirectURI string, err error) {

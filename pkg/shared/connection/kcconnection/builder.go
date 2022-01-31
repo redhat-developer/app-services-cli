@@ -12,8 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 

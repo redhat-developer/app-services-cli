@@ -2,11 +2,11 @@ package cluster
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/services/resources"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/constants"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services/resources"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 	"k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"

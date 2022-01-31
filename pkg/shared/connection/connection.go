@@ -2,7 +2,8 @@ package connection
 
 import (
 	"context"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
+
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 )
 
 type Config struct {

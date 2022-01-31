@@ -2,13 +2,14 @@ package login
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
 
 	// embed static HTML file
 	_ "embed"

@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/constants"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/kubeclient"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/services"
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/constants"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/golang-jwt/jwt/v4"

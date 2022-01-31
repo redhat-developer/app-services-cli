@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
