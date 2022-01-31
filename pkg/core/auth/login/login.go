@@ -3,15 +3,16 @@ package login
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/pkce"
+	"log"
+	"net/http"
+	"net/url"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/pkce"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/browser"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"log"
-	"net/http"
-	"net/url"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/phayes/freeport"

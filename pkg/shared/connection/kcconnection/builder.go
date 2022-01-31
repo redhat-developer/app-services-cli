@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"

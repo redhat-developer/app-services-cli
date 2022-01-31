@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"

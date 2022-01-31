@@ -3,7 +3,7 @@ package whoami
 import (
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"

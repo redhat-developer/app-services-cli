@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
