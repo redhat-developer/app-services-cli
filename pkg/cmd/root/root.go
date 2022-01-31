@@ -12,8 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 

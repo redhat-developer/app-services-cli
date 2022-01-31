@@ -5,11 +5,11 @@ import (
 	"errors"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/api"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )

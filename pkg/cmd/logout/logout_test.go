@@ -2,15 +2,16 @@ package logout
 
 import (
 	"bytes"
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
 	"testing"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/redhat-developer/app-services-cli/internal/mockutil"
 )

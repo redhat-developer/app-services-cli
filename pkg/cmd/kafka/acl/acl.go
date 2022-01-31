@@ -6,7 +6,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/grant"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/list"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 

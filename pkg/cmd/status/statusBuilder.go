@@ -8,14 +8,14 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
-	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/openconfig/goyang/pkg/indent"
 )

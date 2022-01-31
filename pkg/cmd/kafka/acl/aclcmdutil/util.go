@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/spf13/cobra"
 
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 )
@@ -159,4 +161,18 @@ func BuildInstructions(errorCollection []error) error {
 	}
 
 	return errors.New(errString)
+}
+
+// RegisterTopicCompletionFunc enables dynamic autocompletion for topic flag
+func RegisterTopicCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
+	return cmd.RegisterFlagCompletionFunc("topic", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkautil.FilterValidTopicNameArgs(f, toComplete)
+	})
+}
+
+// RegisterGroupCompletionFunc enables dynamic autocompletion for group flag
+func RegisterGroupCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
+	return cmd.RegisterFlagCompletionFunc("group", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return kafkautil.FilterValidConsumerGroupIDs(f, toComplete)
+	})
 }

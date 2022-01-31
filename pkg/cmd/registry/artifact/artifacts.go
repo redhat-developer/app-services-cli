@@ -11,7 +11,7 @@ import (
 	migrate "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/migrate"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/state"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/versions"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 
