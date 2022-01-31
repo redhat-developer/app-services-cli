@@ -3,14 +3,14 @@ package describe
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceregistryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )

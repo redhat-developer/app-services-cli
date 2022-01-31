@@ -13,7 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/update"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 

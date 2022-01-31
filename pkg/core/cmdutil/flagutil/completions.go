@@ -3,12 +3,12 @@ package flagutil
 import (
 	"context"
 
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 

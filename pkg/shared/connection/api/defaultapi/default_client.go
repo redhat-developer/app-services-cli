@@ -9,13 +9,13 @@ import (
 
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
-	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"

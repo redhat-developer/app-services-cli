@@ -4,9 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -14,7 +12,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -14,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
 	// Get all auth schemes

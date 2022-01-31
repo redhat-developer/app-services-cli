@@ -2,11 +2,12 @@ package root
 
 import (
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory/defaultfactory"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
 	"os"
 	"testing"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory/defaultfactory"
 
 	"github.com/aerogear/charmil/validator"
 	"github.com/aerogear/charmil/validator/rules"
