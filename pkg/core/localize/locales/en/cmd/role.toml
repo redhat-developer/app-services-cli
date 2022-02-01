@@ -98,4 +98,4 @@ rhoas service-registry role revoke --username=janedough
 '''
 
 [registry.role.cmd.revoke.success]
-one = 'successfully revoked access for specified principal'
+one = 'Successfully revoked access for specified principal'
