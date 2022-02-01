@@ -244,16 +244,16 @@ func TestValidatePartitionsN(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Should be valid when equal to max allowed value(100)",
+			name: "Should be valid when equal to max allowed value(1000)",
 			args: args{
-				partitions: "100",
+				partitions: "1000",
 			},
 			wantErr: false,
 		},
 		{
-			name: "Should be invalid when exceeds 100",
+			name: "Should be invalid when exceeds 1000",
 			args: args{
-				partitions: "102",
+				partitions: "1002",
 			},
 			wantErr: true,
 		},
