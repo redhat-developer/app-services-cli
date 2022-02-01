@@ -116,7 +116,7 @@ Downstream changes are regenerated on release.
 
 ## Documentation
 
-The main CLI documentation source files are stored in the `./pkg/corelocalize/locales/en/cmd/` directory.
+The main CLI documentation source files are stored in the `./pkg/core/localize/locales/en/cmd/` directory.
 
 The CLI documentation output is generated in the `./docs` directory as markdown files that are published as https://appservices.tech website. 
 
