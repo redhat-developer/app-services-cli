@@ -122,7 +122,9 @@ The CLI documentation output is generated in the `./docs` directory as markdown 
 
 ### Generating website documentation
 
-#### `make generate-docs`
+#### Generating upstream documentation
+
+`make generate-docs`
 
 After running the command, the documentation should be generated in markdown format.
 
