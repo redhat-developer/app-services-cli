@@ -25,7 +25,7 @@ go run ./cmd/rhoas kafka create "test" --provider=aws --region=us-east-1
 To use QA environment we need to login using following arguments
 
 ```shell
-rhoas login --api-gateway=stage --mas-auth-url=stage
+rhoas login --api-gateway=stage
 ```
 
 ### Development features
