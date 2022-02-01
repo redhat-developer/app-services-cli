@@ -17,7 +17,7 @@ const (
 	legalNameChars = "^[a-zA-Z0-9._-]+$"
 	maxNameLength  = 249
 	minPartitions  = 1
-	maxPartitions  = 100
+	maxPartitions  = 1000
 )
 
 // Validator is a type for validating Kafka topic configuration values
