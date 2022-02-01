@@ -18,6 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -149,6 +150,11 @@ func runCreate(opts *options) error {
 		CreateRegistry(opts.Context).
 		RegistryCreate(*payload).
 		Execute()
+
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_7) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
+	}
+
 	if err != nil {
 		return err
 	}

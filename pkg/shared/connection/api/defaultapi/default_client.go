@@ -20,6 +20,7 @@ import (
 	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 	registryinstance "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	registrymgmt "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1"
@@ -108,7 +109,7 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 	if resp != nil {
 		defer resp.Body.Close()
 	}
-	if kafkautil.IsErr(err, kafkautil.ErrorCode7) {
+	if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
 		return nil, nil, kafkautil.NotFoundByIDError(instanceID)
 	} else if err != nil {
 		return nil, nil, fmt.Errorf("%w", err)
