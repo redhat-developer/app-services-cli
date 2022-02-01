@@ -20,7 +20,7 @@ After running this command, you need to grant access for the service account tha
 
 For the Service Registry application service, enter this command:
 
-  $ rhoas service-registry role add --role=DEVELOPER --service-account your-sa
+  $ rhoas service-registry role add --role=Manager --service-account your-sa
 
 
 ```

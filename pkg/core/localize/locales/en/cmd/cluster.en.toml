@@ -158,7 +158,7 @@ After running this command, you need to grant access for the service account tha
 
 For the Service Registry application service, enter this command:
 
-  $ rhoas service-registry role add --role=DEVELOPER --service-account your-sa
+  $ rhoas service-registry role add --role=Manager --service-account your-sa
 '''
 
 [cluster.connect.cmd.example]
@@ -303,7 +303,7 @@ You need to separately grant service account access to Kafka by issuing followin
 one = '''
 You need to assign one of the roles for the service account in order to use it with service registry. For example:
 
-  $ rhoas service-registry role add --role=DEVELOPER --service-account {{.ClientID}}
+  $ rhoas service-registry role add --role=Manager --service-account {{.ClientID}}
 '''
 
 [cluster.kubernetes.createTokenSecret.log.info.createFailed]
