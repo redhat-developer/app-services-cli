@@ -27,4 +27,4 @@ type Factory struct {
 	Context context.Context
 }
 
-type ConnectionFunc func(cfg *connection.Config) (connection.Connection, error)
+type ConnectionFunc func() (connection.Connection, error)

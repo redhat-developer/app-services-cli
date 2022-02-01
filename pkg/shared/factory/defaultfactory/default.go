@@ -34,7 +34,7 @@ func New(localizer localize.Localizer) *factory.Factory {
 
 	ctx := context.Background()
 
-	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
+	connectionFunc := func() (connection.Connection, error) {
 		if conn != nil {
 			return conn, nil
 		}
@@ -52,12 +52,7 @@ func New(localizer localize.Localizer) *factory.Factory {
 		if cfg.RefreshToken != "" {
 			builder.WithRefreshToken(cfg.RefreshToken)
 		}
-		if cfg.MasAccessToken != "" {
-			builder.WithMASAccessToken(cfg.MasAccessToken)
-		}
-		if cfg.MasRefreshToken != "" {
-			builder.WithMASRefreshToken(cfg.MasRefreshToken)
-		}
+
 		if cfg.ClientID != "" {
 			builder.WithClientID(cfg.ClientID)
 		}
@@ -71,11 +66,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 			cfg.AuthURL = build.ProductionAuthURL
 		}
 		builder.WithAuthURL(cfg.AuthURL)
-
-		if cfg.MasAuthURL == "" {
-			cfg.MasAuthURL = build.ProductionMasAuthURL
-		}
-		builder.WithMASAuthURL(cfg.MasAuthURL)
 
 		builder.WithConsoleURL(build.ConsoleURL)
 
@@ -91,8 +81,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 		}
 
 		builder.WithTransportWrapper(transportWrapper)
-
-		builder.WithConnectionConfig(connectionCfg)
 
 		conn, err = builder.Build()
 		if err != nil {

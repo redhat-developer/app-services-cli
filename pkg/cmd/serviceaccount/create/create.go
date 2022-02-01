@@ -16,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -101,11 +100,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCreate(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return err
-	}
-	cfg, err := opts.Config.Load()
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
@@ -154,7 +149,8 @@ func runCreate(opts *options) error {
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetClientSecret(),
-		TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
+		// TODO new location of the token url? From where we can take this value?
+		// TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
@@ -172,7 +168,7 @@ func runCreate(opts *options) error {
 }
 
 func runInteractivePrompt(opts *options) (err error) {
-	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
+	_, err = opts.Connection()
 	if err != nil {
 		return err
 	}

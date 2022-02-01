@@ -16,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -101,7 +100,7 @@ func NewResetCredentialsCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runResetCredentials(opts *options) (err error) {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
@@ -156,15 +155,11 @@ func runResetCredentials(opts *options) (err error) {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("ID", updatedServiceAccount.GetId())))
 
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
-
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
 		ClientSecret: updatedServiceAccount.GetClientSecret(),
-		TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
+		// TODO new location of the token url? From where we can take this value?
+		// TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
@@ -182,7 +177,7 @@ func runResetCredentials(opts *options) (err error) {
 }
 
 func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +211,7 @@ func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
 }
 
 func runInteractivePrompt(opts *options) (err error) {
-	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
+	_, err = opts.Connection()
 	if err != nil {
 		return err
 	}

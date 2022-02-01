@@ -13,7 +13,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 
@@ -28,18 +27,14 @@ type ConnectionBuilder struct {
 	disableKeepAlives bool
 	accessToken       string
 	refreshToken      string
-	masAccessToken    string
-	masRefreshToken   string
 	clientID          string
 	scopes            []string
 	apiURL            string
 	authURL           string
-	masAuthURL        string
 	consoleURL        string
 	config            config.IConfig
 	logger            logging.Logger
 	transportWrapper  TransportWrapper
-	connectionConfig  *connection.Config
 }
 
 // TransportWrapper is a wrapper for a transport of type http.RoundTripper.
@@ -60,16 +55,6 @@ func (b *ConnectionBuilder) WithAccessToken(accessToken string) *ConnectionBuild
 
 func (b *ConnectionBuilder) WithRefreshToken(refreshToken string) *ConnectionBuilder {
 	b.refreshToken = refreshToken
-	return b
-}
-
-func (b *ConnectionBuilder) WithMASAccessToken(accessToken string) *ConnectionBuilder {
-	b.masAccessToken = accessToken
-	return b
-}
-
-func (b *ConnectionBuilder) WithMASRefreshToken(refreshToken string) *ConnectionBuilder {
-	b.masRefreshToken = refreshToken
 	return b
 }
 
@@ -108,11 +93,6 @@ func (b *ConnectionBuilder) WithAuthURL(authURL string) *ConnectionBuilder {
 	return b
 }
 
-func (b *ConnectionBuilder) WithMASAuthURL(authURL string) *ConnectionBuilder {
-	b.masAuthURL = authURL
-	return b
-}
-
 func (b *ConnectionBuilder) WithClientID(clientID string) *ConnectionBuilder {
 	b.clientID = clientID
 	return b
@@ -135,12 +115,6 @@ func (b *ConnectionBuilder) WithConfig(cfg config.IConfig) *ConnectionBuilder {
 	return b
 }
 
-// WithConnectionConfig contains config for the connection instance
-func (b *ConnectionBuilder) WithConnectionConfig(cfg *connection.Config) *ConnectionBuilder {
-	b.connectionConfig = cfg
-	return b
-}
-
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
@@ -156,12 +130,8 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 // the connection, and an error if something fails when trying to create it.
 // nolint:funlen
 func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Connection, err error) {
-	if b.connectionConfig.RequireAuth && b.accessToken == "" && b.refreshToken == "" {
+	if b.accessToken == "" && b.refreshToken == "" {
 		return nil, &AuthError{notLoggedInError()}
-	}
-
-	if b.connectionConfig.RequireMASAuth && b.masAccessToken == "" && b.masRefreshToken == "" {
-		return nil, &MasAuthError{notLoggedInMASError()}
 	}
 
 	if b.clientID == "" {
@@ -186,12 +156,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	tkn := token.Token{
 		AccessToken:  b.accessToken,
 		RefreshToken: b.refreshToken,
-		Logger:       b.logger,
-	}
-
-	masTk := token.Token{
-		AccessToken:  b.masAccessToken,
-		RefreshToken: b.masRefreshToken,
 		Logger:       b.logger,
 	}
 
@@ -230,12 +194,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
-	masAuthURL, err := url.Parse(b.masAuthURL)
-	if err != nil {
-		err = AuthErrorf("unable to parse Auth URL '%s': %w", b.masAuthURL, err)
-		return
-	}
-
 	consoleURL, err := url.Parse(b.consoleURL)
 	if err != nil {
 		err = fmt.Errorf("unable to parse Console URL '%s': %w", b.consoleURL, err)
@@ -264,19 +222,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
 	keycloak.SetRestyClient(&restyClient)
 
-	baseMasAuthURL := fmt.Sprintf("%v://%v", masAuthURL.Scheme, masAuthURL.Host)
-	masKc := gocloak.NewClient(baseMasAuthURL)
-	masRestyClient := *keycloak.RestyClient()
-
-	_, masKcRealm, ok := SplitKeycloakRealmURL(masAuthURL)
-	if !ok {
-		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.masAuthURL)
-	}
-
-	// #nosec 402
-	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
-	masKc.SetRestyClient(&masRestyClient)
-
 	connection = &Connection{
 		insecure:          b.insecure,
 		trustedCAs:        b.trustedCAs,
@@ -286,14 +231,10 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		apiURL:            apiURL,
 		defaultHTTPClient: client,
 		keycloakClient:    keycloak,
-		masKeycloakClient: masKc,
 		Token:             &tkn,
-		MASToken:          &masTk,
 		defaultRealm:      kcRealm,
-		masRealm:          masKcRealm,
 		logger:            b.logger,
 		Config:            b.config,
-		connectionConfig:  b.connectionConfig,
 	}
 
 	return connection, nil
