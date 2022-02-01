@@ -101,7 +101,7 @@ rhoas login --api-gateway=http://localhost:8000
 ## Internationalization
 
 All text strings are placed in `./pkg/core/localize/locales/en` directory containing `.toml` files.
-This files are used in:
+These files are used in:
 
  - CLI itself - all printed messages/strings 
  - generation of the downstream and upstream documentation
