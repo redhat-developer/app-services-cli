@@ -58,7 +58,7 @@ one = 'Username of the user within organization'
 one = 'Role to apply'
 
 [registry.role.cmd.add.success]
-one = 'Role was successfuly applied'
+one = 'Role was successfully applied'
 
 [registry.role.cmd.list.shortDescription]
 one = 'List roles'
@@ -98,4 +98,4 @@ rhoas service-registry role revoke --username=janedough
 '''
 
 [registry.role.cmd.revoke.success]
-one = 'Successfully revoked access for specified principal'
+one = 'successfully revoked access for specified principal'
