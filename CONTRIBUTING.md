@@ -111,7 +111,7 @@ This directory contains number of `toml` files that are used for:
 1. Command structure that is later generated as documentation
 2. Command output and error messages returned by specific commands that aren't included in the generated documentation.
 
-Each time we change any strings in comman structure (1) we should regenerate markdown documentation files and push them with the PR.
+Each time we change any strings in command structure (1) we should regenerate markdown documentation files and push them with the PR.
 Downstream changes are regenerated on release. 
 
 ## Documentation
