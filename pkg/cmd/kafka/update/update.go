@@ -18,7 +18,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -66,7 +65,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.update.cmd.examples"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			_, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+			_, err := opts.Connection()
 			if err != nil {
 				return err
 			}
@@ -127,7 +126,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func run(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
@@ -261,7 +260,7 @@ func promptOwnerSelect(localizer localize.Localizer, users []rbac.Principal) (st
 }
 
 func selectOwnerInteractive(ctx context.Context, opts *options) (string, error) {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return "", err
 	}

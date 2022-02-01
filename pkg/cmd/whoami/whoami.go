@@ -8,7 +8,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
@@ -50,7 +49,7 @@ func runCmd(opts *options) (err error) {
 		return err
 	}
 
-	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
+	_, err = opts.Connection()
 	if err != nil {
 		return err
 	}

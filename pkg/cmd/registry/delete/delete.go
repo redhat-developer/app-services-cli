@@ -11,7 +11,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	"github.com/spf13/cobra"
@@ -90,7 +89,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}

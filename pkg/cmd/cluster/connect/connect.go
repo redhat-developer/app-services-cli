@@ -11,7 +11,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 
@@ -73,7 +72,7 @@ func NewConnectCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runConnect(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}

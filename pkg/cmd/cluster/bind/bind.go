@@ -19,7 +19,7 @@ import (
 
 type options struct {
 	Config     config.IConfig
-	Connection func(connectionCfg *connection.Config) (connection.Connection, error)
+	Connection func() (connection.Connection, error)
 	Logger     logging.Logger
 	IO         *iostreams.IOStreams
 	localizer  localize.Localizer
@@ -93,7 +93,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runBind(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}

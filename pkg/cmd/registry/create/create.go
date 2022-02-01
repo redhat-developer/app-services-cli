@@ -119,7 +119,7 @@ func runCreate(opts *options) error {
 	}
 
 	var conn connection.Connection
-	if conn, err = opts.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
+	if conn, err = opts.Connection(); err != nil {
 		return err
 	}
 

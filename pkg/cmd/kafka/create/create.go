@@ -143,7 +143,7 @@ func runCreate(opts *options) error {
 	}
 
 	var conn connection.Connection
-	if conn, err = opts.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
+	if conn, err = opts.Connection(); err != nil {
 		return err
 	}
 
@@ -400,7 +400,7 @@ type promptAnswers struct {
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
 func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return nil, err
 	}

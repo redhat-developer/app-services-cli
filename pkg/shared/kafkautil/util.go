@@ -1,7 +1,6 @@
 package kafkautil
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
@@ -13,7 +12,7 @@ func RegisterNameFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) erro
 		var validNames []string
 		directive := cobra.ShellCompDirectiveNoSpace
 
-		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+		conn, err := f.Connection()
 		if err != nil {
 			return validNames, directive
 		}
@@ -46,7 +45,7 @@ func GetCloudProviderCompletionValues(f *factory.Factory) (validProviders []stri
 	validProviders = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validProviders, directive
 	}
@@ -71,7 +70,7 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 		return
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validRegions, directive
 	}
@@ -157,7 +156,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validNames, directive
 	}
@@ -199,7 +198,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validIDs, directive
 	}

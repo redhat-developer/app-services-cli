@@ -17,7 +17,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
@@ -45,15 +44,6 @@ var authURLAliases = map[string]string{
 	"stage":      build.ProductionAuthURL,
 }
 
-// When the value of the `--mas-auth-url` option is one of the keys of this map it will be replaced by the
-// corresponding value.
-var masAuthURLAliases = map[string]string{
-	"production": build.ProductionMasAuthURL,
-	"prod":       build.ProductionMasAuthURL,
-	"staging":    build.StagingMasAuthURL,
-	"stage":      build.StagingMasAuthURL,
-}
-
 type options struct {
 	Config     config.IConfig
 	Logger     logging.Logger
@@ -64,7 +54,6 @@ type options struct {
 
 	url                   string
 	authURL               string
-	masAuthURL            string
 	clientID              string
 	scopes                []string
 	insecureSkipTLSVerify bool
@@ -106,7 +95,6 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.insecureSkipTLSVerify, "insecure", false, opts.localizer.MustLocalize("login.flag.insecure"))
 	cmd.Flags().StringVar(&opts.clientID, "client-id", build.DefaultClientID, opts.localizer.MustLocalize("login.flag.clientId"))
 	cmd.Flags().StringVar(&opts.authURL, "auth-url", build.ProductionAuthURL, opts.localizer.MustLocalize("login.flag.authUrl"))
-	cmd.Flags().StringVar(&opts.masAuthURL, "mas-auth-url", build.ProductionMasAuthURL, opts.localizer.MustLocalize("login.flag.masAuthUrl"))
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
 	cmd.Flags().StringArrayVar(&opts.scopes, "scope", kcconnection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
 	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
@@ -126,12 +114,6 @@ func runLogin(opts *options) (err error) {
 		return err
 	}
 	opts.authURL = authURL.String()
-
-	masAuthURL, err := getURLFromAlias(opts.masAuthURL, masAuthURLAliases, opts.localizer)
-	if err != nil {
-		return err
-	}
-	opts.masAuthURL = masAuthURL.String()
 
 	// log in to SSO
 	spinner := spinner.New(opts.IO.ErrOut, opts.localizer)
@@ -158,16 +140,11 @@ func runLogin(opts *options) (err error) {
 			RedirectPath: build.SSORedirectPath,
 		}
 
-		masSsoCfg := &login.SSOConfig{
-			AuthURL:      masAuthURL,
-			RedirectPath: build.MASSSORedirectPath,
-		}
-
 		// Creating a global context with timeout
 		ctx, cancel := context.WithTimeout(context.Background(), build.DefaultLoginTimeout)
 		defer cancel()
 
-		if err = loginExec.Execute(ctx, ssoCfg, masSsoCfg); err != nil {
+		if err = loginExec.Execute(ctx, ssoCfg); err != nil {
 			spinner.Stop()
 			opts.Logger.Info()
 			if errors.Is(err, context.DeadlineExceeded) {
@@ -196,7 +173,6 @@ func runLogin(opts *options) (err error) {
 	cfg.Insecure = opts.insecureSkipTLSVerify
 	cfg.ClientID = opts.clientID
 	cfg.AuthURL = opts.authURL
-	cfg.MasAuthURL = opts.masAuthURL
 	cfg.Scopes = opts.scopes
 
 	if err = opts.Config.Save(cfg); err != nil {
@@ -229,18 +205,14 @@ func loginWithOfflineToken(opts *options) (err error) {
 	cfg.Insecure = opts.insecureSkipTLSVerify
 	cfg.ClientID = opts.clientID
 	cfg.AuthURL = opts.authURL
-	cfg.MasAuthURL = opts.masAuthURL
 	cfg.Scopes = opts.scopes
 	cfg.RefreshToken = opts.offlineToken
-	// remove MAS-SSO tokens, as this does not support token login
-	cfg.MasAccessToken = ""
-	cfg.MasRefreshToken = ""
 
 	if err = opts.Config.Save(cfg); err != nil {
 		return err
 	}
 
-	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
+	_, err = opts.Connection()
 	return err
 }
 
