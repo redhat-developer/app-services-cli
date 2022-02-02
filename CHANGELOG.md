@@ -1,4 +1,8 @@
 
+<a name="v0.38.1"></a>
+## [v0.38.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.0...v0.38.1) (2022-02-02)
+
+
 <a name="v0.38.0"></a>
 ## [v0.38.0](https://github.com/redhat-developer/app-services-cli/compare/v0.37.0...v0.38.0) (2022-02-02)
 
