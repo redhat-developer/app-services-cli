@@ -26,9 +26,9 @@ var AllowedArtifactStateEnumValues = []string{
 }
 
 const (
-	ViewerRole  = "Viewer"
-	ManagerRole = "Manager"
-	AdminRole   = "Admin"
+	ViewerRole  = "viewer"
+	ManagerRole = "manager"
+	AdminRole   = "admin"
 )
 
 var AllowedRoleTypeEnumValues = []string{
