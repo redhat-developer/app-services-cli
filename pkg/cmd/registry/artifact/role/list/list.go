@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -129,7 +130,7 @@ func mapResponseItemsToRows(artifacts []registryinstanceclient.RoleMapping) []re
 		k := (artifacts)[i]
 		row := registryRow{
 			Principal: k.GetPrincipalId(),
-			Role:      string(k.GetRole()),
+			Role:      util.GetRoleLabel(k.GetRole()),
 		}
 
 		rows = append(rows, row)

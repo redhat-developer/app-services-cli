@@ -25,10 +25,16 @@ var AllowedArtifactStateEnumValues = []string{
 	"DEPRECATED",
 }
 
+const (
+	ViewerRole  = "Viewer"
+	ManagerRole = "Manager"
+	AdminRole   = "Admin"
+)
+
 var AllowedRoleTypeEnumValues = []string{
-	"READ_ONLY",
-	"DEVELOPER",
-	"ADMIN",
+	ViewerRole,
+	ManagerRole,
+	AdminRole,
 }
 
 // GetAllowedArtifactTypeEnumValuesAsString gets artifact types as string.
