@@ -9,7 +9,7 @@ Add or update one of the following roles for a user or service account:
 
 * viewer (provides read access)
 * manager (provides read and write access)
-* admin (enables admin along with read and write access)
+* admin (provides admin access as well as read and write access)
 
 
 ```
