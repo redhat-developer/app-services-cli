@@ -6,14 +6,12 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/serviceaccountutil/credentials"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
 var (
-	ValidOutputFormats       = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
-	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat}
+	ValidOutputFormats = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
 )
 
 type FlagSet struct {

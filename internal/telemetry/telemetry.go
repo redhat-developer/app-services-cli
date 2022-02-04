@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/internal/build"

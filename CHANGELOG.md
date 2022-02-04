@@ -1,4 +1,58 @@
 
+<a name="v0.38.1"></a>
+## [v0.38.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.0...v0.38.1) (2022-02-02)
+
+
+<a name="v0.38.0"></a>
+## [v0.38.0](https://github.com/redhat-developer/app-services-cli/compare/v0.37.0...v0.38.0) (2022-02-02)
+
+### Bug Fixes
+
+* use old branch name for documentation
+* add plural form for ACL messages ([#1369](https://github.com/redhat-developer/app-services-cli/issues/1369))
+* small style correction on documentation
+* clarify documentation process ([#1410](https://github.com/redhat-developer/app-services-cli/issues/1410))
+* capital case for message
+* typo in the message ([#1407](https://github.com/redhat-developer/app-services-cli/issues/1407))
+* Add error handling to service registry ([#1401](https://github.com/redhat-developer/app-services-cli/issues/1401))
+* change partition limit for new topic creation ([#1406](https://github.com/redhat-developer/app-services-cli/issues/1406))
+* change base url
+* regenerate documentation for registry ([#1378](https://github.com/redhat-developer/app-services-cli/issues/1378))
+* refactor: place utility methods in pkg/cmd ([#1371](https://github.com/redhat-developer/app-services-cli/issues/1371))
+* kill ams source code
+* replace AMS with SDK version
+* parse yq version for different outputs ([#1388](https://github.com/redhat-developer/app-services-cli/issues/1388))
+* disable docs updates from main
+* add cli prefix to adoc files
+* missing formatter from previous PRs
+* remove logging from segment
+* align roles for service registry ([#1413](https://github.com/redhat-developer/app-services-cli/issues/1413))
+* **acl grant-admin:** add flag for instance id ([#1363](https://github.com/redhat-developer/app-services-cli/issues/1363))
+* **deps:** update k8s.io/utils commit hash to 7d6a63d
+* **deps:** update docusaurus monorepo to v2.0.0-beta.15
+* **deps:** update k8s.io/utils commit hash to 9b34465
+* **deps:** update all
+* **deps:** update docusaurus monorepo to v2.0.0-beta.14
+* **deps:** pin dependencies
+* **deps:** pin dependencies
+* **deps:** update github.com/phayes/freeport commit hash to 74d24b5
+* **deps:** update module github.com/openconfig/goyang to v0.3.2
+* **deps:** update module github.com/openconfig/goyang to v0.4.0
+* **deps:** update all
+* **deps:** update module github.com/briandowns/spinner to v1.18.0
+* **deps:** update module github.com/briandowns/spinner to v1.17.0
+* **deps:** update module github.com/spf13/cobra to v1.3.0
+
+### Features
+
+* provide validation and suggestions for regions when creating Kafka ([#1362](https://github.com/redhat-developer/app-services-cli/issues/1362))
+* make the spinner cyan color
+* community documentation ([#1352](https://github.com/redhat-developer/app-services-cli/issues/1352))
+* **artifact list:** add flags to filter result ([#1351](https://github.com/redhat-developer/app-services-cli/issues/1351))
+* **service-registry:** add description flag for create command ([#1344](https://github.com/redhat-developer/app-services-cli/issues/1344))
+* **service-registry artifact:** allow loading artifact from remote URL ([#1345](https://github.com/redhat-developer/app-services-cli/issues/1345))
+
+
 <a name="v0.37.0"></a>
 ## [v0.37.0](https://github.com/redhat-developer/app-services-cli/compare/v0.36.6...v0.37.0) (2021-12-13)
 

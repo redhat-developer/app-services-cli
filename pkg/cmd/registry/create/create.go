@@ -4,20 +4,21 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/remote"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -149,6 +150,11 @@ func runCreate(opts *options) error {
 		CreateRegistry(opts.Context).
 		RegistryCreate(*payload).
 		Execute()
+
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_7) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
+	}
+
 	if err != nil {
 		return err
 	}

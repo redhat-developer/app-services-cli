@@ -20,13 +20,13 @@ require (
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/openconfig/goyang v0.4.0
-	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2
+	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.4.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.6.0
+	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.8.2
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
-	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.4.0
+	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
 	github.com/spf13/cobra v1.3.0
@@ -41,6 +41,6 @@ require (
 	k8s.io/api v0.22.4
 	k8s.io/apimachinery v0.22.4
 	k8s.io/client-go v0.22.4
-	k8s.io/utils v0.0.0-20211208161948-7d6a63dca704
+	k8s.io/utils v0.0.0-20220127004650-9b3446523e65
 	sigs.k8s.io/controller-runtime v0.10.0 // indirect
 )

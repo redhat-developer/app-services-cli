@@ -3,12 +3,13 @@ package version
 import (
 	"context"
 	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 
@@ -45,7 +46,7 @@ func runCmd(opts *options) (err error) {
 
 	// debug mode checks this for a version update also.
 	// so we check if is enabled first so as not to print it twice
-	if !debug.Enabled() {
+	if !flagutil.DebugEnabled() {
 		build.CheckForUpdate(opts.Context, build.Version, opts.Logger, opts.localizer)
 	}
 	return nil

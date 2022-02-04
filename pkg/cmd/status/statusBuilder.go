@@ -8,14 +8,16 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/servicespec"
-	"github.com/redhat-developer/app-services-cli/pkg/svcstatus"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
+
+	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/openconfig/goyang/pkg/indent"
 )
@@ -81,7 +83,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 			// nolint:govet
 			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
 			if err != nil {
-				if kafkautil.IsErr(err, kafkautil.ErrorCode7) {
+				if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
 					err = kafkautil.NotFoundByIDError(instanceID)
 					c.Logger.Error(err)
 					c.Logger.Info(c.localizer.MustLocalize("status.log.info.rhoasKafkaUse"))

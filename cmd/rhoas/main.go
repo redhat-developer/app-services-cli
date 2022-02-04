@@ -3,18 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/debug"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
 	"os"
 	"strings"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+
 	"github.com/redhat-developer/app-services-cli/internal/telemetry"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory/defaultfactory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory/defaultfactory"
 
 	"github.com/spf13/cobra"
 
@@ -43,7 +44,7 @@ func main() {
 	err = executeCommandWithTelemetry(rootCmd, cmdFactory)
 
 	if err == nil {
-		if debug.Enabled() {
+		if flagutil.DebugEnabled() {
 			build.CheckForUpdate(cmdFactory.Context, build.Version, cmdFactory.Logger, localizer)
 		}
 		return
@@ -114,7 +115,7 @@ func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Fac
 	}
 	commandPath := ""
 	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-		cmdFactory.Logger.SetDebug(debug.Enabled())
+		cmdFactory.Logger.SetDebug(flagutil.DebugEnabled())
 		if cmd.Runnable() && !cmd.Hidden {
 			commandPath = cmd.CommandPath()
 		}

@@ -7,17 +7,17 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 )
 
 const (
 	legalNameChars = "^[a-zA-Z0-9._-]+$"
 	maxNameLength  = 249
 	minPartitions  = 1
-	maxPartitions  = 100
+	maxPartitions  = 1000
 )
 
 // Validator is a type for validating Kafka topic configuration values

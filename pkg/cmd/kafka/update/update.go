@@ -7,21 +7,23 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/redhat-developer/app-services-cli/pkg/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
+
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -192,7 +194,7 @@ func run(opts *options) error {
 	s.Stop()
 
 	if err != nil {
-		if apiError := kafkautil.GetAPIError(err); apiError != nil {
+		if apiError := kafkamgmtv1errors.GetAPIError(err); apiError != nil {
 			return opts.localizer.MustLocalizeError("kafka.update.log.info.updateFailed", localize.NewEntry("Reason", apiError.GetReason()))
 		}
 		return err

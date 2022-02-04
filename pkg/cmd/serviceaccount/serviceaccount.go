@@ -7,7 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/resetcredentials"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 

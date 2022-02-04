@@ -2,9 +2,9 @@ package flagutil
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 
@@ -173,7 +173,7 @@ func (fs *flagSet) AddTopic(topic *string) {
 		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.topic.description"),
 	)
 
-	_ = flagutil.RegisterTopicCompletionFunc(fs.cmd, fs.factory)
+	_ = aclcmdutil.RegisterTopicCompletionFunc(fs.cmd, fs.factory)
 }
 
 // AddConsumerGroup adds a flag for setting the consumer group ID
@@ -187,7 +187,7 @@ func (fs *flagSet) AddConsumerGroup(group *string) {
 		fs.factory.Localizer.MustLocalize("kafka.acl.common.flag.group.description"),
 	)
 
-	_ = flagutil.RegisterGroupCompletionFunc(fs.cmd, fs.factory)
+	_ = aclcmdutil.RegisterGroupCompletionFunc(fs.cmd, fs.factory)
 }
 
 // AddTransactionalID adds a flag for setting the consumer group ID

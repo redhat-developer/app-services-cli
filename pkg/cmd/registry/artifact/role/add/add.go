@@ -5,12 +5,12 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/spf13/cobra"
@@ -65,7 +65,7 @@ func NewAddCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.role != "" {
-				if _, err := registryinstanceclient.NewRoleTypeFromValue(opts.role); err != nil {
+				if role := util.GetRoleEnum(opts.role); role == "" {
 					return opts.localizer.MustLocalizeError("artifact.cmd.common.error.invalidRole",
 						localize.NewEntry("AllowedRoles", util.GetAllowedRoleTypeEnumValuesAsString()))
 				}
@@ -114,13 +114,13 @@ func runAdd(opts *options) error {
 		return err
 	}
 
-	role, _ := registryinstanceclient.NewRoleTypeFromValue(opts.role)
+	role := util.GetRoleEnum(opts.role)
 
 	if principalHasRole(opts, dataAPI.AdminApi) {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.role.cmd.updating"))
 		request := dataAPI.AdminApi.UpdateRoleMapping(opts.Context, opts.principal)
 		_, err = request.UpdateRole(registryinstanceclient.UpdateRole{
-			Role: *role,
+			Role: role,
 		}).Execute()
 		if err != nil {
 			return registrycmdutil.TransformInstanceError(err)
@@ -129,7 +129,7 @@ func runAdd(opts *options) error {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.role.cmd.creating"))
 		roleMapping := registryinstanceclient.RoleMapping{
 			PrincipalId: opts.principal,
-			Role:        *role,
+			Role:        role,
 		}
 		request := dataAPI.AdminApi.CreateRoleMapping(opts.Context)
 		_, err = request.RoleMapping(roleMapping).Execute()

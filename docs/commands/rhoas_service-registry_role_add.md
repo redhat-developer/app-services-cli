@@ -14,7 +14,7 @@ rhoas service-registry role add [flags]
 
 ```
 ## Create or update user role
-rhoas service-registry role add --role=ADMIN --username=joedough
+rhoas service-registry role add --role=admin --username=joedough
 
 ```
 

@@ -100,23 +100,41 @@ rhoas login --api-gateway=http://localhost:8000
 
 ## Internationalization
 
-All text strings are placed in `./pkg/localize/locales` directory.
+All text strings are placed in `./pkg/core/localize/locales/en` directory containing `.toml` files.
+These files are used in:
+
+ - CLI itself - all printed messages/strings 
+ - generation of the downstream and upstream documentation
+
+This directory contains number of `toml` files that are used for:
+
+1. Command structure that is later generated as documentation
+2. Command output and error messages returned by specific commands that aren't included in the generated documentation.
+
+Each time we change any strings in command structure (1) we should regenerate markdown documentation files and push them with the PR.
+Downstream changes are regenerated on release. 
 
 ## Documentation
 
-The main CLI documentation source files are stored in the `./pkg/localize/locales/en/cmd/` directory.
+The main CLI documentation source files are stored in the `./pkg/core/localize/locales/en/cmd/` directory.
 
-The CLI documentation output is generated in the `./docs` directory.
+The CLI documentation output is generated in the `./docs` directory as markdown files that are published as https://appservices.tech website. 
 
-### Generating documentation
+### Generating website documentation
 
-#### `make generate-docs`
+#### Generating upstream documentation
 
-After running the command, the documentation should be generated in AsciiDoc format.
+`make generate-docs`
 
-#### `make generate-modular-docs`
+After running the command, the documentation should be generated in markdown format.
+
+#### Generating downstream (asciidocs) documentation
+
+`make generate-modular-docs`
 
 After running the command, the `dist` directory will contain the documentation conforming to the modular docs specification.
+Developers do not need to generate that documentation themselves. We have github action that generates documentation automatically
+into `modular-docs` branch on each CLI release.
 
 ## Best practices
 
