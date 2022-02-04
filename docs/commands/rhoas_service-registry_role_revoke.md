@@ -6,7 +6,7 @@ Revoke role for principal
 
 Revoke the role of a user or service account.
 
-NOTE: It is not possible to revoke the role of the owner of the instance. The instance owner always retains `admin` rights.
+NOTE: It is not possible to revoke the role of the owner of the instance. The instance owner always retains admin rights.
 
 
 ```

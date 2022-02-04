@@ -62,7 +62,7 @@ one = 'ServiceAccount name'
 one = 'Username of the user within organization'
 
 [registry.role.cmd.flag.role.description]
-one = 'Role to apply: `admin`, `manager`, or `viewer`'
+one = 'Role to apply: admin, manager, or viewer'
 
 [registry.role.cmd.add.success]
 one = 'Role was successfully applied'
@@ -95,7 +95,7 @@ one = 'Revoke role for principal'
 one = '''
 Revoke the role of a user or service account.
 
-NOTE: It is not possible to revoke the role of the owner of the instance. The instance owner always retains `admin` rights.
+NOTE: It is not possible to revoke the role of the owner of the instance. The instance owner always retains admin rights.
 '''
 
 [registry.role.cmd.revoke.example]

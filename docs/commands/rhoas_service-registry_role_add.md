@@ -28,7 +28,7 @@ rhoas service-registry role add --role=admin --username=joedough
 
 ```
       --instance-id string       ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-      --role admin               Role to apply: admin, `manager`, or `viewer`
+      --role string              Role to apply: admin, manager, or viewer
       --service-account string   ServiceAccount name
       --username string          Username of the user within organization
 ```
