@@ -1,0 +1,61 @@
+[registry.rule.cmd.description.short]
+one = 'Manage rules in a Service Registry instance'
+
+[registry.rule.cmd.description.long]
+one = '''
+Manage validity and compatibility rules for a Service Registry instance and artifacts.
+Service Registry rules govern how registry content can evolve over time.
+
+Rules can be configured as global rules for entire Service Registry instances or specific artifacts.
+'''
+
+[registry.rule.cmd.example]
+one = '''
+## Enable global compatibility rule for a specific Service Registry instance
+$ rhoas service-registry rule enable --rule-type=compatibility --config=full-transitive --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
+
+## display configuration details of global validity rule for current Service Registry instance
+$ rhoas service-registry rule describe --rule-type=validity
+'''
+
+[registry.rule.enable.cmd.description.short]
+one='Enable validity and compatibility rules'
+
+[registry.rule.enable.cmd.description.long]
+one='Enable validity and compatibility rules for the selected Service Registry instance or specific artifact'
+
+[registry.rule.enable.cmd.example]
+one='''
+## Enable global compatibility rule for a specific Service Registry instance
+$ rhoas service-registry rule enable --rule-type=compatibility --config=full-transitive --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
+
+## Enable validity rule for a specific artifact
+$ rhoas service-registry rule enable --rule-type=validity --config=syntax-only --artifact-id=my-artifact
+'''
+
+[registry.rule.common.flag.ruleType]
+one='Rule type determines how the content of an artifact can evolve over time'
+
+[registry.rule.common.flag.config]
+one='Configuration value for a rule' 
+
+[registry.rule.common.error.invalidRuleConfig]
+one = 'invalid configuration value "{{.Config}}" for rule type "{{.RuleType}}". Valid operations are: {{.ValidConfigList}}'
+
+[registry.rule.common.error.unauthorized]
+one = 'you are unauthorized to {{.Operation}} this rule'
+
+[registry.rule.common.error.forbidden]
+one = 'you are forbidden to {{.Operation}} this rule'
+
+[registry.rule.common.error.notFoundError]
+one = 'artifact not found'
+
+[registry.rule.common.error.conflict]
+one = 'rule already exists'
+
+[registry.rule.common.error.internalServerError]
+one = 'internal server error'
+
+[registry.rule.enable.log.info.ruleEnabled]
+one = 'Rule successfully enabled'
