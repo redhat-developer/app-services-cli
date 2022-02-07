@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -88,15 +87,14 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := registrycmdutil.NewFlagSet(cmd, f)
-	ruleFlags := rulecmdutil.NewFlagSet(cmd, f)
+	flags := rulecmdutil.NewFlagSet(cmd, f)
 
 	flags.AddRegistryInstance(&opts.registryID)
 
-	ruleFlags.AddArtifactID(&opts.artifactID)
-	ruleFlags.AddGroup(&opts.group)
-	ruleFlags.AddConfig(&opts.config)
-	ruleFlags.AddRuleType(&opts.ruleType)
+	flags.AddArtifactID(&opts.artifactID)
+	flags.AddGroup(&opts.group)
+	flags.AddConfig(&opts.config)
+	flags.AddRuleType(&opts.ruleType)
 
 	_ = cmd.MarkFlagRequired("rule-type")
 	_ = cmd.MarkFlagRequired("config")

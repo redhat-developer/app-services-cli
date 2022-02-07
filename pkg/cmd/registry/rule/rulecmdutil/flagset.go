@@ -1,6 +1,7 @@
 package rulecmdutil
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -9,7 +10,7 @@ import (
 type flagSet struct {
 	cmd     *cobra.Command
 	factory *factory.Factory
-	*flagutil.FlagSet
+	*registrycmdutil.FlagSet
 }
 
 // NewFlagSet returns a new flag set with common Service Registry rule flags
@@ -17,7 +18,7 @@ func NewFlagSet(cmd *cobra.Command, f *factory.Factory) *flagSet {
 	return &flagSet{
 		cmd:     cmd,
 		factory: f,
-		FlagSet: flagutil.NewFlagSet(cmd, f.Localizer),
+		FlagSet: registrycmdutil.NewFlagSet(cmd, f),
 	}
 }
 
