@@ -1,16 +1,19 @@
 [registry.rule.cmd.description.short]
-one = 'Manage rules in a Service Registry instance'
+one = 'Manage artifact rules in a Service Registry instance'
 
 [registry.rule.cmd.description.long]
 one = '''
-Manage validity and compatibility rules for a Service Registry instance and artifacts.
-Service Registry rules govern how registry content can evolve over time.
+Set of commands for managing validity and compatibility rules for an entire Service Registry instance or individual for each artifact.
+Service Registry rules govern how artifact content can evolve over time by validating for any artifact updates
 
 Rules can be configured as global rules for entire Service Registry instances or specific artifacts.
 '''
 
 [registry.rule.cmd.example]
 one = '''
+## Enable global compatibility rule for the current Service Registry instance
+$ rhoas service-registry rule enable --rule-type=compatibility --config=full
+
 ## Enable global compatibility rule for a specific Service Registry instance
 $ rhoas service-registry rule enable --rule-type=compatibility --config=full-transitive --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
 
@@ -26,12 +29,21 @@ one='Enable validity and compatibility rules for the selected Service Registry i
 
 [registry.rule.enable.cmd.example]
 one='''
+## Enable global compatibility rule for the current Service Registry instance
+$ rhoas service-registry rule enable --rule-type=compatibility --config=full
+
 ## Enable global compatibility rule for a specific Service Registry instance
 $ rhoas service-registry rule enable --rule-type=compatibility --config=full-transitive --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
 
 ## Enable validity rule for a specific artifact
 $ rhoas service-registry rule enable --rule-type=validity --config=syntax-only --artifact-id=my-artifact
 '''
+
+[registry.rule.enable.log.info.enabling.globalRules]
+one='Enabling rule for Service Registry instance'
+
+[registry.rule.enable.log.info.enabling.artifactRules]
+one='Enabling rule for artifact'
 
 [registry.rule.common.flag.ruleType]
 one='Rule type determines how the content of an artifact can evolve over time'
@@ -49,10 +61,10 @@ one = 'you are unauthorized to {{.Operation}} this rule'
 one = 'you are forbidden to {{.Operation}} this rule'
 
 [registry.rule.common.error.notFoundError]
-one = 'artifact not found'
+one = 'artifact with ID "{{.ID}}" not found'
 
 [registry.rule.common.error.conflict]
-one = 'rule already exists'
+one = 'rule of type "{{.Type}}" is already enabled'
 
 [registry.rule.common.error.internalServerError]
 one = 'internal server error'

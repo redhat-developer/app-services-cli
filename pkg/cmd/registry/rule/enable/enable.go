@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -93,11 +94,8 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddArtifactID(&opts.artifactID)
 	flags.AddGroup(&opts.group)
-	flags.AddConfig(&opts.config)
-	flags.AddRuleType(&opts.ruleType)
-
-	_ = cmd.MarkFlagRequired("rule-type")
-	_ = cmd.MarkFlagRequired("config")
+	_ = flags.AddConfig(&opts.config).Required()
+	_ = flags.AddRuleType(&opts.ruleType).Required()
 
 	return cmd
 
@@ -125,6 +123,8 @@ func runEnable(opts *options) error {
 
 	if opts.artifactID == "" {
 
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.globalRules"))
+
 		req := dataAPI.AdminApi.CreateGlobalRule(opts.Context)
 
 		req = req.Rule(rule)
@@ -135,6 +135,8 @@ func runEnable(opts *options) error {
 		}
 	} else {
 
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.artifactRules"))
+
 		req := dataAPI.ArtifactRulesApi.CreateArtifactRule(opts.Context, opts.group, opts.artifactID)
 
 		req = req.Rule(rule)
@@ -143,7 +145,11 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+	}
 
+	ruleErr := &rulecmdutil.RegistryRuleError{
+		Localizer:  opts.localizer,
+		InstanceID: opts.registryID,
 	}
 
 	if newErr != nil {
@@ -151,25 +157,25 @@ func runEnable(opts *options) error {
 			return newErr
 		}
 
-		operationTmplPair := localize.NewEntry("Operation", "enable")
+		operation := "enable"
 		switch httpRes.StatusCode {
 		case http.StatusUnauthorized:
-			return opts.localizer.MustLocalizeError("registry.rule.common.error.unauthorized", operationTmplPair)
+			return ruleErr.UnathorizedError(operation)
 		case http.StatusForbidden:
-			return opts.localizer.MustLocalizeError("registry.rule.common.error.forbidden", operationTmplPair)
+			return ruleErr.ForbiddenError(operation)
 		case http.StatusNotFound:
-			return opts.localizer.MustLocalizeError("registry.rule.common.error.notFoundError", operationTmplPair)
+			return ruleErr.ArtifactNotFoundError(opts.artifactID)
 		case http.StatusConflict:
-			return opts.localizer.MustLocalizeError("registry.rule.common.error.conflict")
+			return ruleErr.ConflictError(opts.ruleType)
 		case http.StatusInternalServerError:
-			return opts.localizer.MustLocalizeError("registry.rule.common.error.internalServerError")
+			return ruleErr.ServerError()
 		default:
 			return err
 		}
 
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.enable.log.info.ruleEnabled"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.rule.enable.log.info.ruleEnabled"))
 
 	return nil
 }

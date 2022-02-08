@@ -22,19 +22,23 @@ var configMap = map[string]string{
 
 var ValidRules []string = []string{ValidityRule, CompatibilityRule}
 
+// GetRuleTypeMap returns the mappings for rule types
 func GetRuleTypeMap() map[string]registryinstanceclient.RuleType {
 	return ruleTypeMap
 }
 
+// GetConfigMap returns the mappings for rule configurations
 func GetConfigMap() map[string]string {
 	return configMap
 }
 
+// GetMappedRuleType gets the mapped rule type value
 func GetMappedRuleType(ruleType string) *registryinstanceclient.RuleType {
 	r := ruleTypeMap[ruleType]
 	return &r
 }
 
+// GetConfigMap gets the mapped configuration value
 func GetMappedConfigValue(config string) string {
 	return configMap[config]
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 )
 
+// Validator is a struct to validate inputs for service registry rule operations
 type Validator struct {
 	Localizer localize.Localizer
 }
