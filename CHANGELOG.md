@@ -1,4 +1,15 @@
 
+<a name="v0.38.2"></a>
+## [v0.38.2](https://github.com/redhat-developer/app-services-cli/compare/v0.38.1...v0.38.2) (2022-02-09)
+
+### Bug Fixes
+
+* interactive mode when creating kafka using CLI ([#1423](https://github.com/redhat-developer/app-services-cli/issues/1423))
+* **deps:** update dependency prism-react-renderer to v1.3.1
+* **deps:** update dependency prism-react-renderer to v1.3.0
+* **deps:** update module github.com/briandowns/spinner to v1.18.1
+
+
 <a name="v0.38.1"></a>
 ## [v0.38.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.0...v0.38.1) (2022-02-02)
 
