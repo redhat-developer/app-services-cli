@@ -178,6 +178,8 @@ func runCreate(opts *options) error {
 			return err
 		}
 
+		opts.provider = payload.GetCloudProvider()
+		opts.region = payload.GetRegion()
 	} else {
 		if opts.provider == "" {
 			opts.provider = defaultProvider
