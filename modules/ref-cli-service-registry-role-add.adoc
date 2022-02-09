@@ -8,7 +8,13 @@ Add or update principal role
 [discrete]
 == Synopsis
 
-Add or update role for user or service account
+
+Add or update one of the following roles for a user or service account:
+
+* viewer (provides read access)
+* manager (provides read and write access)
+* admin (provides admin access as well as read and write access)
+
 
 ....
 rhoas service-registry role add [flags]
@@ -27,7 +33,7 @@ rhoas service-registry role add --role=admin --username=joedough
 == Options
 
       `--instance-id` _string_::       ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-      `--role` _string_::              Role to apply
+      `--role` _string_::              Role to apply: admin, manager, or viewer
       `--service-account` _string_::   ServiceAccount name
       `--username` _string_::          Username of the user within organization
 
