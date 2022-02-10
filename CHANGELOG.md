@@ -1,4 +1,13 @@
 
+<a name="v0.38.3"></a>
+## [v0.38.3](https://github.com/redhat-developer/app-services-cli/compare/v0.38.2...v0.38.3) (2022-02-10)
+
+### Bug Fixes
+
+* **deps:** update module github.com/golang-jwt/jwt/v4 to v4.3.0
+* **status:** service name positional conditions ([#1426](https://github.com/redhat-developer/app-services-cli/issues/1426))
+
+
 <a name="v0.38.2"></a>
 ## [v0.38.2](https://github.com/redhat-developer/app-services-cli/compare/v0.38.1...v0.38.2) (2022-02-09)
 
