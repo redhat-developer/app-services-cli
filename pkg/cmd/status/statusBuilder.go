@@ -78,7 +78,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 
 	status = &serviceStatus{}
 
-	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
+	if stringInSlice(servicespec.KafkaServiceName, services) {
 		if instanceID, exists := cfg.GetKafkaIdOk(); exists {
 			// nolint:govet
 			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
