@@ -123,7 +123,10 @@ func runEnable(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.globalRules"))
+		opts.Logger.Info(opts.localizer.MustLocalize(
+			"registry.rule.enable.log.info.enabling.globalRules",
+			localize.NewEntry("RuleType", opts.ruleType),
+			localize.NewEntry("Configuration", opts.config)))
 
 		req := dataAPI.AdminApi.CreateGlobalRule(opts.Context)
 
@@ -135,7 +138,11 @@ func runEnable(opts *options) error {
 		}
 	} else {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.artifactRules"))
+		opts.Logger.Info(opts.localizer.MustLocalize(
+			"registry.rule.enable.log.info.enabling.artifactRules",
+			localize.NewEntry("RuleType", opts.ruleType),
+			localize.NewEntry("Configuration", opts.config),
+			localize.NewEntry("ArtifactID", opts.artifactID)))
 
 		req := dataAPI.ArtifactRulesApi.CreateArtifactRule(opts.Context, opts.group, opts.artifactID)
 

@@ -29,7 +29,7 @@ func (fs *FlagSet) AddRegistryInstance(registryID *string) {
 		registryID,
 		flagName,
 		"",
-		fs.factory.Localizer.MustLocalize("artifact.common.instance.id"),
+		fs.factory.Localizer.MustLocalize("registry.common.flag.instance.id"),
 	)
 
 }

@@ -25,7 +25,7 @@ $ rhoas service-registry rule describe --rule-type=validity
 one='Enable validity and compatibility rules'
 
 [registry.rule.enable.cmd.description.long]
-one='Enable validity and compatibility rules for the selected Service Registry instance or specific artifact'
+one='Enable validity and compatibility rules for the specified Service Registry instance or artifact'
 
 [registry.rule.enable.cmd.example]
 one='''
@@ -40,10 +40,10 @@ $ rhoas service-registry rule enable --rule-type=validity --config=syntax-only -
 '''
 
 [registry.rule.enable.log.info.enabling.globalRules]
-one='Enabling rule for Service Registry instance'
+one='Enabling global "{{.RuleType}}" rule for artifacts of Service Registry instance with configuration "{{.Configuration}}"'
 
 [registry.rule.enable.log.info.enabling.artifactRules]
-one='Enabling rule for artifact'
+one='Enabling "{{.RuleType}}" rule for artifact with ID "{{.ArtifactID}}" with configuration "{{.Configuration}}"'
 
 [registry.rule.common.flag.ruleType]
 one='Rule type determines how the content of an artifact can evolve over time'
