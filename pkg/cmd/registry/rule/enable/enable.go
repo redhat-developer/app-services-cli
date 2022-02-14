@@ -183,18 +183,16 @@ func runEnable(opts *options) error {
 
 	if newErr != nil {
 		if httpRes == nil {
-			return newErr
+			return registrycmdutil.TransformInstanceError(newErr)
 		}
 
 		switch httpRes.StatusCode {
-		case http.StatusUnauthorized, http.StatusInternalServerError, http.StatusForbidden:
-			return registrycmdutil.TransformInstanceError(newErr)
 		case http.StatusNotFound:
 			return ruleErr.ArtifactNotFoundError(opts.artifactID)
 		case http.StatusConflict:
 			return ruleErr.ConflictError(opts.ruleType)
 		default:
-			return newErr
+			return registrycmdutil.TransformInstanceError(newErr)
 		}
 
 	}

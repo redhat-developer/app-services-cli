@@ -86,3 +86,54 @@ one = 'internal server error'
 
 [registry.rule.enable.log.info.ruleEnabled]
 one = 'Rule successfully enabled'
+
+[registry.rule.list.cmd.description.short]
+one='List validity and compatibility rules'
+
+[registry.rule.list.cmd.description.long]
+one='View validity and compatibility rules for the selected Service Registry instance or specific artifact'
+
+[registry.rule.list.cmd.example]
+one='''
+## List global rules for artifacts of the current Service Registry instance
+$ rhoas service-registry rule list
+
+## List global rule for artifacts of a specific Service Registry instance
+$ rhoas service-registry rule list --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
+
+## List rule for a specific artifact
+$ rhoas service-registry rule list --artifact-id=my-artifact
+'''
+
+[registry.rule.list.log.info.fetching.globalRules]
+one = 'Fetching global rules for artifacts in Service Registry Instance'
+
+[registry.rule.list.log.info.fetching.artifactRules]
+one = 'Fetching rules for the artifact'
+
+[registry.rule.list.log.info.noEnabledRule]
+one = 'No rules enabled'
+
+[registry.rule.list.log.info.describeHint]
+one = 'Run describe command to view confiuration of enabled rule'
+
+[registry.rule.describe.cmd.description.short]
+one='Display configuration of a rule'
+
+[registry.rule.describe.cmd.description.long]
+one='View configuration details of compatibility or validity rule for the selected Service Registry instance or specific artifact.'
+
+[registry.rule.describe.cmd.example]
+one='''
+## Display configuration details of global validity rule for current Service Registry instance
+$ rhoas service-registry rule describe --rule-type=validity
+
+## Display configuration details of compatibility rule for a specific artifact
+$ rhoas service-registry rule describe --rule-type=compatibility --artifact-id=my-artifact --group=my-group
+'''
+
+[registry.rule.describe.log.info.fetching.globalRule]
+one='Fetching global {{.Type}} rule for artifacts in the Service Registry instance'
+
+[registry.rule.describe.log.info.fetching.artifactRule]
+one = 'Fetching {{.Type}} rule for the artifact'
