@@ -29,10 +29,9 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	ruleType    string
-	config      string
-	registryID  string
-	interactive bool
+	ruleType   string
+	config     string
+	registryID string
 
 	artifactID string
 	group      string
@@ -75,10 +74,6 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 			if opts.ruleType == "" && opts.config == "" {
-				opts.interactive = true
-			}
-
-			if opts.interactive {
 				err = runInteractivePrompt(opts)
 				if err != nil {
 					return err

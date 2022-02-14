@@ -173,7 +173,10 @@ func runResetCredentials(opts *options) (err error) {
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved", localize.NewEntry("FilePath", opts.filename)))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.common.log.info.credentialsSaved",
+		localize.NewEntry("FilePath", opts.filename),
+		localize.NewEntry("ClientID", color.Success(creds.ClientID)),
+	))
 
 	return nil
 }
