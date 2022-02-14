@@ -22,7 +22,7 @@ func (v *Validator) ValidateOffset(offset string) error {
 		return nil
 	}
 
-	return flagutil.InvalidValueError("output", v, ValidOffsets...)
+	return flagutil.InvalidValueError("offset", offset, ValidOffsets...)
 }
 
 // ValidateOffsetValue validates value for timestamp and absolute offset
