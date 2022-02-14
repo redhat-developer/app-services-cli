@@ -61,23 +61,26 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 				Localizer: opts.localizer,
 			}
 
-			if !opts.IO.CanPrompt() {
-				var missingFlags []string
-				if opts.ruleType == "" {
-					missingFlags = append(missingFlags, "rule-type")
-				}
-				if opts.config == "" {
-					missingFlags = append(missingFlags, "config")
-				}
-				if len(missingFlags) > 0 {
-					return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
-				}
+			var missingFlags []string
+
+			if opts.ruleType == "" {
+				missingFlags = append(missingFlags, "rule-type")
 			}
-			if opts.ruleType == "" && opts.config == "" {
+			if opts.config == "" {
+				missingFlags = append(missingFlags, "config")
+			}
+
+			if !opts.IO.CanPrompt() && len(missingFlags) > 0 {
+				return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
+			}
+
+			if len(missingFlags) == 2 {
 				err = runInteractivePrompt(opts)
 				if err != nil {
 					return err
 				}
+			} else if len(missingFlags) > 0 {
+				return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
 			}
 
 			cfg, err := opts.Config.Load()
