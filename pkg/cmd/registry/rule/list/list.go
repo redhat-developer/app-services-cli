@@ -19,8 +19,13 @@ import (
 )
 
 const (
-	ruleValidity      = "VALIDITY"
-	ruleCompatibility = "COMPATIBILITY"
+	RuleValidity      = "VALIDITY"
+	RuleCompatibility = "COMPATIBILITY"
+)
+
+const (
+	RuleDisabled = "DISABLED"
+	RuleEnabled  = "ENABLED"
 )
 
 // ruleRow is the details of a Service Registry rules needed to print to a table
@@ -43,18 +48,6 @@ type options struct {
 	registryID string
 	artifactID string
 	group      string
-}
-
-var compatibilityRuleStatus = ruleRow{
-	RuleType:    ruleCompatibility,
-	Description: "Enforce a compatibility level when updating this artifact (for example, Backwards Compatibility).",
-	Status:      "DISABLED",
-}
-
-var validityRuleStatus = ruleRow{
-	RuleType:    ruleValidity,
-	Description: "Ensure that content is valid when updating this artifact.",
-	Status:      "DISABLED",
 }
 
 // NewListCommand creates a new command to view status of rules
@@ -160,12 +153,26 @@ func runList(opts *options) error {
 		}
 	}
 
+	opts.localizer.MustLocalize("registry.rule.list.compatibilityRule.description")
+
+	var compatibilityRuleStatus = ruleRow{
+		RuleType:    RuleCompatibility,
+		Description: opts.localizer.MustLocalize("registry.rule.list.compatibilityRule.description"),
+		Status:      RuleDisabled,
+	}
+
+	var validityRuleStatus = ruleRow{
+		RuleType:    RuleValidity,
+		Description: opts.localizer.MustLocalize("registry.rule.list.validityRule.description"),
+		Status:      RuleDisabled,
+	}
+
 	for _, rule := range enabledRules {
-		if rule == ruleValidity {
-			validityRuleStatus.Status = "ENABLED"
+		if rule == RuleValidity {
+			validityRuleStatus.Status = RuleEnabled
 		}
-		if rule == ruleCompatibility {
-			compatibilityRuleStatus.Status = "ENABLED"
+		if rule == RuleCompatibility {
+			compatibilityRuleStatus.Status = RuleEnabled
 		}
 	}
 
