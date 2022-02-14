@@ -97,9 +97,6 @@ one = 'Page number'
 [artifact.common.page.limit]
 one = 'Page limit'
 
-[artifact.common.instance.id]
-one = 'ID of the Service Registry instance to be used (by default, uses the currently selected instance)'
-
 [artifact.common.message.no.group]
 one = 'Using {{.DefaultArtifactGroup}} artifacts group.'
 
