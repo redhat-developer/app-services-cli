@@ -1,4 +1,13 @@
 
+<a name="v0.38.4"></a>
+## [v0.38.4](https://github.com/redhat-developer/app-services-cli/compare/v0.38.3...v0.38.4) (2022-02-14)
+
+### Bug Fixes
+
+* **consumer-group:** offset validation error message ([#1428](https://github.com/redhat-developer/app-services-cli/issues/1428))
+* **deps:** update k8s.io/utils commit hash to 3a6ce19
+
+
 <a name="v0.38.3"></a>
 ## [v0.38.3](https://github.com/redhat-developer/app-services-cli/compare/v0.38.2...v0.38.3) (2022-02-10)
 
