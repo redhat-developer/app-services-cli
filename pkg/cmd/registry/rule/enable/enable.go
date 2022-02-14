@@ -18,6 +18,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
+	artifactutil "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
@@ -227,6 +229,37 @@ func runInteractivePrompt(opts *options) (err error) {
 	}
 
 	err = survey.AskOne(configPrompt, &opts.config)
+	if err != nil {
+		return err
+	}
+
+	instanceIDPrompt := &survey.Input{
+		Message: opts.localizer.MustLocalize("registry.rule.enable.input.instanceID.message"),
+		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.instanceID.help"),
+	}
+
+	err = survey.AskOne(instanceIDPrompt, &opts.registryID)
+	if err != nil {
+		return err
+	}
+
+	artifactIDPrompt := &survey.Input{
+		Message: opts.localizer.MustLocalize("registry.rule.enable.input.artifactID.message"),
+		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.artifactID.help"),
+	}
+
+	err = survey.AskOne(artifactIDPrompt, &opts.artifactID)
+	if err != nil {
+		return err
+	}
+
+	groupPrompt := &survey.Input{
+		Message: opts.localizer.MustLocalize("registry.rule.enable.input.group.message"),
+		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.group.help"),
+		Default: artifactutil.DefaultArtifactGroup,
+	}
+
+	err = survey.AskOne(groupPrompt, &opts.group)
 	if err != nil {
 		return err
 	}

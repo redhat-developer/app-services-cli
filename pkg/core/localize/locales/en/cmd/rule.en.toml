@@ -55,7 +55,25 @@ one='Rule type determines how the content of an artifact can evolve over time'
 one='Config:'
 
 [registry.rule.common.flag.config]
-one='Configuration value for a rule' 
+one='Configuration value for a rule'
+
+[registry.rule.enable.input.instanceID.message]
+one='Instance ID:'
+
+[registry.rule.enable.input.instanceID.help]
+one='ID of the Service Registry instance to be used. Leave blank to use the currently selected instance'
+
+[registry.rule.enable.input.artifactID.message]
+one='Artifact ID:'
+
+[registry.rule.enable.input.artifactID.help]
+one='ID of the artifact. Leave blank for global rule'
+
+[registry.rule.enable.input.group.message]
+one='Group:'
+
+[registry.rule.enable.input.group.help]
+one='Artifact group. Leave blank for global rule'
 
 [registry.rule.common.error.invalidRuleConfig]
 one = 'invalid configuration value "{{.Config}}" for rule type "{{.RuleType}}". Valid operations are: {{.ValidConfigList}}'
