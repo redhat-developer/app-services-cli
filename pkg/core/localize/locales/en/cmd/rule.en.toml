@@ -60,12 +60,6 @@ one='Configuration value for a rule'
 [registry.rule.common.error.invalidRuleConfig]
 one = 'invalid configuration value "{{.Config}}" for rule type "{{.RuleType}}". Valid operations are: {{.ValidConfigList}}'
 
-[registry.rule.common.error.unauthorized]
-one = 'you are unauthorized to {{.Operation}} this rule'
-
-[registry.rule.common.error.forbidden]
-one = 'you are forbidden to {{.Operation}} this rule'
-
 [registry.rule.common.error.artifactNotFound]
 one = 'artifact with ID {{.ID}} not found'
 
@@ -80,9 +74,6 @@ one = '"{{.Type}}" rule not enabled for Service Registry instance with ID "{{.ID
 
 [registry.rule.common.error.conflict]
 one = 'rule of type "{{.Type}}" is already enabled'
-
-[registry.rule.common.error.internalServerError]
-one = 'internal server error'
 
 [registry.rule.enable.log.info.ruleEnabled]
 one = 'Rule successfully enabled'
