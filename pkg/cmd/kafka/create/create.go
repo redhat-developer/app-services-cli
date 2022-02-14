@@ -188,19 +188,20 @@ func runCreate(opts *options) error {
 			opts.region = defaultRegion
 		}
 
+		if !opts.bypassAmsCheck {
+			err = validateProviderAndRegion(opts, constants, conn)
+			if err != nil {
+				return err
+			}
+		}
+
 		payload = &kafkamgmtclient.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
 			MultiAz:       &opts.multiAZ,
 		}
-	}
 
-	if !opts.bypassAmsCheck {
-		err = validateProviderAndRegion(opts, constants, conn)
-		if err != nil {
-			return err
-		}
 	}
 
 	api := conn.API()
