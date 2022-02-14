@@ -4,8 +4,11 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -26,9 +29,10 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	ruleType   string
-	config     string
-	registryID string
+	ruleType    string
+	config      string
+	registryID  string
+	interactive bool
 
 	artifactID string
 	group      string
@@ -56,6 +60,29 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 
 			validator := rulecmdutil.Validator{
 				Localizer: opts.localizer,
+			}
+
+			if !opts.IO.CanPrompt() {
+				var missingFlags []string
+				if opts.ruleType == "" {
+					missingFlags = append(missingFlags, "rule-type")
+				}
+				if opts.config == "" {
+					missingFlags = append(missingFlags, "config")
+				}
+				if len(missingFlags) > 0 {
+					return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
+				}
+			}
+			if opts.ruleType == "" && opts.config == "" {
+				opts.interactive = true
+			}
+
+			if opts.interactive {
+				err = runInteractivePrompt(opts)
+				if err != nil {
+					return err
+				}
 			}
 
 			cfg, err := opts.Config.Load()
@@ -94,8 +121,8 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddArtifactID(&opts.artifactID)
 	flags.AddGroup(&opts.group)
-	_ = flags.AddConfig(&opts.config).Required()
-	_ = flags.AddRuleType(&opts.ruleType).Required()
+	flags.AddConfig(&opts.config)
+	flags.AddRuleType(&opts.ruleType)
 
 	return cmd
 
@@ -164,25 +191,49 @@ func runEnable(opts *options) error {
 			return newErr
 		}
 
-		operation := "enable"
 		switch httpRes.StatusCode {
-		case http.StatusUnauthorized:
-			return ruleErr.UnathorizedError(operation)
-		case http.StatusForbidden:
-			return ruleErr.ForbiddenError(operation)
+		case http.StatusUnauthorized, http.StatusInternalServerError, http.StatusForbidden:
+			return registrycmdutil.TransformInstanceError(newErr)
 		case http.StatusNotFound:
 			return ruleErr.ArtifactNotFoundError(opts.artifactID)
 		case http.StatusConflict:
 			return ruleErr.ConflictError(opts.ruleType)
-		case http.StatusInternalServerError:
-			return ruleErr.ServerError()
 		default:
-			return err
+			return newErr
 		}
 
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.rule.enable.log.info.ruleEnabled"))
+
+	return nil
+}
+
+func runInteractivePrompt(opts *options) (err error) {
+
+	ruleTypePrompt := &survey.Select{
+		Message: opts.localizer.MustLocalize("registry.rule.enable.input.ruleType.message"),
+		Help:    opts.localizer.MustLocalize("registry.rule.common.flag.ruleType"),
+		Options: rulecmdutil.ValidRuleTypes,
+	}
+
+	err = survey.AskOne(ruleTypePrompt, &opts.ruleType)
+	if err != nil {
+		return err
+	}
+
+	configOptions := rulecmdutil.ValidRuleConfigs[opts.ruleType]
+
+	configPrompt := &survey.Select{
+		Message: opts.localizer.MustLocalize("registry.rule.enable.input.config.message"),
+		Help:    opts.localizer.MustLocalize("registry.rule.common.flag.config"),
+		Options: configOptions,
+	}
+
+	err = survey.AskOne(configPrompt, &opts.config)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

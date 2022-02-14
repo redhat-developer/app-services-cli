@@ -45,8 +45,14 @@ one='Enabling global "{{.RuleType}}" rule for artifacts of Service Registry inst
 [registry.rule.enable.log.info.enabling.artifactRules]
 one='Enabling "{{.RuleType}}" rule for artifact with ID "{{.ArtifactID}}" with configuration "{{.Configuration}}"'
 
+[registry.rule.enable.input.ruleType.message]
+one='Rule type:'
+
 [registry.rule.common.flag.ruleType]
 one='Rule type determines how the content of an artifact can evolve over time'
+
+[registry.rule.enable.input.config.message]
+one='Config:'
 
 [registry.rule.common.flag.config]
 one='Configuration value for a rule' 
@@ -60,8 +66,17 @@ one = 'you are unauthorized to {{.Operation}} this rule'
 [registry.rule.common.error.forbidden]
 one = 'you are forbidden to {{.Operation}} this rule'
 
-[registry.rule.common.error.notFoundError]
-one = 'artifact with ID "{{.ID}}" not found'
+[registry.rule.common.error.artifactNotFound]
+one = 'artifact with ID {{.ID}} not found'
+
+[registry.rule.common.error.notEnabled]
+one = '{{.Type}} rule has not been enabled'
+
+[registry.rule.common.error.artifactRule.notFound]
+one = '"{{.Type}}" rule not enabled for artifact with ID "{{.ID}}"'
+
+[registry.rule.common.error.globalRule.notFound]
+one = '"{{.Type}}" rule not enabled for Service Registry instance with ID "{{.ID}}"'
 
 [registry.rule.common.error.conflict]
 one = 'rule of type "{{.Type}}" is already enabled'

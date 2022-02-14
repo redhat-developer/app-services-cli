@@ -26,5 +26,5 @@ func (r *RegistryRuleError) ServerError() error {
 }
 
 func (r *RegistryRuleError) ArtifactNotFoundError(artifactID string) error {
-	return r.Localizer.MustLocalizeError("registry.rule.common.error.notFoundError", localize.NewEntry("ID", artifactID))
+	return r.Localizer.MustLocalizeError("registry.rule.common.error.artifactNotFound", localize.NewEntry("ID", artifactID))
 }

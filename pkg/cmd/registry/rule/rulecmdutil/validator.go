@@ -23,7 +23,7 @@ func (v *Validator) ValidateRuleType(ruleType string) error {
 
 func (v *Validator) IsValidRuleConfig(ruleType string, config string) (bool, []string) {
 
-	validConfigs := validRuleConfigs[ruleType]
+	validConfigs := ValidRuleConfigs[ruleType]
 
 	for _, validConfig := range validConfigs {
 		if validConfig == config {

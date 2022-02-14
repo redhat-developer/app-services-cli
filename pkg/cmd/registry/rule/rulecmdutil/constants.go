@@ -15,3 +15,5 @@ const (
 	ConfigFORWARD_TRANSITIVE  = "forward-transitive"
 	ConfigNONE                = "none"
 )
+
+var ValidRuleTypes = []string{ValidityRule, CompatibilityRule}
