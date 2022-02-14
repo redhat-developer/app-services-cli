@@ -56,13 +56,13 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var errorCollection []error
 
-			if opts.Operation == "" {
-				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
-			}
+			// if opts.Operation == "" {
+			// 	errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
+			// }
 
-			if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
-				errorCollection = append(errorCollection, resourceErrors)
-			}
+			// if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
+			// 	errorCollection = append(errorCollection, resourceErrors)
+			// }
 
 			if principalErrors := validateAndSetOpts(opts); principalErrors != nil {
 				errorCollection = append(errorCollection, principalErrors)
@@ -205,37 +205,37 @@ func getRequestParams(opts *aclcmdutil.CrudOptions) *requestParams {
 
 func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 
-	// user and service account should not be provided together
-	if userID != "" && serviceAccount != "" {
-		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
-	}
+	// // user and service account should not be provided together
+	// if userID != "" && serviceAccount != "" {
+	// 	return opts.Localizer.MustLocalizeError("kafka.acl.common.error.bothPrincipalsSelected")
+	// }
 
-	if userID == aclcmdutil.Wildcard || serviceAccount == aclcmdutil.Wildcard || userID == aclcmdutil.AllAlias || serviceAccount == aclcmdutil.AllAlias {
-		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
-	}
+	// if userID == aclcmdutil.Wildcard || serviceAccount == aclcmdutil.Wildcard || userID == aclcmdutil.AllAlias || serviceAccount == aclcmdutil.AllAlias {
+	// 	return opts.Localizer.MustLocalizeError("kafka.acl.common.error.useAllAccountsFlag")
+	// }
 
-	if allAccounts {
-		if userID != "" || serviceAccount != "" {
-			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
-		}
-		opts.Principal = aclcmdutil.Wildcard
-	}
+	// if allAccounts {
+	// 	if userID != "" || serviceAccount != "" {
+	// 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.allAccountsCannotBeUsedWithUserFlag")
+	// 	}
+	// 	opts.Principal = aclcmdutil.Wildcard
+	// }
 
-	// check if principal is provided
-	if !allAccounts && (userID == "" && serviceAccount == "") {
-		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
-	}
+	// // check if principal is provided
+	// if !allAccounts && (userID == "" && serviceAccount == "") {
+	// 	return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
+	// }
 
-	opts.PatternType = aclcmdutil.PatternTypeLITERAL
-	if prefix {
-		opts.PatternType = aclcmdutil.PatternTypePREFIX
-	}
+	// opts.PatternType = aclcmdutil.PatternTypeLITERAL
+	// if prefix {
+	// 	opts.PatternType = aclcmdutil.PatternTypePREFIX
+	// }
 
-	if userID != "" {
-		opts.Principal = userID
-	} else if serviceAccount != "" {
-		opts.Principal = serviceAccount
-	}
+	// if userID != "" {
+	// 	opts.Principal = userID
+	// } else if serviceAccount != "" {
+	// 	opts.Principal = serviceAccount
+	// }
 
 	if opts.InstanceID == "" {
 		cfg, err := opts.Config.Load()

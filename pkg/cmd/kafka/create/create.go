@@ -173,7 +173,7 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		opts.Logger.Debug()
 
-		payload, err = promptKafkaPayload(opts)
+		payload, err = promptKafkaPayload(opts, constants)
 		if err != nil {
 			return err
 		}
@@ -388,7 +388,7 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -453,8 +453,14 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
+	userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+	if err != nil {
+		opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+		return payload, err
+	}
+
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions)
+	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, &userInstanceTypes)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
