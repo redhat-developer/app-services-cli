@@ -80,7 +80,7 @@ func NewRevokeCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.serviceAccount, "service-account", "", opts.localizer.MustLocalize("registry.role.cmd.flag.serviceAccount.description"))
 	cmd.Flags().StringVar(&opts.user, "username", "", opts.localizer.MustLocalize("registry.role.cmd.flag.username.description"))
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
 
 	return cmd
 }
