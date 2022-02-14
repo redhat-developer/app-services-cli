@@ -4,7 +4,7 @@ List validity and compatibility rules
 
 ### Synopsis
 
-View validity and compatibility rules for the selected Service Registry instance or specific artifact
+View validity and compatibility rules for the specified Service Registry instance or artifact.
 
 ```
 rhoas service-registry rule list [flags]

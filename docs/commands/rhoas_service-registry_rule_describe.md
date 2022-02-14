@@ -4,7 +4,7 @@ Display configuration of a rule
 
 ### Synopsis
 
-View configuration details of compatibility or validity rule for the selected Service Registry instance or specific artifact.
+View configuration details of compatibility or validity rule for the specified Service Registry instance or artifact.
 
 ```
 rhoas service-registry rule describe [flags]
