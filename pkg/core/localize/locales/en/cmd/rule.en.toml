@@ -57,12 +57,6 @@ one='Config:'
 [registry.rule.common.flag.config]
 one='Configuration value for a rule'
 
-[registry.rule.enable.input.instanceID.message]
-one='Instance ID:'
-
-[registry.rule.enable.input.instanceID.help]
-one='ID of the Service Registry instance to be used. Leave blank to use the currently selected instance'
-
 [registry.rule.enable.input.artifactID.message]
 one='Artifact ID:'
 
