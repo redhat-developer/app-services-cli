@@ -4,7 +4,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	aclFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
@@ -56,13 +55,13 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var errorCollection []error
 
-			if opts.Operation == "" {
-				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
-			}
+			// if opts.Operation == "" {
+			// 	errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
+			// }
 
-			if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
-				errorCollection = append(errorCollection, resourceErrors)
-			}
+			// if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
+			// 	errorCollection = append(errorCollection, resourceErrors)
+			// }
 
 			if principalErrors := validateAndSetOpts(opts); principalErrors != nil {
 				errorCollection = append(errorCollection, principalErrors)
@@ -110,21 +109,21 @@ func runDelete(instanceID string, opts *aclcmdutil.CrudOptions) error {
 		return err
 	}
 
-	resourceOperations, httpRes, err := adminAPI.AclsApi.GetAclResourceOperations(ctx).Execute()
-	if httpRes != nil {
-		defer httpRes.Body.Close()
-	}
-	if err != nil {
-		return err
-	}
+	// resourceOperations, httpRes, err := adminAPI.AclsApi.GetAclResourceOperations(ctx).Execute()
+	// if httpRes != nil {
+	// 	defer httpRes.Body.Close()
+	// }
+	// if err != nil {
+	// 	return err
+	// }
 
-	if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
-		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
-			localize.NewEntry("ResourceType", opts.ResourceType),
-			localize.NewEntry("Operation", opts.Operation),
-			localize.NewEntry("ValidOperationList", cmdutil.StringSliceToListStringWithQuotes(validResourceOperations)),
-		)
-	}
+	// if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
+	// 	return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
+	// 		localize.NewEntry("ResourceType", opts.ResourceType),
+	// 		localize.NewEntry("Operation", opts.Operation),
+	// 		localize.NewEntry("ValidOperationList", cmdutil.StringSliceToListStringWithQuotes(validResourceOperations)),
+	// 	)
+	// }
 
 	kafkaNameTmplEntry := localize.NewEntry("Name", kafkaInstance.GetName())
 
@@ -150,12 +149,13 @@ func runDelete(instanceID string, opts *aclcmdutil.CrudOptions) error {
 	requestParams := getRequestParams(opts)
 
 	deletedACLs, httpRes, err := adminAPI.AclsApi.DeleteAcls(ctx).
-		ResourceType(requestParams.resourceType).
+		//ResourceType(requestParams.resourceType).
 		Principal(requestParams.principal).
-		PatternType(requestParams.patternType).
-		ResourceName(requestParams.resourceName).
-		Operation(requestParams.operation).
-		Permission(requestParams.permission).
+
+		// PatternType(requestParams.patternType).
+		// ResourceName(requestParams.resourceName).
+		// Operation(requestParams.operation).
+		// Permission(requestParams.permission).
 		Execute()
 
 	if httpRes != nil {
