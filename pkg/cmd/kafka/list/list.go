@@ -145,7 +145,8 @@ func runList(opts *options) error {
 func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string) []kafkaRow {
 	rows := make([]kafkaRow, len(kafkas))
 
-	for i, k := range kafkas {
+	for i := range kafkas {
+		k := kafkas[i]
 		name := k.GetName()
 		if k.GetId() == selectedId {
 			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))

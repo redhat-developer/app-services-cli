@@ -173,7 +173,7 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		opts.Logger.Debug()
 
-		payload, err = promptKafkaPayload(opts)
+		payload, err = promptKafkaPayload(opts, constants)
 		if err != nil {
 			return err
 		}
@@ -188,19 +188,20 @@ func runCreate(opts *options) error {
 			opts.region = defaultRegion
 		}
 
+		if !opts.bypassAmsCheck {
+			err = validateProviderAndRegion(opts, constants, conn)
+			if err != nil {
+				return err
+			}
+		}
+
 		payload = &kafkamgmtclient.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
 			MultiAz:       &opts.multiAZ,
 		}
-	}
 
-	if !opts.bypassAmsCheck {
-		err = validateProviderAndRegion(opts, constants, conn)
-		if err != nil {
-			return err
-		}
 	}
 
 	api := conn.API()
@@ -387,8 +388,16 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 	return nil
 }
 
+// set type to store the answers from the prompt with defaults
+type promptAnswers struct {
+	Name          string
+	Region        string
+	MultiAZ       bool
+	CloudProvider string
+}
+
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -401,19 +410,13 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		Connection: opts.Connection,
 	}
 
-	// set type to store the answers from the prompt with defaults
-	answers := struct {
-		Name          string
-		Region        string
-		MultiAZ       bool
-		CloudProvider string
-	}{
-		MultiAZ: defaultMultiAZ,
-	}
-
 	promptName := &survey.Input{
 		Message: opts.localizer.MustLocalize("kafka.create.input.name.message"),
 		Help:    opts.localizer.MustLocalize("kafka.create.input.name.help"),
+	}
+
+	answers := &promptAnswers{
+		MultiAZ: defaultMultiAZ,
 	}
 
 	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
@@ -453,8 +456,14 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
+	userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+	if err != nil {
+		opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+		return payload, err
+	}
+
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions)
+	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, &userInstanceTypes)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),

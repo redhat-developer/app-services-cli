@@ -32,8 +32,8 @@ func RegisterNameFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) erro
 		}
 
 		items := kafkas.GetItems()
-		for _, kafka := range items {
-			validNames = append(validNames, kafka.GetName())
+		for index := range items {
+			validNames = append(validNames, items[index].GetName())
 		}
 
 		return validNames, directive
@@ -85,7 +85,7 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 	}
 
 	cloudProviders := cloudProviderResponse.GetItems()
-	validRegions = GetEnabledCloudRegionIDs(cloudProviders)
+	validRegions = GetEnabledCloudRegionIDs(cloudProviders, nil)
 
 	return validRegions, directive
 }
@@ -112,14 +112,33 @@ func FindCloudProviderByName(cloudProviders []kafkamgmtclient.CloudProvider, nam
 }
 
 // GetEnabledCloudRegionIDs extracts and returns a slice of the unique IDs of all enabled regions
-func GetEnabledCloudRegionIDs(regions []kafkamgmtclient.CloudRegion) []string {
+func GetEnabledCloudRegionIDs(regions []kafkamgmtclient.CloudRegion, userAllowedInstanceTypes *[]string) []string {
 	var regionIDs []string
-	for _, region := range regions {
+	for i, region := range regions {
 		if region.GetEnabled() {
-			regionIDs = append(regionIDs, region.GetId())
+			if userAllowedInstanceTypes != nil {
+				if IsRegionAllowed(&regions[i], userAllowedInstanceTypes) {
+					regionIDs = append(regionIDs, region.GetId())
+				}
+			} else {
+				regionIDs = append(regionIDs, region.GetId())
+			}
 		}
 	}
 	return regionIDs
+}
+
+func IsRegionAllowed(region *kafkamgmtclient.CloudRegion, userAllowedInstanceTypes *[]string) bool {
+	for _, userInstanceType := range *userAllowedInstanceTypes {
+		if region.GetSupportedInstanceTypes() != nil {
+			for _, instanceType := range region.GetSupportedInstanceTypes() {
+				if instanceType == userInstanceType {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
 
 // FilterValidTopicNameArgs filters topics from the API and returns the names
