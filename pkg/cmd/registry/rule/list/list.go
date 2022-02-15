@@ -10,6 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -20,13 +21,13 @@ import (
 )
 
 const (
-	RuleValidity      = "validity"
-	RuleCompatibility = "compatibility"
+	ruleValidity      = "validity"
+	ruleCompatibility = "compatibility"
 )
 
 const (
-	RuleDisabled = "disabled"
-	RuleEnabled  = "enabled"
+	ruleDisabled = "disabled"
+	ruleEnabled  = "enabled"
 )
 
 // ruleRow is the details of a Service Registry rules needed to print to a table
@@ -104,7 +105,7 @@ func runList(opts *options) error {
 	var newErr error
 	var enabledRules []registryinstanceclient.RuleType
 
-	var ruleErr = &rulecmdutil.RegistryRuleError{
+	ruleErrHandler := &rulecmdutil.RuleErrHandler{
 		Localizer:  opts.localizer,
 		InstanceID: opts.registryID,
 	}
@@ -121,7 +122,9 @@ func runList(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.list.log.info.fetching.globalRules"))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.globalRules")
+		s.Start()
 
 		req := dataAPI.AdminApi.ListGlobalRules(opts.Context)
 
@@ -131,7 +134,9 @@ func runList(opts *options) error {
 		}
 	} else {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.list.log.info.fetching.artifactRules"))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.artifactRules")
+		s.Start()
 
 		req := dataAPI.ArtifactRulesApi.ListArtifactRules(opts.Context, opts.group, opts.artifactID)
 
@@ -148,36 +153,34 @@ func runList(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusNotFound:
-			return ruleErr.ArtifactNotFoundError(opts.artifactID)
+			return ruleErrHandler.ArtifactNotFoundError(opts.artifactID)
 		default:
 			return registrycmdutil.TransformInstanceError(newErr)
 		}
 	}
 
-	opts.localizer.MustLocalize("registry.rule.list.compatibilityRule.description")
-
-	var compatibilityRuleStatus = ruleRow{
-		RuleType:    RuleCompatibility,
+	compatibilityRuleStatus := ruleRow{
+		RuleType:    ruleCompatibility,
 		Description: opts.localizer.MustLocalize("registry.rule.list.compatibilityRule.description"),
-		Status:      RuleDisabled,
+		Status:      ruleDisabled,
 	}
 
-	var validityRuleStatus = ruleRow{
-		RuleType:    RuleValidity,
+	validityRuleStatus := ruleRow{
+		RuleType:    ruleValidity,
 		Description: opts.localizer.MustLocalize("registry.rule.list.validityRule.description"),
-		Status:      RuleDisabled,
+		Status:      ruleDisabled,
 	}
 
 	for _, rule := range enabledRules {
-		if strings.EqualFold(string(rule), RuleValidity) {
-			validityRuleStatus.Status = RuleEnabled
+		if strings.EqualFold(string(rule), ruleValidity) {
+			validityRuleStatus.Status = ruleEnabled
 		}
-		if strings.EqualFold(string(rule), RuleCompatibility) {
-			compatibilityRuleStatus.Status = RuleEnabled
+		if strings.EqualFold(string(rule), ruleCompatibility) {
+			compatibilityRuleStatus.Status = ruleEnabled
 		}
 	}
 
-	var adminRules = []ruleRow{validityRuleStatus, compatibilityRuleStatus}
+	adminRules := []ruleRow{validityRuleStatus, compatibilityRuleStatus}
 
 	opts.Logger.Info()
 	dump.Table(opts.IO.Out, adminRules)

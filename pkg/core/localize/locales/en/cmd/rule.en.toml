@@ -125,9 +125,9 @@ one = 'No rules enabled'
 
 [registry.rule.list.log.info.describeHint]
 one = '''
-Run describe command to view configuration of an enabled rule:
+Run the following to view the configuration of an enabled rule:
 
-$ rhoas service-registry rule describe --rule-type <compatibility/validity>
+ $ rhoas service-registry rule describe --rule-type <compatibility/validity>
 '''
 
 [registry.rule.list.compatibilityRule.description]

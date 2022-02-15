@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -150,10 +151,13 @@ func runEnable(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		opts.Logger.Info(opts.localizer.MustLocalize(
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix(
 			"registry.rule.enable.log.info.enabling.globalRules",
 			localize.NewEntry("RuleType", opts.ruleType),
-			localize.NewEntry("Configuration", opts.config)))
+			localize.NewEntry("Configuration", opts.config),
+		)
+		s.Start()
 
 		req := dataAPI.AdminApi.CreateGlobalRule(opts.Context)
 
@@ -165,11 +169,14 @@ func runEnable(opts *options) error {
 		}
 	} else {
 
-		opts.Logger.Info(opts.localizer.MustLocalize(
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix(
 			"registry.rule.enable.log.info.enabling.artifactRules",
 			localize.NewEntry("RuleType", opts.ruleType),
 			localize.NewEntry("Configuration", opts.config),
-			localize.NewEntry("ArtifactID", opts.artifactID)))
+			localize.NewEntry("ArtifactID", opts.artifactID),
+		)
+		s.Start()
 
 		req := dataAPI.ArtifactRulesApi.CreateArtifactRule(opts.Context, opts.group, opts.artifactID)
 
@@ -181,7 +188,7 @@ func runEnable(opts *options) error {
 		}
 	}
 
-	ruleErr := &rulecmdutil.RegistryRuleError{
+	ruleErrHandler := &rulecmdutil.RuleErrHandler{
 		Localizer:  opts.localizer,
 		InstanceID: opts.registryID,
 	}
@@ -193,9 +200,9 @@ func runEnable(opts *options) error {
 
 		switch httpRes.StatusCode {
 		case http.StatusNotFound:
-			return ruleErr.ArtifactNotFoundError(opts.artifactID)
+			return ruleErrHandler.ArtifactNotFoundError(opts.artifactID)
 		case http.StatusConflict:
-			return ruleErr.ConflictError(opts.ruleType)
+			return ruleErrHandler.ConflictError(opts.ruleType)
 		default:
 			return registrycmdutil.TransformInstanceError(newErr)
 		}
@@ -229,16 +236,6 @@ func runInteractivePrompt(opts *options) (err error) {
 	}
 
 	err = survey.AskOne(configPrompt, &opts.config)
-	if err != nil {
-		return err
-	}
-
-	instanceIDPrompt := &survey.Input{
-		Message: opts.localizer.MustLocalize("registry.rule.enable.input.instanceID.message"),
-		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.instanceID.help"),
-	}
-
-	err = survey.AskOne(instanceIDPrompt, &opts.registryID)
 	if err != nil {
 		return err
 	}
