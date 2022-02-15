@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
@@ -19,13 +20,13 @@ import (
 )
 
 const (
-	RuleValidity      = "VALIDITY"
-	RuleCompatibility = "COMPATIBILITY"
+	RuleValidity      = "validity"
+	RuleCompatibility = "compatibility"
 )
 
 const (
-	RuleDisabled = "DISABLED"
-	RuleEnabled  = "ENABLED"
+	RuleDisabled = "disabled"
+	RuleEnabled  = "enabled"
 )
 
 // ruleRow is the details of a Service Registry rules needed to print to a table
@@ -168,10 +169,10 @@ func runList(opts *options) error {
 	}
 
 	for _, rule := range enabledRules {
-		if rule == RuleValidity {
+		if strings.EqualFold(string(rule), RuleValidity) {
 			validityRuleStatus.Status = RuleEnabled
 		}
-		if rule == RuleCompatibility {
+		if strings.EqualFold(string(rule), RuleCompatibility) {
 			compatibilityRuleStatus.Status = RuleEnabled
 		}
 	}
