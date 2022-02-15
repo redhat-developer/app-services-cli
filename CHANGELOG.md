@@ -1,4 +1,12 @@
 
+<a name="0.38.5"></a>
+## [0.38.5](https://github.com/redhat-developer/app-services-cli/compare/v0.38.4...0.38.5) (2022-02-15)
+
+### Bug Fixes
+
+* add support for regions in interactive kafka create ([#1438](https://github.com/redhat-developer/app-services-cli/issues/1438))
+
+
 <a name="v0.38.4"></a>
 ## [v0.38.4](https://github.com/redhat-developer/app-services-cli/compare/v0.38.3...v0.38.4) (2022-02-14)
 
