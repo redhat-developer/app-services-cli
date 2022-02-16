@@ -107,7 +107,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			localize.NewEntry("Types", aclcmdutil.PatternTypes)),
 	)
 
-	cmd.RegisterFlagCompletionFunc("pattern-type", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = cmd.RegisterFlagCompletionFunc("pattern-type", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return aclcmdutil.PatternTypes, cobra.ShellCompDirectiveNoSpace
 	})
 
@@ -265,9 +265,14 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 	// Backwards compatibility:
 	if prefix {
 		opts.PatternType = aclcmdutil.PatternTypePREFIX
-	} else if patternTypeFlag == aclcmdutil.PatternTypeANY {
+	}
+
+	switch patternTypeFlag {
+	case aclcmdutil.PatternTypeANY:
 		opts.PatternType = aclcmdutil.PatternTypeANY
-	} else {
+	case aclcmdutil.PatternTypePREFIX:
+		opts.PatternType = aclcmdutil.PatternTypePREFIX
+	case aclcmdutil.PatternTypeLITERAL:
 		opts.PatternType = aclcmdutil.PatternTypeLITERAL
 	}
 
