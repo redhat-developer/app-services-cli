@@ -5,8 +5,7 @@ import (
 )
 
 type RuleErrHandler struct {
-	Localizer  localize.Localizer
-	InstanceID string
+	Localizer localize.Localizer
 }
 
 func (r *RuleErrHandler) ConflictError(ruleType string) error {
@@ -17,6 +16,6 @@ func (r *RuleErrHandler) ArtifactNotFoundError(artifactID string) error {
 	return r.Localizer.MustLocalizeError("registry.rule.common.error.artifactNotFound", localize.NewEntry("ID", artifactID))
 }
 
-func (r *RuleErrHandler) RuleNotEnabled(ruleTYpe string) error {
-	return r.Localizer.MustLocalizeError("registry.rule.common.error.notEnabled", localize.NewEntry("Type", ruleTYpe))
+func (r *RuleErrHandler) RuleNotEnabled(ruleType string) error {
+	return r.Localizer.MustLocalizeError("registry.rule.common.error.notEnabled", localize.NewEntry("Type", ruleType))
 }

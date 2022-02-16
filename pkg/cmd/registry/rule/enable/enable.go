@@ -189,8 +189,7 @@ func runEnable(opts *options) error {
 	}
 
 	ruleErrHandler := &rulecmdutil.RuleErrHandler{
-		Localizer:  opts.localizer,
-		InstanceID: opts.registryID,
+		Localizer: opts.localizer,
 	}
 
 	if newErr != nil {

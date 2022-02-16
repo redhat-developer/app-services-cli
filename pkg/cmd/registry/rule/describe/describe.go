@@ -103,8 +103,7 @@ func runDescribe(opts *options) error {
 	}
 
 	ruleErrHandler := &rulecmdutil.RuleErrHandler{
-		Localizer:  opts.localizer,
-		InstanceID: opts.registryID,
+		Localizer: opts.localizer,
 	}
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)

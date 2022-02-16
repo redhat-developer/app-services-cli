@@ -106,8 +106,7 @@ func runList(opts *options) error {
 	var enabledRules []registryinstanceclient.RuleType
 
 	ruleErrHandler := &rulecmdutil.RuleErrHandler{
-		Localizer:  opts.localizer,
-		InstanceID: opts.registryID,
+		Localizer: opts.localizer,
 	}
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
