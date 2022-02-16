@@ -55,16 +55,22 @@ one='Rule type determines how the content of an artifact can evolve over time'
 one='Config:'
 
 [registry.rule.common.flag.config]
-one='Configuration value for a rule' 
+one='Configuration value for a rule'
+
+[registry.rule.enable.input.artifactID.message]
+one='Artifact ID:'
+
+[registry.rule.enable.input.artifactID.help]
+one='ID of the artifact. Leave blank for global rule'
+
+[registry.rule.enable.input.group.message]
+one='Group:'
+
+[registry.rule.enable.input.group.help]
+one='Artifact group. Leave blank for global rule'
 
 [registry.rule.common.error.invalidRuleConfig]
 one = 'invalid configuration value "{{.Config}}" for rule type "{{.RuleType}}". Valid operations are: {{.ValidConfigList}}'
-
-[registry.rule.common.error.unauthorized]
-one = 'you are unauthorized to {{.Operation}} this rule'
-
-[registry.rule.common.error.forbidden]
-one = 'you are forbidden to {{.Operation}} this rule'
 
 [registry.rule.common.error.artifactNotFound]
 one = 'artifact with ID {{.ID}} not found'
@@ -81,8 +87,66 @@ one = '"{{.Type}}" rule not enabled for Service Registry instance with ID "{{.ID
 [registry.rule.common.error.conflict]
 one = 'rule of type "{{.Type}}" is already enabled'
 
-[registry.rule.common.error.internalServerError]
-one = 'internal server error'
-
 [registry.rule.enable.log.info.ruleEnabled]
 one = 'Rule successfully enabled'
+
+[registry.rule.list.cmd.description.short]
+one='List validity and compatibility rules'
+
+[registry.rule.list.cmd.description.long]
+one='View validity and compatibility rules for the specified Service Registry instance or artifact.'
+
+[registry.rule.list.cmd.example]
+one='''
+## List global rules for artifacts of the current Service Registry instance
+$ rhoas service-registry rule list
+
+## List global rule for artifacts of a specific Service Registry instance
+$ rhoas service-registry rule list --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
+
+## List rule for a specific artifact
+$ rhoas service-registry rule list --artifact-id=my-artifact
+'''
+
+[registry.rule.list.log.info.fetching.globalRules]
+one = 'Fetching global rules for artifacts in Service Registry Instance'
+
+[registry.rule.list.log.info.fetching.artifactRules]
+one = 'Fetching rules for the artifact'
+
+[registry.rule.list.log.info.noEnabledRule]
+one = 'No rules enabled'
+
+[registry.rule.list.log.info.describeHint]
+one = '''
+Run the following to view the configuration of an enabled rule:
+
+ $ rhoas service-registry rule describe --rule-type <compatibility/validity>
+'''
+
+[registry.rule.list.compatibilityRule.description]
+one = 'Enforce a compatibility level when updating this artifact (for example, Backwards Compatibility).'
+
+[registry.rule.list.validityRule.description]
+one = 'Ensure that content is valid when updating this artifact.'
+
+[registry.rule.describe.cmd.description.short]
+one='Display configuration of a rule'
+
+[registry.rule.describe.cmd.description.long]
+one='View configuration details of compatibility or validity rule for the specified Service Registry instance or artifact.'
+
+[registry.rule.describe.cmd.example]
+one='''
+## Display configuration details of global validity rule for current Service Registry instance
+$ rhoas service-registry rule describe --rule-type=validity
+
+## Display configuration details of compatibility rule for a specific artifact
+$ rhoas service-registry rule describe --rule-type=compatibility --artifact-id=my-artifact --group=my-group
+'''
+
+[registry.rule.describe.log.info.fetching.globalRule]
+one='Fetching global {{.Type}} rule for artifacts in the Service Registry instance'
+
+[registry.rule.describe.log.info.fetching.artifactRule]
+one = 'Fetching {{.Type}} rule for the artifact'
