@@ -85,9 +85,6 @@ one = 'Set the resource type to cluster'
 [kafka.acl.common.flag.prefix.description]
 one = 'Determine if the resource should be exact match or prefix'
 
-[kafka.acl.common.flag.delete.prefix.description]
-one = 'Determine if the resource should be exact match or prefix. Use --pattern-type instead'
-
 [kafka.acl.common.flag.patterntypes.description]
 one = 'Determine if the resource should be exact match, prefix or any {{.Types}}'
 

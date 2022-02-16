@@ -91,13 +91,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.AddServiceAccount(&serviceAccount)
 	flags.AddAllAccounts(&allAccounts)
 	flags.AddYes(&opts.SkipConfirm)
-
-	cmd.Flags().BoolVar(
-		&prefix,
-		"prefix",
-		false,
-		flagutil.DeprecateFlag(opts.Localizer.MustLocalize("kafka.acl.common.flag.delete.prefix.description")),
-	)
+	flags.AddPrefix(&prefix)
 
 	cmd.Flags().StringVar(
 		&patternTypeFlag,
