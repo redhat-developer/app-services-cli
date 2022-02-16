@@ -37,3 +37,5 @@ const (
 	PatternTypePREFIX  = "prefix"
 	PatternTypeANY     = "any"
 )
+
+var PatternTypes = []string{PatternTypeANY, PatternTypeLITERAL, PatternTypePREFIX}

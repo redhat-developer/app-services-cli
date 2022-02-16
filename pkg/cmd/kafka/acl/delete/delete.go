@@ -4,6 +4,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	aclFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
@@ -16,10 +17,11 @@ import (
 )
 
 var (
-	serviceAccount string
-	userID         string
-	allAccounts    bool
-	prefix         bool
+	serviceAccount  string
+	userID          string
+	allAccounts     bool
+	prefix          bool
+	patternTypeFlag string
 )
 
 type requestParams struct {
@@ -79,7 +81,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOperationFilter(&opts.Operation)
 
 	flags.AddCluster(&opts.Cluster)
-	flags.AddPrefix(&prefix)
+
 	flags.AddTopic(&opts.Topic)
 	flags.AddConsumerGroup(&opts.Group)
 	flags.AddTransactionalID(&opts.TransactionalID)
@@ -89,6 +91,25 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.AddServiceAccount(&serviceAccount)
 	flags.AddAllAccounts(&allAccounts)
 	flags.AddYes(&opts.SkipConfirm)
+
+	cmd.Flags().BoolVar(
+		&prefix,
+		"prefix",
+		false,
+		flagutil.DeprecateFlag(opts.Localizer.MustLocalize("kafka.acl.common.flag.delete.prefix.description")),
+	)
+
+	cmd.Flags().StringVar(
+		&patternTypeFlag,
+		"pattern-type",
+		aclcmdutil.PatternTypeLITERAL,
+		opts.Localizer.MustLocalize("kafka.acl.common.flag.patterntypes.description",
+			localize.NewEntry("Types", aclcmdutil.PatternTypes)),
+	)
+
+	cmd.RegisterFlagCompletionFunc("pattern-type", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return aclcmdutil.PatternTypes, cobra.ShellCompDirectiveNoSpace
+	})
 
 	return cmd
 }
@@ -107,21 +128,24 @@ func runDelete(instanceID string, opts *aclcmdutil.CrudOptions) error {
 		return err
 	}
 
-	// resourceOperations, httpRes, err := adminAPI.AclsApi.GetAclResourceOperations(ctx).Execute()
-	// if httpRes != nil {
-	// 	defer httpRes.Body.Close()
-	// }
-	// if err != nil {
-	// 	return err
-	// }
+	resourceOperations, httpRes, err := adminAPI.AclsApi.GetAclResourceOperations(ctx).Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
+	if err != nil {
+		return err
+	}
 
-	// if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
-	// 	return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
-	// 		localize.NewEntry("ResourceType", opts.ResourceType),
-	// 		localize.NewEntry("Operation", opts.Operation),
-	// 		localize.NewEntry("ValidOperationList", cmdutil.StringSliceToListStringWithQuotes(validResourceOperations)),
-	// 	)
-	// }
+	// Validate only when both are present
+	if opts.ResourceType != "" && opts.Operation != "" {
+		if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
+			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
+				localize.NewEntry("ResourceType", opts.ResourceType),
+				localize.NewEntry("Operation", opts.Operation),
+				localize.NewEntry("ValidOperationList", cmdutil.StringSliceToListStringWithQuotes(validResourceOperations)),
+			)
+		}
+	}
 
 	kafkaNameTmplEntry := localize.NewEntry("Name", kafkaInstance.GetName())
 
@@ -238,9 +262,13 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
 
-	opts.PatternType = aclcmdutil.PatternTypeLITERAL
+	// Backwards compatibility:
 	if prefix {
 		opts.PatternType = aclcmdutil.PatternTypePREFIX
+	} else if patternTypeFlag == aclcmdutil.PatternTypeANY {
+		opts.PatternType = aclcmdutil.PatternTypeANY
+	} else {
+		opts.PatternType = aclcmdutil.PatternTypeLITERAL
 	}
 
 	if userID != "" {
