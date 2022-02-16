@@ -120,7 +120,6 @@ func runList(opts *options) error {
 	}
 
 	if opts.artifactID == "" {
-
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
 		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.globalRules")
 		s.Start()
@@ -131,8 +130,9 @@ func runList(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
-	} else {
 
+		s.Stop()
+	} else {
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
 		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.artifactRules")
 		s.Start()
@@ -143,6 +143,8 @@ func runList(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	}
 
 	if newErr != nil {

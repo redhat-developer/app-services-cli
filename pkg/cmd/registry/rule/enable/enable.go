@@ -167,6 +167,8 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	} else {
 
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
@@ -186,6 +188,8 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	}
 
 	ruleErrHandler := &rulecmdutil.RuleErrHandler{

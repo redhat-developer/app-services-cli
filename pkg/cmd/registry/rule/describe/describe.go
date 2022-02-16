@@ -124,10 +124,7 @@ func runDescribe(opts *options) error {
 	if opts.artifactID == "" {
 
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix(
-			"registry.rule.describe.log.info.fetching.globalRule",
-			localize.NewEntry("Type", opts.ruleType),
-		)
+		s.SetLocalizedSuffix("registry.rule.describe.log.info.fetching.globalRule", localize.NewEntry("Type", opts.ruleType))
 		s.Start()
 
 		req := dataAPI.AdminApi.GetGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
@@ -137,6 +134,7 @@ func runDescribe(opts *options) error {
 			defer httpRes.Body.Close()
 		}
 
+		s.Stop()
 	} else {
 
 		request := dataAPI.ArtifactsApi.GetLatestArtifact(opts.Context, opts.group, opts.artifactID)
@@ -150,10 +148,7 @@ func runDescribe(opts *options) error {
 		}
 
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix(
-			"registry.rule.describe.log.info.fetching.artifactRule",
-			localize.NewEntry("Type", opts.ruleType),
-		)
+		s.SetLocalizedSuffix("registry.rule.describe.log.info.fetching.artifactRule", localize.NewEntry("Type", opts.ruleType))
 		s.Start()
 
 		ruleTypeParam := string(*rulecmdutil.GetMappedRuleType(opts.ruleType))
@@ -165,6 +160,7 @@ func runDescribe(opts *options) error {
 			defer httpRes.Body.Close()
 		}
 
+		s.Stop()
 	}
 
 	if err != nil {
