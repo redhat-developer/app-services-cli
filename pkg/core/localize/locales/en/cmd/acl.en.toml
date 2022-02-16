@@ -291,6 +291,9 @@ $ rhoas kafka acl delete --operation write --permission allow --topic all --user
 # Delete an ACL for a service account
 $ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
 
+# Delete all ACLs for a service account
+$ rhoas kafka acl delete --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+
 # Delete an ACL for all users on the consumer group resource
 $ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts
 '''

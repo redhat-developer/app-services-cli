@@ -55,13 +55,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var errorCollection []error
 
-			// if opts.Operation == "" {
-			// 	errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
-			// }
-
-			// if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
-			// 	errorCollection = append(errorCollection, resourceErrors)
-			// }
+			selectedResourceTypeCount := aclcmdutil.SetACLResources(opts)
+			if selectedResourceTypeCount > 1 {
+				errorCollection = append(errorCollection,
+					opts.Localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", aclFlagUtil.ResourceTypeFlagEntries...))
+			}
 
 			if principalErrors := validateAndSetOpts(opts); principalErrors != nil {
 				errorCollection = append(errorCollection, principalErrors)
@@ -148,15 +146,29 @@ func runDelete(instanceID string, opts *aclcmdutil.CrudOptions) error {
 
 	requestParams := getRequestParams(opts)
 
-	deletedACLs, httpRes, err := adminAPI.AclsApi.DeleteAcls(ctx).
-		//ResourceType(requestParams.resourceType).
-		Principal(requestParams.principal).
+	requestDeleteAcls := adminAPI.AclsApi.DeleteAcls(ctx)
+	if requestParams.resourceType != "" {
+		requestDeleteAcls = requestDeleteAcls.ResourceType(requestParams.resourceType)
+	}
 
-		// PatternType(requestParams.patternType).
-		// ResourceName(requestParams.resourceName).
-		// Operation(requestParams.operation).
-		// Permission(requestParams.permission).
-		Execute()
+	if requestParams.principal != "" {
+		requestDeleteAcls = requestDeleteAcls.Principal(requestParams.principal)
+	}
+
+	if requestParams.resourceName != "" {
+		requestDeleteAcls = requestDeleteAcls.ResourceName(requestParams.resourceName)
+	}
+	if requestParams.patternType != "" {
+		requestDeleteAcls = requestDeleteAcls.PatternType(requestParams.patternType)
+	}
+	if requestParams.operation != "" {
+		requestDeleteAcls = requestDeleteAcls.Operation(requestParams.operation)
+	}
+	if requestParams.permission != "" {
+		requestDeleteAcls = requestDeleteAcls.Permission(requestParams.permission)
+	}
+
+	deletedACLs, httpRes, err := requestDeleteAcls.Execute()
 
 	if httpRes != nil {
 		defer httpRes.Body.Close()
