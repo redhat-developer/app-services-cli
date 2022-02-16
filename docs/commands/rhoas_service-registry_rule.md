@@ -35,6 +35,8 @@ $ rhoas service-registry rule describe --rule-type=validity
 
 * [rhoas service-registry](rhoas_service-registry.md)	 - Service Registry commands
 * [rhoas service-registry rule describe](rhoas_service-registry_rule_describe.md)	 - Display configuration of a rule
+* [rhoas service-registry rule disable](rhoas_service-registry_rule_disable.md)	 - Disable validity and compatibility rules
 * [rhoas service-registry rule enable](rhoas_service-registry_rule_enable.md)	 - Enable validity and compatibility rules
 * [rhoas service-registry rule list](rhoas_service-registry_rule_list.md)	 - List validity and compatibility rules
+* [rhoas service-registry rule update](rhoas_service-registry_rule_update.md)	 - Update configuration of rules
 
