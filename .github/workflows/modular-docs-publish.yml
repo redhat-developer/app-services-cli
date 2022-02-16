@@ -21,7 +21,7 @@ jobs:
       - run: make generate-downstream-docs
         name: Generate generate-downstream-docs
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.2.3
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           branch: modular-docs # The branch the action should deploy to.
           folder: dist # The folder the action should deploy.
