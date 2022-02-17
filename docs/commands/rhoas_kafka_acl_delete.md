@@ -36,7 +36,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
       --instance-id string        Kafka instance ID. Uses the current instance if not set
       --operation string          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write"
   -o, --output string             Specify the output format. Choose from: "json", "yaml", "yml"
-      --pattern-type string       Determine if the resource should be exact match, prefix or any [any literal prefix] (default "literal")
+      --pattern-type string      Allows to specify arguments matching strategy [any literal prefix] (default "literal")
       --permission string         Set the ACL permission. Choose from: "allow", "any", "deny" (default "any")
       --prefix                    Determine if the resource should be exact match or prefix
       --service-account string    Service account client ID used as principal for this operation
