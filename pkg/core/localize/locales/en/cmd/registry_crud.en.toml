@@ -238,3 +238,6 @@ one = 'Name of the Service Registry instance to delete'
 
 [registry.common.flag.instance.id]
 one = 'ID of the Service Registry instance to be used (by default, uses the currently selected instance)'
+
+[registry.artifact.common.message.no.group]
+one = 'Using {{.DefaultArtifactGroup}} artifacts group.'
