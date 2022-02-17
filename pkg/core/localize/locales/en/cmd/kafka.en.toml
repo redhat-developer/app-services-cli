@@ -317,7 +317,10 @@ one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 one = 'Kafka instance "{{.Name}}" already exists'
 
 [kafka.create.error.oneinstance]
-one = 'unable to create new Kafka instance. Only one instance is allowed with an eval account'
+one = 'maximum number of allowed instances reached. Please review all instances that your user has access to and delete one or more instances before creating a new one.'
+
+[kafka.create.error.temporary.unavailable]
+one = 'unable to create new Kafka instance at this time in specified cloud provider and region. Please try again later or choose another region.'
 
 [kafka.create.region.error.invalidRegion]
 one = '''
