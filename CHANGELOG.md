@@ -1,4 +1,15 @@
 
+<a name="v0.38.6"></a>
+## [v0.38.6](https://github.com/redhat-developer/app-services-cli/compare/v0.38.5...v0.38.6) (2022-02-17)
+
+### Bug Fixes
+
+* remove unused deprecation.go ([#1449](https://github.com/redhat-developer/app-services-cli/issues/1449))
+* clarify errors for kafka create ([#1447](https://github.com/redhat-developer/app-services-cli/issues/1447))
+* allow to delete all ACLs for principal ([#1441](https://github.com/redhat-developer/app-services-cli/issues/1441))
+* updated prerequisite sans the OpenApi generator ([#1446](https://github.com/redhat-developer/app-services-cli/issues/1446))
+
+
 <a name="v0.38.5"></a>
 ## [v0.38.5](https://github.com/redhat-developer/app-services-cli/compare/0.38.5...v0.38.5) (2022-02-15)
 
