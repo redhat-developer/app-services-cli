@@ -217,8 +217,10 @@ func runCreate(opts *options) error {
 
 	if apiErr := kafkamgmtv1errors.GetAPIError(err); apiErr != nil {
 		switch apiErr.GetCode() {
-		case kafkamgmtv1errors.ERROR_24:
+		case kafkamgmtv1errors.ERROR_120:
 			return opts.localizer.MustLocalizeError("kafka.create.error.oneinstance")
+		case kafkamgmtv1errors.ERROR_24:
+			return opts.localizer.MustLocalizeError("kafka.create.error.temporary.unavailable")
 		case kafkamgmtv1errors.ERROR_36:
 			return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
 		}
