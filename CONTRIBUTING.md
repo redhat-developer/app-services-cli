@@ -8,7 +8,6 @@ The following will need to be installed on your device in order to contribute to
 
 - [Go >= v1.16](https://golang.org/dl)
 - [golangci-lint](https://golangci-lint.run)
-- [Yarn](https://classic.yarnpkg.com)
 - [GoReleaser](https://goreleaser.com/) (optional)
 
 ## Development
