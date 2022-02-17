@@ -85,6 +85,9 @@ one = 'Set the resource type to cluster'
 [kafka.acl.common.flag.prefix.description]
 one = 'Determine if the resource should be exact match or prefix'
 
+[kafka.acl.common.flag.patterntypes.description]
+one = 'Allows to specify arguments matching strategy {{.Types}}'
+
 [kafka.acl.common.flag.topic.description]
 one = 'Set the topic resource. When the --prefix option is also passed, this is used as the topic prefix'
 
@@ -290,6 +293,9 @@ $ rhoas kafka acl delete --operation write --permission allow --topic all --user
 
 # Delete an ACL for a service account
 $ rhoas kafka acl delete --operation all --permission any --topic "rhoas" --prefix --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81"
+
+# Delete all ACLs for a service account
+$ rhoas kafka acl delete --service-account "srvc-acct-11924479-43fe-42b4-9676-cf0c9aca81 --pattern-type=all"
 
 # Delete an ACL for all users on the consumer group resource
 $ rhoas kafka acl delete --operation all --permission any --group "group-1" --all-accounts

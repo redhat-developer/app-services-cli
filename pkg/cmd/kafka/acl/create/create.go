@@ -3,7 +3,7 @@ package create
 import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
-	aclFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
+	aclFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -63,8 +63,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
 			}
 
-			if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagutil.ResourceTypeFlagEntries); resourceErrors != nil {
-				errorCollection = append(errorCollection, resourceErrors)
+			selectedResourceTypeCount := aclcmdutil.SetACLResources(opts)
+
+			if selectedResourceTypeCount != 1 {
+				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", aclFlagUtil.ResourceTypeFlagEntries...))
 			}
 
 			if principalErrors := validateAndSetOpts(opts); principalErrors != nil {
@@ -79,7 +81,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := aclFlagutil.NewFlagSet(cmd, f)
+	flags := aclFlagUtil.NewFlagSet(cmd, f)
 
 	flags.AddPermissionCreate(&opts.Permission)
 	flags.AddOperationCreate(&opts.Operation)

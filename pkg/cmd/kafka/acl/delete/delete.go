@@ -17,10 +17,11 @@ import (
 )
 
 var (
-	serviceAccount string
-	userID         string
-	allAccounts    bool
-	prefix         bool
+	serviceAccount  string
+	userID          string
+	allAccounts     bool
+	prefix          bool
+	patternTypeFlag string
 )
 
 type requestParams struct {
@@ -56,12 +57,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 			var errorCollection []error
 
-			if opts.Operation == "" {
-				errorCollection = append(errorCollection, opts.Localizer.MustLocalizeError("kafka.acl.common.flag.operation.required"))
-			}
-
-			if resourceErrors := aclcmdutil.ValidateAndSetResources(opts, aclFlagUtil.ResourceTypeFlagEntries); resourceErrors != nil {
-				errorCollection = append(errorCollection, resourceErrors)
+			selectedResourceTypeCount := aclcmdutil.SetACLResources(opts)
+			if selectedResourceTypeCount > 1 {
+				errorCollection = append(errorCollection,
+					opts.Localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", aclFlagUtil.ResourceTypeFlagEntries...))
 			}
 
 			if principalErrors := validateAndSetOpts(opts); principalErrors != nil {
@@ -82,7 +81,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOperationFilter(&opts.Operation)
 
 	flags.AddCluster(&opts.Cluster)
-	flags.AddPrefix(&prefix)
+
 	flags.AddTopic(&opts.Topic)
 	flags.AddConsumerGroup(&opts.Group)
 	flags.AddTransactionalID(&opts.TransactionalID)
@@ -92,6 +91,19 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.AddServiceAccount(&serviceAccount)
 	flags.AddAllAccounts(&allAccounts)
 	flags.AddYes(&opts.SkipConfirm)
+	flags.AddPrefix(&prefix)
+
+	cmd.Flags().StringVar(
+		&patternTypeFlag,
+		"pattern-type",
+		aclcmdutil.PatternTypeLITERAL,
+		opts.Localizer.MustLocalize("kafka.acl.common.flag.patterntypes.description",
+			localize.NewEntry("Types", aclcmdutil.PatternTypes)),
+	)
+
+	_ = cmd.RegisterFlagCompletionFunc("pattern-type", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return aclcmdutil.PatternTypes, cobra.ShellCompDirectiveNoSpace
+	})
 
 	return cmd
 }
@@ -118,12 +130,15 @@ func runDelete(instanceID string, opts *aclcmdutil.CrudOptions) error {
 		return err
 	}
 
-	if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
-		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
-			localize.NewEntry("ResourceType", opts.ResourceType),
-			localize.NewEntry("Operation", opts.Operation),
-			localize.NewEntry("ValidOperationList", cmdutil.StringSliceToListStringWithQuotes(validResourceOperations)),
-		)
+	// Validate only when both are present
+	if opts.ResourceType != "" && opts.Operation != "" {
+		if isValidOp, validResourceOperations := aclcmdutil.IsValidResourceOperation(opts.ResourceType, opts.Operation, resourceOperations); !isValidOp {
+			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.invalidResourceOperation",
+				localize.NewEntry("ResourceType", opts.ResourceType),
+				localize.NewEntry("Operation", opts.Operation),
+				localize.NewEntry("ValidOperationList", cmdutil.StringSliceToListStringWithQuotes(validResourceOperations)),
+			)
+		}
 	}
 
 	kafkaNameTmplEntry := localize.NewEntry("Name", kafkaInstance.GetName())
@@ -149,14 +164,29 @@ func runDelete(instanceID string, opts *aclcmdutil.CrudOptions) error {
 
 	requestParams := getRequestParams(opts)
 
-	deletedACLs, httpRes, err := adminAPI.AclsApi.DeleteAcls(ctx).
-		ResourceType(requestParams.resourceType).
-		Principal(requestParams.principal).
-		PatternType(requestParams.patternType).
-		ResourceName(requestParams.resourceName).
-		Operation(requestParams.operation).
-		Permission(requestParams.permission).
-		Execute()
+	requestDeleteAcls := adminAPI.AclsApi.DeleteAcls(ctx)
+	if requestParams.resourceType != "" {
+		requestDeleteAcls = requestDeleteAcls.ResourceType(requestParams.resourceType)
+	}
+
+	if requestParams.principal != "" {
+		requestDeleteAcls = requestDeleteAcls.Principal(requestParams.principal)
+	}
+
+	if requestParams.resourceName != "" {
+		requestDeleteAcls = requestDeleteAcls.ResourceName(requestParams.resourceName)
+	}
+	if requestParams.patternType != "" {
+		requestDeleteAcls = requestDeleteAcls.PatternType(requestParams.patternType)
+	}
+	if requestParams.operation != "" {
+		requestDeleteAcls = requestDeleteAcls.Operation(requestParams.operation)
+	}
+	if requestParams.permission != "" {
+		requestDeleteAcls = requestDeleteAcls.Permission(requestParams.permission)
+	}
+
+	deletedACLs, httpRes, err := requestDeleteAcls.Execute()
 
 	if httpRes != nil {
 		defer httpRes.Body.Close()
@@ -226,7 +256,17 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noPrincipalsSelected")
 	}
 
-	opts.PatternType = aclcmdutil.PatternTypeLITERAL
+	// Backwards compatibility:
+
+	switch patternTypeFlag {
+	case aclcmdutil.PatternTypeANY:
+		opts.PatternType = aclcmdutil.PatternTypeANY
+	case aclcmdutil.PatternTypePREFIX:
+		opts.PatternType = aclcmdutil.PatternTypePREFIX
+	case aclcmdutil.PatternTypeLITERAL:
+		opts.PatternType = aclcmdutil.PatternTypeLITERAL
+	}
+
 	if prefix {
 		opts.PatternType = aclcmdutil.PatternTypePREFIX
 	}

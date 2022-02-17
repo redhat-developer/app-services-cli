@@ -93,8 +93,8 @@ func IsValidResourceOperation(resourceType string, operation string, resourceOpe
 	return false, resourceOperations
 }
 
-// ValidateAndSetResources validates and sets resources options
-func ValidateAndSetResources(opts *CrudOptions, resourceTypeFlagEntries []*localize.TemplateEntry) error {
+// SetACLResources sets resources options and returns number of changed resources
+func SetACLResources(opts *CrudOptions) int {
 	var selectedResourceTypeCount int
 
 	if opts.Topic != "" {
@@ -118,11 +118,7 @@ func ValidateAndSetResources(opts *CrudOptions, resourceTypeFlagEntries []*local
 		opts.ResourceName = KafkaCluster
 	}
 
-	if selectedResourceTypeCount != 1 {
-		return opts.Localizer.MustLocalizeError("kafka.acl.common.error.oneResourceTypeAllowed", resourceTypeFlagEntries...)
-	}
-
-	return nil
+	return selectedResourceTypeCount
 }
 
 // ValidateAPIError checks for a HTTP error and maps it to a user friendly error
