@@ -10,7 +10,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -169,13 +168,12 @@ func runUpdate(opts *options) error {
 
 func updateGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient) (httpRes *http.Response, err error) {
 
-	s := spinner.New(opts.IO.ErrOut, opts.localizer)
-	s.SetLocalizedSuffix(
-		"registry.rule.update.log.info.updating.globalRule",
-		localize.NewEntry("RuleType", opts.ruleType),
-		localize.NewEntry("Configuration", opts.config),
+	opts.Logger.Info(
+		opts.localizer.MustLocalize("registry.rule.update.log.info.updating.globalRule",
+			localize.NewEntry("RuleType", opts.ruleType),
+			localize.NewEntry("Configuration", opts.config),
+		),
 	)
-	s.Start()
 
 	req := dataAPI.AdminApi.UpdateGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 
@@ -188,21 +186,18 @@ func updateGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient) 
 
 	_, httpRes, err = req.Execute()
 
-	s.Stop()
-
 	return httpRes, err
 }
 
 func updateArtifactRule(opts *options, dataAPI *registryinstanceclient.APIClient) (httpRes *http.Response, err error) {
 
-	s := spinner.New(opts.IO.ErrOut, opts.localizer)
-	s.SetLocalizedSuffix(
-		"registry.rule.update.log.info.updating.artifactRule",
-		localize.NewEntry("RuleType", opts.ruleType),
-		localize.NewEntry("Configuration", opts.config),
-		localize.NewEntry("ArtifactID", opts.artifactID),
+	opts.Logger.Info(
+		opts.localizer.MustLocalize("registry.rule.update.log.info.updating.artifactRule",
+			localize.NewEntry("RuleType", opts.ruleType),
+			localize.NewEntry("Configuration", opts.config),
+			localize.NewEntry("ArtifactID", opts.artifactID),
+		),
 	)
-	s.Start()
 
 	req := dataAPI.ArtifactRulesApi.UpdateArtifactRuleConfig(opts.Context, opts.group, opts.artifactID, string(*rulecmdutil.GetMappedRuleType(opts.ruleType)))
 
@@ -217,8 +212,6 @@ func updateArtifactRule(opts *options, dataAPI *registryinstanceclient.APIClient
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-
-	s.Stop()
 
 	return httpRes, err
 }

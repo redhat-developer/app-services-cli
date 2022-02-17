@@ -4,19 +4,19 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/spf13/cobra"
-
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -32,6 +32,8 @@ type options struct {
 	registryID string
 	artifactID string
 	group      string
+
+	skipConfirm bool
 }
 
 // NewDisableCommand creates a new command for disabling rule
@@ -53,6 +55,10 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("registry.rule.disable.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
+
+			if !opts.IO.CanPrompt() && !opts.skipConfirm {
+				return flagutil.RequiredWhenNonInteractiveError("yes")
+			}
 
 			validator := rulecmdutil.Validator{
 				Localizer: opts.localizer,
@@ -78,6 +84,8 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().BoolVarP(&opts.skipConfirm, "yes", "y", false, opts.localizer.MustLocalize("registry.rule.disable.flag.yes"))
+
 	flags := rulecmdutil.NewFlagSet(cmd, f)
 
 	flags.AddRegistryInstance(&opts.registryID)
@@ -97,6 +105,20 @@ func runDisable(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
+	}
+
+	if !opts.skipConfirm {
+		prompt := &survey.Confirm{
+			Message: opts.localizer.MustLocalize("registry.rule.disable.confirm"),
+		}
+		if promptErr := survey.AskOne(prompt, &opts.skipConfirm); err != nil {
+			return promptErr
+		}
+
+		if !opts.skipConfirm {
+			opts.Logger.Debug(opts.localizer.MustLocalize("registry.rule.disable.prompt.denied"))
+			return nil
+		}
 	}
 
 	dataAPI, _, err := conn.API().ServiceRegistryInstance(opts.registryID)
@@ -161,26 +183,18 @@ func disableGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient)
 
 	if opts.ruleType != "" {
 
-		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix("registry.rule.disable.log.info.disabling.globalRule", localize.NewEntry("RuleType", opts.ruleType))
-		s.Start()
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.globalRule", localize.NewEntry("RuleType", opts.ruleType)))
 
 		req := dataAPI.AdminApi.DeleteGlobalRule(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 
 		httpRes, err = req.Execute()
-
-		s.Stop()
 	} else {
 
-		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix("registry.rule.disable.log.info.disabling.globalRules", localize.NewEntry("RuleType", opts.ruleType))
-		s.Start()
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.globalRules", localize.NewEntry("RuleType", opts.ruleType)))
 
 		req := dataAPI.AdminApi.DeleteAllGlobalRules(opts.Context)
 
 		httpRes, err = req.Execute()
-
-		s.Stop()
 	}
 
 	return httpRes, err
@@ -189,13 +203,12 @@ func disableGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient)
 func disableArtifactRule(opts *options, dataAPI *registryinstanceclient.APIClient) (httpRes *http.Response, err error) {
 	if opts.ruleType != "" {
 
-		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix(
-			"registry.rule.disable.log.info.disabling.artifactRule",
-			localize.NewEntry("RuleType", opts.ruleType),
-			localize.NewEntry("ArtifactID", opts.artifactID),
+		opts.Logger.Info(
+			opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.artifactRule",
+				localize.NewEntry("RuleType", opts.ruleType),
+				localize.NewEntry("ArtifactID", opts.artifactID),
+			),
 		)
-		s.Start()
 
 		req := dataAPI.ArtifactRulesApi.DeleteArtifactRule(opts.Context, opts.group, opts.artifactID, string(*rulecmdutil.GetMappedRuleType(opts.ruleType)))
 
@@ -204,12 +217,8 @@ func disableArtifactRule(opts *options, dataAPI *registryinstanceclient.APIClien
 			defer httpRes.Body.Close()
 		}
 
-		s.Stop()
 	} else {
-
-		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix("registry.rule.disable.log.info.disabling.artifactRules", localize.NewEntry("ArtifactID", opts.artifactID))
-		s.Start()
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.artifactRules", localize.NewEntry("ArtifactID", opts.artifactID)))
 
 		req := dataAPI.ArtifactRulesApi.DeleteArtifactRules(opts.Context, opts.group, opts.artifactID)
 
@@ -217,8 +226,6 @@ func disableArtifactRule(opts *options, dataAPI *registryinstanceclient.APIClien
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
-
-		s.Stop()
 	}
 
 	return httpRes, err
