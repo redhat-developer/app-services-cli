@@ -257,9 +257,6 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 	}
 
 	// Backwards compatibility:
-	if prefix {
-		opts.PatternType = aclcmdutil.PatternTypePREFIX
-	}
 
 	switch patternTypeFlag {
 	case aclcmdutil.PatternTypeANY:
@@ -268,6 +265,10 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 		opts.PatternType = aclcmdutil.PatternTypePREFIX
 	case aclcmdutil.PatternTypeLITERAL:
 		opts.PatternType = aclcmdutil.PatternTypeLITERAL
+	}
+
+	if prefix {
+		opts.PatternType = aclcmdutil.PatternTypePREFIX
 	}
 
 	if userID != "" {
