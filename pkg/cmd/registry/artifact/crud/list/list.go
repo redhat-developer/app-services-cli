@@ -3,7 +3,6 @@ package list
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -102,7 +101,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", registrycmdutil.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("artifact.common.page.number"))
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("artifact.common.page.limit"))
 
@@ -120,9 +119,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
-	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
-		opts.group = util.DefaultArtifactGroup
+	if opts.group == registrycmdutil.DefaultArtifactGroup {
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 	}
 
 	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)

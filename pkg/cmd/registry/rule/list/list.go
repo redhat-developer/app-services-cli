@@ -133,6 +133,10 @@ func runList(opts *options) error {
 
 		s.Stop()
 	} else {
+		if opts.group == registrycmdutil.DefaultArtifactGroup {
+			opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
+		}
+
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
 		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.artifactRules")
 		s.Start()

@@ -137,6 +137,10 @@ func runDescribe(opts *options) error {
 		s.Stop()
 	} else {
 
+		if opts.group == registrycmdutil.DefaultArtifactGroup {
+			opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
+		}
+
 		request := dataAPI.ArtifactsApi.GetLatestArtifact(opts.Context, opts.group, opts.artifactID)
 		_, httpRes, err = request.Execute()
 		if httpRes != nil {
