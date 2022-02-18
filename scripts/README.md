@@ -7,9 +7,6 @@ This folder contains scripts for automating often-used, multiple step tasks.
 
 Scripts check if documentation was changed.
  
-## generate-changelog.sh
-
-Generate changelog for the repository based on commit messages
  
 ##  install.sh
 
