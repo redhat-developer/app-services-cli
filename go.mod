@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.2
-	github.com/BurntSushi/toml v0.4.1
+	github.com/BurntSushi/toml v1.0.0
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
@@ -18,7 +18,7 @@ require (
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/go-runewidth v0.0.13 // indirect
-	github.com/nicksnyder/go-i18n/v2 v2.1.2
+	github.com/nicksnyder/go-i18n/v2 v2.2.0
 	github.com/openconfig/goyang v0.4.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
