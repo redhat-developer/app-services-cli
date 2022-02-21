@@ -181,12 +181,6 @@ one='Disabling "{{.RuleType}}" rule for artifact with ID "{{.ArtifactID}}"'
 [registry.rule.disable.log.info.disabling.artifactRules]
 one='Disabling all rules for artifact with ID "{{.ArtifactID}}"'
 
-[registry.rule.disable.flag.yes]
-one = 'Disable rule(s) without prompt'
-
-[registry.rule.disable.confirm]
-one='Do you want to disable specified rule(s)?'
-
 [registry.rule.disable.log.info.success]
 one='Successfully disabled'
 

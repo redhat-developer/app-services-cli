@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -148,12 +149,13 @@ func runEnable(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		opts.Logger.Info(
-			opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.globalRules",
-				localize.NewEntry("RuleType", opts.ruleType),
-				localize.NewEntry("Configuration", opts.config),
-			),
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix(
+			"registry.rule.enable.log.info.enabling.globalRules",
+			localize.NewEntry("RuleType", opts.ruleType),
+			localize.NewEntry("Configuration", opts.config),
 		)
+		s.Start()
 
 		req := dataAPI.AdminApi.CreateGlobalRule(opts.Context)
 
@@ -163,19 +165,22 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	} else {
 
 		if opts.group == registrycmdutil.DefaultArtifactGroup {
 			opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 		}
 
-		opts.Logger.Info(
-			opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.artifactRules",
-				localize.NewEntry("RuleType", opts.ruleType),
-				localize.NewEntry("Configuration", opts.config),
-				localize.NewEntry("ArtifactID", opts.artifactID),
-			),
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix(
+			"registry.rule.enable.log.info.enabling.artifactRules",
+			localize.NewEntry("RuleType", opts.ruleType),
+			localize.NewEntry("Configuration", opts.config),
+			localize.NewEntry("ArtifactID", opts.artifactID),
 		)
+		s.Start()
 
 		req := dataAPI.ArtifactRulesApi.CreateArtifactRule(opts.Context, opts.group, opts.artifactID)
 
@@ -185,6 +190,8 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	}
 
 	ruleErrHandler := &rulecmdutil.RuleErrHandler{

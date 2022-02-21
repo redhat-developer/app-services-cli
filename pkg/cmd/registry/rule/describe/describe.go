@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -122,7 +123,9 @@ func runDescribe(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.describe.log.info.fetching.globalRule", localize.NewEntry("Type", opts.ruleType)))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("registry.rule.describe.log.info.fetching.globalRule", localize.NewEntry("Type", opts.ruleType))
+		s.Start()
 
 		req := dataAPI.AdminApi.GetGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 
@@ -130,6 +133,8 @@ func runDescribe(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	} else {
 
 		if opts.group == registrycmdutil.DefaultArtifactGroup {
@@ -146,7 +151,9 @@ func runDescribe(opts *options) error {
 			return registrycmdutil.TransformInstanceError(err)
 		}
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.describe.log.info.fetching.artifactRule", localize.NewEntry("Type", opts.ruleType)))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("registry.rule.describe.log.info.fetching.artifactRule", localize.NewEntry("Type", opts.ruleType))
+		s.Start()
 
 		ruleTypeParam := string(*rulecmdutil.GetMappedRuleType(opts.ruleType))
 
@@ -156,6 +163,8 @@ func runDescribe(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	}
 
 	if err != nil {

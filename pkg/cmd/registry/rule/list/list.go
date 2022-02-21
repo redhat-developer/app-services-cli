@@ -10,6 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -119,8 +120,9 @@ func runList(opts *options) error {
 	}
 
 	if opts.artifactID == "" {
-
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.list.log.info.fetching.globalRules"))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.globalRules")
+		s.Start()
 
 		req := dataAPI.AdminApi.ListGlobalRules(opts.Context)
 
@@ -128,12 +130,16 @@ func runList(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	} else {
 		if opts.group == registrycmdutil.DefaultArtifactGroup {
 			opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 		}
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.list.log.info.fetching.artifactRules"))
+		s := spinner.New(opts.IO.ErrOut, opts.localizer)
+		s.SetLocalizedSuffix("registry.rule.list.log.info.fetching.artifactRules")
+		s.Start()
 
 		req := dataAPI.ArtifactRulesApi.ListArtifactRules(opts.Context, opts.group, opts.artifactID)
 
@@ -141,6 +147,8 @@ func runList(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
+
+		s.Stop()
 	}
 
 	if newErr != nil {
