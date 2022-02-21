@@ -97,6 +97,9 @@ one = 'Page number'
 [artifact.common.page.limit]
 one = 'Page limit'
 
+[artifact.common.message.no.group]
+one = 'Using {{.DefaultArtifactGroup}} artifacts group.'
+
 [artifact.common.message.opening.file]
 one = 'Opening file: {{.FileName}}'
 

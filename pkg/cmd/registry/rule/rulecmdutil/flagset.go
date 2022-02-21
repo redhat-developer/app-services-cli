@@ -1,6 +1,7 @@
 package rulecmdutil
 
 import (
+	artifactutil "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -43,7 +44,7 @@ func (fs *flagSet) AddGroup(artifactID *string) {
 		artifactID,
 		flagName,
 		"g",
-		registrycmdutil.DefaultArtifactGroup,
+		artifactutil.DefaultArtifactGroup,
 		fs.factory.Localizer.MustLocalize("artifact.common.group"),
 	)
 

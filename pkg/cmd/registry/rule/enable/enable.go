@@ -19,6 +19,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
+	artifactutil "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
@@ -169,10 +171,6 @@ func runEnable(opts *options) error {
 		s.Stop()
 	} else {
 
-		if opts.group == registrycmdutil.DefaultArtifactGroup {
-			opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
-		}
-
 		s := spinner.New(opts.IO.ErrOut, opts.localizer)
 		s.SetLocalizedSuffix(
 			"registry.rule.enable.log.info.enabling.artifactRules",
@@ -258,7 +256,7 @@ func runInteractivePrompt(opts *options) (err error) {
 	groupPrompt := &survey.Input{
 		Message: opts.localizer.MustLocalize("registry.rule.enable.input.group.message"),
 		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.group.help"),
-		Default: registrycmdutil.DefaultArtifactGroup,
+		Default: artifactutil.DefaultArtifactGroup,
 	}
 
 	err = survey.AskOne(groupPrompt, &opts.group)

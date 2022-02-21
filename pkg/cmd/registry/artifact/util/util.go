@@ -3,7 +3,6 @@ package util
 import (
 	"fmt"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
@@ -14,7 +13,7 @@ func GetArtifactURL(registry *registrymgmtclient.Registry, metadata *registryins
 	group := metadata.GetGroupId()
 
 	if group == "" {
-		group = registrycmdutil.DefaultArtifactGroup
+		group = DefaultArtifactGroup
 	}
 
 	homeURL, ok := registry.GetBrowserUrlOk()
