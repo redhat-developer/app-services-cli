@@ -187,9 +187,6 @@ one = 'Disable rule(s) without prompt'
 [registry.rule.disable.confirm]
 one='Do you want to disable specified rule(s)?'
 
-[registry.rule.disable.prompt.denied]
-one='User has chosen to not disable rule(s)'
-
 [registry.rule.disable.log.info.success]
 one='Successfully disabled'
 

@@ -114,11 +114,6 @@ func runDisable(opts *options) error {
 		if promptErr := survey.AskOne(prompt, &opts.skipConfirm); err != nil {
 			return promptErr
 		}
-
-		if !opts.skipConfirm {
-			opts.Logger.Debug(opts.localizer.MustLocalize("registry.rule.disable.prompt.denied"))
-			return nil
-		}
 	}
 
 	dataAPI, _, err := conn.API().ServiceRegistryInstance(opts.registryID)
