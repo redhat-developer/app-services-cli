@@ -18,7 +18,7 @@ func (v *Validator) ValidateRuleType(ruleType string) error {
 		return nil
 	}
 
-	return flagutil.InvalidValueError("rule-type", ruleType, ValidRules...)
+	return flagutil.InvalidValueError("rule-type", v, ValidRules...)
 }
 
 func (v *Validator) IsValidRuleConfig(ruleType string, config string) (bool, []string) {

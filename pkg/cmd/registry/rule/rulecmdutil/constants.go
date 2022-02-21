@@ -8,7 +8,7 @@ const (
 const (
 	ConfigFULL                = "full"
 	ConfigSYNTAX_ONLY         = "syntax-only"
-	ConfigFULL_TRANSITIVE     = "full-transitive"
+	ConfigFULL_TRANSITIVE     = "full-trannsitive"
 	ConfigBACKWARD            = "backward"
 	ConfigBACKWARD_TRANSITIVE = "backward-transitive"
 	ConfigFORWARD             = "forward"

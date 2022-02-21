@@ -12,14 +12,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
-
-	artifactutil "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
@@ -64,26 +61,23 @@ func NewEnableCommand(f *factory.Factory) *cobra.Command {
 				Localizer: opts.localizer,
 			}
 
-			var missingFlags []string
-
-			if opts.ruleType == "" {
-				missingFlags = append(missingFlags, "rule-type")
+			if !opts.IO.CanPrompt() {
+				var missingFlags []string
+				if opts.ruleType == "" {
+					missingFlags = append(missingFlags, "rule-type")
+				}
+				if opts.config == "" {
+					missingFlags = append(missingFlags, "config")
+				}
+				if len(missingFlags) > 0 {
+					return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
+				}
 			}
-			if opts.config == "" {
-				missingFlags = append(missingFlags, "config")
-			}
-
-			if !opts.IO.CanPrompt() && len(missingFlags) > 0 {
-				return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
-			}
-
-			if len(missingFlags) == 2 {
+			if opts.ruleType == "" && opts.config == "" {
 				err = runInteractivePrompt(opts)
 				if err != nil {
 					return err
 				}
-			} else if len(missingFlags) > 0 {
-				return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
 			}
 
 			cfg, err := opts.Config.Load()
@@ -151,13 +145,10 @@ func runEnable(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix(
+		opts.Logger.Info(opts.localizer.MustLocalize(
 			"registry.rule.enable.log.info.enabling.globalRules",
 			localize.NewEntry("RuleType", opts.ruleType),
-			localize.NewEntry("Configuration", opts.config),
-		)
-		s.Start()
+			localize.NewEntry("Configuration", opts.config)))
 
 		req := dataAPI.AdminApi.CreateGlobalRule(opts.Context)
 
@@ -167,18 +158,13 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
-
-		s.Stop()
 	} else {
 
-		s := spinner.New(opts.IO.ErrOut, opts.localizer)
-		s.SetLocalizedSuffix(
+		opts.Logger.Info(opts.localizer.MustLocalize(
 			"registry.rule.enable.log.info.enabling.artifactRules",
 			localize.NewEntry("RuleType", opts.ruleType),
 			localize.NewEntry("Configuration", opts.config),
-			localize.NewEntry("ArtifactID", opts.artifactID),
-		)
-		s.Start()
+			localize.NewEntry("ArtifactID", opts.artifactID)))
 
 		req := dataAPI.ArtifactRulesApi.CreateArtifactRule(opts.Context, opts.group, opts.artifactID)
 
@@ -188,26 +174,27 @@ func runEnable(opts *options) error {
 		if httpRes != nil {
 			defer httpRes.Body.Close()
 		}
-
-		s.Stop()
 	}
 
-	ruleErrHandler := &rulecmdutil.RuleErrHandler{
-		Localizer: opts.localizer,
+	ruleErr := &rulecmdutil.RegistryRuleError{
+		Localizer:  opts.localizer,
+		InstanceID: opts.registryID,
 	}
 
 	if newErr != nil {
 		if httpRes == nil {
-			return registrycmdutil.TransformInstanceError(newErr)
+			return newErr
 		}
 
 		switch httpRes.StatusCode {
-		case http.StatusNotFound:
-			return ruleErrHandler.ArtifactNotFoundError(opts.artifactID)
-		case http.StatusConflict:
-			return ruleErrHandler.ConflictError(opts.ruleType)
-		default:
+		case http.StatusUnauthorized, http.StatusInternalServerError, http.StatusForbidden:
 			return registrycmdutil.TransformInstanceError(newErr)
+		case http.StatusNotFound:
+			return ruleErr.ArtifactNotFoundError(opts.artifactID)
+		case http.StatusConflict:
+			return ruleErr.ConflictError(opts.ruleType)
+		default:
+			return newErr
 		}
 
 	}
@@ -239,27 +226,6 @@ func runInteractivePrompt(opts *options) (err error) {
 	}
 
 	err = survey.AskOne(configPrompt, &opts.config)
-	if err != nil {
-		return err
-	}
-
-	artifactIDPrompt := &survey.Input{
-		Message: opts.localizer.MustLocalize("registry.rule.enable.input.artifactID.message"),
-		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.artifactID.help"),
-	}
-
-	err = survey.AskOne(artifactIDPrompt, &opts.artifactID)
-	if err != nil {
-		return err
-	}
-
-	groupPrompt := &survey.Input{
-		Message: opts.localizer.MustLocalize("registry.rule.enable.input.group.message"),
-		Help:    opts.localizer.MustLocalize("registry.rule.enable.input.group.help"),
-		Default: artifactutil.DefaultArtifactGroup,
-	}
-
-	err = survey.AskOne(groupPrompt, &opts.group)
 	if err != nil {
 		return err
 	}

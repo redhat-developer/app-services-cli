@@ -4,7 +4,7 @@ Enable validity and compatibility rules
 
 ### Synopsis
 
-Enable validity and compatibility rules for the specified Service Registry instance or artifact
+Enable validity and compatibility rules for the selected Service Registry instance or specific artifact
 
 ```
 rhoas service-registry rule enable [flags]
