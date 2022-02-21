@@ -64,7 +64,7 @@ func NewExportCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&opts.file, "output-file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
 	_ = cmd.MarkFlagRequired("output-file")
 
 	return cmd

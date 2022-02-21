@@ -78,8 +78,8 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
-	cmd.Flags().StringVarP(&opts.group, "group", "g", util.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
-	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("artifact.common.instance.id"))
+	cmd.Flags().StringVarP(&opts.group, "group", "g", registrycmdutil.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
 	cmd.Flags().StringVar(&opts.state, "state", "", opts.localizer.MustLocalize("artifact.flag.state.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc("state", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -99,9 +99,8 @@ func runSet(opts *options) error {
 		return err
 	}
 
-	if opts.group == util.DefaultArtifactGroup {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", util.DefaultArtifactGroup)))
-		opts.group = util.DefaultArtifactGroup
+	if opts.group == registrycmdutil.DefaultArtifactGroup {
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 	}
 
 	updateState, err := registryinstanceclient.NewArtifactStateFromValue(opts.state)
