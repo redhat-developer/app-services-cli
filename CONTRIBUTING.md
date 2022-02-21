@@ -169,4 +169,8 @@ Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-
 
 [git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
 
-Run `./scripts/generate-changelog.sh` to output the changes between the current and last stable releases. Paste the output into the description of the [release on GitHub](https://github.com/redhat-developer/app-services-cli/releases/tag/latest).
+Tooling is running automatically as github action and doesn't require any interaction from developer. 
+
+Developers should still put effort to provide good commit messages that are source of the changelog.
+
+The latest changelog can be viewed [here](https://github.com/redhat-developer/app-services-cli/releases/latest).
