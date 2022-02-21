@@ -150,6 +150,18 @@ include::../modules/ref-cli-service-registry-role-list.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-service-registry-role-revoke.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-service-registry-rule.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-describe.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-disable.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-enable.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-rule-update.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+2]
 
 
