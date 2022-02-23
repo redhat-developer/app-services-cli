@@ -499,7 +499,8 @@ one = 'The period of time in milliseconds the broker will retain a partition log
 
 [kafka.topic.common.input.retentionBytes.description]
 description = 'Description for the Retention size input'
-one = 'The maximum total size of a partition log segments before old log segments are deleted to free up space. Value of -1 is set by default indicating no retention size limits.'
+one = '''The maximum total size of a partition log segments before old log segments are deleted to free up space.
+Value of -1 is set by default indicating no retention size limits.'''
 
 [kafka.topic.common.input.cleanupPolicy.description]
 description = 'Description for the Cleanup policy input'
