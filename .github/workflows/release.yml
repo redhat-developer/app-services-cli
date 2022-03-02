@@ -1,4 +1,4 @@
-name: goreleaser
+name: Release
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  goreleaser:
+  release:
     runs-on: ubuntu-latest
     steps:
       -
@@ -73,3 +73,19 @@ jobs:
           repository: redhat-developer/app-services-guides
           event-type: rhoas-cli-release
           client-payload: '{"version": steps.set-version.outputs.version }'
+  quay-release:
+    depends-on: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Notify tools repo
+        uses: actions/github-script@v6
+        with: 
+          script: |
+            github.request('POST /repos/redhat-developer/app-services-tools/actions/workflows/42/dispatches', {
+              workflow_id: 42,
+              ref: 'ref',
+              inputs: {
+                rhoasVersion: context.ref.replace(/^refs\/tags\//, '')
+              }
+            })
