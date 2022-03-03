@@ -1,0 +1,111 @@
+[context.cmd.shortDescription]
+one='Group, share and manage your rhoas services'
+
+[context.cmd.longDescription]
+one='''
+When working with RHOAS CLI developers interact with the commands that are connecting directly to the service instance. At the time CLI commands can only connect to a single instance of the service. 
+
+rhoas context commands allow developers to:
+
+Group services into context that can be used with a number of CLI commands.
+Manage different contexts by switching, listing and removing users contexts 
+Share context with others to use the same set of services
+Generating configuration for connecting to the services from various platforms and tools
+'''
+
+[context.cmd.example]
+one='''
+## Select a context
+$ rhoas context use --name my-context
+'''
+
+[context.use.cmd]
+
+[context.use.cmd.shortDescription]
+one='Set the current context'
+
+[context.use.cmd.longDescription]
+one='''
+Select a context to be used as the current context When you set the context to be used, it is set as the current context for all service based commands.
+'''
+
+[context.use.cmd.example]
+one='''
+## Select a context
+$ rhoas context use --name my-context
+'''
+
+[context.use.successMessage]
+one='Current context set to "{{.Name}}"'
+
+[context.status.cmd]
+
+[context.status.cmd.shortDescription]
+one='Show status of the context'
+
+[context.status.cmd.longDescription]
+one='''
+Print overview of the services in a context
+'''
+
+[context.status.cmd.example]
+one='''
+## Show status of current context
+$ rhoas context status
+
+## Show status of specified context
+$ rhoas context status --name my-context
+'''
+
+[context.list.cmd]
+
+[context.list.cmd.shortDescription]
+one='List contexts'
+
+[context.list.cmd.longDescription]
+one='List currently available contexts'
+
+[context.list.cmd.example]
+one='''
+## List contexts
+$ rhoas context list
+'''
+
+[context.common.flag.name]
+one='Name of the context'
+
+[context.common.error.noRegistryID]
+one='''
+context doesn't have a Service Registry ID.
+Use `rhoas context status` commands to review your context
+'''
+
+[context.common.error.noKafkaID]
+one='''
+context doesn't have a Kafka Instance ID.
+Use `rhoas context status` commands to review your context
+'''
+
+[context.common.error.registry.notFound]
+one='''
+Service registry instance doesnt exist, you need to review your context using command `rhoas context status`
+'''
+
+[context.common.error.kafka.notFound]
+one='''
+Kafka instance doesnt exist, you need to review your context using command `rhoas context status`
+'''
+
+[context.common.error.context.notFound]
+one='''
+context with name "{{.Name}}" does not exist
+
+Run `rhoas context list` to view available contexts
+'''
+
+[context.common.error.notSet]
+one='''
+context has not been set. Run the following command to set context:
+
+  rhoas context use --name my-context
+'''

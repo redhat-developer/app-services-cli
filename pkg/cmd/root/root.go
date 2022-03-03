@@ -3,6 +3,7 @@ package root
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/docs"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
@@ -53,6 +54,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 
 	cmd.AddCommand(docs.NewDocsCmd(f))
+	cmd.AddCommand(context.NewContextCmd(f))
 
 	return cmd
 }

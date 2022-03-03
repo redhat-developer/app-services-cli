@@ -10,9 +10,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+
 	"github.com/spf13/cobra"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 type options struct {
@@ -25,6 +29,7 @@ type options struct {
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
 	Context    context.Context
+	Profiles   profile.IContext
 }
 
 // NewDescribeCommand describes a service instance, either by passing an `--id flag`
@@ -36,6 +41,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		IO:         f.IOStreams,
 		localizer:  f.Localizer,
 		Context:    f.Context,
+		Profiles:   f.Profile,
 	}
 
 	cmd := &cobra.Command{
@@ -58,17 +64,27 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return runDescribe(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			context, err := opts.Profiles.Load()
 			if err != nil {
 				return err
 			}
 
-			var registryConfig *config.ServiceRegistryConfig
-			if cfg.Services.ServiceRegistry == registryConfig || cfg.Services.ServiceRegistry.InstanceID == "" {
-				return opts.localizer.MustLocalizeError("registry.common.error.noServiceSelected")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   context,
+				Localizer: opts.localizer,
 			}
 
-			opts.id = cfg.Services.ServiceRegistry.InstanceID
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.id = registryInstance.GetId()
 
 			return runDescribe(opts)
 		},
