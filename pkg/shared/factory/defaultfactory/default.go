@@ -14,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 // New creates a new command factory
@@ -27,6 +28,7 @@ func New(localizer localize.Localizer) *factory.Factory {
 	var logger logging.Logger
 	var conn connection.Connection
 	cfgFile := config.NewFile()
+	ctxFile := profile.NewFile()
 
 	loggerBuilder := logging.NewStdLoggerBuilder()
 	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
@@ -114,5 +116,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 		Logger:     logger,
 		Localizer:  localizer,
 		Context:    ctx,
+		Profile:    ctxFile,
 	}
 }

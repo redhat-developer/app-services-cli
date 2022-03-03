@@ -16,6 +16,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
@@ -45,6 +47,7 @@ type options struct {
 	Logger     logging.Logger
 	localizer  localize.Localizer
 	Context    context.Context
+	Profiles   profile.IContext
 
 	registryID string
 	artifactID string
@@ -61,6 +64,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
 		Context:    f.Context,
+		Profiles:   f.Profile,
 	}
 
 	cmd := &cobra.Command{
@@ -71,17 +75,27 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 
-			cfg, err := opts.Config.Load()
+			context, err := opts.Profiles.Load()
 			if err != nil {
 				return err
 			}
 
-			instanceID, ok := cfg.GetServiceRegistryIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   context,
+				Localizer: opts.localizer,
 			}
 
-			opts.registryID = instanceID
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.registryID = registryInstance.GetId()
 
 			return runList(opts)
 		},
