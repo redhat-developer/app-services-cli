@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 func main() {
@@ -33,6 +34,12 @@ func main() {
 	cmdFactory := defaultfactory.New(localizer)
 
 	err = initConfig(cmdFactory)
+	if err != nil {
+		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		os.Exit(1)
+	}
+
+	err = initProfiles(cmdFactory)
 	if err != nil {
 		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
 		os.Exit(1)
@@ -82,6 +89,39 @@ func initConfig(f *factory.Factory) error {
 
 	cfgFile = &config.Config{}
 	if err := f.Config.Save(cfgFile); err != nil {
+		return err
+	}
+	return nil
+}
+
+func initProfiles(f *factory.Factory) error {
+	if !profile.HasCustomLocation() {
+		rhoasCtxDir, err := config.DefaultDir()
+		if err != nil {
+			return err
+		}
+
+		// create rhoas config directory
+		if _, err = os.Stat(rhoasCtxDir); os.IsNotExist(err) {
+			err = os.MkdirAll(rhoasCtxDir, 0o700)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	ctxFile, err := f.Profile.Load()
+
+	if ctxFile != nil {
+		return err
+	}
+
+	if !os.IsNotExist(err) {
+		return err
+	}
+
+	ctxFile = &profile.Context{}
+	if err := f.Profile.Save(ctxFile); err != nil {
 		return err
 	}
 	return nil
