@@ -3,7 +3,6 @@ package list
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -14,7 +13,6 @@ import (
 
 type options struct {
 	IO         *iostreams.IOStreams
-	Config     config.IConfig
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
@@ -22,10 +20,10 @@ type options struct {
 	Profiles   profile.IContext
 }
 
+// NewListCommand creates a new command to list available contexts
 func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
@@ -56,7 +54,15 @@ func runList(opts *options) error {
 
 	profiles := context.Contexts
 
+	if profiles == nil {
+		profiles = map[string]profile.ServiceConfig{}
+	}
+
 	profileNames := make([]string, 0, len(profiles))
+
+	if len(profileNames) == 0 {
+		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.noContexts"))
+	}
 
 	for name := range profiles {
 		profileNames = append(profileNames, name)

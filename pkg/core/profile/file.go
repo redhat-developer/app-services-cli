@@ -20,9 +20,9 @@ type File struct{}
 
 const errorFormat = "%v: %w"
 
-const EnvName = "RHOASCONTEXT"
+const envName = "RHOASCONTEXT"
 
-const CustomContextLocation = "RHOAS_CUSTOM_CONTEXT"
+const customContextLocation = "RHOAS_CUSTOM_CONTEXT"
 
 // Load loads the profiles from the context file. If the context file doesn't exist
 // it will return an empty context object.
@@ -99,11 +99,11 @@ func (c *File) Remove() error {
 // Location gets the path to the context file
 func (c *File) Location() (path string, err error) {
 
-	if rhoasCustomContext := os.Getenv(CustomContextLocation); rhoasCustomContext != "" {
+	if rhoasCustomContext := os.Getenv(customContextLocation); rhoasCustomContext != "" {
 		return rhoasCustomContext, err
 	}
 
-	if rhoasContext := os.Getenv(EnvName); rhoasContext != "" {
+	if rhoasContext := os.Getenv(envName); rhoasContext != "" {
 		path = rhoasContext
 	} else {
 		rhoasCtxDir, err := DefaultDir()
@@ -120,7 +120,7 @@ func (c *File) Location() (path string, err error) {
 
 // Checks if config has custom location
 func HasCustomLocation() bool {
-	rhoasContext := os.Getenv(CustomContextLocation)
+	rhoasContext := os.Getenv(customContextLocation)
 	return rhoasContext != ""
 }
 

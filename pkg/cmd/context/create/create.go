@@ -2,10 +2,9 @@ package create
 
 import (
 	"context"
-	"errors"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -17,7 +16,6 @@ import (
 
 type options struct {
 	IO         *iostreams.IOStreams
-	Config     config.IConfig
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
@@ -29,10 +27,10 @@ type options struct {
 	registryID string
 }
 
+// NewCreateCommand creates a new command to create contexts
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
@@ -75,9 +73,13 @@ func runCreate(opts *options) error {
 
 	profiles := context.Contexts
 
-	currentCtx, _ := profileHandler.GetContext(context.CurrentContext)
+	if profiles == nil {
+		profiles = map[string]profile.ServiceConfig{}
+	}
+
+	currentCtx, _ := profileHandler.GetContext(opts.name)
 	if currentCtx != nil {
-		return errors.New("context already exists")
+		return opts.localizer.MustLocalizeError("context.create.log.alreadyExists", localize.NewEntry("Name", opts.name))
 	}
 
 	services := profile.ServiceConfig{
@@ -93,6 +95,8 @@ func runCreate(opts *options) error {
 	if err != nil {
 		return err
 	}
+
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.create.log.successMessage"))
 
 	return nil
 }
