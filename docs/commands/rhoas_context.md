@@ -32,6 +32,7 @@ $ rhoas context use --name my-context
 ### SEE ALSO
 
 * [rhoas](rhoas.md)	 - RHOAS CLI
+* [rhoas context create](rhoas_context_create.md)	 - Create context
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
 * [rhoas context status](rhoas_context_status.md)	 - Show status of the context
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context

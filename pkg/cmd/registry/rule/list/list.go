@@ -7,7 +7,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -42,7 +41,6 @@ type ruleRow struct {
 
 type options struct {
 	IO         *iostreams.IOStreams
-	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
@@ -59,7 +57,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
 		IO:         f.IOStreams,
-		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
