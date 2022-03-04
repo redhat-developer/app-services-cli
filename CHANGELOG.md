@@ -1,19 +1,4 @@
 
-<a name="v0.39.0"></a>
-## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.0) (2022-02-21)
-
-### Bug Fixes
-
-* **deps:** update module github.com/nicksnyder/go-i18n/v2 to v2.2.0
-* **service-registry rule:** confirm prompt and remove spinners ([#1448](https://github.com/redhat-developer/app-services-cli/issues/1448))
-
-### Features
-
-* **service-registry rule:** add disable and update command ([#1444](https://github.com/redhat-developer/app-services-cli/issues/1444))
-* **service-registry rule:** add describe and list command ([#1431](https://github.com/redhat-developer/app-services-cli/issues/1431))
-* **service-registry rule:** add base and enable command ([#1418](https://github.com/redhat-developer/app-services-cli/issues/1418))
-
-
 <a name="v0.38.6"></a>
 ## [v0.38.6](https://github.com/redhat-developer/app-services-cli/compare/v0.38.5...v0.38.6) (2022-02-17)
 

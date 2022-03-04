@@ -37,7 +37,7 @@ export RHOAS_DEV=true
 rhoas service-registry
 ```
 
-To permanently enable dev commands add export to your bash/zsh profile files
+To permamently enable dev commands add export to your bash/zsh profile files
 
 ```bash
 export RHOAS_DEV=true
@@ -61,6 +61,10 @@ Builds an executable binary `rhoas` of the CLI in the project root. Executable o
 #### `make format`
 
 Formats source code.
+
+### `make generate`
+
+Generates code based on comments in code. This is primarily used to generate interface stubs using [moq](https://github.com/matryer/moq).
 
 ### Testing
 
@@ -86,7 +90,7 @@ Starts the mock all services Manager API and Instance API at [`http://localhost:
 
 ### Logging in
 
-To log in to the mock API, run `rhoas login` against the local server with your authentication token:
+To log in to the mock API, run `rhoas login against the local server` with your authentication token:
 
 ```shell
 rhoas login --api-gateway=http://localhost:8000
@@ -159,7 +163,9 @@ Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-
 
 > NOTE: To create a pre-release, the tag should have appropriate suffix, e.g v0.20.1-alpha1
 
-### Changelog generation
+### Generate a changelog
+
+> NOTE: This step is not required for pre-releases.
 
 [git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
 
