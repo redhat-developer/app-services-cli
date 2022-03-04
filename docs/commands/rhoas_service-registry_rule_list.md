@@ -1,10 +1,10 @@
 ## rhoas service-registry rule list
 
-List validity and compatibility rules
+List the validity and compatibility rules
 
 ### Synopsis
 
-View validity and compatibility rules for the specified Service Registry instance or artifact.
+List the validity and compatibility rules for the specified Service Registry instance or artifact.
 
 ```
 rhoas service-registry rule list [flags]
@@ -13,13 +13,13 @@ rhoas service-registry rule list [flags]
 ### Examples
 
 ```
-## List global rules for artifacts of the current Service Registry instance
+## List the global rules for all artifacts in the current Service Registry instance
 $ rhoas service-registry rule list
 
-## List global rule for artifacts of a specific Service Registry instance
-$ rhoas service-registry rule list --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
+## List the global rules for all artifacts in a specific Service Registry instance
+$ rhoas service-registry rule list --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 
-## List rule for a specific artifact
+## List the artifact-specific rules for a particular artifact
 $ rhoas service-registry rule list --artifact-id=my-artifact
 
 ```

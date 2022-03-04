@@ -1,10 +1,10 @@
 ## rhoas service-registry rule update
 
-Update configuration of rules
+Update the configuration of rules
 
 ### Synopsis
 
-Update configuration of validity and compatibility rules for the specified Service Registry instance or artifact
+Update the configuration of validity and compatibility rules for the specified Service Registry instance or artifact.
 
 ```
 rhoas service-registry rule update [flags]
@@ -13,13 +13,13 @@ rhoas service-registry rule update [flags]
 ### Examples
 
 ```
-## Update global compatibility rule for artifacts of the current Service Registry instance
+## Update the global compatibility rule for all artifacts in the current Service Registry instance
 $ rhoas service-registry rule update --rule-type=compatibility --config=full
 
-## Update global compatibility rule for artifacts of a specific Service Registry instance
-$ rhoas service-registry rule update --rule-type=compatibility --config=full --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
+## Update the global compatibility rule for all artifacts in a specific Service Registry instance
+$ rhoas service-registry rule update --rule-type=compatibility --config=full --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 
-## Update validity rule for a specific artifact
+## Update the validity rule for a specific artifact
 $ rhoas service-registry rule update --rule-type=validity --config=full --artifact-id=my-artifact
 
 ```
