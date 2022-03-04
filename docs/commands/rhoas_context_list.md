@@ -4,7 +4,7 @@ List contexts
 
 ### Synopsis
 
-List currently available contexts
+List currently available user contexts
 
 ```
 rhoas context list [flags]

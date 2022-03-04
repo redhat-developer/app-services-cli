@@ -3,20 +3,24 @@ one='Group, share and manage your rhoas services'
 
 [context.cmd.longDescription]
 one='''
-When working with RHOAS CLI developers interact with the commands that are connecting directly to the service instance. At the time CLI commands can only connect to a single instance of the service. 
+When working with RHOAS CLI, developers interact with the commands that are connecting directly to the service instance.
+At the time CLI commands can only connect to a single instance of the service. 
 
 rhoas context commands allow developers to:
 
-Group services into context that can be used with a number of CLI commands.
-Manage different contexts by switching, listing and removing users contexts 
-Share context with others to use the same set of services
-Generating configuration for connecting to the services from various platforms and tools
+* Group services into context that can be used with a number of CLI commands.
+* Manage different contexts by switching, listing and removing users contexts 
+* Share context with others to use the same set of services
+* Generating configuration for connecting to the services from various platforms and tools
 '''
 
 [context.cmd.example]
 one='''
-## Select a context
+## Set the current context
 $ rhoas context use --name my-context
+
+## List contexts
+$ rhoas context list
 '''
 
 [context.use.cmd]
@@ -26,12 +30,13 @@ one='Set the current context'
 
 [context.use.cmd.longDescription]
 one='''
-Select a context to be used as the current context When you set the context to be used, it is set as the current context for all service based commands.
+Select a context to be used as the current context.
+When you set the context to be used, it is set as the current context for all service based commands.
 '''
 
 [context.use.cmd.example]
 one='''
-## Select a context
+## Set the current context
 $ rhoas context use --name my-context
 '''
 
@@ -45,7 +50,7 @@ one='Show status of the context'
 
 [context.status.cmd.longDescription]
 one='''
-Print overview of the services in a context
+Print overview of the services in associated with a user context
 '''
 
 [context.status.cmd.example]
@@ -63,7 +68,7 @@ $ rhoas context status --name my-context
 one='List contexts'
 
 [context.list.cmd.longDescription]
-one='List currently available contexts'
+one='List currently available user contexts'
 
 [context.list.cmd.example]
 one='''
@@ -71,19 +76,34 @@ one='''
 $ rhoas context list
 '''
 
+[context.list.log.noContexts]
+one='''
+No user contexts exist.
+
+Run the following command to create an user context:
+
+  rhoas context create
+'''
+
 [context.create.cmd]
 
 [context.create.cmd.shortDescription]
-one='Create context'
+one='Create a user context'
 
 [context.create.cmd.longDescription]
-one='Create a context and assign service identifiers'
+one='Create a user context and assign associated service identifiers'
 
 [context.create.cmd.example]
 one='''
 ## Create context with Kafka ID and Service Registry ID
 $ rhoas context create --name my-context --kafka-id c8696ncpoj7gdjmaiqog --registry-id 0282d488-52b3-405b-9e30-9f6f9407de57
 '''
+
+[context.create.log.successMessage]
+one='Context created successfully'
+
+[context.create.log.alreadyExists]
+one='Context with name "{{.Name}}" already exists'
 
 [context.common.flag.name]
 one='Name of the context'
