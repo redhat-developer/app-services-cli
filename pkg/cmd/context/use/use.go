@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -17,7 +17,6 @@ import (
 
 type options struct {
 	IO         *iostreams.IOStreams
-	Config     config.IConfig
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
@@ -27,10 +26,10 @@ type options struct {
 	name string
 }
 
+// NewUseCommand creates a new command to set the current context
 func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
@@ -68,7 +67,7 @@ func runUse(opts *options) error {
 		Localizer: opts.localizer,
 	}
 
-	_, err = profileHandler.GetContext(context.CurrentContext)
+	_, err = profileHandler.GetContext(opts.name)
 	if err != nil {
 		return err
 	}
@@ -80,7 +79,7 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("context.use.successMessage", localize.NewEntry("Name", opts.name)))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.use.successMessage", localize.NewEntry("Name", opts.name)))
 
 	return nil
 }

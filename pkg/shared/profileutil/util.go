@@ -16,6 +16,7 @@ type ContextHandler struct {
 	Localizer localize.Localizer
 }
 
+// GetCurrentKafkaInstance returns the Kafka instance set in the currently selected context
 func (c *ContextHandler) GetCurrentKafkaInstance(api kafkamgmtclient.DefaultApi) (*kafkamgmtclient.KafkaRequest, error) {
 
 	currentCtx, err := c.getCurrentContext()
@@ -40,6 +41,7 @@ func (c *ContextHandler) GetCurrentKafkaInstance(api kafkamgmtclient.DefaultApi)
 	return &kafkaInstance, err
 }
 
+// GetCurrentRegistryInstance returns the Service Registry instance set in the currently selected context
 func (c *ContextHandler) GetCurrentRegistryInstance(api registrymgmtclient.RegistriesApi) (*registrymgmtclient.Registry, error) {
 
 	currentCtx, err := c.getCurrentContext()
@@ -65,6 +67,7 @@ func (c *ContextHandler) GetCurrentRegistryInstance(api registrymgmtclient.Regis
 	return &registryInstance, nil
 }
 
+// GetContext returns the services associated with the context
 func (c *ContextHandler) GetContext(ctxName string) (*profile.ServiceConfig, error) {
 
 	currCtx, ok := c.Context.Contexts[ctxName]
@@ -75,6 +78,7 @@ func (c *ContextHandler) GetContext(ctxName string) (*profile.ServiceConfig, err
 	return &currCtx, nil
 }
 
+// getCurrentContext returns the name of the currently selected context
 func (c *ContextHandler) getCurrentContext() (string, error) {
 
 	if c.Context.CurrentContext == "" {
