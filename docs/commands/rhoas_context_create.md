@@ -1,10 +1,10 @@
 ## rhoas context create
 
-Create context
+Create a user context
 
 ### Synopsis
 
-Create a context and assign service identifiers
+Create a user context and assign associated service identifiers
 
 ```
 rhoas context create [flags]

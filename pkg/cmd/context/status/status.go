@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -18,7 +17,6 @@ import (
 
 type options struct {
 	IO         *iostreams.IOStreams
-	Config     config.IConfig
 	Logger     logging.Logger
 	Connection factory.ConnectionFunc
 	localizer  localize.Localizer
@@ -29,10 +27,10 @@ type options struct {
 	outputFormat string
 }
 
+// NewStatusCommand creates a new command to display status of a context
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Config:     f.Config,
 		Connection: f.Connection,
 		IO:         f.IOStreams,
 		Logger:     f.Logger,
@@ -61,7 +59,6 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 func runStatus(opts *options) error {
 
-	stdout := opts.IO.Out
 	var currentCtx *profile.ServiceConfig
 	var err error
 
@@ -87,6 +84,7 @@ func runStatus(opts *options) error {
 		}
 	}
 
+	stdout := opts.IO.Out
 	err = dump.Formatted(stdout, opts.outputFormat, currentCtx)
 	if err != nil {
 		return err
