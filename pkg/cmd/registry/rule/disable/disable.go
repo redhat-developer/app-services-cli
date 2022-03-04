@@ -8,24 +8,25 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
 
 type options struct {
 	IO         *iostreams.IOStreams
-	Config     config.IConfig
 	Connection factory.ConnectionFunc
 	Logger     logging.Logger
 	localizer  localize.Localizer
 	Context    context.Context
+	Profiles   profile.IContext
 
 	ruleType string
 
@@ -41,11 +42,11 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
 		IO:         f.IOStreams,
-		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		localizer:  f.Localizer,
 		Context:    f.Context,
+		Profiles:   f.Profile,
 	}
 
 	cmd := &cobra.Command{
@@ -64,21 +65,31 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 				Localizer: opts.localizer,
 			}
 
-			cfg, err := opts.Config.Load()
-			if err != nil {
-				return err
-			}
-
 			if err = validator.ValidateRuleType(opts.ruleType); err != nil && opts.ruleType != "" {
 				return err
 			}
 
-			instanceID, ok := cfg.GetServiceRegistryIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
+			context, err := opts.Profiles.Load()
+			if err != nil {
+				return err
 			}
 
-			opts.registryID = instanceID
+			profileHandler := &profileutil.ContextHandler{
+				Context:   context,
+				Localizer: opts.localizer,
+			}
+
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.registryID = registryInstance.GetId()
 
 			return runDisable(opts)
 		},
