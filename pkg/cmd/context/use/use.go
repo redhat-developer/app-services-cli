@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
@@ -58,6 +59,16 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 func runUse(opts *options) error {
 
 	context, err := opts.Profiles.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   context,
+		Localizer: opts.localizer,
+	}
+
+	_, err = profileHandler.GetContext(context.CurrentContext)
 	if err != nil {
 		return err
 	}
