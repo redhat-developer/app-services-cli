@@ -4,7 +4,8 @@ Set the current context
 
 ### Synopsis
 
-Select a context to be used as the current context When you set the context to be used, it is set as the current context for all service based commands.
+Select a context to be used as the current context.
+When you set the context to be used, it is set as the current context for all service based commands.
 
 
 ```
@@ -14,7 +15,7 @@ rhoas context use [flags]
 ### Examples
 
 ```
-## Select a context
+## Set the current context
 $ rhoas context use --name my-context
 
 ```

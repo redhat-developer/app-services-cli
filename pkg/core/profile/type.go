@@ -1,5 +1,6 @@
 package profile
 
+// Context is a type which describes the properties of context file
 type Context struct {
 	Contexts       map[string]ServiceConfig `json:"contexts,omitempty"`
 	CurrentContext string                   `json:"current_context,omitempty"`
@@ -11,6 +12,7 @@ type ServiceConfig struct {
 	ServiceRegistryID string `json:"serviceregistryID"`
 }
 
+// IContext is an interface which describes functions for context file
 type IContext interface {
 	Load() (*Context, error)
 	Save(config *Context) error
