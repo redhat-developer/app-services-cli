@@ -71,6 +71,20 @@ one='''
 $ rhoas context list
 '''
 
+[context.create.cmd]
+
+[context.create.cmd.shortDescription]
+one='Create context'
+
+[context.create.cmd.longDescription]
+one='Create a context and assign service identifiers'
+
+[context.create.cmd.example]
+one='''
+## Create context with Kafka ID and Service Registry ID
+$ rhoas context create --name my-context --kafka-id c8696ncpoj7gdjmaiqog --registry-id 0282d488-52b3-405b-9e30-9f6f9407de57
+'''
+
 [context.common.flag.name]
 one='Name of the context'
 

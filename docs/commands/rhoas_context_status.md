@@ -24,7 +24,8 @@ $ rhoas context status --name my-context
 ### Options
 
 ```
-      --name string   Name of the context
+      --name string     Name of the context
+  -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
 ### Options inherited from parent commands
