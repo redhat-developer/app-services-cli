@@ -1,6 +1,7 @@
 package context
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/use"
@@ -21,6 +22,7 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 		use.NewUseCommand(f),
 		status.NewStatusCommand(f),
 		list.NewListCommand(f),
+		create.NewCreateCommand(f),
 	)
 	return cmd
 }

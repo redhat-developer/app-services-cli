@@ -1,19 +1,18 @@
-package status
+package create
 
 import (
 	"context"
+	"errors"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/spf13/cobra"
-
 	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/spf13/cobra"
 )
 
 type options struct {
@@ -25,11 +24,12 @@ type options struct {
 	Context    context.Context
 	Profiles   profile.IContext
 
-	name         string
-	outputFormat string
+	name       string
+	kafkaID    string
+	registryID string
 }
 
-func NewStatusCommand(f *factory.Factory) *cobra.Command {
+func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
 		Config:     f.Config,
@@ -41,29 +41,27 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "status",
-		Short:   f.Localizer.MustLocalize("context.status.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("context.status.cmd.shortDescription"),
-		Example: f.Localizer.MustLocalize("context.status.cmd.example"),
+		Use:     "create",
+		Short:   f.Localizer.MustLocalize("context.create.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("context.create.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("context.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runStatus(opts)
+			return runCreate(opts)
 		},
 	}
 
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
-	flags.AddOutput(&opts.outputFormat)
+	flags.StringVar(&opts.kafkaID, "kafka-id", "", opts.localizer.MustLocalize("context.common.flag.name"))
+	flags.StringVar(&opts.registryID, "registry-id", "", opts.localizer.MustLocalize("context.common.flag.name"))
 
 	return cmd
+
 }
 
-func runStatus(opts *options) error {
-
-	stdout := opts.IO.Out
-	var currentCtx *profile.ServiceConfig
-	var err error
+func runCreate(opts *options) error {
 
 	context, err := opts.Profiles.Load()
 	if err != nil {
@@ -75,19 +73,23 @@ func runStatus(opts *options) error {
 		Localizer: opts.localizer,
 	}
 
-	if opts.name != "" {
-		currentCtx, err = profileHandler.GetContext(opts.name)
-		if err != nil {
-			return err
-		}
-	} else {
-		currentCtx, err = profileHandler.GetContext(context.CurrentContext)
-		if err != nil {
-			return err
-		}
+	profiles := context.Contexts
+
+	currentCtx, _ := profileHandler.GetContext(context.CurrentContext)
+	if currentCtx != nil {
+		return errors.New("context already exists")
 	}
 
-	err = dump.Formatted(stdout, opts.outputFormat, currentCtx)
+	services := profile.ServiceConfig{
+		KafkaID:           opts.kafkaID,
+		ServiceRegistryID: opts.registryID,
+	}
+
+	profiles[opts.name] = services
+
+	context.Contexts = profiles
+
+	err = opts.Profiles.Save(context)
 	if err != nil {
 		return err
 	}
