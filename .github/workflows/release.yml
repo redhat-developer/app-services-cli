@@ -73,8 +73,9 @@ jobs:
           repository: redhat-developer/app-services-guides
           event-type: rhoas-cli-release
           client-payload: '{"version": steps.set-version.outputs.version }'
-  quay-release:
-    depends-on: release
+  tools-release:
+    if: steps.check-tag.outputs.prerelease == 'false'
+    needs: release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -82,8 +83,8 @@ jobs:
         uses: actions/github-script@v6
         with: 
           script: |
-            github.request('POST /repos/redhat-developer/app-services-tools/actions/workflows/42/dispatches', {
-              workflow_id: 42,
+            github.request('POST /repos/redhat-developer/app-services-tools/actions/workflows/20880234/dispatches', {
+              workflow_id: 20880234,
               ref: 'ref',
               inputs: {
                 rhoasVersion: context.ref.replace(/^refs\/tags\//, '')
