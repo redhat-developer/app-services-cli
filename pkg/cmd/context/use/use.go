@@ -3,25 +3,25 @@ package use
 import (
 	"context"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 type options struct {
-	IO         *iostreams.IOStreams
-	Logger     logging.Logger
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
-	Profiles   profile.IContext
+	IO             *iostreams.IOStreams
+	Logger         logging.Logger
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	name string
 }
@@ -30,11 +30,11 @@ type options struct {
 func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Connection: f.Connection,
-		IO:         f.IOStreams,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Profiles:   f.Profile,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -44,6 +44,11 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("context.use.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			if !opts.IO.CanPrompt() && opts.name == "" {
+				return flagutil.RequiredWhenNonInteractiveError("name")
+			}
+
 			return runUse(opts)
 		},
 	}
@@ -57,9 +62,16 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 func runUse(opts *options) error {
 
-	context, err := opts.Profiles.Load()
+	context, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
+	}
+
+	if opts.name == "" {
+		opts.name, err = runInteractivePrompt(opts, context)
+		if err != nil {
+			return err
+		}
 	}
 
 	profileHandler := &profileutil.ContextHandler{
@@ -74,7 +86,7 @@ func runUse(opts *options) error {
 
 	context.CurrentContext = opts.name
 
-	err = opts.Profiles.Save(context)
+	err = opts.ServiceContext.Save(context)
 	if err != nil {
 		return err
 	}
@@ -82,4 +94,39 @@ func runUse(opts *options) error {
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.use.successMessage", localize.NewEntry("Name", opts.name)))
 
 	return nil
+}
+
+func runInteractivePrompt(opts *options, context *servicecontext.Context) (string, error) {
+
+	profiles := context.Contexts
+
+	if profiles == nil {
+		profiles = map[string]servicecontext.ServiceConfig{}
+	}
+
+	profileNames := make([]string, 0, len(profiles))
+
+	for name := range profiles {
+		profileNames = append(profileNames, name)
+	}
+
+	if len(profileNames) == 0 {
+		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.noContexts"))
+		return "", nil
+	}
+
+	prompt := &survey.Select{
+		Message:  opts.localizer.MustLocalize("context.common.flag.name"),
+		Options:  profileNames,
+		PageSize: 10,
+	}
+
+	var selectedServiceContext string
+	err := survey.AskOne(prompt, &selectedServiceContext)
+	if err != nil {
+		return "", err
+	}
+
+	return selectedServiceContext, nil
+
 }

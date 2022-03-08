@@ -9,12 +9,12 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 // New creates a new command factory
@@ -28,7 +28,7 @@ func New(localizer localize.Localizer) *factory.Factory {
 	var logger logging.Logger
 	var conn connection.Connection
 	cfgFile := config.NewFile()
-	ctxFile := profile.NewFile()
+	ctxFile := servicecontext.NewFile()
 
 	loggerBuilder := logging.NewStdLoggerBuilder()
 	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
@@ -110,12 +110,12 @@ func New(localizer localize.Localizer) *factory.Factory {
 	}
 
 	return &factory.Factory{
-		IOStreams:  io,
-		Config:     cfgFile,
-		Connection: connectionFunc,
-		Logger:     logger,
-		Localizer:  localizer,
-		Context:    ctx,
-		Profile:    ctxFile,
+		IOStreams:      io,
+		Config:         cfgFile,
+		Connection:     connectionFunc,
+		Logger:         logger,
+		Localizer:      localizer,
+		Context:        ctx,
+		ServiceContext: ctxFile,
 	}
 }
