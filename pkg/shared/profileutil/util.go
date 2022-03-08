@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
@@ -12,7 +12,7 @@ import (
 )
 
 type ContextHandler struct {
-	Context   *profile.Context
+	Context   *servicecontext.Context
 	Localizer localize.Localizer
 }
 
@@ -68,7 +68,7 @@ func (c *ContextHandler) GetCurrentRegistryInstance(api registrymgmtclient.Regis
 }
 
 // GetContext returns the services associated with the context
-func (c *ContextHandler) GetContext(ctxName string) (*profile.ServiceConfig, error) {
+func (c *ContextHandler) GetContext(ctxName string) (*servicecontext.ServiceConfig, error) {
 
 	currCtx, ok := c.Context.Contexts[ctxName]
 	if !ok {

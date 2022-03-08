@@ -10,7 +10,7 @@ At the time CLI commands can only connect to a single instance of the service.
 rhoas context commands allow developers to:
 
 * Group services into context that can be used with a number of CLI commands.
-* Manage different contexts by switching, listing and removing users contexts 
+* Manage different contexts by switching, listing and removing service contexts 
 * Share context with others to use the same set of services
 * Generating configuration for connecting to the services from various platforms and tools
 
@@ -36,7 +36,7 @@ $ rhoas context list
 ### SEE ALSO
 
 * [rhoas](rhoas.md)	 - RHOAS CLI
-* [rhoas context create](rhoas_context_create.md)	 - Create a user context
+* [rhoas context create](rhoas_context_create.md)	 - Create a service context
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
 * [rhoas context status](rhoas_context_status.md)	 - Show status of the context
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context
