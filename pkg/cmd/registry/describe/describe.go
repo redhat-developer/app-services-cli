@@ -8,6 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
@@ -15,8 +16,6 @@ import (
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
-
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 type options struct {
@@ -24,24 +23,24 @@ type options struct {
 	name         string
 	outputFormat string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
-	Profiles   profile.IContext
+	IO             *iostreams.IOStreams
+	Config         config.IConfig
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewDescribeCommand describes a service instance, either by passing an `--id flag`
 // or by using the service instance set in the config, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
-		Profiles:   f.Profile,
+		Config:         f.Config,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -64,7 +63,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return runDescribe(opts)
 			}
 
-			context, err := opts.Profiles.Load()
+			context, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}

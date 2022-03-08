@@ -8,19 +8,19 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/spf13/cobra"
 )
 
 type options struct {
-	IO         *iostreams.IOStreams
-	Logger     logging.Logger
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
-	Profiles   profile.IContext
+	IO             *iostreams.IOStreams
+	Logger         logging.Logger
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	name       string
 	kafkaID    string
@@ -31,11 +31,11 @@ type options struct {
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Connection: f.Connection,
-		IO:         f.IOStreams,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Profiles:   f.Profile,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -61,7 +61,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 func runCreate(opts *options) error {
 
-	context, err := opts.Profiles.Load()
+	context, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func runCreate(opts *options) error {
 	profiles := context.Contexts
 
 	if profiles == nil {
-		profiles = map[string]profile.ServiceConfig{}
+		profiles = map[string]servicecontext.ServiceConfig{}
 	}
 
 	currentCtx, _ := profileHandler.GetContext(opts.name)
@@ -82,7 +82,7 @@ func runCreate(opts *options) error {
 		return opts.localizer.MustLocalizeError("context.create.log.alreadyExists", localize.NewEntry("Name", opts.name))
 	}
 
-	services := profile.ServiceConfig{
+	services := servicecontext.ServiceConfig{
 		KafkaID:           opts.kafkaID,
 		ServiceRegistryID: opts.registryID,
 	}
@@ -91,7 +91,7 @@ func runCreate(opts *options) error {
 
 	context.Contexts = profiles
 
-	err = opts.Profiles.Save(context)
+	err = opts.ServiceContext.Save(context)
 	if err != nil {
 		return err
 	}

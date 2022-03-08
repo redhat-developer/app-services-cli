@@ -1,4 +1,4 @@
-package profile
+package servicecontext
 
 // Context is a type which describes the properties of context file
 type Context struct {

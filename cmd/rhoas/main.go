@@ -8,6 +8,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/redhat-developer/app-services-cli/internal/telemetry"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -20,7 +21,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 )
 
 func main() {
@@ -95,7 +95,7 @@ func initConfig(f *factory.Factory) error {
 }
 
 func initProfiles(f *factory.Factory) error {
-	if !profile.HasCustomLocation() {
+	if !servicecontext.HasCustomLocation() {
 		rhoasCtxDir, err := config.DefaultDir()
 		if err != nil {
 			return err
@@ -110,7 +110,7 @@ func initProfiles(f *factory.Factory) error {
 		}
 	}
 
-	ctxFile, err := f.Profile.Load()
+	ctxFile, err := f.ServiceContext.Load()
 
 	if ctxFile != nil {
 		return err
@@ -120,8 +120,8 @@ func initProfiles(f *factory.Factory) error {
 		return err
 	}
 
-	ctxFile = &profile.Context{}
-	if err := f.Profile.Save(ctxFile); err != nil {
+	ctxFile = &servicecontext.Context{}
+	if err := f.ServiceContext.Save(ctxFile); err != nil {
 		return err
 	}
 	return nil

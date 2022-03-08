@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
@@ -21,12 +21,12 @@ import (
 )
 
 type options struct {
-	IO         *iostreams.IOStreams
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
-	Profiles   profile.IContext
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	ruleType   string
 	config     string
@@ -40,12 +40,12 @@ type options struct {
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		IO:         f.IOStreams,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Context:    f.Context,
-		Profiles:   f.Profile,
+		IO:             f.IOStreams,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -74,7 +74,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 				)
 			}
 
-			context, err := opts.Profiles.Load()
+			context, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
