@@ -3,13 +3,10 @@ one='Group, share and manage your rhoas services'
 
 [context.cmd.longDescription]
 one='''
-When working with RHOAS CLI, developers interact with the commands that are connecting directly to the service instance.
-At the time CLI commands can only connect to a single instance of the service. 
-
 rhoas context commands allow developers to:
 
-* Group services into context that can be used with a number of CLI commands.
-* Manage different contexts by switching, listing and removing service contexts 
+* Group services into contexts that can be used with a number of CLI commands.
+* Manage different service contexts by switching, listing and removing service contexts 
 * Share context with others to use the same set of services
 * Generating configuration for connecting to the services from various platforms and tools
 '''
@@ -30,7 +27,7 @@ one='Set the current context'
 
 [context.use.cmd.longDescription]
 one='''
-Select a context to be used as the current context.
+Select a service context to be used as the current context.
 When you set the context to be used, it is set as the current context for all service based commands.
 '''
 
