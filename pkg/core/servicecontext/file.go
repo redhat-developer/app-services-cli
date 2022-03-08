@@ -1,4 +1,4 @@
-package profile
+package servicecontext
 
 import (
 	"encoding/json"
@@ -20,9 +20,7 @@ type File struct{}
 
 const errorFormat = "%v: %w"
 
-const envName = "RHOASCONTEXT"
-
-const customContextLocation = "RHOAS_CUSTOM_CONTEXT"
+const envName = "RHOAS_CONTEXT"
 
 // Load loads the profiles from the context file. If the context file doesn't exist
 // it will return an empty context object.
@@ -99,10 +97,6 @@ func (c *File) Remove() error {
 // Location gets the path to the context file
 func (c *File) Location() (path string, err error) {
 
-	if rhoasCustomContext := os.Getenv(customContextLocation); rhoasCustomContext != "" {
-		return rhoasCustomContext, err
-	}
-
 	if rhoasContext := os.Getenv(envName); rhoasContext != "" {
 		path = rhoasContext
 	} else {
@@ -120,7 +114,7 @@ func (c *File) Location() (path string, err error) {
 
 // Checks if config has custom location
 func HasCustomLocation() bool {
-	rhoasContext := os.Getenv(customContextLocation)
+	rhoasContext := os.Getenv(envName)
 	return rhoasContext != ""
 }
 

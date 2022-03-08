@@ -8,20 +8,20 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 )
 
 type options struct {
-	IO         *iostreams.IOStreams
-	Logger     logging.Logger
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
-	Profiles   profile.IContext
+	IO             *iostreams.IOStreams
+	Logger         logging.Logger
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	name         string
 	outputFormat string
@@ -31,11 +31,11 @@ type options struct {
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Connection: f.Connection,
-		IO:         f.IOStreams,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Profiles:   f.Profile,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -59,10 +59,10 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 
 func runStatus(opts *options) error {
 
-	var currentCtx *profile.ServiceConfig
+	var currentCtx *servicecontext.ServiceConfig
 	var err error
 
-	context, err := opts.Profiles.Load()
+	context, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
 	}

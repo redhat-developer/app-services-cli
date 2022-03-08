@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -27,8 +27,8 @@ type Factory struct {
 	Localizer localize.Localizer
 	// Context returns the default context for the application
 	Context context.Context
-
-	Profile profile.IContext
+	// ServiceContext returns the identifiers for currently selected services for the context
+	ServiceContext servicecontext.IContext
 }
 
 type ConnectionFunc func(cfg *connection.Config) (connection.Connection, error)

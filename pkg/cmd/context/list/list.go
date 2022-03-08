@@ -2,33 +2,35 @@ package list
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/profile"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 
 type options struct {
-	IO         *iostreams.IOStreams
-	Logger     logging.Logger
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
-	Profiles   profile.IContext
+	IO             *iostreams.IOStreams
+	Logger         logging.Logger
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewListCommand creates a new command to list available contexts
 func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		Connection: f.Connection,
-		IO:         f.IOStreams,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Profiles:   f.Profile,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -47,7 +49,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 func runList(opts *options) error {
 
-	context, err := opts.Profiles.Load()
+	context, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
 	}
@@ -55,20 +57,22 @@ func runList(opts *options) error {
 	profiles := context.Contexts
 
 	if profiles == nil {
-		profiles = map[string]profile.ServiceConfig{}
+		profiles = map[string]servicecontext.ServiceConfig{}
 	}
 
-	profileNames := make([]string, 0, len(profiles))
+	currentCtx := context.CurrentContext
 
-	if len(profileNames) == 0 {
-		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.noContexts"))
-	}
+	var profileList string
 
 	for name := range profiles {
-		profileNames = append(profileNames, name)
+		if currentCtx != "" && name == currentCtx {
+			profileList += fmt.Sprintln(name, icon.SuccessPrefix())
+		} else {
+			profileList += fmt.Sprintln(name)
+		}
 	}
 
-	opts.Logger.Info(profileNames)
+	opts.Logger.Info(profileList)
 
 	return nil
 }

@@ -9,7 +9,7 @@ At the time CLI commands can only connect to a single instance of the service.
 rhoas context commands allow developers to:
 
 * Group services into context that can be used with a number of CLI commands.
-* Manage different contexts by switching, listing and removing users contexts 
+* Manage different contexts by switching, listing and removing service contexts 
 * Share context with others to use the same set of services
 * Generating configuration for connecting to the services from various platforms and tools
 '''
@@ -50,7 +50,7 @@ one='Show status of the context'
 
 [context.status.cmd.longDescription]
 one='''
-Print overview of the services in associated with a user context
+Print overview of the services in associated with a service context
 '''
 
 [context.status.cmd.example]
@@ -68,7 +68,7 @@ $ rhoas context status --name my-context
 one='List contexts'
 
 [context.list.cmd.longDescription]
-one='List currently available user contexts'
+one='List currently available service contexts'
 
 [context.list.cmd.example]
 one='''
@@ -78,9 +78,9 @@ $ rhoas context list
 
 [context.list.log.noContexts]
 one='''
-No user contexts exist.
+No service contexts exist.
 
-Run the following command to create an user context:
+Run the following command to create a service context:
 
   rhoas context create
 '''
@@ -88,10 +88,10 @@ Run the following command to create an user context:
 [context.create.cmd]
 
 [context.create.cmd.shortDescription]
-one='Create a user context'
+one='Create a service context'
 
 [context.create.cmd.longDescription]
-one='Create a user context and assign associated service identifiers'
+one='Create a service context and assign associated service identifiers'
 
 [context.create.cmd.example]
 one='''
@@ -139,7 +139,7 @@ Run `rhoas context list` to view available contexts
 
 [context.common.error.notSet]
 one='''
-context has not been set. Run the following command to set context:
+current context has not been set. Run the following command to set context and use services:
 
   rhoas context use --name my-context
 '''
