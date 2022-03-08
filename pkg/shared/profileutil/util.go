@@ -11,6 +11,7 @@ import (
 	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
 )
 
+// ContextHandler is a type with methods to obtain service data from context
 type ContextHandler struct {
 	Context   *servicecontext.Context
 	Localizer localize.Localizer
