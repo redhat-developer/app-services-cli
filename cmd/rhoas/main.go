@@ -41,7 +41,7 @@ func main() {
 
 	err = initProfiles(cmdFactory)
 	if err != nil {
-		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
+		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.context.error", localize.NewEntry("Error", err)))
 		os.Exit(1)
 	}
 

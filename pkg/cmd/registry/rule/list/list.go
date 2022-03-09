@@ -72,13 +72,13 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 
-			context, err := opts.ServiceContext.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
 			profileHandler := &profileutil.ContextHandler{
-				Context:   context,
+				Context:   svcContext,
 				Localizer: opts.localizer,
 			}
 

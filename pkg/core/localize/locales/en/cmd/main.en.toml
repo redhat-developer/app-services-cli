@@ -1,2 +1,5 @@
 [main.config.error]
 one = 'Error when initializing configuration: "{{.Error}}"'
+
+[main.context.error]
+one = 'Error when initializing service contexts: "{{.Error}}"'
