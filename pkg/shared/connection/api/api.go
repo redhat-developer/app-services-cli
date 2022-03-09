@@ -7,12 +7,13 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	serviceaccount "github.com/redhat-developer/app-services-sdk-go/serviceaccounts/apiv1internal/client"
 )
 
 type API interface {
 	KafkaMgmt() kafkamgmtclient.DefaultApi
 	ServiceRegistryMgmt() registrymgmtclient.RegistriesApi
-	ServiceAccountMgmt() kafkamgmtclient.SecurityApi
+	ServiceAccountMgmt() serviceaccount.ServiceAccountsApi
 	KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
 	AccountMgmt() amsclient.AppServicesApi

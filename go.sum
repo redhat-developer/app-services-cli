@@ -710,6 +710,8 @@ github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1 h1:xRq5X
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1/go.mod h1:Z/gr/snlpsqYg4vftmcx97vCR3qMQJhALGelDHx4pMA=
 github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1 h1:3sUmQ3nAawsYWg7ZCO2Q8HF2J7MW6YA38h/YFL3ao6o=
 github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1/go.mod h1:w6MhtwfivfTB0KUpRFBiXfZROOvPeigGsR6RZt7F1Qg=
+github.com/redhat-developer/app-services-sdk-go/serviceaccounts v0.3.0 h1:XTO4kcCkn/ghVXQNjxH+GoNr5Q7yuxJHeP72lvDnj/w=
+github.com/redhat-developer/app-services-sdk-go/serviceaccounts v0.3.0/go.mod h1:o0eTY+mMe210UaGrGNLMX1CftqQlerhZ6O+mEimSx7k=
 github.com/redhat-developer/service-binding-operator v0.9.0 h1:CS+eEtzu/PtWuyvYQFQpZXd6ukSuFtN+U0EKKtTsvlA=
 github.com/redhat-developer/service-binding-operator v0.9.0/go.mod h1:D415gZQiz5Q8zyRbmrNrlieb6Xp73oFtCb+nCuTL6GA=
 github.com/rivo/uniseg v0.2.0 h1:S1pD9weZBuJdFmowNwbpi7BJ8TNftyUImj/0WQi72jY=
