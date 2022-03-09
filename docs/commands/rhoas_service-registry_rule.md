@@ -6,7 +6,9 @@ Manage artifact rules in a Service Registry instance
 
 Configure the validity and compatibility rules that govern artifact content.
 
-An artifact-specific rule applies to the specified artifact only. Global rules apply to all artifacts in a particular Service Registry instance. Configured artifact-specific rules override any configured global rules. Before a new artifact version can be uploaded to the registry, all configured global rules or artifact-specific rules must pass.
+When you add or update an artifact, Service Registry applies rules to check the validity and compatibility of the artifact content. Artifact-specific rules apply to the specified artifact only. Global rules apply to all artifacts in a particular Service Registry instance. Configured artifact-specific rules override any configured global rules. Before a new artifact version can be uploaded to the registry, all configured global rules or artifact-specific rules must pass.
+
+For more information about supported Service Registry content and rules, see https://access.redhat.com/documentation/en-us/red_hat_openshift_service_registry/1/guide/9b0fdf14-f0d6-4d7f-8637-3ac9e2069817.
 
 
 ### Examples
