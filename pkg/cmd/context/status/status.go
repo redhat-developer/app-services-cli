@@ -62,13 +62,13 @@ func runStatus(opts *options) error {
 	var currentCtx *servicecontext.ServiceConfig
 	var err error
 
-	context, err := opts.ServiceContext.Load()
+	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
 	}
 
 	profileHandler := &profileutil.ContextHandler{
-		Context:   context,
+		Context:   svcContext,
 		Localizer: opts.localizer,
 	}
 
@@ -78,7 +78,7 @@ func runStatus(opts *options) error {
 			return err
 		}
 	} else {
-		currentCtx, err = profileHandler.GetContext(context.CurrentContext)
+		currentCtx, err = profileHandler.GetContext(svcContext.CurrentContext)
 		if err != nil {
 			return err
 		}
