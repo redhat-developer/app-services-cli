@@ -3,15 +3,20 @@ package create
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	"github.com/spf13/cobra"
+
+	"github.com/AlecAivazis/survey/v2"
 )
 
 type options struct {
@@ -22,9 +27,11 @@ type options struct {
 	Context        context.Context
 	ServiceContext servicecontext.IContext
 
-	name       string
-	kafkaID    string
-	registryID string
+	name         string
+	kafkaID      string
+	registryID   string
+	interacttive bool
+	autoUse      bool
 }
 
 // NewCreateCommand creates a new command to create contexts
@@ -45,6 +52,13 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("context.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			if !opts.IO.CanPrompt() && opts.name == "" {
+				return flagutil.RequiredWhenNonInteractiveError("name")
+			} else if opts.name == "" {
+				opts.interacttive = true
+			}
+
 			return runCreate(opts)
 		},
 	}
@@ -52,8 +66,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
-	flags.StringVar(&opts.kafkaID, "kafka-id", "", opts.localizer.MustLocalize("context.common.flag.name"))
-	flags.StringVar(&opts.registryID, "registry-id", "", opts.localizer.MustLocalize("context.common.flag.name"))
+	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("context.create.flag.use"))
+	flags.StringVar(&opts.kafkaID, "kafka-id", "", opts.localizer.MustLocalize("context.create.flag.kafkaID"))
+	flags.StringVar(&opts.registryID, "registry-id", "", opts.localizer.MustLocalize("context.create.flag.registryID"))
 
 	return cmd
 
@@ -61,24 +76,30 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 func runCreate(opts *options) error {
 
-	context, err := opts.ServiceContext.Load()
+	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
 	}
 
 	profileHandler := &profileutil.ContextHandler{
-		Context:   context,
+		Context:   svcContext,
 		Localizer: opts.localizer,
 	}
 
-	profiles := context.Contexts
+	profiles := svcContext.Contexts
 
 	if profiles == nil {
 		profiles = map[string]servicecontext.ServiceConfig{}
 	}
 
-	currentCtx, _ := profileHandler.GetContext(opts.name)
-	if currentCtx != nil {
+	if opts.interacttive {
+		if err = runInteractive(opts); err != nil {
+			return err
+		}
+	}
+
+	context, _ := profileHandler.GetContext(opts.name)
+	if context != nil {
 		return opts.localizer.MustLocalizeError("context.create.log.alreadyExists", localize.NewEntry("Name", opts.name))
 	}
 
@@ -89,14 +110,54 @@ func runCreate(opts *options) error {
 
 	profiles[opts.name] = services
 
-	context.Contexts = profiles
+	svcContext.Contexts = profiles
 
-	err = opts.ServiceContext.Save(context)
+	if opts.autoUse {
+		opts.Logger.Debug("Auto-use is set, updating the current service context")
+		svcContext.CurrentContext = opts.name
+	} else {
+		opts.Logger.Debug("Auto-use is not set, skipping updating the current service context")
+	}
+
+	err = opts.ServiceContext.Save(svcContext)
 	if err != nil {
 		return err
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.create.log.successMessage"))
+
+	return nil
+}
+
+func runInteractive(opts *options) error {
+
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return err
+	}
+
+	promptName := &survey.Input{
+		Message: opts.localizer.MustLocalize("context.create.input.name.message"),
+	}
+
+	err = survey.AskOne(promptName, &opts.name)
+	if err != nil {
+		return err
+	}
+
+	selectedKafka, err := kafkautil.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
+	if err != nil {
+		return err
+	}
+
+	opts.kafkaID = selectedKafka.GetId()
+
+	selectedRegistry, err := serviceregistryutil.InteractiveSelect(opts.Context, conn, opts.Logger)
+	if err != nil {
+		return err
+	}
+
+	opts.registryID = selectedRegistry.GetId()
 
 	return nil
 }

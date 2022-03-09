@@ -2,6 +2,7 @@ package context
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/create"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/status"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/use"
@@ -9,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewContextCmd creates a new command to manage service contexts
 func NewContextCmd(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "context",
@@ -23,6 +25,7 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 		status.NewStatusCommand(f),
 		list.NewListCommand(f),
 		create.NewCreateCommand(f),
+		delete.NewDeleteCommand(f),
 	)
 	return cmd
 }
