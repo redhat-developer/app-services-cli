@@ -1,22 +1,23 @@
-## rhoas context use
+## rhoas context delete
 
-Set the current context
+Delete a service context
 
 ### Synopsis
 
-Select a service context to be used as the current context.
-When you set the context to be used, it is set as the current context for all service based commands.
-
+Delete a service context and assign associated service identifiers
 
 ```
-rhoas context use [flags]
+rhoas context delete [flags]
 ```
 
 ### Examples
 
 ```
-## Set the current context
-$ rhoas context use --name my-context
+## Delete the currently selected service context
+$ rhoas context delete
+
+## Delete a service context by name
+$ rhoas context delete --name my-context
 
 ```
 

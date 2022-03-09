@@ -69,13 +69,13 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			context, err := opts.ServiceContext.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
 			profileHandler := &profileutil.ContextHandler{
-				Context:   context,
+				Context:   svcContext,
 				Localizer: opts.localizer,
 			}
 
