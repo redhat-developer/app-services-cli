@@ -82,6 +82,13 @@ Run the following command to create a service context:
   rhoas context create
 '''
 
+[context.list.log.info.describeHint]
+one = '''
+Run the following to view the services associated with a context:
+
+ $ rhoas context status --name my-context
+'''
+
 [context.create.cmd]
 
 [context.create.cmd.shortDescription]
@@ -96,11 +103,46 @@ one='''
 $ rhoas context create --name my-context --kafka-id c8696ncpoj7gdjmaiqog --registry-id 0282d488-52b3-405b-9e30-9f6f9407de57
 '''
 
+[context.create.flag.use]
+one='Set the new service context as the current context'
+
+[context.create.flag.kafkaID]
+one='ID of Kafka instance for the service context'
+
+[context.create.flag.registryID]
+one='ID of Service Registry instance for the service context'
+
+[context.create.input.name.message]
+one='Name:'
+
+[context.create.input.name.help]
+one='Unique name of service context'
+
 [context.create.log.successMessage]
 one='Context created successfully'
 
 [context.create.log.alreadyExists]
 one='Context with name "{{.Name}}" already exists'
+
+[context.delete.cmd]
+
+[context.delete.cmd.shortDescription]
+one='Delete a service context'
+
+[context.delete.cmd.longDescription]
+one='Delete a service context and assign associated service identifiers'
+
+[context.delete.cmd.example]
+one='''
+## Delete the currently selected service context
+$ rhoas context delete
+
+## Delete a service context by name
+$ rhoas context delete --name my-context
+'''
+
+[context.delete.log.successMessage]
+one='Context deleted successfully'
 
 [context.common.flag.name]
 one='Name of the context'

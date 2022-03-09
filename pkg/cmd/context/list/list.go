@@ -49,18 +49,18 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 func runList(opts *options) error {
 
-	context, err := opts.ServiceContext.Load()
+	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
 	}
 
-	profiles := context.Contexts
+	profiles := svcContext.Contexts
 
 	if profiles == nil {
 		profiles = map[string]servicecontext.ServiceConfig{}
 	}
 
-	currentCtx := context.CurrentContext
+	currentCtx := svcContext.CurrentContext
 
 	var profileList string
 
@@ -73,6 +73,7 @@ func runList(opts *options) error {
 	}
 
 	opts.Logger.Info(profileList)
+	opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.info.describeHint"))
 
 	return nil
 }

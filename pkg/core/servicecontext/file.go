@@ -112,7 +112,7 @@ func (c *File) Location() (path string, err error) {
 	return path, nil
 }
 
-// Checks if config has custom location
+// Checks if context has custom location
 func HasCustomLocation() bool {
 	rhoasContext := os.Getenv(envName)
 	return rhoasContext != ""

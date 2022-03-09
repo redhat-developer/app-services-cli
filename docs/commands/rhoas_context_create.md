@@ -21,9 +21,10 @@ $ rhoas context create --name my-context --kafka-id c8696ncpoj7gdjmaiqog --regis
 ### Options
 
 ```
-      --kafka-id string      Name of the context
+      --kafka-id string      ID of Kafka instance for the service context
       --name string          Name of the context
-      --registry-id string   Name of the context
+      --registry-id string   ID of Service Registry instance for the service context
+      --use                  Set the new service context as the current context (default true)
 ```
 
 ### Options inherited from parent commands

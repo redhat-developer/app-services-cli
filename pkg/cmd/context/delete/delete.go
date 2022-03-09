@@ -1,9 +1,8 @@
-package use
+package delete
 
 import (
 	"context"
 
-	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -23,33 +22,33 @@ type options struct {
 	Context        context.Context
 	ServiceContext servicecontext.IContext
 
-	name string
+	skipConfirm bool
+	name        string
 }
 
-// NewUseCommand creates a new command to set the current context
-func NewUseCommand(f *factory.Factory) *cobra.Command {
-
+// NewDeleteCommand command for deleting service contexts
+func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Connection:     f.Connection,
-		IO:             f.IOStreams,
 		Logger:         f.Logger,
+		IO:             f.IOStreams,
 		localizer:      f.Localizer,
+		Context:        f.Context,
 		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
-		Use:     "use",
-		Short:   f.Localizer.MustLocalize("context.use.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("context.use.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("context.use.cmd.example"),
+		Use:     "delete",
+		Short:   f.Localizer.MustLocalize("context.delete.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("context.delete.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("context.delete.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
-			if !opts.IO.CanPrompt() && opts.name == "" {
-				return flagutil.RequiredWhenNonInteractiveError("name")
+			if !opts.IO.CanPrompt() && !opts.skipConfirm {
+				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
-			return runUse(opts)
+			return runDelete(opts)
 		},
 	}
 
@@ -60,7 +59,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runUse(opts *options) error {
+func runDelete(opts *options) error {
 
 	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
@@ -68,10 +67,13 @@ func runUse(opts *options) error {
 	}
 
 	if opts.name == "" {
-		opts.name, err = runInteractivePrompt(opts, svcContext)
-		if err != nil {
-			return err
+		if svcContext.CurrentContext == "" {
+			return opts.localizer.MustLocalizeError("context.common.error.notSet")
 		}
+
+		opts.name = svcContext.CurrentContext
+
+		svcContext.CurrentContext = ""
 	}
 
 	profileHandler := &profileutil.ContextHandler{
@@ -84,49 +86,15 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	svcContext.CurrentContext = opts.name
+	delete(svcContext.Contexts, opts.name)
 
 	err = opts.ServiceContext.Save(svcContext)
 	if err != nil {
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.use.successMessage", localize.NewEntry("Name", opts.name)))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.delete.log.successMessage"))
 
 	return nil
-}
-
-func runInteractivePrompt(opts *options, context *servicecontext.Context) (string, error) {
-
-	profiles := context.Contexts
-
-	if profiles == nil {
-		profiles = map[string]servicecontext.ServiceConfig{}
-	}
-
-	profileNames := make([]string, 0, len(profiles))
-
-	for name := range profiles {
-		profileNames = append(profileNames, name)
-	}
-
-	if len(profileNames) == 0 {
-		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.noContexts"))
-		return "", nil
-	}
-
-	prompt := &survey.Select{
-		Message:  opts.localizer.MustLocalize("context.common.flag.name"),
-		Options:  profileNames,
-		PageSize: 10,
-	}
-
-	var selectedServiceContext string
-	err := survey.AskOne(prompt, &selectedServiceContext)
-	if err != nil {
-		return "", err
-	}
-
-	return selectedServiceContext, nil
 
 }
