@@ -6,7 +6,7 @@ Connect your services to Kubernetes or OpenShift
 
 Connect your application services to an Kubernetes or OpenShift cluster.
 
-Note: Before you can connect your application service to OpenShift, you need to install the RHOAS Operator in your OpenShift cluster. For installation instructions, see https://github.com/redhat-developer/app-services-guides/tree/main/service-discovery#installing-the-rhoas-operator-on-openshift.
+Note: Before you can connect your application service to OpenShift, you need to install the RHOAS Operator in your OpenShift cluster. For installation instructions, see https://github.com/redhat-developer/app-services-guides/tree/main/docs/kafka/service-binding-kafka#installing-the-rhoas-operator-on-openshift.
 
 When you connect an application service to a Kubernetes or OpenShift cluster, this command uses the kubeconfig file (or the KUBECONFIG environment variable) to connect to the cluster and identify the context.
 

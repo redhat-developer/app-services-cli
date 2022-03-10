@@ -1,10 +1,10 @@
 ## rhoas service-registry rule describe
 
-Display configuration of a rule
+Display the configuration details of a rule
 
 ### Synopsis
 
-View configuration details of compatibility or validity rule for the specified Service Registry instance or artifact.
+Display the configuration details of a compatibility or validity rule for the specified Service Registry instance or artifact.
 
 ```
 rhoas service-registry rule describe [flags]
@@ -13,10 +13,10 @@ rhoas service-registry rule describe [flags]
 ### Examples
 
 ```
-## Display configuration details of global validity rule for current Service Registry instance
+## Display the configuration details of the global validity rule for the current Service Registry instance
 $ rhoas service-registry rule describe --rule-type=validity
 
-## Display configuration details of compatibility rule for a specific artifact
+## Display the configuration details of the compatibility rule for a specific artifact
 $ rhoas service-registry rule describe --rule-type=compatibility --artifact-id=my-artifact --group=my-group
 
 ```
