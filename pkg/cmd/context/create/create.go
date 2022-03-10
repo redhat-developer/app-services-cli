@@ -3,6 +3,7 @@ package create
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/contextcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -27,11 +28,11 @@ type options struct {
 	Context        context.Context
 	ServiceContext servicecontext.IContext
 
-	name         string
-	kafkaID      string
-	registryID   string
-	interacttive bool
-	autoUse      bool
+	name        string
+	kafkaID     string
+	registryID  string
+	interactive bool
+	autoUse     bool
 }
 
 // NewCreateCommand creates a new command to create contexts
@@ -56,7 +57,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			if !opts.IO.CanPrompt() && opts.name == "" {
 				return flagutil.RequiredWhenNonInteractiveError("name")
 			} else if opts.name == "" {
-				opts.interacttive = true
+				opts.interactive = true
 			}
 
 			return runCreate(opts)
@@ -86,16 +87,31 @@ func runCreate(opts *options) error {
 		Localizer: opts.localizer,
 	}
 
+	profileValidator := &contextcmdutil.Validator{
+		Localizer:      opts.localizer,
+		ProfileHandler: profileHandler,
+	}
+
 	profiles := svcContext.Contexts
 
 	if profiles == nil {
 		profiles = map[string]servicecontext.ServiceConfig{}
 	}
 
-	if opts.interacttive {
+	if opts.interactive {
 		if err = runInteractive(opts); err != nil {
 			return err
 		}
+	}
+
+	err = profileValidator.ValidateName(opts.name)
+	if err != nil {
+		return err
+	}
+
+	err = profileValidator.ValidateNameIsAvailable(opts.name)
+	if err != nil {
+		return err
 	}
 
 	context, _ := profileHandler.GetContext(opts.name)
@@ -131,6 +147,21 @@ func runCreate(opts *options) error {
 
 func runInteractive(opts *options) error {
 
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	profileValidator := &contextcmdutil.Validator{
+		Localizer:      opts.localizer,
+		ProfileHandler: profileHandler,
+	}
+
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
@@ -140,7 +171,14 @@ func runInteractive(opts *options) error {
 		Message: opts.localizer.MustLocalize("context.create.input.name.message"),
 	}
 
-	err = survey.AskOne(promptName, &opts.name)
+	err = survey.AskOne(
+		promptName,
+		&opts.name,
+		survey.WithValidator(survey.Required),
+		survey.WithValidator(profileValidator.ValidateName),
+		survey.WithValidator(profileValidator.ValidateNameIsAvailable),
+	)
+
 	if err != nil {
 		return err
 	}

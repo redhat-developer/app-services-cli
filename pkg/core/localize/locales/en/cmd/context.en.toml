@@ -182,3 +182,9 @@ current context has not been set. Run the following command to set context and u
 
   rhoas context use --name my-context
 '''
+
+[context.common.validation.name.error.required]
+one = 'context name is required'
+
+[context.common.validation.name.error.invalidChars]
+one = 'invalid context name "{{.Name}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'
