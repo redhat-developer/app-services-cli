@@ -5,7 +5,7 @@ one = 'Manage artifact rules in a Service Registry instance'
 one = '''
 Configure the validity and compatibility rules that govern artifact content.
 
-When you add or update an artifact, Service Registry applies rules to check the validity and compatibility of the artifact content. Artifact-specific rules apply to the specified artifact only. Global rules apply to all artifacts in a particular Service Registry instance. Configured artifact-specific rules override any configured global rules. Before a new artifact version can be uploaded to the registry, all configured global rules or artifact-specific rules must pass.
+When you add or update an artifact, Service Registry applies rules to check the validity and compatibility of the artifact content. Artifact rules apply to the specified artifact only. Global rules apply to all artifacts in a particular Service Registry instance. Configured artifact rules override any configured global rules. Before a new artifact version can be uploaded to the registry, all configured global rules or artifact rules must pass.
 
 For more information about supported Service Registry content and rules, see https://access.redhat.com/documentation/en-us/red_hat_openshift_service_registry/1/guide/9b0fdf14-f0d6-4d7f-8637-3ac9e2069817.
 '''
@@ -105,7 +105,7 @@ $ rhoas service-registry rule list
 ## List the global rules for all artifacts in a specific Service Registry instance
 $ rhoas service-registry rule list --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 
-## List the artifact-specific rules for a particular artifact
+## List the artifact rules for a specific artifact
 $ rhoas service-registry rule list --artifact-id=my-artifact
 '''
 
@@ -113,7 +113,7 @@ $ rhoas service-registry rule list --artifact-id=my-artifact
 one = 'Fetching global rules for artifacts in the Service Registry instance'
 
 [registry.rule.list.log.info.fetching.artifactRules]
-one = 'Fetching artifact-specific rules for this artifact'
+one = 'Fetching artifact rules for this artifact'
 
 [registry.rule.list.log.info.noEnabledRule]
 one = 'No rules enabled'

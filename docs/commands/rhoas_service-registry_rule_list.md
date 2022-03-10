@@ -19,7 +19,7 @@ $ rhoas service-registry rule list
 ## List the global rules for all artifacts in a specific Service Registry instance
 $ rhoas service-registry rule list --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 
-## List the artifact-specific rules for a particular artifact
+## List the artifact rules for a specific artifact
 $ rhoas service-registry rule list --artifact-id=my-artifact
 
 ```
