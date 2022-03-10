@@ -26,7 +26,7 @@ $ rhoas kafka topic update --name topic-1 --retention-ms -1
       --name string              Topic name
       --partitions string        The number of partitions in the topic
       --retention-bytes string   The maximum total size of a partition log segments before old log segments are deleted to free up space.
-                                 Value of -1 is set by default indicating no retention size limits.
+                                 Value of -1 is set by default indicating no retention size limits
       --retention-ms string      The period of time in milliseconds the broker will retain a partition log before deleting it
 ```
 
