@@ -120,10 +120,31 @@ func initProfiles(f *factory.Factory) error {
 		return err
 	}
 
-	ctxFile = &servicecontext.Context{}
+	configFile, err := f.Config.Load()
+
+	if err != nil {
+		return err
+	}
+
+	kafkaId, _ := configFile.GetKafkaIdOk()
+	serviceRegistryId, _ := configFile.GetServiceRegistryIdOk()
+	ctxFile = &servicecontext.Context{
+		CurrentContext: "default",
+		Contexts: map[string]servicecontext.ServiceConfig{
+			"default": {
+				KafkaID:           kafkaId,
+				ServiceRegistryID: serviceRegistryId,
+			},
+		},
+	}
+
 	if err := f.ServiceContext.Save(ctxFile); err != nil {
 		return err
 	}
+
+	configFile.Services = config.ServiceConfigMap{}
+	_ = f.Config.Save(configFile)
+
 	return nil
 }
 
