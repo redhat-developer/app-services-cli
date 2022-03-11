@@ -21,9 +21,7 @@ func CreateConfigEntries(entryMap map[string]*string) *[]kafkainstanceclient.Con
 	for key, value := range entryMap {
 		if value != nil {
 			// nolint:scopelint
-			entry := kafkainstanceclient.NewConfigEntry()
-			entry.SetKey(key)
-			entry.SetValue(*value)
+			entry := kafkainstanceclient.NewConfigEntry(key, *value)
 			entries = append(entries, *entry)
 		}
 	}
@@ -64,7 +62,7 @@ func ConvertRetentionBytesToInt(retentionBytesStr string) (int, error) {
 func GetConfigValue(configEntries []kafkainstanceclient.ConfigEntry, keyName string) (val string) {
 	for _, config := range configEntries {
 
-		if *config.Key == keyName {
+		if config.Key == keyName {
 			val = config.GetValue()
 		}
 	}
