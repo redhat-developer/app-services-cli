@@ -28,8 +28,8 @@ type Config struct {
 
 // ServiceConfigMap is a map of configs for the application services
 type ServiceConfigMap struct {
-	Kafka           *KafkaConfig           `json:"kafka"`
-	ServiceRegistry *ServiceRegistryConfig `json:"serviceregistry"`
+	Kafka           *KafkaConfig           `json:"kafka,omitempty"`
+	ServiceRegistry *ServiceRegistryConfig `json:"serviceregistry,omitempty"`
 }
 
 // KafkaConfig is the config for the Kafka service
