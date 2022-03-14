@@ -163,7 +163,7 @@ func runCmd(opts *options) error {
 	topicInput := kafkainstanceclient.NewTopicInput{
 		Name: opts.topicName,
 		Settings: kafkainstanceclient.TopicSettings{
-			NumPartitions: opts.partitions,
+			NumPartitions: &opts.partitions,
 			Config:        createConfigEntries(opts),
 		},
 	}

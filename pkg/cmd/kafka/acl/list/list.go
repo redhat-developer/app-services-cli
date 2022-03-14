@@ -150,7 +150,7 @@ func runList(opts *options) (err error) {
 
 	req := api.AclsApi.GetAcls(opts.context)
 
-	req = req.Page(float32(opts.page)).Size(float32(opts.size))
+	req = req.Page(opts.page).Size(opts.size)
 	req = req.Order("asc").OrderKey("principal")
 
 	if opts.principal != "" {
