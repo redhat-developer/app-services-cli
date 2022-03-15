@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/contextcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -53,9 +54,9 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := contextcmdutil.NewFlagSet(cmd, f)
 
-	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
+	flags.AddContextName(&opts.name)
 
 	return cmd
 }
@@ -101,7 +102,7 @@ func runInteractivePrompt(opts *options, context *servicecontext.Context) (strin
 	profiles := context.Contexts
 
 	if profiles == nil {
-		profiles = map[string]servicecontext.ServiceConfig{}
+		profiles = make(map[string]servicecontext.ServiceConfig)
 	}
 
 	profileNames := make([]string, 0, len(profiles))

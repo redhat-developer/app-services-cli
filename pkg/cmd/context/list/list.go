@@ -57,7 +57,7 @@ func runList(opts *options) error {
 	profiles := svcContext.Contexts
 
 	if profiles == nil {
-		profiles = map[string]servicecontext.ServiceConfig{}
+		profiles = make(map[string]servicecontext.ServiceConfig)
 	}
 
 	currentCtx := svcContext.CurrentContext
