@@ -33,7 +33,7 @@ type options struct {
 }
 
 // NewDescribeCommand describes a Kafka instance, either by passing an `--id flag`
-// or by using the kafka instance set in the config, if any
+// or by using the kafka instance set in the current context, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Config:     f.Config,
