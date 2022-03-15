@@ -20,7 +20,7 @@ type ContextHandler struct {
 // GetCurrentKafkaInstance returns the Kafka instance set in the currently selected context
 func (c *ContextHandler) GetCurrentKafkaInstance(api kafkamgmtclient.DefaultApi) (*kafkamgmtclient.KafkaRequest, error) {
 
-	currentCtx, err := c.getCurrentContext()
+	currentCtx, err := c.GetCurrentContext()
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (c *ContextHandler) GetCurrentKafkaInstance(api kafkamgmtclient.DefaultApi)
 
 	kafkaInstance, _, err := api.GetKafkaById(context.Background(), s.KafkaID).Execute()
 	if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
-		return nil, c.Localizer.MustLocalizeError("context.common.error.registry.notFound")
+		return nil, c.Localizer.MustLocalizeError("context.common.error.kafka.notFound")
 	}
 
 	return &kafkaInstance, err
@@ -45,7 +45,7 @@ func (c *ContextHandler) GetCurrentKafkaInstance(api kafkamgmtclient.DefaultApi)
 // GetCurrentRegistryInstance returns the Service Registry instance set in the currently selected context
 func (c *ContextHandler) GetCurrentRegistryInstance(api registrymgmtclient.RegistriesApi) (*registrymgmtclient.Registry, error) {
 
-	currentCtx, err := c.getCurrentContext()
+	currentCtx, err := c.GetCurrentContext()
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +79,8 @@ func (c *ContextHandler) GetContext(ctxName string) (*servicecontext.ServiceConf
 	return &currCtx, nil
 }
 
-// getCurrentContext returns the name of the currently selected context
-func (c *ContextHandler) getCurrentContext() (string, error) {
+// GetCurrentContext returns the name of the currently selected context
+func (c *ContextHandler) GetCurrentContext() (string, error) {
 
 	if c.Context.CurrentContext == "" {
 		return "", c.Localizer.MustLocalizeError("context.common.error.notSet")

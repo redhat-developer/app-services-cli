@@ -33,14 +33,12 @@ func main() {
 	buildVersion := build.Version
 	cmdFactory := defaultfactory.New(localizer)
 
-	err = initConfig(cmdFactory)
-	if err != nil {
+	if err = initConfig(cmdFactory); err != nil {
 		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
 		os.Exit(1)
 	}
 
-	err = initProfiles(cmdFactory)
-	if err != nil {
+	if err = initProfiles(cmdFactory); err != nil {
 		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.context.error", localize.NewEntry("Error", err)))
 		os.Exit(1)
 	}

@@ -64,9 +64,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := contextcmdutil.NewFlagSet(cmd, f)
 
-	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
+	flags.AddContextName(&opts.name)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("context.create.flag.use"))
 	flags.StringVar(&opts.kafkaID, "kafka-id", "", opts.localizer.MustLocalize("context.create.flag.kafkaID"))
 	flags.StringVar(&opts.registryID, "registry-id", "", opts.localizer.MustLocalize("context.create.flag.registryID"))
@@ -95,7 +95,7 @@ func runCreate(opts *options) error {
 	profiles := svcContext.Contexts
 
 	if profiles == nil {
-		profiles = map[string]servicecontext.ServiceConfig{}
+		profiles = make(map[string]servicecontext.ServiceConfig)
 	}
 
 	if opts.interactive {

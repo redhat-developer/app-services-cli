@@ -11,9 +11,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
@@ -24,22 +26,24 @@ type options struct {
 	name        string
 	interactive bool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Config         config.IConfig
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Config:         f.Config,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -89,7 +93,26 @@ func runUse(opts *options) error {
 		}
 	}
 
-	cfg, err := opts.Config.Load()
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	if _, newErr := profileHandler.GetCurrentContext(); newErr != nil {
+		return newErr
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return err
 	}
@@ -114,14 +137,11 @@ func runUse(opts *options) error {
 		}
 	}
 
-	// build Kafka config object from the response
-	var kafkaConfig = config.KafkaConfig{
-		ClusterID: res.GetId(),
-	}
-
 	nameTmplEntry := localize.NewEntry("Name", res.GetName())
-	cfg.Services.Kafka = &kafkaConfig
-	if err := opts.Config.Save(cfg); err != nil {
+	svcConfig.KafkaID = res.GetId()
+	svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+
+	if err := opts.ServiceContext.Save(svcContext); err != nil {
 		saveErrMsg := opts.localizer.MustLocalize("kafka.use.error.saveError", nameTmplEntry)
 		return fmt.Errorf("%v: %w", saveErrMsg, err)
 	}

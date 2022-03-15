@@ -9,34 +9,39 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 
 	"github.com/spf13/cobra"
 )
 
 type options struct {
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Logger     logging.Logger
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Config         config.IConfig
+	Logger         logging.Logger
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	outputFormat string
+	name         string
 	services     []string
 }
 
 func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		IO:         f.IOStreams,
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		services:   servicespec.AllServiceLabels,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		IO:             f.IOStreams,
+		Config:         f.Config,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		services:       servicespec.AllServiceLabels,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -66,6 +71,9 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("status.flag.output.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
@@ -83,11 +91,36 @@ func runStatus(opts *options) error {
 		opts.Logger.Debug(opts.localizer.MustLocalize("status.log.debug.requestingStatusOfServices"), opts.services)
 	}
 
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	var svcConfig *servicecontext.ServiceConfig
+
+	if opts.name != "" {
+		svcConfig, err = profileHandler.GetContext(opts.name)
+		if err != nil {
+			return err
+		}
+	} else {
+		svcConfig, err = profileHandler.GetContext(svcContext.CurrentContext)
+		if err != nil {
+			return err
+		}
+	}
+
 	statusClient := newStatusClient(&clientConfig{
-		config:     opts.Config,
-		connection: conn,
-		Logger:     opts.Logger,
-		localizer:  opts.localizer,
+		config:        opts.Config,
+		connection:    conn,
+		Logger:        opts.Logger,
+		localizer:     opts.localizer,
+		serviceConfig: svcConfig,
 	})
 
 	status, ok, err := statusClient.BuildStatus(opts.Context, opts.services)
