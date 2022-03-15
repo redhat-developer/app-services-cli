@@ -6,10 +6,10 @@ Group, share and manage your rhoas services
 
 rhoas context commands allow developers to:
 
-* Group services into contexts that can be used with a number of CLI commands.
-* Manage different service contexts by switching, listing and removing service contexts 
-* Share context with others to use the same set of services
-* Generating configuration for connecting to the services from various platforms and tools
+  * Group services into contexts that can be used with a number of CLI commands.
+  * Manage different service contexts by switching, listing and removing service contexts 
+  * Share context with others to use the same set of services
+  * Generating configuration for connecting to the services from various platforms and tools
 
 
 ### Examples
@@ -35,7 +35,10 @@ $ rhoas context list
 * [rhoas](rhoas.md)	 - RHOAS CLI
 * [rhoas context create](rhoas_context_create.md)	 - Create a service context
 * [rhoas context delete](rhoas_context_delete.md)	 - Delete a service context
+* [rhoas context kafka-use](rhoas_context_kafka-use.md)	 - Set the current Kafka instance
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
-* [rhoas context status](rhoas_context_status.md)	 - Show status of the context
+* [rhoas context service-registry-use](rhoas_context_service-registry-use.md)	 - Use a Service Registry instance
+* [rhoas context status](rhoas_context_status.md)	 - View the status of your application services
+* [rhoas context status](rhoas_context_status.md)	 - View the status of your application services
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context
 
