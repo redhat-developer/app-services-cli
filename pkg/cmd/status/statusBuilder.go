@@ -17,6 +17,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/openconfig/goyang/pkg/indent"
@@ -45,46 +46,45 @@ type registryStatus struct {
 }
 
 type clientConfig struct {
-	config     config.IConfig
-	Logger     logging.Logger
-	connection connection.Connection
-	localizer  localize.Localizer
+	config        config.IConfig
+	Logger        logging.Logger
+	connection    connection.Connection
+	localizer     localize.Localizer
+	serviceConfig *servicecontext.ServiceConfig
 }
 
 type statusClient struct {
-	config    config.IConfig
-	Logger    logging.Logger
-	conn      connection.Connection
-	localizer localize.Localizer
+	config        config.IConfig
+	Logger        logging.Logger
+	conn          connection.Connection
+	localizer     localize.Localizer
+	serviceConfig *servicecontext.ServiceConfig
 }
 
 // newStatusClient returns a new client to fetch service statuses
 // and build it into a service status config object
 func newStatusClient(cfg *clientConfig) *statusClient {
 	return &statusClient{
-		config:    cfg.config,
-		Logger:    cfg.Logger,
-		conn:      cfg.connection,
-		localizer: cfg.localizer,
+		config:        cfg.config,
+		Logger:        cfg.Logger,
+		conn:          cfg.connection,
+		localizer:     cfg.localizer,
+		serviceConfig: cfg.serviceConfig,
 	}
 }
 
 // BuildStatus gets the status of all services currently set in the user config
 func (c *statusClient) BuildStatus(ctx context.Context, services []string) (status *serviceStatus, ok bool, err error) {
-	cfg, err := c.config.Load()
-	if err != nil {
-		return nil, false, err
-	}
 
 	status = &serviceStatus{}
 
 	if stringInSlice(servicespec.KafkaServiceName, services) {
-		if instanceID, exists := cfg.GetKafkaIdOk(); exists {
+		if c.serviceConfig.KafkaID != "" {
 			// nolint:govet
-			kafkaStatus, err := c.getKafkaStatus(ctx, instanceID)
+			kafkaStatus, err := c.getKafkaStatus(ctx, c.serviceConfig.KafkaID)
 			if err != nil {
 				if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
-					err = kafkautil.NotFoundByIDError(instanceID)
+					err = kafkautil.NotFoundByIDError(c.serviceConfig.KafkaID)
 					c.Logger.Error(err)
 					c.Logger.Info(c.localizer.MustLocalize("status.log.info.rhoasKafkaUse"))
 				}
@@ -98,12 +98,11 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 	}
 
 	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
-		registryCfg := cfg.Services.ServiceRegistry
-		if registryCfg != nil && registryCfg.InstanceID != "" {
+		if c.serviceConfig.ServiceRegistryID != "" {
 			// nolint:govet
-			registry, newErr := c.getRegistryStatus(ctx, registryCfg.InstanceID)
+			registry, newErr := c.getRegistryStatus(ctx, c.serviceConfig.ServiceRegistryID)
 			if newErr != nil {
-				return status, ok, err
+				return status, ok, newErr
 			}
 			status.Registry = registry
 			ok = true
