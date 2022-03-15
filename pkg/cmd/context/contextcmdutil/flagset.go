@@ -22,7 +22,7 @@ func NewFlagSet(cmd *cobra.Command, f *factory.Factory) *FlagSet {
 }
 
 // AddContextName adds a flag for setting the name of the context
-func (fs *FlagSet) AddContextName(name *string) {
+func (fs *FlagSet) AddContextName(name *string) *flagutil.FlagOptions {
 	flagName := "name"
 
 	fs.StringVar(
@@ -31,5 +31,7 @@ func (fs *FlagSet) AddContextName(name *string) {
 		"",
 		fs.factory.Localizer.MustLocalize("context.common.flag.name"),
 	)
+
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
 
 }

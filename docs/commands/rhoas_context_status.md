@@ -1,23 +1,31 @@
 ## rhoas context status
 
-Show status of the context
+View the status of your application services
 
 ### Synopsis
 
-Show status of the context
+View the status of your application services. This command shows the status of the current instance for each of your application services.
+
+To view the status of a specific application service, use "rhoas status [service]".
+
+Note: You can change the current instance for an application service with the "rhoas [service] use” command.
+
 
 ```
-rhoas context status [flags]
+rhoas context status [args] [flags]
 ```
 
 ### Examples
 
 ```
-## Show status of current context
-$ rhoas context status
+# View the status of all application services
+$ rhoas status
 
-## Show status of specified context
-$ rhoas context status --name my-context
+# View the status of the current Kafka instance
+$ rhoas status kafka
+
+# View the status of your services in JSON format
+$ rhoas status -o json
 
 ```
 
@@ -25,7 +33,7 @@ $ rhoas context status --name my-context
 
 ```
       --name string     Name of the context
-  -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
+  -o, --output string   Format in which to display the status of your services (choose from: "json", "yml", "yaml")
 ```
 
 ### Options inherited from parent commands
