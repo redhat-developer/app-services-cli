@@ -99,18 +99,9 @@ one='Create a service context and assign associated service identifiers'
 
 [context.create.cmd.example]
 one='''
-## Create context with Kafka ID and Service Registry ID
-$ rhoas context create --name my-context --kafka-id c8696ncpoj7gdjmaiqog --registry-id 0282d488-52b3-405b-9e30-9f6f9407de57
+## Create context
+$ rhoas context create --name my-context
 '''
-
-[context.create.flag.use]
-one='Set the new service context as the current context'
-
-[context.create.flag.kafkaID]
-one='ID of Kafka instance for the service context'
-
-[context.create.flag.registryID]
-one='ID of Service Registry instance for the service context'
 
 [context.create.input.name.message]
 one='Name:'
@@ -119,7 +110,13 @@ one='Name:'
 one='Unique name of service context'
 
 [context.create.log.successMessage]
-one='Context created successfully'
+one='''
+Context created successfully
+
+Run the following command to set it as current context:
+
+  $ rhoas context use --name {{.Name}}
+'''
 
 [context.create.log.alreadyExists]
 one='Context with name "{{.Name}}" already exists'
