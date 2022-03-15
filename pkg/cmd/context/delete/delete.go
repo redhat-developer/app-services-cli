@@ -3,6 +3,7 @@ package delete
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/contextcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -52,9 +53,9 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := contextcmdutil.NewFlagSet(cmd, f)
 
-	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
+	flags.AddContextName(&opts.name)
 
 	return cmd
 }
@@ -66,23 +67,24 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	if opts.name == "" {
-		if svcContext.CurrentContext == "" {
-			return opts.localizer.MustLocalizeError("context.common.error.notSet")
-		}
-
-		opts.name = svcContext.CurrentContext
-
-		svcContext.CurrentContext = ""
-	}
-
 	profileHandler := &profileutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: opts.localizer,
 	}
 
-	_, err = profileHandler.GetContext(opts.name)
-	if err != nil {
+	if opts.name == "" {
+
+		currCtx, newErr := profileHandler.GetCurrentContext()
+		if newErr != nil {
+			return newErr
+		}
+
+		opts.name = currCtx
+
+		svcContext.CurrentContext = ""
+	}
+
+	if _, err = profileHandler.GetContext(opts.name); err != nil {
 		return err
 	}
 
