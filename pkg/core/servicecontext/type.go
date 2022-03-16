@@ -15,7 +15,7 @@ type ServiceConfig struct {
 // IContext is an interface which describes functions for context file
 type IContext interface {
 	Load() (*Context, error)
-	Save(config *Context) error
+	Save(*Context) error
 	Remove() error
 	Location() (string, error)
 }

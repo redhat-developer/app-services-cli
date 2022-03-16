@@ -73,10 +73,10 @@ func runCreate(opts *options) error {
 		ProfileHandler: profileHandler,
 	}
 
-	profiles := svcContext.Contexts
+	svcContextsMap := svcContext.Contexts
 
-	if profiles == nil {
-		profiles = make(map[string]servicecontext.ServiceConfig)
+	if svcContextsMap == nil {
+		svcContextsMap = make(map[string]servicecontext.ServiceConfig)
 	}
 
 	err = profileValidator.ValidateName(opts.name)
@@ -94,9 +94,9 @@ func runCreate(opts *options) error {
 		return opts.localizer.MustLocalizeError("context.create.log.alreadyExists", localize.NewEntry("Name", opts.name))
 	}
 
-	profiles[opts.name] = servicecontext.ServiceConfig{}
+	svcContextsMap[opts.name] = servicecontext.ServiceConfig{}
 
-	svcContext.Contexts = profiles
+	svcContext.Contexts = svcContextsMap
 
 	err = opts.ServiceContext.Save(svcContext)
 	if err != nil {
