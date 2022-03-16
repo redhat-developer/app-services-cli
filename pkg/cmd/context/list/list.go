@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/contextcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -20,6 +22,8 @@ type options struct {
 	localizer      localize.Localizer
 	Context        context.Context
 	ServiceContext servicecontext.IContext
+
+	outputFormat string
 }
 
 // NewListCommand creates a new command to list available contexts
@@ -44,6 +48,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	flags := contextcmdutil.NewFlagSet(cmd, f)
+
+	flags.AddOutput(&opts.outputFormat)
+
 	return cmd
 }
 
@@ -57,23 +65,25 @@ func runList(opts *options) error {
 	profiles := svcContext.Contexts
 
 	if profiles == nil {
-		profiles = make(map[string]servicecontext.ServiceConfig)
+		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.info.noContexts"))
+		return nil
 	}
 
-	currentCtx := svcContext.CurrentContext
+	switch opts.outputFormat {
+	case dump.EmptyFormat:
+		currentCtx := svcContext.CurrentContext
+		var profileList string
 
-	var profileList string
-
-	for name := range profiles {
-		if currentCtx != "" && name == currentCtx {
-			profileList += fmt.Sprintln(name, icon.SuccessPrefix())
-		} else {
-			profileList += fmt.Sprintln(name)
+		for name := range profiles {
+			if currentCtx != "" && name == currentCtx {
+				profileList += fmt.Sprintln(name, icon.SuccessPrefix())
+			} else {
+				profileList += fmt.Sprintln(name)
+			}
 		}
+		opts.Logger.Info(profileList)
+		return nil
+	default:
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, profiles)
 	}
-
-	opts.Logger.Info(profileList)
-	opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.info.describeHint"))
-
-	return nil
 }
