@@ -39,13 +39,8 @@ func (v *Validator) ValidateName(val interface{}) error {
 	return v.Localizer.MustLocalizeError("context.common.validation.name.error.invalidChars", localize.NewEntry("Name", name))
 }
 
-// ValidateName validates if the name provided is a unique context name
-func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
-
-	name, ok := val.(string)
-	if !ok {
-		return errors.NewCastError(val, "string")
-	}
+// ValidateNameIsAvailable validates if the name provided is a unique context name
+func (v *Validator) ValidateNameIsAvailable(name string) error {
 
 	context, _ := v.ProfileHandler.GetContext(name)
 	if context != nil {
