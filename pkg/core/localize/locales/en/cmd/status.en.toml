@@ -1,9 +1,9 @@
 [status.cmd.shortDescription]
-one = 'View the status of your application services'
+one = 'View the status of application services set in service context'
 
 [status.cmd.longDescription]
 one = '''
-View the status of your application services. This command shows the status of the current instance for each of your application services.
+View the status of your application services. This command shows the status of each of your application services instances set in service context. 
 
 To view the status of a specific application service, use "rhoas status [service]".
 
@@ -12,10 +12,10 @@ Note: You can change the current instance for an application service with the "r
 
 [status.cmd.example]
 one = '''
-# View the status of all application services
+# View the status of all application services in the current service context
 $ rhoas status
 
-# View the status of the current Kafka instance
+# View the status of all application services in a specific service context
 $ rhoas status kafka
 
 # View the status of your services in JSON format

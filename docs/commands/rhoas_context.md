@@ -11,6 +11,12 @@ rhoas context commands allow developers to:
   * Share context with others to use the same set of services
   * Generating configuration for connecting to the services from various platforms and tools
 
+The loading order of contexts follows these rules:
+
+  1. If $RHOAS_CONTEXT environment variable is set, then contexts are managed using only that file
+  2. Otherwise, "UserConfigDir/rhoas/contexts.json" is used for contexts
+
+
 
 ### Examples
 
@@ -38,6 +44,6 @@ $ rhoas context list
 * [rhoas context kafka-use](rhoas_context_kafka-use.md)	 - Set the current Kafka instance
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
 * [rhoas context service-registry-use](rhoas_context_service-registry-use.md)	 - Use a Service Registry instance
-* [rhoas context status](rhoas_context_status.md)	 - View the status of your application services
+* [rhoas context status](rhoas_context_status.md)	 - View the status of application services set in service context
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context
 
