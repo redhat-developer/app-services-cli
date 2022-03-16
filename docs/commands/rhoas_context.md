@@ -39,6 +39,5 @@ $ rhoas context list
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
 * [rhoas context service-registry-use](rhoas_context_service-registry-use.md)	 - Use a Service Registry instance
 * [rhoas context status](rhoas_context_status.md)	 - View the status of your application services
-* [rhoas context status](rhoas_context_status.md)	 - View the status of your application services
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context
 

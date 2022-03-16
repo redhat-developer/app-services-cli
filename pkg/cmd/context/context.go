@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/use"
 	kafkaUse "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
 	registryUse "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -25,22 +26,27 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 	// The implementation of `rhoas kafka use` command has been aliased here as `rhoas context kafka-use`
 	kafkaUseCmd := kafkaUse.NewUseCommand(f)
 	kafkaUseCmd.Use = "kafka-use"
+	kafkaUseCmd.Example = f.Localizer.MustLocalize("context.kafkaUse.cmd.example")
+
+	// `rhoas status` cmd has been re-used as `rhoas context status`
+	statusCmd := status.NewStatusCommand(f)
+	statusCmd.Example = f.Localizer.MustLocalize("context.status.cmd.example")
 
 	// The implementation of `rhoas service-registry use` command has been aliased here as `rhoas context service-registry-use`
 	registryUseCmd := registryUse.NewUseCommand(f)
 	registryUseCmd.Use = "service-registry-use"
+	registryUseCmd.Example = f.Localizer.MustLocalize("context.registryUse.cmd.example")
 
 	cmd.AddCommand(
 		use.NewUseCommand(f),
-		status.NewStatusCommand(f),
 		list.NewListCommand(f),
 		create.NewCreateCommand(f),
 		delete.NewDeleteCommand(f),
+
+		// reused sub-commands
 		kafkaUseCmd,
 		registryUseCmd,
-
-		// `rhoas status` cmd has been re-used as `rhoas context status`
-		status.NewStatusCommand(f),
+		statusCmd,
 	)
 	return cmd
 }
