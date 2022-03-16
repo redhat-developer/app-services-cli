@@ -99,15 +99,15 @@ func runUse(opts *options) error {
 
 func runInteractivePrompt(opts *options, context *servicecontext.Context) (string, error) {
 
-	profiles := context.Contexts
+	svcContextsMap := context.Contexts
 
-	if profiles == nil {
-		profiles = make(map[string]servicecontext.ServiceConfig)
+	if svcContextsMap == nil {
+		svcContextsMap = make(map[string]servicecontext.ServiceConfig)
 	}
 
-	profileNames := make([]string, 0, len(profiles))
+	profileNames := make([]string, 0, len(svcContextsMap))
 
-	for name := range profiles {
+	for name := range svcContextsMap {
 		profileNames = append(profileNames, name)
 	}
 

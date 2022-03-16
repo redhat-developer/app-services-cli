@@ -62,9 +62,9 @@ func runList(opts *options) error {
 		return err
 	}
 
-	profiles := svcContext.Contexts
+	svcContextsMap := svcContext.Contexts
 
-	if profiles == nil {
+	if svcContextsMap == nil {
 		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.info.noContexts"))
 		return nil
 	}
@@ -74,7 +74,7 @@ func runList(opts *options) error {
 		currentCtx := svcContext.CurrentContext
 		var profileList string
 
-		for name := range profiles {
+		for name := range svcContextsMap {
 			if currentCtx != "" && name == currentCtx {
 				profileList += fmt.Sprintln(name, icon.SuccessPrefix())
 			} else {
@@ -84,6 +84,6 @@ func runList(opts *options) error {
 		opts.Logger.Info(profileList)
 		return nil
 	default:
-		return dump.Formatted(opts.IO.Out, opts.outputFormat, profiles)
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, svcContextsMap)
 	}
 }
