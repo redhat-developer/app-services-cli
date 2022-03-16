@@ -52,11 +52,33 @@ Print overview of the services in associated with a service context
 
 [context.status.cmd.example]
 one='''
-## Show status of current context
+# View the status of all application services
 $ rhoas context status
 
-## Show status of specified context
-$ rhoas context status --name my-context
+# View the status of the Kafka instance set in the current context
+$ rhoas context status kafka
+
+# View the status of your services in JSON format
+$ rhoas context status -o json
+'''
+
+[context.kafkaUse.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Select a Kafka instance to be set in the current context
+$ rhoas context kafka-use --name=my-kafka
+
+# Select a Kafka instance to be set in the current context
+$ rhoas context kafka-use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+'''
+
+[context.registryUse.cmd.example]
+one = '''
+# Use a Service Registry instance by name
+rhoas context service-registry-use --name my-service-registry
+
+# Use a Service Registry instance by ID
+rhoas context service-registry-use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [context.list.cmd]
