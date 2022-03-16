@@ -44,6 +44,6 @@ $ rhoas cluster connect
 * [rhoas logout](rhoas_logout.md)	 - Log out from RHOAS
 * [rhoas service-account](rhoas_service-account.md)	 - Create, list, describe, delete, and update service accounts
 * [rhoas service-registry](rhoas_service-registry.md)	 - Service Registry commands
-* [rhoas status](rhoas_status.md)	 - View the status of your application services
+* [rhoas status](rhoas_status.md)	 - View the status of application services set in service context
 * [rhoas whoami](rhoas_whoami.md)	 - Output the current username
 

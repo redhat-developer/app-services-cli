@@ -1,10 +1,10 @@
 ## rhoas context status
 
-View the status of your application services
+View the status of application services set in service context
 
 ### Synopsis
 
-View the status of your application services. This command shows the status of the current instance for each of your application services.
+View the status of your application services. This command shows the status of each of your application services instances set in service context. 
 
 To view the status of a specific application service, use "rhoas status [service]".
 
@@ -18,10 +18,13 @@ rhoas context status [args] [flags]
 ### Examples
 
 ```
-# View the status of all application services
+# View the status of all application services in the current service context
 $ rhoas context status
 
-# View the status of the Kafka instance set in the current context
+# View the status of all application services in a specific service context
+$ rhoas context status --name my-context
+
+# View the status of the Kafka instance set in the current service context
 $ rhoas context status kafka
 
 # View the status of your services in JSON format

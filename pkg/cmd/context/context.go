@@ -1,12 +1,16 @@
 package context
 
 import (
+	"path/filepath"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/use"
 	kafkaUse "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
 	registryUse "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -15,10 +19,15 @@ import (
 
 // NewContextCmd creates a new command to manage service contexts
 func NewContextCmd(f *factory.Factory) *cobra.Command {
+
+	ctxDirLocation, _ := servicecontext.DefaultDir()
+
+	ctxLocation := filepath.Join(ctxDirLocation, "contexts.json")
+
 	cmd := &cobra.Command{
 		Use:     "context",
 		Short:   f.Localizer.MustLocalize("context.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("context.cmd.longDescription"),
+		Long:    f.Localizer.MustLocalize("context.cmd.longDescription", localize.NewEntry("ContextPath", ctxLocation)),
 		Example: f.Localizer.MustLocalize("context.cmd.example"),
 		Args:    cobra.NoArgs,
 	}
