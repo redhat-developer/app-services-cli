@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"k8s.io/utils/strings/slices"
 
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 
@@ -71,4 +72,26 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	}
 
 	return account.Organization.GetId(), nil
+}
+
+// PickInstanceType - Standard instance always wins!!!
+// This function should not exist but it does represents some requirement
+// from business to only pick one instance type when two are presented.
+// When standard instance type is present in user instances it should always take precedence
+func PickInstanceType(amsType *[]string) (string, error) {
+	if amsType == nil {
+		// TODO better error
+		return "", errors.New("Cannot pick the fight between AMS instance types. No one will win")
+	}
+	if len(*amsType) == 0 {
+		// TODO better error
+		return "", errors.New("No fighters to pick the fight. Sorry")
+
+	}
+
+	if slices.Contains(*amsType, QuotaStandardType) {
+		return QuotaStandardType, nil
+	}
+
+	return (*amsType)[0], nil
 }

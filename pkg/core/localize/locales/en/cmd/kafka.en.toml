@@ -266,6 +266,10 @@ one = 'Cloud Provider ID'
 description = 'Description for the --region flag'
 one = 'Cloud Provider Region ID'
 
+[kafka.create.flag.size.description]
+description = 'Description for the --size flag'
+one = 'Size of the Kafka instance'
+
 [kafka.create.flag.autoUse.description]
 one = 'Set the new Kafka instance to the current instance'
 
