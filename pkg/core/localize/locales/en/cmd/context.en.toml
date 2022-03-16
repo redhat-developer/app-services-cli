@@ -95,20 +95,13 @@ one='''
 $ rhoas context list
 '''
 
-[context.list.log.noContexts]
+[context.list.log.info.noContexts]
 one='''
 No service contexts exist.
 
 Run the following command to create a service context:
 
-  rhoas context create
-'''
-
-[context.list.log.info.describeHint]
-one = '''
-Run the following to view the services associated with a context:
-
- $ rhoas context status --name my-context
+  $ rhoas context create
 '''
 
 [context.create.cmd]
