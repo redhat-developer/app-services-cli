@@ -18,10 +18,10 @@ rhoas context service-registry-use [flags]
 
 ```
 # Use a Service Registry instance by name
-rhoas service-registry use --name my-service-registry
+rhoas context service-registry-use --name my-service-registry
 
 # Use a Service Registry instance by ID
-rhoas service-registry use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+rhoas context service-registry-use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ```
 

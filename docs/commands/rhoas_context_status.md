@@ -19,13 +19,13 @@ rhoas context status [args] [flags]
 
 ```
 # View the status of all application services
-$ rhoas status
+$ rhoas context status
 
-# View the status of the current Kafka instance
-$ rhoas status kafka
+# View the status of the Kafka instance set in the current context
+$ rhoas context status kafka
 
 # View the status of your services in JSON format
-$ rhoas status -o json
+$ rhoas context status -o json
 
 ```
 
