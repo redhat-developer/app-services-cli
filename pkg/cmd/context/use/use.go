@@ -112,7 +112,7 @@ func runInteractivePrompt(opts *options, context *servicecontext.Context) (strin
 	}
 
 	if len(profileNames) == 0 {
-		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.noContexts"))
+		opts.Logger.Info(opts.localizer.MustLocalize("context.list.log.info.noContexts"))
 		return "", nil
 	}
 
