@@ -9,6 +9,12 @@ rhoas context commands allow developers to:
   * Manage different service contexts by switching, listing and removing service contexts 
   * Share context with others to use the same set of services
   * Generating configuration for connecting to the services from various platforms and tools
+
+The loading order of contexts follows these rules:
+
+  1. If $RHOAS_CONTEXT environment variable is set, then contexts are managed using only that file
+  2. Otherwise, "UserConfigDir/rhoas/contexts.json" is used for contexts
+
 '''
 
 [context.cmd.example]
@@ -52,10 +58,13 @@ Print overview of the services in associated with a service context
 
 [context.status.cmd.example]
 one='''
-# View the status of all application services
+# View the status of all application services in the current service context
 $ rhoas context status
 
-# View the status of the Kafka instance set in the current context
+# View the status of all application services in a specific service context
+$ rhoas context status --name my-context
+
+# View the status of the Kafka instance set in the current service context
 $ rhoas context status kafka
 
 # View the status of your services in JSON format
@@ -65,19 +74,19 @@ $ rhoas context status -o json
 [context.kafkaUse.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# Select a Kafka instance to be set in the current context
+# Select a Kafka instance by name to be set in the current context
 $ rhoas context kafka-use --name=my-kafka
 
-# Select a Kafka instance to be set in the current context
+# Select a Kafka instance by ID to be set in the current context
 $ rhoas context kafka-use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [context.registryUse.cmd.example]
 one = '''
-# Use a Service Registry instance by name
+# Select a Service Registry instance by name to be set in the current context
 rhoas context service-registry-use --name my-service-registry
 
-# Use a Service Registry instance by ID
+# Select a Service Registry instance by ID to be set in the current context
 rhoas context service-registry-use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 

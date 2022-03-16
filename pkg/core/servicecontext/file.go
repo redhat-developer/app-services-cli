@@ -120,9 +120,9 @@ func HasCustomLocation() bool {
 
 // DefaultDir returns the default parent directory of the context file
 func DefaultDir() (string, error) {
-	userCfgDir, err := os.UserConfigDir()
+	userCtxDir, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(userCfgDir, "rhoas"), nil
+	return filepath.Join(userCtxDir, "rhoas"), nil
 }

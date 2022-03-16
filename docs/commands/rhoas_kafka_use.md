@@ -16,10 +16,10 @@ rhoas kafka use [flags]
 ### Examples
 
 ```
-# Select a Kafka instance to be the current instance
+# Select a Kafka instance by name to be set in the current context
 $ rhoas kafka use --name=my-kafka
 
-# Select a Kafka instance to be the current instance
+# Select a Kafka instance by ID to be set in the current context
 $ rhoas kafka use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ```
