@@ -1,6 +1,8 @@
 package kafkautil
 
 import (
+	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -89,6 +91,48 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 	validRegions = GetEnabledCloudRegionIDs(cloudProviders, nil)
 
 	return validRegions, directive
+}
+
+// GetCloudProviderSizeValues returns the list of region IDs for a particular cloud provider
+func GetCloudProviderSizeValues(f *factory.Factory, providerID string, regionId string) (validSizes []string, directive cobra.ShellCompDirective) {
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	if providerID == "" {
+		return
+	}
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return []string{}, directive
+	}
+
+	// ignores amsType like standard, developer etc.
+	validSizes, _ = GetValidSizes(conn, f.Context, providerID, regionId, nil)
+
+	return validSizes, directive
+}
+
+// return list of the valid instance sizes for the specifed region and ams instance types
+func GetValidSizes(conn connection.Connection, context context.Context,
+	providerID string, regionId string, amsType *string) ([]string, error) {
+	validSizes := []string{}
+
+	instanceTypes, _, err := conn.API().
+		KafkaMgmt().
+		GetInstanceTypesByCloudProviderAndRegion(context, providerID, regionId).
+		Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, instanceType := range instanceTypes.GetItems() {
+		if amsType != nil && amsType != instanceType.Id {
+			continue
+		}
+		for _, instanceSize := range instanceType.GetSizes() {
+			validSizes = append(validSizes, instanceSize.GetId())
+		}
+	}
+	return validSizes, nil
 }
 
 // GetEnabledCloudProviderNames returns a list of cloud provider names from the enabled cloud providers

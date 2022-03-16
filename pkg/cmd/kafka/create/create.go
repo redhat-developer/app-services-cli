@@ -2,6 +2,7 @@ package create
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -43,7 +44,9 @@ type options struct {
 	name     string
 	provider string
 	region   string
-	multiAZ  bool
+	size     string
+
+	multiAZ bool
 
 	outputFormat string
 	autoUse      bool
@@ -52,12 +55,13 @@ type options struct {
 	wait           bool
 	bypassAmsCheck bool
 
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
+	IO                *iostreams.IOStreams
+	Connection        factory.ConnectionFunc
+	Logger            logging.Logger
+	localizer         localize.Localizer
+	Context           context.Context
+	ServiceContext    servicecontext.IContext
+	userInstanceTypes []string
 }
 
 const (
@@ -120,6 +124,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.create.flag.name.description"))
 	flags.StringVar(&opts.provider, kafkaFlagutil.FlagProvider, "", opts.localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
 	flags.StringVar(&opts.region, kafkaFlagutil.FlagRegion, "", opts.localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
+	flags.StringVar(&opts.size, "size", "", opts.localizer.MustLocalize("kafka.create.flag.size.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
@@ -131,6 +136,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return kafkautil.GetCloudProviderRegionCompletionValues(f, opts.provider)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return kafkautil.GetCloudProviderSizeValues(f, opts.provider, opts.region)
 	})
 
 	return cmd
@@ -195,7 +204,18 @@ func runCreate(opts *options) error {
 		}
 
 		if !opts.bypassAmsCheck {
-			err = validateProviderAndRegion(opts, conn)
+			opts.userInstanceTypes, err = accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+			if err != nil {
+				opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+				return err
+			}
+
+			err = validateProviderAndRegion(opts, constants, conn)
+			if err != nil {
+				return err
+			}
+
+			err = validateSize(opts, constants, conn)
 			if err != nil {
 				return err
 			}
@@ -205,9 +225,9 @@ func runCreate(opts *options) error {
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
+			Plan:          &opts.size,
 			MultiAz:       &opts.multiAZ,
 		}
-
 	}
 
 	api := conn.API()
@@ -303,7 +323,23 @@ func runCreate(opts *options) error {
 	return nil
 }
 
-func validateProviderAndRegion(opts *options, conn connection.Connection) error {
+func validateSize(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
+	amsType, err := accountmgmtutil.PickInstanceType(&opts.userInstanceTypes)
+	if err != nil {
+		return err
+	}
+	sizes, err := kafkautil.GetValidSizes(conn, opts.Context, opts.provider, opts.region, &amsType)
+	if err != nil {
+		return err
+	}
+	if !slices.Contains(sizes, opts.size) {
+		// TODO error message
+		return errors.New("Whatever") //opts.localizer.MustLocalizeError("")
+	}
+	return nil
+}
+
+func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
 	opts.Logger.Debug("Validating provider and region")
 	cloudProviders, _, err := conn.API().
 		KafkaMgmt().
@@ -370,22 +406,20 @@ func ValidateProviderRegion(conn connection.Connection, opts *options, selectedP
 			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
 		}
 
-		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
 		if err != nil {
-			opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
 			return err
 		}
 
 		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
 		for _, item := range regionInstanceTypes {
-			if slices.Contains(userInstanceTypes, item) {
+			if slices.Contains(opts.userInstanceTypes, item) {
 				return nil
 			}
 		}
 
 		regionEntry := localize.NewEntry("Region", opts.region)
-		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(opts.userInstanceTypes, ", "))
 		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
 		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
@@ -399,6 +433,7 @@ func ValidateProviderRegion(conn connection.Connection, opts *options, selectedP
 // set type to store the answers from the prompt with defaults
 type promptAnswers struct {
 	Name          string
+	Plan          string
 	Region        string
 	MultiAZ       bool
 	CloudProvider string
@@ -485,10 +520,31 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
+	amsType, err := accountmgmtutil.PickInstanceType(&opts.userInstanceTypes)
+	if err != nil {
+		return nil, err
+	}
+	sizes, err := kafkautil.GetValidSizes(conn, opts.Context, opts.provider, opts.region, &amsType)
+	if err != nil {
+		return nil, err
+	}
+
+	planPrompt := &survey.Select{
+		Message: "What type of instance we should create",
+		Options: sizes,
+		Help:    "",
+	}
+
+	err = survey.AskOne(planPrompt, &answers.Plan)
+	if err != nil {
+		return nil, err
+	}
+
 	payload = &kafkamgmtclient.KafkaRequestPayload{
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
+		Plan:          &answers.Plan,
 		MultiAz:       &answers.MultiAZ,
 	}
 
