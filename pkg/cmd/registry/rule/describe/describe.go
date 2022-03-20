@@ -122,7 +122,7 @@ func runDescribe(opts *options) error {
 
 	if opts.artifactID == "" {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.describe.log.info.fetching.globalRule", localize.NewEntry("Type", opts.ruleType)))
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.describe.log.info.fetching.globalRule", localize.NewEntry("Type", opts.ruleType), localize.NewEntry("ID", opts.registryID)))
 
 		req := dataAPI.AdminApi.GetGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 

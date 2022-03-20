@@ -163,6 +163,9 @@ one='''
 ## Disable the global compatibility rule for all artifacts in the current Service Registry instance
 $ rhoas service-registry rule disable --rule-type=compatibility
 
+## Disable all enabled rules for all artifacts in the current Service Registry instance
+$ rhoas service-registry rule disable
+
 ## Disable the global compatibility rule for all artifacts in a specific Service Registry instance
 $ rhoas service-registry rule disable --rule-type=compatibility --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 
@@ -183,10 +186,10 @@ one='Disabling "{{.RuleType}}" rule for artifact with ID "{{.ArtifactID}}"'
 one='Disabling all rules for artifact with ID "{{.ArtifactID}}"'
 
 [registry.rule.disable.flag.yes]
-one = 'Disable the rule without prompting for confirmation'
+one = 'Skip confirmation to forcibly disable rules'
 
 [registry.rule.disable.confirm]
-one='Do you want to disable the specified rule?'
+one='Do you want to disable specified rule(s)?'
 
 [registry.rule.disable.log.info.success]
 one='Successfully disabled'

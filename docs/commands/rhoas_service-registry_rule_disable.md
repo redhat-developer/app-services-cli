@@ -16,6 +16,9 @@ rhoas service-registry rule disable [flags]
 ## Disable the global compatibility rule for all artifacts in the current Service Registry instance
 $ rhoas service-registry rule disable --rule-type=compatibility
 
+## Disable all enabled rules for all artifacts in the current Service Registry instance
+$ rhoas service-registry rule disable
+
 ## Disable the global compatibility rule for all artifacts in a specific Service Registry instance
 $ rhoas service-registry rule disable --rule-type=compatibility --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 
@@ -31,7 +34,7 @@ $ rhoas service-registry rule disable --rule-type=validity --artifact-id=my-arti
   -g, --group string         Artifact group (default "default")
       --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --rule-type string     Rule type determines how the content of an artifact can evolve over time
-  -y, --yes                  Disable the rule without prompting for confirmation
+  -y, --yes                  Skip confirmation to forcibly disable rules
 ```
 
 ### Options inherited from parent commands
