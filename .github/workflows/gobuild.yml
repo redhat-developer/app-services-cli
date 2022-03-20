@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '**.go'
+      - '**.toml'
       - 'go.mod'
   pull_request:
     branches: [main]
