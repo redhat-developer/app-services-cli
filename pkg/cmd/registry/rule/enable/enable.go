@@ -152,6 +152,7 @@ func runEnable(opts *options) error {
 			opts.localizer.MustLocalize("registry.rule.enable.log.info.enabling.globalRules",
 				localize.NewEntry("RuleType", opts.ruleType),
 				localize.NewEntry("Configuration", opts.config),
+				localize.NewEntry("ID", opts.registryID),
 			),
 		)
 
