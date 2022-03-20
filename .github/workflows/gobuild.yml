@@ -11,6 +11,7 @@ on:
     branches: [main]
     paths:
       - '**.go'
+      - '**.toml'
       - 'go.mod'
 
 jobs:
