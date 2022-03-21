@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"text/tabwriter"
@@ -26,6 +28,8 @@ import (
 const tagTitle = "title"
 
 type serviceStatus struct {
+	Name     string          `json:"name,omitempty" title:"Name"`
+	Path     string          `json:"path,omitempty" title:"Path"`
 	Kafka    *kafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
 	Registry *registryStatus `json:"registry,omitempty" title:"Service Registry"`
 }
@@ -46,6 +50,7 @@ type registryStatus struct {
 }
 
 type clientConfig struct {
+	context       context.Context
 	config        config.IConfig
 	Logger        logging.Logger
 	connection    connection.Connection
@@ -54,6 +59,7 @@ type clientConfig struct {
 }
 
 type statusClient struct {
+	context       context.Context
 	config        config.IConfig
 	Logger        logging.Logger
 	conn          connection.Connection
@@ -73,15 +79,24 @@ func newStatusClient(cfg *clientConfig) *statusClient {
 	}
 }
 
-// BuildStatus gets the status of all services currently set in the user config
-func (c *statusClient) BuildStatus(ctx context.Context, services []string) (status *serviceStatus, ok bool, err error) {
+// BuildStatus gets the status of all services currently set in the service context
+func (c *statusClient) BuildStatus(ctxName string, services []string) (status *serviceStatus, ok bool, err error) {
 
 	status = &serviceStatus{}
+
+	status.Name = ctxName
+
+	if os.Getenv("RHOAS_CONTEXT") == "" {
+		ctxDirLocation, _ := servicecontext.DefaultDir()
+		status.Path = filepath.Join(ctxDirLocation, "contexts.json")
+	} else {
+		status.Path = os.Getenv("RHOAS_CONTEXT")
+	}
 
 	if stringInSlice(servicespec.KafkaServiceName, services) {
 		if c.serviceConfig.KafkaID != "" {
 			// nolint:govet
-			kafkaStatus, err := c.getKafkaStatus(ctx, c.serviceConfig.KafkaID)
+			kafkaStatus, err := c.getKafkaStatus(c.context, c.serviceConfig.KafkaID)
 			if err != nil {
 				if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
 					err = kafkautil.NotFoundByIDError(c.serviceConfig.KafkaID)
@@ -100,7 +115,7 @@ func (c *statusClient) BuildStatus(ctx context.Context, services []string) (stat
 	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
 		if c.serviceConfig.ServiceRegistryID != "" {
 			// nolint:govet
-			registry, newErr := c.getRegistryStatus(ctx, c.serviceConfig.ServiceRegistryID)
+			registry, newErr := c.getRegistryStatus(c.context, c.serviceConfig.ServiceRegistryID)
 			if newErr != nil {
 				return status, ok, newErr
 			}
@@ -158,9 +173,13 @@ func Print(w io.Writer, status *serviceStatus) {
 	for i := 0; i < indirectVal.NumField(); i++ {
 		fieldType := indirectVal.Type().Field(i)
 		fieldVal := indirectVal.Field(i)
+		title := getTitle(&fieldType)
 
-		if !fieldVal.IsNil() {
-			title := getTitle(&fieldType)
+		if fieldVal.Kind() == reflect.String {
+			fmt.Fprintf(w, "%v:\t%v\n", title, fieldVal)
+		}
+
+		if fieldVal.Kind() == reflect.Ptr && !fieldVal.IsNil() {
 			fmt.Fprintln(w, "")
 			printServiceStatus(w, title, fieldVal)
 		}

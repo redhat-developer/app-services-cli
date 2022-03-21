@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/contextcmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -23,8 +22,7 @@ type options struct {
 	Context        context.Context
 	ServiceContext servicecontext.IContext
 
-	skipConfirm bool
-	name        string
+	name string
 }
 
 // NewDeleteCommand command for deleting service contexts
@@ -45,10 +43,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("context.delete.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if !opts.IO.CanPrompt() && !opts.skipConfirm {
-				return flagutil.RequiredWhenNonInteractiveError("yes")
-			}
-
 			return runDelete(opts)
 		},
 	}

@@ -50,7 +50,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	flags := contextcmdutil.NewFlagSet(cmd, f)
 
-	_ = flags.AddContextName(&opts.name)
+	_ = flags.AddContextName(&opts.name).Required()
 
 	return cmd
 
