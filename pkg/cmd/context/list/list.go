@@ -69,8 +69,7 @@ func runList(opts *options) error {
 		return nil
 	}
 
-	switch opts.outputFormat {
-	case dump.EmptyFormat:
+	if opts.outputFormat == dump.EmptyFormat {
 		currentCtx := svcContext.CurrentContext
 		var profileList string
 
@@ -83,7 +82,8 @@ func runList(opts *options) error {
 		}
 		opts.Logger.Info(profileList)
 		return nil
-	default:
-		return dump.Formatted(opts.IO.Out, opts.outputFormat, svcContextsMap)
 	}
+
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, svcContextsMap)
+
 }
