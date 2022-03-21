@@ -3,6 +3,8 @@ package accountmgmtutil
 type QuotaType = string
 
 const (
-	QuotaTrialType    QuotaType = "eval"
-	QuotaStandardType QuotaType = "standard"
+	// Deprecated by QuotaDeveloperType
+	QuotaTrialType     QuotaType = "eval"
+	QuotaDeveloperType QuotaType = "developer"
+	QuotaStandardType  QuotaType = "standard"
 )
