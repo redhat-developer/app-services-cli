@@ -13,7 +13,7 @@ rhoas context commands allow developers to:
 The loading order of contexts follows these rules:
 
   1. If $RHOAS_CONTEXT environment variable is set, then contexts are managed using only that file
-  2. Otherwise, "UserConfigDir/rhoas/contexts.json" is used for contexts
+  2. Otherwise, "<config-dir>/rhoas/contexts.json" is used for contexts
 
 '''
 
@@ -71,23 +71,23 @@ $ rhoas context status kafka
 $ rhoas context status -o json
 '''
 
-[context.kafkaUse.cmd.example]
+[context.useKafka.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
 # Select a Kafka instance by name to be set in the current context
-$ rhoas context kafka-use --name=my-kafka
+$ rhoas context use-kafka --name=my-kafka
 
 # Select a Kafka instance by ID to be set in the current context
-$ rhoas context kafka-use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+$ rhoas context use-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
-[context.registryUse.cmd.example]
+[context.useRegistry.cmd.example]
 one = '''
 # Select a Service Registry instance by name to be set in the current context
-rhoas context service-registry-use --name my-service-registry
+rhoas context use-service-registry --name my-service-registry
 
 # Select a Service Registry instance by ID to be set in the current context
-rhoas context service-registry-use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+rhoas context use-service-registry --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [context.list.cmd]

@@ -1,4 +1,4 @@
-## rhoas context service-registry-use
+## rhoas context use-service-registry
 
 Use a Service Registry instance
 
@@ -11,17 +11,17 @@ When you set the Service Registry instance to be used, it is set as the current 
 
 
 ```
-rhoas context service-registry-use [flags]
+rhoas context use-service-registry [flags]
 ```
 
 ### Examples
 
 ```
 # Select a Service Registry instance by name to be set in the current context
-rhoas context service-registry-use --name my-service-registry
+rhoas context use-service-registry --name my-service-registry
 
 # Select a Service Registry instance by ID to be set in the current context
-rhoas context service-registry-use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+rhoas context use-service-registry --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ```
 
