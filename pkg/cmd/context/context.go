@@ -31,6 +31,7 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 
 	// `rhoas status` cmd has been re-used as `rhoas context status`
 	statusCmd := status.NewStatusCommand(f)
+	statusCmd.Long = f.Localizer.MustLocalize("context.status.cmd.longDescription")
 	statusCmd.Example = f.Localizer.MustLocalize("context.status.cmd.example")
 
 	// The implementation of `rhoas service-registry use` command has been aliased here as `rhoas context use-service-registry`

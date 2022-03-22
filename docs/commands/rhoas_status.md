@@ -33,7 +33,7 @@ $ rhoas status -o json
 
 ```
       --name string     Name of the context
-  -o, --output string   Format in which to display the status of your services (choose from: "json", "yml", "yaml")
+  -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
 ### Options inherited from parent commands
