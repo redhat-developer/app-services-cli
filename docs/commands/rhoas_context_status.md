@@ -6,7 +6,7 @@ View the status of application services set in service context
 
 View the status of your application services. This command shows the status of each of your application services instances set in service context. 
 
-To view the status of a specific application service, use "rhoas status [service]".
+To view the status of a specific application service, use "rhoas context status [service]".
 
 Note: You can change the current instance for an application service with the "rhoas [service] use” command.
 
@@ -36,7 +36,7 @@ $ rhoas context status -o json
 
 ```
       --name string     Name of the context
-  -o, --output string   Format in which to display the status of your services (choose from: "json", "yml", "yaml")
+  -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
 ### Options inherited from parent commands

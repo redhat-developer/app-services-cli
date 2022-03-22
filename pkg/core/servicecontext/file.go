@@ -98,6 +98,12 @@ func (c *File) Remove() error {
 func (c *File) Location() (path string, err error) {
 
 	if rhoasContext := os.Getenv(envName); rhoasContext != "" {
+
+		_, err := os.Stat(rhoasContext)
+		if os.IsNotExist(err) {
+			return "", fmt.Errorf("Custom file path '%s' provided doesn't exist", rhoasContext)
+		}
+
 		path = rhoasContext
 	} else {
 		rhoasCtxDir, err := DefaultDir()
