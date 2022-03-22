@@ -11,11 +11,8 @@ rhoas context commands allow developers to:
   * Share context with others to use the same set of services
   * Generating configuration for connecting to the services from various platforms and tools
 
-The loading order of contexts follows these rules:
-
-  1. If $RHOAS_CONTEXT environment variable is set, then contexts are managed using only that file
-  2. Otherwise, "<config-dir>/rhoas/contexts.json" is used for contexts
-
+By default context is kept under users configuration folder. Users can view context location by executing "rhoas context status" command.
+Additionally developers can specify custom location for contexts by setting $RHOAS_CONTEXT environment variable in their profile.
 
 
 ### Examples

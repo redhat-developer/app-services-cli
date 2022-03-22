@@ -66,16 +66,19 @@ func runDelete(opts *options) error {
 		Localizer: opts.localizer,
 	}
 
-	if opts.name == "" {
+	currCtx := svcContext.CurrentContext
 
-		currCtx, newErr := profileHandler.GetCurrentContext()
-		if newErr != nil {
-			return newErr
+	if opts.name == "" || opts.name == currCtx {
+
+		if currCtx == "" {
+			return opts.localizer.MustLocalizeError("context.common.error.notSet")
 		}
 
 		opts.name = currCtx
 
 		svcContext.CurrentContext = ""
+
+		opts.Logger.Info(opts.localizer.MustLocalize("context.delete.log.warning.currentUnset"))
 	}
 
 	if _, err = profileHandler.GetContext(opts.name); err != nil {

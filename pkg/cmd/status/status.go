@@ -74,7 +74,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("context.common.flag.name"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("status.flag.output.description"))
+	flags.AddOutput(&opts.outputFormat)
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
