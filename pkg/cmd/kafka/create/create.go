@@ -61,7 +61,7 @@ type options struct {
 	localizer         localize.Localizer
 	Context           context.Context
 	ServiceContext    servicecontext.IContext
-	userInstanceTypes []string
+	userInstanceTypes []accountmgmtutil.QuotaSpec
 }
 
 const (
@@ -184,6 +184,12 @@ func runCreate(opts *options) error {
 		}
 	}
 
+	opts.userInstanceTypes, err = accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+	if err != nil {
+		opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+		return err
+	}
+
 	var payload *kafkamgmtclient.KafkaRequestPayload
 	if opts.interactive {
 		opts.Logger.Debug()
@@ -204,12 +210,6 @@ func runCreate(opts *options) error {
 		}
 
 		if !opts.bypassAmsCheck {
-			opts.userInstanceTypes, err = accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-			if err != nil {
-				opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-				return err
-			}
-
 			err = validateProviderAndRegion(opts, constants, conn)
 			if err != nil {
 				return err
@@ -324,7 +324,7 @@ func runCreate(opts *options) error {
 }
 
 func validateSize(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
-	amsType, err := accountmgmtutil.PickInstanceType(&opts.userInstanceTypes)
+	amsType, err := accountmgmtutil.PickInstanceType(opts.userInstanceTypes)
 	if err != nil {
 		return err
 	}
@@ -412,14 +412,15 @@ func ValidateProviderRegion(conn connection.Connection, opts *options, selectedP
 
 		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
+		stringTypes := accountmgmtutil.GetInstanceTypes(opts.userInstanceTypes)
 		for _, item := range regionInstanceTypes {
-			if slices.Contains(opts.userInstanceTypes, item) {
+			if slices.Contains(stringTypes, item) {
 				return nil
 			}
 		}
 
 		regionEntry := localize.NewEntry("Region", opts.region)
-		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(opts.userInstanceTypes, ", "))
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(stringTypes, ", "))
 		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
 		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
@@ -499,15 +500,10 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
-	// Temporary disabled due to breaking changes in the API
-	// userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-	// if err != nil {
-	// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-	// 	return payload, err
-	// }
-
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, nil)
+
+	stringTypes := accountmgmtutil.GetInstanceTypes(opts.userInstanceTypes)
+	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, &stringTypes)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
@@ -520,7 +516,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
-	amsType, err := accountmgmtutil.PickInstanceType(&opts.userInstanceTypes)
+	amsType, err := accountmgmtutil.PickInstanceType(opts.userInstanceTypes)
 	if err != nil {
 		return nil, err
 	}

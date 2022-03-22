@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
-	"k8s.io/utils/strings/slices"
 
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 
@@ -35,7 +34,13 @@ func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connect
 	return false, termsReview.GetRedirectUrl(), nil
 }
 
-func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota []string, err error) {
+// QuotaSpec - contains quota name and remianing quota count
+type QuotaSpec struct {
+	name  string
+	quota int
+}
+
+func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
 	orgId, err := GetOrganizationID(ctx, conn)
 	if err != nil {
 		return nil, err
@@ -49,15 +54,25 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 		return nil, err
 	}
 
-	var quotas []string
+	var quotas []QuotaSpec
+
 	for _, quota := range quotaCostGet.GetItems() {
 		quotaId := strings.TrimSpace(quota.GetQuotaId())
 
+		quotaType := ""
 		if quotaId == spec.TrialQuotaID {
-			quotas = append(quotas, QuotaTrialType)
+			quotaType = QuotaTrialType
+
 		}
+		if quotaId == spec.DeveloperQuotaID {
+			quotaType = QuotaTrialType
+		}
+
 		if quotaId == spec.InstanceQuotaID {
-			quotas = append(quotas, QuotaStandardType)
+			quotaType = QuotaTrialType
+		}
+		if quotaType != "" {
+			quotas = append(quotas, QuotaSpec{QuotaTrialType, int(quota.GetAllowed() - quota.GetConsumed())})
 		}
 	}
 
@@ -78,20 +93,30 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 // This function should not exist but it does represents some requirement
 // from business to only pick one instance type when two are presented.
 // When standard instance type is present in user instances it should always take precedence
-func PickInstanceType(amsType *[]string) (string, error) {
-	if amsType == nil {
+func PickInstanceType(amsTypes []QuotaSpec) (string, error) {
+	if amsTypes == nil {
 		// TODO better error
 		return "", errors.New("Cannot pick the fight between AMS instance types. No one will win")
 	}
-	if len(*amsType) == 0 {
+	if len(amsTypes) == 0 {
 		// TODO better error
 		return "", errors.New("No fighters to pick the fight. Sorry")
 
 	}
 
-	if slices.Contains(*amsType, QuotaStandardType) {
-		return QuotaStandardType, nil
+	for _, amsType := range amsTypes {
+		if amsType.name == QuotaStandardType {
+			return QuotaStandardType, nil
+		}
 	}
 
-	return (*amsType)[0], nil
+	return amsTypes[0].name, nil
+}
+
+func GetInstanceTypes(amsTypes []QuotaSpec) []string {
+	var instanceTypes = make([]string, len(amsTypes))
+	for i, amsType := range amsTypes {
+		instanceTypes[i] = amsType.name
+	}
+	return instanceTypes
 }
