@@ -95,6 +95,7 @@ func runCreate(opts *options) error {
 	}
 
 	svcContextsMap[opts.name] = servicecontext.ServiceConfig{}
+	svcContext.CurrentContext = opts.name
 
 	svcContext.Contexts = svcContextsMap
 

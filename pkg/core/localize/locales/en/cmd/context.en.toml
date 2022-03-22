@@ -10,11 +10,8 @@ rhoas context commands allow developers to:
   * Share context with others to use the same set of services
   * Generating configuration for connecting to the services from various platforms and tools
 
-The loading order of contexts follows these rules:
-
-  1. If $RHOAS_CONTEXT environment variable is set, then contexts are managed using only that file
-  2. Otherwise, "<config-dir>/rhoas/contexts.json" is used for contexts
-
+By default context is kept under users configuration folder. Users can view context location by executing "rhoas context status" command.
+Additionally developers can specify custom location for contexts by setting $RHOAS_CONTEXT environment variable in their profile.
 '''
 
 [context.cmd.example]
@@ -48,12 +45,13 @@ one='Current context set to "{{.Name}}"'
 
 [context.status.cmd]
 
-[context.status.cmd.shortDescription]
-one='Show status of the context'
-
 [context.status.cmd.longDescription]
-one='''
-Print overview of the services in associated with a service context
+one = '''
+View the status of your application services. This command shows the status of each of your application services instances set in service context. 
+
+To view the status of a specific application service, use "rhoas context status [service]".
+
+Note: You can change the current instance for an application service with the "rhoas [service] use” command.
 '''
 
 [context.status.cmd.example]
@@ -161,6 +159,9 @@ $ rhoas context delete
 ## Delete a service context by name
 $ rhoas context delete --name my-context
 '''
+
+[context.delete.log.warning.currentUnset]
+one='Warning: this removed your current service context, use "rhoas context use" to select a different one'
 
 [context.delete.log.successMessage]
 one='Context deleted successfully'
