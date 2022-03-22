@@ -3,7 +3,7 @@ package servicecontext
 // Context is a type which describes the properties of context file
 type Context struct {
 	Contexts       map[string]ServiceConfig `json:"contexts,omitempty"`
-	CurrentContext string                   `json:"current_context,omitempty"`
+	CurrentContext string                   `json:"current_context"`
 }
 
 // ServiceConfig is a map of identifiers for the application services
