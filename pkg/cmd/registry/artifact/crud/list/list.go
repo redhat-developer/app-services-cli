@@ -6,13 +6,14 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 	"github.com/spf13/cobra"
@@ -47,23 +48,23 @@ type options struct {
 	page  int32
 	limit int32
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewListCommand creates a new command for listing registry artifacts.
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -85,17 +86,27 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return runList(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
-			instanceID, ok := cfg.GetServiceRegistryIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("artifact.cmd.common.error.noServiceRegistrySelected")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   svcContext,
+				Localizer: opts.localizer,
 			}
 
-			opts.registryID = instanceID
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.registryID = registryInstance.GetId()
 
 			return runList(opts)
 		},
