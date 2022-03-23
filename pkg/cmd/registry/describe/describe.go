@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -24,7 +23,6 @@ type options struct {
 	outputFormat string
 
 	IO             *iostreams.IOStreams
-	Config         config.IConfig
 	Connection     factory.ConnectionFunc
 	localizer      localize.Localizer
 	Context        context.Context
@@ -35,7 +33,6 @@ type options struct {
 // or by using the service instance set in the current context, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:         f.Config,
 		Connection:     f.Connection,
 		IO:             f.IOStreams,
 		localizer:      f.Localizer,

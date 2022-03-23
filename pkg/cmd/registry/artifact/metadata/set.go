@@ -6,14 +6,15 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/editor"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/spf13/cobra"
 
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
@@ -29,23 +30,23 @@ type SetOptions struct {
 	name        string
 	description string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Logger     logging.Logger
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Logger         logging.Logger
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewSetMetadataCommand creates a new command for updating metadata for registry artifacts.
 func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 	opts := &SetOptions{
-		Config:     f.Config,
-		Connection: f.Connection,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Logger:     f.Logger,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Logger:         f.Logger,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -67,17 +68,27 @@ func NewSetMetadataCommand(f *factory.Factory) *cobra.Command {
 				return runSet(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
-			instanceID, ok := cfg.GetServiceRegistryIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("registry.no.service.selected.use.instance.id.flag")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   svcContext,
+				Localizer: opts.localizer,
 			}
 
-			opts.registryID = instanceID
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.registryID = registryInstance.GetId()
 			return runSet(opts)
 		},
 	}
