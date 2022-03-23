@@ -11,7 +11,9 @@ rhoas context commands allow developers to:
   * Generating configuration for connecting to the services from various platforms and tools
 
 By default context is kept under users configuration folder. Users can view context location by executing "rhoas context status" command.
+
 Additionally developers can specify custom location for contexts by setting $RHOAS_CONTEXT environment variable in their profile.
+Setting $RHOAS_CONTEXT to "./rhoas.json" will load contexts from the current folder.
 '''
 
 [context.cmd.example]
@@ -21,6 +23,9 @@ $ rhoas context use --name my-context
 
 ## List contexts
 $ rhoas context list
+
+## Create context
+$ rhoas context create --name my-context
 '''
 
 [context.use.cmd]
@@ -135,9 +140,9 @@ one='Unique name of service context'
 one='''
 Context created successfully
 
-Run the following command to set it as current context:
+Run the following commands to set service instances in the created context:
 
-  $ rhoas context use --name {{.Name}}
+  $ rhoas context use-[service]
 '''
 
 [context.create.log.alreadyExists]
@@ -172,13 +177,13 @@ one='Name of the context'
 [context.common.error.noRegistryID]
 one='''
 context doesn't have a Service Registry ID.
-Use `rhoas context status` commands to review your context
+Use `rhoas context use-service-registry` command to select a Kafka instance for your context
 '''
 
 [context.common.error.noKafkaID]
 one='''
 context doesn't have a Kafka Instance ID.
-Use `rhoas context status` commands to review your context
+Use `rhoas context use-kafka` command to select a Kafka instance for your context
 '''
 
 [context.common.error.registry.notFound]

@@ -29,7 +29,7 @@ const tagTitle = "title"
 
 type serviceStatus struct {
 	Name     string          `json:"name,omitempty" title:"Name"`
-	Path     string          `json:"path,omitempty" title:"Path"`
+	Location string          `json:"location,omitempty" title:"Location"`
 	Kafka    *kafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
 	Registry *registryStatus `json:"registry,omitempty" title:"Service Registry"`
 }
@@ -86,11 +86,11 @@ func (c *statusClient) BuildStatus(ctxName string, services []string) (status *s
 
 	status.Name = ctxName
 
-	if os.Getenv("RHOAS_CONTEXT") == "" {
-		ctxDirLocation, _ := servicecontext.DefaultDir()
-		status.Path = filepath.Join(ctxDirLocation, "contexts.json")
+	if rhoasContext := os.Getenv("RHOAS_CONTEXT"); rhoasContext != "" {
+		status.Location = rhoasContext
 	} else {
-		status.Path = os.Getenv("RHOAS_CONTEXT")
+		ctxDirLocation, _ := servicecontext.DefaultDir()
+		status.Location = filepath.Join(ctxDirLocation, "contexts.json")
 	}
 
 	if stringInSlice(servicespec.KafkaServiceName, services) {
