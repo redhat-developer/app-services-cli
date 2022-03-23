@@ -177,7 +177,7 @@ one='Name of the context'
 [context.common.error.noRegistryID]
 one='''
 context doesn't have a Service Registry ID.
-Use `rhoas context use-service-registry` command to select a Kafka instance for your context
+Use `rhoas context use-service-registry` command to select a Service registry instance for your context
 '''
 
 [context.common.error.noKafkaID]
@@ -188,12 +188,12 @@ Use `rhoas context use-kafka` command to select a Kafka instance for your contex
 
 [context.common.error.registry.notFound]
 one='''
-Service registry instance doesnt exist, you need to review your context using command `rhoas context status`
+Service registry instance doesn't exist, you need to set valid instance id using `rhoas context use-service-registry` command
 '''
 
 [context.common.error.kafka.notFound]
 one='''
-Kafka instance doesnt exist, you need to review your context using command `rhoas context status`
+Kafka instance doesn't exist, you need to set valid instance id using `rhoas context use-kafka` command
 '''
 
 [context.common.error.context.notFound]
