@@ -6,13 +6,14 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	"github.com/spf13/cobra"
 
@@ -24,22 +25,22 @@ type options struct {
 	name  string
 	force bool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -61,17 +62,27 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return runDelete(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
-			var serviceRegistryConfig *config.ServiceRegistryConfig
-			if cfg.Services.ServiceRegistry == serviceRegistryConfig || cfg.Services.ServiceRegistry.InstanceID == "" {
-				return opts.localizer.MustLocalizeError("registry.common.error.noServiceSelected")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   svcContext,
+				Localizer: opts.localizer,
 			}
 
-			opts.id = cfg.Services.ServiceRegistry.InstanceID
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.id = registryInstance.GetId()
 
 			return runDelete(opts)
 		},
@@ -85,7 +96,23 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *options) error {
-	cfg, err := opts.Config.Load()
+
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return err
 	}
@@ -142,17 +169,19 @@ func runDelete(opts *options) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.delete.log.info.deleteSuccess", localize.NewEntry("Name", registryName)))
 
-	currentContextRegistry := cfg.Services.ServiceRegistry
+	currentContextRegistry := svcConfig.ServiceRegistryID
 	// this is not the current cluster, our work here is done
-	if currentContextRegistry == nil || currentContextRegistry.InstanceID != opts.id {
+	if currentContextRegistry != opts.id {
 		return nil
 	}
 
-	// the service that was deleted is set as the user's current cluster
-	// since it was deleted it should be removed from the config
-	cfg.Services.ServiceRegistry = nil
-	err = opts.Config.Save(cfg)
-	if err != nil {
+	// the service that was deleted is set as the user's current instance
+	// since it was deleted it should be removed from the context
+
+	svcConfig.ServiceRegistryID = ""
+	svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+
+	if err := opts.ServiceContext.Save(svcContext); err != nil {
 		return err
 	}
 

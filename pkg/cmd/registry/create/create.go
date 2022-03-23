@@ -12,9 +12,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
@@ -34,23 +36,25 @@ type options struct {
 	interactive      bool
 	bypassTermsCheck bool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Config         config.IConfig
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewCreateCommand creates a new command for creating registry.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		IO:         f.IOStreams,
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		IO:             f.IOStreams,
+		Config:         f.Config,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -95,7 +99,22 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *options) error {
-	cfg, err := opts.Config.Load()
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return err
 	}
@@ -124,22 +143,8 @@ func runCreate(opts *options) error {
 	}
 
 	if !opts.bypassTermsCheck {
-		opts.Logger.Debug("Checking if terms and conditions have been accepted")
-		// the user must have accepted the terms and conditions from the provider
-		// before they can create a registry instance
-		err1, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
-		if err1 != nil {
+		if err = checkTermsAccepted(opts, conn); err != nil {
 			return err
-		}
-		var termsAccepted bool
-		var termsURL string
-		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.ServiceRegistry.Ams, conn)
-		if err != nil {
-			return err
-		}
-		if !termsAccepted && termsURL != "" {
-			opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
-			return nil
 		}
 	}
 
@@ -165,15 +170,12 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	registryConfig := &config.ServiceRegistryConfig{
-		InstanceID: response.GetId(),
-		Name:       response.GetName(),
-	}
-
 	if opts.autoUse {
 		opts.Logger.Debug("Auto-use is set, updating the current instance")
-		cfg.Services.ServiceRegistry = registryConfig
-		if err := opts.Config.Save(cfg); err != nil {
+		svcConfig.ServiceRegistryID = response.GetId()
+		svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+
+		if err := opts.ServiceContext.Save(svcContext); err != nil {
 			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("registry.cmd.create.error.couldNotUse"), err)
 		}
 	} else {
@@ -224,4 +226,26 @@ func promptPayload(opts *options) (payload *srsmgmtv1.RegistryCreate, err error)
 	}
 
 	return payload, nil
+}
+
+func checkTermsAccepted(opts *options, conn connection.Connection) (err error) {
+	opts.Logger.Debug("Checking if terms and conditions have been accepted")
+	// the user must have accepted the terms and conditions from the provider
+	// before they can create a registry instance
+	err1, constants := remote.GetRemoteServiceConstants(opts.Context, opts.Logger)
+	if err1 != nil {
+		return err1
+	}
+	var termsAccepted bool
+	var termsURL string
+	termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.ServiceRegistry.Ams, conn)
+	if err != nil {
+		return err
+	}
+	if !termsAccepted && termsURL != "" {
+		opts.Logger.Info(opts.localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
+		return nil
+	}
+
+	return nil
 }
