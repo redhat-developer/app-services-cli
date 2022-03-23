@@ -12,7 +12,9 @@ rhoas context commands allow developers to:
   * Generating configuration for connecting to the services from various platforms and tools
 
 By default context is kept under users configuration folder. Users can view context location by executing "rhoas context status" command.
+
 Additionally developers can specify custom location for contexts by setting $RHOAS_CONTEXT environment variable in their profile.
+Setting $RHOAS_CONTEXT to "./rhoas.json" will load contexts from the current folder.
 
 
 ### Examples
@@ -23,6 +25,9 @@ $ rhoas context use --name my-context
 
 ## List contexts
 $ rhoas context list
+
+## Create context
+$ rhoas context create --name my-context
 
 ```
 
