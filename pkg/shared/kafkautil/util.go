@@ -3,6 +3,7 @@ package kafkautil
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
@@ -147,13 +148,28 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 	validNames = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	cfg, err := f.Config.Load()
+	svcContext, err := f.ServiceContext.Load()
 	if err != nil {
 		return validNames, directive
 	}
 
-	instanceID, ok := cfg.GetKafkaIdOk()
-	if !ok {
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: f.Localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return validNames, directive
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
+	if err != nil {
+		return validNames, directive
+	}
+
+	instanceID := svcConfig.KafkaID
+	if instanceID == "" {
 		return validNames, directive
 	}
 
@@ -189,13 +205,28 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 	validIDs = []string{}
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	cfg, err := f.Config.Load()
+	svcContext, err := f.ServiceContext.Load()
 	if err != nil {
 		return validIDs, directive
 	}
 
-	instanceID, ok := cfg.GetKafkaIdOk()
-	if !ok {
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: f.Localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return validIDs, directive
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
+	if err != nil {
+		return validIDs, directive
+	}
+
+	instanceID := svcConfig.KafkaID
+	if instanceID == "" {
 		return validIDs, directive
 	}
 
