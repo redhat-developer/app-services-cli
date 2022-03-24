@@ -6,14 +6,15 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
@@ -35,23 +36,23 @@ type options struct {
 	limit        int32
 	search       string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	ServiceContext servicecontext.IContext
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
 }
 
 // NewListCommand creates a new command for listing service registries.
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -116,9 +117,25 @@ func runList(opts *options) error {
 	switch opts.outputFormat {
 	case dump.TableFormat:
 		var rows []RegistryRow
-		serviceConfig, _ := opts.Config.Load()
-		if serviceConfig != nil && serviceConfig.Services.ServiceRegistry != nil {
-			rows = mapResponseItemsToRows(&response.Items, serviceConfig.Services.ServiceRegistry.InstanceID)
+		svcContext, err := opts.ServiceContext.Load()
+		if err != nil {
+			return err
+		}
+
+		profileHandler := &profileutil.ContextHandler{
+			Context:   svcContext,
+			Localizer: opts.localizer,
+		}
+
+		conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+		if err != nil {
+			return err
+		}
+
+		registryInstance, _ := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+
+		if registryInstance != nil {
+			rows = mapResponseItemsToRows(&response.Items, registryInstance.GetId())
 		} else {
 			rows = mapResponseItemsToRows(&response.Items, "-")
 		}
