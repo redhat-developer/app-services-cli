@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -19,7 +20,22 @@ type KafkaService struct {
 
 func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, ignoreContext bool) (*ServiceDetails, error) {
 	cliOpts := s.CommandEnvironment
-	cfg, err := cliOpts.Config.Load()
+	svcContext, err := cliOpts.ServiceContext.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: cliOpts.Localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return nil, err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +44,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 	var serviceId string
 
 	if serviceName == "" {
-		if cfg.Services.Kafka == nil || ignoreContext {
+		if svcConfig.KafkaID == "" || ignoreContext {
 			// nolint
 			selectedService, err := kafkautil.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger, cliOpts.Localizer)
 			if err != nil {
@@ -40,7 +56,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 			serviceId = selectedService.GetId()
 			serviceName = selectedService.GetName()
 		} else {
-			serviceId = cfg.Services.Kafka.ClusterID
+			serviceId = svcConfig.KafkaID
 			selectedService, _, err := kafkautil.GetKafkaByID(cliOpts.Context, api.KafkaMgmt(), serviceId)
 			if err != nil {
 				return nil, err

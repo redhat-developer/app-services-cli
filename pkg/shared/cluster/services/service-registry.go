@@ -6,6 +6,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -19,7 +20,22 @@ type RegistryService struct {
 
 func (s RegistryService) BuildServiceDetails(serviceName string, namespace string, ignoreContext bool) (*ServiceDetails, error) {
 	cliOpts := s.CommandEnvironment
-	cfg, err := cliOpts.Config.Load()
+	svcContext, err := cliOpts.ServiceContext.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: cliOpts.Localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return nil, err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +44,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 	var serviceId string
 
 	if serviceName == "" {
-		if cfg.Services.ServiceRegistry == nil || ignoreContext {
+		if svcConfig.ServiceRegistryID == "" || ignoreContext {
 			// nolint
 			selectedService, err := serviceregistryutil.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger)
 			if err != nil {
@@ -40,7 +56,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 			serviceId = selectedService.GetId()
 			serviceName = selectedService.GetName()
 		} else {
-			serviceId = cfg.Services.ServiceRegistry.InstanceID
+			serviceId = svcConfig.ServiceRegistryID
 			selectedService, _, err := serviceregistryutil.GetServiceRegistryByID(
 				cliOpts.Context, api.ServiceRegistryMgmt(), serviceId)
 			if err != nil {

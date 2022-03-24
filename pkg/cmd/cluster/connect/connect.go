@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
@@ -19,12 +19,12 @@ import (
 )
 
 type options struct {
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
-	localizer  localize.Localizer
-	Context    context.Context
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	IO             *iostreams.IOStreams
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	kubeconfigLocation string
 	namespace          string
@@ -38,12 +38,12 @@ type options struct {
 
 func NewConnectCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -79,12 +79,12 @@ func runConnect(opts *options) error {
 	}
 
 	cliProperties := v1alpha.CommandEnvironment{
-		IO:         opts.IO,
-		Logger:     opts.Logger,
-		Localizer:  opts.localizer,
-		Config:     opts.Config,
-		Connection: conn,
-		Context:    opts.Context,
+		IO:             opts.IO,
+		Logger:         opts.Logger,
+		Localizer:      opts.localizer,
+		Connection:     conn,
+		Context:        opts.Context,
+		ServiceContext: opts.ServiceContext,
 	}
 
 	kubeClients, err := kubeclient.NewKubernetesClusterClients(&cliProperties, opts.kubeconfigLocation)

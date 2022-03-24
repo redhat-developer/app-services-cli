@@ -3,21 +3,21 @@ package v1alpha
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 )
 
 // CommandEnvironment provides number of abstractions provided by CLI
 type CommandEnvironment struct {
-	Connection connection.Connection
-	Config     config.IConfig
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
-	Localizer  localize.Localizer
-	Context    context.Context
+	Connection     connection.Connection
+	Logger         logging.Logger
+	IO             *iostreams.IOStreams
+	Localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // ConnectOperationOptions contains input flags for connect method
