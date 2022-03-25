@@ -5,15 +5,18 @@ import (
 	"net/http"
 	"strings"
 
+	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -36,24 +39,24 @@ type options struct {
 	interactive       bool
 	cleanupPolicy     string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewUpdateTopicCommand gets a new command for updating a kafka topic.
 // nolint:funlen
 func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Connection: f.Connection,
-		Config:     f.Config,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -128,23 +131,37 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			cfg, err := opts.Config.Load()
-			if err != nil {
-				return err
-			}
+			if opts.kafkaID == "" {
+				svcContext, err := opts.ServiceContext.Load()
+				if err != nil {
+					return err
+				}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.topic.common.error.noKafkaSelected")
-			}
+				profileHandler := &profileutil.ContextHandler{
+					Context:   svcContext,
+					Localizer: opts.localizer,
+				}
 
-			opts.kafkaID = instanceID
+				conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+				if err != nil {
+					return err
+				}
+
+				kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+				if err != nil {
+					return err
+				}
+
+				opts.kafkaID = kafkaInstance.GetId()
+			}
 
 			return runCmd(opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaflagutil.NewFlagSet(cmd, opts.localizer)
+
+	flags.AddInstanceID(&opts.kafkaID)
 
 	flags.StringVar(&opts.retentionMsStr, "retention-ms", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionMs.description"))
 	flags.StringVar(&opts.retentionBytesStr, "retention-bytes", "", opts.localizer.MustLocalize("kafka.topic.common.input.retentionBytes.description"))

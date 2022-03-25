@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"github.com/spf13/cobra"
@@ -20,12 +20,12 @@ import (
 
 // CrudOptions is the interface used for options of create and delete command
 type CrudOptions struct {
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	IO         *iostreams.IOStreams
-	Localizer  localize.Localizer
-	Context    context.Context
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	IO             *iostreams.IOStreams
+	Localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 
 	Cluster         bool
 	PatternType     string

@@ -28,7 +28,7 @@ $ rhoas kafka acl grant-admin --all-accounts --instance-id c5hv7iru4an1g84pogp0
 
 ```
       --all-accounts             Set the ACL principal to match all principals (users and service accounts)
-      --instance-id string       Kafka instance ID. Uses the current instance if not set
+      --instance-id string       Kafka instance ID. Uses the current instance if not set 
       --service-account string   Service account client ID used as principal for this operation
       --user string              User ID to be used as principal
   -y, --yes                      Skip confirmation of this action 

@@ -11,13 +11,13 @@ import (
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 	"k8s.io/utils/strings/slices"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
@@ -25,6 +25,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
@@ -51,12 +52,12 @@ type options struct {
 	wait           bool
 	bypassAmsCheck bool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 const (
@@ -69,12 +70,12 @@ const (
 // NewCreateCommand creates a new command for creating kafkas.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		IO:         f.IOStreams,
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		IO:             f.IOStreams,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 
 		multiAZ: defaultMultiAZ,
 	}
@@ -137,7 +138,22 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCreate(opts *options) error {
-	cfg, err := opts.Config.Load()
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return err
 	}
@@ -230,14 +246,12 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	kafkaCfg := &config.KafkaConfig{
-		ClusterID: response.GetId(),
-	}
-
 	if opts.autoUse {
 		opts.Logger.Debug("Auto-use is set, updating the current instance")
-		cfg.Services.Kafka = kafkaCfg
-		if err = opts.Config.Save(cfg); err != nil {
+		svcConfig.KafkaID = response.GetId()
+		svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+
+		if err = opts.ServiceContext.Save(svcContext); err != nil {
 			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.common.error.couldNotUseKafka"), err)
 		}
 	} else {

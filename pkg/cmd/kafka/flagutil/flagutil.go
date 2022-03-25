@@ -14,7 +14,7 @@ const (
 	FlagRegion = "region"
 )
 
-type flagSet struct {
+type FlagSet struct {
 	flags     *pflag.FlagSet
 	cmd       *cobra.Command
 	localizer localize.Localizer
@@ -22,8 +22,8 @@ type flagSet struct {
 }
 
 // NewFlagSet returns a new flag set for creating common Kafka-command flags
-func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *flagSet {
-	return &flagSet{
+func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
+	return &FlagSet{
 		cmd:       cmd,
 		flags:     cmd.Flags(),
 		localizer: localizer,
@@ -32,7 +32,7 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *flagSet {
 }
 
 // AddInstanceID adds a flag for setting the Kafka instance ID
-func (fs *flagSet) AddInstanceID(instanceID *string) {
+func (fs *FlagSet) AddInstanceID(instanceID *string) {
 	flagName := "instance-id"
 
 	fs.flags.StringVar(

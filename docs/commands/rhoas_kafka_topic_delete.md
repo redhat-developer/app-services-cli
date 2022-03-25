@@ -22,8 +22,9 @@ $ rhoas kafka topic delete --name topic-1
 ### Options
 
 ```
-      --name string   Topic name
-  -y, --yes           Skip confirmation of this action 
+      --instance-id string   Kafka instance ID. Uses the current instance if not set 
+      --name string          Topic name
+  -y, --yes                  Skip confirmation of this action 
 ```
 
 ### Options inherited from parent commands
