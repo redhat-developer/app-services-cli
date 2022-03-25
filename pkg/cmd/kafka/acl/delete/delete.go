@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
@@ -36,7 +37,6 @@ type requestParams struct {
 // NewDeleteCommand creates a new command to delete Kafka ACLs
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &aclcmdutil.CrudOptions{
-		Config:     f.Config,
 		Connection: f.Connection,
 		Logger:     f.Logger,
 		IO:         f.IOStreams,
@@ -278,18 +278,27 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 	}
 
 	if opts.InstanceID == "" {
-		cfg, err := opts.Config.Load()
+		svcContext, err := opts.ServiceContext.Load()
 		if err != nil {
 			return err
 		}
 
-		instanceID, ok := cfg.GetKafkaIdOk()
-
-		if !ok {
-			return opts.Localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
+		profileHandler := &profileutil.ContextHandler{
+			Context:   svcContext,
+			Localizer: opts.Localizer,
 		}
 
-		opts.InstanceID = instanceID
+		conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+		if err != nil {
+			return err
+		}
+
+		kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+		if err != nil {
+			return err
+		}
+
+		opts.InstanceID = kafkaInstance.GetId()
 	}
 
 	return nil

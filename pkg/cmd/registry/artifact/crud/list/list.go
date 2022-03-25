@@ -82,31 +82,29 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return opts.localizer.MustLocalizeError("artifact.common.error.page.and.limit.too.small")
 			}
 
-			if opts.registryID != "" {
-				return runList(opts)
-			}
+			if opts.registryID == "" {
+				svcContext, err := opts.ServiceContext.Load()
+				if err != nil {
+					return err
+				}
 
-			svcContext, err := opts.ServiceContext.Load()
-			if err != nil {
-				return err
-			}
+				profileHandler := &profileutil.ContextHandler{
+					Context:   svcContext,
+					Localizer: opts.localizer,
+				}
 
-			profileHandler := &profileutil.ContextHandler{
-				Context:   svcContext,
-				Localizer: opts.localizer,
-			}
+				conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+				if err != nil {
+					return err
+				}
 
-			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-			if err != nil {
-				return err
-			}
+				registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+				if err != nil {
+					return err
+				}
 
-			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
-			if err != nil {
-				return err
+				opts.registryID = registryInstance.GetId()
 			}
-
-			opts.registryID = registryInstance.GetId()
 
 			return runList(opts)
 		},

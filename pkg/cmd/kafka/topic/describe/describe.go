@@ -4,14 +4,16 @@ import (
 	"context"
 	"net/http"
 
+	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -22,23 +24,23 @@ type options struct {
 	kafkaID      string
 	outputFormat string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewDescribeTopicCommand gets a new command for describing a kafka topic.
 func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Connection: f.Connection,
-		Config:     f.Config,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -54,29 +56,38 @@ func NewDescribeTopicCommand(f *factory.Factory) *cobra.Command {
 				}
 			}
 
-			if opts.kafkaID != "" {
-				return runCmd(opts)
-			}
+			if opts.kafkaID == "" {
+				svcContext, err := opts.ServiceContext.Load()
+				if err != nil {
+					return err
+				}
 
-			cfg, err := opts.Config.Load()
-			if err != nil {
-				return err
-			}
+				profileHandler := &profileutil.ContextHandler{
+					Context:   svcContext,
+					Localizer: opts.localizer,
+				}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.topic.common.error.noKafkaSelected")
-			}
+				conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+				if err != nil {
+					return err
+				}
 
-			opts.kafkaID = instanceID
+				kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+				if err != nil {
+					return err
+				}
+
+				opts.kafkaID = kafkaInstance.GetId()
+			}
 
 			return runCmd(opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaflagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.AddOutput(&opts.outputFormat)
+	flags.AddInstanceID(&opts.kafkaID)
 
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.output.description"))
 	_ = cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
