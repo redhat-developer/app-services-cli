@@ -55,7 +55,7 @@ $ rhoas kafka acl list --group foo_group_id --user foo_user
       --all-accounts             Set the ACL principal to match all principals (users and service accounts)
       --cluster                  Set filter to cluster resource
       --group string             Text search to filter ACL rules for consumer groups by ID
-      --instance-id string       Kafka instance ID. Uses the current instance if not set
+      --instance-id string       Kafka instance ID. Uses the current instance if not set 
   -o, --output string            Specify the output format. Choose from: "json", "yaml", "yml"
       --page int32               Current page number for the list  (default 1)
       --service-account string   Service account client ID used as principal for this operation

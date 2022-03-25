@@ -6,12 +6,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -24,12 +25,12 @@ var (
 )
 
 type options struct {
-	config     config.IConfig
-	connection factory.ConnectionFunc
-	logger     logging.Logger
-	io         *iostreams.IOStreams
-	localizer  localize.Localizer
-	context    context.Context
+	connection     factory.ConnectionFunc
+	logger         logging.Logger
+	io             *iostreams.IOStreams
+	localizer      localize.Localizer
+	context        context.Context
+	serviceContext servicecontext.IContext
 
 	page      int32
 	size      int32
@@ -43,16 +44,17 @@ type options struct {
 	output string
 }
 
+// nolint:funlen
 // NewListACLCommand creates a new command to list Kafka ACL rules
 func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		config:     f.Config,
-		connection: f.Connection,
-		logger:     f.Logger,
-		io:         f.IOStreams,
-		localizer:  f.Localizer,
-		context:    f.Context,
+		connection:     f.Connection,
+		logger:         f.Logger,
+		io:             f.IOStreams,
+		localizer:      f.Localizer,
+		context:        f.Context,
+		serviceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -71,21 +73,30 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 				return opts.localizer.MustLocalizeError("kafka.common.validation.page.error.invalid.minValue", localize.NewEntry("Size", opts.size))
 			}
 
-			if opts.kafkaID != "" {
-				return runList(opts)
-			}
+			if opts.kafkaID == "" {
 
-			cfg, err := opts.config.Load()
-			if err != nil {
-				return err
-			}
+				svcContext, err := opts.serviceContext.Load()
+				if err != nil {
+					return err
+				}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
-			}
+				profileHandler := &profileutil.ContextHandler{
+					Context:   svcContext,
+					Localizer: opts.localizer,
+				}
 
-			opts.kafkaID = instanceID
+				conn, err := opts.connection(connection.DefaultConfigRequireMasAuth)
+				if err != nil {
+					return err
+				}
+
+				kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+				if err != nil {
+					return err
+				}
+
+				opts.kafkaID = kafkaInstance.GetId()
+			}
 
 			// user and service account can't be along with "--all-accounts" flag
 			if allAccounts && (serviceAccount != "" || userID != "") {

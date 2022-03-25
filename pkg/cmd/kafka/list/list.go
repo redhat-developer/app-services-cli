@@ -10,14 +10,15 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -42,26 +43,26 @@ type options struct {
 	limit        int
 	search       string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		page:       0,
-		limit:      100,
-		search:     "",
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		page:           0,
+		limit:          100,
+		search:         "",
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -128,9 +129,25 @@ func runList(opts *options) error {
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
 		var rows []kafkaRow
-		serviceConfig, _ := opts.Config.Load()
-		if serviceConfig != nil && serviceConfig.Services.Kafka != nil {
-			rows = mapResponseItemsToRows(response.GetItems(), serviceConfig.Services.Kafka.ClusterID)
+		svcContext, err := opts.ServiceContext.Load()
+		if err != nil {
+			return err
+		}
+
+		profileHandler := &profileutil.ContextHandler{
+			Context:   svcContext,
+			Localizer: opts.localizer,
+		}
+
+		conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+		if err != nil {
+			return err
+		}
+
+		kafkaInstance, _ := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+
+		if kafkaInstance != nil {
+			rows = mapResponseItemsToRows(response.GetItems(), kafkaInstance.GetId())
 		} else {
 			rows = mapResponseItemsToRows(response.GetItems(), "-")
 		}
