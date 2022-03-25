@@ -45,6 +45,7 @@ $ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic
 
 ```
       --id string               The unique ID of the consumer group to reset-offset
+      --instance-id string      Kafka instance ID. Uses the current instance if not set 
       --offset string           Offset type (choose from: "earliest", "latest", "absolute", "timestamp")
       --partitions int32Slice   Reset consumer group offsets on specified partitions (comma-separated integers) (default [])
       --topic string            Reset consumer group offsets on a specified topic

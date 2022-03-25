@@ -24,8 +24,9 @@ $ rhoas kafka consumer-group delete --id consumer_group_1
 ### Options
 
 ```
-      --id string   The unique ID of the consumer group to delete
-  -y, --yes         Skip confirmation of this action 
+      --id string            The unique ID of the consumer group to delete
+      --instance-id string   Kafka instance ID. Uses the current instance if not set 
+  -y, --yes                  Skip confirmation of this action 
 ```
 
 ### Options inherited from parent commands

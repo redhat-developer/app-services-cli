@@ -7,14 +7,15 @@ import (
 	flagset "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/spf13/cobra"
 
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -27,12 +28,12 @@ var (
 )
 
 type options struct {
-	config     config.IConfig
-	connection factory.ConnectionFunc
-	logger     logging.Logger
-	io         *iostreams.IOStreams
-	localizer  localize.Localizer
-	context    context.Context
+	connection     factory.ConnectionFunc
+	logger         logging.Logger
+	io             *iostreams.IOStreams
+	localizer      localize.Localizer
+	context        context.Context
+	serviceContext servicecontext.IContext
 
 	kafkaID     string
 	principal   string
@@ -43,12 +44,12 @@ type options struct {
 func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		config:     f.Config,
-		connection: f.Connection,
-		logger:     f.Logger,
-		io:         f.IOStreams,
-		localizer:  f.Localizer,
-		context:    f.Context,
+		connection:     f.Connection,
+		logger:         f.Logger,
+		io:             f.IOStreams,
+		localizer:      f.Localizer,
+		context:        f.Context,
+		serviceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -60,18 +61,27 @@ func NewAdminACLCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 
 			if opts.kafkaID == "" {
-				cfg, err := opts.config.Load()
+				svcContext, err := opts.serviceContext.Load()
 				if err != nil {
 					return err
 				}
 
-				instanceID, ok := cfg.GetKafkaIdOk()
-
-				if !ok {
-					return opts.localizer.MustLocalizeError("kafka.acl.common.error.noKafkaSelected")
+				profileHandler := &profileutil.ContextHandler{
+					Context:   svcContext,
+					Localizer: opts.localizer,
 				}
 
-				opts.kafkaID = instanceID
+				conn, err := opts.connection(connection.DefaultConfigRequireMasAuth)
+				if err != nil {
+					return err
+				}
+
+				kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+				if err != nil {
+					return err
+				}
+
+				opts.kafkaID = kafkaInstance.GetId()
 			}
 
 			// check if principal is provided
