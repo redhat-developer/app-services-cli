@@ -30,7 +30,7 @@ $ rhoas kafka acl create --operation all --permission allow --group "group-1" --
       --all-accounts              Set the ACL principal to match all principals (users and service accounts)
       --cluster                   Set the resource type to cluster
       --group string              Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
-      --instance-id string        Kafka instance ID. Uses the current instance if not set
+      --instance-id string        Kafka instance ID. Uses the current instance if not set 
       --operation string          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write"
       --permission string         Set the ACL permission. Choose from: "allow", "deny"
       --prefix                    Determine if the resource should be exact match or prefix

@@ -4,14 +4,16 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -22,23 +24,23 @@ type options struct {
 	kafkaID   string
 	force     bool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewDeleteTopicCommand gets a new command for deleting a kafka topic.
 func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Connection: f.Connection,
-		Config:     f.Config,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -52,27 +54,36 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 				return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes"))
 			}
 
-			if opts.kafkaID != "" {
-				return runCmd(opts)
-			}
+			if opts.kafkaID == "" {
 
-			cfg, err := opts.Config.Load()
-			if err != nil {
-				return err
-			}
+				svcContext, err := opts.ServiceContext.Load()
+				if err != nil {
+					return err
+				}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.topic.common.error.noKafkaSelected")
-			}
+				profileHandler := &profileutil.ContextHandler{
+					Context:   svcContext,
+					Localizer: opts.localizer,
+				}
 
-			opts.kafkaID = instanceID
+				conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+				if err != nil {
+					return err
+				}
+
+				kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+				if err != nil {
+					return err
+				}
+
+				opts.kafkaID = kafkaInstance.GetId()
+			}
 
 			return runCmd(opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaflagutil.NewFlagSet(cmd, opts.localizer)
 
 	flags.StringVar(&opts.topicName, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 
@@ -82,6 +93,7 @@ func NewDeleteTopicCommand(f *factory.Factory) *cobra.Command {
 		return kafkacmdutil.FilterValidTopicNameArgs(f, toComplete)
 	})
 	flags.AddYes(&opts.force)
+	flags.AddInstanceID(&opts.kafkaID)
 
 	return cmd
 }

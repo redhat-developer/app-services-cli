@@ -25,6 +25,7 @@ $ rhoas kafka topic create --name topic-1
 
 ```
       --cleanup-policy string   Determines whether log messages are deleted, compacted, or both (default "delete")
+      --instance-id string      Kafka instance ID. Uses the current instance if not set 
       --name string             Topic name
   -o, --output string           Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
       --partitions int32        The number of partitions in the topic (default 1)

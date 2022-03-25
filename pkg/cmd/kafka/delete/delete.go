@@ -5,14 +5,15 @@ import (
 	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -24,23 +25,23 @@ type options struct {
 	name        string
 	skipConfirm bool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	Logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	Logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 // NewDeleteCommand command for deleting kafkas.
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:     f.Config,
-		Connection: f.Connection,
-		Logger:     f.Logger,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		Logger:         f.Logger,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -62,16 +63,27 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return runDelete(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.common.error.noKafkaSelected")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   svcContext,
+				Localizer: opts.localizer,
 			}
-			opts.id = instanceID
+
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.id = kafkaInstance.GetId()
 
 			return runDelete(opts)
 		},
@@ -91,7 +103,22 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDelete(opts *options) error {
-	cfg, err := opts.Config.Load()
+	svcContext, err := opts.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	profileHandler := &profileutil.ContextHandler{
+		Context:   svcContext,
+		Localizer: opts.localizer,
+	}
+
+	currCtx, err := profileHandler.GetCurrentContext()
+	if err != nil {
+		return err
+	}
+
+	svcConfig, err := profileHandler.GetContext(currCtx)
 	if err != nil {
 		return err
 	}
@@ -147,17 +174,18 @@ func runDelete(opts *options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleting", localize.NewEntry("Name", kafkaName)))
 
-	currentKafka := cfg.Services.Kafka
-	// this is not the current cluster, our work here is done
-	if currentKafka == nil || currentKafka.ClusterID != response.GetId() {
+	currentKafka := svcConfig.KafkaID
+	// this is not the current instance, our work here is done
+	if currentKafka != response.GetId() {
 		return nil
 	}
 
 	// the Kafka that was deleted is set as the user's current cluster
-	// since it was deleted it should be removed from the config
-	cfg.Services.Kafka = nil
-	err = opts.Config.Save(cfg)
-	if err != nil {
+	// since it was deleted it should be removed from the context
+	svcConfig.KafkaID = ""
+	svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+
+	if err := opts.ServiceContext.Save(svcContext); err != nil {
 		return err
 	}
 

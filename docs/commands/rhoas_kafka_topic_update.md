@@ -23,6 +23,7 @@ $ rhoas kafka topic update --name topic-1 --retention-ms -1
 
 ```
       --cleanup-policy string    Determines whether log messages are deleted, compacted, or both
+      --instance-id string       Kafka instance ID. Uses the current instance if not set 
       --name string              Topic name
       --partitions string        The number of partitions in the topic
       --retention-bytes string   The maximum total size of a partition log segments before old log segments are deleted to free up space.

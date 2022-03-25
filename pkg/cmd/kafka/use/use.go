@@ -6,7 +6,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -27,7 +26,6 @@ type options struct {
 	interactive bool
 
 	IO             *iostreams.IOStreams
-	Config         config.IConfig
 	Connection     factory.ConnectionFunc
 	Logger         logging.Logger
 	localizer      localize.Localizer
@@ -37,7 +35,6 @@ type options struct {
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Config:         f.Config,
 		Connection:     f.Connection,
 		Logger:         f.Logger,
 		IO:             f.IOStreams,
@@ -101,10 +98,6 @@ func runUse(opts *options) error {
 	profileHandler := &profileutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: opts.localizer,
-	}
-
-	if _, newErr := profileHandler.GetCurrentContext(); newErr != nil {
-		return newErr
 	}
 
 	currCtx, err := profileHandler.GetCurrentContext()

@@ -46,7 +46,7 @@ $ rhoas kafka acl grant-access --producer --consumer --user user_name --topic al
       --consumer                 Add ACL rules that grant the specified principal access to consume messages from topics
       --group string             Consumer group ID to define ACL rules for
       --group-prefix string      Prefix name for groups to be selected
-      --instance-id string       Kafka instance ID. Uses the current instance if not set
+      --instance-id string       Kafka instance ID. Uses the current instance if not set 
       --producer                 Add ACL rules that grant the specified principal access to produce messages to topics
       --service-account string   Service account client ID used as principal for this operation
       --topic string             Topic name to define ACL rules for

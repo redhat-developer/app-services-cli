@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -21,6 +22,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 
@@ -41,22 +43,25 @@ type options struct {
 	userIsOrgAdmin bool
 	reauth         flagutil.Tribool
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	logger     logging.Logger
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Config         config.IConfig
+	Connection     factory.ConnectionFunc
+	logger         logging.Logger
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
+// nolint:funlen
 func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	opts := options{
-		IO:         f.IOStreams,
-		Config:     f.Config,
-		localizer:  f.Localizer,
-		logger:     f.Logger,
-		Connection: f.Connection,
-		Context:    f.Context,
+		IO:             f.IOStreams,
+		Config:         f.Config,
+		localizer:      f.Localizer,
+		logger:         f.Logger,
+		Connection:     f.Connection,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 
 	cmd := &cobra.Command{
@@ -102,11 +107,27 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 				return run(&opts)
 			}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.common.error.noKafkaSelected")
+			svcContext, err := opts.ServiceContext.Load()
+			if err != nil {
+				return err
 			}
-			opts.id = instanceID
+
+			profileHandler := &profileutil.ContextHandler{
+				Context:   svcContext,
+				Localizer: opts.localizer,
+			}
+
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.id = kafkaInstance.GetId()
 
 			return run(&opts)
 		},

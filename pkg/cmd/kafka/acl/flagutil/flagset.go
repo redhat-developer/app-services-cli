@@ -3,6 +3,8 @@ package flagutil
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+
+	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -25,7 +27,7 @@ var ResourceTypeFlagEntries = []*localize.TemplateEntry{
 type flagSet struct {
 	cmd     *cobra.Command
 	factory *factory.Factory
-	*flagutil.FlagSet
+	*kafkaflagutil.FlagSet
 }
 
 // NewFlagSet returns a new flag set with common Kafka ACL flags
@@ -33,7 +35,7 @@ func NewFlagSet(cmd *cobra.Command, f *factory.Factory) *flagSet {
 	return &flagSet{
 		cmd:     cmd,
 		factory: f,
-		FlagSet: flagutil.NewFlagSet(cmd, f.Localizer),
+		FlagSet: kafkaflagutil.NewFlagSet(cmd, f.Localizer),
 	}
 }
 
@@ -256,18 +258,6 @@ func (fs *flagSet) AddServiceAccount(serviceAccountID *string) *flagutil.FlagOpt
 	_ = flagutil.RegisterServiceAccountCompletionFunc(fs.cmd, fs.factory)
 
 	return flagutil.WithFlagOptions(fs.cmd, flagName)
-}
-
-// AddInstanceID adds a flag for the Kafka instance ID
-func (fs *flagSet) AddInstanceID(id *string) {
-	flagName := "instance-id"
-
-	fs.StringVar(
-		id,
-		flagName,
-		"",
-		fs.factory.Localizer.MustLocalize("kafka.common.flag.instanceID.description"),
-	)
 }
 
 // AddAllAccounts adds a flag to set a wildcard for principals

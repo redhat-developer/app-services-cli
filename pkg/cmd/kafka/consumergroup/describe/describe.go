@@ -8,13 +8,14 @@ import (
 	"sort"
 
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -27,11 +28,11 @@ type options struct {
 	outputFormat string
 	id           string
 
-	IO         *iostreams.IOStreams
-	Config     config.IConfig
-	Connection factory.ConnectionFunc
-	localizer  localize.Localizer
-	Context    context.Context
+	IO             *iostreams.IOStreams
+	Connection     factory.ConnectionFunc
+	localizer      localize.Localizer
+	Context        context.Context
+	ServiceContext servicecontext.IContext
 }
 
 type consumerRow struct {
@@ -46,11 +47,11 @@ type consumerRow struct {
 // NewDescribeConsumerGroupCommand gets a new command for describing a consumer group.
 func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Connection: f.Connection,
-		Config:     f.Config,
-		IO:         f.IOStreams,
-		localizer:  f.Localizer,
-		Context:    f.Context,
+		Connection:     f.Connection,
+		IO:             f.IOStreams,
+		localizer:      f.Localizer,
+		Context:        f.Context,
+		ServiceContext: f.ServiceContext,
 	}
 	cmd := &cobra.Command{
 		Use:     "describe",
@@ -69,17 +70,27 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return runCmd(opts)
 			}
 
-			cfg, err := opts.Config.Load()
+			svcContext, err := opts.ServiceContext.Load()
 			if err != nil {
 				return err
 			}
 
-			instanceID, ok := cfg.GetKafkaIdOk()
-			if !ok {
-				return opts.localizer.MustLocalizeError("kafka.consumerGroup.common.error.noKafkaSelected")
+			profileHandler := &profileutil.ContextHandler{
+				Context:   svcContext,
+				Localizer: opts.localizer,
 			}
 
-			opts.kafkaID = instanceID
+			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+			if err != nil {
+				return err
+			}
+
+			kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+			if err != nil {
+				return err
+			}
+
+			opts.kafkaID = kafkaInstance.GetId()
 
 			return runCmd(opts)
 		},
