@@ -78,6 +78,16 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return aclcmdutil.BuildInstructions(errorCollection)
 			}
 
+			if opts.InstanceID == "" {
+
+				kafkaInstance, err := contextutil.GetCurrentKafkaInstance(f)
+				if err != nil {
+					return err
+				}
+
+				opts.InstanceID = kafkaInstance.GetId()
+			}
+
 			return runAdd(opts.InstanceID, opts)
 		},
 	}
@@ -229,30 +239,6 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 		opts.Principal = userID
 	} else if serviceAccount != "" {
 		opts.Principal = serviceAccount
-	}
-
-	if opts.InstanceID == "" {
-		svcContext, err := opts.ServiceContext.Load()
-		if err != nil {
-			return err
-		}
-
-		profileHandler := &contextutil.ContextHandler{
-			Context:   svcContext,
-			Localizer: opts.Localizer,
-		}
-
-		conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-		if err != nil {
-			return err
-		}
-
-		kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
-		if err != nil {
-			return err
-		}
-
-		opts.InstanceID = kafkaInstance.GetId()
 	}
 
 	return nil

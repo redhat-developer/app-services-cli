@@ -68,14 +68,9 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: opts.localizer,
-	}
-
 	profileValidator := &contextcmdutil.Validator{
-		Localizer:      opts.localizer,
-		ProfileHandler: profileHandler,
+		Localizer:  opts.localizer,
+		SvcContext: svcContext,
 	}
 
 	svcContextsMap := svcContext.Contexts
@@ -94,7 +89,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	context, _ := profileHandler.GetContext(opts.name)
+	context, _ := contextutil.GetContext(svcContext, opts.localizer, opts.name)
 	if context != nil {
 		return opts.localizer.MustLocalizeError("context.create.log.alreadyExists", localize.NewEntry("Name", opts.name))
 	}

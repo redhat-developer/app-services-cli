@@ -143,17 +143,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: opts.localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
-	if err != nil {
-		return err
-	}
-
-	svcConfig, err := profileHandler.GetContext(currCtx)
+	currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -248,8 +238,8 @@ func runCreate(opts *options) error {
 
 	if opts.autoUse {
 		opts.Logger.Debug("Auto-use is set, updating the current instance")
-		svcConfig.KafkaID = response.GetId()
-		svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+		currCtx.KafkaID = response.GetId()
+		svcContext.Contexts[svcContext.CurrentContext] = *currCtx
 
 		if err = opts.ServiceContext.Save(svcContext); err != nil {
 			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.common.error.couldNotUseKafka"), err)

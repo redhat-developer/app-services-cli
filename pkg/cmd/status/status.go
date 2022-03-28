@@ -96,23 +96,18 @@ func runStatus(opts *options) error {
 		return err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: opts.localizer,
-	}
-
 	var svcConfig *servicecontext.ServiceConfig
 
 	if opts.name == "" {
-		opts.name, err = profileHandler.GetCurrentContext()
+		svcConfig, err = contextutil.GetCurrentContext(svcContext, opts.localizer)
 		if err != nil {
 			return err
 		}
-	}
-
-	svcConfig, err = profileHandler.GetContext(opts.name)
-	if err != nil {
-		return err
+	} else {
+		svcConfig, err = contextutil.GetContext(svcContext, opts.localizer, opts.name)
+		if err != nil {
+			return err
+		}
 	}
 
 	statusClient := newStatusClient(&clientConfig{
