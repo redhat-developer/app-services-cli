@@ -276,6 +276,9 @@ one = 'Set the new Kafka instance to the current instance'
 [kafka.create.flag.wait.description]
 one = 'Wait until the Kafka instance is created'
 
+[kafka.create.flag.dryrun.description]
+one = 'Validate all user provided arguments without creating the Kafka instance'
+
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}"...'
