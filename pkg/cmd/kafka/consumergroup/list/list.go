@@ -40,8 +40,8 @@ type options struct {
 
 type consumerGroupRow struct {
 	ConsumerGroupID   string `json:"groupId,omitempty" header:"Consumer group ID"`
-	ActiveMembers     int    `json:"active_members,omitempty" header:"Active members"`
-	PartitionsWithLag int    `json:"lag,omitempty" header:"Partitions with lag"`
+	ActiveMembers     int32  `json:"active_members,omitempty" header:"Active members"`
+	PartitionsWithLag int32  `json:"lag,omitempty" header:"Partitions with lag"`
 }
 
 // NewListConsumerGroupCommand creates a new command to list consumer groups
@@ -181,8 +181,8 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 		metrics := t.GetMetrics()
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetGroupId(),
-			ActiveMembers:     int(metrics.GetActiveConsumers()),
-			PartitionsWithLag: int(metrics.GetLaggingPartitions()),
+			ActiveMembers:     metrics.GetActiveConsumers(),
+			PartitionsWithLag: metrics.GetLaggingPartitions(),
 		}
 		rows[i] = row
 	}

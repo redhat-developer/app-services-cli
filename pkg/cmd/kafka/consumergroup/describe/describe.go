@@ -38,9 +38,9 @@ type consumerRow struct {
 	MemberID      string `json:"memberId,omitempty" header:"Consumer ID"`
 	Partition     int    `json:"partition,omitempty" header:"Partition"`
 	Topic         string `json:"topic,omitempty" header:"Topic"`
-	LogEndOffset  int    `json:"logEndOffset,omitempty" header:"Log end offset"`
-	CurrentOffset int    `json:"offset,omitempty" header:"Current offset"`
-	OffsetLag     int    `json:"lag,omitempty" header:"Offset lag"`
+	LogEndOffset  int64  `json:"logEndOffset,omitempty" header:"Log end offset"`
+	CurrentOffset int64  `json:"offset,omitempty" header:"Current offset"`
+	OffsetLag     int64  `json:"lag,omitempty" header:"Offset lag"`
 }
 
 // NewDescribeConsumerGroupCommand gets a new command for describing a consumer group.
@@ -163,9 +163,9 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 			Partition:     int(consumer.GetPartition()),
 			Topic:         consumer.GetTopic(),
 			MemberID:      consumer.GetMemberId(),
-			LogEndOffset:  int(consumer.GetLogEndOffset()),
-			CurrentOffset: int(consumer.GetOffset()),
-			OffsetLag:     int(consumer.GetLag()),
+			LogEndOffset:  consumer.GetLogEndOffset(),
+			CurrentOffset: consumer.GetOffset(),
+			OffsetLag:     consumer.GetLag(),
 		}
 
 		if consumer.GetMemberId() == "" {
