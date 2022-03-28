@@ -42,12 +42,12 @@ func (c *File) Load() (*Context, error) {
 	if err != nil {
 		return nil, fmt.Errorf(errorFormat, "unable to read context file", err)
 	}
-	var cfg Context
-	err = json.Unmarshal(data, &cfg)
+	var ctx Context
+	err = json.Unmarshal(data, &ctx)
 	if err != nil {
 		return nil, fmt.Errorf(errorFormat, "unable to parse contexts", err)
 	}
-	return &cfg, nil
+	return &ctx, nil
 }
 
 // Save saves the given profiles to the context file.

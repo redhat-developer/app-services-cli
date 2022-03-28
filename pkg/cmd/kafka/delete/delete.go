@@ -63,22 +63,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return runDelete(opts)
 			}
 
-			svcContext, err := opts.ServiceContext.Load()
-			if err != nil {
-				return err
-			}
-
-			profileHandler := &contextutil.ContextHandler{
-				Context:   svcContext,
-				Localizer: opts.localizer,
-			}
-
-			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-			if err != nil {
-				return err
-			}
-
-			kafkaInstance, err := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
+			kafkaInstance, err := contextutil.GetCurrentKafkaInstance(f)
 			if err != nil {
 				return err
 			}
@@ -108,17 +93,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: opts.localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
-	if err != nil {
-		return err
-	}
-
-	svcConfig, err := profileHandler.GetContext(currCtx)
+	currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -174,7 +149,7 @@ func runDelete(opts *options) error {
 
 	opts.Logger.Info(opts.localizer.MustLocalize("kafka.delete.log.info.deleting", localize.NewEntry("Name", kafkaName)))
 
-	currentKafka := svcConfig.KafkaID
+	currentKafka := currCtx.KafkaID
 	// this is not the current instance, our work here is done
 	if currentKafka != response.GetId() {
 		return nil
@@ -182,8 +157,8 @@ func runDelete(opts *options) error {
 
 	// the Kafka that was deleted is set as the user's current cluster
 	// since it was deleted it should be removed from the context
-	svcConfig.KafkaID = ""
-	svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+	currCtx.KafkaID = ""
+	svcContext.Contexts[svcContext.CurrentContext] = *currCtx
 
 	if err := opts.ServiceContext.Save(svcContext); err != nil {
 		return err
