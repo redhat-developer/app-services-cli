@@ -9,7 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -137,7 +137,7 @@ func NewUpdateTopicCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				profileHandler := &profileutil.ContextHandler{
+				profileHandler := &contextutil.ContextHandler{
 					Context:   svcContext,
 					Localizer: opts.localizer,
 				}

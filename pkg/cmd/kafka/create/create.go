@@ -11,7 +11,7 @@ import (
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 	"k8s.io/utils/strings/slices"
@@ -143,7 +143,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	profileHandler := &profileutil.ContextHandler{
+	profileHandler := &contextutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: opts.localizer,
 	}

@@ -17,8 +17,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -134,7 +134,7 @@ func runList(opts *options) error {
 			return err
 		}
 
-		profileHandler := &profileutil.ContextHandler{
+		profileHandler := &contextutil.ContextHandler{
 			Context:   svcContext,
 			Localizer: opts.localizer,
 		}
