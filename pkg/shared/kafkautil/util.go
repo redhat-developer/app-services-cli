@@ -2,8 +2,8 @@ package kafkautil
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
@@ -153,7 +153,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	profileHandler := &profileutil.ContextHandler{
+	profileHandler := &contextutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: f.Localizer,
 	}
@@ -210,7 +210,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	profileHandler := &profileutil.ContextHandler{
+	profileHandler := &contextutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: f.Localizer,
 	}
