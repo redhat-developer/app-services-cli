@@ -6,7 +6,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/services/resources"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -25,7 +25,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 		return nil, err
 	}
 
-	profileHandler := &profileutil.ContextHandler{
+	profileHandler := &contextutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: cliOpts.Localizer,
 	}

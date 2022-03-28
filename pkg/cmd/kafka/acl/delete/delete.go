@@ -11,8 +11,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
@@ -283,7 +283,7 @@ func validateAndSetOpts(opts *aclcmdutil.CrudOptions) error {
 			return err
 		}
 
-		profileHandler := &profileutil.ContextHandler{
+		profileHandler := &contextutil.ContextHandler{
 			Context:   svcContext,
 			Localizer: opts.Localizer,
 		}

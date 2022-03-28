@@ -8,8 +8,8 @@ import (
 	"sort"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
@@ -76,7 +76,7 @@ func NewDescribeConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			profileHandler := &profileutil.ContextHandler{
+			profileHandler := &contextutil.ContextHandler{
 				Context:   svcContext,
 				Localizer: opts.localizer,
 			}

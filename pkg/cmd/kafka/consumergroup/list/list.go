@@ -8,7 +8,7 @@ import (
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -84,7 +84,7 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 					return err
 				}
 
-				profileHandler := &profileutil.ContextHandler{
+				profileHandler := &contextutil.ContextHandler{
 					Context:   svcContext,
 					Localizer: opts.localizer,
 				}

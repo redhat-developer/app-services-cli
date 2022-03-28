@@ -9,8 +9,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	"github.com/spf13/cobra"
 )
 
@@ -50,7 +50,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	flags := contextcmdutil.NewFlagSet(cmd, f)
 
-	_ = flags.AddContextName(&opts.name).Required()
+	flags.StringVar(
+		&opts.name,
+		"name",
+		"",
+		opts.localizer.MustLocalize("context.common.flag.name"),
+	)
 
 	return cmd
 
@@ -63,7 +68,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	profileHandler := &profileutil.ContextHandler{
+	profileHandler := &contextutil.ContextHandler{
 		Context:   svcContext,
 		Localizer: opts.localizer,
 	}
