@@ -5,86 +5,109 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
+
+	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
-	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
-	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
 )
 
-// ContextHandler is a type with methods to obtain service data from context
-type ContextHandler struct {
-	Context   *servicecontext.Context
-	Localizer localize.Localizer
-}
-
-// GetCurrentKafkaInstance returns the Kafka instance set in the currently selected context
-func (c *ContextHandler) GetCurrentKafkaInstance(api kafkamgmtclient.DefaultApi) (*kafkamgmtclient.KafkaRequest, error) {
-
-	currentCtx, err := c.GetCurrentContext()
-	if err != nil {
-		return nil, err
-	}
-
-	s, err := c.GetContext(currentCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	if s.KafkaID == "" {
-		return nil, c.Localizer.MustLocalizeError("context.common.error.noKafkaID")
-	}
-
-	kafkaInstance, _, err := api.GetKafkaById(context.Background(), s.KafkaID).Execute()
-	if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
-		return nil, c.Localizer.MustLocalizeError("context.common.error.kafka.notFound")
-	}
-
-	return &kafkaInstance, err
-}
-
-// GetCurrentRegistryInstance returns the Service Registry instance set in the currently selected context
-func (c *ContextHandler) GetCurrentRegistryInstance(api registrymgmtclient.RegistriesApi) (*registrymgmtclient.Registry, error) {
-
-	currentCtx, err := c.GetCurrentContext()
-	if err != nil {
-		return nil, err
-	}
-
-	s, err := c.GetContext(currentCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	if s.ServiceRegistryID == "" {
-		return nil, c.Localizer.MustLocalizeError("context.common.error.noRegistryID")
-	}
-
-	registryInstance, _, err := api.GetRegistry(context.Background(), s.ServiceRegistryID).Execute()
-
-	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_2) {
-		return nil, c.Localizer.MustLocalizeError("context.common.error.registry.notFound")
-	}
-
-	return &registryInstance, nil
-}
-
 // GetContext returns the services associated with the context
-func (c *ContextHandler) GetContext(ctxName string) (*servicecontext.ServiceConfig, error) {
+func GetContext(svcContext *servicecontext.Context, localizer localize.Localizer, ctxName string) (*servicecontext.ServiceConfig, error) {
 
-	currCtx, ok := c.Context.Contexts[ctxName]
+	ctx, ok := svcContext.Contexts[ctxName]
 	if !ok {
-		return nil, c.Localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", ctxName))
+		return nil, localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
+	}
+
+	return &ctx, nil
+
+}
+
+// GetCurrentContext returns the name of the currently selected context
+func GetCurrentContext(svcContext *servicecontext.Context, localizer localize.Localizer) (*servicecontext.ServiceConfig, error) {
+
+	if svcContext.CurrentContext == "" {
+		return nil, localizer.MustLocalizeError("context.common.error.notSet")
+	}
+
+	currCtx, ok := svcContext.Contexts[svcContext.CurrentContext]
+	if !ok {
+		return nil, localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
 	}
 
 	return &currCtx, nil
 }
 
-// GetCurrentContext returns the name of the currently selected context
-func (c *ContextHandler) GetCurrentContext() (string, error) {
+// GetCurrentKafkaInstance returns the Kafka instance set in the currently selected context
+func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest, error) {
 
-	if c.Context.CurrentContext == "" {
-		return "", c.Localizer.MustLocalizeError("context.common.error.notSet")
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return nil, err
 	}
 
-	return c.Context.CurrentContext, nil
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	if svcContext.CurrentContext == "" {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.notSet")
+	}
+
+	currCtx, ok := svcContext.Contexts[svcContext.CurrentContext]
+	if !ok {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
+	}
+
+	if currCtx.KafkaID == "" {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.noKafkaID")
+	}
+
+	kafkaInstance, _, err := conn.API().KafkaMgmt().GetKafkaById(context.Background(), currCtx.KafkaID).Execute()
+	if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.kafka.notFound")
+	}
+
+	return &kafkaInstance, err
+
+}
+
+// GetCurrentRegistryInstance returns the Service Registry instance set in the currently selected context
+func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registry, error) {
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	if svcContext.CurrentContext == "" {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.notSet")
+	}
+
+	currCtx, ok := svcContext.Contexts[svcContext.CurrentContext]
+	if !ok {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
+	}
+
+	if currCtx.ServiceRegistryID == "" {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.noRegistryID")
+	}
+
+	registryInstance, _, err := conn.API().ServiceRegistryMgmt().GetRegistry(context.Background(), currCtx.ServiceRegistryID).Execute()
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_2) {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.registry.notFound")
+	}
+
+	return &registryInstance, err
+
 }

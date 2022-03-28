@@ -153,22 +153,12 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: f.Localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
+	currCtx, err := contextutil.GetCurrentContext(svcContext, f.Localizer)
 	if err != nil {
 		return validNames, directive
 	}
 
-	svcConfig, err := profileHandler.GetContext(currCtx)
-	if err != nil {
-		return validNames, directive
-	}
-
-	instanceID := svcConfig.KafkaID
+	instanceID := currCtx.KafkaID
 	if instanceID == "" {
 		return validNames, directive
 	}
@@ -210,22 +200,12 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: f.Localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
+	currCtx, err := contextutil.GetCurrentContext(svcContext, f.Localizer)
 	if err != nil {
 		return validIDs, directive
 	}
 
-	svcConfig, err := profileHandler.GetContext(currCtx)
-	if err != nil {
-		return validIDs, directive
-	}
-
-	instanceID := svcConfig.KafkaID
+	instanceID := currCtx.KafkaID
 	if instanceID == "" {
 		return validIDs, directive
 	}

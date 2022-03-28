@@ -122,20 +122,13 @@ func runList(opts *options) error {
 			return err
 		}
 
-		profileHandler := &contextutil.ContextHandler{
-			Context:   svcContext,
-			Localizer: opts.localizer,
-		}
-
-		conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+		currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
 		if err != nil {
 			return err
 		}
 
-		registryInstance, _ := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
-
-		if registryInstance != nil {
-			rows = mapResponseItemsToRows(&response.Items, registryInstance.GetId())
+		if currCtx.ServiceRegistryID != "" {
+			rows = mapResponseItemsToRows(&response.Items, currCtx.ServiceRegistryID)
 		} else {
 			rows = mapResponseItemsToRows(&response.Items, "-")
 		}

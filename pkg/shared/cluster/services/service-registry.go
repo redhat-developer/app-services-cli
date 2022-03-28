@@ -25,17 +25,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 		return nil, err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: cliOpts.Localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
-	if err != nil {
-		return nil, err
-	}
-
-	svcConfig, err := profileHandler.GetContext(currCtx)
+	currCtx, err := contextutil.GetCurrentContext(svcContext, cliOpts.Localizer)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +34,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 	var serviceId string
 
 	if serviceName == "" {
-		if svcConfig.ServiceRegistryID == "" || ignoreContext {
+		if currCtx.ServiceRegistryID == "" || ignoreContext {
 			// nolint
 			selectedService, err := serviceregistryutil.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger)
 			if err != nil {
@@ -56,7 +46,7 @@ func (s RegistryService) BuildServiceDetails(serviceName string, namespace strin
 			serviceId = selectedService.GetId()
 			serviceName = selectedService.GetName()
 		} else {
-			serviceId = svcConfig.ServiceRegistryID
+			serviceId = currCtx.ServiceRegistryID
 			selectedService, _, err := serviceregistryutil.GetServiceRegistryByID(
 				cliOpts.Context, api.ServiceRegistryMgmt(), serviceId)
 			if err != nil {

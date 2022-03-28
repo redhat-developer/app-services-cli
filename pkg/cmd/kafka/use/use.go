@@ -95,17 +95,7 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: opts.localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
-	if err != nil {
-		return err
-	}
-
-	svcConfig, err := profileHandler.GetContext(currCtx)
+	currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
 	if err != nil {
 		return err
 	}
@@ -131,8 +121,8 @@ func runUse(opts *options) error {
 	}
 
 	nameTmplEntry := localize.NewEntry("Name", res.GetName())
-	svcConfig.KafkaID = res.GetId()
-	svcContext.Contexts[svcContext.CurrentContext] = *svcConfig
+	currCtx.KafkaID = res.GetId()
+	svcContext.Contexts[svcContext.CurrentContext] = *currCtx
 
 	if err := opts.ServiceContext.Save(svcContext); err != nil {
 		saveErrMsg := opts.localizer.MustLocalize("kafka.use.error.saveError", nameTmplEntry)

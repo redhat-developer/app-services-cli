@@ -61,30 +61,7 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
 
-			validator := rulecmdutil.Validator{
-				Localizer: opts.localizer,
-			}
-
-			if err = validator.ValidateRuleType(opts.ruleType); err != nil && opts.ruleType != "" {
-				return err
-			}
-
-			svcContext, err := opts.ServiceContext.Load()
-			if err != nil {
-				return err
-			}
-
-			profileHandler := &contextutil.ContextHandler{
-				Context:   svcContext,
-				Localizer: opts.localizer,
-			}
-
-			conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
-			if err != nil {
-				return err
-			}
-
-			registryInstance, err := profileHandler.GetCurrentRegistryInstance(conn.API().ServiceRegistryMgmt())
+			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
 			if err != nil {
 				return err
 			}
