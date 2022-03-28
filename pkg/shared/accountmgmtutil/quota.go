@@ -4,7 +4,6 @@ type QuotaType = string
 
 const (
 	// Deprecated by QuotaDeveloperType
-	QuotaTrialType     QuotaType = "eval"
-	QuotaDeveloperType QuotaType = "developer"
-	QuotaStandardType  QuotaType = "standard"
+	QuotaTrialType    QuotaType = "eval"
+	QuotaStandardType QuotaType = "standard"
 )

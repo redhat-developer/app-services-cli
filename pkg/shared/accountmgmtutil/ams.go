@@ -3,7 +3,6 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
-	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
@@ -55,27 +54,18 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 	}
 
 	var quotas []QuotaSpec
-
 	for _, quota := range quotaCostGet.GetItems() {
-		quotaId := strings.TrimSpace(quota.GetQuotaId())
-
-		quotaType := ""
-		if quotaId == spec.TrialQuotaID {
-			quotaType = QuotaTrialType
-
-		}
-		if quotaId == spec.DeveloperQuotaID {
-			quotaType = QuotaTrialType
-		}
-
-		if quotaId == spec.InstanceQuotaID {
-			quotaType = QuotaTrialType
-		}
-		if quotaType != "" {
-			quotas = append(quotas, QuotaSpec{QuotaTrialType, int(quota.GetAllowed() - quota.GetConsumed())})
+		for _, quotaResource := range quota.GetRelatedResources() {
+			if quotaResource.GetResourceName() == spec.ResourceName {
+				remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
+				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
+					quotas = append(quotas, QuotaSpec{QuotaTrialType, remainingQuota})
+				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
+					quotas = append(quotas, QuotaSpec{QuotaStandardType, remainingQuota})
+				}
+			}
 		}
 	}
-
 	return quotas, err
 }
 
