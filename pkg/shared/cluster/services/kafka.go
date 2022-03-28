@@ -25,17 +25,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 		return nil, err
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: cliOpts.Localizer,
-	}
-
-	currCtx, err := profileHandler.GetCurrentContext()
-	if err != nil {
-		return nil, err
-	}
-
-	svcConfig, err := profileHandler.GetContext(currCtx)
+	currCtx, err := contextutil.GetCurrentContext(svcContext, cliOpts.Localizer)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +34,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 	var serviceId string
 
 	if serviceName == "" {
-		if svcConfig.KafkaID == "" || ignoreContext {
+		if currCtx.KafkaID == "" || ignoreContext {
 			// nolint
 			selectedService, err := kafkautil.InteractiveSelect(cliOpts.Context, cliOpts.Connection, cliOpts.Logger, cliOpts.Localizer)
 			if err != nil {
@@ -56,7 +46,7 @@ func (s KafkaService) BuildServiceDetails(serviceName string, namespace string, 
 			serviceId = selectedService.GetId()
 			serviceName = selectedService.GetName()
 		} else {
-			serviceId = svcConfig.KafkaID
+			serviceId = currCtx.KafkaID
 			selectedService, _, err := kafkautil.GetKafkaByID(cliOpts.Context, api.KafkaMgmt(), serviceId)
 			if err != nil {
 				return nil, err
