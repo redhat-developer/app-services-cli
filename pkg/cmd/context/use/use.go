@@ -75,12 +75,7 @@ func runUse(opts *options) error {
 		}
 	}
 
-	profileHandler := &contextutil.ContextHandler{
-		Context:   svcContext,
-		Localizer: opts.localizer,
-	}
-
-	_, err = profileHandler.GetContext(opts.name)
+	_, err = contextutil.GetContext(svcContext, opts.localizer, opts.name)
 	if err != nil {
 		return err
 	}

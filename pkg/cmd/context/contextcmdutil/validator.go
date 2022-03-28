@@ -5,13 +5,14 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 )
 
 // Validator is a type for validating service context inputs
 type Validator struct {
-	Localizer      localize.Localizer
-	ProfileHandler *contextutil.ContextHandler
+	Localizer  localize.Localizer
+	SvcContext *servicecontext.Context
 }
 
 const (
@@ -42,7 +43,7 @@ func (v *Validator) ValidateName(val interface{}) error {
 // ValidateNameIsAvailable validates if the name provided is a unique context name
 func (v *Validator) ValidateNameIsAvailable(name string) error {
 
-	context, _ := v.ProfileHandler.GetContext(name)
+	context, _ := contextutil.GetContext(v.SvcContext, v.Localizer, name)
 	if context != nil {
 		return v.Localizer.MustLocalizeError("context.create.log.alreadyExists", localize.NewEntry("Name", name))
 	}

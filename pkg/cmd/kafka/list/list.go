@@ -134,20 +134,13 @@ func runList(opts *options) error {
 			return err
 		}
 
-		profileHandler := &contextutil.ContextHandler{
-			Context:   svcContext,
-			Localizer: opts.localizer,
-		}
-
-		conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+		currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
 		if err != nil {
 			return err
 		}
 
-		kafkaInstance, _ := profileHandler.GetCurrentKafkaInstance(conn.API().KafkaMgmt())
-
-		if kafkaInstance != nil {
-			rows = mapResponseItemsToRows(response.GetItems(), kafkaInstance.GetId())
+		if currCtx.KafkaID != "" {
+			rows = mapResponseItemsToRows(response.GetItems(), currCtx.KafkaID)
 		} else {
 			rows = mapResponseItemsToRows(response.GetItems(), "-")
 		}
