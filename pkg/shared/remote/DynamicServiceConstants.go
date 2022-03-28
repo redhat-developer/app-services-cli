@@ -16,6 +16,6 @@ type AmsConfig struct {
 	TermsAndConditionsEventCode string `json:"termsAndConditionsEventCode"`
 	TermsAndConditionsSiteCode  string `json:"termsAndConditionsSiteCode"`
 	InstanceQuotaID             string `json:"instanceQuotaId"`
-	TrialQuotaID                string `json:"trialQuotaId"`
-	DeveloperQuotaID            string `json:"developerQuotaId"`
+	TrialProductQuotaID         string `json:"trialQuotaProductId"`
+	ResourceName                string `json:"resourceName"`
 }

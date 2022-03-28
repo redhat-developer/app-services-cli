@@ -34,7 +34,8 @@ var (
 	RepositoryName = "app-services-cli"
 
 	// DynamicConfigURL Url used to download dynamic service constants. If empty then static service constants are  used.
-	DynamicConfigURL = "https://console.redhat.com/apps/application-services/service-constants.json"
+	// TODO enable again
+	DynamicConfigURL = "" // https://console.redhat.com/apps/application-services/service-constants.json"
 
 	// DefaultPageSize is the default number of items per page when using list commands
 	DefaultPageSize = "10"
