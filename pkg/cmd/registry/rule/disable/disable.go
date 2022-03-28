@@ -14,8 +14,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
@@ -74,7 +74,7 @@ func NewDisableCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			profileHandler := &profileutil.ContextHandler{
+			profileHandler := &contextutil.ContextHandler{
 				Context:   svcContext,
 				Localizer: opts.localizer,
 			}

@@ -5,13 +5,13 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 )
 
 // Validator is a type for validating service context inputs
 type Validator struct {
 	Localizer      localize.Localizer
-	ProfileHandler *profileutil.ContextHandler
+	ProfileHandler *contextutil.ContextHandler
 }
 
 const (
