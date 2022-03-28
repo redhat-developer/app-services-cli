@@ -16,7 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/profileutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
@@ -77,7 +77,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			profileHandler := &profileutil.ContextHandler{
+			profileHandler := &contextutil.ContextHandler{
 				Context:   svcContext,
 				Localizer: opts.localizer,
 			}
