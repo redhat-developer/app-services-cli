@@ -48,7 +48,8 @@
       "args": [
         "kafka",
         "create",
-        "--name=my-kafka-instance"
+        "--name=my-kafka-instance",
+        "--dry-run"
       ]
     },
     {

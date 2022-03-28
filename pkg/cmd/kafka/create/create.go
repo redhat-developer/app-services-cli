@@ -53,6 +53,7 @@ type options struct {
 	interactive    bool
 	wait           bool
 	bypassAmsCheck bool
+	dryRun         bool
 
 	IO                *iostreams.IOStreams
 	Config            config.IConfig
@@ -127,6 +128,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, opts.localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, opts.localizer.MustLocalize("kafka.create.flag.wait.description"))
+	flags.BoolVarP(&opts.dryRun, "dry-run", "", false, opts.localizer.MustLocalize("kafka.create.flag.dryrun.description"))
 	flags.AddBypassTermsCheck(&opts.bypassAmsCheck)
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -222,6 +224,10 @@ func runCreate(opts *options) error {
 			Plan:          &opts.size,
 			MultiAz:       &opts.multiAZ,
 		}
+	}
+
+	if opts.dryRun {
+		return nil
 	}
 
 	api := conn.API()
