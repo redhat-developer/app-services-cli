@@ -22,7 +22,7 @@ rhoas context status [args] [flags]
 $ rhoas context status
 
 # View the status of all application services in a specific service context
-$ rhoas context status --name my-context
+$ rhoas context status --name dev
 
 # View the status of the Kafka instance set in the current service context
 $ rhoas context status kafka

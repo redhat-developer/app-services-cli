@@ -17,7 +17,7 @@ rhoas context delete [flags]
 $ rhoas context delete
 
 ## Delete a service context by name
-$ rhoas context delete --name my-context
+$ rhoas context delete --name dev
 
 ```
 

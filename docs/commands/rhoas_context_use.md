@@ -16,7 +16,7 @@ rhoas context use [flags]
 
 ```
 ## Set the current context
-$ rhoas context use --name my-context
+$ rhoas context use --name dev
 
 ```
 

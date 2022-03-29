@@ -20,7 +20,7 @@ func GetContext(svcContext *servicecontext.Context, localizer localize.Localizer
 
 	ctx, ok := svcContext.Contexts[ctxName]
 	if !ok {
-		return nil, localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
+		return nil, localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", ctxName))
 	}
 
 	return &ctx, nil
