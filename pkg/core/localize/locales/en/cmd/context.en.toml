@@ -208,7 +208,6 @@ Run `rhoas context list` to view available contexts
 [context.common.error.notSet]
 one='''
 Command you have been trying to execute requires an service context.
-Service context contains number of active services that are used when command is executed.
 Current context has not been set. 
 You need to run "rhoas context use" or "rhoas context create" commands to set a context.
 For example:
