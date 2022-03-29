@@ -3,7 +3,6 @@ package request
 import (
 	"context"
 	"errors"
-	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -58,20 +57,18 @@ func runCmd(opts *options) (err error) {
 		return err
 	}
 
-	var response *http.Response
+	var data interface{}
 	if opts.body == "" {
-		response, err = conn.API().GenericAPI().GET(opts.Context, opts.urlPath)
+		data, _, err = conn.API().GenericAPI().GET(opts.Context, opts.urlPath)
 	} else {
-		response, err = conn.API().GenericAPI().POST(opts.Context, opts.urlPath, opts.body)
+		data, _, err = conn.API().GenericAPI().POST(opts.Context, opts.urlPath, opts.body)
 	}
 
-	if err != nil || response == nil {
+	if err != nil || data == nil {
 		opts.Logger.Info("Fetching data failed", err)
 		return nil
 	}
 
-	defer response.Body.Close()
-
-	opts.Logger.Info("Response:", response.Body)
+	opts.Logger.Info("Response:", data)
 	return nil
 }

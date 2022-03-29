@@ -3,13 +3,14 @@ package generic
 import (
 	"context"
 	"errors"
+	"io"
 	"net/http"
 	"strings"
 )
 
 type GenericAPI interface {
-	GET(ctx context.Context, path string) (*http.Response, error)
-	POST(ctx context.Context, path string, body string) (*http.Response, error)
+	GET(ctx context.Context, path string) (interface{}, *http.Response, error)
+	POST(ctx context.Context, path string, body string) (interface{}, *http.Response, error)
 }
 
 // APIConfig defines the available configuration options
@@ -41,12 +42,12 @@ type APIClient struct {
 	baseURL    string
 }
 
-func (c *APIClient) GET(ctx context.Context, path string) (*http.Response, error) {
+func (c *APIClient) GET(ctx context.Context, path string) (interface{}, *http.Response, error) {
 	url := c.baseURL + path
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, err
+		return err, nil, err
 	}
 
 	req = req.WithContext(ctx)
@@ -55,22 +56,27 @@ func (c *APIClient) GET(ctx context.Context, path string) (*http.Response, error
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return resp, err
+		return nil, resp, err
 	}
 	if resp.StatusCode > http.StatusBadRequest {
-		return resp, errors.New(resp.Status)
+		return nil, resp, errors.New(resp.Status)
 	}
 	defer resp.Body.Close()
 
-	return resp, err
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return string(b), resp, err
 }
 
-func (c *APIClient) POST(ctx context.Context, path string, body string) (*http.Response, error) {
+func (c *APIClient) POST(ctx context.Context, path string, body string) (interface{}, *http.Response, error) {
 	url := c.baseURL + path
 
 	req, err := http.NewRequest("POST", url, strings.NewReader(body))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	req = req.WithContext(ctx)
@@ -79,12 +85,17 @@ func (c *APIClient) POST(ctx context.Context, path string, body string) (*http.R
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return resp, err
+		return nil, resp, err
 	}
 	if resp.StatusCode > http.StatusBadRequest {
-		return resp, errors.New(resp.Status)
+		return nil, resp, errors.New(resp.Status)
 	}
 	defer resp.Body.Close()
 
-	return resp, err
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return string(b), resp, err
 }
