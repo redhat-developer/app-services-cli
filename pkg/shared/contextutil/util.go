@@ -55,13 +55,9 @@ func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest,
 		return nil, err
 	}
 
-	if svcContext.CurrentContext == "" {
-		return nil, f.Localizer.MustLocalizeError("context.common.error.notSet")
-	}
-
-	currCtx, ok := svcContext.Contexts[svcContext.CurrentContext]
-	if !ok {
-		return nil, f.Localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return nil, err
 	}
 
 	if currCtx.KafkaID == "" {
@@ -90,13 +86,9 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 		return nil, err
 	}
 
-	if svcContext.CurrentContext == "" {
-		return nil, f.Localizer.MustLocalizeError("context.common.error.notSet")
-	}
-
-	currCtx, ok := svcContext.Contexts[svcContext.CurrentContext]
-	if !ok {
-		return nil, f.Localizer.MustLocalizeError("context.common.error.context.notFound", localize.NewEntry("Name", svcContext.CurrentContext))
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return nil, err
 	}
 
 	if currCtx.ServiceRegistryID == "" {
