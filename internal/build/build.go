@@ -57,7 +57,7 @@ var (
 	ProductionAPIURL            = "https://api.openshift.com"
 	StagingAPIURL               = "https://api.stage.openshift.com"
 	ConsoleURL                  = "https://console.redhat.com"
-	DefaultClientID             = "rhoas-cli-prod"
+	DefaultClientID             = "conduktor"
 	DefaultUserAgentPrefix      = "rhoas-cli_"
 	DefaultOfflineTokenClientID = "cloud-services"
 	DefaultLoginTimeout         = 60 * time.Second
