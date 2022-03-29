@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -17,4 +18,5 @@ type API interface {
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
 	AccountMgmt() amsclient.AppServicesApi
 	RBAC() rbac.RbacAPI
+	GenericAPI() generic.GenericAPI
 }

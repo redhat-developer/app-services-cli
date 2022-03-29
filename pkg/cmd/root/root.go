@@ -8,6 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/logout"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/request"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
@@ -53,6 +54,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 
 	cmd.AddCommand(docs.NewDocsCmd(f))
+	cmd.AddCommand(request.NewCallCmd(f))
 
 	return cmd
 }

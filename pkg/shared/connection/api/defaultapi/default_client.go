@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
@@ -229,6 +230,17 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 	})
 
 	return client, &instance, nil
+}
+
+func (a *defaultAPI) GenericAPI() generic.GenericAPI {
+	tc := a.createOAuthTransport(a.AccessToken)
+	client := generic.NewGenericAPIClient(&generic.Config{
+		BaseURL:    a.ApiURL.String(),
+		Debug:      a.Logger.DebugEnabled(),
+		HTTPClient: tc,
+	})
+
+	return client
 }
 
 // AccountMgmt returns a new Account Management API client instance
