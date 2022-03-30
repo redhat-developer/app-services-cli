@@ -95,7 +95,7 @@ rhoas service-registry list
 '''
 
 [registry.cmd.use.shortDescription]
-one = 'Use a Service Registry instance'
+one = 'Set the current Service Registry instance'
 
 [registry.cmd.use.longDescription]
 one = '''

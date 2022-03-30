@@ -19,13 +19,13 @@ Setting $RHOAS_CONTEXT to "./rhoas.json" will load contexts from the current fol
 [context.cmd.example]
 one='''
 ## Set the current context
-$ rhoas context use --name my-context
+$ rhoas context use --name qa
 
 ## List contexts
 $ rhoas context list
 
-## Create context
-$ rhoas context create --name my-context
+## Create context to represent development services
+$ rhoas context create --name dev-env
 '''
 
 [context.use.cmd]
@@ -42,7 +42,7 @@ When you set the context to be used, it is set as the current context for all se
 [context.use.cmd.example]
 one='''
 ## Set the current context
-$ rhoas context use --name my-context
+$ rhoas context use --name dev
 '''
 
 [context.use.successMessage]
@@ -65,7 +65,7 @@ one='''
 $ rhoas context status
 
 # View the status of all application services in a specific service context
-$ rhoas context status --name my-context
+$ rhoas context status --name dev
 
 # View the status of the Kafka instance set in the current service context
 $ rhoas context status kafka
@@ -127,7 +127,7 @@ one='Create a service context and assign associated service identifiers'
 [context.create.cmd.example]
 one='''
 ## Create context
-$ rhoas context create --name my-context
+$ rhoas context create --name dev
 '''
 
 [context.create.input.name.message]
@@ -140,7 +140,7 @@ one='Unique name of service context'
 one='''
 Context created successfully
 
-Run the following commands to set service instances in the created context:
+Run the following commands to set service instances for the created context:
 
   $ rhoas context use-[service]
 '''
@@ -162,7 +162,7 @@ one='''
 $ rhoas context delete
 
 ## Delete a service context by name
-$ rhoas context delete --name my-context
+$ rhoas context delete --name dev
 '''
 
 [context.delete.log.warning.currentUnset]
@@ -188,12 +188,14 @@ Use `rhoas context use-kafka` command to select a Kafka instance for your contex
 
 [context.common.error.registry.notFound]
 one='''
-Service registry instance doesn't exist, you need to set valid instance id using `rhoas context use-service-registry` command
+Service registry instance in your context doesnt exist.
+Your instance might have been removed.
+You can update your context by creating new instance or using `rhoas context use-service-registry` command
 '''
 
 [context.common.error.kafka.notFound]
 one='''
-Kafka instance doesn't exist, you need to set valid instance id using `rhoas context use-kafka` command
+Kafka instance doesn't exist, you need to set valid instance id using "rhoas context use-kafka" command
 '''
 
 [context.common.error.context.notFound]
@@ -205,9 +207,12 @@ Run `rhoas context list` to view available contexts
 
 [context.common.error.notSet]
 one='''
-current context has not been set. Run the following command to set context and use services:
+Command you have been trying to execute requires an service context.
+Current context has not been set. 
+You need to run "rhoas context use" or "rhoas context create" commands to set a context.
+For example:
 
-  rhoas context use --name my-context
+  rhoas context use --name default
 '''
 
 [context.common.validation.name.error.required]

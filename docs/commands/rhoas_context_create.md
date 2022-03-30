@@ -14,7 +14,7 @@ rhoas context create [flags]
 
 ```
 ## Create context
-$ rhoas context create --name my-context
+$ rhoas context create --name dev
 
 ```
 

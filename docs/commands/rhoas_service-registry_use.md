@@ -1,6 +1,6 @@
 ## rhoas service-registry use
 
-Use a Service Registry instance
+Set the current Service Registry instance
 
 ### Synopsis
 
