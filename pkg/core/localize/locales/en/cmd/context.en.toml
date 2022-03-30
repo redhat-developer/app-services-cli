@@ -171,6 +171,29 @@ one='Warning: this removed your current service context, use "rhoas context use"
 [context.delete.log.successMessage]
 one='Context deleted successfully'
 
+[context.generate.cmd]
+
+[context.generate.cmd.shortDescription]
+one='Generate configurations for the service context'
+
+[context.generate.cmd.longDescription]
+one='Generate configuration files for the service context to connect with to be used with various tools and platforms'
+
+[context.generate.cmd.example]
+one='''
+## Generate configurations for the current service context in json format
+$ rhoas context generate-config --type json
+'''
+
+[context.generate.flag.type]
+one='Type of configuration file to be generated'
+
+[context.generate.log.info.noSevices]
+one='No services available to generate configurations'
+
+[context.generate.log.info.credentialsSaved]
+one='Configurations successfully saved'
+
 [context.common.flag.name]
 one='Name of the context'
 

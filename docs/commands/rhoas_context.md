@@ -43,6 +43,7 @@ $ rhoas context create --name dev-env
 * [rhoas](rhoas.md)	 - RHOAS CLI
 * [rhoas context create](rhoas_context_create.md)	 - Create a service context
 * [rhoas context delete](rhoas_context_delete.md)	 - Delete a service context
+* [rhoas context generate-config](rhoas_context_generate-config.md)	 - Generate configurations for the service context
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
 * [rhoas context status](rhoas_context_status.md)	 - View the status of application services set in service context
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context
