@@ -3,6 +3,7 @@ package request
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -34,8 +35,14 @@ func NewCallCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:    "request",
-		Short:  "Allows you to perform API requests against the API server",
+		Use:   "request",
+		Short: "Allows you to perform API requests against the API server",
+		Example: `
+		  # Perform a GET request to the specified path
+		  rhoas request --path /api/kafkas_mgmt/v1/kafkas
+		  
+		  # Perform a POST request to the specified path
+		  cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post `,
 		Hidden: true,
 		Args:   cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -62,13 +69,12 @@ func runCmd(opts *options) (err error) {
 	var response interface{}
 	if opts.method == "post" {
 		opts.Logger.Info("POST request. Reading file from standard input")
-		specifiedFile, err := util.CreateFileFromStdin()
-		if err != nil {
+		specifiedFile, err1 := util.CreateFileFromStdin()
+		if err1 != nil {
 			return err
 		}
 		data, response, err = conn.API().GenericAPI().POST(opts.Context, opts.urlPath, specifiedFile)
 	} else {
-		opts.Logger.Info("Get request")
 		data, response, err = conn.API().GenericAPI().GET(opts.Context, opts.urlPath)
 	}
 
@@ -77,6 +83,6 @@ func runCmd(opts *options) (err error) {
 		return err
 	}
 
-	opts.Logger.Info("Response:", data)
+	fmt.Fprint(opts.IO.Out, data)
 	return nil
 }
