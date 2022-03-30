@@ -10,7 +10,7 @@ import (
 
 type GenericAPI interface {
 	GET(ctx context.Context, path string) (interface{}, *http.Response, error)
-	POST(ctx context.Context, path string, body string) (interface{}, *http.Response, error)
+	POST(ctx context.Context, path string, body io.Reader) (interface{}, *http.Response, error)
 }
 
 // APIConfig defines the available configuration options
@@ -71,10 +71,15 @@ func (c *APIClient) GET(ctx context.Context, path string) (interface{}, *http.Re
 	return string(b), resp, err
 }
 
-func (c *APIClient) POST(ctx context.Context, path string, body string) (interface{}, *http.Response, error) {
+func (c *APIClient) POST(ctx context.Context, path string, body io.Reader) (interface{}, *http.Response, error) {
 	url := c.baseURL + path
+	bodyBinary, err := io.ReadAll(body)
 
-	req, err := http.NewRequest("POST", url, strings.NewReader(body))
+	if err != nil {
+		return err, nil, err
+	}
+	requestBody := strings.NewReader(string(bodyBinary))
+	req, err := http.NewRequest("POST", url, requestBody)
 	if err != nil {
 		return nil, nil, err
 	}

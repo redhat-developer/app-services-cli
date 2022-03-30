@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -20,7 +21,7 @@ type options struct {
 	Connection factory.ConnectionFunc
 
 	urlPath string
-	body    string
+	method  string
 }
 
 func NewCallCmd(f *factory.Factory) *cobra.Command {
@@ -42,7 +43,7 @@ func NewCallCmd(f *factory.Factory) *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&opts.urlPath, "path", "", "Path to send request. For example /api/kafkas_mgmt/v1/kafkas?async=true")
-	cmd.Flags().StringVar(&opts.body, "body", "", "If body present then it will be used as request body for post request")
+	cmd.Flags().StringVar(&opts.method, "method", "GET", "HTTP method to use. (get, post)")
 	return cmd
 }
 
@@ -58,15 +59,22 @@ func runCmd(opts *options) (err error) {
 	}
 
 	var data interface{}
-	if opts.body == "" {
-		data, _, err = conn.API().GenericAPI().GET(opts.Context, opts.urlPath)
+	var response interface{}
+	if opts.method == "post" {
+		opts.Logger.Info("POST request. Reading file from standard input")
+		specifiedFile, err := util.CreateFileFromStdin()
+		if err != nil {
+			return err
+		}
+		data, response, err = conn.API().GenericAPI().POST(opts.Context, opts.urlPath, specifiedFile)
 	} else {
-		data, _, err = conn.API().GenericAPI().POST(opts.Context, opts.urlPath, opts.body)
+		opts.Logger.Info("Get request")
+		data, response, err = conn.API().GenericAPI().GET(opts.Context, opts.urlPath)
 	}
 
 	if err != nil || data == nil {
-		opts.Logger.Info("Fetching data failed", err)
-		return nil
+		opts.Logger.Info("Fetching data failed", err, response)
+		return err
 	}
 
 	opts.Logger.Info("Response:", data)
