@@ -1,26 +1,21 @@
 package status
 
 import (
-	"context"
 	"fmt"
 	"io"
-	"os"
-	"path/filepath"
 	"reflect"
 	"strings"
 	"text/tabwriter"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
+	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
-	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
-	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/openconfig/goyang/pkg/indent"
 )
@@ -28,10 +23,14 @@ import (
 const tagTitle = "title"
 
 type serviceStatus struct {
-	Name     string          `json:"name,omitempty" title:"Name"`
-	Location string          `json:"location,omitempty" title:"Location"`
+	Name     string          `json:"name,omitempty" title:"Service Context Name"`
+	Location string          `json:"location,omitempty" title:"Context File Location"`
 	Kafka    *kafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
 	Registry *registryStatus `json:"registry,omitempty" title:"Service Registry"`
+}
+
+func (s serviceStatus) hasStatus() bool {
+	return s.Kafka != nil || s.Registry != nil
 }
 
 type kafkaStatus struct {
@@ -50,20 +49,12 @@ type registryStatus struct {
 }
 
 type clientConfig struct {
-	context       context.Context
-	config        config.IConfig
-	Logger        logging.Logger
-	connection    connection.Connection
-	localizer     localize.Localizer
+	f             *factory.Factory
 	serviceConfig *servicecontext.ServiceConfig
 }
 
 type statusClient struct {
-	context       context.Context
-	config        config.IConfig
-	Logger        logging.Logger
-	conn          connection.Connection
-	localizer     localize.Localizer
+	f             *factory.Factory
 	serviceConfig *servicecontext.ServiceConfig
 }
 
@@ -71,70 +62,44 @@ type statusClient struct {
 // and build it into a service status config object
 func newStatusClient(cfg *clientConfig) *statusClient {
 	return &statusClient{
-		config:        cfg.config,
-		Logger:        cfg.Logger,
-		conn:          cfg.connection,
-		localizer:     cfg.localizer,
+		f:             cfg.f,
 		serviceConfig: cfg.serviceConfig,
 	}
 }
 
 // BuildStatus gets the status of all services currently set in the service context
-func (c *statusClient) BuildStatus(ctxName string, services []string) (status *serviceStatus, ok bool, err error) {
+func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, err error) {
+	factory := c.f
 
 	status = &serviceStatus{}
 
-	status.Name = ctxName
-
-	if rhoasContext := os.Getenv("RHOAS_CONTEXT"); rhoasContext != "" {
-		status.Location = rhoasContext
-	} else {
-		ctxDirLocation, _ := servicecontext.DefaultDir()
-		status.Location = filepath.Join(ctxDirLocation, "contexts.json")
-	}
-
 	if stringInSlice(servicespec.KafkaServiceName, services) {
-		if c.serviceConfig.KafkaID != "" {
-			// nolint:govet
-			kafkaStatus, err := c.getKafkaStatus(c.context, c.serviceConfig.KafkaID)
-			if err != nil {
-				if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
-					err = kafkautil.NotFoundByIDError(c.serviceConfig.KafkaID)
-					c.Logger.Error(err)
-					c.Logger.Info(c.localizer.MustLocalize("status.log.info.rhoasKafkaUse"))
-				}
-			} else {
-				status.Kafka = kafkaStatus
-				ok = true
-			}
-		} else {
-			c.Logger.Debug("No Kafka instance is currently used, skipping status check")
+		kafkaResponse, err := contextutil.GetKafkaForServiceConfig(c.serviceConfig, factory)
+		if err != nil {
+			return status, err
 		}
+		kafkaStatus, err := c.getKafkaStatus(kafkaResponse)
+		if err != nil {
+			return status, err
+		}
+		status.Kafka = kafkaStatus
 	}
 
 	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
-		if c.serviceConfig.ServiceRegistryID != "" {
-			// nolint:govet
-			registry, newErr := c.getRegistryStatus(c.context, c.serviceConfig.ServiceRegistryID)
-			if newErr != nil {
-				return status, ok, newErr
-			}
-			status.Registry = registry
-			ok = true
-		} else {
-			c.Logger.Debug("No service registry is currently used, skipping status check")
+		registryResponse, err := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
+		if err != nil {
+			return status, err
 		}
+		registry, newErr := c.getRegistryStatus(registryResponse)
+		if newErr != nil {
+			return status, newErr
+		}
+		status.Registry = registry
 	}
-
-	return status, ok, err
+	return status, err
 }
 
-func (c *statusClient) getKafkaStatus(ctx context.Context, id string) (status *kafkaStatus, err error) {
-	kafkaResponse, _, err := c.conn.API().KafkaMgmt().GetKafkaById(ctx, id).Execute()
-	if err != nil {
-		return nil, err
-	}
-
+func (c *statusClient) getKafkaStatus(kafkaResponse *kafkamgmtclient.KafkaRequest) (status *kafkaStatus, err error) {
 	status = &kafkaStatus{
 		ID:                  kafkaResponse.GetId(),
 		Name:                kafkaResponse.GetName(),
@@ -149,12 +114,7 @@ func (c *statusClient) getKafkaStatus(ctx context.Context, id string) (status *k
 	return status, err
 }
 
-func (c *statusClient) getRegistryStatus(ctx context.Context, id string) (status *registryStatus, err error) {
-	registry, _, err := c.conn.API().ServiceRegistryMgmt().GetRegistry(ctx, id).Execute()
-	if err != nil {
-		return nil, err
-	}
-
+func (c *statusClient) getRegistryStatus(registry *registrymgmtclient.Registry) (status *registryStatus, err error) {
 	status = &registryStatus{
 		ID:          registry.GetId(),
 		Name:        registry.GetName(),

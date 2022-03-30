@@ -33,6 +33,3 @@ one = 'No services set in context. To set a service in context, run "rhoas conte
 
 [status.log.debug.noKafkaSelected]
 one = 'No Kafka instance is currently used, skipping status check'
-
-[status.log.info.rhoasKafkaUse]
-one = 'Run "rhoas context use-kafka" to use another Kafka instance.'
