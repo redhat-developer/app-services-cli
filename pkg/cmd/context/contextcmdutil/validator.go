@@ -16,7 +16,7 @@ type Validator struct {
 }
 
 const (
-	legalNameChars = "^[a-zA-Z0-9._-]+$"
+	legalNameChars = "^[a-z]([-a-z0-9]*[a-z0-9])?$"
 )
 
 // ValidateName validates the name of the context
