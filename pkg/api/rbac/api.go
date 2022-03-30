@@ -68,9 +68,8 @@ func NewPrincipalAPIClient(cfg *Config) PrincipalAPI {
 }
 
 type APIClient struct {
-	httpClient  *http.Client
-	baseURL     *url.URL
-	AccessToken string
+	httpClient *http.Client
+	baseURL    *url.URL
 }
 
 // GetPrincipals returns the list of user's in the current users organization/tenant
