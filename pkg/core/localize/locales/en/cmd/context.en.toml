@@ -189,7 +189,7 @@ Use `rhoas context use-kafka` command to select a Kafka instance for your contex
 [context.common.error.registry.notFound]
 one='''
 Service registry instance in your context doesnt exist.
-Your instance might have been removed outside rhoas-cli. 
+Your instance might have been removed.
 You can update your context by creating new instance or using `rhoas context use-service-registry` command
 '''
 
