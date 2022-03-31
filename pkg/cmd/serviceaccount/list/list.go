@@ -88,14 +88,13 @@ func runList(opts *options) (err error) {
 
 	outStream := opts.IO.Out
 	switch opts.output {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		rows := mapResponseItemsToRows(serviceaccounts)
-		dump.Table(outStream, rows)
+		return dump.Formatted(outStream, opts.output, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.output, res)
 	}
 
-	return nil
 }
 
 func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {

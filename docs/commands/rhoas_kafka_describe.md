@@ -42,7 +42,7 @@ $ rhoas kafka describe -o yaml
       --bootstrap-server   If specified, only the bootstrap server host of the Kafka instance will be displayed
       --id string          Unique ID of the Kafka instance you want to view
       --name string        Name of the Kafka instance you want to view
-  -o, --output string      Specify the output format. Choose from: "json", "yaml", "yml"
+  -o, --output string      Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
 ```
 
 ### Options inherited from parent commands

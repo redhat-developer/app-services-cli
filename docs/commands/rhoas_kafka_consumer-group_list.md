@@ -24,12 +24,11 @@ $ rhoas kafka consumer-group list -o json
 ### Options
 
 ```
-      --instance-id string   Kafka instance ID. Uses the current instance if not set 
-  -o, --output string        Specify the output format. Choose from: "json", "yaml", "yml"
-      --page int32           View the specified page number in the list of consumer groups (default 1)
-      --search string        Text search to filter consumer groups by ID
-      --size int32           Maximum number of consumer groups to be returned per page (default 10)
-      --topic string         Fetch the consumer groups for a specific Kafka topic
+  -o, --output string   Specify the output format. Choose from: "json", "none", "table", "yaml", "yml" (default "table")
+      --page int32      View the specified page number in the list of consumer groups (default 1)
+      --search string   Text search to filter consumer groups by ID
+      --size int32      Maximum number of consumer groups to be returned per page (default 10)
+      --topic string    Fetch the consumer groups for a specific Kafka topic
 ```
 
 ### Options inherited from parent commands

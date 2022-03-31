@@ -27,7 +27,7 @@ $ rhoas service-registry rule describe --rule-type=compatibility --artifact-id=m
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
       --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-  -o, --output string        Specify the output format. Choose from: "json", "yaml", "yml"
+  -o, --output string        Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
       --rule-type string     Rule type determines how the content of an artifact can evolve over time
 ```
 
