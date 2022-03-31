@@ -133,8 +133,11 @@ func runCmd(opts *options) error {
 		return err
 	}
 
+	offsetEnum, _ := kafkainstanceclient.NewOffsetTypeFromValue(opts.offset)
 	offsetResetParams := kafkainstanceclient.ConsumerGroupResetOffsetParameters{
-		Offset: opts.offset,
+		Offset: *offsetEnum,
+		Value:  new(string),
+		Topics: &[]kafkainstanceclient.TopicsToResetOffset{},
 	}
 
 	if opts.value != "" {

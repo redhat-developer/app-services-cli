@@ -178,14 +178,14 @@ func disableGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient)
 
 	if opts.ruleType != "" {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.globalRule", localize.NewEntry("RuleType", opts.ruleType)))
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.globalRule", localize.NewEntry("RuleType", opts.ruleType), localize.NewEntry("ID", opts.registryID)))
 
 		req := dataAPI.AdminApi.DeleteGlobalRule(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 
 		httpRes, err = req.Execute()
 	} else {
 
-		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.globalRules", localize.NewEntry("RuleType", opts.ruleType)))
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.disable.log.info.disabling.globalRules", localize.NewEntry("ID", opts.registryID)))
 
 		req := dataAPI.AdminApi.DeleteAllGlobalRules(opts.Context)
 

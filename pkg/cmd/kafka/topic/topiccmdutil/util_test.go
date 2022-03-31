@@ -31,8 +31,8 @@ func TestCreateConfigEntries(t *testing.T) {
 			},
 			want: &[]kafkainstanceclient.ConfigEntry{
 				{
-					Key:   &keyOne,
-					Value: &valOne,
+					Key:   keyOne,
+					Value: valOne,
 				},
 			},
 		},

@@ -190,7 +190,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 		for _, conf := range t.GetConfig() {
 			unlimitedVal := "-1 (Unlimited)"
 
-			if *conf.Key == topiccmdutil.RetentionMsKey {
+			if conf.Key == topiccmdutil.RetentionMsKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionTime = unlimitedVal
@@ -198,7 +198,7 @@ func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow
 					row.RetentionTime = val
 				}
 			}
-			if *conf.Key == topiccmdutil.RetentionSizeKey {
+			if conf.Key == topiccmdutil.RetentionSizeKey {
 				val := conf.GetValue()
 				if val == "-1" {
 					row.RetentionSize = unlimitedVal

@@ -3,7 +3,7 @@ module github.com/redhat-developer/app-services-cli
 go 1.16
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.2
+	github.com/AlecAivazis/survey/v2 v2.3.4
 	github.com/BurntSushi/toml v1.0.0
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
@@ -12,7 +12,7 @@ require (
 	github.com/briandowns/spinner v1.18.1
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/fatih/color v1.13.0
-	github.com/golang-jwt/jwt/v4 v4.3.0
+	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/google/go-github/v39 v39.2.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
@@ -23,17 +23,17 @@ require (
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.4.0
+	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
-	github.com/spf13/cobra v1.3.0
+	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
+	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0

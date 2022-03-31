@@ -116,7 +116,7 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, f)
 
 	flags.AddInstanceID(&opts.kafkaID)
-	flags.AddOutput(&opts.output)
+	flags.AddOutput(&opts.output, cobra.ShellCompDirectiveNoSpace)
 	flags.AddPage(&opts.page)
 	flags.AddSize(&opts.size)
 	flags.AddUser(&userID)
@@ -150,7 +150,7 @@ func runList(opts *options) (err error) {
 
 	req := api.AclsApi.GetAcls(opts.context)
 
-	req = req.Page(float32(opts.page)).Size(float32(opts.size))
+	req = req.Page(opts.page).Size(opts.size)
 	req = req.Order("asc").OrderKey("principal")
 
 	if opts.principal != "" {

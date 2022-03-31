@@ -230,7 +230,7 @@ func runCmd(opts *options) error {
 
 	updateTopicReq := api.TopicsApi.UpdateTopic(opts.Context, opts.name)
 
-	topicSettings := &kafkainstanceclient.UpdateTopicInput{}
+	topicSettings := &kafkainstanceclient.TopicSettings{}
 
 	if opts.retentionMsStr != "" {
 		needsUpdate = true
@@ -262,7 +262,7 @@ func runCmd(opts *options) error {
 		topicSettings.SetConfig(*configEntries)
 	}
 
-	updateTopicReq = updateTopicReq.UpdateTopicInput(*topicSettings)
+	updateTopicReq = updateTopicReq.TopicSettings(*topicSettings)
 
 	// update the topic
 	_, httpRes, err = updateTopicReq.Execute()

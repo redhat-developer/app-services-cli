@@ -45,5 +45,5 @@ func GetMappedConfigValue(config string) string {
 
 var ValidRuleConfigs = map[string][]string{
 	CompatibilityRule: {ConfigBACKWARD, ConfigBACKWARD_TRANSITIVE, ConfigFORWARD, ConfigFORWARD_TRANSITIVE, ConfigFULL, ConfigFULL_TRANSITIVE, ConfigNONE},
-	ValidityRule:      {ConfigFULL, ConfigSYNTAX_ONLY},
+	ValidityRule:      {ConfigFULL, ConfigSYNTAX_ONLY, ConfigNONE},
 }

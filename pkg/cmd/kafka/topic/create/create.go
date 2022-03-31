@@ -57,9 +57,9 @@ func NewCreateTopicCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "create",
-		Short:   opts.localizer.MustLocalize("kafka.topic.create.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("kafka.topic.create.cmd.longDescription"),
+		Use:   "create",
+		Short: opts.localizer.MustLocalize("kafka.topic.create.cmd.shortDescription"),
+		Long: opts.localizer.MustLocalize("kafka.	topic.create.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -163,7 +163,7 @@ func runCmd(opts *options) error {
 	topicInput := kafkainstanceclient.NewTopicInput{
 		Name: opts.topicName,
 		Settings: kafkainstanceclient.TopicSettings{
-			NumPartitions: opts.partitions,
+			NumPartitions: &opts.partitions,
 			Config:        createConfigEntries(opts),
 		},
 	}

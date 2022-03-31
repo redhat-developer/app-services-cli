@@ -172,6 +172,7 @@ func updateGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient) 
 		opts.localizer.MustLocalize("registry.rule.update.log.info.updating.globalRule",
 			localize.NewEntry("RuleType", opts.ruleType),
 			localize.NewEntry("Configuration", opts.config),
+			localize.NewEntry("ID", opts.registryID),
 		),
 	)
 
