@@ -74,7 +74,7 @@ jobs:
           event-type: rhoas-cli-release
           client-payload: '{"version": steps.set-version.outputs.version }'
   tools-release:
-    if: steps.check-tag.outputs.prerelease == 'false'
+    if: jobs.release.steps.check-tag.outputs.prerelease == 'false'
     needs: release
     runs-on: ubuntu-latest
     steps:
