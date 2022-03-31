@@ -79,6 +79,7 @@ func runGenerate(opts *options) error {
 		if err != nil {
 			return err
 		}
+		opts.name = svcContext.CurrentContext
 	} else {
 		svcConfig, err = contextutil.GetContext(svcContext, opts.localizer, opts.name)
 		if err != nil {

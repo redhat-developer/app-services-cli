@@ -87,7 +87,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		return opts.localizer.MustLocalizeError("context.generate.log.info.noSevices")
 	}
 
-	serviceAccount, err := createServiceAccount(opts, fmt.Sprintf("rhoascli-%v", time.Now().Unix()))
+	serviceAccount, err := createServiceAccount(opts, fmt.Sprintf("%s-%v", opts.name, time.Now().Unix()))
 	if err != nil {
 		return err
 	}
