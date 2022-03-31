@@ -8,10 +8,19 @@ import (
 	"path/filepath"
 )
 
+// configuration types for generate-config command
+const (
+	envFormat        = "env"
+	jsonFormat       = "json"
+	propertiesFormat = "properties"
+)
+
+var configurationTypes = []string{envFormat, jsonFormat, propertiesFormat}
+
 var (
-	envConfig        = template.Must(template.New("env").Parse(templateEnv))
-	jsonConfig       = template.Must(template.New("json").Parse(templateJSON))
-	propertiesConfig = template.Must(template.New("properties").Parse(templateProperties))
+	envConfig        = template.Must(template.New(envFormat).Parse(templateEnv))
+	jsonConfig       = template.Must(template.New(jsonFormat).Parse(templateJSON))
+	propertiesConfig = template.Must(template.New(propertiesFormat).Parse(templateProperties))
 )
 
 // WriteConfig saves the configurations to a file
@@ -34,11 +43,11 @@ func WriteConfig(configType string, config *configValues) error {
 // getDefaultPath returns the default absolute path for the configuration file
 func getDefaultPath(configType string) (filePath string) {
 	switch configType {
-	case "env":
+	case envFormat:
 		filePath = "rhoas.env"
-	case "properties":
+	case propertiesFormat:
 		filePath = "rhoas.properties"
-	case "json":
+	case jsonFormat:
 		filePath = "rhoas.json"
 	}
 
@@ -52,14 +61,16 @@ func getDefaultPath(configType string) (filePath string) {
 	return filePath
 }
 
-func getFileFormat(configType string) *template.Template {
+func getFileFormat(configType string) (template *template.Template) {
 
 	switch configType {
-	case "env":
-		return envConfig
-	case "properties":
-		return propertiesConfig
-	default:
-		return jsonConfig
+	case envFormat:
+		template = envConfig
+	case propertiesFormat:
+		template = propertiesConfig
+	case jsonFormat:
+		template = jsonConfig
 	}
+
+	return template
 }
