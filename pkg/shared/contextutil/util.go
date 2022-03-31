@@ -50,16 +50,20 @@ func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest,
 		return nil, err
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
-	if err != nil {
-		return nil, err
-	}
-
 	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
 	if err != nil {
 		return nil, err
 	}
 
+	return GetKafkaForServiceConfig(currCtx, f)
+}
+
+// GetKafkaForServiceConfig fetching kafka service data using ServiceConfig
+func GetKafkaForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*kafkamgmtclient.KafkaRequest, error) {
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	if err != nil {
+		return nil, err
+	}
 	if currCtx.KafkaID == "" {
 		return nil, f.Localizer.MustLocalizeError("context.common.error.noKafkaID")
 	}
@@ -70,7 +74,6 @@ func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest,
 	}
 
 	return &kafkaInstance, err
-
 }
 
 // GetCurrentRegistryInstance returns the Service Registry instance set in the currently selected context
@@ -81,12 +84,18 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 		return nil, err
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
 	if err != nil {
 		return nil, err
 	}
 
-	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	return GetRegistryForServiceConfig(currCtx, f)
+
+}
+
+// GetRegistryForServiceConfig fetching registry data for provided service config
+func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*registrymgmtclient.Registry, error) {
+	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return nil, err
 	}
@@ -101,5 +110,4 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 	}
 
 	return &registryInstance, err
-
 }
