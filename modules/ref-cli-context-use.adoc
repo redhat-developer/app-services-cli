@@ -1,0 +1,45 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-context-use_{context}']
+= context use
+
+[role="_abstract"]
+Set the current context
+
+[discrete]
+== Synopsis
+
+Select a service context to be used as the current context.
+When you set the context to be used, it is set as the current context for all service based commands.
+
+
+....
+rhoas context use [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Set the current context
+$ rhoas context use --name dev
+
+....
+
+[discrete]
+== Options
+
+      `--name` _string_::   Name of the context
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
+

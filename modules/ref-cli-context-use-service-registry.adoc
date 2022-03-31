@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-service-registry-use_{context}']
-= service-registry use
+[id='ref-context-use-service-registry_{context}']
+= context use-service-registry
 
 [role="_abstract"]
 Set the current Service Registry instance
@@ -15,18 +15,18 @@ When you set the Service Registry instance to be used, it is set as the current 
 
 
 ....
-rhoas service-registry use [flags]
+rhoas context use-service-registry [flags]
 ....
 
 [discrete]
 == Examples
 
 ....
-# Use a Service Registry instance by name
-rhoas service-registry use --name my-service-registry
+# Select a Service Registry instance by name to be set in the current context
+rhoas context use-service-registry --name my-service-registry
 
-# Use a Service Registry instance by ID
-rhoas service-registry use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+# Select a Service Registry instance by ID to be set in the current context
+rhoas context use-service-registry --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
 
@@ -47,5 +47,5 @@ rhoas service-registry use --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 
  
-* link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
+* link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
 

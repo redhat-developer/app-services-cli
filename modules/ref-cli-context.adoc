@@ -1,0 +1,75 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-context_{context}']
+= context
+
+[role="_abstract"]
+Group, share and manage your rhoas services
+
+[discrete]
+== Synopsis
+
+rhoas context commands allow developers to:
+
+  * Group services into contexts that can be used with a number of CLI commands.
+  * Manage different service contexts by switching, listing and removing service contexts 
+  * Share context with others to use the same set of services
+  * Generating configuration for connecting to the services from various platforms and tools
+
+By default context is kept under users configuration folder. Users can view context location by executing "rhoas context status" command.
+
+Additionally developers can specify custom location for contexts by setting $RHOAS_CONTEXT environment variable in their profile.
+Setting $RHOAS_CONTEXT to "./rhoas.json" will load contexts from the current folder.
+
+
+[discrete]
+== Examples
+
+....
+## Set the current context
+$ rhoas context use --name qa
+
+## List contexts
+$ rhoas context list
+
+## Create context to represent development services
+$ rhoas context create --name dev-env
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+
+ 
+* link:{path}#ref-context-create_{context}[context create]	 - Create a service context
+
+ 
+* link:{path}#ref-context-delete_{context}[context delete]	 - Delete a service context
+
+ 
+* link:{path}#ref-context-generate-config_{context}[context generate-config]	 - Generate configurations for the service context
+
+ 
+* link:{path}#ref-context-list_{context}[context list]	 - List contexts
+
+ 
+* link:{path}#ref-context-status_{context}[context status]	 - View the status of application services set in service context
+
+ 
+* link:{path}#ref-context-use_{context}[context use]	 - Set the current context
+
+ 
+* link:{path}#ref-context-use-kafka_{context}[context use-kafka]	 - Set the current Kafka instance
+
+ 
+* link:{path}#ref-context-use-service-registry_{context}[context use-service-registry]	 - Set the current Service Registry instance
+

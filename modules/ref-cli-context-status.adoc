@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-status_{context}']
-= status
+[id='ref-context-status_{context}']
+= context status
 
 [role="_abstract"]
 View the status of application services set in service context
@@ -10,13 +10,13 @@ View the status of application services set in service context
 
 View the status of your application services. This command shows the status of each of your application services instances set in service context. 
 
-To view the status of a specific application service, use "rhoas status [service]".
+To view the status of a specific application service, use "rhoas context status [service]".
 
 Note: You can change the current instance for an application service with the "rhoas [service] use” command.
 
 
 ....
-rhoas status [args] [flags]
+rhoas context status [args] [flags]
 ....
 
 [discrete]
@@ -24,13 +24,16 @@ rhoas status [args] [flags]
 
 ....
 # View the status of all application services in the current service context
-$ rhoas status
+$ rhoas context status
 
 # View the status of all application services in a specific service context
-$ rhoas status kafka
+$ rhoas context status --name dev
+
+# View the status of the Kafka instance set in the current service context
+$ rhoas context status kafka
 
 # View the status of your services in JSON format
-$ rhoas status -o json
+$ rhoas context status -o json
 
 ....
 
@@ -51,5 +54,5 @@ $ rhoas status -o json
 
 
  
-* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+* link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
 

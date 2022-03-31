@@ -1,0 +1,46 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-context-delete_{context}']
+= context delete
+
+[role="_abstract"]
+Delete a service context
+
+[discrete]
+== Synopsis
+
+Delete a service context and assign associated service identifiers
+
+....
+rhoas context delete [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Delete the currently selected service context
+$ rhoas context delete
+
+## Delete a service context by name
+$ rhoas context delete --name dev
+
+....
+
+[discrete]
+== Options
+
+      `--name` _string_::   Name of the context
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
+

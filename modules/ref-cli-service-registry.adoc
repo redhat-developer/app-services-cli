@@ -66,5 +66,5 @@ rhoas service-registry list
 * link:{path}#ref-service-registry-rule_{context}[service-registry rule]	 - Manage artifact rules in a Service Registry instance
 
  
-* link:{path}#ref-service-registry-use_{context}[service-registry use]	 - Use a Service Registry instance
+* link:{path}#ref-service-registry-use_{context}[service-registry use]	 - Set the current Service Registry instance
 
