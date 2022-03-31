@@ -58,6 +58,7 @@ func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest,
 	return GetKafkaForServiceConfig(currCtx, f)
 }
 
+// GetKafkaForServiceConfig fetching kafka service data using ServiceConfig
 func GetKafkaForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*kafkamgmtclient.KafkaRequest, error) {
 	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
@@ -92,6 +93,7 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 
 }
 
+// GetRegistryForServiceConfig fetching registry data for provided service config
 func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*registrymgmtclient.Registry, error) {
 	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
