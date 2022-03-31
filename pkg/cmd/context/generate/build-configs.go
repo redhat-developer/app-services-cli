@@ -60,16 +60,22 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 
 	var serviceAvailable bool
 
-	kafkaInstance, _ := contextutil.GetCurrentKafkaInstance(factory)
+	if svcConfig.KafkaID != "" {
+		kafkaInstance, err := contextutil.GetCurrentKafkaInstance(factory)
+		if err != nil {
+			return err
+		}
 
-	if kafkaInstance != nil {
 		serviceAvailable = true
 		configurations.KafkaURL = kafkaInstance.GetBootstrapServerHost()
 	}
 
-	registryInstance, _ := contextutil.GetCurrentRegistryInstance(factory)
+	if svcConfig.ServiceRegistryID != "" {
+		registryInstance, err := contextutil.GetCurrentRegistryInstance(factory)
+		if err != nil {
+			return err
+		}
 
-	if registryInstance != nil {
 		serviceAvailable = true
 		configurations.RegistryURL = registryInstance.GetRegistryUrl()
 	}
