@@ -242,4 +242,4 @@ For example:
 one = 'context name is required'
 
 [context.common.validation.name.error.invalidChars]
-one = 'invalid context name "{{.Name}}"; only letters (Aa-Zz), numbers, "_", "." and "-" are accepted'
+one = 'invalid context name "{{.Name}}"; only lowercase letters (a-z), numbers, and "-" are accepted'

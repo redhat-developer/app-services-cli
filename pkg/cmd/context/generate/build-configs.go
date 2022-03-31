@@ -1,6 +1,9 @@
 package generate
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
@@ -84,7 +87,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		return opts.localizer.MustLocalizeError("context.generate.log.info.noSevices")
 	}
 
-	serviceAccount, err := createServiceAccount(opts, "to-do-generate-description")
+	serviceAccount, err := createServiceAccount(opts, fmt.Sprintf("%s-%v", opts.name, time.Now().Unix()))
 	if err != nil {
 		return err
 	}

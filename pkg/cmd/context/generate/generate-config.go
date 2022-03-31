@@ -45,8 +45,10 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			if !opts.IO.CanPrompt() && opts.name == "" {
-				return flagutil.RequiredWhenNonInteractiveError("name")
+			// check that a valid type is provided
+			validType := flagutil.IsValidInput(opts.configType, configurationTypes...)
+			if !validType {
+				return flagutil.InvalidValueError("type", opts.configType, configurationTypes...)
 			}
 
 			return runGenerate(opts)
@@ -56,6 +58,9 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 	flags := contextcmdutil.NewFlagSet(cmd, f)
 	flags.AddContextName(&opts.name)
 	flags.StringVar(&opts.configType, "type", "", opts.localizer.MustLocalize("context.generate.flag.type"))
+	_ = cmd.MarkFlagRequired("type")
+
+	flagutil.EnableStaticFlagCompletion(cmd, "type", configurationTypes)
 
 	return cmd
 }
@@ -74,6 +79,7 @@ func runGenerate(opts *options) error {
 		if err != nil {
 			return err
 		}
+		opts.name = svcContext.CurrentContext
 	} else {
 		svcConfig, err = contextutil.GetContext(svcContext, opts.localizer, opts.name)
 		if err != nil {
