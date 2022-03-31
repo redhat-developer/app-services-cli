@@ -73,7 +73,7 @@ func (c *statusClient) BuildStatus(services []string) (*serviceStatus, error) {
 
 	status := &serviceStatus{}
 
-	if stringInSlice(servicespec.KafkaServiceName, services) {
+	if stringInSlice(servicespec.KafkaServiceName, services) && c.serviceConfig.KafkaID != "" {
 		kafkaResponse, err := contextutil.GetKafkaForServiceConfig(c.serviceConfig, factory)
 		if err != nil {
 			return status, err
@@ -81,7 +81,7 @@ func (c *statusClient) BuildStatus(services []string) (*serviceStatus, error) {
 		status.Kafka = c.getKafkaStatus(kafkaResponse)
 	}
 
-	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
+	if stringInSlice(servicespec.ServiceRegistryServiceName, services) && c.serviceConfig.ServiceRegistryID != "" {
 		registryResponse, err := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
 		if err != nil {
 			return status, err
