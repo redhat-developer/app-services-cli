@@ -61,6 +61,12 @@ func YAML(stream io.Writer, body []byte) error {
 	return dumpYAML(stream, data)
 }
 
+// Empty returns no data so that in most cases including automated actions, no cluttering
+// of the console occurs.
+func Empty(stream io.Writer, body []byte) error {
+	return nil
+}
+
 // Table prints the given data into a formatted table. Only properties that have a `header`
 // tag will be printed. See https://github.com/lensesio/tableprinter
 func Table(stream io.Writer, in interface{}) {
@@ -153,6 +159,8 @@ func Formatted(writer io.Writer, format string, data interface{}) error {
 			return err
 		}
 		return YAML(writer, data)
+	case EmptyFormat:
+		return nil
 	default:
 		data, err := json.Marshal(data)
 		if err != nil {
