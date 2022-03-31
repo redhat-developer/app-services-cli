@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.4
-	github.com/BurntSushi/toml v1.0.0
+	github.com/BurntSushi/toml v1.1.0
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
@@ -12,13 +12,18 @@ require (
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/briandowns/spinner v1.18.1
 	github.com/coreos/go-oidc/v3 v3.1.0
+	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/fatih/color v1.13.0
 	github.com/golang-jwt/jwt/v4 v4.4.1
+	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/go-github/v39 v39.2.0
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/go-runewidth v0.0.13 // indirect
+	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.2.0
 	github.com/openconfig/goyang v0.4.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
@@ -37,9 +42,11 @@ require (
 	github.com/wtrocki/go-github-selfupdate v1.2.4
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
+	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
+	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150 // indirect
+	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171 // indirect
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
