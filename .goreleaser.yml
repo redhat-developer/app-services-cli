@@ -41,7 +41,7 @@ archives:
     builds: [macos, linux]
     <<: &archive_defaults
       name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    wrap_in_directory: true
+    wrap_in_directory: "true"
     replacements:
       darwin: macOS
     format: tar.gz
@@ -49,7 +49,7 @@ archives:
   - id: windows
     builds: [windows]
     <<: *archive_defaults
-    wrap_in_directory: false
+    wrap_in_directory: "false"
     format: zip
 
 checksum:
