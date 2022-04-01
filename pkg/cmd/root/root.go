@@ -8,13 +8,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/login"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/logout"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/request"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/plugins/request/pkg/cmd/request"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +54,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 
 	cmd.AddCommand(docs.NewDocsCmd(f))
-	cmd.AddCommand(request.NewCallCmd(f))
+	cmd.AddCommand(request.NewRequestCmd(f))
 
 	return cmd
 }
