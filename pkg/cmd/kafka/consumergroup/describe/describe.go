@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -39,9 +38,9 @@ type consumerRow struct {
 	MemberID      string `json:"memberId,omitempty" header:"Consumer ID"`
 	Partition     int    `json:"partition,omitempty" header:"Partition"`
 	Topic         string `json:"topic,omitempty" header:"Topic"`
-	LogEndOffset  int    `json:"logEndOffset,omitempty" header:"Log end offset"`
-	CurrentOffset int    `json:"offset,omitempty" header:"Current offset"`
-	OffsetLag     int    `json:"lag,omitempty" header:"Offset lag"`
+	LogEndOffset  int64  `json:"logEndOffset,omitempty" header:"Log end offset"`
+	CurrentOffset int64  `json:"offset,omitempty" header:"Current offset"`
+	OffsetLag     int64  `json:"lag,omitempty" header:"Offset lag"`
 }
 
 // NewDescribeConsumerGroupCommand gets a new command for describing a consumer group.
@@ -164,9 +163,9 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 			Partition:     int(consumer.GetPartition()),
 			Topic:         consumer.GetTopic(),
 			MemberID:      consumer.GetMemberId(),
-			LogEndOffset:  int(consumer.GetLogEndOffset()),
-			CurrentOffset: int(consumer.GetOffset()),
-			OffsetLag:     int(consumer.GetLag()),
+			LogEndOffset:  consumer.GetLogEndOffset(),
+			CurrentOffset: consumer.GetOffset(),
+			OffsetLag:     consumer.GetLag(),
 		}
 
 		if consumer.GetMemberId() == "" {
@@ -188,10 +187,11 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclient.ConsumerGroup, localizer localize.Localizer) {
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()
+	metrics := consumerGroupData.GetMetrics()
 
-	activeMembersCount := groupcmdutil.GetActiveConsumersCount(consumers)
-	partitionsWithLagCount := groupcmdutil.GetPartitionsWithLag(consumers)
-	unassignedPartitions := groupcmdutil.GetUnassignedPartitions(consumers)
+	activeMembersCount := metrics.GetActiveConsumers()
+	partitionsWithLagCount := metrics.GetLaggingPartitions()
+	unassignedPartitions := metrics.GetUnassignedPartitions()
 
 	fmt.Fprintln(w, color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.activeMembers")), activeMembersCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.partitionsWithLag")), partitionsWithLagCount, "\t", color.Bold(localizer.MustLocalize("kafka.consumerGroup.describe.output.unassignedPartitions")), unassignedPartitions)
 	fmt.Fprintln(w, "")

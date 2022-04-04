@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
 	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -41,8 +40,8 @@ type options struct {
 
 type consumerGroupRow struct {
 	ConsumerGroupID   string `json:"groupId,omitempty" header:"Consumer group ID"`
-	ActiveMembers     int    `json:"active_members,omitempty" header:"Active members"`
-	PartitionsWithLag int    `json:"lag,omitempty" header:"Partitions with lag"`
+	ActiveMembers     int32  `json:"active_members,omitempty" header:"Active members"`
+	PartitionsWithLag int32  `json:"lag,omitempty" header:"Partitions with lag"`
 }
 
 // NewListConsumerGroupCommand creates a new command to list consumer groups
@@ -179,11 +178,11 @@ func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.C
 	rows := make([]consumerGroupRow, len(consumerGroups))
 
 	for i, t := range consumerGroups {
-		consumers := t.GetConsumers()
+		metrics := t.GetMetrics()
 		row := consumerGroupRow{
 			ConsumerGroupID:   t.GetGroupId(),
-			ActiveMembers:     groupcmdutil.GetActiveConsumersCount(consumers),
-			PartitionsWithLag: groupcmdutil.GetPartitionsWithLag(consumers),
+			ActiveMembers:     metrics.GetActiveConsumers(),
+			PartitionsWithLag: metrics.GetLaggingPartitions(),
 		}
 		rows[i] = row
 	}
