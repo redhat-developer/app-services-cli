@@ -30,7 +30,11 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 }
 
 // AddOutput adds an output flag to the command
-func (fs *FlagSet) AddOutput(output *string, format *string) {
+func (fs *FlagSet) AddOutput(output *string) {
+    AddOutputFormatted(output *string, nil) 
+}
+
+func (fs *FlagSet) AddOutputFormatted(output *string, format *string) {
 	flagName := "output"
 
 	selectedFormat := dump.JSONFormat
