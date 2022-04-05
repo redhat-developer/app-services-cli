@@ -33,12 +33,12 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 func (fs *FlagSet) AddOutput(output *string, format *string) {
 	flagName := "output"
 
-	properFormat := dump.JSONFormat
+	selectedFormat := dump.JSONFormat
 
-	if format == nil {
-		properFormat = *format
-	} else {
-		format = &properFormat
+	if format != nil {
+		selectedFormat = *format
+		// } else {
+		// 	format = &properFormat
 	}
 
 	fs.StringVarP(
