@@ -40,8 +40,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	cmd.Version = version
 
-	// pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
-
 	// Child commands
 	cmd.AddCommand(login.NewLoginCmd(f))
 	cmd.AddCommand(logout.NewLogoutCommand(f))

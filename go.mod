@@ -8,6 +8,7 @@ require (
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
+	github.com/blang/semver v3.5.1+incompatible
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/briandowns/spinner v1.18.1
 	github.com/coreos/go-oidc/v3 v3.1.0
@@ -28,14 +29,19 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1
 	github.com/redhat-developer/service-binding-operator v0.9.0
+	github.com/rhysd/go-github-selfupdate v1.2.3
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
+	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
+	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
+	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.22.4
