@@ -44,13 +44,17 @@ func DoSelfUpdateOnceADay(logger logging.Logger, loader config.IConfig) (bool, e
 
 	if cfg.LastUpdated < time.Now().AddDate(0, 0, -1).UnixMilli() {
 		logger.Debug("Updating CLI")
-		return DoSelfUpdate(logger)
-	}
 
-	cfg.LastUpdated = time.Now().UnixMilli()
-	err = loader.Save(cfg)
-	if err != nil {
-		return false, err
+		updated, err := DoSelfUpdate(logger)
+		if err != nil {
+			return false, err
+		}
+		cfg.LastUpdated = time.Now().UnixMilli()
+		err = loader.Save(cfg)
+		if err != nil {
+			return false, err
+		}
+		return updated, nil
 	}
 	return false, nil
 }
