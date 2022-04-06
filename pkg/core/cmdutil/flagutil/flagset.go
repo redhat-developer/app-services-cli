@@ -31,25 +31,23 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 
 // AddOutput adds an output flag to the command
 func (fs *FlagSet) AddOutput(output *string) {
-    AddOutputFormatted(output *string, nil) 
+	fs.AddOutputFormatted(output, nil)
 }
 
 func (fs *FlagSet) AddOutputFormatted(output *string, format *string) {
 	flagName := "output"
 
-	selectedFormat := dump.JSONFormat
+	selectedFormat := dump.EmptyFormat
 
 	if format != nil {
-		selectedFormat = *format
-		// } else {
-		// 	format = &properFormat
+		selectedFormat = dump.JSONFormat
 	}
 
 	fs.StringVarP(
 		output,
 		flagName,
 		"o",
-		dump.EmptyFormat,
+		selectedFormat,
 		FlagDescription(fs.localizer, "flag.common.output.description", ValidOutputFormats...),
 	)
 

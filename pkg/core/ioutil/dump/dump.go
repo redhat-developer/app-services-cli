@@ -162,9 +162,6 @@ func Formatted(writer io.Writer, format string, data interface{}) error {
 		}
 		return JSON(writer, data)
 	default:
-		// _, err := .Marshal(data)
-		// if err != nil {
-		// 	return err
-		// }
+		return nil
 	}
 }
