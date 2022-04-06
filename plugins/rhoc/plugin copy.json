@@ -1,0 +1,6 @@
+{
+    "name": "rhrequest",
+    "version": "1.0.0",
+    "description": "request example plugin",
+    "github": "https://github.com/redhat-developer/app-services-cli"
+}
