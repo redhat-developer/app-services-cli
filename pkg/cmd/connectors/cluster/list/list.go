@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"strconv"
 
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
@@ -58,8 +57,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
 
 	flags.AddOutput(&opts.outputFormat)
-	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("connectors.cluster.list.flag.page"))
-	flags.IntVar(&opts.limit, "limit", 100, f.Localizer.MustLocalize("connectors.cluster.list.flag.limit"))
+	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("connectors.common.list.flag.page"))
+	flags.IntVar(&opts.limit, "limit", 100, f.Localizer.MustLocalize("connectors.common.list.flag.limit"))
 
 	return cmd
 }
@@ -83,7 +82,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 && opts.outputFormat == "" {
-		f.Logger.Info(f.Localizer.MustLocalize("connectors.cluster.common.log.info.noClusters"))
+		f.Logger.Info(f.Localizer.MustLocalize("connectors.common.log.info.noResults"))
 		return nil
 	}
 
@@ -117,13 +116,4 @@ func mapResponseItemsToRows(items []connectormgmtclient.ConnectorCluster) []item
 	}
 
 	return rows
-}
-
-func buildQuery(search string) string {
-	queryString := fmt.Sprintf(
-		"name like %%%[1]v%% or owner like %%%[1]v%% or cloud_provider like %%%[1]v%% or region like %%%[1]v%% or status like %%%[1]v%%",
-		search,
-	)
-
-	return queryString
 }

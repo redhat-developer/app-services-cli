@@ -636,15 +636,10 @@ github.com/redhat-developer/app-services-sdk-go v0.10.0 h1:zI0X5FR0NOj6IwBWk3y1T
 github.com/redhat-developer/app-services-sdk-go v0.10.0/go.mod h1:enn8Zz6IT0HZYzS6LSttiME2apwnvfVWZnGRS81A4rk=
 github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0 h1:MOljVN8AKTM72Yed8ioAwhdW0KdWEhBZjjam3lY2lyY=
 github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0/go.mod h1:0LX7ZCEmMKAbncO05/zRYsV0K5wsds7AGPpOFC7KWGo=
-<<<<<<< HEAD
-github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0 h1:1FMsZfo2xCtYimrBcR+s0O0b0MzxdxiStY8A78oTGBA=
-github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0/go.mod h1:UYJgMZWmd238bk6l464U1g8I3YWcEE9PGnjvNRi5Lqw=
-=======
 github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.4.1 h1:BuzYhAhO/jHi1R3eOpVoH7tSLvrlWR2s6lb/3m3pqZY=
 github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.4.1/go.mod h1:nQK2LFPPaTR+R6dZKBqSpaLCHBOWWDIewhzFZcfUfrg=
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0 h1:ExEHQaihnPNxN2nKXB0q5nrmSv4p8b3Idzt7TChxv+Q=
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0/go.mod h1:hMpejngP3BFnifCDH1gKRG9cU9Q4lr0WiQaW7A1LYo4=
->>>>>>> e2fc76d6 (feat: initial implementation for connectors commands)
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0 h1:wb335WbgyhFZRIHOwqHJm+D877l50MPMacrONCmknnw=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0/go.mod h1:Bs/YQI9ZuZLzBoeBAWV6KmkO8Jwm8NcrUn3VFp8eleo=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1 h1:xRq5XJzRDs/Z7e/9SDt6zbNRIyesC4LTqN9ajHKwjHo=
