@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
+	connectormgmt "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
@@ -235,6 +237,17 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 func (a *defaultAPI) GenericAPI() generic.GenericAPI {
 	tc := a.createOAuthTransport(a.AccessToken)
 	client := generic.NewGenericAPIClient(&generic.Config{
+		BaseURL:    a.ApiURL.String(),
+		Debug:      a.Logger.DebugEnabled(),
+		HTTPClient: tc,
+	})
+
+	return client
+}
+
+func (a *defaultAPI) ConnectorAPI() *connectormgmtclient.APIClient {
+	tc := a.createOAuthTransport(a.AccessToken)
+	client := connectormgmt.NewAPIClient(&connectormgmt.Config{
 		BaseURL:    a.ApiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
 		HTTPClient: tc,
