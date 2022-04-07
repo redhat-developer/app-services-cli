@@ -3,7 +3,6 @@ package context
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/delete"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/generate"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/use"
 	kafkaUse "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
@@ -50,7 +49,6 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 		kafkaUseCmd,
 		registryUseCmd,
 		statusCmd,
-		generate.NewGenerateCommand(f),
 	)
 	return cmd
 }

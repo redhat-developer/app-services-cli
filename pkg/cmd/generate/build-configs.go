@@ -90,7 +90,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	}
 
 	if !serviceAvailable {
-		return opts.localizer.MustLocalizeError("context.generate.log.info.noSevices")
+		return opts.localizer.MustLocalizeError("generate.log.info.noSevices")
 	}
 
 	serviceAccount, err := createServiceAccount(opts, fmt.Sprintf("%s-%v", opts.name, time.Now().Unix()))
@@ -111,7 +111,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("context.generate.log.info.credentialsSaved"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("generate.log.info.credentialsSaved"))
 
 	return nil
 }
