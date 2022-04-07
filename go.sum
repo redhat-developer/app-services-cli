@@ -628,8 +628,8 @@ github.com/redhat-developer/app-services-sdk-go v0.10.0 h1:zI0X5FR0NOj6IwBWk3y1T
 github.com/redhat-developer/app-services-sdk-go v0.10.0/go.mod h1:enn8Zz6IT0HZYzS6LSttiME2apwnvfVWZnGRS81A4rk=
 github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0 h1:MOljVN8AKTM72Yed8ioAwhdW0KdWEhBZjjam3lY2lyY=
 github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0/go.mod h1:0LX7ZCEmMKAbncO05/zRYsV0K5wsds7AGPpOFC7KWGo=
-github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0 h1:ExEHQaihnPNxN2nKXB0q5nrmSv4p8b3Idzt7TChxv+Q=
-github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0/go.mod h1:hMpejngP3BFnifCDH1gKRG9cU9Q4lr0WiQaW7A1LYo4=
+github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0 h1:1FMsZfo2xCtYimrBcR+s0O0b0MzxdxiStY8A78oTGBA=
+github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0/go.mod h1:UYJgMZWmd238bk6l464U1g8I3YWcEE9PGnjvNRi5Lqw=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0 h1:wb335WbgyhFZRIHOwqHJm+D877l50MPMacrONCmknnw=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0/go.mod h1:Bs/YQI9ZuZLzBoeBAWV6KmkO8Jwm8NcrUn3VFp8eleo=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1 h1:xRq5XJzRDs/Z7e/9SDt6zbNRIyesC4LTqN9ajHKwjHo=
@@ -910,6 +910,7 @@ golang.org/x/oauth2 v0.0.0-20210313182246-cd4f82c27b84/go.mod h1:KelEdhl1UZF7XfJ
 golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
 golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
 golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
+golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b/go.mod h1:DAh4E804XQdzx2j+YRIaUnCqCV2RuMz24cGBJ5QYIrc=
 golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a h1:qfl7ob3DIEs3Ml9oLuPwY2N04gymzAW04WsUQHIClgM=
 golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a/go.mod h1:DAh4E804XQdzx2j+YRIaUnCqCV2RuMz24cGBJ5QYIrc=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
