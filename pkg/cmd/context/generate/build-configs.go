@@ -19,6 +19,7 @@ type configValues struct {
 	RegistryURL  string
 	ClientID     string
 	ClientSecret string
+	TokenURL     string
 }
 
 func createServiceAccount(opts *options, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
@@ -59,14 +60,19 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		ServiceContext: opts.ServiceContext,
 	}
 
+	cfg, err := opts.Config.Load()
+	if err != nil {
+		return err
+	}
+
 	configurations := &configValues{}
 
 	var serviceAvailable bool
 
 	if svcConfig.KafkaID != "" {
-		kafkaInstance, err := contextutil.GetCurrentKafkaInstance(factory)
-		if err != nil {
-			return err
+		kafkaInstance, newErr := contextutil.GetCurrentKafkaInstance(factory)
+		if newErr != nil {
+			return newErr
 		}
 
 		serviceAvailable = true
@@ -74,9 +80,9 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	}
 
 	if svcConfig.ServiceRegistryID != "" {
-		registryInstance, err := contextutil.GetCurrentRegistryInstance(factory)
-		if err != nil {
-			return err
+		registryInstance, newErr := contextutil.GetCurrentRegistryInstance(factory)
+		if newErr != nil {
+			return newErr
 		}
 
 		serviceAvailable = true
@@ -99,6 +105,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 
 	configurations.ClientID = serviceAccount.GetClientId()
 	configurations.ClientSecret = serviceAccount.GetClientSecret()
+	configurations.TokenURL = cfg.MasAuthURL + "/protocol/openid-connect/token"
 
 	if err = WriteConfig(opts.configType, configurations); err != nil {
 		return err

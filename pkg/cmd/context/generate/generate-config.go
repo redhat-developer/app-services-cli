@@ -5,6 +5,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/contextcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -20,6 +21,7 @@ type options struct {
 	Connection     factory.ConnectionFunc
 	localizer      localize.Localizer
 	Context        context.Context
+	Config         config.IConfig
 	ServiceContext servicecontext.IContext
 
 	name       string
@@ -31,6 +33,7 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
 		Connection:     f.Connection,
+		Config:         f.Config,
 		IO:             f.IOStreams,
 		Logger:         f.Logger,
 		localizer:      f.Localizer,
