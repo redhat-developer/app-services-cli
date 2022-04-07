@@ -35,7 +35,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !f.IOStreams.CanPrompt() && opts.id == "" {
-				return f.Localizer.MustLocalizeError("connector.cluster.delete.argument.name.error.requiredWhenNonInteractive")
+				return f.Localizer.MustLocalizeError("connector.common.argument.name.error.requiredWhenNonInteractive")
 			} else if opts.id == "" {
 				opts.interactive = true
 			}
@@ -89,7 +89,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connectors.cluster.create.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connectors.cluster.delete.info.success"))
 
 	return nil
 }
