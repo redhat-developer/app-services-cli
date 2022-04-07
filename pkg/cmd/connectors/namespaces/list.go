@@ -1,4 +1,4 @@
-package list
+package namespaces
 
 import (
 	"strconv"
@@ -18,10 +18,10 @@ import (
 
 // row is the details of a Kafka instance needed to print to a table
 type itemRow struct {
-	ID     string `json:"id" header:"ID"`
-	Name   string `json:"name" header:"Name"`
-	Owner  string `json:"owner" header:"Owner"`
-	Status string `json:"status" header:"Status"`
+	ID      string `json:"id" header:"ID"`
+	Name    string `json:"name" header:"Name"`
+	Owner   string `json:"owner" header:"Owner"`
+	Cluster string `json:"clusterId" header:"Cluster ID"`
 }
 
 type options struct {
@@ -40,10 +40,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "list",
-		Short:   f.Localizer.MustLocalize("connector.list.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.list.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.list.cmd.example"),
+		Use:     "namespaces",
+		Short:   f.Localizer.MustLocalize("connector.namespaces.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.namespaces.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.namespaces.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
@@ -72,7 +72,7 @@ func runList(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorsApi.ListConnectors(f.Context)
+	a := api.ConnectorsMgmt().ConnectorNamespacesApi.ListConnectorNamespaces(f.Context)
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 
@@ -99,7 +99,7 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(items []connectormgmtclient.Connector) []itemRow {
+func mapResponseItemsToRows(items []connectormgmtclient.ConnectorNamespace) []itemRow {
 	rows := make([]itemRow, len(items))
 
 	for i := range items {
@@ -107,9 +107,10 @@ func mapResponseItemsToRows(items []connectormgmtclient.Connector) []itemRow {
 		name := k.GetName()
 
 		row := itemRow{
-			ID:    k.GetId(),
-			Name:  name,
-			Owner: k.GetOwner(),
+			ID:      k.GetId(),
+			Name:    name,
+			Owner:   k.GetOwner(),
+			Cluster: k.GetClusterId(),
 		}
 
 		rows[i] = row

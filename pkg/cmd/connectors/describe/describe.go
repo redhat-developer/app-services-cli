@@ -1,4 +1,4 @@
-package delete
+package describe
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -17,16 +17,16 @@ type options struct {
 	interactive bool
 }
 
-func NewDeleteCommand(f *factory.Factory) *cobra.Command {
+func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,
 	}
 
 	cmd := &cobra.Command{
-		Use:     "delete",
-		Short:   f.Localizer.MustLocalize("connector.delete.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.delete.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.delete.cmd.example"),
+		Use:     "describe",
+		Short:   f.Localizer.MustLocalize("connector.describe.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.describe.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.describe.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.id != "" {
@@ -34,7 +34,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !f.IOStreams.CanPrompt() && opts.id == "" {
-				return f.Localizer.MustLocalizeError("connector.cluster.delete.argument.name.error.requiredWhenNonInteractive")
+				return f.Localizer.MustLocalizeError("connector.cluster.describe.argument.name.error.requiredWhenNonInteractive")
 			} else if opts.id == "" {
 				opts.interactive = true
 			}
@@ -44,17 +44,17 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
-			return runDelete(opts)
+			return runDescribe(opts)
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.id, "name", "", f.Localizer.MustLocalize("connector.common.flag.name.description"))
+	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.common.flag.id.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
 }
 
-func runDelete(opts *options) error {
+func runDescribe(opts *options) error {
 	f := opts.f
 
 	var conn connection.Connection
@@ -69,7 +69,7 @@ func runDelete(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorsApi.DeleteConnector(f.Context, opts.id)
+	a := api.ConnectorsMgmt().ConnectorsApi.GetConnector(f.Context, opts.id)
 
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
@@ -84,7 +84,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connectors.delete.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connectors.describe.info.success"))
 
 	return nil
 }
