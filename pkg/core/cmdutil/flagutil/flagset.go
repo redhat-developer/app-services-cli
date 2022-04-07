@@ -37,10 +37,10 @@ func (fs *FlagSet) AddOutput(output *string) {
 func (fs *FlagSet) AddOutputFormatted(output *string, format *string) {
 	flagName := "output"
 
-	selectedFormat := dump.EmptyFormat
+	selectedFormat := dump.JSONFormat
 
 	if format != nil {
-		selectedFormat = dump.JSONFormat
+		selectedFormat = *format
 	}
 
 	fs.StringVarP(

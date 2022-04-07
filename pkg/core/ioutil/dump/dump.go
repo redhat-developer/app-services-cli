@@ -21,7 +21,7 @@ const (
 	JSONFormat  = "json"
 	YAMLFormat  = "yaml"
 	YMLFormat   = "yml"
-	EmptyFormat = ""
+	EmptyFormat = "none"
 )
 
 // JSON dumps the given data to the given stream so that it looks pretty. If the data is a valid
