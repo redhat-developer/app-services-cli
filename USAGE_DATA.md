@@ -14,5 +14,5 @@ Note that these commands do not include `--help` commands. We do not collect dat
 To disable collection of the usage data please set environment variable in your terminal:
 
 ```
-RHOAS_TELEMETRY=true
+RHOAS_TELEMETRY=false
 ```
