@@ -245,7 +245,7 @@ func (a *defaultAPI) GenericAPI() generic.GenericAPI {
 	return client
 }
 
-func (a *defaultAPI) ConnectorAPI() *connectormgmtclient.APIClient {
+func (a *defaultAPI) ConnectorsMgmt() connectormgmtclient.APIClient {
 	tc := a.createOAuthTransport(a.AccessToken)
 	client := connectormgmt.NewAPIClient(&connectormgmt.Config{
 		BaseURL:    a.ApiURL.String(),
@@ -253,7 +253,7 @@ func (a *defaultAPI) ConnectorAPI() *connectormgmtclient.APIClient {
 		HTTPClient: tc,
 	})
 
-	return client
+	return *client
 }
 
 // AccountMgmt returns a new Account Management API client instance
