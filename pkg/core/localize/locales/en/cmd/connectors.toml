@@ -1,0 +1,152 @@
+["connector.addon.params.cmd.shortDescription"] 
+ one = '' 
+
+["connector.addon.params.cmd.longDescription"] 
+ one = '' 
+
+["connector.addon.params.cmd.example"] 
+ one = '' 
+
+["connectors.common.id.flag.page"] 
+ one = '' 
+
+["connectors.cluster.cmd.shortDescription"] 
+ one = '' 
+
+["connectors.cluster.cmd.longDescription"] 
+ one = '' 
+
+["connectors.cluster.cmd.example"] 
+ one = '' 
+
+["connector.cluster.create.cmd.shortDescription"] 
+ one = '' 
+
+["connector.cluster.create.cmd.longDescription"] 
+ one = '' 
+
+["connector.cluster.create.cmd.example"] 
+ one = '' 
+
+["connector.cluster.create.argument.name.error.requiredWhenNonInteractive"] 
+ one = '' 
+
+["connector.cluster.name.flag.id.description"] 
+ one = '' 
+
+["connectors.cluster.create.info.success"] 
+ one = '' 
+
+["connector.cluster.delete.cmd.shortDescription"] 
+ one = '' 
+
+["connector.cluster.delete.cmd.longDescription"] 
+ one = '' 
+
+["connector.cluster.delete.cmd.example"] 
+ one = '' 
+
+["connector.cluster.create.flag.name.description"] 
+ one = '' 
+
+["connectors.cluster.delete.info.success"] 
+ one = '' 
+
+["connector.cluster.list.cmd.shortDescription"] 
+ one = '' 
+
+["connector.cluster.list.cmd.longDescription"] 
+ one = '' 
+
+["connector.cluster.list.cmd.example"] 
+ one = '' 
+
+["connectors.common.list.flag.page"] 
+ one = '' 
+
+["connectors.common.list.flag.limit"] 
+ one = '' 
+
+["connectors.common.log.info.noResults"] 
+ one = '' 
+
+["connectors.cmd.shortDescription"] 
+ one = '' 
+
+["connectors.cmd.longDescription"] 
+ one = '' 
+
+["connectors.cmd.example"] 
+ one = '' 
+
+["connector.create.cmd.shortDescription"] 
+ one = '' 
+
+["connector.create.cmd.longDescription"] 
+ one = '' 
+
+["connector.create.cmd.example"] 
+ one = '' 
+
+["connector.create.argument.name.error.requiredWhenNonInteractive"] 
+ one = '' 
+
+["connector.name.flag.id.description"] 
+ one = '' 
+
+["connectors.create.info.success"] 
+ one = '' 
+
+["connector.delete.cmd.shortDescription"] 
+ one = '' 
+
+["connector.delete.cmd.longDescription"] 
+ one = '' 
+
+["connector.delete.cmd.example"] 
+ one = '' 
+
+["connector.connector.common.argument.name.error.requiredWhenNonInteractive"] 
+ one = '' 
+
+["connector.common.flag.name.description"] 
+ one = '' 
+
+["connectors.delete.info.success"] 
+ one = '' 
+
+["connector.describe.cmd.shortDescription"] 
+ one = '' 
+
+["connector.describe.cmd.longDescription"] 
+ one = '' 
+
+["connector.describe.cmd.example"] 
+ one = '' 
+
+["connector.cluster.describe.argument.name.error.requiredWhenNonInteractive"] 
+ one = '' 
+
+["connector.common.flag.id.description"] 
+ one = '' 
+
+["connectors.describe.info.success"] 
+ one = '' 
+
+["connector.list.cmd.shortDescription"] 
+ one = '' 
+
+["connector.list.cmd.longDescription"] 
+ one = '' 
+
+["connector.list.cmd.example"] 
+ one = '' 
+
+["connector.namespaces.cmd.shortDescription"] 
+ one = '' 
+
+["connector.namespaces.cmd.longDescription"] 
+ one = '' 
+
+["connector.namespaces.cmd.example"] 
+ one = '' 

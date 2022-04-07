@@ -41,9 +41,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   f.Localizer.MustLocalize("connector.cluster.delete.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.cluster.delete.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.cluster.delete.cmd.example"),
+		Short:   f.Localizer.MustLocalize("connector.cluster.list.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.cluster.list.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.cluster.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
