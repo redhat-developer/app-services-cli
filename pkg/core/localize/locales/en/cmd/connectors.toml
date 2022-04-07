@@ -1,152 +1,152 @@
 ["connector.addon.params.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.addon.params.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.addon.params.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.common.id.flag.page"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cluster.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cluster.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cluster.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.create.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.create.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.create.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.create.argument.name.error.requiredWhenNonInteractive"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.name.flag.id.description"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cluster.create.info.success"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.delete.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.delete.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.delete.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.create.flag.name.description"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cluster.delete.info.success"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.list.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.list.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.list.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.common.list.flag.page"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.common.list.flag.limit"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.common.log.info.noResults"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cmd.shortDescription"] 
- one = '' 
+ one = 'Connectors commands' 
 
 ["connectors.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.create.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.create.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.create.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.create.argument.name.error.requiredWhenNonInteractive"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.name.flag.id.description"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.create.info.success"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.delete.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.delete.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.delete.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.connector.common.argument.name.error.requiredWhenNonInteractive"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.common.flag.name.description"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.delete.info.success"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.describe.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.describe.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.describe.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.cluster.describe.argument.name.error.requiredWhenNonInteractive"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.common.flag.id.description"] 
- one = '' 
+ one = 'TODO' 
 
 ["connectors.describe.info.success"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.list.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.list.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.list.cmd.example"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.namespaces.cmd.shortDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.namespaces.cmd.longDescription"] 
- one = '' 
+ one = 'TODO' 
 
 ["connector.namespaces.cmd.example"] 
- one = '' 
+ one = 'TODO' 
