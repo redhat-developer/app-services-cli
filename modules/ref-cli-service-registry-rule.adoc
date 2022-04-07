@@ -8,24 +8,23 @@ Manage artifact rules in a Service Registry instance
 [discrete]
 == Synopsis
 
-Configure the validity and compatibility rules that govern artifact content.
+Set of commands for managing validity and compatibility rules for an entire Service Registry instance or individual for each artifact.
+Service Registry rules govern how artifact content can evolve over time by validating for any artifact updates
 
-When you add or update an artifact, Service Registry applies rules to check the validity and compatibility of the artifact content. Artifact rules apply to the specified artifact only. Global rules apply to all artifacts in a particular Service Registry instance. Configured artifact rules override any configured global rules. Before a new artifact version can be uploaded to the registry, all configured global rules or artifact rules must pass.
-
-For more information about supported Service Registry content and rules, see https://access.redhat.com/documentation/en-us/red_hat_openshift_service_registry/1/guide/9b0fdf14-f0d6-4d7f-8637-3ac9e2069817.
+Rules can be configured as global rules for entire Service Registry instances or specific artifacts.
 
 
 [discrete]
 == Examples
 
 ....
-## Enable the global compatibility rule for all artifacts in the current Service Registry instance
+## Enable global compatibility rule for artifacts of the current Service Registry instance
 $ rhoas service-registry rule enable --rule-type=compatibility --config=full
 
-## Enable the global compatibility rule for all artifacts in a specific Service Registry instance
-$ rhoas service-registry rule enable --rule-type=compatibility --config=full-transitive --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
+## Enable global compatibility rule for artifacts of a specific Service Registry instance
+$ rhoas service-registry rule enable --rule-type=compatibility --config=full-transitive --instance-id 8ecff228-1ffe-4cf5-b38b-55223885ee00
 
-## Display the configuration details of the global validity rule for the current Service Registry instance
+## display configuration details of global validity rule for current Service Registry instance
 $ rhoas service-registry rule describe --rule-type=validity
 
 ....
@@ -44,7 +43,7 @@ $ rhoas service-registry rule describe --rule-type=validity
 * link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
 
  
-* link:{path}#ref-service-registry-rule-describe_{context}[service-registry-rule describe]	 - Display the configuration details of a rule
+* link:{path}#ref-service-registry-rule-describe_{context}[service-registry-rule describe]	 - Display configuration of a rule
 
  
 * link:{path}#ref-service-registry-rule-disable_{context}[service-registry-rule disable]	 - Disable validity and compatibility rules
@@ -53,8 +52,8 @@ $ rhoas service-registry rule describe --rule-type=validity
 * link:{path}#ref-service-registry-rule-enable_{context}[service-registry-rule enable]	 - Enable validity and compatibility rules
 
  
-* link:{path}#ref-service-registry-rule-list_{context}[service-registry-rule list]	 - List the validity and compatibility rules
+* link:{path}#ref-service-registry-rule-list_{context}[service-registry-rule list]	 - List validity and compatibility rules
 
  
-* link:{path}#ref-service-registry-rule-update_{context}[service-registry-rule update]	 - Update the configuration of rules
+* link:{path}#ref-service-registry-rule-update_{context}[service-registry-rule update]	 - Update configuration of rules
 

@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = service-registry use
 
 [role="_abstract"]
-Set the current Service Registry instance
+Use a Service Registry instance
 
 [discrete]
 == Synopsis
