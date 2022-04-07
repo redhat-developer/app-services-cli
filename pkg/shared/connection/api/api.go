@@ -15,7 +15,7 @@ import (
 type API interface {
 	KafkaMgmt() kafkamgmtclient.DefaultApi
 	ServiceRegistryMgmt() registrymgmtclient.RegistriesApi
-	ConnectorsMgmt() *connectormgmtclient.APIClient
+	ConnectorsMgmt() connectormgmtclient.APIClient
 	ServiceAccountMgmt() kafkamgmtclient.SecurityApi
 	KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
