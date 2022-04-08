@@ -5,14 +5,14 @@ one='Group, share and manage your rhoas services'
 one='''
 Group your application service instances into service contexts.
 
-A service context is a group of application service instances and their configuration details. By using service contexts, you can group together application service instances that you want to use together.
+A service context is a group of application service instances and their service identifiers. By using service contexts, you can group together application service instances that you want to use together.
 
 After creating a service context, you can share it with other developers so that they can use the same group of application service instances.
 
 You can also use the service context to automatically generate configuration files that you need to use those application service instances in other development platforms and tools. For example, the service context can generate the following types of configurations:
 
 - Standard environment variables for use in local development and tooling
-- Java properties files for use in Quarkus, Apache Kafka, and so on
+- Java properties files that can be used in Quarkus, Apache Kafka, and so on
 - Service binding configuration and service connections for the RHOAS Operator
 - Configuration for Helm Charts and Kubernetes
 
@@ -198,12 +198,7 @@ one='Generate configurations for the service context'
 one='''
 Generate configuration files to enable the application service instances in the service context to connect with other platforms and tools.
 
-This command generates configuration files that you need to use application service instances in other development platforms and tools. For example, the service context can generate the following types of configurations:
-
-- Standard environment variables for use in local development and tooling
-- Java properties files for use in Quarkus, Apache Kafka, and so on
-- Service binding configuration and service connections for the RHOAS Operator
-- Configuration for Helm Charts and Kubernetes
+This command generates a JSON configuration file that you can use to connect application service instances to other development platforms and tools.
 '''
 
 [context.generate.cmd.example]
