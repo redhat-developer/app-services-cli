@@ -9,7 +9,6 @@ rhoas context commands allow developers to:
   * Group services into contexts that can be used with a number of CLI commands.
   * Manage different service contexts by switching, listing and removing service contexts 
   * Share context with others to use the same set of services
-  * Generating configuration for connecting to the services from various platforms and tools
 
 By default context is kept under users configuration folder. Users can view context location by executing "rhoas context status" command.
 
@@ -43,7 +42,6 @@ $ rhoas context create --name dev-env
 * [rhoas](rhoas.md)	 - RHOAS CLI
 * [rhoas context create](rhoas_context_create.md)	 - Create a service context
 * [rhoas context delete](rhoas_context_delete.md)	 - Delete a service context
-* [rhoas context generate-config](rhoas_context_generate-config.md)	 - Generate configurations for the service context
 * [rhoas context list](rhoas_context_list.md)	 - List contexts
 * [rhoas context status](rhoas_context_status.md)	 - View the status of application services set in service context
 * [rhoas context use](rhoas_context_use.md)	 - Set the current context

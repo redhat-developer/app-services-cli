@@ -1,4 +1,4 @@
-## rhoas context generate-config
+## rhoas generate-config
 
 Generate configurations for the service context
 
@@ -7,14 +7,14 @@ Generate configurations for the service context
 Generate configuration files for the service context to connect with to be used with various tools and platforms
 
 ```
-rhoas context generate-config [flags]
+rhoas generate-config [flags]
 ```
 
 ### Examples
 
 ```
 ## Generate configurations for the current service context in json format
-$ rhoas context generate-config --type json
+$ rhoas generate-config --type json
 
 ```
 
@@ -34,5 +34,5 @@ $ rhoas context generate-config --type json
 
 ### SEE ALSO
 
-* [rhoas context](rhoas_context.md)	 - Group, share and manage your rhoas services
+* [rhoas](rhoas.md)	 - RHOAS CLI
 

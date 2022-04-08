@@ -1,0 +1,20 @@
+[generate.cmd.shortDescription]
+one='Generate configurations for the service context'
+
+[generate.cmd.longDescription]
+one='Generate configuration files for the service context to connect with to be used with various tools and platforms'
+
+[generate.cmd.example]
+one='''
+## Generate configurations for the current service context in json format
+$ rhoas generate-config --type json
+'''
+
+[generate.flag.type]
+one='Type of configuration file to be generated'
+
+[generate.log.info.noSevices]
+one='No services available to generate configurations'
+
+[generate.log.info.credentialsSaved]
+one='Configurations successfully saved'

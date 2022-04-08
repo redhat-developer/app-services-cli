@@ -42,9 +42,9 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "generate-config",
-		Short:   f.Localizer.MustLocalize("context.generate.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("context.generate.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("context.generate.cmd.example"),
+		Short:   f.Localizer.MustLocalize("generate.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("generate.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("generate.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
@@ -60,7 +60,7 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 
 	flags := contextcmdutil.NewFlagSet(cmd, f)
 	flags.AddContextName(&opts.name)
-	flags.StringVar(&opts.configType, "type", "", opts.localizer.MustLocalize("context.generate.flag.type"))
+	flags.StringVar(&opts.configType, "type", "", opts.localizer.MustLocalize("generate.flag.type"))
 	_ = cmd.MarkFlagRequired("type")
 
 	flagutil.EnableStaticFlagCompletion(cmd, "type", configurationTypes)
