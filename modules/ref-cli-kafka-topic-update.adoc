@@ -30,7 +30,8 @@ $ rhoas kafka topic update --name topic-1 --retention-ms -1
       `--cleanup-policy` _string_::    Determines whether log messages are deleted, compacted, or both
       `--name` _string_::              Topic name
       `--partitions` _string_::        The number of partitions in the topic
-      `--retention-bytes` _string_::   The maximum total size of a partition log segments before old log segments are deleted to free up space
+      `--retention-bytes` _string_::   The maximum total size of a partition log segments before old log segments are deleted to free up space.
+Value of -1 is set by default indicating no retention size limits
       `--retention-ms` _string_::      The period of time in milliseconds the broker will retain a partition log before deleting it
 
 [discrete]
