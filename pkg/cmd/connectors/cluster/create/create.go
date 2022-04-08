@@ -35,7 +35,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !f.IOStreams.CanPrompt() && opts.name == "" {
-				return f.Localizer.MustLocalizeError("connector.cluster.create.argument.name.error.requiredWhenNonInteractive")
+				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
 			} else if opts.name == "" {
 				opts.interactive = true
 			}
@@ -49,7 +49,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.cluster.name.flag.id.description"))
+	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connectors.common.id.flag"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd

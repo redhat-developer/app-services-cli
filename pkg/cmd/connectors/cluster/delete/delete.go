@@ -35,7 +35,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !f.IOStreams.CanPrompt() && opts.id == "" {
-				return f.Localizer.MustLocalizeError("connector.common.argument.name.error.requiredWhenNonInteractive")
+				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
 			} else if opts.id == "" {
 				opts.interactive = true
 			}
