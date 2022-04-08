@@ -34,7 +34,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if !f.IOStreams.CanPrompt() && opts.id == "" {
-				return f.Localizer.MustLocalizeError("connector.connector.common.argument.name.error.requiredWhenNonInteractive")
+				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
 			} else if opts.id == "" {
 				opts.interactive = true
 			}
@@ -48,7 +48,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.id, "name", "", f.Localizer.MustLocalize("connector.common.flag.name.description"))
+	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.delete.flag.id.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd

@@ -1,152 +1,171 @@
-["connector.addon.params.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.addon.params.cmd.shortDescription"]
+one = 'Get Addon parameters'
 
-["connector.addon.params.cmd.longDescription"] 
- one = 'TODO' 
+["connector.addon.params.cmd.longDescription"]
+one = 'Get Addon parameters'
 
-["connector.addon.params.cmd.example"] 
- one = 'TODO' 
+["connector.addon.params.cmd.example"]
+one = '''
+## Get addon parameters
+rhoas connectors addon-parameters ?
+'''
 
-["connectors.common.id.flag.page"] 
- one = 'TODO' 
+["connectors.cluster.cmd.shortDescription"]
+one = 'Connectors cluster commands'
 
-["connectors.cluster.cmd.shortDescription"] 
- one = 'TODO' 
+["connectors.cluster.cmd.longDescription"]
+one = 'Connectors cluster commands'
 
-["connectors.cluster.cmd.longDescription"] 
- one = 'TODO' 
+["connectors.cluster.cmd.example"]
+one = '''
+## Create connectors cluster
+rhoas connectors cluster create --name=test
+'''
 
-["connectors.cluster.cmd.example"] 
- one = 'TODO' 
+["connector.cluster.create.cmd.shortDescription"]
+one = 'Create connectors cluster'
 
-["connector.cluster.create.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.cluster.create.cmd.longDescription"]
+one = 'Create connectors cluster'
 
-["connector.cluster.create.cmd.longDescription"] 
- one = 'TODO' 
+["connector.cluster.create.cmd.example"]
+one = '''
+## Create connectors cluster
+rhoas connectors cluster create --name=test
+'''
 
-["connector.cluster.create.cmd.example"] 
- one = 'TODO' 
+["connectors.cluster.create.info.success"]
+one = 'Successfully created cluster for connectors'
 
-["connector.cluster.create.argument.name.error.requiredWhenNonInteractive"] 
- one = 'TODO' 
+["connector.cluster.delete.cmd.shortDescription"]
+one = 'Delete connectors cluster'
 
-["connector.cluster.name.flag.id.description"] 
- one = 'TODO' 
+["connector.cluster.delete.cmd.longDescription"]
+one = 'Delete connectors cluster'
 
-["connectors.cluster.create.info.success"] 
- one = 'TODO' 
+["connector.cluster.delete.cmd.example"]
+one = '''
+## Delete connectors cluster
+rhoas connectors cluster delete --id=test
+'''
 
-["connector.cluster.delete.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.cluster.create.flag.name.description"]
+one = 'Name of the cluster to create'
 
-["connector.cluster.delete.cmd.longDescription"] 
- one = 'TODO' 
+["connectors.cluster.delete.info.success"]
+one = 'Successfully deleted cluster'
 
-["connector.cluster.delete.cmd.example"] 
- one = 'TODO' 
+["connector.cluster.list.cmd.shortDescription"]
+one = 'List connectors clusters'
 
-["connector.cluster.create.flag.name.description"] 
- one = 'TODO' 
+["connector.cluster.list.cmd.longDescription"]
+one = 'List connectors clusters'
 
-["connectors.cluster.delete.info.success"] 
- one = 'TODO' 
+["connector.cluster.list.cmd.example"]
+one = '''
+## List connectors clusters
+rhoas connectors cluster list
+'''
 
-["connector.cluster.list.cmd.shortDescription"] 
- one = 'TODO' 
+["connectors.common.id.flag"]
+one = 'Unique identifier'
 
-["connector.cluster.list.cmd.longDescription"] 
- one = 'TODO' 
+["connectors.common.list.flag.page"]
+one = 'Page number'
 
-["connector.cluster.list.cmd.example"] 
- one = 'TODO' 
+["connectors.common.list.flag.limit"]
+one = 'Page limit'
 
-["connectors.common.list.flag.page"] 
- one = 'TODO' 
+["connectors.common.log.info.noResults"]
+one = 'No results returned from current command'
 
-["connectors.common.list.flag.limit"] 
- one = 'TODO' 
+["connectors.cmd.shortDescription"]
+one = 'Connectors commands'
 
-["connectors.common.log.info.noResults"] 
- one = 'TODO' 
+["connectors.cmd.longDescription"]
+one = 'Connectors commands'
 
-["connectors.cmd.shortDescription"] 
- one = 'Connectors commands' 
 
-["connectors.cmd.longDescription"] 
- one = 'TODO' 
+["connectors.cmd.example"]
+one = '''   
+## List connec
+rhoas connectors list
+'''
 
-["connectors.cmd.example"] 
- one = 'TODO' 
+["connector.create.cmd.shortDescription"]
+one = 'Create connector'
 
-["connector.create.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.create.cmd.longDescription"]
+one = 'Create connector'
 
-["connector.create.cmd.longDescription"] 
- one = 'TODO' 
+["connector.create.cmd.example"]
+one = '''
+## Create connector
+rhoas connectors create --name=test --namespace=test --type=test --addon=test --params=test
+'''
 
-["connector.create.cmd.example"] 
- one = 'TODO' 
+["connector.create.info.success"]
+one = 'Successfully created connector'
 
-["connector.create.argument.name.error.requiredWhenNonInteractive"] 
- one = 'TODO' 
+["connector.name.flag.description"]
+one = 'Name of the connector'
 
-["connector.name.flag.id.description"] 
- one = 'TODO' 
+["connectors.create.info.success"]
+one = 'Succesfully created connector'
 
-["connectors.create.info.success"] 
- one = 'TODO' 
+["connector.delete.cmd.shortDescription"]
+one = 'Delete connector'
 
-["connector.delete.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.delete.cmd.longDescription"]
+one = 'Delete connector'
 
-["connector.delete.cmd.longDescription"] 
- one = 'TODO' 
+["connector.delete.cmd.example"]
+one = 'TODO'
 
-["connector.delete.cmd.example"] 
- one = 'TODO' 
+["connector.delete.flag.id.description"]
+one = 'Id of the connector to delete'
 
-["connector.connector.common.argument.name.error.requiredWhenNonInteractive"] 
- one = 'TODO' 
+["connectors.delete.info.success"]
+one = 'Successfully deleted connector'
 
-["connector.common.flag.name.description"] 
- one = 'TODO' 
+["connector.describe.cmd.shortDescription"]
+one = 'Get connector details'
 
-["connectors.delete.info.success"] 
- one = 'TODO' 
+["connector.describe.cmd.longDescription"]
+one = 'Get connector details'
 
-["connector.describe.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.describe.cmd.example"]
+one = '''
+## Get connector details
+rhoas connector describe --id=test
+'''
 
-["connector.describe.cmd.longDescription"] 
- one = 'TODO' 
+["connector.common.flag.id.description"]
+one = 'Id of the connector'
 
-["connector.describe.cmd.example"] 
- one = 'TODO' 
+["connectors.describe.info.success"]
+one = 'Connector details returned successfully'
 
-["connector.cluster.describe.argument.name.error.requiredWhenNonInteractive"] 
- one = 'TODO' 
+["connector.list.cmd.shortDescription"]
+one = 'List connectors'
 
-["connector.common.flag.id.description"] 
- one = 'TODO' 
+["connector.list.cmd.longDescription"]
+one = 'List connectors'
 
-["connectors.describe.info.success"] 
- one = 'TODO' 
+["connector.list.cmd.example"]
+one = '''
+## List connectors
+rhoas connectors list
+'''
 
-["connector.list.cmd.shortDescription"] 
- one = 'TODO' 
+["connector.namespaces.cmd.shortDescription"]
+one = 'Get connector namespaces'
 
-["connector.list.cmd.longDescription"] 
- one = 'TODO' 
+["connector.namespaces.cmd.longDescription"]
+one = 'Get connector namespaces'
 
-["connector.list.cmd.example"] 
- one = 'TODO' 
-
-["connector.namespaces.cmd.shortDescription"] 
- one = 'TODO' 
-
-["connector.namespaces.cmd.longDescription"] 
- one = 'TODO' 
-
-["connector.namespaces.cmd.example"] 
- one = 'TODO' 
+["connector.namespaces.cmd.example"]
+one = '''
+## Get connector namespaces
+rhoas connector namespaces
+'''
