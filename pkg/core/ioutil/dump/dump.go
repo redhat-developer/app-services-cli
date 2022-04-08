@@ -21,6 +21,7 @@ const (
 	JSONFormat  = "json"
 	YAMLFormat  = "yaml"
 	YMLFormat   = "yml"
+	TableFormat = "table"
 	EmptyFormat = "none"
 )
 
@@ -161,6 +162,9 @@ func Formatted(writer io.Writer, format string, data interface{}) error {
 			return err
 		}
 		return JSON(writer, data)
+	case TableFormat:
+		Table(writer, data)
+		return nil
 	default:
 		return nil
 	}

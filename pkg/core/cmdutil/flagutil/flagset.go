@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	ValidOutputFormats = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat, dump.EmptyFormat}
+	ValidOutputFormats     = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat, dump.EmptyFormat, dump.TableFormat}
+	ValidListOutputFormats = append(ValidOutputFormats, dump.TableFormat)
 )
 
 type FlagSet struct {
@@ -29,18 +30,26 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 	}
 }
 
-// AddOutput adds an output flag to the command
+// AddOutput executes AddOutputFormatted with required inputs
 func (fs *FlagSet) AddOutput(output *string) {
-	fs.AddOutputFormatted(output, nil)
+	fs.AddOutputFormatted(output, false, nil)
 }
 
-func (fs *FlagSet) AddOutputFormatted(output *string, format *string) {
+// AddOutputFormatted adds an output flag to the command
+func (fs *FlagSet) AddOutputFormatted(output *string, isTable bool, format *string) {
 	flagName := "output"
 
 	selectedFormat := dump.JSONFormat
 
-	if format != nil {
+	if format != nil || *format != "" {
 		selectedFormat = *format
+
+	}
+
+	suggestions := ValidOutputFormats
+
+	if isTable {
+		suggestions = ValidListOutputFormats
 	}
 
 	fs.StringVarP(
@@ -48,11 +57,11 @@ func (fs *FlagSet) AddOutputFormatted(output *string, format *string) {
 		flagName,
 		"o",
 		selectedFormat,
-		FlagDescription(fs.localizer, "flag.common.output.description", ValidOutputFormats...),
+		FlagDescription(fs.localizer, "flag.common.output.description", suggestions...),
 	)
 
 	_ = fs.cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return ValidOutputFormats, cobra.ShellCompDirectiveNoSpace
+		return suggestions, cobra.ShellCompDirectiveNoSpace
 	})
 }
 
@@ -125,4 +134,26 @@ func WithFlagOptions(cmd *cobra.Command, flagName string) *FlagOptions {
 // FlagOptions defines additional flag options
 type FlagOptions struct {
 	Required func() error
+}
+
+// ValidateOutput checks if value v is a valid value for --output
+func ValidateOutput(v string) error {
+	isValid := IsValidInput(v, ValidOutputFormats...)
+
+	if isValid {
+		return nil
+	}
+
+	return InvalidValueError("output", v, ValidOutputFormats...)
+}
+
+// ValidateOutputForTable checks if value v is a valid value for --outpu adding table
+func ValidateOutputForTable(v string) error {
+	isValid := IsValidInput(v, ValidListOutputFormats...)
+
+	if isValid {
+		return nil
+	}
+
+	return InvalidValueError("output", v, ValidListOutputFormats...)
 }

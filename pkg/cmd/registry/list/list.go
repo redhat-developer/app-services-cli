@@ -82,6 +82,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.AddOutput(&opts.outputFormat)
+
 	return cmd
 }
 
@@ -114,7 +117,7 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		var rows []RegistryRow
 		serviceConfig, _ := opts.Config.Load()
 		if serviceConfig != nil && serviceConfig.Services.ServiceRegistry != nil {
