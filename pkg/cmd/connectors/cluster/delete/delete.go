@@ -49,7 +49,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.id, "name", "", f.Localizer.MustLocalize("connector.cluster.create.flag.name.description"))
+	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.cluster.delete.id.flag.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -67,6 +67,8 @@ func runDelete(opts *options) error {
 	if opts.interactive {
 		// TODO
 	}
+
+	// TODO ask user if they are sure?
 
 	api := conn.API()
 
