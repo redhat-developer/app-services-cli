@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewServiceRegistryCommand creates a new registry command.
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "service-registry",
