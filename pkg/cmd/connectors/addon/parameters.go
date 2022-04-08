@@ -5,9 +5,16 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 )
+
+// row is the details of a Kafka instance needed to print to a table
+type itemRow struct {
+	ID    string `json:"id" header:"ID"`
+	Value string `json:"value" header:"Value"`
+}
 
 type options struct {
 	outputFormat string
@@ -64,6 +71,32 @@ func runList(opts *options) error {
 		return err
 	}
 
-	return dump.Formatted(f.IOStreams.Out, opts.outputFormat, response)
+	switch opts.outputFormat {
+	case dump.EmptyFormat:
+		rows := mapResponseItemsToRows(response)
 
+		dump.Table(f.IOStreams.Out, rows)
+		f.Logger.Info("")
+		return nil
+	default:
+		return dump.Formatted(f.IOStreams.Out, opts.outputFormat, response)
+	}
+
+}
+
+func mapResponseItemsToRows(items []connectormgmtclient.AddonParameter) []itemRow {
+	rows := make([]itemRow, len(items))
+
+	for i := range items {
+		k := items[i]
+
+		row := itemRow{
+			ID:    k.GetId(),
+			Value: k.GetValue(),
+		}
+
+		rows[i] = row
+	}
+
+	return rows
 }
