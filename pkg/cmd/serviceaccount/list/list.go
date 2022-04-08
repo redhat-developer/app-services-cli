@@ -23,7 +23,8 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	output string
+	output       string
+	outputFormat string
 }
 
 // svcAcctRow contains the properties used to
@@ -66,6 +67,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.AddOutput(&opts.outputFormat)
+
 	return cmd
 }
 
@@ -88,7 +92,7 @@ func runList(opts *options) (err error) {
 
 	outStream := opts.IO.Out
 	switch opts.output {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:

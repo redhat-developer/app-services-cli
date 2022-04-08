@@ -115,6 +115,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
+	flags := flagutil.NewFlagSet(cmd, opts.localizer)
+	flags.AddOutputFormatted(&opts.outputFormat, false, nil)
+
 	return cmd
 }
 
@@ -169,7 +172,7 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		rows := mapResponseItemsToRows(response.Artifacts)
 		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")

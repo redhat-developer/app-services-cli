@@ -126,7 +126,7 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		var rows []kafkaRow
 		serviceConfig, _ := opts.Config.Load()
 		if serviceConfig != nil && serviceConfig.Services.Kafka != nil {
