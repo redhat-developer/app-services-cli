@@ -104,14 +104,17 @@ one = 'Create connector'
 ["connector.create.cmd.example"]
 one = '''
 ## Create connector
-rhoas connectors create --name=test --namespace=test --type=test --addon=test --params=test
+rhoas connectors create --file=myconnector.json
+
+## Create connector from stdin
+cat myconnector.json | rhoas connectors create
 '''
 
 ["connector.create.info.success"]
 one = 'Successfully created connector'
 
-["connector.name.flag.description"]
-one = 'Name of the connector'
+["connector.file.flag.description"]
+one = 'Location of the connector json file describing the connector'
 
 ["connectors.create.info.success"]
 one = 'Succesfully created connector'
