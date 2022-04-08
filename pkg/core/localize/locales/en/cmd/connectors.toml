@@ -46,8 +46,11 @@ one = 'Delete connectors cluster'
 ["connector.cluster.delete.cmd.example"]
 one = '''
 ## Delete connectors cluster
-rhoas connectors cluster delete --id=test
+rhoas connectors cluster delete --id=c980124otd37bufiemj0
 '''
+
+["connector.cluster.delete.id.flag.description"]
+one = 'Id of connectors cluster to delete'
 
 ["connector.cluster.create.flag.name.description"]
 one = 'Name of the cluster to create'
@@ -137,7 +140,7 @@ one = 'Get connector details'
 ["connector.describe.cmd.example"]
 one = '''
 ## Get connector details
-rhoas connector describe --id=test
+rhoas connector describe --id=c980124otd37bufiemj0
 '''
 
 ["connector.common.flag.id.description"]
