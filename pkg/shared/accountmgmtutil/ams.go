@@ -100,7 +100,7 @@ func PickInstanceType(amsTypes []QuotaSpec) (string, error) {
 		}
 	}
 
-	return amsTypes[0].name, nil
+	return QuotaDeveloperType, nil
 }
 
 func GetInstanceTypes(amsTypes []QuotaSpec) []string {

@@ -2,11 +2,9 @@ package create
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"os/signal"
-	"strings"
 	"time"
 
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -15,7 +13,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
-	"k8s.io/utils/strings/slices"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -29,8 +26,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-	pkgKafka "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
@@ -133,15 +128,15 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddBypassTermsCheck(&opts.bypassAmsCheck)
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return pkgKafka.GetCloudProviderCompletionValues(f)
+		return GetCloudProviderCompletionValues(f)
 	})
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return kafkautil.GetCloudProviderRegionCompletionValues(f, opts.provider)
+		return GetCloudProviderRegionCompletionValues(f, opts.provider)
 	})
 
 	_ = cmd.RegisterFlagCompletionFunc(kafkaFlagutil.FlagRegion, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return kafkautil.GetCloudProviderSizeValues(f, opts.provider, opts.region)
+		return GetCloudProviderSizeValues(f, opts.provider, opts.region)
 	})
 
 	return cmd
@@ -212,15 +207,8 @@ func runCreate(opts *options) error {
 		}
 
 		if !opts.bypassAmsCheck {
-			err = validateProviderAndRegion(opts, constants, conn)
-			if err != nil {
-				return err
-			}
-
-			err = validateSize(opts, constants, conn)
-			if err != nil {
-				return err
-			}
+			// TODO
+			///kafkacmdutil.ValidateKafka(opts, constants, conn)
 		}
 
 		payload = &kafkamgmtclient.KafkaRequestPayload{
@@ -329,114 +317,6 @@ func runCreate(opts *options) error {
 	return nil
 }
 
-func validateSize(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
-	amsType, err := accountmgmtutil.PickInstanceType(opts.userInstanceTypes)
-	if err != nil {
-		return err
-	}
-	sizes, err := kafkautil.GetValidSizes(conn, opts.Context, opts.provider, opts.region, &amsType)
-	if err != nil {
-		return err
-	}
-	if !slices.Contains(sizes, opts.size) {
-		// TODO error message
-		return errors.New("Whatever") //opts.localizer.MustLocalizeError("")
-	}
-	return nil
-}
-
-func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
-	opts.Logger.Debug("Validating provider and region")
-	cloudProviders, _, err := conn.API().
-		KafkaMgmt().
-		GetCloudProviders(opts.Context).
-		Execute()
-
-	if err != nil {
-		return err
-	}
-
-	var selectedProvider kafkamgmtclient.CloudProvider
-
-	providerNames := make([]string, 0)
-	for _, item := range cloudProviders.Items {
-		if !item.GetEnabled() {
-			continue
-		}
-		if item.GetId() == opts.provider {
-			selectedProvider = item
-		}
-		providerNames = append(providerNames, item.GetId())
-	}
-	opts.Logger.Debug("Validating cloud provider", opts.provider, ". Enabled providers: ", providerNames)
-
-	if !selectedProvider.Enabled {
-		providers := strings.Join(providerNames, ",")
-		providerEntry := localize.NewEntry("Provider", opts.provider)
-		validProvidersEntry := localize.NewEntry("Providers", providers)
-		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
-	}
-	// Temporary disabled due to breaking changes in the API
-	return nil // validateProviderRegion(conn, opts, selectedProvider, constants)
-}
-
-func ValidateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
-	cloudRegion, _, err := conn.API().
-		KafkaMgmt().
-		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).
-		Execute()
-
-	if err != nil {
-		return err
-	}
-
-	var selectedRegion kafkamgmtclient.CloudRegion
-	regionNames := make([]string, 0)
-	for _, item := range cloudRegion.Items {
-		if !item.GetEnabled() {
-			continue
-		}
-		regionNames = append(regionNames, item.GetId())
-		if item.GetId() == opts.region {
-			selectedRegion = item
-		}
-	}
-
-	if len(regionNames) != 0 {
-		opts.Logger.Debug("Validating region", opts.region, ". Enabled providers: ", regionNames)
-		regionsString := strings.Join(regionNames, ", ")
-		if !selectedRegion.Enabled {
-			regionEntry := localize.NewEntry("Region", opts.region)
-			validRegionsEntry := localize.NewEntry("Regions", regionsString)
-			providerEntry := localize.NewEntry("Provider", opts.provider)
-			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
-		}
-
-		if err != nil {
-			return err
-		}
-
-		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
-
-		stringTypes := accountmgmtutil.GetInstanceTypes(opts.userInstanceTypes)
-		for _, item := range regionInstanceTypes {
-			if slices.Contains(stringTypes, item) {
-				return nil
-			}
-		}
-
-		regionEntry := localize.NewEntry("Region", opts.region)
-		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(stringTypes, ", "))
-		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
-
-		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
-
-	}
-	opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
-
-	return nil
-}
-
 // set type to store the answers from the prompt with defaults
 type promptAnswers struct {
 	Name          string
@@ -485,7 +365,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	cloudProviders := cloudProviderResponse.GetItems()
-	cloudProviderNames := pkgKafka.GetEnabledCloudProviderNames(cloudProviders)
+	cloudProviderNames := GetEnabledCloudProviderNames(cloudProviders)
 
 	cloudProviderPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
@@ -498,7 +378,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	}
 
 	// get the selected provider type from the name selected
-	selectedCloudProvider := pkgKafka.FindCloudProviderByName(cloudProviders, answers.CloudProvider)
+	selectedCloudProvider := FindCloudProviderByName(cloudProviders, answers.CloudProvider)
 
 	// nolint
 	cloudRegionResponse, _, err := api.KafkaMgmt().GetCloudProviderRegions(opts.Context, selectedCloudProvider.GetId()).Execute()
@@ -509,7 +389,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	regions := cloudRegionResponse.GetItems()
 
 	stringTypes := accountmgmtutil.GetInstanceTypes(opts.userInstanceTypes)
-	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, &stringTypes)
+	regionIDs := GetEnabledCloudRegionIDs(regions, &stringTypes)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
@@ -526,7 +406,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 	if err != nil {
 		return nil, err
 	}
-	sizes, err := kafkautil.GetValidSizes(conn, opts.Context, opts.provider, opts.region, &amsType)
+	sizes, err := GetValidSizes(conn, opts.Context, opts.provider, opts.region, &amsType)
 	if err != nil {
 		return nil, err
 	}

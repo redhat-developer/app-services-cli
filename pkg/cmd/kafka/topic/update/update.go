@@ -7,7 +7,6 @@ import (
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/topiccmdutil"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 
