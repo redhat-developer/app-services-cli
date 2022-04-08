@@ -1,6 +1,10 @@
 
 <a name="v0.39.0"></a>
-## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.0) (2022-02-21)
+## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.39.0) (2022-02-21)
+
+
+<a name="v0.39.1"></a>
+## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.1) (2022-02-21)
 
 ### Bug Fixes
 
