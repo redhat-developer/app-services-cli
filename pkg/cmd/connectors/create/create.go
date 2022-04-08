@@ -1,6 +1,11 @@
 package create
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"os"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -11,7 +16,7 @@ import (
 )
 
 type options struct {
-	name string
+	file string
 
 	outputFormat string
 	f            *factory.Factory
@@ -30,15 +35,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("connector.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.name != "" {
-				// TODO
-			}
-
-			if !f.IOStreams.CanPrompt() && opts.name == "" {
-				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
-			} else if opts.name == "" {
-				opts.interactive = true
-			}
 
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
@@ -49,7 +45,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.name.flag.description"))
+	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("connector.file.flag.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -67,14 +63,39 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		// TODO
 	}
+	var specifiedFile *os.File
+	if opts.file == "" {
+		file, err1 := util.CreateFileFromStdin()
+		if err1 != nil {
+			return err
+		}
+		specifiedFile = file
+	} else {
+		if util.IsURL(opts.file) {
+			specifiedFile, err = util.GetContentFromFileURL(f.Context, opts.file)
+		} else {
+			specifiedFile, err = os.Open(opts.file)
+		}
+		if err != nil {
+			return err
+		}
+	}
+	defer specifiedFile.Close()
+
+	byteValue, err := ioutil.ReadAll(specifiedFile)
+	if err != nil {
+		return err
+	}
+	var connector connectormgmtclient.ConnectorRequest
+	err = json.Unmarshal(byteValue, &connector)
+	if err != nil {
+		return err
+	}
 
 	api := conn.API()
 
 	a := api.ConnectorsMgmt().ConnectorsApi.CreateConnector(f.Context)
-	a = a.ConnectorRequest(connectormgmtclient.ConnectorRequest{
-		Name: opts.name,
-		// TODO read file or stdin as connector request?
-	})
+	a = a.ConnectorRequest(connector)
 	a = a.Async(true)
 
 	response, httpRes, err := a.Execute()
