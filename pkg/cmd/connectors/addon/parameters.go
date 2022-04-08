@@ -43,7 +43,7 @@ func NewParametersCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
 
 	flags.AddOutput(&opts.outputFormat)
-	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connectors.common.id.flag.page"))
+	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connectors.common.id.flag"))
 
 	return cmd
 }
