@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/request"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/status"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/token"
 	cliversion "github.com/redhat-developer/app-services-cli/pkg/cmd/version"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/whoami"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -50,6 +51,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(completion.NewCompletionCommand(f))
 	cmd.AddCommand(whoami.NewWhoAmICmd(f))
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
+	cmd.AddCommand(token.NewTokenCmd(f))
 	// Registry commands
 	cmd.AddCommand(registry.NewServiceRegistryCommand(f))
 

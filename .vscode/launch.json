@@ -28,6 +28,17 @@
       ]
     },
     {
+      "name": "token",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "token"
+      ]
+    },
+    {
       "name": "Logout",
       "type": "go",
       "request": "launch",

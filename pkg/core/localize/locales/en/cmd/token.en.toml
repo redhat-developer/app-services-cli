@@ -1,0 +1,21 @@
+[token.cmd.shortDescription]
+description = "Short description for command"
+one = "Output the current token"
+
+[token.cmd.longDescription]
+description = "Long description for command"
+one = '''
+View the token of the current user.
+
+This command outputs the token for the user currently logged in.
+'''
+
+[token.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Output the current token
+$ rhoas token
+'''
+
+[token.log.info.tokenUnavailable]
+one = 'Token unavailable'
