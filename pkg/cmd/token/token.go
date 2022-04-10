@@ -20,7 +20,7 @@ type options struct {
 	localizer  localize.Localizer
 }
 
-func NewTokenCmd(f *factory.Factory) *cobra.Command {
+func NewAuthTokenCmd(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		Config:     f.Config,
 		Connection: f.Connection,
@@ -30,7 +30,7 @@ func NewTokenCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "token",
+		Use:     "auth-token",
 		Short:   f.Localizer.MustLocalize("token.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("token.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("token.cmd.example"),
