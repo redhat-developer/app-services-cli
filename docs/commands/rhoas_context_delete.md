@@ -1,10 +1,10 @@
 ## rhoas context delete
 
-Delete a service context
+Permanently delete a service context.
 
 ### Synopsis
 
-Delete a service context and assign associated service identifiers
+Delete a service context.
 
 ```
 rhoas context delete [flags]
@@ -13,11 +13,11 @@ rhoas context delete [flags]
 ### Examples
 
 ```
-## Delete the currently selected service context
+# Delete the currently-selected service context
 $ rhoas context delete
 
-## Delete a service context by name
-$ rhoas context delete --name my-context
+# Delete a service context by name
+$ rhoas context delete --name dev
 
 ```
 
