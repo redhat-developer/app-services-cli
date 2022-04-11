@@ -179,7 +179,7 @@ func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Fac
 		if cmd.Runnable() && !cmd.Hidden {
 			commandPath = cmd.CommandPath()
 		}
-		_, err1 := cmdutil.DoSelfUpdateOnceADay(cmdFactory.Logger, cmdFactory.Config)
+		_, err1 := cmdutil.DoSelfUpdateOnceADay(cmdFactory)
 		if err1 != nil {
 			cmdFactory.Logger.Errorf(cmdFactory.Localizer.MustLocalize("main.update.error", localize.NewEntry("Error", err)))
 		}
