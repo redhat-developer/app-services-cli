@@ -107,9 +107,10 @@ func mapResponseItemsToRows(items []connectormgmtclient.Connector) []itemRow {
 		name := k.GetName()
 
 		row := itemRow{
-			ID:    k.GetId(),
-			Name:  name,
-			Owner: k.GetOwner(),
+			ID:     k.GetId(),
+			Name:   name,
+			Owner:  k.GetOwner(),
+			Status: string(*k.Status.State),
 		}
 
 		rows[i] = row
