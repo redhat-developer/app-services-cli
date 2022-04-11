@@ -30,7 +30,7 @@ func NewAuthTokenCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "auth-token",
+		Use:     "authtoken",
 		Short:   f.Localizer.MustLocalize("token.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("token.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("token.cmd.example"),

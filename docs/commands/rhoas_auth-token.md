@@ -1,4 +1,4 @@
-## rhoas auth-token
+## rhoas authtoken
 
 Output the current token
 
@@ -10,7 +10,7 @@ This command outputs the token for the user currently logged in.
 
 
 ```
-rhoas auth-token [flags]
+rhoas authtoken [flags]
 ```
 
 ### Examples

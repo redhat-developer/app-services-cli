@@ -35,7 +35,7 @@
       "program": "${workspaceFolder}/cmd/rhoas",
       "env": {},
       "args": [
-        "auth-token"
+        "authtoken"
       ]
     },
     {

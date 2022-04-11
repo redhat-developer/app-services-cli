@@ -36,7 +36,7 @@ $ rhoas cluster connect
 
 ### SEE ALSO
 
-* [rhoas auth-token](rhoas_auth-token.md)	 - Output the current token
+* [rhoas authtoken](rhoas_authtoken.md)	 - Output the current token
 * [rhoas cluster](rhoas_cluster.md)	 - View and perform operations on your Kubernetes or OpenShift cluster
 * [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, or fish)
 * [rhoas kafka](rhoas_kafka.md)	 - Create, view, use, and manage your Kafka instances
