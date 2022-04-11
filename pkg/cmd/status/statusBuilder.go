@@ -74,32 +74,26 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 	status = &serviceStatus{}
 
 	if stringInSlice(servicespec.KafkaServiceName, services) {
-		kafkaResponse, err := contextutil.GetKafkaForServiceConfig(c.serviceConfig, factory)
-		if err != nil {
-			return status, err
+		kafkaResponse, err1 := contextutil.GetKafkaForServiceConfig(c.serviceConfig, factory)
+		if err1 != nil {
+			return status, err1
 		}
-		kafkaStatus, err := c.getKafkaStatus(kafkaResponse)
-		if err != nil {
-			return status, err
-		}
+		kafkaStatus := c.getKafkaStatus(kafkaResponse)
 		status.Kafka = kafkaStatus
 	}
 
 	if stringInSlice(servicespec.ServiceRegistryServiceName, services) {
-		registryResponse, err := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
-		if err != nil {
-			return status, err
+		registryResponse, err1 := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
+		if err1 != nil {
+			return status, err1
 		}
-		registry, newErr := c.getRegistryStatus(registryResponse)
-		if newErr != nil {
-			return status, newErr
-		}
+		registry := c.getRegistryStatus(registryResponse)
 		status.Registry = registry
 	}
 	return status, err
 }
 
-func (c *statusClient) getKafkaStatus(kafkaResponse *kafkamgmtclient.KafkaRequest) (status *kafkaStatus, err error) {
+func (c *statusClient) getKafkaStatus(kafkaResponse *kafkamgmtclient.KafkaRequest) (status *kafkaStatus) {
 	status = &kafkaStatus{
 		ID:                  kafkaResponse.GetId(),
 		Name:                kafkaResponse.GetName(),
@@ -111,10 +105,10 @@ func (c *statusClient) getKafkaStatus(kafkaResponse *kafkamgmtclient.KafkaReques
 		status.FailedReason = kafkaResponse.GetFailedReason()
 	}
 
-	return status, err
+	return status
 }
 
-func (c *statusClient) getRegistryStatus(registry *registrymgmtclient.Registry) (status *registryStatus, err error) {
+func (c *statusClient) getRegistryStatus(registry *registrymgmtclient.Registry) (status *registryStatus) {
 	status = &registryStatus{
 		ID:          registry.GetId(),
 		Name:        registry.GetName(),
@@ -122,7 +116,7 @@ func (c *statusClient) getRegistryStatus(registry *registrymgmtclient.Registry) 
 		Status:      string(registry.GetStatus()),
 	}
 
-	return status, err
+	return status
 }
 
 // Print prints the status information of all set services
