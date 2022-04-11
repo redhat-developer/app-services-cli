@@ -4,8 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
