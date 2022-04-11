@@ -8,7 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/rhysd/go-github-selfupdate/selfupdate"
+	"github.com/wtrocki/go-github-selfupdate/selfupdate"
 )
 
 // DoSelfUpdate checks for updates and prompts the user to update if there is a newer version available
