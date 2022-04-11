@@ -1,10 +1,13 @@
 ## rhoas context list
 
-List contexts
+List service contexts
 
 ### Synopsis
 
-List currently available service contexts
+List all service contexts. This command lists each service context, and indicates the context that is currently being used.
+
+To view the details of a service context, use the "rhoas context status" command.
+
 
 ```
 rhoas context list [flags]
@@ -13,7 +16,7 @@ rhoas context list [flags]
 ### Examples
 
 ```
-## List contexts
+# List contexts
 $ rhoas context list
 
 ```

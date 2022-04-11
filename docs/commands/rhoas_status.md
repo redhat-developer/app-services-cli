@@ -1,10 +1,10 @@
 ## rhoas status
 
-View the status of application services set in service context
+View the status of application services in a service context
 
 ### Synopsis
 
-View the status of your application services. This command shows the status of each of your application services instances set in service context. 
+View the status of your application services. This command shows the status of each of your application services instances that belong to a service context.
 
 To view the status of a specific application service, use "rhoas status [service]".
 

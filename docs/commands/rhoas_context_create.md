@@ -4,7 +4,12 @@ Create a service context
 
 ### Synopsis
 
-Create a service context and assign associated service identifiers
+Create a service context and assign associated service identifiers.
+
+A service context is a group of application service instances and their configuration details. By creating a service context, you can group together application service instances that you want to use together.
+
+After creating the service context, add application service instances to it by using the "rhoas context use-[service]" commands.
+
 
 ```
 rhoas context create [flags]
@@ -13,8 +18,8 @@ rhoas context create [flags]
 ### Examples
 
 ```
-## Create context
-$ rhoas context create --name my-context
+# Create context
+$ rhoas context create --name dev
 
 ```
 
