@@ -3,7 +3,8 @@ one='Group, share and manage your rhoas services'
 
 [context.cmd.longDescription]
 one='''
-Group your application service instances into service contexts.
+Group your service instances into reusable contexts.
+Context can be used when running other rhoas commands or to generate service configuration.
 
 A service context is a group of application service instances and their service identifiers. By using service contexts, you can group together application service instances that you want to use together.
 
