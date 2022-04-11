@@ -36,6 +36,7 @@ $ rhoas cluster connect
 
 ### SEE ALSO
 
+* [rhoas authtoken](rhoas_authtoken.md)	 - Output the current token
 * [rhoas cluster](rhoas_cluster.md)	 - View and perform operations on your Kubernetes or OpenShift cluster
 * [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, or fish)
 * [rhoas context](rhoas_context.md)	 - Group, share and manage your rhoas services
