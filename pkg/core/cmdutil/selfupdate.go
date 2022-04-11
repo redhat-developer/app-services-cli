@@ -14,10 +14,6 @@ import (
 // DoSelfUpdate checks for updates and prompts the user to update if there is a newer version available
 func DoSelfUpdate(f *factory.Factory) (bool, error) {
 	version := build.Version
-	// TODO temp
-	if build.IsDevBuild() {
-		version = "0.0.0"
-	}
 
 	v := semver.MustParse(version)
 	versionToUpdate, found, err := selfupdate.DefaultUpdater().DetectLatest(version)
