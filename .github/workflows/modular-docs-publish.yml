@@ -3,10 +3,8 @@
 name: Downstream docs publish
 
 on:
-  push:
-    tags:
-      - 'v*'
-    #branches: [main]
+  release:
+    types: [released]
       
 jobs:
   build:
