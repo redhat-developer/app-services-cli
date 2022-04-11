@@ -17,7 +17,9 @@ func DoSelfUpdate(f *factory.Factory) (bool, error) {
 
 	v := semver.MustParse(version)
 	versionToUpdate, found, err := selfupdate.DefaultUpdater().DetectLatest(version)
-
+	if err != nil {
+		return false, err
+	}
 	if found && versionToUpdate.Version.Equals(v) {
 		// latest version is the same as current version. It means current binary is up to date.
 		f.Logger.Debug("Current binary is the latest version", version)
