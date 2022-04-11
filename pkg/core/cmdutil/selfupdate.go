@@ -48,6 +48,7 @@ func DoSelfUpdate(f *factory.Factory) (bool, error) {
 
 }
 
+// DoSelfUpdate checks for updates once per day and prompts the user to update if there is a newer version available
 func DoSelfUpdateOnceADay(f *factory.Factory) (bool, error) {
 	if !f.IOStreams.CanPrompt() {
 		// Do not prompt if we are not in interactive mode
