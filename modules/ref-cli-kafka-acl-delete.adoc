@@ -38,7 +38,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
       `--all-accounts`::                Set the ACL principal to match all principals (users and service accounts)
       `--cluster`::                     Set the resource type to cluster
       `--group` _string_::              Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
-      `--instance-id` _string_::        Kafka instance ID. Uses the current instance if not set
+      `--instance-id` _string_::        Kafka instance ID. Uses the current instance if not set 
       `--operation` _string_::          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write"
   `-o`, `--output` _string_::           Specify the output format. Choose from: "json", "yaml", "yml"
       `--pattern-type` _string_::       Allows to specify arguments matching strategy [any literal prefix] (default "literal")

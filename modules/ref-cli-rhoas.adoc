@@ -49,6 +49,12 @@ $ rhoas cluster connect
 * link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 
  
+* link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
+
+ 
+* link:{path}#ref-rhoas-generate-config_{context}[rhoas generate-config]	 - Generate configurations for the service context
+
+ 
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
 
  
@@ -64,7 +70,7 @@ $ rhoas cluster connect
 * link:{path}#ref-rhoas-service-registry_{context}[rhoas service-registry]	 - Service Registry commands
 
  
-* link:{path}#ref-rhoas-status_{context}[rhoas status]	 - View the status of your application services
+* link:{path}#ref-rhoas-status_{context}[rhoas status]	 - View the status of application services in a service context
 
  
 * link:{path}#ref-rhoas-whoami_{context}[rhoas whoami]	 - Output the current username

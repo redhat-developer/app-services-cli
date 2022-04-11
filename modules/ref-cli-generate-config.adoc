@@ -1,0 +1,44 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-generate-config_{context}']
+= generate-config
+
+[role="_abstract"]
+Generate configurations for the service context
+
+[discrete]
+== Synopsis
+
+Generate configuration files for the service context to connect with to be used with various tools and platforms
+
+....
+rhoas generate-config [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Generate configurations for the current service context in json format
+$ rhoas generate-config --type json
+
+....
+
+[discrete]
+== Options
+
+      `--name` _string_::   Name of the context
+      `--type` _string_::   Type of configuration file to be generated
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+
