@@ -5,7 +5,8 @@ one = "Output the current token"
 [token.cmd.longDescription]
 description = "Long description for command"
 one = '''
-View the token of the current user.
+View the authentication token of the current user that can be used to 
+make general API requests against api.openshift.com APIs.
 
 This command outputs the token for the user currently logged in.
 '''
@@ -13,8 +14,8 @@ This command outputs the token for the user currently logged in.
 [token.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# Output the current token
-$ rhoas token
+# Returns header with token used for authorization
+$ echo Authorization: BEARER ${rhoas authtoken}
 '''
 
 [token.log.info.tokenUnavailable]

@@ -4,7 +4,8 @@ Output the current token
 
 ### Synopsis
 
-View the token of the current user.
+View the authentication token of the current user that can be used to 
+make general API requests against api.openshift.com APIs.
 
 This command outputs the token for the user currently logged in.
 
@@ -16,8 +17,8 @@ rhoas authtoken [flags]
 ### Examples
 
 ```
-# Output the current token
-$ rhoas token
+# Returns header with token used for authorization
+$ echo Authorization: BEARER ${rhoas authtoken}
 
 ```
 
