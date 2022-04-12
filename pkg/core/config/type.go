@@ -24,6 +24,7 @@ type Config struct {
 	Insecure        bool             `json:"insecure,omitempty" doc:"Enables insecure communication with the server. This disables verification of TLS certificates and host names."`
 	Scopes          []string         `json:"scopes,omitempty" doc:"OpenID scope. If this option is used it will replace completely the default scopes. Can be repeated multiple times to specify multiple scopes."`
 	Telemetry       string           `json:"telemetry,omitempty" doc:"Flag used to enable telemetry for user."`
+	LastUpdated     int64            `json:"last_updated,omitempty" doc:"Timestamp of the last update cli"`
 }
 
 // ServiceConfigMap is a map of configs for the application services

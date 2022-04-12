@@ -3,3 +3,6 @@ one = 'Error when initializing configuration: "{{.Error}}"'
 
 [main.context.error]
 one = 'Error when initializing service contexts: "{{.Error}}"'
+
+[main.update.error]
+one = 'Error when updating cli: "{{.Error}}"'

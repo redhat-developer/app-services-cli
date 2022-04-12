@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/root"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
@@ -177,6 +178,10 @@ func executeCommandWithTelemetry(rootCmd *cobra.Command, cmdFactory *factory.Fac
 		cmdFactory.Logger.SetDebug(flagutil.DebugEnabled())
 		if cmd.Runnable() && !cmd.Hidden {
 			commandPath = cmd.CommandPath()
+		}
+		_, newErr := cmdutil.DoSelfUpdateOnceADay(cmdFactory)
+		if newErr != nil {
+			cmdFactory.Logger.Errorf(cmdFactory.Localizer.MustLocalize("main.update.error", localize.NewEntry("Error", newErr)))
 		}
 	}
 	err = rootCmd.Execute()
