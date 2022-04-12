@@ -16,7 +16,8 @@ import (
 
 func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:         "connectors",
+		Use:         "connector",
+		Hidden:      true,
 		Annotations: map[string]string{doc.AnnotationName: "Connectors commands"},
 		Short:       f.Localizer.MustLocalize("connectors.cmd.shortDescription"),
 		Long:        f.Localizer.MustLocalize("connectors.cmd.longDescription"),
