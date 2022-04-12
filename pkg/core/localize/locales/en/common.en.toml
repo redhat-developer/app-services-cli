@@ -24,10 +24,10 @@ one = 'Do you agree to send anonymous data'
 
 [common.selfupdate.confirm]
 one = '''
-New version of the RHOAS CLI detected. 
-Do you want CLI to be updated to the latest version now?  
+RHOAS CLI can be updated to {{.Version}}. 
+Do you want to update now?  
 
-NOTE: You might need to run the CLI as root to make sure that binary file can be updated.
+NOTE: You might need to run command as root to update RHOAS CLI binary.
 '''
 
 [common.selfupdate.success]

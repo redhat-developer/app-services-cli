@@ -14,9 +14,10 @@ import (
 // DoSelfUpdate checks for updates and prompts the user to update if there is a newer version available
 func DoSelfUpdate(f *factory.Factory) (bool, error) {
 	version := build.Version
+	slug := build.RepositoryOwner + "/" + build.RepositoryName
 
 	v := semver.MustParse(version)
-	versionToUpdate, found, err := selfupdate.DefaultUpdater().DetectLatest(version)
+	versionToUpdate, found, err := selfupdate.DefaultUpdater().DetectLatest(slug)
 	if err != nil {
 		return false, err
 	}
@@ -27,7 +28,7 @@ func DoSelfUpdate(f *factory.Factory) (bool, error) {
 	}
 
 	promptConfirmName := &survey.Confirm{
-		Message: f.Localizer.MustLocalize("common.selfupdate.confirm"),
+		Message: f.Localizer.MustLocalize("common.selfupdate.confirm", localize.NewEntry("Version", versionToUpdate.Version.String())),
 	}
 
 	var confirmUpdate bool
@@ -40,7 +41,7 @@ func DoSelfUpdate(f *factory.Factory) (bool, error) {
 		return false, nil
 	}
 
-	latest, err := selfupdate.UpdateSelf(v, build.RepositoryOwner+"/"+build.RepositoryName)
+	latest, err := selfupdate.UpdateSelf(v, slug)
 	if err != nil {
 		return false, err
 	}
