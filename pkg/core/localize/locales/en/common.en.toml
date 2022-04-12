@@ -21,3 +21,14 @@ You can also disable telemetry by setting the "RHOAS_TELEMETRY" environment vari
 
 [common.telemetry.question]
 one = 'Do you agree to send anonymous data'
+
+[common.selfupdate.confirm]
+one = '''
+RHOAS CLI can be updated to {{.Version}}. 
+Do you want to update now?  
+
+NOTE: You might need to run command as root to update RHOAS CLI binary.
+'''
+
+[common.selfupdate.success]
+one = 'RHOAS CLI updated to version {{.Version}}'
