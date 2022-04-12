@@ -33,7 +33,7 @@ require (
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
 	github.com/ulikunitz/xz v0.5.10 // indirect
-	github.com/wtrocki/go-github-selfupdate v1.2.4 // indirect
+	github.com/wtrocki/go-github-selfupdate v1.2.4
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
