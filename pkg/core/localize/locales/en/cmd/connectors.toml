@@ -4,10 +4,11 @@ one = 'Get Addon parameters'
 ["connector.addon.params.cmd.longDescription"]
 one = 'Get Addon parameters'
 
+
 ["connector.addon.params.cmd.example"]
 one = '''
 ## Get addon parameters
-rhoas connectors addon-parameters ?
+rhoas connectors addon-parameters
 '''
 
 ["connectors.cluster.cmd.shortDescription"]
