@@ -58,7 +58,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddOutput(&opts.outputFormat)
 	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("connectors.common.list.flag.page"))
-	flags.IntVar(&opts.limit, "limit", 100, f.Localizer.MustLocalize("connectors.common.list.flag.limit"))
+	flags.IntVar(&opts.limit, "limit", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageSize)), f.Localizer.MustLocalize("connectors.common.list.flag.limit"))
 
 	return cmd
 }
