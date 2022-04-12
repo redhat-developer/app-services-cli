@@ -117,9 +117,8 @@ func NewListACLCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddInstanceID(&opts.kafkaID)
 
-	tabular := "table"
-
-	flags.AddOutputFormatted(&opts.output, true, &tabular)
+	table := dump.TableFormat
+	flags.AddOutputFormatted(&opts.output, true, &table)
 	flags.AddPage(&opts.page)
 	flags.AddSize(&opts.size)
 	flags.AddUser(&userID)
@@ -215,10 +214,8 @@ func runList(opts *options) (err error) {
 		opts.logger.Info("")
 		permissions := permissionsData.GetItems()
 		rows := aclcmdutil.MapACLsToTableRows(permissions, opts.localizer)
-		dump.Formatted(opts.io.Out, opts.output, rows)
+		return dump.Formatted(opts.io.Out, opts.output, rows)
 	default:
 		return dump.Formatted(opts.io.Out, opts.output, permissionsData)
 	}
-
-	return nil
 }

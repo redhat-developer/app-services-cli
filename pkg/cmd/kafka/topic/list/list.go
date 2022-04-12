@@ -102,7 +102,8 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
-	flags.AddOutput(&opts.output)
+	table := dump.TableFormat
+	flags.AddOutputFormatted(&opts.output, true, &table)
 	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.topic.list.flag.search.description"))
 	flags.Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.topic.list.flag.page.description"))
 	flags.Int32VarP(&opts.size, "size", "", cmdutil.ConvertSizeValueToInt32(build.DefaultPageSize), opts.localizer.MustLocalize("kafka.topic.list.flag.size.description"))
@@ -170,12 +171,10 @@ func runCmd(opts *options) error {
 	case dump.TableFormat:
 		topics := topicData.GetItems()
 		rows := mapTopicResultsToTableFormat(topics)
-		dump.Table(stdout, rows)
+		return dump.Formatted(stdout, opts.output, rows)
 	default:
 		return dump.Formatted(stdout, opts.output, topicData)
 	}
-
-	return nil
 }
 
 func mapTopicResultsToTableFormat(topics []kafkainstanceclient.Topic) []topicRow {

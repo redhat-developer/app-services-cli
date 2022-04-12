@@ -113,14 +113,12 @@ func runList(opts *options) error {
 
 	switch opts.outputFormat {
 	case dump.TableFormat:
-		rows := mapResponseItemsToRows(mappings)
-		dump.Formatted(opts.IO.Out, opts.outputFormat, rows)
 		opts.Logger.Info("")
+		rows := mapResponseItemsToRows(mappings)
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, rows)
 	default:
 		return dump.Formatted(stdout, opts.outputFormat, mappings)
 	}
-
-	return nil
 }
 
 func mapResponseItemsToRows(artifacts []registryinstanceclient.RoleMapping) []registryRow {
