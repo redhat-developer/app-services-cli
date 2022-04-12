@@ -20,7 +20,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.2.0
-	github.com/openconfig/goyang v0.4.0
+	github.com/openconfig/goyang v1.0.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0

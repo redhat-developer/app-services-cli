@@ -11,12 +11,12 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       -
         name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: 1.17.x
 
@@ -29,7 +29,7 @@ jobs:
             echo "::set-output name=prerelease::true"
           fi
       - id: set-version
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           script: |
             const version = context.ref.replace(/^refs\/tags\//, '').replace(/^v/, '')
@@ -67,7 +67,7 @@ jobs:
 
       - name: Notify Guides of new version
         if: steps.check-tag.outputs.prerelease == 'false'
-        uses: peter-evans/repository-dispatch@v1
+        uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.APP_SERVICES_CI }}
           repository: redhat-developer/app-services-guides
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.release.steps.check-tag.outputs.prerelease == 'false'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Notify tools repo
         uses: actions/github-script@v6
         with: 
