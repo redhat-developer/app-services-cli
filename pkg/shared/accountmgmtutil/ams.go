@@ -57,10 +57,10 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 	for _, quota := range quotaCostGet.GetItems() {
 		for _, quotaResource := range quota.GetRelatedResources() {
 			if quotaResource.GetResourceName() == spec.ResourceName {
-				remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
-					quotas = append(quotas, QuotaSpec{QuotaTrialType, remainingQuota})
+					quotas = append(quotas, QuotaSpec{QuotaTrialType, 0})
 				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
+					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					quotas = append(quotas, QuotaSpec{QuotaStandardType, remainingQuota})
 				}
 			}
@@ -79,7 +79,7 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	return account.Organization.GetId(), nil
 }
 
-// PickInstanceType - Standard instance always wins!!!
+// PickInstanceType - Standard instance always wins!
 // This function should not exist but it does represents some requirement
 // from business to only pick one instance type when two are presented.
 // When standard instance type is present in user instances it should always take precedence
@@ -100,7 +100,7 @@ func PickInstanceType(amsTypes []QuotaSpec) (string, error) {
 		}
 	}
 
-	return QuotaDeveloperType, nil
+	return QuotaTrialType, nil
 }
 
 func GetInstanceTypes(amsTypes []QuotaSpec) []string {

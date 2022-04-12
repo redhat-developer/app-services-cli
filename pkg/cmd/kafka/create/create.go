@@ -51,6 +51,8 @@ type options struct {
 	bypassAmsCheck bool
 	dryRun         bool
 
+	f *factory.Factory
+	// TODO remove those
 	IO                *iostreams.IOStreams
 	Connection        factory.ConnectionFunc
 	Logger            logging.Logger
@@ -76,6 +78,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		localizer:      f.Localizer,
 		Context:        f.Context,
 		ServiceContext: f.ServiceContext,
+		f:              f,
 
 		multiAZ: defaultMultiAZ,
 	}
@@ -333,8 +336,6 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
-	api := conn.API()
-
 	validator := &kafkacmdutil.Validator{
 		Localizer:  opts.localizer,
 		Connection: opts.Connection,
@@ -354,18 +355,11 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
-	// fetch all cloud available providers
-	cloudProviderResponse, httpRes, err := api.KafkaMgmt().GetCloudProviders(opts.Context).Execute()
-	if httpRes != nil {
-		defer httpRes.Body.Close()
-	}
-
 	if err != nil {
 		return nil, err
 	}
 
-	cloudProviders := cloudProviderResponse.GetItems()
-	cloudProviderNames := GetEnabledCloudProviderNames(cloudProviders)
+	cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
 
 	cloudProviderPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
@@ -377,19 +371,11 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		return nil, err
 	}
 
-	// get the selected provider type from the name selected
-	selectedCloudProvider := FindCloudProviderByName(cloudProviders, answers.CloudProvider)
-
-	// nolint
-	cloudRegionResponse, _, err := api.KafkaMgmt().GetCloudProviderRegions(opts.Context, selectedCloudProvider.GetId()).Execute()
+	stringTypes := accountmgmtutil.GetInstanceTypes(opts.userInstanceTypes)
+	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, &stringTypes)
 	if err != nil {
 		return nil, err
 	}
-
-	regions := cloudRegionResponse.GetItems()
-
-	stringTypes := accountmgmtutil.GetInstanceTypes(opts.userInstanceTypes)
-	regionIDs := GetEnabledCloudRegionIDs(regions, &stringTypes)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
