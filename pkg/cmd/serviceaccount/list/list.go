@@ -23,8 +23,7 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	output       string
-	outputFormat string
+	output string
 }
 
 // svcAcctRow contains the properties used to
@@ -67,9 +66,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
-	flags.AddOutput(&opts.outputFormat)
-
 	return cmd
 }
 
@@ -94,12 +90,11 @@ func runList(opts *options) (err error) {
 	switch opts.output {
 	case dump.TableFormat:
 		rows := mapResponseItemsToRows(serviceaccounts)
-		dump.Table(outStream, rows)
+		return dump.Formatted(outStream, opts.output, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.output, res)
 	}
 
-	return nil
 }
 
 func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {

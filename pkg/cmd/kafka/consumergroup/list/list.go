@@ -93,7 +93,8 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 
-	flags.AddOutput(&opts.output)
+	table := dump.TableFormat
+	flags.AddOutputFormatted(&opts.output, true, &table)
 	flags.StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.topic.description"))
 	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.search"))
 	flags.Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.page"))
@@ -167,12 +168,10 @@ func runList(opts *options) (err error) {
 		opts.Logger.Info("")
 		consumerGroups := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
-		dump.Table(opts.IO.Out, rows)
+		return dump.Formatted(opts.IO.Out, opts.output, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.output, consumerGroupData)
 	}
-
-	return nil
 }
 
 func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {

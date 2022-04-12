@@ -89,7 +89,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flags := kafkaFlagutil.NewFlagSet(cmd, opts.localizer)
 
-	flags.AddOutput(&opts.outputFormat)
+	table := dump.TableFormat
+	flags.AddOutputFormatted(&opts.outputFormat, true, &table)
 	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
 	flags.IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
 	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
@@ -134,12 +135,11 @@ func runList(opts *options) error {
 		} else {
 			rows = mapResponseItemsToRows(response.GetItems(), "-")
 		}
-		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 	}
-	return nil
 }
 
 func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string) []kafkaRow {
