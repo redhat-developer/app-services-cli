@@ -92,7 +92,7 @@ one = 'Connectors commands'
 
 ["connectors.cmd.example"]
 one = '''   
-## List connec
+## List connectors
 rhoas connectors list
 '''
 
@@ -111,14 +111,29 @@ rhoas connectors create --file=myconnector.json
 cat myconnector.json | rhoas connectors create
 '''
 
-["connector.create.info.success"]
+["connectors.create.info.success"]
 one = 'Successfully created connector'
+
+["connector.update.cmd.shortDescription"]
+one = 'Create connector'
+
+["connector.update.cmd.longDescription"]
+one = 'Create connector'
+
+["connector.update.cmd.example"]
+one = '''
+## Create connector
+rhoas connectors create --file=myconnector.json
+
+## Create connector from stdin
+cat myconnector.json | rhoas connectors create
+'''
+
+["connector.update.info.success"]
+one = 'Successfully updated connector'
 
 ["connector.file.flag.description"]
 one = 'Location of the connector json file describing the connector'
-
-["connectors.create.info.success"]
-one = 'Succesfully created connector'
 
 ["connector.delete.cmd.shortDescription"]
 one = 'Delete connector'
@@ -165,14 +180,53 @@ one = '''
 rhoas connectors list
 '''
 
-["connector.namespaces.cmd.shortDescription"]
-one = 'Get connector namespaces'
+[connector.namespace.cmd.shortDescription]
+one = 'Connector namespace commands'
 
-["connector.namespaces.cmd.longDescription"]
-one = 'Get connector namespaces'
+[connector.namespace.cmd.longDescription]
+one = 'Commands to manage namespaces for connectors'
 
-["connector.namespaces.cmd.example"]
+[connector.namespace.cmd.example]
 one = '''
-## Get connector namespaces
-rhoas connector namespaces
+# List namespaces in the connector instance
+$ rhoas connector namespace list
+
+# Create a namespace in connector instance
+$ rhoas connector name space create --name "my-namespace"
 '''
+
+[connector.namespace.create.flag.name.description]
+one = 'Name of the namespace'
+
+[connector.namespace.create.flag.eval.description]
+one = 'Create an evaluation namespace'
+
+["connector.namespace.list.cmd.shortDescription"]
+one = 'Get connector namespaces'
+
+["connector.namespace.list.cmd.longDescription"]
+one = 'Get connector namespaces'
+
+["connector.namespace.list.cmd.example"]
+one = '''
+## Get connector namespaces list
+rhoas connector namespaces list
+'''
+
+["connector.namespace.create.cmd.shortDescription"]
+one = 'Create a connector namespace'
+
+["connector.namespace.create.cmd.longDescription"]
+one = 'Create a connector namespace'
+
+["connector.namespace.create.cmd.example"]
+one = '''
+# Create a connector namespace
+rhoas connector namespaces create --name "my-namespace"
+
+# Create an evaluation namespace
+rhoas connector namespaces create --name "my-namespace" --eval
+'''
+
+["connector.namespace.create.info.success"]
+one = 'Successfully created namespace'
