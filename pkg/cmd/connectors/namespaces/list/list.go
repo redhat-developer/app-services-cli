@@ -1,4 +1,4 @@
-package namespaces
+package list
 
 import (
 	"strconv"
@@ -40,10 +40,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "namespaces",
-		Short:   f.Localizer.MustLocalize("connector.namespaces.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.namespaces.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.namespaces.cmd.example"),
+		Use:     "list",
+		Short:   f.Localizer.MustLocalize("connector.namespace.list.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.namespace.list.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.namespace.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
