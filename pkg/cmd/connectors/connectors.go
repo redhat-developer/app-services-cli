@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/namespaces"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/update"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -32,8 +33,9 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 		delete.NewDeleteCommand(f),
 		list.NewListCommand(f),
 		describe.NewDescribeCommand(f),
-		namespaces.NewListCommand(f),
+		namespaces.NewNameSpaceCommand(f),
 		addon.NewParametersCommand(f),
+		update.NewUpdateCommand(f),
 	)
 
 	return cmd
