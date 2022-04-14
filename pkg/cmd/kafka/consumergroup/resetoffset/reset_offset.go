@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup/groupcmdutil"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"

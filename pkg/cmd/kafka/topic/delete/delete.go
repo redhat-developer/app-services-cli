@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"

@@ -69,7 +69,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name"))
 
-	if err := kafkautil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
+	if err := flagutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
 	}
 
