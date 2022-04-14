@@ -142,7 +142,7 @@ func (c *Connection) Logout(ctx context.Context) (err error) {
 
 // API Creates a new API type which is a single type for multiple APIs
 func (c *Connection) API() api.API {
-	apiClient := defaultapi.New(&defaultapi.Config{
+	apiClient := defaultapi.New(&api.Config{
 		HTTPClient:     c.defaultHTTPClient,
 		UserAgent:      build.DefaultUserAgentPrefix + build.Version,
 		MasAccessToken: c.MASToken.AccessToken,

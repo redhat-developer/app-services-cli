@@ -1,8 +1,12 @@
 package api
 
 import (
+	"net/http"
+	"net/url"
+
 	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
@@ -22,4 +26,15 @@ type API interface {
 	AccountMgmt() amsclient.AppServicesApi
 	RBAC() rbac.RbacAPI
 	GenericAPI() generic.GenericAPI
+	GetConfig() Config
+}
+
+type Config struct {
+	AccessToken    string
+	MasAccessToken string
+	ApiURL         *url.URL
+	ConsoleURL     *url.URL
+	UserAgent      string
+	HTTPClient     *http.Client
+	Logger         logging.Logger
 }
