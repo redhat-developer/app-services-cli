@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
@@ -126,7 +127,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddYes(&opts.skipConfirm)
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.update.flag.name"))
 
-	_ = kafkautil.RegisterNameFlagCompletionFunc(cmd, f)
+	_ = kafkaflagutil.RegisterNameFlagCompletionFunc(cmd, f)
 	_ = flagutil.RegisterUserCompletionFunc(cmd, "owner", f)
 
 	return cmd

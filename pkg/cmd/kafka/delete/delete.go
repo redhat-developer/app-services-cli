@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
@@ -80,7 +81,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.delete.flag.id"))
 	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.delete.flag.name"))
 
-	if err := kafkautil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
+	if err := kafkaflagutil.RegisterNameFlagCompletionFunc(cmd, f); err != nil {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.common.error.load.completions.name.flag"), err)
 	}
 
