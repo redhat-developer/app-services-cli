@@ -67,7 +67,7 @@ func New(cfg *Config) api.API {
 
 // KafkaMgmt returns a new Kafka Management API client instance
 func (a *defaultAPI) KafkaMgmt() kafkamgmtclient.DefaultApi {
-	tc := a.createOAuthTransport(a.AccessToken)
+	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
 		BaseURL:    a.ApiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
@@ -80,7 +80,7 @@ func (a *defaultAPI) KafkaMgmt() kafkamgmtclient.DefaultApi {
 
 // ServiceRegistryMgmt return a new Service Registry Management API client instance
 func (a *defaultAPI) ServiceRegistryMgmt() registrymgmtclient.RegistriesApi {
-	tc := a.createOAuthTransport(a.AccessToken)
+	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := registrymgmt.NewAPIClient(&registrymgmt.Config{
 		BaseURL:    a.ApiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
@@ -93,7 +93,7 @@ func (a *defaultAPI) ServiceRegistryMgmt() registrymgmtclient.RegistriesApi {
 
 // ServiceAccountMgmt return a new Service Account Management API client instance
 func (a *defaultAPI) ServiceAccountMgmt() kafkamgmtclient.SecurityApi {
-	tc := a.createOAuthTransport(a.AccessToken)
+	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
 		BaseURL:    a.ApiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
@@ -166,7 +166,7 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 	client := kafkainstance.NewAPIClient(&kafkainstance.Config{
 		BaseURL:    apiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
-		HTTPClient: a.createOAuthTransport(a.MasAccessToken),
+		HTTPClient: a.CreateOAuthTransport(a.MasAccessToken),
 		UserAgent:  a.UserAgent,
 	})
 
@@ -227,7 +227,7 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 	client := registryinstance.NewAPIClient(&registryinstance.Config{
 		BaseURL:    baseURL,
 		Debug:      a.Logger.DebugEnabled(),
-		HTTPClient: a.createOAuthTransport(a.MasAccessToken),
+		HTTPClient: a.CreateOAuthTransport(a.MasAccessToken),
 		UserAgent:  build.DefaultUserAgentPrefix + build.Version,
 	})
 
@@ -235,7 +235,7 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 }
 
 func (a *defaultAPI) GenericAPI() generic.GenericAPI {
-	tc := a.createOAuthTransport(a.AccessToken)
+	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := generic.NewGenericAPIClient(&generic.Config{
 		BaseURL:    a.ApiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
@@ -246,7 +246,7 @@ func (a *defaultAPI) GenericAPI() generic.GenericAPI {
 }
 
 func (a *defaultAPI) ConnectorsMgmt() connectormgmtclient.APIClient {
-	tc := a.createOAuthTransport(a.AccessToken)
+	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := connectormgmt.NewAPIClient(&connectormgmt.Config{
 		BaseURL:    a.ApiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
@@ -264,7 +264,7 @@ func (a *defaultAPI) AccountMgmt() amsclient.AppServicesApi {
 	cfg.Host = a.ApiURL.Host
 	cfg.UserAgent = a.UserAgent
 
-	cfg.HTTPClient = a.createOAuthTransport(a.AccessToken)
+	cfg.HTTPClient = a.CreateOAuthTransport(a.AccessToken)
 
 	apiClient := amsclient.NewAPIClient(cfg)
 
@@ -275,7 +275,7 @@ func (a *defaultAPI) AccountMgmt() amsclient.AppServicesApi {
 func (a *defaultAPI) RBAC() rbac.RbacAPI {
 	rbacAPI := rbac.RbacAPI{
 		PrincipalAPI: func() rbac.PrincipalAPI {
-			cl := a.createOAuthTransport(a.AccessToken)
+			cl := a.CreateOAuthTransport(a.AccessToken)
 			cfg := rbac.Config{
 				HTTPClient: cl,
 				Debug:      a.Logger.DebugEnabled(),
@@ -288,7 +288,7 @@ func (a *defaultAPI) RBAC() rbac.RbacAPI {
 }
 
 // wraps the HTTP client with an OAuth2 Transport layer to provide automatic token refreshing
-func (a *defaultAPI) createOAuthTransport(accessToken string) *http.Client {
+func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{
 			AccessToken: accessToken,
