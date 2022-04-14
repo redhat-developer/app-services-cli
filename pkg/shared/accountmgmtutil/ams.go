@@ -35,8 +35,19 @@ func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connect
 
 // QuotaSpec - contains quota name and remianing quota count
 type QuotaSpec struct {
-	name  string
-	quota int
+	Name  string
+	Quota int
+}
+
+func GetUserSupportedInstanceType(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota *QuotaSpec, err error) {
+	userInstanceTypes, err := GetUserSupportedInstanceTypes(ctx, spec, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	amsType := PickInstanceType(userInstanceTypes)
+
+	return amsType, nil
 }
 
 func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
@@ -83,30 +94,16 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 // This function should not exist but it does represents some requirement
 // from business to only pick one instance type when two are presented.
 // When standard instance type is present in user instances it should always take precedence
-func PickInstanceType(amsTypes []QuotaSpec) (string, error) {
-	if amsTypes == nil {
-		// TODO better error
-		return "", errors.New("Cannot pick the fight between AMS instance types. No one will win")
-	}
-	if len(amsTypes) == 0 {
-		// TODO better error
-		return "", errors.New("No fighters to pick the fight. Sorry")
-
+func PickInstanceType(amsTypes []QuotaSpec) *QuotaSpec {
+	if amsTypes == nil || len(amsTypes) == 0 {
+		return nil
 	}
 
 	for _, amsType := range amsTypes {
-		if amsType.name == QuotaStandardType {
-			return QuotaStandardType, nil
+		if amsType.Name == QuotaStandardType {
+			return &amsType
 		}
 	}
 
-	return QuotaTrialType, nil
-}
-
-func GetInstanceTypes(amsTypes []QuotaSpec) []string {
-	var instanceTypes = make([]string, len(amsTypes))
-	for i, amsType := range amsTypes {
-		instanceTypes[i] = amsType.name
-	}
-	return instanceTypes
+	return &amsTypes[0]
 }
