@@ -23,3 +23,18 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 
 	return validRegions, cobra.ShellCompDirectiveNoSpace
 }
+
+// GetEnabledCloudProviderNames returns a list of valid kafka sizes for the specifed region and ams instance types
+func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionId string) (validRegions []string, directive cobra.ShellCompDirective) {
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	// We need both values to provide a valid list of sizes
+	if providerID == "" || regionId == "" {
+		return
+	}
+
+	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
+	validRegions, _ = GetValidKafkaSizes(f, providerID, regionId, nil)
+
+	return validRegions, cobra.ShellCompDirectiveNoSpace
+}

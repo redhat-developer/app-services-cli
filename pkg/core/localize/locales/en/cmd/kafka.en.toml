@@ -323,6 +323,9 @@ one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
 
+[kafka.create.error.userInstanceType.notFound]
+one = 'Cannot fetch user allowed instance type"'
+
 [kafka.create.error.oneinstance]
 one = 'maximum number of allowed instances reached. Please review all instances that your user has access to and delete one or more instances before creating a new one.'
 

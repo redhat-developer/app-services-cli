@@ -18,7 +18,7 @@ type ValidatorInput struct {
 	region   string
 	size     string
 
-	userInstanceTypes []accountmgmtutil.QuotaSpec
+	userAMSInstanceType *accountmgmtutil.QuotaSpec
 
 	f         *factory.Factory
 	constants *remote.DynamicServiceConstants
@@ -100,15 +100,15 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 
 		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
-		stringTypes := accountmgmtutil.GetInstanceTypes(input.userInstanceTypes)
+		backendType := mapAmsTypeToBackendType(input.userAMSInstanceType)
 		for _, item := range regionInstanceTypes {
-			if slices.Contains(stringTypes, item) {
+			if backendType == item {
 				return nil
 			}
 		}
 
 		regionEntry := localize.NewEntry("Region", input.region)
-		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(stringTypes, ", "))
+		userTypesEntry := localize.NewEntry("MyTypes", input.userAMSInstanceType.Name)
 		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
 		return f.Localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
@@ -120,11 +120,7 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 }
 
 func ValidateSize(input *ValidatorInput) error {
-	amsType, err := accountmgmtutil.PickInstanceType(input.userInstanceTypes)
-	if err != nil {
-		return err
-	}
-	sizes, err := GetValidSizes(input.conn, input.f.Context, input.provider, input.region, &amsType)
+	sizes, err := GetValidKafkaSizes(input.f, input.provider, input.region, input.userAMSInstanceType)
 	if err != nil {
 		return err
 	}
