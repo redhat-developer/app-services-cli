@@ -16,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
@@ -33,36 +32,18 @@ import (
 
 // defaultAPI is a type which defines a number of API creator functions
 type defaultAPI struct {
-	AccessToken    string
-	MasAccessToken string
-	ApiURL         *url.URL
-	ConsoleURL     *url.URL
-	UserAgent      string
-	HTTPClient     *http.Client
-	Logger         logging.Logger
-}
-
-type Config struct {
-	AccessToken    string
-	MasAccessToken string
-	ApiURL         *url.URL
-	ConsoleURL     *url.URL
-	UserAgent      string
-	HTTPClient     *http.Client
-	Logger         logging.Logger
+	api.Config
 }
 
 // New creates a new default API client wrapper
-func New(cfg *Config) api.API {
+func New(cfg *api.Config) api.API {
 	return &defaultAPI{
-		AccessToken:    cfg.AccessToken,
-		MasAccessToken: cfg.MasAccessToken,
-		ApiURL:         cfg.ApiURL,
-		ConsoleURL:     cfg.ConsoleURL,
-		UserAgent:      cfg.UserAgent,
-		HTTPClient:     cfg.HTTPClient,
-		Logger:         cfg.Logger,
+		Config: *cfg,
 	}
+}
+
+func (a *defaultAPI) GetConfig() api.Config {
+	return a.Config
 }
 
 // KafkaMgmt returns a new Kafka Management API client instance
