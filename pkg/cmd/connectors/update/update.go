@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -18,7 +19,6 @@ type options struct {
 
 	outputFormat string
 	f            *factory.Factory
-	interactive  bool
 	id           string
 }
 
@@ -46,9 +46,9 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, f.Localizer)
+	flags := connectorcmdutil.NewFlagSet(cmd, f)
 	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("connector.file.flag.description"))
-	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.file.flag.description"))
+	flags.AddConnectorID(&opts.id)
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -64,9 +64,6 @@ func runUpdateCommand(opts *options) error {
 		return err
 	}
 
-	if opts.interactive {
-		// TODO
-	}
 	var specifiedFile *os.File
 	if opts.file == "" {
 		file, err1 := util.CreateFileFromStdin()

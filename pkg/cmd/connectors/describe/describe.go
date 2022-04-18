@@ -1,6 +1,7 @@
 package describe
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -13,8 +14,7 @@ type options struct {
 	id           string
 	outputFormat string
 
-	f           *factory.Factory
-	interactive bool
+	f *factory.Factory
 }
 
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
@@ -29,15 +29,6 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("connector.describe.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.id != "" {
-				// TODO
-			}
-
-			if !f.IOStreams.CanPrompt() && opts.id == "" {
-				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
-			} else if opts.id == "" {
-				opts.interactive = true
-			}
 
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
@@ -47,8 +38,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			return runDescribe(opts)
 		},
 	}
-	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.common.flag.id.description"))
+	flags := connectorcmdutil.NewFlagSet(cmd, f)
+	_ = flags.AddConnectorID(&opts.id).Required()
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -61,10 +52,6 @@ func runDescribe(opts *options) error {
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
-	}
-
-	if opts.interactive {
-		// TODO
 	}
 
 	api := conn.API()
