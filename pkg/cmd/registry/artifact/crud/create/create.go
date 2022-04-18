@@ -149,7 +149,7 @@ func runCreate(opts *options) error {
 			}
 		}
 	} else {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.reading.file"))
+		opts.Logger.Info(opts.localizer.MustLocalize("common.message.reading.file"))
 		specifiedFile, err = util.CreateFileFromStdin()
 		if err != nil {
 			return err

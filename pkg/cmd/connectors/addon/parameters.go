@@ -1,6 +1,7 @@
 package addon
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -47,10 +48,10 @@ func NewParametersCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, f.Localizer)
+	flags := connectorcmdutil.NewFlagSet(cmd, f)
 
 	flags.AddOutput(&opts.outputFormat)
-	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connectors.common.id.flag"))
+	_ = flags.AddConnectorID(&opts.id).Required
 
 	return cmd
 }

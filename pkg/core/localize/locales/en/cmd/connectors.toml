@@ -59,6 +59,9 @@ one = 'Name of the cluster to create'
 ["connectors.cluster.delete.info.success"]
 one = 'Successfully deleted cluster'
 
+[connectors.cluster.delete.confirmDialog.message]
+one = 'Are you sure you want to delete the connector cluster with id "{{.ID}}"?'
+
 ["connector.cluster.list.cmd.shortDescription"]
 one = 'List connectors clusters'
 
@@ -142,13 +145,20 @@ one = 'Delete connector'
 one = 'Delete connector'
 
 ["connector.delete.cmd.example"]
-one = 'TODO'
+one = '''
+# Delete connector
+rhoas connector delete --id=c9b71ucotd37bufoamkg
+'''
 
 ["connector.delete.flag.id.description"]
 one = 'Id of the connector to delete'
 
 ["connectors.delete.info.success"]
 one = 'Successfully deleted connector'
+
+
+[connectors.delete.confirmDialog.message]
+one = 'Are you sure you want to delete the connector with id "{{.ID}}"?'
 
 ["connector.describe.cmd.shortDescription"]
 one = 'Get connector details'

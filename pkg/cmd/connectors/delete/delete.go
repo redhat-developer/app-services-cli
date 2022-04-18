@@ -1,8 +1,11 @@
 package delete
 
 import (
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
@@ -14,7 +17,7 @@ type options struct {
 	outputFormat string
 
 	f           *factory.Factory
-	interactive bool
+	skipConfirm bool
 }
 
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
@@ -33,12 +36,6 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				// TODO
 			}
 
-			if !f.IOStreams.CanPrompt() && opts.id == "" {
-				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
-			} else if opts.id == "" {
-				opts.interactive = true
-			}
-
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
@@ -47,9 +44,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			return runDelete(opts)
 		},
 	}
-	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.delete.flag.id.description"))
+
+	flags := connectorcmdutil.NewFlagSet(cmd, f)
 	flags.AddOutput(&opts.outputFormat)
+	_ = flags.AddConnectorID(&opts.id).Required()
+	flags.AddYes(&opts.skipConfirm)
 
 	return cmd
 }
@@ -57,14 +56,21 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 func runDelete(opts *options) error {
 	f := opts.f
 
+	if !opts.skipConfirm {
+		confirm, promptErr := promptConfirmDelete(opts)
+		if promptErr != nil {
+			return promptErr
+		}
+		if !confirm {
+			opts.f.Logger.Debug("User has chosen to not delete connector cluster")
+			return nil
+		}
+	}
+
 	var conn connection.Connection
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
-	}
-
-	if opts.interactive {
-		// TODO
 	}
 
 	api := conn.API()
@@ -87,4 +93,16 @@ func runDelete(opts *options) error {
 	f.Logger.Info(f.Localizer.MustLocalize("connectors.delete.info.success"))
 
 	return nil
+}
+
+func promptConfirmDelete(opts *options) (bool, error) {
+	promptConfirm := survey.Confirm{
+		Message: opts.f.Localizer.MustLocalize("connectors.delete.confirmDialog.message", localize.NewEntry("ID", opts.id)),
+	}
+
+	var confirmDelete bool
+	if err := survey.AskOne(&promptConfirm, &confirmDelete); err != nil {
+		return false, err
+	}
+	return confirmDelete, nil
 }
