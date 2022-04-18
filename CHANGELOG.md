@@ -1,4 +1,53 @@
 
+<a name="v0.40.0"></a>
+## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.40.0) (2022-04-12)
+
+### Bug Fixes
+
+* include toml files in build ([#1477](https://github.com/redhat-developer/app-services-cli/issues/1477))
+* suspend updating modular docs for prereleases ([#1521](https://github.com/redhat-developer/app-services-cli/issues/1521))
+* regenerate documentation
+* status builder lint issues
+* refactor status command
+* handle custom context location
+* rename context maps
+* address review comments
+* message for partition limit ([#1459](https://github.com/redhat-developer/app-services-cli/issues/1459))
+* add migration to the contexts
+* add validation for context create
+* build failing at test ([#1469](https://github.com/redhat-developer/app-services-cli/issues/1469))
+* update golang version
+* update golang version
+* update go in CI/CD workflow ([#1514](https://github.com/redhat-developer/app-services-cli/issues/1514))
+* update telemetry setup
+* add server side backed up metrics ([#1493](https://github.com/redhat-developer/app-services-cli/issues/1493))
+* add support for calling any endpoint from control plane ([#1497](https://github.com/redhat-developer/app-services-cli/issues/1497))
+* changes required for Kafka SDK update ([#1470](https://github.com/redhat-developer/app-services-cli/issues/1470))
+* enable self updating CLI ([#1509](https://github.com/redhat-developer/app-services-cli/issues/1509))
+* **context:** fixes bugs and add comments
+* **context:** examples of re-used commands
+* **deps:** update docusaurus monorepo to v2.0.0-beta.18
+* **deps:** update module github.com/golang-jwt/jwt/v4 to v4.4.0
+* **deps:** update all
+* **deps:** update module github.com/golang-jwt/jwt/v4 to v4.4.1
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.4
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.3
+* **deps:** update docusaurus monorepo to v2.0.0-beta.17
+* **deps:** update docusaurus monorepo to v2.0.0-beta.16
+* **deps:** update golang.org/x/oauth2 commit hash to ee48083
+
+### Features
+
+* token command ([#1520](https://github.com/redhat-developer/app-services-cli/issues/1520))
+* alias status and use commands to context cmds
+* **context:** add generate-config command
+* **context:** add command to delete contexts
+* **context:** add command for context creation
+* **context:** add commands for context management
+* **context create:** remove setting services
+* **context status:** show context name and path
+
+
 <a name="v0.39.0"></a>
 ## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.39.0) (2022-02-21)
 
