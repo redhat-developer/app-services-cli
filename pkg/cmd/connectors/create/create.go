@@ -16,11 +16,9 @@ import (
 )
 
 type options struct {
-	file string
-
+	file         string
 	outputFormat string
 	f            *factory.Factory
-	interactive  bool
 }
 
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
@@ -60,14 +58,12 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	if opts.interactive {
-		// TODO
-	}
 	var specifiedFile *os.File
 	if opts.file == "" {
-		file, err1 := util.CreateFileFromStdin()
-		if err1 != nil {
-			return err
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("common.message.reading.file"))
+		file, newErr := util.CreateFileFromStdin()
+		if newErr != nil {
+			return newErr
 		}
 		specifiedFile = file
 	} else {

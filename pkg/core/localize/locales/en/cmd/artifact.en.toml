@@ -112,9 +112,6 @@ one = 'Output format (json, yaml, yml)'
 [artifact.common.message.no.artifact.available.for.group.and.registry]
 one = 'No artifacts found for {{.Group}} group and registry ID {{.Registry}}'
 
-[artifact.common.message.reading.file]
-one = 'Reading file content from standard input'
-
 [artifact.common.message.deleteAllArtifactsInGroup]
 one = 'Artifact was not specified. Command will delete all artifacts in the group'
 

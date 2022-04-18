@@ -15,7 +15,6 @@ type options struct {
 
 	outputFormat string
 	f            *factory.Factory
-	interactive  bool
 }
 
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
@@ -30,15 +29,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("connector.cluster.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.name != "" {
-				// TODO
-			}
-
-			if !f.IOStreams.CanPrompt() && opts.name == "" {
-				return f.Localizer.MustLocalizeError("connector.common.error.requiredWhenNonInteractive")
-			} else if opts.name == "" {
-				opts.interactive = true
-			}
 
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
@@ -52,6 +42,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connectors.common.id.flag"))
 	flags.AddOutput(&opts.outputFormat)
 
+	cmd.MarkFlagRequired("name")
+
 	return cmd
 }
 
@@ -62,10 +54,6 @@ func runCreate(opts *options) error {
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
-	}
-
-	if opts.interactive {
-		// TODO
 	}
 
 	api := conn.API()
