@@ -43,6 +43,9 @@ $ rhoas cluster connect
 
 
  
+* link:{path}#ref-rhoas-authtoken_{context}[rhoas authtoken]	 - Output the current token
+
+ 
 * link:{path}#ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 
  

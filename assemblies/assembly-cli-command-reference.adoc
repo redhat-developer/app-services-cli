@@ -8,6 +8,8 @@ You use the `rhoas` CLI to manage your application services from the command lin
 
 == General commands
 
+include::../modules/ref-cli-authtoken.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-completion.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-completion-bash.adoc[leveloffset=+2]
