@@ -1,8 +1,6 @@
 package create
 
 import (
-	"net/http"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -64,19 +62,14 @@ func runCreate(opts *options) error {
 
 	var connector connectormgmtclient.ConnectorNamespace
 	var newErr error
-	var httpRes *http.Response
 
 	if opts.eval {
-		a := api.ConnectorsMgmt().ConnectorNamespacesApi.CreateEvaluationNamespace(f.Context)
+		a = api.ConnectorsMgmt().ConnectorNamespacesApi.CreateEvaluationNamespace(f.Context)
 		a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
-		connector, httpRes, newErr = a.Execute()
+		connector, _, newErr = a.Execute()
 	} else {
 		a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
-		connector, httpRes, newErr = a.Execute()
-	}
-
-	if httpRes != nil {
-		defer httpRes.Body.Close()
+		connector, _, newErr = a.Execute()
 	}
 
 	if newErr != nil {
