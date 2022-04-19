@@ -367,12 +367,14 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
 		}
 
-		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-		if err != nil {
-			opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-			return err
-		}
+		// This code have been disabled due to breaking change in the API
+		// userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+		// if err != nil {
+		// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+		// 	return err
+		// }
 
+		//
 		// regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
 		// for _, item := range regionInstanceTypes {
