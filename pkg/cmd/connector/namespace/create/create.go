@@ -67,12 +67,9 @@ func runCreate(opts *options) error {
 	var httpRes *http.Response
 
 	if opts.eval {
-
 		a := api.ConnectorsMgmt().ConnectorNamespacesApi.CreateEvaluationNamespace(f.Context)
-
 		a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
 		connector, httpRes, newErr = a.Execute()
-
 	} else {
 		a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
 		connector, httpRes, newErr = a.Execute()
