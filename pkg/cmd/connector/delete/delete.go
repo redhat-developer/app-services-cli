@@ -2,12 +2,12 @@ package delete
 
 import (
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 )
@@ -27,16 +27,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "delete",
-		Short:   f.Localizer.MustLocalize("connector.cluster.delete.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.cluster.delete.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.cluster.delete.cmd.example"),
+		Short:   f.Localizer.MustLocalize("connector.delete.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.delete.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.delete.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
-			if !f.IOStreams.CanPrompt() && !opts.skipConfirm {
-				return flagutil.RequiredWhenNonInteractiveError("yes")
-			}
-
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
@@ -45,12 +40,11 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			return runDelete(opts)
 		},
 	}
-	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.cluster.delete.id.flag.description"))
-	flags.AddOutput(&opts.outputFormat)
-	flags.AddYes(&opts.skipConfirm)
 
-	cmd.MarkFlagRequired("id")
+	flags := connectorcmdutil.NewFlagSet(cmd, f)
+	flags.AddOutput(&opts.outputFormat)
+	_ = flags.AddConnectorID(&opts.id).Required()
+	flags.AddYes(&opts.skipConfirm)
 
 	return cmd
 }
@@ -77,11 +71,7 @@ func runDelete(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorClustersApi.CreateConnectorCluster(f.Context)
-	a = a.ConnectorClusterRequest(connectormgmtclient.ConnectorClusterRequest{
-		Name: &opts.id,
-	})
-	a = a.Async(true)
+	a := api.ConnectorsMgmt().ConnectorsApi.DeleteConnector(f.Context, opts.id)
 
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
@@ -96,19 +86,19 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connectors.cluster.delete.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.delete.info.success"))
 
 	return nil
 }
 
 func promptConfirmDelete(opts *options) (bool, error) {
 	promptConfirm := survey.Confirm{
-		Message: opts.f.Localizer.MustLocalize("connectors.cluster.delete.confirmDialog.message", localize.NewEntry("ID", opts.id)),
+		Message: opts.f.Localizer.MustLocalize("connector.delete.confirmDialog.message", localize.NewEntry("ID", opts.id)),
 	}
 
-	var confirmUpdate bool
-	if err := survey.AskOne(&promptConfirm, &confirmUpdate); err != nil {
+	var confirmDelete bool
+	if err := survey.AskOne(&promptConfirm, &confirmDelete); err != nil {
 		return false, err
 	}
-	return confirmUpdate, nil
+	return confirmDelete, nil
 }

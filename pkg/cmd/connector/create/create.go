@@ -107,7 +107,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connectors.create.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.create.info.success"))
 
 	return nil
 }

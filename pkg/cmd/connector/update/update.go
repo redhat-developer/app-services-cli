@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -111,7 +111,7 @@ func runUpdateCommand(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connectors.update.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.update.info.success"))
 
 	return nil
 }
