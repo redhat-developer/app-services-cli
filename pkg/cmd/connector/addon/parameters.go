@@ -1,7 +1,7 @@
 package addon
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -38,10 +38,6 @@ func NewParametersCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
-			}
-
-			if opts.id == "" {
-				// TODO validation for id?
 			}
 
 			return runList(opts)

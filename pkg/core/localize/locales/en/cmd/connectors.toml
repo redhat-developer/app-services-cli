@@ -11,13 +11,13 @@ one = '''
 rhoas connectors addon-parameters
 '''
 
-["connectors.cluster.cmd.shortDescription"]
+["connector.cluster.cmd.shortDescription"]
 one = 'Connectors cluster commands'
 
-["connectors.cluster.cmd.longDescription"]
+["connector.cluster.cmd.longDescription"]
 one = 'Connectors cluster commands'
 
-["connectors.cluster.cmd.example"]
+["connector.cluster.cmd.example"]
 one = '''
 ## Create connectors cluster
 rhoas connectors cluster create --name=test
@@ -35,7 +35,7 @@ one = '''
 rhoas connectors cluster create --name=test
 '''
 
-["connectors.cluster.create.info.success"]
+["connector.cluster.create.info.success"]
 one = 'Successfully created cluster for connectors'
 
 ["connector.cluster.delete.cmd.shortDescription"]
@@ -56,10 +56,10 @@ one = 'Id of connectors cluster to delete'
 ["connector.cluster.create.flag.name.description"]
 one = 'Name of the cluster to create'
 
-["connectors.cluster.delete.info.success"]
+["connector.cluster.delete.info.success"]
 one = 'Successfully deleted cluster'
 
-[connectors.cluster.delete.confirmDialog.message]
+[connector.cluster.delete.confirmDialog.message]
 one = 'Are you sure you want to delete the connector cluster with id "{{.ID}}"?'
 
 ["connector.cluster.list.cmd.shortDescription"]
@@ -74,26 +74,26 @@ one = '''
 rhoas connectors cluster list
 '''
 
-["connectors.common.id.flag"]
+["connector.common.id.flag"]
 one = 'Unique identifier'
 
-["connectors.common.list.flag.page"]
+["connector.common.list.flag.page"]
 one = 'Page number'
 
-["connectors.common.list.flag.limit"]
+["connector.common.list.flag.limit"]
 one = 'Page limit'
 
-["connectors.common.log.info.noResults"]
+["connector.common.log.info.noResults"]
 one = 'No results returned from current command'
 
-["connectors.cmd.shortDescription"]
+["connector.cmd.shortDescription"]
 one = 'Connectors commands'
 
-["connectors.cmd.longDescription"]
+["connector.cmd.longDescription"]
 one = 'Connectors commands'
 
 
-["connectors.cmd.example"]
+["connector.cmd.example"]
 one = '''   
 ## List connectors
 rhoas connectors list
@@ -114,7 +114,7 @@ rhoas connectors create --file=myconnector.json
 cat myconnector.json | rhoas connectors create
 '''
 
-["connectors.create.info.success"]
+["connector.create.info.success"]
 one = 'Successfully created connector'
 
 ["connector.update.cmd.shortDescription"]
@@ -153,11 +153,11 @@ rhoas connector delete --id=c9b71ucotd37bufoamkg
 ["connector.delete.flag.id.description"]
 one = 'Id of the connector to delete'
 
-["connectors.delete.info.success"]
+["connector.delete.info.success"]
 one = 'Successfully deleted connector'
 
 
-[connectors.delete.confirmDialog.message]
+[connector.delete.confirmDialog.message]
 one = 'Are you sure you want to delete the connector with id "{{.ID}}"?'
 
 ["connector.describe.cmd.shortDescription"]
@@ -175,7 +175,7 @@ rhoas connector describe --id=c980124otd37bufiemj0
 ["connector.common.flag.id.description"]
 one = 'Id of the connector'
 
-["connectors.describe.info.success"]
+["connector.describe.info.success"]
 one = 'Connector details returned successfully'
 
 ["connector.list.cmd.shortDescription"]

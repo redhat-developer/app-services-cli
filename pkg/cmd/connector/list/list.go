@@ -18,10 +18,10 @@ import (
 
 // row is the details of a Kafka instance needed to print to a table
 type itemRow struct {
-	ID      string `json:"id" header:"ID"`
-	Name    string `json:"name" header:"Name"`
-	Owner   string `json:"owner" header:"Owner"`
-	Cluster string `json:"clusterId" header:"Cluster ID"`
+	ID     string `json:"id" header:"ID"`
+	Name   string `json:"name" header:"Name"`
+	Owner  string `json:"owner" header:"Owner"`
+	Status string `json:"status" header:"Status"`
 }
 
 type options struct {
@@ -41,9 +41,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   f.Localizer.MustLocalize("connector.namespace.list.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.namespace.list.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.namespace.list.cmd.example"),
+		Short:   f.Localizer.MustLocalize("connector.list.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.list.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
@@ -57,8 +57,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
 
 	flags.AddOutput(&opts.outputFormat)
-	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("connectors.common.list.flag.page"))
-	flags.IntVar(&opts.limit, "limit", 100, f.Localizer.MustLocalize("connectors.common.list.flag.limit"))
+	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("connector.common.list.flag.page"))
+	flags.IntVar(&opts.limit, "limit", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageSize)), f.Localizer.MustLocalize("connector.common.list.flag.limit"))
 
 	return cmd
 }
@@ -72,7 +72,7 @@ func runList(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorNamespacesApi.ListConnectorNamespaces(f.Context)
+	a := api.ConnectorsMgmt().ConnectorsApi.ListConnectors(f.Context)
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 
@@ -82,7 +82,7 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 && opts.outputFormat == "" {
-		f.Logger.Info(f.Localizer.MustLocalize("connectors.common.log.info.noResults"))
+		f.Logger.Info(f.Localizer.MustLocalize("connector.common.log.info.noResults"))
 		return nil
 	}
 
@@ -99,7 +99,7 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(items []connectormgmtclient.ConnectorNamespace) []itemRow {
+func mapResponseItemsToRows(items []connectormgmtclient.Connector) []itemRow {
 	rows := make([]itemRow, len(items))
 
 	for i := range items {
@@ -107,10 +107,10 @@ func mapResponseItemsToRows(items []connectormgmtclient.ConnectorNamespace) []it
 		name := k.GetName()
 
 		row := itemRow{
-			ID:      k.GetId(),
-			Name:    name,
-			Owner:   k.GetOwner(),
-			Cluster: k.GetClusterId(),
+			ID:     k.GetId(),
+			Name:   name,
+			Owner:  k.GetOwner(),
+			Status: string(*k.Status.State),
 		}
 
 		rows[i] = row
