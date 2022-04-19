@@ -43,7 +43,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.cluster.create.flag.name.description"))
 	flags.AddOutput(&opts.outputFormat)
 
-	cmd.MarkFlagRequired("name")
+	_ = cmd.MarkFlagRequired("name")
 
 	return cmd
 }
