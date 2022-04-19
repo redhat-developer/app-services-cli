@@ -41,7 +41,7 @@ func (fs *FlagSet) AddOutputFormatted(output *string, isTable bool, format *stri
 
 	selectedFormat := dump.JSONFormat
 
-	if format != nil || *format != "" {
+	if format != nil && *format != "" {
 		selectedFormat = *format
 
 	}
@@ -147,7 +147,7 @@ func ValidateOutput(v string) error {
 	return InvalidValueError("output", v, ValidOutputFormats...)
 }
 
-// ValidateOutputForTable checks if value v is a valid value for --outpu adding table
+// ValidateOutputForTable checks if value v is a valid value for --output adding table
 func ValidateOutputForTable(v string) error {
 	isValid := IsValidInput(v, ValidListOutputFormats...)
 

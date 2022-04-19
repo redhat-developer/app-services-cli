@@ -29,7 +29,7 @@ $ rhoas service-account list -o json
 ### Options
 
 ```
-  -o, --output string   Format in which to display the service accounts (choose from: "json", "yml", "yaml")
+  -o, --output string   Format in which to display the service accounts (choose from: "json", "yml", "yaml" or "none")
 ```
 
 ### Options inherited from parent commands
