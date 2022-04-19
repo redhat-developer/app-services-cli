@@ -220,7 +220,7 @@ one = 'Get connector namespaces'
 ["connector.namespace.list.cmd.example"]
 one = '''
 ## Get connector namespaces list
-rhoas connector namespaces list
+rhoas connector namespace list
 '''
 
 ["connector.namespace.create.cmd.shortDescription"]
@@ -232,11 +232,30 @@ one = 'Create a connector namespace'
 ["connector.namespace.create.cmd.example"]
 one = '''
 # Create a connector namespace
-rhoas connector namespaces create --name "my-namespace"
+rhoas connector namespace create --name "my-namespace"
 
 # Create an evaluation namespace
-rhoas connector namespaces create --name "my-namespace" --eval
+rhoas connector namespace create --name "my-namespace" --eval
 '''
 
 ["connector.namespace.create.info.success"]
 one = 'Successfully created namespace'
+
+
+["connector.namespace.delete.cmd.shortDescription"]
+one = 'Delete a connector namespace'
+
+["connector.namespace.delete.cmd.longDescription"]
+one = 'Delete a connector namespace'
+
+["connector.namespace.delete.cmd.example"]
+one = '''
+# Delete a connector namespace
+rhoas connector namespace delete --id jdhdhdhmmf
+'''
+
+["connector.namespace.delete.info.success"]
+one = 'Successfully deleted namespace'
+
+[connector.namespace.delete.confirmDialog.message]
+one = 'Are you sure you want to delete the connector namespace with id "{{.ID}}"?'

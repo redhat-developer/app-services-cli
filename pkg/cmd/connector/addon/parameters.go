@@ -47,7 +47,7 @@ func NewParametersCommand(f *factory.Factory) *cobra.Command {
 	flags := connectorcmdutil.NewFlagSet(cmd, f)
 
 	flags.AddOutput(&opts.outputFormat)
-	_ = flags.AddConnectorID(&opts.id).Required
+	_ = flags.AddConnectorID(&opts.id).Required()
 
 	return cmd
 }
