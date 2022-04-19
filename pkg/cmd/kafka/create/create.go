@@ -14,7 +14,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
-	"k8s.io/utils/strings/slices"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -374,19 +373,19 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 			return err
 		}
 
-		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
+		// regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
-		for _, item := range regionInstanceTypes {
-			if slices.Contains(userInstanceTypes, item) {
-				return nil
-			}
-		}
+		// for _, item := range regionInstanceTypes {
+		// 	if slices.Contains(userInstanceTypes, item) {
+		// 		return nil
+		// 	}
+		// }
 
-		regionEntry := localize.NewEntry("Region", opts.region)
-		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
-		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
+		// regionEntry := localize.NewEntry("Region", opts.region)
+		// userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
+		// cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
-		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
+		// return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
 	}
 	opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
