@@ -20,6 +20,7 @@ type options struct {
 	skipConfirm bool
 }
 
+// NewDeleteCommand creates a new command to delete a connector cluster
 func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,

@@ -32,6 +32,7 @@ type options struct {
 	f *factory.Factory
 }
 
+// NewListCommand creates a new command to list connector clusters
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		page:  0,
