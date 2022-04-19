@@ -20,7 +20,7 @@ type options struct {
 	outputFormat string
 }
 
-// NewCreateCommand creates a new namespace
+// NewCreateCommand a new command to create a new namespace
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{

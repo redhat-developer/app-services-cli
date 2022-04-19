@@ -17,6 +17,7 @@ type options struct {
 	f            *factory.Factory
 }
 
+// NewCreateCommand creates a new command to create a connector cluster
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,
@@ -39,7 +40,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.common.id.flag"))
+	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.cluster.create.flag.name.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	cmd.MarkFlagRequired("name")

@@ -17,6 +17,7 @@ type options struct {
 	f *factory.Factory
 }
 
+// NewDescribeCommand creates a new command to view a connector
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,

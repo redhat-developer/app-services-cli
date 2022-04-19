@@ -1,14 +1,14 @@
-[connector.addon.params.cmd.shortDescription]
+[connector.cluster.addonParams.cmd.shortDescription]
 one = 'Get Addon parameters'
 
-[connector.addon.params.cmd.longDescription]
+[connector.cluster.addonParams.cmd.longDescription]
 one = 'Get Addon parameters'
 
 
-[connector.addon.params.cmd.example]
+[connector.cluster.addonParams.cmd.example]
 one = '''
 ## Get addon parameters
-rhoas connectors addon-parameters
+rhoas connector cluster addon-parameters
 '''
 
 [connector.cluster.cmd.shortDescription]
@@ -20,7 +20,7 @@ one = 'Connectors cluster commands'
 [connector.cluster.cmd.example]
 one = '''
 ## Create connectors cluster
-rhoas connectors cluster create --name=test
+rhoas connector cluster create --name=test
 '''
 
 [connector.cluster.create.cmd.shortDescription]
@@ -32,7 +32,7 @@ one = 'Create connectors cluster'
 [connector.cluster.create.cmd.example]
 one = '''
 ## Create connectors cluster
-rhoas connectors cluster create --name=test
+rhoas connector cluster create --name=test
 '''
 
 [connector.cluster.create.info.success]
@@ -47,7 +47,7 @@ one = 'Delete connectors cluster'
 [connector.cluster.delete.cmd.example]
 one = '''
 ## Delete connectors cluster
-rhoas connectors cluster delete --id=c980124otd37bufiemj0
+rhoas connector cluster delete --id=c980124otd37bufiemj0
 '''
 
 [connector.cluster.delete.id.flag.description]
@@ -71,7 +71,7 @@ one = 'List connectors clusters'
 [connector.cluster.list.cmd.example]
 one = '''
 ## List connectors clusters
-rhoas connectors cluster list
+rhoas connector cluster list
 '''
 
 [connector.common.id.flag]
@@ -96,7 +96,7 @@ one = 'Connectors commands'
 [connector.cmd.example]
 one = '''   
 ## List connectors
-rhoas connectors list
+rhoas connector list
 '''
 
 [connector.create.cmd.shortDescription]
@@ -108,10 +108,10 @@ one = 'Create connector'
 [connector.create.cmd.example]
 one = '''
 ## Create connector
-rhoas connectors create --file=myconnector.json
+rhoas connector create --file=myconnector.json
 
 ## Create connector from stdin
-cat myconnector.json | rhoas connectors create
+cat myconnector.json | rhoas connector create
 '''
 
 [connector.create.info.success]
@@ -126,10 +126,10 @@ one = 'Create connector'
 [connector.update.cmd.example]
 one = '''
 ## Create connector
-rhoas connectors create --file=myconnector.json
+rhoas connector update  -id=my-connector --file=myconnector.json
 
 ## Create connector from stdin
-cat myconnector.json | rhoas connectors create
+cat myconnector.json | rhoas connector create
 '''
 
 [connector.update.info.success]
@@ -187,7 +187,7 @@ one = 'List connectors'
 [connector.list.cmd.example]
 one = '''
 ## List connectors
-rhoas connectors list
+rhoas connector list
 '''
 
 [connector.namespace.cmd.shortDescription]

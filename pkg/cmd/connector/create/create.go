@@ -21,6 +21,7 @@ type options struct {
 	f            *factory.Factory
 }
 
+// NewCreateCommand creates a new command to create a Connector
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,

@@ -24,6 +24,7 @@ type options struct {
 	f *factory.Factory
 }
 
+// NewParametersCommand creates a new command to list addon parameters of a connector cluster
 func NewParametersCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,
@@ -31,9 +32,9 @@ func NewParametersCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "addon-parameters",
-		Short:   f.Localizer.MustLocalize("connector.addon.params.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.addon.params.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.addon.params.cmd.example"),
+		Short:   f.Localizer.MustLocalize("connector.cluster.addonParams.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.cluster.addonParams.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.cluster.addonParams.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
