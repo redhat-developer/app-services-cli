@@ -1,32 +1,32 @@
-package describe
+package create
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/connectors/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 )
 
 type options struct {
-	id           string
-	outputFormat string
+	name string
 
-	f *factory.Factory
+	outputFormat string
+	f            *factory.Factory
 }
 
-func NewDescribeCommand(f *factory.Factory) *cobra.Command {
+func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,
 	}
 
 	cmd := &cobra.Command{
-		Use:     "describe",
-		Short:   f.Localizer.MustLocalize("connector.describe.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.describe.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.describe.cmd.example"),
+		Use:     "create",
+		Short:   f.Localizer.MustLocalize("connector.cluster.create.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.cluster.create.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.cluster.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
@@ -35,17 +35,19 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
-			return runDescribe(opts)
+			return runCreate(opts)
 		},
 	}
-	flags := connectorcmdutil.NewFlagSet(cmd, f)
-	_ = flags.AddConnectorID(&opts.id).Required()
+	flags := flagutil.NewFlagSet(cmd, f.Localizer)
+	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.common.id.flag"))
 	flags.AddOutput(&opts.outputFormat)
+
+	cmd.MarkFlagRequired("name")
 
 	return cmd
 }
 
-func runDescribe(opts *options) error {
+func runCreate(opts *options) error {
 	f := opts.f
 
 	var conn connection.Connection
@@ -56,7 +58,11 @@ func runDescribe(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorsApi.GetConnector(f.Context, opts.id)
+	a := api.ConnectorsMgmt().ConnectorClustersApi.CreateConnectorCluster(f.Context)
+	a = a.ConnectorClusterRequest(connectormgmtclient.ConnectorClusterRequest{
+		Name: &opts.name,
+	})
+	a = a.Async(true)
 
 	response, httpRes, err := a.Execute()
 	if httpRes != nil {
@@ -71,7 +77,7 @@ func runDescribe(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connectors.describe.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.cluster.create.info.success"))
 
 	return nil
 }
