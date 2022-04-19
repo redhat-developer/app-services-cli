@@ -12,7 +12,7 @@ type FlagSet struct {
 	*flagutil.FlagSet
 }
 
-// NewFlagSet returns a new flag set with common Service Registry flags
+// NewFlagSet returns a new flag set with common connector flags
 func NewFlagSet(cmd *cobra.Command, f *factory.Factory) *FlagSet {
 	return &FlagSet{
 		cmd:     cmd,

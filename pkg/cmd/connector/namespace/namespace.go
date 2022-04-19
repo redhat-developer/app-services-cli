@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewNamespaceCommand creates a new command to manage connector namespaces
 func NewNameSpaceCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "namespace",

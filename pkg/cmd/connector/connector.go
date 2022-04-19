@@ -1,7 +1,6 @@
 package connector
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/addon"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/delete"
@@ -15,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewConnectorCommand creates a new command to manage connectors
 func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "connector",
@@ -34,7 +34,6 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 		list.NewListCommand(f),
 		describe.NewDescribeCommand(f),
 		namespace.NewNameSpaceCommand(f),
-		addon.NewParametersCommand(f),
 		update.NewUpdateCommand(f),
 	)
 

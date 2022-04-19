@@ -1,6 +1,7 @@
 package cluster
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster/addon"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster/list"
@@ -8,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewConnectorClusterCommand creates a new command to manage connector clusters
 func NewConnectorClusterCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "cluster",
@@ -22,6 +24,7 @@ func NewConnectorClusterCommand(f *factory.Factory) *cobra.Command {
 		create.NewCreateCommand(f),
 		delete.NewDeleteCommand(f),
 		list.NewListCommand(f),
+		addon.NewParametersCommand(f),
 	)
 
 	return cmd
