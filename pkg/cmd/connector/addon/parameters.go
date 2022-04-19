@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// row is the details of a Kafka instance needed to print to a table
+// row is the details of the addon parameters needed to print to a table
 type itemRow struct {
 	ID    string `json:"id" header:"ID"`
 	Value string `json:"value" header:"Value"`
