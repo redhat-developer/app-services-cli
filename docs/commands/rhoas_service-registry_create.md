@@ -27,7 +27,7 @@ rhoas service-registry create --name myregistry --description "description of in
 ```
       --description string   User-provided description of the new Service Registry instance
       --name string          Unique name of the Service Registry instance
-  -o, --output string        Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml") (default "json")
+  -o, --output string        Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml" or "none") (default "json")
       --use                  Set the new Service Registry instance to the current instance (default true)
 ```
 

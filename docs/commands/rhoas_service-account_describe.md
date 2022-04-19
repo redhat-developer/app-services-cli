@@ -27,7 +27,7 @@ $ rhoas service-account describe --id=8a06e685-f827-44bc-b0a7-250bc8abe52e --out
 
 ```
       --id string       The unique ID of the service account to view
-  -o, --output string   Format in which to display the service account (choose from: "json", "yml", "yaml") (default "json")
+  -o, --output string   Format in which to display the service account (choose from: "json", "yml", "yaml" or "none") (default "json")
 ```
 
 ### Options inherited from parent commands

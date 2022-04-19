@@ -28,7 +28,7 @@ rhoas service-registry describe --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 ```
       --id string       Unique ID of the Service Registry instance (if not provided, the current Service Registry instance will be used)
       --name string     Name of the Service Registry instance to view
-  -o, --output string   Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml") (default "json")
+  -o, --output string   Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml" or "none") (default "json")
 ```
 
 ### Options inherited from parent commands
