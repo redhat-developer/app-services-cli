@@ -51,7 +51,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 	flags.AddYes(&opts.skipConfirm)
 
-	cmd.MarkFlagRequired("id")
+	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
 }
