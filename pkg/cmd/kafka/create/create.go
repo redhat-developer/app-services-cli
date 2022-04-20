@@ -179,7 +179,7 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		opts.Logger.Debug()
 
-		payload, err = promptKafkaPayload(opts, constants)
+		payload, err = promptKafkaPayload(opts)
 		if err != nil {
 			return err
 		}
@@ -195,7 +195,7 @@ func runCreate(opts *options) error {
 		}
 
 		if !opts.bypassAmsCheck {
-			err = validateProviderAndRegion(opts, constants, conn)
+			err = validateProviderAndRegion(opts, conn)
 			if err != nil {
 				return err
 			}
@@ -301,7 +301,7 @@ func runCreate(opts *options) error {
 	return nil
 }
 
-func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
+func validateProviderAndRegion(opts *options, conn connection.Connection) error {
 	opts.Logger.Debug("Validating provider and region")
 	cloudProviders, _, err := conn.API().
 		KafkaMgmt().
@@ -333,10 +333,10 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
 	}
 	// Temporary disabled due to breaking changes in the API
-	return nil //validateProviderRegion(conn, opts, selectedProvider, constants)
+	return nil // validateProviderRegion(conn, opts, selectedProvider, constants)
 }
 
-func validateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
+func ValidateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
 	cloudRegion, _, err := conn.API().
 		KafkaMgmt().
 		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).
@@ -403,7 +403,7 @@ type promptAnswers struct {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
