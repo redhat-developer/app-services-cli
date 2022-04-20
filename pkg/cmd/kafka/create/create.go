@@ -229,6 +229,8 @@ func runCreate(opts *options) error {
 			return opts.localizer.MustLocalizeError("kafka.create.error.temporary.unavailable")
 		case kafkamgmtv1errors.ERROR_36:
 			return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
+		case kafkamgmtv1errors.ERROR_41:
+			return opts.localizer.MustLocalizeError("kafka.create.error.notsupported", localize.NewEntry("Name", payload.Name))
 		}
 	}
 
