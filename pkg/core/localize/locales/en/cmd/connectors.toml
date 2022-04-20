@@ -86,6 +86,9 @@ one = 'Page limit'
 [connector.common.log.info.noResults]
 one = 'No results returned from current command'
 
+[connector.common.validation.namespace.error.invalidChars]
+one = 'invalid name for namespace "{{.Name}}"'
+
 [connector.cmd.shortDescription]
 one = 'Connectors commands'
 
