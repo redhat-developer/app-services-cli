@@ -15,7 +15,7 @@ import (
 )
 
 type configValues struct {
-	KafkaURL     string
+	KafkaHost    string
 	RegistryURL  string
 	ClientID     string
 	ClientSecret string
@@ -76,7 +76,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		}
 
 		serviceAvailable = true
-		configurations.KafkaURL = kafkaInstance.GetBootstrapServerHost()
+		configurations.KafkaHost = kafkaInstance.GetBootstrapServerHost()
 	}
 
 	if svcConfig.ServiceRegistryID != "" {
