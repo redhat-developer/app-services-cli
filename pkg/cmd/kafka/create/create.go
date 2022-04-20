@@ -14,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
+	"k8s.io/utils/strings/slices"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -331,8 +332,8 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 		validProvidersEntry := localize.NewEntry("Providers", providers)
 		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
 	}
-
-	return validateProviderRegion(conn, opts, selectedProvider, constants)
+	// Temporary disabled due to breaking changes in the API
+	return nil //validateProviderRegion(conn, opts, selectedProvider, constants)
 }
 
 func validateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
@@ -367,27 +368,25 @@ func validateProviderRegion(conn connection.Connection, opts *options, selectedP
 			return opts.localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
 		}
 
-		// This code have been disabled due to breaking change in the API
-		// userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-		// if err != nil {
-		// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-		// 	return err
-		// }
+		userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+		if err != nil {
+			opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+			return err
+		}
 
-		//
-		// regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
+		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
-		// for _, item := range regionInstanceTypes {
-		// 	if slices.Contains(userInstanceTypes, item) {
-		// 		return nil
-		// 	}
-		// }
+		for _, item := range regionInstanceTypes {
+			if slices.Contains(userInstanceTypes, item) {
+				return nil
+			}
+		}
 
-		// regionEntry := localize.NewEntry("Region", opts.region)
-		// userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
-		// cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
+		regionEntry := localize.NewEntry("Region", opts.region)
+		userTypesEntry := localize.NewEntry("MyTypes", strings.Join(userInstanceTypes, ", "))
+		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
-		// return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
+		return opts.localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
 	}
 	opts.Logger.Debug("No regions found for provider. Skipping provider validation", opts.provider)
@@ -463,14 +462,15 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-	if err != nil {
-		opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-		return payload, err
-	}
+	// Temporary disabled due to breaking changes in the API
+	// userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+	// if err != nil {
+	// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+	// 	return payload, err
+	// }
 
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, &userInstanceTypes)
+	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, nil)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
