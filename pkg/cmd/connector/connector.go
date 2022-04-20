@@ -18,7 +18,7 @@ import (
 func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "connector",
-		Hidden:      profile.DevModeEnabled(),
+		Hidden:      true,
 		Annotations: profile.DevPreviewAnnotation(),
 		Short:       f.Localizer.MustLocalize("connector.cmd.shortDescription"),
 		Long:        f.Localizer.MustLocalize("connector.cmd.longDescription"),
