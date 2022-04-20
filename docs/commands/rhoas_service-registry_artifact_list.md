@@ -42,7 +42,7 @@ rhoas service-registry artifact list --description sample
       --label stringArray      Text search to filter artifacts by labels
       --limit int32            Page limit (default 100)
       --name string            Text search to filter artifacts by name
-  -o, --output string          Output format ("json", "yaml", "yml", "none")
+  -o, --output string          Output format (json, yaml, yml)
       --page int32             Page number (default 1)
       --property stringArray   Text search to filter artifacts by properties (separate each name/value pair using a colon)
 ```

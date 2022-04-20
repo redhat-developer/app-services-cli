@@ -22,7 +22,7 @@ rhoas service-registry list
 
 ```
       --limit int32     The maximum number of Service Registry instances to be returned (default 100)
-  -o, --output string   Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml" or "none")
+  -o, --output string   Format in which to display the Service Registry instance (choose from: "json", "yml", "yaml")
       --page int32      Display the Service Registry instances from the specified page number (default 1)
 ```
 

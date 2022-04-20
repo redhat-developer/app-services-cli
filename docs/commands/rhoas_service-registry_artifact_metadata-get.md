@@ -30,7 +30,7 @@ rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group m
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
       --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-  -o, --output string        Output format ("json", "yaml", "yml", "none")
+  -o, --output string        Output format (json, yaml, yml)
 ```
 
 ### Options inherited from parent commands

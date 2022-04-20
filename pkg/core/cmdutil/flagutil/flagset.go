@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	ValidOutputFormats     = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat, dump.EmptyFormat, dump.TableFormat}
+	ValidOutputFormats     = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat, dump.EmptyFormat}
 	ValidListOutputFormats = append(ValidOutputFormats, dump.TableFormat)
 )
 
