@@ -50,7 +50,7 @@ func (a *defaultAPI) GetConfig() api.Config {
 func (a *defaultAPI) KafkaMgmt() kafkamgmtclient.DefaultApi {
 	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
-		BaseURL:    a.ApiURL.String(),
+		BaseURL:    "https://kas-fleet-manager-kas-fleet-manager-rareddy.apps.rareddy-kafka.j1j7.s1.devshift.org",
 		Debug:      a.Logger.DebugEnabled(),
 		HTTPClient: tc,
 		UserAgent:  a.UserAgent,
