@@ -26,7 +26,7 @@ $ rhoas kafka topic create --name topic-1
 ```
       --cleanup-policy string   Determines whether log messages are deleted, compacted, or both (default "delete")
       --name string             Topic name
-  -o, --output string           Specify the output format. Choose from: "json", "yaml", "yml" or "none"
+  -o, --output string           Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
       --partitions int32        The number of partitions in the topic (default 1)
       --retention-bytes int     The maximum total size of a partition log segments before old log segments are deleted to free up space.
                                 Value of -1 is set by default indicating no retention size limits (default -1)

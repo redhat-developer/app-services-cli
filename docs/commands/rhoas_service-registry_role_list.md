@@ -22,7 +22,7 @@ rhoas service-registry role list
 
 ```
       --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-  -o, --output string        Output format ("json", "yaml", "yml", "none")
+  -o, --output string        Output format (json, yaml, yml)
 ```
 
 ### Options inherited from parent commands
