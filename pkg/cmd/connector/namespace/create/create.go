@@ -1,6 +1,7 @@
 package create
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -32,6 +33,15 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("connector.namespace.create.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			validator := connectorcmdutil.Validator{
+				Localizer: f.Localizer,
+			}
+
+			if err := validator.ValidateNamespace(opts.name); err != nil {
+				return err
+			}
+
 			return runCreate(opts)
 		},
 	}
