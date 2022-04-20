@@ -1,4 +1,13 @@
 
+<a name="v0.40.1"></a>
+## [v0.40.1](https://github.com/redhat-developer/app-services-cli/compare/v0.40.0...v0.40.1) (2022-04-20)
+
+### Bug Fixes
+
+* disable check for region ([#1527](https://github.com/redhat-developer/app-services-cli/issues/1527))
+* **generate-config:** change keyname to kafkaHost ([#1528](https://github.com/redhat-developer/app-services-cli/issues/1528))
+
+
 <a name="v0.40.0"></a>
 ## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.40.0) (2022-04-12)
 
