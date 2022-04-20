@@ -179,7 +179,7 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		opts.Logger.Debug()
 
-		payload, err = promptKafkaPayload(opts, constants)
+		payload, err = promptKafkaPayload(opts)
 		if err != nil {
 			return err
 		}
@@ -195,7 +195,7 @@ func runCreate(opts *options) error {
 		}
 
 		if !opts.bypassAmsCheck {
-			err = validateProviderAndRegion(opts, constants, conn)
+			err = validateProviderAndRegion(opts, conn)
 			if err != nil {
 				return err
 			}
@@ -229,6 +229,8 @@ func runCreate(opts *options) error {
 			return opts.localizer.MustLocalizeError("kafka.create.error.temporary.unavailable")
 		case kafkamgmtv1errors.ERROR_36:
 			return opts.localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
+		case kafkamgmtv1errors.ERROR_41:
+			return opts.localizer.MustLocalizeError("kafka.create.error.notsupported", localize.NewEntry("Name", payload.Name))
 		}
 	}
 
@@ -301,7 +303,7 @@ func runCreate(opts *options) error {
 	return nil
 }
 
-func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceConstants, conn connection.Connection) error {
+func validateProviderAndRegion(opts *options, conn connection.Connection) error {
 	opts.Logger.Debug("Validating provider and region")
 	cloudProviders, _, err := conn.API().
 		KafkaMgmt().
@@ -332,11 +334,11 @@ func validateProviderAndRegion(opts *options, constants *remote.DynamicServiceCo
 		validProvidersEntry := localize.NewEntry("Providers", providers)
 		return opts.localizer.MustLocalizeError("kafka.create.provider.error.invalidProvider", providerEntry, validProvidersEntry)
 	}
-
-	return validateProviderRegion(conn, opts, selectedProvider, constants)
+	// Temporary disabled due to breaking changes in the API
+	return nil // validateProviderRegion(conn, opts, selectedProvider, constants)
 }
 
-func validateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
+func ValidateProviderRegion(conn connection.Connection, opts *options, selectedProvider kafkamgmtclient.CloudProvider, constants *remote.DynamicServiceConstants) error {
 	cloudRegion, _, err := conn.API().
 		KafkaMgmt().
 		GetCloudProviderRegions(opts.Context, selectedProvider.GetId()).
@@ -403,7 +405,7 @@ type promptAnswers struct {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
+func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPayload, err error) {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
@@ -462,14 +464,15 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
-	if err != nil {
-		opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
-		return payload, err
-	}
+	// Temporary disabled due to breaking changes in the API
+	// userInstanceTypes, err := accountmgmtutil.GetUserSupportedInstanceTypes(opts.Context, constants.Kafka.Ams, conn)
+	// if err != nil {
+	// 	opts.Logger.Debug("Cannot retrieve user supported instance types. Skipping validation", err)
+	// 	return payload, err
+	// }
 
 	regions := cloudRegionResponse.GetItems()
-	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, &userInstanceTypes)
+	regionIDs := pkgKafka.GetEnabledCloudRegionIDs(regions, nil)
 
 	regionPrompt := &survey.Select{
 		Message: opts.localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
