@@ -211,6 +211,9 @@ one = 'Filtering Service Registry instances with the query "{{.Search}}".'
 description = 'Info message when no Registry instances were found'
 one = 'No Service Registry instances were found.'
 
+[registry.common.log.message.compatibleAPIs]
+one = 'Compatible API endpoints:'
+
 [registry.use.flag.id]
 description = 'Description for the --id flag'
 one = 'Unique ID of the Service Registry instance you want to set as the current instance'
