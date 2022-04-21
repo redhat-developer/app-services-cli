@@ -62,7 +62,7 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" {
-				if err := flagutil.ValidateOutput(opts.output); err != nil {
+				if err := flagutil.ValidateOutputForTable(opts.output); err != nil {
 					return err
 				}
 			}
