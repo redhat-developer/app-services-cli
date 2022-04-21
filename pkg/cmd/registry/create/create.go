@@ -158,8 +158,12 @@ func runCreate(opts *options) error {
 
 	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(response.GetRegistryUrl())
 
-	opts.Logger.Error(opts.localizer.MustLocalize("registry.common.log.message.compatibleAPIs"))
-	_ = dump.Formatted(opts.IO.ErrOut, opts.outputFormat, compatibleEndpoints)
+	opts.Logger.Error(opts.localizer.MustLocalize(
+		"registry.common.log.message.compatibleAPIs",
+		localize.NewEntry("CoreRegistryAPI", compatibleEndpoints.CoreRegistry),
+		localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
+		localize.NewEntry("CncfSchemaRegistryAPI", compatibleEndpoints.CncfSchemaRegistry),
+	))
 
 	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, response); err != nil {
 		return err
