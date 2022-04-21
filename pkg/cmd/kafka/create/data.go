@@ -26,12 +26,12 @@ const (
 // mapAmsTypeToBackendType - Cloud providers API is not using AMS types but some other values (CloudProviderValues)
 func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId {
 	switch amsType.Name {
-	case accountmgmtutil.QuotaTrialType:
-		return StandardType
 	case accountmgmtutil.QuotaStandardType:
+		return StandardType
+	case accountmgmtutil.QuotaTrialType:
 		return DeveloperType
 	default:
-		return TrialType
+		return DeveloperType
 	}
 }
 

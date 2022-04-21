@@ -198,16 +198,17 @@ func runCreate(opts *options) error {
 
 		if !opts.bypassAmsCheck {
 
-			/// kafkacmdutil.ValidateKafka(opts, constants, conn)
+			//kafkacmdutil.ValidateKafka(opts, constants, conn)
 		}
 
 		payload = &kafkamgmtclient.KafkaRequestPayload{
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
-			Plan:          &opts.size,
 		}
 	}
+
+	payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 
 	if opts.dryRun {
 		return nil
@@ -389,7 +390,6 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
-		Plan:          &answers.Plan,
 	}
 
 	return payload, nil
