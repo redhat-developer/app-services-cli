@@ -3,10 +3,12 @@ package describe
 import (
 	"context"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
@@ -25,6 +27,7 @@ type options struct {
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
 	localizer      localize.Localizer
+	logger         logging.Logger
 	Context        context.Context
 	ServiceContext servicecontext.IContext
 }
@@ -37,6 +40,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		IO:             f.IOStreams,
 		localizer:      f.Localizer,
 		Context:        f.Context,
+		logger:         f.Logger,
 		ServiceContext: f.ServiceContext,
 	}
 
@@ -101,5 +105,16 @@ func runDescribe(opts *options) error {
 		}
 	}
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, registry)
+	if err := dump.Formatted(opts.IO.Out, opts.outputFormat, registry); err != nil {
+		return err
+	}
+
+	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
+
+	opts.logger.Error(opts.localizer.MustLocalize("registry.common.log.message.compatibleAPIs"))
+	if err := dump.Formatted(opts.IO.ErrOut, opts.outputFormat, compatibleEndpoints); err != nil {
+		return err
+	}
+
+	return nil
 }

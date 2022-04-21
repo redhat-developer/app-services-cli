@@ -156,6 +156,11 @@ func runCreate(opts *options) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
+	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(response.GetRegistryUrl())
+
+	opts.Logger.Error(opts.localizer.MustLocalize("registry.common.log.message.compatibleAPIs"))
+	_ = dump.Formatted(opts.IO.ErrOut, opts.outputFormat, compatibleEndpoints)
+
 	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, response); err != nil {
 		return err
 	}

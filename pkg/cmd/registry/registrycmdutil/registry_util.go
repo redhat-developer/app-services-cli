@@ -9,6 +9,12 @@ import (
 
 var validNameRegexp = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
 
+type compatibilityEndpoints struct {
+	CoreRegistry       string `json:"coreRegistryAPI"`
+	SchemaRegistry     string `json:"schemaRegistryCompatAPI"`
+	CncfSchemaRegistry string `json:"cncfSchemaRegistryAPI"`
+}
+
 // ValidateName validates the proposed name of a Kafka instance
 func ValidateName(val interface{}) error {
 	name, ok := val.(string)
@@ -28,4 +34,16 @@ func ValidateName(val interface{}) error {
 	}
 
 	return errors.New("invalid service registry name: " + name)
+}
+
+// GetCompatibilityEndpoints returns the compatible API endpoints
+func GetCompatibilityEndpoints(url string) *compatibilityEndpoints {
+
+	endpoints := &compatibilityEndpoints{
+		CoreRegistry:       url + "/apis/registry/v2",
+		SchemaRegistry:     url + "/apis/ccompat/v6",
+		CncfSchemaRegistry: url + "/apis/cncf/v0",
+	}
+
+	return endpoints
 }
