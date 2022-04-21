@@ -43,7 +43,6 @@ type options struct {
 	name     string
 	provider string
 	region   string
-	multiAZ  bool
 
 	outputFormat string
 	autoUse      bool
@@ -61,8 +60,6 @@ type options struct {
 }
 
 const (
-	// default Kafka instance values
-	defaultMultiAZ  = true
 	defaultRegion   = "us-east-1"
 	defaultProvider = "aws"
 )
@@ -76,8 +73,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		localizer:      f.Localizer,
 		Context:        f.Context,
 		ServiceContext: f.ServiceContext,
-
-		multiAZ: defaultMultiAZ,
 	}
 
 	cmd := &cobra.Command{
@@ -205,7 +200,6 @@ func runCreate(opts *options) error {
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
-			MultiAz:       &opts.multiAZ,
 		}
 
 	}
@@ -400,7 +394,6 @@ func ValidateProviderRegion(conn connection.Connection, opts *options, selectedP
 type promptAnswers struct {
 	Name          string
 	Region        string
-	MultiAZ       bool
 	CloudProvider string
 }
 
@@ -423,9 +416,7 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		Help:    opts.localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	answers := &promptAnswers{
-		MultiAZ: defaultMultiAZ,
-	}
+	answers := &promptAnswers{}
 
 	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
@@ -489,7 +480,6 @@ func promptKafkaPayload(opts *options) (payload *kafkamgmtclient.KafkaRequestPay
 		Name:          answers.Name,
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
-		MultiAz:       &answers.MultiAZ,
 	}
 
 	return payload, nil
