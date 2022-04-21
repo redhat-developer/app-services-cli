@@ -35,8 +35,9 @@ func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connect
 
 // QuotaSpec - contains quota name and remianing quota count
 type QuotaSpec struct {
-	Name  string
-	Quota int
+	Name         string
+	Quota        int
+	BillingModel string
 }
 
 func GetUserSupportedInstanceType(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota *QuotaSpec, err error) {
@@ -69,25 +70,39 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 		for _, quotaResource := range quota.GetRelatedResources() {
 			if quotaResource.GetResourceName() == spec.ResourceName {
 				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
-					quotas = append(quotas, QuotaSpec{QuotaTrialType, 0})
+					quotas = append(quotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel})
 				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
-					quotas = append(quotas, QuotaSpec{QuotaStandardType, remainingQuota})
+					quotas = append(quotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel})
 				}
 			}
 		}
 	}
-	return quotas, err
+
+	return BattleOfInstanceBillingModels(quotas), err
 }
 
-func GetOrganizationID(ctx context.Context, conn connection.Connection) (accountID string, err error) {
-	account, _, err := conn.API().AccountMgmt().ApiAccountsMgmtV1CurrentAccountGet(ctx).
-		Execute()
-	if err != nil {
-		return "", err
+// This function selects the billing model that should be used
+// It represents some requirement to always use the same standard billing models
+// This function should not exist but it does represents some requirement that we cannot do on backend
+func BattleOfInstanceBillingModels(quotas []QuotaSpec) []QuotaSpec {
+	var betterQuotasMap map[string]*QuotaSpec = make(map[string]*QuotaSpec)
+	alwaysWinsBillingModel := "standard"
+	for i := 0; i < len(quotas); i++ {
+		if quotas[i].BillingModel == alwaysWinsBillingModel {
+			betterQuotasMap[quotas[i].Name] = &quotas[i]
+		} else {
+			if betterQuotasMap[quotas[i].Name] == nil {
+				betterQuotasMap[quotas[i].Name] = &quotas[i]
+			}
+		}
+	}
+	var betterQuotas []QuotaSpec
+	for _, v := range betterQuotasMap {
+		betterQuotas = append(betterQuotas, *v)
 	}
 
-	return account.Organization.GetId(), nil
+	return betterQuotas
 }
 
 // PickInstanceType - Standard instance always wins!
@@ -105,5 +120,17 @@ func PickInstanceType(amsTypes []QuotaSpec) *QuotaSpec {
 		}
 	}
 
+	// There is chance of having multiple instances in the future
+	// We will pick the first one as we do not know which one to pick
 	return &amsTypes[0]
+}
+
+func GetOrganizationID(ctx context.Context, conn connection.Connection) (accountID string, err error) {
+	account, _, err := conn.API().AccountMgmt().ApiAccountsMgmtV1CurrentAccountGet(ctx).
+		Execute()
+	if err != nil {
+		return "", err
+	}
+
+	return account.Organization.GetId(), nil
 }

@@ -4,6 +4,8 @@
     "ams": {
       "termsAndConditionsEventCode": "register",
       "termsAndConditionsSiteCode": "ocm",
+      "instanceQuotaId": "cluster|rhinfra|rhosak|standard",
+      "trialQuotaId": "cluster|rhinfra|rhosaktrial|standard",
       "quotaProductId": "RHOSAK",
       "trialQuotaProductId": "RHOSAKTrial",
       "resourceName": "rhosak"
@@ -13,6 +15,8 @@
     "ams": {
       "termsAndConditionsEventCode": "register",
       "termsAndConditionsSiteCode": "ocm",
+      "instanceQuotaId": "cluster|rhinfra|rhosr|any",
+      "trialQuotaId": "cluster|rhinfra|rhosrtrial|any",
       "quotaProductId": "RHOSR",
       "trialQuotaProductId": "RHOSRTrial",
       "resourceName": "rhosr"
