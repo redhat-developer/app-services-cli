@@ -111,7 +111,7 @@ func runDescribe(opts *options) error {
 
 	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
 
-	opts.logger.Error(opts.localizer.MustLocalize(
+	opts.logger.Info(opts.localizer.MustLocalize(
 		"registry.common.log.message.compatibleAPIs",
 		localize.NewEntry("CoreRegistryAPI", compatibleEndpoints.CoreRegistry),
 		localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
