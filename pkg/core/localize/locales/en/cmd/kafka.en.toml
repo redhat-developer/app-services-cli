@@ -326,14 +326,17 @@ one = 'Kafka instance "{{.Name}}" already exists'
 [kafka.create.error.userInstanceType.notFound]
 one = 'Cannot fetch user allowed instance type"'
 
-[kafka.create.error.oneinstance]
-one = 'maximum number of allowed instances reached. Please review all instances that your user has access to and delete one or more instances before creating a new one.'
+[kafka.create.error.quota.exceeded]
+one = 'your accout exceeded quota for Kafka instances. Please refer to https://console.redhat.com/application-services/subscriptions/streams for more information' 
 
 [kafka.create.error.notsupported]
-one = 'Kafka instance creation is not supported for this cloud provider region and account'
+one = 'kafka instance creation is not supported for this cloud provider region and account'
 
 [kafka.create.error.temporary.unavailable]
 one = 'unable to create new Kafka instance at this time in specified cloud provider and region. Please try again later or choose another region.'
+
+[kafka.create.error.instance.limit]
+one = 'maximum number of allowed kafka instances has been reached. Please review all instances that your user has access to and delete one or more instances before creating a new one'
 
 [kafka.create.region.error.invalidRegion]
 one = '''
