@@ -63,8 +63,8 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
-				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
+			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidListOutputFormats...) {
+				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidListOutputFormats...)
 			}
 
 			if opts.page < 1 {
