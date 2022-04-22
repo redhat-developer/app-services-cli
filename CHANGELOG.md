@@ -1,4 +1,39 @@
 
+<a name="v0.41.0"></a>
+## [v0.41.0](https://github.com/redhat-developer/app-services-cli/compare/v0.40.1...v0.41.0) (2022-04-22)
+
+### Bug Fixes
+
+* change message for compatibility APIs
+* change to info from error
+* address review comments
+* add remaining commands
+* add messages placeholders
+* build failing at lint
+* expose api config to enable using external clients and APIs ([#1523](https://github.com/redhat-developer/app-services-cli/issues/1523))
+* update client to enable using external clients
+* map connector status to row ([#1518](https://github.com/redhat-developer/app-services-cli/issues/1518))
+* remove invalid char in docs
+* use default page size from build
+* add create support
+* add parameters
+* improve messages
+* add example strings
+* add connectors to root
+* move messages generator
+* default client
+* **connector:** hide connector commands
+* **connector namespace:** add validation
+
+### Features
+
+* initial implementation for connectors commands
+* **connector:** add update and namespace commands
+* **connector namespace:** add delete command and refactors
+* **connectors:** add update cmd and enhance commands
+* **service-registry:** display compatibile API endpoints
+
+
 <a name="v0.40.1"></a>
 ## [v0.40.1](https://github.com/redhat-developer/app-services-cli/compare/v0.40.0...v0.40.1) (2022-04-20)
 
