@@ -214,11 +214,11 @@ one = 'No Service Registry instances were found.'
 [registry.common.log.message.compatibleAPIs]
 one='''
 You can connect to the Service Registry instance using following options:
- - For native Apicurio API and SerDes - Core Registry API:
+ - For Apicurio Service Registry API:
     {{.CoreRegistryAPI}}
- - For any upstream tools - Confluent Schema Registry API:  
+ - For tools supporting Confluent Schema Registry API:  
     {{.SchemaRegistryAPI}}
- - For tools compatible with CNCF API - CNCF Schema Registry API
+ - For CNCF Schema Registry API:
     {{.CncfSchemaRegistryAPI}}
 '''
 
