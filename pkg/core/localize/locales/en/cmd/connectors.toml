@@ -121,18 +121,18 @@ cat myconnector.json | rhoas connector create
 one = 'Successfully created connector'
 
 [connector.update.cmd.shortDescription]
-one = 'Create connector'
+one = 'Update connector'
 
 [connector.update.cmd.longDescription]
-one = 'Create connector'
+one = 'Update connector'
 
 [connector.update.cmd.example]
 one = '''
-## Create connector
-rhoas connector update  -id=my-connector --file=myconnector.json
+## Update connector
+rhoas connector update --id=my-connector --file=myconnector.json
 
-## Create connector from stdin
-cat myconnector.json | rhoas connector create
+## Update connector from stdin
+cat myconnector.json | rhoas connector update
 '''
 
 [connector.update.info.success]
