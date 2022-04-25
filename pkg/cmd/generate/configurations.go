@@ -13,19 +13,21 @@ const (
 	envFormat        = "env"
 	jsonFormat       = "json"
 	propertiesFormat = "properties"
+	secretFormat     = "secret"
 )
 
-var configurationTypes = []string{envFormat, jsonFormat, propertiesFormat}
+var configurationTypes = []string{envFormat, jsonFormat, propertiesFormat, secretFormat}
 
 var (
-	envConfig        = template.Must(template.New(envFormat).Parse(templateEnv))
-	jsonConfig       = template.Must(template.New(jsonFormat).Parse(templateJSON))
-	propertiesConfig = template.Must(template.New(propertiesFormat).Parse(templateProperties))
+	envConfig            = template.Must(template.New(envFormat).Parse(templateEnv))
+	jsonConfig           = template.Must(template.New(jsonFormat).Parse(templateJSON))
+	propertiesConfig     = template.Must(template.New(propertiesFormat).Parse(templateProperties))
+	secretTemplateConfig = template.Must(template.New(secretFormat).Parse(templateSecret))
 )
 
 // WriteConfig saves the configurations to a file
 // in the specified output format
-func WriteConfig(configType string, config *configValues) error {
+func WriteConfig(configType string, filePath string, config *configValues) error {
 
 	var fileBody bytes.Buffer
 	fileTemplate := getFileFormat(configType)
@@ -35,7 +37,9 @@ func WriteConfig(configType string, config *configValues) error {
 	}
 
 	fileData := []byte(fileBody.String())
-	filePath := getDefaultPath(configType)
+	if filePath == "" {
+		filePath = getDefaultPath(configType)
+	}
 
 	return ioutil.WriteFile(filePath, fileData, 0o600)
 }
@@ -49,6 +53,8 @@ func getDefaultPath(configType string) (filePath string) {
 		filePath = "rhoas.properties"
 	case jsonFormat:
 		filePath = "rhoas.json"
+	case secretFormat:
+		filePath = "rhoas-services-secret.yaml"
 	}
 
 	pwd, err := os.Getwd()
@@ -62,7 +68,6 @@ func getDefaultPath(configType string) (filePath string) {
 }
 
 func getFileFormat(configType string) (template *template.Template) {
-
 	switch configType {
 	case envFormat:
 		template = envConfig
@@ -70,6 +75,8 @@ func getFileFormat(configType string) (template *template.Template) {
 		template = propertiesConfig
 	case jsonFormat:
 		template = jsonConfig
+	case secretFormat:
+		template = secretTemplateConfig
 	}
 
 	return template

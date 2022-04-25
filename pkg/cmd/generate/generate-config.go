@@ -25,6 +25,7 @@ type options struct {
 	ServiceContext servicecontext.IContext
 
 	name       string
+	fileName   string
 	configType string
 }
 
@@ -47,7 +48,6 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("generate.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			// check that a valid type is provided
 			validType := flagutil.IsValidInput(opts.configType, configurationTypes...)
 			if !validType {
@@ -61,6 +61,7 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 	flags := contextcmdutil.NewFlagSet(cmd, f)
 	flags.AddContextName(&opts.name)
 	flags.StringVar(&opts.configType, "type", "", opts.localizer.MustLocalize("generate.flag.type"))
+	cmd.Flags().StringVar(&opts.fileName, "output-file", "", opts.localizer.MustLocalize("generate.common.flag.fileLocation.description"))
 	_ = cmd.MarkFlagRequired("type")
 
 	flagutil.EnableStaticFlagCompletion(cmd, "type", configurationTypes)

@@ -21,8 +21,9 @@ $ rhoas generate-config --type json
 ### Options
 
 ```
-      --name string   Name of the context
-      --type string   Type of configuration file to be generated
+      --name string          Name of the context
+      --output-file string   Sets a custom file location to save the credentials
+      --type string          Type of configuration file to be generated
 ```
 
 ### Options inherited from parent commands
