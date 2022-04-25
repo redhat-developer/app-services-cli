@@ -20,6 +20,9 @@ type configValues struct {
 	ClientID     string
 	ClientSecret string
 	TokenURL     string
+
+	// Optional
+	Name string
 }
 
 func createServiceAccount(opts *options, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
@@ -92,8 +95,8 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	if !serviceAvailable {
 		return opts.localizer.MustLocalizeError("generate.log.info.noSevices")
 	}
-
-	serviceAccount, err := createServiceAccount(opts, fmt.Sprintf("%s-%v", opts.name, time.Now().Unix()))
+	configInstanceName := fmt.Sprintf("%s-%v", opts.name, time.Now().Unix())
+	serviceAccount, err := createServiceAccount(opts, configInstanceName)
 	if err != nil {
 		return err
 	}
@@ -106,8 +109,9 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	configurations.ClientID = serviceAccount.GetClientId()
 	configurations.ClientSecret = serviceAccount.GetClientSecret()
 	configurations.TokenURL = cfg.MasAuthURL + "/protocol/openid-connect/token"
+	configurations.Name = configInstanceName
 
-	if err = WriteConfig(opts.configType, configurations); err != nil {
+	if err = WriteConfig(opts.configType, opts.fileName, configurations); err != nil {
 		return err
 	}
 
