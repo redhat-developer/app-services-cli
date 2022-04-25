@@ -1,0 +1,71 @@
+[kafka.consumerGroup.resetOffset.cmd.shortDescription]
+one = 'Reset partition offsets for a consumer group'
+
+[kafka.consumerGroup.resetOffset.cmd.longDescription]
+one = '''
+Reset partition offsets for a particular topic. A reset changes the offset position from which consumers read from the message log of a topic partition. To reset an offset position, the consumer group must have NO MEMBERS connected to a topic.
+
+You can choose from the following options for the reset:
+- Earliest (earliest offset at the start of the message log)
+- Latest (latest offset at the end of the message log)
+- Absolute (specific offset in the message log)
+- Timestamp (specific timestamp in the message log)
+
+You can also reset the offset position for all topics or a single, specified topic.
+
+Warning: By resetting the offset position, you risk clients skipping or duplicating messages.
+'''
+
+[kafka.consumerGroup.resetOffset.cmd.example]
+one = '''
+# Reset partition offsets for a consumer group to latest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset latest
+
+# Reset partition offsets for a consumer group to earliest
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset earliest
+
+# Reset partition offsets for a consumer group to an absolute value
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset absolute --value 0
+
+# Reset partition offsets for a consumer group to a timestamp
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset timestamp --value "2016-06-23T09:07:21-07:00"
+
+# Reset specific partition offsets for a consumer group
+$ rhoas kafka consumer-group reset-offset --id consumer_group_1 --topic my-topic --offset latest --partitions 0,1
+'''
+
+[kafka.consumerGroup.resetOffset.flag.topic]
+one = 'Reset consumer group offsets on a specified topic'
+
+[kafka.consumerGroup.resetOffset.flag.yes]
+one = 'Skip confirmation to forcibly reset the offset for the consumer group'
+
+[kafka.consumerGroup.resetOffset.flag.offset]
+one = 'Offset type (choose from: "earliest", "latest", "absolute", "timestamp")'
+
+[kafka.consumerGroup.resetOffset.flag.value]
+one = 'Custom offset value (required when offset is "absolute" or "timestamp")'
+
+[kafka.consumerGroup.resetOffset.flag.partitions]
+one = 'Reset consumer group offsets on specified partitions (comma-separated integers)'
+
+[kafka.consumerGroup.resetOffset.flag.output]
+one = 'Format in which to display reset offset result (choose from: "json", "yml", "yaml")'
+
+[kafka.consumerGroup.resetOffset.input.confirmReset.message]
+one = 'Are you sure you want to reset the offset for consumer group "{{.ID}}"?'
+
+[kafka.consumerGroup.resetOffset.log.debug.cancelledReset]
+one = 'You have chosen not to reset the consumer group offset.'
+
+[kafka.consumerGroup.resetOffset.log.info.successful]
+one = 'Offset has been reset for members of consumer group with ID "{{.ConsumerGroupID}}" in the Kafka instance "{{.InstanceName}}". Run "rhoas kafka consumer-group describe --id {{.ConsumerGroupID}}" to view its current state.'
+
+[kafka.consumerGroup.resetOffset.error.valueRequired]
+one = 'value is required  when "{{.Offset}}" offset is used'
+
+[kafka.consumerGroup.resetOffset.error.invalidAbsoluteOffset]
+one = 'invalid value "{{.Value}}" for absolute offset, should be an integer'
+
+[kafka.consumerGroup.resetOffset.error.invalidTimestampOffset]
+one = "invalid value \"{{.Value}}\" for timestamp offset, must be in format \"yyyy-MM-dd'T'HH:mm:ssz\""

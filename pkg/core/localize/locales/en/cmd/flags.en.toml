@@ -1,0 +1,27 @@
+[flag.error.requiredWhenNonInteractive]
+description = "Flag is required when not running interactively"
+one = "--{{.Flag}} required when not running interactively"
+
+[flag.error.invalidValue.base]
+description = "Invalid flag value"
+one = 'invalid value "{{.Value}}" for --{{.Flag}}'
+
+[flag.error.invalidValue.options]
+one = ', valid options are: '
+
+[flag.error.requiredFlag]
+description = 'Required flag error message'
+one = '--{{.Flag}} is a required flag'
+
+[flag.common.chooseFrom]
+one = 'Choose from: '
+
+[flag.common.output.description]
+one = 'Specify the output format'
+
+[flag.common.yes.description]
+one = 'Skip confirmation of this action'
+
+[argument.error.requiredWhenNonInteractive]
+description = "Argument is required when not running interactively"
+one = "{{.Argument}} required when not running interactively"

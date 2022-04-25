@@ -1,0 +1,108 @@
+[registry.role.cmd.description.short]
+one = 'Service Registry role management'
+
+[registry.role.cmd.description.long]
+one = '''
+
+Manage Service Registry roles using a set of commands that give users one of following permissions:
+
+* viewer (provides read access)
+* manager (provides read and write access)
+* admin (provides admin access as well as read and write access)
+
+Roles can be applied to users (for example, "martin_redhat") and Service Account Client IDs (for example, "srvc-acct-03ddedba-5b49-4aa0-9b68-02e8b8c31add").
+These commands are accessible only to users with the organization admin role or owners of the Service Registry instance.
+'''
+
+[registry.role.cmd.example]
+one = '''
+## Create or update user role
+rhoas service-registry role add --role=admin --username=joedough
+
+## List user and service account roles
+rhoas service-registry role list
+
+## Revoke role for user
+rhoas service-registry role revoke --username=janedough
+'''
+
+
+[registry.role.cmd.add.shortDescription]
+one = 'Add or update principal role'
+
+[registry.role.cmd.add.longDescription]
+one = '''
+
+Add or update one of the following roles for a user or service account:
+
+* viewer (provides read access)
+* manager (provides read and write access)
+* admin (provides admin access as well as read and write access)
+'''
+
+[registry.role.cmd.add.example]
+one = '''
+## Create or update user role
+rhoas service-registry role add --role=admin --username=joedough
+'''
+
+[artifact.cmd.common.error.useSaOrUserOnly]
+one = 'Use only single flag (username,service-account)'
+
+[artifact.cmd.common.error.missingUserOrSA]
+one = 'Missing username or service account flag'
+
+[artifact.cmd.common.error.invalidRole]
+one = 'Invalid role provided by user'
+
+[registry.role.cmd.flag.serviceAccount.description]
+one = 'ServiceAccount name'
+
+[registry.role.cmd.flag.username.description]
+one = 'Username of the user within organization'
+
+[registry.role.cmd.flag.role.description]
+one = 'Role to apply: admin, manager, or viewer'
+
+[registry.role.cmd.add.success]
+one = 'Role was successfully applied'
+
+[registry.role.cmd.list.shortDescription]
+one = 'List roles'
+
+[registry.role.cmd.list.longDescription]
+one = 'List all roles on selected instance'
+
+[registry.role.cmd.list.example]
+one = '''
+## List user and service account roles
+rhoas service-registry role list
+'''
+
+[registry.role.cmd.nomappings]
+one = 'No role mappings available'
+
+[registry.role.cmd.updating]
+one = 'Updating role for principal'
+
+[registry.role.cmd.creating]
+one = 'Creating new role for principal'
+
+[registry.role.cmd.revoke.shortDescription]
+one = 'Revoke role for principal'
+
+[registry.role.cmd.revoke.longDescription]
+one = '''
+Revoke the role of a user or service account.
+
+NOTE: It is not possible to revoke the role of the owner of the instance. The instance owner always retains admin rights.
+'''
+
+[registry.role.cmd.revoke.example]
+one = '''
+## Revoke role for user
+rhoas service-registry role revoke --username=janedough
+'''
+
+[registry.role.cmd.revoke.success]
+one = 'Successfully revoked access for specified principal'

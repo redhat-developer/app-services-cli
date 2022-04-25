@@ -1,0 +1,5 @@
+# ignore generated API clients in GitHub pull requests
+pkg/api/ams/**/* linguist-generated=true
+
+# ignore the generated command line reference document in GitHub PRs
+docs/commands/* linguist-generated=true

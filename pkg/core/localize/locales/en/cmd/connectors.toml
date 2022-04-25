@@ -1,0 +1,264 @@
+[connector.cluster.addonParams.cmd.shortDescription]
+one = 'Get Addon parameters'
+
+[connector.cluster.addonParams.cmd.longDescription]
+one = 'Get Addon parameters'
+
+
+[connector.cluster.addonParams.cmd.example]
+one = '''
+## Get addon parameters
+rhoas connector cluster addon-parameters
+'''
+
+[connector.cluster.cmd.shortDescription]
+one = 'Connectors cluster commands'
+
+[connector.cluster.cmd.longDescription]
+one = 'Connectors cluster commands'
+
+[connector.cluster.cmd.example]
+one = '''
+## Create connectors cluster
+rhoas connector cluster create --name=test
+'''
+
+[connector.cluster.create.cmd.shortDescription]
+one = 'Create connectors cluster'
+
+[connector.cluster.create.cmd.longDescription]
+one = 'Create connectors cluster'
+
+[connector.cluster.create.cmd.example]
+one = '''
+## Create connectors cluster
+rhoas connector cluster create --name=test
+'''
+
+[connector.cluster.create.info.success]
+one = 'Successfully created cluster for connectors'
+
+[connector.cluster.delete.cmd.shortDescription]
+one = 'Delete connectors cluster'
+
+[connector.cluster.delete.cmd.longDescription]
+one = 'Delete connectors cluster'
+
+[connector.cluster.delete.cmd.example]
+one = '''
+## Delete connectors cluster
+rhoas connector cluster delete --id=c980124otd37bufiemj0
+'''
+
+[connector.cluster.delete.id.flag.description]
+one = 'Id of connectors cluster to delete'
+
+[connector.cluster.create.flag.name.description]
+one = 'Name of the cluster to create'
+
+[connector.cluster.delete.info.success]
+one = 'Successfully deleted cluster'
+
+[connector.cluster.delete.confirmDialog.message]
+one = 'Are you sure you want to delete the connector cluster with id "{{.ID}}"?'
+
+[connector.cluster.list.cmd.shortDescription]
+one = 'List connectors clusters'
+
+[connector.cluster.list.cmd.longDescription]
+one = 'List connectors clusters'
+
+[connector.cluster.list.cmd.example]
+one = '''
+## List connectors clusters
+rhoas connector cluster list
+'''
+
+[connector.common.id.flag]
+one = 'Unique identifier'
+
+[connector.common.list.flag.page]
+one = 'Page number'
+
+[connector.common.list.flag.limit]
+one = 'Page limit'
+
+[connector.common.log.info.noResults]
+one = 'No results returned from current command'
+
+[connector.common.validation.namespace.error.invalidChars]
+one = 'invalid name for namespace "{{.Name}}"'
+
+[connector.cmd.shortDescription]
+one = 'Connectors commands'
+
+[connector.cmd.longDescription]
+one = 'Connectors commands'
+
+
+[connector.cmd.example]
+one = '''   
+## List connectors
+rhoas connector list
+'''
+
+[connector.create.cmd.shortDescription]
+one = 'Create connector'
+
+[connector.create.cmd.longDescription]
+one = 'Create connector'
+
+[connector.create.cmd.example]
+one = '''
+## Create connector
+rhoas connector create --file=myconnector.json
+
+## Create connector from stdin
+cat myconnector.json | rhoas connector create
+'''
+
+[connector.create.info.success]
+one = 'Successfully created connector'
+
+[connector.update.cmd.shortDescription]
+one = 'Update connector'
+
+[connector.update.cmd.longDescription]
+one = 'Update connector'
+
+[connector.update.cmd.example]
+one = '''
+## Update connector
+rhoas connector update --id=my-connector --file=myconnector.json
+
+## Update connector from stdin
+cat myconnector.json | rhoas connector update
+'''
+
+[connector.update.info.success]
+one = 'Successfully updated connector'
+
+[connector.file.flag.description]
+one = 'Location of the connector json file describing the connector'
+
+[connector.delete.cmd.shortDescription]
+one = 'Delete connector'
+
+[connector.delete.cmd.longDescription]
+one = 'Delete connector'
+
+[connector.delete.cmd.example]
+one = '''
+# Delete connector
+rhoas connector delete --id=c9b71ucotd37bufoamkg
+'''
+
+[connector.delete.flag.id.description]
+one = 'Id of the connector to delete'
+
+[connector.delete.info.success]
+one = 'Successfully deleted connector'
+
+
+[connector.delete.confirmDialog.message]
+one = 'Are you sure you want to delete the connector with id "{{.ID}}"?'
+
+[connector.describe.cmd.shortDescription]
+one = 'Get connector details'
+
+[connector.describe.cmd.longDescription]
+one = 'Get connector details'
+
+[connector.describe.cmd.example]
+one = '''
+## Get connector details
+rhoas connector describe --id=c980124otd37bufiemj0
+'''
+
+[connector.common.flag.id.description]
+one = 'Id of the connector'
+
+[connector.describe.info.success]
+one = 'Connector details returned successfully'
+
+[connector.list.cmd.shortDescription]
+one = 'List connectors'
+
+[connector.list.cmd.longDescription]
+one = 'List connectors'
+
+[connector.list.cmd.example]
+one = '''
+## List connectors
+rhoas connector list
+'''
+
+[connector.namespace.cmd.shortDescription]
+one = 'Connector namespace commands'
+
+[connector.namespace.cmd.longDescription]
+one = 'Commands to manage namespaces for connectors'
+
+[connector.namespace.cmd.example]
+one = '''
+# List namespaces in the connector instance
+$ rhoas connector namespace list
+
+# Create a namespace in connector instance
+$ rhoas connector name space create --name "my-namespace"
+'''
+
+[connector.namespace.create.flag.name.description]
+one = 'Name of the namespace'
+
+[connector.namespace.create.flag.eval.description]
+one = 'Create an evaluation namespace'
+
+[connector.namespace.list.cmd.shortDescription]
+one = 'Get connector namespaces'
+
+[connector.namespace.list.cmd.longDescription]
+one = 'Get connector namespaces'
+
+[connector.namespace.list.cmd.example]
+one = '''
+## Get connector namespaces list
+rhoas connector namespace list
+'''
+
+[connector.namespace.create.cmd.shortDescription]
+one = 'Create a connector namespace'
+
+[connector.namespace.create.cmd.longDescription]
+one = 'Create a connector namespace'
+
+[connector.namespace.create.cmd.example]
+one = '''
+# Create a connector namespace
+rhoas connector namespace create --name "my-namespace"
+
+# Create an evaluation namespace
+rhoas connector namespace create --name "my-namespace" --eval
+'''
+
+[connector.namespace.create.info.success]
+one = 'Successfully created namespace'
+
+
+[connector.namespace.delete.cmd.shortDescription]
+one = 'Delete a connector namespace'
+
+[connector.namespace.delete.cmd.longDescription]
+one = 'Delete a connector namespace'
+
+[connector.namespace.delete.cmd.example]
+one = '''
+# Delete a connector namespace
+rhoas connector namespace delete --id jdhdhdhmmf
+'''
+
+[connector.namespace.delete.info.success]
+one = 'Successfully deleted namespace'
+
+[connector.namespace.delete.confirmDialog.message]
+one = 'Are you sure you want to delete the connector namespace with id "{{.ID}}"?'

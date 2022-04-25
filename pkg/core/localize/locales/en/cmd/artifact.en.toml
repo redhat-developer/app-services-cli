@@ -1,0 +1,499 @@
+
+[artifact.cmd.description.short]
+one = 'Manage Service Registry artifacts'
+
+[artifact.cmd.description.long]
+one = '''
+Manage Service Registry schema and API artifacts in the currently selected Service Registry instance.
+
+Commands are executed on the currently selected Service Registry instance, which can be overridden using the --instance-id flag.
+
+Service Registry enables developers to manage and share the structure of their data.
+For example, client applications can dynamically push or pull the latest schema or API updates to or from the registry without needing to redeploy.
+Service Registry also enables developers to create rules that govern how registry content can evolve over time.
+For example, this includes rules for content validation and version compatibility.
+
+Artifact commands enable client applications to manage the schema and API artifacts in the registry instance.
+This set of commands provide create, read, update, and delete operations for artifacts, rules, versions, and metadata.
+'''
+
+[artifact.cmd.example]
+one = '''
+## Create artifact in my-group from schema.json file
+rhoas service-registry artifact create --artifact-id=my-artifact --group=my-group artifact.json
+
+## Get artifact content
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
+
+## Get artifact content by hash
+rhoas service-registry artifact download --hash=cab4...al9 --output-file=artifact.json
+
+## Delete artifact
+rhoas service-registry artifact delete --artifact-id=my-artifact
+
+## Get artifact metadata
+rhoas service-registry artifact metadata --artifact-id=my-artifact --group=my-group
+
+## Update artifact
+rhoas service-registry artifact update --artifact-id=my-artifact artifact-new.json
+
+## List artifacts
+rhoas service-registry artifact list --group=my-group --limit=10 page=1
+
+## View artifact versions
+rhoas service-registry artifact versions --artifact-id=my-artifact --group=my-group
+
+Artifacts file can be instance of any schema like OpenAPI, Avro etc.
+For example: https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/docs/resources/avro-userInfo.json
+'''
+
+[artifact.common.file.location]
+one = 'File location of the artifact'
+
+[artifact.common.delete.without.prompt]
+one = 'Delete artifact without prompt'
+
+[artifact.common.registryIdToUse]
+one = 'ID of the Service Registry instance to be used (by default, uses the currently selected instance)'
+
+[artifact.common.id]
+one = 'ID of the artifact'
+
+[artifact.common.group]
+one = 'Artifact group'
+
+[artifact.common.sha]
+one = 'SHA-256 hash of the artifact'
+
+[artifact.common.version]
+one = 'Version of the artifact'
+
+[artifact.common.custom.version]
+one = 'Custom version of the artifact (for example 1.0.0)'
+
+[artifact.common.custom.name]
+one = 'Custom name of the artifact'
+
+[artifact.common.custom.description]
+one = 'Custom description of the artifact'
+
+[artifact.common.type]
+one = 'Type of artifact. Choose from: {{.AllowedTypes}}'
+
+[artifact.common.webURL]
+one = '''
+You can view or manage this artifact in your browser by accessing:
+{{.URL}}
+'''
+[artifact.common.global.id]
+one = 'Global ID of the artifact'
+
+[artifact.common.content.id]
+one = 'ContentId of the artifact'
+
+[artifact.common.page.number]
+one = 'Page number'
+
+[artifact.common.page.limit]
+one = 'Page limit'
+
+[artifact.common.message.opening.file]
+one = 'Opening file: {{.FileName}}'
+
+[artifact.common.message.loading.file]
+one = 'Loading file from url: {{.FileName}}'
+
+[artifact.common.message.file.location]
+one = 'Location of the output file'
+
+[artifact.common.message.output.format]
+one = 'Output format (json, yaml, yml)'
+
+[artifact.common.message.no.artifact.available.for.group.and.registry]
+one = 'No artifacts found for {{.Group}} group and registry ID {{.Registry}}'
+
+[artifact.common.message.deleteAllArtifactsInGroup]
+one = 'Artifact was not specified. Command will delete all artifacts in the group'
+
+[artifact.common.message.deleteAllArtifactsFromGroup]
+one = 'Do you want to delete ALL ARTIFACTS from group {{.GroupName}}'
+
+[artifact.common.message.AllArtifactsInGroupDeleted]
+one = 'Artifacts in group {{.GroupName}} deleted'
+
+[artifact.common.message.created]
+one = 'Artifact created'
+
+[artifact.common.message.deleted]
+one = 'Artifact deleted: {{.Name}}'
+
+[artifact.common.message.updated]
+one = 'Artifact updated'
+
+[artifact.common.message.deleting.artifact]
+one = 'Deleting artifact {{.Name}}'
+
+[artifact.common.message.deleting.artifactFromGroup]
+one = 'Do you want to delete artifact {{.Name}} from group {{.Group}}'
+
+[artifact.common.message.fetching.artifact]
+one = 'Fetching artifact'
+
+[artifact.common.message.fetching.with.version]
+one = 'Fetching artifact with version: {{.Version}}'
+
+[artifact.common.message.fetching.latest]
+one = 'Fetching latest artifact'
+
+[artifact.common.message.artifact.metadata.fetching]
+one = 'Fetching artifact metadata'
+
+[artifact.common.message.artifact.metadata.fetched]
+one = 'Successfully fetched artifact metadata'
+
+[artifact.common.message.artifact.versions.fetching]
+one = 'Fetching artifact versions'
+
+[artifact.common.message.artifact.versions.fetched]
+one = 'Successfully fetched artifact versions'
+
+[artifact.common.message.artifact.metadata.updating]
+one = 'Updating artifact metadata'
+
+[artifact.common.message.artifact.metadata.updated]
+one = 'Successfully updated artifact metadata'
+
+[artifact.common.message.fetched.successfully]
+one = 'Successfully fetched artifact'
+
+[artifact.common.message.artifactIdRequired]
+one = 'artifact ID is required. Please specify artifact by using --artifact-id flag'
+
+[artifact.common.message.running.editor.with.editable.metadata]
+one = 'Running editor with editable metadata. Please save contents and close editor to continue...'
+
+[artifact.common.error.artifact.id.required]
+one = 'artifact is required. Please specify artifact by using --artifact-id flag'
+
+[artifact.common.error.artifact.notFound]
+one = 'artifact {{.Name}} not found'
+
+[artifact.common.error.page.and.limit.too.small]
+one = 'page and limit values should be bigger than 1'
+
+[artifact.cmd.common.error.noServiceRegistrySelected]
+one = '''no Service Registry instance selected. Use 'rhoas service-registry use' to select your registry instance'''
+
+[artifact.cmd.common.error.specify.contentId.globalId.hash]
+one = 'please specify at least one flag: [contentId, global-id, hash]'
+
+[artifact.cmd.common.error.no.editor.mode.in.non.interactive]
+one = 'editor mode cannot be started in non-interactive mode. Please use --name and --description flags'
+
+[artifact.cmd.create.description.short]
+one = 'Create new artifact from file or standard input'
+
+[artifact.cmd.create.description.long]
+one = '''
+Create a new artifact by posting the artifact content to the registry instance.
+
+Artifacts are typically in JSON format for most of the supported types, but might be in another format for a few types (for example, PROTOBUF).
+
+Service Registry attempts to identify what type of artifact is being added from the following supported list:
+
+* Avro (AVRO)
+* Protobuf (PROTOBUF)
+* JSON Schema (JSON)
+* Kafka Connect (KCONNECT)
+* OpenAPI (OPENAPI)
+* AsyncAPI (ASYNCAPI)
+* GraphQL (GRAPHQL)
+* Web Services Description Language (WSDL)
+* XML Schema (XSD)
+
+An artifact is created using the content provided in the request body.
+This content is created with a unique artifact ID that can be provided by user.
+If not provided in the request, the registry server generates a unique ID for the artifact.
+It is typically recommended that callers provide the ID, because this is a meaningful identifier, and for most use cases should be supplied by the caller.
+If an artifact with the provided artifact ID already exists, the command will fail with an error.
+
+When the --group parameter is missing, the command uses the "default" group.
+when the --instance-id is missing, the command creates a new artifact for the currently active Service Registry instance (displayed in rhoas service-registry describe)
+'''
+
+[artifact.cmd.create.example]
+one = '''
+# Create an artifact in the default group
+rhoas service-registry artifact create my-artifact.json
+
+# Create an artifact with the specified type
+rhoas service-registry artifact create --type=JSON my-artifact.json
+'''
+
+[artifact.cmd.create.error.invalidArtifactType]
+one = 'invalid artifact type. Please use one of following values: {{.AllowedTypes}}'
+
+[artifact.cmd.delete.description.short]
+one = 'Deletes an artifact or all artifacts in a given group'
+
+[artifact.cmd.delete.description.long]
+one = '''
+Deletes a single artifact or all artifacts in a given group:
+
+* When called without arguments, deletes all artifacts in the group.
+* When --artifact-id is specified, deletes only a single artifact and its version.
+* When --group is omitted, the command uses the "default" group.
+'''
+
+[artifact.cmd.delete.example]
+one = '''
+## Delete all artifacts in the group "default"
+rhoas service-registry artifact delete
+
+## Delete artifact in the group "default" with name "my-artifact"
+rhoas service-registry artifact delete --artifact-id=my-artifact
+'''
+
+[artifact.cmd.get.description.short]
+one = 'Get artifact by ID, group, and version'
+
+[artifact.cmd.get.description.long]
+one = '''
+Get an artifact from the registry based on the artifact ID, group, and version.
+
+NOTE: To fetch artifacts using global identifiers, use the "service-registry artifact download" command.
+
+When --version is specified, the command fetches the specified artifact version. When --version is not specified, the command fetches the latest artifact version.
+
+'''
+
+[artifact.cmd.get.example]
+one = '''
+## Get latest artifact with name "my-artifact" and print it out to standard out
+rhoas service-registry artifact get --artifact-id=my-artifact
+
+## Get latest artifact with name "my-artifact" from group "my-group" and save it to artifact.json file
+rhoas service-registry artifact get --artifact-id=my-artifact --group=my-group --output-file=artifact.json
+
+## Get latest artifact and pipe it to another command
+rhoas service-registry artifact get --artifact-id=my-artifact | grep -i 'user'
+
+## Get artifact with custom version and print it out to standard out
+rhoas service-registry artifact get --artifact-id=myartifact --version=4
+'''
+
+[artifact.cmd.list.description.short]
+one = 'List artifacts'
+
+[artifact.cmd.list.description.long]
+one = 'List all artifacts for the group in the specified output format (by default, "table")'
+
+[artifact.cmd.list.example]
+one = '''
+## List all artifacts for the "default" artifact group
+rhoas service-registry artifact list
+
+## List all artifacts with "my-group" group
+rhoas service-registry artifact list --group=my-group
+
+## List all artifacts with limit and group
+rhoas service-registry artifact list --page=2 --limit=10
+
+## List all artifacts for the "default" artifact group with name containing "sample"
+rhoas service-registry artifact list --name sample
+
+## List all artifacts for the "default" artifact group having labels "my-label" and "sample"
+rhoas service-registry artifact list --label "my-label" --labels "sample"
+
+## List all artifacts for the "default" artifact group with description containing "sample"
+rhoas service-registry artifact list --description sample
+'''
+
+[artifact.cmd.update.description.short]
+one = 'Update artifact'
+
+[artifact.cmd.update.description.long]
+one = '''
+Update an artifact from a file or directly from standard input.
+
+Artifacts are typically in JSON format for most supported types, but might be in another format for some types (for example, PROTOBUF).
+The type of the content should be compatible with the current artifact type.
+
+When successful, this command creates a new version of the artifact, making it the most recent (and therefore official) version of the artifact.
+
+An artifact is updated using the content provided in the request body.
+This content is updated under a unique artifactId provided by the user.
+
+Updated artifact content should conform to the validity and compatibility rules set for the registry instance.
+'''
+
+[artifact.cmd.update.example]
+one = '''
+## update artifact from group and artifact-id
+rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json
+
+## update artifact from group and artifact-id
+rhoas service-registry artifact update --artifact-id=my-artifact --group my-group my-artifact.json
+'''
+
+[artifact.cmd.download.description.short]
+one = 'Download artifacts from Service Registry using global identifiers'
+
+[artifact.cmd.download.description.long]
+one = '''
+Get one or more artifacts by group, content, hash, or globalId.
+
+NOTE: To download artifacts by artifactId, use the "service-registry artifact get" command.
+
+Use the following flags to specify the artifacts to download:
+
+* --contentId (ID if the content is from metadata)
+* --globalId (globalId of the content from metadata)
+* --hash (SHA-256 hash of the content)
+* --group (artifact group)
+'''
+
+[artifact.cmd.download.example]
+one = '''
+## Get latest artifact by content ID
+rhoas service-registry artifact download --content-id=183282932983
+
+## Get latest artifact by content ID to specific file
+rhoas service-registry artifact download --content-id=183282932983 --output-file=schema.json
+
+## Get latest artifact by global ID
+rhoas service-registry artifact download --global-id=383282932983
+
+## Get latest artifact by hash
+rhoas service-registry artifact download --hash=c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4
+'''
+
+[artifact.cmd.metadata.get.description.short]
+one = 'Get artifact metadata'
+
+[artifact.cmd.metadata.get.description.long]
+one = '''
+Get the metadata for an artifact in a Service Registry instance.
+
+The returned metadata includes both generated (read-only) and editable metadata (such as name and description).
+'''
+
+[artifact.cmd.metadata.get.example]
+one = '''
+## Get latest artifact metadata for default group
+rhoas service-registry artifact metadata-get --artifact-id=my-artifact
+
+## Get latest artifact metadata for my-group group
+rhoas service-registry artifact metadata-get --artifact-id=my-artifact --group mygroup
+'''
+
+[artifact.cmd.metadata.set.description.short]
+one = 'Update artifact metadata'
+
+[artifact.cmd.metadata.set.description.long]
+one = '''
+Update the metadata for an artifact in a Service Registry instance.
+
+Editable metadata includes fields such as name and description.
+'''
+
+[artifact.cmd.metadata.set.example]
+one = '''
+## Update the metadata for an artifact
+rhoas service-registry artifact metadata-set --artifact-id=my-artifact --group=my-group --name=my-name --description=my-description
+
+## Update the metadata for an artifact using your default editor ($EDITOR)
+rhoas service-registry artifact metadata-set --artifact-id=my-artifact
+
+##  Update the metadata for an artifact using Visual Studio Code
+EDITOR="code -w" rhoas service-registry artifact metadata-set --artifact-id=my-artifact
+'''
+
+[artifact.cmd.versions.description.short]
+one = 'Get latest artifact versions by artifact-id and group'
+
+[artifact.cmd.versions.description.long]
+one = 'Get the latest artifact versions by specifying the group and artifact-id'
+
+[artifact.cmd.versions.example]
+one = '''
+## Get latest artifact versions for default group
+rhoas service-registry artifact versions --artifact-id=my-artifact
+
+## Get latest artifact versions for my-group group
+rhoas service-registry artifact versions --artifact-id=my-artifact --group mygroup
+'''
+
+[artifact.cmd.import.description.short]
+one = 'Import data into a Service Registry instance'
+
+[artifact.cmd.import.description.long]
+one = '''
+Import all artifacts and metadata from an export file to another Service Registry instance
+'''
+
+[artifact.cmd.import.example]
+one = '''
+## Import all artifacts and metadata from export file to another Service Registry instance
+rhoas service-registry artifact import --file=export.zip
+'''
+
+[artifact.cmd.export.description.short]
+one = 'Export data from Service Registry instance'
+
+[artifact.cmd.export.description.long]
+one = '''
+Export all artifacts and metadata from a Service Registry instance to a specified file
+'''
+
+[artifact.cmd.export.example]
+one = '''
+## Export all artifacts and metadata to export file for another Service Registry instance
+rhoas service-registry artifact export --file=export.zip
+'''
+
+[artifact.export.success]
+one = 'All data exported successfully'
+
+[artifact.import.success]
+one = 'All data imported successfully'
+
+
+[artifact.cmd.stateset.description.short]
+one = 'Set artifact state'
+
+[artifact.cmd.stateset.description.long]
+one = '''
+Set the artifact state by setting one of the following values:
+
+* ENABLED (Enable artifact)
+* DISABLED (Disable artifact usage)
+* DEPRECATED (Deprecate artifact)
+'''
+
+[artifact.cmd.stateset.example]
+one = '''
+## Set artifact state to DISABLED
+rhoas service-registry artifact state-set --artifact-id=my-artifact --state=DISABLED
+'''
+
+[artifact.flag.state.description]
+one = 'new artifact state'
+
+[artifact.common.message.artifact.state.updated]
+one = 'Successfully updated artifact state'
+
+[artifact.cmd.state.error.invalidArtifactState]
+one = 'invalid artifact state. Please use one of following values: {{.AllowedTypes}}'
+
+[artifact.cmd.list.flag.name.description]
+one = 'Text search to filter artifacts by name'
+
+[artifact.cmd.list.flag.labels.description]
+one = 'Text search to filter artifacts by labels'
+
+[artifact.cmd.list.flag.description.description]
+one = 'Text search to filter artifacts by description'
+
+[artifact.cmd.list.flag.properties.description]
+one = 'Text search to filter artifacts by properties (separate each name/value pair using a colon)'

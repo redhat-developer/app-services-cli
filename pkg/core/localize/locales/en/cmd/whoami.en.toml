@@ -1,0 +1,21 @@
+[whoami.cmd.shortDescription]
+description = "Short description for command"
+one = "Output the current username"
+
+[whoami.cmd.longDescription]
+description = "Long description for command"
+one = '''
+View the username of the current user.
+
+This command outputs the username for the user currently logged in.
+'''
+
+[whoami.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Output the current username
+$ rhoas whoami
+'''
+
+[whoami.log.info.tokenHasNoUsername]
+one = 'Token has no username'

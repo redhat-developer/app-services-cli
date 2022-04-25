@@ -1,0 +1,20 @@
+[logout.cmd.shortDescription]
+description = "Short description for command"
+one = "Log out from RHOAS"
+
+[logout.cmd.longDescription]
+description = "Long description for command"
+one = 'Log out from RHOAS. To manage your application services again, log in using ”rhoas login”.'
+
+[logout.cmd.example]
+one = '''
+rhoas logout
+'''
+
+[logout.error.unableToLogout]
+description = 'Log out error message'
+one = 'unable to log out:'
+
+[logout.log.info.logoutSuccess]
+description = 'Log out success message'
+one = 'Successfully logged out'

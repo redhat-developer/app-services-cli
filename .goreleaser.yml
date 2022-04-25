@@ -1,0 +1,78 @@
+project_name: rhoas
+
+release:
+  prerelease: auto
+  draft: false
+  name_template: "{{.Version}}"
+
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+    
+env:
+  - GO111MODULE=on
+  
+builds:
+  - <<: &build_defaults
+      binary: rhoas
+      main: ./cmd/rhoas
+      ldflags:
+        - -s -w -X github.com/redhat-developer/app-services-cli/internal/build.Version={{.Version}}
+        - -s -w -X github.com/redhat-developer/app-services-cli/internal/build.BuildSource="github"
+    id: macos
+    goos: [darwin]
+    goarch: [amd64, arm64]
+    
+  - <<: *build_defaults
+    id: linux
+    goos: [linux]
+    goarch: [amd64, arm64]
+    env:
+      - CGO_ENABLED=0
+
+  - <<: *build_defaults
+    id: windows
+    goos: [windows]
+    goarch: [amd64]
+
+archives:
+  - id: nix
+    builds: [macos, linux]
+    <<: &archive_defaults
+      name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    wrap_in_directory: true
+    replacements:
+      darwin: macOS
+    format: tar.gz
+
+  - id: windows
+    builds: [windows]
+    <<: *archive_defaults
+    wrap_in_directory: false
+    format: zip
+
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  skip: false
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+nfpms:
+  - file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    description: Command line tool for RHOAS
+    bindir: /usr/bin
+    license: Apache 2.0
+    contents:
+      - src: ./LICENSE
+        dst: /usr/share/licenses/rhoas/LICENSE
+    formats:
+      - deb
+      - rpm

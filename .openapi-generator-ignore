@@ -1,0 +1,2 @@
+pkg/api/**/go.mod
+pkg/api/**/go.sum

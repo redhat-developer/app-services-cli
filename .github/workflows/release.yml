@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.x
+
+      - name: Check tag
+        id: check-tag
+        run: |
+          if [[ ${GITHUB_REF} =~ ^refs/tags/^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::set-output name=prerelease::false"
+          else
+            echo "::set-output name=prerelease::true"
+          fi
+      - id: set-version
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const version = context.ref.replace(/^refs\/tags\//, '').replace(/^v/, '')
+            core.setOutput('version', version)
+      - 
+        name: Install git-chglog
+        uses: craicoverflow/install-git-chglog@v1
+      - 
+        name: Generate release notes
+        if: steps.check-tag.outputs.prerelease == 'false'
+        run: |
+          git-chglog -t .chglog/RELEASE.tpl.md $(git describe --tags $(git rev-parse HEAD)) > RELEASE_NOTES.md
+     
+      - name: Print release notes
+        if: steps.check-tag.outputs.prerelease == 'false'
+        run: cat RELEASE_NOTES.md
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        if: steps.check-tag.outputs.prerelease == 'false'
+        with:
+          version: latest
+          args: release --rm-dist --release-notes=RELEASE_NOTES.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run GoReleaser on pre-release
+        uses: goreleaser/goreleaser-action@v2
+        if: steps.check-tag.outputs.prerelease == 'true'
+        with:
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Guides of new version
+        if: steps.check-tag.outputs.prerelease == 'false'
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.APP_SERVICES_CI }}
+          repository: redhat-developer/app-services-guides
+          event-type: rhoas-cli-release
+          client-payload: '{"version": steps.set-version.outputs.version }'
+  tools-release:
+    needs: release
+    runs-on: ubuntu-latest
+    if: needs.release.steps.check-tag.outputs.prerelease == 'false'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Notify tools repo
+        uses: actions/github-script@v6
+        with: 
+          script: |
+            github.request('POST /repos/redhat-developer/app-services-tools/actions/workflows/20880234/dispatches', {
+              workflow_id: 20880234,
+              ref: 'ref',
+              inputs: {
+                rhoasVersion: context.ref.replace(/^refs\/tags\//, '')
+              }
+            })

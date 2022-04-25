@@ -1,0 +1,35 @@
+[status.cmd.shortDescription]
+one = 'View the status of application services in a service context'
+
+[status.cmd.longDescription]
+one = '''
+View the status of your application services. This command shows the status of each of your application services instances that belong to a service context.
+
+To view the status of a specific application service, use "rhoas status [service]".
+
+Note: You can change the current instance for an application service with the "rhoas [service] use” command.
+'''
+
+[status.cmd.example]
+one = '''
+# View the status of all application services in the current service context
+$ rhoas status
+
+# View the status of all application services in a specific service context
+$ rhoas status kafka
+
+# View the status of your services in JSON format
+$ rhoas status -o json
+'''
+
+[status.error.args.error.unknownServiceError]
+one = 'unknown service "{{.ServiceName}}"'
+
+[status.log.debug.requestingStatusOfServices]
+one = 'Requesting status of the following services:'
+
+[status.log.info.noStatusesAreUsed]
+one = 'No services set in context. To set a service in context, run "rhoas context use-[service] [args]".'
+
+[status.log.debug.noKafkaSelected]
+one = 'No Kafka instance is currently used, skipping status check'
