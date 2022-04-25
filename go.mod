@@ -23,7 +23,12 @@ require (
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0
+<<<<<<< HEAD
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0
+=======
+	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.5.0
+	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0
+>>>>>>> 0f2f8e14 (chore: update and fix issues)
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1
