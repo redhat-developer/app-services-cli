@@ -35,7 +35,7 @@ $ rhoas kafka acl delete --operation all --permission any --group "group-1" --al
       --group string              Set the consumer group resource. When the --prefix option is also passed, this is used as the consumer group prefix
       --instance-id string        Kafka instance ID. Uses the current instance if not set
       --operation string          Set the ACL operation. Choose from: "all", "alter", "alter-configs", "create", "delete", "describe", "describe-configs", "read", "write"
-  -o, --output string             Specify the output format. Choose from: "json", "yaml", "yml"
+  -o, --output string             Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
       --pattern-type string       Allows to specify arguments matching strategy [any literal prefix] (default "literal")
       --permission string         Set the ACL permission. Choose from: "allow", "any", "deny" (default "any")
       --prefix                    Determine if the resource should be exact match or prefix

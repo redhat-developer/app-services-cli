@@ -169,15 +169,14 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		rows := mapResponseItemsToRows(response.Artifacts)
-		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 	}
 
-	return nil
 }
 
 func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact) []artifactRow {

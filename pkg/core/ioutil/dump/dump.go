@@ -21,7 +21,8 @@ const (
 	JSONFormat  = "json"
 	YAMLFormat  = "yaml"
 	YMLFormat   = "yml"
-	EmptyFormat = ""
+	TableFormat = "table"
+	EmptyFormat = "none"
 )
 
 // JSON dumps the given data to the given stream so that it looks pretty. If the data is a valid
@@ -59,12 +60,6 @@ func YAML(stream io.Writer, body []byte) error {
 	}
 
 	return dumpYAML(stream, data)
-}
-
-// Empty returns no data so that in most cases including automated actions, no cluttering
-// of the console occurs.
-func Empty(stream io.Writer, body []byte) error {
-	return nil
 }
 
 // Table prints the given data into a formatted table. Only properties that have a `header`
@@ -161,11 +156,16 @@ func Formatted(writer io.Writer, format string, data interface{}) error {
 		return YAML(writer, data)
 	case EmptyFormat:
 		return nil
-	default:
+	case JSONFormat:
 		data, err := json.Marshal(data)
 		if err != nil {
 			return err
 		}
 		return JSON(writer, data)
+	case TableFormat:
+		Table(writer, data)
+		return nil
+	default:
+		return nil
 	}
 }

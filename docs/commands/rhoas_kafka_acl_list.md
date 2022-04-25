@@ -56,7 +56,7 @@ $ rhoas kafka acl list --group foo_group_id --user foo_user
       --cluster                  Set filter to cluster resource
       --group string             Text search to filter ACL rules for consumer groups by ID
       --instance-id string       Kafka instance ID. Uses the current instance if not set
-  -o, --output string            Specify the output format. Choose from: "json", "yaml", "yml"
+  -o, --output string            Specify the output format. Choose from: "json", "none", "table", "yaml", "yml" (default "table")
       --page int32               Current page number for the list  (default 1)
       --service-account string   Service account client ID used as principal for this operation
       --size int32               Maximum number of items to be returned per page  (default 10)

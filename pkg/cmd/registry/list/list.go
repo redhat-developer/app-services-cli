@@ -114,7 +114,7 @@ func runList(opts *options) error {
 	}
 
 	switch opts.outputFormat {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		var rows []RegistryRow
 		serviceConfig, _ := opts.Config.Load()
 		if serviceConfig != nil && serviceConfig.Services.ServiceRegistry != nil {
@@ -122,13 +122,12 @@ func runList(opts *options) error {
 		} else {
 			rows = mapResponseItemsToRows(&response.Items, "-")
 		}
-		dump.Table(opts.IO.Out, rows)
 		opts.Logger.Info("")
+		return dump.Formatted(opts.IO.Out, opts.outputFormat, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
 	}
 
-	return nil
 }
 
 func mapResponseItemsToRows(registries *[]srsmgmtv1.Registry, selectedId string) []RegistryRow {
