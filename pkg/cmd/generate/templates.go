@@ -23,13 +23,13 @@ var (
 
 	templateJSON = heredoc.Doc(`
 		{	
-			{{if .KafkaHost}}"kafkaHost":"{{.KafkaHost}}",
-			{{end}}{{if .RegistryURL}}"serviceRegistryUrl":"{{.RegistryURL}}",
-			"serviceRegistryCorePath":"` + registrycmdutil.REGISTRY_CORE_PATH + `",
-			"serviceRegistryCompatPath":"` + registrycmdutil.REGISTRY_COMPAT_PATH + `",
-			{{end}}"rhoasClientID":"{{.ClientID}}",
-			"rhoasClientSecret":"{{.ClientSecret}}",
-			"rhoasOauthTokenUrl":"{{.TokenURL}}"
+            {{if .KafkaHost}}"kafkaHost":"{{.KafkaHost}}",
+            {{end}}{{if .RegistryURL}}"serviceRegistryUrl":"{{.RegistryURL}}",
+            "serviceRegistryCorePath":"` + registrycmdutil.REGISTRY_CORE_PATH + `",
+            "serviceRegistryCompatPath":"` + registrycmdutil.REGISTRY_COMPAT_PATH + `",
+            {{end}}"rhoasClientID":"{{.ClientID}}",
+            "rhoasClientSecret":"{{.ClientSecret}}",
+            "rhoasOauthTokenUrl":"{{.TokenURL}}"
 		}
 	`)
 
@@ -52,18 +52,18 @@ var (
 		apiVersion: v1
 		kind: Secret
 		metadata:
-			name: {{.Name}}
+            name: {{.Name}}
 		type: Opaque
 		stringData:
-			{{if .KafkaHost}}## Kafka Configuration
-			KAFKA_HOST: {{.KafkaHost}}{{end}}
-			{{if .RegistryURL}}## Service Registry Configuration
-			SERVICE_REGISTRY_URL: {{.RegistryURL}}
-			SERVICE_REGISTRY_CORE_PATH: ` + registrycmdutil.REGISTRY_CORE_PATH + `
-			SERVICE_REGISTRY_COMPAT_PATH: ` + registrycmdutil.REGISTRY_COMPAT_PATH + `
-			{{end}}
-			## Authentication Configuration
-			RHOAS_CLIENT_ID: {{.ClientID}}
-			RHOAS_CLIENT_SECRET: {{.ClientSecret}}
-			RHOAS_OAUTH_TOKEN_URL: {{.TokenURL}}`)
+            {{if .KafkaHost}}## Kafka Configuration
+            KAFKA_HOST: {{.KafkaHost}}{{end}}
+            {{if .RegistryURL}}## Service Registry Configuration
+            SERVICE_REGISTRY_URL: {{.RegistryURL}}
+            SERVICE_REGISTRY_CORE_PATH: ` + registrycmdutil.REGISTRY_CORE_PATH + `
+            SERVICE_REGISTRY_COMPAT_PATH: ` + registrycmdutil.REGISTRY_COMPAT_PATH + `
+            {{end}}
+            ## Authentication Configuration
+            RHOAS_CLIENT_ID: {{.ClientID}}
+            RHOAS_CLIENT_SECRET: {{.ClientSecret}}
+            RHOAS_OAUTH_TOKEN_URL: {{.TokenURL}}`)
 )
