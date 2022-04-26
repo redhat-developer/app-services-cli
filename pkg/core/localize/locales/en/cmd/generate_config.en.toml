@@ -15,7 +15,7 @@ one='Type of configuration file to be generated'
 
 [generate.common.flag.fileLocation.description]
 description = 'Description for --output-file flag'
-one = 'Sets a custom file location to save the credentials'
+one = 'Sets a custom file location to save the configurations'
 
 
 [generate.log.info.noSevices]
