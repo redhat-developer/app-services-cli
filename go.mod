@@ -8,37 +8,49 @@ require (
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
+	github.com/andygrunwald/go-jira v1.15.1 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/briandowns/spinner v1.18.1
 	github.com/coreos/go-oidc/v3 v3.1.0
+	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/fatih/color v1.13.0
+	github.com/git-chglog/git-chglog v0.15.1 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.1
+	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/go-github/v39 v39.2.0
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
+	github.com/kyokomi/emoji/v2 v2.2.9 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/go-runewidth v0.0.13 // indirect
+	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
+	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.2.0
 	github.com/openconfig/goyang v0.4.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0
-<<<<<<< HEAD
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.5.0
-=======
-	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.5.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0
->>>>>>> 0f2f8e14 (chore: update and fix issues)
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
+	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
+	github.com/urfave/cli/v2 v2.5.0 // indirect
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
+	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
+	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150 // indirect
+	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171 // indirect
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0

@@ -87,11 +87,7 @@ generate-downstream-docs: ## Generate command-line reference documentation in ad
 I18N_LINTER_DEF := $(shell command -v app-services-go-linter 2> /dev/null)
 
 # lint-lang: ## Lint i18n files
-# ifndef I18N_LINTER_DEF # check if the linter is installed, install it if not
-# 	go install github.com/redhat-developer/app-services-go-linter/cmd/app-services-go-linter@latest
-# endif
-# 	app-services-go-linter -path ./pkg/core/localize/locales ./...
-# .PHONY: lint-lang
+
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help:
