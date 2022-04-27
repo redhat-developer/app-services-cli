@@ -1,4 +1,4 @@
-## rhoas context use-kafka
+## rhoas context set-kafka
 
 Set the current Kafka instance
 
@@ -10,17 +10,17 @@ You can select a  Kafka instance by name or ID.
 
 
 ```
-rhoas context use-kafka [flags]
+rhoas context set-kafka [flags]
 ```
 
 ### Examples
 
 ```
 # Select a Kafka instance by name to be set in the current context
-$ rhoas context use-kafka --name=my-kafka
+$ rhoas context set-kafka --name=my-kafka
 
 # Select a Kafka instance by ID to be set in the current context
-$ rhoas context use-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+$ rhoas context set-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ```
 

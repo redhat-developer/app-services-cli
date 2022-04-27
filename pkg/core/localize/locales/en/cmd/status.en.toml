@@ -29,7 +29,7 @@ one = 'unknown service "{{.ServiceName}}"'
 one = 'Requesting status of the following services:'
 
 [status.log.info.noStatusesAreUsed]
-one = 'No services set in context. To set a service in context, run "rhoas context use-[service] [args]".'
+one = 'No services set in context. To set a service in context, run "rhoas context set-[service] [args]".'
 
 [status.log.debug.noKafkaSelected]
 one = 'No Kafka instance is currently used, skipping status check'

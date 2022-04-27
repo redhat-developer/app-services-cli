@@ -81,23 +81,23 @@ $ rhoas context status kafka
 $ rhoas context status -o json
 '''
 
-[context.useKafka.cmd.example]
+[context.setKafka.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
 # Select a Kafka instance by name to be set in the current context
-$ rhoas context use-kafka --name=my-kafka
+$ rhoas context set-kafka --name=my-kafka
 
 # Select a Kafka instance by ID to be set in the current context
-$ rhoas context use-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+$ rhoas context set-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
-[context.useRegistry.cmd.example]
+[context.setRegistry.cmd.example]
 one = '''
 # Select a Service Registry instance by name to be set in the current context
-rhoas context use-service-registry --name my-service-registry
+rhoas context set-service-registry --name my-service-registry
 
 # Select a Service Registry instance by ID to be set in the current context
-rhoas context use-service-registry --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+rhoas context set-service-registry --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [context.list.cmd]
@@ -138,7 +138,7 @@ Create a service context and assign associated service identifiers.
 
 A service context is a group of application service instances and their configuration details. By creating a service context, you can group together application service instances that you want to use together.
 
-After creating the service context, add application service instances to it by using the "rhoas context use-[service]" commands.
+After creating the service context, add application service instances to it by using the "rhoas context set-[service]" commands.
 '''
 
 [context.create.cmd.example]
@@ -159,7 +159,7 @@ Context created successfully
 
 Run the following commands to set service instances in the created context:
 
-  $ rhoas context use-[service]
+  $ rhoas context set-[service]
 '''
 
 [context.create.log.alreadyExists]
@@ -221,25 +221,25 @@ one='Name of the context'
 [context.common.error.noRegistryID]
 one='''
 The context doesn't have a Service Registry ID.
-Use the "rhoas context use-service-registry" command to select a Service Registry instance for your context
+Use the "rhoas context set-service-registry" command to select a Service Registry instance for your context
 '''
 
 [context.common.error.noKafkaID]
 one='''
 The context doesn't have a Kafka instance ID.
-Use the "rhoas context use-kafka" command to select a Kafka instance for your context
+Use the "rhoas context set-kafka" command to select a Kafka instance for your context
 '''
 
 [context.common.error.registry.notFound]
 one='''
 Service registry instance in your context doesn't exist.
 Your instance might have been removed.
-You can update your context by creating a new instance or by using the "rhoas context use-service-registry" command
+You can update your context by creating a new instance or by using the "rhoas context set-service-registry" command
 '''
 
 [context.common.error.kafka.notFound]
 one='''
-Kafka instance doesn't exist, you must set a valid Kafka instance ID by using the "rhoas context use-kafka" command
+Kafka instance doesn't exist, you must set a valid Kafka instance ID by using the "rhoas context set-kafka" command
 '''
 
 [context.common.error.context.notFound]
