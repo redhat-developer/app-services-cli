@@ -1,4 +1,17 @@
 
+<a name="v0.41.1"></a>
+## [v0.41.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.0...v0.41.1) (2022-04-26)
+
+### Bug Fixes
+
+* address review comments
+* replace tabs to spaces
+
+### Features
+
+* support secret output for generate config
+
+
 <a name="v0.41.0"></a>
 ## [v0.41.0](https://github.com/redhat-developer/app-services-cli/compare/v0.40.1...v0.41.0) (2022-04-22)
 
