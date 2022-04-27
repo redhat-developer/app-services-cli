@@ -244,7 +244,7 @@ func runCreate(opts *options) error {
 		svcContext.Contexts[svcContext.CurrentContext] = *currCtx
 
 		if err = opts.ServiceContext.Save(svcContext); err != nil {
-			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.common.error.couldNotsetKafka"), err)
+			return fmt.Errorf("%v: %w", opts.localizer.MustLocalize("kafka.common.error.couldNotUseKafka"), err)
 		}
 	} else {
 		opts.Logger.Debug("Auto-use is not set, skipping updating the current instance")
