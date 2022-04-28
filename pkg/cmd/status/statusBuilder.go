@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
@@ -73,7 +74,7 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 
 	status = &serviceStatus{}
 
-	if stringInSlice(servicespec.KafkaServiceName, services) && c.serviceConfig.KafkaID != "" {
+	if flagutil.StringInSlice(servicespec.KafkaServiceName, services) && c.serviceConfig.KafkaID != "" {
 		kafkaResponse, err1 := contextutil.GetKafkaForServiceConfig(c.serviceConfig, factory)
 		if err1 != nil {
 			return status, err1
@@ -82,7 +83,7 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 		status.Kafka = kafkaStatus
 	}
 
-	if stringInSlice(servicespec.ServiceRegistryServiceName, services) && c.serviceConfig.ServiceRegistryID != "" {
+	if flagutil.StringInSlice(servicespec.ServiceRegistryServiceName, services) && c.serviceConfig.ServiceRegistryID != "" {
 		registryResponse, err1 := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
 		if err1 != nil {
 			return status, err1
@@ -212,13 +213,4 @@ func createDivider(n int) string {
 	}
 
 	return b
-}
-
-func stringInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
 }

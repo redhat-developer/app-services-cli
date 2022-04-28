@@ -4,6 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/unset"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/use"
 	kafkaUse "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
 	registryUse "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
@@ -44,6 +45,7 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 		list.NewListCommand(f),
 		create.NewCreateCommand(f),
 		delete.NewDeleteCommand(f),
+		unset.NewUnsetCommand(f),
 
 		// reused sub-commands
 		kafkaUseCmd,

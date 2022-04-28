@@ -22,9 +22,6 @@ $ rhoas status kafka
 $ rhoas status -o json
 '''
 
-[status.error.args.error.unknownServiceError]
-one = 'unknown service "{{.ServiceName}}"'
-
 [status.log.debug.requestingStatusOfServices]
 one = 'Requesting status of the following services:'
 

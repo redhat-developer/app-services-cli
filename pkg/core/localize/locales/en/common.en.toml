@@ -32,3 +32,6 @@ NOTE: You might need to run command as root to update RHOAS CLI binary.
 
 [common.selfupdate.success]
 one = 'RHOAS CLI updated to version {{.Version}}'
+
+[common.error.args.error.unknownServiceError]
+one = 'unknown service "{{.ServiceName}}"'
