@@ -239,7 +239,9 @@ You can update your context by creating a new instance or by using the "rhoas co
 
 [context.common.error.kafka.notFound]
 one='''
-Kafka instance doesn't exist, you must set a valid Kafka instance ID by using the "rhoas context set-kafka" command
+Kafka instance in your context doesn't exist.
+Your instance might have been removed.
+You can update your context by creating a new instance or by using the "rhoas context set-kafka" command
 '''
 
 [context.common.error.context.notFound]
