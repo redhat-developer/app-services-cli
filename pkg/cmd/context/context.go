@@ -24,20 +24,20 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 		Args:    cobra.NoArgs,
 	}
 
-	// The implementation of `rhoas kafka use` command has been aliased here as `rhoas context use-kafka`
+	// The implementation of `rhoas kafka use` command has been aliased here as `rhoas context set-kafka`
 	kafkaUseCmd := kafkaUse.NewUseCommand(f)
-	kafkaUseCmd.Use = "use-kafka"
-	kafkaUseCmd.Example = f.Localizer.MustLocalize("context.useKafka.cmd.example")
+	kafkaUseCmd.Use = "set-kafka"
+	kafkaUseCmd.Example = f.Localizer.MustLocalize("context.setKafka.cmd.example")
 
 	// `rhoas status` cmd has been re-used as `rhoas context status`
 	statusCmd := status.NewStatusCommand(f)
 	statusCmd.Long = f.Localizer.MustLocalize("context.status.cmd.longDescription")
 	statusCmd.Example = f.Localizer.MustLocalize("context.status.cmd.example")
 
-	// The implementation of `rhoas service-registry use` command has been aliased here as `rhoas context use-service-registry`
+	// The implementation of `rhoas service-registry use` command has been aliased here as `rhoas context set-service-registry`
 	registryUseCmd := registryUse.NewUseCommand(f)
-	registryUseCmd.Use = "use-service-registry"
-	registryUseCmd.Example = f.Localizer.MustLocalize("context.useRegistry.cmd.example")
+	registryUseCmd.Use = "set-service-registry"
+	registryUseCmd.Example = f.Localizer.MustLocalize("context.setRegistry.cmd.example")
 
 	cmd.AddCommand(
 		use.NewUseCommand(f),
