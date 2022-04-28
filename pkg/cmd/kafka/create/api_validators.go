@@ -1,7 +1,6 @@
 package create
 
 import (
-	"errors"
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -25,7 +24,7 @@ type ValidatorInput struct {
 	conn      connection.Connection
 }
 
-func ValidateProviderAndRegion(input *ValidatorInput) error {
+func (input *ValidatorInput) ValidateProviderAndRegion() error {
 	f := input.f
 	f.Logger.Debug("Validating provider and region")
 	cloudProviders, _, err := input.conn.API().
@@ -85,7 +84,7 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 	}
 
 	if len(regionNames) != 0 {
-		f.Logger.Debug("Validating region", input.region, ". Enabled providers: ", regionNames)
+		f.Logger.Debug("Validating region", input.region, ". Enabled regions: ", regionNames)
 		regionsString := strings.Join(regionNames, ", ")
 		if !selectedRegion.Enabled {
 			regionEntry := localize.NewEntry("Region", input.region)
@@ -94,24 +93,23 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 			return f.Localizer.MustLocalizeError("kafka.create.region.error.invalidRegion", regionEntry, providerEntry, validRegionsEntry)
 		}
 
-		if err != nil {
-			return err
-		}
+		return nil
 
-		regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
+		// Current API doesn't allow us to validate regions properly.
+		// regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
 
-		backendType := mapAmsTypeToBackendType(input.userAMSInstanceType)
-		for _, item := range regionInstanceTypes {
-			if backendType == item {
-				return nil
-			}
-		}
+		// backendType := mapAmsTypeToBackendType(input.userAMSInstanceType)
+		// for _, item := range regionInstanceTypes {
+		// 	if backendType == item {
+		// 		return nil
+		// 	}
+		// }
 
-		regionEntry := localize.NewEntry("Region", input.region)
-		userTypesEntry := localize.NewEntry("MyTypes", input.userAMSInstanceType.Name)
-		cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
+		// regionEntry := localize.NewEntry("Region", input.region)
+		// userTypesEntry := localize.NewEntry("MyTypes", input.userAMSInstanceType.Name)
+		// cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
 
-		return f.Localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
+		// return f.Localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
 	}
 	f.Logger.Debug("No regions found for provider. Skipping provider validation", input.provider)
@@ -119,14 +117,13 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 	return nil
 }
 
-func ValidateSize(input *ValidatorInput) error {
-	sizes, err := GetValidKafkaSizes(input.f, input.provider, input.region, input.userAMSInstanceType)
+func (input *ValidatorInput) ValidateSize() error {
+	sizes, err := GetValidKafkaSizes(input.f, input.provider, input.region, *input.userAMSInstanceType)
 	if err != nil {
 		return err
 	}
 	if !slices.Contains(sizes, input.size) {
-		// TODO error message
-		return errors.New("Whatever") //f.localizer.MustLocalizeError("")
+		return input.f.Localizer.MustLocalizeError("kafka.create.error.invalidSize", localize.NewEntry("ValidSizes", sizes))
 	}
 	return nil
 }

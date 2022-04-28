@@ -180,7 +180,7 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		f.Logger.Debug()
 
-		payload, err = promptKafkaPayload(opts, constants, userInstanceType)
+		payload, err = promptKafkaPayload(opts, constants, *userInstanceType)
 		if err != nil {
 			return err
 		}
@@ -197,8 +197,24 @@ func runCreate(opts *options) error {
 		}
 
 		if !opts.bypassAmsCheck {
+			validator := ValidatorInput{
+				provider:            opts.provider,
+				region:              opts.region,
+				size:                opts.size,
+				userAMSInstanceType: userInstanceType,
+				f:                   f,
+				constants:           constants,
+				conn:                conn,
+			}
+			err1 := validator.ValidateProviderAndRegion()
+			if err1 != nil {
+				return err1
+			}
 
-			//kafkacmdutil.ValidateKafka(opts, constants, conn)
+			err1 = validator.ValidateSize()
+			if err1 != nil {
+				return err1
+			}
 		}
 
 		payload = &kafkamgmtclient.KafkaRequestPayload{
@@ -209,7 +225,7 @@ func runCreate(opts *options) error {
 	}
 
 	payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
-
+	f.Logger.Debug("Creating kafka instance", payload)
 	if opts.dryRun {
 		return nil
 	}
@@ -318,7 +334,7 @@ type promptAnswers struct {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants, userQuotaType *accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
+func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants, userQuotaType accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
 
 	validator := &kafkacmdutil.Validator{
@@ -354,7 +370,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuotaType)
+	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, &userQuotaType)
 	if err != nil {
 		return nil, err
 	}

@@ -354,6 +354,11 @@ one = '''the selected region "{{.Region}}" does not support the instance types t
 ({{.MyTypes}}). Supported types for this region are: "{{.CloudTypes}}" 
 '''
 
+[kafka.create.error.invalidSize]
+one = '''
+provided instance size is not valid. Valid sizes: {{.ValidSizes}}
+'''
+
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
 one = "Delete a Kafka instance"

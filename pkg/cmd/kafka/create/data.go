@@ -37,7 +37,7 @@ func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId
 
 // return list of the valid instance sizes for the specifed region and ams instance types
 func GetValidKafkaSizes(f *factory.Factory,
-	providerID string, regionId string, amsType *accountmgmtutil.QuotaSpec) ([]string, error) {
+	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]string, error) {
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
@@ -54,23 +54,14 @@ func GetValidKafkaSizes(f *factory.Factory,
 		return nil, err
 	}
 
-	var desiredInstanceType string
-	if amsType != nil {
-		desiredInstanceType = mapAmsTypeToBackendType(amsType)
-	} else {
-		// If we do not know instance type from AMS we should assume standard instance type
-		// This is because trials do not have sizes so it is best to suggest all standard sizes instead
-		desiredInstanceType = mapAmsTypeToBackendType(
-			&accountmgmtutil.QuotaSpec{
-				Name:  accountmgmtutil.QuotaStandardType,
-				Quota: 1,
-			})
-	}
+	desiredInstanceType := mapAmsTypeToBackendType(&amsType)
 
-	for _, instanceType := range instanceTypes.GetItems() {
+	for _, instanceType := range instanceTypes.GetInstanceTypes() {
 		if desiredInstanceType == instanceType.GetId() {
 			for _, instanceSize := range instanceType.GetSizes() {
-				validSizes = append(validSizes, instanceSize.GetId())
+				if instanceSize.GetQuotaConsumed() <= int32(amsType.Quota) {
+					validSizes = append(validSizes, instanceSize.GetId())
+				}
 			}
 		}
 	}
@@ -100,16 +91,6 @@ func GetEnabledCloudProviderNames(f *factory.Factory) ([]string, error) {
 	return cloudProviderNames, err
 }
 
-// FindCloudProviderByName finds and returns a cloud provider item from the list by its name
-func FindCloudProviderByName(cloudProviders []kafkamgmtclient.CloudProvider, name string) *kafkamgmtclient.CloudProvider {
-	for _, p := range cloudProviders {
-		if p.GetName() == name {
-			return &p
-		}
-	}
-	return nil
-}
-
 // GetEnabledCloudRegionIDs extracts and returns a slice of the unique IDs of all enabled regions
 func GetEnabledCloudRegionIDs(f *factory.Factory, providerID string, userAllowedAMSInstanceType *accountmgmtutil.QuotaSpec) ([]string, error) {
 	validRegions := []string{}
@@ -126,18 +107,13 @@ func GetEnabledCloudRegionIDs(f *factory.Factory, providerID string, userAllowed
 		return validRegions, err
 	}
 
-	var serverInstanceType string
-	if userAllowedAMSInstanceType != nil {
-		serverInstanceType = mapAmsTypeToBackendType(userAllowedAMSInstanceType)
-	}
-
 	regions := cloudProviderResponse.GetItems()
 
 	var regionIDs []string
 	for i, region := range regions {
 		if region.GetEnabled() {
-			if serverInstanceType != "" {
-				if IsRegionAllowed(&regions[i], serverInstanceType) {
+			if userAllowedAMSInstanceType != nil {
+				if IsRegionAllowed(&regions[i], userAllowedAMSInstanceType) {
 					regionIDs = append(regionIDs, region.GetId())
 				}
 			} else {
@@ -148,10 +124,11 @@ func GetEnabledCloudRegionIDs(f *factory.Factory, providerID string, userAllowed
 	return regionIDs, err
 }
 
-func IsRegionAllowed(region *kafkamgmtclient.CloudRegion, userInstanceType string) bool {
-	if region.GetSupportedInstanceTypes() != nil {
-		for _, instanceType := range region.GetSupportedInstanceTypes() {
-			if instanceType == userInstanceType {
+func IsRegionAllowed(region *kafkamgmtclient.CloudRegion, userInstanceType *accountmgmtutil.QuotaSpec) bool {
+	if len(region.Capacity) > 0 {
+		backendInstanceType := mapAmsTypeToBackendType(userInstanceType)
+		for _, capacityItem := range region.Capacity {
+			if capacityItem.InstanceType == backendInstanceType {
 				return true
 			}
 		}
