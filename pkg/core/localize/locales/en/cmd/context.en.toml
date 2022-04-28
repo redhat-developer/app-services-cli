@@ -55,6 +55,36 @@ $ rhoas context use --name dev
 [context.use.successMessage]
 one='Current context set to "{{.Name}}"'
 
+[context.unset.cmd]
+
+[context.unset.cmd.shortDescription]
+one='Unset services in context'
+
+[context.unset.cmd.longDescription]
+one='''
+Unset services in context
+
+When you unset a service in context, it will no longer point to any instance of that service.
+'''
+
+[context.unset.cmd.example]
+one='''
+# Unset services for current context
+$ rhoas context unset --services kafka,service-registry
+
+# Unset service-registry for a specific context
+$ rhoas context unset --name dev --services service-registry
+'''
+
+[context.unset.flag.services.description]
+one='The name of the services to unset'
+
+[context.unset.log.info.success]
+one='Service(s) have been unset'
+
+[context.unset.cmd.error.noServices]
+one='no service specified to unset'
+
 [context.status.cmd]
 
 [context.status.cmd.longDescription]

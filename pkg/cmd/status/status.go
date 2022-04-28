@@ -36,7 +36,7 @@ func NewStatusCommand(f *factory.Factory) *cobra.Command {
 			if len(args) > 0 {
 				for _, s := range args {
 					if !flagutil.IsValidInput(s, servicespec.AllServiceLabels...) {
-						return f.Localizer.MustLocalizeError("status.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s))
+						return f.Localizer.MustLocalizeError("common.error.args.error.unknownServiceError", localize.NewEntry("ServiceName", s))
 					}
 				}
 

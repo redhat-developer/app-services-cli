@@ -2,8 +2,9 @@ package flagutil
 
 import (
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"sort"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 )
 
 // IsValidInput checks if the input value is in the range of valid values
@@ -40,4 +41,15 @@ func FlagDescription(localizer localize.Localizer, messageID string, validOption
 	}
 
 	return fmt.Sprintf("%v %v", description, chooseFrom)
+}
+
+// StringInSlice checks if a string is in a slice.
+// It is used when array of strings is passed as flag value or argument
+func StringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
