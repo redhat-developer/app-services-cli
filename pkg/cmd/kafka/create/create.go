@@ -226,9 +226,8 @@ func runCreate(opts *options) error {
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
 		}
+		payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 	}
-
-	payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 
 	f.Logger.Debug("Creating kafka instance", payload)
 	if opts.dryRun {
@@ -258,6 +257,8 @@ func runCreate(opts *options) error {
 			return f.Localizer.MustLocalizeError("kafka.create.error.conflictError", localize.NewEntry("Name", payload.Name))
 		case kafkamgmtv1errors.ERROR_41:
 			return f.Localizer.MustLocalizeError("kafka.create.error.notsupported", localize.NewEntry("Name", payload.Name))
+		case kafkamgmtv1errors.ERROR_42:
+			return f.Localizer.MustLocalizeError("kafka.create.error.plan.notsupported", localize.NewEntry("Plan", payload.Plan))
 		}
 	}
 
@@ -333,7 +334,7 @@ func runCreate(opts *options) error {
 // set type to store the answers from the prompt with defaults
 type promptAnswers struct {
 	Name          string
-	Plan          string
+	Size          string
 	Region        string
 	CloudProvider string
 }
@@ -402,7 +403,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Help:    "",
 	}
 
-	err = survey.AskOne(planPrompt, &answers.Plan)
+	err = survey.AskOne(planPrompt, &answers.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -412,6 +413,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
 	}
+	payload.SetPlan(mapAmsTypeToBackendType(&userQuotaType) + "." + answers.Size)
 
 	return payload, nil
 }

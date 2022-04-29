@@ -18,8 +18,7 @@ DEFAULT_PAGE_SIZE ?= "10"
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.Version=$(RHOAS_VERSION) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.RepositoryOwner=$(REPOSITORY_OWNER) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.RepositoryName=$(REPOSITORY_NAME) $(GO_LDFLAGS)
-# TODO
-#GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.DynamicConfigURL=$(CONSTANTS_URL) $(GO_LDFLAGS)
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.DynamicConfigURL=$(CONSTANTS_URL) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.DefaultPageSize=$(DEFAULT_PAGE_SIZE) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.DefaultPageNumber=$(DEFAULT_PAGE_NUMBER) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.SSORedirectPath=$(SSO_REDIRECT_PATH) $(GO_LDFLAGS)

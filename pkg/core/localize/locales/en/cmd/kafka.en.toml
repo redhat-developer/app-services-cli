@@ -332,6 +332,9 @@ one = 'your accout exceeded quota for Kafka instances. Please refer to https://c
 [kafka.create.error.notsupported]
 one = 'kafka instance creation is not supported for this cloud provider region and account'
 
+[kafka.create.error.plan.notsupported]
+one = 'provided plan "{{.Plan}}" (kafka instances size) is not supported.'
+
 [kafka.create.error.temporary.unavailable]
 one = 'unable to create new Kafka instance at this time in specified cloud provider and region. Please try again later or choose another region.'
 
