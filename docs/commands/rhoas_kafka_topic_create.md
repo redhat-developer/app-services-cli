@@ -29,13 +29,8 @@ $ rhoas kafka topic create --name topic-1
       --name string             Topic name
   -o, --output string           Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
       --partitions int32        The number of partitions in the topic (default 1)
-<<<<<<< HEAD
       --retention-bytes int     The maximum total size of a partition log segments before old log segments are deleted to free up space.
                                 Value of -1 is set by default indicating no retention size limits (default -1)
-=======
-      --retention-bytes int     The maximum total size of a partition log segments before old log segments are deleted to free up space
-                                (value of "-1" is set by default indicating no retention size limits.)
->>>>>>> 3f91eacb (Update docs/commands/rhoas_kafka_topic_create.md)
       --retention-ms int        The period of time in milliseconds the broker will retain a partition log before deleting it (default 604800000)
 ```
 

@@ -25,10 +25,11 @@ $ rhoas kafka topic list -o json
 ### Options
 
 ```
-  -o, --output string   Specify the output format. Choose from: "json", "none", "table", "yaml", "yml" (default "table")
-      --page int32      Current page number for list of topics (default 1)
-      --search string   Text search to filter the Kafka topics by name
-      --size int32      Maximum number of items to be returned per page (default 10)
+      --instance-id string   Kafka instance ID. Uses the current instance if not set 
+  -o, --output string        Specify the output format. Choose from: "json", "none", "table", "yaml", "yml" (default "table")
+      --page int32           Current page number for list of topics (default 1)
+      --search string        Text search to filter the Kafka topics by name
+      --size int32           Maximum number of items to be returned per page (default 10)
 ```
 
 ### Options inherited from parent commands
