@@ -30,10 +30,12 @@ $ rhoas kafka create -o yaml
 ### Options
 
 ```
+      --dry-run           Validate all user provided arguments without creating the Kafka instance
       --name string       Unique name of the Kafka instance
   -o, --output string     Specify the output format. Choose from: "json", "yaml", "yml"
       --provider string   Cloud Provider ID
       --region string     Cloud Provider Region ID
+      --size string       Size of the Kafka instance
       --use               Set the new Kafka instance to the current instance (default true)
   -w, --wait              Wait until the Kafka instance is created
 ```
