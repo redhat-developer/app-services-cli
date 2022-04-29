@@ -56,15 +56,27 @@ func GetValidKafkaSizes(f *factory.Factory,
 
 	desiredInstanceType := mapAmsTypeToBackendType(&amsType)
 
-	for _, instanceType := range instanceTypes.GetInstanceTypes() {
-		if desiredInstanceType == instanceType.GetId() {
-			for _, instanceSize := range instanceType.GetSizes() {
-				if instanceSize.GetQuotaConsumed() <= int32(amsType.Quota) {
+	// Temporary workaround to be removed
+	if desiredInstanceType == DeveloperType {
+		for _, instanceType := range instanceTypes.GetInstanceTypes() {
+			if desiredInstanceType == instanceType.GetId() {
+				for _, instanceSize := range instanceType.GetSizes() {
 					validSizes = append(validSizes, instanceSize.GetId())
 				}
 			}
 		}
+	} else {
+		for _, instanceType := range instanceTypes.GetInstanceTypes() {
+			if desiredInstanceType == instanceType.GetId() {
+				for _, instanceSize := range instanceType.GetSizes() {
+					if instanceSize.GetQuotaConsumed() <= int32(amsType.Quota) {
+						validSizes = append(validSizes, instanceSize.GetId())
+					}
+				}
+			}
+		}
 	}
+
 	return validSizes, nil
 }
 

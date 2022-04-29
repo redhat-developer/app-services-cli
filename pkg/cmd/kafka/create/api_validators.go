@@ -117,13 +117,18 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 	return nil
 }
 
-func (input *ValidatorInput) ValidateSize() error {
+func (input *ValidatorInput) ValidateSize() (string, error) {
 	sizes, err := GetValidKafkaSizes(input.f, input.provider, input.region, *input.userAMSInstanceType)
 	if err != nil {
-		return err
+		return "", err
 	}
+
+	if input.size == "" && len(sizes) == 1 {
+		return sizes[0], nil
+	}
+
 	if !slices.Contains(sizes, input.size) {
-		return input.f.Localizer.MustLocalizeError("kafka.create.error.invalidSize", localize.NewEntry("ValidSizes", sizes))
+		return "", input.f.Localizer.MustLocalizeError("kafka.create.error.invalidSize", localize.NewEntry("ValidSizes", sizes))
 	}
-	return nil
+	return "", nil
 }

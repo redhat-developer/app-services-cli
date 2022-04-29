@@ -211,9 +211,13 @@ func runCreate(opts *options) error {
 				return err1
 			}
 
-			err1 = validator.ValidateSize()
+			prefferedSize, err1 := validator.ValidateSize()
 			if err1 != nil {
 				return err1
+			}
+
+			if prefferedSize != "" {
+				opts.size = prefferedSize
 			}
 		}
 
@@ -225,6 +229,7 @@ func runCreate(opts *options) error {
 	}
 
 	payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
+
 	f.Logger.Debug("Creating kafka instance", payload)
 	if opts.dryRun {
 		return nil
