@@ -11,7 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 )
 
-func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (accepted bool, redirectURI string, err error) {
+func CheckTermsAccepted(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (accepted bool, redirectURI string, err error) {
 	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(ctx).
 		SelfTermsReview(amsclient.SelfTermsReview{
@@ -33,14 +33,14 @@ func CheckTermsAccepted(ctx context.Context, spec remote.AmsConfig, conn connect
 	return false, termsReview.GetRedirectUrl(), nil
 }
 
-// QuotaSpec - contains quota name and remianing quota count
+// QuotaSpec - contains quota name and remaining quota count
 type QuotaSpec struct {
 	Name         string
 	Quota        int
 	BillingModel string
 }
 
-func GetUserSupportedInstanceType(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota *QuotaSpec, err error) {
+func GetUserSupportedInstanceType(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota *QuotaSpec, err error) {
 	userInstanceTypes, err := GetUserSupportedInstanceTypes(ctx, spec, conn)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func GetUserSupportedInstanceType(ctx context.Context, spec remote.AmsConfig, co
 	return amsType, nil
 }
 
-func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
+func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
 	orgId, err := GetOrganizationID(ctx, conn)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,9 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec remote.AmsConfig, c
 
 	var quotas []QuotaSpec
 	for _, quota := range quotaCostGet.GetItems() {
-		for _, quotaResource := range quota.GetRelatedResources() {
+		quotaResources := quota.GetRelatedResources()
+		for i := range quotaResources {
+			quotaResource := quotaResources[i]
 			if quotaResource.GetResourceName() == spec.ResourceName {
 				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
 					quotas = append(quotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel})
@@ -91,10 +93,9 @@ func BattleOfInstanceBillingModels(quotas []QuotaSpec) []QuotaSpec {
 	for i := 0; i < len(quotas); i++ {
 		if quotas[i].BillingModel == alwaysWinsBillingModel {
 			betterQuotasMap[quotas[i].Name] = &quotas[i]
-		} else {
-			if betterQuotasMap[quotas[i].Name] == nil {
-				betterQuotasMap[quotas[i].Name] = &quotas[i]
-			}
+		} else if betterQuotasMap[quotas[i].Name] == nil {
+			betterQuotasMap[quotas[i].Name] = &quotas[i]
+
 		}
 	}
 	var betterQuotas []QuotaSpec

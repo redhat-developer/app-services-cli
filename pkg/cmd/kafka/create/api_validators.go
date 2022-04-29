@@ -85,8 +85,9 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 
 	if len(regionNames) != 0 {
 		f.Logger.Debug("Validating region", input.region, ". Enabled regions: ", regionNames)
-		regionsString := strings.Join(regionNames, ", ")
+
 		if !selectedRegion.Enabled {
+			regionsString := strings.Join(regionNames, ", ")
 			regionEntry := localize.NewEntry("Region", input.region)
 			validRegionsEntry := localize.NewEntry("Regions", regionsString)
 			providerEntry := localize.NewEntry("Provider", input.provider)
@@ -94,22 +95,6 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 		}
 
 		return nil
-
-		// Current API doesn't allow us to validate regions properly.
-		// regionInstanceTypes := selectedRegion.GetSupportedInstanceTypes()
-
-		// backendType := mapAmsTypeToBackendType(input.userAMSInstanceType)
-		// for _, item := range regionInstanceTypes {
-		// 	if backendType == item {
-		// 		return nil
-		// 	}
-		// }
-
-		// regionEntry := localize.NewEntry("Region", input.region)
-		// userTypesEntry := localize.NewEntry("MyTypes", input.userAMSInstanceType.Name)
-		// cloudTypesEntry := localize.NewEntry("CloudTypes", strings.Join(regionInstanceTypes, ", "))
-
-		// return f.Localizer.MustLocalizeError("kafka.create.region.error.regionNotSupported", regionEntry, userTypesEntry, cloudTypesEntry)
 
 	}
 	f.Logger.Debug("No regions found for provider. Skipping provider validation", input.provider)

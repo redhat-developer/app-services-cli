@@ -27,7 +27,7 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 	return validRegions, cobra.ShellCompDirectiveNoSpace
 }
 
-// GetKafkaSizeCompletionValues returns a list of valid kafka sizes for the specifed region and ams instance types
+// GetKafkaSizeCompletionValues returns a list of valid kafka sizes for the specified region and ams instance types
 func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionId string) (validRegions []string, directive cobra.ShellCompDirective) {
 	directive = cobra.ShellCompDirectiveNoSpace
 
@@ -46,7 +46,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 		return nil, directive
 	}
 
-	userInstanceType, err := accountmgmtutil.GetUserSupportedInstanceType(f.Context, constants.Kafka.Ams, conn)
+	userInstanceType, _ := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
 
 	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
 	validRegions, _ = GetValidKafkaSizes(f, providerID, regionId, *userInstanceType)

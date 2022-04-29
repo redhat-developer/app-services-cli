@@ -160,7 +160,7 @@ func runCreate(opts *options) error {
 		// before they can create a kafka instance
 		var termsAccepted bool
 		var termsURL string
-		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(f.Context, constants.Kafka.Ams, conn)
+		termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(f.Context, &constants.Kafka.Ams, conn)
 
 		if err != nil {
 			return err
@@ -171,7 +171,7 @@ func runCreate(opts *options) error {
 		}
 	}
 
-	userInstanceType, err := accountmgmtutil.GetUserSupportedInstanceType(f.Context, constants.Kafka.Ams, conn)
+	userInstanceType, err := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
 	if err != nil || userInstanceType == nil {
 		return f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
 	}
@@ -180,7 +180,7 @@ func runCreate(opts *options) error {
 	if opts.interactive {
 		f.Logger.Debug()
 
-		payload, err = promptKafkaPayload(opts, constants, *userInstanceType)
+		payload, err = promptKafkaPayload(opts, *userInstanceType)
 		if err != nil {
 			return err
 		}
@@ -340,7 +340,7 @@ type promptAnswers struct {
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
-func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants, userQuotaType accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
+func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
 
 	validator := &kafkacmdutil.Validator{
@@ -365,6 +365,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
+	if err != nil {
+		return nil, err
+	}
 
 	cloudProviderPrompt := &survey.Select{
 		Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),

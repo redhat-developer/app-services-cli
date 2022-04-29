@@ -237,7 +237,7 @@ func checkTermsAccepted(opts *options, conn connection.Connection) (err error) {
 	}
 	var termsAccepted bool
 	var termsURL string
-	termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, constants.ServiceRegistry.Ams, conn)
+	termsAccepted, termsURL, err = accountmgmtutil.CheckTermsAccepted(opts.Context, &constants.ServiceRegistry.Ams, conn)
 	if err != nil {
 		return err
 	}

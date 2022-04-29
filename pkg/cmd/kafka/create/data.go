@@ -35,7 +35,7 @@ func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId
 	}
 }
 
-// return list of the valid instance sizes for the specifed region and ams instance types
+// return list of the valid instance sizes for the specified region and ams instance types
 func GetValidKafkaSizes(f *factory.Factory,
 	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]string, error) {
 
