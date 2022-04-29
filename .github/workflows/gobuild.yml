@@ -31,7 +31,7 @@ jobs:
           skip-go-installation: true
           # skip-pkg-cache: true
           # skip-build-cache: true
-          args: --timeout 2m0s  
+          args: --timeout 3m0s --verbose
       - name: Check documentation
         run: make check-docs
       - name: Check i18n
