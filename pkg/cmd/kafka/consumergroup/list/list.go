@@ -65,8 +65,8 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 		Example: opts.localizer.MustLocalize("kafka.consumerGroup.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
-				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
+			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidListOutputFormats...) {
+				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidListOutputFormats...)
 			}
 
 			if opts.page < 1 {
@@ -95,7 +95,8 @@ func NewListConsumerGroupCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddInstanceID(&opts.kafkaID)
 
-	flags.AddOutput(&opts.output)
+	table := dump.TableFormat
+	flags.AddOutputFormatted(&opts.output, true, &table)
 	flags.StringVar(&opts.topic, "topic", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.topic.description"))
 	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.search"))
 	flags.Int32VarP(&opts.page, "page", "", cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber), opts.localizer.MustLocalize("kafka.consumerGroup.list.flag.page"))
@@ -165,16 +166,14 @@ func runList(opts *options) (err error) {
 	}
 
 	switch opts.output {
-	case dump.EmptyFormat:
+	case dump.TableFormat:
 		opts.Logger.Info("")
 		consumerGroups := consumerGroupData.GetItems()
 		rows := mapConsumerGroupResultsToTableFormat(consumerGroups)
-		dump.Table(opts.IO.Out, rows)
+		return dump.Formatted(opts.IO.Out, opts.output, rows)
 	default:
 		return dump.Formatted(opts.IO.Out, opts.output, consumerGroupData)
 	}
-
-	return nil
 }
 
 func mapConsumerGroupResultsToTableFormat(consumerGroups []kafkainstanceclient.ConsumerGroup) []consumerGroupRow {

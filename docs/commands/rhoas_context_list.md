@@ -24,7 +24,7 @@ $ rhoas context list
 ### Options
 
 ```
-  -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
+  -o, --output string   Specify the output format. Choose from: "json", "none", "yaml", "yml" (default "json")
 ```
 
 ### Options inherited from parent commands

@@ -21,7 +21,8 @@ const (
 	JSONFormat  = "json"
 	YAMLFormat  = "yaml"
 	YMLFormat   = "yml"
-	EmptyFormat = ""
+	TableFormat = "table"
+	EmptyFormat = "none"
 )
 
 // JSON dumps the given data to the given stream so that it looks pretty. If the data is a valid
@@ -153,11 +154,18 @@ func Formatted(writer io.Writer, format string, data interface{}) error {
 			return err
 		}
 		return YAML(writer, data)
-	default:
+	case EmptyFormat:
+		return nil
+	case JSONFormat:
 		data, err := json.Marshal(data)
 		if err != nil {
 			return err
 		}
 		return JSON(writer, data)
+	case TableFormat:
+		Table(writer, data)
+		return nil
+	default:
+		return nil
 	}
 }
