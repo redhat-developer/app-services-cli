@@ -386,7 +386,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	sizes, err := GetValidKafkaSizes(opts.f, opts.provider, opts.region, userQuotaType)
+	sizes, err := GetValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, userQuotaType)
 	if err != nil {
 		return nil, err
 	}
