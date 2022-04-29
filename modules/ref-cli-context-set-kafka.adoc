@@ -1,6 +1,6 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-context-use-kafka_{context}']
-= context use-kafka
+[id='ref-context-set-kafka_{context}']
+= context set-kafka
 
 [role="_abstract"]
 Set the current Kafka instance
@@ -14,7 +14,7 @@ You can select a  Kafka instance by name or ID.
 
 
 ....
-rhoas context use-kafka [flags]
+rhoas context set-kafka [flags]
 ....
 
 [discrete]
@@ -22,10 +22,10 @@ rhoas context use-kafka [flags]
 
 ....
 # Select a Kafka instance by name to be set in the current context
-$ rhoas context use-kafka --name=my-kafka
+$ rhoas context set-kafka --name=my-kafka
 
 # Select a Kafka instance by ID to be set in the current context
-$ rhoas context use-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+$ rhoas context set-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ....
 

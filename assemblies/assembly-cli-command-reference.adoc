@@ -26,13 +26,15 @@ include::../modules/ref-cli-context-delete.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-context-list.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-context-set-kafka.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-context-set-service-registry.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-context-status.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-context-unset.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-context-use.adoc[leveloffset=+2]
-
-include::../modules/ref-cli-context-use-kafka.adoc[leveloffset=+2]
-
-include::../modules/ref-cli-context-use-service-registry.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-generate-config.adoc[leveloffset=+2]
 
