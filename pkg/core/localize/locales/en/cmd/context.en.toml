@@ -218,15 +218,6 @@ one='Warning: Your current service context has been removed, use "rhoas context 
 [context.delete.log.successMessage]
 one='Context deleted successfully'
 
-[context.generate.flag.type]
-one='Type of configuration file to be generated'
-
-[context.generate.log.info.noSevices]
-one='No services available to generate configurations'
-
-[context.generate.log.info.credentialsSaved]
-one='Configurations successfully saved'
-
 [context.common.flag.name]
 one='Name of the context'
 
