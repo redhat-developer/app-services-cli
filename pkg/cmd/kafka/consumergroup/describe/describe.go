@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
-	kafkacmdutil "github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"

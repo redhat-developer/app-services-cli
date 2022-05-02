@@ -1,19 +1,25 @@
 {
-    "version": 1,
-    "kafka": {
-      "ams": {
-        "termsAndConditionsEventCode": "register",
-        "termsAndConditionsSiteCode": "ocm",
-        "instanceQuotaId": "cluster|rhinfra|rhosak|marketplace",
-        "trialQuotaId": "cluster|rhinfra|rhosaktrial|marketplace"
-      }
-    },
-    "serviceRegistry": {
-      "ams": {
-        "termsAndConditionsEventCode": "register",
-        "termsAndConditionsSiteCode": "ocm",
-        "instanceQuotaId": "cluster|rhinfra|rhosr|any",
-        "trialQuotaId": "cluster|rhinfra|rhosrtrial|any"
-      }
+  "version": 1,
+  "kafka": {
+    "ams": {
+      "termsAndConditionsEventCode": "register",
+      "termsAndConditionsSiteCode": "ocm",
+      "instanceQuotaId": "cluster|rhinfra|rhosak|standard",
+      "trialQuotaId": "cluster|rhinfra|rhosaktrial|standard",
+      "quotaProductId": "RHOSAK",
+      "trialQuotaProductId": "RHOSAKTrial",
+      "resourceName": "rhosak"
+    }
+  },
+  "serviceRegistry": {
+    "ams": {
+      "termsAndConditionsEventCode": "register",
+      "termsAndConditionsSiteCode": "ocm",
+      "instanceQuotaId": "cluster|rhinfra|rhosr|any",
+      "trialQuotaId": "cluster|rhinfra|rhosrtrial|any",
+      "quotaProductId": "RHOSR",
+      "trialQuotaProductId": "RHOSRTrial",
+      "resourceName": "rhosr"
     }
   }
+}

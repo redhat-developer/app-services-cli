@@ -26,7 +26,7 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.1.0
 	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.5.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.9.0
+	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.11.2
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1
 	github.com/redhat-developer/service-binding-operator v0.9.0
@@ -39,7 +39,7 @@ require (
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
 	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
-	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
+	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect

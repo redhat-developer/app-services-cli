@@ -266,11 +266,18 @@ one = 'Cloud Provider ID'
 description = 'Description for the --region flag'
 one = 'Cloud Provider Region ID'
 
+[kafka.create.flag.size.description]
+description = 'Description for the --size flag'
+one = 'Size of the Kafka instance'
+
 [kafka.create.flag.autoUse.description]
 one = 'Set the new Kafka instance to the current instance'
 
 [kafka.create.flag.wait.description]
 one = 'Wait until the Kafka instance is created'
+
+[kafka.create.flag.dryrun.description]
+one = 'Validate all user provided arguments without creating the Kafka instance'
 
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
@@ -316,14 +323,23 @@ one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
 
-[kafka.create.error.oneinstance]
-one = 'maximum number of allowed instances reached. Please review all instances that your user has access to and delete one or more instances before creating a new one.'
+[kafka.create.error.userInstanceType.notFound]
+one = 'Cannot fetch user allowed instance type"'
+
+[kafka.create.error.quota.exceeded]
+one = 'your accout exceeded quota for Kafka instances. Please refer to https://console.redhat.com/application-services/subscriptions/streams for more information' 
 
 [kafka.create.error.notsupported]
-one = 'Kafka instance creation is not supported for this cloud provider region and account'
+one = 'kafka instance creation is not supported for this cloud provider region and account'
+
+[kafka.create.error.plan.notsupported]
+one = 'provided plan "{{.Plan}}" (kafka instances size) is not supported.'
 
 [kafka.create.error.temporary.unavailable]
 one = 'unable to create new Kafka instance at this time in specified cloud provider and region. Please try again later or choose another region.'
+
+[kafka.create.error.instance.limit]
+one = 'maximum number of allowed kafka instances has been reached. Please review all instances that your user has access to and delete one or more instances before creating a new one'
 
 [kafka.create.region.error.invalidRegion]
 one = '''
@@ -339,6 +355,11 @@ the cloud provider "{{.Provider}}" does not exist or is not available. Choose fr
 [kafka.create.region.error.regionNotSupported]
 one = '''the selected region "{{.Region}}" does not support the instance types that you can create
 ({{.MyTypes}}). Supported types for this region are: "{{.CloudTypes}}" 
+'''
+
+[kafka.create.error.invalidSize]
+one = '''
+provided instance size is not valid. Valid sizes: {{.ValidSizes}}
 '''
 
 [kafka.delete.cmd.shortDescription]

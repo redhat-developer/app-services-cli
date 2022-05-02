@@ -3,15 +3,10 @@ package flagutil
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-)
-
-const (
-	// FlagProvider is a flag representing an OCM provider ID
-	FlagProvider = "provider"
-	// FlagRegion is a flag representing an OCM region ID
-	FlagRegion = "region"
 )
 
 type FlagSet struct {
@@ -41,4 +36,37 @@ func (fs *FlagSet) AddInstanceID(instanceID *string) {
 		"",
 		flagutil.FlagDescription(fs.localizer, "kafka.common.flag.instanceID.description"),
 	)
+}
+
+// RegisterNameFlagCompletionFunc adds dynamic completion for the --name flag
+func RegisterNameFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) error {
+	return cmd.RegisterFlagCompletionFunc("name", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var validNames []string
+		directive := cobra.ShellCompDirectiveNoSpace
+
+		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+		if err != nil {
+			return validNames, directive
+		}
+
+		req := conn.API().KafkaMgmt().GetKafkas(f.Context)
+		if toComplete != "" {
+			searchQ := "name like " + toComplete + "%"
+			req = req.Search(searchQ)
+		}
+		kafkas, httpRes, err := req.Execute()
+		if err != nil {
+			return validNames, directive
+		}
+		if httpRes != nil {
+			defer httpRes.Body.Close()
+		}
+
+		items := kafkas.GetItems()
+		for index := range items {
+			validNames = append(validNames, items[index].GetName())
+		}
+
+		return validNames, directive
+	})
 }
