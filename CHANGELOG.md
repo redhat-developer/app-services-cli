@@ -1,4 +1,16 @@
 
+<a name="v0.42.0"></a>
+## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.0) (2022-05-02)
+
+### Bug Fixes
+
+* **deps:** update all ([#1334](https://github.com/redhat-developer/app-services-cli/issues/1334))
+
+### Features
+
+* changes for Kafka Creation business logic ([#1526](https://github.com/redhat-developer/app-services-cli/issues/1526))
+
+
 <a name="v0.41.2"></a>
 ## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.41.2) (2022-04-29)
 
