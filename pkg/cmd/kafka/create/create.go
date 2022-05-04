@@ -229,8 +229,9 @@ func runCreate(opts *options) error {
 		payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 	}
 
-	f.Logger.Debug("Creating kafka instance", payload)
+	f.Logger.Debug("Creating kafka instance", payload.Name)
 	if opts.dryRun {
+		f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.dryRun.success"))
 		return nil
 	}
 
@@ -401,7 +402,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 	}
 
 	planPrompt := &survey.Select{
-		Message: "What type of instance we should create",
+		Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
 		Options: sizes,
 		Help:    "",
 	}
