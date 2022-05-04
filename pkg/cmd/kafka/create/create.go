@@ -397,15 +397,19 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		return nil, err
 	}
 
-	planPrompt := &survey.Select{
-		Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
-		Options: sizes,
-		Help:    "",
-	}
+	if len(sizes) == 1 {
+		answers.Size = sizes[0]
+	} else {
+		planPrompt := &survey.Select{
+			Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
+			Options: sizes,
+			Help:    "",
+		}
 
-	err = survey.AskOne(planPrompt, &answers.Size)
-	if err != nil {
-		return nil, err
+		err = survey.AskOne(planPrompt, &answers.Size)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	payload := &kafkamgmtclient.KafkaRequestPayload{
