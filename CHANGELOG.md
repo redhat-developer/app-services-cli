@@ -12,7 +12,11 @@
 
 
 <a name="v0.41.2"></a>
-## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.41.2) (2022-04-29)
+## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.41.2) (2022-04-29)
+
+
+<a name="v0.42.1"></a>
+## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.42.1) (2022-04-29)
 
 ### Bug Fixes
 
