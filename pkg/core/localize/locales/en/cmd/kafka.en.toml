@@ -287,6 +287,9 @@ one = 'Creating Kafka instance "{{.Name}}"...'
 description = 'Message when Kafka instance is being created'
 one = 'Kafka instance "{{.Name}}" is being created. Current status: {{.Status}}.'
 
+[kafka.create.log.info.dryRun.success]
+one = 'Dry run successful, arguments are valid'
+
 [kafka.create.info.successAsync]
 description = 'Message to display when instance has been created'
 one = 'Kafka instance "{{.Name}}" is being created. To monitor its status run "rhoas status".'
@@ -312,6 +315,9 @@ one = 'Cloud Provider:'
 [kafka.create.input.cloudRegion.message]
 description = 'Input title for Cloud Region'
 one = "Cloud Region:"
+
+[kafka.create.input.plan.message]
+one = 'Instance type:'
 
 [kafka.create.input.cloudRegion.help]
 description = 'Help text for Cloud Region'
