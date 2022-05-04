@@ -225,7 +225,7 @@ func runCreate(opts *options) error {
 		}
 	}
 
-	f.Logger.Debug("Creating kafka instance", payload.Name)
+	f.Logger.Debug("Creating kafka instance", payload.Name, payload.Plan)
 	if opts.dryRun {
 		f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.dryRun.success"))
 		return nil
