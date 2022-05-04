@@ -49,10 +49,10 @@ type options struct {
 	outputFormat string
 	autoUse      bool
 
-	interactive    bool
-	wait           bool
-	bypassAmsCheck bool
-	dryRun         bool
+	interactive  bool
+	wait         bool
+	bypassChecks bool
+	dryRun       bool
 
 	f *factory.Factory
 }
@@ -114,7 +114,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
 	flags.BoolVarP(&opts.dryRun, "dry-run", "", false, f.Localizer.MustLocalize("kafka.create.flag.dryrun.description"))
-	flags.AddBypassTermsCheck(&opts.bypassAmsCheck)
+	flags.AddBypassTermsCheck(&opts.bypassChecks)
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetCloudProviderCompletionValues(f)
@@ -154,7 +154,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	if !opts.bypassAmsCheck {
+	if !opts.bypassChecks {
 		f.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
 		// before they can create a kafka instance
@@ -184,9 +184,6 @@ func runCreate(opts *options) error {
 		if err != nil {
 			return err
 		}
-
-		opts.provider = payload.GetCloudProvider()
-		opts.region = payload.GetRegion()
 	} else {
 		if opts.provider == "" {
 			opts.provider = defaultProvider
@@ -196,7 +193,7 @@ func runCreate(opts *options) error {
 			opts.region = defaultRegion
 		}
 
-		if !opts.bypassAmsCheck {
+		if !opts.bypassChecks {
 			validator := ValidatorInput{
 				provider:            opts.provider,
 				region:              opts.region,
@@ -211,13 +208,9 @@ func runCreate(opts *options) error {
 				return err1
 			}
 
-			prefferedSize, err1 := validator.ValidateSize()
+			err1 = validator.ValidateSize()
 			if err1 != nil {
 				return err1
-			}
-
-			if prefferedSize != "" {
-				opts.size = prefferedSize
 			}
 		}
 
@@ -226,7 +219,10 @@ func runCreate(opts *options) error {
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
 		}
-		payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
+
+		if opts.size != "" {
+			payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
+		}
 	}
 
 	f.Logger.Debug("Creating kafka instance", payload.Name)
