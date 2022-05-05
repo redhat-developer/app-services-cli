@@ -32,7 +32,7 @@ func main() {
 	}
 
 	buildVersion := build.Version
-	cmdFactory := defaultfactory.New(localizer)
+	cmdFactory := defaultfactory.New(build.BinaryName, localizer)
 
 	if err = initConfig(cmdFactory); err != nil {
 		cmdFactory.Logger.Errorf(localizer.MustLocalize("main.config.error", localize.NewEntry("Error", err)))
@@ -61,21 +61,6 @@ func main() {
 }
 
 func initConfig(f *factory.Factory) error {
-	if !config.HasCustomLocation() {
-		rhoasCfgDir, err := config.DefaultDir()
-		if err != nil {
-			return err
-		}
-
-		// create rhoas config directory
-		if _, err = os.Stat(rhoasCfgDir); os.IsNotExist(err) {
-			err = os.MkdirAll(rhoasCfgDir, 0o700)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
 	cfgFile, err := f.Config.Load()
 
 	if cfgFile != nil {
@@ -94,21 +79,6 @@ func initConfig(f *factory.Factory) error {
 }
 
 func initProfiles(f *factory.Factory) error {
-	if !servicecontext.HasCustomLocation() {
-		rhoasCtxDir, err := config.DefaultDir()
-		if err != nil {
-			return err
-		}
-
-		// create rhoas config directory
-		if _, err = os.Stat(rhoasCtxDir); os.IsNotExist(err) {
-			err = os.MkdirAll(rhoasCtxDir, 0o700)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
 	ctxFile, err := f.ServiceContext.Load()
 
 	if ctxFile != nil {

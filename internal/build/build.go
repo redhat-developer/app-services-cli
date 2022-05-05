@@ -50,6 +50,9 @@ var (
 
 	// BuildSource is a unique key which indicates the infrastructure on which the binary was built
 	BuildSource = "local"
+
+	// The name of the binary
+	BinaryName = "rhoas"
 )
 
 // Auth Build variables

@@ -19,7 +19,7 @@ var _ Connection = &ConnectionMock{}
 //
 // 		// make and configure a mocked Connection
 // 		mockedConnection := &ConnectionMock{
-// 			APIFunc: func() apis.API {
+// 			APIFunc: func() api.API {
 // 				panic("mock out the API method")
 // 			},
 // 			LogoutFunc: func(ctx context.Context) error {

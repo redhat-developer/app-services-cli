@@ -1,6 +1,10 @@
 .DEFAULT_GOAL := binary
 SHELL = bash
 
+
+# The details of the application:
+binary:=rhoas
+
 # see internal/build.go on build configurations
 RHOAS_VERSION ?= "dev"
 REPOSITORY_OWNER ?= "redhat-developer"
@@ -24,15 +28,13 @@ GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.Def
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.SSORedirectPath=$(SSO_REDIRECT_PATH) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.MASSSORedirectPath=$(MAS_SSO_REDIRECT_PATH) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.BuildSource=$(BUILD_SOURCE) $(GO_LDFLAGS)
+GO_LDFLAGS := -X github.com/redhat-developer/app-services-cli/internal/build.CommandName=$(binary) $(GO_LDFLAGS)
 
 BUILDFLAGS :=
 
 ifdef DEBUG
 BUILDFLAGS := -gcflags "all=-N -l" $(BUILDFLAGS)
 endif
-
-# The details of the application:
-binary:=rhoas
 
 # Enable Go modules:
 export GO111MODULE=on

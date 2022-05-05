@@ -22,13 +22,13 @@ import (
 // giving centralized access to the config and API connection
 
 // nolint:funlen
-func New(localizer localize.Localizer) *factory.Factory {
+func New(id string, localizer localize.Localizer) *factory.Factory {
 	io := iostreams.System()
 
 	var logger logging.Logger
 	var conn connection.Connection
-	cfgFile := config.NewFile()
-	ctxFile := servicecontext.NewFile()
+	cfgFile := config.NewFile(id)
+	ctxFile := servicecontext.NewFile(id)
 
 	loggerBuilder := logging.NewStdLoggerBuilder()
 	loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
