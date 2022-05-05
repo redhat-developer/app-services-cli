@@ -46,43 +46,30 @@ func New(id string, localizer localize.Localizer) *factory.Factory {
 			return nil, err
 		}
 
-		builder := kcconnection.NewConnectionBuilder()
-
-		if cfg.AccessToken != "" {
-			builder.WithAccessToken(cfg.AccessToken)
-		}
-		if cfg.RefreshToken != "" {
-			builder.WithRefreshToken(cfg.RefreshToken)
-		}
-		if cfg.MasAccessToken != "" {
-			builder.WithMASAccessToken(cfg.MasAccessToken)
-		}
-		if cfg.MasRefreshToken != "" {
-			builder.WithMASRefreshToken(cfg.MasRefreshToken)
-		}
-		if cfg.ClientID != "" {
-			builder.WithClientID(cfg.ClientID)
-		}
-		if cfg.Scopes != nil {
-			builder.WithScopes(cfg.Scopes...)
-		}
-		if cfg.APIUrl != "" {
-			builder.WithURL(cfg.APIUrl)
-		}
 		if cfg.AuthURL == "" {
 			cfg.AuthURL = build.ProductionAuthURL
 		}
-		builder.WithAuthURL(cfg.AuthURL)
-
 		if cfg.MasAuthURL == "" {
 			cfg.MasAuthURL = build.ProductionMasAuthURL
 		}
+
+		builder := kcconnection.NewConnectionBuilder()
+
+		builder.WithAccessToken(cfg.AccessToken)
+		builder.WithRefreshToken(cfg.RefreshToken)
+		builder.WithMASAccessToken(cfg.MasAccessToken)
+		builder.WithMASRefreshToken(cfg.MasRefreshToken)
+		builder.WithClientID(cfg.ClientID)
+
+		if cfg.Scopes != nil {
+			builder.WithScopes(cfg.Scopes...)
+		}
+
+		builder.WithURL(cfg.APIUrl)
+		builder.WithAuthURL(cfg.AuthURL)
 		builder.WithMASAuthURL(cfg.MasAuthURL)
-
 		builder.WithConsoleURL(build.ConsoleURL)
-
 		builder.WithInsecure(cfg.Insecure)
-
 		builder.WithConfig(cfgFile)
 
 		transportWrapper := func(a http.RoundTripper) http.RoundTripper {
