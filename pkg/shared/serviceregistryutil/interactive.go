@@ -17,7 +17,12 @@ const (
 func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger) (*srsmgmtv1.Registry, error) {
 	api := connection.API()
 
-	response, _, err := api.ServiceRegistryMgmt().GetRegistries(ctx).Size(queryLimit).Execute()
+	response, httpRes, err := api.ServiceRegistryMgmt().GetRegistries(ctx).Size(queryLimit).Execute()
+	if httpRes != nil {
+		defer func() {
+			_ = httpRes.Body.Close()
+		}()
+	}
 	if err != nil {
 		return nil, fmt.Errorf("unable to list Service Registry instances: %w", err)
 	}

@@ -42,7 +42,12 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		req = req.Filter(toComplete)
 	}
 
-	topicRes, _, err := req.Execute()
+	topicRes, httpRes, err := req.Execute()
+	if httpRes != nil {
+		defer func() {
+			_ = httpRes.Body.Close()
+		}()
+	}
 	if err != nil {
 		return validNames, directive
 	}
@@ -89,7 +94,12 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		req = req.GroupIdFilter(toComplete)
 	}
 
-	cgRes, _, err := req.Execute()
+	cgRes, httpRes, err := req.Execute()
+	if httpRes != nil {
+		defer func() {
+			_ = httpRes.Body.Close()
+		}()
+	}
 	if err != nil {
 		return validIDs, directive
 	}
