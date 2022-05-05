@@ -3,11 +3,10 @@ package delete
 import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 )
@@ -78,13 +77,9 @@ func runDelete(opts *options) error {
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorClustersApi.CreateConnectorCluster(f.Context)
-	a = a.ConnectorClusterRequest(connectormgmtclient.ConnectorClusterRequest{
-		Name: &opts.id,
-	})
-	a = a.Async(true)
+	a := api.ConnectorsMgmt().ConnectorClustersApi.DeleteConnectorCluster(f.Context, opts.id)
 
-	response, httpRes, err := a.Execute()
+	_, httpRes, err := a.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -93,11 +88,7 @@ func runDelete(opts *options) error {
 		return err
 	}
 
-	if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, response); err != nil {
-		return err
-	}
-
-	f.Logger.Info(f.Localizer.MustLocalize("connector.cluster.delete.info.success"))
+	f.Logger.Info(icon.SuccessPrefix(), f.Localizer.MustLocalize("connector.cluster.delete.info.success"))
 
 	return nil
 }
