@@ -1,4 +1,12 @@
 
+<a name="v0.42.2"></a>
+## [v0.42.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.0...v0.42.2) (2022-05-05)
+
+### Bug Fixes
+
+* **connector cluster:** wrong sdk method used in delete cmd ([#1555](https://github.com/redhat-developer/app-services-cli/issues/1555)) ([#1557](https://github.com/redhat-developer/app-services-cli/issues/1557))
+
+
 <a name="v0.42.0"></a>
 ## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.0) (2022-05-02)
 
