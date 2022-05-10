@@ -17,6 +17,20 @@ To install or update to latest version of CLI use following script:
 curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/scripts/install.sh | bash 
 ```
 
+## RHOAS Container Image
+
+To install or update [image](https://github.com/redhat-developer/app-services-tools) containing RHOAS CLI:
+
+```shell
+docker pull quay.io/rhoas/tools
+```
+
+Running the image:
+
+```shell
+docker run -ti --rm --name rhoas-devsandbox --entrypoint /bin/bash quay.io/rhoas/tools
+```
+
 ## Guides
 
 See our [Guides](https://github.com/redhat-developer/app-services-guides/tree/main/docs/rhoas/rhoas-cli-installation) for installation and usage instructions.
