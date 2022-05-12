@@ -105,10 +105,6 @@ func runCreate(opts *options) error {
 	if err != nil {
 		return err
 	}
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
 
 	if opts.interactive {
 		// run the create command interactively
@@ -134,6 +130,8 @@ func runCreate(opts *options) error {
 	// create the service account
 	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: opts.shortDescription}
 
+	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
+
 	serviceacct, httpRes, err := conn.API().
 		ServiceAccountMgmt().
 		CreateServiceAccount(opts.Context).
@@ -154,7 +152,7 @@ func runCreate(opts *options) error {
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetClientSecret(),
-		TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
+		TokenURL:     providerUrls.GetTokenUrl(),
 	}
 
 	// save the credentials to a file
