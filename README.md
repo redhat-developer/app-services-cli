@@ -19,11 +19,7 @@ curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/mai
 
 ## RHOAS Container Image
 
-To install or update [image](https://github.com/redhat-developer/app-services-tools) containing RHOAS CLI:
-
-```shell
-docker pull quay.io/rhoas/tools
-```
+Container image for RHOAS can be found in [redhat-developer/app-services-tools](https://github.com/redhat-developer/app-services-tools). It contains a number of CLIs that can be executed as container.
 
 Running the image:
 
