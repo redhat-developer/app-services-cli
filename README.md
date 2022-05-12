@@ -19,7 +19,7 @@ curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/mai
 
 ## RHOAS Container Image
 
-Container image for RHOAS can be found in [redhat-developer/app-services-tools](https://github.com/redhat-developer/app-services-tools). It contains a number of CLIs that can be executed as container.
+RHOAS CLI can be also used as container image. This can be useful when using CLI in OpenShift environment, automation and testing. Image contains also oc cli and kafkacat binaries. For more information please refer to [redhat-developer/app-services-tools](https://github.com/redhat-developer/app-services-tools) github repository
 
 Running the image:
 
