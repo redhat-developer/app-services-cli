@@ -106,6 +106,9 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	}
 
 	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
+	if err != nil {
+		return err
+	}
 
 	configurations.ClientID = serviceAccount.GetClientId()
 	configurations.ClientSecret = serviceAccount.GetClientSecret()

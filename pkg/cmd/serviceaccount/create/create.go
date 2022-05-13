@@ -131,6 +131,9 @@ func runCreate(opts *options) error {
 	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: opts.shortDescription}
 
 	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
+	if err != nil {
+		return err
+	}
 
 	serviceacct, httpRes, err := conn.API().
 		ServiceAccountMgmt().
