@@ -146,7 +146,7 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 	a.Logger.Debugf("Making request to %v", apiURL.String())
 
 	token := a.MasAccessToken
-	if !hacks.ShouldUseMasSSO() {
+	if !hacks.ShouldUseMasSSO(a.Logger, a.ApiURL.String()) {
 		token = a.AccessToken
 	}
 
@@ -211,7 +211,7 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 
 	a.Logger.Debugf("Making request to %v", baseURL)
 	token := a.MasAccessToken
-	if !hacks.ShouldUseMasSSO() {
+	if !hacks.ShouldUseMasSSO(a.Logger, a.ApiURL.String()) {
 		token = a.AccessToken
 	}
 

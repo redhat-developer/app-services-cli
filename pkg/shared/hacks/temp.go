@@ -10,14 +10,16 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 // Temporary hack that we use to determine if
 // Our CLI needs to use mas-sso token
-func ShouldUseMasSSO() bool {
-	req, err := http.NewRequest("GET", "https://api.openshift.com/api/kafkas_mgmt/v1/sso_providers", nil)
+func ShouldUseMasSSO(logger logging.Logger, apiUrl string) bool {
+	req, err := http.NewRequest("GET", apiUrl+"/api/kafkas_mgmt/v1/sso_providers", nil)
 	if err != nil {
+		fmt.Print("Error creating request: ", err)
 		return true
 	}
 
