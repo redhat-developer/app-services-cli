@@ -144,10 +144,15 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 
 	a.Logger.Debugf("Making request to %v", apiURL.String())
 
+	token := a.MasAccessToken
+	if !ShouldUseMasSSO() {
+		token = a.AccessToken
+	}
+
 	client := kafkainstance.NewAPIClient(&kafkainstance.Config{
 		BaseURL:    apiURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
-		HTTPClient: a.CreateOAuthTransport(a.MasAccessToken),
+		HTTPClient: a.CreateOAuthTransport(token),
 		UserAgent:  a.UserAgent,
 	})
 
@@ -204,11 +209,15 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 	}
 
 	a.Logger.Debugf("Making request to %v", baseURL)
+	token := a.MasAccessToken
+	if !ShouldUseMasSSO() {
+		token = a.AccessToken
+	}
 
 	client := registryinstance.NewAPIClient(&registryinstance.Config{
 		BaseURL:    baseURL,
 		Debug:      a.Logger.DebugEnabled(),
-		HTTPClient: a.CreateOAuthTransport(a.MasAccessToken),
+		HTTPClient: a.CreateOAuthTransport(token),
 		UserAgent:  build.DefaultUserAgentPrefix + build.Version,
 	})
 

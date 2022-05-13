@@ -274,5 +274,17 @@
         "--dir", "./docs/commands"
       ]
     },
+    {
+      "name": "request",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "request",
+        "--path", "/api/kafkas_mgmt/v1/sso_providers",
+      ]
+    },
   ]
 }
