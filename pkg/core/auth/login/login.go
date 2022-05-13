@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/hacks"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/phayes/freeport"
@@ -42,6 +43,10 @@ type SSOConfig struct {
 func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) error {
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
+	}
+
+	if !hacks.ShouldUseMasSSO() {
+		return nil
 	}
 
 	masSSOHost := masSSOCfg.AuthURL.Host
