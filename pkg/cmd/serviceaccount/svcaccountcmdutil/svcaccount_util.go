@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat}
+	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat, credentials.SecretFormat}
 )
 
 // Method fetches authentication details for providers
