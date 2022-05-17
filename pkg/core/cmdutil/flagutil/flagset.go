@@ -91,16 +91,16 @@ func (fs *FlagSet) AddSize(page *int32) {
 // AddBypassTermsCheck adds a flag to allow bypassing
 // of the terms check before creating an instance
 func (fs *FlagSet) AddBypassTermsCheck(bypass *bool) {
-	flagName := "bypass-terms-check"
+	newFlagName := "bypass-checks"
 
 	fs.BoolVar(
 		bypass,
-		flagName,
+		newFlagName,
 		false,
-		"Bypass the terms and conditions pre-check and other AMS checks",
+		"Bypass all checks and validation for command",
 	)
 
-	_ = fs.MarkHidden(flagName)
+	_ = fs.MarkHidden(newFlagName)
 }
 
 // WithFlagOptions returns additional functions to custom the default flag settings
