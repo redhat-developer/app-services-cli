@@ -58,5 +58,5 @@ func ShouldUseMasSSO(logger logging.Logger, apiUrl string) bool {
 		return true
 	}
 
-	return provider.GetName() == "mas-sso"
+	return provider.GetName() == "mas_sso"
 }
