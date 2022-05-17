@@ -19,7 +19,7 @@ import (
 func ShouldUseMasSSO(logger logging.Logger, apiUrl string) bool {
 	req, err := http.NewRequest("GET", apiUrl+"/api/kafkas_mgmt/v1/sso_providers", nil)
 	if err != nil {
-		fmt.Print("Error creating request: ", err)
+		logger.Debug("Error when fetching auth config", err)
 		return true
 	}
 
@@ -29,6 +29,7 @@ func ShouldUseMasSSO(logger logging.Logger, apiUrl string) bool {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
+		logger.Debug("Error when fetching auth config", err)
 		return true
 	}
 
@@ -36,6 +37,7 @@ func ShouldUseMasSSO(logger logging.Logger, apiUrl string) bool {
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
+		logger.Debug("Error when fetching auth config", err)
 		return true
 	}
 
@@ -47,12 +49,14 @@ func ShouldUseMasSSO(logger logging.Logger, apiUrl string) bool {
 	responseBytes := []byte(fmt.Sprintf("%v", response))
 	err = json.Unmarshal(responseBytes, &provider)
 	if err != nil {
+		logger.Debug("Error when fetching auth config", err)
 		return true
 	}
 
 	if provider.GetBaseUrl() == "" {
+		logger.Debug("Error when fetching auth config", err)
 		return true
 	}
 
-	return provider.GetBaseUrl() == "https://identity.api.redhat.com"
+	return provider.GetName() == "mas-sso"
 }
