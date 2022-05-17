@@ -167,7 +167,7 @@ func runLogin(opts *options) (err error) {
 		ctx, cancel := context.WithTimeout(context.Background(), build.DefaultLoginTimeout)
 		defer cancel()
 
-		if err = loginExec.Execute(ctx, ssoCfg, masSsoCfg); err != nil {
+		if err = loginExec.Execute(ctx, ssoCfg, masSsoCfg, gatewayURL.String()); err != nil {
 			spinner.Stop()
 			opts.Logger.Info()
 			if errors.Is(err, context.DeadlineExceeded) {

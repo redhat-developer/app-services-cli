@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
@@ -26,12 +27,10 @@ type configValues struct {
 }
 
 func createServiceAccount(opts *options, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
-
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
-
 	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: shortDescription}
 
 	serviceacct, httpRes, err := conn.API().
@@ -61,11 +60,6 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		Localizer:      opts.localizer,
 		Connection:     opts.Connection,
 		ServiceContext: opts.ServiceContext,
-	}
-
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
 	}
 
 	configurations := &configValues{}
@@ -106,9 +100,19 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceAccount.GetId())),
 	)
 
+	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return err
+	}
+
+	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
+	if err != nil {
+		return err
+	}
+
 	configurations.ClientID = serviceAccount.GetClientId()
 	configurations.ClientSecret = serviceAccount.GetClientSecret()
-	configurations.TokenURL = cfg.MasAuthURL + "/protocol/openid-connect/token"
+	configurations.TokenURL = providerUrls.GetTokenUrl()
 	configurations.Name = configInstanceName
 
 	if err = WriteConfig(opts.configType, opts.fileName, configurations); err != nil {

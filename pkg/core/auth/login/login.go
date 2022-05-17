@@ -13,6 +13,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/hacks"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/phayes/freeport"
@@ -39,9 +40,14 @@ type SSOConfig struct {
 // Execute runs an Authorization Code flow login
 // enabling the user to log in to SSO and MAS-SSO in succession
 // https://tools.ietf.org/html/rfc6749#section-4.1
-func (a *AuthorizationCodeGrant) Execute(ctx context.Context, ssoCfg *SSOConfig, masSSOCfg *SSOConfig) error {
+func (a *AuthorizationCodeGrant) Execute(ctx context.Context,
+	ssoCfg *SSOConfig, masSSOCfg *SSOConfig, apiUrl string) error {
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
+	}
+
+	if !hacks.ShouldUseMasSSO(a.Logger, apiUrl) {
+		return nil
 	}
 
 	masSSOHost := masSSOCfg.AuthURL.Host

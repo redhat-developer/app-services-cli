@@ -116,6 +116,7 @@ func runResetCredentials(opts *options) (err error) {
 	if err != nil {
 		return err
 	}
+
 	if opts.interactive {
 		err = runInteractivePrompt(opts)
 		if err != nil {
@@ -156,15 +157,12 @@ func runResetCredentials(opts *options) (err error) {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("ID", updatedServiceAccount.GetId())))
 
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
+	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
 
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
 		ClientSecret: updatedServiceAccount.GetClientSecret(),
-		TokenURL:     cfg.MasAuthURL + "/protocol/openid-connect/token",
+		TokenURL:     providerUrls.GetTokenUrl(),
 	}
 
 	// save the credentials to a file
