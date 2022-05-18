@@ -27,7 +27,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 		return nil, fmt.Errorf("unable to list Service Registry instances: %w", err)
 	}
 
-	if response.Size == 0 {
+	if response.Total == 0 {
 		logger.Info("No Service Registry instances were found.")
 		return nil, nil
 	}

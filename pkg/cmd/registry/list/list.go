@@ -109,7 +109,7 @@ func runList(opts *options) error {
 		return err
 	}
 
-	if len(response.Items) == 0 && opts.outputFormat == "" {
+	if response.Total == 0 && opts.outputFormat == "" {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.common.log.info.noInstances"))
 		return nil
 	}
