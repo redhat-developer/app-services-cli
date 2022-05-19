@@ -103,11 +103,12 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 }
 
 func (input *ValidatorInput) ValidateSize() error {
+	// Size is not required and it will not be passed f
 	if input.size == "" {
 		return nil
 	}
 
-	sizes, err := GetValidKafkaSizes(input.f, input.provider, input.region, *input.userAMSInstanceType)
+	sizes, err := FetchValidKafkaSizesLabels(input.f, input.provider, input.region, *input.userAMSInstanceType)
 	if err != nil {
 		return err
 	}

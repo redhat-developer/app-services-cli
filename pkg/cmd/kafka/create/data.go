@@ -35,16 +35,35 @@ func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId
 	}
 }
 
-// return list of the valid instance sizes for the specified region and ams instance types
-func GetValidKafkaSizes(f *factory.Factory,
+func GetValidKafkaSizesLabels(sizes []kafkamgmtclient.SupportedKafkaSize) []string {
+	var labels []string = make([]string, len(sizes))
+	for i := range sizes {
+		labels[i] = sizes[i].GetId()
+	}
+
+	return labels
+}
+
+func FetchValidKafkaSizesLabels(f *factory.Factory,
 	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]string, error) {
+	sizes, err := FetchValidKafkaSizes(f, providerID, regionId, amsType)
+	if err != nil {
+		return nil, err
+	}
+	return GetValidKafkaSizesLabels(sizes), nil
+
+}
+
+// return list of the valid instance sizes for the specified region and ams instance types
+func FetchValidKafkaSizes(f *factory.Factory,
+	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
 
-	validSizes := []string{}
+	validSizes := []kafkamgmtclient.SupportedKafkaSize{}
 
 	instanceTypes, _, err := conn.API().
 		KafkaMgmt().
@@ -62,7 +81,7 @@ func GetValidKafkaSizes(f *factory.Factory,
 			if desiredInstanceType == instanceType.GetId() {
 				instanceSizes := instanceType.GetSizes()
 				for i := range instanceSizes {
-					validSizes = append(validSizes, instanceSizes[i].GetId())
+					validSizes = append(validSizes, instanceSizes[i])
 				}
 			}
 		}
@@ -72,7 +91,7 @@ func GetValidKafkaSizes(f *factory.Factory,
 				instanceSizes := instanceType.GetSizes()
 				for i := range instanceSizes {
 					if instanceSizes[i].GetQuotaConsumed() <= int32(amsType.Quota) {
-						validSizes = append(validSizes, instanceSizes[i].GetId())
+						validSizes = append(validSizes, instanceSizes[i])
 					}
 				}
 			}

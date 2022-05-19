@@ -49,7 +49,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 	userInstanceType, _ := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
 
 	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
-	validRegions, _ = GetValidKafkaSizes(f, providerID, regionId, *userInstanceType)
+	validRegions, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, *userInstanceType)
 
 	return validRegions, cobra.ShellCompDirectiveNoSpace
 }

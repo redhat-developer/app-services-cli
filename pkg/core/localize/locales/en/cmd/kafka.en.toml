@@ -322,6 +322,9 @@ one = "Cloud Region:"
 [kafka.create.input.plan.message]
 one = 'Instance type:'
 
+[kafka.create.log.info.sizePreview]
+one = 'Selected Kafka size is available under technology preview'
+
 [kafka.create.input.cloudRegion.help]
 description = 'Help text for Cloud Region'
 one = "Geographical region where the Kafka instance will be deployed"
