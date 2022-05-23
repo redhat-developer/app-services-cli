@@ -207,10 +207,10 @@ func runCreate(opts *options) error {
 				return err1
 			}
 
-			// err1 = validator.ValidateSize()
-			// if err1 != nil {
-			// 	return err1
-			// }
+			err1 = validator.ValidateSize()
+			if err1 != nil {
+				return err1
+			}
 		}
 
 		payload = &kafkamgmtclient.KafkaRequestPayload{
@@ -229,7 +229,7 @@ func runCreate(opts *options) error {
 		}
 	}
 
-	f.Logger.Debug("Creating kafka instance", payload.Name, payload.Plan)
+	f.Logger.Debug("Creating kafka instance", payload.Name, payload.GetPlan())
 
 	if opts.dryRun {
 		f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.dryRun.success"))

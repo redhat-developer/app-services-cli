@@ -103,7 +103,7 @@ func validateProviderRegion(input *ValidatorInput, selectedProvider kafkamgmtcli
 }
 
 func (input *ValidatorInput) ValidateSize() error {
-	// Size is not required and it will not be passed f
+	// Size is not required
 	if input.size == "" {
 		return nil
 	}

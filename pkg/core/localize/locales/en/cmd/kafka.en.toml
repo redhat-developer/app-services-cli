@@ -323,7 +323,7 @@ one = "Cloud Region:"
 one = 'Instance type:'
 
 [kafka.create.log.info.sizePreview]
-one = 'Selected Kafka size is available under technology preview'
+one = 'Selected Kafka instance size is a Technology Preview feature. Do not use it for production workloads. For more information, see https://access.redhat.com/support/offerings/techpreview'
 
 [kafka.create.input.cloudRegion.help]
 description = 'Help text for Cloud Region'
