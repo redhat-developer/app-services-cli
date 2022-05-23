@@ -65,7 +65,6 @@ var (
 // NewCreateCommand creates a new command for creating kafkas.
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-
 		f: f,
 	}
 
@@ -221,11 +220,17 @@ func runCreate(opts *options) error {
 		}
 
 		if opts.size != "" {
+			sizes, err1 := FetchValidKafkaSizes(opts.f, opts.provider, opts.region, *userInstanceType)
+			if err1 != nil {
+				return err1
+			}
+			printSizeWarningIfNeeded(opts.f, opts.size, sizes)
 			payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 		}
 	}
 
-	f.Logger.Debug("Creating kafka instance", payload.Name, payload.Plan)
+	f.Logger.Debug("Creating kafka instance", payload.Name, payload.GetPlan())
+
 	if opts.dryRun {
 		f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.dryRun.success"))
 		return nil
@@ -392,18 +397,18 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		return nil, err
 	}
 
-	sizes, err := GetValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, userQuotaType)
+	sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, userQuotaType)
 	if err != nil {
 		return nil, err
 	}
 
 	if len(sizes) == 1 {
-		answers.Size = sizes[0]
+		answers.Size = sizes[0].GetId()
 	} else {
+		sizeLabels := GetValidKafkaSizesLabels(sizes)
 		planPrompt := &survey.Select{
 			Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
-			Options: sizes,
-			Help:    "",
+			Options: sizeLabels,
 		}
 
 		err = survey.AskOne(planPrompt, &answers.Size)
@@ -417,7 +422,20 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		Region:        &answers.Region,
 		CloudProvider: &answers.CloudProvider,
 	}
+	printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
 	payload.SetPlan(mapAmsTypeToBackendType(&userQuotaType) + "." + answers.Size)
 
 	return payload, nil
+}
+
+func printSizeWarningIfNeeded(f *factory.Factory, selectedSize string, sizes []kafkamgmtclient.SupportedKafkaSize) {
+	for i := range sizes {
+		if sizes[i].GetId() == selectedSize {
+			f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.sizeUnit",
+				localize.NewEntry("DisplaySize", sizes[i].GetDisplayName()), localize.NewEntry("Size", sizes[i].GetId())))
+			if sizes[i].GetMaturityStatus() == "preview" {
+				f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.sizePreview"))
+			}
+		}
+	}
 }
