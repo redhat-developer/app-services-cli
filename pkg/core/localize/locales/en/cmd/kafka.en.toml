@@ -322,6 +322,9 @@ one = "Cloud Region:"
 [kafka.create.input.plan.message]
 one = 'Instance type:'
 
+[kafka.create.log.info.sizeUnit]
+one = 'Kafka instance with size {{.DisplaySize}} is being created. (Size id: {{.Size}})'
+
 [kafka.create.log.info.sizePreview]
 one = 'Selected Kafka instance size is a Technology Preview feature. Do not use it for production workloads. For more information, see https://access.redhat.com/support/offerings/techpreview'
 

@@ -431,6 +431,8 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 func printSizeWarningIfNeeded(f *factory.Factory, selectedSize string, sizes []kafkamgmtclient.SupportedKafkaSize) {
 	for i := range sizes {
 		if sizes[i].GetId() == selectedSize {
+			f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.sizeUnit",
+				localize.NewEntry("DisplaySize", sizes[i].GetDisplayName()), localize.NewEntry("Size", sizes[i].GetId())))
 			if sizes[i].GetMaturityStatus() == "preview" {
 				f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.sizePreview"))
 			}
