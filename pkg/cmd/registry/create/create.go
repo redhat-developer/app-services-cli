@@ -18,6 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
@@ -156,7 +157,16 @@ func runCreate(opts *options) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
-	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(response.GetRegistryUrl())
+	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), response.GetId())
+	if err != nil {
+		return err
+	}
+
+	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, registry); err != nil {
+		return err
+	}
+
+	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
 
 	opts.Logger.Info(opts.localizer.MustLocalize(
 		"registry.common.log.message.compatibleAPIs",
@@ -164,10 +174,6 @@ func runCreate(opts *options) error {
 		localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
 		localize.NewEntry("CncfSchemaRegistryAPI", compatibleEndpoints.CncfSchemaRegistry),
 	))
-
-	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, response); err != nil {
-		return err
-	}
 
 	if opts.autoUse {
 		opts.Logger.Debug("Auto-use is set, updating the current instance")
