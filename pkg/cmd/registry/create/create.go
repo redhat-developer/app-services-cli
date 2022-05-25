@@ -151,10 +151,6 @@ func runCreate(opts *options) error {
 		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
 	}
 
-	if err != nil {
-		return err
-	}
-
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), response.GetId())
@@ -166,14 +162,18 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
+	if registry.GetRegistryUrl() != "" {
+		compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
 
-	opts.Logger.Info(opts.localizer.MustLocalize(
-		"registry.common.log.message.compatibleAPIs",
-		localize.NewEntry("CoreRegistryAPI", compatibleEndpoints.CoreRegistry),
-		localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
-		localize.NewEntry("CncfSchemaRegistryAPI", compatibleEndpoints.CncfSchemaRegistry),
-	))
+		opts.Logger.Info(opts.localizer.MustLocalize(
+			"registry.common.log.message.compatibleAPIs",
+			localize.NewEntry("CoreRegistryAPI", compatibleEndpoints.CoreRegistry),
+			localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
+			localize.NewEntry("CncfSchemaRegistryAPI", compatibleEndpoints.CncfSchemaRegistry),
+		))
+	} else {
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.compatibilityEndpointHint"))
+	}
 
 	if opts.autoUse {
 		opts.Logger.Debug("Auto-use is set, updating the current instance")
