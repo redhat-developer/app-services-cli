@@ -1,4 +1,29 @@
 
+<a name="v0.43.0"></a>
+## [v0.43.0](https://github.com/redhat-developer/app-services-cli/compare/v0.42.2...v0.43.0) (2022-05-23)
+
+### Bug Fixes
+
+* add tech preview warning for kafka creation([#1577](https://github.com/redhat-developer/app-services-cli/issues/1577))
+* add support for dynamic config url ([#1565](https://github.com/redhat-developer/app-services-cli/issues/1565))
+* revert update kafka mgmt sdk for the latest version ([#1569](https://github.com/redhat-developer/app-services-cli/issues/1569))" ([#1570](https://github.com/redhat-developer/app-services-cli/issues/1570))
+* update kafka mgmt sdk for the latest version ([#1569](https://github.com/redhat-developer/app-services-cli/issues/1569))
+* addressing feedback for instance sizes ([#1552](https://github.com/redhat-developer/app-services-cli/issues/1552))
+* **connector cluster:** wrong sdk method used in delete cmd ([#1555](https://github.com/redhat-developer/app-services-cli/issues/1555))
+* **deps:** update module github.com/coreos/go-oidc/v3 to v3.2.0
+* **deps:** update docusaurus monorepo to v2.0.0-beta.20
+* **deps:** update docusaurus monorepo to v2.0.0-beta.19
+* **deps:** update all ([#1334](https://github.com/redhat-developer/app-services-cli/issues/1334))
+* **kafka create:** change log messages ([#1550](https://github.com/redhat-developer/app-services-cli/issues/1550))
+* **lint:** response body must be closed ([#1558](https://github.com/redhat-developer/app-services-cli/issues/1558))
+* **service-registry use:** erroneous message thrown for no instances ([#1576](https://github.com/redhat-developer/app-services-cli/issues/1576))
+
+### Features
+
+* changes for Kafka Creation business logic ([#1526](https://github.com/redhat-developer/app-services-cli/issues/1526))
+* **consumer-group:** display state ([#1568](https://github.com/redhat-developer/app-services-cli/issues/1568))
+
+
 <a name="v0.42.2"></a>
 ## [v0.42.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.0...v0.42.2) (2022-05-05)
 
