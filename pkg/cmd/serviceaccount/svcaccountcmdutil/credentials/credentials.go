@@ -3,10 +3,11 @@ package credentials
 import (
 	"errors"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/MakeNowJust/heredoc"
@@ -16,6 +17,7 @@ const (
 	EnvFormat        = "env"
 	JSONFormat       = "json"
 	PropertiesFormat = "properties"
+	SecretFormat     = "secret"
 )
 
 // Templates
@@ -40,6 +42,18 @@ var (
 		"clientSecret":"%v",
 		"oauthTokenUrl":"%v"
 	}`)
+
+	templateSecret = heredoc.Doc(`
+		apiVersion: v1
+		kind: Secret
+		metadata:
+    name: service-account-credentials
+		type: Opaque
+		stringData:
+		  RHOAS_SERVICE_ACCOUNT_CLIENT_ID: %v
+		  RHOAS_SERVICE_ACCOUNT_CLIENT_SECRET: %v
+		  RHOAS_SERVICE_ACCOUNT_OAUTH_TOKEN_URL: %v
+	`)
 )
 
 // Credentials is a type which represents the credentials
@@ -59,6 +73,8 @@ func GetDefaultPath(outputFormat string) (filePath string) {
 		filePath = "credentials.properties"
 	case JSONFormat:
 		filePath = "credentials.json"
+	case SecretFormat:
+		filePath = "credentials.yaml"
 	}
 
 	pwd, err := os.Getwd()
@@ -94,6 +110,8 @@ func getFileFormat(output string) (format string) {
 		format = templateProperties
 	case JSONFormat:
 		format = templateJSON
+	case SecretFormat:
+		format = templateSecret
 	}
 
 	return format
