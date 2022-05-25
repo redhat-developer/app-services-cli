@@ -18,6 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 
 	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
@@ -150,23 +151,28 @@ func runCreate(opts *options) error {
 		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
 	}
 
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
+
+	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), response.GetId())
 	if err != nil {
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
-
-	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(response.GetRegistryUrl())
-
-	opts.Logger.Info(opts.localizer.MustLocalize(
-		"registry.common.log.message.compatibleAPIs",
-		localize.NewEntry("CoreRegistryAPI", compatibleEndpoints.CoreRegistry),
-		localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
-		localize.NewEntry("CncfSchemaRegistryAPI", compatibleEndpoints.CncfSchemaRegistry),
-	))
-
-	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, response); err != nil {
+	if err = dump.Formatted(opts.IO.Out, opts.outputFormat, registry); err != nil {
 		return err
+	}
+
+	if registry.GetRegistryUrl() != "" {
+		compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
+
+		opts.Logger.Info(opts.localizer.MustLocalize(
+			"registry.common.log.message.compatibleAPIs",
+			localize.NewEntry("CoreRegistryAPI", compatibleEndpoints.CoreRegistry),
+			localize.NewEntry("SchemaRegistryAPI", compatibleEndpoints.SchemaRegistry),
+			localize.NewEntry("CncfSchemaRegistryAPI", compatibleEndpoints.CncfSchemaRegistry),
+		))
+	} else {
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.cmd.create.info.compatibilityEndpointHint"))
 	}
 
 	if opts.autoUse {

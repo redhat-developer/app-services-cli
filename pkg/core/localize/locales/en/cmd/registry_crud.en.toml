@@ -46,6 +46,13 @@ one = 'Successfully created Service Registry instance'
 [registry.cmd.create.info.action]
 one = 'Creating Service Registry instance with name: {{.Name}}'
 
+[registry.cmd.create.info.compatibilityEndpointHint]
+one = '''
+Run the following command to view service status
+
+  $ rhoas service-registry describe
+'''
+
 [registry.cmd.delete.shortDescription]
 one = 'Delete a Service Registry instance'
 
