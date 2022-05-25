@@ -48,7 +48,7 @@ one = 'Creating Service Registry instance with name: {{.Name}}'
 
 [registry.cmd.create.info.compatibilityEndpointHint]
 one = '''
-Run the following command to view compatible endpoints:
+Run the following command to view service status
 
   $ rhoas service-registry describe
 '''
