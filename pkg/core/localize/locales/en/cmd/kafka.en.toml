@@ -380,6 +380,11 @@ one = '''
 provided instance size is not valid. Valid sizes: {{.ValidSizes}}
 '''
 
+[kafka.create.error.billing.invalid]
+one = '''
+provided billing account id and provider are invalid {{.Billing}}
+'''
+
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
 one = "Delete a Kafka instance"

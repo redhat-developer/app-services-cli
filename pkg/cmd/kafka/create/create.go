@@ -46,6 +46,9 @@ type options struct {
 	region   string
 	size     string
 
+	marketplaceId   string
+	marketplaceType string
+
 	outputFormat string
 	autoUse      bool
 
@@ -60,6 +63,8 @@ type options struct {
 var (
 	defaultRegion   = "us-east-1"
 	defaultProvider = "aws"
+
+	defaultMarketplace = "aws"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
@@ -109,6 +114,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.provider, FlagProvider, "", f.Localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
 	flags.StringVar(&opts.region, FlagRegion, "", f.Localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	flags.StringVar(&opts.size, FlagSize, "", f.Localizer.MustLocalize("kafka.create.flag.size.description"))
+	flags.StringVar(&opts.marketplaceId, "marketplace-id", "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceId.description"))
+	flags.StringVar(&opts.marketplaceType, "marketplace-type", defaultMarketplace, f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
@@ -265,6 +272,8 @@ func runCreate(opts *options) error {
 			return f.Localizer.MustLocalizeError("kafka.create.error.notsupported", localize.NewEntry("Name", payload.Name))
 		case kafkamgmtv1errors.ERROR_42:
 			return f.Localizer.MustLocalizeError("kafka.create.error.plan.notsupported", localize.NewEntry("Plan", payload.Plan))
+		case kafkamgmtv1errors.ERROR_43:
+			return f.Localizer.MustLocalizeError("kafka.create.error.billing.invalid", localize.NewEntry("Billing", payload.BillingCloudAccountId))
 		}
 	}
 
