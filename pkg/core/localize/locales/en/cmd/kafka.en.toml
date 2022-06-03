@@ -678,7 +678,7 @@ $ rhoas kafka topic delete --name topic-1
 one = 'Skip confirmation to forcibly delete a topic'
 
 [kafka.topic.delete.input.name.message]
-one = 'Confirm the name of the topic you want to delete:'
+one = 'Confirm the name of the topic you want to delete ({{.TopicName}}):'
 
 [kafka.topic.delete.error.mismatchedNameConfirmation]
 one = 'topic name entered "{{.ConfirmedName}}" does not match the name of the topic you tried to delete "{{.ActualName}}"'
