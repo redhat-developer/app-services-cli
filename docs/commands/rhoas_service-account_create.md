@@ -12,7 +12,8 @@ You must specify an output format into which the credentials will be stored.
 
 - env (default): Store credentials in an env file as environment variables
 - json: Store credentials in a JSON file
-- properties: Store credentials in a properties file, which is typically used in Java-related technologies.
+- properties: Store credentials in a properties file, which is typically used in Java-related technologies
+- secret: Store credentials in a Kubernetes secret file
 
 
 ```
@@ -39,7 +40,7 @@ $ rhoas service-account create --output-file=./service-acct-credentials.json
 ### Options
 
 ```
-      --file-format string         Format in which to save the service account credentials (choose from: "env", "json", "properties")
+      --file-format string         Format in which to save the service account credentials (choose from: "env", "json", "properties", "secret")
       --output-file string         Sets a custom file location to save the credentials
       --overwrite                  Forcibly overwrite a credentials file if it already exists
       --short-description string   Short description of the service account

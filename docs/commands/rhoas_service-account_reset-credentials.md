@@ -12,7 +12,8 @@ You must specify an output format into which the credentials will be stored.
 
 - env (default): Store credentials in an env file as environment variables
 - json: Store credentials in a JSON file
-- properties: Store credentials in a properties file, which is typically used in Java-related technologies.
+- properties: Store credentials in a properties file, which is typically used in Java-related technologies
+- secret: Store credentials in a Kubernetes secret file
 
 
 ```
@@ -33,7 +34,7 @@ $ rhoas service-account reset-credentials --id 173c1ad9-932d-4007-ae0f-4da74f4d2
 ### Options
 
 ```
-      --file-format string   Format in which to save the service account credentials (choose from: "env", "json", "properties")
+      --file-format string   Format in which to save the service account credentials (choose from: "env", "json", "properties", "secret")
       --id string            The unique ID of the service account for which you want to reset the credentials
       --output-file string   Sets a custom file location to save the credentials
       --overwrite            Forcibly overwrite a credentials file if it already exists
