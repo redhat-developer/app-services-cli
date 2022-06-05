@@ -64,6 +64,8 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	configurations := &configValues{}
 
 	var serviceAvailable bool
+	var serviceAccount *kafkamgmtclient.ServiceAccount
+	var err error
 
 	if svcConfig.KafkaID != "" {
 		kafkaInstance, newErr := contextutil.GetCurrentKafkaInstance(factory)
@@ -89,15 +91,29 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		return opts.localizer.MustLocalizeError("generate.log.info.noSevices")
 	}
 	configInstanceName := fmt.Sprintf("%s-%v", opts.name, time.Now().Unix())
-	serviceAccount, err := createServiceAccount(opts, configInstanceName)
-	if err != nil {
-		return err
-	}
 
-	opts.Logger.Info(
-		icon.SuccessPrefix(),
-		opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceAccount.GetId())),
-	)
+	if opts.generateAuth {
+		serviceAccount, err = createServiceAccount(opts, configInstanceName)
+		if err != nil {
+			return err
+		}
+
+		configurations.ClientID = serviceAccount.GetClientId()
+		configurations.ClientSecret = serviceAccount.GetClientSecret()
+
+		opts.Logger.Info(
+			icon.SuccessPrefix(),
+			opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceAccount.GetId())),
+		)
+	} else {
+		configurations.ClientID = opts.clientID
+
+		if opts.clientSecretStdin {
+			fmt.Scanln(&opts.clientSecret)
+		}
+
+		configurations.ClientSecret = opts.clientSecret
+	}
 
 	conn, err := opts.Connection()
 	if err != nil {
@@ -109,8 +125,6 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 		return err
 	}
 
-	configurations.ClientID = serviceAccount.GetClientId()
-	configurations.ClientSecret = serviceAccount.GetClientSecret()
 	configurations.TokenURL = providerUrls.GetTokenUrl()
 	configurations.Name = configInstanceName
 

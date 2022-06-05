@@ -24,10 +24,14 @@ type options struct {
 	Config         config.IConfig
 	ServiceContext servicecontext.IContext
 
-	name       string
-	fileName   string
-	configType string
-	overwrite  bool
+	name              string
+	fileName          string
+	configType        string
+	overwrite         bool
+	generateAuth      bool
+	clientID          string
+	clientSecret      string
+	clientSecretStdin bool
 }
 
 // NewGenerateCommand creates configuration files for service context
@@ -63,7 +67,12 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddContextName(&opts.name)
 	flags.StringVar(&opts.configType, "type", "", opts.localizer.MustLocalize("generate.flag.type"))
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("generate.flag.overwrite.description"))
-	cmd.Flags().StringVar(&opts.fileName, "output-file", "", opts.localizer.MustLocalize("generate.common.flag.fileLocation.description"))
+	flags.StringVar(&opts.fileName, "output-file", "", opts.localizer.MustLocalize("generate.common.flag.fileLocation.description"))
+	flags.BoolVar(&opts.generateAuth, "generate-auth", false, "Create service account")
+	flags.StringVar(&opts.clientID, "client-id", "", "Client ID of the service account")
+	flags.StringVar(&opts.clientSecret, "client-secret", "", "Client secret of the service account")
+	flags.BoolVar(&opts.clientSecretStdin, "client-secret-stdin", false, "Take the client secret from stdin")
+
 	_ = cmd.MarkFlagRequired("type")
 
 	flagutil.EnableStaticFlagCompletion(cmd, "type", configurationTypes)
