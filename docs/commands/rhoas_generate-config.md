@@ -35,10 +35,14 @@ $ rhoas generate-config --name qaprod --type secret
 ### Options
 
 ```
-      --name string          Name of the context
-      --output-file string   Sets a custom file location to save the configurations
-      --overwrite            Forcibly overwrite a configuration file if it already exists
-      --type string          Type of configuration file to be generated
+      --client-id string       Client ID of the service account
+      --client-secret string   Client secret of the service account
+      --client-secret-stdin    Take the client secret from stdin
+      --generate-auth          Create service account
+      --name string            Name of the context
+      --output-file string     Sets a custom file location to save the configurations
+      --overwrite              Forcibly overwrite a configuration file if it already exists
+      --type string            Type of configuration file to be generated
 ```
 
 ### Options inherited from parent commands
