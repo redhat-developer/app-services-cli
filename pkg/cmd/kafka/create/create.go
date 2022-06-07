@@ -114,8 +114,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.provider, FlagProvider, "", f.Localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
 	flags.StringVar(&opts.region, FlagRegion, "", f.Localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	flags.StringVar(&opts.size, FlagSize, "", f.Localizer.MustLocalize("kafka.create.flag.size.description"))
-	flags.StringVar(&opts.marketplaceId, "marketplace-id", "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceId.description"))
-	flags.StringVar(&opts.marketplaceType, "marketplace-type", defaultMarketplace, f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
+	flags.StringVar(&opts.marketplaceId, "marketplace-id", "", "kafka.create.flag.marketplaceId.description")
+	flags.StringVar(&opts.marketplaceType, "marketplace-type", defaultMarketplace, "kafka.create.flag.marketplaceType.description")
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
@@ -132,6 +132,14 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagSize, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetKafkaSizeCompletionValues(f, opts.provider, opts.region)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("marketplace-id", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetMarketplaceIdCompletionValues(f)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("marketplace-type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetMarketplaceTypeCompletionValues(f)
 	})
 
 	return cmd

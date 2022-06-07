@@ -51,7 +51,7 @@ func GetUserSupportedInstanceType(ctx context.Context, spec *remote.AmsConfig, c
 	return amsType, nil
 }
 
-func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
+func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amsclient.QuotaCostList, error) {
 	orgId, err := GetOrganizationID(ctx, conn)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,16 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, 
 	quotaCostGet, _, err := conn.API().AccountMgmt().
 		ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx, orgId).
 		FetchRelatedResources(true).
+		FetchCloudAccounts(true).
 		Execute()
+
+	return &quotaCostGet, err
+
+}
+
+func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
@@ -134,4 +143,40 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	}
 
 	return account.Organization.GetId(), nil
+}
+
+func GetValidMarketplaceIDs(ctx context.Context, conn connection.Connection) (marketplaceIDs []string, err error) {
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quota := range quotaCostGet.GetItems() {
+		if len(quota.GetCloudAccounts()) > 0 {
+			for _, cloudAccount := range quota.GetCloudAccounts() {
+				marketplaceIDs = append(marketplaceIDs, cloudAccount.GetCloudAccountId())
+			}
+		}
+	}
+
+	return marketplaceIDs, err
+}
+
+func GetValidMarketplaceTypes(ctx context.Context, conn connection.Connection) (marketplaceTypes []string, err error) {
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quota := range quotaCostGet.GetItems() {
+		if len(quota.GetCloudAccounts()) > 0 {
+			for _, cloudAccount := range quota.GetCloudAccounts() {
+				marketplaceTypes = append(marketplaceTypes, cloudAccount.GetCloudProviderId())
+			}
+		}
+	}
+
+	return marketplaceTypes, err
 }
