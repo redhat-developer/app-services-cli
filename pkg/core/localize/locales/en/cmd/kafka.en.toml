@@ -528,6 +528,12 @@ one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "
 [kafka.topic.list.flag.output.description]
 one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "yaml")'
 
+[kafka.topic.produce.flag.key.description]
+one = 'The key associated with the value produced. Empty if not set'
+
+[kafka.topic.produce.flag.partition.description]
+one = 'The partition receiving the message'
+
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'
@@ -633,6 +639,20 @@ The replicas are preconfigured. The number of partition replicas for the topic i
 one = '''
 # Create a topic
 $ rhoas kafka topic create --name topic-1
+'''
+
+[kafka.topic.produce.cmd.shortDescription]
+one = 'Produce to a topic'
+
+[kafka.topic.produce.cmd.longDescription]
+one = '''
+Produce to a topic in the current Kafka instance. You can specify the partition, key, and value.
+'''
+
+[kafka.topic.produce.cmd.example]
+one = '''
+# Produce to a topic
+$ rhoas kafka topic produce --name topic-1 --value "Hello world"
 '''
 
 [kafka.topic.create.error.topicNameIsRequired]
