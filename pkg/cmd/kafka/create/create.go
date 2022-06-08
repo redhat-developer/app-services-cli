@@ -38,6 +38,10 @@ const (
 	FlagRegion = "region"
 	// FlagSize is a flag representing an size ID
 	FlagSize = "size"
+	// FlagMaxInstances is a flag representing a market place account ID
+	FlagMarketPlaceID = "marketplace-id"
+	// FlagMarketPlaceType is a flag representing a market place provider ID
+	FlagMarketPlaceType = "marketplace-type"
 )
 
 type options struct {
@@ -114,8 +118,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.provider, FlagProvider, "", f.Localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
 	flags.StringVar(&opts.region, FlagRegion, "", f.Localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	flags.StringVar(&opts.size, FlagSize, "", f.Localizer.MustLocalize("kafka.create.flag.size.description"))
-	flags.StringVar(&opts.marketplaceId, "marketplace-id", "", "kafka.create.flag.marketplaceId.description")
-	flags.StringVar(&opts.marketplaceType, "marketplace-type", defaultMarketplace, "kafka.create.flag.marketplaceType.description")
+	flags.StringVar(&opts.marketplaceId, FlagMarketPlaceID, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceId.description"))
+	flags.StringVar(&opts.marketplaceType, FlagMarketPlaceType, defaultMarketplace, f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
@@ -134,11 +138,11 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetKafkaSizeCompletionValues(f, opts.provider, opts.region)
 	})
 
-	_ = cmd.RegisterFlagCompletionFunc("marketplace-id", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlaceID, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetMarketplaceIdCompletionValues(f)
 	})
 
-	_ = cmd.RegisterFlagCompletionFunc("marketplace-type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlaceType, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetMarketplaceTypeCompletionValues(f)
 	})
 
@@ -356,15 +360,23 @@ func runCreate(opts *options) error {
 
 // set type to store the answers from the prompt with defaults
 type promptAnswers struct {
-	Name          string
-	Size          string
-	Region        string
-	CloudProvider string
+	Name            string
+	Size            string
+	Region          string
+	CloudProvider   string
+	AccountID       string
+	CloudProviderID string
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
+// nolint:funlen
 func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
+
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
 
 	validator := &kafkacmdutil.Validator{
 		Localizer:  f.Localizer,
@@ -378,11 +390,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 
 	answers := &promptAnswers{}
 
-	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
-	if err != nil {
-		return nil, err
-	}
-
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
 		return nil, err
 	}
@@ -438,15 +446,74 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 	}
 
+	accountIDs, err := accountmgmtutil.GetValidMarketplaceIDs(f.Context, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(accountIDs) > 0 {
+		if err = promptAccountIDSelect(f.Localizer, accountIDs, answers); err != nil {
+			return nil, err
+		}
+	}
+
+	marketplaceIDs, err := accountmgmtutil.GetValidMarketplaceTypes(f.Context, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(marketplaceIDs) > 0 {
+		if err = promptMarketplaceIDSelect(f.Localizer, marketplaceIDs, answers); err != nil {
+			return nil, err
+		}
+
+	}
+
+	accountIDNullable := kafkamgmtclient.NullableString{}
+	accountIDNullable.Set(&answers.AccountID)
+
+	cloudProviderIDNullable := kafkamgmtclient.NullableString{}
+	cloudProviderIDNullable.Set(&answers.CloudProviderID)
+
 	payload := &kafkamgmtclient.KafkaRequestPayload{
-		Name:          answers.Name,
-		Region:        &answers.Region,
-		CloudProvider: &answers.CloudProvider,
+		Name:                  answers.Name,
+		Region:                &answers.Region,
+		CloudProvider:         &answers.CloudProvider,
+		BillingCloudAccountId: accountIDNullable,
+		Marketplace:           cloudProviderIDNullable,
 	}
 	printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
 	payload.SetPlan(mapAmsTypeToBackendType(&userQuotaType) + "." + answers.Size)
 
 	return payload, nil
+}
+
+func promptMarketplaceIDSelect(localizer localize.Localizer, marketplaceIDs []string, answers *promptAnswers) error {
+
+	marketplaceIDPrompt := &survey.Select{
+		Message: localizer.MustLocalize("kafka.create.input.marketPlace.message"),
+		Options: marketplaceIDs,
+	}
+
+	if err := survey.AskOne(marketplaceIDPrompt, answers.CloudProviderID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func promptAccountIDSelect(localizer localize.Localizer, accountIDs []string, answers *promptAnswers) error {
+
+	accountIDPrompt := &survey.Select{
+		Message: localizer.MustLocalize("kafka.create.input.accountID.message"),
+		Options: accountIDs,
+	}
+
+	if err := survey.AskOne(accountIDPrompt, answers.AccountID); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func printSizeWarningIfNeeded(f *factory.Factory, selectedSize string, sizes []kafkamgmtclient.SupportedKafkaSize) {
