@@ -153,6 +153,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
+	var userInstanceType *accountmgmtutil.QuotaSpec
 	if !opts.bypassChecks {
 		f.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
@@ -168,16 +169,19 @@ func runCreate(opts *options) error {
 			f.Logger.Info(f.Localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
 			return nil
 		}
-	}
 
-	userInstanceType, err := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
-	if err != nil || userInstanceType == nil {
-		return f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
+		userInstanceType, err = accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
+		if err != nil || userInstanceType == nil {
+			return f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
+		}
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
 	if opts.interactive {
 		f.Logger.Debug()
+		if userInstanceType == nil {
+			return f.Localizer.MustLocalizeError("kafka.create.error.noInteractiveMode")
+		}
 
 		payload, err = promptKafkaPayload(opts, *userInstanceType)
 		if err != nil {
@@ -190,6 +194,12 @@ func runCreate(opts *options) error {
 
 		if opts.region == "" {
 			opts.region = defaultRegion
+		}
+
+		payload = &kafkamgmtclient.KafkaRequestPayload{
+			Name:          opts.name,
+			Region:        &opts.region,
+			CloudProvider: &opts.provider,
 		}
 
 		if !opts.bypassChecks {
@@ -211,22 +221,16 @@ func runCreate(opts *options) error {
 			if err1 != nil {
 				return err1
 			}
-		}
-
-		payload = &kafkamgmtclient.KafkaRequestPayload{
-			Name:          opts.name,
-			Region:        &opts.region,
-			CloudProvider: &opts.provider,
-		}
-
-		if opts.size != "" {
-			sizes, err1 := FetchValidKafkaSizes(opts.f, opts.provider, opts.region, *userInstanceType)
-			if err1 != nil {
-				return err1
+			if opts.size != "" {
+				sizes, err1 := FetchValidKafkaSizes(opts.f, opts.provider, opts.region, *userInstanceType)
+				if err1 != nil {
+					return err1
+				}
+				printSizeWarningIfNeeded(opts.f, opts.size, sizes)
+				payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 			}
-			printSizeWarningIfNeeded(opts.f, opts.size, sizes)
-			payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
 		}
+
 	}
 
 	f.Logger.Debug("Creating kafka instance", payload.Name, payload.GetPlan())
