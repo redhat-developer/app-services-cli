@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 
@@ -145,7 +146,12 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	return account.Organization.GetId(), nil
 }
 
-func GetValidMarketplaceAcctIDs(ctx context.Context, conn connection.Connection) (marketplaceAcctIDs []string, err error) {
+func GetValidMarketplaceAcctIDs(ctx context.Context, connectionFunc factory.ConnectionFunc) (marketplaceAcctIDs []string, err error) {
+
+	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
 
 	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {
@@ -163,7 +169,12 @@ func GetValidMarketplaceAcctIDs(ctx context.Context, conn connection.Connection)
 	return unique(marketplaceAcctIDs), err
 }
 
-func GetValidMarketplaces(ctx context.Context, conn connection.Connection) (marketplaces []string, err error) {
+func GetValidMarketplaces(ctx context.Context, connectionFunc factory.ConnectionFunc) (marketplaces []string, err error) {
+
+	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
 
 	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {

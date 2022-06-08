@@ -58,12 +58,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 func GetMarketplaceAcctIdCompletionValues(f *factory.Factory) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return nil, directive
-	}
-
-	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, conn)
+	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
 
 	return validMarketplaceAcctIDs, directive
 }
@@ -72,12 +67,7 @@ func GetMarketplaceAcctIdCompletionValues(f *factory.Factory) (validMarketplaceA
 func GetMarketplaceCompletionValues(f *factory.Factory) (validMarketplaces []string, directive cobra.ShellCompDirective) {
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return nil, directive
-	}
-
-	validMarketplaces, _ = accountmgmtutil.GetValidMarketplaces(f.Context, conn)
+	validMarketplaces, _ = accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
 
 	return validMarketplaces, directive
 }

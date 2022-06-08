@@ -70,6 +70,7 @@ var (
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
+// nolint: funlen
 func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
 		f: f,
@@ -104,6 +105,24 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+			}
+
+			validMarketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
+			if err != nil {
+				return err
+			}
+
+			if opts.marketplaceAcctId != "" && !flagutil.IsValidInput(opts.marketplaceAcctId, validMarketplaceAcctIDs...) {
+				return flagutil.InvalidValueError(FlagMarketPlaceAcctID, opts.marketplaceAcctId, validMarketplaceAcctIDs...)
+			}
+
+			validMarketplaces, err := accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
+			if err != nil {
+				return err
+			}
+
+			if opts.marketplace != "" && !flagutil.IsValidInput(opts.marketplaceAcctId, validMarketplaces...) {
+				return flagutil.InvalidValueError(FlagMarketPlace, opts.marketplace, validMarketplaces...)
 			}
 
 			return runCreate(opts)
@@ -371,11 +390,6 @@ type promptAnswers struct {
 func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return nil, err
-	}
-
 	validator := &kafkacmdutil.Validator{
 		Localizer:  f.Localizer,
 		Connection: f.Connection,
@@ -388,7 +402,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 
 	answers := &promptAnswers{}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
+	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
 		return nil, err
 	}
@@ -444,7 +458,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 	}
 
-	accountIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, conn)
+	accountIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
 	if err != nil {
 		return nil, err
 	}
@@ -455,7 +469,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 	}
 
-	marketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaces(f.Context, conn)
+	marketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
 	if err != nil {
 		return nil, err
 	}
