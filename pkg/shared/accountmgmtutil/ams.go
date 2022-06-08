@@ -145,7 +145,7 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	return account.Organization.GetId(), nil
 }
 
-func GetValidMarketplaceIDs(ctx context.Context, conn connection.Connection) (marketplaceIDs []string, err error) {
+func GetValidMarketplaceAcctIDs(ctx context.Context, conn connection.Connection) (marketplaceAcctIDs []string, err error) {
 
 	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {
@@ -155,12 +155,12 @@ func GetValidMarketplaceIDs(ctx context.Context, conn connection.Connection) (ma
 	for _, quota := range quotaCostGet.GetItems() {
 		if len(quota.GetCloudAccounts()) > 0 {
 			for _, cloudAccount := range quota.GetCloudAccounts() {
-				marketplaceIDs = append(marketplaceIDs, cloudAccount.GetCloudAccountId())
+				marketplaceAcctIDs = append(marketplaceAcctIDs, cloudAccount.GetCloudAccountId())
 			}
 		}
 	}
 
-	return unique(marketplaceIDs), err
+	return unique(marketplaceAcctIDs), err
 }
 
 func GetValidMarketplaces(ctx context.Context, conn connection.Connection) (marketplaces []string, err error) {
