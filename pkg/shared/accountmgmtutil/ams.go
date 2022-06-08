@@ -3,7 +3,6 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
@@ -164,7 +163,7 @@ func GetValidMarketplaceIDs(ctx context.Context, conn connection.Connection) (ma
 	return unique(marketplaceIDs), err
 }
 
-func GetValidMarketplaceTypes(ctx context.Context, conn connection.Connection) (marketplaceTypes []string, err error) {
+func GetValidMarketplaces(ctx context.Context, conn connection.Connection) (marketplaces []string, err error) {
 
 	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {
@@ -174,12 +173,12 @@ func GetValidMarketplaceTypes(ctx context.Context, conn connection.Connection) (
 	for _, quota := range quotaCostGet.GetItems() {
 		if len(quota.GetCloudAccounts()) > 0 {
 			for _, cloudAccount := range quota.GetCloudAccounts() {
-				marketplaceTypes = append(marketplaceTypes, cloudAccount.GetCloudProviderId())
+				marketplaces = append(marketplaces, cloudAccount.GetCloudProviderId())
 			}
 		}
 	}
 
-	return unique(marketplaceTypes), err
+	return unique(marketplaces), err
 }
 
 func unique(s []string) []string {
@@ -187,7 +186,6 @@ func unique(s []string) []string {
 	var result []string
 	for _, str := range s {
 		if _, ok := inResult[str]; !ok {
-			fmt.Println("string - ", inResult[str])
 			inResult[str] = true
 			result = append(result, str)
 		}

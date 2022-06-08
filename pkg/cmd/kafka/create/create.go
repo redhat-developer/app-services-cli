@@ -38,10 +38,10 @@ const (
 	FlagRegion = "region"
 	// FlagSize is a flag representing an size ID
 	FlagSize = "size"
-	// FlagMaxInstances is a flag representing a market place account ID
-	FlagMarketPlaceID = "marketplace-id"
-	// FlagMarketPlaceType is a flag representing a market place provider ID
-	FlagMarketPlaceType = "marketplace-type"
+	// FlagMarketPlaceID is a flag representing a marketplace cloud account ID used to purchase the instance
+	FlagMarketPlaceID = "marketplace-account-id"
+	// FlagMarketPlaceType is a flag representing marketplace where the instance is purchased on
+	FlagMarketPlace = "marketplace"
 )
 
 type options struct {
@@ -50,8 +50,8 @@ type options struct {
 	region   string
 	size     string
 
-	marketplaceId   string
-	marketplaceType string
+	marketplaceId string
+	marketplace   string
 
 	outputFormat string
 	autoUse      bool
@@ -67,8 +67,6 @@ type options struct {
 var (
 	defaultRegion   = "us-east-1"
 	defaultProvider = "aws"
-
-	defaultMarketplace = "aws"
 )
 
 // NewCreateCommand creates a new command for creating kafkas.
@@ -119,7 +117,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.region, FlagRegion, "", f.Localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	flags.StringVar(&opts.size, FlagSize, "", f.Localizer.MustLocalize("kafka.create.flag.size.description"))
 	flags.StringVar(&opts.marketplaceId, FlagMarketPlaceID, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceId.description"))
-	flags.StringVar(&opts.marketplaceType, FlagMarketPlaceType, defaultMarketplace, f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
+	flags.StringVar(&opts.marketplace, FlagMarketPlace, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
@@ -142,8 +140,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetMarketplaceIdCompletionValues(f)
 	})
 
-	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlaceType, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return GetMarketplaceTypeCompletionValues(f)
+	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlace, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetMarketplaceCompletionValues(f)
 	})
 
 	return cmd
@@ -360,12 +358,12 @@ func runCreate(opts *options) error {
 
 // set type to store the answers from the prompt with defaults
 type promptAnswers struct {
-	Name            string
-	Size            string
-	Region          string
-	CloudProvider   string
-	AccountID       string
-	CloudProviderID string
+	Name          string
+	Size          string
+	Region        string
+	CloudProvider string
+	MarketplaceID string
+	Marketplace   string
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
@@ -457,7 +455,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 	}
 
-	marketplaceIDs, err := accountmgmtutil.GetValidMarketplaceTypes(f.Context, conn)
+	marketplaceIDs, err := accountmgmtutil.GetValidMarketplaces(f.Context, conn)
 	if err != nil {
 		return nil, err
 	}
@@ -470,10 +468,10 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 	}
 
 	accountIDNullable := kafkamgmtclient.NullableString{}
-	accountIDNullable.Set(&answers.AccountID)
+	accountIDNullable.Set(&answers.MarketplaceID)
 
 	cloudProviderIDNullable := kafkamgmtclient.NullableString{}
-	cloudProviderIDNullable.Set(&answers.CloudProviderID)
+	cloudProviderIDNullable.Set(&answers.Marketplace)
 
 	payload := &kafkamgmtclient.KafkaRequestPayload{
 		Name:                  answers.Name,
@@ -495,7 +493,7 @@ func promptMarketplaceIDSelect(localizer localize.Localizer, marketplaceIDs []st
 		Options: marketplaceIDs,
 	}
 
-	if err := survey.AskOne(marketplaceIDPrompt, answers.CloudProviderID); err != nil {
+	if err := survey.AskOne(marketplaceIDPrompt, &answers.Marketplace); err != nil {
 		return err
 	}
 
@@ -509,7 +507,7 @@ func promptAccountIDSelect(localizer localize.Localizer, accountIDs []string, an
 		Options: accountIDs,
 	}
 
-	if err := survey.AskOne(accountIDPrompt, answers.AccountID); err != nil {
+	if err := survey.AskOne(accountIDPrompt, &answers.MarketplaceID); err != nil {
 		return err
 	}
 

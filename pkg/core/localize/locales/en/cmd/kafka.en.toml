@@ -283,10 +283,10 @@ one = 'Wait until the Kafka instance is created'
 one = 'Validate all user provided arguments without creating the Kafka instance'
 
 [kafka.create.flag.marketplaceId.description]
-one = 'Cloud Account ID for the market place'
+one = 'Cloud Account ID for the marketplace'
 
 [kafka.create.flag.marketplaceType.description]
-one = 'ID of the market place provider'
+one = 'Name of the marketplace where the instance is purchased on'
 
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
@@ -329,10 +329,10 @@ one = "Cloud Region:"
 one = 'Instance type:'
 
 [kafka.create.input.marketPlace.message]
-one = 'Enter Market place provider id:'
+one = 'Select a marketplace:'
 
 [kafka.create.input.accountID.message]
-one = 'Enter cloud account ID:'
+one = 'Select a cloud account ID for the marketplace'
 
 [kafka.create.log.info.sizeUnit]
 one = 'Kafka instance with size {{.DisplaySize}} is being created. (Size id: {{.Size}})'
