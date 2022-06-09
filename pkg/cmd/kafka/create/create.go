@@ -465,17 +465,6 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 	}
 
-	marketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(marketplaceAcctIDs) > 0 {
-		if err = promptMarketplaceAcctIDSelect(f.Localizer, marketplaceAcctIDs, answers); err != nil {
-			return nil, err
-		}
-	}
-
 	marketplaces, err := accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
 	if err != nil {
 		return nil, err
@@ -485,7 +474,17 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		if err = promptMarketplaceSelect(f.Localizer, marketplaces, answers); err != nil {
 			return nil, err
 		}
+	}
 
+	marketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(marketplaceAcctIDs) > 0 {
+		if err = promptMarketplaceAcctIDSelect(f.Localizer, marketplaceAcctIDs, answers); err != nil {
+			return nil, err
+		}
 	}
 
 	accountIDNullable := kafkamgmtclient.NullableString{}

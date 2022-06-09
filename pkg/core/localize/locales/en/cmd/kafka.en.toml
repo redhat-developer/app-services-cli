@@ -332,7 +332,7 @@ one = 'Instance type:'
 one = 'Select a marketplace:'
 
 [kafka.create.input.accountID.message]
-one = 'Select a cloud account ID for the marketplace'
+one = 'Select a cloud account ID for the marketplace:'
 
 [kafka.create.log.info.sizeUnit]
 one = 'Kafka instance with size {{.DisplaySize}} is being created. (Size id: {{.Size}})'
