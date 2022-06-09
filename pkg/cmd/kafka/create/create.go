@@ -40,7 +40,7 @@ const (
 	FlagSize = "size"
 	// FlagMarketPlaceAcctID is a flag representing a marketplace cloud account ID used to purchase the instance
 	FlagMarketPlaceAcctID = "marketplace-account-id"
-	// FlagMarketPlaceType is a flag representing marketplace where the instance is purchased on
+	// FlagMarketPlace is a flag representing marketplace where the instance is purchased on
 	FlagMarketPlace = "marketplace"
 )
 
@@ -236,6 +236,13 @@ func runCreate(opts *options) error {
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
+		}
+
+		if opts.marketplaceAcctId != "" && opts.marketplace != "" {
+			payload.Marketplace = kafkamgmtclient.NullableString{}
+			payload.Marketplace.Set(&opts.marketplace)
+			payload.BillingCloudAccountId = kafkamgmtclient.NullableString{}
+			payload.BillingCloudAccountId.Set(&opts.marketplaceAcctId)
 		}
 
 		if !opts.bypassChecks {
