@@ -58,7 +58,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 func GetMarketplaceAcctIdCompletionValues(f *factory.Factory) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
+	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection, "")
 
 	return validMarketplaceAcctIDs, directive
 }
