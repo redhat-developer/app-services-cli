@@ -282,6 +282,12 @@ one = 'Wait until the Kafka instance is created'
 [kafka.create.flag.dryrun.description]
 one = 'Validate all user provided arguments without creating the Kafka instance'
 
+[kafka.create.flag.marketplaceId.description]
+one = 'Cloud Account ID for the marketplace'
+
+[kafka.create.flag.marketplaceType.description]
+one = 'Name of the marketplace where the instance is purchased on'
+
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}"...'
@@ -321,6 +327,12 @@ one = "Cloud Region:"
 
 [kafka.create.input.plan.message]
 one = 'Instance type:'
+
+[kafka.create.input.marketPlace.message]
+one = 'Select a marketplace:'
+
+[kafka.create.input.accountID.message]
+one = 'Select a cloud account ID for the marketplace:'
 
 [kafka.create.log.info.sizeUnit]
 one = 'Kafka instance with size {{.DisplaySize}} is being created. (Size id: {{.Size}})'
@@ -378,6 +390,11 @@ one = '''the selected region "{{.Region}}" does not support the instance types t
 [kafka.create.error.invalidSize]
 one = '''
 provided instance size is not valid. Valid sizes: {{.ValidSizes}}
+'''
+
+[kafka.create.error.billing.invalid]
+one = '''
+provided billing account id and provider are invalid {{.Billing}}
 '''
 
 [kafka.delete.cmd.shortDescription]

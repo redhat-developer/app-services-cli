@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
 
@@ -51,7 +52,7 @@ func GetUserSupportedInstanceType(ctx context.Context, spec *remote.AmsConfig, c
 	return amsType, nil
 }
 
-func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
+func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amsclient.QuotaCostList, error) {
 	orgId, err := GetOrganizationID(ctx, conn)
 	if err != nil {
 		return nil, err
@@ -60,7 +61,16 @@ func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, 
 	quotaCostGet, _, err := conn.API().AccountMgmt().
 		ApiAccountsMgmtV1OrganizationsOrgIdQuotaCostGet(ctx, orgId).
 		FetchRelatedResources(true).
+		FetchCloudAccounts(true).
 		Execute()
+
+	return &quotaCostGet, err
+
+}
+
+func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
@@ -134,4 +144,62 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	}
 
 	return account.Organization.GetId(), nil
+}
+
+func GetValidMarketplaceAcctIDs(ctx context.Context, connectionFunc factory.ConnectionFunc) (marketplaceAcctIDs []string, err error) {
+
+	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quota := range quotaCostGet.GetItems() {
+		if len(quota.GetCloudAccounts()) > 0 {
+			for _, cloudAccount := range quota.GetCloudAccounts() {
+				marketplaceAcctIDs = append(marketplaceAcctIDs, cloudAccount.GetCloudAccountId())
+			}
+		}
+	}
+
+	return unique(marketplaceAcctIDs), err
+}
+
+func GetValidMarketplaces(ctx context.Context, connectionFunc factory.ConnectionFunc) (marketplaces []string, err error) {
+
+	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quota := range quotaCostGet.GetItems() {
+		if len(quota.GetCloudAccounts()) > 0 {
+			for _, cloudAccount := range quota.GetCloudAccounts() {
+				marketplaces = append(marketplaces, cloudAccount.GetCloudProviderId())
+			}
+		}
+	}
+
+	return unique(marketplaces), err
+}
+
+func unique(s []string) []string {
+	inResult := make(map[string]bool)
+	var result []string
+	for _, str := range s {
+		if _, ok := inResult[str]; !ok {
+			inResult[str] = true
+			result = append(result, str)
+		}
+	}
+	return result
 }
