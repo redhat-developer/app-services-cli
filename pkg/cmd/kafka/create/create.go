@@ -121,7 +121,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return err
 			}
 
-			if opts.marketplace != "" && !flagutil.IsValidInput(opts.marketplaceAcctId, validMarketplaces...) {
+			if opts.marketplace != "" && !flagutil.IsValidInput(opts.marketplace, validMarketplaces...) {
 				return flagutil.InvalidValueError(FlagMarketPlace, opts.marketplace, validMarketplaces...)
 			}
 
@@ -458,24 +458,24 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 	}
 
-	accountIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(accountIDs) > 0 {
-		if err = promptAccountIDSelect(f.Localizer, accountIDs, answers); err != nil {
-			return nil, err
-		}
-	}
-
-	marketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
+	marketplaceAcctIDs, err := accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection)
 	if err != nil {
 		return nil, err
 	}
 
 	if len(marketplaceAcctIDs) > 0 {
 		if err = promptMarketplaceAcctIDSelect(f.Localizer, marketplaceAcctIDs, answers); err != nil {
+			return nil, err
+		}
+	}
+
+	marketplaces, err := accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(marketplaces) > 0 {
+		if err = promptMarketplaceSelect(f.Localizer, marketplaces, answers); err != nil {
 			return nil, err
 		}
 
@@ -500,21 +500,21 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 	return payload, nil
 }
 
-func promptMarketplaceAcctIDSelect(localizer localize.Localizer, marketplaceAcctIDs []string, answers *promptAnswers) error {
+func promptMarketplaceSelect(localizer localize.Localizer, marketplaceAcctIDs []string, answers *promptAnswers) error {
 
-	marketplaceAcctIDPrompt := &survey.Select{
+	marketplacePrompt := &survey.Select{
 		Message: localizer.MustLocalize("kafka.create.input.marketPlace.message"),
 		Options: marketplaceAcctIDs,
 	}
 
-	if err := survey.AskOne(marketplaceAcctIDPrompt, &answers.Marketplace); err != nil {
+	if err := survey.AskOne(marketplacePrompt, &answers.Marketplace); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func promptAccountIDSelect(localizer localize.Localizer, accountIDs []string, answers *promptAnswers) error {
+func promptMarketplaceAcctIDSelect(localizer localize.Localizer, accountIDs []string, answers *promptAnswers) error {
 
 	accountIDPrompt := &survey.Select{
 		Message: localizer.MustLocalize("kafka.create.input.accountID.message"),
