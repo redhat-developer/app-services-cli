@@ -35,14 +35,16 @@ $ rhoas kafka create -o yaml
 [discrete]
 == Options
 
-      `--dry-run`::             Validate all user provided arguments without creating the Kafka instance
-      `--name` _string_::       Unique name of the Kafka instance
-  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
-      `--provider` _string_::   Cloud Provider ID
-      `--region` _string_::     Cloud Provider Region ID
-      `--size` _string_::       Size of the Kafka instance
-      `--use`::                 Set the new Kafka instance to the current instance (default true)
-  `-w`, `--wait`::              Wait until the Kafka instance is created
+      `--dry-run`::                           Validate all user provided arguments without creating the Kafka instance
+      `--marketplace` _string_::              Name of the marketplace where the instance is purchased on
+      `--marketplace-account-id` _string_::   Cloud Account ID for the marketplace
+      `--name` _string_::                     Unique name of the Kafka instance
+  `-o`, `--output` _string_::                 Specify the output format. Choose from: "json", "yaml", "yml"
+      `--provider` _string_::                 Cloud Provider ID
+      `--region` _string_::                   Cloud Provider Region ID
+      `--size` _string_::                     Size of the Kafka instance
+      `--use`::                               Set the new Kafka instance to the current instance (default true)
+  `-w`, `--wait`::                            Wait until the Kafka instance is created
 
 [discrete]
 == Options inherited from parent commands

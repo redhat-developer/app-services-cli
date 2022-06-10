@@ -10,6 +10,14 @@ Generate configurations for the service context
 
 Generate configuration files for the service context to connect with to be used with various tools and platforms
 
+You must specify an output format into which the credentials will be stored:
+
+- env (default): Store configurations in an env file as environment variables
+- json: Store configurations in a JSON file
+- properties: Store configurations in a properties file, which is typically used in Java-related technologies
+- secret: Store configurations in a Kubernetes secret file
+
+
 ....
 rhoas generate-config [flags]
 ....
@@ -20,6 +28,12 @@ rhoas generate-config [flags]
 ....
 ## Generate configurations for the current service context in json format
 $ rhoas generate-config --type json
+
+## Generate configurations for the current service context in env format and save it in specified path
+$ rhoas generate-config --type env --output-file ./configs/.env
+
+## Generate configurations for a specified context as Kubernetes secret
+$ rhoas generate-config --name qaprod --type secret
 
 ....
 
