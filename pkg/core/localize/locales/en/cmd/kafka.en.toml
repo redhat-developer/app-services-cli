@@ -531,6 +531,9 @@ one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "
 [kafka.topic.produce.flag.key.description]
 one = 'The key associated with the value produced. Empty if not set'
 
+[kafka.topic.produce.flag.key.file]
+one = 'Path to file containing value'
+
 [kafka.topic.produce.flag.partition.description]
 one = 'The partition receiving the message'
 

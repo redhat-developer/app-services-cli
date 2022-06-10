@@ -20,6 +20,7 @@ type options struct {
 	topicName string
 	kafkaID   string
 	key       string
+	file      string
 	partition int32
 
 	f *factory.Factory
@@ -57,6 +58,7 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.StringVar(&opts.key, "key", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.produce.flag.partition.description"))
+	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.file"))
 
 	_ = cmd.MarkFlagRequired("name")
 
@@ -82,19 +84,29 @@ func runCmd(opts *options) error {
 
 	var value string
 
-	// if value being piped then cannot have delimeter as \n
-	info, _ := os.Stdin.Stat()
-	if info.Mode()&os.ModeCharDevice == 0 {
-		bytes, err := ioutil.ReadAll(os.Stdin)
+	if opts.file != "" {
+		bytes, err := ioutil.ReadFile(opts.file)
 		if err != nil {
 			return err
 		}
 
 		value = string(bytes)
 	} else {
-		value, err = bufio.NewReader(os.Stdin).ReadString('\n')
-		if err != nil {
-			return err
+		// if value is being piped then cannot have delimeter as \n
+		info, _ := os.Stdin.Stat()
+		if info.Mode()&os.ModeCharDevice == 0 {
+			bytes, err := ioutil.ReadAll(os.Stdin)
+			if err != nil {
+				return err
+			}
+
+			value = string(bytes)
+		} else {
+			value, err = bufio.NewReader(os.Stdin).ReadString('\n')
+			if err != nil {
+				return err
+			}
+
 		}
 	}
 

@@ -22,6 +22,7 @@ $ rhoas kafka topic produce --name topic-1 --value "Hello world"
 ### Options
 
 ```
+      --file string          Path to file containing value
       --instance-id string   Kafka instance ID. Uses the current instance if not set 
       --key string           The key associated with the value produced. Empty if not set
       --name string          Topic name
