@@ -1,6 +1,7 @@
 package connector
 
 import (
+	"github.com/redhat-developer/app-services-cli/internal/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/delete"
@@ -8,7 +9,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/namespace"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/update"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/profile"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
