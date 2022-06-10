@@ -404,7 +404,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 	f := opts.f
 
 	accountIDNullable := kafkamgmtclient.NullableString{}
-	cloudProviderIDNullable := kafkamgmtclient.NullableString{}
+	marketplaceProviderNullable := kafkamgmtclient.NullableString{}
 
 	validator := &kafkacmdutil.Validator{
 		Localizer:  f.Localizer,
@@ -496,7 +496,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		}
 
 		accountIDNullable.Set(&answers.MarketplaceAcctID)
-		cloudProviderIDNullable.Set(&answers.Marketplace)
+		marketplaceProviderNullable.Set(&answers.Marketplace)
 	}
 
 	payload := &kafkamgmtclient.KafkaRequestPayload{
@@ -504,7 +504,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		Region:                &answers.Region,
 		CloudProvider:         &answers.CloudProvider,
 		BillingCloudAccountId: accountIDNullable,
-		Marketplace:           cloudProviderIDNullable,
+		Marketplace:           marketplaceProviderNullable,
 	}
 	printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
 	payload.SetPlan(mapAmsTypeToBackendType(&userQuotaType) + "." + answers.Size)
