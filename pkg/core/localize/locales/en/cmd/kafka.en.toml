@@ -332,7 +332,7 @@ one = 'Instance type:'
 one = 'Select a marketplace:'
 
 [kafka.create.input.accountID.message]
-one = 'Select a cloud account ID for the marketplace:'
+one = 'Select a cloud provider ID associated with "{{.Marketplace}}" marketplace'
 
 [kafka.create.log.info.sizeUnit]
 one = 'Kafka instance with size {{.DisplaySize}} is being created. (Size id: {{.Size}})'
@@ -346,6 +346,9 @@ one = "Geographical region where the Kafka instance will be deployed"
 
 [kafka.create.argument.name.error.requiredWhenNonInteractive]
 one = 'name is required. Run "rhoas kafka create --name my-kafka"'
+
+[kafka.create.error.bypassChecks.marketplace]
+one = '"--marketplace" and "--marketplace-account-id" flags are not supported with "--bypass-checks" flag'
 
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
