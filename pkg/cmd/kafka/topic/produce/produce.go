@@ -1,7 +1,6 @@
 package produce
 
 import (
-	"context"
 	"os"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -11,10 +10,6 @@ import (
 	"io/ioutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -27,36 +22,22 @@ type options struct {
 	key       string
 	partition int32
 
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
+	f *factory.Factory
 }
 
-// NewProduceTopicCommand gets a new command for producing to a kafka topic.
+// NewProduceTopicCommand creates a new command for producing to a kafka topic.
 func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Connection:     f.Connection,
-		Logger:         f.Logger,
-		IO:             f.IOStreams,
-		localizer:      f.Localizer,
-		Context:        f.Context,
-		ServiceContext: f.ServiceContext,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
 		Use:     "produce",
-		Short:   opts.localizer.MustLocalize("kafka.topic.produce.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("kafka.topic.produce.cmd.longDescription"),
-		Example: opts.localizer.MustLocalize("kafka.topic.produce.cmd.example"),
+		Short:   f.Localizer.MustLocalize("kafka.topic.produce.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.topic.produce.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.topic.produce.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			// if !opts.IO.CanPrompt() {
-			// 	return opts.localizer.MustLocalizeError("flag.error.requiredWhenNonInteractive", localize.NewEntry("Flag", "yes"))
-			// }
-
 			if opts.kafkaID == "" {
 
 				kafkaInstance, err := contextutil.GetCurrentKafkaInstance(f)
@@ -71,11 +52,11 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := kafkaflagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaflagutil.NewFlagSet(cmd, f.Localizer)
 
-	flags.StringVar(&opts.topicName, "name", "", opts.localizer.MustLocalize("kafka.topic.common.flag.name.description"))
-	flags.StringVar(&opts.key, "key", "", opts.localizer.MustLocalize("kafka.topic.produce.flag.key.description"))
-	flags.Int32Var(&opts.partition, "partition", 0, opts.localizer.MustLocalize("kafka.topic.produce.flag.partition.description"))
+	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
+	flags.StringVar(&opts.key, "key", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.description"))
+	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.produce.flag.partition.description"))
 
 	_ = cmd.MarkFlagRequired("name")
 
@@ -88,9 +69,8 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-// nolint:funlen
 func runCmd(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
 	}
@@ -124,7 +104,7 @@ func runCmd(opts *options) error {
 		Partition: &opts.partition,
 	}
 
-	_, _, err = api.RecordsApi.ProduceRecord(opts.Context, opts.topicName).Record(record).Execute()
+	_, _, err = api.RecordsApi.ProduceRecord(opts.f.Context, opts.topicName).Record(record).Execute()
 	if err != nil {
 		return err
 	}
