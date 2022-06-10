@@ -347,6 +347,9 @@ one = "Geographical region where the Kafka instance will be deployed"
 [kafka.create.argument.name.error.requiredWhenNonInteractive]
 one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 
+[kafka.create.error.bypassChecks.marketplace]
+one = 'marketplace is not supported with "--bypass-checks" flag'
+
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
 
