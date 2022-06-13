@@ -4,12 +4,15 @@ import (
 	"os"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
 	"bufio"
 	"io/ioutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -24,6 +27,14 @@ type options struct {
 	partition int32
 
 	f *factory.Factory
+}
+
+// row is the details of a record produced needed to print to a table
+type kafkaRow struct {
+	Topic     string `json:"topic" header:"Topic"`
+	Key       string `json:"key" header:"Key"`
+	Value     string `json:"value" header:"Value"`
+	Partition int32  `json:"partition" header:"Partition"`
 }
 
 // NewProduceTopicCommand creates a new command for producing to a kafka topic.
@@ -121,5 +132,19 @@ func runCmd(opts *options) error {
 		return err
 	}
 
+	dump.Table(opts.f.IOStreams.Out, mapRecordToRow(opts.topicName, &record))
+	opts.f.Logger.Info("")
+
+	opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("kafka.topic.produce.info.produceSuccess", localize.NewEntry("Topic", opts.topicName)))
+
 	return nil
+}
+
+func mapRecordToRow(topic string, record *kafkainstanceclient.Record) kafkaRow {
+	return kafkaRow{
+		Topic:     topic,
+		Key:       *record.Key,
+		Value:     record.Value,
+		Partition: *record.Partition,
+	}
 }

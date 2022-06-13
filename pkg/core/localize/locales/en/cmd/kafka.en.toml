@@ -537,6 +537,10 @@ one = 'Path to file containing value'
 [kafka.topic.produce.flag.partition.description]
 one = 'The partition receiving the message'
 
+[kafka.topic.produce.info.produceSuccess]
+description = 'Produce success message'
+one = 'Record successfully produced to "{{.Topic}}"'
+
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'
