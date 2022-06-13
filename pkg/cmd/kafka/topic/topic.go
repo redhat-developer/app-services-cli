@@ -1,6 +1,7 @@
 package topic
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/consume"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/describe"
@@ -32,6 +33,7 @@ func NewTopicCommand(f *factory.Factory) *cobra.Command {
 		describe.NewDescribeTopicCommand(f),
 		update.NewUpdateTopicCommand(f),
 		produce.NewProduceTopicCommand(f),
+		consume.NewConsumeTopicCommand(f),
 	)
 
 	return cmd
