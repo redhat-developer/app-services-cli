@@ -551,6 +551,15 @@ one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "
 [kafka.topic.list.flag.output.description]
 one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "yaml")'
 
+[kafka.topic.consume.flag.partition.description]
+one = 'The partition to consume from'
+
+[kafka.topic.consume.flag.timestamp.description]
+one = 'Timestamp to start consuming from'
+
+[kafka.topic.consume.flag.limit.description]
+one = 'Max records to consume from topic'
+
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'
