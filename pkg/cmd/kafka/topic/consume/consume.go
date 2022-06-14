@@ -3,10 +3,14 @@ package consume
 import (
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 
+	"strings"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -18,6 +22,14 @@ type options struct {
 	limit     int32
 
 	f *factory.Factory
+}
+
+// row is the details of a record produced needed to print to a table
+type kafkaRow struct {
+	Topic     string `json:"topic" header:"Topic"`
+	Key       string `json:"key" header:"Key"`
+	Value     string `json:"value" header:"Value"`
+	Partition int32  `json:"partition" header:"Partition"`
 }
 
 // NewComsumeTopicCommand creates a new command for producing to a kafka topic.
@@ -76,14 +88,32 @@ func runCmd(opts *options) error {
 		return err
 	}
 
-	list, _, err := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition).Execute()
+	list, _, err := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition).Timestamp(opts.timestamp).Execute()
 	if err != nil {
 		return err
 	}
 
-	for i := int32(0); i < list.Total; i++ {
-		opts.f.Logger.Info(list.Items[i].Value)
-	}
+	dump.Table(opts.f.IOStreams.Out, mapRecordsToRows(opts.topicName, &list.Items))
+	opts.f.Logger.Info("")
 
 	return nil
+}
+
+func mapRecordsToRows(topic string, records *[]kafkainstanceclient.Record) []kafkaRow {
+
+	rows := make([]kafkaRow, len(*records))
+
+	for i := 0; i < len(*records); i++ {
+		record := &(*records)[i]
+		row := kafkaRow{
+			Topic:     topic,
+			Key:       *record.Key,
+			Value:     strings.TrimSuffix(record.Value, "\n"), // trailing new line gives weird printing of table
+			Partition: *record.Partition,
+		}
+
+		rows[i] = row
+	}
+
+	return rows
 }
