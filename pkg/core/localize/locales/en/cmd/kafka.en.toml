@@ -61,6 +61,10 @@ one = 'Select Kafka instance:'
 description = 'Info message when no Kafka instances were found'
 one = 'No Kafka instances were found.'
 
+[kafka.common.log.info.noRecords]
+description = 'Info message when no records for a topic were found'
+one = 'No records were found.'
+
 [kafka.topic.common.error.topicNotFoundError]
 one = 'topic "{{.TopicName}}" does not exist in Kafka instance "{{.InstanceName}}"'
 

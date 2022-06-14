@@ -20,6 +20,7 @@ type options struct {
 	partition int32
 	timestamp string
 	limit     int32
+	outputFormat string
 
 	f *factory.Factory
 }
@@ -61,6 +62,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flags := kafkaflagutil.NewFlagSet(cmd, f.Localizer)
 
+	flags.AddOutput(&opts.outputFormat)
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
 	flags.StringVar(&opts.timestamp, "timestamp", "", f.Localizer.MustLocalize("kafka.topic.consume.flag.timestamp.description"))
@@ -88,13 +90,33 @@ func runCmd(opts *options) error {
 		return err
 	}
 
-	list, _, err := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition).Timestamp(opts.timestamp).Execute()
+	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition)
+	if opts.timestamp != "" {
+		// setting timestamp as "" (not set by user) is not valid
+		// not setting timestamp is handled by the request
+		request = request.Timestamp(opts.timestamp)
+	}
+
+	list, _, err := request.Execute()
 	if err != nil {
 		return err
 	}
 
-	dump.Table(opts.f.IOStreams.Out, mapRecordsToRows(opts.topicName, &list.Items))
-	opts.f.Logger.Info("")
+	if len(list.Items) == 0 {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.common.log.info.noRecords"))
+		return nil
+	}
+
+	recordsAsRows := mapRecordsToRows(opts.topicName, &list.Items)
+
+	switch opts.outputFormat {
+	case dump.EmptyFormat:
+		dump.Table(opts.f.IOStreams.Out, recordsAsRows)
+		opts.f.Logger.Info("")
+	default:
+		dump.Formatted(opts.f.IOStreams.Out, opts.outputFormat, recordsAsRows)
+		opts.f.Logger.Info("")
+	}
 
 	return nil
 }
