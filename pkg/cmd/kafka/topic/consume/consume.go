@@ -20,6 +20,8 @@ type options struct {
 	partition int32
 	timestamp string
 	limit     int32
+	offset    int64
+	wait      bool
 	outputFormat string
 
 	f *factory.Factory
@@ -31,6 +33,7 @@ type kafkaRow struct {
 	Key       string `json:"key" header:"Key"`
 	Value     string `json:"value" header:"Value"`
 	Partition int32  `json:"partition" header:"Partition"`
+	Offset 	  int64  `json:"offset" header:"Offset"`
 }
 
 // NewComsumeTopicCommand creates a new command for producing to a kafka topic.
@@ -66,6 +69,8 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
 	flags.StringVar(&opts.timestamp, "timestamp", "", f.Localizer.MustLocalize("kafka.topic.consume.flag.timestamp.description"))
+	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
+	flags.Int64Var(&opts.offset, "offset", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", 20, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
 
 	_ = cmd.MarkFlagRequired("name")
@@ -80,6 +85,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *options) error {
+
 	conn, err := opts.f.Connection(connection.DefaultConfigRequireMasAuth)
 	if err != nil {
 		return err
@@ -90,7 +96,39 @@ func runCmd(opts *options) error {
 		return err
 	}
 
-	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition)
+	if opts.wait {
+		
+		max_offset := opts.offset
+		for true {
+
+			records, err := consume(opts, api);	
+			if err != nil {
+				return err
+			}
+
+			record_count := len(records.Items) 
+			if record_count > 0 {
+				max_offset = *(records.Items[record_count - 1].Offset) + 1
+				outputRecords(opts, records)
+			}	
+
+			opts.offset = max_offset 
+		}
+	} else {
+		records, err := consume(opts, api)
+		if err != nil {
+			return err
+		}
+
+		outputRecords(opts, records)
+	}
+
+	return nil
+}
+
+func consume(opts *options, api *kafkainstanceclient.APIClient) (*kafkainstanceclient.RecordList, error) {
+
+	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition).Offset(int32(opts.offset))
 	if opts.timestamp != "" {
 		// setting timestamp as "" (not set by user) is not valid
 		// not setting timestamp is handled by the request
@@ -99,15 +137,19 @@ func runCmd(opts *options) error {
 
 	list, _, err := request.Execute()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if len(list.Items) == 0 {
+	return &list, nil
+}
+
+func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
+	recordsAsRows := mapRecordsToRows(opts.topicName, &records.Items)
+
+	if len(records.Items) == 0 {
 		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.common.log.info.noRecords"))
-		return nil
+		return
 	}
-
-	recordsAsRows := mapRecordsToRows(opts.topicName, &list.Items)
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
@@ -117,8 +159,6 @@ func runCmd(opts *options) error {
 		dump.Formatted(opts.f.IOStreams.Out, opts.outputFormat, recordsAsRows)
 		opts.f.Logger.Info("")
 	}
-
-	return nil
 }
 
 func mapRecordsToRows(topic string, records *[]kafkainstanceclient.Record) []kafkaRow {
@@ -132,6 +172,7 @@ func mapRecordsToRows(topic string, records *[]kafkainstanceclient.Record) []kaf
 			Key:       *record.Key,
 			Value:     strings.TrimSuffix(record.Value, "\n"), // trailing new line gives weird printing of table
 			Partition: *record.Partition,
+			Offset:    *record.Offset,
 		}
 
 		rows[i] = row

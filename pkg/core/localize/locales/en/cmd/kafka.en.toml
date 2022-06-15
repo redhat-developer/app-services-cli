@@ -551,6 +551,12 @@ one = 'The partition to consume from'
 [kafka.topic.consume.flag.timestamp.description]
 one = 'Timestamp to start consuming from'
 
+[kafka.topic.consume.flag.wait.description]
+one = 'Continuously waiting for records to consume'
+
+[kafka.topic.consume.flag.offset.description]
+one = 'Retrieve messages with an offset equal to or greater than this'
+
 [kafka.topic.consume.flag.limit.description]
 one = 'Max records to consume from topic'
 
