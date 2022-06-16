@@ -357,7 +357,7 @@ one = 'Kafka instance "{{.Name}}" already exists'
 one = 'Cannot fetch user allowed instance type'
 
 [kafka.create.error.noInteractiveMode]
-one = 'Interactive mode is not supported when using --skip-checks flag'
+one = 'Interactive mode is not supported when using --bypass-checks flag'
 
 [kafka.create.error.quota.exceeded]
 one = 'your accout exceeded quota for Kafka instances. Please refer to https://console.redhat.com/application-services/subscriptions/streams for more information' 
