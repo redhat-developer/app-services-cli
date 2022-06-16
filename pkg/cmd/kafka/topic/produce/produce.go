@@ -127,7 +127,7 @@ func runCmd(opts *options) error {
 		Partition: &opts.partition,
 	}
 
-	_, _, err = api.RecordsApi.ProduceRecord(opts.f.Context, opts.topicName).Record(record).Execute()
+	record, _, err = api.RecordsApi.ProduceRecord(opts.f.Context, opts.topicName).Record(record).Execute()
 	if err != nil {
 		return err
 	}
@@ -135,7 +135,9 @@ func runCmd(opts *options) error {
 	dump.Table(opts.f.IOStreams.Out, mapRecordToRow(opts.topicName, &record))
 	opts.f.Logger.Info("")
 
-	opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("kafka.topic.produce.info.produceSuccess", localize.NewEntry("Topic", opts.topicName)))
+	opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("kafka.topic.produce.info.produceSuccess",
+		localize.NewEntry("Topic", opts.topicName),
+		localize.NewEntry("Offset", record.Offset)))
 
 	return nil
 }

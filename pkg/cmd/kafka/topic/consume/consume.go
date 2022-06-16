@@ -15,13 +15,13 @@ import (
 )
 
 type options struct {
-	topicName string
-	kafkaID   string
-	partition int32
-	timestamp string
-	limit     int32
-	offset    int64
-	wait      bool
+	topicName    string
+	kafkaID      string
+	partition    int32
+	timestamp    string
+	limit        int32
+	offset       int64
+	wait         bool
 	outputFormat string
 
 	f *factory.Factory
@@ -33,7 +33,7 @@ type kafkaRow struct {
 	Key       string `json:"key" header:"Key"`
 	Value     string `json:"value" header:"Value"`
 	Partition int32  `json:"partition" header:"Partition"`
-	Offset 	  int64  `json:"offset" header:"Offset"`
+	Offset    int64  `json:"offset" header:"Offset"`
 }
 
 // NewComsumeTopicCommand creates a new command for producing to a kafka topic.
@@ -97,22 +97,22 @@ func runCmd(opts *options) error {
 	}
 
 	if opts.wait {
-		
+
 		max_offset := opts.offset
 		for true {
 
-			records, err := consume(opts, api);	
+			records, err := consume(opts, api)
 			if err != nil {
 				return err
 			}
 
-			record_count := len(records.Items) 
+			record_count := len(records.Items)
 			if record_count > 0 {
-				max_offset = *(records.Items[record_count - 1].Offset) + 1
+				max_offset = *(records.Items[record_count-1].Offset) + 1
 				outputRecords(opts, records)
-			}	
+			}
 
-			opts.offset = max_offset 
+			opts.offset = max_offset
 		}
 	} else {
 		records, err := consume(opts, api)
@@ -151,13 +151,13 @@ func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
 		return
 	}
 
-	switch opts.outputFormat {
-	case dump.EmptyFormat:
-		dump.Table(opts.f.IOStreams.Out, recordsAsRows)
-		opts.f.Logger.Info("")
-	default:
-		dump.Formatted(opts.f.IOStreams.Out, opts.outputFormat, recordsAsRows)
-		opts.f.Logger.Info("")
+	format := opts.outputFormat
+	if format == dump.EmptyFormat {
+		format = dump.JSONFormat
+	}
+
+	for i := 0; i < len(recordsAsRows); i++ {
+		dump.Formatted(opts.f.IOStreams.Out, format, recordsAsRows[i])
 	}
 }
 
