@@ -139,7 +139,7 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 		apiHost := fmt.Sprintf("admin-server-%v", host)
 		apiURL, _ = url.Parse(apiHost)
 		apiURL.Scheme = "https"
-		apiURL.Path = "/"
+		apiURL.Path = ""
 		apiURL.Host = fmt.Sprintf("admin-server-%v", host)
 	}
 
