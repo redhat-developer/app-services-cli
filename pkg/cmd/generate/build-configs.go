@@ -115,7 +115,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	configurations.TokenURL = providerUrls.GetTokenUrl()
 	configurations.Name = configInstanceName
 
-	if err = WriteConfig(opts.configType, opts.fileName, configurations); err != nil {
+	if err = WriteConfig(opts, configurations); err != nil {
 		return err
 	}
 
