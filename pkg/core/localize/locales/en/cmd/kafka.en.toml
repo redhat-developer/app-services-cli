@@ -560,6 +560,9 @@ one = 'Retrieve messages within an offset equal to or greater than this'
 [kafka.topic.consume.flag.limit.description]
 one = 'Max records to consume from topic'
 
+[kafka.topic.consume.flag.format.description]
+one = 'Format of the messages printed as they are consumed'
+
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'

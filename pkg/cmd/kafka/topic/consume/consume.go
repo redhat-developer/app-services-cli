@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
@@ -13,6 +14,8 @@ import (
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 	"github.com/spf13/cobra"
 )
+
+var outputFormatTypes = []string{dump.JSONFormat, dump.YAMLFormat}
 
 type options struct {
 	topicName    string
@@ -65,13 +68,13 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flags := kafkaflagutil.NewFlagSet(cmd, f.Localizer)
 
-	flags.AddOutput(&opts.outputFormat)
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
 	flags.StringVar(&opts.timestamp, "timestamp", "", f.Localizer.MustLocalize("kafka.topic.consume.flag.timestamp.description"))
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
 	flags.Int64Var(&opts.offset, "offset", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", 20, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
+	flags.StringVar(&opts.outputFormat, "format", "json", f.Localizer.MustLocalize("kafka.topic.consume.flag.format.description"))
 
 	_ = cmd.MarkFlagRequired("name")
 
@@ -80,6 +83,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 	})
 
 	flags.AddInstanceID(&opts.kafkaID)
+	flagutil.EnableStaticFlagCompletion(cmd, "format", outputFormatTypes)
 
 	return cmd
 }

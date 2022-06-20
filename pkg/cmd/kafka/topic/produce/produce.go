@@ -35,6 +35,7 @@ type kafkaRow struct {
 	Key       string `json:"key" header:"Key"`
 	Value     string `json:"value" header:"Value"`
 	Partition int32  `json:"partition" header:"Partition"`
+	Offset    int64  `json:"offset" header:"Offset"`
 }
 
 // NewProduceTopicCommand creates a new command for producing to a kafka topic.
@@ -148,5 +149,6 @@ func mapRecordToRow(topic string, record *kafkainstanceclient.Record) kafkaRow {
 		Key:       *record.Key,
 		Value:     record.Value,
 		Partition: *record.Partition,
+		Offset:    *record.Offset,
 	}
 }
