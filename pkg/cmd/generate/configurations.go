@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 )
 
 // configuration types for generate-config command
@@ -27,28 +29,35 @@ var (
 
 // WriteConfig saves the configurations to a file
 // in the specified output format
-func WriteConfig(configType string, filePath string, config *configValues) error {
+func WriteConfig(opts *options, config *configValues) error {
 
 	var fileBody bytes.Buffer
-	fileTemplate := getFileFormat(configType)
+	fileTemplate := getFileFormat(opts.configType)
 	err := fileTemplate.Execute(&fileBody, config)
 	if err != nil {
 		return err
 	}
 
 	fileData := []byte(fileBody.String())
-	if filePath == "" {
-		filePath = getDefaultPath(configType)
+	if opts.fileName == "" {
+		opts.fileName = getDefaultPath(opts.configType)
 	}
 
-	return ioutil.WriteFile(filePath, fileData, 0o600)
+	// If the file already exists, and the --overwrite flag is not set then return an error
+	// indicating that the user should explicitly request overwriting of the file
+	_, err = os.Stat(opts.fileName)
+	if err == nil && !opts.overwrite {
+		return opts.localizer.MustLocalizeError("generate.error.configFileAlreadyExists", localize.NewEntry("FilePath", opts.fileName))
+	}
+
+	return ioutil.WriteFile(opts.fileName, fileData, 0o600)
 }
 
 // getDefaultPath returns the default absolute path for the configuration file
 func getDefaultPath(configType string) (filePath string) {
 	switch configType {
 	case envFormat:
-		filePath = "rhoas.env"
+		filePath = ".env"
 	case propertiesFormat:
 		filePath = "rhoas.properties"
 	case jsonFormat:
