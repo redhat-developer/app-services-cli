@@ -97,9 +97,9 @@ func runCmd(opts *options) error {
 	var value string
 
 	if opts.file != "" {
-		bytes, err := ioutil.ReadFile(opts.file)
-		if err != nil {
-			return err
+		bytes, readError := ioutil.ReadFile(opts.file)
+		if readError != nil {
+			return readError
 		}
 
 		value = string(bytes)
@@ -107,9 +107,9 @@ func runCmd(opts *options) error {
 		// if value is being piped then cannot have delimeter as \n
 		info, _ := os.Stdin.Stat()
 		if info.Mode()&os.ModeCharDevice == 0 {
-			bytes, err := ioutil.ReadAll(os.Stdin)
-			if err != nil {
-				return err
+			bytes, readError := ioutil.ReadAll(os.Stdin)
+			if readError != nil {
+				return readError
 			}
 
 			value = string(bytes)

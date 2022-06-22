@@ -1,10 +1,13 @@
 ## rhoas kafka topic consume
 
-consume short
+Consume messages from a topic
 
 ### Synopsis
 
-consume long
+Consume messages from a given topic, by default all messages on the topic will be consumed and printed in the foramat chosen. You can add filters to these message like a starting offset or a time that the messages must of been produced by.
+
+Adding the --wait flag will wait for messages to be produced starting from when the command was ran and will ignore any limit or offset given.
+
 
 ```
 rhoas kafka topic consume [flags]
@@ -13,19 +16,24 @@ rhoas kafka topic consume [flags]
 ### Examples
 
 ```
-consume example
+# Consume from a topic
+$ rhoas kafka topic consume --name=topic-1
+
+# Consume from a topic and wait for messages produced since command was ran
+$ rhoas kafka topic consume --name=topic-1 --wait
+
 ```
 
 ### Options
 
 ```
+      --format string        Format of the messages printed as they are consumed (default "json")
+      --from string          Only messages with a timestamp after this time will be consumed
       --instance-id string   Kafka instance ID. Uses the current instance if not set 
       --limit int32          Max records to consume from topic (default 20)
       --name string          Topic name
       --offset int           Retrieve messages within an offset equal to or greater than this
-  -o, --output string        Specify the output format. Choose from: "json", "yaml", "yml"
       --partition int32      The partition number used for consumer. Positive integer
-      --timestamp string     Timestamp to start consuming from
       --wait                 Waiting for records to consume
 ```
 
