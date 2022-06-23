@@ -52,6 +52,7 @@ type options struct {
 
 	marketplaceAcctId string
 	marketplace       string
+	billingModel      string
 
 	outputFormat string
 	autoUse      bool
@@ -147,6 +148,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
 	flags.BoolVarP(&opts.dryRun, "dry-run", "", false, f.Localizer.MustLocalize("kafka.create.flag.dryrun.description"))
+	flags.StringVar(&opts.billingModel, "billing-model", "", f.Localizer.MustLocalize("kafka.create.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -249,6 +251,8 @@ func runCreate(opts *options) error {
 			payload.Marketplace.Set(&opts.marketplace)
 			payload.BillingCloudAccountId = kafkamgmtclient.NullableString{}
 			payload.BillingCloudAccountId.Set(&opts.marketplaceAcctId)
+			payload.BillingModel = kafkamgmtclient.NullableString{}
+			payload.BillingModel.Set(&opts.billingModel)
 		}
 
 		if !opts.bypassChecks {
@@ -480,6 +484,11 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 	}
 
 	if !opts.bypassChecks && len(marketplaces) > 0 {
+
+		if err = promptBillingModelSelect(f.Localizer, answers); err != nil {
+			return nil, err
+		}
+
 		if err = promptMarketplaceSelect(f.Localizer, marketplaces, answers); err != nil {
 			return nil, err
 		}
@@ -510,6 +519,21 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 	payload.SetPlan(mapAmsTypeToBackendType(&userQuotaType) + "." + answers.Size)
 
 	return payload, nil
+}
+
+func promptBillingModelSelect(localizer localize.Localizer, answers *promptAnswers) error {
+
+	billingModelPrompt := &survey.Select{
+		Message: "Billing model:",
+		Options: kafkacmdutil.ValidBillingModels,
+		Help:    localizer.MustLocalize("kafka.create.flag.billingModel.description"),
+	}
+
+	if err := survey.AskOne(billingModelPrompt, &answers.Marketplace); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func promptMarketplaceSelect(localizer localize.Localizer, marketplaceAcctIDs []string, answers *promptAnswers) error {
