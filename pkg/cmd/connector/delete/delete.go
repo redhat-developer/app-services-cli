@@ -31,6 +31,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("connector.delete.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("connector.delete.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.delete.cmd.example"),
+		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats

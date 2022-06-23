@@ -32,6 +32,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("connector.create.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("connector.create.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.create.cmd.example"),
+		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
