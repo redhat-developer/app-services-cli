@@ -18,7 +18,7 @@ import (
 func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "connector",
-		Hidden:      true,
+		Hidden:      false,
 		Annotations: map[string]string{doc.AnnotationName: "Connectors commands"},
 		Short:       f.Localizer.MustLocalize("connector.cmd.shortDescription"),
 		Long:        f.Localizer.MustLocalize("connector.cmd.longDescription"),
@@ -29,12 +29,12 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 	// add sub-commands
 	cmd.AddCommand(
 		cluster.NewConnectorClusterCommand(f),
-		create.NewCreateCommand(f),
-		delete.NewDeleteCommand(f),
-		list.NewListCommand(f),
-		describe.NewDescribeCommand(f),
+// 		create.NewCreateCommand(f),
+// 		delete.NewDeleteCommand(f),
+// 		list.NewListCommand(f),
+//		describe.NewDescribeCommand(f),
 		namespace.NewNameSpaceCommand(f),
-		update.NewUpdateCommand(f),
+// 		update.NewUpdateCommand(f),
 	)
 
 	return cmd
