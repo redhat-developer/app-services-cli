@@ -111,37 +111,9 @@ func runCmd(opts *options) error {
 	}
 
 	if opts.wait {
-
-		if opts.limit != DefaultLimit {
-			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.log.info.limitIgnored", localize.NewEntry("Limit", DefaultLimit)))
-			opts.limit = DefaultLimit
-		}
-
-		if opts.offset != DefaultOffset {
-			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.log.info.offsetIgnored", localize.NewEntry("Offset", DefaultOffset)))
-			opts.offset = DefaultOffset
-		}
-
-		if opts.from == DefaultTimestamp {
-			// get current time in ISO 8601
-			opts.from = time.Now().Format(time.RFC3339)
-		}
-
-		max_offset := opts.offset
-		for true {
-
-			records, err := consume(opts, api)
-			if err != nil {
-				return err
-			}
-
-			record_count := len(records.Items)
-			if record_count > 0 {
-				max_offset = *(records.Items[record_count-1].Offset) + 1
-				outputRecords(opts, records)
-			}
-
-			opts.offset = max_offset
+		err := consumeAndWait(opts, api)
+		if err != nil {
+			return err
 		}
 	} else {
 		records, err := consume(opts, api)
@@ -150,6 +122,52 @@ func runCmd(opts *options) error {
 		}
 
 		outputRecords(opts, records)
+	}
+
+	return nil
+}
+
+func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient) error {
+	if opts.limit != DefaultLimit {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.log.info.limitIgnored", localize.NewEntry("Limit", DefaultLimit)))
+		opts.limit = DefaultLimit
+	}
+
+	if opts.offset != DefaultOffset {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.log.info.offsetIgnored", localize.NewEntry("Offset", DefaultOffset)))
+		opts.offset = DefaultOffset
+	}
+
+	if opts.from == DefaultTimestamp {
+		// get current time in ISO 8601
+		opts.from = time.Now().Format(time.RFC3339)
+	}
+
+	max_offset := opts.offset
+	first_consume := true
+	for true {
+
+		records, err := consume(opts, api)
+		if err != nil {
+			return err
+		}
+
+		record_count := len(records.Items)
+		if record_count > 0 {
+			max_offset = *(records.Items[record_count-1].Offset) + 1
+			outputRecords(opts, records)
+
+			if first_consume {
+				// reset timestamp after first consume as it will conflict with
+				// the max offset we are setting to only get new records
+				opts.from = DefaultTimestamp
+				first_consume = false
+			}
+		}
+
+		opts.offset = max_offset
+
+		time.Sleep(1 * time.Second)
 	}
 
 	return nil
