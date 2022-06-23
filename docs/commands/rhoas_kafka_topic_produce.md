@@ -23,6 +23,7 @@ $ rhoas kafka topic produce --name=topic-1 --file="./value.json" --key=my-value
 
 ```
       --file string          Path to file containing message sent
+      --format string        Format of the messages printed as they are produced, possible values are json and yaml (default "json")
       --instance-id string   Kafka instance ID. Uses the current instance if not set 
       --key string           The message key. Empty if not set
       --name string          Topic name

@@ -541,16 +541,36 @@ one = 'Path to file containing message sent'
 [kafka.topic.produce.flag.partition.description]
 one = 'The partition number for the message. Must be positive integer value that represents number of partitions for the specified topic'
 
+[kafka.topic.produce.flag.format.description]
+one = 'Format of the messages printed as they are produced, possible values are json and yaml'
+
 [kafka.topic.produce.info.produceSuccess]
 description = 'Produce success message'
 one = 'Record successfully produced to "{{.Topic}}" with offset {{.Offset}}'
+
+[kafka.topic.produce.error.messageTooLarge]
+description = 'Error message when message produced was too large'
+one = 'The messaged sent was too large, the max size for a message is 1MB'
+
+[kafka.topic.common.error.partitionNotFoundError]
+description = 'Error message when the partition given does not exist on the topic'
+one = 'The topic "{{.Topic}}" does not have the  partition {{.Partition}}'
+
+[kafka.topic.produce.input.value]
+description = 'Prompt for entering value to produce'
+one = 'Value'
+
+[kafka.topic.produce.input.help]
+description = 'Help message when entering value to produce'
+one = 'Enter text to be the value of the message produced'
 
 [kafka.topic.consume.cmd.shortDescription]
 one = 'Consume messages from a topic'
 
 [kafka.topic.consume.cmd.longDescription]
 one = '''
-Consume messages from a given topic, by default all messages on the topic will be consumed and printed in the foramat chosen. You can add filters to these message like a starting offset or a time that the messages must of been produced by.
+Consume messages from a given topic, by default all messages on the topic will be consumed and printed in the foramat chosen. You can add filters 
+to these message like a starting offset or a time that the messages must of been produced by.
 
 Adding the --wait flag will wait for messages to be produced starting from when the command was ran and will ignore any limit or offset given.
 '''
@@ -568,7 +588,7 @@ $ rhoas kafka topic consume --name=topic-1 --wait
 one = 'The partition number used for consumer. Positive integer'
 
 [kafka.topic.consume.flag.from.description]
-one = 'Only messages with a timestamp after this time will be consumed'
+one = 'Only messages with a timestamp after this time will be consumed, time format required is YYYY-MM-DDThh:mm:ss.ssssZ'
 
 [kafka.topic.consume.flag.wait.description]
 one = 'Waiting for records to consume'
@@ -580,7 +600,7 @@ one = 'Retrieve messages within an offset equal to or greater than this'
 one = 'Max records to consume from topic'
 
 [kafka.topic.consume.flag.format.description]
-one = 'Format of the messages printed as they are consumed'
+one = 'Format of the messages printed as they are consumed, possible values are json, yaml and key-value'
 
 [kafka.topic.consume.log.info.limitIgnored]
 one = 'Value given for limit will be ignored, using default value {{.Limit}}'

@@ -1,14 +1,18 @@
 package produce
 
 import (
+	"net/http"
 	"os"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
 
-	"bufio"
 	"io/ioutil"
+
+	"github.com/AlecAivazis/survey/v2"
+
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -19,23 +23,26 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var outputFormatTypes = []string{dump.JSONFormat, dump.YAMLFormat}
+
 type options struct {
-	topicName string
-	kafkaID   string
-	key       string
-	file      string
-	partition int32
+	topicName    string
+	kafkaID      string
+	key          string
+	file         string
+	outputFormat string
+	partition    int32
 
 	f *factory.Factory
 }
 
 // row is the details of a record produced needed to print to a table
 type kafkaRow struct {
-	Topic     string `json:"topic" header:"Topic"`
-	Key       string `json:"key" header:"Key"`
-	Value     string `json:"value" header:"Value"`
-	Partition int32  `json:"partition" header:"Partition"`
-	Offset    int64  `json:"offset" header:"Offset"`
+	Topic     string `json:"topic"`
+	Key       string `json:"key"`
+	Value     string `json:"value"`
+	Partition int32  `json:"partition"`
+	Offset    int64  `json:"offset"`
 }
 
 // NewProduceTopicCommand creates a new command for producing to a kafka topic.
@@ -71,6 +78,7 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.key, "key", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.produce.flag.partition.description"))
 	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.file"))
+	flags.StringVar(&opts.outputFormat, "format", "json", f.Localizer.MustLocalize("kafka.topic.produce.flag.format.description"))
 
 	_ = cmd.MarkFlagRequired("name")
 
@@ -79,6 +87,7 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 	})
 
 	flags.AddInstanceID(&opts.kafkaID)
+	flagutil.EnableStaticFlagCompletion(cmd, "format", outputFormatTypes)
 
 	return cmd
 }
@@ -114,11 +123,15 @@ func runCmd(opts *options) error {
 
 			value = string(bytes)
 		} else {
-			value, err = bufio.NewReader(os.Stdin).ReadString('\n')
-			if err != nil {
-				return err
+			promptName := &survey.Input{
+				Message: opts.f.Localizer.MustLocalize("kafka.topic.produce.input.value"),
+				Help:    opts.f.Localizer.MustLocalize("kafka.topic.produce.input.help"),
 			}
 
+			surveyErr := survey.AskOne(promptName, &value)
+			if surveyErr != nil {
+				return surveyErr
+			}
 		}
 	}
 
@@ -128,12 +141,30 @@ func runCmd(opts *options) error {
 		Partition: &opts.partition,
 	}
 
-	record, _, err = api.RecordsApi.ProduceRecord(opts.f.Context, opts.topicName).Record(record).Execute()
+	record, httpRes, err := api.RecordsApi.ProduceRecord(opts.f.Context, opts.topicName).Record(record).Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
+
 	if err != nil {
+
+		if httpRes == nil {
+			return err
+		}
+
+		if httpRes.StatusCode == http.StatusRequestEntityTooLarge {
+			return opts.f.Localizer.MustLocalizeError("kafka.topic.produce.error.messageTooLarge")
+		}
+
 		return err
 	}
 
-	dump.Table(opts.f.IOStreams.Out, mapRecordToRow(opts.topicName, &record))
+	format := opts.outputFormat
+	if format == dump.EmptyFormat {
+		format = dump.JSONFormat
+	}
+
+	_ = dump.Formatted(opts.f.IOStreams.Out, format, mapRecordToRow(opts.topicName, &record))
 	opts.f.Logger.Info("")
 
 	opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("kafka.topic.produce.info.produceSuccess",

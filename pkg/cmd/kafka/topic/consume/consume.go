@@ -3,6 +3,7 @@ package consume
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -17,6 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 
@@ -86,7 +88,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
 	flags.Int64Var(&opts.offset, "offset", DefaultOffset, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", DefaultLimit, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
-	flags.StringVar(&opts.outputFormat, "format", "json", f.Localizer.MustLocalize("kafka.topic.consume.flag.format.description"))
+	flags.StringVar(&opts.outputFormat, "format", FormatKeyValue, f.Localizer.MustLocalize("kafka.topic.produce.flag.format.description"))
 
 	_ = cmd.MarkFlagRequired("name")
 
@@ -107,18 +109,18 @@ func runCmd(opts *options) error {
 		return err
 	}
 
-	api, _, err := conn.API().KafkaAdmin(opts.kafkaID)
+	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
 	}
 
 	if opts.wait {
-		err := consumeAndWait(opts, api)
+		err := consumeAndWait(opts, api, kafkaInstance)
 		if err != nil {
 			return err
 		}
 	} else {
-		records, err := consume(opts, api)
+		records, err := consume(opts, api, kafkaInstance)
 		if err != nil {
 			return err
 		}
@@ -129,7 +131,7 @@ func runCmd(opts *options) error {
 	return nil
 }
 
-func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient) error {
+func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *kafkamgmtclient.KafkaRequest) error {
 	if opts.limit != DefaultLimit {
 		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.log.info.limitIgnored", localize.NewEntry("Limit", DefaultLimit)))
 		opts.limit = DefaultLimit
@@ -149,7 +151,7 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient) error {
 	first_consume := true
 	for true {
 
-		records, err := consume(opts, api)
+		records, err := consume(opts, api, kafkaInstance)
 		if err != nil {
 			return err
 		}
@@ -175,7 +177,7 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient) error {
 	return nil
 }
 
-func consume(opts *options, api *kafkainstanceclient.APIClient) (*kafkainstanceclient.RecordList, error) {
+func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *kafkamgmtclient.KafkaRequest) (*kafkainstanceclient.RecordList, error) {
 
 	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition).Offset(int32(opts.offset))
 	if opts.from != DefaultTimestamp {
@@ -188,8 +190,29 @@ func consume(opts *options, api *kafkainstanceclient.APIClient) (*kafkainstancec
 		request = request.Timestamp(opts.from)
 	}
 
-	list, _, err := request.Execute()
+	list, httpRes, err := request.Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
+
 	if err != nil {
+
+		if httpRes == nil {
+			return nil, err
+		}
+
+		if httpRes.StatusCode == http.StatusNotFound {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.common.error.topicNotFoundError",
+				localize.NewEntry("TopicName", opts.topicName),
+				localize.NewEntry("InstanceName", kafkaInstance.GetName()))
+		}
+
+		if httpRes.StatusCode == 400 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.common.error.partitionNotFoundError",
+				localize.NewEntry("Topic", opts.topicName),
+				localize.NewEntry("Partition", opts.partition))
+		}
+
 		return nil, err
 	}
 
@@ -213,12 +236,12 @@ func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
 		row := &recordsAsRows[i]
 		if format == FormatKeyValue {
 			if row.Key == "" {
-				opts.f.Logger.Info(row.Value)
+				opts.f.Logger.Info(fmt.Sprintf("Message: %v", row.Value))
 			} else {
-				opts.f.Logger.Info(fmt.Sprintf("Key: %v\nValue: %v\n", row.Key, row.Value))
+				opts.f.Logger.Info(fmt.Sprintf("Key: %v\nMessage: %v", row.Key, row.Value))
 			}
 		} else {
-			_ = dump.Formatted(opts.f.IOStreams.Out, format, *row)
+			_ = dump.Formatted(opts.f.IOStreams.Out, format, records.Items[i])
 		}
 	}
 }

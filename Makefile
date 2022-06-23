@@ -39,7 +39,7 @@ export GO111MODULE=on
 
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
-lint: lint-lang ## Lint Go files for errors
+lint: lint-lang 	## Lint Go files for errors
 	golangci-lint run cmd/... pkg/... internal/...
 
 generate: ## Scan code for generate comments and run generators
