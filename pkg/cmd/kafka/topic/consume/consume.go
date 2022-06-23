@@ -2,6 +2,7 @@ package consume
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -23,9 +24,10 @@ const (
 	DefaultOffset    = 0
 	DefaultLimit     = 20
 	DefaultTimestamp = ""
+	FormatKeyValue   = "key-value"
 )
 
-var outputFormatTypes = []string{dump.JSONFormat, dump.YAMLFormat}
+var outputFormatTypes = []string{dump.JSONFormat, dump.YAMLFormat, FormatKeyValue}
 
 type options struct {
 	topicName    string
@@ -208,7 +210,16 @@ func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
 	}
 
 	for i := 0; i < len(recordsAsRows); i++ {
-		_ = dump.Formatted(opts.f.IOStreams.Out, format, recordsAsRows[i])
+		row := &recordsAsRows[i]
+		if format == FormatKeyValue {
+			if row.Key == "" {
+				opts.f.Logger.Info(row.Value)
+			} else {
+				opts.f.Logger.Info(fmt.Sprintf("Key: %v\nValue: %v\n", row.Key, row.Value))
+			}
+		} else {
+			_ = dump.Formatted(opts.f.IOStreams.Out, format, *row)
+		}
 	}
 }
 
