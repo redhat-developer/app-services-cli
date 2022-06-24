@@ -611,6 +611,18 @@ one = 'Value given for offset will be ignored, using default value {{.Offset}}'
 [kafka.topic.comman.error.timeFormat]
 one = '"{{.Time}}" cannot be parsed as a valid time, must use YYYY-MM-DDThh:mm:ss.ssssZ'
 
+[kafka.topic.comman.error.offsetNegative]
+description = 'Error message when a negative offset is given'
+one = 'Invalid offset given, offset must be a positive integer'
+
+[kafka.topic.comman.error.offsetInvalid]
+description = 'Error message when the offset given is not a number'
+one = 'Invalid offset given, the value "{{.Offset}}" is not a number'
+
+[kafka.topic.consume.error.offsetAndFromConflict]
+description = 'Error message when the offset and from flags are both set'
+one = 'Cannot use offset and from flags to filter messages'
+
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
 one = 'The number of partitions in the topic'

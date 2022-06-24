@@ -1,9 +1,9 @@
 package consume
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	DefaultOffset    = 0
+	DefaultOffset    = ""
 	DefaultLimit     = 20
 	DefaultTimestamp = ""
 	FormatKeyValue   = "key-value"
@@ -37,7 +37,7 @@ type options struct {
 	partition    int32
 	from         string
 	limit        int32
-	offset       int64
+	offset       string
 	wait         bool
 	outputFormat string
 
@@ -86,7 +86,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
 	flags.StringVar(&opts.from, "from", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.from.description"))
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
-	flags.Int64Var(&opts.offset, "offset", DefaultOffset, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
+	flags.StringVar(&opts.offset, "offset", DefaultOffset, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", DefaultLimit, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
 	flags.StringVar(&opts.outputFormat, "format", FormatKeyValue, f.Localizer.MustLocalize("kafka.topic.produce.flag.format.description"))
 
@@ -112,6 +112,11 @@ func runCmd(opts *options) error {
 	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
 	if err != nil {
 		return err
+	}
+
+	// check for flags that are exclusive to eachother
+	if opts.offset != DefaultOffset && opts.from != DefaultTimestamp {
+		return opts.f.Localizer.MustLocalizeError("kafka.topic.consume.error.offsetAndFromConflict")
 	}
 
 	if opts.wait {
@@ -147,7 +152,7 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 		opts.from = time.Now().Format(time.RFC3339)
 	}
 
-	max_offset := opts.offset
+	var max_offset int64
 	first_consume := true
 	for true {
 
@@ -167,9 +172,8 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 				opts.from = DefaultTimestamp
 				first_consume = false
 			}
+			opts.offset = fmt.Sprint(max_offset)
 		}
-
-		opts.offset = max_offset
 
 		time.Sleep(1 * time.Second)
 	}
@@ -179,12 +183,26 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 
 func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *kafkamgmtclient.KafkaRequest) (*kafkainstanceclient.RecordList, error) {
 
-	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition).Offset(int32(opts.offset))
+	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit).Partition(opts.partition)
+
+	if opts.offset != DefaultOffset {
+		intOffset, err := strconv.ParseInt(opts.offset, 10, 64)
+		if err != nil {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.offsetInvalid", localize.NewEntry("Offset", opts.offset))
+		}
+
+		if intOffset < 0 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.offsetNegative")
+		}
+
+		request = request.Offset(int32(intOffset))
+	}
+
 	if opts.from != DefaultTimestamp {
 
 		_, err := time.Parse(time.RFC3339, opts.from)
 		if err != nil {
-			return nil, errors.New(opts.f.Localizer.MustLocalize("kafka.topic.comman.error.timeFormat", localize.NewEntry("Time", opts.from)))
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.timeFormat", localize.NewEntry("Time", opts.from))
 		}
 
 		request = request.Timestamp(opts.from)

@@ -33,7 +33,7 @@ $ rhoas kafka topic consume --name=topic-1 --wait
       --instance-id string   Kafka instance ID. Uses the current instance if not set 
       --limit int32          Max records to consume from topic (default 20)
       --name string          Topic name
-      --offset int           Retrieve messages within an offset equal to or greater than this
+      --offset string        Retrieve messages within an offset equal to or greater than this
       --partition int32      The partition number used for consumer. Positive integer
       --wait                 Waiting for records to consume
 ```
