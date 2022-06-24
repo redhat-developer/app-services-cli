@@ -36,6 +36,7 @@ type options struct {
 	kafkaID      string
 	partition    int32
 	from         string
+	unix         bool
 	limit        int32
 	offset       string
 	wait         bool
@@ -85,6 +86,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
 	flags.StringVar(&opts.from, "from", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.from.description"))
+	flags.BoolVar(&opts.unix, "unix-time", false, "Use unix timestamp")
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
 	flags.StringVar(&opts.offset, "offset", DefaultOffset, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", DefaultLimit, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
@@ -200,9 +202,19 @@ func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *k
 
 	if opts.from != DefaultTimestamp {
 
-		_, err := time.Parse(time.RFC3339, opts.from)
-		if err != nil {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.timeFormat", localize.NewEntry("Time", opts.from))
+		if opts.unix {
+			digits, err := strconv.ParseInt(opts.from, 10, 64)
+			if err != nil {
+				return nil, err
+			}
+
+			opts.from = time.Unix(digits, 0).Format(time.RFC3339)
+			opts.f.Logger.Info(opts.from)
+		} else {
+			_, err := time.Parse(time.RFC3339, opts.from)
+			if err != nil {
+				return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.timeFormat", localize.NewEntry("Time", opts.from))
+			}
 		}
 
 		request = request.Timestamp(opts.from)
@@ -259,7 +271,7 @@ func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
 				opts.f.Logger.Info(fmt.Sprintf("Key: %v\nMessage: %v", row.Key, row.Value))
 			}
 		} else {
-			_ = dump.Formatted(opts.f.IOStreams.Out, format, records.Items[i])
+			_ = dump.Formatted(opts.f.IOStreams.Out, format, row)
 		}
 	}
 }

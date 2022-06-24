@@ -35,6 +35,7 @@ $ rhoas kafka topic consume --name=topic-1 --wait
       --name string          Topic name
       --offset string        Retrieve messages within an offset equal to or greater than this
       --partition int32      The partition number used for consumer. Positive integer
+      --unix-time            Use unix timestamp
       --wait                 Waiting for records to consume
 ```
 
