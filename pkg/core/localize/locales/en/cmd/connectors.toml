@@ -1,76 +1,83 @@
 [connector.cluster.addonParams.cmd.shortDescription]
-one = 'Get Addon parameters'
+one = 'Get Connectors add-on parameters'
 
 [connector.cluster.addonParams.cmd.longDescription]
-one = 'Get Addon parameters'
-
+one = 'Get a list of the Connectors add-on parameters'
 
 [connector.cluster.addonParams.cmd.example]
 one = '''
-## Get addon parameters
+# Get a list of the Connectors add-on parameters
 rhoas connector cluster addon-parameters
 '''
 
 [connector.cluster.cmd.shortDescription]
-one = 'Connectors cluster commands'
+one = 'Create, delete, and list Connectors clusters'
 
 [connector.cluster.cmd.longDescription]
-one = 'Connectors cluster commands'
+one = 'A Connectors cluster is an OpenShift Dedicated instance for deploying your Connectors instances. Use the "connector cluster" command to create, delete, and view a list of Connectors clusters.'
 
 [connector.cluster.cmd.example]
 one = '''
-## Create connectors cluster
-rhoas connector cluster create --name=test
+# Create a Connectors cluster that is named "my-connectors-cluster"
+rhoas connector cluster create --name=my-connectors-cluster
+
+# Delete a Connectors cluster that has ID c980124otd37bufiemj0
+rhoas connector cluster delete --id=c980124otd37bufiemj0
+
+# List Connectors clusters
+rhoas connector cluster list
 '''
 
 [connector.cluster.create.cmd.shortDescription]
-one = 'Create connectors cluster'
+one = 'Create a Connectors cluster'
 
 [connector.cluster.create.cmd.longDescription]
-one = 'Create connectors cluster'
+one = 'Create a Connectors cluster and specify its name'
 
 [connector.cluster.create.cmd.example]
 one = '''
-## Create connectors cluster
-rhoas connector cluster create --name=test
+# Create a Connectors cluster that is named "my-connectors-cluster"
+rhoas connector cluster create --name=my-connectors-cluster
 '''
 
 [connector.cluster.create.info.success]
-one = 'Successfully created cluster for connectors'
+one = 'Successfully created the Connectors cluster named "{{.NAME}}" '
 
 [connector.cluster.delete.cmd.shortDescription]
-one = 'Delete connectors cluster'
+one = 'Delete a Connectors cluster'
 
 [connector.cluster.delete.cmd.longDescription]
-one = 'Delete connectors cluster'
+one = '''
+Delete a Connectors cluster by specifying its cluster ID. Use the "connector cluster list" command to see a list of all Connectors clusters and their ID values.'
+'''
 
 [connector.cluster.delete.cmd.example]
 one = '''
-## Delete connectors cluster
+# Delete a Connectors cluster that has ID c980124otd37bufiemj0
 rhoas connector cluster delete --id=c980124otd37bufiemj0
 '''
 
 [connector.cluster.delete.id.flag.description]
-one = 'Id of connectors cluster to delete'
+one = 'ID of the Connectors cluster to delete'
 
 [connector.cluster.create.flag.name.description]
-one = 'Name of the cluster to create'
+one = 'Name of the Connectors cluster to create'
 
 [connector.cluster.delete.info.success]
-one = 'Successfully deleted cluster'
+one = 'Successfully deleted the Connectors cluster'
 
 [connector.cluster.delete.confirmDialog.message]
-one = 'Are you sure you want to delete the connector cluster with id "{{.ID}}"?'
+one = 'Are you sure that you want to delete the Connectors cluster with ID "{{.ID}}"?'
 
 [connector.cluster.list.cmd.shortDescription]
-one = 'List connectors clusters'
+one = 'List Connectors clusters'
 
 [connector.cluster.list.cmd.longDescription]
-one = 'List connectors clusters'
-
+one = '''List all Connectors clusters in the OpenShift Dedicated environment. The returned list includes the ID value for each Connectors cluster.
+'''
 [connector.cluster.list.cmd.example]
 one = '''
-## List connectors clusters
+# List Connectors clusters
 rhoas connector cluster list
 '''
 
@@ -84,181 +91,213 @@ one = 'Page number'
 one = 'Page limit'
 
 [connector.common.log.info.noResults]
-one = 'No results returned from current command'
+one = 'No results returned from the current command'
 
 [connector.common.validation.namespace.error.invalidChars]
 one = 'invalid name for namespace "{{.Name}}"'
 
 [connector.cmd.shortDescription]
-one = 'Connectors commands'
+one = 'Connectors instance commands'
 
 [connector.cmd.longDescription]
-one = 'Connectors commands'
+one = '''
+With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that produce data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
 
+A Connectors instance is an instance of a one of the supported Connectors.
+Use the "connector" command to create, delete, and view a list of Connectors instances.
+'''
 
 [connector.cmd.example]
 one = '''   
-## List connectors
+# List of Connectors instances
 rhoas connector list
+
+# Create a Connectors instance
+rhoas connector create --file=myconnector.json
+
+# Create a Connectors instance from stdin
+cat myconnector.json | rhoas connector create
+
+# Update a Connectors instance
+rhoas connector update --id=my-connector --file=myconnector.json
+
+# Update a Connectors instance from stdin
+cat myconnector.json | rhoas connector update
+
+# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
+rhoas connector delete --id=c9b71ucotd37bufoamkg
 '''
 
 [connector.create.cmd.shortDescription]
-one = 'Create connector'
+one = 'Create a Connectors instance'
 
 [connector.create.cmd.longDescription]
-one = 'Create connector'
+one = 'Create a Connectors instance'
 
 [connector.create.cmd.example]
 one = '''
-## Create connector
+# Create a Connectors instance
 rhoas connector create --file=myconnector.json
 
-## Create connector from stdin
+# Create a Connectors instance from stdin
 cat myconnector.json | rhoas connector create
 '''
 
 [connector.create.info.success]
-one = 'Successfully created connector'
+one = 'Successfully created the Connectors instance'
 
 [connector.update.cmd.shortDescription]
-one = 'Update connector'
+one = 'Update a Connectors instance'
 
 [connector.update.cmd.longDescription]
-one = 'Update connector'
+one = 'Update a Connectors instance'
 
 [connector.update.cmd.example]
 one = '''
-## Update connector
+# Update a Connectors instance
 rhoas connector update --id=my-connector --file=myconnector.json
 
-## Update connector from stdin
+# Update a Connectors instance from stdin
 cat myconnector.json | rhoas connector update
 '''
 
 [connector.update.info.success]
-one = 'Successfully updated connector'
+one = 'Successfully updated the Connectors instance'
 
 [connector.file.flag.description]
-one = 'Location of the connector json file describing the connector'
+one = 'Location of the Connectors JSON file that describes the connector'
 
 [connector.delete.cmd.shortDescription]
-one = 'Delete connector'
+one = 'Delete a Connectors instance'
 
 [connector.delete.cmd.longDescription]
-one = 'Delete connector'
+one = 'Delete a Connectors instance by specifing its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.'
 
 [connector.delete.cmd.example]
 one = '''
-# Delete connector
+# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
 rhoas connector delete --id=c9b71ucotd37bufoamkg
 '''
 
 [connector.delete.flag.id.description]
-one = 'Id of the connector to delete'
+one = 'The ID of the Connectors instance to delete'
 
 [connector.delete.info.success]
-one = 'Successfully deleted connector'
-
+one = 'Successfully deleted the Connectors instance'
 
 [connector.delete.confirmDialog.message]
-one = 'Are you sure you want to delete the connector with id "{{.ID}}"?'
+one = 'Are you sure that you want to delete the Connectors instance with ID "{{.ID}}"?'
 
 [connector.describe.cmd.shortDescription]
-one = 'Get connector details'
+one = 'Get the details for the Connectors instance'
 
 [connector.describe.cmd.longDescription]
-one = 'Get connector details'
+one = 'Get the details for the Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.'
 
 [connector.describe.cmd.example]
 one = '''
-## Get connector details
+# Get the Connectors instance details
 rhoas connector describe --id=c980124otd37bufiemj0
 '''
 
 [connector.common.flag.id.description]
-one = 'Id of the connector'
+one = 'The ID for the Connectors instance'
 
 [connector.describe.info.success]
-one = 'Connector details returned successfully'
+one = 'The Connectors instance details were returned successfully'
 
 [connector.list.cmd.shortDescription]
-one = 'List connectors'
+one = 'List of Connectors instances'
 
 [connector.list.cmd.longDescription]
-one = 'List connectors'
+one = '''
+List of Connectors instances. The returned list includes the ID value for each Connectors instance.
+'''
 
 [connector.list.cmd.example]
 one = '''
-## List connectors
+# List of Connectors instance
 rhoas connector list
 '''
 
 [connector.namespace.cmd.shortDescription]
-one = 'Connector namespace commands'
+one = 'Connectors namespace commands'
 
 [connector.namespace.cmd.longDescription]
-one = 'Commands to manage namespaces for connectors'
+one = '''Commands to manage namespaces for Connectors. A Connectors namespace is the logical hosting location for deploying your Connectors instances on a Connectors cluster.
+
+For your own OpenShift Dedicated environment, a Connectors namespace does not automatically expire. You use the information about your Connectors namespace to configure the OpenShift Connectors add-on so that you can use Connectors.
+
+For the Service Preview evaluation site, a Connectors namespace expires 48 hours after you create it. To create an evaluation Connectors namespace include the --eval option with the "connector namespace create" command.
+'''
 
 [connector.namespace.cmd.example]
 one = '''
-# List namespaces in the connector instance
+# Create a Connectors namespace and name it "my-namespace"
+rhoas connector namespace create --name "my-namespace"
+
+# Create an evaluation Connectors namespace and name it "my-namespace"
+rhoas connector namespace create --name "my-namespace" --eval
+
+# List the namespaces for the Connectors cluster
 $ rhoas connector namespace list
 
-# Create a namespace in connector instance
-$ rhoas connector name space create --name "my-namespace"
+# Delete the Connectors namespace with ID jdhdhdhmmf
+rhoas connector namespace delete --id jdhdhdhmmf
 '''
 
 [connector.namespace.create.flag.name.description]
-one = 'Name of the namespace'
+one = 'The name of the Connectors namespace'
 
 [connector.namespace.create.flag.eval.description]
-one = 'Create an evaluation namespace'
+one = 'Create an evaluation Connectors namespace'
 
 [connector.namespace.list.cmd.shortDescription]
-one = 'Get connector namespaces'
+one = 'Get a list of Connectors namespaces'
 
 [connector.namespace.list.cmd.longDescription]
-one = 'Get connector namespaces'
+one = '''
+Get a list of Connectors namespaces for the Connectors cluster. The "connector namespace list" returns details about the namespaces, including their ID values.
+'''
 
 [connector.namespace.list.cmd.example]
 one = '''
-## Get connector namespaces list
+# Get a list of Connectors namespaces
 rhoas connector namespace list
 '''
 
 [connector.namespace.create.cmd.shortDescription]
-one = 'Create a connector namespace'
+one = 'Create a Connectors namespace'
 
 [connector.namespace.create.cmd.longDescription]
-one = 'Create a connector namespace'
+one = 'Create a Connectors namespace'
 
 [connector.namespace.create.cmd.example]
 one = '''
-# Create a connector namespace
+# Create a Connectors namespace and name it "my-namespace"
 rhoas connector namespace create --name "my-namespace"
 
-# Create an evaluation namespace
+# Create an evaluation Connectors namespace and name it "my-namespace"
 rhoas connector namespace create --name "my-namespace" --eval
 '''
 
 [connector.namespace.create.info.success]
-one = 'Successfully created namespace'
-
+one = 'Successfully created the "{{.NAME}}" namespace'
 
 [connector.namespace.delete.cmd.shortDescription]
-one = 'Delete a connector namespace'
+one = 'Delete a Connectors namespace'
 
 [connector.namespace.delete.cmd.longDescription]
-one = 'Delete a connector namespace'
+one = 'Delete a Connectors namespace by specifing its ID. Use the "connector namespace list" command to see a list of all Connectors namespaces and their ID values.'
 
 [connector.namespace.delete.cmd.example]
 one = '''
-# Delete a connector namespace
+# Delete the Connectors namespace with ID jdhdhdhmmf
 rhoas connector namespace delete --id jdhdhdhmmf
 '''
 
 [connector.namespace.delete.info.success]
-one = 'Successfully deleted namespace'
+one = 'Successfully deleted the namespace'
 
 [connector.namespace.delete.confirmDialog.message]
-one = 'Are you sure you want to delete the connector namespace with id "{{.ID}}"?'
+one = 'Are you sure that you want to delete the Connectors namespace with id "{{.ID}}"?'
