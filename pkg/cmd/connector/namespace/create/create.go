@@ -71,7 +71,6 @@ func runCreate(opts *options) error {
 	var connector connectormgmtclient.ConnectorNamespace
 	var newErr error
 
-	a = api.ConnectorsMgmt().ConnectorNamespacesApi.CreateEvaluationNamespace(f.Context)
 	a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
 	connector, _, newErr = a.Execute()
 
