@@ -4,7 +4,7 @@ name: Downstream docs publish
 
 on:
   release:
-    types: [released]
+    types: [released, prereleased]
       
 jobs:
   build:
