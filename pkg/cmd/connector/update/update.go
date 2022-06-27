@@ -34,6 +34,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("connector.update.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("connector.update.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.update.cmd.example"),
+		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
