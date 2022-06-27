@@ -603,6 +603,9 @@ one = '''
 # Consume from a topic
 $ rhoas kafka topic consume --name=topic-1
 
+# Consume from topic and output yaml format  
+$ rhoas kafka topic consume --name=topic-1 --format=yaml
+
 # Consume from a topic and wait for messages produced since command was ran
 $ rhoas kafka topic consume --name=topic-1 --wait
 
@@ -611,6 +614,15 @@ $ rhoas kafka topic consume --name=topic-1 --wait --from=2022-06-17T07:05:34+00:
 
 # Consume from a topic starting from a certain time using unix time format
 $ rhoas kafka topic consume --name=topic-1 --wait --unix-time --from=812762
+
+# Consume from a topic starting from an offset
+$ rhoas kafka topic consume --name=topic-1 --offset=15
+
+# Consume from a topic starting from an offset with a message limit of 30
+$ rhoas kafka topic consume --name=topic-1 --offset=15 --limit=30
+
+# Consume from topic to json format and use jq to read values of returning json 
+$ rhoas kafka topic consume --name=topic-1 --format=json | jq -rc .value
 '''
 
 [kafka.topic.consume.flag.partition.description]
@@ -774,6 +786,9 @@ $ rhoas kafka topic produce --name=topic-1 --file="./value.json" --key=my-value
 
 # Produce to a topic and be prompted to enter a value
 $ rhoas kafka topic produce --name=topic-1
+
+# Produce to a topic with json filtered with jq as the value  
+$ cat input.json | jq .data.value | rhoas kafka topic produce --name=topic-1
 '''
 
 [kafka.topic.create.error.topicNameIsRequired]
