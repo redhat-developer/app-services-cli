@@ -1,10 +1,10 @@
 ## rhoas connector cluster addon-parameters
 
-Get Addon parameters
+Get Connectors add-on parameters
 
 ### Synopsis
 
-Get Addon parameters
+Get a list of the Connectors add-on parameters
 
 ```
 rhoas connector cluster addon-parameters [flags]
@@ -13,7 +13,7 @@ rhoas connector cluster addon-parameters [flags]
 ### Examples
 
 ```
-## Get addon parameters
+# Get a list of the Connectors add-on parameters
 rhoas connector cluster addon-parameters
 
 ```
@@ -21,7 +21,7 @@ rhoas connector cluster addon-parameters
 ### Options
 
 ```
-      --id string       Id of the connector
+      --id string       The ID for the Connectors instance
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
@@ -34,5 +34,5 @@ rhoas connector cluster addon-parameters
 
 ### SEE ALSO
 
-* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Connectors cluster commands
+* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 
