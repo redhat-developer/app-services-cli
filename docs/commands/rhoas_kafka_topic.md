@@ -18,12 +18,6 @@ rhoas kafka topic create --name mytopic
 # List all topics
 rhoas kafka topic list
 
-# Produce message from file to topic
-rhoas kafka topic produce --name mytopic --file message.json 
-
-# Consume 10 most recent messages from topic
-rhoas kafka topic consume --name mytopic --limit 10 
-
 ```
 
 ### Options inherited from parent commands
