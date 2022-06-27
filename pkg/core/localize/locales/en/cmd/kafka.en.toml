@@ -606,14 +606,14 @@ $ rhoas kafka topic consume --name=topic-1
 # Consume from topic and output yaml format  
 $ rhoas kafka topic consume --name=topic-1 --format=yaml
 
-# Consume from a topic and wait for messages produced since command was ran
+# Consume from a topic continously by pooling for new messages
 $ rhoas kafka topic consume --name=topic-1 --wait
 
 # Consume from a topic starting from a certain time using the default ISO time format
-$ rhoas kafka topic consume --name=topic-1 --wait --from=2022-06-17T07:05:34+00:00Z
+$ rhoas kafka topic consume --name=topic-1 --from=2022-06-17T07:05:34+00:00Z
 
 # Consume from a topic starting from a certain time using unix time format
-$ rhoas kafka topic consume --name=topic-1 --wait --unix-time --from=812762
+$ rhoas kafka topic consume --name=topic-1 --wait --unix-time --from=1656346796
 
 # Consume from a topic starting from an offset
 $ rhoas kafka topic consume --name=topic-1 --offset=15
@@ -781,14 +781,23 @@ Produce a message to a topic in a Kafka instance. Pass a file path to read that 
 
 [kafka.topic.produce.cmd.example]
 one = '''
-# Produce to a topic with the value being read from a file
-$ rhoas kafka topic produce --name=topic-1 --file="./value.json" --key=my-value
+# Produce single message read from a file and provide custom message key
+$ rhoas kafka topic produce --name=users --file="./message.json" --key="{'location': 'us-east-1'}"
 
-# Produce to a topic and be prompted to enter a value
-$ rhoas kafka topic produce --name=topic-1
+# Produce to a topic from standard input (requires terminating command with Ctrl+D)
+$ rhoas kafka topic produce --name=users
+
+# Produce to a topic from other command output
+$ cat yourfile.json | rhoas kafka topic produce --name=users
+
+# Produce to a topic and fetch its offset
+$ rhoas kafka topic produce --name=topic-1 --file="./message.json" | jq .offset
 
 # Produce to a topic with json filtered with jq as the value  
 $ cat input.json | jq .data.value | rhoas kafka topic produce --name=topic-1
+
+# Produce to a topic with specific partition
+$ rhoas kafka topic produce --name=topic-1 --file="./message.json" --partition=1
 '''
 
 [kafka.topic.create.error.topicNameIsRequired]
