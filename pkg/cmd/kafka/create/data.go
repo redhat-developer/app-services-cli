@@ -23,6 +23,11 @@ const (
 	TrialType CloudProviderId = "eval"
 )
 
+const (
+	MarketplaceBillingModel = "marketplace"
+	StandardBillingModel    = "standard"
+)
+
 // mapAmsTypeToBackendType - Cloud providers API is not using AMS types but some other values (CloudProviderValues)
 func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId {
 	switch amsType.Name {
@@ -45,7 +50,7 @@ func GetValidKafkaSizesLabels(sizes []kafkamgmtclient.SupportedKafkaSize) []stri
 }
 
 func FetchValidKafkaSizesLabels(f *factory.Factory,
-	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]string, error) {
+	providerID string, regionId string, amsType *accountmgmtutil.QuotaSpec) ([]string, error) {
 	sizes, err := FetchValidKafkaSizes(f, providerID, regionId, amsType)
 	if err != nil {
 		return nil, err
@@ -56,7 +61,7 @@ func FetchValidKafkaSizesLabels(f *factory.Factory,
 
 // return list of the valid instance sizes for the specified region and ams instance types
 func FetchValidKafkaSizes(f *factory.Factory,
-	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
+	providerID string, regionId string, amsType *accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
@@ -73,7 +78,7 @@ func FetchValidKafkaSizes(f *factory.Factory,
 		return nil, err
 	}
 
-	desiredInstanceType := mapAmsTypeToBackendType(&amsType)
+	desiredInstanceType := mapAmsTypeToBackendType(amsType)
 
 	// Temporary workaround to be removed
 	if desiredInstanceType == DeveloperType {

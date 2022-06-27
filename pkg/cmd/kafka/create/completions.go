@@ -46,28 +46,28 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 		return nil, directive
 	}
 
-	userInstanceType, _ := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
+	userInstanceType, _ := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn, "")
 
 	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
-	validRegions, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, *userInstanceType)
+	validRegions, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, userInstanceType)
 
 	return validRegions, cobra.ShellCompDirectiveNoSpace
 }
 
 // GetMarketplaceAcctIdCompletionValues returns a list of valid marketplace account IDs for the organization
-func GetMarketplaceAcctIdCompletionValues(f *factory.Factory) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
-	directive = cobra.ShellCompDirectiveNoSpace
+// func GetMarketplaceAcctIdCompletionValues(f *factory.Factory) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
+// 	directive = cobra.ShellCompDirectiveNoSpace
 
-	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection, "")
+// 	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context,)
 
-	return validMarketplaceAcctIDs, directive
-}
+// 	return validMarketplaceAcctIDs, directive
+// }
 
 // GetMarketplaceCompletionValues returns a list of valid marketplaces for the organization
-func GetMarketplaceCompletionValues(f *factory.Factory) (validMarketplaces []string, directive cobra.ShellCompDirective) {
-	directive = cobra.ShellCompDirectiveNoSpace
+// func GetMarketplaceCompletionValues(f *factory.Factory) (validMarketplaces []string, directive cobra.ShellCompDirective) {
+// 	directive = cobra.ShellCompDirectiveNoSpace
 
-	validMarketplaces, _ = accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
+// 	validMarketplaces, _ = accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
 
-	return validMarketplaces, directive
-}
+// 	return validMarketplaces, directive
+// }
