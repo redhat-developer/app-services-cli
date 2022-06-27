@@ -1,10 +1,12 @@
 package topic
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/consume"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/produce"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic/update"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -30,6 +32,8 @@ func NewTopicCommand(f *factory.Factory) *cobra.Command {
 		delete.NewDeleteTopicCommand(f),
 		describe.NewDescribeTopicCommand(f),
 		update.NewUpdateTopicCommand(f),
+		produce.NewProduceTopicCommand(f),
+		consume.NewConsumeTopicCommand(f),
 	)
 
 	return cmd
