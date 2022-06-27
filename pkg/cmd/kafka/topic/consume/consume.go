@@ -36,7 +36,7 @@ type options struct {
 	kafkaID      string
 	partition    int32
 	from         string
-	unix         bool
+	unix         string
 	limit        int32
 	offset       string
 	wait         bool
@@ -86,8 +86,8 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
-	flags.StringVar(&opts.from, "from", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.from.description"))
-	flags.BoolVar(&opts.unix, "unix-time", false, "Use unix timestamp")
+	flags.StringVar(&opts.from, "from-date", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.from.description"))
+	flags.StringVar(&opts.unix, "from-timestamp", "", "Unix timestamp used to  ")
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
 	flags.StringVar(&opts.offset, "offset", DefaultOffset, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", DefaultLimit, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
