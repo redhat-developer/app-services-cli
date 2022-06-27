@@ -56,6 +56,7 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("kafka.topic.produce.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("kafka.topic.produce.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("kafka.topic.produce.cmd.example"),
+		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if opts.kafkaID == "" {

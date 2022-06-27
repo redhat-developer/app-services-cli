@@ -582,6 +582,12 @@ $ rhoas kafka topic consume --name=topic-1
 
 # Consume from a topic and wait for messages produced since command was ran
 $ rhoas kafka topic consume --name=topic-1 --wait
+
+# Consume from a topic starting from a certain time using the default ISO time format
+$ rhoas kafka topic consume --name=topic-1 --wait --from=2022-06-17T07:05:34+00:00Z
+
+# Consume from a topic starting from a certain time using unix time format
+$ rhoas kafka topic consume --name=topic-1 --wait --unix-time --from=812762
 '''
 
 [kafka.topic.consume.flag.partition.description]
@@ -735,13 +741,16 @@ one = 'Produce a new message to a topic'
 
 [kafka.topic.produce.cmd.longDescription]
 one = '''
-Produce a message to a topic in a Kafka instance. Pass a file path to read that file as the message value or use stdin as your message. You can specify the partition, key, timestamp and value.
+Produce a message to a topic in a Kafka instance. Pass a file path to read that file as the message value or use stdin as your message. You can specify the partition, key and value.
 '''
 
 [kafka.topic.produce.cmd.example]
 one = '''
-# Produce to a topic
+# Produce to a topic with the value being read from a file
 $ rhoas kafka topic produce --name=topic-1 --file="./value.json" --key=my-value
+
+# Produce to a topic and be prompted to enter a value
+$ rhoas kafka topic produce --name=topic-1
 '''
 
 [kafka.topic.create.error.topicNameIsRequired]
