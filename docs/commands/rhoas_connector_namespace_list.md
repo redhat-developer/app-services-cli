@@ -1,10 +1,11 @@
 ## rhoas connector namespace list
 
-Get connector namespaces
+Get a list of Connectors namespaces
 
 ### Synopsis
 
-Get connector namespaces
+Get a list of Connectors namespaces for the Connectors cluster. The "connector namespace list" returns details about the namespaces, including their ID values.
+
 
 ```
 rhoas connector namespace list [flags]
@@ -13,7 +14,7 @@ rhoas connector namespace list [flags]
 ### Examples
 
 ```
-## Get connector namespaces list
+# Get a list of Connectors namespaces
 rhoas connector namespace list
 
 ```
@@ -35,5 +36,5 @@ rhoas connector namespace list
 
 ### SEE ALSO
 
-* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connector namespace commands
+* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
 

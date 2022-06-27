@@ -1,10 +1,11 @@
 ## rhoas connector cluster delete
 
-Delete connectors cluster
+Delete a Connectors cluster
 
 ### Synopsis
 
-Delete connectors cluster
+Delete a Connectors cluster by specifying its cluster ID. Use the "connector cluster list" command to see a list of all Connectors clusters and their ID values.'
+
 
 ```
 rhoas connector cluster delete [flags]
@@ -13,7 +14,7 @@ rhoas connector cluster delete [flags]
 ### Examples
 
 ```
-## Delete connectors cluster
+# Delete a Connectors cluster that has ID c980124otd37bufiemj0
 rhoas connector cluster delete --id=c980124otd37bufiemj0
 
 ```
@@ -21,7 +22,7 @@ rhoas connector cluster delete --id=c980124otd37bufiemj0
 ### Options
 
 ```
-      --id string       Id of connectors cluster to delete
+      --id string       ID of the Connectors cluster to delete
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
   -y, --yes             Skip confirmation of this action 
 ```
@@ -35,5 +36,5 @@ rhoas connector cluster delete --id=c980124otd37bufiemj0
 
 ### SEE ALSO
 
-* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Connectors cluster commands
+* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 

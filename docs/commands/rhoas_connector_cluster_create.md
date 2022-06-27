@@ -1,10 +1,10 @@
 ## rhoas connector cluster create
 
-Create connectors cluster
+Create a Connectors cluster
 
 ### Synopsis
 
-Create connectors cluster
+Create a Connectors cluster and specify its name
 
 ```
 rhoas connector cluster create [flags]
@@ -13,15 +13,15 @@ rhoas connector cluster create [flags]
 ### Examples
 
 ```
-## Create connectors cluster
-rhoas connector cluster create --name=test
+# Create a Connectors cluster that is named "my-connectors-cluster"
+rhoas connector cluster create --name=my-connectors-cluster
 
 ```
 
 ### Options
 
 ```
-      --name string     Name of the cluster to create
+      --name string     Name of the Connectors cluster to create
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
@@ -34,5 +34,5 @@ rhoas connector cluster create --name=test
 
 ### SEE ALSO
 
-* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Connectors cluster commands
+* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 

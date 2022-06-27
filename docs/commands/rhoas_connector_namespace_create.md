@@ -1,10 +1,10 @@
 ## rhoas connector namespace create
 
-Create a connector namespace
+Create a Connectors namespace
 
 ### Synopsis
 
-Create a connector namespace
+Create a Connectors namespace
 
 ```
 rhoas connector namespace create [flags]
@@ -13,10 +13,10 @@ rhoas connector namespace create [flags]
 ### Examples
 
 ```
-# Create a connector namespace
+# Create a Connectors namespace and name it "my-namespace"
 rhoas connector namespace create --name "my-namespace"
 
-# Create an evaluation namespace
+# Create an evaluation Connectors namespace and name it "my-namespace"
 rhoas connector namespace create --name "my-namespace" --eval
 
 ```
@@ -24,8 +24,8 @@ rhoas connector namespace create --name "my-namespace" --eval
 ### Options
 
 ```
-      --eval            Create an evaluation namespace
-      --name string     Name of the namespace
+      --eval            Create an evaluation Connectors namespace
+      --name string     The name of the Connectors namespace
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
@@ -38,5 +38,5 @@ rhoas connector namespace create --name "my-namespace" --eval
 
 ### SEE ALSO
 
-* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connector namespace commands
+* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
 

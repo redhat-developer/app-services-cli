@@ -1,10 +1,11 @@
 ## rhoas connector cluster list
 
-List connectors clusters
+List Connectors clusters
 
 ### Synopsis
 
-List connectors clusters
+List all Connectors clusters in the OpenShift Dedicated environment. The returned list includes the ID value for each Connectors cluster.
+
 
 ```
 rhoas connector cluster list [flags]
@@ -13,7 +14,7 @@ rhoas connector cluster list [flags]
 ### Examples
 
 ```
-## List connectors clusters
+# List Connectors clusters
 rhoas connector cluster list
 
 ```
@@ -35,5 +36,5 @@ rhoas connector cluster list
 
 ### SEE ALSO
 
-* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Connectors cluster commands
+* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 

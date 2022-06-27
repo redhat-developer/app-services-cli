@@ -1,10 +1,10 @@
 ## rhoas connector namespace delete
 
-Delete a connector namespace
+Delete a Connectors namespace
 
 ### Synopsis
 
-Delete a connector namespace
+Delete a Connectors namespace by specifing its ID. Use the "connector namespace list" command to see a list of all Connectors namespaces and their ID values.
 
 ```
 rhoas connector namespace delete [flags]
@@ -13,7 +13,7 @@ rhoas connector namespace delete [flags]
 ### Examples
 
 ```
-# Delete a connector namespace
+# Delete the Connectors namespace with ID jdhdhdhmmf
 rhoas connector namespace delete --id jdhdhdhmmf
 
 ```
@@ -21,7 +21,7 @@ rhoas connector namespace delete --id jdhdhdhmmf
 ### Options
 
 ```
-      --id string   Id of the connector
+      --id string   The ID for the Connectors instance
 ```
 
 ### Options inherited from parent commands
@@ -33,5 +33,5 @@ rhoas connector namespace delete --id jdhdhdhmmf
 
 ### SEE ALSO
 
-* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connector namespace commands
+* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
 
