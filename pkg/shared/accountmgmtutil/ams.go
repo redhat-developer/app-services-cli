@@ -2,7 +2,9 @@ package accountmgmtutil
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -65,9 +67,18 @@ func FetchQuotaCost(f *factory.Factory, billingModel string, cloudAccountID stri
 		return nil, err
 	}
 
+	if billingModel == QuotaStandardType && (cloudAccountID != "" || marketplace != "") {
+		return nil, errors.New("accountID cant be provided with standard billing model")
+	}
+
+	if (cloudAccountID != "") != (marketplace != "") {
+		return nil, errors.New("accountID and marketplace should be provided together")
+	}
+
 	if billingModel == "" && (cloudAccountID != "" || marketplace != "") {
 		billingModel = QuotaMarketplaceType
 	} else if billingModel == "" && cloudAccountID == "" && marketplace == "" {
+		f.Logger.Info("No billing model specified. Looking for prepaid instances")
 		billingModel = QuotaStandardType
 	}
 
@@ -76,35 +87,55 @@ func FetchQuotaCost(f *factory.Factory, billingModel string, cloudAccountID stri
 		return nil, err
 	}
 
+	var filteredQuotaCosts []amsclient.QuotaCost
+
+	quotaCostList := quotaCostGet.GetItems()
+
 	var userQuota amsclient.QuotaCost
 
-	for _, quota := range quotaCostGet.GetItems() {
+	for _, quota := range quotaCostList {
 		relatedResources := quota.GetRelatedResources()
 		for i := range relatedResources {
 			if relatedResources[i].GetResourceName() == spec.ResourceName && relatedResources[i].GetProduct() == spec.InstanceQuotaID && relatedResources[i].GetBillingModel() == billingModel {
-				userQuota = quota
+				filteredQuotaCosts = append(filteredQuotaCosts, quota)
 			}
 		}
+	}
+
+	if len(filteredQuotaCosts) == 0 {
+		return nil, errors.New("no quota object is available")
+	}
+
+	filteredQuotasJSON, _ := json.Marshal(filteredQuotaCosts)
+	f.Logger.Debug(fmt.Sprintf("Filtered Quotas : %#v", string(filteredQuotasJSON)))
+
+	if billingModel == QuotaMarketplaceType {
+
+		if len(filteredQuotaCosts) > 1 && marketplace == "" && cloudAccountID == "" {
+			return nil, errors.New("please specify marketplace provider and account id")
+		}
+
+		if len(filteredQuotaCosts) == 1 && marketplace == "" && cloudAccountID == "" {
+			userQuota = filteredQuotaCosts[0]
+		} else {
+			for _, filteredQuotaCost := range filteredQuotaCosts {
+				for _, cloudAccount := range filteredQuotaCost.GetCloudAccounts() {
+					if cloudAccount.GetCloudAccountId() == cloudAccountID && cloudAccount.GetCloudProviderId() == marketplace {
+						userQuota = filteredQuotaCost
+					}
+				}
+			}
+		}
+	} else {
+		userQuota = filteredQuotaCosts[0]
 	}
 
 	if userQuota.GetQuotaId() == "" {
 		return nil, errors.New("quota could not be found")
 	}
 
-	var cloudAccountExists bool
-
-	if billingModel == QuotaMarketplaceType && marketplace != "" && cloudAccountID != "" {
-		for _, cloudAccount := range userQuota.GetCloudAccounts() {
-			if cloudAccount.GetCloudAccountId() == cloudAccountID && cloudAccount.GetCloudProviderId() == marketplace {
-				cloudAccountExists = true
-				break
-			}
-		}
-
-		if !cloudAccountExists {
-			return nil, errors.New("cloud account doesnt exist for the given marketplace provider")
-		}
-	}
+	userQuotaJSON, _ := json.Marshal(userQuota)
+	f.Logger.Debug(fmt.Sprintf("Selected user quota : %#v", string(userQuotaJSON)))
 
 	userQuotaSpec = &QuotaSpec{billingModel, int(userQuota.GetAllowed() - userQuota.GetConsumed()), billingModel, userQuota.CloudAccounts}
 

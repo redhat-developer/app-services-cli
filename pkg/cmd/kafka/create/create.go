@@ -187,11 +187,6 @@ func runCreate(opts *options) error {
 			return err
 		}
 
-		err = ValidateMarketplaceFlags(opts.billingModel, opts.marketplaceAcctId, opts.marketplace)
-		if err != nil {
-			return err
-		}
-
 		userInstanceType, err = accountmgmtutil.FetchQuotaCost(f, opts.billingModel, opts.marketplaceAcctId, opts.marketplace, &constants.Kafka.Ams)
 		if err != nil {
 			return err
