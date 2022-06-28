@@ -23,11 +23,6 @@ const (
 	TrialType CloudProviderId = "eval"
 )
 
-const (
-	MarketplaceBillingModel = "marketplace"
-	StandardBillingModel    = "standard"
-)
-
 // mapAmsTypeToBackendType - Cloud providers API is not using AMS types but some other values (CloudProviderValues)
 func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId {
 	switch amsType.Name {

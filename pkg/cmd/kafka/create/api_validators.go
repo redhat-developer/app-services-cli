@@ -1,6 +1,7 @@
 package create
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -24,7 +25,7 @@ type ValidatorInput struct {
 	conn      connection.Connection
 }
 
-var validBillingModels []string = []string{MarketplaceBillingModel, StandardBillingModel}
+var validBillingModels []string = []string{accountmgmtutil.QuotaMarketplaceType, accountmgmtutil.QuotaStandardType}
 
 func (input *ValidatorInput) ValidateProviderAndRegion() error {
 	f := input.f
@@ -136,4 +137,19 @@ func ValidateBillingModel(billingModel string) error {
 	}
 
 	return flagutil.InvalidValueError("billing-model", billingModel, validBillingModels...)
+}
+
+// ValidateMarketplaceFlags validates if flag combination is valid for chosing quota
+func ValidateMarketplaceFlags(billingModel string, accountID string, marketplace string) error {
+
+	if billingModel == StandardType && (accountID != "" || marketplace != "") {
+		return errors.New("accountID cant be provided with standard billing model")
+	}
+
+	if (accountID != "") != (marketplace != "") {
+		return errors.New("accountID and marketplace should be provided together")
+	}
+
+	return nil
+
 }

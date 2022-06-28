@@ -6,5 +6,5 @@ type QuotaType = string
 const (
 	QuotaTrialType       QuotaType = "trial"
 	QuotaStandardType    QuotaType = "standard"
-	QuotaMarketplaceTYpe QuotaType = "marketplace"
+	QuotaMarketplaceType QuotaType = "marketplace"
 )

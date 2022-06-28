@@ -139,18 +139,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetCloudProviderRegionCompletionValues(f, opts.provider)
 	})
 
-	_ = cmd.RegisterFlagCompletionFunc(FlagSize, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return GetKafkaSizeCompletionValues(f, opts.provider, opts.region)
-	})
-
-	// _ = cmd.RegisterFlagCompletionFunc(FlagMarketPlaceAcctID, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	// 	return GetMarketplaceAcctIdCompletionValues(f)
-	// })
-
-	// _ = cmd.RegisterFlagCompletionFunc(FlagMarketPlace, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	// 	return GetMarketplaceCompletionValues(f)
-	// })
-
 	return cmd
 }
 
@@ -199,32 +187,16 @@ func runCreate(opts *options) error {
 			return err
 		}
 
-		userInstanceType, err = accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn, opts.billingModel)
-		if err != nil || userInstanceType == nil {
-			return f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
+		err = ValidateMarketplaceFlags(opts.billingModel, opts.marketplaceAcctId, opts.marketplace)
+		if err != nil {
+			return err
 		}
 
-		if opts.billingModel == "marketplace" {
-
-			validMarketplaces, newErr := accountmgmtutil.GetValidMarketplaces(userInstanceType)
-			if newErr != nil {
-				return newErr
-			}
-
-			if opts.marketplace != "" && !flagutil.IsValidInput(opts.marketplace, validMarketplaces...) {
-				return flagutil.InvalidValueError(FlagMarketPlace, opts.marketplace, validMarketplaces...)
-			}
-
-			validMarketplaceAcctIDs, newErr := accountmgmtutil.GetValidMarketplaceAcctIDs(userInstanceType, opts.marketplace)
-			if newErr != nil {
-				return newErr
-			}
-
-			if opts.marketplaceAcctId != "" && !flagutil.IsValidInput(opts.marketplaceAcctId, validMarketplaceAcctIDs...) {
-				return flagutil.InvalidValueError(FlagMarketPlaceAcctID, opts.marketplaceAcctId, validMarketplaceAcctIDs...)
-			}
-
+		userInstanceType, err = accountmgmtutil.FetchQuotaCost(f, opts.billingModel, opts.marketplaceAcctId, opts.marketplace, &constants.Kafka.Ams)
+		if err != nil {
+			return err
 		}
+
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
@@ -485,7 +457,7 @@ func promptKafkaPayload(opts *options, userQuotaType *accountmgmtutil.QuotaSpec)
 		}
 	}
 
-	if !opts.bypassChecks && userQuotaType.BillingModel == "marketplace" {
+	if !opts.bypassChecks && opts.billingModel == accountmgmtutil.QuotaMarketplaceType {
 
 		marketplaces, err := accountmgmtutil.GetValidMarketplaces(userQuotaType)
 		if err != nil {
@@ -493,10 +465,6 @@ func promptKafkaPayload(opts *options, userQuotaType *accountmgmtutil.QuotaSpec)
 		}
 
 		if len(marketplaces) > 0 {
-
-			if err = promptBillingModelSelect(f.Localizer, answers); err != nil {
-				return nil, err
-			}
 
 			if err = promptMarketplaceSelect(f.Localizer, marketplaces, answers); err != nil {
 				return nil, err
@@ -530,21 +498,6 @@ func promptKafkaPayload(opts *options, userQuotaType *accountmgmtutil.QuotaSpec)
 	payload.SetPlan(mapAmsTypeToBackendType(userQuotaType) + "." + answers.Size)
 
 	return payload, nil
-}
-
-func promptBillingModelSelect(localizer localize.Localizer, answers *promptAnswers) error {
-
-	billingModelPrompt := &survey.Select{
-		Message: "Billing model:",
-		Options: kafkacmdutil.ValidBillingModels,
-		Help:    localizer.MustLocalize("kafka.create.flag.billingModel.description"),
-	}
-
-	if err := survey.AskOne(billingModelPrompt, &answers.Marketplace); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func promptMarketplaceSelect(localizer localize.Localizer, marketplaceAcctIDs []string, answers *promptAnswers) error {
