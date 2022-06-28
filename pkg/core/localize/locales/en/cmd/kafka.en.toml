@@ -610,10 +610,10 @@ $ rhoas kafka topic consume --name=topic-1 --format=yaml
 $ rhoas kafka topic consume --name=topic-1 --wait
 
 # Consume from a topic starting from a certain time using the default ISO time format
-$ rhoas kafka topic consume --name=topic-1 --from=2022-06-17T07:05:34+00:00Z
+$ rhoas kafka topic consume --name=topic-1 --from-date=2022-06-17T07:05:34.0000Z
 
 # Consume from a topic starting from a certain time using unix time format
-$ rhoas kafka topic consume --name=topic-1 --wait --unix-time --from=1656346796
+$ rhoas kafka topic consume --name=topic-1 --wait --from-timestamp=1656346796
 
 # Consume from a topic starting from an offset
 $ rhoas kafka topic consume --name=topic-1 --offset=15
@@ -628,8 +628,11 @@ $ rhoas kafka topic consume --name=topic-1 --format=json | jq -rc .value
 [kafka.topic.consume.flag.partition.description]
 one = 'The partition number used for consumer. Positive integer'
 
-[kafka.topic.consume.flag.from.description]
-one = 'Only messages with a timestamp after this time will be consumed, time format required is YYYY-MM-DDThh:mm:ss.ssssZ'
+[kafka.topic.consume.flag.date.description]
+one = 'Messages with a date after this date will be consumed, time format required is YYYY-MM-DDThh:mm:ss.ssssZ'
+
+[kafka.topic.consume.flag.timestamp.description]
+one = 'Messages with a timestamp after this time will be consumed, time format required is the Unix timestamp'
 
 [kafka.topic.consume.flag.wait.description]
 one = 'Waiting for records to consume'
@@ -660,9 +663,13 @@ one = 'Invalid offset given, offset must be a positive integer'
 description = 'Error message when the offset given is not a number'
 one = 'Invalid offset given, the value "{{.Offset}}" is not a number'
 
+[kafka.topic.consume.error.dateAndTimestampConflict]
+description = 'Error message when the date and timestamp are both set'
+one = 'Cannot set date and timestamp'
+
 [kafka.topic.consume.error.offsetAndFromConflict]
 description = 'Error message when the offset and from flags are both set'
-one = 'Cannot use offset and from flags to filter messages'
+one = 'Cannot use offset with timestamp or date flags to filter messages'
 
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
