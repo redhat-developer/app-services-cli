@@ -28,10 +28,16 @@ $ rhoas generate-config --name qaprod --type secret
 [generate.flag.type]
 one='Type of configuration file to be generated'
 
+[generate.flag.overwrite.description]
+one = 'Forcibly overwrite a configuration file if it already exists'
+
 [generate.common.flag.fileLocation.description]
 description = 'Description for --output-file flag'
 one = 'Sets a custom file location to save the configurations'
 
+[generate.error.configFileAlreadyExists]
+description = 'Error message for when a configuration file alredy exists at a location'
+one = 'file {{.FilePath}} already exists. Use --overwrite to overwrite the file, or the --output-file flag to choose a different location'
 
 [generate.log.info.noSevices]
 one='No services available to generate configurations'

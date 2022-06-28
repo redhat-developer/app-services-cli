@@ -124,26 +124,8 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 		return nil, nil, err
 	}
 
-	host, port, _ := net.SplitHostPort(bootstrapURL)
-
-	var apiURL *url.URL
-
-	if host == "localhost" {
-		apiURL = &url.URL{
-			Scheme: "http",
-			Host:   fmt.Sprintf("localhost:%v", port),
-		}
-		apiURL.Scheme = "http"
-		apiURL.Path = "/data/kafka"
-	} else {
-		apiHost := fmt.Sprintf("admin-server-%v", host)
-		apiURL, _ = url.Parse(apiHost)
-		apiURL.Scheme = "https"
-		apiURL.Path = "/"
-		apiURL.Host = fmt.Sprintf("admin-server-%v", host)
-	}
-
-	a.Logger.Debugf("Making request to %v", apiURL.String())
+	apiURL := kafkaInstance.GetAdminApiServerUrl()
+	a.Logger.Debugf("Making request to %v", apiURL)
 
 	token := a.MasAccessToken
 	if !hacks.ShouldUseMasSSO(a.Logger, a.ApiURL.String()) {
@@ -151,7 +133,7 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 	}
 
 	client := kafkainstance.NewAPIClient(&kafkainstance.Config{
-		BaseURL:    apiURL.String(),
+		BaseURL:    apiURL,
 		Debug:      a.Logger.DebugEnabled(),
 		HTTPClient: a.CreateOAuthTransport(token),
 		UserAgent:  a.UserAgent,

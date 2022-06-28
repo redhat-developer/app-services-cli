@@ -45,6 +45,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("connector.list.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("connector.list.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.list.cmd.example"),
+		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {

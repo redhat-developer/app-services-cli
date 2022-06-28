@@ -15,7 +15,6 @@ type options struct {
 	f *factory.Factory
 
 	name         string
-	eval         bool
 	outputFormat string
 }
 
@@ -48,7 +47,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.namespace.create.flag.name.description"))
-	flags.BoolVar(&opts.eval, "eval", false, f.Localizer.MustLocalize("connector.namespace.create.flag.eval.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -73,14 +71,8 @@ func runCreate(opts *options) error {
 	var connector connectormgmtclient.ConnectorNamespace
 	var newErr error
 
-	if opts.eval {
-		a = api.ConnectorsMgmt().ConnectorNamespacesApi.CreateEvaluationNamespace(f.Context)
-		a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
-		connector, _, newErr = a.Execute()
-	} else {
-		a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
-		connector, _, newErr = a.Execute()
-	}
+	a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
+	connector, _, newErr = a.Execute()
 
 	if newErr != nil {
 		return newErr

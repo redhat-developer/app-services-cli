@@ -59,7 +59,7 @@ func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest,
 }
 
 func GetKafkaForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*kafkamgmtclient.KafkaRequest, error) {
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 }
 
 func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*registrymgmtclient.Registry, error) {
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return nil, err
 	}
