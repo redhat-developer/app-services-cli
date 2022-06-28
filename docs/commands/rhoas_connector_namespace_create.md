@@ -24,7 +24,6 @@ rhoas connector namespace create --name "my-namespace" --eval
 ### Options
 
 ```
-      --eval            Create an evaluation Connectors namespace
       --name string     The name of the Connectors namespace
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
 ```

@@ -14,17 +14,11 @@ For the Service Preview evaluation site, a Connectors namespace expires 48 hours
 ### Examples
 
 ```
-# Create a Connectors namespace and name it "my-namespace"
-rhoas connector namespace create --name "my-namespace"
-
-# Create an evaluation Connectors namespace and name it "my-namespace"
-rhoas connector namespace create --name "my-namespace" --eval
+# Create a Connectors namespace
+rhoas connector namespace create --name "eval-namespace"
 
 # List the namespaces for the Connectors cluster
 $ rhoas connector namespace list
-
-# Delete the Connectors namespace with ID jdhdhdhmmf
-rhoas connector namespace delete --id jdhdhdhmmf
 
 ```
 
@@ -39,6 +33,5 @@ rhoas connector namespace delete --id jdhdhdhmmf
 
 * [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
 * [rhoas connector namespace create](rhoas_connector_namespace_create.md)	 - Create a Connectors namespace
-* [rhoas connector namespace delete](rhoas_connector_namespace_delete.md)	 - Delete a Connectors namespace
 * [rhoas connector namespace list](rhoas_connector_namespace_list.md)	 - Get a list of Connectors namespaces
 
