@@ -182,16 +182,15 @@ func runCreate(opts *options) error {
 			return nil
 		}
 
-		err = ValidateBillingModel(opts.billingModel)
-		if err != nil {
-			return err
-		}
-
 		userInstanceType, err = accountmgmtutil.FetchQuotaCost(f, opts.billingModel, opts.marketplaceAcctId, opts.marketplace, &constants.Kafka.Ams)
 		if err != nil {
 			return err
 		}
 
+		err = ValidateBillingModel(opts.billingModel)
+		if err != nil {
+			return err
+		}
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
@@ -225,6 +224,10 @@ func runCreate(opts *options) error {
 			payload.Marketplace.Set(&opts.marketplace)
 			payload.BillingCloudAccountId = kafkamgmtclient.NullableString{}
 			payload.BillingCloudAccountId.Set(&opts.marketplaceAcctId)
+		}
+
+		if opts.billingModel != "" {
+			// This is wrong as opts.billingModel can be empty
 			payload.BillingModel = kafkamgmtclient.NullableString{}
 			payload.BillingModel.Set(&opts.billingModel)
 		}
@@ -452,8 +455,7 @@ func promptKafkaPayload(opts *options, userQuotaType *accountmgmtutil.QuotaSpec)
 		}
 	}
 
-	if !opts.bypassChecks && opts.billingModel == accountmgmtutil.QuotaMarketplaceType {
-
+	if opts.billingModel == accountmgmtutil.QuotaMarketplaceType {
 		marketplaces, err := accountmgmtutil.GetValidMarketplaces(userQuotaType)
 		if err != nil {
 			return nil, err
