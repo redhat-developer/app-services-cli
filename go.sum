@@ -640,8 +640,8 @@ github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.7.0 h1:GcbNg/Ad
 github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.7.0/go.mod h1:0WB4LlMmesjBlGKvnMXQ7twPxeSr27f5a+w4QnMoSdQ=
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0 h1:ExEHQaihnPNxN2nKXB0q5nrmSv4p8b3Idzt7TChxv+Q=
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0/go.mod h1:hMpejngP3BFnifCDH1gKRG9cU9Q4lr0WiQaW7A1LYo4=
-github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.1 h1:Gcyn2kLlslsVT6T8qoiCJpJFPrnD2i2KIFeKQJrXkTY=
-github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.1/go.mod h1:RoPo3tyHjv8apStFNVjChwWYdlWhg6hMzi1IrH3yQX8=
+github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.0 h1:63UhOYB8TozKdnkkws2pXc0D1lEB+K3qX63/OxkjDas=
+github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.0/go.mod h1:m+m7d6xkC9WbSxemslyhjv0jVhquWLysRfdh+RQ5hH0=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1 h1:xRq5XJzRDs/Z7e/9SDt6zbNRIyesC4LTqN9ajHKwjHo=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1/go.mod h1:Z/gr/snlpsqYg4vftmcx97vCR3qMQJhALGelDHx4pMA=
 github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.6.1 h1:3sUmQ3nAawsYWg7ZCO2Q8HF2J7MW6YA38h/YFL3ao6o=
@@ -933,7 +933,6 @@ golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f/go.mod h1:KelEdhl1UZF7XfJ
 golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
 golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a/go.mod h1:DAh4E804XQdzx2j+YRIaUnCqCV2RuMz24cGBJ5QYIrc=
 golang.org/x/oauth2 v0.0.0-20220524215830-622c5d57e401/go.mod h1:DAh4E804XQdzx2j+YRIaUnCqCV2RuMz24cGBJ5QYIrc=
-golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb/go.mod h1:jaDAt6Dkxork7LmZnYtzbRWj0W47D86a3TGe0YHBvmE=
 golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2 h1:+jnHzr9VPj32ykQVai5DNahi9+NSp7yYuCsl5eAQtL0=
 golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2/go.mod h1:jaDAt6Dkxork7LmZnYtzbRWj0W47D86a3TGe0YHBvmE=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
