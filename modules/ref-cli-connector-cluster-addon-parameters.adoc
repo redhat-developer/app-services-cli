@@ -1,0 +1,44 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-cluster-addon-parameters_{context}']
+= connector cluster addon-parameters
+
+[role="_abstract"]
+Get Connectors add-on parameters
+
+[discrete]
+== Synopsis
+
+Get a list of the Connectors add-on parameters
+
+....
+rhoas connector cluster addon-parameters [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Get a list of the Connectors add-on parameters
+rhoas connector cluster addon-parameters
+
+....
+
+[discrete]
+== Options
+
+      `--id` _string_::         The ID for the Connectors instance
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector-cluster_{context}[rhoas connector cluster]	 - Create, delete, and list Connectors clusters
+

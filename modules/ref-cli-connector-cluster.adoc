@@ -1,0 +1,52 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-cluster_{context}']
+= connector cluster
+
+[role="_abstract"]
+Create, delete, and list Connectors clusters
+
+[discrete]
+== Synopsis
+
+A Connectors cluster is an OpenShift Dedicated instance for deploying your Connectors instances. Use the "connector cluster" command to create, delete, and view a list of Connectors clusters.
+
+[discrete]
+== Examples
+
+....
+# Create a Connectors cluster that is named "my-connectors-cluster"
+rhoas connector cluster create --name=my-connectors-cluster
+
+# Delete a Connectors cluster that has ID c980124otd37bufiemj0
+rhoas connector cluster delete --id=c980124otd37bufiemj0
+
+# List Connectors clusters
+rhoas connector cluster list
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+
+ 
+* link:{path}#ref-connector-cluster-addon-parameters_{context}[connector-cluster addon-parameters]	 - Get Connectors add-on parameters
+
+ 
+* link:{path}#ref-connector-cluster-create_{context}[connector-cluster create]	 - Create a Connectors cluster
+
+ 
+* link:{path}#ref-connector-cluster-delete_{context}[connector-cluster delete]	 - Delete a Connectors cluster
+
+ 
+* link:{path}#ref-connector-cluster-list_{context}[connector-cluster list]	 - List Connectors clusters
+

@@ -60,6 +60,27 @@ include::../modules/ref-cli-cluster-connect.adoc[leveloffset=+2]
 include::../modules/ref-cli-cluster-status.adoc[leveloffset=+2]
 
 
+== Connectors commands
+
+include::../modules/ref-cli-connector.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-cluster.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-cluster-addon-parameters.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-cluster-create.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-cluster-delete.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-cluster-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-namespace.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-namespace-create.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-namespace-list.adoc[leveloffset=+2]
+
+
 == Kafka commands
 
 include::../modules/ref-cli-kafka.adoc[leveloffset=+2]

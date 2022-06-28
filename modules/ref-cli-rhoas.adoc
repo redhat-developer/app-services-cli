@@ -52,6 +52,9 @@ $ rhoas cluster connect
 * link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
 
  
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+
+ 
 * link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
 
  

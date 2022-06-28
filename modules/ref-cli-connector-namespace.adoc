@@ -1,0 +1,48 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-namespace_{context}']
+= connector namespace
+
+[role="_abstract"]
+Connectors namespace commands
+
+[discrete]
+== Synopsis
+
+Commands to manage namespaces for Connectors. A Connectors namespace is the logical hosting location for deploying your Connectors instances on a Connectors cluster.
+
+For your own OpenShift Dedicated environment, a Connectors namespace does not automatically expire. You use the information about your Connectors namespace to configure the OpenShift Connectors add-on so that you can use Connectors.
+
+For the Service Preview evaluation site, a Connectors namespace expires 48 hours after you create it. To create an evaluation Connectors namespace include the --eval option with the "connector namespace create" command.
+
+
+[discrete]
+== Examples
+
+....
+# Create a Connectors namespace
+rhoas connector namespace create --name "eval-namespace"
+
+# List the namespaces for the Connectors cluster
+$ rhoas connector namespace list
+
+....
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+
+ 
+* link:{path}#ref-connector-namespace-create_{context}[connector-namespace create]	 - Create a Connectors namespace
+
+ 
+* link:{path}#ref-connector-namespace-list_{context}[connector-namespace list]	 - Get a list of Connectors namespaces
+

@@ -1,0 +1,46 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-cluster-list_{context}']
+= connector cluster list
+
+[role="_abstract"]
+List Connectors clusters
+
+[discrete]
+== Synopsis
+
+List all Connectors clusters in the OpenShift Dedicated environment. The returned list includes the ID value for each Connectors cluster.
+
+
+....
+rhoas connector cluster list [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# List Connectors clusters
+rhoas connector cluster list
+
+....
+
+[discrete]
+== Options
+
+      `--limit` _int_::         Page limit (default 100)
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
+      `--page` _int_::          Page number (default 1)
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector-cluster_{context}[rhoas connector cluster]	 - Create, delete, and list Connectors clusters
+

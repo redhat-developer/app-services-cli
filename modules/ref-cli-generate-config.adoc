@@ -42,6 +42,7 @@ $ rhoas generate-config --name qaprod --type secret
 
       `--name` _string_::          Name of the context
       `--output-file` _string_::   Sets a custom file location to save the configurations
+      `--overwrite`::              Forcibly overwrite a configuration file if it already exists
       `--type` _string_::          Type of configuration file to be generated
 
 [discrete]
