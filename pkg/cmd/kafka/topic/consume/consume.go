@@ -35,8 +35,8 @@ type options struct {
 	topicName    string
 	kafkaID      string
 	partition    int32
-	from         string
-	unix         bool
+	date         string
+	timestamp    string
 	limit        int32
 	offset       string
 	wait         bool
@@ -86,8 +86,8 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
-	flags.StringVar(&opts.from, "from", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.from.description"))
-	flags.BoolVar(&opts.unix, "unix-time", false, "Use unix timestamp")
+	flags.StringVar(&opts.date, "from-date", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.date.description"))
+	flags.StringVar(&opts.timestamp, "from-timestamp", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.timestamp.description"))
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
 	flags.StringVar(&opts.offset, "offset", DefaultOffset, f.Localizer.MustLocalize("kafka.topic.consume.flag.offset.description"))
 	flags.Int32Var(&opts.limit, "limit", DefaultLimit, f.Localizer.MustLocalize("kafka.topic.consume.flag.limit.description"))
@@ -117,8 +117,13 @@ func runCmd(opts *options) error {
 		return err
 	}
 
+	// cannot set unix timestamp and the date
+	if opts.date != DefaultTimestamp && opts.timestamp != DefaultTimestamp {
+		return opts.f.Localizer.MustLocalizeError("kafka.topic.consume.error.dateAndTimestampConflict")
+	}
+
 	// check for flags that are exclusive to eachother
-	if opts.offset != DefaultOffset && opts.from != DefaultTimestamp {
+	if opts.offset != DefaultOffset && (opts.date != DefaultTimestamp || opts.timestamp != DefaultTimestamp) {
 		return opts.f.Localizer.MustLocalizeError("kafka.topic.consume.error.offsetAndFromConflict")
 	}
 
@@ -150,9 +155,9 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 		opts.offset = DefaultOffset
 	}
 
-	if opts.from == DefaultTimestamp {
+	if opts.date == DefaultTimestamp && opts.timestamp == DefaultTimestamp {
 		// get current time in ISO 8601
-		opts.from = time.Now().Format(time.RFC3339)
+		opts.date = time.Now().Format(time.RFC3339)
 	}
 
 	var max_offset int64
@@ -170,9 +175,10 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 			outputRecords(opts, records)
 
 			if first_consume {
-				// reset timestamp after first consume as it will conflict with
-				// the max offset we are setting to only get new records
-				opts.from = DefaultTimestamp
+				// reset timestamp and date after first consume as it will
+				// conflict with the max offset we are setting to only get new records
+				opts.date = DefaultTimestamp
+				opts.timestamp = DefaultTimestamp
 				first_consume = false
 			}
 			opts.offset = fmt.Sprint(max_offset)
@@ -201,24 +207,22 @@ func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *k
 		request = request.Offset(int32(intOffset))
 	}
 
-	if opts.from != DefaultTimestamp {
-
-		if opts.unix {
-			digits, err := strconv.ParseInt(opts.from, 10, 64)
-			if err != nil {
-				return nil, err
-			}
-
-			opts.from = time.Unix(digits, 0).Format(time.RFC3339)
-			opts.f.Logger.Info(opts.from)
-		} else {
-			_, err := time.Parse(time.RFC3339, opts.from)
-			if err != nil {
-				return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.timeFormat", localize.NewEntry("Time", opts.from))
-			}
+	if opts.date != DefaultTimestamp {
+		_, err := time.Parse(time.RFC3339, opts.date)
+		if err != nil {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.topic.comman.error.timeFormat", localize.NewEntry("Time", opts.date))
 		}
 
-		request = request.Timestamp(opts.from)
+		request = request.Timestamp(opts.date)
+	}
+
+	if opts.timestamp != DefaultTimestamp {
+		digits, err := strconv.ParseInt(opts.timestamp, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		opts.timestamp = time.Unix(digits, 0).Format(time.RFC3339)
 	}
 
 	list, httpRes, err := request.Execute()
