@@ -3,6 +3,7 @@ package create
 import (
 	"strings"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -13,16 +14,17 @@ import (
 )
 
 type ValidatorInput struct {
-	provider string
-	region   string
-	size     string
-
+	provider            string
+	region              string
+	size                string
 	userAMSInstanceType *accountmgmtutil.QuotaSpec
 
 	f         *factory.Factory
 	constants *remote.DynamicServiceConstants
 	conn      connection.Connection
 }
+
+var validBillingModels []string = []string{accountmgmtutil.QuotaMarketplaceType, accountmgmtutil.QuotaStandardType}
 
 func (input *ValidatorInput) ValidateProviderAndRegion() error {
 	f := input.f
@@ -108,7 +110,7 @@ func (input *ValidatorInput) ValidateSize() error {
 		return nil
 	}
 
-	sizes, err := FetchValidKafkaSizesLabels(input.f, input.provider, input.region, *input.userAMSInstanceType)
+	sizes, err := FetchValidKafkaSizesLabels(input.f, input.provider, input.region, input.userAMSInstanceType)
 	if err != nil {
 		return err
 	}
@@ -118,4 +120,20 @@ func (input *ValidatorInput) ValidateSize() error {
 	}
 
 	return nil
+}
+
+// ValidateBillingModel validates if user provided a correct billing model
+func ValidateBillingModel(billingModel string) error {
+
+	if billingModel == "" {
+		return nil
+	}
+
+	isValid := flagutil.IsValidInput(billingModel, validBillingModels...)
+
+	if isValid {
+		return nil
+	}
+
+	return flagutil.InvalidValueError("billing-model", billingModel, validBillingModels...)
 }
