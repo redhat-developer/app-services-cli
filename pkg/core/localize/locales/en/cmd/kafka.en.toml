@@ -286,6 +286,9 @@ one = 'Wait until the Kafka instance is created'
 [kafka.create.flag.dryrun.description]
 one = 'Validate all user provided arguments without creating the Kafka instance'
 
+[kafka.create.flag.billingModel.description]
+one = 'Billing model to be used'
+
 [kafka.create.flag.marketplaceId.description]
 one = 'Cloud Account ID for the marketplace'
 
