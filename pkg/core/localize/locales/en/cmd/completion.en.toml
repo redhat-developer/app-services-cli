@@ -1,11 +1,11 @@
 [completion.cmd.shortDescription]
 description = "Short description for command"
-one = "Install command completion for your shell (bash, zsh, or fish)"
+one = "Install command completion for your shell (bash, zsh, fish or powershell)"
 
 [completion.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Install rhoas command completion for your shell (bash, zsh, or fish).
+Install rhoas command completion for your shell (bash, zsh, fish, powershell).
 
 To find what shell you are currently running:
 
@@ -13,7 +13,7 @@ To find what shell you are currently running:
 
 For instructions on installing command completions for your shell:
 
-  $ rhoas completion [bash|zsh|fish] -h
+  $ rhoas completion [bash|zsh|fish|powershell] -h
 
 When you have installed the command completion script, restart your shell for the changes to take effect.
 '''
@@ -28,10 +28,13 @@ rhoas completion fish
 
 ## Generate command completion script for Zsh shell
 rhoas completion zsh
+
+## Generate command completion script for Powershell shell
+rhoas completion powershell
 '''
 
 [completion.cmd.error.subcommandRequired]
-one = 'a subcommand of either "bash", "zsh", "fish" is required'
+one = 'a subcommand of either "bash", "zsh", "fish", "powershell" is required'
 
 [completion.bash.cmd.shortDescription]
 description = "Short description for command"
@@ -98,11 +101,11 @@ rhoas completion zsh
 
 [completion.fish.cmd.shortDescription]
 description = "Short description for command"
-one = "Generate command completion script for fish shell"
+one = "Generate command completion script for Fish shell"
 
 [completion.fish.cmd.longDescription]
 one = '''
-Install rhoas command completion for the fish shell.
+Install rhoas command completion for the Fish shell.
 
 1. Install fish completions:
 
@@ -114,4 +117,26 @@ Install rhoas command completion for the fish shell.
 [completion.fish.cmd.example]
 one = '''
 rhoas completion fish
+'''
+
+[completion.powershell.cmd.shortDescription]
+description = "Short description for command"
+one = "Generate command completion script for Powershell shell"
+
+[completion.powershell.cmd.longDescription]
+one = '''
+Install rhoas command completion for the Powershell shell.
+
+1. Create the script file:
+
+   PS> rhoas completion powershell | Out-File -FilePath rhoas.ps1
+
+2. Source this file from your PowerShell profile.
+
+3. Restart your shell for the changes to take effect.
+'''
+
+[completion.powershell.cmd.example]
+one = '''
+rhoas completion powershell
 '''

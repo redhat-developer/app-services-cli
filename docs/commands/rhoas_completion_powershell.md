@@ -1,30 +1,28 @@
-## rhoas completion zsh
+## rhoas completion powershell
 
-Generate command completion script for Zsh shell
+Generate command completion script for Powershell shell
 
 ### Synopsis
 
-Install rhoas command completion  for the Zsh shell.
+Install rhoas command completion for the Powershell shell.
 
-1. Install the completion script:
+1. Create the script file:
 
-   $ rhoas completion zsh > "${fpath[1]}/_rhoas"
+   PS> rhoas completion powershell | Out-File -FilePath rhoas.ps1
 
-2. Unless already installed, enable shell completions for Zsh:
-
-   $ echo "autoload -U compinit; compinit" >> ~/.zshrc
+2. Source this file from your PowerShell profile.
 
 3. Restart your shell for the changes to take effect.
 
 
 ```
-rhoas completion zsh
+rhoas completion powershell
 ```
 
 ### Examples
 
 ```
-rhoas completion zsh
+rhoas completion powershell
 
 ```
 
