@@ -2,7 +2,6 @@ package accountmgmtutil
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -78,7 +77,7 @@ func FetchQuotaCost(f *factory.Factory, billingModel string, cloudAccountID stri
 	if billingModel == "" && (cloudAccountID != "" || marketplace != "") {
 		billingModel = QuotaMarketplaceType
 	} else if billingModel == "" && cloudAccountID == "" && marketplace == "" {
-		f.Logger.Info("No billing model specified. Looking for prepaid instances")
+		f.Logger.Debug("No billing model specified. Looking for prepaid instances")
 		billingModel = QuotaStandardType
 	}
 
@@ -96,22 +95,29 @@ func FetchQuotaCost(f *factory.Factory, billingModel string, cloudAccountID stri
 	for _, quota := range quotaCostList {
 		relatedResources := quota.GetRelatedResources()
 		for i := range relatedResources {
-			if relatedResources[i].GetResourceName() == spec.ResourceName && relatedResources[i].GetProduct() == spec.InstanceQuotaID && relatedResources[i].GetBillingModel() == billingModel {
+			if relatedResources[i].GetResourceName() == spec.ResourceName &&
+				relatedResources[i].GetProduct() == spec.InstanceQuotaID {
+				filteredQuotaCosts = append(filteredQuotaCosts, quota)
+			}
+			if relatedResources[i].GetResourceName() == spec.ResourceName &&
+				relatedResources[i].GetProduct() == spec.TrialProductQuotaID {
 				filteredQuotaCosts = append(filteredQuotaCosts, quota)
 			}
 		}
 	}
 
 	if len(filteredQuotaCosts) == 0 {
-		return nil, errors.New("no quota object is available")
+		// This error is impossible to happen
+		return nil, errors.New("Cannot find plan for your account.")
 	}
 
-	filteredQuotasJSON, _ := json.Marshal(filteredQuotaCosts)
-	f.Logger.Debug(fmt.Sprintf("Filtered Quotas : %#v", string(filteredQuotasJSON)))
+	f.Logger.Debug(fmt.Sprintf("Filtered Quotas : %#v \n", filteredQuotaCosts))
 
 	if billingModel == QuotaMarketplaceType {
 
 		if len(filteredQuotaCosts) > 1 && marketplace == "" && cloudAccountID == "" {
+			// This logic might be improved - marketplace is enough to
+			// filter things out when 2 marketplaces are present
 			return nil, errors.New("please specify marketplace provider and account id")
 		}
 
@@ -134,8 +140,7 @@ func FetchQuotaCost(f *factory.Factory, billingModel string, cloudAccountID stri
 		return nil, errors.New("quota could not be found")
 	}
 
-	userQuotaJSON, _ := json.Marshal(userQuota)
-	f.Logger.Debug(fmt.Sprintf("Selected user quota : %#v", string(userQuotaJSON)))
+	f.Logger.Debug(fmt.Sprintf("Selected user quota : %#v", userQuota))
 
 	userQuotaSpec = &QuotaSpec{billingModel, int(userQuota.GetAllowed() - userQuota.GetConsumed()), billingModel, userQuota.CloudAccounts}
 
