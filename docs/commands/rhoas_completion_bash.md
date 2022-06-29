@@ -51,5 +51,5 @@ rhoas completion bash
 
 ### SEE ALSO
 
-* [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, or fish)
+* [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, fish or powershell)
 

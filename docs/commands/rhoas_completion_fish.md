@@ -1,10 +1,10 @@
 ## rhoas completion fish
 
-Generate command completion script for fish shell
+Generate command completion script for Fish shell
 
 ### Synopsis
 
-Install rhoas command completion for the fish shell.
+Install rhoas command completion for the Fish shell.
 
 1. Install fish completions:
 
@@ -33,5 +33,5 @@ rhoas completion fish
 
 ### SEE ALSO
 
-* [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, or fish)
+* [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, fish or powershell)
 
