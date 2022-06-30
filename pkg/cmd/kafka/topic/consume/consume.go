@@ -251,6 +251,16 @@ func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *k
 		return nil, err
 	}
 
+	// fill in fields not set in message
+	for i := 0; i < len(list.Items); i++ {
+		record := &list.Items[i]
+
+		if record.Key == nil {
+			defaultKey := ""
+			record.Key = &defaultKey
+		}
+	}
+
 	return &list, nil
 }
 
@@ -277,6 +287,7 @@ func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
 			}
 		} else {
 			_ = dump.Formatted(opts.f.IOStreams.Out, format, row)
+			opts.f.Logger.Info("")
 		}
 	}
 }
