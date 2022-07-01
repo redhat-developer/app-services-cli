@@ -367,7 +367,7 @@ one = 'Cannot fetch user allowed instance type'
 one = 'Interactive mode is not supported when using --bypass-checks flag'
 
 [kafka.create.error.quota.exceeded]
-one = 'your accout exceeded quota for Kafka instances. Please refer to https://console.redhat.com/application-services/subscriptions/streams for more information' 
+one = 'your accout exceeded quota for Kafka instances. Please refer to https://console.redhat.com/application-services/subscriptions/streams for more information'
 
 [kafka.create.error.notsupported]
 one = 'kafka instance creation is not supported for this cloud provider region and account'
@@ -394,7 +394,7 @@ the cloud provider "{{.Provider}}" does not exist or is not available. Choose fr
 
 [kafka.create.region.error.regionNotSupported]
 one = '''the selected region "{{.Region}}" does not support the instance types that you can create
-({{.MyTypes}}). Supported types for this region are: "{{.CloudTypes}}" 
+({{.MyTypes}}). Supported types for this region are: "{{.CloudTypes}}"
 '''
 
 [kafka.create.error.invalidSize]
@@ -559,28 +559,28 @@ one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "
 one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "yaml")'
 
 [kafka.topic.produce.flag.key.description]
-one = 'The message key. Empty if not set'
+one = 'Message key. Empty if not set'
 
 [kafka.topic.produce.flag.key.file]
-one = 'Path to file containing message sent'
+one = 'Path to file containing sent message'
 
 [kafka.topic.produce.flag.partition.description]
-one = 'The partition number for the message. Must be positive integer value that represents number of partitions for the specified topic'
+one = 'Partition number for the message. Must be a positive integer value that is valid for the specified topic'
 
 [kafka.topic.produce.flag.format.description]
-one = 'Format of the messages printed as they are produced, possible values are json and yaml'
+one = 'Format for printing produced messages (possible values are "json" and "yaml")'
 
 [kafka.topic.produce.info.produceSuccess]
 description = 'Produce success message'
-one = 'Record successfully produced to "{{.Topic}}" with offset {{.Offset}}'
+one = 'Message successfully produced to "{{.Topic}}" with offset {{.Offset}}'
 
 [kafka.topic.produce.error.messageTooLarge]
-description = 'Error message when message produced was too large'
-one = 'The messaged sent was too large, the max size for a message is 1MB'
+description = 'Error message if produced message is too large'
+one = 'The sent message was too large, the maximum size for a message is 1MB'
 
 [kafka.topic.common.error.partitionNotFoundError]
-description = 'Error message when the partition given does not exist on the topic'
-one = 'The topic "{{.Topic}}" does not have the  partition {{.Partition}}'
+description = 'Error message when specified partition does not exist on the topic'
+one = 'Topic "{{.Topic}}" does not have a partition value {{.Partition}}'
 
 [kafka.topic.produce.input.value]
 description = 'Prompt for entering value to produce'
@@ -588,17 +588,17 @@ one = 'Value'
 
 [kafka.topic.produce.input.help]
 description = 'Help message when entering value to produce'
-one = 'Enter text to be the value of the message produced'
+one = 'Enter text for message value to produce'
 
 [kafka.topic.consume.cmd.shortDescription]
 one = 'Consume messages from a topic'
 
 [kafka.topic.consume.cmd.longDescription]
 one = '''
-Consume messages from a given topic, by default all messages on the topic will be consumed and printed in the foramat chosen. You can add filters 
-to these message like a starting offset or a time that the messages must of been produced by.
+Consume messages from a given topic. By default, all messages on the topic are consumed and printed in the format that you specify. You can spcecify filters
+such as a starting offset or a starting time for message production.
 
-Adding the --wait flag will wait for messages to be produced starting from when the command was ran and will ignore any limit or offset given.
+If you add the --wait flag, the CLI waits for messages to be produced starting from when you run the command and ignores any limit or offset specified.
 '''
 
 [kafka.topic.consume.cmd.example]
@@ -606,73 +606,73 @@ one = '''
 # Consume from a topic
 $ rhoas kafka topic consume --name=topic-1
 
-# Consume from topic and output yaml format  
+# Consume from a topic and output to YAML format
 $ rhoas kafka topic consume --name=topic-1 --format=yaml
 
-# Consume from a topic continously by pooling for new messages
+# Consume from a topic by continually polling the topic for new messages
 $ rhoas kafka topic consume --name=topic-1 --wait
 
-# Consume from a topic starting from a certain time using the default ISO time format
+# Consume from a topic starting from a time specified in default ISO time format
 $ rhoas kafka topic consume --name=topic-1 --from-date=2022-06-17T07:05:34.0000Z
 
-# Consume from a topic starting from a certain time using unix time format
+# Consume from a topic starting from a time specified in Unix epoch time format
 $ rhoas kafka topic consume --name=topic-1 --wait --from-timestamp=1656346796
 
-# Consume from a topic starting from an offset
+# Consume from a topic starting from an offset value
 $ rhoas kafka topic consume --name=topic-1 --offset=15
 
-# Consume from a topic starting from an offset with a message limit of 30
+# Consume from a topic starting from an offset value and with a specified message limit
 $ rhoas kafka topic consume --name=topic-1 --offset=15 --limit=30
 
-# Consume from topic to json format and use jq to read values of returning json 
+# Consume from topic and output to JSON format and using jq to read values
 $ rhoas kafka topic consume --name=topic-1 --format=json | jq -rc .value
 '''
 
 [kafka.topic.consume.flag.partition.description]
-one = 'The partition number used for consumer. Positive integer'
+one = 'Consume messages from specified partition (value must be a positive integer)'
 
 [kafka.topic.consume.flag.date.description]
-one = 'Messages with a date after this date will be consumed, time format required is YYYY-MM-DDThh:mm:ss.ssssZ'
+one = 'Consume only messages with a date later than the specified value (requied format is YYYY-MM-DDThh:mm:ss.ssssZ)'
 
 [kafka.topic.consume.flag.timestamp.description]
-one = 'Messages with a timestamp after this time will be consumed, time format required is the Unix timestamp'
+one = 'Consume only messages with a timestamp later than the specified value (required format is Unix epoch timestamp value)'
 
 [kafka.topic.consume.flag.wait.description]
-one = 'Waiting for records to consume'
+one = 'Wait for messages to consume from topic'
 
 [kafka.topic.consume.flag.offset.description]
-one = 'Retrieve messages within an offset equal to or greater than this'
+one = 'Consume messages from an offset equal to or greater than the specified value'
 
 [kafka.topic.consume.flag.limit.description]
-one = 'Max records to consume from topic'
+one = 'Maximum number of messages to consume from topic'
 
 [kafka.topic.consume.flag.format.description]
-one = 'Format of the messages printed as they are consumed, possible values are json, yaml and key-value'
+one = 'Output format for consumed messages (choose from: "json", "yaml", "key-value")'
 
 [kafka.topic.consume.log.info.limitIgnored]
-one = 'Value given for limit will be ignored, using default value {{.Limit}}'
+one = 'Ignore specified limit value and use default value of {{.Limit}}'
 
 [kafka.topic.consume.log.info.offsetIgnored]
-one = 'Value given for offset will be ignored, using default value {{.Offset}}'
+one = 'Ignore specified offset value and use default value of {{.Offset}}'
 
 [kafka.topic.comman.error.timeFormat]
-one = '"{{.Time}}" cannot be parsed as a valid time, must use YYYY-MM-DDThh:mm:ss.ssssZ'
+one = 'Invalid time value of "{{.Time}}" specified, value must use format of YYYY-MM-DDThh:mm:ss.ssssZ'
 
 [kafka.topic.comman.error.offsetNegative]
 description = 'Error message when a negative offset is given'
-one = 'Invalid offset given, offset must be a positive integer'
+one = 'Invalid offset value specified, value must be a positive integer'
 
 [kafka.topic.comman.error.offsetInvalid]
 description = 'Error message when the offset given is not a number'
-one = 'Invalid offset given, the value "{{.Offset}}" is not a number'
+one = 'Invalid offset value specified, the value "{{.Offset}}" is not a number'
 
 [kafka.topic.consume.error.dateAndTimestampConflict]
 description = 'Error message when the date and timestamp are both set'
-one = 'Cannot set date and timestamp'
+one = 'Cannot set both a date and timestamp value'
 
 [kafka.topic.consume.error.offsetAndFromConflict]
 description = 'Error message when the offset and from flags are both set'
-one = 'Cannot use offset with timestamp or date flags to filter messages'
+one = 'Cannot use both an offset and a timestamp or date value to filter messages'
 
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
@@ -786,27 +786,27 @@ one = 'Produce a new message to a topic'
 
 [kafka.topic.produce.cmd.longDescription]
 one = '''
-Produce a message to a topic in a Kafka instance. Pass a file path to read that file as the message value or use stdin as your message. You can specify the partition, key and value.
+Produce a message to a topic in a Kafka instance. Specify a file path for the CLI to read as the message value or use stdin to provide your message. You can specify the partition, key, and value.
 '''
 
 [kafka.topic.produce.cmd.example]
 one = '''
-# Produce single message read from a file and provide custom message key
+# Produce a single message to a topic from a file and provide a custom message key
 $ rhoas kafka topic produce --name=users --file="./message.json" --key="{'location': 'us-east-1'}"
 
-# Produce to a topic from standard input (requires terminating command with Ctrl+D)
+# Produce to a topic from standard input (requires Ctrl+D terminating command)
 $ rhoas kafka topic produce --name=users
 
 # Produce to a topic from other command output
 $ cat yourfile.json | rhoas kafka topic produce --name=users
 
-# Produce to a topic and fetch its offset
+# Produce to a topic and fetch its offset value
 $ rhoas kafka topic produce --name=topic-1 --file="./message.json" | jq .offset
 
-# Produce to a topic with json filtered with jq as the value  
+# Produce to a topic from a JSON file and filter using jq
 $ cat input.json | jq .data.value | rhoas kafka topic produce --name=topic-1
 
-# Produce to a topic with specific partition
+# Produce to a topic and specified partition
 $ rhoas kafka topic produce --name=topic-1 --file="./message.json" --partition=1
 '''
 
