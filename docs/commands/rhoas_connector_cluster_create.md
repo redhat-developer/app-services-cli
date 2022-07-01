@@ -4,7 +4,7 @@ Create a Connectors cluster
 
 ### Synopsis
 
-Create a Connectors cluster and specify its name
+Create a Connectors cluster and specify its name. You must be an org adminastrator for this to be successful
 
 ```
 rhoas connector cluster create [flags]
