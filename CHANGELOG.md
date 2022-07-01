@@ -1,4 +1,43 @@
 
+<a name="v0.44.0"></a>
+## [v0.44.0](https://github.com/redhat-developer/app-services-cli/compare/v0.43.0...v0.44.0) (2022-07-01)
+
+### Bug Fixes
+
+* do not reuse connection for the commands ([#1624](https://github.com/redhat-developer/app-services-cli/issues/1624))
+* nil keys are now empty strings when consumed ([#1621](https://github.com/redhat-developer/app-services-cli/issues/1621))
+* billing model fixes ([#1617](https://github.com/redhat-developer/app-services-cli/issues/1617))
+* added topic name as a hint when confirming deletion of topic ([#1585](https://github.com/redhat-developer/app-services-cli/issues/1585))
+* add prerelease support for documentation sync ([#1612](https://github.com/redhat-developer/app-services-cli/issues/1612))
+* regenerate documentation ([#1611](https://github.com/redhat-developer/app-services-cli/issues/1611))
+* more examples for consume produce ([#1609](https://github.com/redhat-developer/app-services-cli/issues/1609))
+* restore hidden connectors commands on main
+* reenable connectors
+* enable using custom provider by specifying env var ([#1605](https://github.com/redhat-developer/app-services-cli/issues/1605))
+* update error message to reflect proper flag name ([#1602](https://github.com/redhat-developer/app-services-cli/issues/1602))
+* use kafka admin url from control plane ([#1601](https://github.com/redhat-developer/app-services-cli/issues/1601))
+* remove redundant kafka admin slash ([#1600](https://github.com/redhat-developer/app-services-cli/issues/1600))
+* remove require mas-auth ([#1599](https://github.com/redhat-developer/app-services-cli/issues/1599))
+* add documentation import
+* add connector annotation for adoc generator
+* add bypass for ams for kas-installer ([#1592](https://github.com/redhat-developer/app-services-cli/issues/1592))
+* **deps:** update docusaurus monorepo to v2.0.0-beta.21
+* **kafka create:** completions should consider provider ([#1593](https://github.com/redhat-developer/app-services-cli/issues/1593))
+* **kafka create:** reduce number of calls made to AMS API ([#1596](https://github.com/redhat-developer/app-services-cli/issues/1596))
+* **service-registry create:** fetch registry URL after creation ([#1580](https://github.com/redhat-developer/app-services-cli/issues/1580))
+
+### Features
+
+* aws marketplace configuration for testing ([#1586](https://github.com/redhat-developer/app-services-cli/issues/1586))
+* consume now uses seperate time flags for date and Unix ([#1615](https://github.com/redhat-developer/app-services-cli/issues/1615))
+* connectors docs and enablement ([#1606](https://github.com/redhat-developer/app-services-cli/issues/1606))
+* added more examples to topic and consume docs ([#1607](https://github.com/redhat-developer/app-services-cli/issues/1607))
+* produce and consume records ([#1598](https://github.com/redhat-developer/app-services-cli/issues/1598))
+* **completion:** add instruction for powershell completions ([#1620](https://github.com/redhat-developer/app-services-cli/issues/1620))
+* **generate-config:** add overwrite flag and change default env file ([#1604](https://github.com/redhat-developer/app-services-cli/issues/1604))
+* **service-account:** enable credentials to be saved as secret ([#1575](https://github.com/redhat-developer/app-services-cli/issues/1575))
+
+
 <a name="v0.43.0"></a>
 ## [v0.43.0](https://github.com/redhat-developer/app-services-cli/compare/v0.42.2...v0.43.0) (2022-05-23)
 
