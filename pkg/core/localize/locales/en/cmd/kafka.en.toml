@@ -286,9 +286,6 @@ one = 'Wait until the Kafka instance is created'
 [kafka.create.flag.dryrun.description]
 one = 'Validate all user provided arguments without creating the Kafka instance'
 
-[kafka.create.flag.billingModel.description]
-one = 'Billing model to be used'
-
 [kafka.create.flag.marketplaceId.description]
 one = 'Cloud Account ID for the marketplace'
 
@@ -355,7 +352,7 @@ one = "Geographical region where the Kafka instance will be deployed"
 one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 
 [kafka.create.error.bypassChecks.marketplace]
-one = '"--marketplace", "--marketplace-account-id" and "--billing-model" flags are not supported with "--bypass-checks" flag'
+one = '"--marketplace" and "--marketplace-account-id" flags are not supported with "--bypass-checks" flag'
 
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'

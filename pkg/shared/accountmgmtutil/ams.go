@@ -3,7 +3,6 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -37,10 +36,20 @@ func CheckTermsAccepted(ctx context.Context, spec *remote.AmsConfig, conn connec
 
 // QuotaSpec - contains quota name and remaining quota count
 type QuotaSpec struct {
-	Name          string
-	Quota         int
-	BillingModel  string
-	CloudAccounts *[]amsclient.CloudAccount
+	Name         string
+	Quota        int
+	BillingModel string
+}
+
+func GetUserSupportedInstanceType(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota *QuotaSpec, err error) {
+	userInstanceTypes, err := GetUserSupportedInstanceTypes(ctx, spec, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	amsType := PickInstanceType(userInstanceTypes)
+
+	return amsType, nil
 }
 
 func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amsclient.QuotaCostList, error) {
@@ -59,92 +68,72 @@ func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amscli
 
 }
 
-func FetchQuotaCost(f *factory.Factory, billingModel string, cloudAccountID string, marketplace string, spec *remote.AmsConfig) (userQuotaSpec *QuotaSpec, err error) {
+func GetUserSupportedInstanceTypes(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (quota []QuotaSpec, err error) {
 
-	var conn connection.Connection
-	if conn, err = f.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
-		return nil, err
-	}
-
-	if billingModel == QuotaStandardType && (cloudAccountID != "" || marketplace != "") {
-		return nil, errors.New("accountID cant be provided with standard billing model")
-	}
-
-	if (cloudAccountID != "") != (marketplace != "") {
-		return nil, errors.New("accountID and marketplace should be provided together")
-	}
-
-	if billingModel == "" && (cloudAccountID != "" || marketplace != "") {
-		billingModel = QuotaMarketplaceType
-	} else if billingModel == "" && cloudAccountID == "" && marketplace == "" {
-		f.Logger.Debug("No billing model specified. Looking for prepaid instances")
-		billingModel = QuotaStandardType
-	}
-
-	quotaCostGet, err := fetchOrgQuotaCost(f.Context, conn)
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
 
-	var filteredQuotaCosts []amsclient.QuotaCost
-
-	quotaCostList := quotaCostGet.GetItems()
-
-	var userQuota amsclient.QuotaCost
-
-	for _, quota := range quotaCostList {
-		relatedResources := quota.GetRelatedResources()
-		for i := range relatedResources {
-			if relatedResources[i].GetResourceName() == spec.ResourceName &&
-				relatedResources[i].GetProduct() == spec.InstanceQuotaID {
-				filteredQuotaCosts = append(filteredQuotaCosts, quota)
-			}
-			if relatedResources[i].GetResourceName() == spec.ResourceName &&
-				relatedResources[i].GetProduct() == spec.TrialProductQuotaID {
-				filteredQuotaCosts = append(filteredQuotaCosts, quota)
-			}
-		}
-	}
-
-	if len(filteredQuotaCosts) == 0 {
-		// This error is impossible to happen
-		return nil, errors.New("Cannot find plan for your account.")
-	}
-
-	f.Logger.Debug(fmt.Sprintf("Filtered Quotas : %#v \n", filteredQuotaCosts))
-
-	if billingModel == QuotaMarketplaceType {
-
-		if len(filteredQuotaCosts) > 1 && marketplace == "" && cloudAccountID == "" {
-			// This logic might be improved - marketplace is enough to
-			// filter things out when 2 marketplaces are present
-			return nil, errors.New("please specify marketplace provider and account id")
-		}
-
-		if len(filteredQuotaCosts) == 1 && marketplace == "" && cloudAccountID == "" {
-			userQuota = filteredQuotaCosts[0]
-		} else {
-			for _, filteredQuotaCost := range filteredQuotaCosts {
-				for _, cloudAccount := range filteredQuotaCost.GetCloudAccounts() {
-					if cloudAccount.GetCloudAccountId() == cloudAccountID && cloudAccount.GetCloudProviderId() == marketplace {
-						userQuota = filteredQuotaCost
-					}
+	var quotas []QuotaSpec
+	for _, quota := range quotaCostGet.GetItems() {
+		quotaResources := quota.GetRelatedResources()
+		for i := range quotaResources {
+			quotaResource := quotaResources[i]
+			if quotaResource.GetResourceName() == spec.ResourceName {
+				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
+					quotas = append(quotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel})
+				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
+					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
+					quotas = append(quotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel})
 				}
 			}
 		}
-	} else {
-		userQuota = filteredQuotaCosts[0]
 	}
 
-	if userQuota.GetQuotaId() == "" {
-		return nil, errors.New("quota could not be found")
+	return BattleOfInstanceBillingModels(quotas), err
+}
+
+// This function selects the billing model that should be used
+// It represents some requirement to always use the same standard billing models
+// This function should not exist but it does represents some requirement that we cannot do on backend
+func BattleOfInstanceBillingModels(quotas []QuotaSpec) []QuotaSpec {
+	var betterQuotasMap map[string]*QuotaSpec = make(map[string]*QuotaSpec)
+	alwaysWinsBillingModel := "standard"
+	for i := 0; i < len(quotas); i++ {
+		if quotas[i].BillingModel == alwaysWinsBillingModel {
+			betterQuotasMap[quotas[i].Name] = &quotas[i]
+		} else if betterQuotasMap[quotas[i].Name] == nil {
+			betterQuotasMap[quotas[i].Name] = &quotas[i]
+
+		}
+	}
+	var betterQuotas []QuotaSpec
+	for _, v := range betterQuotasMap {
+		betterQuotas = append(betterQuotas, *v)
 	}
 
-	f.Logger.Debug(fmt.Sprintf("Selected user quota : %#v", userQuota))
+	return betterQuotas
+}
 
-	userQuotaSpec = &QuotaSpec{billingModel, int(userQuota.GetAllowed() - userQuota.GetConsumed()), billingModel, userQuota.CloudAccounts}
+// PickInstanceType - Standard instance always wins!
+// This function should not exist but it does represents some requirement
+// from business to only pick one instance type when two are presented.
+// When standard instance type is present in user instances it should always take precedence
+func PickInstanceType(amsTypes []QuotaSpec) *QuotaSpec {
+	if amsTypes == nil || len(amsTypes) == 0 {
+		return nil
+	}
 
-	return userQuotaSpec, nil
+	for _, amsType := range amsTypes {
+		if amsType.Name == QuotaStandardType {
+			return &amsType
+		}
+	}
+
+	// There is chance of having multiple instances in the future
+	// We will pick the first one as we do not know which one to pick
+	return &amsTypes[0]
 }
 
 func GetOrganizationID(ctx context.Context, conn connection.Connection) (accountID string, err error) {
@@ -157,12 +146,28 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	return account.Organization.GetId(), nil
 }
 
-func GetValidMarketplaceAcctIDs(userQuotaType *QuotaSpec, marketplace string) (marketplaceAcctIDs []string, err error) {
+func GetValidMarketplaceAcctIDs(ctx context.Context, connectionFunc factory.ConnectionFunc, marketplace string) (marketplaceAcctIDs []string, err error) {
 
-	for _, cloudAccount := range *userQuotaType.CloudAccounts {
-		if marketplace != "" {
-			if cloudAccount.GetCloudProviderId() == marketplace {
-				marketplaceAcctIDs = append(marketplaceAcctIDs, cloudAccount.GetCloudAccountId())
+	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quota := range quotaCostGet.GetItems() {
+		if len(quota.GetCloudAccounts()) > 0 {
+			for _, cloudAccount := range quota.GetCloudAccounts() {
+				if marketplace != "" {
+					if cloudAccount.GetCloudProviderId() == marketplace {
+						marketplaceAcctIDs = append(marketplaceAcctIDs, cloudAccount.GetCloudAccountId())
+					}
+				} else {
+					marketplaceAcctIDs = append(marketplaceAcctIDs, cloudAccount.GetCloudAccountId())
+				}
 			}
 		}
 	}
@@ -170,10 +175,24 @@ func GetValidMarketplaceAcctIDs(userQuotaType *QuotaSpec, marketplace string) (m
 	return unique(marketplaceAcctIDs), err
 }
 
-func GetValidMarketplaces(userQuotaType *QuotaSpec) (marketplaces []string, err error) {
+func GetValidMarketplaces(ctx context.Context, connectionFunc factory.ConnectionFunc) (marketplaces []string, err error) {
 
-	for _, cloudAccount := range *userQuotaType.CloudAccounts {
-		marketplaces = append(marketplaces, cloudAccount.GetCloudProviderId())
+	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	quotaCostGet, err := fetchOrgQuotaCost(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quota := range quotaCostGet.GetItems() {
+		if len(quota.GetCloudAccounts()) > 0 {
+			for _, cloudAccount := range quota.GetCloudAccounts() {
+				marketplaces = append(marketplaces, cloudAccount.GetCloudProviderId())
+			}
+		}
 	}
 
 	return unique(marketplaces), err
