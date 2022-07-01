@@ -4,7 +4,6 @@ package accountmgmtutil
 type QuotaType = string
 
 const (
-	QuotaTrialType       QuotaType = "trial"
-	QuotaStandardType    QuotaType = "standard"
-	QuotaMarketplaceType QuotaType = "marketplace"
+	QuotaTrialType    QuotaType = "trial"
+	QuotaStandardType QuotaType = "standard"
 )

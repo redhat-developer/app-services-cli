@@ -30,7 +30,6 @@ $ rhoas kafka create -o yaml
 ### Options
 
 ```
-      --billing-model string            Billing model to be used
       --dry-run                         Validate all user provided arguments without creating the Kafka instance
       --marketplace string              Name of the marketplace where the instance is purchased on
       --marketplace-account-id string   Cloud Account ID for the marketplace
