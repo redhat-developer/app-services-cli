@@ -37,10 +37,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 	ctx := context.Background()
 
 	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
-		if conn != nil {
-			return conn, nil
-		}
-
 		cfg, err := cfgFile.Load()
 		if err != nil {
 			return nil, err
