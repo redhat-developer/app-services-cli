@@ -16,6 +16,8 @@ include::../modules/ref-cli-completion-bash.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-completion-fish.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-completion-powershell.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-completion-zsh.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-context.adoc[leveloffset=+2]

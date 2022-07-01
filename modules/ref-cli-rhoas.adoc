@@ -49,7 +49,7 @@ $ rhoas cluster connect
 * link:{path}#ref-rhoas-cluster_{context}[rhoas cluster]	 - View and perform operations on your Kubernetes or OpenShift cluster
 
  
-* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, or fish)
+* link:{path}#ref-rhoas-completion_{context}[rhoas completion]	 - Install command completion for your shell (bash, zsh, fish or powershell)
 
  
 * link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands

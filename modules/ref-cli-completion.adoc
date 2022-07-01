@@ -3,12 +3,12 @@ ifdef::env-github,env-browser[:context: cmd]
 = completion
 
 [role="_abstract"]
-Install command completion for your shell (bash, zsh, or fish)
+Install command completion for your shell (bash, zsh, fish or powershell)
 
 [discrete]
 == Synopsis
 
-Install rhoas command completion for your shell (bash, zsh, or fish).
+Install rhoas command completion for your shell (bash, zsh, fish, powershell).
 
 To find what shell you are currently running:
 
@@ -16,7 +16,7 @@ To find what shell you are currently running:
 
 For instructions on installing command completions for your shell:
 
-  $ rhoas completion [bash|zsh|fish] -h
+  $ rhoas completion [bash|zsh|fish|powershell] -h
 
 When you have installed the command completion script, restart your shell for the changes to take effect.
 
@@ -33,6 +33,9 @@ rhoas completion fish
 
 ## Generate command completion script for Zsh shell
 rhoas completion zsh
+
+## Generate command completion script for Powershell shell
+rhoas completion powershell
 
 ....
 
@@ -53,7 +56,10 @@ rhoas completion zsh
 * link:{path}#ref-completion-bash_{context}[completion bash]	 - Generate command completion script for Bash shell
 
  
-* link:{path}#ref-completion-fish_{context}[completion fish]	 - Generate command completion script for fish shell
+* link:{path}#ref-completion-fish_{context}[completion fish]	 - Generate command completion script for Fish shell
+
+ 
+* link:{path}#ref-completion-powershell_{context}[completion powershell]	 - Generate command completion script for Powershell shell
 
  
 * link:{path}#ref-completion-zsh_{context}[completion zsh]	 - Generate command completion script for Zsh shell

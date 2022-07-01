@@ -1,31 +1,33 @@
 ifdef::env-github,env-browser[:context: cmd]
-[id='ref-completion-fish_{context}']
-= completion fish
+[id='ref-completion-powershell_{context}']
+= completion powershell
 
 [role="_abstract"]
-Generate command completion script for Fish shell
+Generate command completion script for Powershell shell
 
 [discrete]
 == Synopsis
 
-Install rhoas command completion for the Fish shell.
+Install rhoas command completion for the Powershell shell.
 
-1. Install fish completions:
+1. Create the script file:
 
-   $ rhoas command completion -s fish > ~/.config/fish/completion/gh.fish
+   PS> rhoas completion powershell | Out-File -FilePath rhoas.ps1
 
-2. Restart your shell for the changes to take effect.
+2. Source this file from your PowerShell profile.
+
+3. Restart your shell for the changes to take effect.
 
 
 ....
-rhoas completion fish
+rhoas completion powershell
 ....
 
 [discrete]
 == Examples
 
 ....
-rhoas completion fish
+rhoas completion powershell
 
 ....
 
