@@ -32,7 +32,7 @@ rhoas connector cluster list
 one = 'Create a Connectors cluster'
 
 [connector.cluster.create.cmd.longDescription]
-one = 'Create a Connectors cluster and specify its name'
+one = 'Create a Connectors cluster and specify its name. You must be an org adminastrator for this to be successful'
 
 [connector.cluster.create.cmd.example]
 one = '''
