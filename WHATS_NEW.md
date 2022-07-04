@@ -3,8 +3,7 @@
 Latest changes for the RHOAS CLI.
 For information on what was included in latest release please refer to our [changelog](https://github.com/redhat-developer/app-services-cli/blob/main/CHANGELOG.md)
 
-## Latest
-
+## Unrelased (main branch)
 
 ## 0.44.0 
 
