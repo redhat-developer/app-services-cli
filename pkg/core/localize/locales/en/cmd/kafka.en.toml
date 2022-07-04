@@ -561,8 +561,8 @@ one = 'Format in which to display the Kafka topic (choose from: "json", "yml", "
 [kafka.topic.produce.flag.key.description]
 one = 'Message key. Empty if not set'
 
-[kafka.topic.produce.flag.key.file]
-one = 'Path to file containing sent message'
+[kafka.topic.produce.flag.file.description]
+one = 'Path to file containing message value'
 
 [kafka.topic.produce.flag.partition.description]
 one = 'Partition number for the message. Must be a positive integer value that is valid for the specified topic'
@@ -580,7 +580,7 @@ one = 'The sent message was too large, the maximum size for a message is 1MB'
 
 [kafka.topic.common.error.partitionNotFoundError]
 description = 'Error message when specified partition does not exist on the topic'
-one = 'Topic "{{.Topic}}" does not have a partition value {{.Partition}}'
+one = 'Topic "{{.Topic}}" does not have a partition {{.Partition}}'
 
 [kafka.topic.produce.input.value]
 description = 'Prompt for entering value to produce'
@@ -588,7 +588,7 @@ one = 'Value'
 
 [kafka.topic.produce.input.help]
 description = 'Help message when entering value to produce'
-one = 'Enter text for message value to produce'
+one = 'Enter text for the message value to be produced'
 
 [kafka.topic.consume.cmd.shortDescription]
 one = 'Consume messages from a topic'
@@ -672,7 +672,7 @@ one = 'Cannot set both a date and timestamp value'
 
 [kafka.topic.consume.error.offsetAndFromConflict]
 description = 'Error message when the offset and from flags are both set'
-one = 'Cannot use both an offset and a timestamp or date value to filter messages'
+one = 'Cannot use offset with timestamp or date value to filter messages'
 
 [kafka.topic.common.input.partitions.description]
 description = 'help for the Partitions input'
@@ -794,7 +794,7 @@ one = '''
 # Produce a single message to a topic from a file and provide a custom message key
 $ rhoas kafka topic produce --name=users --file="./message.json" --key="{'location': 'us-east-1'}"
 
-# Produce to a topic from standard input (requires Ctrl+D terminating command)
+# Produce to a topic from standard input
 $ rhoas kafka topic produce --name=users
 
 # Produce to a topic from other command output
