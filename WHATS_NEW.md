@@ -30,7 +30,7 @@ Users will not longer see multiple tabs opened when login and communicate with t
 
 ## Windows Powershell Suggestions
 
-`rhoas completion powershell` 
+`rhoas completion powershell` will enable developers to get command completions on Windows platforms
 
 > NOTE: Feature have been provided by our community. We are looking for feedback on usability of Powershell extensions.
 
