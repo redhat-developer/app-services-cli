@@ -78,7 +78,7 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
 	flags.StringVar(&opts.key, "key", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.description"))
 	flags.Int32Var(&opts.partition, "partition", 0, f.Localizer.MustLocalize("kafka.topic.produce.flag.partition.description"))
-	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.key.file"))
+	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("kafka.topic.produce.flag.file.description"))
 	flags.StringVar(&opts.outputFormat, "format", "json", f.Localizer.MustLocalize("kafka.topic.produce.flag.format.description"))
 
 	_ = cmd.MarkFlagRequired("name")
