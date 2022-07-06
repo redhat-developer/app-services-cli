@@ -8,6 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/namespace"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/use"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/update"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -30,6 +31,7 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 	cmd.AddCommand(
 		cluster.NewConnectorClusterCommand(f),
 		namespace.NewNameSpaceCommand(f),
+		use.NewUseCommand(f),
 		// Hidden for the users and docs at the moment
 		create.NewCreateCommand(f),
 		delete.NewDeleteCommand(f),
