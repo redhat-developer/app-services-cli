@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -11,8 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connectorutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/spf13/cobra"
@@ -20,6 +21,7 @@ import (
 
 type options struct {
 	id          string
+	name        string
 
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
@@ -52,8 +54,7 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
 	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))
-
-	_ = cmd.MarkFlagRequired("id")
+	flags.StringVar(&opts.name, "name", "", "name of connector")
 
 	return cmd
 }
@@ -75,9 +76,20 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	connectorInstance, err := connectorutil.GetConnectorByID(opts.Context, conn.API().ConnectorsMgmt(), opts.id)
-	if err != nil {
-		return nil
+	var connectorInstance *connectormgmtclient.Connector  
+
+	if opts.id != "" {
+		connectorInstance, err = connectorutil.GetConnectorByID(opts.Context, conn.API().ConnectorsMgmt(), opts.id)
+		if err != nil {
+			return nil
+		}	
+	}
+
+	if opts.name != "" {
+		connectorInstance, err = connectorutil.GetConnectorByName(opts.Context, conn.API().ConnectorsMgmt(), opts.name)
+		if err != nil {
+			return nil
+		}	
 	}
 
 	currCtx.ConnectorID = *connectorInstance.Id

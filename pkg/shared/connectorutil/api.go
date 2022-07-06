@@ -13,3 +13,18 @@ func GetConnectorByID(ctx context.Context, api connectormgmtclient.APIClient, id
 
 	return &connectorInstance, nil
 }
+
+func GetConnectorByName(ctx context.Context, api connectormgmtclient.APIClient, name string) (*connectormgmtclient.Connector, error) {
+	list, _, err := api.ConnectorsApi.ListConnectors(ctx).Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	for i, connector := range list.Items {
+		if connector.Name == name {
+			return &list.Items[i], nil
+		}
+	}
+
+	return nil, NotFoundByNameError(name)
+}
