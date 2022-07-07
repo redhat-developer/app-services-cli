@@ -160,10 +160,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return nil, &AuthError{notLoggedInError()}
 	}
 
-	if b.connectionConfig.RequireMASAuth && b.masAccessToken == "" && b.masRefreshToken == "" {
-		return nil, &MasAuthError{notLoggedInMASError()}
-	}
-
 	if b.clientID == "" {
 		return nil, AuthErrorf("missing client ID")
 	}

@@ -75,7 +75,7 @@ func (c *Connection) RefreshTokens(ctx context.Context) (err error) {
 		}
 	}
 
-	if c.connectionConfig.RequireMASAuth {
+	if c.connectionConfig.RequireMASAuth && c.MASToken.RefreshToken != "" {
 		c.logger.Debug("Refreshing MAS SSO tokens")
 		// nolint:govet
 		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
