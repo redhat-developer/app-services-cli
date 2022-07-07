@@ -31,10 +31,10 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 	kafkaUseCmd.Use = "set-kafka"
 	kafkaUseCmd.Example = f.Localizer.MustLocalize("context.setKafka.cmd.example")
 
-	// The implementation of `rhoas kafka use` command has been aliased here as `rhoas context set-kafka`
+	// The implementation of `rhoas kafka use` command has been aliased here as `rhoas context set-connector`
 	connectorUseCmd := connectorUse.NewUseCommand(f)
 	connectorUseCmd.Use = "set-connector"
-	connectorUseCmd.Example = f.Localizer.MustLocalize("context.setKafka.cmd.example") // TODO
+	connectorUseCmd.Example = f.Localizer.MustLocalize("context.setConnector.cmd.example")
 
 	// `rhoas status` cmd has been re-used as `rhoas context status`
 	statusCmd := status.NewStatusCommand(f)

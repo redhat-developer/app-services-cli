@@ -44,22 +44,20 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "use",
-		Short:   "set connector",
-		Long:    "set connector",
-		Example: "",
+		Short:   opts.localizer.MustLocalize("connector.use.cmd.shortDescription"),
+		Long:    opts.localizer.MustLocalize("connector.use.cmd.longDescription"),
+		Example: opts.localizer.MustLocalize("connector.use.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if opts.id == "" && opts.name == "" {
 				if !opts.IO.CanPrompt() {
-					// TODO
-					return opts.localizer.MustLocalizeError("kafka.use.error.idOrNameRequired")
+					return opts.localizer.MustLocalizeError("connector.use.error.idOrNameRequired")
 				}
 				opts.interactive = true
 			}
 
 			if opts.name != "" && opts.id != "" {
-				// TODO
 				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
@@ -68,8 +66,8 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	flags := flagutil.NewFlagSet(cmd, opts.localizer)
-	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("kafka.use.flag.id"))       // TODO
-	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("kafka.use.flag.name")) // TODO
+	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("connector.use.flag.id"))
+	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("connector.use.flag.name"))
 
 	return cmd
 }
@@ -104,16 +102,17 @@ func runUse(opts *options) error {
 	}
 
 	var connectorInstance *connectormgmtclient.Connector
+	api := conn.API().ConnectorsMgmt()
 
 	if opts.id != "" {
-		connectorInstance, err = connectorutil.GetConnectorByID(opts.Context, conn.API().ConnectorsMgmt(), opts.id)
+		connectorInstance, err = connectorutil.GetConnectorByID(opts.Context, &api, opts.id)
 		if err != nil {
 			return err
 		}
 	}
 
 	if opts.name != "" {
-		connectorInstance, err = connectorutil.GetConnectorByName(opts.Context, conn.API().ConnectorsMgmt(), opts.name)
+		connectorInstance, err = connectorutil.GetConnectorByName(opts.Context, &api, opts.name)
 		if err != nil {
 			return err
 		}
@@ -128,8 +127,7 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	// TODO
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("kafka.use.log.info.useSuccess", nameTmplEntry))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("connector.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }
@@ -147,6 +145,13 @@ func runInteractivePrompt(opts *options) error {
 		return err
 	}
 
-	opts.name = selectedConnector.Name
+	if selectedConnector != nil {
+		opts.name = selectedConnector.Name
+
+	} else {
+		// conector instance found
+		opts.name = ""
+	}
+
 	return nil
 }

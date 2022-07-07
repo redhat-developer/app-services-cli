@@ -121,6 +121,16 @@ $ rhoas context set-kafka --name=my-kafka
 $ rhoas context set-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
+[context.setConnector.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Select a connector instance by name to be set in the current context
+$ rhoas context set-connector --name=my-connector
+
+# Select a connector instance by ID to be set in the current context
+$ rhoas context set-connector --id=1iSSK8RQ3JKI8Q0OTFHF5FRg
+'''
+
 [context.setRegistry.cmd.example]
 one = '''
 # Select a Service Registry instance by name to be set in the current context

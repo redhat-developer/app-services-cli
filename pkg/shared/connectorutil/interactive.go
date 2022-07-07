@@ -11,10 +11,6 @@ import (
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 )
 
-const (
-	queryLimit = "1000"
-)
-
 func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger, localizer localize.Localizer) (*connectormgmtclient.Connector, error) {
 	api := connection.API().ConnectorsMgmt()
 
@@ -24,8 +20,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 	}
 
 	if len(list.Items) == 0 {
-		// TODO
-		logger.Info(localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
+		logger.Info(localizer.MustLocalize("connector.common.log.info.noConnectorInstances"))
 		return nil, nil
 	}
 
@@ -35,7 +30,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 	}
 
 	prompt := &survey.Select{
-		Message:  localizer.MustLocalize("kafka.common.input.instanceName.message"), // TODO
+		Message:  localizer.MustLocalize("connector.common.input.instanceName.message"),
 		Options:  connectorNames,
 		PageSize: 10,
 	}

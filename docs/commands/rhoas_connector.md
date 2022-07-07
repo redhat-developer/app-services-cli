@@ -46,4 +46,5 @@ rhoas connector delete --id=c9b71ucotd37bufoamkg
 * [rhoas](rhoas.md)	 - RHOAS CLI
 * [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 * [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
+* [rhoas connector use](rhoas_connector_use.md)	 - Set the current connector instance
 
