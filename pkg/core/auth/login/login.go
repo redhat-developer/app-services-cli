@@ -47,6 +47,16 @@ func (a *AuthorizationCodeGrant) Execute(ctx context.Context,
 	}
 
 	if !hacks.ShouldUseMasSSO(a.Logger, apiUrl) {
+		cfg, err := a.Config.Load()
+		if err != nil {
+			return err
+		}
+		cfg.MasAccessToken = ""
+		cfg.MasRefreshToken = ""
+		err = a.Config.Save(cfg)
+		if err != nil {
+			return err
+		}
 		return nil
 	}
 
