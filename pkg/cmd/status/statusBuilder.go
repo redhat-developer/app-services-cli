@@ -14,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
@@ -24,14 +25,15 @@ import (
 const tagTitle = "title"
 
 type serviceStatus struct {
-	Name     string          `json:"name,omitempty" title:"Service Context Name"`
-	Location string          `json:"location,omitempty" title:"Context File Location"`
-	Kafka    *kafkaStatus    `json:"kafka,omitempty" title:"Kafka"`
-	Registry *registryStatus `json:"registry,omitempty" title:"Service Registry"`
+	Name      string           `json:"name,omitempty" title:"Service Context Name"`
+	Location  string           `json:"location,omitempty" title:"Context File Location"`
+	Kafka     *kafkaStatus     `json:"kafka,omitempty" title:"Kafka"`
+	Connector *ConnectorStatus `json:"connector,omitempty" title:"Connector"`
+	Registry  *registryStatus  `json:"registry,omitempty" title:"Service Registry"`
 }
 
 func (s serviceStatus) hasStatus() bool {
-	return s.Kafka != nil || s.Registry != nil
+	return s.Kafka != nil || s.Registry != nil || s.Connector != nil
 }
 
 type kafkaStatus struct {
@@ -40,6 +42,12 @@ type kafkaStatus struct {
 	Status              string `json:"status,omitempty"`
 	BootstrapServerHost string `json:"bootstrap_server_host,omitempty" title:"Bootstrap URL"`
 	FailedReason        string `json:"failed_reason,omitempty" title:"Failed Reason"`
+}
+
+type ConnectorStatus struct {
+	ID     string `json:"id,omitempty"`
+	Name   string `json:"name,omitempty"`
+	Status string `json:"status,omitempty"`
 }
 
 type registryStatus struct {
@@ -83,6 +91,15 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 		status.Kafka = kafkaStatus
 	}
 
+	if flagutil.StringInSlice(servicespec.ConnectorServiceName, services) && c.serviceConfig.ConnectorID != "" {
+		connectorResponse, err1 := contextutil.GetConnectorForServiceConfig(c.serviceConfig, factory)
+		if err1 != nil {
+			return status, err1
+		}
+		connectorStatus := c.getConnectorStatus(connectorResponse)
+		status.Connector = connectorStatus
+	}
+
 	if flagutil.StringInSlice(servicespec.ServiceRegistryServiceName, services) && c.serviceConfig.ServiceRegistryID != "" {
 		registryResponse, err1 := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
 		if err1 != nil {
@@ -104,6 +121,16 @@ func (c *statusClient) getKafkaStatus(kafkaResponse *kafkamgmtclient.KafkaReques
 
 	if kafkaResponse.GetStatus() == svcstatus.StatusFailed {
 		status.FailedReason = kafkaResponse.GetFailedReason()
+	}
+
+	return status
+}
+
+func (c *statusClient) getConnectorStatus(connector *connectormgmtclient.Connector) (status *ConnectorStatus) {
+	status = &ConnectorStatus{
+		ID:     *connector.Id,
+		Name:   connector.Name,
+		Status: string(*connector.Status.State),
 	}
 
 	return status
