@@ -1,4 +1,13 @@
 
+<a name="v0.44.1"></a>
+## [v0.44.1](https://github.com/redhat-developer/app-services-cli/compare/v0.44.0...v0.44.1) (2022-07-07)
+
+### Bug Fixes
+
+* change header for better readability
+* add new notes to whats new ([#1627](https://github.com/redhat-developer/app-services-cli/issues/1627))
+
+
 <a name="v0.44.0"></a>
 ## [v0.44.0](https://github.com/redhat-developer/app-services-cli/compare/v0.43.0...v0.44.0) (2022-07-01)
 
@@ -157,7 +166,7 @@
 
 
 <a name="v0.40.0"></a>
-## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.40.0) (2022-04-12)
+## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.40.0) (2022-04-12)
 
 ### Bug Fixes
 
@@ -205,12 +214,12 @@
 * **context status:** show context name and path
 
 
-<a name="v0.39.0"></a>
-## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.39.0) (2022-02-21)
-
-
 <a name="v0.39.1"></a>
-## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.1) (2022-02-21)
+## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.39.1) (2022-02-21)
+
+
+<a name="v0.39.0"></a>
+## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.0) (2022-02-21)
 
 ### Bug Fixes
 
