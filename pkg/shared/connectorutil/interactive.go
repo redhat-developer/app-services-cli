@@ -1,26 +1,23 @@
 package connectorutil
 
 import (
-	"context"
-
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/AlecAivazis/survey/v2"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 )
 
-func InteractiveSelect(ctx context.Context, connection connection.Connection, logger logging.Logger, localizer localize.Localizer) (*connectormgmtclient.Connector, error) {
+func InteractiveSelect(connection connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {
 	api := connection.API().ConnectorsMgmt()
 
-	list, _, err := api.ConnectorsApi.ListConnectors(ctx).Execute()
+	list, _, err := api.ConnectorsApi.ListConnectors(f.Context).Execute()
 	if err != nil {
 		return nil, err
 	}
 
 	if len(list.Items) == 0 {
-		logger.Info(localizer.MustLocalize("connector.common.log.info.noConnectorInstances"))
+		f.Logger.Info(f.Localizer.MustLocalize("connector.common.log.info.noConnectorInstances"))
 		return nil, nil
 	}
 
@@ -30,7 +27,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 	}
 
 	prompt := &survey.Select{
-		Message:  localizer.MustLocalize("connector.common.input.instanceName.message"),
+		Message:  f.Localizer.MustLocalize("connector.common.input.instanceName.message"),
 		Options:  connectorNames,
 		PageSize: 10,
 	}

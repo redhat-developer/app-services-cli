@@ -1,16 +1,11 @@
 package use
 
 import (
-	"context"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connectorutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
@@ -24,67 +19,57 @@ type options struct {
 	name        string
 	interactive bool
 
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
+	f *factory.Factory
 }
 
 func NewUseCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		Connection:     f.Connection,
-		Logger:         f.Logger,
-		IO:             f.IOStreams,
-		localizer:      f.Localizer,
-		Context:        f.Context,
-		ServiceContext: f.ServiceContext,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
 		Use:     "use",
-		Short:   opts.localizer.MustLocalize("connector.use.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("connector.use.cmd.longDescription"),
-		Example: opts.localizer.MustLocalize("connector.use.cmd.example"),
+		Short:   opts.f.Localizer.MustLocalize("connector.use.cmd.shortDescription"),
+		Long:    opts.f.Localizer.MustLocalize("connector.use.cmd.longDescription"),
+		Example: opts.f.Localizer.MustLocalize("connector.use.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if opts.id == "" && opts.name == "" {
-				if !opts.IO.CanPrompt() {
-					return opts.localizer.MustLocalizeError("connector.use.error.idOrNameRequired")
+				if !opts.f.IOStreams.CanPrompt() {
+					return opts.f.Localizer.MustLocalizeError("connector.use.error.idOrNameRequired")
 				}
 				opts.interactive = true
 			}
 
 			if opts.name != "" && opts.id != "" {
-				return opts.localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
+				return opts.f.Localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			return runUse(opts)
 		},
 	}
 
-	flags := flagutil.NewFlagSet(cmd, opts.localizer)
-	flags.StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("connector.use.flag.id"))
-	flags.StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("connector.use.flag.name"))
+	flags := flagutil.NewFlagSet(cmd, opts.f.Localizer)
+	flags.StringVar(&opts.id, "id", "", opts.f.Localizer.MustLocalize("connector.use.flag.id"))
+	flags.StringVar(&opts.name, "name", "", opts.f.Localizer.MustLocalize("connector.use.flag.name"))
 
 	return cmd
 }
 
 func runUse(opts *options) error {
 
-	svcContext, err := opts.ServiceContext.Load()
+	svcContext, err := opts.f.ServiceContext.Load()
 	if err != nil {
 		return err
 	}
 
-	currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
+	currCtx, err := contextutil.GetCurrentContext(svcContext, opts.f.Localizer)
 	if err != nil {
 		return err
 	}
 
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
 	}
@@ -95,7 +80,7 @@ func runUse(opts *options) error {
 		if err != nil {
 			return err
 		}
-		// no Kafka was connector, exit program
+		// no connector was found, exit program
 		if opts.name == "" {
 			return nil
 		}
@@ -105,14 +90,14 @@ func runUse(opts *options) error {
 	api := conn.API().ConnectorsMgmt()
 
 	if opts.id != "" {
-		connectorInstance, err = connectorutil.GetConnectorByID(opts.Context, &api, opts.id)
+		connectorInstance, err = connectorutil.GetConnectorByID(&api, opts.id, opts.f)
 		if err != nil {
 			return err
 		}
 	}
 
 	if opts.name != "" {
-		connectorInstance, err = connectorutil.GetConnectorByName(opts.Context, &api, opts.name, opts.localizer)
+		connectorInstance, err = connectorutil.GetConnectorByName(&api, opts.name, opts.f)
 		if err != nil {
 			return err
 		}
@@ -123,19 +108,19 @@ func runUse(opts *options) error {
 
 	nameTmplEntry := localize.NewEntry("Name", connectorInstance.Name)
 
-	if err := opts.ServiceContext.Save(svcContext); err != nil {
+	if err := opts.f.ServiceContext.Save(svcContext); err != nil {
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("connector.use.log.info.useSuccess", nameTmplEntry))
+	opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("connector.use.log.info.useSuccess", nameTmplEntry))
 
 	return nil
 }
 
 func runInteractivePrompt(opts *options, conn *connection.Connection) error {
-	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
+	opts.f.Logger.Debug(opts.f.Localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedConnector, err := connectorutil.InteractiveSelect(opts.Context, *conn, opts.Logger, opts.localizer)
+	selectedConnector, err := connectorutil.InteractiveSelect(*conn, opts.f)
 	if err != nil {
 		return err
 	}
