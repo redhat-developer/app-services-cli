@@ -89,6 +89,10 @@ func runUnset(opts *options) error {
 		svcConfig.ServiceRegistryID = ""
 	}
 
+	if flagutil.StringInSlice(servicespec.ConnectorServiceName, opts.services) {
+		svcConfig.ConnectorID = ""
+	}
+
 	svcContext.Contexts[ctxName] = *svcConfig
 
 	err = opts.f.ServiceContext.Save(svcContext)

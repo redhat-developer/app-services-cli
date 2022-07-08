@@ -73,18 +73,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runUse(opts *options) error {
-	if opts.interactive {
-		// run the use command interactively
-		err := runInteractivePrompt(opts)
-		if err != nil {
-			return err
-		}
-		// no service was selected, exit program
-		if opts.name == "" {
-			return nil
-		}
-	}
-
 	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
@@ -98,6 +86,18 @@ func runUse(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
+	}
+
+	if opts.interactive {
+		// run the use command interactively
+		err = runInteractivePrompt(opts, &conn)
+		if err != nil {
+			return err
+		}
+		// no service was selected, exit program
+		if opts.name == "" {
+			return nil
+		}
 	}
 
 	api := conn.API()
@@ -129,15 +129,10 @@ func runUse(opts *options) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return err
-	}
-
+func runInteractivePrompt(opts *options, conn *connection.Connection) error {
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedRegistry, err := serviceregistryutil.InteractiveSelect(opts.Context, conn, opts.Logger)
+	selectedRegistry, err := serviceregistryutil.InteractiveSelect(opts.Context, *conn, opts.Logger)
 	if err != nil {
 		return err
 	}

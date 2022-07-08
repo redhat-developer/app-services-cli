@@ -78,17 +78,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runUse(opts *options) error {
-	if opts.interactive {
-		// run the use command interactively
-		err := runInteractivePrompt(opts)
-		if err != nil {
-			return err
-		}
-		// no Kafka was selected, exit program
-		if opts.name == "" {
-			return nil
-		}
-	}
 
 	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
@@ -103,6 +92,18 @@ func runUse(opts *options) error {
 	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
 		return err
+	}
+
+	if opts.interactive {
+		// run the use command interactively
+		err = runInteractivePrompt(opts, &conn)
+		if err != nil {
+			return err
+		}
+		// no Kafka was selected, exit program
+		if opts.name == "" {
+			return nil
+		}
 	}
 
 	api := conn.API()
@@ -134,15 +135,10 @@ func runUse(opts *options) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return err
-	}
-
+func runInteractivePrompt(opts *options, conn *connection.Connection) error {
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedKafka, err := kafkautil.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
+	selectedKafka, err := kafkautil.InteractiveSelect(opts.Context, *conn, opts.Logger, opts.localizer)
 	if err != nil {
 		return err
 	}
