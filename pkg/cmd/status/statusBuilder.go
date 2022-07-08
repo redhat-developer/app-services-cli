@@ -106,14 +106,17 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 	if flagutil.StringInSlice(servicespec.ConnectorServiceName, services) && c.serviceConfig.ConnectorID != "" {
 
 		conn, err1 := factory.Connection(connection.DefaultConfigSkipMasAuth)
-		if err != nil {
+		if err1 != nil {
 			return nil, err1
 		}
 
 		connectorResponse, err2 := contextutil.GetConnectorForServiceConfig(c.serviceConfig, &conn, factory)
-		if err1 != nil {
+		if err2 != nil {
 			return status, err2
 		}
+
+		factory.Logger.Info(connectorResponse)
+
 		connectorStatus := c.getConnectorStatus(connectorResponse)
 		status.Connector = connectorStatus
 	}
