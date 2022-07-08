@@ -10,6 +10,7 @@ type Context struct {
 type ServiceConfig struct {
 	KafkaID           string `json:"kafkaID"`
 	ServiceRegistryID string `json:"serviceregistryID"`
+	ConnectorID       string `json:"connectorID"`
 }
 
 // IContext is an interface which describes functions for context file

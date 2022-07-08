@@ -1,6 +1,7 @@
 package context
 
 import (
+	connectorUse "github.com/redhat-developer/app-services-cli/pkg/cmd/connector/use"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context/list"
@@ -30,6 +31,11 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 	kafkaUseCmd.Use = "set-kafka"
 	kafkaUseCmd.Example = f.Localizer.MustLocalize("context.setKafka.cmd.example")
 
+	// The implementation of `rhoas kafka use` command has been aliased here as `rhoas context set-connector`
+	connectorUseCmd := connectorUse.NewUseCommand(f)
+	connectorUseCmd.Use = "set-connector"
+	connectorUseCmd.Example = f.Localizer.MustLocalize("context.setConnector.cmd.example")
+
 	// `rhoas status` cmd has been re-used as `rhoas context status`
 	statusCmd := status.NewStatusCommand(f)
 	statusCmd.Long = f.Localizer.MustLocalize("context.status.cmd.longDescription")
@@ -49,6 +55,7 @@ func NewContextCmd(f *factory.Factory) *cobra.Command {
 
 		// reused sub-commands
 		kafkaUseCmd,
+		connectorUseCmd,
 		registryUseCmd,
 		statusCmd,
 	)
