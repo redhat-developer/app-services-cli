@@ -2,6 +2,7 @@ package connectorutil
 
 import (
 	"context"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 )
 
@@ -14,7 +15,7 @@ func GetConnectorByID(ctx context.Context, api *connectormgmtclient.APIClient, i
 	return &connectorInstance, nil
 }
 
-func GetConnectorByName(ctx context.Context, api *connectormgmtclient.APIClient, name string) (*connectormgmtclient.Connector, error) {
+func GetConnectorByName(ctx context.Context, api *connectormgmtclient.APIClient, name string, localizer localize.Localizer) (*connectormgmtclient.Connector, error) {
 	list, _, err := api.ConnectorsApi.ListConnectors(ctx).Execute()
 	if err != nil {
 		return nil, err
@@ -26,5 +27,5 @@ func GetConnectorByName(ctx context.Context, api *connectormgmtclient.APIClient,
 		}
 	}
 
-	return nil, NotFoundByNameError(name)
+	return nil, localizer.MustLocalizeError("connector.common.error.nameNotFound", localize.NewEntry("Name", name))
 }

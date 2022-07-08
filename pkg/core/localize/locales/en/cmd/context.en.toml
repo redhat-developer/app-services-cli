@@ -243,6 +243,12 @@ The context doesn't have a Kafka instance ID.
 Use the "rhoas context set-kafka" command to select a Kafka instance for your context
 '''
 
+[context.common.error.noConnectorID]
+one='''
+The context doesn't have a connector instance ID.
+Use the "rhoas context set-connector" command to select a connector instance for your context
+'''
+
 [context.common.error.registry.notFound]
 one='''
 Service registry instance in your context doesn't exist.

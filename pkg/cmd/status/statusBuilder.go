@@ -8,6 +8,7 @@ import (
 	"text/tabwriter"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
@@ -28,8 +29,8 @@ type serviceStatus struct {
 	Name      string           `json:"name,omitempty" title:"Service Context Name"`
 	Location  string           `json:"location,omitempty" title:"Context File Location"`
 	Kafka     *kafkaStatus     `json:"kafka,omitempty" title:"Kafka"`
-	Connector *ConnectorStatus `json:"connector,omitempty" title:"Connector"`
 	Registry  *registryStatus  `json:"registry,omitempty" title:"Service Registry"`
+	Connector *ConnectorStatus `json:"connector,omitempty" title:"Connector"`
 }
 
 func (s serviceStatus) hasStatus() bool {
@@ -44,17 +45,19 @@ type kafkaStatus struct {
 	FailedReason        string `json:"failed_reason,omitempty" title:"Failed Reason"`
 }
 
-type ConnectorStatus struct {
-	ID     string `json:"id,omitempty"`
-	Name   string `json:"name,omitempty"`
-	Status string `json:"status,omitempty"`
-}
-
 type registryStatus struct {
 	ID          string `json:"id,omitempty"`
 	Name        string `json:"name,omitempty"`
 	Status      string `json:"status,omitempty"`
 	RegistryUrl string `json:"registryUrl,omitempty" title:"Registry URL"`
+}
+
+type ConnectorStatus struct {
+	ID      string `json:"id,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Type    string `json:"type,omitempty"`
+	KafkaID string `json:"kafka_id,omitempty"`
+	Status  string `json:"status,omitempty"`
 }
 
 type clientConfig struct {
@@ -91,15 +94,6 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 		status.Kafka = kafkaStatus
 	}
 
-	if flagutil.StringInSlice(servicespec.ConnectorServiceName, services) && c.serviceConfig.ConnectorID != "" {
-		connectorResponse, err1 := contextutil.GetConnectorForServiceConfig(c.serviceConfig, factory)
-		if err1 != nil {
-			return status, err1
-		}
-		connectorStatus := c.getConnectorStatus(connectorResponse)
-		status.Connector = connectorStatus
-	}
-
 	if flagutil.StringInSlice(servicespec.ServiceRegistryServiceName, services) && c.serviceConfig.ServiceRegistryID != "" {
 		registryResponse, err1 := contextutil.GetRegistryForServiceConfig(c.serviceConfig, factory)
 		if err1 != nil {
@@ -108,6 +102,22 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 		registry := c.getRegistryStatus(registryResponse)
 		status.Registry = registry
 	}
+
+	if flagutil.StringInSlice(servicespec.ConnectorServiceName, services) && c.serviceConfig.ConnectorID != "" {
+
+		conn, err1 := factory.Connection(connection.DefaultConfigSkipMasAuth)
+		if err != nil {
+			return nil, err1
+		}
+
+		connectorResponse, err2 := contextutil.GetConnectorForServiceConfig(c.serviceConfig, &conn, factory)
+		if err1 != nil {
+			return status, err2
+		}
+		connectorStatus := c.getConnectorStatus(connectorResponse)
+		status.Connector = connectorStatus
+	}
+
 	return status, err
 }
 
@@ -126,22 +136,24 @@ func (c *statusClient) getKafkaStatus(kafkaResponse *kafkamgmtclient.KafkaReques
 	return status
 }
 
-func (c *statusClient) getConnectorStatus(connector *connectormgmtclient.Connector) (status *ConnectorStatus) {
-	status = &ConnectorStatus{
-		ID:     *connector.Id,
-		Name:   connector.Name,
-		Status: string(*connector.Status.State),
-	}
-
-	return status
-}
-
 func (c *statusClient) getRegistryStatus(registry *registrymgmtclient.Registry) (status *registryStatus) {
 	status = &registryStatus{
 		ID:          registry.GetId(),
 		Name:        registry.GetName(),
 		RegistryUrl: registry.GetRegistryUrl(),
 		Status:      string(registry.GetStatus()),
+	}
+
+	return status
+}
+
+func (c *statusClient) getConnectorStatus(connector *connectormgmtclient.Connector) (status *ConnectorStatus) {
+	status = &ConnectorStatus{
+		ID:      *connector.Id,
+		Name:    connector.Name,
+		Type:    connector.ConnectorTypeId,
+		KafkaID: connector.Kafka.Id,
+		Status:  string(*connector.Status.State),
 	}
 
 	return status

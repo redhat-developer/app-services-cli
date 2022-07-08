@@ -74,18 +74,6 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 
 func runUse(opts *options) error {
 
-	if opts.interactive {
-		// run the use command interactively
-		err := runInteractivePrompt(opts)
-		if err != nil {
-			return err
-		}
-		// no Kafka was connector, exit program
-		if opts.name == "" {
-			return nil
-		}
-	}
-
 	svcContext, err := opts.ServiceContext.Load()
 	if err != nil {
 		return err
@@ -101,6 +89,18 @@ func runUse(opts *options) error {
 		return err
 	}
 
+	if opts.interactive {
+		// run the use command interactively
+		err = runInteractivePrompt(opts, &conn)
+		if err != nil {
+			return err
+		}
+		// no Kafka was connector, exit program
+		if opts.name == "" {
+			return nil
+		}
+	}
+
 	var connectorInstance *connectormgmtclient.Connector
 	api := conn.API().ConnectorsMgmt()
 
@@ -112,7 +112,7 @@ func runUse(opts *options) error {
 	}
 
 	if opts.name != "" {
-		connectorInstance, err = connectorutil.GetConnectorByName(opts.Context, &api, opts.name)
+		connectorInstance, err = connectorutil.GetConnectorByName(opts.Context, &api, opts.name, opts.localizer)
 		if err != nil {
 			return err
 		}
@@ -132,15 +132,10 @@ func runUse(opts *options) error {
 	return nil
 }
 
-func runInteractivePrompt(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return err
-	}
-
+func runInteractivePrompt(opts *options, conn *connection.Connection) error {
 	opts.Logger.Debug(opts.localizer.MustLocalize("common.log.debug.startingInteractivePrompt"))
 
-	selectedConnector, err := connectorutil.InteractiveSelect(opts.Context, conn, opts.Logger, opts.localizer)
+	selectedConnector, err := connectorutil.InteractiveSelect(opts.Context, *conn, opts.Logger, opts.localizer)
 	if err != nil {
 		return err
 	}

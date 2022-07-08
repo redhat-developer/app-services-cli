@@ -112,7 +112,7 @@ func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *facto
 }
 
 // GetCurrentConnectorInstance returns the connector instance set in the currently selected context
-func GetCurrentConnectorInstance(f *factory.Factory) (*connectormgmtclient.Connector, error) {
+func GetCurrentConnectorInstance(conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {
 
 	svcContext, err := f.ServiceContext.Load()
 	if err != nil {
@@ -124,20 +124,16 @@ func GetCurrentConnectorInstance(f *factory.Factory) (*connectormgmtclient.Conne
 		return nil, err
 	}
 
-	return GetConnectorForServiceConfig(currCtx, f)
+	return GetConnectorForServiceConfig(currCtx, conn, f)
 }
 
-func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*connectormgmtclient.Connector, error) {
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
-	if err != nil {
-		return nil, err
-	}
+func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {
 
 	if currCtx.ConnectorID == "" {
-		return nil, f.Localizer.MustLocalizeError("context.common.error.noKafkaID")
+		return nil, f.Localizer.MustLocalizeError("context.common.error.noConnecterID")
 	}
 
-	connectorInstance, _, err := conn.API().ConnectorsMgmt().ConnectorsApi.GetConnector(f.Context, currCtx.ConnectorID).Execute()
+	connectorInstance, _, err := (*conn).API().ConnectorsMgmt().ConnectorsApi.GetConnector(f.Context, currCtx.ConnectorID).Execute()
 	if err != nil {
 		return nil, err
 	}

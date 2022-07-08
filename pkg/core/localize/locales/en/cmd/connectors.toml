@@ -340,3 +340,11 @@ $ rhoas connector use --name=my-connector
 # Select a connector instance by ID to be set in the current context
 $ rhoas connector use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
+
+[connector.common.error.idNotFound]
+description = "Error message for when and connector with ID is not found"
+one = "Connector instance with ID {{.ID}} not found"
+
+[connector.common.error.nameNotFound]
+description = "Error message for when and connector with name is not found"
+one = "Connector instance with name {{.Name}} not found"
