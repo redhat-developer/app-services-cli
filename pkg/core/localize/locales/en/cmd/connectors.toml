@@ -295,3 +295,56 @@ one = 'Successfully deleted the namespace'
 
 [connector.namespace.delete.confirmDialog.message]
 one = 'Are you sure that you want to delete the Connectors namespace with id "{{.ID}}"?'
+
+[connector.use.error.idOrNameRequired]
+one= '--id flag or name required when not running interactively'
+
+[connector.use.flag.id]
+description = 'Description for the --id flag'
+one = 'Unique ID of the connector instance you want to set as the current instance'
+
+[connector.use.flag.name]
+description = 'Description for the --name flag'
+one = 'Name of the connector instance you want to set as the current instance'
+
+[connector.use.log.info.useSuccess]
+description = 'Info message when current connector was set'
+one = 'Connector instance "{{.Name}}" has been set as the current instance.'
+
+[connector.common.log.info.noConnectorInstances]
+description = 'Info message when no connector instances were found'
+one = 'No connector instances were found.'
+
+[connector.common.input.instanceName.message]
+one = 'Select connector instance:'
+
+[connector.use.cmd.shortDescription]
+description = "Short description for command"
+one = "Set the current connector instance"
+
+[connector.use.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Select a connector instance to be the current instance. When you set the connector instance to be used, it is set as the current instance for all 
+“rhoas connector cluster” commands.
+
+You can select a  connector instance by name or ID.
+'''
+
+[connector.use.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Select a connector instance by name to be set in the current context
+$ rhoas connector use --name=my-connector
+
+# Select a connector instance by ID to be set in the current context
+$ rhoas connector use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+'''
+
+[connector.common.error.idNotFound]
+description = "Error message for when and connector with ID is not found"
+one = "Connector instance with ID {{.ID}} not found"
+
+[connector.common.error.nameNotFound]
+description = "Error message for when and connector with name is not found"
+one = "Connector instance with name {{.Name}} not found"

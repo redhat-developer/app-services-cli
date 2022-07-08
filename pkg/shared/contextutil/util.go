@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
 
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
@@ -108,4 +109,34 @@ func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *facto
 	}
 
 	return &registryInstance, err
+}
+
+// GetCurrentConnectorInstance returns the connector instance set in the currently selected context
+func GetCurrentConnectorInstance(conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetConnectorForServiceConfig(currCtx, conn, f)
+}
+
+func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {
+
+	if currCtx.ConnectorID == "" {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.noConnecterID")
+	}
+
+	connectorInstance, _, err := (*conn).API().ConnectorsMgmt().ConnectorsApi.GetConnector(f.Context, currCtx.ConnectorID).Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	return &connectorInstance, err
 }
