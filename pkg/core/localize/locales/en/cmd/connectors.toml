@@ -153,7 +153,7 @@ cat myconnector.json | rhoas connector create
 one = 'Stop a connector instance'
 
 [connector.stop.cmd.longDescription]
-one = 'Stop a connectorc instance, pass an id or use the instance in the current context'
+one = 'Stop a connector instance, pass an id or use the instance in the current context'
 
 [connector.stop.cmd.example]
 one = '''
