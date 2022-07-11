@@ -13,11 +13,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/hacks"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/phayes/freeport"
-	"github.com/redhat-developer/app-services-cli/static"
 	"golang.org/x/oauth2"
 )
 
@@ -38,37 +36,12 @@ type SSOConfig struct {
 }
 
 // Execute runs an Authorization Code flow login
-// enabling the user to log in to SSO and MAS-SSO in succession
 // https://tools.ietf.org/html/rfc6749#section-4.1
 func (a *AuthorizationCodeGrant) Execute(ctx context.Context,
-	ssoCfg *SSOConfig, masSSOCfg *SSOConfig, apiUrl string) error {
+	ssoCfg *SSOConfig, apiUrl string) error {
 	if err := a.loginSSO(ctx, ssoCfg); err != nil {
 		return err
 	}
-
-	if !hacks.ShouldUseMasSSO(a.Logger, apiUrl) {
-		cfg, err := a.Config.Load()
-		if err != nil {
-			return err
-		}
-		cfg.MasAccessToken = ""
-		cfg.MasRefreshToken = ""
-		err = a.Config.Save(cfg)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	masSSOHost := masSSOCfg.AuthURL.Host
-
-	a.Logger.Debug(a.Localizer.MustLocalize("login.log.info.loggingInMAS", localize.NewEntry("Host", masSSOHost)))
-	// log in to MAS-SSO
-	if err := a.loginMAS(ctx, masSSOCfg); err != nil {
-		return err
-	}
-	a.Logger.Debug(a.Localizer.MustLocalize("login.log.info.loggedInMAS", localize.NewEntry("Host", masSSOHost)))
-
 	return nil
 }
 
@@ -123,8 +96,6 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 		http.Redirect(w, r, authCodeURL, http.StatusFound)
 	})
 
-	sm.Handle("/static/", createStaticHTTPHandler())
-
 	authURL, err := url.Parse(cfg.AuthURL.String())
 	if err != nil {
 		return err
@@ -153,85 +124,6 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 	a.openBrowser(authCodeURL, redirectURL)
 
 	// start the local server
-	a.startServer(clientCtx, &server)
-
-	return nil
-}
-
-// log in to MAS-SSO
-func (a *AuthorizationCodeGrant) loginMAS(ctx context.Context, cfg *SSOConfig) error {
-	a.Logger.Debug("Logging into", cfg.AuthURL, "\n")
-
-	clientCtx, cancel := createClientContext(ctx, a.HTTPClient)
-	defer cancel()
-	provider, err := oidc.NewProvider(ctx, cfg.AuthURL.String())
-	if err != nil {
-		return err
-	}
-
-	redirectURL, redirectURLPort, err := createRedirectURL(cfg.RedirectPath)
-	if err != nil {
-		return err
-	}
-
-	oauthConfig := &oauth2.Config{
-		ClientID:    a.ClientID,
-		Endpoint:    provider.Endpoint(),
-		RedirectURL: redirectURL.String(),
-		Scopes:      a.Scopes,
-	}
-
-	oidcConfig := &oidc.Config{
-		ClientID: a.ClientID,
-	}
-
-	// Configure PKCE challenge and verifier
-	// https://tools.ietf.org/html/rfc7636
-	verifier := provider.Verifier(oidcConfig)
-	state, _ := pkce.GenerateVerifier(128)
-	pkceCodeVerifier, err := pkce.GenerateVerifier(128)
-	if err != nil {
-		return err
-	}
-	pkceCodeChallenge := pkce.CreateChallenge(pkceCodeVerifier)
-
-	authCodeURL := oauthConfig.AuthCodeURL(state, *pkce.GetAuthCodeURLOptions(pkceCodeChallenge)...)
-	a.Logger.Debug("Opening Authorization URL:", authCodeURL)
-	a.Logger.Debug()
-
-	sm := http.NewServeMux()
-	server := http.Server{
-		Handler: sm,
-		Addr:    redirectURL.Host,
-	}
-
-	sm.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, authCodeURL, http.StatusFound)
-	})
-
-	sm.Handle("/static/", createStaticHTTPHandler())
-
-	// HTTP handler for the redirect page
-	sm.Handle("/"+redirectURL.Path, &masRedirectPageHandler{
-		CancelContext: cancel,
-		Ctx:           clientCtx,
-		Port:          redirectURLPort,
-		Config:        a.Config,
-		Logger:        a.Logger,
-		AuthURL:       cfg.AuthURL,
-		IO:            a.IO,
-		ServerAddr:    server.Addr,
-		Oauth2Config:  oauthConfig,
-		State:         state,
-		TokenVerifier: verifier,
-		Localizer:     a.Localizer,
-		AuthOptions: []oauth2.AuthCodeOption{
-			oauth2.SetAuthURLParam("code_verifier", pkceCodeVerifier),
-			oauth2.SetAuthURLParam("grant_type", "authorization_code"),
-		},
-	})
-
-	a.openBrowser(authCodeURL, redirectURL)
 	a.startServer(clientCtx, &server)
 
 	return nil
@@ -290,9 +182,4 @@ func (a *AuthorizationCodeGrant) printAuthURLFallback(authCodeURL string, redire
 	a.PrintURL = true
 	a.Logger.Debug("Error opening browser:", err, "\nPrinting Auth URL to console instead")
 	a.openBrowser(authCodeURL, redirectURL)
-}
-
-func createStaticHTTPHandler() http.Handler {
-	staticFs := http.FileServer(http.FS(static.ImagesFS()))
-	return http.StripPrefix("/static", staticFs)
 }

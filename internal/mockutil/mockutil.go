@@ -60,8 +60,6 @@ func NewConnectionMock(conn *kcconnection.Connection, apiClient *kafkamgmtclient
 
 			cfg.AccessToken = ""
 			cfg.RefreshToken = ""
-			cfg.MasAccessToken = ""
-			cfg.MasRefreshToken = ""
 
 			return conn.Config.Save(cfg)
 		},

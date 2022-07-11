@@ -11,7 +11,6 @@ import (
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/hacks"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -127,10 +126,7 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 	apiURL := kafkaInstance.GetAdminApiServerUrl()
 	a.Logger.Debugf("Making request to %v", apiURL)
 
-	token := a.MasAccessToken
-	if !hacks.ShouldUseMasSSO(a.Logger, a.ApiURL.String()) {
-		token = a.AccessToken
-	}
+	token := a.AccessToken
 
 	client := kafkainstance.NewAPIClient(&kafkainstance.Config{
 		BaseURL:    apiURL,
@@ -192,10 +188,8 @@ func (a *defaultAPI) ServiceRegistryInstance(instanceID string) (*registryinstan
 	}
 
 	a.Logger.Debugf("Making request to %v", baseURL)
-	token := a.MasAccessToken
-	if !hacks.ShouldUseMasSSO(a.Logger, a.ApiURL.String()) {
-		token = a.AccessToken
-	}
+
+	token := a.AccessToken
 
 	client := registryinstance.NewAPIClient(&registryinstance.Config{
 		BaseURL:    baseURL,

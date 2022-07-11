@@ -6,21 +6,19 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 )
 
+// FIXLATER This entire class can be removed however it should be done
+// after connectors commands are finished thus we do not have many conflicts.
 type Config struct {
-	RequireAuth    bool
-	RequireMASAuth bool
+	RequireAuth bool
 }
 
-// DefaultConfigSkipMasAuth is used when running commands which do  not require authenticatation with MAS-SSO
+// DefaultConfigSkipMasAuth is used when running all commads
 var DefaultConfigSkipMasAuth = &Config{
-	RequireAuth:    true,
-	RequireMASAuth: false,
+	RequireAuth: true,
 }
 
-// DefaultConfigRequireMasAuth is used when running commands which must authenticate with MAS-SSO
 var DefaultConfigRequireMasAuth = &Config{
-	RequireAuth:    true,
-	RequireMASAuth: true,
+	RequireAuth: true,
 }
 
 // Connection is an interface which defines methods for interacting

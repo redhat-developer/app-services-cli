@@ -30,11 +30,10 @@ type API interface {
 }
 
 type Config struct {
-	AccessToken    string
-	MasAccessToken string
-	ApiURL         *url.URL
-	ConsoleURL     *url.URL
-	UserAgent      string
-	HTTPClient     *http.Client
-	Logger         logging.Logger
+	AccessToken string
+	ApiURL      *url.URL
+	ConsoleURL  *url.URL
+	UserAgent   string
+	HTTPClient  *http.Client
+	Logger      logging.Logger
 }

@@ -31,14 +31,11 @@ type Connection struct {
 	defaultHTTPClient *http.Client
 	clientID          string
 	Token             *token.Token
-	MASToken          *token.Token
 	scopes            []string
 	keycloakClient    gocloak.GoCloak
-	masKeycloakClient gocloak.GoCloak
 	apiURL            *url.URL
 	consoleURL        *url.URL
 	defaultRealm      string
-	masRealm          string
 	logger            logging.Logger
 	Config            config.IConfig
 	connectionConfig  *connection.Config
@@ -75,25 +72,6 @@ func (c *Connection) RefreshTokens(ctx context.Context) (err error) {
 		}
 	}
 
-	if c.connectionConfig.RequireMASAuth && c.MASToken.RefreshToken != "" {
-		c.logger.Debug("Refreshing MAS SSO tokens")
-		// nolint:govet
-		refreshedMasTk, err := c.masKeycloakClient.RefreshToken(ctx, c.MASToken.RefreshToken, c.clientID, "", c.masRealm)
-		if err != nil {
-			return &MasAuthError{err}
-		}
-		if refreshedMasTk.AccessToken != c.MASToken.AccessToken {
-			c.MASToken.AccessToken = refreshedMasTk.AccessToken
-			cfg.MasAccessToken = refreshedMasTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedMasTk.RefreshToken != c.MASToken.RefreshToken {
-			c.MASToken.RefreshToken = refreshedMasTk.RefreshToken
-			cfg.MasRefreshToken = refreshedMasTk.RefreshToken
-			cfgChanged = true
-		}
-	}
-
 	if !cfgChanged {
 		return nil
 	}
@@ -115,17 +93,8 @@ func (c *Connection) Logout(ctx context.Context) (err error) {
 		return &AuthError{err}
 	}
 
-	if c.MASToken.RefreshToken != "" {
-		err = c.masKeycloakClient.Logout(ctx, c.clientID, "", c.masRealm, c.MASToken.RefreshToken)
-		if err != nil {
-			return &AuthError{err}
-		}
-	}
-
 	c.Token.AccessToken = ""
 	c.Token.RefreshToken = ""
-	c.MASToken.AccessToken = ""
-	c.MASToken.RefreshToken = ""
 
 	cfg, err := c.Config.Load()
 	if err != nil {
@@ -134,8 +103,6 @@ func (c *Connection) Logout(ctx context.Context) (err error) {
 
 	cfg.AccessToken = ""
 	cfg.RefreshToken = ""
-	cfg.MasAccessToken = ""
-	cfg.MasRefreshToken = ""
 
 	return c.Config.Save(cfg)
 }
@@ -143,13 +110,12 @@ func (c *Connection) Logout(ctx context.Context) (err error) {
 // API Creates a new API type which is a single type for multiple APIs
 func (c *Connection) API() api.API {
 	apiClient := defaultapi.New(&api.Config{
-		HTTPClient:     c.defaultHTTPClient,
-		UserAgent:      build.DefaultUserAgentPrefix + build.Version,
-		MasAccessToken: c.MASToken.AccessToken,
-		AccessToken:    c.Token.AccessToken,
-		ApiURL:         c.apiURL,
-		ConsoleURL:     c.consoleURL,
-		Logger:         c.logger,
+		HTTPClient:  c.defaultHTTPClient,
+		UserAgent:   build.DefaultUserAgentPrefix + build.Version,
+		AccessToken: c.Token.AccessToken,
+		ApiURL:      c.apiURL,
+		ConsoleURL:  c.consoleURL,
+		Logger:      c.logger,
 	})
 
 	return apiClient

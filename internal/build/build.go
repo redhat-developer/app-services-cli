@@ -45,9 +45,6 @@ var (
 	// SSORedirectPath is the default SSO redirect path
 	SSORedirectPath = "sso-redhat-callback"
 
-	// MASSSORedirectPath is the default MAS-SSO redirect path
-	MASSSORedirectPath = "mas-sso-callback"
-
 	// BuildSource is a unique key which indicates the infrastructure on which the binary was built
 	BuildSource = "local"
 )
@@ -63,8 +60,6 @@ var (
 	DefaultLoginTimeout         = 60 * time.Second
 	OfflineTokenURL             = ConsoleURL + "/openshift/token"
 	ProductionAuthURL           = "https://sso.redhat.com/auth/realms/redhat-external"
-	ProductionMasAuthURL        = "https://identity.api.openshift.com/auth/realms/rhoas"
-	StagingMasAuthURL           = "https://identity.api.stage.openshift.com/auth/realms/rhoas"
 )
 
 func init() {
