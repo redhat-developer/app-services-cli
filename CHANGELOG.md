@@ -1,4 +1,12 @@
 
+<a name="v0.44.3"></a>
+## [v0.44.3](https://github.com/redhat-developer/app-services-cli/compare/v0.44.2...v0.44.3) (2022-07-11)
+
+### Bug Fixes
+
+* **deps:** update docusaurus monorepo to v2.0.0-beta.22
+
+
 <a name="v0.44.2"></a>
 ## [v0.44.2](https://github.com/redhat-developer/app-services-cli/compare/v0.44.1...v0.44.2) (2022-07-07)
 
