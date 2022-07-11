@@ -44,7 +44,7 @@ description = 'Description for the --auth-url flag'
 one = "The URL of the SSO Authentication server"
 
 [login.flag.masAuthUrl]
-one = "This flag is no longer valid and will be removed in a future release."
+one = "Unused: This flag is no longer valid and will be removed in a future release"
 
 [login.flag.token]
 one = "Log in using an offline token, which can be obtained at {{.OfflineTokenURL}}"
