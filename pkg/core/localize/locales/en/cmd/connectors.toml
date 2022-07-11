@@ -143,6 +143,36 @@ rhoas connector create --file=myconnector.json
 cat myconnector.json | rhoas connector create
 '''
 
+[connector.stop.cmd.shortDescription]
+one = 'Stop a Connectors instance'
+
+[connector.stop.cmd.longDescription]
+one = 'Stop a Connectors instance, pass an id or use the instance in the current context'
+
+[connector.stop.cmd.example]
+one = '''
+# Stop a Connectors instance
+rhoas connector stop
+
+# Stop a Connectors instance
+rhoas connector stop --id=IJD76DUH675234
+'''
+
+[connector.start.cmd.shortDescription]
+one = 'Start a Connectors instance'
+
+[connector.start.cmd.longDescription]
+one = 'Start a Connectors instance, pass an id or use the instance in the current context'
+
+[connector.start.cmd.example]
+one = '''
+# Start a Connectors instance
+rhoas connector start
+
+# Start a Connectors instance
+rhoas connector start --id=IJD76DUH675234
+'''
+
 [connector.create.info.success]
 one = 'Successfully created the Connectors instance'
 
