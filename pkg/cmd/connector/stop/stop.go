@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 
@@ -69,7 +70,7 @@ func runUpdateCommand(opts *options) error {
 	api := conn.API()
 
 	patch := make(map[string]interface{})
-	patch["desired_state"] = "stopped"
+	patch["desired_state"] = connectormgmtclient.CONNECTORDESIREDSTATE_STOPPED
 	a := api.ConnectorsMgmt().ConnectorsApi.PatchConnector(f.Context, opts.connectorID).Body(patch)
 
 	response, httpRes, err := a.Execute()
