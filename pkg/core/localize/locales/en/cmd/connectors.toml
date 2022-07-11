@@ -126,6 +126,12 @@ cat myconnector.json | rhoas connector update
 
 # Delete a Connectors instance with ID c9b71ucotd37bufoamkg
 rhoas connector delete --id=c9b71ucotd37bufoamkg
+
+# Start a Connectors instance with ID c9b71ucotd37bufoamkg
+rhoas connector start --id=c9b71ucotd37bufoamkg
+
+# Start the Connectors instance in the current context 
+rhoas connector stop
 '''
 
 [connector.create.cmd.shortDescription]
@@ -141,6 +147,36 @@ rhoas connector create --file=myconnector.json
 
 # Create a Connectors instance from stdin
 cat myconnector.json | rhoas connector create
+'''
+
+[connector.stop.cmd.shortDescription]
+one = 'Stop a connector instance'
+
+[connector.stop.cmd.longDescription]
+one = 'Stop a connector instance, pass an id or use the instance in the current context'
+
+[connector.stop.cmd.example]
+one = '''
+# Stop a connector instance
+rhoas connector stop
+
+# Stop a connector instance
+rhoas connector stop --id=IJD76DUH675234
+'''
+
+[connector.start.cmd.shortDescription]
+one = 'Start a connector instance'
+
+[connector.start.cmd.longDescription]
+one = 'Start a Connectors instance, pass an id or use the instance in the current context'
+
+[connector.start.cmd.example]
+one = '''
+# Start a connector instance
+rhoas connector start
+
+# Start a connector instance
+rhoas connector start --id=IJD76DUH675234
 '''
 
 [connector.create.info.success]

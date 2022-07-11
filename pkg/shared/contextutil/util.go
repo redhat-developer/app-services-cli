@@ -130,7 +130,7 @@ func GetCurrentConnectorInstance(conn *connection.Connection, f *factory.Factory
 func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {
 
 	if currCtx.ConnectorID == "" {
-		return nil, f.Localizer.MustLocalizeError("context.common.error.noConnecterID")
+		return nil, f.Localizer.MustLocalizeError("context.common.error.noConnectorID")
 	}
 
 	connectorInstance, _, err := (*conn).API().ConnectorsMgmt().ConnectorsApi.GetConnector(f.Context, currCtx.ConnectorID).Execute()
