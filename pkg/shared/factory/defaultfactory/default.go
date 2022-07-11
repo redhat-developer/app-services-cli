@@ -50,12 +50,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 		if cfg.RefreshToken != "" {
 			builder.WithRefreshToken(cfg.RefreshToken)
 		}
-		if cfg.MasAccessToken != "" {
-			builder.WithMASAccessToken(cfg.MasAccessToken)
-		}
-		if cfg.MasRefreshToken != "" {
-			builder.WithMASRefreshToken(cfg.MasRefreshToken)
-		}
 		if cfg.ClientID != "" {
 			builder.WithClientID(cfg.ClientID)
 		}
@@ -69,11 +63,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 			cfg.AuthURL = build.ProductionAuthURL
 		}
 		builder.WithAuthURL(cfg.AuthURL)
-
-		if cfg.MasAuthURL == "" {
-			cfg.MasAuthURL = build.ProductionMasAuthURL
-		}
-		builder.WithMASAuthURL(cfg.MasAuthURL)
 
 		builder.WithConsoleURL(build.ConsoleURL)
 

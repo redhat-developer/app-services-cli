@@ -44,8 +44,7 @@ description = 'Description for the --auth-url flag'
 one = "The URL of the SSO Authentication server"
 
 [login.flag.masAuthUrl]
-description = 'Description for the --auth-url flag'
-one = "The URL of the identity.api.openshift.com Authentication server"
+one = "This flag is no longer valid and will be removed in a future release."
 
 [login.flag.token]
 one = "Log in using an offline token, which can be obtained at {{.OfflineTokenURL}}"
@@ -103,12 +102,6 @@ one = 'Logging in...'
 
 [login.log.info.loggedIn]
 one = 'Logged in successfully'
-
-[login.log.info.loggingInMAS]
-one = 'Logging in to {{.Host}}...'
-
-[login.log.info.loggedInMAS]
-one = 'Logged in successfully to {{.Host}}'
 
 [login.error.noRealmInURL]
 one = 'the authentication URL is missing a realm'

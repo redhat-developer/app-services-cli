@@ -28,13 +28,10 @@ type ConnectionBuilder struct {
 	disableKeepAlives bool
 	accessToken       string
 	refreshToken      string
-	masAccessToken    string
-	masRefreshToken   string
 	clientID          string
 	scopes            []string
 	apiURL            string
 	authURL           string
-	masAuthURL        string
 	consoleURL        string
 	config            config.IConfig
 	logger            logging.Logger
@@ -53,6 +50,11 @@ func NewConnectionBuilder() *ConnectionBuilder {
 	return &ConnectionBuilder{}
 }
 
+func (b *ConnectionBuilder) WithURL(url string) *ConnectionBuilder {
+	b.apiURL = url
+	return b
+}
+
 func (b *ConnectionBuilder) WithAccessToken(accessToken string) *ConnectionBuilder {
 	b.accessToken = accessToken
 	return b
@@ -60,16 +62,6 @@ func (b *ConnectionBuilder) WithAccessToken(accessToken string) *ConnectionBuild
 
 func (b *ConnectionBuilder) WithRefreshToken(refreshToken string) *ConnectionBuilder {
 	b.refreshToken = refreshToken
-	return b
-}
-
-func (b *ConnectionBuilder) WithMASAccessToken(accessToken string) *ConnectionBuilder {
-	b.masAccessToken = accessToken
-	return b
-}
-
-func (b *ConnectionBuilder) WithMASRefreshToken(refreshToken string) *ConnectionBuilder {
-	b.masRefreshToken = refreshToken
 	return b
 }
 
@@ -93,11 +85,6 @@ func (b *ConnectionBuilder) WithLogger(logger logging.Logger) *ConnectionBuilder
 	return b
 }
 
-func (b *ConnectionBuilder) WithURL(url string) *ConnectionBuilder {
-	b.apiURL = url
-	return b
-}
-
 func (b *ConnectionBuilder) WithConsoleURL(url string) *ConnectionBuilder {
 	b.consoleURL = url
 	return b
@@ -105,11 +92,6 @@ func (b *ConnectionBuilder) WithConsoleURL(url string) *ConnectionBuilder {
 
 func (b *ConnectionBuilder) WithAuthURL(authURL string) *ConnectionBuilder {
 	b.authURL = authURL
-	return b
-}
-
-func (b *ConnectionBuilder) WithMASAuthURL(authURL string) *ConnectionBuilder {
-	b.masAuthURL = authURL
 	return b
 }
 
@@ -185,12 +167,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		Logger:       b.logger,
 	}
 
-	masTk := token.Token{
-		AccessToken:  b.masAccessToken,
-		RefreshToken: b.masRefreshToken,
-		Logger:       b.logger,
-	}
-
 	tokenIsValid, err := tkn.IsValid()
 	if err != nil {
 		return nil, err
@@ -226,12 +202,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
-	masAuthURL, err := url.Parse(b.masAuthURL)
-	if err != nil {
-		err = AuthErrorf("unable to parse Auth URL '%s': %w", b.masAuthURL, err)
-		return
-	}
-
 	consoleURL, err := url.Parse(b.consoleURL)
 	if err != nil {
 		err = fmt.Errorf("unable to parse Console URL '%s': %w", b.consoleURL, err)
@@ -260,19 +230,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
 	keycloak.SetRestyClient(&restyClient)
 
-	baseMasAuthURL := fmt.Sprintf("%v://%v", masAuthURL.Scheme, masAuthURL.Host)
-	masKc := gocloak.NewClient(baseMasAuthURL)
-	masRestyClient := *keycloak.RestyClient()
-
-	_, masKcRealm, ok := SplitKeycloakRealmURL(masAuthURL)
-	if !ok {
-		return nil, fmt.Errorf("unable to get realm name from Auth URL: '%s'", b.masAuthURL)
-	}
-
-	// #nosec 402
-	restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: b.insecure})
-	masKc.SetRestyClient(&masRestyClient)
-
 	connection = &Connection{
 		insecure:          b.insecure,
 		trustedCAs:        b.trustedCAs,
@@ -282,11 +239,8 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		apiURL:            apiURL,
 		defaultHTTPClient: client,
 		keycloakClient:    keycloak,
-		masKeycloakClient: masKc,
 		Token:             &tkn,
-		MASToken:          &masTk,
 		defaultRealm:      kcRealm,
-		masRealm:          masKcRealm,
 		logger:            b.logger,
 		Config:            b.config,
 		connectionConfig:  b.connectionConfig,
