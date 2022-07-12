@@ -53,7 +53,7 @@ $ rhoas kafka topic consume --name=topic-1 --format=json | jq -rc .value
       --limit int32             Maximum number of messages to consume from topic (default 20)
       --name string             Topic name
       --offset string           Consume messages from an offset equal to or greater than the specified value
-      --partition int32         Consume messages from specified partition (value must be a positive integer)
+      --partition string        Consume messages from specified partition (value must be a positive integer)
       --wait                    Wait for messages to consume from topic
 ```
 

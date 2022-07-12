@@ -24,6 +24,7 @@ import (
 
 const (
 	DefaultOffset    = ""
+	DefaultPartition = ""
 	DefaultLimit     = 20
 	DefaultTimestamp = ""
 	FormatKeyValue   = "key-value"
@@ -34,7 +35,7 @@ var outputFormatTypes = []string{dump.JSONFormat, dump.YAMLFormat, FormatKeyValu
 type options struct {
 	topicName    string
 	kafkaID      string
-	partition    int32
+	partition    string
 	date         string
 	timestamp    string
 	limit        int32
@@ -84,7 +85,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 	flags := kafkaflagutil.NewFlagSet(cmd, f.Localizer)
 
 	flags.StringVar(&opts.topicName, "name", "", f.Localizer.MustLocalize("kafka.topic.common.flag.name.description"))
-	flags.Int32Var(&opts.partition, "partition", -1, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
+	flags.StringVar(&opts.partition, "partition", DefaultPartition, f.Localizer.MustLocalize("kafka.topic.consume.flag.partition.description"))
 	flags.StringVar(&opts.date, "from-date", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.date.description"))
 	flags.StringVar(&opts.timestamp, "from-timestamp", DefaultTimestamp, f.Localizer.MustLocalize("kafka.topic.consume.flag.timestamp.description"))
 	flags.BoolVar(&opts.wait, "wait", false, f.Localizer.MustLocalize("kafka.topic.consume.flag.wait.description"))
@@ -192,8 +193,13 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *kafkamgmtclient.KafkaRequest) (*kafkainstanceclient.RecordList, error) {
 
 	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit)
-	if opts.partition != -1 {
-		request = request.Partition(opts.partition)
+
+	if opts.partition != "" {
+		partition, err := strconv.Atoi(opts.partition)
+		if err != nil {
+			return nil, err
+		}
+		request = request.Partition(int32(partition))
 	}
 	if opts.offset != DefaultOffset {
 		intOffset, err := strconv.ParseInt(opts.offset, 10, 64)
