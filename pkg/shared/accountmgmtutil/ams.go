@@ -3,6 +3,7 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -92,15 +93,19 @@ func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig, ma
 					trialQuotas = append(trialQuotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel, nil})
 				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
-					if quotaResource.BillingModel == "standard" {
+					if quotaResource.BillingModel == QuotaStandardType {
 						standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
-					} else if quotaResource.BillingModel == "marketplace" {
+					} else if quotaResource.BillingModel == QuotaMarketplaceType {
 						marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 					}
 				}
 			}
 		}
 	}
+
+	fmt.Println("trial quotas - ", len(trialQuotas))
+	fmt.Println("standard quotas - ", len(standardQuotas))
+	fmt.Println("marketplace quotas - ", len(marketplaceQuotas))
 
 	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas}
 
@@ -121,7 +126,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 {
 
-		if marketplaceInfo.BillingModel == "marketplace" || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			return nil, errors.New("no marketplace quotas available")
 		}
 		// select a standard quota
@@ -130,7 +135,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
 
-		if marketplaceInfo.BillingModel == "standard" {
+		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return nil, errors.New("no standard quotas available")
 		}
 
@@ -148,9 +153,9 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 	}
 
 	if len(orgQuota.StandardQuotas) > 0 && len(orgQuota.MarketplaceQuotas) > 0 {
-		if marketplaceInfo.BillingModel == "standard" {
+		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return &orgQuota.StandardQuotas[0], nil
-		} else if marketplaceInfo.BillingModel == "marketplace" || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			marketplaceQuota, err := getMarketplaceQuota(orgQuota.MarketplaceQuotas, marketplaceInfo.Provider, marketplaceInfo.CloudAccountID)
 			if err != nil {
 				return nil, err

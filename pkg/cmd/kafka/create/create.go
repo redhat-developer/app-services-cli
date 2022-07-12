@@ -99,7 +99,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return f.Localizer.MustLocalizeError("kafka.create.error.bypassChecks.marketplace")
 			}
 
-			if opts.billingModel == "standard" && (opts.marketplaceAcctId != "" || opts.marketplace != "") {
+			if opts.billingModel == accountmgmtutil.QuotaStandardType && (opts.marketplaceAcctId != "" || opts.marketplace != "") {
 				return errors.New("marketplace cannot be standard if marketplace-account-id or billing-model are set")
 			}
 
@@ -225,7 +225,7 @@ func runCreate(opts *options) error {
 			CloudProvider: &opts.provider,
 		}
 
-		if userInstanceType.BillingModel == "marketplace" {
+		if userInstanceType.BillingModel == accountmgmtutil.QuotaMarketplaceType && userInstanceType.CloudAccounts != nil {
 
 			payload.Marketplace = kafkamgmtclient.NullableString{}
 			payload.Marketplace.Set((*userInstanceType.CloudAccounts)[0].CloudProviderId)
@@ -264,7 +264,7 @@ func runCreate(opts *options) error {
 
 	}
 
-	if userInstanceType.BillingModel == "standard" || userInstanceType.BillingModel == "marketplace" {
+	if userInstanceType.BillingModel == accountmgmtutil.QuotaStandardType || userInstanceType.BillingModel == accountmgmtutil.QuotaMarketplaceType {
 		payload.BillingModel = kafkamgmtclient.NullableString{}
 		payload.BillingModel.Set(&userInstanceType.BillingModel)
 	}
