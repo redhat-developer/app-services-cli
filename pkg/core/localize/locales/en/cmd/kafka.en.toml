@@ -637,6 +637,11 @@ one = 'Consume only messages with a timestamp later than the specified value (re
 [kafka.topic.consume.flag.wait.description]
 one = 'Wait for messages to consume from topic'
 
+[kafka.topic.consume.partition.value]
+one = 'Consuming messages from partition {{.Partition}}'
+
+
+
 [kafka.topic.consume.flag.offset.description]
 one = 'Consume messages from an offset equal to or greater than the specified value'
 
