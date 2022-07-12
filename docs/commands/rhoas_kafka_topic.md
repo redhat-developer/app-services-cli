@@ -35,5 +35,6 @@ rhoas kafka topic list
 * [rhoas kafka topic delete](rhoas_kafka_topic_delete.md)	 - Delete a topic
 * [rhoas kafka topic describe](rhoas_kafka_topic_describe.md)	 - Describe a topic
 * [rhoas kafka topic list](rhoas_kafka_topic_list.md)	 - List all topics
+* [rhoas kafka topic produce](rhoas_kafka_topic_produce.md)	 - Produce a new message to a topic
 * [rhoas kafka topic update](rhoas_kafka_topic_update.md)	 - Update configuration details for a Kafka topic
 
