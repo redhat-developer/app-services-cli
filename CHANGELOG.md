@@ -1,4 +1,13 @@
 
+<a name="v0.45.0"></a>
+## [v0.45.0](https://github.com/redhat-developer/app-services-cli/compare/v0.44.3...v0.45.0) (2022-07-12)
+
+### Bug Fixes
+
+* public consume and produce commands ([#1637](https://github.com/redhat-developer/app-services-cli/issues/1637))
+* flag name
+
+
 <a name="v0.44.3"></a>
 ## [v0.44.3](https://github.com/redhat-developer/app-services-cli/compare/v0.44.2...v0.44.3) (2022-07-11)
 
