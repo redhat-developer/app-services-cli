@@ -1,0 +1,76 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-kafka-topic-consume_{context}']
+= kafka topic consume
+
+[role="_abstract"]
+Consume messages from a topic
+
+[discrete]
+== Synopsis
+
+Consume messages from a given topic. By default, all messages on the topic are consumed and printed in the format that you specify. You can spcecify filters
+such as a starting offset or a starting time for message production.
+
+If you add the --wait flag, the CLI waits for messages to be produced starting from when you run the command and ignores any limit or offset specified.
+
+
+....
+rhoas kafka topic consume [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Consume from a topic
+$ rhoas kafka topic consume --name=topic-1
+
+# Consume from a topic and output to YAML format
+$ rhoas kafka topic consume --name=topic-1 --format=yaml
+
+# Consume from a topic by continually polling the topic for new messages
+$ rhoas kafka topic consume --name=topic-1 --wait
+
+# Consume from a topic starting from a time specified in default ISO time format
+$ rhoas kafka topic consume --name=topic-1 --from-date=2022-06-17T07:05:34.0000Z
+
+# Consume from a topic starting from a time specified in Unix epoch time format
+$ rhoas kafka topic consume --name=topic-1 --wait --from-timestamp=1656346796
+
+# Consume from a topic starting from an offset value
+$ rhoas kafka topic consume --name=topic-1 --offset=15
+
+# Consume from a topic starting from an offset value and with a specified message limit
+$ rhoas kafka topic consume --name=topic-1 --offset=15 --limit=30
+
+# Consume from topic and output to JSON format and using jq to read values
+$ rhoas kafka topic consume --name=topic-1 --format=json | jq -rc .value
+
+....
+
+[discrete]
+== Options
+
+      `--format` _string_::           Format for printing produced messages (possible values are "json" and "yaml") (default "key-value")
+      `--from-date` _string_::        Consume only messages with a date later than the specified value (requied format is YYYY-MM-DDThh:mm:ss.ssssZ)
+      `--from-timestamp` _string_::   Consume only messages with a timestamp later than the specified value (required format is Unix epoch timestamp value)
+      `--instance-id` _string_::      Kafka instance ID. Uses the current instance if not set 
+      `--limit` _int32_::             Maximum number of messages to consume from topic (default 20)
+      `--name` _string_::             Topic name
+      `--offset` _string_::           Consume messages from an offset equal to or greater than the specified value
+      `--partition` _int32_::         Consume messages from specified partition (value must be a positive integer)
+      `--wait`::                      Wait for messages to consume from topic
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-kafka-topic_{context}[rhoas kafka topic]	 - Create, describe, update, list, and delete topics
+

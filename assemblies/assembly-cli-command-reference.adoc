@@ -119,6 +119,8 @@ include::../modules/ref-cli-kafka-list.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-topic.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-kafka-topic-consume.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-kafka-topic-create.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-topic-delete.adoc[leveloffset=+2]
@@ -126,6 +128,8 @@ include::../modules/ref-cli-kafka-topic-delete.adoc[leveloffset=+2]
 include::../modules/ref-cli-kafka-topic-describe.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-topic-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-kafka-topic-produce.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-topic-update.adoc[leveloffset=+2]
 

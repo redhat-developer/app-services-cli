@@ -39,6 +39,9 @@ rhoas kafka topic list
 * link:{path}#ref-rhoas-kafka_{context}[rhoas kafka]	 - Create, view, use, and manage your Kafka instances
 
  
+* link:{path}#ref-kafka-topic-consume_{context}[kafka-topic consume]	 - Consume messages from a topic
+
+ 
 * link:{path}#ref-kafka-topic-create_{context}[kafka-topic create]	 - Create a topic
 
  
@@ -49,6 +52,9 @@ rhoas kafka topic list
 
  
 * link:{path}#ref-kafka-topic-list_{context}[kafka-topic list]	 - List all topics
+
+ 
+* link:{path}#ref-kafka-topic-produce_{context}[kafka-topic produce]	 - Produce a new message to a topic
 
  
 * link:{path}#ref-kafka-topic-update_{context}[kafka-topic update]	 - Update configuration details for a Kafka topic
