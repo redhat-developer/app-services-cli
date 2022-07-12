@@ -65,7 +65,6 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("kafka.topic.consume.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("kafka.topic.consume.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("kafka.topic.consume.cmd.example"),
-		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if opts.kafkaID == "" {

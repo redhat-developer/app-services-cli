@@ -30,6 +30,7 @@ rhoas kafka topic list
 ### SEE ALSO
 
 * [rhoas kafka](rhoas_kafka.md)	 - Create, view, use, and manage your Kafka instances
+* [rhoas kafka topic consume](rhoas_kafka_topic_consume.md)	 - Consume messages from a topic
 * [rhoas kafka topic create](rhoas_kafka_topic_create.md)	 - Create a topic
 * [rhoas kafka topic delete](rhoas_kafka_topic_delete.md)	 - Delete a topic
 * [rhoas kafka topic describe](rhoas_kafka_topic_describe.md)	 - Describe a topic
