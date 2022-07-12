@@ -8,8 +8,6 @@ import (
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 
-	"strings"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -193,6 +191,7 @@ func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *k
 
 	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit)
 	if opts.partition != -1 {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.partition.value", localize.NewEntry("Partition", opts.partition)))
 		request = request.Partition(opts.partition)
 	}
 	if opts.offset != DefaultOffset {
@@ -302,10 +301,10 @@ func mapRecordsToRows(topic string, records *[]kafkainstanceclient.Record) []kaf
 		record := &(*records)[i]
 		row := kafkaRow{
 			Topic:     topic,
-			Key:       *record.Key,
-			Value:     strings.TrimSuffix(record.Value, "\n"), // trailing new line gives weird printing of table
-			Partition: *record.Partition,
-			Offset:    *record.Offset,
+			Key:       record.GetKey(),
+			Value:     record.Value,
+			Partition: record.GetPartition(),
+			Offset:    record.GetOffset(),
 		}
 
 		rows[i] = row
