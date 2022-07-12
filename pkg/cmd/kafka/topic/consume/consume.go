@@ -288,7 +288,7 @@ func outputRecords(opts *options, records *kafkainstanceclient.RecordList) {
 			}
 			opts.f.Logger.Info(fmt.Sprintf("Offset: %v", row.Offset))
 			if opts.partition == DefaultPartition {
-				opts.f.Logger.Info(fmt.Sprintf("Offset: %v", row.Partition))
+				opts.f.Logger.Info(fmt.Sprintf("Partition: %v", row.Partition))
 			}
 		} else {
 			_ = dump.Formatted(opts.f.IOStreams.Out, format, row)
