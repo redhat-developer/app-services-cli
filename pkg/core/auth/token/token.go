@@ -123,7 +123,10 @@ func GetUsername(tokenStr string) (username string, ok bool) {
 	if tokenStr == "" {
 		return "", false
 	}
-	accessTkn, _ := Parse(tokenStr)
+	accessTkn, err := Parse(tokenStr)
+	if err != nil {
+		return "", false
+	}
 	tknClaims, _ := MapClaims(accessTkn)
 	u, ok := tknClaims["preferred_username"]
 	if ok {
