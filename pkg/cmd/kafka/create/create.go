@@ -498,9 +498,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	marketplaceInfo := accountmgmtutil.MarketplaceInfo{
-		BillingModel:   opts.billingModel,
-		Provider:       opts.marketplace,
-		CloudAccountID: opts.marketplaceAcctId,
+		BillingModel:   answers.BillingModel,
+		Provider:       answers.Marketplace,
+		CloudAccountID: answers.MarketplaceAcctID,
 	}
 
 	userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
