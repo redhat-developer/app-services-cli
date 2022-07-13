@@ -1,4 +1,12 @@
 
+<a name="v0.45.2"></a>
+## [v0.45.2](https://github.com/redhat-developer/app-services-cli/compare/v0.45.1...v0.45.2) (2022-07-13)
+
+### Bug Fixes
+
+* add env var config ([#1640](https://github.com/redhat-developer/app-services-cli/issues/1640))
+
+
 <a name="v0.45.1"></a>
 ## [v0.45.1](https://github.com/redhat-developer/app-services-cli/compare/v0.45.0...v0.45.1) (2022-07-12)
 
