@@ -8,8 +8,6 @@ import (
 	"net/url"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/auth/login"
-	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
@@ -179,20 +177,8 @@ func runLogin(opts *options) (err error) {
 		return err
 	}
 
-	username, ok := token.GetUsername(cfg.AccessToken)
-
 	opts.Logger.Info()
-	if !ok {
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
-	} else {
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username)))
-	}
-
-	// debug mode checks this for a version update also.
-	// so we check if is enabled first so as not to print it twice
-	if !flagutil.DebugEnabled() {
-		build.CheckForUpdate(opts.Context, build.Version, opts.Logger, opts.localizer)
-	}
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccess"))
 
 	return nil
 }
