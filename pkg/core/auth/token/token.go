@@ -88,7 +88,9 @@ func MapClaims(token *jwt.Token) (claims jwt.MapClaims, err error) {
 
 func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	left time.Duration, err error) {
-
+	if tokenStr == "" {
+		return true, 0, nil
+	}
 	token, err := Parse(tokenStr)
 	if err != nil {
 		return false, 0, err
@@ -120,7 +122,13 @@ func GetExpiry(tokenStr string, now time.Time) (expires bool,
 
 // GetUsername extracts the username claim value from the JWT
 func GetUsername(tokenStr string) (username string, ok bool) {
-	accessTkn, _ := Parse(tokenStr)
+	if tokenStr == "" {
+		return "", false
+	}
+	accessTkn, err := Parse(tokenStr)
+	if err != nil {
+		return "", false
+	}
 	tknClaims, _ := MapClaims(accessTkn)
 	u, ok := tknClaims["preferred_username"]
 	if ok {

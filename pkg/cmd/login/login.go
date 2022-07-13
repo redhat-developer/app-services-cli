@@ -8,8 +8,6 @@ import (
 	"net/url"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/auth/login"
-	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
-	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
@@ -156,14 +154,6 @@ func runLogin(opts *options) (err error) {
 			return err
 		}
 	}
-
-	if opts.offlineToken != "" {
-		if err = loginWithOfflineToken(opts); err != nil {
-			spinner.Stop()
-			opts.Logger.Info()
-			return err
-		}
-	}
 	spinner.Stop()
 
 	cfg, err := opts.Config.Load()
@@ -171,50 +161,26 @@ func runLogin(opts *options) (err error) {
 		return err
 	}
 
+	if opts.offlineToken != "" {
+		cfg.RefreshToken = opts.offlineToken
+	}
+
 	cfg.APIUrl = gatewayURL.String()
 	cfg.Insecure = opts.insecureSkipTLSVerify
 	cfg.ClientID = opts.clientID
 	cfg.AuthURL = opts.authURL
 	cfg.Scopes = opts.scopes
+	// Reset access token on login to avoid reusing previous users valid token
+	cfg.AccessToken = ""
 
 	if err = opts.Config.Save(cfg); err != nil {
 		return err
 	}
-
-	username, ok := token.GetUsername(cfg.AccessToken)
 
 	opts.Logger.Info()
-	if !ok {
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccessNoUsername"))
-	} else {
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccess", localize.NewEntry("Username", username)))
-	}
-
-	// debug mode checks this for a version update also.
-	// so we check if is enabled first so as not to print it twice
-	if !flagutil.DebugEnabled() {
-		build.CheckForUpdate(opts.Context, build.Version, opts.Logger, opts.localizer)
-	}
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("login.log.info.loginSuccess"))
 
 	return nil
-}
-
-func loginWithOfflineToken(opts *options) (err error) {
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
-	cfg.Insecure = opts.insecureSkipTLSVerify
-	cfg.ClientID = opts.clientID
-	cfg.AuthURL = opts.authURL
-	cfg.Scopes = opts.scopes
-	cfg.RefreshToken = opts.offlineToken
-
-	if err = opts.Config.Save(cfg); err != nil {
-		return err
-	}
-
-	return err
 }
 
 func createTransport(insecure bool) *http.Transport {

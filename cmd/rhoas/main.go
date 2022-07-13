@@ -50,9 +50,6 @@ func main() {
 	err = executeCommandWithTelemetry(rootCmd, cmdFactory)
 
 	if err == nil {
-		if flagutil.DebugEnabled() {
-			build.CheckForUpdate(cmdFactory.Context, build.Version, cmdFactory.Logger, localizer)
-		}
 		return
 	}
 	cmdFactory.Logger.Errorf("%v\n", rootError(err, localizer))
