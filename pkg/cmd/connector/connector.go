@@ -12,6 +12,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/stop"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/update"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/use"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connector_type"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -36,6 +37,8 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 		use.NewUseCommand(f),
 		start.NewStartCommand(f),
 		stop.NewStopCommand(f),
+		connector_type.NewTypeCommand(f),
+
 		// Hidden for the users and docs at the moment
 		create.NewCreateCommand(f),
 		delete.NewDeleteCommand(f),
