@@ -3,7 +3,6 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -71,7 +70,7 @@ func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amscli
 
 }
 
-func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error) {
+func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error) {
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
@@ -103,8 +102,6 @@ func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig) (*
 		}
 	}
 
-	fmt.Println("inside get user supported instance type")
-
 	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas}
 
 	return availableOrgQuotas, nil
@@ -112,19 +109,17 @@ func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig) (*
 
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo) (*QuotaSpec, error) {
 
-	fmt.Println("inside select quota for user")
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
 		if marketplaceInfo.BillingModel != "" {
-			return nil, errors.New("only trial quotas are available")
-		} else {
-			// select a trial quota as all others are missing
-			return &orgQuota.TrialQuotas[0], nil
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.onlyTrialAvailable")
 		}
+		// select a trial quota as all other types are missing
+		return &orgQuota.TrialQuotas[0], nil
 	}
 
 	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 {
 		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
-			return nil, errors.New("no marketplace quotas available")
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
 		}
 		// select a standard quota
 		return &orgQuota.StandardQuotas[0], nil
@@ -133,15 +128,15 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
-			return nil, errors.New("no standard quotas available")
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
 		}
 
-		marketplaceQuota, err := getMarketplaceQuota(orgQuota.MarketplaceQuotas, marketplaceInfo.Provider, marketplaceInfo.CloudAccountID)
+		marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
 		if err != nil {
 			return nil, err
 		}
 
-		marketplaceQuota.CloudAccounts, err = pickCloudAccount(marketplaceQuota.CloudAccounts, marketplaceInfo)
+		marketplaceQuota.CloudAccounts, err = pickCloudAccount(f, marketplaceQuota.CloudAccounts, marketplaceInfo)
 		if err != nil {
 			return nil, err
 		}
@@ -150,63 +145,63 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 	}
 
 	if len(orgQuota.StandardQuotas) > 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return &orgQuota.StandardQuotas[0], nil
 		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
-			marketplaceQuota, err := getMarketplaceQuota(orgQuota.MarketplaceQuotas, marketplaceInfo.Provider, marketplaceInfo.CloudAccountID)
+			marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
 			if err != nil {
 				return nil, err
 			}
 
-			marketplaceQuota.CloudAccounts, err = pickCloudAccount(marketplaceQuota.CloudAccounts, marketplaceInfo)
+			marketplaceQuota.CloudAccounts, err = pickCloudAccount(f, marketplaceQuota.CloudAccounts, marketplaceInfo)
 			if err != nil {
 				return nil, err
 			}
 
 			return marketplaceQuota, nil
-		} else {
-			return nil, errors.New("you must specify a billing model")
 		}
+		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noBillingModel")
 	}
 
-	return &orgQuota.StandardQuotas[0], nil
+	return &orgQuota.TrialQuotas[0], nil
 }
 
-func getMarketplaceQuota(marketplaceQuotas []QuotaSpec, provider string, accountID string) (*QuotaSpec, error) {
+func getMarketplaceQuota(f *factory.Factory, marketplaceQuotas []QuotaSpec, marketplace MarketplaceInfo) (*QuotaSpec, error) {
 	if len(marketplaceQuotas) == 1 {
-		if provider != "" || accountID != "" {
-			marketplaceQuota, err := pickMarketplaceQuota(marketplaceQuotas, provider, accountID)
+		if marketplace.Provider != "" || marketplace.CloudAccountID != "" {
+			marketplaceQuota, err := pickMarketplaceQuota(f, marketplaceQuotas, marketplace)
 			if err != nil {
 				return nil, err
 			}
 			return marketplaceQuota, nil
 		}
 		return &marketplaceQuotas[0], nil
-	} else if len(marketplaceQuotas) > 1 && provider == "" && accountID == "" {
-		return nil, errors.New("more than one marketplace quota is available. Please specify marketplace and account ID")
-	} else {
-		marketplaceQuota, err := pickMarketplaceQuota(marketplaceQuotas, provider, accountID)
-		if err != nil {
-			return nil, err
-		}
-		return marketplaceQuota, nil
+	} else if len(marketplaceQuotas) > 1 && marketplace.Provider == "" && marketplace.CloudAccountID == "" {
+		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.multipleMarketplaceQuotas")
 	}
+
+	marketplaceQuota, err := pickMarketplaceQuota(f, marketplaceQuotas, marketplace)
+	if err != nil {
+		return nil, err
+	}
+	return marketplaceQuota, nil
 
 }
 
-func pickMarketplaceQuota(marketplaceQuotas []QuotaSpec, provider string, accountID string) (*QuotaSpec, error) {
+func pickMarketplaceQuota(f *factory.Factory, marketplaceQuotas []QuotaSpec, marketplace MarketplaceInfo) (*QuotaSpec, error) {
 
 	matchedQuotas := []QuotaSpec{}
 
 	for _, quota := range marketplaceQuotas {
 		cloudAccounts := *quota.CloudAccounts
 		for _, cloudAccount := range cloudAccounts {
-			if provider != "" && accountID != "" {
-				if *cloudAccount.CloudProviderId == provider && *cloudAccount.CloudAccountId == accountID {
+			if marketplace.Provider != "" && marketplace.CloudAccountID != "" {
+				if *cloudAccount.CloudProviderId == marketplace.Provider && *cloudAccount.CloudAccountId == marketplace.CloudAccountID {
 					matchedQuotas = append(matchedQuotas, quota)
 				}
-			} else if provider != "" || accountID != "" {
-				if *cloudAccount.CloudProviderId == provider || *cloudAccount.CloudAccountId == accountID {
+			} else if marketplace.Provider != "" || marketplace.CloudAccountID != "" {
+				if *cloudAccount.CloudProviderId == marketplace.Provider || *cloudAccount.CloudAccountId == marketplace.CloudAccountID {
 					matchedQuotas = append(matchedQuotas, quota)
 				}
 			}
@@ -214,22 +209,20 @@ func pickMarketplaceQuota(marketplaceQuotas []QuotaSpec, provider string, accoun
 	}
 
 	if len(matchedQuotas) == 0 {
-		return nil, errors.New("no quota found with the given cloud account")
-	} else if len(matchedQuotas) > 1 {
-		return nil, errors.New("multiple quota objects were found")
+		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.cloudAccountNotFound")
 	}
 
 	return &matchedQuotas[0], nil
 }
 
-func pickCloudAccount(cloudAccounts *[]amsclient.CloudAccount, market MarketplaceInfo) (*[]amsclient.CloudAccount, error) {
+func pickCloudAccount(f *factory.Factory, cloudAccounts *[]amsclient.CloudAccount, market MarketplaceInfo) (*[]amsclient.CloudAccount, error) {
 
 	if len(*cloudAccounts) == 1 {
 		return cloudAccounts, nil
 	}
 
 	if len(*cloudAccounts) > 2 && market.Provider == "" && market.CloudAccountID == "" {
-		return nil, errors.New("multiple cloud accounts found, specify provider and cloud account ID")
+		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.multipleCloudAccounts")
 	}
 
 	var matchedAccounts []amsclient.CloudAccount
@@ -240,10 +233,6 @@ func pickCloudAccount(cloudAccounts *[]amsclient.CloudAccount, market Marketplac
 				matchedAccounts = append(matchedAccounts, cloudAccount)
 			}
 		}
-	}
-
-	if len(matchedAccounts) > 1 {
-		return nil, errors.New("multiple cloud accounts found")
 	}
 
 	return &matchedAccounts, nil

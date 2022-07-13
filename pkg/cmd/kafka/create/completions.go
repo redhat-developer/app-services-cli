@@ -40,7 +40,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 		return nil, directive
 	}
 
-	orgQuota, err := accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams)
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
 	if err != nil {
 		return nil, directive
 	}

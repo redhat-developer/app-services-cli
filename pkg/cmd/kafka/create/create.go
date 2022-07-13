@@ -174,7 +174,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	var userInstanceType *accountmgmtutil.QuotaSpec
+	var userQuota *accountmgmtutil.QuotaSpec
 	if !opts.bypassChecks {
 		f.Logger.Debug("Checking if terms and conditions have been accepted")
 		// the user must have accepted the terms and conditions from the provider
@@ -191,37 +191,43 @@ func runCreate(opts *options) error {
 			return nil
 		}
 
-		marketplaceInfo := accountmgmtutil.MarketplaceInfo{
-			Provider:       opts.marketplace,
-			BillingModel:   opts.billingModel,
-			CloudAccountID: opts.marketplaceAcctId,
-		}
-
-		orgQuota, err := accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams)
+		err = ValidateBillingModel(opts.billingModel)
 		if err != nil {
 			return err
-		}
-
-		if !opts.interactive {
-			userInstanceType, err = accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
-			if err != nil || userInstanceType == nil {
-				return err // || f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
-			}
 		}
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
 	if opts.interactive {
 		f.Logger.Debug()
-		// if userInstanceType == nil {
-		// 	return f.Localizer.MustLocalizeError("kafka.create.error.noInteractiveMode")
-		// }
+		if opts.bypassChecks {
+			return f.Localizer.MustLocalizeError("kafka.create.error.noInteractiveMode")
+		}
 
 		payload, err = promptKafkaPayload(opts, constants)
 		if err != nil {
 			return err
 		}
 	} else {
+
+		orgQuota, newErr := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+		if newErr != nil {
+			return newErr
+		}
+
+		marketplaceInfo := accountmgmtutil.MarketplaceInfo{
+			BillingModel:   opts.billingModel,
+			Provider:       opts.marketplace,
+			CloudAccountID: opts.marketplaceAcctId,
+		}
+
+		userQuota, err = accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
+		if err != nil {
+			return err
+		}
+
+		f.Logger.Debug(fmt.Sprintf("Selected quota object: %#v", userQuota))
+
 		if opts.provider == "" {
 			opts.provider = defaultProvider
 		}
@@ -236,12 +242,17 @@ func runCreate(opts *options) error {
 			CloudProvider: &opts.provider,
 		}
 
-		if userInstanceType.BillingModel == accountmgmtutil.QuotaMarketplaceType && userInstanceType.CloudAccounts != nil {
+		if userQuota.BillingModel == accountmgmtutil.QuotaMarketplaceType && userQuota.CloudAccounts != nil {
 
 			payload.Marketplace = kafkamgmtclient.NullableString{}
-			payload.Marketplace.Set((*userInstanceType.CloudAccounts)[0].CloudProviderId)
+			payload.Marketplace.Set((*userQuota.CloudAccounts)[0].CloudProviderId)
 			payload.BillingCloudAccountId = kafkamgmtclient.NullableString{}
-			payload.BillingCloudAccountId.Set((*userInstanceType.CloudAccounts)[0].CloudAccountId)
+			payload.BillingCloudAccountId.Set((*userQuota.CloudAccounts)[0].CloudAccountId)
+		}
+
+		if opts.billingModel != "" {
+			payload.BillingModel = kafkamgmtclient.NullableString{}
+			payload.BillingModel.Set(&opts.billingModel)
 		}
 
 		if !opts.bypassChecks {
@@ -249,7 +260,7 @@ func runCreate(opts *options) error {
 				provider:            opts.provider,
 				region:              opts.region,
 				size:                opts.size,
-				userAMSInstanceType: userInstanceType,
+				userAMSInstanceType: userQuota,
 				f:                   f,
 				constants:           constants,
 				conn:                conn,
@@ -264,21 +275,16 @@ func runCreate(opts *options) error {
 				return err1
 			}
 			if opts.size != "" {
-				sizes, err1 := FetchValidKafkaSizes(opts.f, opts.provider, opts.region, *userInstanceType)
+				sizes, err1 := FetchValidKafkaSizes(opts.f, opts.provider, opts.region, *userQuota)
 				if err1 != nil {
 					return err1
 				}
 				printSizeWarningIfNeeded(opts.f, opts.size, sizes)
-				payload.SetPlan(mapAmsTypeToBackendType(userInstanceType) + "." + opts.size)
+				payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + opts.size)
 			}
 		}
 
 	}
-
-	// if userInstanceType.BillingModel == accountmgmtutil.QuotaStandardType || userInstanceType.BillingModel == accountmgmtutil.QuotaMarketplaceType {
-	// 	payload.BillingModel = kafkamgmtclient.NullableString{}
-	// 	payload.BillingModel.Set(&userInstanceType.BillingModel)
-	// }
 
 	f.Logger.Debug("Creating kafka instance", payload.Name, payload.GetPlan())
 
@@ -437,7 +443,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	orgQuota, err := accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams)
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
 	if err != nil {
 		return nil, err
 	}
@@ -452,6 +458,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			Options: availableBillingModels,
 		}
 		err = survey.AskOne(billingModelPrompt, &answers.BillingModel)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
@@ -488,12 +497,20 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
-	userQuotaType, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, accountmgmtutil.MarketplaceInfo{answers.BillingModel, answers.Marketplace, answers.MarketplaceAcctID})
+	marketplaceInfo := accountmgmtutil.MarketplaceInfo{
+		BillingModel:   opts.billingModel,
+		Provider:       opts.marketplace,
+		CloudAccountID: opts.marketplaceAcctId,
+	}
+
+	userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
 	if err != nil {
 		return nil, err
 	}
 
-	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuotaType)
+	f.Logger.Debug(fmt.Sprintf("Selected quota object: %#v", userQuota))
+
+	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuota)
 	if err != nil {
 		return nil, err
 	}
@@ -509,7 +526,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuotaType)
+	sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
 	if err != nil {
 		return nil, err
 	}
@@ -537,7 +554,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Marketplace:           marketplaceProviderNullable,
 	}
 	printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
-	payload.SetPlan(mapAmsTypeToBackendType(userQuotaType) + "." + answers.Size)
+	payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
 
 	return payload, nil
 }

@@ -94,9 +94,9 @@ func FetchValidMarketplaceAccounts(amsTypes []accountmgmtutil.QuotaSpec, marketp
 				if marketplace != "" {
 					if cloudAccount.GetCloudProviderId() == marketplace {
 						validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
-					} else {
-						validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
 					}
+				} else {
+					validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
 				}
 			}
 		}
