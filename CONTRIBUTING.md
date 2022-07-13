@@ -159,6 +159,14 @@ Once pushed, a [GitHub Action](https://github.com/redhat-developer/app-services-
 
 > NOTE: To create a pre-release, the tag should have appropriate suffix, e.g v0.20.1-alpha1
 
+### Environment variables
+
+RHOASCONFIG="./config.json" - custom configuration location (useful for testing)
+RHOAS_CONTEXT="./context.json" - custom context location
+RHOAS_TELEMETRY=false - Enables/Disables telemetry (should happen automatically in non tty sessions)
+EDITOR=Code -w - controls CLI editor
+KUBECONFIG=./config.json - custom kubernetes config used for other commands
+
 ### Changelog generation
 
 [git-chglog](https://github.com/git-chglog/git-chglog) is used to generate a changelog for the current release.
