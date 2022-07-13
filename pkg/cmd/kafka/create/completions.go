@@ -1,7 +1,9 @@
 package create
 
 import (
+	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/spf13/cobra"
 )
 
@@ -22,4 +24,31 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 	validRegions, _ = GetEnabledCloudRegionIDs(f, providerID, nil)
 
 	return validRegions, cobra.ShellCompDirectiveNoSpace
+}
+
+// GetKafkaSizeCompletionValues returns a list of valid kafka sizes for the specified region and ams instance types
+func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionId string) (validSizes []string, directive cobra.ShellCompDirective) {
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	// We need both values to provide a valid list of sizes
+	if providerID == "" || regionId == "" {
+		return nil, directive
+	}
+
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
+
+	orgQuota, err := accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	userInstanceType, _ := accountmgmtutil.SelectQuotaForUser(f, orgQuota, accountmgmtutil.MarketplaceInfo{})
+
+	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
+	validSizes, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, *userInstanceType)
+
+	return validSizes, cobra.ShellCompDirectiveNoSpace
 }

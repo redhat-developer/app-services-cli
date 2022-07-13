@@ -144,6 +144,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetCloudProviderRegionCompletionValues(f, opts.provider)
 	})
 
+	_ = cmd.RegisterFlagCompletionFunc(FlagSize, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetKafkaSizeCompletionValues(f, opts.provider, opts.region)
+	})
+
 	return cmd
 }
 
@@ -193,20 +197,27 @@ func runCreate(opts *options) error {
 			CloudAccountID: opts.marketplaceAcctId,
 		}
 
-		userInstanceType, err = accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams, marketplaceInfo)
-		if err != nil || userInstanceType == nil {
-			return err // || f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
+		orgQuota, err := accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams)
+		if err != nil {
+			return err
+		}
+
+		if !opts.interactive {
+			userInstanceType, err = accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
+			if err != nil || userInstanceType == nil {
+				return err // || f.Localizer.MustLocalizeError("kafka.create.error.userInstanceType.notFound")
+			}
 		}
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
 	if opts.interactive {
 		f.Logger.Debug()
-		if userInstanceType == nil {
-			return f.Localizer.MustLocalizeError("kafka.create.error.noInteractiveMode")
-		}
+		// if userInstanceType == nil {
+		// 	return f.Localizer.MustLocalizeError("kafka.create.error.noInteractiveMode")
+		// }
 
-		payload, err = promptKafkaPayload(opts, *userInstanceType)
+		payload, err = promptKafkaPayload(opts, constants)
 		if err != nil {
 			return err
 		}
@@ -264,10 +275,10 @@ func runCreate(opts *options) error {
 
 	}
 
-	if userInstanceType.BillingModel == accountmgmtutil.QuotaStandardType || userInstanceType.BillingModel == accountmgmtutil.QuotaMarketplaceType {
-		payload.BillingModel = kafkamgmtclient.NullableString{}
-		payload.BillingModel.Set(&userInstanceType.BillingModel)
-	}
+	// if userInstanceType.BillingModel == accountmgmtutil.QuotaStandardType || userInstanceType.BillingModel == accountmgmtutil.QuotaMarketplaceType {
+	// 	payload.BillingModel = kafkamgmtclient.NullableString{}
+	// 	payload.BillingModel.Set(&userInstanceType.BillingModel)
+	// }
 
 	f.Logger.Debug("Creating kafka instance", payload.Name, payload.GetPlan())
 
@@ -381,13 +392,14 @@ type promptAnswers struct {
 	Size              string
 	Region            string
 	CloudProvider     string
+	BillingModel      string
 	MarketplaceAcctID string
 	Marketplace       string
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
 // nolint:funlen
-func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) (*kafkamgmtclient.KafkaRequestPayload, error) {
+func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
 
 	accountIDNullable := kafkamgmtclient.NullableString{}
@@ -425,7 +437,63 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		return nil, err
 	}
 
-	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, &userQuotaType)
+	orgQuota, err := accountmgmtutil.GetUserSupportedInstanceType(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, err
+	}
+
+	availableBillingModels := FetchSupportedBillingModels(orgQuota)
+
+	if len(availableBillingModels) == 1 {
+		answers.BillingModel = availableBillingModels[0]
+	} else {
+		billingModelPrompt := &survey.Select{
+			Message: "billing model:",
+			Options: availableBillingModels,
+		}
+		err = survey.AskOne(billingModelPrompt, &answers.BillingModel)
+	}
+
+	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
+		validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas)
+		if len(validMarketPlaces) == 1 {
+			answers.Marketplace = validMarketPlaces[0]
+		} else {
+			marketplacePrompt := &survey.Select{
+				Message: "marketplace:",
+				Options: validMarketPlaces,
+			}
+			err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(validMarketPlaces) > 0 {
+
+			validMarketplaceAcctIDs := FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, answers.Marketplace)
+
+			if len(validMarketplaceAcctIDs) == 1 {
+				answers.MarketplaceAcctID = validMarketplaceAcctIDs[0]
+			} else {
+				marketplaceAccountPrompt := &survey.Select{
+					Message: "marketplace account ID:",
+					Options: validMarketplaceAcctIDs,
+				}
+				err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+	}
+
+	userQuotaType, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, accountmgmtutil.MarketplaceInfo{answers.BillingModel, answers.Marketplace, answers.MarketplaceAcctID})
+	if err != nil {
+		return nil, err
+	}
+
+	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuotaType)
 	if err != nil {
 		return nil, err
 	}
@@ -441,7 +509,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		return nil, err
 	}
 
-	sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, userQuotaType)
+	sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuotaType)
 	if err != nil {
 		return nil, err
 	}
@@ -469,7 +537,7 @@ func promptKafkaPayload(opts *options, userQuotaType accountmgmtutil.QuotaSpec) 
 		Marketplace:           marketplaceProviderNullable,
 	}
 	printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
-	payload.SetPlan(mapAmsTypeToBackendType(&userQuotaType) + "." + answers.Size)
+	payload.SetPlan(mapAmsTypeToBackendType(userQuotaType) + "." + answers.Size)
 
 	return payload, nil
 }

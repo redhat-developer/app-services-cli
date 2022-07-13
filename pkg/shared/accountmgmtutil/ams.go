@@ -71,7 +71,7 @@ func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amscli
 
 }
 
-func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig, marketplace MarketplaceInfo) (*QuotaSpec, error) {
+func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error) {
 
 	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
 	if err != nil {
@@ -103,20 +103,18 @@ func GetUserSupportedInstanceType(f *factory.Factory, spec *remote.AmsConfig, ma
 		}
 	}
 
-	fmt.Println("trial quotas - ", len(trialQuotas))
-	fmt.Println("standard quotas - ", len(standardQuotas))
-	fmt.Println("marketplace quotas - ", len(marketplaceQuotas))
+	fmt.Println("inside get user supported instance type")
 
 	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas}
 
-	return SelectQuotaForUser(f, availableOrgQuotas, marketplace)
+	return availableOrgQuotas, nil
 }
 
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo) (*QuotaSpec, error) {
+
+	fmt.Println("inside select quota for user")
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
-		if len(orgQuota.TrialQuotas) == 0 {
-			return nil, errors.New("no quotas available")
-		} else if marketplaceInfo.BillingModel != "" {
+		if marketplaceInfo.BillingModel != "" {
 			return nil, errors.New("only trial quotas are available")
 		} else {
 			// select a trial quota as all others are missing
@@ -125,7 +123,6 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 	}
 
 	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 {
-
 		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			return nil, errors.New("no marketplace quotas available")
 		}

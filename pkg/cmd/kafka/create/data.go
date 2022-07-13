@@ -54,6 +54,57 @@ func FetchValidKafkaSizesLabels(f *factory.Factory,
 
 }
 
+func FetchSupportedBillingModels(userQuotas *accountmgmtutil.OrgQuotas) []string {
+
+	billingModels := []string{}
+
+	if len(userQuotas.StandardQuotas) > 0 {
+		billingModels = append(billingModels, accountmgmtutil.QuotaStandardType)
+	}
+
+	if len(userQuotas.MarketplaceQuotas) > 0 {
+		billingModels = append(billingModels, accountmgmtutil.QuotaMarketplaceType)
+	}
+
+	return billingModels
+}
+
+func FetchValidMarketplaces(amsTypes []accountmgmtutil.QuotaSpec) []string {
+
+	validMarketplaces := []string{}
+
+	for _, quota := range amsTypes {
+		if quota.CloudAccounts != nil {
+			for _, cloudAccount := range *quota.CloudAccounts {
+				validMarketplaces = append(validMarketplaces, *cloudAccount.CloudProviderId)
+			}
+		}
+	}
+
+	return unique(validMarketplaces)
+}
+
+func FetchValidMarketplaceAccounts(amsTypes []accountmgmtutil.QuotaSpec, marketplace string) []string {
+
+	validAccounts := []string{}
+
+	for _, quota := range amsTypes {
+		if quota.CloudAccounts != nil {
+			for _, cloudAccount := range *quota.CloudAccounts {
+				if marketplace != "" {
+					if cloudAccount.GetCloudProviderId() == marketplace {
+						validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
+					} else {
+						validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
+					}
+				}
+			}
+		}
+	}
+
+	return unique(validAccounts)
+}
+
 // return list of the valid instance sizes for the specified region and ams instance types
 func FetchValidKafkaSizes(f *factory.Factory,
 	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
@@ -167,4 +218,16 @@ func IsRegionAllowed(region *kafkamgmtclient.CloudRegion, userInstanceType *acco
 		}
 	}
 	return false
+}
+
+func unique(s []string) []string {
+	inResult := make(map[string]bool)
+	var result []string
+	for _, str := range s {
+		if _, ok := inResult[str]; !ok {
+			inResult[str] = true
+			result = append(result, str)
+		}
+	}
+	return result
 }
