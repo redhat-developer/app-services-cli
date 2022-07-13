@@ -1,6 +1,7 @@
 package list
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -12,19 +13,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	DefaultSearch = ""
+)
+
 type options struct {
 	search string
-	limt int
+	limit int
 	page int
 	outputFormat string
 
 	f            *factory.Factory
 }
 
-type connectorType struct {
+type connectorOutput struct {
+	Name string `json:"name,omitempty"`
 	Id string `json:"id,omitempty"`
-	Kind string `json:"kind,omitempty"`
-	Href string `json:"href,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 // NewListCommand creates a new command to list connector types
@@ -52,8 +57,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flags := connectorcmdutil.NewFlagSet(cmd, f)
 	flags.AddOutput(&opts.outputFormat)
-	flags.StringVar(&opts.search, "search", "", "search description")
-	flags.IntVar(&opts.limt, "limit", 20, "limit description")
+	flags.StringVar(&opts.search, "search", DefaultSearch, "search description")
+	flags.IntVar(&opts.limit, "limit", 20, "limit description")
 	flags.IntVar(&opts.page, "page", 1, "page description")
 	return cmd
 
@@ -70,17 +75,27 @@ func runUpdateCommand(opts *options) error {
 
 	api := conn.API()
 
-	types, httpRes, err := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypes(f.Context).Page(strconv.Itoa(opts.page)).Size("100").Execute()
+	request := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypes(f.Context)
+	request = request.Page(strconv.Itoa(opts.page))
+	request = request.Size("100")
+
+	if opts.search != DefaultSearch {
+		query := fmt.Sprintf("name like %s", opts.search)
+		request = request.Search(query)
+	}
+
+	types, httpRes, err := request.Execute()
+
+
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
 
-	f.Logger.Info(len(types.Items))
 	if err != nil {
 		return err
 	}
 
-	rows := mapResponseToConnectorTypes(&types)
+	rows := mapResponseToConnectorTypes(&types, opts.limit)
 	for i := 0; i < len(rows); i++ {
 		if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, rows[i]); err != nil {
 			return err
@@ -90,15 +105,21 @@ func runUpdateCommand(opts *options) error {
 	return nil
 }
 
-func mapResponseToConnectorTypes(list *connectormgmtclient.ConnectorTypeList) []connectorType {
-	types := make([]connectorType, len(list.Items))
+func mapResponseToConnectorTypes(list *connectormgmtclient.ConnectorTypeList, limit int) []connectorOutput {
+	set_limit := limit
+	if len(list.Items) < limit {
+		set_limit = len(list.Items)
+	}
+	
+	types := make([]connectorOutput, set_limit)
 
-	for i := 0; i < len(list.Items); i++ {
+
+	for i := 0; i < set_limit; i++ {
 		item := &list.Items[i]
-		types[i] = connectorType{
-			Id: *item.ObjectReference.Id,
-			Href: *item.ObjectReference.Href,
-			Kind: *item.ObjectReference.Kind,
+		types[i] = connectorOutput {
+			Name: item.GetName(),
+			Id: item.GetId(),
+			Description: item.GetDescription(),
 		}
 	}
 
