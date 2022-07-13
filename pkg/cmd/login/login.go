@@ -156,14 +156,6 @@ func runLogin(opts *options) (err error) {
 			return err
 		}
 	}
-
-	if opts.offlineToken != "" {
-		if err = loginWithOfflineToken(opts); err != nil {
-			spinner.Stop()
-			opts.Logger.Info()
-			return err
-		}
-	}
 	spinner.Stop()
 
 	cfg, err := opts.Config.Load()
@@ -171,11 +163,17 @@ func runLogin(opts *options) (err error) {
 		return err
 	}
 
+	if opts.offlineToken != "" {
+		cfg.RefreshToken = opts.offlineToken
+	}
+
 	cfg.APIUrl = gatewayURL.String()
 	cfg.Insecure = opts.insecureSkipTLSVerify
 	cfg.ClientID = opts.clientID
 	cfg.AuthURL = opts.authURL
 	cfg.Scopes = opts.scopes
+	// Reset access token on login to avoid reusing previous users valid token
+	cfg.AccessToken = ""
 
 	if err = opts.Config.Save(cfg); err != nil {
 		return err
@@ -197,24 +195,6 @@ func runLogin(opts *options) (err error) {
 	}
 
 	return nil
-}
-
-func loginWithOfflineToken(opts *options) (err error) {
-	cfg, err := opts.Config.Load()
-	if err != nil {
-		return err
-	}
-	cfg.Insecure = opts.insecureSkipTLSVerify
-	cfg.ClientID = opts.clientID
-	cfg.AuthURL = opts.authURL
-	cfg.Scopes = opts.scopes
-	cfg.RefreshToken = opts.offlineToken
-
-	if err = opts.Config.Save(cfg); err != nil {
-		return err
-	}
-
-	return err
 }
 
 func createTransport(insecure bool) *http.Transport {
