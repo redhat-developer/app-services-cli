@@ -88,7 +88,9 @@ func MapClaims(token *jwt.Token) (claims jwt.MapClaims, err error) {
 
 func GetExpiry(tokenStr string, now time.Time) (expires bool,
 	left time.Duration, err error) {
-
+	if tokenStr == "" {
+		return true, 0, nil
+	}
 	token, err := Parse(tokenStr)
 	if err != nil {
 		return false, 0, err

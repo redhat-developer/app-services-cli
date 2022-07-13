@@ -83,10 +83,6 @@ one = 'Redirected to callback URL: {{.URL}}'
 
 [login.log.info.loginSuccess]
 description = 'Log in success message'
-one = 'You are now logged in as "{{.Username}}"'
-
-[login.log.info.loginSuccessNoUsername]
-description = 'Log in success message'
 one = 'You are now logged in'
 
 [login.log.info.openSSOUrl]
