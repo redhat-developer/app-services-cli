@@ -24,7 +24,7 @@ require (
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0
-	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.7.0
+	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.6.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
@@ -38,11 +38,9 @@ require (
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
-	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
-	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2
+	golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.22.4
