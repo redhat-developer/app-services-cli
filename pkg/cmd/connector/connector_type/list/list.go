@@ -2,6 +2,7 @@ package list
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -18,17 +19,17 @@ const (
 )
 
 type options struct {
-	search string
-	limit int
-	page int
+	search       string
+	limit        int
+	page         int
 	outputFormat string
 
-	f            *factory.Factory
+	f *factory.Factory
 }
 
 type connectorOutput struct {
-	Name string `json:"name,omitempty"`
-	Id string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Id          string `json:"id,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
@@ -41,9 +42,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   f.Localizer.MustLocalize("connector.start.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("connector.start.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("connector.start.cmd.example"),
+		Short:   f.Localizer.MustLocalize("connector.type.list.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("connector.type.list.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("connector.type.list.cmd.example"),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			validOutputFormats := flagutil.ValidOutputFormats
@@ -57,9 +58,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flags := connectorcmdutil.NewFlagSet(cmd, f)
 	flags.AddOutput(&opts.outputFormat)
-	flags.StringVar(&opts.search, "search", DefaultSearch, "search description")
-	flags.IntVar(&opts.limit, "limit", 20, "limit description")
-	flags.IntVar(&opts.page, "page", 1, "page description")
+	flags.IntVar(&opts.limit, "limit", 150, f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
+	flags.StringVar(&opts.search, "search", DefaultSearch, f.Localizer.MustLocalize("connector.type.list.flag.search.description"))
+	flags.IntVar(&opts.page, "page", 1, f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
 	return cmd
 
 }
@@ -77,7 +78,7 @@ func runUpdateCommand(opts *options) error {
 
 	request := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypes(f.Context)
 	request = request.Page(strconv.Itoa(opts.page))
-	request = request.Size("100")
+	request = request.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != DefaultSearch {
 		query := fmt.Sprintf("name like %s", opts.search)
@@ -86,16 +87,22 @@ func runUpdateCommand(opts *options) error {
 
 	types, httpRes, err := request.Execute()
 
-
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
 
 	if err != nil {
-		return err
+		switch httpRes.StatusCode {
+		case http.StatusUnauthorized:
+			return opts.f.Localizer.MustLocalizeError("connector.common.error.unauthorized")
+		case http.StatusInternalServerError:
+			return opts.f.Localizer.MustLocalizeError("connector.common.error.internalServerError")
+		default:
+			return err
+		}
 	}
 
-	rows := mapResponseToConnectorTypes(&types, opts.limit)
+	rows := mapResponseToConnectorTypes(&types)
 	for i := 0; i < len(rows); i++ {
 		if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, rows[i]); err != nil {
 			return err
@@ -105,20 +112,14 @@ func runUpdateCommand(opts *options) error {
 	return nil
 }
 
-func mapResponseToConnectorTypes(list *connectormgmtclient.ConnectorTypeList, limit int) []connectorOutput {
-	set_limit := limit
-	if len(list.Items) < limit {
-		set_limit = len(list.Items)
-	}
-	
-	types := make([]connectorOutput, set_limit)
+func mapResponseToConnectorTypes(list *connectormgmtclient.ConnectorTypeList) []connectorOutput {
+	types := make([]connectorOutput, len(list.Items))
 
-
-	for i := 0; i < set_limit; i++ {
+	for i := 0; i < len(list.Items); i++ {
 		item := &list.Items[i]
-		types[i] = connectorOutput {
-			Name: item.GetName(),
-			Id: item.GetId(),
+		types[i] = connectorOutput{
+			Name:        item.GetName(),
+			Id:          item.GetId(),
 			Description: item.GetDescription(),
 		}
 	}

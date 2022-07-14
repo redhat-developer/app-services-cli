@@ -384,3 +384,69 @@ one = "Connector instance with ID {{.ID}} not found"
 [connector.common.error.nameNotFound]
 description = "Error message for when and connector with name is not found"
 one = "Connector instance with name {{.Name}} not found"
+
+[connector.type.cmd.shortDescription]
+description = "Short description of connector type command"
+one = 'List and get details of different connector types'
+
+[connector.type.cmd.longDescription]
+description = "Long description of connector type command"
+one = '''List, search and get details of connector types that are available to use in the connector catalog.
+
+Use list to list available connector types.
+
+Use describe to get more details about a specific connector type.
+'''
+
+[connector.type.cmd.example]
+description = "Example commands for connector type"
+one = '''
+# List all connector types
+rhoas connector type list
+
+# List all connector types that start with 'Amazon'
+rhoas connector type list --search=Amazon%
+
+# Get more details of connector type with a type id of IEJF87hg2342hsdHFG
+rhoas connector type describe --id=IEJF87hg2342hsdHFG
+'''
+
+[connector.type.list.cmd.shortDescription]
+description = "Short description of connector type list command"
+one = 'List connector types'
+
+[connector.type.list.cmd.longDescription]
+description = "Long description of connector type list command"
+one = 'List connector types available from the catalog, use filter options such as --limit, --page and --search'
+
+[connector.type.list.cmd.example]
+description = "Example commands for connector type list"
+one = '''
+# List all connector types
+rhoas connector type list
+
+# List connector types with a limit of 10 from the second page
+rhoas connector type list --limit=10 --page=2
+
+# List all connector types that start with 'Amazon'
+rhoas connector type list --search=Amazon%
+
+# List all connector types that contain the word 'Amazon'
+rhoas connector type list --search=%Amazon%
+
+'''
+
+[connector.type.list.flag.page.description]
+one = 'Page of connector limit'
+
+[connector.type.list.flag.search.description]
+one = 'Search query for name of connector type'
+
+[connector.type.list.flag.limit.description]
+one = 'The max number of connectors to return in the page'
+
+[connector.common.error.unauthorized]
+one = 'Auth token provided is invalid'
+
+[connector.common.error.internalServerError]
+one = 'Unexpected internal server error occured'

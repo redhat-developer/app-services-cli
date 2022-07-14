@@ -3,8 +3,8 @@ package connector_type
 import (
 	"github.com/redhat-developer/app-services-cli/internal/doc"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connector_type/list"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
 
@@ -13,9 +13,9 @@ func NewTypeCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "type",
 		Annotations: map[string]string{doc.AnnotationName: "Connectors commands"},
-		Short:       f.Localizer.MustLocalize("connector.cmd.shortDescription"),
-		Long:        f.Localizer.MustLocalize("connector.cmd.longDescription"),
-		Example:     f.Localizer.MustLocalize("connector.cmd.example"),
+		Short:       f.Localizer.MustLocalize("connector.type.cmd.shortDescription"),
+		Long:        f.Localizer.MustLocalize("connector.type.cmd.longDescription"),
+		Example:     f.Localizer.MustLocalize("connector.type.cmd.example"),
 		Args:        cobra.MinimumNArgs(1),
 	}
 
