@@ -148,7 +148,7 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 
 func GetValidMarketplaceAcctIDs(ctx context.Context, connectionFunc factory.ConnectionFunc, marketplace string) (marketplaceAcctIDs []string, err error) {
 
-	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	conn, err := connectionFunc()
 	if err != nil {
 		return nil, err
 	}
@@ -177,7 +177,7 @@ func GetValidMarketplaceAcctIDs(ctx context.Context, connectionFunc factory.Conn
 
 func GetValidMarketplaces(ctx context.Context, connectionFunc factory.ConnectionFunc) (marketplaces []string, err error) {
 
-	conn, err := connectionFunc(connection.DefaultConfigSkipMasAuth)
+	conn, err := connectionFunc()
 	if err != nil {
 		return nil, err
 	}

@@ -13,7 +13,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 
@@ -36,7 +35,6 @@ type ConnectionBuilder struct {
 	config            config.IConfig
 	logger            logging.Logger
 	transportWrapper  TransportWrapper
-	connectionConfig  *connection.Config
 }
 
 // TransportWrapper is a wrapper for a transport of type http.RoundTripper.
@@ -117,12 +115,6 @@ func (b *ConnectionBuilder) WithConfig(cfg config.IConfig) *ConnectionBuilder {
 	return b
 }
 
-// WithConnectionConfig contains config for the connection instance
-func (b *ConnectionBuilder) WithConnectionConfig(cfg *connection.Config) *ConnectionBuilder {
-	b.connectionConfig = cfg
-	return b
-}
-
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
@@ -138,7 +130,7 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 // the connection, and an error if something fails when trying to create it.
 // nolint:funlen
 func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Connection, err error) {
-	if b.connectionConfig.RequireAuth && b.accessToken == "" && b.refreshToken == "" {
+	if b.accessToken == "" && b.refreshToken == "" {
 		return nil, &AuthError{notLoggedInError()}
 	}
 
@@ -243,7 +235,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		defaultRealm:      kcRealm,
 		logger:            b.logger,
 		Config:            b.config,
-		connectionConfig:  b.connectionConfig,
 	}
 
 	return connection, nil

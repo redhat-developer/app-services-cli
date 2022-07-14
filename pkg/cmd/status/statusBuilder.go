@@ -8,7 +8,6 @@ import (
 	"text/tabwriter"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
@@ -105,7 +104,7 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 
 	if flagutil.StringInSlice(servicespec.ConnectorServiceName, services) && c.serviceConfig.ConnectorID != "" {
 
-		conn, err1 := factory.Connection(connection.DefaultConfigSkipMasAuth)
+		conn, err1 := factory.Connection()
 		if err1 != nil {
 			return nil, err1
 		}

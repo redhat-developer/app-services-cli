@@ -12,7 +12,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -103,7 +102,7 @@ func runUpdate(opts *options) error {
 	var httpRes *http.Response
 	var newErr error
 
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}

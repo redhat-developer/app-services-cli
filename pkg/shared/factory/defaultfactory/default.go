@@ -10,6 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -36,7 +37,7 @@ func New(localizer localize.Localizer) *factory.Factory {
 
 	ctx := context.Background()
 
-	connectionFunc := func(connectionCfg *connection.Config) (connection.Connection, error) {
+	connectionFunc := func() (connection.Connection, error) {
 		cfg, err := cfgFile.Load()
 		if err != nil {
 			return nil, err
@@ -78,8 +79,6 @@ func New(localizer localize.Localizer) *factory.Factory {
 		}
 
 		builder.WithTransportWrapper(transportWrapper)
-
-		builder.WithConnectionConfig(connectionCfg)
 
 		conn, err = builder.Build()
 		if err != nil {

@@ -2,7 +2,6 @@ package create
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/spf13/cobra"
@@ -41,7 +40,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 		return nil, directive
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return nil, directive
 	}

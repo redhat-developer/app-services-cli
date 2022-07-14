@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"

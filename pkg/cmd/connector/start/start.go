@@ -4,6 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -53,7 +54,7 @@ func runUpdateCommand(opts *options) error {
 	f := opts.f
 
 	var conn connection.Connection
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return err
 	}
