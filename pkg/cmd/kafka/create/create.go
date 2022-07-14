@@ -461,16 +461,18 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	availableBillingModels := FetchSupportedBillingModels(orgQuota)
 
-	if len(availableBillingModels) == 1 {
-		answers.BillingModel = availableBillingModels[0]
-	} else {
-		billingModelPrompt := &survey.Select{
-			Message: f.Localizer.MustLocalize("kafka.create.input.billingModel.message"),
-			Options: availableBillingModels,
-		}
-		err = survey.AskOne(billingModelPrompt, &answers.BillingModel)
-		if err != nil {
-			return nil, err
+	if len(availableBillingModels) > 0 {
+		if len(availableBillingModels) == 1 {
+			answers.BillingModel = availableBillingModels[0]
+		} else {
+			billingModelPrompt := &survey.Select{
+				Message: f.Localizer.MustLocalize("kafka.create.input.billingModel.message"),
+				Options: availableBillingModels,
+			}
+			err = survey.AskOne(billingModelPrompt, &answers.BillingModel)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
