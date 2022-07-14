@@ -369,6 +369,9 @@ one = '"--billing-model", "--marketplace", "--marketplace-account-id" flags are 
 [kafka.create.error.insufficientMarketplaceInfo]
 one = '"--marketplace" and "--marketplace-account-id" flags should be supplied together'
 
+[kafka.create.error.standard.invalidFlags]
+one = 'billing model cannot be standard if "--marketplace-account-id" or "--marketplace" are set'
+
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
 

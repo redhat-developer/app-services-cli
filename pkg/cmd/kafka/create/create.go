@@ -1,7 +1,6 @@
 package create
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -104,7 +103,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if opts.billingModel == accountmgmtutil.QuotaStandardType && (opts.marketplaceAcctId != "" || opts.marketplace != "") {
-				return errors.New("marketplace cannot be standard if marketplace-account-id or billing-model are set")
+				return f.Localizer.MustLocalizeError("kafka.create.error.standard.invalidFlags")
 			}
 
 			if !f.IOStreams.CanPrompt() && opts.name == "" {
