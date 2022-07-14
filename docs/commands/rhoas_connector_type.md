@@ -1,4 +1,4 @@
-## rhoas connector
+## rhoas connector type
 
 Connectors instance commands
 
@@ -49,11 +49,6 @@ rhoas connector stop
 
 ### SEE ALSO
 
-* [rhoas](rhoas.md)	 - RHOAS CLI
-* [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
-* [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
-* [rhoas connector start](rhoas_connector_start.md)	 - Start a connector instance
-* [rhoas connector stop](rhoas_connector_stop.md)	 - Stop a connector instance
-* [rhoas connector type](rhoas_connector_type.md)	 - Connectors instance commands
-* [rhoas connector use](rhoas_connector_use.md)	 - Set the current connector instance
+* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector type list](rhoas_connector_type_list.md)	 - List connector types
 
