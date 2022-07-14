@@ -42,6 +42,8 @@ const (
 	FlagMarketPlaceAcctID = "marketplace-account-id"
 	// FlagMarketPlace is a flag representing marketplace where the instance is purchased on
 	FlagMarketPlace = "marketplace"
+	// FlagMarketPlace is a flag representing billing model of the instance
+	FlagBillingModel = "billing-model"
 )
 
 type options struct {
@@ -136,7 +138,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
 	flags.BoolVarP(&opts.dryRun, "dry-run", "", false, f.Localizer.MustLocalize("kafka.create.flag.dryrun.description"))
-	flags.StringVar(&opts.billingModel, "billing-model", "", f.Localizer.MustLocalize("kafka.create.flag.billingModel.description"))
+	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.create.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -157,6 +159,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlaceAcctID, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetMarketplaceAccountCompletionValues(f, opts.marketplace)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc(FlagBillingModel, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetBillingModelCompletionValues(f)
 	})
 
 	return cmd

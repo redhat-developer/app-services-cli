@@ -94,3 +94,22 @@ func GetMarketplaceAccountCompletionValues(f *factory.Factory, marketplace strin
 
 	return validMarketplaceAcctIDs, cobra.ShellCompDirectiveNoSpace
 }
+
+func GetBillingModelCompletionValues(f *factory.Factory) (availableBillingModels []string, directive cobra.ShellCompDirective) {
+
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
+
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	availableBillingModels = FetchSupportedBillingModels(orgQuota)
+
+	return availableBillingModels, directive
+}

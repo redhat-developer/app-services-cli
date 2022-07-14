@@ -435,7 +435,7 @@ one = 'multiple quota types found, please specify "--billing-model"'
 one = 'multiple marketplace quota types found, please specify "--marketplace" and "--marketplace-account-id"'
 
 [kafka.create.quota.error.cloudAccountNotFound]
-one = 'no marketplace quota found with the specified marketplace provider or account id'
+one = 'no marketplace quota found with the specified marketplace provider and account id'
 
 [kafka.create.quota.error.multipleCloudAccounts]
 one = 'multiple cloud accounts found, please specify "--marketplace" and "--marketplace-account-id"'

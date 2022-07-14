@@ -110,7 +110,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo) (*QuotaSpec, error) {
 
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
-		if marketplaceInfo.BillingModel != "" {
+		if marketplaceInfo.BillingModel != "" || marketplaceInfo.Provider != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.onlyTrialAvailable")
 		}
 		// select a trial quota as all other types are missing
