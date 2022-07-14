@@ -169,7 +169,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 func getMarketplaceQuota(f *factory.Factory, marketplaceQuotas []QuotaSpec, marketplace MarketplaceInfo) (*QuotaSpec, error) {
 	if len(marketplaceQuotas) == 1 {
-		if marketplace.Provider != "" || marketplace.CloudAccountID != "" {
+		if marketplace.Provider != "" && marketplace.CloudAccountID != "" {
 			marketplaceQuota, err := pickMarketplaceQuota(f, marketplaceQuotas, marketplace)
 			if err != nil {
 				return nil, err
@@ -196,14 +196,8 @@ func pickMarketplaceQuota(f *factory.Factory, marketplaceQuotas []QuotaSpec, mar
 	for _, quota := range marketplaceQuotas {
 		cloudAccounts := *quota.CloudAccounts
 		for _, cloudAccount := range cloudAccounts {
-			if marketplace.Provider != "" && marketplace.CloudAccountID != "" {
-				if *cloudAccount.CloudProviderId == marketplace.Provider && *cloudAccount.CloudAccountId == marketplace.CloudAccountID {
-					matchedQuotas = append(matchedQuotas, quota)
-				}
-			} else if marketplace.Provider != "" || marketplace.CloudAccountID != "" {
-				if *cloudAccount.CloudProviderId == marketplace.Provider || *cloudAccount.CloudAccountId == marketplace.CloudAccountID {
-					matchedQuotas = append(matchedQuotas, quota)
-				}
+			if *cloudAccount.CloudProviderId == marketplace.Provider && *cloudAccount.CloudAccountId == marketplace.CloudAccountID {
+				matchedQuotas = append(matchedQuotas, quota)
 			}
 		}
 	}
@@ -228,10 +222,8 @@ func pickCloudAccount(f *factory.Factory, cloudAccounts *[]amsclient.CloudAccoun
 	var matchedAccounts []amsclient.CloudAccount
 
 	for _, cloudAccount := range *cloudAccounts {
-		if market.Provider != "" || market.CloudAccountID != "" {
-			if *cloudAccount.CloudProviderId == market.Provider || *cloudAccount.CloudAccountId == market.CloudAccountID {
-				matchedAccounts = append(matchedAccounts, cloudAccount)
-			}
+		if *cloudAccount.CloudProviderId == market.Provider || *cloudAccount.CloudAccountId == market.CloudAccountID {
+			matchedAccounts = append(matchedAccounts, cloudAccount)
 		}
 	}
 

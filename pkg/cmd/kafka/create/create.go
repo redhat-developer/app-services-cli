@@ -99,6 +99,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return f.Localizer.MustLocalizeError("kafka.create.error.bypassChecks.marketplace")
 			}
 
+			if (opts.marketplace != "") != (opts.marketplaceAcctId != "") {
+				return f.Localizer.MustLocalizeError("kafka.create.error.insufficientMarketplaceInfo")
+			}
+
 			if opts.billingModel == accountmgmtutil.QuotaStandardType && (opts.marketplaceAcctId != "" || opts.marketplace != "") {
 				return errors.New("marketplace cannot be standard if marketplace-account-id or billing-model are set")
 			}

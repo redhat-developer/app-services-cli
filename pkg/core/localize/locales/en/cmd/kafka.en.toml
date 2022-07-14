@@ -366,6 +366,9 @@ one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 [kafka.create.error.bypassChecks.marketplace]
 one = '"--billing-model", "--marketplace", "--marketplace-account-id" flags are not supported with "--bypass-checks" flag'
 
+[kafka.create.error.insufficientMarketplaceInfo]
+one = '"--marketplace" and "--marketplace-account-id" flags should be supplied together'
+
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
 
