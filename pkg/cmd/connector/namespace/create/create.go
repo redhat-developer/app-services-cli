@@ -4,7 +4,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
@@ -55,7 +54,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 func runCreate(opts *options) error {
 
 	f := opts.f
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return err
 	}

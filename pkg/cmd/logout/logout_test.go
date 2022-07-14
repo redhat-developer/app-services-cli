@@ -9,6 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/kcconnection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -73,7 +74,7 @@ func TestNewLogoutCommand(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			fact := &factory.Factory{
 				Config: mockutil.NewConfigMock(tt.args.cfg),
-				Connection: func(connectionCfg *connection.Config) (connection.Connection, error) {
+				Connection: func() (connection.Connection, error) {
 					return mockutil.NewConnectionMock(tt.args.connection, nil), nil
 				},
 				Localizer: localizer,

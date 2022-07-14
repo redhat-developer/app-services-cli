@@ -10,6 +10,7 @@ import (
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
@@ -21,7 +22,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -184,7 +185,7 @@ func runCreate(opts *options) error {
 	}
 
 	var conn connection.Connection
-	if conn, err = f.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
+	if conn, err = f.Connection(); err != nil {
 		return err
 	}
 

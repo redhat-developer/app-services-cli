@@ -1,7 +1,6 @@
 package kafkacmdutil
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -28,7 +27,7 @@ func FilterValidTopicNameArgs(f *factory.Factory, toComplete string) (validNames
 		return validNames, directive
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validNames, directive
 	}
@@ -80,7 +79,7 @@ func FilterValidConsumerGroupIDs(f *factory.Factory, toComplete string) (validID
 		return validIDs, directive
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validIDs, directive
 	}

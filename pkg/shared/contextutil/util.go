@@ -5,6 +5,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
@@ -60,7 +61,7 @@ func GetCurrentKafkaInstance(f *factory.Factory) (*kafkamgmtclient.KafkaRequest,
 }
 
 func GetKafkaForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*kafkamgmtclient.KafkaRequest, error) {
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +95,7 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 }
 
 func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.Factory) (*registrymgmtclient.Registry, error) {
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return nil, err
 	}

@@ -12,7 +12,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -105,7 +104,7 @@ func NewConsumeTopicCommand(f *factory.Factory) *cobra.Command {
 
 func runCmd(opts *options) error {
 
-	conn, err := opts.f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}

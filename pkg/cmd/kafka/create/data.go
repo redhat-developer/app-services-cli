@@ -2,7 +2,6 @@ package create
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
@@ -111,7 +110,7 @@ func FetchValidMarketplaceAccounts(amsTypes []accountmgmtutil.QuotaSpec, marketp
 func FetchValidKafkaSizes(f *factory.Factory,
 	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +156,7 @@ func FetchValidKafkaSizes(f *factory.Factory,
 // GetEnabledCloudProviderNames returns a list of cloud provider names from the enabled cloud providers
 func GetEnabledCloudProviderNames(f *factory.Factory) ([]string, error) {
 	validProviders := []string{}
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validProviders, err
 	}
@@ -180,7 +179,7 @@ func GetEnabledCloudProviderNames(f *factory.Factory) ([]string, error) {
 // GetEnabledCloudRegionIDs extracts and returns a slice of the unique IDs of all enabled regions
 func GetEnabledCloudRegionIDs(f *factory.Factory, providerID string, userAllowedAMSInstanceType *accountmgmtutil.QuotaSpec) ([]string, error) {
 	validRegions := []string{}
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return validRegions, err
 	}

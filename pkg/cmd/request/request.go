@@ -9,7 +9,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
@@ -59,7 +58,7 @@ func runCmd(opts *options) (err error) {
 		return errors.New("--path is required")
 	}
 	opts.Logger.Info("Performing request to", opts.urlPath)
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 
 	if err != nil {
 		return err

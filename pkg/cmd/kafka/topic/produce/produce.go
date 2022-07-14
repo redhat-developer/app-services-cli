@@ -17,7 +17,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/kafkacmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -93,7 +92,7 @@ func NewProduceTopicCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *options) error {
-	conn, err := opts.f.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}

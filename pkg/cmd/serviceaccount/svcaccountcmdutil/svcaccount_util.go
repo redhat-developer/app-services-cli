@@ -5,6 +5,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 

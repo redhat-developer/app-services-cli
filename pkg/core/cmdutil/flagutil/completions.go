@@ -5,7 +5,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac/rbacutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
@@ -34,7 +33,7 @@ func RegisterUserCompletionFunc(cmd *cobra.Command, flagName string, f *factory.
 		var usernames []string
 		directive := cobra.ShellCompDirectiveNoSpace
 
-		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+		conn, err := f.Connection()
 		if err != nil {
 			return usernames, directive
 		}
@@ -59,7 +58,7 @@ func RegisterServiceAccountCompletionFunc(cmd *cobra.Command, f *factory.Factory
 		var emptyList []string
 		directive := cobra.ShellCompDirectiveNoSpace
 
-		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+		conn, err := f.Connection()
 		if err != nil {
 			return emptyList, directive
 		}
