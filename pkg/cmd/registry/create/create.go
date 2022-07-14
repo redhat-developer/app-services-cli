@@ -15,6 +15,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
@@ -129,7 +130,7 @@ func runCreate(opts *options) error {
 	}
 
 	var conn connection.Connection
-	if conn, err = opts.Connection(connection.DefaultConfigSkipMasAuth); err != nil {
+	if conn, err = opts.Connection(); err != nil {
 		return err
 	}
 

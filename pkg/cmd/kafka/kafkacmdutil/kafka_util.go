@@ -9,7 +9,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -97,7 +96,7 @@ func (v *Validator) ValidateSearchInput(val interface{}) error {
 func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	name, _ := val.(string)
 
-	conn, err := v.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := v.Connection()
 	if err != nil {
 		return err
 	}

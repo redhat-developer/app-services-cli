@@ -8,7 +8,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/spf13/cobra"
@@ -67,7 +66,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 func runList(opts *options) error {
 	f := opts.f
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return err
 	}
