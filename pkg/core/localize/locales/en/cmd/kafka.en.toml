@@ -328,6 +328,15 @@ one = 'Unique name of the Kafka instance'
 description = 'Input title for Cloud Provider'
 one = 'Cloud Provider:'
 
+[kafka.create.input.billingModel.message]
+one = 'Billing Model:'
+
+[kafka.create.input.marketplace.message]
+one = 'Marketplace:'
+
+[kafka.create.input.marketplaceAccountID.message]
+one = 'Marketplace Account ID:'
+
 [kafka.create.input.cloudRegion.message]
 description = 'Input title for Cloud Region'
 one = "Cloud Region:"

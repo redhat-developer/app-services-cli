@@ -238,6 +238,44 @@ func pickCloudAccount(f *factory.Factory, cloudAccounts *[]amsclient.CloudAccoun
 	return &matchedAccounts, nil
 }
 
+// FetchValidMarketplaces returns the marketplaces available to the user to create Kafka Instance
+func FetchValidMarketplaces(amsTypes []QuotaSpec) []string {
+
+	validMarketplaces := []string{}
+
+	for _, quota := range amsTypes {
+		if quota.CloudAccounts != nil {
+			for _, cloudAccount := range *quota.CloudAccounts {
+				validMarketplaces = append(validMarketplaces, *cloudAccount.CloudProviderId)
+			}
+		}
+	}
+
+	return unique(validMarketplaces)
+}
+
+// FetchValidMarketplaceAccounts returns the cloud accounts available for the specified marketplace
+func FetchValidMarketplaceAccounts(amsTypes []QuotaSpec, marketplace string) []string {
+
+	validAccounts := []string{}
+
+	for _, quota := range amsTypes {
+		if quota.CloudAccounts != nil {
+			for _, cloudAccount := range *quota.CloudAccounts {
+				if marketplace != "" {
+					if cloudAccount.GetCloudProviderId() == marketplace {
+						validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
+					}
+				} else {
+					validAccounts = append(validAccounts, cloudAccount.GetCloudAccountId())
+				}
+			}
+		}
+	}
+
+	return unique(validAccounts)
+}
+
 func GetOrganizationID(ctx context.Context, conn connection.Connection) (accountID string, err error) {
 	account, _, err := conn.API().AccountMgmt().ApiAccountsMgmtV1CurrentAccountGet(ctx).
 		Execute()
@@ -246,4 +284,16 @@ func GetOrganizationID(ctx context.Context, conn connection.Connection) (account
 	}
 
 	return account.Organization.GetId(), nil
+}
+
+func unique(s []string) []string {
+	inResult := make(map[string]bool)
+	var result []string
+	for _, str := range s {
+		if _, ok := inResult[str]; !ok {
+			inResult[str] = true
+			result = append(result, str)
+		}
+	}
+	return result
 }

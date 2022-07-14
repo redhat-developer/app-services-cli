@@ -148,6 +148,14 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetKafkaSizeCompletionValues(f, opts.provider, opts.region)
 	})
 
+	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlace, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetMarketplaceCompletionValues(f)
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc(FlagMarketPlaceAcctID, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return GetMarketplaceAccountCompletionValues(f, opts.marketplace)
+	})
+
 	return cmd
 }
 
@@ -454,7 +462,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		answers.BillingModel = availableBillingModels[0]
 	} else {
 		billingModelPrompt := &survey.Select{
-			Message: "billing model:",
+			Message: f.Localizer.MustLocalize("kafka.create.input.billingModel.message"),
 			Options: availableBillingModels,
 		}
 		err = survey.AskOne(billingModelPrompt, &answers.BillingModel)
@@ -469,7 +477,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			answers.Marketplace = validMarketPlaces[0]
 		} else {
 			marketplacePrompt := &survey.Select{
-				Message: "marketplace:",
+				Message: f.Localizer.MustLocalize("kafka.create.input.marketplace.message"),
 				Options: validMarketPlaces,
 			}
 			err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
@@ -486,7 +494,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 				answers.MarketplaceAcctID = validMarketplaceAcctIDs[0]
 			} else {
 				marketplaceAccountPrompt := &survey.Select{
-					Message: "marketplace account ID:",
+					Message: f.Localizer.MustLocalize("kafka.create.input.marketplaceAccountID.message"),
 					Options: validMarketplaceAcctIDs,
 				}
 				err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)

@@ -52,3 +52,45 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 
 	return validSizes, cobra.ShellCompDirectiveNoSpace
 }
+
+func GetMarketplaceCompletionValues(f *factory.Factory) (validSizes []string, directive cobra.ShellCompDirective) {
+
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
+
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas)
+
+	return validMarketPlaces, cobra.ShellCompDirectiveNoSpace
+}
+
+func GetMarketplaceAccountCompletionValues(f *factory.Factory, marketplace string) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
+
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	if marketplace == "" {
+		return validMarketplaceAcctIDs, directive
+	}
+
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
+
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	validMarketplaceAcctIDs = FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, marketplace)
+
+	return validMarketplaceAcctIDs, cobra.ShellCompDirectiveNoSpace
+}
