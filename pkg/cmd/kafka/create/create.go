@@ -111,7 +111,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			if !f.IOStreams.CanPrompt() && opts.name == "" {
 				return f.Localizer.MustLocalizeError("kafka.create.argument.name.error.requiredWhenNonInteractive")
 			} else if opts.name == "" {
-				if opts.provider != "" || opts.region != "" {
+				if opts.provider != "" || opts.region != "" || opts.marketplaceAcctId != "" ||
+					opts.marketplace != "" || opts.size != "" || opts.billingModel != "" {
 					return f.Localizer.MustLocalizeError("kafka.create.argument.name.error.requiredWhenNonInteractive")
 				}
 				opts.interactive = true
