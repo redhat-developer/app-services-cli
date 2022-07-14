@@ -9,7 +9,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
@@ -115,7 +114,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 func runAdd(instanceID string, opts *aclcmdutil.CrudOptions) error {
 	ctx := opts.Context
 
-	conn, err := opts.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}

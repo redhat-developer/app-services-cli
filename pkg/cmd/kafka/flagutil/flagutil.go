@@ -3,7 +3,6 @@ package flagutil
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -44,7 +43,7 @@ func RegisterNameFlagCompletionFunc(cmd *cobra.Command, f *factory.Factory) erro
 		var validNames []string
 		directive := cobra.ShellCompDirectiveNoSpace
 
-		conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+		conn, err := f.Connection()
 		if err != nil {
 			return validNames, directive
 		}

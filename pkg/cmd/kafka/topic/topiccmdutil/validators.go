@@ -9,7 +9,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 )
 
@@ -143,7 +142,7 @@ func (v *Validator) ValidateMessageRetentionSize(val interface{}) error {
 func (v *Validator) ValidateNameIsAvailable(val interface{}) error {
 	name := fmt.Sprintf("%v", val)
 
-	conn, err := v.Connection(connection.DefaultConfigRequireMasAuth)
+	conn, err := v.Connection()
 	if err != nil {
 		return err
 	}

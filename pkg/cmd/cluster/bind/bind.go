@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/kubeclient"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/cluster/v1alpha"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/servicespec"
 
@@ -18,7 +19,7 @@ import (
 )
 
 type options struct {
-	Connection     func(connectionCfg *connection.Config) (connection.Connection, error)
+	Connection     func() (connection.Connection, error)
 	Logger         logging.Logger
 	IO             *iostreams.IOStreams
 	localizer      localize.Localizer
@@ -93,7 +94,7 @@ func NewBindCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runBind(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}

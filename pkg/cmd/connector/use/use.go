@@ -6,6 +6,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connectorutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
@@ -69,7 +70,7 @@ func runUse(opts *options) error {
 		return err
 	}
 
-	conn, err := opts.f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}

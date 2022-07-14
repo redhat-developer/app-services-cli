@@ -16,7 +16,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/spinner"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -101,7 +100,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 // nolint:funlen
 func runCreate(opts *options) error {
-	conn, err := opts.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
@@ -173,7 +172,7 @@ func runCreate(opts *options) error {
 }
 
 func runInteractivePrompt(opts *options) (err error) {
-	_, err = opts.Connection(connection.DefaultConfigSkipMasAuth)
+	_, err = opts.Connection()
 	if err != nil {
 		return err
 	}

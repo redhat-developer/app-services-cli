@@ -10,7 +10,6 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/defaultapi"
 
@@ -38,13 +37,11 @@ type Connection struct {
 	defaultRealm      string
 	logger            logging.Logger
 	Config            config.IConfig
-	connectionConfig  *connection.Config
 }
 
 // RefreshTokens will fetch a refreshed copy of the access token and refresh token from the authentication server
 // The new tokens will have an increased expiry time and are persisted in the config and connection
 func (c *Connection) RefreshTokens(ctx context.Context) (err error) {
-
 	cfg, err := c.Config.Load()
 	if err != nil {
 		return err
@@ -52,24 +49,23 @@ func (c *Connection) RefreshTokens(ctx context.Context) (err error) {
 
 	// track if we need to update the config with new token values
 	var cfgChanged bool
-	if c.connectionConfig.RequireAuth {
-		c.logger.Debug("Refreshing tokens")
-		// nolint:govet
-		refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
-		if err != nil {
-			return &AuthError{err}
-		}
 
-		if refreshedTk.AccessToken != c.Token.AccessToken {
-			c.Token.AccessToken = refreshedTk.AccessToken
-			cfg.AccessToken = refreshedTk.AccessToken
-			cfgChanged = true
-		}
-		if refreshedTk.RefreshToken != c.Token.RefreshToken {
-			c.Token.RefreshToken = refreshedTk.RefreshToken
-			cfg.RefreshToken = refreshedTk.RefreshToken
-			cfgChanged = true
-		}
+	c.logger.Debug("Refreshing tokens")
+	// nolint:govet
+	refreshedTk, err := c.keycloakClient.RefreshToken(ctx, c.Token.RefreshToken, c.clientID, "", c.defaultRealm)
+	if err != nil {
+		return &AuthError{err}
+	}
+
+	if refreshedTk.AccessToken != c.Token.AccessToken {
+		c.Token.AccessToken = refreshedTk.AccessToken
+		cfg.AccessToken = refreshedTk.AccessToken
+		cfgChanged = true
+	}
+	if refreshedTk.RefreshToken != c.Token.RefreshToken {
+		c.Token.RefreshToken = refreshedTk.RefreshToken
+		cfg.RefreshToken = refreshedTk.RefreshToken
+		cfgChanged = true
 	}
 
 	if !cfgChanged {

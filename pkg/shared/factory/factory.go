@@ -5,11 +5,11 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 )
 
 // Factory is an abstract type which provides access to
@@ -31,4 +31,4 @@ type Factory struct {
 	ServiceContext servicecontext.IContext
 }
 
-type ConnectionFunc func(cfg *connection.Config) (connection.Connection, error)
+type ConnectionFunc func() (connection.Connection, error)
