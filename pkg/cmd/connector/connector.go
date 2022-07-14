@@ -3,6 +3,7 @@ package connector
 import (
 	"github.com/redhat-developer/app-services-cli/internal/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/cluster"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connector_type"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/describe"
@@ -36,6 +37,8 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 		use.NewUseCommand(f),
 		start.NewStartCommand(f),
 		stop.NewStopCommand(f),
+		connector_type.NewTypeCommand(f),
+
 		// Hidden for the users and docs at the moment
 		create.NewCreateCommand(f),
 		delete.NewDeleteCommand(f),
