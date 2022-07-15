@@ -2,7 +2,6 @@ package list
 
 import (
 	"fmt"
-	"net/http"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -12,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
+	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 	"github.com/spf13/cobra"
 )
 
@@ -82,7 +82,7 @@ func runUpdateCommand(opts *options) error {
 	request = request.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != DefaultSearch {
-		query := fmt.Sprintf("name like %s", opts.search)
+		query := fmt.Sprintf("name like %[1]s or label like %[1]s or description like %[1]s", opts.search)
 		request = request.Search(query)
 	}
 
@@ -92,12 +92,13 @@ func runUpdateCommand(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if err != nil {
-		switch httpRes.StatusCode {
-		case http.StatusUnauthorized:
+	if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetCode() {
+		case connectorerror.ERROR_11:
 			return opts.f.Localizer.MustLocalizeError("connector.common.error.unauthorized")
-		case http.StatusInternalServerError:
-			return opts.f.Localizer.MustLocalizeError("connector.common.error.internalServerError")
+		case connectorerror.ERROR_23:
+			return opts.f.Localizer.MustLocalizeError("connector.common.error.parse.search")
+
 		default:
 			return err
 		}

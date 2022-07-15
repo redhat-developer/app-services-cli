@@ -448,5 +448,8 @@ one = 'The max number of connectors to return in the page'
 [connector.common.error.unauthorized]
 one = 'Auth token provided is invalid'
 
+[connector.common.error.parse.search]
+one = 'Failed to parse search query'
+
 [connector.common.error.internalServerError]
 one = 'Unexpected internal server error occured'
