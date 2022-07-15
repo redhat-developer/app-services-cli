@@ -1,42 +1,27 @@
 ## rhoas connector type
 
-Connectors instance commands
+List and get details of different connector types
 
 ### Synopsis
 
-With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that produce data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
+List, search and get details of connector types that are available to use in the connector catalog.
 
-A Connectors instance is an instance of a one of the supported Connectors.
-Use the "connector" command to create, delete, and view a list of Connectors instances.
+Use list to list available connector types.
+
+Use describe to get more details about a specific connector type.
 
 
 ### Examples
 
 ```
-   
-# List of Connectors instances
-rhoas connector list
+# List all connector types
+rhoas connector type list
 
-# Create a Connectors instance
-rhoas connector create --file=myconnector.json
+# List all connector types that start with 'Amazon'
+rhoas connector type list --search=Amazon%
 
-# Create a Connectors instance from stdin
-cat myconnector.json | rhoas connector create
-
-# Update a Connectors instance
-rhoas connector update --id=my-connector --file=myconnector.json
-
-# Update a Connectors instance from stdin
-cat myconnector.json | rhoas connector update
-
-# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector delete --id=c9b71ucotd37bufoamkg
-
-# Start a Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector start --id=c9b71ucotd37bufoamkg
-
-# Start the Connectors instance in the current context 
-rhoas connector stop
+# Get more details of connector type with a type id of IEJF87hg2342hsdHFG
+rhoas connector type describe --id=IEJF87hg2342hsdHFG
 
 ```
 
