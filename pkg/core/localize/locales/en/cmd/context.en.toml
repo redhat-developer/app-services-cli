@@ -124,10 +124,10 @@ $ rhoas context set-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 [context.setConnector.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# Select a connector instance by name to be set in the current context
+# Set the current Connectors instance by providing the name of a Connectors instance
 $ rhoas context set-connector --name=my-connector
 
-# Select a connector instance by ID to be set in the current context
+# Set the current Connectors instance by providing the ID of a Connectors instance
 $ rhoas context set-connector --id=1iSSK8RQ3JKI8Q0OTFHF5FRg
 '''
 
@@ -245,8 +245,9 @@ Use the "rhoas context set-kafka" command to select a Kafka instance for your co
 
 [context.common.error.noConnectorID]
 one='''
-The rhoas context doesn't have a connector instance ID.
-Use the "rhoas context set-connector" command to select a connector instance for your context
+The Connectors instance for the current context is not set. The rhoas CLI uses the current Connectors 
+instance when you run any rhoas connector cluster commands. Use the rhoas context set-connector command 
+to set the current Connectors instance
 '''
 
 [context.common.error.registry.notFound]

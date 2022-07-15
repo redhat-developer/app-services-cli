@@ -32,10 +32,10 @@ cat myconnector.json | rhoas connector update
 # Delete a Connectors instance with ID c9b71ucotd37bufoamkg
 rhoas connector delete --id=c9b71ucotd37bufoamkg
 
-# Start a Connectors instance with ID c9b71ucotd37bufoamkg
+# Start the Connectors instance with ID c9b71ucotd37bufoamkg
 rhoas connector start --id=c9b71ucotd37bufoamkg
 
-# Start the Connectors instance in the current context 
+# Stop the current Connectors instance
 rhoas connector stop
 
 ```
@@ -52,8 +52,8 @@ rhoas connector stop
 * [rhoas](rhoas.md)	 - RHOAS CLI
 * [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 * [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
-* [rhoas connector start](rhoas_connector_start.md)	 - Start a connector instance
-* [rhoas connector stop](rhoas_connector_stop.md)	 - Stop a connector instance
-* [rhoas connector type](rhoas_connector_type.md)	 - Connectors instance commands
-* [rhoas connector use](rhoas_connector_use.md)	 - Set the current connector instance
+* [rhoas connector start](rhoas_connector_start.md)	 - Start a Connectors instance
+* [rhoas connector stop](rhoas_connector_stop.md)	 - Stop a Connectors instance
+* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of different connector types
+* [rhoas connector use](rhoas_connector_use.md)	 - Set the current Connectors instance
 

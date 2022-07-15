@@ -1,10 +1,10 @@
 ## rhoas connector start
 
-Start a connector instance
+Start a Connectors instance
 
 ### Synopsis
 
-Start a Connectors instance, pass an id or use the instance in the current context
+Start the current Connectors instance or start a Connectors instance by specifying its ID
 
 ```
 rhoas connector start [flags]
@@ -13,10 +13,10 @@ rhoas connector start [flags]
 ### Examples
 
 ```
-# Start a connector instance
+# Start the current Connectors instance
 rhoas connector start
 
-# Start a connector instance
+# Start a Connectors instance by specifying its ID
 rhoas connector start --id=IJD76DUH675234
 
 ```

@@ -46,5 +46,5 @@ rhoas connector type list --search=%Amazon%
 
 ### SEE ALSO
 
-* [rhoas connector type](rhoas_connector_type.md)	 - Connectors instance commands
+* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of different connector types
 

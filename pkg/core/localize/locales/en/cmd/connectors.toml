@@ -127,10 +127,10 @@ cat myconnector.json | rhoas connector update
 # Delete a Connectors instance with ID c9b71ucotd37bufoamkg
 rhoas connector delete --id=c9b71ucotd37bufoamkg
 
-# Start a Connectors instance with ID c9b71ucotd37bufoamkg
+# Start the Connectors instance with ID c9b71ucotd37bufoamkg
 rhoas connector start --id=c9b71ucotd37bufoamkg
 
-# Start the Connectors instance in the current context 
+# Stop the current Connectors instance
 rhoas connector stop
 '''
 
@@ -150,32 +150,32 @@ cat myconnector.json | rhoas connector create
 '''
 
 [connector.stop.cmd.shortDescription]
-one = 'Stop a connector instance'
+one = 'Stop a Connectors instance'
 
 [connector.stop.cmd.longDescription]
-one = 'Stop a connector instance, pass an id or use the instance in the current context'
+one = 'Stop the current Connectors instance or stop a Connectors instance by providing its ID'
 
 [connector.stop.cmd.example]
 one = '''
-# Stop a connector instance
+# Stop current Connectors instance
 rhoas connector stop
 
-# Stop a connector instance
+# Stop a Connectors instance by specifying its ID
 rhoas connector stop --id=IJD76DUH675234
 '''
 
 [connector.start.cmd.shortDescription]
-one = 'Start a connector instance'
+one = 'Start a Connectors instance'
 
 [connector.start.cmd.longDescription]
-one = 'Start a Connectors instance, pass an id or use the instance in the current context'
+one = 'Start the current Connectors instance or start a Connectors instance by specifying its ID'
 
 [connector.start.cmd.example]
 one = '''
-# Start a connector instance
+# Start the current Connectors instance
 rhoas connector start
 
-# Start a connector instance
+# Start a Connectors instance by specifying its ID
 rhoas connector start --id=IJD76DUH675234
 '''
 
@@ -333,56 +333,56 @@ one = 'Successfully deleted the namespace'
 one = 'Are you sure that you want to delete the Connectors namespace with id "{{.ID}}"?'
 
 [connector.use.error.idOrNameRequired]
-one= '--id flag or name required when not running interactively'
+one= 'You must provide the --id flag or the --name flag to identify the current Connectors instance'
 
 [connector.use.flag.id]
 description = 'Description for the --id flag'
-one = 'Unique ID of the connector instance you want to set as the current instance'
+one = 'The unique ID of the Connectors instance that you want to set as the current instance'
 
 [connector.use.flag.name]
 description = 'Description for the --name flag'
-one = 'Name of the connector instance you want to set as the current instance'
+one = 'The name of the Connectors instance that you want to set as the current instance'
 
 [connector.use.log.info.useSuccess]
 description = 'Info message when current connector was set'
-one = 'Connector instance "{{.Name}}" has been set as the current instance.'
+one = 'Connectors instance "{{.Name}}" is now the current instance'
 
 [connector.common.log.info.noConnectorInstances]
-description = 'Info message when no connector instances were found'
-one = 'No connector instances were found.'
+description = 'Info message when no Connectors instances were found'
+one = 'No Connectors instances were found.'
 
 [connector.common.input.instanceName.message]
-one = 'Select connector instance:'
+one = 'Set the current Connectors instance:'
 
 [connector.use.cmd.shortDescription]
 description = "Short description for command"
-one = "Set the current connector instance"
+one = "Set the current Connectors instance"
 
 [connector.use.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Select a connector instance to be the current instance. When you set the connector instance to be used, it is set as the current instance for all 
-“rhoas connector cluster” commands.
+Set a Connectors instance as the current instance. The rhoas CLI uses the 
+current Connectors instance when you run any rhoas connector cluster commands.
 
-You can select a  connector instance by name or ID.
+You can set a Connectors instance as the current instance by providing its name or ID.
 '''
 
 [connector.use.cmd.example]
 description = 'Examples of how to use the command'
 one = '''
-# Select a connector instance by name to be set in the current context
+# Set the current Connectors instance by providing the name of a Connectors instance
 $ rhoas connector use --name=my-connector
 
-# Select a connector instance by ID to be set in the current context
+# Set the current Connectors instance by providing the ID of a Connectors instance
 $ rhoas connector use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
 [connector.common.error.idNotFound]
-description = "Error message for when and connector with ID is not found"
+description = "Error message for when a Connectors instance ID is not found"
 one = "Connector instance with ID {{.ID}} not found"
 
 [connector.common.error.nameNotFound]
-description = "Error message for when and connector with name is not found"
+description = "Error message for when a Connectors instance name is not found"
 one = "Connector instance with name {{.Name}} not found"
 
 [connector.type.cmd.shortDescription]
