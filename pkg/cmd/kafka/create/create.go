@@ -245,7 +245,9 @@ func runCreate(opts *options) error {
 			return err
 		}
 
-		f.Logger.Debug(fmt.Sprintf("Selected quota object: %#v", userQuota))
+		userQuotaJSON, _ := json.MarshalIndent(userQuota, "", "  ")
+		f.Logger.Debug("Selected Quota object:")
+		f.Logger.Debug(string(userQuotaJSON))
 
 		if opts.provider == "" {
 			opts.provider = defaultProvider
@@ -429,9 +431,6 @@ type promptAnswers struct {
 func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
 
-	accountIDNullable := kafkamgmtclient.NullableString{}
-	marketplaceProviderNullable := kafkamgmtclient.NullableString{}
-
 	validator := &kafkacmdutil.Validator{
 		Localizer:  f.Localizer,
 		Connection: f.Connection,
@@ -531,7 +530,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	f.Logger.Debug(fmt.Sprintf("Selected quota object: %#v", userQuota))
+	userQuotaJSON, _ := json.MarshalIndent(userQuota, "", "  ")
+	f.Logger.Debug("Selected Quota object:")
+	f.Logger.Debug(string(userQuotaJSON))
 
 	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuota)
 	if err != nil {
@@ -568,8 +569,23 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			return nil, err
 		}
 	}
+
+	accountIDNullable := kafkamgmtclient.NullableString{}
+	marketplaceProviderNullable := kafkamgmtclient.NullableString{}
 	billingNullable := kafkamgmtclient.NullableString{}
-	billingNullable.Set(&answers.BillingModel)
+
+	if answers.BillingModel != "" {
+		billingNullable.Set(&answers.BillingModel)
+	}
+
+	if answers.Marketplace != "" {
+		marketplaceProviderNullable.Set(&answers.Marketplace)
+	}
+
+	if answers.MarketplaceAcctID != "" {
+		accountIDNullable.Set(&answers.MarketplaceAcctID)
+	}
+
 	payload := &kafkamgmtclient.KafkaRequestPayload{
 		Name:                  answers.Name,
 		Region:                &answers.Region,
