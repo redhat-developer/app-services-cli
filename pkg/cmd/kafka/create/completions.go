@@ -2,7 +2,6 @@ package create
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/spf13/cobra"
@@ -28,7 +27,7 @@ func GetCloudProviderRegionCompletionValues(f *factory.Factory, providerID strin
 }
 
 // GetKafkaSizeCompletionValues returns a list of valid kafka sizes for the specified region and ams instance types
-func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionId string) (validRegions []string, directive cobra.ShellCompDirective) {
+func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionId string) (validSizes []string, directive cobra.ShellCompDirective) {
 	directive = cobra.ShellCompDirectiveNoSpace
 
 	// We need both values to provide a valid list of sizes
@@ -41,33 +40,76 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 		return nil, directive
 	}
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
 	if err != nil {
 		return nil, directive
 	}
 
-	userInstanceType, _ := accountmgmtutil.GetUserSupportedInstanceType(f.Context, &constants.Kafka.Ams, conn)
+	userInstanceType, _ := accountmgmtutil.SelectQuotaForUser(f, orgQuota, accountmgmtutil.MarketplaceInfo{})
 
 	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
-	validRegions, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, *userInstanceType)
+	validSizes, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, *userInstanceType)
 
-	return validRegions, cobra.ShellCompDirectiveNoSpace
+	return validSizes, cobra.ShellCompDirectiveNoSpace
 }
 
-// GetMarketplaceAcctIdCompletionValues returns a list of valid marketplace account IDs for the organization
-func GetMarketplaceAcctIdCompletionValues(f *factory.Factory) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
+func GetMarketplaceCompletionValues(f *factory.Factory) (validSizes []string, directive cobra.ShellCompDirective) {
+
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	validMarketplaceAcctIDs, _ = accountmgmtutil.GetValidMarketplaceAcctIDs(f.Context, f.Connection, "")
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
 
-	return validMarketplaceAcctIDs, directive
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas)
+
+	return validMarketPlaces, cobra.ShellCompDirectiveNoSpace
 }
 
-// GetMarketplaceCompletionValues returns a list of valid marketplaces for the organization
-func GetMarketplaceCompletionValues(f *factory.Factory) (validMarketplaces []string, directive cobra.ShellCompDirective) {
+func GetMarketplaceAccountCompletionValues(f *factory.Factory, marketplace string) (validMarketplaceAcctIDs []string, directive cobra.ShellCompDirective) {
+
 	directive = cobra.ShellCompDirectiveNoSpace
 
-	validMarketplaces, _ = accountmgmtutil.GetValidMarketplaces(f.Context, f.Connection)
+	if marketplace == "" {
+		return validMarketplaceAcctIDs, directive
+	}
 
-	return validMarketplaces, directive
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
+
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	validMarketplaceAcctIDs = FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, marketplace)
+
+	return validMarketplaceAcctIDs, cobra.ShellCompDirectiveNoSpace
+}
+
+func GetBillingModelCompletionValues(f *factory.Factory) (availableBillingModels []string, directive cobra.ShellCompDirective) {
+
+	directive = cobra.ShellCompDirectiveNoSpace
+
+	err, constants := remote.GetRemoteServiceConstants(f.Context, f.Logger)
+	if err != nil {
+		return nil, directive
+	}
+
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, directive
+	}
+
+	availableBillingModels = FetchSupportedBillingModels(orgQuota)
+
+	return availableBillingModels, directive
 }

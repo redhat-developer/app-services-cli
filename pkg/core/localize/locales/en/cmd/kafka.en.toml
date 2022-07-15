@@ -289,6 +289,9 @@ one = 'Validate all user provided arguments without creating the Kafka instance'
 [kafka.create.flag.marketplaceId.description]
 one = 'Cloud Account ID for the marketplace'
 
+[kafka.create.flag.billingModel.description]
+one = 'Billing model to be used'
+
 [kafka.create.flag.marketplaceType.description]
 one = 'Name of the marketplace where the instance is purchased on'
 
@@ -325,6 +328,15 @@ one = 'Unique name of the Kafka instance'
 description = 'Input title for Cloud Provider'
 one = 'Cloud Provider:'
 
+[kafka.create.input.billingModel.message]
+one = 'Billing Model:'
+
+[kafka.create.input.marketplace.message]
+one = 'Marketplace:'
+
+[kafka.create.input.marketplaceAccountID.message]
+one = 'Marketplace Account ID:'
+
 [kafka.create.input.cloudRegion.message]
 description = 'Input title for Cloud Region'
 one = "Cloud Region:"
@@ -352,13 +364,16 @@ one = "Geographical region where the Kafka instance will be deployed"
 one = 'name is required. Run "rhoas kafka create --name my-kafka"'
 
 [kafka.create.error.bypassChecks.marketplace]
-one = '"--marketplace" and "--marketplace-account-id" flags are not supported with "--bypass-checks" flag'
+one = '"--billing-model", "--marketplace", "--marketplace-account-id" flags are not supported with "--bypass-checks" flag'
+
+[kafka.create.error.insufficientMarketplaceInfo]
+one = '"--marketplace" and "--marketplace-account-id" flags should be supplied together'
+
+[kafka.create.error.standard.invalidFlags]
+one = 'billing model cannot be standard if "--marketplace-account-id" or "--marketplace" are set'
 
 [kafka.create.error.conflictError]
 one = 'Kafka instance "{{.Name}}" already exists'
-
-[kafka.create.error.userInstanceType.notFound]
-one = 'Cannot fetch user allowed instance type'
 
 [kafka.create.error.noInteractiveMode]
 one = 'Interactive mode is not supported when using --bypass-checks flag'
@@ -403,6 +418,27 @@ provided instance size is not valid. Valid sizes: {{.ValidSizes}}
 one = '''
 provided billing account id and provider are invalid {{.Billing}}
 '''
+
+[kafka.create.quota.error.onlyTrialAvailable]
+one = "only trial quotas are available, don't specify billing model details"
+
+[kafka.create.quota.error.noMarketplace]
+one = "no marketplace quotas are available"
+
+[kafka.create.quota.error.noStandard]
+one = "no standard quotas are available"
+
+[kafka.create.quota.error.noBillingModel]
+one = 'multiple quota types found, please specify "--billing-model"'
+
+[kafka.create.quota.error.multipleMarketplaceQuotas]
+one = 'multiple marketplace quota types found, please specify "--marketplace" and "--marketplace-account-id"'
+
+[kafka.create.quota.error.cloudAccountNotFound]
+one = 'no marketplace quota found with the specified marketplace provider and account id'
+
+[kafka.create.quota.error.multipleCloudAccounts]
+one = 'multiple cloud accounts found, please specify "--marketplace" and "--marketplace-account-id"'
 
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"

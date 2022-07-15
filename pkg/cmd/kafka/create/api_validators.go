@@ -3,6 +3,7 @@ package create
 import (
 	"strings"
 
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -23,6 +24,8 @@ type ValidatorInput struct {
 	constants *remote.DynamicServiceConstants
 	conn      connection.Connection
 }
+
+var validBillingModels []string = []string{accountmgmtutil.QuotaMarketplaceType, accountmgmtutil.QuotaStandardType}
 
 func (input *ValidatorInput) ValidateProviderAndRegion() error {
 	f := input.f
@@ -118,4 +121,20 @@ func (input *ValidatorInput) ValidateSize() error {
 	}
 
 	return nil
+}
+
+// ValidateBillingModel validates if user provided a supported billing model
+func ValidateBillingModel(billingModel string) error {
+
+	if billingModel == "" {
+		return nil
+	}
+
+	isValid := flagutil.IsValidInput(billingModel, validBillingModels...)
+
+	if isValid {
+		return nil
+	}
+
+	return flagutil.InvalidValueError("billing-model", billingModel, validBillingModels...)
 }
