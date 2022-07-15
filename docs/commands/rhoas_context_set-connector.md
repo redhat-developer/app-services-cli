@@ -1,13 +1,13 @@
 ## rhoas context set-connector
 
-Set the current connector instance
+Set the current Connectors instance
 
 ### Synopsis
 
-Select a connector instance to be the current instance. When you set the connector instance to be used, it is set as the current instance for all 
-“rhoas connector cluster” commands.
+Set a Connectors instance as the current instance. The rhoas CLI uses the 
+current Connectors instance when you run any rhoas connector cluster commands.
 
-You can select a  connector instance by name or ID.
+You can set a Connectors instance as the current instance by providing its name or ID.
 
 
 ```
@@ -17,10 +17,10 @@ rhoas context set-connector [flags]
 ### Examples
 
 ```
-# Select a connector instance by name to be set in the current context
+# Set the current Connectors instance by providing the name of a Connectors instance
 $ rhoas context set-connector --name=my-connector
 
-# Select a connector instance by ID to be set in the current context
+# Set the current Connectors instance by providing the ID of a Connectors instance
 $ rhoas context set-connector --id=1iSSK8RQ3JKI8Q0OTFHF5FRg
 
 ```
@@ -28,8 +28,8 @@ $ rhoas context set-connector --id=1iSSK8RQ3JKI8Q0OTFHF5FRg
 ### Options
 
 ```
-      --id string     Unique ID of the connector instance you want to set as the current instance
-      --name string   Name of the connector instance you want to set as the current instance
+      --id string     The unique ID of the Connectors instance that you want to set as the current instance
+      --name string   The name of the Connectors instance that you want to set as the current instance
 ```
 
 ### Options inherited from parent commands

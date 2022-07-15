@@ -1,10 +1,10 @@
 ## rhoas connector stop
 
-Stop a connector instance
+Stop a Connectors instance
 
 ### Synopsis
 
-Stop a connector instance, pass an id or use the instance in the current context
+Stop the current Connectors instance or stop a Connectors instance by providing its ID
 
 ```
 rhoas connector stop [flags]
@@ -13,10 +13,10 @@ rhoas connector stop [flags]
 ### Examples
 
 ```
-# Stop a connector instance
+# Stop current Connectors instance
 rhoas connector stop
 
-# Stop a connector instance
+# Stop a Connectors instance by specifying its ID
 rhoas connector stop --id=IJD76DUH675234
 
 ```
