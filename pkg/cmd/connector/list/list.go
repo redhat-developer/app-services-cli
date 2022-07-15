@@ -44,7 +44,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("connector.list.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("connector.list.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.list.cmd.example"),
-		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
@@ -82,15 +81,19 @@ func runList(opts *options) error {
 		return err
 	}
 
-	if response.Size == 0 && opts.outputFormat == "" {
+	if response.Items == nil && opts.outputFormat == "" {
+		f.Logger.Info(f.Localizer.MustLocalize("connector.common.log.info.noResults"))
+		return nil
+	}
+
+	if response.Size == 0  && opts.outputFormat == "" {
 		f.Logger.Info(f.Localizer.MustLocalize("connector.common.log.info.noResults"))
 		return nil
 	}
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
-		var rows []itemRow
-		rows = mapResponseItemsToRows(response.Items)
+		rows := mapResponseItemsToRows(response.Items)
 
 		dump.Table(f.IOStreams.Out, rows)
 		f.Logger.Info("")
