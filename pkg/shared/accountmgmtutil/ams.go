@@ -72,7 +72,7 @@ func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amscli
 
 func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error) {
 
-	conn, err := f.Connection(connection.DefaultConfigSkipMasAuth)
+	conn, err := f.Connection()
 	if err != nil {
 		return nil, err
 	}
