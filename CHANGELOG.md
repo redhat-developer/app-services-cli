@@ -1,4 +1,25 @@
 
+<a name="v0.46.0"></a>
+## [v0.46.0](https://github.com/redhat-developer/app-services-cli/compare/v0.45.2...v0.46.0) (2022-07-18)
+
+### Bug Fixes
+
+* missing rebase changes
+* add dam-sum
+* cache connection to skip refreshes ([#1653](https://github.com/redhat-developer/app-services-cli/issues/1653))
+* print no result when list is nil and using default format ([#1651](https://github.com/redhat-developer/app-services-cli/issues/1651))
+* remove redundant refresh token spec ([#1646](https://github.com/redhat-developer/app-services-cli/issues/1646))
+* connector type list ([#1641](https://github.com/redhat-developer/app-services-cli/issues/1641))
+* **deps:** update docusaurus monorepo to v2.0.0-rc.1
+
+### Features
+
+* added name flag to connector delete
+* connectors start stop commands ([#1633](https://github.com/redhat-developer/app-services-cli/issues/1633))
+* connector is now in context ([#1628](https://github.com/redhat-developer/app-services-cli/issues/1628))
+* **kafka create:** add billing model logic ([#1636](https://github.com/redhat-developer/app-services-cli/issues/1636))
+
+
 <a name="v0.45.2"></a>
 ## [v0.45.2](https://github.com/redhat-developer/app-services-cli/compare/v0.45.1...v0.45.2) (2022-07-13)
 
@@ -118,7 +139,7 @@
 
 
 <a name="v0.42.0"></a>
-## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.0) (2022-05-02)
+## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.42.0) (2022-05-02)
 
 ### Bug Fixes
 
@@ -129,12 +150,12 @@
 * changes for Kafka Creation business logic ([#1526](https://github.com/redhat-developer/app-services-cli/issues/1526))
 
 
-<a name="v0.41.2"></a>
-## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.41.2) (2022-04-29)
-
-
 <a name="v0.42.1"></a>
-## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.42.1) (2022-04-29)
+## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.1) (2022-04-29)
+
+
+<a name="v0.41.2"></a>
+## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.41.2) (2022-04-29)
 
 ### Bug Fixes
 
