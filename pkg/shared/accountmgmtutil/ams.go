@@ -146,7 +146,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 	if len(orgQuota.StandardQuotas) > 0 && len(orgQuota.MarketplaceQuotas) > 0 {
 
-		if marketplaceInfo.BillingModel == QuotaStandardType {
+		if marketplaceInfo.BillingModel == QuotaStandardType || (marketplaceInfo.BillingModel == "" && marketplaceInfo.Provider == "") {
 			return &orgQuota.StandardQuotas[0], nil
 		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
