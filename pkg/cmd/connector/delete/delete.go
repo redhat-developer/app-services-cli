@@ -8,13 +8,17 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connectorutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 )
 
 type options struct {
 	id           string
+	name         string
 	outputFormat string
 
 	f           *factory.Factory
@@ -32,12 +36,15 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Short:   f.Localizer.MustLocalize("connector.delete.cmd.shortDescription"),
 		Long:    f.Localizer.MustLocalize("connector.delete.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.delete.cmd.example"),
-		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+			}
+
+			if opts.name != "" && opts.id != "" {
+				return opts.f.Localizer.MustLocalizeError("service.error.idAndNameCannotBeUsed")
 			}
 
 			return runDelete(opts)
@@ -46,7 +53,8 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 	flags := connectorcmdutil.NewFlagSet(cmd, f)
 	flags.AddOutput(&opts.outputFormat)
-	_ = flags.AddConnectorID(&opts.id).Required()
+	_ = flags.AddConnectorID(&opts.id)
+	_ = flags.AddConnectorName(&opts.name)
 	flags.AddYes(&opts.skipConfirm)
 
 	return cmd
@@ -54,6 +62,40 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 
 func runDelete(opts *options) error {
 	f := opts.f
+
+	var conn connection.Connection
+	conn, err := f.Connection()
+	if err != nil {
+		return err
+	}
+
+	api := conn.API()
+	connectorMgmt := api.ConnectorsMgmt()
+
+	var connector *connectormgmtclient.Connector
+
+	if opts.id != "" {
+		connector, err = connectorutil.GetConnectorByID(&connectorMgmt, opts.id, f)
+		if err != nil {
+			return err
+		}
+	}
+
+	if opts.name != "" {
+		connector, err = connectorutil.GetConnectorByName(&connectorMgmt, opts.name, f)
+		if err != nil {
+			return err
+		}
+	}
+
+	if connector == nil {
+		connector, err = contextutil.GetCurrentConnectorInstance(&conn, f)
+		if err != nil {
+			return err
+		}
+	}
+
+	opts.id = connector.GetId()
 
 	if !opts.skipConfirm {
 		confirm, promptErr := promptConfirmDelete(opts)
@@ -66,15 +108,7 @@ func runDelete(opts *options) error {
 		}
 	}
 
-	var conn connection.Connection
-	conn, err := f.Connection()
-	if err != nil {
-		return err
-	}
-
-	api := conn.API()
-
-	a := api.ConnectorsMgmt().ConnectorsApi.DeleteConnector(f.Context, opts.id)
+	a := connectorMgmt.ConnectorsApi.DeleteConnector(f.Context, opts.id)
 
 	_, httpRes, err := a.Execute()
 	if httpRes != nil {
@@ -86,6 +120,30 @@ func runDelete(opts *options) error {
 	}
 
 	f.Logger.Info(icon.SuccessPrefix(), f.Localizer.MustLocalize("connector.delete.info.success"))
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	currCtx, err := contextutil.GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return err
+	}
+
+	// this is not the current instance, our work here is done
+	if currCtx.ConnectorID != connector.GetId() {
+		return nil
+	}
+
+	// the connector that was deleted is set as the user's current cluster
+	// since it was deleted it should be removed from the context
+	currCtx.ConnectorID = ""
+	svcContext.Contexts[svcContext.CurrentContext] = *currCtx
+
+	if err := opts.f.ServiceContext.Save(svcContext); err != nil {
+		return err
+	}
 
 	return nil
 }
