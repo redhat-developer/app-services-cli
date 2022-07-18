@@ -1,0 +1,46 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-delete_{context}']
+= connector delete
+
+[role="_abstract"]
+Delete a Connectors instance
+
+[discrete]
+== Synopsis
+
+Delete a Connectors instance by specifing its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.
+
+....
+rhoas connector delete [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
+rhoas connector delete --id=c9b71ucotd37bufoamkg
+
+....
+
+[discrete]
+== Options
+
+      `--id` _string_::         The ID for the Connectors instance
+      `--name` _string_::       The name for the Connectors instance
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
+  `-y`, `--yes`::               Skip confirmation of this action 
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+

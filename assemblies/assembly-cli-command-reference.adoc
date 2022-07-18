@@ -28,6 +28,8 @@ include::../modules/ref-cli-context-delete.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-context-list.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-context-set-connector.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-context-set-kafka.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-context-set-service-registry.adoc[leveloffset=+2]
@@ -76,11 +78,25 @@ include::../modules/ref-cli-connector-cluster-delete.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-cluster-list.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-connector-delete.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-list.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-connector-namespace.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-namespace-create.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-namespace-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-start.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-stop.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-type.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-type-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-use.adoc[leveloffset=+2]
 
 
 == Kafka commands

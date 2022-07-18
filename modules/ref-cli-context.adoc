@@ -65,6 +65,9 @@ $ rhoas context create --name dev-env
 * link:{path}#ref-context-list_{context}[context list]	 - List service contexts
 
  
+* link:{path}#ref-context-set-connector_{context}[context set-connector]	 - Set the current Connectors instance
+
+ 
 * link:{path}#ref-context-set-kafka_{context}[context set-kafka]	 - Set the current Kafka instance
 
  

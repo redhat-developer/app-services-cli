@@ -1,0 +1,46 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-list_{context}']
+= connector list
+
+[role="_abstract"]
+List of Connectors instances
+
+[discrete]
+== Synopsis
+
+List of Connectors instances. The returned list includes the ID value for each Connectors instance.
+
+
+....
+rhoas connector list [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# List of Connectors instance
+rhoas connector list
+
+....
+
+[discrete]
+== Options
+
+      `--limit` _int_::         Page limit (default 10)
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
+      `--page` _int_::          Page number (default 1)
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+
