@@ -9,7 +9,7 @@ For information on what was included in latest release please refer to our [chan
 
 ### Support for Marketplace Billing model
 
-`rhoas kafka create` now supports `--billing-model` flag that allow users to specify the type of billing model.
+`rhoas kafka create` now supports `--billing-model` flag that allow users to specify the type billing details for your kafka instance.
 
 `--billing-model` along with `--marketplace` and `--marketplace-account-id` flags can be used to specify the
 billing details.
