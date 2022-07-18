@@ -5,6 +5,21 @@ For information on what was included in latest release please refer to our [chan
 
 ## Unrelased (main branch)
 
+## 0.46.0
+
+### Support for Marketplace Billing model
+
+`rhoas kafka create` now supports `--billing-model` flag that allow users to specify the type of billing model.
+
+`--billing-model` along with `--marketplace` and `--marketplace-account-id` flags can be used to specify the
+billing details.
+
+Billing details can also be prompted by running the command in interactive mode:
+
+```
+rhoas kafka create
+```
+
 ## 0.44.0 
 
 ### Support for consuming and producing to a topic
