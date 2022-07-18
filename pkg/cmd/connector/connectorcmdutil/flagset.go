@@ -35,3 +35,18 @@ func (fs *FlagSet) AddConnectorID(ruleType *string) *flagutil.FlagOptions {
 	return flagutil.WithFlagOptions(fs.cmd, flagName)
 
 }
+
+// AddConnectorName adds a flag for specifying the connector name
+func (fs *FlagSet) AddConnectorName(ruleType *string) *flagutil.FlagOptions {
+	flagName := "name"
+
+	fs.StringVar(
+		ruleType,
+		flagName,
+		"",
+		fs.factory.Localizer.MustLocalize("connector.common.flag.name.description"),
+	)
+
+	return flagutil.WithFlagOptions(fs.cmd, flagName)
+
+}

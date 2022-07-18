@@ -86,7 +86,7 @@ func runList(opts *options) error {
 		return nil
 	}
 
-	if response.Size == 0  && opts.outputFormat == "" {
+	if response.Size == 0 && opts.outputFormat == "" {
 		f.Logger.Info(f.Localizer.MustLocalize("connector.common.log.info.noResults"))
 		return nil
 	}

@@ -239,6 +239,9 @@ rhoas connector describe --id=c980124otd37bufiemj0
 [connector.common.flag.id.description]
 one = 'The ID for the Connectors instance'
 
+[connector.common.flag.name.description]
+one = 'The name for the Connectors instance'
+
 [connector.describe.info.success]
 one = 'The Connectors instance details were returned successfully'
 
