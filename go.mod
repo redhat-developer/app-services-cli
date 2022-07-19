@@ -3,7 +3,7 @@ module github.com/redhat-developer/app-services-cli
 go 1.16
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.5
+	github.com/AlecAivazis/survey/v2 v2.3.4
 	github.com/BurntSushi/toml v1.1.0
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
@@ -28,7 +28,7 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.8.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.3
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
-	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.7.0
+	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.8.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
 	github.com/spf13/cobra v1.5.0
@@ -38,14 +38,14 @@ require (
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
-	golang.org/x/oauth2 c8730f7fcb92
+	golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
-	gopkg.in/segmentio/analytics-go.v3 v3.2.1
+	gopkg.in/segmentio/analytics-go.v3 v3.1.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.22.4
 	k8s.io/apimachinery v0.22.4
 	k8s.io/client-go v0.22.4
-	k8s.io/utils 56c0de1e6f5e
+	k8s.io/utils v0.0.0-20220713171938-56c0de1e6f5e
 	sigs.k8s.io/controller-runtime v0.10.0 // indirect
 )

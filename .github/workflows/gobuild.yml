@@ -28,7 +28,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.41.1
-          skip-go-installation: true
+          # skip-go-installation: true
           # skip-pkg-cache: true
           # skip-build-cache: true
           args: --timeout 3m0s --verbose
