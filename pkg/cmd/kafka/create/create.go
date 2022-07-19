@@ -210,11 +210,6 @@ func runCreate(opts *options) error {
 			f.Logger.Info(f.Localizer.MustLocalize("service.info.termsCheck", localize.NewEntry("TermsURL", termsURL)))
 			return nil
 		}
-
-		err = ValidateBillingModel(opts.billingModel)
-		if err != nil {
-			return err
-		}
 	}
 
 	var payload *kafkamgmtclient.KafkaRequestPayload
@@ -230,26 +225,6 @@ func runCreate(opts *options) error {
 		}
 	} else {
 
-		orgQuota, newErr := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
-		if newErr != nil {
-			return newErr
-		}
-
-		marketplaceInfo := accountmgmtutil.MarketplaceInfo{
-			BillingModel:   opts.billingModel,
-			Provider:       opts.marketplace,
-			CloudAccountID: opts.marketplaceAcctId,
-		}
-
-		userQuota, err = accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
-		if err != nil {
-			return err
-		}
-
-		userQuotaJSON, _ := json.MarshalIndent(userQuota, "", "  ")
-		f.Logger.Debug("Selected Quota object:")
-		f.Logger.Debug(string(userQuotaJSON))
-
 		if opts.provider == "" {
 			opts.provider = defaultProvider
 		}
@@ -264,20 +239,45 @@ func runCreate(opts *options) error {
 			CloudProvider: &opts.provider,
 		}
 
-		if userQuota.BillingModel == accountmgmtutil.QuotaMarketplaceType && userQuota.CloudAccounts != nil {
-
-			payload.Marketplace = kafkamgmtclient.NullableString{}
-			payload.Marketplace.Set((*userQuota.CloudAccounts)[0].CloudProviderId)
-			payload.BillingCloudAccountId = kafkamgmtclient.NullableString{}
-			payload.BillingCloudAccountId.Set((*userQuota.CloudAccounts)[0].CloudAccountId)
-		}
-
-		if opts.billingModel != "" {
-			payload.BillingModel = kafkamgmtclient.NullableString{}
-			payload.BillingModel.Set(&opts.billingModel)
-		}
-
 		if !opts.bypassChecks {
+
+			err = ValidateBillingModel(opts.billingModel)
+			if err != nil {
+				return err
+			}
+
+			orgQuotas, newErr := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+			if newErr != nil {
+				return newErr
+			}
+
+			marketplaceInfo := accountmgmtutil.MarketplaceInfo{
+				BillingModel:   opts.billingModel,
+				Provider:       opts.marketplace,
+				CloudAccountID: opts.marketplaceAcctId,
+			}
+
+			userQuota, err = accountmgmtutil.SelectQuotaForUser(f, orgQuotas, marketplaceInfo)
+			if err != nil {
+				return err
+			}
+
+			userQuotaJSON, _ := json.MarshalIndent(userQuota, "", "  ")
+			f.Logger.Debug("Selected Quota object:")
+			f.Logger.Debug(string(userQuotaJSON))
+
+			if userQuota.BillingModel == accountmgmtutil.QuotaMarketplaceType && userQuota.CloudAccounts != nil {
+				payload.Marketplace = kafkamgmtclient.NullableString{}
+				payload.Marketplace.Set((*userQuota.CloudAccounts)[0].CloudProviderId)
+				payload.BillingCloudAccountId = kafkamgmtclient.NullableString{}
+				payload.BillingCloudAccountId.Set((*userQuota.CloudAccounts)[0].CloudAccountId)
+			}
+
+			if opts.billingModel != "" {
+				payload.BillingModel = kafkamgmtclient.NullableString{}
+				payload.BillingModel.Set(&opts.billingModel)
+			}
+
 			validator := ValidatorInput{
 				provider:            opts.provider,
 				region:              opts.region,
