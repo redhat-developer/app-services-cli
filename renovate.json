@@ -3,5 +3,11 @@
   "postUpdateOptions": [
     "gomodTidy"
   ],
-  "ignoreDeps": ["github.com/redhat-developer/service-binding-operator"]
+  "ignoreDeps": ["github.com/redhat-developer/service-binding-operator"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["^https://togithub.com/AlecAivazis/survey"],
+      "allowedVersions": "!/v2.3.5/"
+    }
+  ]
 }
