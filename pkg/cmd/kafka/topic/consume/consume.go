@@ -142,6 +142,11 @@ func runCmd(opts *options) error {
 }
 
 func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *kafkamgmtclient.KafkaRequest) error {
+
+	if opts.partition == DefaultPartition {
+		return opts.f.Localizer.MustLocalizeError("kafka.topic.consume.error.noPartitionWhenWaiting")
+	}
+
 	if opts.limit != DefaultLimit {
 		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.log.info.limitIgnored", localize.NewEntry("Limit", DefaultLimit)))
 		opts.limit = DefaultLimit
@@ -188,12 +193,12 @@ func consumeAndWait(opts *options, api *kafkainstanceclient.APIClient, kafkaInst
 }
 
 func consume(opts *options, api *kafkainstanceclient.APIClient, kafkaInstance *kafkamgmtclient.KafkaRequest) (*kafkainstanceclient.RecordList, error) {
-
 	request := api.RecordsApi.ConsumeRecords(opts.f.Context, opts.topicName).Limit(opts.limit)
+
 	if opts.partition != DefaultPartition {
-		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.topic.consume.partition.value", localize.NewEntry("Partition", opts.partition)))
 		request = request.Partition(opts.partition)
 	}
+
 	if opts.offset != DefaultOffset {
 		intOffset, err := strconv.ParseInt(opts.offset, 10, 64)
 		if err != nil {
