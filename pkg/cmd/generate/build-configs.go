@@ -114,11 +114,12 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	configurations.TokenURL = providerUrls.GetTokenUrl()
 	configurations.Name = configInstanceName
 
-	if err = WriteConfig(opts, configurations); err != nil {
+	var fileName string
+	if fileName, err = WriteConfig(opts, configurations); err != nil {
 		return err
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("generate.log.info.credentialsSaved"))
+	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("generate.log.info.credentialsSaved", localize.NewEntry("FilePath", fileName)))
 
 	return nil
 }
