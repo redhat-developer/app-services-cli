@@ -3,5 +3,13 @@
   "postUpdateOptions": [
     "gomodTidy"
   ],
-  "ignoreDeps": ["github.com/redhat-developer/service-binding-operator"]
+  "ignoreDeps": ["github.com/redhat-developer/service-binding-operator", 
+  "gopkg.in/segmentio/analytics-go.v3",
+  "k8s.io/utils"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["^https://togithub.com/AlecAivazis/survey"],
+      "allowedVersions": "!/v2.3.5/"
+    }
+  ]
 }

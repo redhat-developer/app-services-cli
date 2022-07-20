@@ -141,9 +141,9 @@ func runCmd(opts *options) error {
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
-		printConsumerGroupDetails(stdout, consumerGroupData, opts.localizer)
+		printConsumerGroupDetails(stdout, &consumerGroupData, opts.localizer)
 	default:
-		return dump.Formatted(stdout, opts.outputFormat, consumerGroupData)
+		return dump.Formatted(stdout, opts.outputFormat, &consumerGroupData)
 	}
 
 	return nil
@@ -179,7 +179,7 @@ func mapConsumerGroupDescribeToTableFormat(consumers []kafkainstanceclient.Consu
 }
 
 // print the consumer group details
-func printConsumerGroupDetails(w io.Writer, consumerGroupData kafkainstanceclient.ConsumerGroup, localizer localize.Localizer) {
+func printConsumerGroupDetails(w io.Writer, consumerGroupData *kafkainstanceclient.ConsumerGroup, localizer localize.Localizer) {
 	fmt.Fprintln(w, "")
 	consumers := consumerGroupData.GetConsumers()
 	metrics := consumerGroupData.GetMetrics()
