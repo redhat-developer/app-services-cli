@@ -690,6 +690,9 @@ one = 'Output format for consumed messages (choose from: "json", "yaml", "key-va
 [kafka.topic.consume.log.info.limitIgnored]
 one = 'Ignore specified limit value and use default value of {{.Limit}}'
 
+[kafka.topic.consume.error.noPartitionWhenWaiting]
+one = 'Must set a partition when using --wait in consume'
+
 [kafka.topic.consume.log.info.offsetIgnored]
 one = 'Ignore specified offset value and use default value of {{.Offset}}'
 
