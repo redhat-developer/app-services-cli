@@ -1,1 +1,0 @@
-{"buildTargets":[".PHONY","binary","check-docs","format","generate","generate-docs","generate-downstream-docs","help","install","lint","lint-lang","start-mock-api","test"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
