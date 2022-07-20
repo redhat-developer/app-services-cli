@@ -26,8 +26,8 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0
 	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.8.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.12.3
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.3.1
+	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
+	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.4.0
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.8.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
