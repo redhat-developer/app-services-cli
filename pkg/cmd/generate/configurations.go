@@ -29,13 +29,13 @@ var (
 
 // WriteConfig saves the configurations to a file
 // in the specified output format
-func WriteConfig(opts *options, config *configValues) error {
+func WriteConfig(opts *options, config *configValues) (string, error) {
 
 	var fileBody bytes.Buffer
 	fileTemplate := getFileFormat(opts.configType)
 	err := fileTemplate.Execute(&fileBody, config)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	fileData := []byte(fileBody.String())
@@ -47,10 +47,10 @@ func WriteConfig(opts *options, config *configValues) error {
 	// indicating that the user should explicitly request overwriting of the file
 	_, err = os.Stat(opts.fileName)
 	if err == nil && !opts.overwrite {
-		return opts.localizer.MustLocalizeError("generate.error.configFileAlreadyExists", localize.NewEntry("FilePath", opts.fileName))
+		return "", opts.localizer.MustLocalizeError("generate.error.configFileAlreadyExists", localize.NewEntry("FilePath", opts.fileName))
 	}
 
-	return ioutil.WriteFile(opts.fileName, fileData, 0o600)
+	return opts.fileName, ioutil.WriteFile(opts.fileName, fileData, 0o600)
 }
 
 // getDefaultPath returns the default absolute path for the configuration file
