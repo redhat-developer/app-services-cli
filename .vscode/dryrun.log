@@ -1,6 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/dimakis/redhat/app-services-cli'
-go build  -ldflags "-X github.com/redhat-developer/app-services-cli/internal/build.BuildSource="local" -X github.com/redhat-developer/app-services-cli/internal/build.SSORedirectPath="sso-redhat-callback" -X github.com/redhat-developer/app-services-cli/internal/build.DefaultPageNumber="1" -X github.com/redhat-developer/app-services-cli/internal/build.DefaultPageSize="10" -X github.com/redhat-developer/app-services-cli/internal/build.DynamicConfigURL="https://console.redhat.com/apps/application-services/service-constants.json" -X github.com/redhat-developer/app-services-cli/internal/build.RepositoryName="app-services-cli" -X github.com/redhat-developer/app-services-cli/internal/build.RepositoryOwner="redhat-developer" -X github.com/redhat-developer/app-services-cli/internal/build.Version="dev" " -o rhoas ./cmd/rhoas
- 
-make: Leaving directory `/Users/dimakis/redhat/app-services-cli'
- 
