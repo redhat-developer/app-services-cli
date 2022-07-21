@@ -293,6 +293,9 @@ one = '''
 ## List all artifacts for the "default" artifact group
 rhoas service-registry artifact list
 
+## List all artifacts in all groups
+rhoas service-registry artifact list --all-groups
+
 ## List all artifacts with "my-group" group
 rhoas service-registry artifact list --group=my-group
 
@@ -485,6 +488,9 @@ one = 'Successfully updated artifact state'
 
 [artifact.cmd.state.error.invalidArtifactState]
 one = 'invalid artifact state. Please use one of following values: {{.AllowedTypes}}'
+
+[artifact.cmd.list.flag.allgroups.description]
+one= 'List artifacts in all groups'
 
 [artifact.cmd.list.flag.name.description]
 one = 'Text search to filter artifacts by name'

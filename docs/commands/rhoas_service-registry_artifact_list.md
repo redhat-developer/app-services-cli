@@ -16,6 +16,9 @@ rhoas service-registry artifact list [flags]
 ## List all artifacts for the "default" artifact group
 rhoas service-registry artifact list
 
+## List all artifacts in all groups
+rhoas service-registry artifact list --all-groups
+
 ## List all artifacts with "my-group" group
 rhoas service-registry artifact list --group=my-group
 
@@ -36,6 +39,7 @@ rhoas service-registry artifact list --description sample
 ### Options
 
 ```
+  -a, --all-groups             List artifacts in all groups
       --description string     Text search to filter artifacts by description
   -g, --group string           Artifact group (default "default")
       --instance-id string     ID of the Service Registry instance to be used (by default, uses the currently selected instance)
