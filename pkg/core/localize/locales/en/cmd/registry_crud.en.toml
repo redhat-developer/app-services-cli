@@ -135,6 +135,17 @@ Instance cannot be created. You have reached the limit of service registry insta
 Please contact your administrator to increase the limit or remove one of the existing instances.
 '''
 
+[registry.cmd.create.error.trial.limitreached]
+one = '''
+Instance cannot be created. You have reached the limit of service registry instances per user.
+Pleare review your existing instances before creating a new one.
+'''
+
+[registry.cmd.create.error.global.limitreached]
+one = '''
+Instance cannot be created. We have reached global the limit of service registry instances. 
+'''
+
 
 [registry.cmd.create.flag.use.description]
 one = 'Set the new Service Registry instance to the current instance'

@@ -148,13 +148,15 @@ func runCreate(opts *options) error {
 		RegistryCreate(*payload).
 		Execute()
 
-	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_7) {
-		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
+	err = handleErrors(err, opts)
+	if err != nil {
+		return err
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), response.GetId())
+
 	if err != nil {
 		return err
 	}
@@ -188,6 +190,22 @@ func runCreate(opts *options) error {
 		opts.Logger.Debug("Auto-use is not set, skipping updating the current instance")
 	}
 
+	return nil
+}
+
+func handleErrors(err error, opts *options) error {
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_7) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
+	}
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_13) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.trial.limitreached")
+	}
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_14) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.global.limitreached")
+	}
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

@@ -152,7 +152,7 @@ func runEnable(opts *options) error {
 			),
 		)
 
-		req := dataAPI.AdminApi.CreateGlobalRule(opts.Context)
+		req := dataAPI.GlobalRulesApi.CreateGlobalRule(opts.Context)
 
 		req = req.Rule(rule)
 
