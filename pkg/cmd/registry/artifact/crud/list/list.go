@@ -127,7 +127,7 @@ func runList(opts *options) error {
 	if err != nil {
 		return err
 	}
-	request := a.ArtifactsApi.SearchArtifacts(opts.Context)
+	request := a.SearchApi.SearchArtifacts(opts.Context)
 
 	request = request.Group(opts.group)
 	request = request.Offset((opts.page - 1) * opts.limit)
