@@ -177,7 +177,7 @@ func createBindingCR(options *v1alpha.BindOperationOptions, serviceMetadata sche
 			Namespace: namespace,
 		},
 		Spec: bindv1alpha1.ServiceBindingSpec{
-			BindAsFiles: true,
+			BindAsFiles: options.BindAsFiles,
 			Services:    []bindv1alpha1.Service{serviceRef},
 			Application: appRef,
 		},
