@@ -21,10 +21,10 @@ const (
 var configurationTypes = []string{envFormat, jsonFormat, propertiesFormat, configmapFormat}
 
 var (
-	envConfig             = template.Must(template.New(envFormat).Parse(templateEnv))
-	jsonConfig            = template.Must(template.New(jsonFormat).Parse(templateJSON))
-	propertiesConfig      = template.Must(template.New(propertiesFormat).Parse(templateProperties))
-	congMapTemplateConfig = template.Must(template.New(configmapFormat).Parse(templateConfigMap))
+	envConfig               = template.Must(template.New(envFormat).Parse(templateEnv))
+	jsonConfig              = template.Must(template.New(jsonFormat).Parse(templateJSON))
+	propertiesConfig        = template.Must(template.New(propertiesFormat).Parse(templateProperties))
+	configMapTemplateConfig = template.Must(template.New(configmapFormat).Parse(templateConfigMap))
 )
 
 // WriteConfig saves the configurations to a file
@@ -85,7 +85,7 @@ func getFileFormat(configType string) (template *template.Template) {
 	case jsonFormat:
 		template = jsonConfig
 	case configmapFormat:
-		template = congMapTemplateConfig
+		template = configMapTemplateConfig
 	}
 
 	return template
