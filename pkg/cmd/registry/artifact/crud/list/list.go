@@ -35,7 +35,8 @@ type artifactRow struct {
 }
 
 type options struct {
-	group string
+	group     string
+	allGroups bool
 
 	registryID   string
 	outputFormat string
@@ -95,6 +96,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.group, "group", "g", registrycmdutil.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
+	cmd.Flags().BoolVarP(&opts.allGroups, "all-groups", "a", false, opts.localizer.MustLocalize("artifact.cmd.list.flag.allgroups.description"))
 	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, opts.localizer.MustLocalize("artifact.common.page.number"))
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, opts.localizer.MustLocalize("artifact.common.page.limit"))
 
@@ -112,7 +114,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
-	if opts.group == registrycmdutil.DefaultArtifactGroup {
+	if opts.group == registrycmdutil.DefaultArtifactGroup && !opts.allGroups {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 	}
 
@@ -129,11 +131,14 @@ func runList(opts *options) error {
 	}
 	request := a.SearchApi.SearchArtifacts(opts.Context)
 
-	request = request.Group(opts.group)
 	request = request.Offset((opts.page - 1) * opts.limit)
 	request = request.Limit(opts.limit)
 	request = request.Orderby(registryinstanceclient.SORTBY_CREATED_ON)
 	request = request.Order(registryinstanceclient.SORTORDER_ASC)
+
+	if !opts.allGroups {
+		request = request.Group(opts.group)
+	}
 
 	if opts.name != "" {
 		request = request.Name(opts.name)
