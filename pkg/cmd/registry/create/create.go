@@ -150,11 +150,20 @@ func runCreate(opts *options) error {
 
 	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_7) {
 		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
+	} else if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_13) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.trial.limitreached")
+	} else if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_14) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.global.limitreached")
+	}
+
+	if err != nil {
+		return err
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("registry.cmd.create.info.successMessage"))
 
 	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), response.GetId())
+
 	if err != nil {
 		return err
 	}

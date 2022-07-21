@@ -119,7 +119,7 @@ func runDescribe(opts *options) error {
 
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.describe.log.info.fetching.globalRule", localize.NewEntry("Type", opts.ruleType), localize.NewEntry("ID", opts.registryID)))
 
-		req := dataAPI.AdminApi.GetGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
+		req := dataAPI.GlobalRulesApi.GetGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 
 		rule, httpRes, err = req.Execute()
 		if httpRes != nil {
