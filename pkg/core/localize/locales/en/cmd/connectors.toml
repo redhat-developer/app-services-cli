@@ -149,6 +149,22 @@ rhoas connector create --file=myconnector.json
 cat myconnector.json | rhoas connector create
 '''
 
+[connector.build.cmd.shortDescription]
+one = 'Build a Connectors instance'
+
+[connector.build.cmd.longDescription]
+one = '''
+Command builds specficication for Connector 
+instance that can be later created using create command.
+'''
+
+[connector.build.cmd.example]
+one = '''
+# Build a Connectors instance
+rhoas connector build --name=myconnector
+cat myconnector.json | rhoas connector create
+'''
+
 [connector.stop.cmd.shortDescription]
 one = 'Stop a Connectors instance'
 
@@ -202,6 +218,13 @@ one = 'Successfully updated the Connectors instance'
 
 [connector.file.flag.description]
 one = 'Location of the Connectors JSON file that describes the connector'
+
+[connector.build.name.flag.description]
+one = 'Name of the output connector file (default is "connector.json")'
+
+
+[connector.build.type.flag.description]
+one = 'Connector type (id of the connector)'
 
 [connector.delete.cmd.shortDescription]
 one = 'Delete a Connectors instance'
