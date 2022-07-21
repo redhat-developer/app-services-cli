@@ -1,4 +1,21 @@
 
+<a name="v0.46.2"></a>
+## [v0.46.2](https://github.com/redhat-developer/app-services-cli/compare/v0.46.1...v0.46.2) (2022-07-21)
+
+### Bug Fixes
+
+* service registry create not handling errors properly ([#1668](https://github.com/redhat-developer/app-services-cli/issues/1668))
+* include bind as files flag into CR creation ([#1666](https://github.com/redhat-developer/app-services-cli/issues/1666))
+* can now only consume and wait from single topic ([#1659](https://github.com/redhat-developer/app-services-cli/issues/1659))
+* **deps:** update all
+* **deps:** update all ([#1645](https://github.com/redhat-developer/app-services-cli/issues/1645))
+* **generate-config:** print path to configuration file ([#1661](https://github.com/redhat-developer/app-services-cli/issues/1661))
+
+### Features
+
+* **service-registry:** added --all-groups flag in artifact list command ([#1667](https://github.com/redhat-developer/app-services-cli/issues/1667))
+
+
 <a name="v0.46.1"></a>
 ## [v0.46.1](https://github.com/redhat-developer/app-services-cli/compare/v0.46.0...v0.46.1) (2022-07-19)
 
@@ -147,7 +164,7 @@
 
 
 <a name="v0.42.0"></a>
-## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.42.0) (2022-05-02)
+## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.0) (2022-05-02)
 
 ### Bug Fixes
 
@@ -158,12 +175,12 @@
 * changes for Kafka Creation business logic ([#1526](https://github.com/redhat-developer/app-services-cli/issues/1526))
 
 
-<a name="v0.42.1"></a>
-## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.1) (2022-04-29)
-
-
 <a name="v0.41.2"></a>
-## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.41.2) (2022-04-29)
+## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.41.2) (2022-04-29)
+
+
+<a name="v0.42.1"></a>
+## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.42.1) (2022-04-29)
 
 ### Bug Fixes
 
@@ -232,7 +249,7 @@
 
 
 <a name="v0.40.0"></a>
-## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.40.0) (2022-04-12)
+## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.40.0) (2022-04-12)
 
 ### Bug Fixes
 
@@ -280,12 +297,12 @@
 * **context status:** show context name and path
 
 
-<a name="v0.39.1"></a>
-## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.39.1) (2022-02-21)
-
-
 <a name="v0.39.0"></a>
-## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.0) (2022-02-21)
+## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.39.0) (2022-02-21)
+
+
+<a name="v0.39.1"></a>
+## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.1) (2022-02-21)
 
 ### Bug Fixes
 
