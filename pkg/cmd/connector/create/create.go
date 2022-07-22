@@ -55,6 +55,12 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 func runCreate(opts *options) error {
 	f := opts.f
 
+	// TODO - select user kafka
+	// TODO - select namespace
+	// TODO - generate service accounts or ask user to provide ones?
+	// TODO - ask for the name - ask if override name or override by flag etc.
+	// TODO - spec can contain service account - users can paste it.
+	// WE should
 	var conn connection.Connection
 	conn, err := f.Connection()
 	if err != nil {
