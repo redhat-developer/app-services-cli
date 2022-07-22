@@ -3,7 +3,9 @@ package list
 import (
 	"strconv"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 
@@ -58,10 +60,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flags := connectorcmdutil.NewFlagSet(cmd, f)
 	flags.AddOutput(&opts.outputFormat)
-	flags.IntVar(&opts.limit, "limit", 150, f.Localizer.MustLocalize("connector.type.list.flag.limit.description"))
+	flags.IntVar(&opts.limit, "limit", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageSize)), f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
+	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
 	flags.StringVar(&opts.search, "search", DefaultSearch, f.Localizer.MustLocalize("connector.type.list.flag.search.description"))
-	flags.IntVar(&opts.page, "page", 1, f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
-
 	return cmd
 
 }
