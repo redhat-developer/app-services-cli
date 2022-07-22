@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -83,9 +82,9 @@ func runUpdateCommand(opts *options) error {
 	request = request.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != DefaultSearch {
-		query := fmt.Sprintf("name like %[2]s%[1]s%[2]s or description like %[2]s%[1]s%[2]s", opts.search, "%")
+		query := connectorcmdutil.NewSearchQuery(opts.search).Filter("name").Filter("description").Build()
 		request = request.Search(query)
-		}
+	}
 
 	types, httpRes, err := request.Execute()
 
