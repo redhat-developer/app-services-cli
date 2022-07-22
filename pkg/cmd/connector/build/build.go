@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 	"github.com/wtrocki/survey-json-schema/pkg/surveyjson"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -15,9 +17,8 @@ import (
 )
 
 type options struct {
-	name          string
+	outputFile    string
 	connectorType string
-	outputFormat  string
 	f             *factory.Factory
 }
 
@@ -35,18 +36,15 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
 			return runBuild(opts)
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.build.name.flag.description"))
+	flags.StringVar(&opts.outputFile, "output-file", "", f.Localizer.MustLocalize("connector.build.name.flag.description"))
 	flags.StringVar(&opts.connectorType, "type", "", f.Localizer.MustLocalize("connector.build.type.flag.description"))
-	// TODO connector type suggestions
+
+	_ = cmd.MarkFlagRequired("type")
+
 	return cmd
 }
 
@@ -59,21 +57,26 @@ func runBuild(opts *options) error {
 		return err
 	}
 
-	if opts.name == "" {
-		opts.name = "connector.json"
+	if opts.outputFile == "" {
+		opts.outputFile = "connector.json"
 	}
 
 	api := conn.API()
-	if opts.connectorType == "" {
-		return fmt.Errorf("Interactive mode not supported yet")
-	}
 
 	request := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypeByID(f.Context, opts.connectorType)
 	response, _, err := request.Execute()
+
+	if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetCode() {
+		case connectorerror.ERROR_7:
+			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", opts.connectorType))
+		default:
+			return err
+		}
+	}
 	if err != nil {
 		return err
 	}
-	// TODO handle errors for connectors
 
 	// Creates JSONSchema based of
 	schemaOptions := surveyjson.JSONSchemaOptions{
@@ -97,8 +100,16 @@ func runBuild(opts *options) error {
 	if err != nil {
 		return err
 	}
-	// TODO file output
-	fmt.Fprint(os.Stdin, string(result))
+
+	if opts.outputFile != "" {
+		err := os.WriteFile(opts.outputFile, result, 0600)
+		if err != nil {
+			return err
+		}
+	} else {
+		// Print to stdout
+		fmt.Fprintf(os.Stdout, "%v\n", string(result))
+	}
 
 	return nil
 }
