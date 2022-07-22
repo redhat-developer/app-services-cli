@@ -28,7 +28,7 @@ $ rhoas context unset --name dev --services service-registry
 
 ```
       --name string        Name of the context
-      --services strings   context.unset.flag.services.description
+      --services strings   The name of the services to unset
 ```
 
 ### Options inherited from parent commands

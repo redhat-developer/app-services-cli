@@ -39,7 +39,7 @@ one = 'Sets a custom file location to save the configurations'
 description = 'Error message for when a configuration file alredy exists at a location'
 one = 'file {{.FilePath}} already exists. Use --overwrite to overwrite the file, or the --output-file flag to choose a different location'
 
-[generate.log.info.noSevices]
+[generate.log.info.noServices]
 one='No services available to generate configurations'
 
 [generate.log.info.credentialsSaved]
