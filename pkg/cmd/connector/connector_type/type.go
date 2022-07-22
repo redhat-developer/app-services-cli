@@ -3,6 +3,7 @@ package connector_type
 import (
 	"github.com/redhat-developer/app-services-cli/internal/doc"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connector_type/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connector_type/list"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -22,6 +23,7 @@ func NewTypeCommand(f *factory.Factory) *cobra.Command {
 	// add sub-commands
 	cmd.AddCommand(
 		list.NewListCommand(f),
+		describe.NewDescribeCommand(f),
 	)
 
 	return cmd
