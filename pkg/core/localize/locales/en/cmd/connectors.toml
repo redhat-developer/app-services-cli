@@ -440,7 +440,7 @@ rhoas connector type list --search=%Amazon%
 '''
 
 [connector.type.list.flag.page.description]
-one = 'Page of connector limit'
+one = 'Page of the list based on limit'
 
 [connector.type.list.flag.search.description]
 one = 'Search query for name of connector type'
