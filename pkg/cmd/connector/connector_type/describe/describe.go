@@ -6,7 +6,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
-	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 
@@ -56,19 +55,21 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDescribe(opts *options) error {
-	f := opts.f
 
-	var conn connection.Connection
-	conn, err := f.Connection()
+	if opts.type_id == "" {
+		return opts.f.Localizer.MustLocalizeError("connector.type.error.noType")
+	}
+
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}
 
 	api := conn.API()
 
-	a := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypeByID(opts.f.Context, opts.type_id)
+	request := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypeByID(opts.f.Context, opts.type_id)
 
-	response, httpRes, err := a.Execute()
+	response, httpRes, err := request.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -86,11 +87,11 @@ func runDescribe(opts *options) error {
 		return err
 	}
 
-	if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, response); err != nil {
+	if err = dump.Formatted(opts.f.IOStreams.Out, opts.outputFormat, response); err != nil {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.type.describe.info.success"))
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("connector.type.describe.info.success"))
 
 	return nil
 }

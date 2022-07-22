@@ -463,6 +463,9 @@ one = 'The Connectors type details were returned successfully'
 [connector.type.error.notFound]
 one = 'The connector type with id "{{.Id}}" does not exist'
 
+[connector.type.error.noType]
+one = 'No type id was passed to command'
+
 [connector.type.describe.flag.id]
 one = 'The type id of the connector you want to get details about'
 

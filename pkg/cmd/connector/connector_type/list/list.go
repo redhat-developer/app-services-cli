@@ -85,7 +85,7 @@ func runUpdateCommand(opts *options) error {
 	if opts.search != DefaultSearch {
 		query := fmt.Sprintf("name like %[2]s%[1]s%[2]s or description like %[2]s%[1]s%[2]s", opts.search, "%")
 		request = request.Search(query)
-	}
+		}
 
 	types, httpRes, err := request.Execute()
 
