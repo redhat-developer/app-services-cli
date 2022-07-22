@@ -51,7 +51,7 @@ func NewUnsetCommand(f *factory.Factory) *cobra.Command {
 	flags := contextcmdutil.NewFlagSet(cmd, f)
 
 	flags.AddContextName(&opts.name)
-	flags.StringSliceVar(&opts.services, "services", []string{}, "context.unset.flag.services.description")
+	flags.StringSliceVar(&opts.services, "services", []string{}, f.Localizer.MustLocalize("context.unset.flag.services.description"))
 
 	return cmd
 

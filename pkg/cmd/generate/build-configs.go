@@ -86,7 +86,7 @@ func BuildConfiguration(svcConfig *servicecontext.ServiceConfig, opts *options) 
 	}
 
 	if !serviceAvailable {
-		return opts.localizer.MustLocalizeError("generate.log.info.noSevices")
+		return opts.localizer.MustLocalizeError("generate.log.info.noServices")
 	}
 	configInstanceName := fmt.Sprintf("%s-%v", opts.name, time.Now().Unix())
 	serviceAccount, err := createServiceAccount(opts, configInstanceName)
