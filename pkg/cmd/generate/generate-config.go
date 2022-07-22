@@ -63,7 +63,8 @@ func NewGenerateCommand(f *factory.Factory) *cobra.Command {
 	flags.AddContextName(&opts.name)
 	flags.StringVar(&opts.configType, "type", "", opts.localizer.MustLocalize("generate.flag.type"))
 	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.localizer.MustLocalize("generate.flag.overwrite.description"))
-	cmd.Flags().StringVar(&opts.fileName, "output-file", "", opts.localizer.MustLocalize("generate.common.flag.fileLocation.description"))
+	flags.StringVar(&opts.fileName, "output-file", "", opts.localizer.MustLocalize("generate.common.flag.fileLocation.description"))
+
 	_ = cmd.MarkFlagRequired("type")
 
 	flagutil.EnableStaticFlagCompletion(cmd, "type", configurationTypes)
