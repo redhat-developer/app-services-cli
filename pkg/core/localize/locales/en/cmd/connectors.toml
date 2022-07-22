@@ -219,9 +219,14 @@ one = 'Successfully updated the Connectors instance'
 [connector.file.flag.description]
 one = 'Location of the Connectors JSON file that describes the connector'
 
-[connector.build.name.flag.description]
-one = 'Name of the output connector file (default is "connector.json")'
+[connector.build.file.flag.description]
+one = 'filename of the connector specification file'
 
+[connector.build.name.flag.description]
+one = 'name of the connector'
+
+[connector.build.info.msg]
+one = 'Creating connector specification'
 
 [connector.build.type.flag.description]
 one = 'Connector type (id of the connector)'

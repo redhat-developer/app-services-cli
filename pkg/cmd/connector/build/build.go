@@ -2,11 +2,12 @@ package build
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 	"github.com/wtrocki/survey-json-schema/pkg/surveyjson"
 
@@ -18,7 +19,9 @@ import (
 
 type options struct {
 	outputFile    string
+	name          string
 	connectorType string
+	outputFormat  string
 	f             *factory.Factory
 }
 
@@ -36,12 +39,18 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			validOutputFormats := flagutil.ValidOutputFormats
+			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+			}
 			return runBuild(opts)
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.outputFile, "output-file", "", f.Localizer.MustLocalize("connector.build.name.flag.description"))
+	flags.StringVar(&opts.outputFile, "output-file", "", f.Localizer.MustLocalize("connector.build.file.flag.description"))
 	flags.StringVar(&opts.connectorType, "type", "", f.Localizer.MustLocalize("connector.build.type.flag.description"))
+	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.build.name.flag.description"))
+	flags.AddOutput(&opts.outputFormat)
 
 	_ = cmd.MarkFlagRequired("type")
 
@@ -55,10 +64,6 @@ func runBuild(opts *options) error {
 	conn, err := f.Connection()
 	if err != nil {
 		return err
-	}
-
-	if opts.outputFile == "" {
-		opts.outputFile = "connector.json"
 	}
 
 	api := conn.API()
@@ -77,6 +82,8 @@ func runBuild(opts *options) error {
 	if err != nil {
 		return err
 	}
+
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("connector.build.info.msg"))
 
 	// Creates JSONSchema based of
 	schemaOptions := surveyjson.JSONSchemaOptions{
@@ -101,15 +108,48 @@ func runBuild(opts *options) error {
 		return err
 	}
 
+	var connectorSpecification map[string]interface{}
+	err = json.Unmarshal(result, &connectorSpecification)
+	if err != nil {
+		return err
+	}
+
+	connector := createConnector(opts, connectorSpecification)
+
 	if opts.outputFile != "" {
-		err := os.WriteFile(opts.outputFile, result, 0600)
+		file, err := os.OpenFile(opts.outputFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
 		if err != nil {
 			return err
 		}
+		defer file.Close()
+		if err = dump.Formatted(file, opts.outputFormat, connector); err != nil {
+			return err
+		}
 	} else {
-		// Print to stdout
-		fmt.Fprintf(os.Stdout, "%v\n", string(result))
+		if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, connector); err != nil {
+			return err
+		}
 	}
 
 	return nil
+}
+
+func createConnector(opts *options, connectorSpecification map[string]interface{}) connectormgmtclient.ConnectorRequest {
+	connectorChannel := connectormgmtclient.Channel(connectormgmtclient.CHANNEL_STABLE)
+	connector := connectormgmtclient.ConnectorRequest{
+		Name:            opts.name,
+		Channel:         &connectorChannel,
+		ConnectorTypeId: opts.connectorType,
+		DesiredState:    connectormgmtclient.CONNECTORDESIREDSTATE_READY,
+		NamespaceId:     "xxx",
+		ServiceAccount:  *connectormgmtclient.NewServiceAccount("xxx", "xxx"),
+		Kafka: connectormgmtclient.KafkaConnectionSettings{
+			Id: "xxx",
+		},
+		SchemaRegistry: &connectormgmtclient.SchemaRegistryConnectionSettings{
+			Id: "xxx",
+		},
+		Connector: connectorSpecification,
+	}
+	return connector
 }
