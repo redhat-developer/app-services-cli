@@ -82,7 +82,7 @@ func runUpdateCommand(opts *options) error {
 	request = request.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != DefaultSearch {
-		query := fmt.Sprintf("name like %[1]s or label like %[1]s or description like %[1]s", opts.search)
+		query := fmt.Sprintf("name like %[2]s%[1]s%[2]s or description like %[2]s%[1]s%[2]s", opts.search, "%")
 		request = request.Search(query)
 	}
 
