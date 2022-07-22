@@ -117,13 +117,13 @@ func runBuild(opts *options) error {
 	connector := createConnector(opts, connectorSpecification)
 
 	if opts.outputFile != "" {
-		file, err := os.OpenFile(opts.outputFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
-		if err != nil {
-			return err
+		file, err1 := os.OpenFile(opts.outputFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+		if err1 != nil {
+			return err1
 		}
 		defer file.Close()
-		if err = dump.Formatted(file, opts.outputFormat, connector); err != nil {
-			return err
+		if err1 = dump.Formatted(file, opts.outputFormat, connector); err1 != nil {
+			return err1
 		}
 	} else {
 		if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, connector); err != nil {
