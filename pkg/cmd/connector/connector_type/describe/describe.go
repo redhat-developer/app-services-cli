@@ -48,6 +48,10 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	_ = cmd.MarkFlagRequired("type")
 
+	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return connectorcmdutil.FilterValidTypesArgs(f, toComplete)
+	})
+
 	return cmd
 }
 

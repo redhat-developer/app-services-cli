@@ -62,6 +62,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flags.IntVar(&opts.limit, "limit", 150, f.Localizer.MustLocalize("connector.type.list.flag.limit.description"))
 	flags.StringVar(&opts.search, "search", DefaultSearch, f.Localizer.MustLocalize("connector.type.list.flag.search.description"))
 	flags.IntVar(&opts.page, "page", 1, f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
+
 	return cmd
 
 }
