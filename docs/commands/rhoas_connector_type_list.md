@@ -31,9 +31,9 @@ rhoas connector type list --search=%Amazon%
 ### Options
 
 ```
-      --limit int       Page of connector limit (default 150)
+      --limit int       The max number of connectors to return in the page (default 150)
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
-      --page int        Page of connector limit (default 1)
+      --page int        Page of the list based on limit (default 1)
       --search string   Search query for name of connector type
 ```
 
