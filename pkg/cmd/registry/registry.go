@@ -10,6 +10,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/setting"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/use"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -36,6 +37,7 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		artifact.NewArtifactsCommand(f),
 		role.NewRoleCommand(f),
 		rule.NewRuleCommand(f),
+		setting.NewSettingCommand(f),
 	)
 
 	return cmd
