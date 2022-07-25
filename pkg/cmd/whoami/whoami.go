@@ -44,12 +44,12 @@ func NewWhoAmICmd(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *options) (err error) {
-	cfg, err := opts.Config.Load()
+	_, err = opts.Connection()
 	if err != nil {
 		return err
 	}
 
-	_, err = opts.Connection()
+	cfg, err := opts.Config.Load()
 	if err != nil {
 		return err
 	}
