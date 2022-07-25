@@ -14,20 +14,20 @@ rhoas service-registry setting set [flags]
 
 ```
 ## Set value of setting by name
-$ rhoas service-registry setting set --setting-name registry.ccompat.legacy-id-mode.enabled --value true
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --value true
 
 ## Reset value of setting by name
-$ rhoas service-registry setting set --setting-name registry.ccompat.legacy-id-mode.enabled --default
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --default
 
 ```
 
 ### Options
 
 ```
-      --default               Reset value of the setting to default
-      --instance-id string    ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-  -n, --setting-name string   Name of the setting
-      --value string          New value of the setting
+      --default              Restore value of the setting to default
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
+  -n, --name string          Name of the setting
+      --value string         New value of the setting
 ```
 
 ### Options inherited from parent commands

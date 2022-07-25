@@ -1,14 +1,9 @@
 package list
 
 import (
-	"context"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	"github.com/spf13/cobra"
@@ -28,26 +23,16 @@ type settingRow struct {
 }
 
 type options struct {
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
-
 	registryID string
+
+	f *factory.Factory
 }
 
 // NewListCommand creates a new command to view a list of settings
 func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		IO:             f.IOStreams,
-		Connection:     f.Connection,
-		Logger:         f.Logger,
-		localizer:      f.Localizer,
-		Context:        f.Context,
-		ServiceContext: f.ServiceContext,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
@@ -57,6 +42,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("setting.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
+
+			if opts.registryID != "" {
+				return runList(opts)
+			}
 
 			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
 			if err != nil {
@@ -78,7 +67,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runList(opts *options) error {
-	conn, err := opts.Connection()
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}
@@ -89,7 +78,7 @@ func runList(opts *options) error {
 	if err != nil {
 		return err
 	}
-	request := a.AdminApi.ListConfigProperties(opts.Context)
+	request := a.AdminApi.ListConfigProperties(opts.f.Context)
 
 	response, _, err := request.Execute()
 	if err != nil {
@@ -98,9 +87,9 @@ func runList(opts *options) error {
 
 	rows := mapResponseItemsToRows(response)
 
-	opts.Logger.Info("")
-	dump.Table(opts.IO.Out, rows)
-	opts.Logger.Info("")
+	opts.f.Logger.Info("")
+	dump.Table(opts.f.IOStreams.Out, rows)
+	opts.f.Logger.Info("")
 
 	return nil
 }

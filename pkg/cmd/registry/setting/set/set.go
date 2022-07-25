@@ -1,16 +1,11 @@
 package set
 
 import (
-	"context"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	"github.com/spf13/cobra"
@@ -20,29 +15,19 @@ import (
 )
 
 type options struct {
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
-
 	registryID     string
 	settingName    string
 	value          string
 	resetToDefault bool
+
+	f *factory.Factory
 }
 
 // NewSetCommand creates a new command to set a service registry setting
 func NewSetCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		IO:             f.IOStreams,
-		Connection:     f.Connection,
-		Logger:         f.Logger,
-		localizer:      f.Localizer,
-		Context:        f.Context,
-		ServiceContext: f.ServiceContext,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
@@ -56,13 +41,13 @@ func NewSetCommand(f *factory.Factory) *cobra.Command {
 			var missingFlags []string
 
 			if opts.settingName == "" {
-				missingFlags = append(missingFlags, "setting-name")
+				missingFlags = append(missingFlags, "name")
 			}
 			if opts.value == "" && !opts.resetToDefault {
 				missingFlags = append(missingFlags, "value")
 			}
 
-			if !opts.IO.CanPrompt() && len(missingFlags) > 0 {
+			if !opts.f.IOStreams.CanPrompt() && len(missingFlags) > 0 {
 				return flagutil.RequiredWhenNonInteractiveError(missingFlags...)
 			}
 
@@ -71,6 +56,10 @@ func NewSetCommand(f *factory.Factory) *cobra.Command {
 				if err != nil {
 					return err
 				}
+			}
+
+			if opts.registryID != "" {
+				return runSet(opts)
 			}
 
 			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
@@ -88,7 +77,7 @@ func NewSetCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddRegistryInstance(&opts.registryID)
 
-	flags.StringVarP(&opts.settingName, "setting-name", "n", "", f.Localizer.MustLocalize("setting.set.cmd.flag.settingName.description"))
+	flags.StringVarP(&opts.settingName, "name", "n", "", f.Localizer.MustLocalize("setting.set.cmd.flag.settingName.description"))
 	flags.StringVar(&opts.value, "value", "", f.Localizer.MustLocalize("setting.set.cmd.flag.value.description"))
 	flags.BoolVar(&opts.resetToDefault, "default", false, f.Localizer.MustLocalize("setting.set.cmd.flag.default.description"))
 
@@ -96,7 +85,7 @@ func NewSetCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runSet(opts *options) error {
-	conn, err := opts.Connection()
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}
@@ -109,7 +98,7 @@ func runSet(opts *options) error {
 	}
 
 	if !opts.resetToDefault {
-		request := a.AdminApi.UpdateConfigProperty(opts.Context, opts.settingName)
+		request := a.AdminApi.UpdateConfigProperty(opts.f.Context, opts.settingName)
 
 		request = request.UpdateConfigurationProperty(registryinstanceclient.UpdateConfigurationProperty{Value: opts.value})
 
@@ -118,25 +107,29 @@ func runSet(opts *options) error {
 			return registrycmdutil.TransformInstanceError(err)
 		}
 
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("setting.set.log.info.settingSet"))
+		opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("setting.set.log.info.settingSet"))
 	} else {
-		request := a.AdminApi.ResetConfigProperty(opts.Context, opts.settingName)
+		if opts.value != "" {
+			opts.f.Logger.Info(icon.InfoPrefix(), opts.f.Localizer.MustLocalize("setting.set.warning.valueignored"))
+		}
+
+		request := a.AdminApi.ResetConfigProperty(opts.f.Context, opts.settingName)
 
 		_, err = request.Execute()
 		if err != nil {
 			return registrycmdutil.TransformInstanceError(err)
 		}
 
-		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("setting.set.log.info.settingReset"))
+		opts.f.Logger.Info(icon.SuccessPrefix(), opts.f.Localizer.MustLocalize("setting.set.log.info.settingReset"))
 	}
 	return nil
 }
 
 func runInteractivePrompt(opts *options, missingFlags []string) (err error) {
 
-	if slices.Contains(missingFlags, "setting-name") {
+	if slices.Contains(missingFlags, "name") {
 		settingNamePrompt := &survey.Input{
-			Message: opts.localizer.MustLocalize("setting.set.input.settingName.message"),
+			Message: opts.f.Localizer.MustLocalize("setting.set.input.settingName.message"),
 		}
 
 		err = survey.AskOne(settingNamePrompt, &opts.settingName)
@@ -147,7 +140,7 @@ func runInteractivePrompt(opts *options, missingFlags []string) (err error) {
 
 	if slices.Contains(missingFlags, "value") {
 		valuePrompt := &survey.Input{
-			Message: opts.localizer.MustLocalize("setting.set.input.value.message"),
+			Message: opts.f.Localizer.MustLocalize("setting.set.input.value.message"),
 		}
 
 		err = survey.AskOne(valuePrompt, &opts.value)

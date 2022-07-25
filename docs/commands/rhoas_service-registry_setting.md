@@ -14,7 +14,7 @@ Configure settings of a Service Registry instance
 $ rhoas service-registry setting list
 
 ## Set the value of setting
-$ rhoas service-registry setting set --setting-name registry.ccompat.legacy-id-mode.enabled --value true
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --value true
 
 ```
 

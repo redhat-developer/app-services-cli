@@ -1,16 +1,11 @@
 package get
 
 import (
-	"context"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
-	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
@@ -18,28 +13,18 @@ import (
 )
 
 type options struct {
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
-
 	registryID  string
 	settingName string
 	output      string
+
+	f *factory.Factory
 }
 
 // NewGetCommand creates a new command to get a service registry setting
 func NewGetCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{
-		IO:             f.IOStreams,
-		Connection:     f.Connection,
-		Logger:         f.Logger,
-		localizer:      f.Localizer,
-		Context:        f.Context,
-		ServiceContext: f.ServiceContext,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
@@ -51,13 +36,17 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 
 			if opts.settingName == "" {
-				if !opts.IO.CanPrompt() {
-					return flagutil.RequiredWhenNonInteractiveError("setting-name")
+				if !opts.f.IOStreams.CanPrompt() {
+					return flagutil.RequiredWhenNonInteractiveError("name")
 				}
 				err = runInteractivePrompt(opts)
 				if err != nil {
 					return err
 				}
+			}
+
+			if opts.registryID != "" {
+				return runGet(opts)
 			}
 
 			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
@@ -75,7 +64,7 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddRegistryInstance(&opts.registryID)
 
-	flags.StringVarP(&opts.settingName, "setting-name", "n", "", f.Localizer.MustLocalize("setting.get.cmd.flag.settingName.description"))
+	flags.StringVarP(&opts.settingName, "name", "n", "", f.Localizer.MustLocalize("setting.get.cmd.flag.settingName.description"))
 
 	flags.AddOutput(&opts.output)
 
@@ -83,7 +72,7 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runGet(opts *options) error {
-	conn, err := opts.Connection()
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}
@@ -95,20 +84,20 @@ func runGet(opts *options) error {
 		return err
 	}
 
-	request := a.AdminApi.GetConfigProperty(opts.Context, opts.settingName)
+	request := a.AdminApi.GetConfigProperty(opts.f.Context, opts.settingName)
 
 	configProperty, _, err := request.Execute()
 	if err != nil {
 		return registrycmdutil.TransformInstanceError(err)
 	}
 
-	return dump.Formatted(opts.IO.Out, opts.output, configProperty)
+	return dump.Formatted(opts.f.IOStreams.Out, opts.output, configProperty)
 }
 
 func runInteractivePrompt(opts *options) (err error) {
 
 	settingNamePrompt := &survey.Input{
-		Message: opts.localizer.MustLocalize("setting.get.input.settingName.message"),
+		Message: opts.f.Localizer.MustLocalize("setting.get.input.settingName.message"),
 	}
 
 	err = survey.AskOne(settingNamePrompt, &opts.settingName)

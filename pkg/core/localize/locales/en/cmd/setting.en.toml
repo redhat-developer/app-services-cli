@@ -12,7 +12,7 @@ one = '''
 $ rhoas service-registry setting list
 
 ## Set the value of setting
-$ rhoas service-registry setting set --setting-name registry.ccompat.legacy-id-mode.enabled --value true
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --value true
 '''
 
 [setting.list.cmd.description.short]
@@ -39,10 +39,10 @@ one = 'Get formatted setting value and other information'
 [setting.get.cmd.example]
 one = '''
 ## Get setting by name
-$ rhoas service-registry setting get --setting-name registry.ccompat.legacy-id-mode.enabled
+$ rhoas service-registry setting get --name registry.ccompat.legacy-id-mode.enabled
 
 ## Get setting in yaml format by name
-$ rhoas service-registry setting get --setting-name registry.ccompat.legacy-id-mode.enabled --output yaml
+$ rhoas service-registry setting get --name registry.ccompat.legacy-id-mode.enabled --output yaml
 '''
 
 [setting.get.cmd.flag.settingName.description]
@@ -60,10 +60,10 @@ one = 'Set value of the setting to a specific value or reset to default'
 [setting.set.cmd.example]
 one = '''
 ## Set value of setting by name
-$ rhoas service-registry setting set --setting-name registry.ccompat.legacy-id-mode.enabled --value true
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --value true
 
 ## Reset value of setting by name
-$ rhoas service-registry setting set --setting-name registry.ccompat.legacy-id-mode.enabled --default
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --default
 '''
 
 [setting.set.cmd.flag.settingName.description]
@@ -79,10 +79,14 @@ one = 'New value:'
 one = 'New value of the setting'
 
 [setting.set.cmd.flag.default.description]
-one = 'Reset value of the setting to default'
+one = 'Restore value of the setting to default'
 
 [setting.set.log.info.settingSet]
-one = 'Setting was successfully set'
+one = 'Successfully updated settings for update'
 
 [setting.set.log.info.settingReset]
 one = 'Setting was successfully reset to default'
+
+[setting.set.warning.valueignored]
+one = 'Value is ignore while setting is being restored to default'
+

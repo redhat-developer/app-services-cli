@@ -14,19 +14,19 @@ rhoas service-registry setting get [flags]
 
 ```
 ## Get setting by name
-$ rhoas service-registry setting get --setting-name registry.ccompat.legacy-id-mode.enabled
+$ rhoas service-registry setting get --name registry.ccompat.legacy-id-mode.enabled
 
 ## Get setting in yaml format by name
-$ rhoas service-registry setting get --setting-name registry.ccompat.legacy-id-mode.enabled --output yaml
+$ rhoas service-registry setting get --name registry.ccompat.legacy-id-mode.enabled --output yaml
 
 ```
 
 ### Options
 
 ```
-      --instance-id string    ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-  -o, --output string         Specify the output format. Choose from: "json", "yaml", "yml"
-  -n, --setting-name string   Name of the setting
+      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
+  -n, --name string          Name of the setting
+  -o, --output string        Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
 ### Options inherited from parent commands
