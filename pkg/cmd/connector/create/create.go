@@ -109,12 +109,14 @@ func runCreate(opts *options) error {
 		connector.Name = opts.name
 	}
 
-	serviceAccount, err := createServiceAccount(opts.f, "connector-"+connector.Name)
-	if err != nil {
-		return err
-	}
+	if opts.serviceAccount {
+		serviceAccount, err := createServiceAccount(opts.f, "connector-"+connector.Name)
+		if err != nil {
+			return err
+		}
+		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
 
-	connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
+	}
 
 	var conn connection.Connection
 	conn, err = f.Connection()
