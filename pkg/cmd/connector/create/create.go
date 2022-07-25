@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/pkg/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -68,11 +69,10 @@ func runCreate(opts *options) error {
 	var err error
 	if opts.file == "" {
 		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("common.message.reading.file"))
-		file, newErr := util.CreateFileFromStdin()
-		if newErr != nil {
-			opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
+		specifiedFile, err = util.CreateFileFromStdin()
+		if err != nil {
+			return errors.Wrap(err, opts.f.Localizer.MustLocalize("common.message.reading.file.error"))
 		}
-		specifiedFile = file
 	} else {
 		if util.IsURL(opts.file) {
 			specifiedFile, err = util.GetContentFromFileURL(f.Context, opts.file)
@@ -80,13 +80,13 @@ func runCreate(opts *options) error {
 			specifiedFile, err = os.Open(opts.file)
 		}
 		if err != nil {
-			return opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
+			return errors.Wrap(err, opts.f.Localizer.MustLocalize("common.message.reading.file.error"))
 		}
 	}
 	defer specifiedFile.Close()
 	byteValue, err := ioutil.ReadAll(specifiedFile)
 	if err != nil {
-		return opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
+		return errors.Wrap(err, opts.f.Localizer.MustLocalize("common.message.reading.file.error"))
 	}
 
 	var connector connectormgmtclient.ConnectorRequest
