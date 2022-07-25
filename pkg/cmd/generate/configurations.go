@@ -57,7 +57,7 @@ func WriteConfig(opts *options, config *configValues) (string, error) {
 func getDefaultPath(configType string) (filePath string) {
 	switch configType {
 	case envFormat:
-		filePath = ".env"
+		filePath = "rhoas.env"
 	case propertiesFormat:
 		filePath = "rhoas.properties"
 	case jsonFormat:
