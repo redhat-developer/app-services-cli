@@ -66,6 +66,10 @@ func runBuild(opts *options) error {
 		return err
 	}
 
+	if opts.connectorType == "" {
+		return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", opts.connectorType))
+	}
+
 	api := conn.API()
 
 	request := api.ConnectorsMgmt().ConnectorTypesApi.GetConnectorTypeByID(f.Context, opts.connectorType)
@@ -75,8 +79,6 @@ func runBuild(opts *options) error {
 		switch apiErr.GetCode() {
 		case connectorerror.ERROR_7:
 			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", opts.connectorType))
-		default:
-			return err
 		}
 	}
 	if err != nil {
@@ -131,6 +133,8 @@ func runBuild(opts *options) error {
 		}
 	}
 
+	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"))
+
 	return nil
 }
 
@@ -141,13 +145,15 @@ func createConnector(opts *options, connectorSpecification map[string]interface{
 		Channel:         &connectorChannel,
 		ConnectorTypeId: opts.connectorType,
 		DesiredState:    connectormgmtclient.CONNECTORDESIREDSTATE_READY,
-		NamespaceId:     "xxx",
-		ServiceAccount:  *connectormgmtclient.NewServiceAccount("xxx", "xxx"),
+		NamespaceId:     "",
+		ServiceAccount:  *connectormgmtclient.NewServiceAccount("", ""),
 		Kafka: connectormgmtclient.KafkaConnectionSettings{
-			Id: "xxx",
+			Id:  "",
+			Url: "",
 		},
 		SchemaRegistry: &connectormgmtclient.SchemaRegistryConnectionSettings{
-			Id: "xxx",
+			Id:  "",
+			Url: "",
 		},
 		Connector: connectorSpecification,
 	}

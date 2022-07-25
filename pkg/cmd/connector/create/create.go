@@ -8,6 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -18,6 +19,9 @@ import (
 
 type options struct {
 	file         string
+	kafkaId      string
+	namespace    string
+	name         string
 	outputFormat string
 	f            *factory.Factory
 }
@@ -36,7 +40,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Hidden:  true,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
@@ -46,7 +49,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.file, "file", "", f.Localizer.MustLocalize("connector.file.flag.description"))
+	flags.StringVarP(&opts.file, "file", "", "f", f.Localizer.MustLocalize("connector.file.flag.description"))
+	flags.StringVar(&opts.kafkaId, "kafka", "", f.Localizer.MustLocalize("connector.flag.kafka.description"))
+	flags.StringVar(&opts.namespace, "namespace", "", f.Localizer.MustLocalize("connector.flag.namespace.description"))
+	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.flag.name.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -55,23 +61,13 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 func runCreate(opts *options) error {
 	f := opts.f
 
-	//  - select user kafka
-	//  - select namespace
-	//  - generate service accounts or ask user to provide ones?
-	//  - ask for the name - ask if override name or override by flag etc.
-	//  - spec can contain service account - users can paste it.
-	var conn connection.Connection
-	conn, err := f.Connection()
-	if err != nil {
-		return err
-	}
-
 	var specifiedFile *os.File
+	var err error
 	if opts.file == "" {
 		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("common.message.reading.file"))
 		file, newErr := util.CreateFileFromStdin()
 		if newErr != nil {
-			return newErr
+			opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
 		}
 		specifiedFile = file
 	} else {
@@ -81,17 +77,39 @@ func runCreate(opts *options) error {
 			specifiedFile, err = os.Open(opts.file)
 		}
 		if err != nil {
-			return err
+			return opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
 		}
 	}
 	defer specifiedFile.Close()
-
 	byteValue, err := ioutil.ReadAll(specifiedFile)
 	if err != nil {
-		return err
+		return opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
 	}
+
 	var connector connectormgmtclient.ConnectorRequest
 	err = json.Unmarshal(byteValue, &connector)
+	if err != nil {
+		return opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
+	}
+
+	if opts.kafkaId != "" {
+		connector.Kafka = connectormgmtclient.KafkaConnectionSettings{
+			Id: opts.kafkaId,
+		}
+	}
+
+	if opts.namespace != "" {
+		connector.NamespaceId = opts.namespace
+	}
+
+	if opts.name != "" {
+		connector.Name = opts.name
+	}
+
+	generate.createServiceAccount()
+
+	var conn connection.Connection
+	conn, err = f.Connection()
 	if err != nil {
 		return err
 	}

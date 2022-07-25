@@ -219,6 +219,15 @@ one = 'Successfully updated the Connectors instance'
 [connector.file.flag.description]
 one = 'Location of the Connectors JSON file that describes the connector'
 
+[connector.flag.kafka.description]
+one = 'Id of the kafka instance (by default kafka instance from context would be used)'
+
+[connector.flag.namespace.description]
+one = 'Id of the namespace for the connector (by default namespace from context would be used)'
+
+[connector.flag.name.description]
+one = 'Override name of the connector (by default name in the connector spec would be used)'
+
 [connector.build.file.flag.description]
 one = 'filename of the connector specification file'
 
@@ -230,6 +239,16 @@ one = 'Creating connector specification'
 
 [connector.build.type.flag.description]
 one = 'Connector type (id of the connector)'
+
+[connector.build.info.success]
+one = '''
+Connector specification file successfully created.
+You can edit the file and then use the "rhoas connector create --file={{.}}" command to create the Connectors instance.
+
+Information like connector namespace,  and service accounts can be supplied at the time of the creation. 
+You can generate new service account using rhoas service-account create command.
+'''
+
 
 [connector.delete.cmd.shortDescription]
 one = 'Delete a Connectors instance'
