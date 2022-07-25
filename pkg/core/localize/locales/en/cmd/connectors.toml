@@ -40,6 +40,14 @@ one = '''
 rhoas connector cluster create --name=my-connectors-cluster
 '''
 
+[connector.sa.created]
+one = '''
+Service account created. 
+Client ID: {{.ClientId}}  
+Secret: {{.ClientSecret}}
+'''
+
+
 [connector.cluster.create.info.success]
 one = 'Successfully created the Connectors cluster named "{{.NAME}}" '
 
@@ -228,6 +236,9 @@ one = 'Id of the namespace for the connector (by default namespace from context 
 [connector.flag.name.description]
 one = 'Override name of the connector (by default name in the connector spec would be used)'
 
+[connector.flag.sa.description]
+one = 'If set, the connector will be created with the newly specified service account'
+
 [connector.build.file.flag.description]
 one = 'filename of the connector specification file'
 
@@ -248,7 +259,6 @@ You can edit the file and then use the "rhoas connector create --file={{.}}" com
 Information like connector namespace,  and service accounts can be supplied at the time of the creation. 
 You can generate new service account using rhoas service-account create command.
 '''
-
 
 [connector.delete.cmd.shortDescription]
 one = 'Delete a Connectors instance'

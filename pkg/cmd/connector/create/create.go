@@ -14,16 +14,18 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 
 type options struct {
-	file         string
-	kafkaId      string
-	namespace    string
-	name         string
-	outputFormat string
-	f            *factory.Factory
+	file           string
+	kafkaId        string
+	namespace      string
+	name           string
+	outputFormat   string
+	serviceAccount bool
+	f              *factory.Factory
 }
 
 // NewCreateCommand creates a new command to create a Connector
@@ -53,6 +55,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.kafkaId, "kafka", "", f.Localizer.MustLocalize("connector.flag.kafka.description"))
 	flags.StringVar(&opts.namespace, "namespace", "", f.Localizer.MustLocalize("connector.flag.namespace.description"))
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.flag.name.description"))
+	flags.BoolVar(&opts.serviceAccount, "create-service-account", false, f.Localizer.MustLocalize("connector.flag.sa.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
@@ -106,7 +109,12 @@ func runCreate(opts *options) error {
 		connector.Name = opts.name
 	}
 
-	generate.createServiceAccount()
+	serviceAccount, err := createServiceAccount(opts.f, "connector-"+connector.Name)
+	if err != nil {
+		return err
+	}
+
+	connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
 
 	var conn connection.Connection
 	conn, err = f.Connection()
@@ -136,4 +144,29 @@ func runCreate(opts *options) error {
 	f.Logger.Info(f.Localizer.MustLocalize("connector.create.info.success"))
 
 	return nil
+}
+
+func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
+	conn, err := opts.Connection()
+	if err != nil {
+		return nil, err
+	}
+	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: shortDescription}
+
+	serviceacct, httpRes, err := conn.API().
+		ServiceAccountMgmt().
+		CreateServiceAccount(opts.Context).
+		ServiceAccountRequest(serviceAccountPayload).
+		Execute()
+
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
+
+	if err != nil {
+		return nil, err
+	}
+	opts.Logger.Info(opts.Localizer.MustLocalize("connector.sa.created",
+		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.ClientSecret)))
+	return &serviceacct, nil
 }
