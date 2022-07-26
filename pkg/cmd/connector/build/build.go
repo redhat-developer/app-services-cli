@@ -99,6 +99,7 @@ func runBuild(opts *options) error {
 			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", opts.connectorType))
 		}
 	}
+
 	if err != nil {
 		return err
 	}

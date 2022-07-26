@@ -1,0 +1,37 @@
+{
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "namespace_id": {
+      "type": "string"
+    },
+    "kafka": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": ["id"]
+    },
+    "service_account": {
+      "properties": {
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": ["client_id", "client_secret"]
+    }
+  },
+  "type": "object",
+  "required": ["name", "namespace_id", "kafka", "service_account"]
+}

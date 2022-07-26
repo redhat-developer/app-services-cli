@@ -5,12 +5,15 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/invopop/jsonschema"
+	// embed static HTML file
+	_ "embed"
+
 	"github.com/pkg/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 	"github.com/wtrocki/survey-json-schema/pkg/surveyjson"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
@@ -20,6 +23,9 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
+
+//go:embed schema.json
+var requestSchema []byte
 
 type options struct {
 	file           string
@@ -83,14 +89,14 @@ func runCreate(opts *options) error {
 		return err
 	}
 	var connectorRequest connectormgmtclient.ConnectorRequest
-	if opts.f.IOStreams.CanPrompt() {
-		connectorRequest, err = setValuesUsingInteractiveMode(&userConnector, opts)
-		if err != nil {
-			return err
-		}
-	} else {
-		connectorRequest = userConnector
+	//if opts.f.IOStreams.CanPrompt() {
+	connectorRequest, err = setValuesUsingInteractiveMode(&userConnector, opts)
+	if err != nil {
+		return err
 	}
+	// } else {
+	// 	connectorRequest = userConnector
+	// }
 
 	var conn connection.Connection
 	conn, err = f.Connection()
@@ -109,6 +115,14 @@ func runCreate(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
+	if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
+		if apiErr.GetCode() == connectorerror.ERROR_7 {
+			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", connectorRequest.ConnectorTypeId))
+		}
+
+		return opts.f.Localizer.MustLocalizeError("connector.type.create.error.other", localize.NewEntry("Error", apiErr.GetReason()))
+	}
+
 	if err != nil {
 		return err
 	}
@@ -120,10 +134,6 @@ func runCreate(opts *options) error {
 	f.Logger.Info(f.Localizer.MustLocalize("connector.create.info.success"))
 
 	return nil
-}
-
-func readFileContent() {
-	panic("unimplemented")
 }
 
 func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
@@ -152,31 +162,25 @@ func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafk
 }
 
 func setValuesUsingInteractiveMode(connector *connectormgmtclient.ConnectorRequest, opts *options) (connectormgmtclient.ConnectorRequest, error) {
-	requestJSONSchema := jsonschema.Reflect(&connector)
-	schemaBytes, err := requestJSONSchema.MarshalJSON()
-	if err != nil {
-		return connectormgmtclient.ConnectorRequest{}, err
-	}
-
-	// Creates JSONSchema based of
 	schemaOptions := surveyjson.JSONSchemaOptions{
 		Out:                 os.Stdout,
 		In:                  os.Stdin,
 		OutErr:              os.Stderr,
 		AskExisting:         false,
-		AutoAcceptDefaults:  false,
+		AutoAcceptDefaults:  true,
 		NoAsk:               false,
-		IgnoreMissingValues: false,
+		IgnoreMissingValues: true,
 	}
 
+	// In future library will be able to
+	// pick those values automatically
 	initialValues := map[string]interface{}{
-		"name":            connector.Name,
-		"namespace_id":    connector.NamespaceId,
-		"kafka":           connector.Kafka,
-		"schema_registry": connector.SchemaRegistry,
+		"name":         connector.Name,
+		"namespace_id": connector.NamespaceId,
+		//"kafka":        connector.Kafka,
 	}
 
-	result, err := schemaOptions.GenerateValues(schemaBytes, initialValues)
+	result, err := schemaOptions.GenerateValues(requestSchema, initialValues)
 	if err != nil {
 		return connectormgmtclient.ConnectorRequest{}, err
 	}

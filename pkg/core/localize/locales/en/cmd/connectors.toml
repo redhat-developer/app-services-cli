@@ -526,6 +526,9 @@ one = 'The connector type with id "{{.Id}}" does not exist'
 [connector.type.error.noType]
 one = 'No type id was passed to command'
 
+[connector.type.create.error.other]
+one = 'error returned by api when creating connector instance: {{.Error}}'
+
 [connector.type.describe.flag.id]
 one = 'The type id of the connector you want to get details about'
 

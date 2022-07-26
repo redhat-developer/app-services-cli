@@ -295,7 +295,7 @@
       "env": {},
       "args": [
         "connector", "create",
-        "--file","connector.json",
+        "--file","../../connector.json",
       ]
     },
   ]
