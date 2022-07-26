@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -67,6 +68,10 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 	flags.AddOutput(&opts.outputFormat)
 
 	_ = cmd.MarkFlagRequired("type")
+
+	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return connectorcmdutil.FilterValidTypesArgs(f, toComplete)
+	})
 
 	return cmd
 }
@@ -148,8 +153,7 @@ func runBuild(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"),
-		localize.NewEntry("File", opts.outputFile))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"))
 
 	return nil
 }

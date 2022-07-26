@@ -287,15 +287,15 @@
       ]
     },
     {
-      "name": "connector build",
+      "name": "connector create",
       "type": "go",
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/cmd/rhoas",
       "env": {},
       "args": [
-        " rhoas connector build",
-        "--type","aws_s3_source_0.1"
+        "connector", "create",
+        "--file","connector.json",
       ]
     },
   ]

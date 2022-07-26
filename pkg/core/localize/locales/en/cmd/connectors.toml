@@ -257,7 +257,7 @@ one = 'Connector type (id of the connector)'
 [connector.build.info.success]
 one = '''
 Connector specification successfully created.
-You can edit the specification in your editor and use the "rhoas connector create --file={{.File}}" command to create the connectors instance.
+You can edit the specification in your editor and use the "rhoas connector create --file=yourconnector.json" command to create the connectors instance.
 
 Information like connector namespace and service accounts can be supplied at the time of the creation. 
 You can generate new service account using rhoas service-account create command.
