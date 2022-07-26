@@ -43,6 +43,5 @@ rhoas service-registry list
 * [rhoas service-registry list](rhoas_service-registry_list.md)	 - List Service Registry instances
 * [rhoas service-registry role](rhoas_service-registry_role.md)	 - Service Registry role management
 * [rhoas service-registry rule](rhoas_service-registry_rule.md)	 - Manage artifact rules in a Service Registry instance
-* [rhoas service-registry setting](rhoas_service-registry_setting.md)	 - Configure settings of a Service Registry instance
 * [rhoas service-registry use](rhoas_service-registry_use.md)	 - Use a Service Registry instance
 

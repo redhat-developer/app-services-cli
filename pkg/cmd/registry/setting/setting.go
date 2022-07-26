@@ -15,6 +15,7 @@ func NewSettingCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("setting.cmd.description.long"),
 		Example: f.Localizer.MustLocalize("setting.cmd.example"),
 		Args:    cobra.MinimumNArgs(1),
+		Hidden:  true,
 	}
 
 	// add sub-commands
