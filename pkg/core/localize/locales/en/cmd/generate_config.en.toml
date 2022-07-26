@@ -10,7 +10,7 @@ You must specify an output format into which the credentials will be stored:
 - env (default): Store configurations in an env file as environment variables
 - json: Store configurations in a JSON file
 - properties: Store configurations in a properties file, which is typically used in Java-related technologies
-- configmap: Store configurations in a Kubernetes ConfigMap file
+- secret: Store configurations in a Kubernetes secret file
 '''
 
 [generate.cmd.example]
@@ -21,8 +21,8 @@ $ rhoas generate-config --type json
 ## Generate configurations for the current service context in env format and save it in specified path
 $ rhoas generate-config --type env --output-file ./configs/.env
 
-## Generate configurations for a specified context as Kubernetes ConfigMap
-$ rhoas generate-config --name qaprod --type configmap
+## Generate configurations for a specified context as Kubernetes secret
+$ rhoas generate-config --name qaprod --type secret
 '''
 
 [generate.flag.type]
@@ -43,11 +43,4 @@ one = 'file {{.FilePath}} already exists. Use --overwrite to overwrite the file,
 one='No services available to generate configurations'
 
 [generate.log.info.credentialsSaved]
-one='''
-Configurations successfully saved to "{{.FilePath}}"
-
-You can now use existing service accounts or create new to connect to the services.
-To create new service account, run this command:
-
-  $ rhoas service-account create
-'''
+one='Configurations successfully saved to "{{.FilePath}}"'
