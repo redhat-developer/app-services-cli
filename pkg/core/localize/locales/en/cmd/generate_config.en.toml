@@ -46,8 +46,5 @@ one='No services available to generate configurations'
 one='''
 Configurations successfully saved to "{{.FilePath}}"
 
-You can now use existing service accounts or create new to connect to the services.
-To create new service account, run this command:
-
-  $ rhoas service-account create
+You can now create new service accounts or use existing ones to connect to the service(s)
 '''
