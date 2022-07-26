@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -62,6 +61,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flags.IntVar(&opts.limit, "limit", 150, f.Localizer.MustLocalize("connector.type.list.flag.limit.description"))
 	flags.StringVar(&opts.search, "search", DefaultSearch, f.Localizer.MustLocalize("connector.type.list.flag.search.description"))
 	flags.IntVar(&opts.page, "page", 1, f.Localizer.MustLocalize("connector.type.list.flag.page.description"))
+
 	return cmd
 
 }
@@ -82,7 +82,7 @@ func runUpdateCommand(opts *options) error {
 	request = request.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != DefaultSearch {
-		query := fmt.Sprintf("name like %[2]s%[1]s%[2]s or description like %[2]s%[1]s%[2]s", opts.search, "%")
+		query := connectorcmdutil.NewSearchQuery(opts.search).Filter("name").Filter("description").Build()
 		request = request.Search(query)
 	}
 
