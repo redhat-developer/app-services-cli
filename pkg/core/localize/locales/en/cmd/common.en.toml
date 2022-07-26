@@ -14,6 +14,3 @@ one = 'invalid value for limit {{.Limit}}, minimum value is -1'
 
 [common.message.reading.file]
 one = 'Reading file content from standard input'
-
-[common.message.reading.file.error]
-one = 'cannot read file content'

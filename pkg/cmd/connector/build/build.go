@@ -76,8 +76,7 @@ func runBuild(opts *options) error {
 	response, _, err := request.Execute()
 
 	if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
-		switch apiErr.GetCode() {
-		case connectorerror.ERROR_7:
+		if apiErr.GetCode() == connectorerror.ERROR_7 {
 			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", opts.connectorType))
 		}
 	}

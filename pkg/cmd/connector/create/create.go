@@ -71,7 +71,7 @@ func runCreate(opts *options) error {
 		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("common.message.reading.file"))
 		specifiedFile, err = util.CreateFileFromStdin()
 		if err != nil {
-			return errors.Wrap(err, opts.f.Localizer.MustLocalize("common.message.reading.file.error"))
+			return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
 		}
 	} else {
 		if util.IsURL(opts.file) {
@@ -80,19 +80,19 @@ func runCreate(opts *options) error {
 			specifiedFile, err = os.Open(opts.file)
 		}
 		if err != nil {
-			return errors.Wrap(err, opts.f.Localizer.MustLocalize("common.message.reading.file.error"))
+			return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
 		}
 	}
 	defer specifiedFile.Close()
 	byteValue, err := ioutil.ReadAll(specifiedFile)
 	if err != nil {
-		return errors.Wrap(err, opts.f.Localizer.MustLocalize("common.message.reading.file.error"))
+		return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
 	}
 
 	var connector connectormgmtclient.ConnectorRequest
 	err = json.Unmarshal(byteValue, &connector)
 	if err != nil {
-		return opts.f.Localizer.MustLocalizeError("common.message.reading.file.error", localize.NewEntry("ErrorMessage", err))
+		return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
 	}
 
 	if opts.kafkaId != "" {
@@ -110,12 +110,11 @@ func runCreate(opts *options) error {
 	}
 
 	if opts.serviceAccount {
-		serviceAccount, err := createServiceAccount(opts.f, "connector-"+connector.Name)
-		if err != nil {
-			return err
+		serviceAccount, err1 := createServiceAccount(opts.f, "connector-"+connector.Name)
+		if err1 != nil {
+			return err1
 		}
 		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
-
 	}
 
 	var conn connection.Connection
