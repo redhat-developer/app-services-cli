@@ -9,4 +9,4 @@ const NamespaceServiceName = "namespace"
 const ConnectorServiceName = "connector"
 
 // All services as labels
-var AllServiceLabels = []string{KafkaServiceName, ServiceRegistryServiceName, ConnectorServiceName}
+var AllServiceLabels = []string{KafkaServiceName, ServiceRegistryServiceName, NamespaceServiceName, ConnectorServiceName}
