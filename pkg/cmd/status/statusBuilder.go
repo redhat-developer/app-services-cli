@@ -29,11 +29,12 @@ type serviceStatus struct {
 	Location  string           `json:"location,omitempty" title:"Context File Location"`
 	Kafka     *kafkaStatus     `json:"kafka,omitempty" title:"Kafka"`
 	Registry  *registryStatus  `json:"registry,omitempty" title:"Service Registry"`
+	Namespace *NamespaceStatus `json:"namespace,omitempty" title:"Namespace"`
 	Connector *ConnectorStatus `json:"connector,omitempty" title:"Connector"`
 }
 
 func (s serviceStatus) hasStatus() bool {
-	return s.Kafka != nil || s.Registry != nil || s.Connector != nil
+	return s.Kafka != nil || s.Registry != nil || s.Connector != nil || s.Namespace != nil
 }
 
 type kafkaStatus struct {
@@ -49,6 +50,11 @@ type registryStatus struct {
 	Name        string `json:"name,omitempty"`
 	Status      string `json:"status,omitempty"`
 	RegistryUrl string `json:"registryUrl,omitempty" title:"Registry URL"`
+}
+
+type NamespaceStatus struct {
+	Name string `json:"name,omitempty"`
+	ID   string `json:"id,omitempty"`
 }
 
 type ConnectorStatus struct {
@@ -120,6 +126,24 @@ func (c *statusClient) BuildStatus(services []string) (status *serviceStatus, er
 		status.Connector = connectorStatus
 	}
 
+	if flagutil.StringInSlice(servicespec.NamespaceServiceName, services) && c.serviceConfig.NamespaceID != "" {
+
+		conn, err1 := factory.Connection()
+		if err1 != nil {
+			return nil, err1
+		}
+
+		namespaceResponse, err2 := contextutil.GetNamespaceForServiceConfig(c.serviceConfig, &conn, factory)
+		if err2 != nil {
+			return status, err2
+		}
+
+		factory.Logger.Info(namespaceResponse)
+
+		namespaceStatus := c.getNamespaceStatus(namespaceResponse)
+		status.Namespace = namespaceStatus
+	}
+
 	return status, err
 }
 
@@ -144,6 +168,15 @@ func (c *statusClient) getRegistryStatus(registry *registrymgmtclient.Registry) 
 		Name:        registry.GetName(),
 		RegistryUrl: registry.GetRegistryUrl(),
 		Status:      string(registry.GetStatus()),
+	}
+
+	return status
+}
+
+func (c *statusClient) getNamespaceStatus(namespace *connectormgmtclient.ConnectorNamespace) (status *NamespaceStatus) {
+	status = &NamespaceStatus{
+		ID:   namespace.GetId(),
+		Name: namespace.GetName(),
 	}
 
 	return status
