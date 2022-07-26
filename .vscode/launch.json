@@ -286,5 +286,19 @@
         "--path", "/api/kafkas_mgmt/v1/sso_providers",
       ]
     },
+    {
+      "name": "connector build",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        " rhoas connector build",
+        "--type","aws_s3_source_0.1"
+      ]
+    },
   ]
+
+
 }
