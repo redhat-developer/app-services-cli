@@ -22,7 +22,7 @@ rhoas service-registry setting set
 
 `rhoas service-registry setting list` for listing all settings of a service registry instance.
 
-> NOTE: setting command is only for admins of the service registry instance
+> NOTE: setting command is only for owners and admins of the service registry instance
 
 ## 0.46.0
 
