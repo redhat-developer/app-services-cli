@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
@@ -22,7 +23,9 @@ type options struct {
 	name          string
 	connectorType string
 	outputFormat  string
-	f             *factory.Factory
+	overwrite     bool
+
+	f *factory.Factory
 }
 
 // NewBuildCommand builds a new command to build a Connector
@@ -43,6 +46,16 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
+			if !opts.f.IOStreams.CanPrompt() {
+				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+			}
+
+			// If the  file already exists, and the --overwrite flag is not set then return an error
+			// indicating that the user should explicitly request overwriting of the file
+			if _, err := os.Stat(opts.outputFile); err == nil && !opts.overwrite {
+				return opts.f.Localizer.MustLocalizeError("common.error.FileAlreadyExists", localize.NewEntry("FilePath", color.CodeSnippet(opts.outputFile)))
+			}
+
 			return runBuild(opts)
 		},
 	}
@@ -50,6 +63,7 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.outputFile, "output-file", "", f.Localizer.MustLocalize("connector.build.file.flag.description"))
 	flags.StringVar(&opts.connectorType, "type", "", f.Localizer.MustLocalize("connector.build.type.flag.description"))
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.build.name.flag.description"))
+	cmd.Flags().BoolVar(&opts.overwrite, "overwrite", false, opts.f.Localizer.MustLocalize("connector.build.overwrite.flag.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	_ = cmd.MarkFlagRequired("type")
@@ -115,29 +129,31 @@ func runBuild(opts *options) error {
 		return err
 	}
 
-	connector := createConnector(opts, connectorSpecification)
+	connector := createConnectorObject(opts, connectorSpecification)
 
-	if opts.outputFile != "" {
-		file, err1 := os.OpenFile(opts.outputFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
-		if err1 != nil {
-			return err1
-		}
-		defer file.Close()
-		if err1 = dump.Formatted(file, opts.outputFormat, connector); err1 != nil {
-			return err1
-		}
-	} else {
-		if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, connector); err != nil {
-			return err
+	if opts.outputFile == "" {
+		if opts.outputFormat == "" {
+			opts.outputFile = "connector.json"
+		} else {
+			opts.outputFile = "connector." + opts.outputFormat
 		}
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"))
+	file, err1 := os.OpenFile(opts.outputFile, os.O_WRONLY|os.O_CREATE, 0600)
+	if err1 != nil {
+		return err1
+	}
+	defer file.Close()
+	if err1 = dump.Formatted(file, opts.outputFormat, connector); err1 != nil {
+		return err1
+	}
+
+	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"), localize.NewEntry("File", opts.outputFile))
 
 	return nil
 }
 
-func createConnector(opts *options, connectorSpecification map[string]interface{}) connectormgmtclient.ConnectorRequest {
+func createConnectorObject(opts *options, connectorSpecification map[string]interface{}) connectormgmtclient.ConnectorRequest {
 	connectorChannel := connectormgmtclient.Channel(connectormgmtclient.CHANNEL_STABLE)
 	connector := connectormgmtclient.ConnectorRequest{
 		Name:            opts.name,

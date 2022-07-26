@@ -245,6 +245,9 @@ one = 'filename of the connector specification file'
 [connector.build.name.flag.description]
 one = 'name of the connector'
 
+[connector.build.overwrite.flag.description]
+one = 'should overwrite file if exist'
+
 [connector.build.info.msg]
 one = 'Creating connector specification'
 
@@ -254,9 +257,9 @@ one = 'Connector type (id of the connector)'
 [connector.build.info.success]
 one = '''
 Connector specification successfully created.
-You can edit the specification in your editor and then use the "rhoas connector create --file=spec.json" command to create the Connectors instance.
+You can edit the specification in your editor and use the "rhoas connector create --file={{.File}}" command to create the connectors instance.
 
-Information like connector namespace,  and service accounts can be supplied at the time of the creation. 
+Information like connector namespace and service accounts can be supplied at the time of the creation. 
 You can generate new service account using rhoas service-account create command.
 '''
 

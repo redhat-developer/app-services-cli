@@ -5,11 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/invopop/jsonschema"
 	"github.com/pkg/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/wtrocki/survey-json-schema/pkg/surveyjson"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -64,57 +66,30 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 
 func runCreate(opts *options) error {
 	f := opts.f
+	// Load the connector from the file
+	fileContent, err := readFileFromInput(opts)
+	if err != nil {
+		return err
+	}
 
-	var specifiedFile *os.File
-	var err error
-	if opts.file == "" {
-		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("common.message.reading.file"))
-		specifiedFile, err = util.CreateFileFromStdin()
+	var userConnector connectormgmtclient.ConnectorRequest
+	err = json.Unmarshal(fileContent, &userConnector)
+	if err != nil {
+		return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
+	}
+
+	err = setDefaultValuesFromFlags(&userConnector, opts)
+	if err != nil {
+		return err
+	}
+	var connectorRequest connectormgmtclient.ConnectorRequest
+	if opts.f.IOStreams.CanPrompt() {
+		connectorRequest, err = setValuesUsingInteractiveMode(&userConnector, opts)
 		if err != nil {
-			return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
+			return err
 		}
 	} else {
-		if util.IsURL(opts.file) {
-			specifiedFile, err = util.GetContentFromFileURL(f.Context, opts.file)
-		} else {
-			specifiedFile, err = os.Open(opts.file)
-		}
-		if err != nil {
-			return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
-		}
-	}
-	defer specifiedFile.Close()
-	byteValue, err := ioutil.ReadAll(specifiedFile)
-	if err != nil {
-		return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
-	}
-
-	var connector connectormgmtclient.ConnectorRequest
-	err = json.Unmarshal(byteValue, &connector)
-	if err != nil {
-		return errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
-	}
-
-	if opts.kafkaId != "" {
-		connector.Kafka = connectormgmtclient.KafkaConnectionSettings{
-			Id: opts.kafkaId,
-		}
-	}
-
-	if opts.namespace != "" {
-		connector.NamespaceId = opts.namespace
-	}
-
-	if opts.name != "" {
-		connector.Name = opts.name
-	}
-
-	if opts.serviceAccount {
-		serviceAccount, err1 := createServiceAccount(opts.f, "connector-"+connector.Name)
-		if err1 != nil {
-			return err1
-		}
-		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
+		connectorRequest = userConnector
 	}
 
 	var conn connection.Connection
@@ -126,7 +101,7 @@ func runCreate(opts *options) error {
 	api := conn.API()
 
 	a := api.ConnectorsMgmt().ConnectorsApi.CreateConnector(f.Context)
-	a = a.ConnectorRequest(connector)
+	a = a.ConnectorRequest(connectorRequest)
 	a = a.Async(true)
 
 	response, httpRes, err := a.Execute()
@@ -145,6 +120,10 @@ func runCreate(opts *options) error {
 	f.Logger.Info(f.Localizer.MustLocalize("connector.create.info.success"))
 
 	return nil
+}
+
+func readFileContent() {
+	panic("unimplemented")
 }
 
 func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
@@ -170,4 +149,95 @@ func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafk
 	opts.Logger.Info(opts.Localizer.MustLocalize("connector.sa.created",
 		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.ClientSecret)))
 	return &serviceacct, nil
+}
+
+func setValuesUsingInteractiveMode(connector *connectormgmtclient.ConnectorRequest, opts *options) (connectormgmtclient.ConnectorRequest, error) {
+	requestJSONSchema := jsonschema.Reflect(&connector)
+	schemaBytes, err := requestJSONSchema.MarshalJSON()
+	if err != nil {
+		return connectormgmtclient.ConnectorRequest{}, err
+	}
+
+	// Creates JSONSchema based of
+	schemaOptions := surveyjson.JSONSchemaOptions{
+		Out:                 os.Stdout,
+		In:                  os.Stdin,
+		OutErr:              os.Stderr,
+		AskExisting:         false,
+		AutoAcceptDefaults:  false,
+		NoAsk:               false,
+		IgnoreMissingValues: false,
+	}
+
+	initialValues := map[string]interface{}{
+		"name":            connector.Name,
+		"namespace_id":    connector.NamespaceId,
+		"kafka":           connector.Kafka,
+		"schema_registry": connector.SchemaRegistry,
+	}
+
+	result, err := schemaOptions.GenerateValues(schemaBytes, initialValues)
+	if err != nil {
+		return connectormgmtclient.ConnectorRequest{}, err
+	}
+	var connectorObj connectormgmtclient.ConnectorRequest
+	err = json.Unmarshal(result, &connectorObj)
+	if err != nil {
+		return connectormgmtclient.ConnectorRequest{}, err
+	}
+	// We need to map values to the connector spec
+	connectorObj.Connector = connector.Connector
+	return connectorObj, nil
+}
+
+func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, opts *options) error {
+	if opts.kafkaId != "" {
+		connector.Kafka = connectormgmtclient.KafkaConnectionSettings{
+			Id: opts.kafkaId,
+		}
+	}
+
+	if opts.namespace != "" {
+		connector.NamespaceId = opts.namespace
+	}
+
+	if opts.name != "" {
+		connector.Name = opts.name
+	}
+
+	if opts.serviceAccount {
+		serviceAccount, err1 := createServiceAccount(opts.f, "connector-"+connector.Name)
+		if err1 != nil {
+			return err1
+		}
+		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
+	}
+	return nil
+}
+
+func readFileFromInput(opts *options) ([]byte, error) {
+	var specifiedFile *os.File
+	var err error
+	if opts.file == "" {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("common.message.reading.file"))
+		specifiedFile, err = util.CreateFileFromStdin()
+		if err != nil {
+			return nil, errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
+		}
+	} else {
+		if util.IsURL(opts.file) {
+			specifiedFile, err = util.GetContentFromFileURL(opts.f.Context, opts.file)
+		} else {
+			specifiedFile, err = os.Open(opts.file)
+		}
+		if err != nil {
+			return nil, errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
+		}
+	}
+	defer specifiedFile.Close()
+	byteValue, err := ioutil.ReadAll(specifiedFile)
+	if err != nil {
+		return nil, errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
+	}
+	return byteValue, nil
 }
