@@ -14,7 +14,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
-	"github.com/wtrocki/survey-json-schema/pkg/surveyjson"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -88,15 +87,6 @@ func runCreate(opts *options) error {
 	if err != nil {
 		return err
 	}
-	var connectorRequest connectormgmtclient.ConnectorRequest
-	//if opts.f.IOStreams.CanPrompt() {
-	connectorRequest, err = setValuesUsingInteractiveMode(&userConnector, opts)
-	if err != nil {
-		return err
-	}
-	// } else {
-	// 	connectorRequest = userConnector
-	// }
 
 	var conn connection.Connection
 	conn, err = f.Connection()
@@ -107,7 +97,7 @@ func runCreate(opts *options) error {
 	api := conn.API()
 
 	a := api.ConnectorsMgmt().ConnectorsApi.CreateConnector(f.Context)
-	a = a.ConnectorRequest(connectorRequest)
+	a = a.ConnectorRequest(userConnector)
 	a = a.Async(true)
 
 	response, httpRes, err := a.Execute()
@@ -117,7 +107,7 @@ func runCreate(opts *options) error {
 
 	if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
 		if apiErr.GetCode() == connectorerror.ERROR_7 {
-			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", connectorRequest.ConnectorTypeId))
+			return opts.f.Localizer.MustLocalizeError("connector.type.error.notFound", localize.NewEntry("Id", userConnector.ConnectorTypeId))
 		}
 
 		return opts.f.Localizer.MustLocalizeError("connector.type.create.error.other", localize.NewEntry("Error", apiErr.GetReason()))
@@ -159,39 +149,6 @@ func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafk
 	opts.Logger.Info(opts.Localizer.MustLocalize("connector.sa.created",
 		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.ClientSecret)))
 	return &serviceacct, nil
-}
-
-func setValuesUsingInteractiveMode(connector *connectormgmtclient.ConnectorRequest, opts *options) (connectormgmtclient.ConnectorRequest, error) {
-	schemaOptions := surveyjson.JSONSchemaOptions{
-		Out:                 os.Stdout,
-		In:                  os.Stdin,
-		OutErr:              os.Stderr,
-		AskExisting:         false,
-		AutoAcceptDefaults:  true,
-		NoAsk:               false,
-		IgnoreMissingValues: true,
-	}
-
-	// In future library will be able to
-	// pick those values automatically
-	initialValues := map[string]interface{}{
-		"name":         connector.Name,
-		"namespace_id": connector.NamespaceId,
-		//"kafka":        connector.Kafka,
-	}
-
-	result, err := schemaOptions.GenerateValues(requestSchema, initialValues)
-	if err != nil {
-		return connectormgmtclient.ConnectorRequest{}, err
-	}
-	var connectorObj connectormgmtclient.ConnectorRequest
-	err = json.Unmarshal(result, &connectorObj)
-	if err != nil {
-		return connectormgmtclient.ConnectorRequest{}, err
-	}
-	// We need to map values to the connector spec
-	connectorObj.Connector = connector.Connector
-	return connectorObj, nil
 }
 
 func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, opts *options) error {
