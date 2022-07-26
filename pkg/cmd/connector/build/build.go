@@ -53,7 +53,7 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 			// If the  file already exists, and the --overwrite flag is not set then return an error
 			// indicating that the user should explicitly request overwriting of the file
 			if _, err := os.Stat(opts.outputFile); err == nil && !opts.overwrite {
-				return opts.f.Localizer.MustLocalizeError("common.error.FileAlreadyExists", localize.NewEntry("FilePath", color.CodeSnippet(opts.outputFile)))
+				return opts.f.Localizer.MustLocalizeError("connector.common.error.FileAlreadyExists", localize.NewEntry("Name", color.CodeSnippet(opts.outputFile)))
 			}
 
 			return runBuild(opts)
@@ -139,16 +139,17 @@ func runBuild(opts *options) error {
 		}
 	}
 
-	file, err1 := os.OpenFile(opts.outputFile, os.O_WRONLY|os.O_CREATE, 0600)
-	if err1 != nil {
-		return err1
+	file, err := os.Create(opts.outputFile)
+	if err != nil {
+		return err
 	}
 	defer file.Close()
-	if err1 = dump.Formatted(file, opts.outputFormat, connector); err1 != nil {
-		return err1
+	if err = dump.Formatted(file, opts.outputFormat, connector); err != nil {
+		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"), localize.NewEntry("File", opts.outputFile))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"),
+		localize.NewEntry("File", opts.outputFile))
 
 	return nil
 }

@@ -546,3 +546,8 @@ rhoas connector type describe --type=slack_source_0.1 --yaml
 
 [connector.message.reading.file.error]
 one = 'supplied file is invalid. please make sure that file exist and it contains connector specification'
+
+
+[connector.common.error.FileAlreadyExists]
+one = 'provided {{.Name}} file already exist. Please specify --overwrite flag to overwrite the file'
+
