@@ -5,6 +5,25 @@ For information on what was included in latest release please refer to our [chan
 
 ## Unrelased (main branch)
 
+### Support for configuration of service registry
+`rhoas service-registry setting get` for getting the value of setting. Supports `--name` flag to define name of the setting.
+
+Name of the setting can also be prompted by running command in interactive mode:
+```
+rhoas service-registry setting get
+```
+
+`rhoas service-registry setting set` for configuring the value of setting. Supports `--name` flag to define name of the setting and `--value` to define new value of the setting. `--default` flag can be used to restore default value of the setting.
+
+Name of the setting and the value can also be prompted by running command in interactive mode:
+```
+rhoas service-registry setting set
+```
+
+`rhoas service-registry setting list` for listing all settings of a service registry instance.
+
+> NOTE: setting command is only for owners and admins of the service registry instance
+
 ## 0.46.0
 
 ### Support for Marketplace Billing model
