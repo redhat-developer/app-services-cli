@@ -1,3 +1,41 @@
 [namespace.common.error.nameNotFound]
 description = "Error message for when a namespace name is not found"
 one = "Namespace with name {{.Name}} not found"
+
+[namespace.use.cmd.shortDescription]
+description = "Short description for command"
+one = "Set the current namespace in context"
+
+[namespace.use.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Set a namespace as the current working namespace in context. The rhoas CLI uses the
+current namespace you run any rhoas connector cluster commands.
+
+You can set a namespace in the current context providing its name or ID.
+'''
+
+[namespace.use.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Set the current namespace by providing the name
+$ rhoas connector namespace use --name=my-namespace
+
+# Set the current namespace by providing the ID of a Connectors namespace
+$ rhoas connector namespace use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+'''
+
+[namespace.use.error.idOrNameRequired]
+one= 'You must provide the --id flag or the --name flag to identify a namespace'
+
+[namespace.use.flag.id]
+description = 'Description for the --id flag'
+one = 'The unique ID of the namespace you want to set as the current namespace'
+
+[namespace.use.flag.name]
+description = 'Description for the --name flag'
+one = 'The name of the namespace you want to set as the namespace'
+
+[namespace.use.log.info.useSuccess]
+description = 'Info message when current namespace was set'
+one = 'Namespace "{{.Name}}" is now the current namespace'
