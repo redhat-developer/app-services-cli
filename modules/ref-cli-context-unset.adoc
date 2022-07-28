@@ -33,7 +33,7 @@ $ rhoas context unset --name dev --services service-registry
 == Options
 
       `--name` _string_::        Name of the context
-      `--services` _strings_::   context.unset.flag.services.description
+      `--services` _strings_::   The name of the services to unset
 
 [discrete]
 == Options inherited from parent commands

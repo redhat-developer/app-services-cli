@@ -94,6 +94,8 @@ include::../modules/ref-cli-connector-stop.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-type.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-connector-type-describe.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-connector-type-list.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-use.adoc[leveloffset=+2]

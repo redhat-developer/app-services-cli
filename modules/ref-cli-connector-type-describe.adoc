@@ -1,0 +1,47 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-type-describe_{context}']
+= connector type describe
+
+[role="_abstract"]
+Get details of a connector type
+
+[discrete]
+== Synopsis
+
+Get full list of details of a connector type using its type id
+
+....
+rhoas connector type describe [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Desribe connector type with id of slack_source_0.1
+rhoas connector type describe --type=slack_source_0.1 
+
+# Desribe connector type with id of slack_source_0.1 and give output as yaml
+rhoas connector type describe --type=slack_source_0.1 --yaml 
+
+....
+
+[discrete]
+== Options
+
+  `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
+      `--type` _string_::       The type id of the connector you want to get details about
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector-type_{context}[rhoas connector type]	 - List and get details of different connector types
+

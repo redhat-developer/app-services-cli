@@ -44,5 +44,8 @@ rhoas connector type describe --id=IEJF87hg2342hsdHFG
 * link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
 
  
+* link:{path}#ref-connector-type-describe_{context}[connector-type describe]	 - Get details of a connector type
+
+ 
 * link:{path}#ref-connector-type-list_{context}[connector-type list]	 - List connector types
 
