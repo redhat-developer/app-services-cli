@@ -184,10 +184,11 @@ func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, 
 func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorRequest, opts *options) error {
 	if connectorRequest.Name == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			err := askForValue(connectorRequest, "Name", opts)
+			value, err := askForValue(connectorRequest, "Name", opts)
 			if err != nil {
 				return err
 			}
+			connectorRequest.Name = value
 		} else {
 			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
 				localize.NewEntry("Field", "name"))
@@ -196,10 +197,11 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 
 	if connectorRequest.NamespaceId == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			err := askForValue(connectorRequest, "Namespace ID", opts)
+			value, err := askForValue(connectorRequest, "Namespace ID", opts)
 			if err != nil {
 				return err
 			}
+			connectorRequest.NamespaceId = value
 		} else {
 			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
 				localize.NewEntry("Field", "namespace_id"))
@@ -208,10 +210,11 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 
 	if connectorRequest.Kafka.Id == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			err := askForValue(connectorRequest, "KafkaID", opts)
+			value, err := askForValue(connectorRequest, "KafkaID", opts)
 			if err != nil {
 				return err
 			}
+			connectorRequest.Kafka.Id = value
 		} else {
 			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
 				localize.NewEntry("Field", "kafka.id"))
@@ -219,10 +222,11 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 	}
 	if connectorRequest.Kafka.Url == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			err := askForValue(connectorRequest, "Kafka URL", opts)
+			value, err := askForValue(connectorRequest, "Kafka URL", opts)
 			if err != nil {
 				return err
 			}
+			connectorRequest.Kafka.Url = value
 		} else {
 			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
 				localize.NewEntry("Field", "kafka.url"))
@@ -231,10 +235,11 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 
 	if connectorRequest.ServiceAccount.ClientId == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			err := askForValue(connectorRequest, "Service Account Client ID", opts)
+			value, err := askForValue(connectorRequest, "Service Account Client ID", opts)
 			if err != nil {
 				return err
 			}
+			connectorRequest.ServiceAccount.ClientId = value
 		} else {
 			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
 				localize.NewEntry("Field", "service_account.client_id"))
@@ -243,10 +248,11 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 
 	if connectorRequest.ServiceAccount.ClientSecret == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			err := askForValue(connectorRequest, "Service Account Client Secret", opts)
+			value, err := askForValue(connectorRequest, "Service Account Client Secret", opts)
 			if err != nil {
 				return err
 			}
+			connectorRequest.ServiceAccount.ClientSecret = value
 		} else {
 			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
 				localize.NewEntry("Field", "service_account.client_secret"))
@@ -256,17 +262,18 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 	return nil
 }
 
-func askForValue(connectorRequest *connectormgmtclient.ConnectorRequest, field string, opts *options) error {
+func askForValue(connectorRequest *connectormgmtclient.ConnectorRequest, field string, opts *options) (string, error) {
+	var value string
 	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("connector.create.interactive.error",
 		localize.NewEntry("Field", field)))
 	prompt := &survey.Input{
 		Message: opts.f.Localizer.MustLocalize("connector.create.input.message", localize.NewEntry("Field", field)),
 	}
-	err := survey.AskOne(prompt, &connectorRequest.Name, nil)
+	err := survey.AskOne(prompt, &value, nil)
 	if err != nil {
-		return err
+		return value, err
 	}
-	return nil
+	return value, nil
 }
 
 func readFileFromInput(opts *options) ([]byte, error) {
