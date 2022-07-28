@@ -10,6 +10,7 @@ type Context struct {
 type ServiceConfig struct {
 	KafkaID           string `json:"kafkaID"`
 	ServiceRegistryID string `json:"serviceregistryID"`
+	NamespaceID       string `json:"namespaceID"`
 	ConnectorID       string `json:"connectorID"`
 }
 

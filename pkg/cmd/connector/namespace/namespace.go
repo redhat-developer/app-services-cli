@@ -3,6 +3,7 @@ package namespace
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/namespace/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/namespace/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/namespace/use"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,7 @@ func NewNameSpaceCommand(f *factory.Factory) *cobra.Command {
 	// add sub-commands
 	cmd.AddCommand(
 		list.NewListCommand(f),
+		use.NewUseCommand(f),
 		create.NewCreateCommand(f),
 	)
 
