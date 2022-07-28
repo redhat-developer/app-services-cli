@@ -25,7 +25,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0
 	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.8.0
+	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.5.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0
