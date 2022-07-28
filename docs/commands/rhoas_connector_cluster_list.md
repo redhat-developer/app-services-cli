@@ -22,7 +22,7 @@ rhoas connector cluster list
 ### Options
 
 ```
-      --limit int       Page limit (default 100)
+      --limit int       Page limit (default 10)
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
       --page int        Page number (default 1)
 ```

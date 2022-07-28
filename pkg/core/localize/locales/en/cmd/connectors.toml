@@ -40,6 +40,14 @@ one = '''
 rhoas connector cluster create --name=my-connectors-cluster
 '''
 
+[connector.sa.created]
+one = '''
+Service account created. 
+Client ID: {{.ClientId}}  
+Secret: {{.ClientSecret}}
+'''
+
+
 [connector.cluster.create.info.success]
 one = 'Successfully created the Connectors cluster named "{{.NAME}}" '
 
@@ -149,6 +157,22 @@ rhoas connector create --file=myconnector.json
 cat myconnector.json | rhoas connector create
 '''
 
+[connector.build.cmd.shortDescription]
+one = 'Build a Connectors instance'
+
+[connector.build.cmd.longDescription]
+one = '''
+Command builds specficication for Connector 
+instance that can be later created using create command.
+'''
+
+[connector.build.cmd.example]
+one = '''
+# Build a Connectors instance
+rhoas connector build --name=myconnector
+cat myconnector.json | rhoas connector create
+'''
+
 [connector.stop.cmd.shortDescription]
 one = 'Stop a Connectors instance'
 
@@ -182,6 +206,15 @@ rhoas connector start --id=IJD76DUH675234
 [connector.create.info.success]
 one = 'Successfully created the Connectors instance'
 
+[connector.create.input.message]
+one = 'Please provide {{.Field}}'
+
+[connector.create.interactive.error]
+one = 'Connector specification missing required value: {{.Field}}'
+
+[connector.create.start]
+one = 'Creating connector instance based on specified connector spec file'
+
 [connector.update.cmd.shortDescription]
 one = 'Update a Connectors instance'
 
@@ -202,6 +235,42 @@ one = 'Successfully updated the Connectors instance'
 
 [connector.file.flag.description]
 one = 'Location of the Connectors JSON file that describes the connector'
+
+[connector.flag.kafka.description]
+one = 'Id of the kafka instance (by default kafka instance from context would be used)'
+
+[connector.flag.namespace.description]
+one = 'Id of the namespace for the connector (by default namespace from context would be used)'
+
+[connector.flag.name.description]
+one = 'Override name of the connector (by default name in the connector spec would be used)'
+
+[connector.flag.sa.description]
+one = 'If set, the connector will be created with the newly specified service account'
+
+[connector.build.file.flag.description]
+one = 'filename of the connector specification file'
+
+[connector.build.name.flag.description]
+one = 'name of the connector'
+
+[connector.build.overwrite.flag.description]
+one = 'should overwrite file if exist'
+
+[connector.build.info.msg]
+one = 'Creating connector specification'
+
+[connector.build.type.flag.description]
+one = 'Connector type (id of the connector)'
+
+[connector.build.info.success]
+one = '''
+Connector specification successfully created.
+You can edit the specification in your editor and use the "rhoas connector create --file=yourconnector.json" command to create the connectors instance.
+
+Information like connector namespace and service accounts can be supplied at the time of the creation. 
+You can generate new service account using rhoas service-account create command.
+'''
 
 [connector.delete.cmd.shortDescription]
 one = 'Delete a Connectors instance'
@@ -466,6 +535,9 @@ one = 'The connector type with id "{{.Id}}" does not exist'
 [connector.type.error.noType]
 one = 'No type id was passed to command'
 
+[connector.type.create.error.other]
+one = 'error returned by api when creating connector instance: {{.Error}}'
+
 [connector.type.describe.flag.id]
 one = 'The type id of the connector you want to get details about'
 
@@ -483,3 +555,11 @@ rhoas connector type describe --type=slack_source_0.1
 # Desribe connector type with id of slack_source_0.1 and give output as yaml
 rhoas connector type describe --type=slack_source_0.1 --yaml 
 '''
+
+[connector.message.reading.file.error]
+one = 'supplied file is invalid. please make sure that file exist and it contains connector specification'
+
+
+[connector.common.error.FileAlreadyExists]
+one = 'provided {{.Name}} file already exist. Please specify --overwrite flag to overwrite the file'
+

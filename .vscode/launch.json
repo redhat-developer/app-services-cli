@@ -286,5 +286,19 @@
         "--path", "/api/kafkas_mgmt/v1/sso_providers",
       ]
     },
+    {
+      "name": "connector create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "connector", "create",
+        "--file","../../connector.json",
+      ]
+    },
   ]
+
+
 }
