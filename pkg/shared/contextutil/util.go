@@ -141,3 +141,33 @@ func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *c
 
 	return &connectorInstance, err
 }
+
+// GetCurrentNamespaceInstance returns the namespace set in the currently selected context
+func GetCurrentNamespaceInstance(conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.ConnectorNamespace, error) {
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetNamespaceForServiceConfig(currCtx, conn, f)
+}
+
+func GetNamespaceForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.ConnectorNamespace, error) {
+
+	if currCtx.NamespaceID == "" {
+		return nil, f.Localizer.MustLocalizeError("context.common.error.noConnectorID")
+	}
+
+	namespace, _, err := (*conn).API().ConnectorsMgmt().ConnectorNamespacesApi.GetConnectorNamespace(f.Context, currCtx.ConnectorID).Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	return &namespace, err
+}
