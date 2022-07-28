@@ -206,6 +206,12 @@ rhoas connector start --id=IJD76DUH675234
 [connector.create.info.success]
 one = 'Successfully created the Connectors instance'
 
+[connector.create.input.message]
+one = 'Please provide {{.Field}}'
+
+[connector.create.interactive.error]
+one = 'Connector specification missing required value:  {{.Field}}'
+
 [connector.update.cmd.shortDescription]
 one = 'Update a Connectors instance'
 

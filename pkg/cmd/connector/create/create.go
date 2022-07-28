@@ -14,6 +14,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
+	"gopkg.in/AlecAivazis/survey.v1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -22,9 +23,6 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
-
-//go:embed schema.json
-var requestSchema []byte
 
 type options struct {
 	file           string
@@ -84,6 +82,11 @@ func runCreate(opts *options) error {
 	}
 
 	err = setDefaultValuesFromFlags(&userConnector, opts)
+	if err != nil {
+		return err
+	}
+
+	err = setValuesInInteractiveMode(&userConnector, opts)
 	if err != nil {
 		return err
 	}
@@ -172,6 +175,74 @@ func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, 
 			return err1
 		}
 		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
+	}
+	return nil
+}
+
+func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorRequest, opts *options) error {
+	if connectorRequest.Name == "" {
+		if opts.f.IOStreams.CanPrompt() {
+			return askForValue(connectorRequest, "Name", opts)
+		} else {
+			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+				localize.NewEntry("Field", "name"))
+		}
+	}
+
+	if connectorRequest.NamespaceId == "" {
+		if opts.f.IOStreams.CanPrompt() {
+			return askForValue(connectorRequest, "Namespace ID", opts)
+		} else {
+			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+				localize.NewEntry("Field", "namespace_id"))
+		}
+	}
+
+	if connectorRequest.Kafka.Id == "" {
+		if opts.f.IOStreams.CanPrompt() {
+			return askForValue(connectorRequest, "KafkaID", opts)
+		} else {
+			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+				localize.NewEntry("Field", "kafka.id"))
+		}
+	}
+	if connectorRequest.Kafka.Url == "" {
+		if opts.f.IOStreams.CanPrompt() {
+			return askForValue(connectorRequest, "Kafka URL", opts)
+		} else {
+			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+				localize.NewEntry("Field", "kafka.url"))
+		}
+	}
+
+	if connectorRequest.ServiceAccount.ClientId == "" {
+		if opts.f.IOStreams.CanPrompt() {
+			return askForValue(connectorRequest, "Service Account Client ID", opts)
+		} else {
+			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+				localize.NewEntry("Field", "service_account.client_id"))
+		}
+	}
+
+	if connectorRequest.ServiceAccount.ClientSecret == "" {
+		if opts.f.IOStreams.CanPrompt() {
+			return askForValue(connectorRequest, "Service Account Client Secret", opts)
+		} else {
+			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+				localize.NewEntry("Field", "service_account.client_secret"))
+		}
+	}
+
+	return nil
+}
+
+func askForValue(connectorRequest *connectormgmtclient.ConnectorRequest, field string, opts *options) error {
+	prompt := &survey.Input{
+		Message: opts.f.Localizer.MustLocalize("connector.create.input.message", localize.NewEntry("Field", "Name")),
+	}
+	err := survey.AskOne(prompt, &connectorRequest.Name, nil)
+	if err != nil {
+		return err
 	}
 	return nil
 }
