@@ -210,7 +210,10 @@ one = 'Successfully created the Connectors instance'
 one = 'Please provide {{.Field}}'
 
 [connector.create.interactive.error]
-one = 'Connector specification missing required value:  {{.Field}}'
+one = 'Connector specification missing required value: {{.Field}}'
+
+[connector.create.start]
+one = 'Creating connector instance based on specified connector spec file'
 
 [connector.update.cmd.shortDescription]
 one = 'Update a Connectors instance'
