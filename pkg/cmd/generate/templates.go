@@ -40,7 +40,7 @@ var (
 		apiVersion: v1
 		kind: ConfigMap
 		metadata:
-      name: {{.Name}}
+    name: {{.Name}}
 		data:
 		  {{if .KafkaHost}}## Kafka Configuration
 		  kafka_host: {{.KafkaHost}}
