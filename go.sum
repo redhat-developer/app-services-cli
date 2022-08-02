@@ -681,8 +681,8 @@ github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0 h1:1z3tnXPlfC
 github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0/go.mod h1:z+UjxlBbTJwLRpbupX+F4FwI7arTuMx4dUJmhePdz9Q=
 github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0 h1:6lVgDiJTDYmBw/qd7U5GzneHPlPIvdU8Wzy1u3Kaz40=
 github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0/go.mod h1:t3IV0eKUPgCQjoInv2l8B/NMm2OVemCxGFO/z91wsCU=
-github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.8.0 h1:NdtvHSoIQs0Lv4+VAcIHFIfBFgEpXDiscjR1UI7Ylts=
-github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.8.0/go.mod h1:yazwUm4IHuIWrQ0CCsqN0h7rHZx51nlFbYWKnUn7B84=
+github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0 h1:AEjtq7k3G4XeJU5rH5VbN7hNTWLmQTQUCMCyS8jXXL0=
+github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0/go.mod h1:yazwUm4IHuIWrQ0CCsqN0h7rHZx51nlFbYWKnUn7B84=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0 h1:aSuONBf3znnotUX7ywLh6xvOVVFsPRIUCfsEBWTWEM0=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0/go.mod h1:ILvcakLEXMLZyRdO//WJZNk9fdFbnU+cM3XrBvubE64=
 github.com/redhat-developer/app-services-sdk-go/registryinstance v0.5.1 h1:pgOtCWeWchiz+55BhHD9uAg4jXsxeXqtJdW4ex2co/0=

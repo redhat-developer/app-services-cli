@@ -1,6 +1,6 @@
 package aclcmdutil
 
-import kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+import kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 
 var resourceTypeFilterMap = map[string]kafkainstanceclient.AclResourceTypeFilter{
 	ResourceTypeANY:              kafkainstanceclient.ACLRESOURCETYPEFILTER_ANY,
