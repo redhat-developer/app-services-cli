@@ -3,6 +3,8 @@ package create
 import (
 	"encoding/json"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/namespaceutil"
 	"io/ioutil"
 	"os"
 
@@ -185,7 +187,7 @@ func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, 
 func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorRequest, opts *options, conn *connection.Connection) error {
 	if connectorRequest.Name == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "Name", opts)
+			value, err := askForValue("Name", opts)
 			if err != nil {
 				return err
 			}
@@ -200,58 +202,43 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 
 		namespace, err := contextutil.GetCurrentNamespaceInstance(conn, opts.f)
 
-		if err == nil {
-			connectorRequest.NamespaceId = namespace.GetId()
-		} else if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "Namespace ID", opts)
-			if err != nil {
-				return err
+		if err != nil {
+			if opts.f.IOStreams.CanPrompt() {
+				namespace, err = namespaceutil.InteractiveSelect(*conn, opts.f)
+				if err != nil {
+					return err
+				}
+			} else {
+				return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+					localize.NewEntry("Field", "namespace.id"))
 			}
-			connectorRequest.NamespaceId = value
-		} else {
-			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
-				localize.NewEntry("Field", "namespace_id"))
 		}
+
+		connectorRequest.NamespaceId = namespace.GetId()
 	}
 
 	if connectorRequest.Kafka.Id == "" {
-
 		kafka, err := contextutil.GetCurrentKafkaInstance(opts.f)
 
-		if err == nil {
-			connectorRequest.Kafka.Id = kafka.GetId()
-		} else if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "KafkaID", opts)
-			if err != nil {
-				return err
+		if err != nil {
+			if opts.f.IOStreams.CanPrompt() {
+				kafka, err = kafkautil.InteractiveSelect(opts.f.Context, *conn, opts.f.Logger, opts.f.Localizer)
+				if err != nil {
+					return err
+				}
+			} else {
+				return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+					localize.NewEntry("Field", "kafka.id"))
 			}
-			connectorRequest.Kafka.Id = value
-		} else {
-			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
-				localize.NewEntry("Field", "kafka.id"))
 		}
-	}
-	if connectorRequest.Kafka.Url == "" {
 
-		kafka, err := contextutil.GetCurrentKafkaInstance(opts.f)
-
-		if err == nil {
-			connectorRequest.Kafka.Url = kafka.GetAdminApiServerUrl()
-		} else if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "Kafka URL", opts)
-			if err != nil {
-				return err
-			}
-			connectorRequest.Kafka.Url = value
-		} else {
-			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
-				localize.NewEntry("Field", "kafka.url"))
-		}
+		connectorRequest.Kafka.Id = kafka.GetId()
+		connectorRequest.Kafka.Url = kafka.GetAdminApiServerUrl()
 	}
 
 	if connectorRequest.ServiceAccount.ClientId == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "Service Account Client ID", opts)
+			value, err := askForValue("Service Account Client ID", opts)
 			if err != nil {
 				return err
 			}
@@ -264,7 +251,7 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 
 	if connectorRequest.ServiceAccount.ClientSecret == "" {
 		if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "Service Account Client Secret", opts)
+			value, err := askForValue("Service Account Client Secret", opts)
 			if err != nil {
 				return err
 			}
@@ -278,7 +265,7 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 	return nil
 }
 
-func askForValue(connectorRequest *connectormgmtclient.ConnectorRequest, field string, opts *options) (string, error) {
+func askForValue(field string, opts *options) (string, error) {
 	var value string
 	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("connector.create.interactive.error",
 		localize.NewEntry("Field", field)))
