@@ -1,0 +1,49 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-service-registry-setting-set_{context}']
+= service-registry setting set
+
+[role="_abstract"]
+Set value of the setting for a Service Registry instance
+
+[discrete]
+== Synopsis
+
+Set the value of the Service Registry setting to a specific value or reset to default
+
+....
+rhoas service-registry setting set [flags]
+....
+
+[discrete]
+== Examples
+
+....
+## Set value of setting by name
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --value true
+
+## Reset value of setting by name
+$ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enabled --default
+
+....
+
+[discrete]
+== Options
+
+      `--default`::                Restore value of the Service Registry setting to default
+      `--instance-id` _string_::   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
+  `-n`, `--name` _string_::        Name of the Service Registry setting
+      `--value` _string_::         New value of the Service Registry setting
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-service-registry-setting_{context}[rhoas service-registry setting]	 - Configure settings for a Service Registry instance
+

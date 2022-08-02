@@ -229,6 +229,14 @@ include::../modules/ref-cli-service-registry-rule-list.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-service-registry-rule-update.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-service-registry-setting.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-setting-get.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-setting-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-service-registry-setting-set.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-service-registry-use.adoc[leveloffset=+2]
 
 
