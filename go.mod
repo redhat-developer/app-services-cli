@@ -15,6 +15,7 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/google/go-github/v39 v39.2.0
+	github.com/jackdelahunt/survey-json-schema v0.8.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
 	github.com/mattn/go-isatty v0.0.14
@@ -35,7 +36,6 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/wtrocki/go-github-selfupdate v1.2.4
-	github.com/wtrocki/survey-json-schema v0.6.0
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
