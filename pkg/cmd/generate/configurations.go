@@ -15,16 +15,16 @@ const (
 	envFormat        = "env"
 	jsonFormat       = "json"
 	propertiesFormat = "properties"
-	secretFormat     = "secret"
+	configmapFormat  = "configmap"
 )
 
-var configurationTypes = []string{envFormat, jsonFormat, propertiesFormat, secretFormat}
+var configurationTypes = []string{envFormat, jsonFormat, propertiesFormat, configmapFormat}
 
 var (
-	envConfig            = template.Must(template.New(envFormat).Parse(templateEnv))
-	jsonConfig           = template.Must(template.New(jsonFormat).Parse(templateJSON))
-	propertiesConfig     = template.Must(template.New(propertiesFormat).Parse(templateProperties))
-	secretTemplateConfig = template.Must(template.New(secretFormat).Parse(templateSecret))
+	envConfig               = template.Must(template.New(envFormat).Parse(templateEnv))
+	jsonConfig              = template.Must(template.New(jsonFormat).Parse(templateJSON))
+	propertiesConfig        = template.Must(template.New(propertiesFormat).Parse(templateProperties))
+	configMapTemplateConfig = template.Must(template.New(configmapFormat).Parse(templateConfigMap))
 )
 
 // WriteConfig saves the configurations to a file
@@ -57,13 +57,13 @@ func WriteConfig(opts *options, config *configValues) (string, error) {
 func getDefaultPath(configType string) (filePath string) {
 	switch configType {
 	case envFormat:
-		filePath = ".env"
+		filePath = "rhoas.env"
 	case propertiesFormat:
 		filePath = "rhoas.properties"
 	case jsonFormat:
 		filePath = "rhoas.json"
-	case secretFormat:
-		filePath = "rhoas-services-secret.yaml"
+	case configmapFormat:
+		filePath = "rhoas-services.yaml"
 	}
 
 	pwd, err := os.Getwd()
@@ -84,8 +84,8 @@ func getFileFormat(configType string) (template *template.Template) {
 		template = propertiesConfig
 	case jsonFormat:
 		template = jsonConfig
-	case secretFormat:
-		template = secretTemplateConfig
+	case configmapFormat:
+		template = configMapTemplateConfig
 	}
 
 	return template
