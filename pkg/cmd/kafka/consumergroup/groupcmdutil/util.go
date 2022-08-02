@@ -1,7 +1,7 @@
 package groupcmdutil
 
 import (
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 )
 
 // valid values for consumer group reset offset operaion

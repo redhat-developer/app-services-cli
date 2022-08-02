@@ -6,7 +6,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 )
 
 type permissionsRow struct {
