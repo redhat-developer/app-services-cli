@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/jackdelahunt/survey-json-schema/pkg/surveyjson"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
@@ -11,7 +12,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
-	"github.com/wtrocki/survey-json-schema/pkg/surveyjson"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
