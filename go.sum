@@ -787,8 +787,8 @@ github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijb
 github.com/vektah/gqlparser v1.1.2/go.mod h1:1ycwN7Ij5njmMkPPAOaRFY4rET2Enx7IkVv3vaXspKw=
 github.com/wtrocki/go-github-selfupdate v1.2.4 h1:dFm8Ge+wHJ3ahS3OE05tsNI6w+W/YdJre7k2dNO6uMk=
 github.com/wtrocki/go-github-selfupdate v1.2.4/go.mod h1:sXGbZniTJbQoWzXGdfVTgPWLEBEq5SX6jxO7q+J7ymo=
-github.com/wtrocki/survey-json-schema v0.6.0 h1:nA2WUkNO5JKgwvcDHNe0RuVnG5ET0wWT1UF0CrGvXJ0=
-github.com/wtrocki/survey-json-schema v0.6.0/go.mod h1:ro72CPx8Mn0DSYYeiuraP0A4SHG7Qd/PjaA9VisIp7E=
+github.com/wtrocki/survey-json-schema v0.7.0 h1:rYoltqUuMDP0C926rhQVN8ZFj2SYJAGRixasUpTDbBA=
+github.com/wtrocki/survey-json-schema v0.7.0/go.mod h1:ro72CPx8Mn0DSYYeiuraP0A4SHG7Qd/PjaA9VisIp7E=
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=

@@ -17,7 +17,7 @@ type Validator struct {
 
 // ValidateNamespace validates the name of the namespace
 func (v *Validator) ValidateNamespace(name string) error {
-
+	// TODO check for empty string
 	matched, _ := regexp.Match(legalNamespaceChars, []byte(name))
 
 	if matched {

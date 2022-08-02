@@ -220,18 +220,18 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 				localize.NewEntry("Field", "kafka.id"))
 		}
 	}
-	if connectorRequest.Kafka.Url == "" {
-		if opts.f.IOStreams.CanPrompt() {
-			value, err := askForValue(connectorRequest, "Kafka URL", opts)
-			if err != nil {
-				return err
-			}
-			connectorRequest.Kafka.Url = value
-		} else {
-			return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
-				localize.NewEntry("Field", "kafka.url"))
-		}
-	}
+	// if connectorRequest.Kafka.Url == "" {
+	// 	if opts.f.IOStreams.CanPrompt() {
+	// 		value, err := askForValue(connectorRequest, "Kafka URL", opts)
+	// 		if err != nil {
+	// 			return err
+	// 		}
+	// 		connectorRequest.Kafka.Url = value
+	// 	} else {
+	// 		return opts.f.Localizer.MustLocalizeError("connector.create.interactive.error",
+	// 			localize.NewEntry("Field", "kafka.url"))
+	// 	}
+	// }
 
 	if connectorRequest.ServiceAccount.ClientId == "" {
 		if opts.f.IOStreams.CanPrompt() {

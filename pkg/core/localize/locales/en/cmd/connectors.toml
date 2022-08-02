@@ -341,7 +341,7 @@ For the Service Preview evaluation site, a Connectors namespace expires 48 hours
 
 [connector.namespace.cmd.example]
 one = '''
-# Create a Connectors namespace
+# Create an evaluation connectors namespace
 rhoas connector namespace create --name "eval-namespace"
 
 # List the namespaces for the Connectors cluster
