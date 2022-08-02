@@ -1,14 +1,27 @@
 [setting.cmd.description.short]
-one = 'Configure settings of a Service Registry instance'
+one = 'Configure settings for a Service Registry instance'
 
 [setting.cmd.description.long]
 one = '''
-Configure settings of a Service Registry instance
+Service Registry instance owners, instance administrators, and organization administrators can 
+configure settings for a Service Registry instance. 
+
+The available settings include the following options: 
+
+* registry.auth.basic-auth-client-credentials.enabled - Specifies whether Service Registry users can 
+  authenticate using HTTP basic authentication, in addition to OAuth. Defaults to true.
+* registry.auth.owner-only-authorization - Specifies whether only the user who creates an artifact can modify 
+  that artifact. Defaults to false. 
+* registry.auth.owner-only-authorization.limit-group-access - When registry.auth.owner-only-authorization is 
+  set to true, specifies whether only the user who creates an artifact group has write access to that artifact 
+  group, for example, to add or remove artifacts. Defaults to false.  
+* registry.ccompat.legacy-id-mode.enabled - Specifies whether the Confluent Schema Registry compatibility API 
+  uses globalId instead of contentId as an artifact identifier. Defaults to false.
 '''
 
 [setting.cmd.example]
 one = '''
-## List all settings of the current Service Registry instance
+## List all settings for the current Service Registry instance
 $ rhoas service-registry setting list
 
 ## Set the value of setting
@@ -16,46 +29,46 @@ $ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enab
 '''
 
 [setting.list.cmd.description.short]
-one = 'List settings'
+one = 'List settings for a Service Registry instance'
 
 [setting.list.cmd.description.long]
-one = 'List all settings with their values and types'
+one = 'List all settings for a Service Registry instance with their values and types'
 
 [setting.list.cmd.example]
 one = '''
-## List all settings of the current Service Registry
+## List all settings for the current Service Registry instance
 $ rhoas service-registry setting list
 
-## List all settings of a specific Service Registry instance
+## List all settings for a specific Service Registry instance
 $ rhoas service-registry setting list --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00
 '''
 
 [setting.get.cmd.description.short]
-one = 'Get value of the setting'
+one = 'Get value of the setting for a Service Registry instance'
 
 [setting.get.cmd.description.long]
-one = 'Get formatted setting value and other information'
+one = 'Get the formatted value of the setting and other information for a Service Registry instance'
 
 [setting.get.cmd.example]
 one = '''
-## Get setting by name
+## Get the setting for a Service Registry instance by name
 $ rhoas service-registry setting get --name registry.ccompat.legacy-id-mode.enabled
 
-## Get setting in yaml format by name
+## Get the setting for a Service Registry instance in YAML format by name
 $ rhoas service-registry setting get --name registry.ccompat.legacy-id-mode.enabled --output yaml
 '''
 
 [setting.get.cmd.flag.settingName.description]
-one = 'Name of the setting'
+one = 'Name of the setting for a Service Registry instance'
 
 [setting.get.input.settingName.message]
-one = 'Name of the setting:'
+one = 'Name of the setting for a Service Registry instance:'
 
 [setting.set.cmd.description.short]
-one = 'Set value of the setting'
+one = 'Set value of the setting for a Service Registry instance'
 
 [setting.set.cmd.description.long]
-one = 'Set value of the setting to a specific value or reset to default'
+one = 'Set the value of the Service Registry setting to a specific value or reset to default'
 
 [setting.set.cmd.example]
 one = '''
@@ -67,26 +80,26 @@ $ rhoas service-registry setting set --name registry.ccompat.legacy-id-mode.enab
 '''
 
 [setting.set.cmd.flag.settingName.description]
-one = 'Name of the setting'
+one = 'Name of the Service Registry setting'
 
 [setting.set.input.settingName.message]
 one = 'Name of the setting:'
 
 [setting.set.input.value.message]
-one = 'New value:'
+one = 'New setting value:'
 
 [setting.set.cmd.flag.value.description]
-one = 'New value of the setting'
+one = 'New value of the Service Registry setting'
 
 [setting.set.cmd.flag.default.description]
-one = 'Restore value of the setting to default'
+one = 'Restore value of the Service Registry setting to default'
 
 [setting.set.log.info.settingSet]
-one = 'Successfully updated settings for update'
+one = 'Successfully updated settings for the Service Registry instance'
 
 [setting.set.log.info.settingReset]
-one = 'Setting was successfully reset to default'
+one = 'Service Registry setting was successfully reset to default'
 
 [setting.set.warning.valueignored]
-one = 'Value is ignore while setting is being restored to default'
+one = 'Value is ignored while Service Registry setting is being restored to default'
 
