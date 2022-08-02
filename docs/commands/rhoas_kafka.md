@@ -47,6 +47,6 @@ rhoas kafka topic create --name mytopic
 * [rhoas kafka describe](rhoas_kafka_describe.md)	 - View configuration details of a Kafka instance
 * [rhoas kafka list](rhoas_kafka_list.md)	 - List all Kafka instances
 * [rhoas kafka topic](rhoas_kafka_topic.md)	 - Create, describe, update, list, and delete topics
-* [rhoas kafka update](rhoas_kafka_update.md)	 - Update configuration details of a Kafka instance.
+* [rhoas kafka update](rhoas_kafka_update.md)	 - Update configuration details for a Kafka instance.
 * [rhoas kafka use](rhoas_kafka_use.md)	 - Set the current Kafka instance
 
