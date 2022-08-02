@@ -164,7 +164,7 @@ func GetNamespaceForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *c
 		return nil, f.Localizer.MustLocalizeError("context.common.error.noConnectorID")
 	}
 
-	namespace, _, err := (*conn).API().ConnectorsMgmt().ConnectorNamespacesApi.GetConnectorNamespace(f.Context, currCtx.ConnectorID).Execute()
+	namespace, _, err := (*conn).API().ConnectorsMgmt().ConnectorNamespacesApi.GetConnectorNamespace(f.Context, currCtx.NamespaceID).Execute()
 	if err != nil {
 		return nil, err
 	}
