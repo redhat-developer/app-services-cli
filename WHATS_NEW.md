@@ -22,7 +22,7 @@ rhoas service-registry setting set
 
 `rhoas service-registry setting list` for listing all settings for a Service Registry instance.
 
-> NOTE: The `service-registry setting` command is only available to Service Registry instance owners, instance adminstrators, and organization administrators.
+> NOTE: The `service-registry setting` command is only available to Service Registry instance owners, instance administrators, and organization administrators.
 
 
 ### Breaking changes for `rhoas generate-config` command
