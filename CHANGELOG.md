@@ -1,4 +1,14 @@
 
+<a name="v0.48.0"></a>
+## [v0.48.0](https://github.com/redhat-developer/app-services-cli/compare/v0.47.0...v0.48.0) (2022-08-02)
+
+### Bug Fixes
+
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go/kafkainstance to v0.9.0 ([#1689](https://github.com/redhat-developer/app-services-cli/issues/1689))
+* **deps:** update docusaurus monorepo to v2.0.1
+* **deps:** update rhoas golang sdk ([#1688](https://github.com/redhat-developer/app-services-cli/issues/1688))
+
+
 <a name="v0.47.0"></a>
 ## [v0.47.0](https://github.com/redhat-developer/app-services-cli/compare/v0.46.2...v0.47.0) (2022-07-28)
 
@@ -183,7 +193,7 @@
 
 
 <a name="v0.42.0"></a>
-## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.42.0) (2022-05-02)
+## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.0) (2022-05-02)
 
 ### Bug Fixes
 
@@ -194,12 +204,12 @@
 * changes for Kafka Creation business logic ([#1526](https://github.com/redhat-developer/app-services-cli/issues/1526))
 
 
-<a name="v0.42.1"></a>
-## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.1) (2022-04-29)
-
-
 <a name="v0.41.2"></a>
-## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.41.2) (2022-04-29)
+## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.41.2) (2022-04-29)
+
+
+<a name="v0.42.1"></a>
+## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.42.1) (2022-04-29)
 
 ### Bug Fixes
 
