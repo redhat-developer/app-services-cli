@@ -2,6 +2,7 @@ package create
 
 import (
 	"encoding/json"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"io/ioutil"
 	"os"
 
@@ -88,13 +89,13 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	err = setValuesInInteractiveMode(&userConnector, opts)
+	var conn connection.Connection
+	conn, err = f.Connection()
 	if err != nil {
 		return err
 	}
 
-	var conn connection.Connection
-	conn, err = f.Connection()
+	err = setValuesInInteractiveMode(&userConnector, opts, &conn)
 	if err != nil {
 		return err
 	}
@@ -181,7 +182,7 @@ func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, 
 	return nil
 }
 
-func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorRequest, opts *options) error {
+func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorRequest, opts *options, conn *connection.Connection) error {
 	if connectorRequest.Name == "" {
 		if opts.f.IOStreams.CanPrompt() {
 			value, err := askForValue(connectorRequest, "Name", opts)
@@ -196,7 +197,12 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 	}
 
 	if connectorRequest.NamespaceId == "" {
-		if opts.f.IOStreams.CanPrompt() {
+
+		namespace, err := contextutil.GetCurrentNamespaceInstance(conn, opts.f)
+
+		if err == nil {
+			connectorRequest.NamespaceId = namespace.GetId()
+		} else if opts.f.IOStreams.CanPrompt() {
 			value, err := askForValue(connectorRequest, "Namespace ID", opts)
 			if err != nil {
 				return err
@@ -209,7 +215,12 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 	}
 
 	if connectorRequest.Kafka.Id == "" {
-		if opts.f.IOStreams.CanPrompt() {
+
+		kafka, err := contextutil.GetCurrentKafkaInstance(opts.f)
+
+		if err == nil {
+			connectorRequest.Kafka.Id = kafka.GetId()
+		} else if opts.f.IOStreams.CanPrompt() {
 			value, err := askForValue(connectorRequest, "KafkaID", opts)
 			if err != nil {
 				return err
@@ -221,7 +232,12 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 		}
 	}
 	if connectorRequest.Kafka.Url == "" {
-		if opts.f.IOStreams.CanPrompt() {
+
+		kafka, err := contextutil.GetCurrentKafkaInstance(opts.f)
+
+		if err == nil {
+			connectorRequest.Kafka.Url = kafka.GetAdminApiServerUrl()
+		} else if opts.f.IOStreams.CanPrompt() {
 			value, err := askForValue(connectorRequest, "Kafka URL", opts)
 			if err != nil {
 				return err
