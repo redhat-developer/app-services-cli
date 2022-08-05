@@ -27,10 +27,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	KafkaAdminURlPort = ":443"
-)
-
 type options struct {
 	file           string
 	kafkaId        string
@@ -237,7 +233,7 @@ func setValuesInInteractiveMode(connectorRequest *connectormgmtclient.ConnectorR
 		}
 
 		connectorRequest.Kafka.Id = kafka.GetId()
-		connectorRequest.Kafka.Url = kafka.GetAdminApiServerUrl() + KafkaAdminURlPort
+		connectorRequest.Kafka.Url = kafka.GetBootstrapServerHost()
 	}
 
 	if connectorRequest.ServiceAccount.ClientId == "" {
