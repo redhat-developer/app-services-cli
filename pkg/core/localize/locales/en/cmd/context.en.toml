@@ -121,6 +121,16 @@ $ rhoas context set-kafka --name=my-kafka
 $ rhoas context set-kafka --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 '''
 
+[context.setNamespace.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Set the current namespace providing the name of a Connectors namespace
+$ rhoas context set-namespace --name=my-namespace
+
+# Set the current namespace providing the ID of a Connectors namespace
+$ rhoas context set-namespace --id=1iSSK8RQ3JKI8Q0OTFHF5FRg
+'''
+
 [context.setConnector.cmd.example]
 description = 'Examples of how to use the command'
 one = '''

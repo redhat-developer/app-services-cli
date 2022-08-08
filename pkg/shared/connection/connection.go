@@ -8,6 +8,7 @@ import (
 
 // Connection is an interface which defines methods for interacting
 // with the control plane API and the authentication server
+//
 //go:generate moq -out connection_mock.go . Connection
 type Connection interface {
 	// Method to refresh the OAuth tokens

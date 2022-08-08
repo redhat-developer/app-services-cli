@@ -52,6 +52,7 @@ $ rhoas context create --name dev-env
 * [rhoas context list](rhoas_context_list.md)	 - List service contexts
 * [rhoas context set-connector](rhoas_context_set-connector.md)	 - Set the current Connectors instance
 * [rhoas context set-kafka](rhoas_context_set-kafka.md)	 - Set the current Kafka instance
+* [rhoas context set-namespace](rhoas_context_set-namespace.md)	 - Set the current namespace in context
 * [rhoas context set-service-registry](rhoas_context_set-service-registry.md)	 - Use a Service Registry instance
 * [rhoas context status](rhoas_context_status.md)	 - View the status of application services in a service context
 * [rhoas context unset](rhoas_context_unset.md)	 - Unset services in context

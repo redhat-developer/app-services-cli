@@ -93,6 +93,10 @@ func runUnset(opts *options) error {
 		svcConfig.ConnectorID = ""
 	}
 
+	if flagutil.StringInSlice(servicespec.NamespaceServiceName, opts.services) {
+		svcConfig.NamespaceID = ""
+	}
+
 	svcContext.Contexts[ctxName] = *svcConfig
 
 	err = opts.f.ServiceContext.Save(svcContext)
