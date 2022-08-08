@@ -262,9 +262,13 @@ func runCreate(opts *options) error {
 				return err
 			}
 
-			userQuotaJSON, _ := json.MarshalIndent(userQuota, "", "  ")
-			f.Logger.Debug("Selected Quota object:")
-			f.Logger.Debug(string(userQuotaJSON))
+			userQuotaJSON, lintErr := json.MarshalIndent(userQuota, "", "  ")
+			if lintErr != nil {
+				f.Logger.Debug(lintErr)
+			} else {
+				f.Logger.Debug("Selected Quota object:")
+				f.Logger.Debug(string(userQuotaJSON))
+			}
 
 			if userQuota.BillingModel == accountmgmtutil.QuotaMarketplaceType && userQuota.CloudAccounts != nil {
 				payload.Marketplace = kafkamgmtclient.NullableString{}
@@ -309,8 +313,12 @@ func runCreate(opts *options) error {
 	}
 
 	f.Logger.Debug("Creating kafka instance", payload.Name)
-	data, _ := json.MarshalIndent(payload, "", "  ")
-	f.Logger.Debug(string(data))
+	data, lintErr := json.MarshalIndent(payload, "", "  ")
+	if err != nil {
+		f.Logger.Debug(lintErr)
+	} else {
+		f.Logger.Debug(string(data))
+	}
 
 	if opts.dryRun {
 		f.Logger.Info(f.Localizer.MustLocalize("kafka.create.log.info.dryRun.success"))
@@ -531,9 +539,13 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	userQuotaJSON, _ := json.MarshalIndent(userQuota, "", "  ")
-	f.Logger.Debug("Selected Quota object:")
-	f.Logger.Debug(string(userQuotaJSON))
+	userQuotaJSON, lintErr := json.MarshalIndent(userQuota, "", "  ")
+	if lintErr != nil {
+		f.Logger.Debug(lintErr)
+	} else {
+		f.Logger.Debug("Selected Quota object:")
+		f.Logger.Debug(string(userQuotaJSON))
+	}
 
 	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuota)
 	if err != nil {
