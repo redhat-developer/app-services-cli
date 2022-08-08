@@ -1,14 +1,13 @@
 package produce
 
 import (
+	"io"
 	"net/http"
 	"os"
 
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1internal/client"
-
-	"io/ioutil"
 
 	"github.com/AlecAivazis/survey/v2"
 
@@ -105,7 +104,7 @@ func runCmd(opts *options) error {
 	var value string
 
 	if opts.file != "" {
-		bytes, readError := ioutil.ReadFile(opts.file)
+		bytes, readError := os.ReadFile(opts.file)
 		if readError != nil {
 			return readError
 		}
@@ -115,7 +114,7 @@ func runCmd(opts *options) error {
 		// if value is being piped then cannot have delimeter as \n
 		info, _ := os.Stdin.Stat()
 		if info.Mode()&os.ModeCharDevice == 0 {
-			bytes, readError := ioutil.ReadAll(os.Stdin)
+			bytes, readError := io.ReadAll(os.Stdin)
 			if readError != nil {
 				return readError
 			}

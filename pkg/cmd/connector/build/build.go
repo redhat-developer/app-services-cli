@@ -79,6 +79,20 @@ func NewBuildCommand(f *factory.Factory) *cobra.Command {
 func runBuild(opts *options) error {
 	f := opts.f
 
+	if opts.outputFile == "" {
+		if opts.outputFormat == "" {
+			opts.outputFile = "connector.json"
+		} else {
+			opts.outputFile = "connector." + opts.outputFormat
+		}
+	}
+
+	// If the  file already exists, and the --overwrite flag is not set then return an error
+	// indicating that the user should explicitly request overwriting of the file
+	if _, err := os.Stat(opts.outputFile); err == nil && !opts.overwrite {
+		return opts.f.Localizer.MustLocalizeError("connector.common.error.FileAlreadyExists", localize.NewEntry("Name", color.CodeSnippet(opts.outputFile)))
+	}
+
 	var conn connection.Connection
 	conn, err := f.Connection()
 	if err != nil {
@@ -137,14 +151,6 @@ func runBuild(opts *options) error {
 
 	connector := createConnectorObject(opts, connectorSpecification)
 
-	if opts.outputFile == "" {
-		if opts.outputFormat == "" {
-			opts.outputFile = "connector.json"
-		} else {
-			opts.outputFile = "connector." + opts.outputFormat
-		}
-	}
-
 	file, err := os.Create(opts.outputFile)
 	if err != nil {
 		return err
@@ -154,7 +160,7 @@ func runBuild(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.build.info.success", localize.NewEntry("PATH", opts.outputFile)))
 
 	return nil
 }

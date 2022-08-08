@@ -13,28 +13,28 @@ var _ IConfig = &IConfigMock{}
 
 // IConfigMock is a mock implementation of IConfig.
 //
-// 	func TestSomethingThatUsesIConfig(t *testing.T) {
+//	func TestSomethingThatUsesIConfig(t *testing.T) {
 //
-// 		// make and configure a mocked IConfig
-// 		mockedIConfig := &IConfigMock{
-// 			LoadFunc: func() (*Config, error) {
-// 				panic("mock out the Load method")
-// 			},
-// 			LocationFunc: func() (string, error) {
-// 				panic("mock out the Location method")
-// 			},
-// 			RemoveFunc: func() error {
-// 				panic("mock out the Remove method")
-// 			},
-// 			SaveFunc: func(config *Config) error {
-// 				panic("mock out the Save method")
-// 			},
-// 		}
+//		// make and configure a mocked IConfig
+//		mockedIConfig := &IConfigMock{
+//			LoadFunc: func() (*Config, error) {
+//				panic("mock out the Load method")
+//			},
+//			LocationFunc: func() (string, error) {
+//				panic("mock out the Location method")
+//			},
+//			RemoveFunc: func() error {
+//				panic("mock out the Remove method")
+//			},
+//			SaveFunc: func(config *Config) error {
+//				panic("mock out the Save method")
+//			},
+//		}
 //
-// 		// use mockedIConfig in code that requires IConfig
-// 		// and then make assertions.
+//		// use mockedIConfig in code that requires IConfig
+//		// and then make assertions.
 //
-// 	}
+//	}
 type IConfigMock struct {
 	// LoadFunc mocks the Load method.
 	LoadFunc func() (*Config, error)
@@ -86,7 +86,8 @@ func (mock *IConfigMock) Load() (*Config, error) {
 
 // LoadCalls gets all the calls that were made to Load.
 // Check the length with:
-//     len(mockedIConfig.LoadCalls())
+//
+//	len(mockedIConfig.LoadCalls())
 func (mock *IConfigMock) LoadCalls() []struct {
 } {
 	var calls []struct {
@@ -112,7 +113,8 @@ func (mock *IConfigMock) Location() (string, error) {
 
 // LocationCalls gets all the calls that were made to Location.
 // Check the length with:
-//     len(mockedIConfig.LocationCalls())
+//
+//	len(mockedIConfig.LocationCalls())
 func (mock *IConfigMock) LocationCalls() []struct {
 } {
 	var calls []struct {
@@ -138,7 +140,8 @@ func (mock *IConfigMock) Remove() error {
 
 // RemoveCalls gets all the calls that were made to Remove.
 // Check the length with:
-//     len(mockedIConfig.RemoveCalls())
+//
+//	len(mockedIConfig.RemoveCalls())
 func (mock *IConfigMock) RemoveCalls() []struct {
 } {
 	var calls []struct {
@@ -167,7 +170,8 @@ func (mock *IConfigMock) Save(config *Config) error {
 
 // SaveCalls gets all the calls that were made to Save.
 // Check the length with:
-//     len(mockedIConfig.SaveCalls())
+//
+//	len(mockedIConfig.SaveCalls())
 func (mock *IConfigMock) SaveCalls() []struct {
 	Config *Config
 } {

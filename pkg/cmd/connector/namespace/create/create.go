@@ -4,6 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
@@ -67,18 +68,21 @@ func runCreate(opts *options) error {
 		Name: &opts.name,
 	}
 
-	var connector connectormgmtclient.ConnectorNamespace
 	var newErr error
 
 	a = a.ConnectorNamespaceEvalRequest(connectorNameSpaceEvalReq)
-	connector, _, newErr = a.Execute()
+	namespace, _, newErr := a.Execute()
 
 	if newErr != nil {
 		return newErr
 	}
 
-	if newErr = dump.Formatted(f.IOStreams.Out, opts.outputFormat, connector); newErr != nil {
+	if newErr = dump.Formatted(f.IOStreams.Out, opts.outputFormat, namespace); newErr != nil {
 		return newErr
+	}
+
+	if err = contextutil.SetCurrentNamespaceInstance(&namespace, &conn, f); err != nil {
+		return err
 	}
 
 	f.Logger.Info(f.Localizer.MustLocalize("connector.namespace.create.info.success"))

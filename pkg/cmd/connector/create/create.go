@@ -6,7 +6,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/namespaceutil"
 	"io/ioutil"
+	"math/rand"
 	"os"
+	"strconv"
 
 	// embed static HTML file
 	_ "embed"
@@ -60,7 +62,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVarP(&opts.file, "file", "", "f", f.Localizer.MustLocalize("connector.file.flag.description"))
+	flags.StringVarP(&opts.file, "file", "f", "", f.Localizer.MustLocalize("connector.file.flag.description"))
 	flags.StringVar(&opts.kafkaId, "kafka", "", f.Localizer.MustLocalize("connector.flag.kafka.description"))
 	flags.StringVar(&opts.namespace, "namespace", "", f.Localizer.MustLocalize("connector.flag.namespace.description"))
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.flag.name.description"))
@@ -121,7 +123,7 @@ func runCreate(opts *options) error {
 		return opts.f.Localizer.MustLocalizeError("connector.type.create.error.other", localize.NewEntry("Error", apiErr.GetReason()))
 	}
 
-	if err != nil {
+	if err = contextutil.SetCurrentConnectorInstance(&response, &conn, f); err != nil {
 		return err
 	}
 
@@ -155,7 +157,7 @@ func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafk
 		return nil, err
 	}
 	opts.Logger.Info(opts.Localizer.MustLocalize("connector.sa.created",
-		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.ClientSecret)))
+		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.ClientSecret), localize.NewEntry("Name", shortDescription)))
 	return &serviceacct, nil
 }
 
@@ -175,7 +177,8 @@ func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, 
 	}
 
 	if opts.serviceAccount {
-		serviceAccount, err1 := createServiceAccount(opts.f, "connector-"+connector.Name)
+		n := rand.Intn(100_000) //nolint:gosec
+		serviceAccount, err1 := createServiceAccount(opts.f, "svc-acnt-"+strconv.Itoa(n))
 		if err1 != nil {
 			return err1
 		}

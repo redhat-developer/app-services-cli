@@ -15,25 +15,25 @@ var _ Connection = &ConnectionMock{}
 
 // ConnectionMock is a mock implementation of Connection.
 //
-// 	func TestSomethingThatUsesConnection(t *testing.T) {
+//	func TestSomethingThatUsesConnection(t *testing.T) {
 //
-// 		// make and configure a mocked Connection
-// 		mockedConnection := &ConnectionMock{
-// 			APIFunc: func() apis.API {
-// 				panic("mock out the API method")
-// 			},
-// 			LogoutFunc: func(ctx context.Context) error {
-// 				panic("mock out the Logout method")
-// 			},
-// 			RefreshTokensFunc: func(ctx context.Context) error {
-// 				panic("mock out the RefreshTokens method")
-// 			},
-// 		}
+//		// make and configure a mocked Connection
+//		mockedConnection := &ConnectionMock{
+//			APIFunc: func() apis.API {
+//				panic("mock out the API method")
+//			},
+//			LogoutFunc: func(ctx context.Context) error {
+//				panic("mock out the Logout method")
+//			},
+//			RefreshTokensFunc: func(ctx context.Context) error {
+//				panic("mock out the RefreshTokens method")
+//			},
+//		}
 //
-// 		// use mockedConnection in code that requires Connection
-// 		// and then make assertions.
+//		// use mockedConnection in code that requires Connection
+//		// and then make assertions.
 //
-// 	}
+//	}
 type ConnectionMock struct {
 	// APIFunc mocks the API method.
 	APIFunc func() api.API
@@ -80,7 +80,8 @@ func (mock *ConnectionMock) API() api.API {
 
 // APICalls gets all the calls that were made to API.
 // Check the length with:
-//     len(mockedConnection.APICalls())
+//
+//	len(mockedConnection.APICalls())
 func (mock *ConnectionMock) APICalls() []struct {
 } {
 	var calls []struct {
@@ -109,7 +110,8 @@ func (mock *ConnectionMock) Logout(ctx context.Context) error {
 
 // LogoutCalls gets all the calls that were made to Logout.
 // Check the length with:
-//     len(mockedConnection.LogoutCalls())
+//
+//	len(mockedConnection.LogoutCalls())
 func (mock *ConnectionMock) LogoutCalls() []struct {
 	Ctx context.Context
 } {
@@ -140,7 +142,8 @@ func (mock *ConnectionMock) RefreshTokens(ctx context.Context) error {
 
 // RefreshTokensCalls gets all the calls that were made to RefreshTokens.
 // Check the length with:
-//     len(mockedConnection.RefreshTokensCalls())
+//
+//	len(mockedConnection.RefreshTokensCalls())
 func (mock *ConnectionMock) RefreshTokensCalls() []struct {
 	Ctx context.Context
 } {

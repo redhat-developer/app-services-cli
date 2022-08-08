@@ -34,7 +34,7 @@ one = 'The unique ID of the namespace you want to set as the current namespace'
 
 [namespace.use.flag.name]
 description = 'Description for the --name flag'
-one = 'The name of the namespace you want to set as the namespace'
+one = 'The name of the namespace you want to set as the current namespace'
 
 [namespace.use.log.info.useSuccess]
 description = 'Info message when current namespace was set'

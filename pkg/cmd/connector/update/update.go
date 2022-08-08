@@ -2,7 +2,7 @@ package update
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -85,7 +85,7 @@ func runUpdateCommand(opts *options) error {
 	}
 	defer specifiedFile.Close()
 
-	byteValue, err := ioutil.ReadAll(specifiedFile)
+	byteValue, err := io.ReadAll(specifiedFile)
 	if err != nil {
 		return err
 	}

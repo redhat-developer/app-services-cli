@@ -2,7 +2,6 @@ package contextutil
 
 import (
 	"context"
-
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
@@ -142,6 +141,28 @@ func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *c
 	return &connectorInstance, err
 }
 
+func SetCurrentConnectorInstance(connector *connectormgmtclient.Connector, conn *connection.Connection, f *factory.Factory) error {
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return err
+	}
+
+	currCtx.ConnectorID = connector.GetId()
+	svcContext.Contexts[svcContext.CurrentContext] = *currCtx
+
+	if err = f.ServiceContext.Save(svcContext); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetCurrentNamespaceInstance returns the namespace set in the currently selected context
 func GetCurrentNamespaceInstance(conn *connection.Connection, f *factory.Factory) (*connectormgmtclient.ConnectorNamespace, error) {
 
@@ -170,4 +191,26 @@ func GetNamespaceForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *c
 	}
 
 	return &namespace, err
+}
+
+func SetCurrentNamespaceInstance(namespace *connectormgmtclient.ConnectorNamespace, conn *connection.Connection, f *factory.Factory) error {
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return err
+	}
+
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return err
+	}
+
+	currCtx.ConnectorID = namespace.GetId()
+	svcContext.Contexts[svcContext.CurrentContext] = *currCtx
+
+	if err = f.ServiceContext.Save(svcContext); err != nil {
+		return err
+	}
+
+	return nil
 }

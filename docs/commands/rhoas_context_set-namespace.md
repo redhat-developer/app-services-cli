@@ -29,7 +29,7 @@ $ rhoas context set-namespace --id=1iSSK8RQ3JKI8Q0OTFHF5FRg
 
 ```
       --id string     The unique ID of the namespace you want to set as the current namespace
-      --name string   The name of the namespace you want to set as the namespace
+      --name string   The name of the namespace you want to set as the current namespace
 ```
 
 ### Options inherited from parent commands

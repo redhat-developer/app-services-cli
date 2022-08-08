@@ -7,36 +7,36 @@
 // kubeclient - provides kubernetes clients
 // service - individual service implementations
 //
-//
 // Usage:
 //
-// cliProperties := v1alpha.CommandEnvironment{
-//     IO:         opts.IO,
-//     Logger:     opts.Logger,
-//     Localizer:  opts.localizer,
-//     Config:     opts.Config,
-//     Connection: conn,
-// }
+//	cliProperties := v1alpha.CommandEnvironment{
+//	    IO:         opts.IO,
+//	    Logger:     opts.Logger,
+//	    Localizer:  opts.localizer,
+//	    Config:     opts.Config,
+//	    Connection: conn,
+//	}
 //
 // kubeClients, err := kubeclient.NewKubernetesClusterClients(&cliProperties, opts.kubeconfigLocation)
-// if err != nil {
-//     return err
-// }
 //
-// clusterAPI := cluster.KubernetesClusterAPIImpl{
-//     KubernetesClients:  kubeClients,
-//     CommandEnvironment: &cliProperties,
-// }
+//	if err != nil {
+//	    return err
+//	}
 //
-// err = clusterAPI.ExecuteServiceBinding(&v1alpha.BindOperationOptions{
-//     ServiceName:             opts.serviceName,
-//     Namespace:               opts.namespace,
-//     AppName:                 opts.appName,
-//     ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
-//     BindingName:             opts.bindingName,
-//     BindAsFiles:             !opts.bindAsEnv,
-//     DeploymentConfigEnabled: opts.deploymentConfigEnabled,
-// })
+//	clusterAPI := cluster.KubernetesClusterAPIImpl{
+//	    KubernetesClients:  kubeClients,
+//	    CommandEnvironment: &cliProperties,
+//	}
+//
+//	err = clusterAPI.ExecuteServiceBinding(&v1alpha.BindOperationOptions{
+//	    ServiceName:             opts.serviceName,
+//	    Namespace:               opts.namespace,
+//	    AppName:                 opts.appName,
+//	    ForceCreationWithoutAsk: opts.forceCreationWithoutAsk,
+//	    BindingName:             opts.bindingName,
+//	    BindAsFiles:             !opts.bindAsEnv,
+//	    DeploymentConfigEnabled: opts.deploymentConfigEnabled,
+//	})
 //
 // Adding new service in "4 Simple Steps" ™
 //

@@ -29,7 +29,7 @@ $ rhoas connector namespace use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ```
       --id string     The unique ID of the namespace you want to set as the current namespace
-      --name string   The name of the namespace you want to set as the namespace
+      --name string   The name of the namespace you want to set as the current namespace
 ```
 
 ### Options inherited from parent commands

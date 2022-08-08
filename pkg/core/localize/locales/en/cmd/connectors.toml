@@ -42,7 +42,8 @@ rhoas connector cluster create --name=my-connectors-cluster
 
 [connector.sa.created]
 one = '''
-Service account created. 
+Service account created.
+Name: {{.Name}}
 Client ID: {{.ClientId}}  
 Secret: {{.ClientSecret}}
 '''
@@ -152,9 +153,6 @@ one = 'Create a Connectors instance'
 one = '''
 # Create a Connectors instance
 rhoas connector create --file=myconnector.json
-
-# Create a Connectors instance from stdin
-cat myconnector.json | rhoas connector create
 '''
 
 [connector.build.cmd.shortDescription]
@@ -169,7 +167,11 @@ instance that can be later created using create command.
 [connector.build.cmd.example]
 one = '''
 # Build a Connectors instance
-rhoas connector build --name=myconnector
+rhoas connector build --type=--type=aws_lambda_sink_0.1
+
+# Build a Connectors instance with a name of my_connector
+rhoas connector build --name=my_connector --type=--type=aws_lambda_sink_0.1
+
 cat myconnector.json | rhoas connector create
 '''
 
@@ -207,7 +209,7 @@ rhoas connector start --id=IJD76DUH675234
 one = 'Successfully created the Connectors instance'
 
 [connector.create.input.message]
-one = 'Please provide {{.Field}}'
+one = '{{.Field}}:'
 
 [connector.create.interactive.error]
 one = 'Connector specification missing required value: {{.Field}}'
@@ -266,7 +268,7 @@ one = 'Connector type (id of the connector)'
 [connector.build.info.success]
 one = '''
 Connector specification successfully created.
-You can edit the specification in your editor and use the "rhoas connector create --file=yourconnector.json" command to create the connectors instance.
+You can edit the specification in your editor and use the "rhoas connector create --file={{.PATH}}" command to create the connectors instance.
 
 Information like connector namespace and service accounts can be supplied at the time of the creation. 
 You can generate new service account using rhoas service-account create command.
@@ -553,7 +555,7 @@ one = '''
 rhoas connector type describe --type=slack_source_0.1 
 
 # Desribe connector type with id of slack_source_0.1 and give output as yaml
-rhoas connector type describe --type=slack_source_0.1 --yaml 
+rhoas connector type describe --type=slack_source_0.1 -o yaml
 '''
 
 [connector.message.reading.file.error]

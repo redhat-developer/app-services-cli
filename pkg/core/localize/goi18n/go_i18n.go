@@ -74,7 +74,6 @@ func New(cfg *Config) (localize.Localizer, error) {
 // Examples:
 //
 // `localizer.MustLocalize("my-message-id", &localize.TemplateEntry{"Name", "Danny"})`
-//
 func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry) string {
 	templateData := map[string]interface{}{}
 	// map the template entries to the go-i18n format
@@ -90,7 +89,6 @@ func (l *Goi18n) MustLocalize(id string, tmplEntries ...*localize.TemplateEntry)
 // Examples:
 //
 // `localizer.MustLocalizePlural("my-message-id", 2)`
-//
 func (l *Goi18n) MustLocalizePlural(id string, pluralCount int, tmplEntries ...*localize.TemplateEntry) string {
 	templateData := map[string]interface{}{}
 	// map the template entries to the go-i18n format
@@ -106,7 +104,6 @@ func (l *Goi18n) MustLocalizePlural(id string, pluralCount int, tmplEntries ...*
 // Examples:
 //
 // `err := localizer.MustLocalizeError("my-message-id", &localize.TemplateEntry{"Name", "Danny"}`
-//
 func (l *Goi18n) MustLocalizeError(id string, tmplEntries ...*localize.TemplateEntry) error {
 	return errors.New(l.MustLocalize(id, tmplEntries...))
 }
