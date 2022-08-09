@@ -241,6 +241,12 @@ one = 'Location of the Connectors JSON file that describes the connector'
 [connector.flag.kafka.description]
 one = 'Id of the kafka instance (by default kafka instance from context would be used)'
 
+[connector.flag.namespaceID.description]
+one = 'ID of of the namespace you want the connector to be updated to'
+
+[connector.flag.kafkaID.description]
+one = 'ID of of the kafka you want the connector to be updated to'
+
 [connector.flag.namespace.description]
 one = 'Id of the namespace for the connector (by default namespace from context would be used)'
 
@@ -564,4 +570,10 @@ one = 'supplied file is invalid. please make sure that file exist and it contain
 
 [connector.common.error.FileAlreadyExists]
 one = 'provided {{.Name}} file already exist. Please specify --overwrite flag to overwrite the file'
+
+[connector.interactive.error]
+one = 'Connector specification missing required value: {{.Field}}'
+
+[connector.type.update.error.other]
+one = 'Error while updating connector {{.Error}}'
 
