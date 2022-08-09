@@ -10,19 +10,7 @@ type AuthError struct {
 	Err error
 }
 
-type MasAuthError struct {
-	Err error
-}
-
 func (e *AuthError) Error() string {
-	return fmt.Sprintf("%v", e.Err)
-}
-
-func (e *MasAuthError) Unwrap() error {
-	return e.Err
-}
-
-func (e *MasAuthError) Error() string {
 	return fmt.Sprintf("%v", e.Err)
 }
 

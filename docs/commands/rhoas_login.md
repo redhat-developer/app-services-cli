@@ -34,14 +34,13 @@ $ rhoas login --token f5cgc...
 ### Options
 
 ```
-      --api-gateway string    URL of the API gateway (default "https://api.openshift.com")
-      --auth-url string       The URL of the SSO Authentication server (default "https://sso.redhat.com/auth/realms/redhat-external")
-      --client-id string      OpenID client identifier (default "rhoas-cli-prod")
-      --insecure              Allow insecure communication with the server by disabling TLS certificate and host name verification
-      --mas-auth-url string   Unused: This flag is no longer valid and will be removed in a future release
-      --print-sso-url         Print the console login URL, which you can use to log in to RHOAS from a different web browser (this is useful if you need to log in with different credentials than the credentials you used in your default web browser)
-      --scope stringArray     Override the default OpenID scope (to specify multiple scopes, use a separate --scope for each scope) (default [openid])
-  -t, --token string          Log in using an offline token, which can be obtained at https://console.redhat.com/openshift/token
+      --api-gateway string   URL of the API gateway (default "https://api.openshift.com")
+      --auth-url string      The URL of the SSO Authentication server (default "https://sso.redhat.com/auth/realms/redhat-external")
+      --client-id string     OpenID client identifier (default "rhoas-cli-prod")
+      --insecure             Allow insecure communication with the server by disabling TLS certificate and host name verification
+      --print-sso-url        Print the console login URL, which you can use to log in to RHOAS from a different web browser (this is useful if you need to log in with different credentials than the credentials you used in your default web browser)
+      --scope stringArray    Override the default OpenID scope (to specify multiple scopes, use a separate --scope for each scope) (default [openid])
+  -t, --token string         Log in using an offline token, which can be obtained at https://console.redhat.com/openshift/token
 ```
 
 ### Options inherited from parent commands
