@@ -262,9 +262,9 @@ func runCreate(opts *options) error {
 				return err
 			}
 
-			userQuotaJSON, lintErr := json.MarshalIndent(userQuota, "", "  ")
-			if lintErr != nil {
-				f.Logger.Debug(lintErr)
+			userQuotaJSON, marshalErr := json.MarshalIndent(userQuota, "", "  ")
+			if marshalErr != nil {
+				f.Logger.Debug(marshalErr)
 			} else {
 				f.Logger.Debug("Selected Quota object:")
 				f.Logger.Debug(string(userQuotaJSON))
@@ -313,9 +313,9 @@ func runCreate(opts *options) error {
 	}
 
 	f.Logger.Debug("Creating kafka instance", payload.Name)
-	data, lintErr := json.MarshalIndent(payload, "", "  ")
-	if err != nil {
-		f.Logger.Debug(lintErr)
+	data, marshalErr := json.MarshalIndent(payload, "", "  ")
+	if marshalErr != nil {
+		f.Logger.Debug(marshalErr)
 	} else {
 		f.Logger.Debug(string(data))
 	}
@@ -539,9 +539,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	userQuotaJSON, lintErr := json.MarshalIndent(userQuota, "", "  ")
-	if lintErr != nil {
-		f.Logger.Debug(lintErr)
+	userQuotaJSON, marshalErr := json.MarshalIndent(userQuota, "", "  ")
+	if marshalErr != nil {
+		f.Logger.Debug(marshalErr)
 	} else {
 		f.Logger.Debug("Selected Quota object:")
 		f.Logger.Debug(string(userQuotaJSON))
