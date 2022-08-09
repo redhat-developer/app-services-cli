@@ -24,7 +24,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// When the value of the `--api-gateway` option is one of the keys of this map it will be replaced by the
+// When tzhe value of the `--api-gateway` option is one of the keys of this map it will be replaced by the
 // corresponding value.
 var apiGatewayAliases = map[string]string{
 	"production": build.ProductionAPIURL,
@@ -52,7 +52,6 @@ type options struct {
 
 	url                   string
 	authURL               string
-	deprecatedUrl         string
 	clientID              string
 	scopes                []string
 	insecureSkipTLSVerify bool
