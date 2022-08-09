@@ -27,7 +27,7 @@ rhoas connector cluster list
 [discrete]
 == Options
 
-      `--limit` _int_::         Page limit (default 100)
+      `--limit` _int_::         Page limit (default 10)
   `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
       `--page` _int_::          Page number (default 1)
 

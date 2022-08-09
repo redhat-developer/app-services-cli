@@ -13,15 +13,15 @@ configure settings for a Service Registry instance.
 
 The available settings include the following options: 
 
+* registry.auth.authenticated-read-access.enabled - Specifies whether Service Registry grants at least 
+  read-only access to requests from any authenticated user in the same organization, regardless of their 
+  user role. Defaults to false.  
 * registry.auth.basic-auth-client-credentials.enabled - Specifies whether Service Registry users can 
   authenticate using HTTP basic authentication, in addition to OAuth. Defaults to true.
-* registry.auth.owner-only-authorization - Specifies whether only the user who creates an artifact can modify 
-  that artifact. Defaults to false. 
-* registry.auth.owner-only-authorization.limit-group-access - When registry.auth.owner-only-authorization is 
-  set to true, specifies whether only the user who creates an artifact group has write access to that artifact 
-  group, for example, to add or remove artifacts. Defaults to false.  
-* registry.ccompat.legacy-id-mode.enabled - Specifies whether the Confluent Schema Registry compatibility API 
-  uses globalId instead of contentId as an artifact identifier. Defaults to false.
+* registry.auth.owner-only-authorization - Specifies whether only the user who creates an artifact can 
+  modify that artifact. Defaults to false. 
+* registry.ccompat.legacy-id-mode.enabled - Specifies whether the Confluent Schema Registry compatibility 
+  API uses globalId instead of contentId as an artifact identifier. Defaults to false.
 
 
 [discrete]

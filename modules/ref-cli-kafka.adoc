@@ -70,7 +70,7 @@ rhoas kafka topic create --name mytopic
 * link:{path}#ref-kafka-topic_{context}[kafka topic]	 - Create, describe, update, list, and delete topics
 
  
-* link:{path}#ref-kafka-update_{context}[kafka update]	 - Update configuration details of a Kafka instance.
+* link:{path}#ref-kafka-update_{context}[kafka update]	 - Update configuration details for a Kafka instance.
 
  
 * link:{path}#ref-kafka-use_{context}[kafka use]	 - Set the current Kafka instance

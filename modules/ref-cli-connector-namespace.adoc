@@ -46,3 +46,6 @@ $ rhoas connector namespace list
  
 * link:{path}#ref-connector-namespace-list_{context}[connector-namespace list]	 - Get a list of Connectors namespaces
 
+ 
+* link:{path}#ref-connector-namespace-use_{context}[connector-namespace use]	 - Set the current namespace in context
+
