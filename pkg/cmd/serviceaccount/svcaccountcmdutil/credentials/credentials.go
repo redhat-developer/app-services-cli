@@ -3,7 +3,6 @@ package credentials
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -99,7 +98,7 @@ func Write(output string, filepath string, credentials *Credentials) error {
 	// replace any env vars in the file path
 	trueFilePath := os.ExpandEnv(filepath)
 
-	return ioutil.WriteFile(trueFilePath, fileData, 0o600)
+	return os.WriteFile(trueFilePath, fileData, 0o600)
 }
 
 func getFileFormat(output string) (format string) {

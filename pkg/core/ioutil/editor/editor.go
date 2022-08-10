@@ -2,7 +2,6 @@ package editor
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -31,7 +30,7 @@ func (e *Editor) Run() ([]byte, error) {
 	}
 
 	path := filepath.Join(os.TempDir(), e.filename)
-	err := ioutil.WriteFile(path, e.content, 0600)
+	err := os.WriteFile(path, e.content, 0600)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +47,7 @@ func (e *Editor) Run() ([]byte, error) {
 		return nil, err
 	}
 
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

@@ -5,7 +5,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -41,7 +41,7 @@ func GetRemoteServiceConstants(context context.Context, logger logging.Logger) (
 	}
 	defer response.Body.Close()
 
-	specJson, err := ioutil.ReadAll(response.Body)
+	specJson, err := io.ReadAll(response.Body)
 	if err != nil {
 		logger.Debug("Reading remote constants failed with error ", err)
 		return nil, &embeddedConstants

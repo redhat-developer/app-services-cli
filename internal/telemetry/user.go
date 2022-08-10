@@ -1,7 +1,6 @@
 package telemetry
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -22,7 +21,7 @@ func GetUserIdentity(client *TelemetryClient, telemetryFilePath string) (string,
 
 	// Get-or-Create the anonymousID file that contains a UUID
 	if _, err := os.Stat(telemetryFilePath); !os.IsNotExist(err) {
-		id, err = ioutil.ReadFile(telemetryFilePath)
+		id, err = os.ReadFile(telemetryFilePath)
 		if err != nil {
 			return "", err
 		}
@@ -32,7 +31,7 @@ func GetUserIdentity(client *TelemetryClient, telemetryFilePath string) (string,
 	uuidValue := string(id)
 	if _, err := uuid.Parse(uuidValue); err != nil {
 		id = []byte(uuid.NewRandom().String())
-		if err := ioutil.WriteFile(telemetryFilePath, id, 0600); err != nil {
+		if err := os.WriteFile(telemetryFilePath, id, 0600); err != nil {
 			return "", err
 		}
 		// Since a new ID was created, send the Identify message data that helps identify the user on segment

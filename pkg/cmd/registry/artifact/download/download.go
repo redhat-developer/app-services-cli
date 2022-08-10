@@ -3,7 +3,6 @@ package download
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
@@ -120,7 +119,7 @@ func runGet(opts *options) error {
 		return registrycmdutil.TransformInstanceError(err)
 	}
 
-	fileContent, err := ioutil.ReadFile(dataFile.Name())
+	fileContent, err := os.ReadFile(dataFile.Name())
 	if err != nil {
 		return err
 	}

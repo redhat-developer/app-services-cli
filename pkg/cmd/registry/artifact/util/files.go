@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -12,11 +11,11 @@ import (
 
 func CreateFileFromStdin() (*os.File, error) {
 	var specifiedFile *os.File
-	data, err := ioutil.ReadAll(os.Stdin)
+	data, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return nil, err
 	}
-	specifiedFile, err = ioutil.TempFile("", "rhoas-std-input")
+	specifiedFile, err = os.CreateTemp("", "rhoas-std-input")
 	if err != nil {
 		return nil, err
 	}
@@ -55,14 +54,14 @@ func GetContentFromFileURL(ctx context.Context, url string) (*os.File, error) {
 		return nil, fmt.Errorf("error loading file: %s", http.StatusText(resp.StatusCode))
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 
-	tmpfile, err := ioutil.TempFile("", "rhoas-std-input")
+	tmpfile, err := os.CreateTemp("", "rhoas-std-input")
 	if err != nil {
 		return nil, fmt.Errorf("error initializing temporary file: %w", err)
 	}
