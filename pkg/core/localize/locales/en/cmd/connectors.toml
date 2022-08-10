@@ -221,7 +221,18 @@ one = 'Creating connector instance based on specified connector spec file'
 one = 'Update a Connectors instance'
 
 [connector.update.cmd.longDescription]
-one = 'Update a Connectors instance'
+one = '''
+Update a Connectors instance
+
+Allows you to change the details of a already existing connectors instance.
+By changing its configuration in a text editor. To change which editor use
+edit the EDITOR environment variable. Below are some comman editors you may
+use.
+
+export EDITOR=nvim
+export EDITOR=vim
+export EDITOR="code -w"
+'''
 
 [connector.update.cmd.example]
 one = '''
@@ -596,4 +607,7 @@ one = 'The requested resource does not exist anymore'
 
 [connector.update.error.unexpectedError]
 one = 'Unexpected error occured when updating connector'
+
+[connector.update.info.editor.open]
+one = 'Opening a text editor to edit connector details, close the editor to continue'
 
