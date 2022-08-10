@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/core/auth/pkce"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/browser"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -88,8 +89,9 @@ func (a *AuthorizationCodeGrant) loginSSO(ctx context.Context, cfg *SSOConfig) e
 	// create a localhost server to handle redirects and exchange tokens securely
 	sm := http.NewServeMux()
 	server := http.Server{
-		Handler: sm,
-		Addr:    redirectURL.Host,
+		Handler:           sm,
+		Addr:              redirectURL.Host,
+		ReadHeaderTimeout: build.DefaultLoginTimeout,
 	}
 
 	sm.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

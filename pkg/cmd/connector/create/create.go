@@ -2,13 +2,14 @@ package create
 
 import (
 	"encoding/json"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/namespaceutil"
-	"io/ioutil"
+	"io"
 	"math/rand"
 	"os"
 	"strconv"
+
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/namespaceutil"
 
 	// embed static HTML file
 	_ "embed"
@@ -302,7 +303,7 @@ func readFileFromInput(opts *options) ([]byte, error) {
 		}
 	}
 	defer specifiedFile.Close()
-	byteValue, err := ioutil.ReadAll(specifiedFile)
+	byteValue, err := io.ReadAll(specifiedFile)
 	if err != nil {
 		return nil, errors.Wrap(err, opts.f.Localizer.MustLocalize("connector.message.reading.file.error"))
 	}

@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -37,7 +36,7 @@ func (c *File) Load() (*Config, error) {
 		return nil, fmt.Errorf(errorFormat, "unable to check if config file exists", err)
 	}
 	// #nosec G304
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return nil, fmt.Errorf(errorFormat, "unable to read config file", err)
 	}
@@ -69,7 +68,7 @@ func (c *File) Save(cfg *Config) error {
 			return err
 		}
 	}
-	err = ioutil.WriteFile(file, data, 0o600)
+	err = os.WriteFile(file, data, 0o600)
 	if err != nil {
 		return fmt.Errorf(errorFormat, "unable to save config", err)
 	}

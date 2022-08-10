@@ -3,7 +3,6 @@ package generate
 import (
 	"bytes"
 	"html/template"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -50,7 +49,7 @@ func WriteConfig(opts *options, config *configValues) (string, error) {
 		return "", opts.localizer.MustLocalizeError("generate.error.configFileAlreadyExists", localize.NewEntry("FilePath", opts.fileName))
 	}
 
-	return opts.fileName, ioutil.WriteFile(opts.fileName, fileData, 0o600)
+	return opts.fileName, os.WriteFile(opts.fileName, fileData, 0o600)
 }
 
 // getDefaultPath returns the default absolute path for the configuration file
