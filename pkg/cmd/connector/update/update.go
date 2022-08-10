@@ -55,6 +55,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
+// nolint:funlen
 func runUpdate(opts *options) error {
 
 	conn, err := opts.f.Connection()
@@ -86,6 +87,7 @@ func runUpdate(opts *options) error {
 	}
 
 	if !connectorChanged {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("connector.update.info.editor.open"))
 		err = runEditor(connector)
 		if err != nil {
 			return err
