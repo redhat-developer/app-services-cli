@@ -585,3 +585,15 @@ one = 'Connector specification missing required value: {{.Field}}'
 [connector.type.update.error.other]
 one = 'Error while updating connector {{.Error}}'
 
+[connector.update.error.authTokenInvalid]
+one = 'The auth token used is invalid when updating connector'
+
+[connector.update.error.noMatchingResource]
+one = 'There was no matching resource to the one requested when updating connector'
+
+[connector.update.error.doesNotExistAnymore]
+one = 'The requested resource does not exist anymore'
+
+[connector.update.error.unexpectedError]
+one = 'Unexpected error occured when updating connector'
+

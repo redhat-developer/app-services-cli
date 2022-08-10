@@ -111,6 +111,23 @@ func runUpdate(opts *options) error {
 	}
 
 	if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
+
+		if apiErr.GetCode() == connectorerror.ERROR_11 {
+			return opts.f.Localizer.MustLocalizeError("connector.update.error.authTokenInvalid")
+		}
+
+		if apiErr.GetCode() == connectorerror.ERROR_7 {
+			return opts.f.Localizer.MustLocalizeError("connector.update.error.noMatchingResource")
+		}
+
+		if apiErr.GetCode() == connectorerror.ERROR_25 {
+			return opts.f.Localizer.MustLocalizeError("connector.update.error.doesNotExistAnymore")
+		}
+
+		if apiErr.GetCode() == connectorerror.ERROR_9 {
+			return opts.f.Localizer.MustLocalizeError("connector.update.error.unexpectedError")
+		}
+
 		return opts.f.Localizer.MustLocalizeError("connector.type.update.error.other", localize.NewEntry("Error", apiErr.GetReason()))
 	}
 
