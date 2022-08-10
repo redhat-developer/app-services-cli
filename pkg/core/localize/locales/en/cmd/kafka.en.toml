@@ -57,9 +57,9 @@ one = 'Format in which to display the Kafka instances (choose from: "json", "yml
 [kafka.common.input.instanceName.message]
 one = 'Select Kafka instance:'
 
-[kafka.common.log.info.noKafkaInstances]
-description = 'Info message when no Kafka instances were found'
-one = 'No Kafka instances were found.'
+[kafka.error.interactive.noKafkas]
+description = 'Info message when no Kafka instances were found in interactive mode'
+one = 'No Kafka instances were found to select from, try creating one'
 
 [kafka.common.log.info.noRecords]
 description = 'Info message when no messages for a topic were found'

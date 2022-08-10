@@ -30,8 +30,7 @@ func InteractiveSelect(ctx context.Context, connection connection.Connection, lo
 	}
 
 	if response.Size == 0 {
-		logger.Info(localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
-		return nil, nil
+		return nil, localizer.MustLocalizeError("kafka.error.interactive.noKafkas")
 	}
 
 	kafkas := make([]string, len(response.Items))

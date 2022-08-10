@@ -427,9 +427,13 @@ one = 'The name of the Connectors instance that you want to set as the current i
 description = 'Info message when current connector was set'
 one = 'Connectors instance "{{.Name}}" is now the current instance'
 
-[connector.common.log.info.noConnectorInstances]
-description = 'Info message when no Connectors instances were found'
+[connector.error.interactive.noConnectors]
+description = 'Info message when no Connectors instances were found when selecting in interactive mode'
 one = 'No Connectors instances were found.'
+
+[connector.error.interactive.noNamespaces]
+description = 'Info message when no Connectors namespace instances were found when selecting in interactive mode'
+one = 'No namespaces were found to select from, try creating one'
 
 [connector.common.input.instanceName.message]
 one = 'Set the current Connectors instance:'

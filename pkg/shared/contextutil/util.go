@@ -73,7 +73,7 @@ func GetKafkaForServiceConfig(currCtx *servicecontext.ServiceConfig, f *factory.
 		return nil, f.Localizer.MustLocalizeError("context.common.error.kafka.notFound")
 	}
 
-	return &kafkaInstance, err
+	return &kafkaInstance, nil
 }
 
 // GetCurrentRegistryInstance returns the Service Registry instance set in the currently selected context
@@ -108,7 +108,7 @@ func GetRegistryForServiceConfig(currCtx *servicecontext.ServiceConfig, f *facto
 		return nil, f.Localizer.MustLocalizeError("context.common.error.registry.notFound")
 	}
 
-	return &registryInstance, err
+	return &registryInstance, nil
 }
 
 // GetCurrentConnectorInstance returns the connector instance set in the currently selected context
@@ -138,7 +138,7 @@ func GetConnectorForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *c
 		return nil, err
 	}
 
-	return &connectorInstance, err
+	return &connectorInstance, nil
 }
 
 func SetCurrentConnectorInstance(connector *connectormgmtclient.Connector, conn *connection.Connection, f *factory.Factory) error {
