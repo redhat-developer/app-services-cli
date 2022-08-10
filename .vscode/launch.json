@@ -17,6 +17,18 @@
       ]
     },
     {
+      "name": "Connector update",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/rhoas",
+      "env": {},
+      "args": [
+        "connector",
+        "update"
+      ]
+    },
+    {
       "name": "Whoami",
       "type": "go",
       "request": "launch",

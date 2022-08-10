@@ -17,8 +17,7 @@ func InteractiveSelect(connection connection.Connection, f *factory.Factory) (*c
 	}
 
 	if len(list.Items) == 0 {
-		f.Logger.Info(f.Localizer.MustLocalize("connector.common.log.info.noConnectorInstances"))
-		return nil, nil
+		return nil, f.Localizer.MustLocalizeError("connector.error.interactive.noConnectors")
 	}
 
 	connectorNames := make([]string, len(list.Items))
