@@ -427,6 +427,10 @@ one = 'The name of the Connectors instance that you want to set as the current i
 description = 'Info message when current connector was set'
 one = 'Connectors instance "{{.Name}}" is now the current instance'
 
+[kafka.common.log.info.noKafkaInstances]
+description = 'Info message when no Kafka instances were found'
+one = 'No Kafka instances were found.'
+
 [connector.error.interactive.noConnectors]
 description = 'Info message when no Connectors instances were found when selecting in interactive mode'
 one = 'No Connectors instances were found.'
