@@ -14,13 +14,14 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 type API interface {
 	KafkaMgmt() kafkamgmtclient.DefaultApi
 	ServiceRegistryMgmt() registrymgmtclient.RegistriesApi
 	ConnectorsMgmt() connectormgmtclient.APIClient
-	ServiceAccountMgmt() kafkamgmtclient.SecurityApi
+	ServiceAccountMgmt() svcacctmgmtclient.ServiceAccountsApi
 	KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
 	AccountMgmt() amsclient.AppServicesApi

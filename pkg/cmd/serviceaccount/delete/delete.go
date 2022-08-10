@@ -78,7 +78,7 @@ func runDelete(opts *options) (err error) {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccountMgmt().GetServiceAccount(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -118,7 +118,7 @@ func deleteServiceAccount(opts *options) error {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccountMgmt().DeleteServiceAccountById(opts.Context, opts.id).Execute()
+	httpRes, err := conn.API().ServiceAccountMgmt().DeleteServiceAccount(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

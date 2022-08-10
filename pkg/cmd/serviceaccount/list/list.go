@@ -2,6 +2,7 @@ package list
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -10,7 +11,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +30,6 @@ type options struct {
 // svcAcctRow contains the properties used to
 // populate the list of service accounts into a table row
 type svcAcctRow struct {
-	ID        string `json:"id" header:"ID"`
 	ClientID  string `json:"clientID" header:"Client ID"`
 	Name      string `json:"name" header:"Short Description"`
 	Owner     string `json:"owner" header:"Owner"`
@@ -74,12 +75,11 @@ func runList(opts *options) (err error) {
 		return err
 	}
 
-	res, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context).Execute()
+	serviceaccounts, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context).Execute()
 	if err != nil {
 		return err
 	}
 
-	serviceaccounts := res.GetItems()
 	if len(serviceaccounts) == 0 && opts.output == "" {
 		opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.list.log.info.noneFound"))
 		return nil
@@ -91,22 +91,22 @@ func runList(opts *options) (err error) {
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:
-		return dump.Formatted(opts.IO.Out, opts.output, res)
+		return dump.Formatted(opts.IO.Out, opts.output, serviceaccounts)
 	}
 
 	return nil
 }
 
-func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {
+func mapResponseItemsToRows(svcAccts []svcacctmgmtclient.ServiceAccountData) []svcAcctRow {
 	rows := make([]svcAcctRow, len(svcAccts))
 
 	for i, sa := range svcAccts {
+
 		row := svcAcctRow{
-			ID:        sa.GetId(),
 			Name:      sa.GetName(),
 			ClientID:  sa.GetClientId(),
 			Owner:     sa.GetCreatedBy(),
-			CreatedAt: sa.GetCreatedAt().String(),
+			CreatedAt: fmt.Sprintf("%v", sa.GetCreatedAt()),
 		}
 
 		rows[i] = row
