@@ -3,16 +3,15 @@
 This folder contains scripts for automating often-used, multiple step tasks.
 
 
-## check-docs.sh
+## Check Documentation
 
-Scripts check if documentation was changed.
+[check-docs.sh](./check-docs.sh) - This script checks if the commands documentation was changed and lists the changes.
  
  
-##  install.sh
+##  CLI Installation
 
-CLI installation script
+[install.sh](./install.sh) - This script aids in the installation of RHOAS CLI.
 
-## ./util
 
 Anything in [./util](./util) can be considered non-essential helper scripts.
 
