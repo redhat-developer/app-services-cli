@@ -2,6 +2,7 @@ package connectorcmdutil
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -84,7 +85,9 @@ func FilterValidTypesArgs(f *factory.Factory, toComplete string) ([]string, cobr
 
 	items := types.GetItems()
 	for _, connector_type := range items {
-		validTypes = append(validTypes, connector_type.GetId())
+		if strings.HasPrefix(connector_type.GetId(), toComplete) {
+			validTypes = append(validTypes, connector_type.GetId())
+		}
 	}
 
 	return validTypes, directive
