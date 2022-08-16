@@ -3,6 +3,7 @@ package list
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -106,11 +107,17 @@ func mapResponseItemsToRows(svcAccts []svcacctmgmtclient.ServiceAccountData) []s
 			Name:      sa.GetName(),
 			ClientID:  sa.GetClientId(),
 			Owner:     sa.GetCreatedBy(),
-			CreatedAt: fmt.Sprintf("%v", sa.GetCreatedAt()),
+			CreatedAt: unixTimestampToUTC(sa.GetCreatedAt()),
 		}
 
 		rows[i] = row
 	}
 
 	return rows
+}
+
+// unixTimestampToUTC converts a unix timestamp to the corresponding local Time
+func unixTimestampToUTC(timestamp int64) string {
+	localTime := time.Unix(timestamp, 0)
+	return fmt.Sprint(localTime)
 }
