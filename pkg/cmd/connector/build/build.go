@@ -143,17 +143,6 @@ func runBuild(opts *options) error {
 		return err
 	}
 
-	file, err := os.Create("dump.json")
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	t := surveyjson.JSONSchemaType{}
-	json.Unmarshal(schemaBytes, &t)
-	if err = dump.Formatted(file, opts.outputFormat, t); err != nil {
-		return err
-	}
-
 	result, err := schemaOptions.GenerateValues(schemaBytes, initialValues)
 	if err != nil {
 		return err
@@ -167,7 +156,7 @@ func runBuild(opts *options) error {
 
 	connector := createConnectorObject(opts, connectorSpecification)
 
-	file, err = os.Create(opts.outputFile)
+	file, err := os.Create(opts.outputFile)
 	if err != nil {
 		return err
 	}
