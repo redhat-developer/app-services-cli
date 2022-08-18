@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
@@ -163,7 +162,7 @@ func runResetCredentials(opts *options) (err error) {
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
 		ClientSecret: updatedServiceAccount.GetSecret(),
-		TokenURL:     build.ProductionAuthURL + "/protocol/openid-connect/token",
+		TokenURL:     conn.API().GetConfig().AuthURL.String() + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file

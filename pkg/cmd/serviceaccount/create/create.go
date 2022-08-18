@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
@@ -150,7 +149,7 @@ func runCreate(opts *options) error {
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
 		ClientSecret: serviceacct.GetSecret(),
-		TokenURL:     build.ProductionAuthURL + "/protocol/openid-connect/token",
+		TokenURL:     conn.API().GetConfig().AuthURL.String() + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
