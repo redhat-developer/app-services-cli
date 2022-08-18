@@ -2,6 +2,7 @@ package build
 
 import (
 	"encoding/json"
+	"github.com/AlecAivazis/survey/v2"
 	"os"
 
 	"github.com/jackdelahunt/survey-json-schema/pkg/surveyjson"
@@ -120,6 +121,9 @@ func runBuild(opts *options) error {
 
 	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("connector.build.info.msg"))
 
+	overrides := make(map[string]func(o *surveyjson.JSONSchemaOptions, ctx surveyjson.SchemaContext) error)
+	overrides["error_handler"] = onErrorHandler
+
 	// Creates JSONSchema based of
 	schemaOptions := surveyjson.JSONSchemaOptions{
 		Out:                 os.Stdout,
@@ -129,12 +133,24 @@ func runBuild(opts *options) error {
 		AutoAcceptDefaults:  false,
 		NoAsk:               false,
 		IgnoreMissingValues: false,
+		Overrides:           overrides,
 	}
 
 	initialValues := make(map[string]interface{})
 
 	schemaBytes, err := json.Marshal(response.Schema)
 	if err != nil {
+		return err
+	}
+
+	file, err := os.Create("dump.json")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	t := surveyjson.JSONSchemaType{}
+	json.Unmarshal(schemaBytes, &t)
+	if err = dump.Formatted(file, opts.outputFormat, t); err != nil {
 		return err
 	}
 
@@ -151,7 +167,7 @@ func runBuild(opts *options) error {
 
 	connector := createConnectorObject(opts, connectorSpecification)
 
-	file, err := os.Create(opts.outputFile)
+	file, err = os.Create(opts.outputFile)
 	if err != nil {
 		return err
 	}
@@ -185,4 +201,29 @@ func createConnectorObject(opts *options, connectorSpecification map[string]inte
 		Connector: connectorSpecification,
 	}
 	return connector
+}
+
+// overrides schema library to  do custom actions for this
+func onErrorHandler(o *surveyjson.JSONSchemaOptions, ctx surveyjson.SchemaContext) error {
+
+	options := make([]string, len(ctx.SchemaType.OneOf))
+	for index, option := range ctx.SchemaType.OneOf {
+		options[index] = option.Required[0]
+	}
+
+	prompt := &survey.Select{
+		Message: ctx.Name,
+		Options: options,
+	}
+
+	var selectedIndex int
+	err := survey.AskOne(prompt, &selectedIndex)
+	if err != nil {
+		return err
+	}
+
+	ctx.Name = "error_handling"
+	ctx.ParentType = ctx.SchemaType
+	ctx.SchemaType = ctx.SchemaType.OneOf[selectedIndex]
+	return o.Recurse(ctx)
 }
