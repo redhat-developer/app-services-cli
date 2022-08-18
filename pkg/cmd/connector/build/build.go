@@ -2,8 +2,9 @@ package build
 
 import (
 	"encoding/json"
-	"github.com/AlecAivazis/survey/v2"
 	"os"
+
+	"github.com/AlecAivazis/survey/v2"
 
 	"github.com/jackdelahunt/survey-json-schema/pkg/surveyjson"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
@@ -211,7 +212,7 @@ func onErrorHandler(o *surveyjson.JSONSchemaOptions, ctx surveyjson.SchemaContex
 		return err
 	}
 
-	ctx.Name = "error_handling"
+	ctx.Name = "error_handler"
 	ctx.ParentType = ctx.SchemaType
 	ctx.SchemaType = ctx.SchemaType.OneOf[selectedIndex]
 	return o.Recurse(ctx)
