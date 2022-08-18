@@ -7,6 +7,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/errorutils"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -140,8 +141,13 @@ func runCreate(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if err != nil {
-		return err
+	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_limit_exceeded":
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.limitExceeded")
+		default:
+			return err
+		}
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId())))

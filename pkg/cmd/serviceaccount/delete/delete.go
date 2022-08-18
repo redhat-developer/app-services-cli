@@ -2,8 +2,8 @@ package delete
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/errorutils"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -82,13 +82,13 @@ func runDelete(opts *options) (err error) {
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
 
-		if httpRes.StatusCode == http.StatusNotFound {
+	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_not_found":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
+		default:
+			return err
 		}
 	}
 
@@ -122,16 +122,13 @@ func deleteServiceAccount(opts *options) error {
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
 
-		switch httpRes.StatusCode {
-		case http.StatusForbidden:
+	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_access_invalid":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete"))
-		case http.StatusInternalServerError:
-			return opts.localizer.MustLocalizeError("serviceAccount.common.error.internalServerError")
+		case "service_account_not_found":
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return err
 		}

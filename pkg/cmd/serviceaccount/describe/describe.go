@@ -2,13 +2,14 @@ package describe
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/errorutils"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/spf13/cobra"
@@ -72,13 +73,10 @@ func runDescribe(opts *options) error {
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
 
-		switch httpRes.StatusCode {
-		case http.StatusNotFound:
+	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_not_found":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return err
