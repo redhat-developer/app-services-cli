@@ -2,6 +2,8 @@ package list
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -10,7 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+
 	"github.com/spf13/cobra"
 )
 
@@ -74,12 +77,11 @@ func runList(opts *options) (err error) {
 		return err
 	}
 
-	res, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context).Execute()
+	serviceaccounts, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context).Execute()
 	if err != nil {
 		return err
 	}
 
-	serviceaccounts := res.GetItems()
 	if len(serviceaccounts) == 0 && opts.output == "" {
 		opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.list.log.info.noneFound"))
 		return nil
@@ -91,26 +93,33 @@ func runList(opts *options) (err error) {
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:
-		return dump.Formatted(opts.IO.Out, opts.output, res)
+		return dump.Formatted(opts.IO.Out, opts.output, serviceaccounts)
 	}
 
 	return nil
 }
 
-func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) []svcAcctRow {
+func mapResponseItemsToRows(svcAccts []svcacctmgmtclient.ServiceAccountData) []svcAcctRow {
 	rows := make([]svcAcctRow, len(svcAccts))
 
 	for i, sa := range svcAccts {
+
 		row := svcAcctRow{
 			ID:        sa.GetId(),
 			Name:      sa.GetName(),
 			ClientID:  sa.GetClientId(),
 			Owner:     sa.GetCreatedBy(),
-			CreatedAt: sa.GetCreatedAt().String(),
+			CreatedAt: unixTimestampToUTC(sa.GetCreatedAt()),
 		}
 
 		rows[i] = row
 	}
 
 	return rows
+}
+
+// unixTimestampToUTC converts a unix timestamp to the corresponding local Time
+func unixTimestampToUTC(timestamp int64) string {
+	localTime := time.Unix(timestamp, 0)
+	return fmt.Sprint(localTime)
 }

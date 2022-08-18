@@ -28,6 +28,9 @@ import (
 	registrymgmt "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1"
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"golang.org/x/oauth2"
+
+	svcacctmgmt "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 // defaultAPI is a type which defines a number of API creator functions
@@ -73,16 +76,16 @@ func (a *defaultAPI) ServiceRegistryMgmt() registrymgmtclient.RegistriesApi {
 }
 
 // ServiceAccountMgmt return a new Service Account Management API client instance
-func (a *defaultAPI) ServiceAccountMgmt() kafkamgmtclient.SecurityApi {
+func (a *defaultAPI) ServiceAccountMgmt() svcacctmgmtclient.ServiceAccountsApi {
 	tc := a.CreateOAuthTransport(a.AccessToken)
-	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
-		BaseURL:    a.ApiURL.String(),
+	client := svcacctmgmt.NewAPIClient(&svcacctmgmt.Config{
+		BaseURL:    a.AuthURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
 		HTTPClient: tc,
 		UserAgent:  a.UserAgent,
 	})
 
-	return client.SecurityApi
+	return client.ServiceAccountsApi
 }
 
 // KafkaAdmin returns a new Kafka Admin API client instance, with the Kafka configuration object
@@ -103,16 +106,16 @@ func (a *defaultAPI) KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClie
 
 	switch kafkaStatus {
 	case svcstatus.StatusProvisioning, svcstatus.StatusAccepted:
-		err = fmt.Errorf(`Kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
+		err = fmt.Errorf(`kafka instance "%v" is not ready yet`, kafkaInstance.GetName())
 		return nil, nil, err
 	case svcstatus.StatusFailed:
-		err = fmt.Errorf(`Kafka instance "%v" has failed`, kafkaInstance.GetName())
+		err = fmt.Errorf(`kafka instance "%v" has failed`, kafkaInstance.GetName())
 		return nil, nil, err
 	case svcstatus.StatusDeprovision:
-		err = fmt.Errorf(`Kafka instance "%v" is being deprovisioned`, kafkaInstance.GetName())
+		err = fmt.Errorf(`kafka instance "%v" is being deprovisioned`, kafkaInstance.GetName())
 		return nil, nil, err
 	case svcstatus.StatusDeleting:
-		err = fmt.Errorf(`Kafka instance "%v" is being deleted`, kafkaInstance.GetName())
+		err = fmt.Errorf(`kafka instance "%v" is being deleted`, kafkaInstance.GetName())
 		return nil, nil, err
 	}
 
