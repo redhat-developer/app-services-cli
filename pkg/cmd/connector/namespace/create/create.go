@@ -4,6 +4,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -85,7 +86,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.namespace.create.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.namespace.create.info.success"), localize.NewEntry("Name", opts.name))
 
 	return nil
 

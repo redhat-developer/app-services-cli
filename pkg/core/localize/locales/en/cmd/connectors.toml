@@ -403,7 +403,7 @@ rhoas connector namespace create --name "my-namespace" --eval
 '''
 
 [connector.namespace.create.info.success]
-one = 'Successfully created the "{{.NAME}}" namespace'
+one = 'Successfully created the "{{.Name}}" namespace'
 
 [connector.namespace.delete.cmd.shortDescription]
 one = 'Delete a Connectors namespace'
