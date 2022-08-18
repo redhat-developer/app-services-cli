@@ -31,6 +31,7 @@ type options struct {
 // svcAcctRow contains the properties used to
 // populate the list of service accounts into a table row
 type svcAcctRow struct {
+	ID        string `json:"id" header:"ID"`
 	ClientID  string `json:"clientID" header:"Client ID"`
 	Name      string `json:"name" header:"Short Description"`
 	Owner     string `json:"owner" header:"Owner"`
@@ -104,6 +105,7 @@ func mapResponseItemsToRows(svcAccts []svcacctmgmtclient.ServiceAccountData) []s
 	for i, sa := range svcAccts {
 
 		row := svcAcctRow{
+			ID:        sa.GetId(),
 			Name:      sa.GetName(),
 			ClientID:  sa.GetClientId(),
 			Owner:     sa.GetCreatedBy(),
