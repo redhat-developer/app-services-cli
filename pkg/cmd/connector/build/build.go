@@ -193,7 +193,7 @@ func createConnectorObject(opts *options, connectorSpecification map[string]inte
 	return connector
 }
 
-// overrides schema library to  do custom actions for this
+// nolint:gocritic
 func onErrorHandler(o *surveyjson.JSONSchemaOptions, ctx surveyjson.SchemaContext) error {
 
 	options := make([]string, len(ctx.SchemaType.OneOf))
