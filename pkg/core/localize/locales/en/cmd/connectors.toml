@@ -611,3 +611,6 @@ one = 'Unexpected error occured when updating connector'
 [connector.update.info.editor.open]
 one = 'Opening a text editor to edit connector details, close the editor to continue'
 
+[connector.common.page.prompt]
+one = 'Page'
+

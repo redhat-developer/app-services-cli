@@ -1,6 +1,7 @@
 package list
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -111,6 +112,10 @@ func runUpdateCommand(opts *options) error {
 			return err
 		}
 	}
+
+	start := (opts.page - 1) * opts.limit
+	end := start + len(rows)
+	opts.f.Logger.Info(fmt.Sprintf("[%v %v : %v - %v]", opts.f.Localizer.MustLocalize("connector.common.page.prompt"), opts.page, start, end))
 
 	return nil
 }
