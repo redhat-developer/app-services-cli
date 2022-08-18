@@ -79,7 +79,7 @@ func (a *defaultAPI) ServiceRegistryMgmt() registrymgmtclient.RegistriesApi {
 func (a *defaultAPI) ServiceAccountMgmt() svcacctmgmtclient.ServiceAccountsApi {
 	tc := a.CreateOAuthTransport(a.AccessToken)
 	client := svcacctmgmt.NewAPIClient(&svcacctmgmt.Config{
-		BaseURL:    build.ProductionAuthURL,
+		BaseURL:    a.AuthURL.String(),
 		Debug:      a.Logger.DebugEnabled(),
 		HTTPClient: tc,
 		UserAgent:  a.UserAgent,

@@ -33,6 +33,7 @@ type API interface {
 type Config struct {
 	AccessToken string
 	ApiURL      *url.URL
+	AuthURL     *url.URL
 	ConsoleURL  *url.URL
 	UserAgent   string
 	HTTPClient  *http.Client
