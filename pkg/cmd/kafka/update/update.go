@@ -81,10 +81,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			opts.userIsOrgAdmin = token.IsOrgAdmin(cfg.AccessToken)
-			if !opts.userIsOrgAdmin {
-				opts.logger.Info(opts.localizer.MustLocalize("kafka.update.log.info.onlyOrgAdminsCanUpdate"))
-				return nil
-			}
 
 			if !opts.IO.CanPrompt() {
 				var missingFlags []string
@@ -213,9 +209,14 @@ func run(opts *options) error {
 }
 
 func runInteractivePrompt(opts *options, kafkaInstance *kafkamgmtclient.KafkaRequest) (err error) {
-	opts.owner, err = selectOwnerInteractive(opts.Context, opts)
-	if err != nil {
-		return err
+
+	if opts.userIsOrgAdmin {
+		opts.owner, err = selectOwnerInteractive(opts.Context, opts)
+		if err != nil {
+			return err
+		}
+	} else {
+		opts.owner = kafkaInstance.GetOwner()
 	}
 
 	reauthenticationPrompt := &survey.Select{
