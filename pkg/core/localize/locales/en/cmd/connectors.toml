@@ -120,7 +120,7 @@ one = '''
 # List all connector types
 rhoas connector type list
 
-# Build a Connectors configuration file named `my_aws_lambda_connector.json` that is based on the `aws_lambda_sink_0.1` connector type
+# Build a Connectors configuration file named 'my_aws_lambda_connector.json' that is based on the 'aws_lambda_sink_0.1' connector type
 rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_sink_0.1
 
 # Create a Connectors instance by specifying a configuration file
@@ -150,10 +150,10 @@ one = 'List and get details of the different connector types'
 description = "Long description of connector type command"
 one = '''List and get details of connector types that are available in the connector catalog. 
 
-To see a list of all available connector types, use the `type list` command.
-You can optionally use the `--search` flag to filter the requested results by Connector types that start with or contain text that you specify. 
+To see a list of all available connector types, use the 'type list' command.
+You can optionally use the '--search' flag to filter the requested results by Connector types that start with or contain text that you specify. 
 
-To see a description of a specific connector type, use the `type details` command.
+To see a description of a specific connector type, use the 'type details' command.
 
 '''
 
@@ -245,18 +245,18 @@ one = 'Build a Connectors instance'
 [connector.build.cmd.longDescription]
 one = '''
 Build a configuration file by specifying a connector type.
-For a list of available connector types, use the `connector type list` command.
+For a list of available connector types, use the 'connector type list' command.
 
-After you build a configuration file, you can create a Connectors instance by using the `connector create` command and providing the name of the configuration file that you built.
+After you build a configuration file, you can create a Connectors instance by using the 'connector create' command and providing the name of the configuration file that you built.
 
 '''
 
 [connector.build.cmd.example]
 one = '''
-# Build a Connectors configuration file based on the aws_lambda_sink_0.1 connector type. The default configuration file name is `connector.json`
+# Build a Connectors configuration file based on the aws_lambda_sink_0.1 connector type. The default configuration file name is 'connector.json'
 rhoas connector build --type=--type=aws_lambda_sink_0.1
 
-# Build a Connectors configuration file named `my_aws_lambda_connector.json` that is based on the `aws_lambda_sink_0.1` connector type
+# Build a Connectors configuration file named 'my_aws_lambda_connector.json' that is based on the 'aws_lambda_sink_0.1' connector type
 rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_sink_0.1
 '''
 
@@ -269,7 +269,7 @@ one = '''Create a Connectors instance.
 A Connectors instance is an instance of a one of the supported Connectors.
 Use the "connector" command to create, delete, and view a list of Connectors instances.
 
-Before you create a Connectors instance, you must use the `connector build` command to create a configuration file for the type of connector that you want to create. 
+Before you create a Connectors instance, you must use the 'connector build' command to create a configuration file for the type of connector that you want to create. 
 '''
 
 [connector.create.cmd.example]
@@ -277,7 +277,6 @@ one = '''
 # Create a Connectors instance by specifying a configuration file
 rhoas connector create --file=myconnector.json
 '''
-
 
 [connector.stop.cmd.shortDescription]
 one = 'Stop a Connectors instance'
