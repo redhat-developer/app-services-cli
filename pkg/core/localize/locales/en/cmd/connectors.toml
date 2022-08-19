@@ -32,7 +32,10 @@ rhoas connector cluster list
 one = 'Create a Connectors cluster'
 
 [connector.cluster.create.cmd.longDescription]
-one = 'Create a Connectors cluster and specify its name. You must be an org adminastrator for this to be successful'
+one = 'Create a Connectors cluster and specify its name. You must have administrator access to run this command.'
+
+[connector.cluster.create.flag.name.description]
+one = 'Name of the Connectors cluster to create'
 
 [connector.cluster.create.cmd.example]
 one = '''
@@ -57,7 +60,7 @@ one = 'Delete a Connectors cluster'
 
 [connector.cluster.delete.cmd.longDescription]
 one = '''
-Delete a Connectors cluster by specifying its cluster ID. Use the "connector cluster list" command to see a list of all Connectors clusters and their ID values.'
+Delete a Connectors cluster by specifying its cluster ID. To see a list of all Connectors clusters and their ID values, use the "connector cluster list" command.
 '''
 
 [connector.cluster.delete.cmd.example]
@@ -68,9 +71,6 @@ rhoas connector cluster delete --id=c980124otd37bufiemj0
 
 [connector.cluster.delete.id.flag.description]
 one = 'ID of the Connectors cluster to delete'
-
-[connector.cluster.create.flag.name.description]
-one = 'Name of the Connectors cluster to create'
 
 [connector.cluster.delete.info.success]
 one = 'Successfully deleted the Connectors cluster'
@@ -103,56 +103,140 @@ one = 'Page limit'
 one = 'No results returned from the current command'
 
 [connector.common.validation.namespace.error.invalidChars]
-one = 'invalid name for namespace "{{.Name}}"'
+one = 'Invalid name for namespace "{{.Name}}"'
 
 [connector.cmd.shortDescription]
-one = 'Connectors instance commands'
+one = 'Connectors commands'
 
 [connector.cmd.longDescription]
 one = '''
-With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that produce data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
+With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that retrieve data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
 
-A Connectors instance is an instance of a one of the supported Connectors.
-Use the "connector" command to create, delete, and view a list of Connectors instances.
 '''
 
 [connector.cmd.example]
 one = '''   
+
+# List all connector types
+rhoas connector type list
+
+# Build a Connectors configuration file named `my_aws_lambda_connector.json` that is based on the `aws_lambda_sink_0.1` connector type
+rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_sink_0.1
+
+# Create a Connectors instance by specifying a configuration file
+rhoas connector create --file=myconnector.json
+
+# Update an existing Connectors instance by specifying a configuration file
+rhoas connector update --id=my-connector --file=myconnector.json
+
 # List of Connectors instances
 rhoas connector list
 
-# Create a Connectors instance
-rhoas connector create --file=myconnector.json
-
-# Create a Connectors instance from stdin
-cat myconnector.json | rhoas connector create
-
-# Update a Connectors instance
-rhoas connector update --id=my-connector --file=myconnector.json
-
-# Update a Connectors instance from stdin
-cat myconnector.json | rhoas connector update
-
-# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector delete --id=c9b71ucotd37bufoamkg
-
-# Start the Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector start --id=c9b71ucotd37bufoamkg
+# Start the Connectors instance with ID my-connector
+rhoas connector start --id=my-connector
 
 # Stop the current Connectors instance
 rhoas connector stop
+
+# Delete a Connectors instance with ID my-connector
+rhoas connector delete --id=my-connector
 '''
 
-[connector.create.cmd.shortDescription]
-one = 'Create a Connectors instance'
+[connector.type.cmd.shortDescription]
+description = "Short description of connector type command"
+one = 'List and get details of the different connector types'
 
-[connector.create.cmd.longDescription]
-one = 'Create a Connectors instance'
+[connector.type.cmd.longDescription]
+description = "Long description of connector type command"
+one = '''List and get details of connector types that are available in the connector catalog. 
 
-[connector.create.cmd.example]
+To see a list of all available connector types, use the `type list` command.
+You can optionally use the `--search` flag to filter the requested results by Connector types that start with or contain text that you specify. 
+
+To see a description of a specific connector type, use the `type details` command.
+
+'''
+
+[connector.type.cmd.example]
+description = "Example commands for connector type"
 one = '''
-# Create a Connectors instance
-rhoas connector create --file=myconnector.json
+# List all connector types
+rhoas connector type list
+
+# List all connector types that start with 'Amazon'
+rhoas connector type list --search=Amazon%
+
+# Get all of the details for the connector type by specifying the type ID
+rhoas connector type describe --type=aws_kinesis_sink_0.1
+'''
+
+[connector.type.list.cmd.shortDescription]
+description = "Short description of connector type list command"
+one = 'List connector types'
+
+[connector.type.list.cmd.longDescription]
+description = "Long description of connector type list command"
+one = '''
+List the types of connectors that you are available in the Connectors catalog.'
+
+Use filter options, such as --limit, --page, and --search
+
+'''
+
+[connector.type.list.cmd.example]
+description = "Example commands for connector type list"
+one = '''
+# List all connector types
+rhoas connector type list
+
+# List connector types with a limit of 10 from the second page
+rhoas connector type list --limit=10 --page=2
+
+# List all connector types that start with 'Amazon'
+rhoas connector type list --search=Amazon%
+
+# List all connector types that contain the word 'Amazon'
+rhoas connector type list --search=%Amazon%
+
+'''
+
+[connector.type.list.flag.page.description]
+one = 'Page of the list based on limit'
+
+[connector.type.list.flag.search.description]
+one = 'Search query for name of connector type'
+
+[connector.type.list.flag.limit.description]
+one = 'The max number of connectors to return in the page'
+
+[connector.type.describe.info.success]
+one = 'The Connectors type details were returned successfully'
+
+[connector.type.error.notFound]
+one = 'The connector type with id "{{.Id}}" does not exist'
+
+[connector.type.error.noType]
+one = 'No type id was passed to command'
+
+[connector.type.create.error.other]
+one = 'error returned by api when creating connector instance: {{.Error}}'
+
+[connector.type.describe.flag.id]
+one = 'The type id of the connector you want to get details about'
+
+[connector.type.describe.cmd.shortDescription]
+one = 'Get details of a connector type'
+
+[connector.type.describe.cmd.longDescription]
+one = 'Get full list of details of a connector type using its type id'
+
+[connector.type.describe.cmd.example]
+one = '''
+# Describe connector type with id of slack_source_0.1
+rhoas connector type describe --type=slack_source_0.1 
+
+# Describe connector type with id of slack_source_0.1 and give output as yaml
+rhoas connector type describe --type=slack_source_0.1 -o yaml
 '''
 
 [connector.build.cmd.shortDescription]
@@ -160,20 +244,40 @@ one = 'Build a Connectors instance'
 
 [connector.build.cmd.longDescription]
 one = '''
-Command builds specficication for Connector 
-instance that can be later created using create command.
+Build a configuration file by specifying a connector type.
+For a list of available connector types, use the `connector type list` command.
+
+After you build a configuration file, you can create a Connectors instance by using the `connector create` command and providing the name of the configuration file that you built.
+
 '''
 
 [connector.build.cmd.example]
 one = '''
-# Build a Connectors instance
+# Build a Connectors configuration file based on the aws_lambda_sink_0.1 connector type. The default configuration file name is `connector.json`
 rhoas connector build --type=--type=aws_lambda_sink_0.1
 
-# Build a Connectors instance with a name of my_connector
-rhoas connector build --name=my_connector --type=--type=aws_lambda_sink_0.1
-
-cat myconnector.json | rhoas connector create
+# Build a Connectors configuration file named `my_aws_lambda_connector.json` that is based on the `aws_lambda_sink_0.1` connector type
+rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_sink_0.1
 '''
+
+[connector.create.cmd.shortDescription]
+one = 'Create a Connectors instance'
+
+[connector.create.cmd.longDescription]
+one = '''Create a Connectors instance. 
+
+A Connectors instance is an instance of a one of the supported Connectors.
+Use the "connector" command to create, delete, and view a list of Connectors instances.
+
+Before you create a Connectors instance, you must use the `connector build` command to create a configuration file for the type of connector that you want to create. 
+'''
+
+[connector.create.cmd.example]
+one = '''
+# Create a Connectors instance by specifying a configuration file
+rhoas connector create --file=myconnector.json
+'''
+
 
 [connector.stop.cmd.shortDescription]
 one = 'Stop a Connectors instance'
@@ -183,11 +287,11 @@ one = 'Stop the current Connectors instance or stop a Connectors instance by pro
 
 [connector.stop.cmd.example]
 one = '''
-# Stop current Connectors instance
+# Stop the current Connectors instance
 rhoas connector stop
 
 # Stop a Connectors instance by specifying its ID
-rhoas connector stop --id=IJD76DUH675234
+rhoas connector stop --id=
 '''
 
 [connector.start.cmd.shortDescription]
@@ -295,7 +399,7 @@ You can generate new service account using rhoas service-account create command.
 one = 'Delete a Connectors instance'
 
 [connector.delete.cmd.longDescription]
-one = 'Delete a Connectors instance by specifing its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.'
+one = 'Delete a Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.'
 
 [connector.delete.cmd.example]
 one = '''
@@ -378,7 +482,7 @@ one = 'Get a list of Connectors namespaces'
 
 [connector.namespace.list.cmd.longDescription]
 one = '''
-Get a list of Connectors namespaces for the Connectors cluster. The "connector namespace list" returns details about the namespaces, including their ID values.
+Get a list of Connectors namespaces for the Connectors cluster. The "connector namespace list" command returns details about the namespaces including their ID values.
 '''
 
 [connector.namespace.list.cmd.example]
@@ -409,7 +513,7 @@ one = 'Successfully created the "{{.Name}}" namespace'
 one = 'Delete a Connectors namespace'
 
 [connector.namespace.delete.cmd.longDescription]
-one = 'Delete a Connectors namespace by specifing its ID. Use the "connector namespace list" command to see a list of all Connectors namespaces and their ID values.'
+one = 'Delete a Connectors namespace by specifying its ID. Use the "connector namespace list" command to see a list of all Connectors namespaces and their ID values.'
 
 [connector.namespace.delete.cmd.example]
 one = '''
@@ -484,66 +588,6 @@ one = "Connector instance with ID {{.ID}} not found"
 description = "Error message for when a Connectors instance name is not found"
 one = "Connector instance with name {{.Name}} not found"
 
-[connector.type.cmd.shortDescription]
-description = "Short description of connector type command"
-one = 'List and get details of different connector types'
-
-[connector.type.cmd.longDescription]
-description = "Long description of connector type command"
-one = '''List, search and get details of connector types that are available to use in the connector catalog.
-
-Use list to list available connector types.
-
-Use describe to get more details about a specific connector type.
-'''
-
-[connector.type.cmd.example]
-description = "Example commands for connector type"
-one = '''
-# List all connector types
-rhoas connector type list
-
-# List all connector types that start with 'Amazon'
-rhoas connector type list --search=Amazon%
-
-# Get more details of connector type with a type id of IEJF87hg2342hsdHFG
-rhoas connector type describe --id=IEJF87hg2342hsdHFG
-'''
-
-[connector.type.list.cmd.shortDescription]
-description = "Short description of connector type list command"
-one = 'List connector types'
-
-[connector.type.list.cmd.longDescription]
-description = "Long description of connector type list command"
-one = 'List connector types available from the catalog, use filter options such as --limit, --page and --search'
-
-[connector.type.list.cmd.example]
-description = "Example commands for connector type list"
-one = '''
-# List all connector types
-rhoas connector type list
-
-# List connector types with a limit of 10 from the second page
-rhoas connector type list --limit=10 --page=2
-
-# List all connector types that start with 'Amazon'
-rhoas connector type list --search=Amazon%
-
-# List all connector types that contain the word 'Amazon'
-rhoas connector type list --search=%Amazon%
-
-'''
-
-[connector.type.list.flag.page.description]
-one = 'Page of the list based on limit'
-
-[connector.type.list.flag.search.description]
-one = 'Search query for name of connector type'
-
-[connector.type.list.flag.limit.description]
-one = 'The max number of connectors to return in the page'
-
 [connector.common.error.unauthorized]
 one = 'Auth token provided is invalid'
 
@@ -552,36 +596,6 @@ one = 'Failed to parse search query'
 
 [connector.common.error.internalServerError]
 one = 'Unexpected internal server error occured'
-
-[connector.type.describe.info.success]
-one = 'The Connectors type details were returned successfully'
-
-[connector.type.error.notFound]
-one = 'The connector type with id "{{.Id}}" does not exist'
-
-[connector.type.error.noType]
-one = 'No type id was passed to command'
-
-[connector.type.create.error.other]
-one = 'error returned by api when creating connector instance: {{.Error}}'
-
-[connector.type.describe.flag.id]
-one = 'The type id of the connector you want to get details about'
-
-[connector.type.describe.cmd.shortDescription]
-one = 'Get details of a connector type'
-
-[connector.type.describe.cmd.longDescription]
-one = 'Get full list of details of a connector type using its type id'
-
-[connector.type.describe.cmd.example]
-one = '''
-# Desribe connector type with id of slack_source_0.1
-rhoas connector type describe --type=slack_source_0.1 
-
-# Desribe connector type with id of slack_source_0.1 and give output as yaml
-rhoas connector type describe --type=slack_source_0.1 -o yaml
-'''
 
 [connector.message.reading.file.error]
 one = 'supplied file is invalid. please make sure that file exist and it contains connector specification'
