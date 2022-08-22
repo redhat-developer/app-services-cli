@@ -70,6 +70,8 @@ include::../modules/ref-cli-cluster-status.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-connector-build.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-connector-cluster.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-cluster-addon-parameters.adoc[leveloffset=+2]
@@ -80,7 +82,11 @@ include::../modules/ref-cli-connector-cluster-delete.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-cluster-list.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-connector-create.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-connector-delete.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-describe.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-list.adoc[leveloffset=+2]
 
@@ -101,6 +107,8 @@ include::../modules/ref-cli-connector-type.adoc[leveloffset=+2]
 include::../modules/ref-cli-connector-type-describe.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-type-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-connector-update.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-use.adoc[leveloffset=+2]
 

@@ -1,0 +1,54 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-build_{context}']
+= connector build
+
+[role="_abstract"]
+Build a Connectors instance
+
+[discrete]
+== Synopsis
+
+Command builds specficication for Connector 
+instance that can be later created using create command.
+
+
+....
+rhoas connector build [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Build a Connectors instance
+rhoas connector build --type=--type=aws_lambda_sink_0.1
+
+# Build a Connectors instance with a name of my_connector
+rhoas connector build --name=my_connector --type=--type=aws_lambda_sink_0.1
+
+cat myconnector.json | rhoas connector create
+
+....
+
+[discrete]
+== Options
+
+      `--name` _string_::          name of the connector
+  `-o`, `--output` _string_::      Specify the output format. Choose from: "json", "yaml", "yml"
+      `--output-file` _string_::   filename of the connector specification file
+      `--overwrite`::              should overwrite file if exist
+      `--type` _string_::          Connector type (id of the connector)
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+

@@ -59,10 +59,19 @@ rhoas connector stop
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
 
  
+* link:{path}#ref-connector-build_{context}[connector build]	 - Build a Connectors instance
+
+ 
 * link:{path}#ref-connector-cluster_{context}[connector cluster]	 - Create, delete, and list Connectors clusters
 
  
+* link:{path}#ref-connector-create_{context}[connector create]	 - Create a Connectors instance
+
+ 
 * link:{path}#ref-connector-delete_{context}[connector delete]	 - Delete a Connectors instance
+
+ 
+* link:{path}#ref-connector-describe_{context}[connector describe]	 - Get the details for the Connectors instance
 
  
 * link:{path}#ref-connector-list_{context}[connector list]	 - List of Connectors instances
@@ -78,6 +87,9 @@ rhoas connector stop
 
  
 * link:{path}#ref-connector-type_{context}[connector type]	 - List and get details of different connector types
+
+ 
+* link:{path}#ref-connector-update_{context}[connector update]	 - Update a Connectors instance
 
  
 * link:{path}#ref-connector-use_{context}[connector use]	 - Set the current Connectors instance

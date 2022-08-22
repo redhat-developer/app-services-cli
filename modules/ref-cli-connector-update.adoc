@@ -1,0 +1,59 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-connector-update_{context}']
+= connector update
+
+[role="_abstract"]
+Update a Connectors instance
+
+[discrete]
+== Synopsis
+
+Update a Connectors instance
+
+Allows you to change the details of a already existing connectors instance.
+By changing its configuration in a text editor. To change which editor use
+edit the EDITOR environment variable. Below are some comman editors you may
+use.
+
+export EDITOR=nvim
+export EDITOR=vim
+export EDITOR="code -w"
+
+
+....
+rhoas connector update [flags]
+....
+
+[discrete]
+== Examples
+
+....
+# Update a Connectors instance
+rhoas connector update --id=my-connector --file=myconnector.json
+
+# Update a Connectors instance from stdin
+cat myconnector.json | rhoas connector update
+
+....
+
+[discrete]
+== Options
+
+      `--kafka-id` _string_::       ID of of the namespace you want the connector to be updated to
+      `--name` _string_::           Override name of the connector (by default name in the connector spec would be used)
+      `--namespace-id` _string_::   ID of of the kafka you want the connector to be updated to
+  `-o`, `--output` _string_::       Specify the output format. Choose from: "json", "yaml", "yml"
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+
