@@ -40,8 +40,6 @@ func NewConnectorsCommand(f *factory.Factory) *cobra.Command {
 		stop.NewStopCommand(f),
 		connector_type.NewTypeCommand(f),
 		list.NewListCommand(f),
-
-		// Hidden for the users and docs at the moment
 		create.NewCreateCommand(f),
 		build.NewBuildCommand(f),
 		delete.NewDeleteCommand(f),

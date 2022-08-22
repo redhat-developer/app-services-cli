@@ -50,12 +50,16 @@ rhoas connector stop
 ### SEE ALSO
 
 * [rhoas](rhoas.md)	 - RHOAS CLI
+* [rhoas connector build](rhoas_connector_build.md)	 - Build a Connectors instance
 * [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
+* [rhoas connector create](rhoas_connector_create.md)	 - Create a Connectors instance
 * [rhoas connector delete](rhoas_connector_delete.md)	 - Delete a Connectors instance
+* [rhoas connector describe](rhoas_connector_describe.md)	 - Get the details for the Connectors instance
 * [rhoas connector list](rhoas_connector_list.md)	 - List of Connectors instances
 * [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
 * [rhoas connector start](rhoas_connector_start.md)	 - Start a Connectors instance
 * [rhoas connector stop](rhoas_connector_stop.md)	 - Stop a Connectors instance
 * [rhoas connector type](rhoas_connector_type.md)	 - List and get details of different connector types
+* [rhoas connector update](rhoas_connector_update.md)	 - Update a Connectors instance
 * [rhoas connector use](rhoas_connector_use.md)	 - Set the current Connectors instance
 
