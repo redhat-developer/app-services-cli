@@ -48,7 +48,6 @@ Client ID: {{.ClientId}}
 Secret: {{.ClientSecret}}
 '''
 
-
 [connector.cluster.create.info.success]
 one = 'Successfully created the Connectors cluster named "{{.NAME}}" '
 
