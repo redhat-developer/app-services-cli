@@ -216,7 +216,19 @@ func runInteractivePrompt(opts *options, kafkaInstance *kafkamgmtclient.KafkaReq
 			return err
 		}
 	} else {
-		opts.owner = kafkaInstance.GetOwner()
+		ownerPormpt := &survey.Input{
+			Message: opts.localizer.MustLocalize("kafka.update.input.message.selectOwner"),
+		}
+
+		var newOwner string
+
+		err = survey.AskOne(ownerPormpt, &newOwner)
+		if err != nil {
+			return err
+
+		}
+
+		opts.owner = newOwner
 	}
 
 	reauthenticationPrompt := &survey.Select{
