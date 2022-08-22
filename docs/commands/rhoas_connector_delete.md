@@ -19,12 +19,6 @@ rhoas connector delete --id=myconnector
 [connector.delete.flag.id.description]
 one = 'The ID of the Connectors instance to delete'
 
-[connector.delete.info.success]
-one = 'Successfully deleted the Connectors instance'
-
-[connector.delete.confirmDialog.message]
-one = 'Are you sure that you want to delete the Connectors instance with ID "<no value>"?'
-
 ```
 
 ### Options
