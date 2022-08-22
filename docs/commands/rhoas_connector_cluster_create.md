@@ -4,7 +4,7 @@ Create a Connectors cluster
 
 ### Synopsis
 
-Create a Connectors cluster and specify its name. You must be an org adminastrator for this to be successful
+Create a Connectors cluster and specify its name. You must have administrator access to run this command.
 
 ```
 rhoas connector cluster create [flags]

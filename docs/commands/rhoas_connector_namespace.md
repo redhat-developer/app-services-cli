@@ -31,7 +31,7 @@ $ rhoas connector namespace list
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 * [rhoas connector namespace create](rhoas_connector_namespace_create.md)	 - Create a Connectors namespace
 * [rhoas connector namespace list](rhoas_connector_namespace_list.md)	 - Get a list of Connectors namespaces
 * [rhoas connector namespace use](rhoas_connector_namespace_use.md)	 - Set the current namespace in context

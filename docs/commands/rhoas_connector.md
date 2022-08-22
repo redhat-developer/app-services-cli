@@ -1,42 +1,39 @@
 ## rhoas connector
 
-Connectors instance commands
+Connectors commands
 
 ### Synopsis
 
-With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that produce data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
-
-A Connectors instance is an instance of a one of the supported Connectors.
-Use the "connector" command to create, delete, and view a list of Connectors instances.
+With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that retrieve data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
 
 
 ### Examples
 
 ```
    
+# List all connector types
+rhoas connector type list
+
+# Build a Connectors configuration file named "my_aws_lambda_connector.json" that is based on the "aws_lambda_sink_0.1" connector type
+rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_sink_0.1
+
+# Create a Connectors instance by specifying a configuration file
+rhoas connector create --file=myconnector.json
+
+# Update an existing Connectors instance by specifying a configuration file
+rhoas connector update --id=my-connector --file=myconnector.json
+
 # List of Connectors instances
 rhoas connector list
 
-# Create a Connectors instance
-rhoas connector create --file=myconnector.json
-
-# Create a Connectors instance from stdin
-cat myconnector.json | rhoas connector create
-
-# Update a Connectors instance
-rhoas connector update --id=my-connector --file=myconnector.json
-
-# Update a Connectors instance from stdin
-cat myconnector.json | rhoas connector update
-
-# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector delete --id=c9b71ucotd37bufoamkg
-
-# Start the Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector start --id=c9b71ucotd37bufoamkg
+# Start the Connectors instance with ID my-connector
+rhoas connector start --id=my-connector
 
 # Stop the current Connectors instance
 rhoas connector stop
+
+# Delete a Connectors instance with ID my-connector
+rhoas connector delete --id=my-connector
 
 ```
 
@@ -59,7 +56,7 @@ rhoas connector stop
 * [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
 * [rhoas connector start](rhoas_connector_start.md)	 - Start a Connectors instance
 * [rhoas connector stop](rhoas_connector_stop.md)	 - Stop a Connectors instance
-* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of different connector types
+* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of the different connector types
 * [rhoas connector update](rhoas_connector_update.md)	 - Update a Connectors instance
 * [rhoas connector use](rhoas_connector_use.md)	 - Set the current Connectors instance
 

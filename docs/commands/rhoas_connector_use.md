@@ -41,5 +41,5 @@ $ rhoas connector use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 

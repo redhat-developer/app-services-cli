@@ -4,7 +4,7 @@ Delete a Connectors instance
 
 ### Synopsis
 
-Delete a Connectors instance by specifing its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.
+Delete a Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.
 
 ```
 rhoas connector delete [flags]
@@ -13,8 +13,17 @@ rhoas connector delete [flags]
 ### Examples
 
 ```
-# Delete a Connectors instance with ID c9b71ucotd37bufoamkg
-rhoas connector delete --id=c9b71ucotd37bufoamkg
+# Delete a Connectors instance with ID myconnector
+rhoas connector delete --id=myconnector
+
+[connector.delete.flag.id.description]
+one = 'The ID of the Connectors instance to delete'
+
+[connector.delete.info.success]
+one = 'Successfully deleted the Connectors instance'
+
+[connector.delete.confirmDialog.message]
+one = 'Are you sure that you want to delete the Connectors instance with ID "<no value>"?'
 
 ```
 
@@ -36,5 +45,5 @@ rhoas connector delete --id=c9b71ucotd37bufoamkg
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 
