@@ -6,6 +6,7 @@ Create, delete, and list Connectors clusters
 
 A Connectors cluster is an OpenShift Dedicated instance for deploying your Connectors instances. Use the "connector cluster" command to create, delete, and view a list of Connectors clusters.
 
+
 ### Examples
 
 ```

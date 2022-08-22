@@ -4,7 +4,7 @@ Delete a Connectors cluster
 
 ### Synopsis
 
-Delete a Connectors cluster by specifying its cluster ID. Use the "connector cluster list" command to see a list of all Connectors clusters and their ID values.'
+Delete a Connectors cluster by specifying its cluster ID. Use the "connector cluster list" command to see a list of all Connectors clusters and their ID values.
 
 
 ```
