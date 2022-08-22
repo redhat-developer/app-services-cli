@@ -36,7 +36,7 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("connector.update.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.update.cmd.example"),
 		Args:    cobra.NoArgs,
-		Hidden:  true,
+		Hidden:  false,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {

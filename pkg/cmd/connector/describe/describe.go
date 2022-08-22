@@ -30,7 +30,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("connector.describe.cmd.longDescription"),
 		Example: f.Localizer.MustLocalize("connector.describe.cmd.example"),
 		Args:    cobra.NoArgs,
-		Hidden:  true,
+		Hidden:  false,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			validOutputFormats := flagutil.ValidOutputFormats
