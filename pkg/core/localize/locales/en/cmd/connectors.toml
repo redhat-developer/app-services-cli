@@ -14,7 +14,9 @@ rhoas connector cluster addon-parameters
 one = 'Create, delete, and list Connectors clusters'
 
 [connector.cluster.cmd.longDescription]
-one = 'A Connectors cluster is an OpenShift Dedicated instance for deploying your Connectors instances. Use the "connector cluster" command to create, delete, and view a list of Connectors clusters.'
+one = '''
+A Connectors cluster is an OpenShift Dedicated instance for deploying your Connectors instances. Use the "connector cluster" command to create, delete, and view a list of Connectors clusters.
+'''
 
 [connector.cluster.cmd.example]
 one = '''
@@ -40,9 +42,6 @@ one = '''
 rhoas connector cluster create --name=my-connectors-cluster
 '''
 
-[connector.cluster.create.flag.name.description]
-one = 'Name of the Connectors cluster to create'
-
 [connector.sa.created]
 one = '''
 Service account created.
@@ -50,6 +49,7 @@ Name: {{.Name}}
 Client ID: {{.ClientId}}  
 Secret: {{.ClientSecret}}
 '''
+
 
 [connector.cluster.create.info.success]
 one = 'Successfully created the Connectors cluster named "{{.NAME}}" '
@@ -59,7 +59,8 @@ one = 'Delete a Connectors cluster'
 
 [connector.cluster.delete.cmd.longDescription]
 one = '''
-Delete a Connectors cluster by specifying its cluster ID. To see a list of all Connectors clusters and their ID values, use the "connector cluster list" command.'''
+Delete a Connectors cluster by specifying its cluster ID. Use the "connector cluster list" command to see a list of all Connectors clusters and their ID values.
+'''
 
 [connector.cluster.delete.cmd.example]
 one = '''
@@ -69,6 +70,9 @@ rhoas connector cluster delete --id=c980124otd37bufiemj0
 
 [connector.cluster.delete.id.flag.description]
 one = 'ID of the Connectors cluster to delete'
+
+[connector.cluster.create.flag.name.description]
+one = 'Name of the Connectors cluster to create'
 
 [connector.cluster.delete.info.success]
 one = 'Successfully deleted the Connectors cluster'
@@ -80,7 +84,8 @@ one = 'Are you sure that you want to delete the Connectors cluster with ID "{{.I
 one = 'List Connectors clusters'
 
 [connector.cluster.list.cmd.longDescription]
-one = '''List all Connectors clusters in the OpenShift Dedicated environment. The returned list includes the ID value for each Connectors cluster.
+one = '''
+List all Connectors clusters in the OpenShift Dedicated environment. The returned list includes the ID value for each Connectors cluster.
 '''
 [connector.cluster.list.cmd.example]
 one = '''
