@@ -36,6 +36,6 @@ rhoas connector type describe --type=aws_kinesis_sink_0.1
 ### SEE ALSO
 
 * [rhoas connector](rhoas_connector.md)	 - Connectors commands
-* [rhoas connector type describe](rhoas_connector_type_describe.md)	 - Get details of a connector type
+* [rhoas connector type describe](rhoas_connector_type_describe.md)	 - Get the details of a connector type
 * [rhoas connector type list](rhoas_connector_type_list.md)	 - List connector types
 

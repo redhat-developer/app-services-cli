@@ -1,6 +1,6 @@
 ## rhoas connector cluster list
 
-List Connectors clusters
+List the Connectors clusters
 
 ### Synopsis
 

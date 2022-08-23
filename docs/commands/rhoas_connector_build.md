@@ -7,7 +7,11 @@ Build a Connectors instance
 Build a configuration file by specifying a connector type.
 For a list of available connector types, use the "connector type list" command.
 
-After you build a configuration file, you can create a Connectors instance by using the "connector create" command and providing the name of the configuration file that you built.
+The "connector build" command prompts you to provide values for the connector configuration properties.
+
+After you build a configuration file, you can optionally edit it in a text editor.
+
+You can then create a Connectors instance by using the "connector create" command and providing the name of the configuration file that you built.
 
 
 ```
@@ -32,7 +36,7 @@ rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_si
   -o, --output string        Specify the output format. Choose from: "json", "yaml", "yml"
       --output-file string   The filename of the connector configuration file
       --overwrite            Overwrite the file if it aready exists
-      --type string          The type of the connector in the catalog (the same as the ID value for the connector in the catalog)
+      --type string          The type of the connector in the catalog. This is the same as the ID value for the connector in the catalog.
 ```
 
 ### Options inherited from parent commands
