@@ -3,6 +3,31 @@
 Latest changes for the RHOAS CLI.
 For information on what was included in latest release please refer to our [changelog](https://github.com/redhat-developer/app-services-cli/blob/main/CHANGELOG.md)
 
+## 0.50.0
+
+### Full support for Redhat Openshit Connectors (RHOC)
+While RHOC itegration was added all new commands are now all visable. You can create a new connector by using `rhoas connector build` in conjunction with `rhoas connector create`.
+
+Use the `--type` flag to pick which connector type you want to deploy. You can list and search through all availble connector types use the command with the `--search` flag:
+```bash
+rhoas connector type list
+```
+
+Updating the state of a connector can also be done from the CLI using the command:
+```bash
+rhoas connector update
+```
+
+You can also create a new Connectors namespace using the command:
+```bash
+rhoas connector namespace create
+```
+
+Newly created Connectors instances and Connectors namespaces are set in the current service context. To update your context or to remove services from the context for either a namespace or connector use:
+```bash
+rhoas context unset --services=connector,namespace
+``` 
+
 ## 0.49.0
 
 ### Support for Redhat Openshit Connectors (RHOC)
