@@ -229,7 +229,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		consoleURL:        consoleURL,
 		scopes:            scopes,
 		apiURL:            apiURL,
-		authURL:           authURL,
 		defaultHTTPClient: client,
 		keycloakClient:    keycloak,
 		Token:             &tkn,

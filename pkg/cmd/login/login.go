@@ -38,8 +38,8 @@ var apiGatewayAliases = map[string]string{
 var authURLAliases = map[string]string{
 	"production": build.ProductionAuthURL,
 	"prod":       build.ProductionAuthURL,
-	"staging":    build.StagingAuthURL,
-	"stage":      build.StagingAuthURL,
+	"staging":    build.ProductionAuthURL,
+	"stage":      build.ProductionAuthURL,
 }
 
 type options struct {

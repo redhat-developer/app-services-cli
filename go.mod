@@ -28,7 +28,6 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.5.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0
-	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.8.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/pflag v1.0.5

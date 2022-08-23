@@ -17,8 +17,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
-
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -68,7 +67,7 @@ func (api *KubernetesClusterAPIImpl) ExecuteConnect(connectOpts *v1alpha.Connect
 		localize.NewEntry("Namespace", color.Info(currentNamespace)),
 		localize.NewEntry("ServiceAccountSecretName", color.Info(constants.ServiceAccountSecretName))))
 
-	if !connectOpts.ForceCreationWithoutAsk {
+	if connectOpts.ForceCreationWithoutAsk == false {
 		var shouldContinue bool
 		confirm := &survey.Confirm{
 			Message: cliOpts.Localizer.MustLocalize("cluster.kubernetes.input.confirm.message"),
@@ -209,7 +208,7 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 		},
 		StringData: map[string]string{
 			"client-id":     serviceAcct.GetClientId(),
-			"client-secret": serviceAcct.GetSecret(),
+			"client-secret": serviceAcct.GetClientSecret(),
 		},
 	}
 
@@ -227,13 +226,13 @@ func (c *KubernetesClusterAPIImpl) createServiceAccountSecretIfNeeded(namespace 
 }
 
 // createServiceAccount creates a service account
-func (c *KubernetesClusterAPIImpl) createServiceAccount(ctx context.Context, cliOpts *v1alpha.CommandEnvironment) (*svcacctmgmtclient.ServiceAccountData, error) {
+func (c *KubernetesClusterAPIImpl) createServiceAccount(ctx context.Context, cliOpts *v1alpha.CommandEnvironment) (*kafkamgmtclient.ServiceAccount, error) {
 	t := time.Now()
 
 	api := cliOpts.Connection.API()
-	serviceAcct := &svcacctmgmtclient.ServiceAccountCreateRequestData{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
+	serviceAcct := &kafkamgmtclient.ServiceAccountRequest{Name: fmt.Sprintf("rhoascli-%v", t.Unix())}
 	req := api.ServiceAccountMgmt().CreateServiceAccount(ctx)
-	req = req.ServiceAccountCreateRequestData(*serviceAcct)
+	req = req.ServiceAccountRequest(*serviceAcct)
 	serviceAcctRes, httpRes, err := req.Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
