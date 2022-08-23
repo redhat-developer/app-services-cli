@@ -71,7 +71,7 @@ rhoas connector cluster delete --id=c980124otd37bufiemj0
 '''
 
 [connector.cluster.delete.id.flag.description]
-one = 'ID of the Connectors cluster to delete'
+one = 'The ID of the Connectors cluster to delete'
 
 [connector.cluster.delete.info.success]
 one = 'Successfully deleted the Connectors cluster'
@@ -80,7 +80,7 @@ one = 'Successfully deleted the Connectors cluster'
 one = 'Are you sure that you want to delete the Connectors cluster with ID "{{.ID}}"?'
 
 [connector.cluster.list.cmd.shortDescription]
-one = 'List Connectors clusters'
+one = 'List the Connectors clusters'
 
 [connector.cluster.list.cmd.longDescription]
 one = '''List all Connectors clusters in the OpenShift Dedicated environment. The returned list includes the ID value for each Connectors cluster.
@@ -112,6 +112,18 @@ one = 'Connectors commands'
 [connector.cmd.longDescription]
 one = '''
 With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that retrieve data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
+
+To get started:
+1. Decide which type of connector you want to create.
+   Use the "rhoas connector type list" command to see a list of connector types
+2. Build a configuration file based on one of the connector types.
+   Use the "rhoas connector build" command to build a configuration file.
+3. Optionally, edit the configuration file.
+   Use a text editor of your choice to edit the configuration file.
+4. Create a Connectors instance by specfiying the configuration file.
+   Use the "rhoas connector create" command to create a Connectors instance.
+5. Start the Connectors instance by using the "rhoas connector start" command.
+6. Stop the Connectors instance by using the "rhoas connector stop" command.
 '''
 
 [connector.cmd.example]
@@ -176,7 +188,7 @@ one = 'List connector types'
 [connector.type.list.cmd.longDescription]
 description = "Long description of connector type list command"
 one = '''
-List the types of connectors that you are available in the Connectors catalog.'
+List the types of connectors that are available in the Connectors catalog.'
 
 Use filter options, such as --limit, --page, and --search
 '''
@@ -187,7 +199,7 @@ one = '''
 # List all connector types
 rhoas connector type list
 
-# List connector types with a limit of 10 from the second page
+# List connector types with a limit of 10 connector types and 2 pages
 rhoas connector type list --limit=10 --page=2
 
 # List all connector types that start with "Amazon"
@@ -198,41 +210,41 @@ rhoas connector type list --search=%Amazon%
 '''
 
 [connector.type.list.flag.page.description]
-one = 'Page of the list based on limit'
+one = 'Page of the list based on the limit value'
 
 [connector.type.list.flag.search.description]
 one = 'Search query for name of connector type'
 
 [connector.type.list.flag.limit.description]
-one = 'The max number of connectors to return in the page'
+one = 'The maximum number of connector types to return in a page'
 
 [connector.type.describe.info.success]
-one = 'The Connectors type details were returned successfully'
+one = 'The connector type details were returned successfully'
 
 [connector.type.error.notFound]
-one = 'The connector type with id "{{.Id}}" does not exist'
+one = 'The connector type with ID "{{.Id}}" does not exist'
 
 [connector.type.error.noType]
-one = 'No type id was passed to command'
+one = 'No type ID was passed to the command'
 
 [connector.type.create.error.other]
-one = 'error returned by api when creating connector instance: {{.Error}}'
+one = 'error returned by the API when creating a Connectors instance: {{.Error}}'
 
 [connector.type.describe.flag.id]
-one = 'The type id of the connector you want to get details about'
+one = 'The ID of the connector type that you want to get details about'
 
 [connector.type.describe.cmd.shortDescription]
-one = 'Get details of a connector type'
+one = 'Get the details of a connector type'
 
 [connector.type.describe.cmd.longDescription]
-one = 'Get full list of details of a connector type using its type id'
+one = 'Get the full list of details of a connector type by using its type ID'
 
 [connector.type.describe.cmd.example]
 one = '''
-# Describe connector type with id of slack_source_0.1
+# Describe connector type with ID of "slack_source_0.1"
 rhoas connector type describe --type=slack_source_0.1 
 
-# Describe connector type with id of slack_source_0.1 and give output as yaml
+# Describe the connector type with ID of "slack_source_0.1" and use YAML for the output format
 rhoas connector type describe --type=slack_source_0.1 -o yaml
 '''
 
@@ -244,7 +256,11 @@ one = '''
 Build a configuration file by specifying a connector type.
 For a list of available connector types, use the "connector type list" command.
 
-After you build a configuration file, you can create a Connectors instance by using the "connector create" command and providing the name of the configuration file that you built.
+The "connector build" command prompts you to provide values for the connector configuration properties.
+
+After you build a configuration file, you can optionally edit it in a text editor.
+
+You can then create a Connectors instance by using the "connector create" command and providing the name of the configuration file that you built.
 '''
 
 [connector.build.cmd.example]
@@ -266,7 +282,12 @@ Create a Connectors instance.
 A Connectors instance is an instance of a one of the supported Connectors.
 Use the "connector" command to create, delete, and view a list of Connectors instances.
 
-Before you create a Connectors instance, you must use the "connector build" command to create a configuration file for the type of connector that you want to create. 
+Before you create a Connectors instance:
+- Create a Kakfa instance. Use the "rhoas kafka create" command.
+- Create a Kakfa topic. Use the "rhoas kafka topic create" command.
+- Create a service account (you need the service account ID and secret). Use the "rhoas service-account create" command.
+- Create a Connectors namespace. Use the "rhoas connector namespace create" command.
+- Create a configuration file for the type of connector that you want to create. Use the "rhoas connector build" command. 
 '''
 
 [connector.create.cmd.example]
@@ -329,6 +350,8 @@ You can change the details of an existing Connectors instance by changing its co
 export EDITOR=nvim
 export EDITOR=vim
 export EDITOR="code -w"
+
+After you edit the configuration file, use the "connector update" command to update an existing Connectors instance by specifying the configuration file.
 '''
 
 [connector.update.cmd.example]
@@ -377,13 +400,15 @@ one = 'Overwrite the file if it aready exists'
 one = 'Creating a Connector configuraton file'
 
 [connector.build.type.flag.description]
-one = 'The type of the connector in the catalog (the same as the ID value for the connector in the catalog)'
+one = 'The type of the connector in the catalog - this is the same as the ID value for the connector in the catalog'
 
 [connector.build.info.success]
 one = '''
 Connector configuration file successfully created.
 
-You can edit the configuration in your text editor.
+Optionally, you can edit the configuration in your text editor.
+
+Note that you do not need to specify values for the service account or the namespace in the configuration file. You can specify those values when you create a Connectors instance. 
 
 To create a Connectors instance, use the "rhoas connector create --file={{.PATH}}" command.
 '''
@@ -448,7 +473,8 @@ rhoas connector list
 one = 'Connectors namespace commands'
 
 [connector.namespace.cmd.longDescription]
-one = '''Commands to manage namespaces for Connectors. A Connectors namespace is the logical hosting location for deploying your Connectors instances on a Connectors cluster.
+one = '''
+Commands to manage namespaces for Connectors. A Connectors namespace is the logical hosting location for deploying your Connectors instances on a Connectors cluster.
 
 For your own OpenShift Dedicated environment, a Connectors namespace does not automatically expire. You use the information about your Connectors namespace to configure the OpenShift Connectors add-on so that you can use Connectors.
 
@@ -548,7 +574,7 @@ description = 'Info message when no Connectors namespace instances were found wh
 one = 'No namespaces were found to select from, try creating one'
 
 [connector.common.input.instanceName.message]
-one = 'Set the current Connectors instance:'
+one = 'Set the Connectors namespace:'
 
 [connector.use.cmd.shortDescription]
 description = "Short description for command"

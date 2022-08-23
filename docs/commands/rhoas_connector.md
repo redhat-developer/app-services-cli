@@ -6,6 +6,18 @@ Connectors commands
 
 With Red Hat OpenShift Connectors, you can create and configure connections between Red Hat OpenShift Streams for Apache Kafka and third-party systems. You can configure Connectors that retrieve data (data source Connectors) and Connectors that specify where to send data (data sink Connectors).
 
+To get started:
+1. Decide which type of connector you want to create.
+   Use the "rhoas connector type list" command to see a list of connector types
+2. Build a configuration file based on one of the connector types.
+   Use the "rhoas connector build" command to build a configuration file.
+3. Optionally, edit the configuration file.
+   Use a text editor of your choice to edit the configuration file.
+4. Create a Connectors instance by specfiying the configuration file.
+   Use the "rhoas connector create" command to create a Connectors instance.
+5. Start the Connectors instance by using the "rhoas connector start" command.
+6. Stop the Connectors instance by using the "rhoas connector stop" command.
+
 
 ### Examples
 

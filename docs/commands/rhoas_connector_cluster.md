@@ -34,5 +34,5 @@ rhoas connector cluster list
 * [rhoas connector cluster addon-parameters](rhoas_connector_cluster_addon-parameters.md)	 - Get Connectors add-on parameters
 * [rhoas connector cluster create](rhoas_connector_cluster_create.md)	 - Create a Connectors cluster
 * [rhoas connector cluster delete](rhoas_connector_cluster_delete.md)	 - Delete a Connectors cluster
-* [rhoas connector cluster list](rhoas_connector_cluster_list.md)	 - List Connectors clusters
+* [rhoas connector cluster list](rhoas_connector_cluster_list.md)	 - List the Connectors clusters
 

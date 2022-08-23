@@ -1,10 +1,10 @@
 ## rhoas connector type describe
 
-Get details of a connector type
+Get the details of a connector type
 
 ### Synopsis
 
-Get full list of details of a connector type using its type id
+Get the full list of details of a connector type by using its type ID
 
 ```
 rhoas connector type describe [flags]
@@ -13,10 +13,10 @@ rhoas connector type describe [flags]
 ### Examples
 
 ```
-# Describe connector type with id of slack_source_0.1
+# Describe connector type with ID of "slack_source_0.1"
 rhoas connector type describe --type=slack_source_0.1 
 
-# Describe connector type with id of slack_source_0.1 and give output as yaml
+# Describe the connector type with ID of "slack_source_0.1" and use YAML for the output format
 rhoas connector type describe --type=slack_source_0.1 -o yaml
 
 ```
@@ -25,7 +25,7 @@ rhoas connector type describe --type=slack_source_0.1 -o yaml
 
 ```
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
-      --type string     The type id of the connector you want to get details about
+      --type string     The ID of the connector type that you want to get details about
 ```
 
 ### Options inherited from parent commands

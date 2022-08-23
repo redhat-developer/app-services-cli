@@ -12,6 +12,8 @@ export EDITOR=nvim
 export EDITOR=vim
 export EDITOR="code -w"
 
+After you edit the configuration file, use the "connector update" command to update an existing Connectors instance by specifying the configuration file.
+
 
 ```
 rhoas connector update [flags]

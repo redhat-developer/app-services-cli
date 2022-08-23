@@ -9,7 +9,12 @@ Create a Connectors instance.
 A Connectors instance is an instance of a one of the supported Connectors.
 Use the "connector" command to create, delete, and view a list of Connectors instances.
 
-Before you create a Connectors instance, you must use the "connector build" command to create a configuration file for the type of connector that you want to create. 
+Before you create a Connectors instance:
+- Create a Kakfa instance. Use the "rhoas kafka create" command.
+- Create a Kakfa topic. Use the "rhoas kafka topic create" command.
+- Create a service account (you need the service account ID and secret). Use the "rhoas service-account create" command.
+- Create a Connectors namespace. Use the "rhoas connector namespace create" command.
+- Create a configuration file for the type of connector that you want to create. Use the "rhoas connector build" command. 
 
 
 ```
