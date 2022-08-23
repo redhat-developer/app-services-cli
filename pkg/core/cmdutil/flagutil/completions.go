@@ -69,10 +69,12 @@ func RegisterServiceAccountCompletionFunc(cmd *cobra.Command, f *factory.Factory
 			return cachedServiceAccounts, directive
 		}
 
-		serviceAccounts, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(cmd.Context()).Execute()
-		if err != nil || len(serviceAccounts) == 0 {
+		serviceAccountResults, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(cmd.Context()).Execute()
+		if err != nil || len(serviceAccountResults.GetItems()) == 0 {
 			return emptyList, directive
 		}
+
+		serviceAccounts := serviceAccountResults.GetItems()
 
 		for _, serviceAcct := range serviceAccounts {
 			cachedServiceAccounts = append(cachedServiceAccounts, serviceAcct.GetClientId())

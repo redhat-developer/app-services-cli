@@ -17,7 +17,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -107,19 +107,16 @@ func runResetCredentials(opts *options) (err error) {
 
 	api := conn.API()
 
-	if opts.id != "" {
-		_, httpRes, newErr := api.ServiceAccountMgmt().GetServiceAccount(opts.Context, opts.id).Execute()
-		if httpRes != nil {
-			defer httpRes.Body.Close()
-		}
-		if newErr != nil {
-			return newErr
-		}
+	_, httpRes, err := api.ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
+	if httpRes != nil {
+		defer httpRes.Body.Close()
+	}
 
+	if err != nil {
+		return err
 	}
 
 	if opts.interactive {
-
 		err = runInteractivePrompt(opts)
 		if err != nil {
 			return err
@@ -159,10 +156,12 @@ func runResetCredentials(opts *options) (err error) {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("ID", updatedServiceAccount.GetId())))
 
+	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
+
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
-		ClientSecret: updatedServiceAccount.GetSecret(),
-		TokenURL:     conn.API().GetConfig().AuthURL.String() + "/protocol/openid-connect/token",
+		ClientSecret: updatedServiceAccount.GetClientSecret(),
+		TokenURL:     providerUrls.GetTokenUrl(),
 	}
 
 	// save the credentials to a file
@@ -179,7 +178,7 @@ func runResetCredentials(opts *options) (err error) {
 	return nil
 }
 
-func resetCredentials(opts *options) (*svcacctmgmtclient.ServiceAccountData, error) {
+func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
 	conn, err := opts.Connection()
 	if err != nil {
 		return nil, err
@@ -190,7 +189,7 @@ func resetCredentials(opts *options) (*svcacctmgmtclient.ServiceAccountData, err
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("ID", opts.id)))
 
-	serviceacct, httpRes, err := api.ServiceAccountMgmt().ResetServiceAccountSecret(opts.Context, opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccountMgmt().ResetServiceAccountCreds(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}

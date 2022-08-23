@@ -20,14 +20,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
-
 	"gopkg.in/AlecAivazis/survey.v1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 
@@ -138,17 +137,17 @@ func runCreate(opts *options) error {
 	return nil
 }
 
-func createServiceAccount(opts *factory.Factory, shortDescription string) (*svcacctmgmtclient.ServiceAccountData, error) {
+func createServiceAccount(opts *factory.Factory, shortDescription string) (*kafkamgmtclient.ServiceAccount, error) {
 	conn, err := opts.Connection()
 	if err != nil {
 		return nil, err
 	}
-	serviceAccountPayload := svcacctmgmtclient.ServiceAccountCreateRequestData{Name: shortDescription}
+	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: shortDescription}
 
 	serviceacct, httpRes, err := conn.API().
 		ServiceAccountMgmt().
 		CreateServiceAccount(opts.Context).
-		ServiceAccountCreateRequestData(serviceAccountPayload).
+		ServiceAccountRequest(serviceAccountPayload).
 		Execute()
 
 	if httpRes != nil {
@@ -159,7 +158,7 @@ func createServiceAccount(opts *factory.Factory, shortDescription string) (*svca
 		return nil, err
 	}
 	opts.Logger.Info(opts.Localizer.MustLocalize("connector.sa.created",
-		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.Secret), localize.NewEntry("Name", shortDescription)))
+		localize.NewEntry("ClientId", serviceacct.ClientId), localize.NewEntry("ClientSecret", serviceacct.ClientSecret), localize.NewEntry("Name", shortDescription)))
 	return &serviceacct, nil
 }
 
@@ -184,7 +183,7 @@ func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, 
 		if err1 != nil {
 			return err1
 		}
-		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetSecret())
+		connector.ServiceAccount = *connectormgmtclient.NewServiceAccount(serviceAccount.GetClientId(), serviceAccount.GetClientSecret())
 	}
 	return nil
 }

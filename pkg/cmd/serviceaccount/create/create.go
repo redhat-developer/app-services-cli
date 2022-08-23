@@ -18,7 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -127,12 +127,17 @@ func runCreate(opts *options) error {
 	spinner.SetSuffix(opts.localizer.MustLocalize("serviceAccount.create.log.info.creating"))
 	spinner.Start()
 	// create the service account
-	serviceAccountPayload := svcacctmgmtclient.ServiceAccountCreateRequestData{Name: opts.shortDescription}
+	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: opts.shortDescription}
+
+	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
+	if err != nil {
+		return err
+	}
 
 	serviceacct, httpRes, err := conn.API().
 		ServiceAccountMgmt().
 		CreateServiceAccount(opts.Context).
-		ServiceAccountCreateRequestData(serviceAccountPayload).
+		ServiceAccountRequest(serviceAccountPayload).
 		Execute()
 	spinner.Stop()
 
@@ -148,8 +153,8 @@ func runCreate(opts *options) error {
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
-		ClientSecret: serviceacct.GetSecret(),
-		TokenURL:     conn.API().GetConfig().AuthURL.String() + "/protocol/openid-connect/token",
+		ClientSecret: serviceacct.GetClientSecret(),
+		TokenURL:     providerUrls.GetTokenUrl(),
 	}
 
 	// save the credentials to a file
