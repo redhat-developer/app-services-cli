@@ -13,7 +13,7 @@ rhoas connector describe [flags]
 ### Examples
 
 ```
-# Get the Connectors instance details
+#Get the Connectors instance details
 rhoas connector describe --id=c980124otd37bufiemj0
 
 ```
@@ -34,5 +34,5 @@ rhoas connector describe --id=c980124otd37bufiemj0
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 

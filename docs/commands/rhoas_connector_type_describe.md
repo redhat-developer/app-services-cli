@@ -13,10 +13,10 @@ rhoas connector type describe [flags]
 ### Examples
 
 ```
-# Desribe connector type with id of slack_source_0.1
+# Describe connector type with id of slack_source_0.1
 rhoas connector type describe --type=slack_source_0.1 
 
-# Desribe connector type with id of slack_source_0.1 and give output as yaml
+# Describe connector type with id of slack_source_0.1 and give output as yaml
 rhoas connector type describe --type=slack_source_0.1 -o yaml
 
 ```
@@ -37,5 +37,5 @@ rhoas connector type describe --type=slack_source_0.1 -o yaml
 
 ### SEE ALSO
 
-* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of different connector types
+* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of the different connector types
 

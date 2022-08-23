@@ -6,6 +6,7 @@ Create, delete, and list Connectors clusters
 
 A Connectors cluster is an OpenShift Dedicated instance for deploying your Connectors instances. Use the "connector cluster" command to create, delete, and view a list of Connectors clusters.
 
+
 ### Examples
 
 ```
@@ -29,7 +30,7 @@ rhoas connector cluster list
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 * [rhoas connector cluster addon-parameters](rhoas_connector_cluster_addon-parameters.md)	 - Get Connectors add-on parameters
 * [rhoas connector cluster create](rhoas_connector_cluster_create.md)	 - Create a Connectors cluster
 * [rhoas connector cluster delete](rhoas_connector_cluster_delete.md)	 - Delete a Connectors cluster

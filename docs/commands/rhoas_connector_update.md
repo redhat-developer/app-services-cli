@@ -4,12 +4,9 @@ Update a Connectors instance
 
 ### Synopsis
 
-Update a Connectors instance
+Update a Connectors instance.
 
-Allows you to change the details of a already existing connectors instance.
-By changing its configuration in a text editor. To change which editor use
-edit the EDITOR environment variable. Below are some comman editors you may
-use.
+You can change the details of an existing Connectors instance by changing its configuration in a text editor. To specify an editor, use the EDITOR environment variable before you run the "rhoas connector update" command. For example:
 
 export EDITOR=nvim
 export EDITOR=vim
@@ -34,9 +31,9 @@ cat myconnector.json | rhoas connector update
 ### Options
 
 ```
-      --kafka-id string       ID of of the namespace you want the connector to be updated to
-      --name string           Override name of the connector (by default name in the connector spec would be used)
-      --namespace-id string   ID of of the kafka you want the connector to be updated to
+      --kafka-id string       ID of the namespace in which you want to deploy the Connectors instance
+      --name string           Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)
+      --namespace-id string   ID of of the Kafka instance that you want the Connectors instance to use
   -o, --output string         Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
@@ -49,5 +46,5 @@ cat myconnector.json | rhoas connector update
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 

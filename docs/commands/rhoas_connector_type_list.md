@@ -4,7 +4,10 @@ List connector types
 
 ### Synopsis
 
-List connector types available from the catalog, use filter options such as --limit, --page and --search
+List the types of connectors that you are available in the Connectors catalog.'
+
+Use filter options, such as --limit, --page, and --search
+
 
 ```
 rhoas connector type list [flags]
@@ -19,12 +22,11 @@ rhoas connector type list
 # List connector types with a limit of 10 from the second page
 rhoas connector type list --limit=10 --page=2
 
-# List all connector types that start with 'Amazon'
+# List all connector types that start with "Amazon"
 rhoas connector type list --search=Amazon%
 
-# List all connector types that contain the word 'Amazon'
+# List all connector types that contain the word "Amazon"
 rhoas connector type list --search=%Amazon%
-
 
 ```
 
@@ -46,5 +48,5 @@ rhoas connector type list --search=%Amazon%
 
 ### SEE ALSO
 
-* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of different connector types
+* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of the different connector types
 

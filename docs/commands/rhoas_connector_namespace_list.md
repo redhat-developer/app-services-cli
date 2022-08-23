@@ -4,7 +4,7 @@ Get a list of Connectors namespaces
 
 ### Synopsis
 
-Get a list of Connectors namespaces for the Connectors cluster. The "connector namespace list" returns details about the namespaces, including their ID values.
+Get a list of Connectors namespaces for the Connectors cluster. The "connector namespace list" command returns details about the namespaces including their ID values.
 
 
 ```

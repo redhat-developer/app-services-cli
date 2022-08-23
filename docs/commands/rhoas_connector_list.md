@@ -36,5 +36,5 @@ rhoas connector list
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 

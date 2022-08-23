@@ -37,5 +37,5 @@ rhoas connector start --id=IJD76DUH675234
 
 ### SEE ALSO
 
-* [rhoas connector](rhoas_connector.md)	 - Connectors instance commands
+* [rhoas connector](rhoas_connector.md)	 - Connectors commands
 
