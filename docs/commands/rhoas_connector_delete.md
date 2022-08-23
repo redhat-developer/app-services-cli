@@ -16,9 +16,6 @@ rhoas connector delete [flags]
 # Delete a Connectors instance with ID myconnector
 rhoas connector delete --id=myconnector
 
-[connector.delete.flag.id.description]
-one = 'The ID of the Connectors instance to delete'
-
 ```
 
 ### Options

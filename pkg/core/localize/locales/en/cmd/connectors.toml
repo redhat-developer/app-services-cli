@@ -350,7 +350,7 @@ one = 'Location of the Connectors JSON file that describes the connector'
 one = 'ID of the Kafka instance (the default is the Kafka instance for the current context)'
 
 [connector.flag.namespaceID.description]
-one = 'ID of of the namespace in which you want to deploy the Connectors instance'
+one = 'ID of the namespace in which you want to deploy the Connectors instance'
 
 [connector.flag.kafkaID.description]
 one = 'ID of of the Kafka instance that you want the Connectors instance to use'
@@ -359,7 +359,7 @@ one = 'ID of of the Kafka instance that you want the Connectors instance to use'
 one = 'ID of the namespace for the Connectors instance (the default is the namespace for the current context)'
 
 [connector.flag.name.description]
-one = 'Override the name of the Connectors instance (the default name is the name specified in the connector configuration file.)'
+one = 'Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)'
 
 [connector.flag.sa.description]
 one = 'If set, the connector is created with the specified service account'
@@ -368,13 +368,13 @@ one = 'If set, the connector is created with the specified service account'
 one = 'The filename of the connector configuration file'
 
 [connector.build.name.flag.description]
-one = 'The name of the connector type that was used to build a configuration file.'
+one = 'The name of the connector type that was used to build a configuration file'
 
 [connector.build.overwrite.flag.description]
-one = 'Overwrite the file if it aready exists.'
+one = 'Overwrite the file if it aready exists'
 
 [connector.build.info.msg]
-one = 'Creating a Connector configuraton file.'
+one = 'Creating a Connector configuraton file'
 
 [connector.build.type.flag.description]
 one = 'The type of the connector in the catalog (the same as the ID value for the connector in the catalog)'
@@ -398,10 +398,10 @@ one = 'Delete a Connectors instance by specifying its ID. Use the "connector lis
 one = '''
 # Delete a Connectors instance with ID myconnector
 rhoas connector delete --id=myconnector
+'''
 
 [connector.delete.flag.id.description]
 one = 'The ID of the Connectors instance to delete'
-'''
 
 [connector.delete.info.success]
 one = 'Successfully deleted the Connectors instance'
@@ -594,28 +594,28 @@ one = 'Unexpected internal server error occured'
 one = 'supplied file is invalid. please make sure that file exist and it contains connector specification'
 
 [connector.common.error.FileAlreadyExists]
-one = 'provided {{.Name}} file already exist. Please specify --overwrite flag to overwrite the file'
+one = 'provided {{.Name}} file already exists. Specify the --overwrite flag if you want to overwrite the existing file'
 
 [connector.interactive.error]
-one = 'Connector specification missing required value: {{.Field}}'
+one = 'Connector specification missing a required value: {{.Field}}'
 
 [connector.type.update.error.other]
-one = 'Error while updating connector {{.Error}}'
+one = 'Error while updating Connectors instance {{.Error}}'
 
 [connector.update.error.authTokenInvalid]
 one = 'The auth token used is invalid when updating connector'
 
 [connector.update.error.noMatchingResource]
-one = 'There was no matching resource to the one requested when updating connector'
+one = 'There was no matching resource to the one requested when updating the Connectors instance'
 
 [connector.update.error.doesNotExistAnymore]
 one = 'The requested resource does not exist anymore'
 
 [connector.update.error.unexpectedError]
-one = 'Unexpected error occured when updating connector'
+one = 'Unexpected error occured when updating the Connectors instance'
 
 [connector.update.info.editor.open]
-one = 'Opening a text editor to edit connector details, close the editor to continue'
+one = 'Opening a text editor to edit the Connectors instance details, close the editor to continue'
 
 [connector.common.page.prompt]
 one = 'Page'

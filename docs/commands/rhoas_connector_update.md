@@ -31,8 +31,8 @@ cat myconnector.json | rhoas connector update
 ### Options
 
 ```
-      --kafka-id string       ID of of the namespace in which you want to deploy the Connectors instance
-      --name string           Override the name of the Connectors instance (the default name is the name specified in the connector configuration file.)
+      --kafka-id string       ID of the namespace in which you want to deploy the Connectors instance
+      --name string           Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)
       --namespace-id string   ID of of the Kafka instance that you want the Connectors instance to use
   -o, --output string         Specify the output format. Choose from: "json", "yaml", "yml"
 ```

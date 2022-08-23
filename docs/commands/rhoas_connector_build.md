@@ -28,10 +28,10 @@ rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_si
 ### Options
 
 ```
-      --name string          The name of the connector type that was used to build a configuration file.
+      --name string          The name of the connector type that was used to build a configuration file
   -o, --output string        Specify the output format. Choose from: "json", "yaml", "yml"
       --output-file string   The filename of the connector configuration file
-      --overwrite            Overwrite the file if it aready exists.
+      --overwrite            Overwrite the file if it aready exists
       --type string          The type of the connector in the catalog (the same as the ID value for the connector in the catalog)
 ```
 
