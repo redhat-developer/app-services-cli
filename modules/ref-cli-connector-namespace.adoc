@@ -38,7 +38,7 @@ $ rhoas connector namespace list
 
 
  
-* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors commands
 
  
 * link:{path}#ref-connector-namespace-create_{context}[connector-namespace create]	 - Create a Connectors namespace

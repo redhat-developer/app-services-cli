@@ -8,7 +8,13 @@ Create a Connectors instance
 [discrete]
 == Synopsis
 
-Create a Connectors instance
+Create a Connectors instance. 
+
+A Connectors instance is an instance of a one of the supported Connectors.
+Use the "connector" command to create, delete, and view a list of Connectors instances.
+
+Before you create a Connectors instance, you must use the "connector build" command to create a configuration file for the type of connector that you want to create. 
+
 
 ....
 rhoas connector create [flags]
@@ -18,7 +24,7 @@ rhoas connector create [flags]
 == Examples
 
 ....
-# Create a Connectors instance
+# Create a Connectors instance by specifying a configuration file
 rhoas connector create --file=myconnector.json
 
 ....
@@ -26,11 +32,11 @@ rhoas connector create --file=myconnector.json
 [discrete]
 == Options
 
-      `--create-service-account`::   If set, the connector will be created with the newly specified service account
+      `--create-service-account`::   If set, the connector is created with the specified service account
   `-f`, `--file` _string_::          Location of the Connectors JSON file that describes the connector
-      `--kafka` _string_::           Id of the kafka instance (by default kafka instance from context would be used)
-      `--name` _string_::            Override name of the connector (by default name in the connector spec would be used)
-      `--namespace` _string_::       Id of the namespace for the connector (by default namespace from context would be used)
+      `--kafka` _string_::           ID of the Kafka instance (the default is the Kafka instance for the current context)
+      `--name` _string_::            Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)
+      `--namespace` _string_::       ID of the namespace for the Connectors instance (the default is the namespace for the current context)
   `-o`, `--output` _string_::        Specify the output format. Choose from: "json", "yaml", "yml"
 
 [discrete]
@@ -44,5 +50,5 @@ rhoas connector create --file=myconnector.json
 
 
  
-* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors commands
 

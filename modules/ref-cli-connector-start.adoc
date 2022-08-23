@@ -43,5 +43,5 @@ rhoas connector start --id=IJD76DUH675234
 
 
  
-* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors instance commands
+* link:{path}#ref-rhoas-connector_{context}[rhoas connector]	 - Connectors commands
 
