@@ -33,6 +33,7 @@ type Connection struct {
 	scopes            []string
 	keycloakClient    gocloak.GoCloak
 	apiURL            *url.URL
+	authURL           *url.URL
 	consoleURL        *url.URL
 	defaultRealm      string
 	logger            logging.Logger
@@ -110,6 +111,7 @@ func (c *Connection) API() api.API {
 		UserAgent:   build.DefaultUserAgentPrefix + build.Version,
 		AccessToken: c.Token.AccessToken,
 		ApiURL:      c.apiURL,
+		AuthURL:     c.authURL,
 		ConsoleURL:  c.consoleURL,
 		Logger:      c.logger,
 	})

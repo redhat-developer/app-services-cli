@@ -28,6 +28,7 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
 	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0
+	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/pflag v1.0.5
@@ -45,8 +46,6 @@ require (
 	k8s.io/client-go v0.22.4
 	k8s.io/utils v0.0.0-20220713171938-56c0de1e6f5e
 )
-
-require github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
 
 require (
 	cloud.google.com/go/compute v1.7.0 // indirect

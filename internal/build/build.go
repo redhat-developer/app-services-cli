@@ -60,6 +60,7 @@ var (
 	DefaultLoginTimeout         = 60 * time.Second
 	OfflineTokenURL             = ConsoleURL + "/openshift/token"
 	ProductionAuthURL           = "https://sso.redhat.com/auth/realms/redhat-external"
+	StagingAuthURL              = "https://sso.stage.redhat.com/auth/realms/redhat-external"
 )
 
 func init() {
