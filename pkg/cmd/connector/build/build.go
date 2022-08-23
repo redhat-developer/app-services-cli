@@ -215,5 +215,5 @@ func onErrorHandler(o *surveyjson.JSONSchemaOptions, ctx surveyjson.SchemaContex
 	ctx.Name = "error_handler"
 	ctx.ParentType = ctx.SchemaType
 	ctx.SchemaType = ctx.SchemaType.OneOf[selectedIndex]
-	return o.Recurse(ctx)
+	return o.RecurseObject(ctx)
 }
