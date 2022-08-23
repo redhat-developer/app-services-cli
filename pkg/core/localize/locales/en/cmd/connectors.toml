@@ -400,7 +400,7 @@ one = 'Overwrite the file if it aready exists'
 one = 'Creating a Connector configuraton file'
 
 [connector.build.type.flag.description]
-one = 'The type of the connector in the catalog. This is the same as the ID value for the connector in the catalog.'
+one = 'The type of the connector in the catalog - this is the same as the ID value for the connector in the catalog'
 
 [connector.build.info.success]
 one = '''
