@@ -5,8 +5,12 @@ For information on what was included in latest release please refer to our [chan
 
 ## 0.50.0
 
-### Full support for Redhat Openshit Connectors (RHOC)
-While RHOC itegration was added all new commands are now all visable. You can create a new connector by using `rhoas connector build` in conjunction with `rhoas connector create`.
+### Support for Red Hat Openshift Connectors (RHOC)
+Our expanded support for RHOC is now visable for you to use. You can create a new connector by using `rhoas connector build` in conjunction with `rhoas connector create`.
+
+`rhoas connector build` can be used to generate a configuration for a connector type.
+
+`rhoas connector create` can be used to create a connectors instance based on the configuration you generated with `rhoas connector build`.
 
 Use the `--type` flag to pick which connector type you want to deploy. You can list and search through all availble connector types use the command with the `--search` flag:
 ```bash
@@ -30,7 +34,7 @@ rhoas context unset --services=connector,namespace
 
 ## 0.49.0
 
-### Support for Redhat Openshit Connectors (RHOC)
+### Support for Red Hat Openshift Connectors (RHOC)
 You are now able to interact with RHOC directly from the CLI. You can create a new connector by using `rhoas connector build` in conjunction with `rhoas connector create`.
 
 Use the `--type` flag to pick which connector type you want to deploy. You can list and search through all availble connector types use the command with the `--search` flag:
