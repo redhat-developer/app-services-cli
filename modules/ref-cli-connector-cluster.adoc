@@ -49,5 +49,5 @@ rhoas connector cluster list
 * link:{path}#ref-connector-cluster-delete_{context}[connector-cluster delete]	 - Delete a Connectors cluster
 
  
-* link:{path}#ref-connector-cluster-list_{context}[connector-cluster list]	 - List Connectors clusters
+* link:{path}#ref-connector-cluster-list_{context}[connector-cluster list]	 - List the Connectors clusters
 

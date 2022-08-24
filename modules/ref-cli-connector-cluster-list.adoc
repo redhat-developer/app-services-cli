@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = connector cluster list
 
 [role="_abstract"]
-List Connectors clusters
+List the Connectors clusters
 
 [discrete]
 == Synopsis

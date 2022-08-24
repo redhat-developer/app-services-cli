@@ -27,7 +27,7 @@ rhoas connector cluster delete --id=c980124otd37bufiemj0
 [discrete]
 == Options
 
-      `--id` _string_::         ID of the Connectors cluster to delete
+      `--id` _string_::         The ID of the Connectors cluster to delete
   `-o`, `--output` _string_::   Specify the output format. Choose from: "json", "yaml", "yml"
   `-y`, `--yes`::               Skip confirmation of this action 
 
