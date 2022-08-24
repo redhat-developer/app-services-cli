@@ -3,10 +3,39 @@
 Latest changes for the RHOAS CLI.
 For information on what was included in latest release please refer to our [changelog](https://github.com/redhat-developer/app-services-cli/blob/main/CHANGELOG.md)
 
+## 0.50.0
+
+### Support for Red Hat OpenShift Connectors
+Our expanded support for Red Hat OpenShift Connectors is now available for you to use. You can create a Connector instance definition file by using `rhoas connector build`. A definition file can be used to create one or more Connector instances using `rhoas connector create`
+
+`rhoas connector build` can be used to create a definition file for a Connector type.
+
+`rhoas connector create` can be used to create a Connector instance based on the configuration you generated with `rhoas connector build`.
+
+Use the `--type` flag to pick which connector type you want to deploy. You can list and search through all available Connector types use the command with the `--search` flag:
+```bash 
+rhoas connector type list --search=Amazon
+```
+
+Updating the state of a Connector instance can also be done from the CLI using the command:
+```bash
+rhoas connector update
+```
+
+You can also create a new namespace using the command:
+```bash
+rhoas connector namespace create
+```
+
+Each created Connector instances and namespaces are set in the active service context. To update your context or to remove services from the context for either a namespace or Connector instance use:
+```bash
+rhoas context unset --services=connector,namespace
+``` 
+
 ## 0.49.0
 
-### Support for Redhat Openshit Connectors (RHOC)
-You are now able to interact with RHOC directly from the CLI. You can create a new connector by using `rhoas connector build` in conjunction with `rhoas connector create`.
+### Support for Red Hat OpenShift Connectors
+You are now able to interact with Red Hat OpenShift Connectors directly from the CLI. You can create a new connector by using `rhoas connector build` in conjunction with `rhoas connector create`.
 
 Use the `--type` flag to pick which connector type you want to deploy. You can list and search through all availble connector types use the command with the `--search` flag:
 ```bash
