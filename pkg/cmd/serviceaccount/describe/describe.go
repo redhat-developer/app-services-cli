@@ -3,12 +3,12 @@ package describe
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/errorutils"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
@@ -74,7 +74,7 @@ func runDescribe(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
 		switch apiErr.GetError() {
 		case "service_account_not_found":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))

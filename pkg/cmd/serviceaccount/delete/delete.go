@@ -3,7 +3,6 @@ package delete
 import (
 	"context"
 
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/errorutils"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -12,6 +11,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -83,7 +84,7 @@ func runDelete(opts *options) (err error) {
 		defer httpRes.Body.Close()
 	}
 
-	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
 		switch apiErr.GetError() {
 		case "service_account_not_found":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
@@ -123,7 +124,7 @@ func deleteServiceAccount(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if apiErr := errorutils.GetAPIError(err); apiErr != nil {
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
 		switch apiErr.GetError() {
 		case "service_account_access_invalid":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete"))
