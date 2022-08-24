@@ -1,4 +1,26 @@
 
+<a name="v0.50.0"></a>
+## [v0.50.0](https://github.com/redhat-developer/app-services-cli/compare/v0.49.0...v0.50.0) (2022-08-24)
+
+### Bug Fixes
+
+* error handler overwrite now works as intended ([#1735](https://github.com/redhat-developer/app-services-cli/issues/1735))
+* revert service accounts integration ([#1732](https://github.com/redhat-developer/app-services-cli/issues/1732))
+* edits for connectors cli help text ([#1730](https://github.com/redhat-developer/app-services-cli/issues/1730))
+* can now update kafka when only owner ([#1724](https://github.com/redhat-developer/app-services-cli/issues/1724))
+* namespace name in msg ([#1722](https://github.com/redhat-developer/app-services-cli/issues/1722))
+* remove mas-auth  url ([#1708](https://github.com/redhat-developer/app-services-cli/issues/1708))
+
+### Features
+
+* new connector commands are now not hidden ([#1726](https://github.com/redhat-developer/app-services-cli/issues/1726))
+* added info on pageination in type list ([#1723](https://github.com/redhat-developer/app-services-cli/issues/1723))
+* added error handler check in connector build ([#1720](https://github.com/redhat-developer/app-services-cli/issues/1720))
+* type flag suggestions now based on input ([#1718](https://github.com/redhat-developer/app-services-cli/issues/1718))
+* added info about changing editor in connector update ([#1715](https://github.com/redhat-developer/app-services-cli/issues/1715))
+* connector edit ([#1702](https://github.com/redhat-developer/app-services-cli/issues/1702))
+
+
 <a name="v0.49.0"></a>
 ## [v0.49.0](https://github.com/redhat-developer/app-services-cli/compare/v0.48.0...v0.49.0) (2022-08-08)
 
