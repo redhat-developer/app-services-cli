@@ -1,6 +1,6 @@
 module github.com/redhat-developer/app-services-cli
 
-go 1.18
+go 1.19.0
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.5
@@ -9,7 +9,7 @@ require (
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/briandowns/spinner v1.18.1
+	github.com/briandowns/spinner v1.19.0
 	github.com/coreos/go-oidc/v3 v3.2.0
 	github.com/fatih/color v1.13.0
 	github.com/golang-jwt/jwt/v4 v4.4.2
@@ -17,9 +17,9 @@ require (
 	github.com/jackdelahunt/survey-json-schema v0.12.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
-	github.com/mattn/go-isatty v0.0.14
+	github.com/mattn/go-isatty v0.0.16
 	github.com/nicksnyder/go-i18n/v2 v2.2.0
-	github.com/openconfig/goyang v1.0.0
+	github.com/openconfig/goyang v1.1.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0
@@ -34,7 +34,7 @@ require (
 	github.com/wtrocki/go-github-selfupdate v1.2.4
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92
+	golang.org/x/oauth2 0ebed06d0094
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8
