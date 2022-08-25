@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	ValidOutputFormats = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat}
+	ValidOutputFormats = []string{dump.JSONFormat, dump.YAMLFormat, dump.YMLFormat, dump.EmptyFormat}
 )
 
 type FlagSet struct {
@@ -30,8 +30,16 @@ func NewFlagSet(cmd *cobra.Command, localizer localize.Localizer) *FlagSet {
 }
 
 // AddOutput adds an output flag to the command
-func (fs *FlagSet) AddOutput(output *string) {
+func (fs *FlagSet) AddOutput(output *string, format *string) {
 	flagName := "output"
+
+	properFormat := dump.JSONFormat
+
+	if format == nil {
+		properFormat = *format
+	} else {
+		format = &properFormat
+	}
 
 	fs.StringVarP(
 		output,
