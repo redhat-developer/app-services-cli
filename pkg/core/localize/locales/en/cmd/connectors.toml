@@ -120,7 +120,7 @@ To get started:
    Use the "rhoas connector build" command to build a configuration file.
 3. Optionally, edit the configuration file.
    Use a text editor of your choice to edit the configuration file.
-4. Create a Connectors instance by specfiying the configuration file.
+4. Create a Connectors instance by specifying the configuration file.
    Use the "rhoas connector create" command to create a Connectors instance.
 5. Start the Connectors instance by using the "rhoas connector start" command.
 6. Stop the Connectors instance by using the "rhoas connector stop" command.
