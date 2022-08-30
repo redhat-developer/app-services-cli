@@ -4,7 +4,7 @@ Get Connectors add-on parameters
 
 ### Synopsis
 
-Get a list of the Connectors add-on parameters
+Get a list of the OpenShift Connectors service add-on parameters
 
 ```
 rhoas connector cluster addon-parameters [flags]
@@ -13,7 +13,7 @@ rhoas connector cluster addon-parameters [flags]
 ### Examples
 
 ```
-# Get a list of the Connectors add-on parameters
+# Get a list of the OpenShift Connectors service add-on parameters
 rhoas connector cluster addon-parameters
 
 ```

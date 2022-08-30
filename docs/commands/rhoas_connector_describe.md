@@ -4,7 +4,7 @@ Get the details for the Connectors instance
 
 ### Synopsis
 
-Get the details for the Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.
+Get the details for the Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances, their names, and their ID values.
 
 ```
 rhoas connector describe [flags]

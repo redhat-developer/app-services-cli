@@ -1,6 +1,6 @@
 ## rhoas connector type
 
-List and get details of the different connector types
+View a list of supported connector types
 
 ### Synopsis
 
