@@ -13,7 +13,7 @@ To get started:
    Use the "rhoas connector build" command to build a configuration file.
 3. Optionally, edit the configuration file.
    Use a text editor of your choice to edit the configuration file.
-4. Create a Connectors instance by specfiying the configuration file.
+4. Create a Connectors instance by specifying the configuration file.
    Use the "rhoas connector create" command to create a Connectors instance.
 5. Start the Connectors instance by using the "rhoas connector start" command.
 6. Stop the Connectors instance by using the "rhoas connector stop" command.
@@ -59,7 +59,7 @@ rhoas connector delete --id=my-connector
 ### SEE ALSO
 
 * [rhoas](rhoas.md)	 - RHOAS CLI
-* [rhoas connector build](rhoas_connector_build.md)	 - Build a Connectors instance
+* [rhoas connector build](rhoas_connector_build.md)	 - Build a configuration file based on a connector type
 * [rhoas connector cluster](rhoas_connector_cluster.md)	 - Create, delete, and list Connectors clusters
 * [rhoas connector create](rhoas_connector_create.md)	 - Create a Connectors instance
 * [rhoas connector delete](rhoas_connector_delete.md)	 - Delete a Connectors instance
@@ -68,7 +68,7 @@ rhoas connector delete --id=my-connector
 * [rhoas connector namespace](rhoas_connector_namespace.md)	 - Connectors namespace commands
 * [rhoas connector start](rhoas_connector_start.md)	 - Start a Connectors instance
 * [rhoas connector stop](rhoas_connector_stop.md)	 - Stop a Connectors instance
-* [rhoas connector type](rhoas_connector_type.md)	 - List and get details of the different connector types
+* [rhoas connector type](rhoas_connector_type.md)	 - View a list of supported connector types
 * [rhoas connector update](rhoas_connector_update.md)	 - Update a Connectors instance
 * [rhoas connector use](rhoas_connector_use.md)	 - Set the current Connectors instance
 

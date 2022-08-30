@@ -2,11 +2,11 @@
 one = 'Get Connectors add-on parameters'
 
 [connector.cluster.addonParams.cmd.longDescription]
-one = 'Get a list of the Connectors add-on parameters'
+one = 'Get a list of the OpenShift Connectors service add-on parameters'
 
 [connector.cluster.addonParams.cmd.example]
 one = '''
-# Get a list of the Connectors add-on parameters
+# Get a list of the OpenShift Connectors service add-on parameters
 rhoas connector cluster addon-parameters
 '''
 
@@ -155,7 +155,7 @@ rhoas connector delete --id=my-connector
 
 [connector.type.cmd.shortDescription]
 description = "Short description of connector type command"
-one = 'List and get details of the different connector types'
+one = 'View a list of supported connector types'
 
 [connector.type.cmd.longDescription]
 description = "Long description of connector type command"
@@ -237,7 +237,7 @@ one = 'The ID of the connector type that you want to get details about'
 one = 'Get the details of a connector type'
 
 [connector.type.describe.cmd.longDescription]
-one = 'Get the full list of details of a connector type by using its type ID'
+one = 'Get the full list of details for a connector type by using its type ID'
 
 [connector.type.describe.cmd.example]
 one = '''
@@ -249,11 +249,12 @@ rhoas connector type describe --type=slack_source_0.1 -o yaml
 '''
 
 [connector.build.cmd.shortDescription]
-one = 'Build a Connectors instance'
+one = 'Build a configuration file based on a connector type'
 
 [connector.build.cmd.longDescription]
 one = '''
 Build a configuration file by specifying a connector type.
+
 For a list of available connector types, use the "connector type list" command.
 
 The "connector build" command prompts you to provide values for the connector configuration properties.
@@ -266,11 +267,11 @@ You can then create a Connectors instance by using the "connector create" comman
 [connector.build.cmd.example]
 one = '''
 # Build a Connectors configuration file based on the "aws_lambda_sink_0.1" connector type. The default configuration file name is "connector.json"
-rhoas connector build --type=--type=aws_lambda_sink_0.1
+rhoas connector build --type=aws_lambda_sink_0.1
 
-# Build a Connectors configuration file named "my_aws_lambda_connector.json" that is based on the "aws_lambda_sink_0.1" connector type
-rhoas connector build --name=my_aws_lambda_connector --type=--type=aws_lambda_sink_0.1
-'''
+# Build a Connectors configuration file named "my_aws_lambda_connector.json" that is based on the "aws_lambda_sink_0.1" connector type. Use "my-aws-lamda-sink.json" for the configuration file name.
+rhoas connector build --name=my_aws_lambda_connector --type=aws_lambda_sink_0.1 --output-file=my-aws-lamda-sink.json
+''' 
 
 [connector.create.cmd.shortDescription]
 one = 'Create a Connectors instance'
@@ -279,13 +280,13 @@ one = 'Create a Connectors instance'
 one = '''
 Create a Connectors instance. 
 
-A Connectors instance is an instance of a one of the supported Connectors.
+A Connectors instance is an instance of a one of the supported Connectors types.
 Use the "connector" command to create, delete, and view a list of Connectors instances.
 
 Before you create a Connectors instance:
 - Create a Kakfa instance. Use the "rhoas kafka create" command.
-- Create a Kakfa topic. Use the "rhoas kafka topic create" command.
 - Create a service account (you need the service account ID and secret). Use the "rhoas service-account create" command.
+- Create a Kakfa topic. Use the "rhoas kafka topic create" command.
 - Create a Connectors namespace. Use the "rhoas connector namespace create" command.
 - Create a configuration file for the type of connector that you want to create. Use the "rhoas connector build" command. 
 '''
@@ -323,7 +324,7 @@ one = '''
 rhoas connector stop
 
 # Stop a Connectors instance by specifying its ID
-rhoas connector stop --id=
+rhoas connector stop --id=IJD76DUH675234
 '''
 
 [connector.create.info.success]
@@ -333,10 +334,10 @@ one = 'Successfully created the Connectors instance'
 one = '{{.Field}}:'
 
 [connector.create.interactive.error]
-one = 'Connector specification missing required value: {{.Field}}'
+one = 'The connector configuration file is missing a required value for: {{.Field}}'
 
 [connector.create.start]
-one = 'Creating connector instance based on specified connector spec file'
+one = 'Creating a Connectors instance based on the connector configuration file'
 
 [connector.update.cmd.shortDescription]
 one = 'Update a Connectors instance'
@@ -345,8 +346,9 @@ one = 'Update a Connectors instance'
 one = '''
 Update a Connectors instance.
 
-You can change the details of an existing Connectors instance by changing its configuration in a text editor. To specify an editor, use the EDITOR environment variable before you run the "rhoas connector update" command. For example:
+You can change the details of an existing Connectors instance by editing its configuration file in a text editor. 
 
+Note: To specify an editor, use the EDITOR environment variable before you run the "rhoas connector update" command. For example:
 export EDITOR=nvim
 export EDITOR=vim
 export EDITOR="code -w"
@@ -367,7 +369,7 @@ cat myconnector.json | rhoas connector update
 one = 'Successfully updated the Connectors instance'
 
 [connector.file.flag.description]
-one = 'Location of the Connectors JSON file that describes the connector'
+one = 'The location of the configuration file that defines the Connectors instance'
 
 [connector.flag.kafka.description]
 one = 'ID of the Kafka instance (the default is the Kafka instance for the current context)'
@@ -385,10 +387,10 @@ one = 'ID of the namespace for the Connectors instance (the default is the names
 one = 'Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)'
 
 [connector.flag.sa.description]
-one = 'If set, the connector is created with the specified service account'
+one = 'If set, the Connectors instance is created with the specified service account'
 
 [connector.build.file.flag.description]
-one = 'The filename of the connector configuration file'
+one = 'The file name of the connector configuration file'
 
 [connector.build.name.flag.description]
 one = 'The name of the connector type that was used to build a configuration file'
@@ -397,18 +399,18 @@ one = 'The name of the connector type that was used to build a configuration fil
 one = 'Overwrite the file if it aready exists'
 
 [connector.build.info.msg]
-one = 'Creating a Connector configuraton file'
+one = 'Creating a connector configuraton file'
 
 [connector.build.type.flag.description]
-one = 'The type of the connector in the catalog - this is the same as the ID value for the connector in the catalog'
+one = 'The type of the connector in the catalog - this value is the same as the ID value for the connector in the catalog'
 
 [connector.build.info.success]
 one = '''
-Connector configuration file successfully created.
+The connector configuration file was successfully created.
 
-Optionally, you can edit the configuration in your text editor.
+Optionally, you can edit the configuration file in your text editor.
 
-Note that you do not need to specify values for the service account or the namespace in the configuration file. You can specify those values when you create a Connectors instance. 
+Note that you can leave the service account and the namespace values empty in the configuration file. You specify those values when you create a Connectors instance. 
 
 To create a Connectors instance, use the "rhoas connector create --file={{.PATH}}" command.
 '''
@@ -417,11 +419,11 @@ To create a Connectors instance, use the "rhoas connector create --file={{.PATH}
 one = 'Delete a Connectors instance'
 
 [connector.delete.cmd.longDescription]
-one = 'Delete a Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.'
+one = 'Delete a Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances, their names, and their ID values.'
 
 [connector.delete.cmd.example]
 one = '''
-# Delete a Connectors instance with ID myconnector
+# Delete a Connectors instance with ID "myconnector"
 rhoas connector delete --id=myconnector
 '''
 
@@ -438,7 +440,7 @@ one = 'Are you sure that you want to delete the Connectors instance with ID "{{.
 one = 'Get the details for the Connectors instance'
 
 [connector.describe.cmd.longDescription]
-one = 'Get the details for the Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances and their ID values.'
+one = 'Get the details for the Connectors instance by specifying its ID. Use the "connector list" command to see a list of all Connectors instances, their names, and their ID values.'
 
 [connector.describe.cmd.example]
 one = '''
@@ -460,7 +462,7 @@ one = 'List of Connectors instances'
 
 [connector.list.cmd.longDescription]
 one = '''
-List of Connectors instances. The returned list includes the ID value for each Connectors instance.
+List of Connectors instances. The returned list includes the ID and name for each Connectors instance.
 '''
 
 [connector.list.cmd.example]
@@ -519,10 +521,10 @@ one = 'Create a Connectors namespace'
 [connector.namespace.create.cmd.example]
 one = '''
 # Create a Connectors namespace and name it "my-namespace"
-rhoas connector namespace create --name "my-namespace"
+rhoas connector namespace create --name my-namespace
 
 # Create an evaluation Connectors namespace and name it "my-namespace"
-rhoas connector namespace create --name "my-namespace" --eval
+rhoas connector namespace create --name my-namespace --eval
 '''
 
 [connector.namespace.create.info.success]
@@ -584,7 +586,7 @@ one = "Set the current Connectors instance"
 description = "Long description for command"
 one = '''
 Set a Connectors instance as the current instance. The rhoas CLI uses the 
-current Connectors instance when you run any rhoas connector cluster commands.
+current Connectors instance when you run any "rhoas connector cluster" commands.
 
 You can set a Connectors instance as the current instance by providing its name or ID.
 '''
@@ -601,11 +603,11 @@ $ rhoas connector use --id=1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
 
 [connector.common.error.idNotFound]
 description = "Error message for when a Connectors instance ID is not found"
-one = "Connector instance with ID {{.ID}} not found"
+one = "Connectors instance with ID {{.ID}} not found"
 
 [connector.common.error.nameNotFound]
 description = "Error message for when a Connectors instance name is not found"
-one = "Connector instance with name {{.Name}} not found"
+one = "Connectors instance with name {{.Name}} not found"
 
 [connector.common.error.unauthorized]
 one = 'Auth token provided is invalid'
@@ -617,13 +619,13 @@ one = 'Failed to parse search query'
 one = 'Unexpected internal server error occured'
 
 [connector.message.reading.file.error]
-one = 'supplied file is invalid. please make sure that file exist and it contains connector specification'
+one = 'supplied file is invalid. Make sure that the file exists and that it contains a connector configuration'
 
 [connector.common.error.FileAlreadyExists]
 one = 'provided {{.Name}} file already exists. Specify the --overwrite flag if you want to overwrite the existing file'
 
 [connector.interactive.error]
-one = 'Connector specification missing a required value: {{.Field}}'
+one = 'The connector configuration is missing a required value for: {{.Field}}'
 
 [connector.type.update.error.other]
 one = 'Error while updating Connectors instance {{.Error}}'
@@ -641,7 +643,7 @@ one = 'The requested resource does not exist anymore'
 one = 'Unexpected error occured when updating the Connectors instance'
 
 [connector.update.info.editor.open]
-one = 'Opening a text editor to edit the Connectors instance details, close the editor to continue'
+one = 'Opening a text editor to edit the Connectors instance details, close the text editor to continue'
 
 [connector.common.page.prompt]
 one = 'Page'
