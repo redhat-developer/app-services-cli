@@ -42,7 +42,6 @@ func NewCallCmd(f *factory.Factory) *cobra.Command {
 		  
 		  # Perform a POST request to the specified path
 		  cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post `,
-		Hidden: true,
 		Args:   cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runCmd(opts)
