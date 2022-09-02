@@ -12,6 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
+
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 type options struct {
@@ -91,6 +93,18 @@ func runList(opts *options) (err error) {
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:
+
+		cfg, err := opts.Config.Load()
+		if err != nil {
+			return err
+		}
+
+		// Temporary workaround to be removed
+		if cfg.EnableAuthV2 {
+			opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.breakingChangeNotice.SDK"))
+			formattedRes := mapResponseToNewFormat(res)
+			return dump.Formatted(opts.IO.Out, opts.output, formattedRes)
+		}
 		return dump.Formatted(opts.IO.Out, opts.output, res)
 	}
 
@@ -113,4 +127,29 @@ func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) [
 	}
 
 	return rows
+}
+
+// mapResponseToNewFormat accepts response of old sdk and transforms it to response of new sdk
+func mapResponseToNewFormat(res kafkamgmtclient.ServiceAccountList) []svcacctmgmtclient.ServiceAccountData {
+
+	var serviceaccounts []svcacctmgmtclient.ServiceAccountData
+
+	for _, svcAcct := range res.GetItems() {
+
+		timeInt := svcAcct.CreatedAt.Unix()
+
+		formattedServiceAccount := svcacctmgmtclient.ServiceAccountData{
+			Id:          &svcAcct.Id,
+			ClientId:    svcAcct.ClientId,
+			Name:        svcAcct.Name,
+			Description: svcAcct.Description,
+			CreatedBy:   svcAcct.CreatedBy,
+			CreatedAt:   &timeInt,
+		}
+
+		serviceaccounts = append(serviceaccounts, formattedServiceAccount)
+	}
+
+	return serviceaccounts
+
 }

@@ -23,6 +23,7 @@ type Config struct {
 	Scopes       []string         `json:"scopes,omitempty" doc:"OpenID scope. If this option is used it will replace completely the default scopes. Can be repeated multiple times to specify multiple scopes."`
 	Telemetry    string           `json:"telemetry,omitempty" doc:"Flag used to enable telemetry for user."`
 	LastUpdated  int64            `json:"last_updated,omitempty" doc:"Timestamp of the last update cli"`
+	EnableAuthV2 bool             `json:"enable_auth_v2,omitempty" doc:"Enables use of new Service Account SDK"`
 }
 
 // ServiceConfigMap is a map of configs for the application services

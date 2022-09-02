@@ -57,6 +57,8 @@ type options struct {
 	insecureSkipTLSVerify bool
 	printURL              bool
 	offlineToken          string
+	// Temporary workaround to be removed
+	enableAuthV2 bool
 }
 
 // NewLoginCmd gets the command that's log the user in
@@ -96,6 +98,7 @@ func NewLoginCmd(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.printURL, "print-sso-url", false, opts.localizer.MustLocalize("login.flag.printSsoUrl"))
 	cmd.Flags().StringArrayVar(&opts.scopes, "scope", kcconnection.DefaultScopes, opts.localizer.MustLocalize("login.flag.scope"))
 	cmd.Flags().StringVarP(&opts.offlineToken, "token", "t", "", opts.localizer.MustLocalize("login.flag.token", localize.NewEntry("OfflineTokenURL", build.OfflineTokenURL)))
+	cmd.Flags().BoolVar(&opts.enableAuthV2, "enable-auth-v2", false, opts.localizer.MustLocalize("login.flag.enableAuthV2"))
 
 	return cmd
 }
@@ -170,6 +173,8 @@ func runLogin(opts *options) (err error) {
 	cfg.Scopes = opts.scopes
 	// Reset access token on login to avoid reusing previous users valid token
 	cfg.AccessToken = ""
+
+	cfg.EnableAuthV2 = opts.enableAuthV2
 
 	if err = opts.Config.Save(cfg); err != nil {
 		return err
