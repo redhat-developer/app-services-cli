@@ -37,6 +37,7 @@ $ rhoas login --token f5cgc...
       --api-gateway string   URL of the API gateway (default "https://api.openshift.com")
       --auth-url string      The URL of the SSO Authentication server (default "https://sso.redhat.com/auth/realms/redhat-external")
       --client-id string     OpenID client identifier (default "rhoas-cli-prod")
+      --enable-auth-v2       Enable use of new Service Account SDK
       --insecure             Allow insecure communication with the server by disabling TLS certificate and host name verification
       --print-sso-url        Print the console login URL, which you can use to log in to RHOAS from a different web browser (this is useful if you need to log in with different credentials than the credentials you used in your default web browser)
       --scope stringArray    Override the default OpenID scope (to specify multiple scopes, use a separate --scope for each scope) (default [openid])
