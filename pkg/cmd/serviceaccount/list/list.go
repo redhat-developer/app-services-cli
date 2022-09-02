@@ -24,7 +24,8 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	output string
+	output       string
+	enableAuthV2 bool
 }
 
 // svcAcctRow contains the properties used to
@@ -64,6 +65,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("serviceAccount.list.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.enableAuthV2, "enable-auth-v2", false, opts.localizer.MustLocalize("serviceAccount.common.flag.enableAuthV2"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -93,18 +95,12 @@ func runList(opts *options) (err error) {
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:
-
-		cfg, err := opts.Config.Load()
-		if err != nil {
-			return err
-		}
-
 		// Temporary workaround to be removed
-		if cfg.EnableAuthV2 {
-			opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.breakingChangeNotice.SDK"))
+		if opts.enableAuthV2 {
 			formattedRes := mapResponseToNewFormat(res)
 			return dump.Formatted(opts.IO.Out, opts.output, formattedRes)
 		}
+		opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.breakingChangeNotice.SDK"))
 		return dump.Formatted(opts.IO.Out, opts.output, res)
 	}
 
