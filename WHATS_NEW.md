@@ -3,6 +3,14 @@
 Latest changes for the RHOAS CLI.
 For information on what was included in latest release please refer to our [changelog](https://github.com/redhat-developer/app-services-cli/blob/main/CHANGELOG.md)
 
+## 0.51.0
+
+### Migration of Service Account SDK
+
+CLI now supports both Control Plane SDK and the new Service Account SDK. While Control Plane SDK is still being used to make requests, user can pass "--enable-auth-v2" flag to get the data formatted according to the new Service Account SDK.
+
+"--enable-auth-v2" is a temporary flag to facilitate users to migrate to the new SDK. The flag will be deprecated in future releases along with deprecation of using Control Plane SDK for service account operations.
+
 ## 0.50.0
 
 ### Support for Red Hat OpenShift Connectors
