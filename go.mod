@@ -92,6 +92,7 @@ require (
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/redhat-developer/app-services-sdk-go v0.10.0 // indirect
+	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect

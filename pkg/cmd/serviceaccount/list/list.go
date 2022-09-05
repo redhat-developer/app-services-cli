@@ -12,6 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
+
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 type options struct {
@@ -22,7 +24,8 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	output string
+	output       string
+	enableAuthV2 bool
 }
 
 // svcAcctRow contains the properties used to
@@ -62,6 +65,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("serviceAccount.list.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.enableAuthV2, "enable-auth-v2", false, opts.localizer.MustLocalize("serviceAccount.common.flag.enableAuthV2"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -91,6 +95,12 @@ func runList(opts *options) (err error) {
 		rows := mapResponseItemsToRows(serviceaccounts)
 		dump.Table(outStream, rows)
 	default:
+		// Temporary workaround to be removed
+		if opts.enableAuthV2 {
+			formattedRes := mapResponseToNewFormat(res)
+			return dump.Formatted(opts.IO.Out, opts.output, formattedRes)
+		}
+		opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.breakingChangeNotice.SDK"))
 		return dump.Formatted(opts.IO.Out, opts.output, res)
 	}
 
@@ -113,4 +123,29 @@ func mapResponseItemsToRows(svcAccts []kafkamgmtclient.ServiceAccountListItem) [
 	}
 
 	return rows
+}
+
+// mapResponseToNewFormat accepts response of old sdk and transforms it to response of new sdk
+func mapResponseToNewFormat(res kafkamgmtclient.ServiceAccountList) []svcacctmgmtclient.ServiceAccountData {
+
+	var serviceaccounts []svcacctmgmtclient.ServiceAccountData
+
+	for _, svcAcct := range res.GetItems() {
+
+		timeInt := svcAcct.CreatedAt.Unix()
+
+		formattedServiceAccount := svcacctmgmtclient.ServiceAccountData{
+			Id:          &svcAcct.Id,
+			ClientId:    svcAcct.ClientId,
+			Name:        svcAcct.Name,
+			Description: svcAcct.Description,
+			CreatedBy:   svcAcct.CreatedBy,
+			CreatedAt:   &timeInt,
+		}
+
+		serviceaccounts = append(serviceaccounts, formattedServiceAccount)
+	}
+
+	return serviceaccounts
+
 }
