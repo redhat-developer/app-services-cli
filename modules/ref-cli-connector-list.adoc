@@ -8,7 +8,7 @@ List of Connectors instances
 [discrete]
 == Synopsis
 
-List of Connectors instances. The returned list includes the ID value for each Connectors instance.
+List of Connectors instances. The returned list includes the ID and name for each Connectors instance.
 
 
 ....

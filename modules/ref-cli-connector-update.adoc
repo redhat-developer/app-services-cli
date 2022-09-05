@@ -10,8 +10,9 @@ Update a Connectors instance
 
 Update a Connectors instance.
 
-You can change the details of an existing Connectors instance by changing its configuration in a text editor. To specify an editor, use the EDITOR environment variable before you run the "rhoas connector update" command. For example:
+You can change the details of an existing Connectors instance by editing its configuration file in a text editor. 
 
+Note: To specify an editor, use the EDITOR environment variable before you run the "rhoas connector update" command. For example:
 export EDITOR=nvim
 export EDITOR=vim
 export EDITOR="code -w"

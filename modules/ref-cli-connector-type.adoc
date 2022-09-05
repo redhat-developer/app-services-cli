@@ -3,7 +3,7 @@ ifdef::env-github,env-browser[:context: cmd]
 = connector type
 
 [role="_abstract"]
-List and get details of the different connector types
+View a list of supported connector types
 
 [discrete]
 == Synopsis

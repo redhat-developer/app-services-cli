@@ -54,5 +54,5 @@ rhoas connector type list --search=%Amazon%
 
 
  
-* link:{path}#ref-rhoas-connector-type_{context}[rhoas connector type]	 - List and get details of the different connector types
+* link:{path}#ref-rhoas-connector-type_{context}[rhoas connector type]	 - View a list of supported connector types
 

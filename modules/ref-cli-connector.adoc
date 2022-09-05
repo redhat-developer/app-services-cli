@@ -17,7 +17,7 @@ To get started:
    Use the "rhoas connector build" command to build a configuration file.
 3. Optionally, edit the configuration file.
    Use a text editor of your choice to edit the configuration file.
-4. Create a Connectors instance by specfiying the configuration file.
+4. Create a Connectors instance by specifying the configuration file.
    Use the "rhoas connector create" command to create a Connectors instance.
 5. Start the Connectors instance by using the "rhoas connector start" command.
 6. Stop the Connectors instance by using the "rhoas connector stop" command.
@@ -68,7 +68,7 @@ rhoas connector delete --id=my-connector
 * link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
 
  
-* link:{path}#ref-connector-build_{context}[connector build]	 - Build a Connectors instance
+* link:{path}#ref-connector-build_{context}[connector build]	 - Build a configuration file based on a connector type
 
  
 * link:{path}#ref-connector-cluster_{context}[connector cluster]	 - Create, delete, and list Connectors clusters
@@ -95,7 +95,7 @@ rhoas connector delete --id=my-connector
 * link:{path}#ref-connector-stop_{context}[connector stop]	 - Stop a Connectors instance
 
  
-* link:{path}#ref-connector-type_{context}[connector type]	 - List and get details of the different connector types
+* link:{path}#ref-connector-type_{context}[connector type]	 - View a list of supported connector types
 
  
 * link:{path}#ref-connector-update_{context}[connector update]	 - Update a Connectors instance

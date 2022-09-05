@@ -9,7 +9,7 @@ Set the current Connectors instance
 == Synopsis
 
 Set a Connectors instance as the current instance. The rhoas CLI uses the 
-current Connectors instance when you run any rhoas connector cluster commands.
+current Connectors instance when you run any "rhoas connector cluster" commands.
 
 You can set a Connectors instance as the current instance by providing its name or ID.
 

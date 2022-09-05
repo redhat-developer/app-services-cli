@@ -22,7 +22,7 @@ rhoas connector stop [flags]
 rhoas connector stop
 
 # Stop a Connectors instance by specifying its ID
-rhoas connector stop --id=
+rhoas connector stop --id=IJD76DUH675234
 
 ....
 

@@ -8,7 +8,7 @@ Get the details of a connector type
 [discrete]
 == Synopsis
 
-Get the full list of details of a connector type by using its type ID
+Get the full list of details for a connector type by using its type ID
 
 ....
 rhoas connector type describe [flags]
@@ -43,5 +43,5 @@ rhoas connector type describe --type=slack_source_0.1 -o yaml
 
 
  
-* link:{path}#ref-rhoas-connector-type_{context}[rhoas connector type]	 - List and get details of the different connector types
+* link:{path}#ref-rhoas-connector-type_{context}[rhoas connector type]	 - View a list of supported connector types
 
