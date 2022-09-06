@@ -1,4 +1,12 @@
 
+<a name="v0.51.0"></a>
+## [v0.51.0](https://github.com/redhat-developer/app-services-cli/compare/v0.50.0...v0.51.0) (2022-09-05)
+
+### Features
+
+* **service-account:** add support for service account SDK ([#1743](https://github.com/redhat-developer/app-services-cli/issues/1743))
+
+
 <a name="v0.50.0"></a>
 ## [v0.50.0](https://github.com/redhat-developer/app-services-cli/compare/v0.49.0...v0.50.0) (2022-08-24)
 
