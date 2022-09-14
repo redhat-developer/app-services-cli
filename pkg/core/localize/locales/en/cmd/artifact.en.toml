@@ -503,3 +503,49 @@ one = 'Text search to filter artifacts by description'
 
 [artifact.cmd.list.flag.properties.description]
 one = 'Text search to filter artifacts by properties (separate each name/value pair using a colon)'
+
+[artifact.cmd.owner.get.description.short]
+one = 'Get owner of artifact'
+
+[artifact.cmd.owner.get.description.long]
+one = '''
+Get owner of the artifact
+'''
+
+[artifact.cmd.owner.get.example]
+one = '''
+## Get owner of the artifact with artifact id 'example-name' in group 'example-group'
+$ rhoas service-registry artifact owner-get --artifact-id example-name --group example-group
+'''
+
+[artifact.cmd.owner.get.input.artifactId.message]
+one = 'Artifact-id of the artifact:'
+
+[artifact.cmd.owner.set.description.short]
+one = 'Set owner of the artifact'
+
+[artifact.cmd.owner.set.description.long]
+one = '''
+Set owner of the specific artifact
+'''
+
+[artifact.cmd.owner.set.example]
+one = '''
+## Set owner of the artifact with artifact id 'example-name' in group 'example-group' to 'new-owner-name'
+$ rhoas service-registry artifact owner-get --artifact-id example-name --group example-group --owner new-owner-name
+'''
+
+[setting.set.cmd.flag.owner.description]
+one = 'Name of new owner'
+
+[artifact.cmd.owner.set.input.artifactId.message]
+one = 'Artifact-id of the artifact:'
+
+[artifact.cmd.owner.set.input.owner.message]
+one = 'Name of new owner:'
+
+[artifact.cmd.owner.set.success]
+one = '''
+Owner of the artifact '{{.Name}}' was successfully updated.
+'''
+

@@ -26,7 +26,7 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.5.1
+	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.0
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/spf13/cobra v1.5.0
@@ -34,7 +34,7 @@ require (
 	github.com/wtrocki/go-github-selfupdate v1.2.4
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92
+	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.7 // indirect
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8
@@ -45,6 +45,8 @@ require (
 	k8s.io/client-go v0.22.4
 	k8s.io/utils v0.0.0-20220713171938-56c0de1e6f5e
 )
+
+require github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
 
 require (
 	cloud.google.com/go/compute v1.7.0 // indirect
@@ -91,8 +93,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
-	github.com/redhat-developer/app-services-sdk-go v0.10.0 // indirect
-	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0 // indirect
+	github.com/redhat-developer/app-services-sdk-go v0.11.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
@@ -100,13 +101,13 @@ require (
 	github.com/tcnksm/go-gitconfig v0.1.2 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
-	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
-	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
+	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
+	golang.org/x/sys v0.0.0-20220728004956-3c1f35247d10 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
