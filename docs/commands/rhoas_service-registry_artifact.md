@@ -68,8 +68,6 @@ For example: https://raw.githubusercontent.com/redhat-developer/app-services-cli
 * [rhoas service-registry artifact list](rhoas_service-registry_artifact_list.md)	 - List artifacts
 * [rhoas service-registry artifact metadata-get](rhoas_service-registry_artifact_metadata-get.md)	 - Get artifact metadata
 * [rhoas service-registry artifact metadata-set](rhoas_service-registry_artifact_metadata-set.md)	 - Update artifact metadata
-* [rhoas service-registry artifact owner-get](rhoas_service-registry_artifact_owner-get.md)	 - Get owner of artifact
-* [rhoas service-registry artifact owner-set](rhoas_service-registry_artifact_owner-set.md)	 - Set owner of the artifact
 * [rhoas service-registry artifact state-set](rhoas_service-registry_artifact_state-set.md)	 - Set artifact state
 * [rhoas service-registry artifact update](rhoas_service-registry_artifact_update.md)	 - Update artifact
 * [rhoas service-registry artifact versions](rhoas_service-registry_artifact_versions.md)	 - Get latest artifact versions by artifact-id and group

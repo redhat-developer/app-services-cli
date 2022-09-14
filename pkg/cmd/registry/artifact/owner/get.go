@@ -34,6 +34,7 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("artifact.cmd.owner.get.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.owner.get.example"),
 		Args:    cobra.NoArgs,
+		Hidden:  true,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 
 			var missingFlags []string

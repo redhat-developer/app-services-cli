@@ -37,6 +37,7 @@ func NewSetCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("artifact.cmd.owner.set.description.long"),
 		Example: f.Localizer.MustLocalize("artifact.cmd.owner.set.example"),
 		Args:    cobra.NoArgs,
+		Hidden:  true,
 		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 
 			var missingFlags []string
