@@ -5,11 +5,13 @@ package kafka
 import (
 	"github.com/redhat-developer/app-services-cli/internal/doc"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/billing"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/providers"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/update"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/use"
@@ -38,6 +40,8 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		consumergroup.NewConsumerGroupCommand(f),
 		update.NewUpdateCommand(f),
 		acl.NewAclCommand(f),
+		billing.NewBillingCommand(f),
+		providers.NewProviderCommand(f),
 	)
 
 	return cmd
