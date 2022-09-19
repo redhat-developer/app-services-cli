@@ -28,7 +28,7 @@ type options struct {
 // NewListCommand creates a new command for listing kafkas.
 func NewProviderCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		ServiceContext: f.ServiceContext,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
