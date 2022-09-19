@@ -538,6 +538,39 @@ one = 'If specified, only the bootstrap server host of the Kafka instance will b
 [kafka.describe.bootstrapserver.not.available]
 one = 'Kafka instance "{{.Name}}" does not have a bootstrap server URL.'
 
+[kafka.provider.cmd.shortDescription]
+one = "List Kafka Cloud Providers"
+
+[kafka.provider.cmd.longDescription]
+one = '''
+List all enabled Cloud Providers and Regions for Kafka deployment
+'''
+
+[kafka.provider.cmd.example]
+one = '''
+# List all providers using the default output format
+$ rhoas kafka providers 
+
+# List all providersin JSON format
+$ rhoas kafka providers  -o json
+'''
+
+[kafka.billing.cmd.shortDescription]
+one = "List Kafka Billing Types"
+
+[kafka.billing.cmd.longDescription]
+one = '''
+List Kafka Billing Types
+'''
+
+[kafka.billing.cmd.example]
+one = '''
+# List billing types
+$ rhoas kafka billing 
+
+'''
+
+
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"
 one = "List all Kafka instances"
