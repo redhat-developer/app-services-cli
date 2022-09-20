@@ -56,10 +56,16 @@ func runList(opts *options) error {
 	billingTypes, _ := create.GetBillingModelCompletionValues(opts.f)
 
 	providersArray := make([]billingRow, 0, 10)
-	for _, billing := range billingTypes {
+	if len(billingTypes) == 0 {
 		providersArray = append(providersArray, billingRow{
-			BillingType: billing,
+			BillingType: create.DeveloperType,
 		})
+	} else {
+		for _, billing := range billingTypes {
+			providersArray = append(providersArray, billingRow{
+				BillingType: billing,
+			})
+		}
 	}
 
 	switch opts.outputFormat {
