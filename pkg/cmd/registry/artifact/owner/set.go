@@ -24,7 +24,7 @@ type options struct {
 	f *factory.Factory
 }
 
-// NewGetCommand creates a new command to get a service registry setting
+// NewSetCommand creates a new command to set owner of an artifact
 func NewSetCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &options{

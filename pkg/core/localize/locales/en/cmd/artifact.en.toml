@@ -532,7 +532,7 @@ Set owner of the specific artifact
 [artifact.cmd.owner.set.example]
 one = '''
 ## Set owner of the artifact with artifact id 'example-name' in group 'example-group' to 'new-owner-name'
-$ rhoas service-registry artifact owner-get --artifact-id example-name --group example-group --owner new-owner-name
+$ rhoas service-registry artifact owner-set --artifact-id example-name --group example-group --owner new-owner-name
 '''
 
 [setting.set.cmd.flag.owner.description]

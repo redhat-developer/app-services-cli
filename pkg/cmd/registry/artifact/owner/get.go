@@ -5,7 +5,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule/rulecmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -21,7 +20,7 @@ type OwnerGetOptions struct {
 	f *factory.Factory
 }
 
-// NewGetCommand creates a new command to get a service registry setting
+// NewGetCommand creates a new command to get owner of an artifact
 func NewGetCommand(f *factory.Factory) *cobra.Command {
 
 	opts := &OwnerGetOptions{
@@ -98,7 +97,7 @@ func runGet(opts *OwnerGetOptions) error {
 		return registrycmdutil.TransformInstanceError(err)
 	}
 
-	opts.f.Logger.Info(icon.SuccessPrefix(), *artifactOwner.Owner)
+	opts.f.Logger.Info(*artifactOwner.Owner)
 	return nil
 }
 
