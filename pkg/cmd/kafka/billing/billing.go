@@ -71,51 +71,42 @@ func runList(opts *options) error {
 		return err
 	}
 
-	billingTypes := create.FetchSupportedBillingModels(orgQuotas)
+	paidQuotas := append(orgQuotas.MarketplaceQuotas, orgQuotas.StandardQuotas...)
 
 	billingArray := make([]billingRow, 0, 10)
-	if len(billingTypes) == 0 {
+	if len(paidQuotas) == 0 {
 		billingArray = append(billingArray, billingRow{
 			BillingType: create.DeveloperType,
 		})
 	} else {
 
-		quotas := append(orgQuotas.MarketplaceQuotas, orgQuotas.StandardQuotas...)
-
-		for _, quota := range quotas {
-
-			providers, err := create.GetEnabledCloudProviderNames(opts.f)
+		providers, err := create.GetEnabledCloudProviderNames(opts.f)
+		if err != nil {
+			return err
+		}
+		for _, providerId := range providers {
+			regions, err := create.GetEnabledCloudRegionIDs(opts.f, providerId, nil)
 			if err != nil {
 				return err
 			}
-			for _, providerId := range providers {
-				regions, err := create.GetEnabledCloudRegionIDs(opts.f, providerId, nil)
-				if err != nil {
-					return err
-				}
-				for _, region := range regions {
+			for _, region := range regions {
+				for _, quota := range paidQuotas {
 					kafkaSizes, _ := create.FetchValidKafkaSizes(opts.f, "aws", "us-east-1", quota)
 					sizeLabels := create.GetValidKafkaSizesLabels(kafkaSizes)
 					for _, sizeLabel := range sizeLabels {
+
 						billingArray = append(billingArray, billingRow{
 							CloudProvider: providerId,
 							Region:        region,
 							BillingType:   quota.BillingModel,
 							Plan:          fmt.Sprintf("%s.%s", quota.BillingModel, sizeLabel),
 						})
+
 					}
 				}
 			}
-
 		}
-		// for _, billing := range billingTypes {
 
-		// 	kafkaSizes := create.FetchValidKafkaSizes(opts.f, "aws", "us-east-1", orgQuotas)
-
-		// 	billingArray = append(billingArray, billingRow{
-		// 		BillingType: billing,
-		// 	})
-		// }
 	}
 
 	switch opts.outputFormat {
