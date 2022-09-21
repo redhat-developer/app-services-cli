@@ -1,6 +1,8 @@
 package providers
 
 import (
+	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 
@@ -16,6 +18,7 @@ import (
 type providerRow struct {
 	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
 	Region        string `json:"region" header:"Region"`
+	Plan          string `json:"plan" header:"Supported Plan"`
 }
 
 type options struct {
@@ -65,10 +68,20 @@ func runList(opts *options) error {
 			return err
 		}
 		for _, region := range regions {
-			providersArray = append(providersArray, providerRow{
-				CloudProvider: providerId,
-				Region:        region,
-			})
+			instanceTypes, err := create.FetchInstanceTypes(opts.f, providerId, region)
+			if err != nil {
+				return err
+			}
+			for _, instanceType := range instanceTypes {
+				instanceSizes := instanceType.GetSizes()
+				for i := range instanceSizes {
+					providersArray = append(providersArray, providerRow{
+						CloudProvider: providerId,
+						Region:        region,
+						Plan:          fmt.Sprintf("%s.%s", instanceType.GetId(), instanceSizes[i].GetId()),
+					})
+				}
+			}
 		}
 	}
 

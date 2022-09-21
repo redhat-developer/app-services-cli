@@ -1,9 +1,6 @@
 package create
 
 import (
-	"encoding/json"
-	"fmt"
-
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -109,16 +106,12 @@ func FetchValidMarketplaceAccounts(amsTypes []accountmgmtutil.QuotaSpec, marketp
 	return unique(validAccounts)
 }
 
-// return list of the valid instance sizes for the specified region and ams instance types
-func FetchValidKafkaSizes(f *factory.Factory,
-	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
+func FetchInstanceTypes(f *factory.Factory, providerID string, regionId string) ([]kafkamgmtclient.SupportedKafkaInstanceType, error) {
 
 	conn, err := f.Connection()
 	if err != nil {
 		return nil, err
 	}
-
-	validSizes := []kafkamgmtclient.SupportedKafkaSize{}
 
 	instanceTypes, _, err := conn.API().
 		KafkaMgmt().
@@ -128,15 +121,26 @@ func FetchValidKafkaSizes(f *factory.Factory,
 		return nil, err
 	}
 
-	instanceTypesJson, _ := json.Marshal(instanceTypes)
+	return instanceTypes.GetInstanceTypes(), nil
 
-	fmt.Println("instance Types", string(instanceTypesJson))
+}
+
+// FetchValidKafkaSizes returns list of the valid instance sizes for the specified region and ams instance types
+func FetchValidKafkaSizes(f *factory.Factory,
+	providerID string, regionId string, amsType accountmgmtutil.QuotaSpec) ([]kafkamgmtclient.SupportedKafkaSize, error) {
+
+	validSizes := []kafkamgmtclient.SupportedKafkaSize{}
+
+	instanceTypes, err := FetchInstanceTypes(f, providerID, regionId)
+	if err != nil {
+		return nil, err
+	}
 
 	desiredInstanceType := mapAmsTypeToBackendType(&amsType)
 
 	// Temporary workaround to be removed
 	if desiredInstanceType == DeveloperType {
-		for _, instanceType := range instanceTypes.GetInstanceTypes() {
+		for _, instanceType := range instanceTypes {
 			if desiredInstanceType == instanceType.GetId() {
 				instanceSizes := instanceType.GetSizes()
 				for i := range instanceSizes {
@@ -145,7 +149,7 @@ func FetchValidKafkaSizes(f *factory.Factory,
 			}
 		}
 	} else {
-		for _, instanceType := range instanceTypes.GetInstanceTypes() {
+		for _, instanceType := range instanceTypes {
 			if desiredInstanceType == instanceType.GetId() {
 				instanceSizes := instanceType.GetSizes()
 				for i := range instanceSizes {

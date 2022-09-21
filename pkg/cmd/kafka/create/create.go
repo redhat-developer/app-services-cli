@@ -477,15 +477,10 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	orgQuotaJSON, _ := json.Marshal(orgQuota)
-	fmt.Println(string(orgQuotaJSON))
-
 	availableBillingModels := FetchSupportedBillingModels(orgQuota)
-	fmt.Println(availableBillingModels)
 
 	if len(availableBillingModels) > 0 {
 		if len(availableBillingModels) == 1 {
-			fmt.Println("inside billing model")
 			answers.BillingModel = availableBillingModels[0]
 		} else {
 			billingModelPrompt := &survey.Select{
