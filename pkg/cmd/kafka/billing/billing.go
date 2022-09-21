@@ -1,8 +1,6 @@
 package billing
 
 import (
-	"fmt"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/create"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 
@@ -18,10 +16,9 @@ import (
 
 // row is the details of a Kafka instance needed to print to a table
 type billingRow struct {
-	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
-	Region        string `json:"region" header:"Region"`
-	BillingType   string `json:"billing" header:"Billing"`
-	Plan          string `json:"plan" header:"Plan"`
+	BillingType string `json:"billing" header:"Billing"`
+	AccountID   string `json:"marketplace_account_id" header:"Marketplace Account ID"`
+	Provider    string `json:"marketplace_provider" header:"Marketplace Provider"`
 }
 
 type options struct {
@@ -71,40 +68,34 @@ func runList(opts *options) error {
 		return err
 	}
 
-	paidQuotas := append(orgQuotas.MarketplaceQuotas, orgQuotas.StandardQuotas...)
+	paidQuotas := orgQuotas.MarketplaceQuotas
+	paidQuotas = append(paidQuotas, orgQuotas.StandardQuotas...)
 
 	billingArray := make([]billingRow, 0, 10)
+
 	if len(paidQuotas) == 0 {
-		billingArray = append(billingArray, billingRow{
-			BillingType: create.DeveloperType,
-		})
-	} else {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.billing.log.info.noStandardInstancesAvailable"))
+		return nil
+	}
 
-		providers, err := create.GetEnabledCloudProviderNames(opts.f)
-		if err != nil {
-			return err
-		}
-		for _, providerId := range providers {
-			regions, err := create.GetEnabledCloudRegionIDs(opts.f, providerId, nil)
-			if err != nil {
-				return err
+	for _, quota := range paidQuotas {
+
+		if quota.BillingModel == create.StandardType {
+
+			billingArray = append(billingArray, billingRow{
+				BillingType: quota.BillingModel,
+			})
+
+		} else {
+
+			for _, cloudAccount := range *quota.CloudAccounts {
+				billingArray = append(billingArray, billingRow{
+					BillingType: quota.BillingModel,
+					AccountID:   *cloudAccount.CloudAccountId,
+					Provider:    *cloudAccount.CloudProviderId,
+				})
 			}
-			for _, region := range regions {
-				for _, quota := range paidQuotas {
-					kafkaSizes, _ := create.FetchValidKafkaSizes(opts.f, "aws", "us-east-1", quota)
-					sizeLabels := create.GetValidKafkaSizesLabels(kafkaSizes)
-					for _, sizeLabel := range sizeLabels {
 
-						billingArray = append(billingArray, billingRow{
-							CloudProvider: providerId,
-							Region:        region,
-							BillingType:   quota.BillingModel,
-							Plan:          fmt.Sprintf("%s.%s", quota.BillingModel, sizeLabel),
-						})
-
-					}
-				}
-			}
 		}
 
 	}

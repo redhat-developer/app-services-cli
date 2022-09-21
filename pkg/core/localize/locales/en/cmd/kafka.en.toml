@@ -570,6 +570,9 @@ $ rhoas kafka billing
 
 '''
 
+[kafka.billing.log.info.noStandardInstancesAvailable]
+one = "Only developer instances are available"
+
 
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"
