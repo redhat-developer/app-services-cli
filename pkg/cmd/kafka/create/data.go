@@ -1,6 +1,9 @@
 package create
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -124,6 +127,10 @@ func FetchValidKafkaSizes(f *factory.Factory,
 	if err != nil {
 		return nil, err
 	}
+
+	instanceTypesJson, _ := json.Marshal(instanceTypes)
+
+	fmt.Println("instance Types", string(instanceTypesJson))
 
 	desiredInstanceType := mapAmsTypeToBackendType(&amsType)
 
