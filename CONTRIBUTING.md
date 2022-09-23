@@ -130,6 +130,20 @@ After running the command, the `dist` directory will contain the documentation c
 Developers do not need to generate that documentation themselves. We have github action that generates documentation automatically
 into `modular-docs` branch on each CLI release.
 
+##### Adding new category to asembly file
+
+Categories for assembly files are generated from source code (as this is only way for us to support multiple languages). 
+To add new category please set Annotation on the root of the command that needs to represent an new command group.
+
+```go
+cmd := &cobra.Command{
+		Use:         "connector",
+		Annotations: map[string]string{doc.AnnotationName: "Connectors commands"},
+```
+
+For example: 
+https://github.com/redhat-developer/app-services-cli/blob/main/pkg/cmd/connector/connector.go#L27
+
 ## Best practices
 
 - [Command Line Interface Guidelines](https://clig.dev/) is a great resource for writing command-line interfaces.
