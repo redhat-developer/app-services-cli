@@ -26,7 +26,7 @@ require (
 	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0
 	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0
 	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.0
+	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.1
 	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/spf13/cobra v1.5.0
