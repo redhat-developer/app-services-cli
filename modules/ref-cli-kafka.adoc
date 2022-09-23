@@ -52,6 +52,9 @@ rhoas kafka topic create --name mytopic
 * link:{path}#ref-kafka-acl_{context}[kafka acl]	 - Manage Kafka ACLs for users and service accounts
 
  
+* link:{path}#ref-kafka-billing_{context}[kafka billing]	 - List Kafka Billing Types
+
+ 
 * link:{path}#ref-kafka-consumer-group_{context}[kafka consumer-group]	 - Describe, list, and delete consumer groups for the current Kafka instance
 
  
@@ -65,6 +68,9 @@ rhoas kafka topic create --name mytopic
 
  
 * link:{path}#ref-kafka-list_{context}[kafka list]	 - List all Kafka instances
+
+ 
+* link:{path}#ref-kafka-providers_{context}[kafka providers]	 - List Kafka Cloud Providers
 
  
 * link:{path}#ref-kafka-topic_{context}[kafka topic]	 - Create, describe, update, list, and delete topics

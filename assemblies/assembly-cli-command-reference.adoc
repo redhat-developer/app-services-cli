@@ -129,6 +129,8 @@ include::../modules/ref-cli-kafka-acl-grant-admin.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-acl-list.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-kafka-billing.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-kafka-consumer-group.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-consumer-group-delete.adoc[leveloffset=+2]
@@ -146,6 +148,8 @@ include::../modules/ref-cli-kafka-delete.adoc[leveloffset=+2]
 include::../modules/ref-cli-kafka-describe.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-kafka-providers.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-kafka-topic.adoc[leveloffset=+2]
 
