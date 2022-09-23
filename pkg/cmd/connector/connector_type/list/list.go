@@ -105,12 +105,17 @@ func runUpdateCommand(opts *options) error {
 			return err
 		}
 	}
-
 	rows := mapResponseToConnectorTypes(&types)
-	for i := 0; i < len(rows); i++ {
-		if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, rows[i]); err != nil {
-			return err
+	switch opts.outputFormat {
+	case dump.EmptyFormat:
+		for i := 0; i < len(rows); i++ {
+			if err = dump.Formatted(f.IOStreams.Out, opts.outputFormat, rows[i]); err != nil {
+				return err
+			}
 		}
+		f.Logger.Info("")
+	default:
+		return dump.Formatted(f.IOStreams.Out, opts.outputFormat, types)
 	}
 
 	start := (opts.page - 1) * opts.limit
