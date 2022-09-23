@@ -1,4 +1,21 @@
 
+<a name="v0.51.1"></a>
+## [v0.51.1](https://github.com/redhat-developer/app-services-cli/compare/v0.51.0...v0.51.1) (2022-09-23)
+
+### Bug Fixes
+
+* update version of registryinstance sdk ([#1748](https://github.com/redhat-developer/app-services-cli/issues/1748))
+* get cloud account details too
+* get quota lower
+* add trial billing type
+* add billing command
+* add cloud providers command
+
+### Features
+
+* **service-registry:** added artifact owner-get owner-set commands ([#1745](https://github.com/redhat-developer/app-services-cli/issues/1745))
+
+
 <a name="v0.51.0"></a>
 ## [v0.51.0](https://github.com/redhat-developer/app-services-cli/compare/v0.50.0...v0.51.0) (2022-09-05)
 
