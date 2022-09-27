@@ -3,6 +3,28 @@
 Latest changes for the RHOAS CLI.
 For information on what was included in latest release please refer to our [changelog](https://github.com/redhat-developer/app-services-cli/blob/main/CHANGELOG.md)
 
+## 0.51.1
+
+### Support for changing owner of Service Registry artifact
+
+CLI now supports commands to view and modify owner of a Service Registry artifact.
+
+`rhoas service-registry artifact owner-get` can be used to view the owner of the artifact.
+
+`rhoas service-registry artifact owner-set` can be used to edit/set owner of an artifact.
+
+> NOTE: Only the current owner of an artifact or any user with the Admin role is allowed to change the owner.
+
+### Fetch state required for Kafka instance creation
+
+Commands have been added to enable users to fetch state for their organization and personal account required for Kafka instance creation.
+
+Supported commands:
+
+`rhoas kafka providers` can be used to fetch valid cloud providers, regions and supported plans.
+
+`rhoas kafka billing` can be used to fetch billing type, marketplace cloud provider and marketplace cloud account IDs.
+
 ## 0.51.0
 
 ### Migration of Service Account SDK
