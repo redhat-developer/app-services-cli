@@ -34,18 +34,6 @@ function exec_git() {
 branch_name="update-vendor"
 git checkout -B $branch_name
 
-step "Display env vars"
-exec_go env
-
-step "Set GOMODCACHE"
-export GOMODCACHE="${PWD}/gotmp"
-mkdir -p "${GOMODCACHE}"
-echo $GOMODCACHE
-chown 1000 /var/lib/jenkins/workspace/mk-ci-cd-cli-gl-build-main/gotmp
-
-step "Clean up code and dependencies"
-exec_go mod tidy
-
 step "Vendorize components"
 exec_go mod vendor
 
@@ -58,3 +46,11 @@ num_changes=$(git diff --cached --numstat | wc -l)
 if [[ $(($num_changes)) == 0 ]]; then
     exit 0
 fi
+
+step "Commit vendor updates and create a merge request"
+git commit -m "chore: update vendor folder"
+exec_git push -u ${git_origin} ${branch_name} -o merge_request.create \
+    -o ci.skip \
+    -o merge_request.target="main" \
+    -o merge_request.merge_when_pipeline_succeeds
+    -o merge_request.remove_source_branch
