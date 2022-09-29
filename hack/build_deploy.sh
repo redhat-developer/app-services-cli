@@ -31,26 +31,26 @@ function exec_git() {
     ./hack/tools_exec.sh git $@
 }
 
-branch_name="update-vendor"
-git checkout -B $branch_name
+# branch_name="update-vendor"
+# git checkout -B $branch_name
 
-step "Vendorize components"
-exec_go mod vendor
+# step "Vendorize components"
+# exec_go mod vendor
 
-step "Add vendor files to staging area"
-git add vendor -f
+# step "Add vendor files to staging area"
+# git add vendor -f
 
-step "Commit and push vendor files if there are changes to push"
+# step "Commit and push vendor files if there are changes to push"
 
-num_changes=$(git diff --cached --numstat | wc -l)
-if [[ $(($num_changes)) == 0 ]]; then
-    exit 0
-fi
+# num_changes=$(git diff --cached --numstat | wc -l)
+# if [[ $(($num_changes)) == 0 ]]; then
+#     exit 0
+# fi
 
-step "Commit vendor updates and create a merge request"
-git commit -m "chore: update vendor folder"
-exec_git push -u ${git_origin} ${branch_name} -o merge_request.create \
-    -o ci.skip \
-    -o merge_request.target="main" \
-    -o merge_request.merge_when_pipeline_succeeds
-    -o merge_request.remove_source_branch
+# step "Commit vendor updates and create a merge request"
+# git commit -m "chore: update vendor folder"
+# exec_git push -u ${git_origin} ${branch_name} -o merge_request.create \
+#     -o ci.skip \
+#     -o merge_request.target="main" \
+#     -o merge_request.merge_when_pipeline_succeeds
+#     -o merge_request.remove_source_branch
