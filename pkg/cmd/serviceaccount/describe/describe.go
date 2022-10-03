@@ -86,6 +86,5 @@ func runDescribe(opts *options) error {
 		}
 	}
 
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.breakingChangeNotice.SDK"))
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, res)
 }
