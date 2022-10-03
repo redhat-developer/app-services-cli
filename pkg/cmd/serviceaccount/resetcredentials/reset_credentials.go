@@ -18,6 +18,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -205,6 +206,15 @@ func resetCredentials(opts *options) (*svcacctmgmtclient.ServiceAccountData, err
 			return nil, fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update")), err)
 		case http.StatusInternalServerError:
 			return nil, opts.localizer.MustLocalizeError("serviceAccount.common.error.internalServerError")
+		default:
+			return nil, err
+		}
+	}
+
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_not_found":
+			return nil, opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return nil, err
 		}

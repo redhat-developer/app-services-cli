@@ -19,6 +19,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -140,8 +141,13 @@ func runCreate(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if err != nil {
-		return err
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_limit_exceeded":
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.limitExceeded")
+		default:
+			return err
+		}
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId())))
