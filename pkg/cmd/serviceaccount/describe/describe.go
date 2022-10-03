@@ -19,6 +19,7 @@ import (
 type options struct {
 	id           string
 	outputFormat string
+	enableAuthV2 bool
 
 	IO         *iostreams.IOStreams
 	Config     config.IConfig
@@ -56,8 +57,11 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.id, "id", "", opts.localizer.MustLocalize("serviceAccount.describe.flag.id.description"))
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("serviceAccount.common.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.enableAuthV2, "enable-auth-v2", false, opts.localizer.MustLocalize("serviceAccount.common.flag.enableAuthV2"))
 
 	_ = cmd.MarkFlagRequired("id")
+
+	_ = cmd.Flags().MarkDeprecated("enable-auth-v2", opts.localizer.MustLocalize("serviceAccount.common.flag.deprecated.enableAuthV2"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 

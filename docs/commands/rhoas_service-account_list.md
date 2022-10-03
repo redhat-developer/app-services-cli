@@ -29,8 +29,7 @@ $ rhoas service-account list -o json
 ### Options
 
 ```
-      --enable-auth-v2   Format output according to new Service Account SDK
-  -o, --output string    Format in which to display the service accounts (choose from: "json", "yml", "yaml")
+  -o, --output string   Format in which to display the service accounts (choose from: "json", "yml", "yaml")
 ```
 
 ### Options inherited from parent commands

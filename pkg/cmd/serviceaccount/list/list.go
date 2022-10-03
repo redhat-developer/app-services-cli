@@ -26,7 +26,8 @@ type options struct {
 	localizer  localize.Localizer
 	Context    context.Context
 
-	output string
+	output       string
+	enableAuthV2 bool
 }
 
 // svcAcctRow contains the properties used to
@@ -66,6 +67,9 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.output, "output", "o", "", opts.localizer.MustLocalize("serviceAccount.list.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.enableAuthV2, "enable-auth-v2", false, opts.localizer.MustLocalize("serviceAccount.common.flag.enableAuthV2"))
+
+	_ = cmd.Flags().MarkDeprecated("enable-auth-v2", opts.localizer.MustLocalize("serviceAccount.common.flag.deprecated.enableAuthV2"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
