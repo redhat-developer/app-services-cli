@@ -130,12 +130,13 @@ func mapResponseToNewFormat(res kafkamgmtclient.ServiceAccountList) []svcacctmgm
 
 	var serviceaccounts []svcacctmgmtclient.ServiceAccountData
 
-	for _, svcAcct := range res.GetItems() {
-
+	newServiceAccounts := res.GetItems()
+	for _, svcAcct := range newServiceAccounts {
 		timeInt := svcAcct.CreatedAt.Unix()
+		saId := svcAcct.GetId()
 
 		formattedServiceAccount := svcacctmgmtclient.ServiceAccountData{
-			Id:          &svcAcct.Id,
+			Id:          &saId,
 			ClientId:    svcAcct.ClientId,
 			Name:        svcAcct.Name,
 			Description: svcAcct.Description,
