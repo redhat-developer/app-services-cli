@@ -28,7 +28,7 @@ $ rhoas kafka topic describe --name topic-1
 == Options
 
       `--instance-id` _string_::   Kafka instance ID. Uses the current instance if not set 
-      `--name` _string_::          Format in which to display the Kafka topic (choose from: "json", "yml", "yaml")
+      `--name` _string_::          Topic name
   `-o`, `--output` _string_::      Specify the output format. Choose from: "json", "yaml", "yml"
 
 [discrete]
