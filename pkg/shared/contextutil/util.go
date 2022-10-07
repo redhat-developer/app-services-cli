@@ -205,7 +205,7 @@ func SetCurrentNamespaceInstance(namespace *connectormgmtclient.ConnectorNamespa
 		return err
 	}
 
-	currCtx.ConnectorID = namespace.GetId()
+	currCtx.NamespaceID = namespace.GetId()
 	svcContext.Contexts[svcContext.CurrentContext] = *currCtx
 
 	if err = f.ServiceContext.Save(svcContext); err != nil {
