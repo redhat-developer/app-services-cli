@@ -1,4 +1,16 @@
 
+<a name="v0.51.3"></a>
+## [v0.51.3](https://github.com/redhat-developer/app-services-cli/compare/v0.51.2...v0.51.3) (2022-10-07)
+
+### Bug Fixes
+
+* context now correctly stores namespace id
+* duplicates for service accouts ids
+* add permissions to the hack scripts
+* invalid flag name
+* **build:** comment out vendor update step
+
+
 <a name="v0.51.2"></a>
 ## [v0.51.2](https://github.com/redhat-developer/app-services-cli/compare/v0.51.1...v0.51.2) (2022-09-27)
 
@@ -256,7 +268,7 @@
 
 
 <a name="v0.42.0"></a>
-## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.42.0) (2022-05-02)
+## [v0.42.0](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.0) (2022-05-02)
 
 ### Bug Fixes
 
@@ -267,12 +279,12 @@
 * changes for Kafka Creation business logic ([#1526](https://github.com/redhat-developer/app-services-cli/issues/1526))
 
 
-<a name="v0.42.1"></a>
-## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.2...v0.42.1) (2022-04-29)
-
-
 <a name="v0.41.2"></a>
-## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.41.2) (2022-04-29)
+## [v0.41.2](https://github.com/redhat-developer/app-services-cli/compare/v0.42.1...v0.41.2) (2022-04-29)
+
+
+<a name="v0.42.1"></a>
+## [v0.42.1](https://github.com/redhat-developer/app-services-cli/compare/v0.41.1...v0.42.1) (2022-04-29)
 
 ### Bug Fixes
 
@@ -341,7 +353,7 @@
 
 
 <a name="v0.40.0"></a>
-## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.40.0) (2022-04-12)
+## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.40.0) (2022-04-12)
 
 ### Bug Fixes
 
@@ -389,12 +401,12 @@
 * **context status:** show context name and path
 
 
-<a name="v0.39.0"></a>
-## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.39.0) (2022-02-21)
-
-
 <a name="v0.39.1"></a>
-## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.1) (2022-02-21)
+## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.39.1) (2022-02-21)
+
+
+<a name="v0.39.0"></a>
+## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.0) (2022-02-21)
 
 ### Bug Fixes
 
