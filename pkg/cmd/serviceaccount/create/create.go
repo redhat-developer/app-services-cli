@@ -18,7 +18,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -127,17 +128,12 @@ func runCreate(opts *options) error {
 	spinner.SetSuffix(opts.localizer.MustLocalize("serviceAccount.create.log.info.creating"))
 	spinner.Start()
 	// create the service account
-	serviceAccountPayload := kafkamgmtclient.ServiceAccountRequest{Name: opts.shortDescription}
-
-	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
-	if err != nil {
-		return err
-	}
+	serviceAccountPayload := svcacctmgmtclient.ServiceAccountCreateRequestData{Name: opts.shortDescription}
 
 	serviceacct, httpRes, err := conn.API().
 		ServiceAccountMgmt().
 		CreateServiceAccount(opts.Context).
-		ServiceAccountRequest(serviceAccountPayload).
+		ServiceAccountCreateRequestData(serviceAccountPayload).
 		Execute()
 	spinner.Stop()
 
@@ -145,16 +141,21 @@ func runCreate(opts *options) error {
 		defer httpRes.Body.Close()
 	}
 
-	if err != nil {
-		return err
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_limit_exceeded":
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.limitExceeded")
+		default:
+			return err
+		}
 	}
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.create.log.info.createdSuccessfully", localize.NewEntry("ID", serviceacct.GetId())))
 
 	creds := &credentials.Credentials{
 		ClientID:     serviceacct.GetClientId(),
-		ClientSecret: serviceacct.GetClientSecret(),
-		TokenURL:     providerUrls.GetTokenUrl(),
+		ClientSecret: serviceacct.GetSecret(),
+		TokenURL:     conn.API().GetConfig().AuthURL.String() + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file

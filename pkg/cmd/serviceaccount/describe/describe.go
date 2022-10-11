@@ -2,7 +2,6 @@ package describe
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -10,9 +9,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/spf13/cobra"
 )
@@ -62,6 +61,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 
 	_ = cmd.MarkFlagRequired("id")
 
+	_ = cmd.Flags().MarkDeprecated("enable-auth-v2", opts.localizer.MustLocalize("serviceAccount.common.flag.deprecated.enableAuthV2"))
+
 	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
@@ -75,40 +76,19 @@ func runDescribe(opts *options) error {
 
 	api := conn.API()
 
-	res, httpRes, err := api.ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
+	res, httpRes, err := api.ServiceAccountMgmt().GetServiceAccount(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
 
-		switch httpRes.StatusCode {
-		case http.StatusNotFound:
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_not_found":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return err
 		}
 	}
 
-	// Temporary workaround to be removed
-	if opts.enableAuthV2 {
-
-		timeInt := res.CreatedAt.Unix()
-
-		formattedRes := svcacctmgmtclient.ServiceAccountData{
-			Id:          &res.Id,
-			ClientId:    res.ClientId,
-			Name:        res.Name,
-			Description: res.Description,
-			CreatedBy:   res.CreatedBy,
-			CreatedAt:   &timeInt,
-		}
-
-		return dump.Formatted(opts.IO.Out, opts.outputFormat, formattedRes)
-	}
-
-	opts.Logger.Info(opts.localizer.MustLocalize("serviceAccount.common.breakingChangeNotice.SDK"))
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, res)
 }

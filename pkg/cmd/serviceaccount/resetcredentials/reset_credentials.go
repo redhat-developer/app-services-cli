@@ -17,7 +17,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -107,16 +108,19 @@ func runResetCredentials(opts *options) (err error) {
 
 	api := conn.API()
 
-	_, httpRes, err := api.ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
-	if httpRes != nil {
-		defer httpRes.Body.Close()
-	}
+	if opts.id != "" {
+		_, httpRes, newErr := api.ServiceAccountMgmt().GetServiceAccount(opts.Context, opts.id).Execute()
+		if httpRes != nil {
+			defer httpRes.Body.Close()
+		}
+		if newErr != nil {
+			return newErr
+		}
 
-	if err != nil {
-		return err
 	}
 
 	if opts.interactive {
+
 		err = runInteractivePrompt(opts)
 		if err != nil {
 			return err
@@ -156,12 +160,10 @@ func runResetCredentials(opts *options) (err error) {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.info.resetSuccess", localize.NewEntry("ID", updatedServiceAccount.GetId())))
 
-	providerUrls, err := svcaccountcmdutil.GetProvidersDetails(conn, opts.Context)
-
 	creds := &credentials.Credentials{
 		ClientID:     updatedServiceAccount.GetClientId(),
-		ClientSecret: updatedServiceAccount.GetClientSecret(),
-		TokenURL:     providerUrls.GetTokenUrl(),
+		ClientSecret: updatedServiceAccount.GetSecret(),
+		TokenURL:     conn.API().GetConfig().AuthURL.String() + "/protocol/openid-connect/token",
 	}
 
 	// save the credentials to a file
@@ -178,7 +180,7 @@ func runResetCredentials(opts *options) (err error) {
 	return nil
 }
 
-func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
+func resetCredentials(opts *options) (*svcacctmgmtclient.ServiceAccountData, error) {
 	conn, err := opts.Connection()
 	if err != nil {
 		return nil, err
@@ -189,7 +191,7 @@ func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
 
 	opts.Logger.Debug(opts.localizer.MustLocalize("serviceAccount.resetCredentials.log.debug.resettingCredentials", localize.NewEntry("ID", opts.id)))
 
-	serviceacct, httpRes, err := api.ServiceAccountMgmt().ResetServiceAccountCreds(opts.Context, opts.id).Execute()
+	serviceacct, httpRes, err := api.ServiceAccountMgmt().ResetServiceAccountSecret(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
@@ -204,6 +206,15 @@ func resetCredentials(opts *options) (*kafkamgmtclient.ServiceAccount, error) {
 			return nil, fmt.Errorf("%v: %w", opts.localizer.MustLocalize("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "update")), err)
 		case http.StatusInternalServerError:
 			return nil, opts.localizer.MustLocalizeError("serviceAccount.common.error.internalServerError")
+		default:
+			return nil, err
+		}
+	}
+
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_not_found":
+			return nil, opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return nil, err
 		}

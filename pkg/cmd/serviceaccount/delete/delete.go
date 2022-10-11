@@ -2,7 +2,6 @@ package delete
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -12,6 +11,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+
+	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -78,17 +79,17 @@ func runDelete(opts *options) (err error) {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccountMgmt().GetServiceAccountById(opts.Context, opts.id).Execute()
+	_, httpRes, err := conn.API().ServiceAccountMgmt().GetServiceAccount(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
 
-		if httpRes.StatusCode == http.StatusNotFound {
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_not_found":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
+		default:
+			return err
 		}
 	}
 
@@ -118,20 +119,17 @@ func deleteServiceAccount(opts *options) error {
 		return err
 	}
 
-	_, httpRes, err := conn.API().ServiceAccountMgmt().DeleteServiceAccountById(opts.Context, opts.id).Execute()
+	httpRes, err := conn.API().ServiceAccountMgmt().DeleteServiceAccount(opts.Context, opts.id).Execute()
 	if httpRes != nil {
 		defer httpRes.Body.Close()
 	}
-	if err != nil {
-		if httpRes == nil {
-			return err
-		}
 
-		switch httpRes.StatusCode {
-		case http.StatusForbidden:
+	if apiErr := svcacctmgmterrors.GetAPIError(err); apiErr != nil {
+		switch apiErr.GetError() {
+		case "service_account_access_invalid":
 			return opts.localizer.MustLocalizeError("serviceAccount.common.error.forbidden", localize.NewEntry("Operation", "delete"))
-		case http.StatusInternalServerError:
-			return opts.localizer.MustLocalizeError("serviceAccount.common.error.internalServerError")
+		case "service_account_not_found":
+			return opts.localizer.MustLocalizeError("serviceAccount.common.error.notFoundError", localize.NewEntry("ID", opts.id))
 		default:
 			return err
 		}
