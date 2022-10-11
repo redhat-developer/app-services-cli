@@ -29,11 +29,14 @@ type options struct {
 	logger         logging.Logger
 	Context        context.Context
 	ServiceContext servicecontext.IContext
+
+	registryInstance *srsmgmtv1.Registry
 }
 
 // NewDescribeCommand describes a service instance, either by passing an `--id flag`
 // or by using the service instance set in the current context, if any
 func NewDescribeCommand(f *factory.Factory) *cobra.Command {
+
 	opts := &options{
 		Connection:     f.Connection,
 		IO:             f.IOStreams,
@@ -49,7 +52,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("registry.cmd.describe.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.cmd.describe.example"),
 		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
@@ -63,12 +66,12 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return runDescribe(opts)
 			}
 
-			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
+			opts.registryInstance, err = contextutil.GetCurrentRegistryInstance(f)
 			if err != nil {
 				return err
 			}
 
-			opts.id = registryInstance.GetId()
+			opts.id = opts.registryInstance.GetId()
 
 			return runDescribe(opts)
 		},
@@ -91,24 +94,25 @@ func runDescribe(opts *options) error {
 
 	api := conn.API()
 
-	var registry *srsmgmtv1.Registry
-	if opts.name != "" {
-		registry, _, err = serviceregistryutil.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
-		if err != nil {
-			return err
-		}
-	} else {
-		registry, _, err = serviceregistryutil.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
-		if err != nil {
-			return err
+	if opts.registryInstance == nil {
+		if opts.name != "" {
+			opts.registryInstance, _, err = serviceregistryutil.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
+			if err != nil {
+				return err
+			}
+		} else {
+			opts.registryInstance, _, err = serviceregistryutil.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
-	if err := dump.Formatted(opts.IO.Out, opts.outputFormat, registry); err != nil {
+	if err := dump.Formatted(opts.IO.Out, opts.outputFormat, opts.registryInstance); err != nil {
 		return err
 	}
 
-	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(registry.GetRegistryUrl())
+	compatibleEndpoints := registrycmdutil.GetCompatibilityEndpoints(opts.registryInstance.GetRegistryUrl())
 
 	opts.logger.Info(opts.localizer.MustLocalize(
 		"registry.common.log.message.compatibleAPIs",
