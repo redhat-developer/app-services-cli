@@ -21,9 +21,10 @@ import (
 )
 
 type options struct {
-	id          string
-	name        string
-	skipConfirm bool
+	id            string
+	name          string
+	skipConfirm   bool
+	kafkaInstance *kafkamgmtclient.KafkaRequest
 
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
@@ -50,7 +51,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Long:    opts.localizer.MustLocalize("kafka.delete.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.delete.cmd.example"),
 		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.skipConfirm {
 				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
@@ -63,12 +64,12 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return runDelete(opts)
 			}
 
-			kafkaInstance, err := contextutil.GetCurrentKafkaInstance(f)
+			opts.kafkaInstance, err = contextutil.GetCurrentKafkaInstance(f)
 			if err != nil {
 				return err
 			}
 
-			opts.id = kafkaInstance.GetId()
+			opts.id = opts.kafkaInstance.GetId()
 
 			return runDelete(opts)
 		},
@@ -105,20 +106,21 @@ func runDelete(opts *options) error {
 
 	api := conn.API()
 
-	var response *kafkamgmtclient.KafkaRequest
-	if opts.name != "" {
-		response, _, err = kafkautil.GetKafkaByName(opts.Context, api.KafkaMgmt(), opts.name)
-		if err != nil {
-			return err
-		}
-	} else {
-		response, _, err = kafkautil.GetKafkaByID(opts.Context, api.KafkaMgmt(), opts.id)
-		if err != nil {
-			return err
+	if opts.kafkaInstance == nil {
+		if opts.name != "" {
+			opts.kafkaInstance, _, err = kafkautil.GetKafkaByName(opts.Context, api.KafkaMgmt(), opts.name)
+			if err != nil {
+				return err
+			}
+		} else {
+			opts.kafkaInstance, _, err = kafkautil.GetKafkaByID(opts.Context, api.KafkaMgmt(), opts.id)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
-	kafkaName := response.GetName()
+	kafkaName := opts.kafkaInstance.GetName()
 
 	if !opts.skipConfirm {
 		promptConfirmName := &survey.Input{
@@ -139,7 +141,7 @@ func runDelete(opts *options) error {
 
 	// delete the Kafka
 	opts.Logger.Debug(opts.localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafkaName))
-	a := api.KafkaMgmt().DeleteKafkaById(opts.Context, response.GetId())
+	a := api.KafkaMgmt().DeleteKafkaById(opts.Context, opts.kafkaInstance.GetId())
 	a = a.Async(true)
 	_, _, err = a.Execute()
 
@@ -151,7 +153,7 @@ func runDelete(opts *options) error {
 
 	currentKafka := currCtx.KafkaID
 	// this is not the current instance, our work here is done
-	if currentKafka != response.GetId() {
+	if currentKafka != opts.kafkaInstance.GetId() {
 		return nil
 	}
 
