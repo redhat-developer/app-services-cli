@@ -5,6 +5,20 @@
 
 `rhoas` is a command-line client for managing Red Hat application services
 
+### Tech Badges
+<p align="center"> 
+  &emsp; 
+  <a href="https://www.w3.org/html/" target="_blank"> 
+   <img alt="Apache" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg">
+  </a>   
+  &emsp;
+  <a href="https://www.w3schools.com/css/" target="_blank">
+    <img alt="Go" src="https://img.shields.io/github/go-mod/go-version/gomods/athens.svg">
+  </a> 
+  <a href="https://www.w3schools.com/css/" target="_blank">
+    <img alt="Go reference" src="https://pkg.go.dev/badge/github.com/redhat-developer/app-services-cli?utm_source=godoc">
+  </a> 
+</p>
 
 ## Installing RHOAS
 
