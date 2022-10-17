@@ -1,4 +1,14 @@
 
+<a name="v0.51.4"></a>
+## [v0.51.4](https://github.com/redhat-developer/app-services-cli/compare/v0.51.3...v0.51.4) (2022-10-16)
+
+### Bug Fixes
+
+* lint
+* doc updates
+* make request command public
+
+
 <a name="v0.51.3"></a>
 ## [v0.51.3](https://github.com/redhat-developer/app-services-cli/compare/v0.51.2...v0.51.3) (2022-10-07)
 
