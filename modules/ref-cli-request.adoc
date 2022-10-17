@@ -1,0 +1,47 @@
+ifdef::env-github,env-browser[:context: cmd]
+[id='ref-request_{context}']
+= request
+
+[role="_abstract"]
+Allows you to perform API requests against the API server
+
+[discrete]
+== Synopsis
+
+Command allows users you to perform API requests against the API server.
+
+....
+rhoas request [flags]
+....
+
+[discrete]
+== Examples
+
+....
+
+		  # Perform a GET request to the specified path
+		  rhoas request --path /api/kafkas_mgmt/v1/kafkas
+		  
+		  # Perform a POST request to the specified path
+		  # cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post 
+....
+
+[discrete]
+== Options
+
+      `--method` _string_::   HTTP method to use. (get, post) (default "GET")
+      `--path` _string_::     Path to send request. For example /api/kafkas_mgmt/v1/kafkas?async=true
+
+[discrete]
+== Options inherited from parent commands
+
+  `-h`, `--help`::      Show help for a command
+  `-v`, `--verbose`::   Enable verbose mode
+
+[discrete]
+== See also
+
+
+ 
+* link:{path}#ref-rhoas_{context}[rhoas]	 - RHOAS CLI
+

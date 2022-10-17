@@ -48,6 +48,8 @@ include::../modules/ref-cli-login.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-logout.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-request.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-status.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-whoami.adoc[leveloffset=+2]
