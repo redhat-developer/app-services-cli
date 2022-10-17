@@ -3,6 +3,22 @@
 Latest changes for the RHOAS CLI.
 For information on what was included in latest release please refer to our [changelog](https://github.com/redhat-developer/app-services-cli/blob/main/CHANGELOG.md)
 
+## 0.51.4
+
+### Migration of Service Account SDK
+
+RHOAS CLI now uses the new service account SDK to make requests for service account related operations.
+
+The temporary flag "--enable-auth-v2" added in [v0.51.0](https://github.com/redhat-developer/app-services-cli/blob/main/WHATS_NEW.md#0510) to facilitate migrating to the new SDK has been deprecated along with usage of Control Plane SDK for service account operations.
+
+## Add support to perform API requests
+
+CLI now supports a `request` command to perform generic api calls.
+
+```
+rhoas request -h
+```
+
 ## 0.51.1
 
 ### Support for changing owner of Service Registry artifact
