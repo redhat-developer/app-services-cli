@@ -2,12 +2,14 @@ package contextutil
 
 import (
 	"context"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
+	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
 
 	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
@@ -187,9 +189,14 @@ func GetNamespaceForServiceConfig(currCtx *servicecontext.ServiceConfig, conn *c
 
 	namespace, _, err := (*conn).API().ConnectorsMgmt().ConnectorNamespacesApi.GetConnectorNamespace(f.Context, currCtx.NamespaceID).Execute()
 	if err != nil {
-		return nil, err
-	}
+		if apiErr := connectorerror.GetAPIError(err); apiErr != nil {
+			if apiErr.GetCode() == connectorerror.ERROR_7 {
+				return nil, f.Localizer.MustLocalizeError("context.common.error.namespace.notFound")
+			}
 
+			return nil, err
+		}
+	}
 	return &namespace, err
 }
 

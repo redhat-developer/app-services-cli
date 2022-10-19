@@ -274,6 +274,13 @@ Your instance might have been removed.
 You can update your context by creating a new instance or by using the "rhoas context set-kafka" command
 '''
 
+[context.common.error.namespace.notFound]
+one='''
+Connector namespace in your context does not exist.
+Your connector namespace might have been removed.
+You can set a namespace in the current context by creating a new connector namespace or by using the "rhoas context set-namespace" command
+'''
+
 [context.common.error.context.notFound]
 one='''
 context with name "{{.Name}}" does not exist
