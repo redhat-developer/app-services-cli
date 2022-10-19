@@ -2,8 +2,12 @@ package contextutil
 
 import (
 	"context"
+	"fmt"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
+
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -90,6 +94,37 @@ func GetCurrentRegistryInstance(f *factory.Factory) (*registrymgmtclient.Registr
 	}
 
 	return GetRegistryForServiceConfig(currCtx, f)
+
+}
+
+func GetCurrentKafkaInstanceDataPlane(f *factory.Factory) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error) {
+
+	svcContext, err := f.ServiceContext.Load()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	conn, err := f.Connection()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	currCtx, err := GetCurrentContext(svcContext, f.Localizer)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	fmt.Println("inside get kafka dp")
+
+	api, kafkaInstance, err := conn.API().KafkaAdmin(currCtx.KafkaID)
+
+	fmt.Println("error - ", err)
+	if kafkamgmtv1errors.IsAPIError(err, kafkamgmtv1errors.ERROR_7) {
+		fmt.Println("inside if statement")
+		return nil, nil, f.Localizer.MustLocalizeError("context.common.error.kafka.notFound")
+	}
+
+	return api, kafkaInstance, err
 
 }
 

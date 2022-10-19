@@ -66,7 +66,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return runDescribe(opts)
 			}
 
-			opts.kafkaInstance, err = contextutil.GetCurrentKafkaInstance(f)
+			_, opts.kafkaInstance, err = contextutil.GetCurrentKafkaInstanceDataPlane(f)
 			if err != nil {
 				return err
 			}

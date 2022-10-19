@@ -16,6 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 
@@ -30,11 +31,15 @@ type options struct {
 	Context        context.Context
 	ServiceContext servicecontext.IContext
 
-	kafkaID string
-	output  string
-	search  string
-	page    int32
-	size    int32
+	kafkaID       string
+	output        string
+	search        string
+	page          int32
+	size          int32
+	api           *kafkainstanceclient.APIClient
+	kafkaInstance *kafkamgmtclient.KafkaRequest
+
+	f *factory.Factory
 }
 
 type topicRow struct {
@@ -47,6 +52,7 @@ type topicRow struct {
 // NewListTopicCommand gets a new command for getting kafkas.
 func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
+		f:              f,
 		Connection:     f.Connection,
 		Logger:         f.Logger,
 		IO:             f.IOStreams,
@@ -61,9 +67,9 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 		Long:    opts.localizer.MustLocalize("kafka.topic.list.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.topic.list.cmd.example"),
 		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) (err error) {
 			if opts.output != "" {
-				if err := flagutil.ValidateOutput(opts.output); err != nil {
+				if err = flagutil.ValidateOutput(opts.output); err != nil {
 					return err
 				}
 			}
@@ -80,19 +86,19 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 				validator := topiccmdutil.Validator{
 					Localizer: opts.localizer,
 				}
-				if err := validator.ValidateSearchInput(opts.search); err != nil {
+				if err = validator.ValidateSearchInput(opts.search); err != nil {
 					return err
 				}
 			}
 
 			if opts.kafkaID == "" {
 
-				kafkaInstance, err := contextutil.GetCurrentKafkaInstance(f)
+				opts.api, opts.kafkaInstance, err = contextutil.GetCurrentKafkaInstanceDataPlane(f)
 				if err != nil {
 					return err
 				}
 
-				opts.kafkaID = kafkaInstance.GetId()
+				opts.kafkaID = opts.kafkaInstance.GetId()
 			}
 
 			return runCmd(opts)
@@ -112,18 +118,16 @@ func NewListTopicCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runCmd(opts *options) error {
-	conn, err := opts.Connection()
-	if err != nil {
-		return err
+func runCmd(opts *options) (err error) {
+
+	if opts.api == nil || opts.kafkaInstance == nil {
+		opts.api, opts.kafkaInstance, err = contextutil.GetCurrentKafkaInstanceDataPlane(opts.f)
+		if err != nil {
+			return err
+		}
 	}
 
-	api, kafkaInstance, err := conn.API().KafkaAdmin(opts.kafkaID)
-	if err != nil {
-		return err
-	}
-
-	a := api.TopicsApi.GetTopics(opts.Context)
+	a := opts.api.TopicsApi.GetTopics(opts.Context)
 
 	if opts.search != "" {
 		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.topic.list.log.debug.filteringTopicList", localize.NewEntry("Search", opts.search)))
@@ -153,14 +157,14 @@ func runCmd(opts *options) error {
 		case http.StatusInternalServerError:
 			return opts.localizer.MustLocalizeError("kafka.topic.common.error.internalServerError")
 		case http.StatusServiceUnavailable:
-			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", kafkaInstance.GetName()))
+			return opts.localizer.MustLocalizeError("kafka.topic.common.error.unableToConnectToKafka", localize.NewEntry("Name", opts.kafkaInstance.GetName()))
 		default:
 			return err
 		}
 	}
 
 	if topicData.GetTotal() == 0 && opts.output == "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", kafkaInstance.GetName())))
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.topic.list.log.info.noTopics", localize.NewEntry("InstanceName", opts.kafkaInstance.GetName())))
 
 		return nil
 	}
