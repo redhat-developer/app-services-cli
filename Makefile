@@ -65,7 +65,7 @@ start-mock-api: ## Start the mock rhoas server
 format: ## Clean up code and dependencies
 	@go mod tidy
 
-	@gofmt -w `find . -type f -name '*.go'`
+	@gofmt -w `find . -type f -name '*.go' ! -path './vendor/*'`
 .PHONY: format
 
 check-docs: generate-docs ## Check whether reference documentation needs to be generated
