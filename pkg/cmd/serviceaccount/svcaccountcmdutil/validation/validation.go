@@ -1,9 +1,10 @@
 package validation
 
 import (
+	"regexp"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"regexp"
 )
 
 const (
@@ -55,4 +56,38 @@ func (v *Validator) ValidateUUID(val interface{}) error {
 	}
 
 	return v.Localizer.MustLocalizeError("serviceAccount.common.validation.id.error.invalidID", localize.NewEntry("ID", id))
+}
+
+// ValidatePage validates if page number is valid
+func (v *Validator) ValidatePage(val interface{}) error {
+	page, ok := val.(int32)
+	if !ok {
+		return errors.NewCastError(val, "int32")
+	}
+
+	if page < 1 {
+		return v.Localizer.MustLocalizeError("serviceAccount.list.validation.page.error", localize.NewEntry("Page", page))
+	}
+
+	return nil
+
+}
+
+// ValidateSize validates if a valid size is provided
+func (v *Validator) ValidateSize(val interface{}) error {
+	size, ok := val.(int32)
+	if !ok {
+		return errors.NewCastError(val, "int32")
+	}
+
+	if size > 100 {
+		return v.Localizer.MustLocalizeError("serviceAccount.list.validation.size.error.max", localize.NewEntry("Size", size))
+	}
+
+	if size < 1 {
+		return v.Localizer.MustLocalizeError("serviceAccount.list.validation.size.error.min", localize.NewEntry("Size", size))
+	}
+
+	return nil
+
 }

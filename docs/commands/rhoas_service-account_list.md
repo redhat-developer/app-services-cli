@@ -30,6 +30,8 @@ $ rhoas service-account list -o json
 
 ```
   -o, --output string   Format in which to display the service accounts (choose from: "json", "yml", "yaml")
+      --page int32      Current page number for the list (default 1)
+      --size int32      Maximum number of items to be returned per page (default 100)
 ```
 
 ### Options inherited from parent commands

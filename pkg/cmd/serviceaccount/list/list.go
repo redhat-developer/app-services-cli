@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -28,6 +31,8 @@ type options struct {
 
 	output       string
 	enableAuthV2 bool
+	page         int32
+	size         int32
 }
 
 // svcAcctRow contains the properties used to
@@ -62,6 +67,18 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
 			}
 
+			validator := &validation.Validator{
+				Localizer: opts.localizer,
+			}
+
+			if err := validator.ValidatePage(opts.page); err != nil {
+				return err
+			}
+
+			if err := validator.ValidateSize(opts.size); err != nil {
+				return err
+			}
+
 			return runList(opts)
 		},
 	}
@@ -70,6 +87,10 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.enableAuthV2, "enable-auth-v2", false, opts.localizer.MustLocalize("serviceAccount.common.flag.enableAuthV2"))
 
 	_ = cmd.Flags().MarkDeprecated("enable-auth-v2", opts.localizer.MustLocalize("serviceAccount.common.flag.deprecated.enableAuthV2"))
+
+	cmd.Flags().Int32VarP(&opts.page, "page", "", int32(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("serviceAccount.list.flag.page.description"))
+	// Default has been set to 100 to preserve how list worked before
+	cmd.Flags().Int32VarP(&opts.size, "size", "", 100, opts.localizer.MustLocalize("serviceAccount.list.flag.size.description"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -82,7 +103,14 @@ func runList(opts *options) (err error) {
 		return err
 	}
 
-	serviceaccounts, _, err := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context).Execute()
+	a := conn.API().ServiceAccountMgmt().GetServiceAccounts(opts.Context)
+
+	// Calculate offset based on page and size provided
+	calculatedFirst := (opts.page - 1) * opts.size
+	a = a.First(calculatedFirst)
+	a = a.Max(opts.size)
+
+	serviceaccounts, _, err := a.Execute()
 	if err != nil {
 		return err
 	}
