@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
@@ -64,6 +65,18 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.output != "" && !flagutil.IsValidInput(opts.output, flagutil.ValidOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.output, flagutil.ValidOutputFormats...)
+			}
+
+			validator := &validation.Validator{
+				Localizer: opts.localizer,
+			}
+
+			if err := validator.ValidatePage(opts.page); err != nil {
+				return err
+			}
+
+			if err := validator.ValidateSize(opts.size); err != nil {
+				return err
 			}
 
 			return runList(opts)
