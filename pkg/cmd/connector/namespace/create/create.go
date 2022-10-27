@@ -86,7 +86,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.namespace.create.info.success"), localize.NewEntry("Name", opts.name))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.namespace.create.info.success", localize.NewEntry("Name", namespace.Name)))
 
 	return nil
 
