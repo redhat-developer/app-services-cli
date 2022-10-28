@@ -452,7 +452,7 @@ Export all artifacts and metadata from a Service Registry instance to a specifie
 [artifact.cmd.export.example]
 one = '''
 ## Export all artifacts and metadata to export file for another Service Registry instance
-rhoas service-registry artifact export --file=export.zip
+rhoas service-registry artifact export --output-file=export.zip
 '''
 
 [artifact.export.success]
