@@ -34,16 +34,11 @@ func NewCallCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:   "request",
-		Short: "Allows you to perform API requests against the API server",
-		Long:  "Command allows users you to perform API requests against the API server.",
-		Example: `
-		  # Perform a GET request to the specified path
-		  rhoas request --path /api/kafkas_mgmt/v1/kafkas
-		  
-		  # Perform a POST request to the specified path
-		  # cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post `,
-		Args: cobra.NoArgs,
+		Use:     "request",
+		Short:   f.Localizer.MustLocalize("request.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("request.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("request.cmd.example"),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runCmd(opts)
 		},
