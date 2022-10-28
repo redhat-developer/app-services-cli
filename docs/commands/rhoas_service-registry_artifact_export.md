@@ -15,7 +15,7 @@ rhoas service-registry artifact export [flags]
 
 ```
 ## Export all artifacts and metadata to export file for another Service Registry instance
-rhoas service-registry artifact export --file=export.zip
+rhoas service-registry artifact export --output-file=export.zip
 
 ```
 
