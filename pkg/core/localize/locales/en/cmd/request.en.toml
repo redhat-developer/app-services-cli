@@ -1,0 +1,20 @@
+[request.cmd.shortDescription]
+description = "Short description for command"
+one = "Allows you to perform API requests against the API server"
+
+[request.cmd.longDescription]
+description = "Long description for command"
+one = '''
+Command allows users you to perform API requests against the API server.
+'''
+
+[request.cmd.example]
+description = 'Examples of how to use the command'
+one = '''
+# Perform a GET request to the specified path
+rhoas request --path /api/kafkas_mgmt/v1/kafkas
+
+# Perform a POST request to the specified path
+# cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post
+'''
+	

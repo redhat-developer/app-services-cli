@@ -6,6 +6,7 @@ Allows you to perform API requests against the API server
 
 Command allows users you to perform API requests against the API server.
 
+
 ```
 rhoas request [flags]
 ```
@@ -13,12 +14,12 @@ rhoas request [flags]
 ### Examples
 
 ```
+# Perform a GET request to the specified path
+rhoas request --path /api/kafkas_mgmt/v1/kafkas
 
-		  # Perform a GET request to the specified path
-		  rhoas request --path /api/kafkas_mgmt/v1/kafkas
-		  
-		  # Perform a POST request to the specified path
-		  # cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post 
+# Perform a POST request to the specified path
+# cat request.json | rhoas request --path "/api/kafkas_mgmt/v1/kafkas?async=true" --method post
+
 ```
 
 ### Options
