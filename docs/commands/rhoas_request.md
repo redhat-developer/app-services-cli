@@ -1,10 +1,10 @@
 ## rhoas request
 
-Allows you to perform API requests against the API server
+Allows users to perform API requests against the API server
 
 ### Synopsis
 
-Command allows users you to perform API requests against the API server.
+Command allows users to perform API requests against the API server.
 
 
 ```

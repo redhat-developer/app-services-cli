@@ -45,7 +45,7 @@ $ rhoas cluster connect
 * [rhoas kafka](rhoas_kafka.md)	 - Create, view, use, and manage your Kafka instances
 * [rhoas login](rhoas_login.md)	 - Log in to RHOAS
 * [rhoas logout](rhoas_logout.md)	 - Log out from RHOAS
-* [rhoas request](rhoas_request.md)	 - Allows you to perform API requests against the API server
+* [rhoas request](rhoas_request.md)	 - Allows users to perform API requests against the API server
 * [rhoas service-account](rhoas_service-account.md)	 - Create, list, describe, delete, and update service accounts
 * [rhoas service-registry](rhoas_service-registry.md)	 - Service Registry commands
 * [rhoas status](rhoas_status.md)	 - View the status of application services in a service context
