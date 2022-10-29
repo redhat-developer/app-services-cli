@@ -1,11 +1,11 @@
 [request.cmd.shortDescription]
 description = "Short description for command"
-one = "Allows you to perform API requests against the API server"
+one = "Allows users to perform API requests against the API server"
 
 [request.cmd.longDescription]
 description = "Long description for command"
 one = '''
-Command allows users you to perform API requests against the API server.
+Command allows users to perform API requests against the API server.
 '''
 
 [request.cmd.example]
