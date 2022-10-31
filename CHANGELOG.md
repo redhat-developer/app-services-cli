@@ -1,4 +1,19 @@
 
+<a name="v0.51.5"></a>
+## [v0.51.5](https://github.com/redhat-developer/app-services-cli/compare/v0.51.4...v0.51.5) (2022-10-29)
+
+### Bug Fixes
+
+* **context:** return detailed error message for ns not found ([#1769](https://github.com/redhat-developer/app-services-cli/issues/1769))
+* **namespace:** fix namespace name logging ([#1773](https://github.com/redhat-developer/app-services-cli/issues/1773))
+* **request:** localize strings ([#1779](https://github.com/redhat-developer/app-services-cli/issues/1779))
+* **service-registry:** use right flags for export command ([#1775](https://github.com/redhat-developer/app-services-cli/issues/1775))
+
+### Features
+
+* **service-account:** add pagination to list command ([#1771](https://github.com/redhat-developer/app-services-cli/issues/1771))
+
+
 <a name="v0.51.4"></a>
 ## [v0.51.4](https://github.com/redhat-developer/app-services-cli/compare/v0.51.3...v0.51.4) (2022-10-16)
 
@@ -363,7 +378,7 @@
 
 
 <a name="v0.40.0"></a>
-## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.40.0) (2022-04-12)
+## [v0.40.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.40.0) (2022-04-12)
 
 ### Bug Fixes
 
@@ -411,12 +426,12 @@
 * **context status:** show context name and path
 
 
-<a name="v0.39.1"></a>
-## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.39.0...v0.39.1) (2022-02-21)
-
-
 <a name="v0.39.0"></a>
-## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.0) (2022-02-21)
+## [v0.39.0](https://github.com/redhat-developer/app-services-cli/compare/v0.39.1...v0.39.0) (2022-02-21)
+
+
+<a name="v0.39.1"></a>
+## [v0.39.1](https://github.com/redhat-developer/app-services-cli/compare/v0.38.6...v0.39.1) (2022-02-21)
 
 ### Bug Fixes
 
