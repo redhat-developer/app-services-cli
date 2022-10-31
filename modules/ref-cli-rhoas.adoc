@@ -70,7 +70,7 @@ $ rhoas cluster connect
 * link:{path}#ref-rhoas-logout_{context}[rhoas logout]	 - Log out from RHOAS
 
  
-* link:{path}#ref-rhoas-request_{context}[rhoas request]	 - Allows you to perform API requests against the API server
+* link:{path}#ref-rhoas-request_{context}[rhoas request]	 - Allows users to perform API requests against the API server
 
  
 * link:{path}#ref-rhoas-service-account_{context}[rhoas service-account]	 - Create, list, describe, delete, and update service accounts
