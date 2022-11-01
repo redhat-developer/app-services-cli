@@ -3,6 +3,7 @@ package create
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -79,7 +80,7 @@ func runCreate(opts *options) error {
 		return err
 	}
 
-	f.Logger.Info(f.Localizer.MustLocalize("connector.cluster.create.info.success"))
+	f.Logger.Info(f.Localizer.MustLocalize("connector.cluster.create.info.success", localize.NewEntry("NAME", response.Name)))
 
 	return nil
 }
