@@ -539,9 +539,14 @@ func (a *AdminApiService) DeleteRoleMappingExecute(r ApiDeleteRoleMappingRequest
 type ApiExportDataRequest struct {
 	ctx _context.Context
 	ApiService AdminApi
+	accept *string
 	forBrowser *bool
 }
 
+func (r ApiExportDataRequest) Accept(accept string) ApiExportDataRequest {
+	r.accept = &accept
+	return r
+}
 func (r ApiExportDataRequest) ForBrowser(forBrowser bool) ApiExportDataRequest {
 	r.forBrowser = &forBrowser
 	return r
@@ -608,6 +613,9 @@ func (a *AdminApiService) ExportDataExecute(r ApiExportDataRequest) (*os.File, *
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.accept != nil {
+		localVarHeaderParams["Accept"] = parameterToString(*r.accept, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {

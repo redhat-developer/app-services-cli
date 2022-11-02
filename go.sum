@@ -690,8 +690,8 @@ github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0 h1:AEjtq7k3
 github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0/go.mod h1:yazwUm4IHuIWrQ0CCsqN0h7rHZx51nlFbYWKnUn7B84=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0 h1:aSuONBf3znnotUX7ywLh6xvOVVFsPRIUCfsEBWTWEM0=
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0/go.mod h1:ILvcakLEXMLZyRdO//WJZNk9fdFbnU+cM3XrBvubE64=
-github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.1 h1:S2nGyknlqS1vibgI8ya5KWch/bbxm5QkwWasVSrQhz0=
-github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.1/go.mod h1:HkNzOWHTW/SomobQ4343+yR4oTmiyvm85BIWlsh0qbA=
+github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.2 h1:U2je87d/DIeOaQIycg2Y7TLiESmGu0/0rQC5n64Od0Y=
+github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.2/go.mod h1:HkNzOWHTW/SomobQ4343+yR4oTmiyvm85BIWlsh0qbA=
 github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0 h1:9kqTCGoz5jR6VE+cgz8fl5Zt9Ctctg9GN1XlkzheVQw=
 github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0/go.mod h1:UoxuqkUN+g5Ni8zgsCA7zidR5s774m9fqhZ5o4eOSIM=
 github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0 h1:kMvH66RXnxrF7FKraWu7n1BnaWrCUchw2unYa9rl/IM=

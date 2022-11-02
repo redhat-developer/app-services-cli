@@ -236,7 +236,7 @@ github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error
-# github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.1
+# github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal
 github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client

@@ -81,7 +81,7 @@ func runExport(opts *ExportOptions) error {
 		return err
 	}
 
-	request := dataAPI.AdminApi.ExportData(opts.Context)
+	request := dataAPI.AdminApi.ExportData(opts.Context).Accept("application/zip")
 	file, _, err := request.Execute()
 	if err != nil {
 		return registrycmdutil.TransformInstanceError(err)
