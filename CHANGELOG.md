@@ -1,4 +1,13 @@
 
+<a name="v0.51.6"></a>
+## [v0.51.6](https://github.com/redhat-developer/app-services-cli/compare/v0.51.5...v0.51.6) (2022-11-04)
+
+### Bug Fixes
+
+* **connector:** add missing name in the log ([#1781](https://github.com/redhat-developer/app-services-cli/issues/1781))
+* **service-registry artifact:** provide content type for export ([#1782](https://github.com/redhat-developer/app-services-cli/issues/1782))
+
+
 <a name="v0.51.5"></a>
 ## [v0.51.5](https://github.com/redhat-developer/app-services-cli/compare/v0.51.4...v0.51.5) (2022-10-29)
 
