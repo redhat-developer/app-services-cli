@@ -5,5 +5,5 @@ import (
 )
 
 var (
-	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat, credentials.SecretFormat}
+	CredentialsOutputFormats = []string{credentials.EnvFormat, credentials.JSONFormat, credentials.PropertiesFormat, credentials.SecretFormat, credentials.JavaPropertiesFormat}
 )
