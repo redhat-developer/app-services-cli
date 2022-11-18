@@ -1,4 +1,12 @@
 
+<a name="v0.51.7"></a>
+## [v0.51.7](https://github.com/redhat-developer/app-services-cli/compare/v0.51.6...v0.51.7) (2022-11-15)
+
+### Features
+
+* generate credentials for Java Kafka client ([#1783](https://github.com/redhat-developer/app-services-cli/issues/1783))
+
+
 <a name="v0.51.6"></a>
 ## [v0.51.6](https://github.com/redhat-developer/app-services-cli/compare/v0.51.5...v0.51.6) (2022-11-04)
 
