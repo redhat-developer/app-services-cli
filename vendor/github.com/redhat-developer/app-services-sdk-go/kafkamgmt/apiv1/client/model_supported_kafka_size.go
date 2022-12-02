@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.11.0
+ * API version: 1.14.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -43,7 +43,7 @@ type SupportedKafkaSize struct {
 	LifespanSeconds NullableInt32 `json:"lifespan_seconds,omitempty"`
 	// Quota consumed by this Kafka instance size.
 	QuotaConsumed *int32 `json:"quota_consumed,omitempty"`
-	// Quota type used by this Kafka instance size.
+	// Quota type used by this Kafka instance size. This is now deprecated, please refer to supported_billing_models at instance-type level instead.
 	QuotaType *string `json:"quota_type,omitempty"`
 	// Data plane cluster capacity consumed by this Kafka instance size.
 	CapacityConsumed *int32 `json:"capacity_consumed,omitempty"`

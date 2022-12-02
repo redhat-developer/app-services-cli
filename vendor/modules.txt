@@ -1,7 +1,7 @@
 # cloud.google.com/go/compute v1.7.0
 ## explicit; go 1.15
 cloud.google.com/go/compute/metadata
-# github.com/AlecAivazis/survey/v2 v2.3.5
+# github.com/AlecAivazis/survey/v2 v2.3.6
 ## explicit; go 1.13
 github.com/AlecAivazis/survey/v2
 github.com/AlecAivazis/survey/v2/core
@@ -25,7 +25,7 @@ github.com/Azure/go-autorest/logger
 # github.com/Azure/go-autorest/tracing v0.6.0
 ## explicit; go 1.12
 github.com/Azure/go-autorest/tracing
-# github.com/BurntSushi/toml v1.2.0
+# github.com/BurntSushi/toml v1.2.1
 ## explicit; go 1.16
 github.com/BurntSushi/toml
 github.com/BurntSushi/toml/internal
@@ -48,13 +48,13 @@ github.com/beorn7/perks/quantile
 github.com/blang/semver
 # github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869
 ## explicit
-# github.com/briandowns/spinner v1.18.1
+# github.com/briandowns/spinner v1.19.0
 ## explicit; go 1.14
 github.com/briandowns/spinner
 # github.com/cespare/xxhash/v2 v2.1.1
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
-# github.com/coreos/go-oidc/v3 v3.2.0
+# github.com/coreos/go-oidc/v3 v3.4.0
 ## explicit; go 1.14
 github.com/coreos/go-oidc/v3/oidc
 # github.com/cpuguy83/go-md2man/v2 v2.0.2
@@ -91,7 +91,7 @@ github.com/go-resty/resty/v2
 ## explicit; go 1.15
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
-# github.com/golang-jwt/jwt/v4 v4.4.2
+# github.com/golang-jwt/jwt/v4 v4.4.3
 ## explicit; go 1.16
 github.com/golang-jwt/jwt/v4
 # github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
@@ -143,8 +143,8 @@ github.com/imdario/mergo
 github.com/inconshreveable/go-update
 github.com/inconshreveable/go-update/internal/binarydist
 github.com/inconshreveable/go-update/internal/osext
-# github.com/inconshreveable/mousetrap v1.0.0
-## explicit
+# github.com/inconshreveable/mousetrap v1.0.1
+## explicit; go 1.18
 github.com/inconshreveable/mousetrap
 # github.com/jackdelahunt/survey-json-schema v0.12.0
 ## explicit; go 1.16
@@ -165,8 +165,8 @@ github.com/landoop/tableprinter
 # github.com/mattn/go-colorable v0.1.9
 ## explicit; go 1.13
 github.com/mattn/go-colorable
-# github.com/mattn/go-isatty v0.0.14
-## explicit; go 1.12
+# github.com/mattn/go-isatty v0.0.16
+## explicit; go 1.15
 github.com/mattn/go-isatty
 # github.com/mattn/go-runewidth v0.0.13
 ## explicit; go 1.9
@@ -183,12 +183,12 @@ github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v1.0.1
 ## explicit
 github.com/modern-go/reflect2
-# github.com/nicksnyder/go-i18n/v2 v2.2.0
+# github.com/nicksnyder/go-i18n/v2 v2.2.1
 ## explicit; go 1.12
 github.com/nicksnyder/go-i18n/v2/i18n
 github.com/nicksnyder/go-i18n/v2/internal
 github.com/nicksnyder/go-i18n/v2/internal/plural
-# github.com/openconfig/goyang v1.0.0
+# github.com/openconfig/goyang v1.2.0
 ## explicit; go 1.14
 github.com/openconfig/goyang/pkg/indent
 # github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
@@ -219,19 +219,19 @@ github.com/prometheus/procfs/internal/util
 # github.com/redhat-developer/app-services-sdk-go v0.11.0
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/core
-# github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.2.0
+# github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.8.0
+# github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.9.0
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1
 github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client
 github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error
-# github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.9.0
+# github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1
 github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.13.0
+# github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.15.0
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1
 github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client
@@ -240,7 +240,7 @@ github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal
 github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client
-# github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.10.0
+# github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.1
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1
 github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client
@@ -266,7 +266,7 @@ github.com/segmentio/backo-go
 # github.com/segmentio/ksuid v1.0.3
 ## explicit; go 1.12
 github.com/segmentio/ksuid
-# github.com/spf13/cobra v1.5.0
+# github.com/spf13/cobra v1.6.1
 ## explicit; go 1.15
 github.com/spf13/cobra
 github.com/spf13/cobra/doc
@@ -304,7 +304,7 @@ golang.org/x/crypto/openpgp/s2k
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/pkcs12
 golang.org/x/crypto/pkcs12/internal/rc2
-# golang.org/x/net v0.0.0-20220909164309-bea034e7d591
+# golang.org/x/net v0.2.0
 ## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
@@ -313,7 +313,7 @@ golang.org/x/net/http2
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/publicsuffix
-# golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
+# golang.org/x/oauth2 v0.2.0
 ## explicit; go 1.17
 golang.org/x/oauth2
 golang.org/x/oauth2/authhandler
@@ -322,16 +322,16 @@ golang.org/x/oauth2/google/internal/externalaccount
 golang.org/x/oauth2/internal
 golang.org/x/oauth2/jws
 golang.org/x/oauth2/jwt
-# golang.org/x/sys v0.0.0-20220728004956-3c1f35247d10
+# golang.org/x/sys v0.2.0
 ## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+# golang.org/x/term v0.2.0
 ## explicit; go 1.17
 golang.org/x/term
-# golang.org/x/text v0.3.7
+# golang.org/x/text v0.4.0
 ## explicit; go 1.17
 golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
@@ -345,8 +345,6 @@ golang.org/x/text/width
 # golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac
 ## explicit
 golang.org/x/time/rate
-# golang.org/x/tools v0.1.7
-## explicit; go 1.17
 # gomodules.xyz/jsonpatch/v2 v2.2.0
 ## explicit; go 1.12
 gomodules.xyz/jsonpatch/v2
@@ -405,7 +403,7 @@ gopkg.in/inf.v0
 # gopkg.in/segmentio/analytics-go.v3 v3.1.0
 ## explicit
 gopkg.in/segmentio/analytics-go.v3
-# gopkg.in/square/go-jose.v2 v2.5.1
+# gopkg.in/square/go-jose.v2 v2.6.0
 ## explicit
 gopkg.in/square/go-jose.v2
 gopkg.in/square/go-jose.v2/cipher

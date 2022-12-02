@@ -128,7 +128,7 @@ const (
   // Failed to check quota
   ERROR_121 string = "KAFKAS-MGMT-121"
 
-  // Too Many requests
+  // Too many requests
   ERROR_429 string = "KAFKAS-MGMT-429"
 
   // An unexpected error happened, please check the log of the service for details

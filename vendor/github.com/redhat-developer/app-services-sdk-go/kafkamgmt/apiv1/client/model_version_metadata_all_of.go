@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.11.0
+ * API version: 1.14.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -17,6 +17,7 @@ import (
 
 // VersionMetadataAllOf struct for VersionMetadataAllOf
 type VersionMetadataAllOf struct {
+	ServerVersion *string `json:"server_version,omitempty"`
 	Collections *[]ObjectReference `json:"collections,omitempty"`
 }
 
@@ -35,6 +36,38 @@ func NewVersionMetadataAllOf() *VersionMetadataAllOf {
 func NewVersionMetadataAllOfWithDefaults() *VersionMetadataAllOf {
 	this := VersionMetadataAllOf{}
 	return &this
+}
+
+// GetServerVersion returns the ServerVersion field value if set, zero value otherwise.
+func (o *VersionMetadataAllOf) GetServerVersion() string {
+	if o == nil || o.ServerVersion == nil {
+		var ret string
+		return ret
+	}
+	return *o.ServerVersion
+}
+
+// GetServerVersionOk returns a tuple with the ServerVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *VersionMetadataAllOf) GetServerVersionOk() (*string, bool) {
+	if o == nil || o.ServerVersion == nil {
+		return nil, false
+	}
+	return o.ServerVersion, true
+}
+
+// HasServerVersion returns a boolean if a field has been set.
+func (o *VersionMetadataAllOf) HasServerVersion() bool {
+	if o != nil && o.ServerVersion != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetServerVersion gets a reference to the given string and assigns it to the ServerVersion field.
+func (o *VersionMetadataAllOf) SetServerVersion(v string) {
+	o.ServerVersion = &v
 }
 
 // GetCollections returns the Collections field value if set, zero value otherwise.
@@ -71,6 +104,9 @@ func (o *VersionMetadataAllOf) SetCollections(v []ObjectReference) {
 
 func (o VersionMetadataAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.ServerVersion != nil {
+		toSerialize["server_version"] = o.ServerVersion
+	}
 	if o.Collections != nil {
 		toSerialize["collections"] = o.Collections
 	}
