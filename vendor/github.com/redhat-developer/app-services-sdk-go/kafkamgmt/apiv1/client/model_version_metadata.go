@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.11.0
+ * API version: 1.14.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -20,6 +20,7 @@ type VersionMetadata struct {
 	Id string `json:"id"`
 	Kind string `json:"kind"`
 	Href string `json:"href"`
+	ServerVersion *string `json:"server_version,omitempty"`
 	Collections *[]ObjectReference `json:"collections,omitempty"`
 }
 
@@ -115,6 +116,38 @@ func (o *VersionMetadata) SetHref(v string) {
 	o.Href = v
 }
 
+// GetServerVersion returns the ServerVersion field value if set, zero value otherwise.
+func (o *VersionMetadata) GetServerVersion() string {
+	if o == nil || o.ServerVersion == nil {
+		var ret string
+		return ret
+	}
+	return *o.ServerVersion
+}
+
+// GetServerVersionOk returns a tuple with the ServerVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *VersionMetadata) GetServerVersionOk() (*string, bool) {
+	if o == nil || o.ServerVersion == nil {
+		return nil, false
+	}
+	return o.ServerVersion, true
+}
+
+// HasServerVersion returns a boolean if a field has been set.
+func (o *VersionMetadata) HasServerVersion() bool {
+	if o != nil && o.ServerVersion != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetServerVersion gets a reference to the given string and assigns it to the ServerVersion field.
+func (o *VersionMetadata) SetServerVersion(v string) {
+	o.ServerVersion = &v
+}
+
 // GetCollections returns the Collections field value if set, zero value otherwise.
 func (o *VersionMetadata) GetCollections() []ObjectReference {
 	if o == nil || o.Collections == nil {
@@ -157,6 +190,9 @@ func (o VersionMetadata) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["href"] = o.Href
+	}
+	if o.ServerVersion != nil {
+		toSerialize["server_version"] = o.ServerVersion
 	}
 	if o.Collections != nil {
 		toSerialize["collections"] = o.Collections

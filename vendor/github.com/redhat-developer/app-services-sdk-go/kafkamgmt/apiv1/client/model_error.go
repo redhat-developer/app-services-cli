@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.11.0
+ * API version: 1.14.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -17,11 +17,17 @@ import (
 
 // Error struct for Error
 type Error struct {
+	// Human-readable description of the error. Intended for human consumption
 	Reason string `json:"reason"`
+	// Relatively unique operation ID of the request associated to the error
 	OperationId *string `json:"operation_id,omitempty"`
+	// The unique and immutable identifier of the resource
 	Id string `json:"id"`
+	// The kind of the resource
 	Kind string `json:"kind"`
+	// The absolute path of the resource
 	Href string `json:"href"`
+	// Code of the error
 	Code string `json:"code"`
 }
 

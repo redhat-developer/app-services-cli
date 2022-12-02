@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.11.0
+ * API version: 1.14.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -21,7 +21,9 @@ type SupportedKafkaInstanceType struct {
 	Id *string `json:"id,omitempty"`
 	// Human readable name of the supported Kafka instance type
 	DisplayName *string `json:"display_name,omitempty"`
-	//  A list of Kafka instance sizes available for this instance type
+	// A list of available kafka billing models for the instance type. Each kafka billing model item has a unique 'id'
+	SupportedBillingModels []SupportedKafkaBillingModel `json:"supported_billing_models"`
+	// A list of Kafka instance sizes available for this instance type
 	Sizes *[]SupportedKafkaSize `json:"sizes,omitempty"`
 }
 
@@ -29,8 +31,9 @@ type SupportedKafkaInstanceType struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSupportedKafkaInstanceType() *SupportedKafkaInstanceType {
+func NewSupportedKafkaInstanceType(supportedBillingModels []SupportedKafkaBillingModel) *SupportedKafkaInstanceType {
 	this := SupportedKafkaInstanceType{}
+	this.SupportedBillingModels = supportedBillingModels
 	return &this
 }
 
@@ -106,6 +109,30 @@ func (o *SupportedKafkaInstanceType) SetDisplayName(v string) {
 	o.DisplayName = &v
 }
 
+// GetSupportedBillingModels returns the SupportedBillingModels field value
+func (o *SupportedKafkaInstanceType) GetSupportedBillingModels() []SupportedKafkaBillingModel {
+	if o == nil {
+		var ret []SupportedKafkaBillingModel
+		return ret
+	}
+
+	return o.SupportedBillingModels
+}
+
+// GetSupportedBillingModelsOk returns a tuple with the SupportedBillingModels field value
+// and a boolean to check if the value has been set.
+func (o *SupportedKafkaInstanceType) GetSupportedBillingModelsOk() (*[]SupportedKafkaBillingModel, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.SupportedBillingModels, true
+}
+
+// SetSupportedBillingModels sets field value
+func (o *SupportedKafkaInstanceType) SetSupportedBillingModels(v []SupportedKafkaBillingModel) {
+	o.SupportedBillingModels = v
+}
+
 // GetSizes returns the Sizes field value if set, zero value otherwise.
 func (o *SupportedKafkaInstanceType) GetSizes() []SupportedKafkaSize {
 	if o == nil || o.Sizes == nil {
@@ -145,6 +172,9 @@ func (o SupportedKafkaInstanceType) MarshalJSON() ([]byte, error) {
 	}
 	if o.DisplayName != nil {
 		toSerialize["display_name"] = o.DisplayName
+	}
+	if true {
+		toSerialize["supported_billing_models"] = o.SupportedBillingModels
 	}
 	if o.Sizes != nil {
 		toSerialize["sizes"] = o.Sizes

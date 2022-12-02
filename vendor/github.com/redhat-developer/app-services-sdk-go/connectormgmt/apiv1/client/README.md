@@ -90,6 +90,7 @@ Class | Method | HTTP request | Description
 *ConnectorNamespacesApi* | [**ListConnectorNamespaces**](docs/ConnectorNamespacesApi.md#listconnectornamespaces) | **Get** /api/connector_mgmt/v1/kafka_connector_namespaces | Returns a list of connector namespaces
 *ConnectorServiceApi* | [**GetVersionMetadata**](docs/ConnectorServiceApi.md#getversionmetadata) | **Get** /api/connector_mgmt/v1 | Returns the version metadata
 *ConnectorTypesApi* | [**GetConnectorTypeByID**](docs/ConnectorTypesApi.md#getconnectortypebyid) | **Get** /api/connector_mgmt/v1/kafka_connector_types/{connector_type_id} | Get a connector type by id
+*ConnectorTypesApi* | [**GetConnectorTypeLabels**](docs/ConnectorTypesApi.md#getconnectortypelabels) | **Get** /api/connector_mgmt/v1/kafka_connector_types/labels | Returns a list of connector type labels
 *ConnectorTypesApi* | [**GetConnectorTypes**](docs/ConnectorTypesApi.md#getconnectortypes) | **Get** /api/connector_mgmt/v1/kafka_connector_types | Returns a list of connector types
 *ConnectorsApi* | [**CreateConnector**](docs/ConnectorsApi.md#createconnector) | **Post** /api/connector_mgmt/v1/kafka_connectors | Create a new connector
 *ConnectorsApi* | [**DeleteConnector**](docs/ConnectorsApi.md#deleteconnector) | **Delete** /api/connector_mgmt/v1/kafka_connectors/{id} | Delete a connector
@@ -141,10 +142,11 @@ Class | Method | HTTP request | Description
  - [ConnectorStatusStatus](docs/ConnectorStatusStatus.md)
  - [ConnectorType](docs/ConnectorType.md)
  - [ConnectorTypeAllOf](docs/ConnectorTypeAllOf.md)
+ - [ConnectorTypeLabelCount](docs/ConnectorTypeLabelCount.md)
+ - [ConnectorTypeLabelCountList](docs/ConnectorTypeLabelCountList.md)
  - [ConnectorTypeList](docs/ConnectorTypeList.md)
  - [ConnectorTypeListAllOf](docs/ConnectorTypeListAllOf.md)
  - [Error](docs/Error.md)
- - [ErrorAllOf](docs/ErrorAllOf.md)
  - [KafkaConnectionSettings](docs/KafkaConnectionSettings.md)
  - [List](docs/List.md)
  - [ObjectMeta](docs/ObjectMeta.md)
@@ -190,5 +192,5 @@ Each of these functions takes a value of the given basic type and returns a poin
 
 ## Author
 
-
+rhosak-support@redhat.com
 
