@@ -16,7 +16,7 @@ import (
 type buildSource string
 
 const (
-	githubBuildSource buildSource = "github"
+	GithubBuildSource buildSource = "github"
 )
 
 // Define public variables here which you wish to be configurable at build time
@@ -75,7 +75,7 @@ func init() {
 // the version currently being used. If so, it logs this information
 // to the console.
 func CheckForUpdate(ctx context.Context, version string, logger logging.Logger, localizer localize.Localizer) {
-	if BuildSource != string(githubBuildSource) {
+	if BuildSource != string(GithubBuildSource) {
 		return
 	}
 	// prefix version with a v to correspond with Git tag
