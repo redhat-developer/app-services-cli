@@ -2,6 +2,7 @@ package update
 
 import (
 	"encoding/json"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connectorutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
@@ -48,8 +49,8 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.flag.name.description"))
-	flags.StringVar(&opts.namespaceID, "namespace-id", "", f.Localizer.MustLocalize("connector.flag.kafkaID.description"))
-	flags.StringVar(&opts.kafkaID, "kafka-id", "", f.Localizer.MustLocalize("connector.flag.namespaceID.description"))
+	flags.StringVar(&opts.namespaceID, "namespace-id", "", f.Localizer.MustLocalize("connector.flag.namespaceID.description"))
+	flags.StringVar(&opts.kafkaID, "kafka-id", "", f.Localizer.MustLocalize("connector.flag.kafkaID.description"))
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
