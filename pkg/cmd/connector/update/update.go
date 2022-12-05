@@ -22,6 +22,7 @@ type options struct {
 	namespaceID string
 	kafkaID     string
 	name        string
+	id          string
 
 	outputFormat string
 	f            *factory.Factory
@@ -45,10 +46,27 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
+			if opts.id != "" {
+				return runUpdate(opts)
+			}
+
+			conn, err := opts.f.Connection()
+			if err != nil {
+				return err
+			}
+
+			connector, err := contextutil.GetCurrentConnectorInstance(&conn, opts.f)
+			if err != nil {
+				return err
+			}
+
+			opts.id = connector.GetId()
+
 			return runUpdate(opts)
 		},
 	}
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
+	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.flag.id.description"))
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.flag.name.description"))
 	flags.StringVar(&opts.namespaceID, "namespace-id", "", f.Localizer.MustLocalize("connector.flag.namespaceID.description"))
 	flags.StringVar(&opts.kafkaID, "kafka-id", "", f.Localizer.MustLocalize("connector.flag.kafkaID.description"))
@@ -65,13 +83,10 @@ func runUpdate(opts *options) error {
 		return err
 	}
 
-	api := conn.API()
-
-	connector, err := contextutil.GetCurrentConnectorInstance(&conn, opts.f)
-	if err != nil || connector == nil {
-		if connector, err = connectorutil.InteractiveSelect(conn, opts.f); err != nil {
-			return err
-		}
+	connectorsApi := conn.API().ConnectorsMgmt()
+	connector, err := connectorutil.GetConnectorByID(&connectorsApi, opts.id, opts.f)
+	if err != nil {
+		return err
 	}
 
 	connectorChanged := false
@@ -84,7 +99,7 @@ func runUpdate(opts *options) error {
 		connectorChanged = true
 	}
 	if opts.kafkaID != "" {
-		kafkaInstance, _, kafkaErr := kafkautil.GetKafkaByID(opts.f.Context, api.KafkaMgmt(), opts.kafkaID)
+		kafkaInstance, _, kafkaErr := kafkautil.GetKafkaByID(opts.f.Context, conn.API().KafkaMgmt(), opts.kafkaID)
 		if kafkaErr != nil {
 			return kafkaErr
 		}
@@ -112,7 +127,7 @@ func runUpdate(opts *options) error {
 		return err
 	}
 
-	a := api.ConnectorsMgmt().ConnectorsApi.PatchConnector(opts.f.Context, connector.GetId())
+	a := conn.API().ConnectorsMgmt().ConnectorsApi.PatchConnector(opts.f.Context, connector.GetId())
 	a = a.Body(patchData)
 	updated, httpRes, err := a.Execute()
 	if httpRes != nil {
