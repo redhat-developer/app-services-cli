@@ -24,7 +24,7 @@ rhoas connector update [flags]
 
 ```
 # Update a Connectors instance
-rhoas connector update --name=my-connector --file=myconnector.json
+rhoas connector update --name=my-connector
 
 # Update a Connectors instance from stdin
 cat myconnector.json | rhoas connector update

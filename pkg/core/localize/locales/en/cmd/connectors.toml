@@ -359,7 +359,7 @@ After you edit the configuration file, use the "connector update" command to upd
 [connector.update.cmd.example]
 one = '''
 # Update a Connectors instance
-rhoas connector update --name=my-connector --file=myconnector.json
+rhoas connector update --name=my-connector
 
 # Update a Connectors instance from stdin
 cat myconnector.json | rhoas connector update
