@@ -6,6 +6,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connectorutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"github.com/spf13/cobra"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -83,7 +84,12 @@ func runUpdate(opts *options) error {
 		connectorChanged = true
 	}
 	if opts.kafkaID != "" {
-		connector.Kafka.SetId(opts.kafkaID)
+		kafkaInstance, _, kafkaErr := kafkautil.GetKafkaByID(opts.f.Context, api.KafkaMgmt(), opts.kafkaID)
+		if kafkaErr != nil {
+			return kafkaErr
+		}
+		connector.Kafka.SetId(kafkaInstance.GetId())
+		connector.Kafka.SetUrl(kafkaInstance.GetBootstrapServerHost())
 		connectorChanged = true
 	}
 
