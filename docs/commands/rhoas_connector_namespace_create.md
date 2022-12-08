@@ -16,9 +16,6 @@ rhoas connector namespace create [flags]
 # Create a Connectors namespace and name it "my-namespace"
 rhoas connector namespace create --name my-namespace
 
-# Create an evaluation Connectors namespace and name it "my-namespace"
-rhoas connector namespace create --name my-namespace --eval
-
 ```
 
 ### Options
