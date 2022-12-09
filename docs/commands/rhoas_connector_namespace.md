@@ -8,7 +8,7 @@ Commands to manage namespaces for Connectors. A Connectors namespace is the logi
 
 For your own OpenShift Dedicated environment, a Connectors namespace does not automatically expire. You use the information about your Connectors namespace to configure the OpenShift Connectors add-on so that you can use Connectors.
 
-For the Service Preview evaluation site, a Connectors namespace expires 48 hours after you create it. To create an evaluation Connectors namespace include the --eval option with the "connector namespace create" command.
+For the Service Preview evaluation site, a Connectors namespace expires 48 hours after you create it.
 
 
 ### Examples
