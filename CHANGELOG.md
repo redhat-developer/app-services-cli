@@ -1,4 +1,13 @@
 
+<a name="v0.51.8"></a>
+## [v0.51.8](https://github.com/redhat-developer/app-services-cli/compare/v0.51.7...v0.51.8) (2022-12-09)
+
+### Bug Fixes
+
+* **deps:** update shared components packages ([#1764](https://github.com/redhat-developer/app-services-cli/issues/1764))
+* **namespace create:** remove eval from examples ([#1788](https://github.com/redhat-developer/app-services-cli/issues/1788))
+
+
 <a name="v0.51.7"></a>
 ## [v0.51.7](https://github.com/redhat-developer/app-services-cli/compare/v0.51.6...v0.51.7) (2022-11-15)
 
