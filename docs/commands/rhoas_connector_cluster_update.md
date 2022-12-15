@@ -24,9 +24,9 @@ rhoas connector cluster update --id cdh0s0bjdpqd9bgomcbg --annotations h1=head
 ### Options
 
 ```
-      --annotations strings   connector.cluster.update.flag.annotations.description
-      --id string             ID of the Connectors cluster to update
-      --name string           connector.cluster.update.flag.name.description
+      --annotations key=value   comma-separated list of string annotations in key=value format
+      --id string               ID of the Connectors cluster to update
+      --name string             Name of the Connectors cluster
 ```
 
 ### Options inherited from parent commands
