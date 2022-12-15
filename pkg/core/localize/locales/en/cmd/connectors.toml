@@ -124,6 +124,14 @@ one = 'Connectors cluster has been updated.'
 [connector.cluster.update.error.notFound]
 one = 'Connectors cluster with ID "{{.ID}}" does not exist'
 
+[connector.cluster.update.error.authTokenInvalid]
+one = 'The auth token used is invalid when updating connectors cluster'
+
+[connector.cluster.update.error.doesNotExistAnymore]
+one = 'The requested resource does not exist anymore'
+
+[connector.cluster.type.create.error.other]
+
 [connector.common.id.flag]
 one = 'Unique identifier'
 

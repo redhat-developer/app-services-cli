@@ -97,7 +97,13 @@ func runUpdate(opts *options) error {
 			return opts.f.Localizer.MustLocalizeError("connector.cluster.update.error.notFound", localize.NewEntry("ID", opts.id))
 		}
 
-		return opts.f.Localizer.MustLocalizeError("connector.type.create.error.other", localize.NewEntry("Error", apiErr.GetReason()))
+		if apiErr.GetCode() == connectorerror.ERROR_11 {
+			return opts.f.Localizer.MustLocalizeError("connector.cluster.update.error.authTokenInvalid")
+		}
+
+		if apiErr.GetCode() == connectorerror.ERROR_25 {
+			return opts.f.Localizer.MustLocalizeError("connector.cluster.update.error.doesNotExistAnymore")
+		}
 	}
 	if err != nil {
 		return err
