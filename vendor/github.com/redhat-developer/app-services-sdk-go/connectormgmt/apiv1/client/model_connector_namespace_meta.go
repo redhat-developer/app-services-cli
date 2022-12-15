@@ -23,6 +23,7 @@ type ConnectorNamespaceMeta struct {
 	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 	// Namespace name must match pattern `^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$`, or it may be empty to be auto-generated.
 	Name *string `json:"name,omitempty"`
+	// Name-value string annotations for resource
 	Annotations *map[string]string `json:"annotations,omitempty"`
 	ResourceVersion *int64 `json:"resource_version,omitempty"`
 	Quota *ConnectorNamespaceQuota `json:"quota,omitempty"`

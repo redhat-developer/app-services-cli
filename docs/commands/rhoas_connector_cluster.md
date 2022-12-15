@@ -35,4 +35,5 @@ rhoas connector cluster list
 * [rhoas connector cluster create](rhoas_connector_cluster_create.md)	 - Create a Connectors cluster
 * [rhoas connector cluster delete](rhoas_connector_cluster_delete.md)	 - Delete a Connectors cluster
 * [rhoas connector cluster list](rhoas_connector_cluster_list.md)	 - List the Connectors clusters
+* [rhoas connector cluster update](rhoas_connector_cluster_update.md)	 - Update a Connectors cluster
 

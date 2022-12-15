@@ -91,6 +91,39 @@ one = '''
 rhoas connector cluster list
 '''
 
+[connector.cluster.update.cmd.shortDescription]
+one = 'Update a Connectors cluster'
+
+[connector.cluster.update.cmd.longDescription]
+one = 'Update a Connectors cluster'
+
+[connector.cluster.update.cmd.example]
+one = '''
+# Update name of a connector cluster
+rhoas connector cluster update --id cdh0s0bjdpqd9bgomcbg --name my-connector
+
+# Update annotations of a connector cluster
+rhoas connector cluster update --id cdh0s0bjdpqd9bgomcbg --annotations h1=head
+'''
+
+[connector.cluster.update.flag.id.description]
+one = 'ID of the Connectors cluster to update'
+
+[connector.cluster.update.flag.name.description]
+one = 'Name of the Connectors cluster'
+
+[connector.cluster.update.flag.annotations.description]
+one = 'comma-separated list of string annotations in `key=value` format'
+
+[connector.cluster.update.log.info.nothingToUpdate]
+one = 'Nothing to update'
+
+[connector.cluster.update.log.info.updateSuccess]
+one = 'Connectors cluster has been updated.'
+
+[connector.cluster.update.error.notFound]
+one = 'Connectors cluster with ID "{{.ID}}" does not exist'
+
 [connector.common.id.flag]
 one = 'Unique identifier'
 

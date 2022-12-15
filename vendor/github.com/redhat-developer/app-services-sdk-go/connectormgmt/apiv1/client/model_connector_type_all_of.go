@@ -29,9 +29,11 @@ type ConnectorTypeAllOf struct {
 	IconHref *string `json:"icon_href,omitempty"`
 	// Labels used to categorize the connector
 	Labels *[]string `json:"labels,omitempty"`
+	// Name-value string annotations for resource
+	Annotations *map[string]string `json:"annotations,omitempty"`
 	// Ranking for featured connectors
 	FeaturedRank *int32 `json:"featured_rank,omitempty"`
-	// The capabilities supported by the conenctor
+	// The capabilities supported by the connector
 	Capabilities *[]string `json:"capabilities,omitempty"`
 	// A json schema that can be used to validate a ConnectorRequest connector field.
 	Schema *map[string]interface{} `json:"schema,omitempty"`
@@ -246,6 +248,38 @@ func (o *ConnectorTypeAllOf) SetLabels(v []string) {
 	o.Labels = &v
 }
 
+// GetAnnotations returns the Annotations field value if set, zero value otherwise.
+func (o *ConnectorTypeAllOf) GetAnnotations() map[string]string {
+	if o == nil || o.Annotations == nil {
+		var ret map[string]string
+		return ret
+	}
+	return *o.Annotations
+}
+
+// GetAnnotationsOk returns a tuple with the Annotations field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ConnectorTypeAllOf) GetAnnotationsOk() (*map[string]string, bool) {
+	if o == nil || o.Annotations == nil {
+		return nil, false
+	}
+	return o.Annotations, true
+}
+
+// HasAnnotations returns a boolean if a field has been set.
+func (o *ConnectorTypeAllOf) HasAnnotations() bool {
+	if o != nil && o.Annotations != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAnnotations gets a reference to the given map[string]string and assigns it to the Annotations field.
+func (o *ConnectorTypeAllOf) SetAnnotations(v map[string]string) {
+	o.Annotations = &v
+}
+
 // GetFeaturedRank returns the FeaturedRank field value if set, zero value otherwise.
 func (o *ConnectorTypeAllOf) GetFeaturedRank() int32 {
 	if o == nil || o.FeaturedRank == nil {
@@ -361,6 +395,9 @@ func (o ConnectorTypeAllOf) MarshalJSON() ([]byte, error) {
 	}
 	if o.Labels != nil {
 		toSerialize["labels"] = o.Labels
+	}
+	if o.Annotations != nil {
+		toSerialize["annotations"] = o.Annotations
 	}
 	if o.FeaturedRank != nil {
 		toSerialize["featured_rank"] = o.FeaturedRank
