@@ -29,6 +29,8 @@ type Connector struct {
 	NamespaceId string `json:"namespace_id"`
 	Channel *Channel `json:"channel,omitempty"`
 	DesiredState ConnectorDesiredState `json:"desired_state"`
+	// Name-value string annotations for resource
+	Annotations *map[string]string `json:"annotations,omitempty"`
 	ResourceVersion *int64 `json:"resource_version,omitempty"`
 	Kafka KafkaConnectionSettings `json:"kafka"`
 	ServiceAccount ServiceAccount `json:"service_account"`
@@ -385,6 +387,38 @@ func (o *Connector) SetDesiredState(v ConnectorDesiredState) {
 	o.DesiredState = v
 }
 
+// GetAnnotations returns the Annotations field value if set, zero value otherwise.
+func (o *Connector) GetAnnotations() map[string]string {
+	if o == nil || o.Annotations == nil {
+		var ret map[string]string
+		return ret
+	}
+	return *o.Annotations
+}
+
+// GetAnnotationsOk returns a tuple with the Annotations field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Connector) GetAnnotationsOk() (*map[string]string, bool) {
+	if o == nil || o.Annotations == nil {
+		return nil, false
+	}
+	return o.Annotations, true
+}
+
+// HasAnnotations returns a boolean if a field has been set.
+func (o *Connector) HasAnnotations() bool {
+	if o != nil && o.Annotations != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAnnotations gets a reference to the given map[string]string and assigns it to the Annotations field.
+func (o *Connector) SetAnnotations(v map[string]string) {
+	o.Annotations = &v
+}
+
 // GetResourceVersion returns the ResourceVersion field value if set, zero value otherwise.
 func (o *Connector) GetResourceVersion() int64 {
 	if o == nil || o.ResourceVersion == nil {
@@ -587,6 +621,9 @@ func (o Connector) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["desired_state"] = o.DesiredState
+	}
+	if o.Annotations != nil {
+		toSerialize["annotations"] = o.Annotations
 	}
 	if o.ResourceVersion != nil {
 		toSerialize["resource_version"] = o.ResourceVersion

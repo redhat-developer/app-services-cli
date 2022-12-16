@@ -25,6 +25,7 @@ type ConnectorNamespace struct {
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 	Name string `json:"name"`
+	// Name-value string annotations for resource
 	Annotations *map[string]string `json:"annotations,omitempty"`
 	ResourceVersion int64 `json:"resource_version"`
 	Quota *ConnectorNamespaceQuota `json:"quota,omitempty"`

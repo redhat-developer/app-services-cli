@@ -19,6 +19,7 @@ import (
 type ConnectorNamespaceRequest struct {
 	// Namespace name must match pattern `^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$`, or it may be empty to be auto-generated.
 	Name string `json:"name"`
+	// Name-value string annotations for resource
 	Annotations *map[string]string `json:"annotations,omitempty"`
 	ClusterId string `json:"cluster_id"`
 	Kind ConnectorNamespaceTenantKind `json:"kind"`

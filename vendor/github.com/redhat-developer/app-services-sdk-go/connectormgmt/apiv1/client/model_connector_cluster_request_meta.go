@@ -18,6 +18,8 @@ import (
 // ConnectorClusterRequestMeta struct for ConnectorClusterRequestMeta
 type ConnectorClusterRequestMeta struct {
 	Name *string `json:"name,omitempty"`
+	// Name-value string annotations for resource
+	Annotations *map[string]string `json:"annotations,omitempty"`
 }
 
 // NewConnectorClusterRequestMeta instantiates a new ConnectorClusterRequestMeta object
@@ -69,10 +71,45 @@ func (o *ConnectorClusterRequestMeta) SetName(v string) {
 	o.Name = &v
 }
 
+// GetAnnotations returns the Annotations field value if set, zero value otherwise.
+func (o *ConnectorClusterRequestMeta) GetAnnotations() map[string]string {
+	if o == nil || o.Annotations == nil {
+		var ret map[string]string
+		return ret
+	}
+	return *o.Annotations
+}
+
+// GetAnnotationsOk returns a tuple with the Annotations field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ConnectorClusterRequestMeta) GetAnnotationsOk() (*map[string]string, bool) {
+	if o == nil || o.Annotations == nil {
+		return nil, false
+	}
+	return o.Annotations, true
+}
+
+// HasAnnotations returns a boolean if a field has been set.
+func (o *ConnectorClusterRequestMeta) HasAnnotations() bool {
+	if o != nil && o.Annotations != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAnnotations gets a reference to the given map[string]string and assigns it to the Annotations field.
+func (o *ConnectorClusterRequestMeta) SetAnnotations(v map[string]string) {
+	o.Annotations = &v
+}
+
 func (o ConnectorClusterRequestMeta) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Name != nil {
 		toSerialize["name"] = o.Name
+	}
+	if o.Annotations != nil {
+		toSerialize["annotations"] = o.Annotations
 	}
 	return json.Marshal(toSerialize)
 }
