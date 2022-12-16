@@ -552,6 +552,10 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
+	if len(regionIDs) == 0 {
+		return nil, f.Localizer.MustLocalizeError("kafka.create.error.noRegionSupported")
+	}
+
 	regionPrompt := &survey.Select{
 		Message: f.Localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
 		Options: regionIDs,
