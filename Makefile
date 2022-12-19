@@ -82,6 +82,10 @@ generate-downstream-docs: ## Generate command-line reference documentation in ad
 	go run ./cmd/rhoas docs --dir ./dist --file-format adoc
 .PHONY: generate-downstream-docs
 
+check-vendor:
+	./scripts/check-vendor.sh
+.PHONY: check-vendor
+
 I18N_LINTER_DEF := $(shell command -v app-services-go-linter 2> /dev/null)
 
 lint-lang: ## Lint i18n files
