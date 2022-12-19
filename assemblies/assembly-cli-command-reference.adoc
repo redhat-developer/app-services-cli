@@ -84,6 +84,8 @@ include::../modules/ref-cli-connector-cluster-delete.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-cluster-list.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-connector-cluster-update.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-connector-create.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-connector-delete.adoc[leveloffset=+2]

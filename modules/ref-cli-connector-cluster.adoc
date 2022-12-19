@@ -51,3 +51,6 @@ rhoas connector cluster list
  
 * link:{path}#ref-connector-cluster-list_{context}[connector-cluster list]	 - List the Connectors clusters
 
+ 
+* link:{path}#ref-connector-cluster-update_{context}[connector-cluster update]	 - Update a Connectors cluster
+
