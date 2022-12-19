@@ -414,6 +414,9 @@ one = '''
 provided instance size is not valid. Valid sizes: {{.ValidSizes}}
 '''
 
+[kafka.create.error.noRegionSupported]
+one = 'all regions in the selected cloud provider are temporarily unavailable'
+
 [kafka.create.error.billing.invalid]
 one = '''
 provided billing account id and provider are invalid {{.Billing}}
