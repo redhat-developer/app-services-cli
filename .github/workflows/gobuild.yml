@@ -36,6 +36,8 @@ jobs:
         run: make check-docs
       - name: Check i18n
         run: make lint-lang
+      - name: Check vendoring
+        run: make check-vendor
       - name: Build
         run: make binary
       - name: Unit tests
