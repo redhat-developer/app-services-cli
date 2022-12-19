@@ -137,16 +137,6 @@ github.com/googleapis/gnostic/jsonschema
 github.com/googleapis/gnostic/openapiv2
 # github.com/hashicorp/hcl v1.0.0
 ## explicit
-github.com/hashicorp/hcl
-github.com/hashicorp/hcl/hcl/ast
-github.com/hashicorp/hcl/hcl/parser
-github.com/hashicorp/hcl/hcl/printer
-github.com/hashicorp/hcl/hcl/scanner
-github.com/hashicorp/hcl/hcl/strconv
-github.com/hashicorp/hcl/hcl/token
-github.com/hashicorp/hcl/json/parser
-github.com/hashicorp/hcl/json/scanner
-github.com/hashicorp/hcl/json/token
 # github.com/iancoleman/orderedmap v0.2.0
 ## explicit
 github.com/iancoleman/orderedmap
@@ -179,7 +169,6 @@ github.com/kballard/go-shellquote
 github.com/landoop/tableprinter
 # github.com/magiconair/properties v1.8.6
 ## explicit; go 1.13
-github.com/magiconair/properties
 # github.com/mattn/go-colorable v0.1.12
 ## explicit; go 1.13
 github.com/mattn/go-colorable
@@ -197,7 +186,6 @@ github.com/matttproud/golang_protobuf_extensions/pbutil
 github.com/mgutz/ansi
 # github.com/mitchellh/mapstructure v1.5.0
 ## explicit; go 1.14
-github.com/mitchellh/mapstructure
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 ## explicit
 github.com/modern-go/concurrent
@@ -214,13 +202,8 @@ github.com/nicksnyder/go-i18n/v2/internal/plural
 github.com/openconfig/goyang/pkg/indent
 # github.com/pelletier/go-toml v1.9.5
 ## explicit; go 1.12
-github.com/pelletier/go-toml
 # github.com/pelletier/go-toml/v2 v2.0.5
 ## explicit; go 1.16
-github.com/pelletier/go-toml/v2
-github.com/pelletier/go-toml/v2/internal/ast
-github.com/pelletier/go-toml/v2/internal/danger
-github.com/pelletier/go-toml/v2/internal/tracker
 # github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 ## explicit
 github.com/phayes/freeport
@@ -298,36 +281,21 @@ github.com/segmentio/backo-go
 github.com/segmentio/ksuid
 # github.com/spf13/afero v1.9.2
 ## explicit; go 1.16
-github.com/spf13/afero
-github.com/spf13/afero/internal/common
-github.com/spf13/afero/mem
 # github.com/spf13/cast v1.5.0
 ## explicit; go 1.18
-github.com/spf13/cast
 # github.com/spf13/cobra v1.6.1
 ## explicit; go 1.15
 github.com/spf13/cobra
 github.com/spf13/cobra/doc
 # github.com/spf13/jwalterweatherman v1.1.0
 ## explicit
-github.com/spf13/jwalterweatherman
 # github.com/spf13/pflag v1.0.5
 ## explicit; go 1.12
 github.com/spf13/pflag
 # github.com/spf13/viper v1.14.0
 ## explicit; go 1.17
-github.com/spf13/viper
-github.com/spf13/viper/internal/encoding
-github.com/spf13/viper/internal/encoding/dotenv
-github.com/spf13/viper/internal/encoding/hcl
-github.com/spf13/viper/internal/encoding/ini
-github.com/spf13/viper/internal/encoding/javaproperties
-github.com/spf13/viper/internal/encoding/json
-github.com/spf13/viper/internal/encoding/toml
-github.com/spf13/viper/internal/encoding/yaml
 # github.com/subosito/gotenv v1.4.1
 ## explicit; go 1.18
-github.com/subosito/gotenv
 # github.com/tcnksm/go-gitconfig v0.1.2
 ## explicit
 github.com/tcnksm/go-gitconfig
@@ -392,7 +360,6 @@ golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
 golang.org/x/text/language
-golang.org/x/text/runes
 golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
@@ -458,7 +425,6 @@ gopkg.in/AlecAivazis/survey.v1/terminal
 gopkg.in/inf.v0
 # gopkg.in/ini.v1 v1.67.0
 ## explicit
-gopkg.in/ini.v1
 # gopkg.in/segmentio/analytics-go.v3 v3.1.0
 ## explicit
 gopkg.in/segmentio/analytics-go.v3
