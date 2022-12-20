@@ -1,4 +1,17 @@
 
+<a name="v0.51.9"></a>
+## [v0.51.9](https://github.com/redhat-developer/app-services-cli/compare/v0.51.8...v0.51.9) (2022-12-19)
+
+### Bug Fixes
+
+* run go mod vendor ([#1791](https://github.com/redhat-developer/app-services-cli/issues/1791))
+
+### Features
+
+* **connector cluster:** add update command ([#1789](https://github.com/redhat-developer/app-services-cli/issues/1789))
+* **kafka create:** return appropriate error for no regions ([#1790](https://github.com/redhat-developer/app-services-cli/issues/1790))
+
+
 <a name="v0.51.8"></a>
 ## [v0.51.8](https://github.com/redhat-developer/app-services-cli/compare/v0.51.7...v0.51.8) (2022-12-09)
 
