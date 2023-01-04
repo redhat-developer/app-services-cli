@@ -12,6 +12,10 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 )
 
+const (
+	RedHatMarketPlace = "rhm"
+)
+
 func CheckTermsAccepted(ctx context.Context, spec *remote.AmsConfig, conn connection.Connection) (accepted bool, redirectURI string, err error) {
 	termsReview, _, err := conn.API().AccountMgmt().
 		ApiAuthorizationsV1SelfTermsReviewPost(ctx).
@@ -107,7 +111,8 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 	return availableOrgQuotas, nil
 }
 
-func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo) (*QuotaSpec, error) {
+// nolint:funlen
+func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo, provider string) (*QuotaSpec, error) {
 
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
 		if marketplaceInfo.BillingModel != "" || marketplaceInfo.Provider != "" {
@@ -131,12 +136,31 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
 		}
 
+		var filteredMarketPlaceQuotas []QuotaSpec
+
+		if provider != "" {
+			for _, quota := range orgQuota.MarketplaceQuotas {
+				for _, cloudAccount := range *quota.CloudAccounts {
+					if cloudAccount.GetCloudProviderId() == provider || cloudAccount.GetCloudProviderId() == RedHatMarketPlace {
+						filteredMarketPlaceQuotas = append(filteredMarketPlaceQuotas, quota)
+						break
+					}
+				}
+			}
+
+			orgQuota.MarketplaceQuotas = uniqueQuota(filteredMarketPlaceQuotas)
+		}
+
+		if len(orgQuota.MarketplaceQuotas) == 0 {
+			return nil, errors.New("no marketplace quota available for given provider")
+		}
+
 		marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
 		if err != nil {
 			return nil, err
 		}
 
-		marketplaceQuota.CloudAccounts, err = pickCloudAccount(f, marketplaceQuota.CloudAccounts, marketplaceInfo)
+		marketplaceQuota.CloudAccounts, err = pickCloudAccount(f, marketplaceQuota.CloudAccounts, marketplaceInfo, provider)
 		if err != nil {
 			return nil, err
 		}
@@ -149,12 +173,32 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return &orgQuota.StandardQuotas[0], nil
 		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+
+			var filteredMarketPlaceQuotas []QuotaSpec
+
+			if provider != "" {
+				for _, quota := range orgQuota.MarketplaceQuotas {
+					for _, cloudAccount := range *quota.CloudAccounts {
+						if cloudAccount.GetCloudProviderId() == provider || cloudAccount.GetCloudProviderId() == RedHatMarketPlace {
+							filteredMarketPlaceQuotas = append(filteredMarketPlaceQuotas, quota)
+							break
+						}
+					}
+				}
+
+				orgQuota.MarketplaceQuotas = uniqueQuota(filteredMarketPlaceQuotas)
+			}
+
+			if len(orgQuota.MarketplaceQuotas) == 0 {
+				return nil, errors.New("no marketplace quota available for given provider")
+			}
+
 			marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
 			if err != nil {
 				return nil, err
 			}
 
-			marketplaceQuota.CloudAccounts, err = pickCloudAccount(f, marketplaceQuota.CloudAccounts, marketplaceInfo)
+			marketplaceQuota.CloudAccounts, err = pickCloudAccount(f, marketplaceQuota.CloudAccounts, marketplaceInfo, provider)
 			if err != nil {
 				return nil, err
 			}
@@ -209,13 +253,26 @@ func pickMarketplaceQuota(f *factory.Factory, marketplaceQuotas []QuotaSpec, mar
 	return &matchedQuotas[0], nil
 }
 
-func pickCloudAccount(f *factory.Factory, cloudAccounts *[]amsclient.CloudAccount, market MarketplaceInfo) (*[]amsclient.CloudAccount, error) {
+func pickCloudAccount(f *factory.Factory, cloudAccounts *[]amsclient.CloudAccount, market MarketplaceInfo, provider string) (*[]amsclient.CloudAccount, error) {
+
+	// filter cloud accounts according to provider
+	var filteredCloudAccounts []amsclient.CloudAccount
+
+	if provider != "" {
+		for _, cloudAccount := range *cloudAccounts {
+			if *cloudAccount.CloudProviderId == provider || *cloudAccount.CloudProviderId == RedHatMarketPlace {
+				filteredCloudAccounts = append(filteredCloudAccounts, cloudAccount)
+			}
+		}
+
+		*cloudAccounts = filteredCloudAccounts
+	}
 
 	if len(*cloudAccounts) == 1 {
 		return cloudAccounts, nil
 	}
 
-	if len(*cloudAccounts) > 2 && market.Provider == "" && market.CloudAccountID == "" {
+	if len(*cloudAccounts) > 1 && market.Provider == "" && market.CloudAccountID == "" {
 		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.multipleCloudAccounts")
 	}
 
@@ -285,6 +342,18 @@ func unique(s []string) []string {
 		if _, ok := inResult[str]; !ok {
 			inResult[str] = true
 			result = append(result, str)
+		}
+	}
+	return result
+}
+
+func uniqueQuota(s []QuotaSpec) []QuotaSpec {
+	inResult := make(map[QuotaSpec]bool)
+	var result []QuotaSpec
+	for _, quota := range s {
+		if _, ok := inResult[quota]; !ok {
+			inResult[quota] = true
+			result = append(result, quota)
 		}
 	}
 	return result
