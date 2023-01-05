@@ -148,7 +148,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 				}
 			}
 
-			orgQuota.MarketplaceQuotas = uniqueQuota(filteredMarketPlaceQuotas)
+			orgQuota.MarketplaceQuotas = uniqueQuotaSpec(filteredMarketPlaceQuotas)
 		}
 
 		if len(orgQuota.MarketplaceQuotas) == 0 {
@@ -186,7 +186,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 					}
 				}
 
-				orgQuota.MarketplaceQuotas = uniqueQuota(filteredMarketPlaceQuotas)
+				orgQuota.MarketplaceQuotas = uniqueQuotaSpec(filteredMarketPlaceQuotas)
 			}
 
 			if len(orgQuota.MarketplaceQuotas) == 0 {
@@ -347,7 +347,8 @@ func unique(s []string) []string {
 	return result
 }
 
-func uniqueQuota(s []QuotaSpec) []QuotaSpec {
+// uniqueQuotaSpec accepts a list of QuotaSpec objects and returns the unique QuotaSpecs
+func uniqueQuotaSpec(s []QuotaSpec) []QuotaSpec {
 	inResult := make(map[QuotaSpec]bool)
 	var result []QuotaSpec
 	for _, quota := range s {
