@@ -2,7 +2,6 @@ package create
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -260,7 +259,7 @@ func runCreate(opts *options) error {
 
 			if opts.marketplace != "" && opts.marketplace != accountmgmtutil.RedHatMarketPlace {
 				if opts.marketplace != opts.provider {
-					return errors.New("selected marketplace is not supported for the cloud provider")
+					return opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.unsupportedMarketplace")
 				}
 			}
 
@@ -487,10 +486,8 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	availableBillingModels := FetchSupportedBillingModels(orgQuota, answers.CloudProvider)
 
 	if len(availableBillingModels) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
-		return nil, errors.New("standard instances are unavailable for the cloud provider, try another provider")
+		return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
 	}
-
-	fmt.Println("Supported Billing Models - ", availableBillingModels)
 
 	if len(availableBillingModels) > 0 {
 		if len(availableBillingModels) == 1 {

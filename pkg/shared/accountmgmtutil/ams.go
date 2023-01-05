@@ -152,7 +152,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		}
 
 		if len(orgQuota.MarketplaceQuotas) == 0 {
-			return nil, errors.New("no marketplace quota available for given provider")
+			return nil, f.Localizer.MustLocalizeError("kafka.create.provider.error.noMarketplaceQuota")
 		}
 
 		marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
@@ -190,7 +190,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 			}
 
 			if len(orgQuota.MarketplaceQuotas) == 0 {
-				return nil, errors.New("no marketplace quota available for given provider")
+				return nil, f.Localizer.MustLocalizeError("kafka.create.provider.error.noMarketplaceQuota")
 			}
 
 			marketplaceQuota, err := getMarketplaceQuota(f, orgQuota.MarketplaceQuotas, marketplaceInfo)
