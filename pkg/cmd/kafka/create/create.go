@@ -257,7 +257,13 @@ func runCreate(opts *options) error {
 				CloudAccountID: opts.marketplaceAcctId,
 			}
 
-			userQuota, err = accountmgmtutil.SelectQuotaForUser(f, orgQuotas, marketplaceInfo)
+			if opts.marketplace != "" && opts.marketplace != accountmgmtutil.RedHatMarketPlace {
+				if opts.marketplace != opts.provider {
+					return opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.unsupportedMarketplace")
+				}
+			}
+
+			userQuota, err = accountmgmtutil.SelectQuotaForUser(f, orgQuotas, marketplaceInfo, opts.provider)
 			if err != nil {
 				return err
 			}
@@ -477,7 +483,11 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	availableBillingModels := FetchSupportedBillingModels(orgQuota)
+	availableBillingModels := FetchSupportedBillingModels(orgQuota, answers.CloudProvider)
+
+	if len(availableBillingModels) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+		return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
+	}
 
 	if len(availableBillingModels) > 0 {
 		if len(availableBillingModels) == 1 {
@@ -495,7 +505,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
-		validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas)
+		validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, answers.CloudProvider)
 		if len(validMarketPlaces) == 1 {
 			answers.Marketplace = validMarketPlaces[0]
 		} else {
@@ -534,7 +544,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		CloudAccountID: answers.MarketplaceAcctID,
 	}
 
-	userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo)
+	userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo, answers.CloudProvider)
 	if err != nil {
 		return nil, err
 	}

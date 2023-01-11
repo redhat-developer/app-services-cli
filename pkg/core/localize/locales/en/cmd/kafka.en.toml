@@ -417,6 +417,15 @@ provided instance size is not valid. Valid sizes: {{.ValidSizes}}
 [kafka.create.error.noRegionSupported]
 one = 'all regions in the selected cloud provider are temporarily unavailable'
 
+[kafka.create.provider.error.noStandardInstancesAvailable]
+one = 'standard instances are unavailable for the cloud provider, try another provider'
+
+[kafka.create.provider.error.noMarketplaceQuota]
+one = 'no marketplace quota available for given provider'
+
+[kafka.create.provider.error.unsupportedMarketplace]
+one = 'selected marketplace is not supported for the cloud provider'
+
 [kafka.create.error.billing.invalid]
 one = '''
 provided billing account id and provider are invalid {{.Billing}}

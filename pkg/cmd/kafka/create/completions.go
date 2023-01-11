@@ -45,7 +45,7 @@ func GetKafkaSizeCompletionValues(f *factory.Factory, providerID string, regionI
 		return nil, directive
 	}
 
-	userInstanceType, _ := accountmgmtutil.SelectQuotaForUser(f, orgQuota, accountmgmtutil.MarketplaceInfo{})
+	userInstanceType, _ := accountmgmtutil.SelectQuotaForUser(f, orgQuota, accountmgmtutil.MarketplaceInfo{}, "")
 
 	// Not including quota in this request as it takes very long time to list quota for all regions in suggestion mode
 	validSizes, _ = FetchValidKafkaSizesLabels(f, providerID, regionId, *userInstanceType)
@@ -67,7 +67,7 @@ func GetMarketplaceCompletionValues(f *factory.Factory) (validSizes []string, di
 		return nil, directive
 	}
 
-	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas)
+	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, "")
 
 	return validMarketPlaces, cobra.ShellCompDirectiveNoSpace
 }
@@ -109,7 +109,7 @@ func GetBillingModelCompletionValues(f *factory.Factory) (availableBillingModels
 		return nil, directive
 	}
 
-	availableBillingModels = FetchSupportedBillingModels(orgQuota)
+	availableBillingModels = FetchSupportedBillingModels(orgQuota, "")
 
 	return availableBillingModels, directive
 }

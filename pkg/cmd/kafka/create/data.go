@@ -55,7 +55,7 @@ func FetchValidKafkaSizesLabels(f *factory.Factory,
 
 }
 
-func FetchSupportedBillingModels(userQuotas *accountmgmtutil.OrgQuotas) []string {
+func FetchSupportedBillingModels(userQuotas *accountmgmtutil.OrgQuotas, provider string) []string {
 
 	billingModels := []string{}
 
@@ -64,20 +64,37 @@ func FetchSupportedBillingModels(userQuotas *accountmgmtutil.OrgQuotas) []string
 	}
 
 	if len(userQuotas.MarketplaceQuotas) > 0 {
-		billingModels = append(billingModels, accountmgmtutil.QuotaMarketplaceType)
+		if provider != "" {
+			for _, quota := range userQuotas.MarketplaceQuotas {
+				for _, cloudAccount := range *quota.CloudAccounts {
+					if cloudAccount.GetCloudProviderId() == provider || cloudAccount.GetCloudProviderId() == accountmgmtutil.RedHatMarketPlace {
+						billingModels = append(billingModels, accountmgmtutil.QuotaMarketplaceType)
+						return billingModels
+					}
+				}
+			}
+		} else {
+			billingModels = append(billingModels, accountmgmtutil.QuotaMarketplaceType)
+		}
 	}
 
 	return billingModels
 }
 
-func FetchValidMarketplaces(amsTypes []accountmgmtutil.QuotaSpec) []string {
+func FetchValidMarketplaces(amsTypes []accountmgmtutil.QuotaSpec, provider string) []string {
 
 	validMarketplaces := []string{}
 
 	for _, quota := range amsTypes {
 		if quota.CloudAccounts != nil {
 			for _, cloudAccount := range *quota.CloudAccounts {
-				validMarketplaces = append(validMarketplaces, *cloudAccount.CloudProviderId)
+				if provider != "" {
+					if *cloudAccount.CloudProviderId == provider || *cloudAccount.CloudProviderId == accountmgmtutil.RedHatMarketPlace {
+						validMarketplaces = append(validMarketplaces, *cloudAccount.CloudProviderId)
+					}
+				} else {
+					validMarketplaces = append(validMarketplaces, *cloudAccount.CloudProviderId)
+				}
 			}
 		}
 	}
