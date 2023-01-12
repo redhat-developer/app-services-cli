@@ -164,9 +164,21 @@ func createServiceAccount(opts *factory.Factory, shortDescription string) (*svca
 }
 
 func setDefaultValuesFromFlags(connector *connectormgmtclient.ConnectorRequest, opts *options) error {
+
+	conn, err := opts.f.Connection()
+	if err != nil {
+		return err
+	}
+
 	if opts.kafkaId != "" {
+		kafkaInstance, _, kafkaErr := kafkautil.GetKafkaByID(opts.f.Context, conn.API().KafkaMgmt(), opts.kafkaId)
+		if kafkaErr != nil {
+			return kafkaErr
+		}
+
 		connector.Kafka = connectormgmtclient.KafkaConnectionSettings{
-			Id: opts.kafkaId,
+			Id:  opts.kafkaId,
+			Url: kafkaInstance.GetBootstrapServerHost(),
 		}
 	}
 

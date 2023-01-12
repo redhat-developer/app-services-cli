@@ -23,20 +23,21 @@ rhoas connector update [flags]
 ### Examples
 
 ```
-# Update a Connectors instance
-rhoas connector update --id=my-connector --file=myconnector.json
+# Update name of the current Connectors instance
+rhoas connector update --name=my-connector
 
-# Update a Connectors instance from stdin
-cat myconnector.json | rhoas connector update
+# Update Kafka Instance of a Connectors instance by ID
+rhoas connector update --kafka-id ce6pg07k09f3rs6us7sg --id ce6tgb1mk0orirpo5i70
 
 ```
 
 ### Options
 
 ```
-      --kafka-id string       ID of the namespace in which you want to deploy the Connectors instance
+      --id string             ID of the Connectors instance to be updated (the default is the instance in current context)
+      --kafka-id string       ID of of the Kafka instance that you want the Connectors instance to use
       --name string           Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)
-      --namespace-id string   ID of of the Kafka instance that you want the Connectors instance to use
+      --namespace-id string   ID of the namespace in which you want to deploy the Connectors instance
   -o, --output string         Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 

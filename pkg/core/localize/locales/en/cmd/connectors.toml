@@ -399,11 +399,11 @@ After you edit the configuration file, use the "connector update" command to upd
 
 [connector.update.cmd.example]
 one = '''
-# Update a Connectors instance
-rhoas connector update --id=my-connector --file=myconnector.json
+# Update name of the current Connectors instance
+rhoas connector update --name=my-connector
 
-# Update a Connectors instance from stdin
-cat myconnector.json | rhoas connector update
+# Update Kafka Instance of a Connectors instance by ID
+rhoas connector update --kafka-id ce6pg07k09f3rs6us7sg --id ce6tgb1mk0orirpo5i70
 '''
 
 [connector.update.info.success]
@@ -423,6 +423,9 @@ one = 'ID of of the Kafka instance that you want the Connectors instance to use'
 
 [connector.flag.namespace.description]
 one = 'ID of the namespace for the Connectors instance (the default is the namespace for the current context)'
+
+[connector.flag.id.description]
+one = 'ID of the Connectors instance to be updated (the default is the instance in current context)'
 
 [connector.flag.name.description]
 one = 'Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)'
