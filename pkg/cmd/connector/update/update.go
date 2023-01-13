@@ -19,10 +19,9 @@ import (
 )
 
 type options struct {
-	namespaceID string
-	kafkaID     string
-	name        string
-	id          string
+	kafkaID string
+	name    string
+	id      string
 
 	outputFormat string
 	f            *factory.Factory
@@ -68,7 +67,6 @@ func NewUpdateCommand(f *factory.Factory) *cobra.Command {
 	flags := flagutil.NewFlagSet(cmd, f.Localizer)
 	flags.StringVar(&opts.id, "id", "", f.Localizer.MustLocalize("connector.flag.id.description"))
 	flags.StringVar(&opts.name, "name", "", f.Localizer.MustLocalize("connector.flag.name.description"))
-	flags.StringVar(&opts.namespaceID, "namespace-id", "", f.Localizer.MustLocalize("connector.flag.namespaceID.description"))
 	flags.StringVar(&opts.kafkaID, "kafka-id", "", f.Localizer.MustLocalize("connector.flag.kafkaID.description"))
 	flags.AddOutput(&opts.outputFormat)
 
@@ -92,10 +90,6 @@ func runUpdate(opts *options) error {
 	connectorChanged := false
 	if opts.name != "" {
 		connector.SetName(opts.name)
-		connectorChanged = true
-	}
-	if opts.namespaceID != "" {
-		connector.SetNamespaceId(opts.namespaceID)
 		connectorChanged = true
 	}
 	if opts.kafkaID != "" {
