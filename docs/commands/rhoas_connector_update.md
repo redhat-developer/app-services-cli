@@ -34,11 +34,10 @@ rhoas connector update --kafka-id ce6pg07k09f3rs6us7sg --id ce6tgb1mk0orirpo5i70
 ### Options
 
 ```
-      --id string             ID of the Connectors instance to be updated (the default is the instance in current context)
-      --kafka-id string       ID of of the Kafka instance that you want the Connectors instance to use
-      --name string           Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)
-      --namespace-id string   ID of the namespace in which you want to deploy the Connectors instance
-  -o, --output string         Specify the output format. Choose from: "json", "yaml", "yml"
+      --id string         ID of the Connectors instance to be updated (the default is the instance in current context)
+      --kafka-id string   ID of of the Kafka instance that you want the Connectors instance to use
+      --name string       Override the name of the Connectors instance (the default name is the name specified in the connector configuration file)
+  -o, --output string     Specify the output format. Choose from: "json", "yaml", "yml"
 ```
 
 ### Options inherited from parent commands
