@@ -1,4 +1,14 @@
 
+<a name="v0.52.0"></a>
+## [v0.52.0](https://github.com/redhat-developer/app-services-cli/compare/v0.51.9...v0.52.0) (2023-01-14)
+
+### Bug Fixes
+
+* **connector create:** remove namespace flag ([#1793](https://github.com/redhat-developer/app-services-cli/issues/1793))
+* **connector update:** populate kafka url ([#1786](https://github.com/redhat-developer/app-services-cli/issues/1786))
+* **kafka create:** sync marketplace provider with cloud provider ([#1792](https://github.com/redhat-developer/app-services-cli/issues/1792))
+
+
 <a name="v0.51.9"></a>
 ## [v0.51.9](https://github.com/redhat-developer/app-services-cli/compare/v0.51.8...v0.51.9) (2022-12-19)
 
