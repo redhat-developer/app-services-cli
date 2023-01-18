@@ -67,6 +67,18 @@ func (a *defaultAPI) KafkaMgmt() kafkamgmtclient.DefaultApi {
 	return client.DefaultApi
 }
 
+func (a *defaultAPI) KafkaMgmtEnterprise() kafkamgmtclient.EnterpriseDataplaneClustersApi {
+	tc := a.CreateOAuthTransport(a.AccessToken)
+	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
+		BaseURL:    a.ApiURL.String(),
+		Debug:      a.Logger.DebugEnabled(),
+		HTTPClient: tc,
+		UserAgent:  a.UserAgent,
+	})
+
+	return client.EnterpriseDataplaneClustersApi
+}
+
 // ServiceRegistryMgmt return a new Service Registry Management API client instance
 func (a *defaultAPI) ServiceRegistryMgmt() registrymgmtclient.RegistriesApi {
 	tc := a.CreateOAuthTransport(a.AccessToken)
@@ -302,7 +314,6 @@ func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, error) {
 
 // create an OCM clustermgmt client
 func (a *defaultAPI) OCMClustermgmt() (*ocmclustersmgmtv1.Client, error) {
-	// create an OCM connection
 	conn, err := a.CreateOCMConnection()
 	if err != nil {
 		return nil, err

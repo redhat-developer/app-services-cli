@@ -22,6 +22,7 @@ type API interface {
 	ServiceRegistryMgmt() registrymgmtclient.RegistriesApi
 	ConnectorsMgmt() connectormgmtclient.APIClient
 	ServiceAccountMgmt() svcacctmgmtclient.ServiceAccountsApi
+	KafkaMgmtEnterprise() kafkamgmtclient.EnterpriseDataplaneClustersApi
 	KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
 	AccountMgmt() amsclient.AppServicesApi
