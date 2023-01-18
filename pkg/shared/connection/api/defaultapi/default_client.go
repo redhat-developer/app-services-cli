@@ -6,13 +6,17 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 
 	connectormgmt "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
 
+	// "github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
+	ocmSdkClient "github.com/openshift-online/ocm-sdk-go"
+	ocmclustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
@@ -272,4 +276,36 @@ func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 			Source: oauth2.ReuseTokenSource(nil, ts),
 		},
 	}
+}
+
+func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, error) {
+	connection, err := ocmSdkClient.NewConnectionBuilder().
+		Tokens(a.AccessToken).
+		Build()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
+		return nil, err
+	}
+	// What is the best way to handle this connection? the defer connection.Close() will not let the connection
+	// stay open when the client is passed to the calling function
+
+	//defer connection.Close()
+
+	// alternatively we can create a call back, but this will require a
+	//return (*ocmclustersmgmtv1.Client)(connection.ClustersMgmt().V1()), func() {
+	//	_ = connection.Close()
+	//}, nil
+
+	// futures may also be used here but I have no experience of using them.
+	return connection, nil
+}
+
+// create an OCM clustermgmt client
+func (a *defaultAPI) OCMClustermgmt() (*ocmclustersmgmtv1.Client, error) {
+	// create an OCM connection
+	conn, err := a.CreateOCMConnection()
+	if err != nil {
+		return nil, err
+	}
+	return conn.ClustersMgmt().V1(), nil
 }
