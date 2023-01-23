@@ -36,7 +36,8 @@ jobs:
             core.setOutput('version', version)
       - 
         name: Install git-chglog
-        uses: craicoverflow/install-git-chglog@v1
+        # v1
+        uses: craicoverflow/install-git-chglog@6d338c1d96dcbf12a2115fbe8e5b9817293aae33
       - 
         name: Generate release notes
         if: steps.check-tag.outputs.prerelease == 'false'
@@ -48,7 +49,8 @@ jobs:
         run: cat RELEASE_NOTES.md
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v3
+        # v3
+        uses: goreleaser/goreleaser-action@b508e2e3ef3b19d4e4146d4f8fb3ba9db644a757
         if: steps.check-tag.outputs.prerelease == 'false'
         with:
           version: latest
@@ -57,7 +59,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run GoReleaser on pre-release
-        uses: goreleaser/goreleaser-action@v3
+        # v3
+        uses: goreleaser/goreleaser-action@b508e2e3ef3b19d4e4146d4f8fb3ba9db644a757
         if: steps.check-tag.outputs.prerelease == 'true'
         with:
           version: latest
@@ -67,7 +70,8 @@ jobs:
 
       - name: Notify Guides of new version
         if: steps.check-tag.outputs.prerelease == 'false'
-        uses: peter-evans/repository-dispatch@v2
+        # v2
+        uses: peter-evans/repository-dispatch@26b39ed245ab8f31526069329e112ab2fb224588
         with:
           token: ${{ secrets.APP_SERVICES_CI }}
           repository: redhat-developer/app-services-guides
