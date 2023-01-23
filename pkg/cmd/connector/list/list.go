@@ -107,7 +107,7 @@ func runList(opts *options) error {
 			return err
 		}
 
-		if currCtx.KafkaID != "" {
+		if currCtx.ConnectorID != "" {
 			rows = mapResponseItemsToRows(response.GetItems(), currCtx.ConnectorID)
 		} else {
 			rows = mapResponseItemsToRows(response.GetItems(), "-")
