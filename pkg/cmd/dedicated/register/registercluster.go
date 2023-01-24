@@ -211,6 +211,10 @@ func createNewMachinePoolTaintsDedicated() *v1.TaintBuilder {
 		Value(machinePoolTaintValue)
 }
 
+//func createNewMachinePoolLabelsDedicated() (map[string]string, error) {
+//
+//}
+
 func createNewMachinePoolLabelsDedicated() (*v1.Label, error) {
 	label := v1.NewLabel().
 		Key(machinePoolLabelKey).
@@ -297,7 +301,30 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 // refactor to take in list -- select or create
 func validateMachinePoolNodes(opts *options) error {
 	for _, machinePool := range opts.existingMachinePoolList {
-		if validateMachinePoolCount(machinePool.Replicas()) &&
+
+		// manyandas code here doesn't work.
+		//var nodeCount int
+		//replicas, ok :=	machinePool.GetReplicas()
+		//if ok {
+		//	nodeCount = replicas
+		//} else {
+		//	autoscaledReplicas, ok := machinePool.GetAutoscaling()
+		//	if ok {
+		//		nodeCount = autoscaledReplicas.MaxReplicas()
+		//	}
+		//}
+
+		// does this do as expected??
+		mp, ok := machinePool.GetReplicas()
+		if !ok {
+			mp = 0
+		} else {
+			autoScaledReplicas, ok := machinePool.GetAutoscaling()
+			if ok {
+				mp = autoScaledReplicas.MaxReplicas()
+			}
+		}
+		if validateMachinePoolCount(mp) &&
 			checkForValidMachinePoolLabels(machinePool) &&
 			checkForValidMachinePoolTaints(machinePool) {
 			opts.selectedClusterMachinePool = machinePool
@@ -331,7 +358,6 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	return nil
 }
 
-// TODO add machine pool logic
 func registerClusterWithKFM(opts *options) error {
 	clusterIngressDNSName, err := parseDNSURL(opts)
 	if err != nil {
