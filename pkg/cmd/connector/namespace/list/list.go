@@ -1,6 +1,7 @@
 package list
 
 import (
+	"fmt"
 	"strconv"
 
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
@@ -8,6 +9,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/spf13/cobra"
@@ -88,8 +91,21 @@ func runList(opts *options) error {
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
 		var rows []itemRow
-		rows = mapResponseItemsToRows(response.Items)
 
+		svcContext, err := opts.f.ServiceContext.Load()
+		if err != nil {
+			return err
+		}
+		currCtx, err := contextutil.GetCurrentContext(svcContext, opts.f.Localizer)
+		if err != nil {
+			return err
+		}
+
+		if currCtx.KafkaID != "" {
+			rows = mapResponseItemsToRows(response.GetItems(), currCtx.NamespaceID)
+		} else {
+			rows = mapResponseItemsToRows(response.GetItems(), "-")
+		}
 		dump.Table(f.IOStreams.Out, rows)
 		f.Logger.Info("")
 	default:
@@ -98,13 +114,14 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(items []connectormgmtclient.ConnectorNamespace) []itemRow {
+func mapResponseItemsToRows(items []connectormgmtclient.ConnectorNamespace, selectedId string) []itemRow {
 	rows := make([]itemRow, len(items))
-
 	for i := range items {
 		k := items[i]
 		name := k.GetName()
-
+		if k.GetId() == selectedId {
+			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))
+		}
 		row := itemRow{
 			ID:      k.GetId(),
 			Name:    name,

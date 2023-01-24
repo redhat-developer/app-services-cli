@@ -6,6 +6,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/spf13/cobra"
@@ -38,11 +39,27 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
 			}
 
+			if opts.id != "" {
+				return runDescribe(opts)
+			}
+
+			conn, err := opts.f.Connection()
+			if err != nil {
+				return err
+			}
+
+			connectorInstance, err := contextutil.GetCurrentConnectorInstance(&conn, f)
+			if err != nil {
+				return err
+			}
+
+			opts.id = connectorInstance.GetId()
+
 			return runDescribe(opts)
 		},
 	}
 	flags := connectorcmdutil.NewFlagSet(cmd, f)
-	_ = flags.AddConnectorID(&opts.id).Required()
+	_ = flags.AddConnectorID(&opts.id)
 	flags.AddOutput(&opts.outputFormat)
 
 	return cmd
