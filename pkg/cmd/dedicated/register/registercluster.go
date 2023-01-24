@@ -16,7 +16,7 @@ import (
 
 type options struct {
 	selectedClusterId string
-	clusterList       v1.ClusterList
+	clusterList       []v1.Cluster
 	//interactive                   bool
 	selectedCluster         v1.Cluster
 	clusterMachinePoolList  v1.MachinePoolList
@@ -31,11 +31,12 @@ type options struct {
 }
 
 const (
-	machinePoolId           = "kafka-standard"
-	machinePoolTaintKey     = "bf2.org/kafkaInstanceProfileType"
-	machinePoolTaintEffect  = "NoExecute"
-	machinePoolTaintValue   = "standard"
-	machinePoolInstanceType = "m5.2xlarge"
+	machinePoolId          = "kafka-standard"
+	machinePoolTaintKey    = "bf2.org/kafkaInstanceProfileType"
+	machinePoolTaintEffect = "NoExecute"
+	machinePoolTaintValue  = "standard"
+	//machinePoolInstanceType = "m5.2xlarge"
+	machinePoolInstanceType = "r5.xlarge"
 	machinePoolLabelKey     = "bf2.org/kafkaInstanceProfileType"
 	machinePoolLabelValue   = "standard"
 )
@@ -58,7 +59,7 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	// TODO add Localizer and logic for pass cluster ID flag
+	// TODO add Localizer and flags
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
 	// this flag will allow the user to pass the cluster id as a flag
 	opts.selectedClusterId = "123"
@@ -84,7 +85,7 @@ func getListClusters(opts *options) error {
 	if err != nil {
 		return err
 	}
-	client, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt()
 	if err != nil {
 		return err
 	}
@@ -95,19 +96,30 @@ func getListClusters(opts *options) error {
 		return err
 	}
 	clusters := response.Items()
-	opts.clusterList = *clusters
+	var cls = []v1.Cluster{}
+	for _, cluster := range clusters.Slice() {
+		// TODO the cluster must be multiAZ
+		//if cluster.State() == "ready" && cluster.MultiAZ() == true {
+		if cluster.State() == "ready" {
+			cls = append(cls, *cluster)
+		}
+	}
+	opts.clusterList = cls
+	defer cc()
+	//defer conn.Close()
 	return nil
 }
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
+	// get rid of this
 	clusterListString := make([]string, 0)
-	for _, cluster := range opts.clusterList.Slice() {
+	for _, cluster := range opts.clusterList {
 		clusterListString = append(clusterListString, cluster.Name())
 	}
 
 	// TODO add page size and Localizer
 	prompt := &survey.Select{
-		Message: "Select the cluster to register",
+		Message: "Select the ready cluster to register",
 		Options: clusterListString,
 	}
 
@@ -118,9 +130,9 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	}
 
 	// get the desired cluster
-	for _, cluster := range opts.clusterList.Slice() {
+	for _, cluster := range opts.clusterList {
 		if cluster.Name() == selectedClusterName {
-			opts.selectedCluster = *cluster
+			opts.selectedCluster = cluster
 		}
 	}
 	return nil
@@ -141,11 +153,10 @@ func getMachinePoolList(opts *options) error {
 	if err != nil {
 		return err
 	}
-	client, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt()
 	if err != nil {
 		return err
 	}
-
 	resource := client.Clusters().Cluster(opts.selectedCluster.ID()).MachinePools().List()
 	response, err := resource.Send()
 	if err != nil {
@@ -162,13 +173,14 @@ func getMachinePoolList(opts *options) error {
 			return err
 		}
 	}
+	defer cc()
 	return nil
 }
 
 func checkForValidMachinePoolLabels(machinePool v1.MachinePool) bool {
 	labels := machinePool.Labels()
 	for key, value := range labels {
-		if key == machinePoolLabelKey && value == "standard" {
+		if key == machinePoolLabelKey && value == machinePoolLabelValue {
 			return true
 		}
 	}
@@ -241,7 +253,7 @@ func createMachinePool(opts *options, mprequest *v1.MachinePool) error {
 	if err != nil {
 		return err
 	}
-	client, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt()
 	if err != nil {
 		return err
 	}
@@ -250,6 +262,7 @@ func createMachinePool(opts *options, mprequest *v1.MachinePool) error {
 		return err
 	}
 	opts.selectedClusterMachinePool = *response.Body()
+	defer cc()
 	return nil
 }
 
@@ -281,19 +294,18 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 }
 
 // machine pool replica count must be greater than or equal and a multiple of 3
+// refactor to take in list -- select or create
 func validateMachinePoolNodes(opts *options) error {
-	if len(opts.clusterMachinePoolList.Slice()) > 0 {
-		for _, machinePool := range opts.clusterMachinePoolList.Slice() {
-			if validateMachinePoolCount(machinePool.Replicas()) &&
-				checkForValidMachinePoolLabels(*machinePool) &&
-				checkForValidMachinePoolTaints(*machinePool) {
-				opts.selectedClusterMachinePool = *machinePool
-				return nil
-			} else {
-				err := createMachinePoolInteractivePrompt(opts)
-				if err != nil {
-					return err
-				}
+	for _, machinePool := range opts.existingMachinePoolList {
+		if validateMachinePoolCount(machinePool.Replicas()) &&
+			checkForValidMachinePoolLabels(machinePool) &&
+			checkForValidMachinePoolTaints(machinePool) {
+			opts.selectedClusterMachinePool = machinePool
+			return nil
+		} else {
+			err := createMachinePoolInteractivePrompt(opts)
+			if err != nil {
+				return err
 			}
 		}
 	}
@@ -342,9 +354,11 @@ func registerClusterWithKFM(opts *options) error {
 	response, r, err := resource.Execute()
 	if err != nil {
 		return err
-		return nil
 	}
-	opts.f.Logger.Info("response: ", response)
+	// add strimzi first
+	//opts.f.Logger.Info("response strimzi params: ", response.FleetshardParameters)
+	// id of the param and the value is the list
+	opts.f.Logger.Info("response fleetshard params: ", response.FleetshardParameters)
 	opts.f.Logger.Info("r: ", r)
 	return nil
 }

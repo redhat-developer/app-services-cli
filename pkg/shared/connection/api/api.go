@@ -29,7 +29,7 @@ type API interface {
 	RBAC() rbac.RbacAPI
 	GenericAPI() generic.GenericAPI
 	GetConfig() Config
-	OCMClustermgmt() (*ocmclustersmgmtv1.Client, error)
+	OCMClustermgmt() (*ocmclustersmgmtv1.Client, func(), error)
 }
 
 type Config struct {

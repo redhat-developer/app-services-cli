@@ -44,7 +44,7 @@ type defaultAPI struct {
 }
 
 // New creates a new default API client wrapper
-func New(cfg *api.Config) api.API {
+func New(cfg *api.Config) *defaultAPI {
 	return &defaultAPI{
 		Config: *cfg,
 	}
@@ -290,33 +290,26 @@ func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 	}
 }
 
-func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, error) {
+func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, func(), error) {
 	connection, err := ocmSdkClient.NewConnectionBuilder().
 		Tokens(a.AccessToken).
 		Build()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		return nil, err
+		return nil, nil, err
 	}
-	// What is the best way to handle this connection? the defer connection.Close() will not let the connection
-	// stay open when the client is passed to the calling function
-
-	//defer connection.Close()
-
-	// alternatively we can create a call back, but this will require a
-	//return (*ocmclustersmgmtv1.Client)(connection.ClustersMgmt().V1()), func() {
-	//	_ = connection.Close()
-	//}, nil
-
-	// futures may also be used here but I have no experience of using them.
-	return connection, nil
+	return connection, func() {
+		_ = connection.Close()
+	}, nil
 }
 
 // create an OCM clustermgmt client
-func (a *defaultAPI) OCMClustermgmt() (*ocmclustersmgmtv1.Client, error) {
-	conn, err := a.CreateOCMConnection()
+func (a *defaultAPI) OCMClustermgmt() (*ocmclustersmgmtv1.Client, func(), error) {
+	connection, closeConnection, err := a.CreateOCMConnection()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return conn.ClustersMgmt().V1(), nil
+	return connection.ClustersMgmt().V1(), func() {
+		closeConnection()
+	}, nil
 }
