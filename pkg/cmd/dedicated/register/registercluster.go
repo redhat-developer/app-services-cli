@@ -7,9 +7,8 @@ import (
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	dedicatedcmdutil "github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -26,6 +25,7 @@ type options struct {
 	requestedMachinePoolNodeCount int
 	accessKafkasViaPrivateNetwork bool
 	newMachinePool                v1.MachinePool
+	fleetshardParams              map[string]string
 
 	f *factory.Factory
 }
@@ -74,7 +74,7 @@ func runRegisterClusterCmd(opts *options) error {
 	runClusterSelectionInteractivePrompt(opts)
 	getMachinePoolList(opts)
 	selectAccessPrivateNetworkInteractivePrompt(opts)
-	registerClusterWithKFM(opts)
+	registerClusterWithKasFleetManager(opts)
 
 	return nil
 }
@@ -187,8 +187,8 @@ func checkForValidMachinePoolLabels(machinePool v1.MachinePool) bool {
 	return false
 }
 
-func validateMachinePoolCount(count int) bool {
-	if count <= 2 || count%3 != 0 {
+func validateMachinePoolNodeCount(nodeCount int) bool {
+	if nodeCount <= 2 || nodeCount%3 != 0 {
 		return false
 	}
 	return true
@@ -197,7 +197,9 @@ func validateMachinePoolCount(count int) bool {
 func checkForValidMachinePoolTaints(machinePool v1.MachinePool) bool {
 	taints := machinePool.Taints()
 	for _, taint := range taints {
-		if taint.Effect() == machinePoolTaintEffect && taint.Key() == machinePoolTaintKey {
+		if taint.Effect() == machinePoolTaintEffect &&
+			taint.Key() == machinePoolTaintKey &&
+			taint.Value() == machinePoolTaintValue {
 			return true
 		}
 	}
@@ -211,37 +213,18 @@ func createNewMachinePoolTaintsDedicated() *v1.TaintBuilder {
 		Value(machinePoolTaintValue)
 }
 
-//func createNewMachinePoolLabelsDedicated() (map[string]string, error) {
-//
-//}
-
-func createNewMachinePoolLabelsDedicated() (*v1.Label, error) {
-	label := v1.NewLabel().
-		Key(machinePoolLabelKey).
-		Value(machinePoolLabelValue)
-	l, err := label.Build()
-	if err != nil {
-		return nil, err
+func createNewMachinePoolLabelsDedicated() map[string]string {
+	return map[string]string{
+		machinePoolLabelKey: machinePoolLabelValue,
 	}
-	return l, nil
-}
-
-func createMachinePoolLabelMap(labels *v1.Label) map[string]string {
-	labelMap := make(map[string]string)
-	labelMap[labels.Key()] = labels.Value()
-	return labelMap
 }
 
 func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*v1.MachinePool, error) {
-	labels, err := createNewMachinePoolLabelsDedicated()
-	if err != nil {
-		return nil, err
-	}
 	mp := v1.NewMachinePool()
 	mp.ID(machinePoolId).
 		Replicas(machinePoolNodeCount).
 		InstanceType(machinePoolInstanceType).
-		Labels(createMachinePoolLabelMap(labels)).
+		Labels(createNewMachinePoolLabelsDedicated()).
 		Taints(createNewMachinePoolTaintsDedicated())
 	machinePool, err := mp.Build()
 	if err != nil {
@@ -324,9 +307,10 @@ func validateMachinePoolNodes(opts *options) error {
 				mp = autoScaledReplicas.MaxReplicas()
 			}
 		}
-		if validateMachinePoolCount(mp) &&
+		if validateMachinePoolNodeCount(mp) &&
 			checkForValidMachinePoolLabels(machinePool) &&
 			checkForValidMachinePoolTaints(machinePool) {
+			opts.f.Logger.Info("Found a valid machine pool: %s", machinePool.ID())
 			opts.selectedClusterMachinePool = machinePool
 			return nil
 		} else {
@@ -342,7 +326,7 @@ func validateMachinePoolNodes(opts *options) error {
 func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	options := []string{"Yes", "No"}
 	prompt := &survey.Select{
-		Message: "Do you want to access a private network?",
+		Message: "Do you want to access Kafkas via a private network?",
 		Options: options,
 	}
 	err := survey.AskOne(prompt, &options)
@@ -358,7 +342,7 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	return nil
 }
 
-func registerClusterWithKFM(opts *options) error {
+func registerClusterWithKasFleetManager(opts *options) error {
 	clusterIngressDNSName, err := parseDNSURL(opts)
 	if err != nil {
 		return err
@@ -381,6 +365,16 @@ func registerClusterWithKFM(opts *options) error {
 	if err != nil {
 		return err
 	}
+	fsoParams := []kafkamgmtclient.FleetshardParameter{}
+
+	for _, param := range response.GetFleetshardParameters() {
+		fsoParams = append(fsoParams, kafkamgmtclient.FleetshardParameter{
+			Id:    param.Id,
+			Value: param.Value,
+		})
+	}
+
+	opts.f.Logger.Info("fsoParams: ", fsoParams)
 	// add strimzi first
 	//opts.f.Logger.Info("response strimzi params: ", response.FleetshardParameters)
 	// id of the param and the value is the list
