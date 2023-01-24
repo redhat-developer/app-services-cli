@@ -12,6 +12,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/AlecAivazis/survey/v2"
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtv1errors "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/error"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
@@ -23,8 +25,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
 
 	"github.com/spf13/cobra"
 

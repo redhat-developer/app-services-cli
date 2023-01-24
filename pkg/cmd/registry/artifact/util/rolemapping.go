@@ -1,6 +1,6 @@
 package util
 
-import registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+import registryinstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
 
 func GetRoleLabel(role registryinstanceclient.RoleType) string {
 	switch role {

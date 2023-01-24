@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	svcacctmgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmterrors "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/credentials"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/serviceaccount/svcaccountcmdutil/validation"
@@ -17,8 +19,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
-	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"

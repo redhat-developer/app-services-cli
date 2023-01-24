@@ -1,9 +1,9 @@
 package registryinstance
 
 import (
-	"github.com/redhat-developer/app-services-sdk-go/core"
+	"github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/core"
 
-	apiv1 "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+	apiv1 "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
 // Config defines the available configuration options

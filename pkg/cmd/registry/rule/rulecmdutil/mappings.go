@@ -1,7 +1,7 @@
 package rulecmdutil
 
 import (
-	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+	registryinstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
 var ruleTypeMap = map[string]registryinstanceclient.RuleType{

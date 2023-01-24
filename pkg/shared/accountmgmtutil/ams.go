@@ -7,7 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
-	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
+	amsclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 )

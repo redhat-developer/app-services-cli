@@ -21,8 +21,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
-	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
+	srsmgmtv1 "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
+	srsmgmtv1errors "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/error"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"

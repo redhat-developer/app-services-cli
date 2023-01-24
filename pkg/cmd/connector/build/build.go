@@ -6,14 +6,14 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 
+	connectormgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
+	connectorerror "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/error"
 	"github.com/jackdelahunt/survey-json-schema/pkg/surveyjson"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector/connectorcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
-	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"

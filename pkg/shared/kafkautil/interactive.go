@@ -9,7 +9,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
 	"github.com/AlecAivazis/survey/v2"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 const (

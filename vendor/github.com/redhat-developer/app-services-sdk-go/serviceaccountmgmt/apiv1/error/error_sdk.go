@@ -3,7 +3,7 @@ package error
 import (
 	"errors"
 
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 // GetAPIError gets a strongly typed error from an error

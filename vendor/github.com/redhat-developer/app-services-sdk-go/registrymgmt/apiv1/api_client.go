@@ -1,9 +1,9 @@
 package registrymgmt
 
 import (
-	"github.com/redhat-developer/app-services-sdk-go/core"
+	"github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/core"
 
-	apiv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	apiv1 "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 // Config defines the available configuration options

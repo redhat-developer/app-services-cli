@@ -5,7 +5,7 @@ import (
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize/goi18n"
 
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 var validator *Validator

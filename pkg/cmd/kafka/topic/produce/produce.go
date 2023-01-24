@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	kafkainstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client"
 	kafkaflagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 
 	"github.com/AlecAivazis/survey/v2"
 

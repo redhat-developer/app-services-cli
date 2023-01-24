@@ -14,6 +14,7 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/google/go-github/v39 v39.2.0
+	github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go v0.7.0
 	github.com/jackdelahunt/survey-json-schema v0.12.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
@@ -22,21 +23,14 @@ require (
 	github.com/openconfig/goyang v1.2.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
-	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
-	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.10.0
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.15.0
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.2
-	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.1
-	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/wtrocki/go-github-selfupdate v1.2.4
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
-	golang.org/x/oauth2 v0.2.0
-	golang.org/x/text v0.4.0
+	golang.org/x/oauth2 v0.4.0
+	golang.org/x/text v0.6.0
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0
 	gopkg.in/yaml.v2 v2.4.0
@@ -93,7 +87,6 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
-	github.com/redhat-developer/app-services-sdk-go v0.11.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
@@ -106,9 +99,9 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
-	golang.org/x/net v0.2.0 // indirect
-	golang.org/x/sys v0.2.0 // indirect
-	golang.org/x/term v0.2.0 // indirect
+	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/term v0.4.0 // indirect
 	golang.org/x/time v0.0.0-20220609170525-579cf78fd858 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect

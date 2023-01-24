@@ -16,7 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	"github.com/spf13/cobra"
 
-	srsmgmtv1client "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	srsmgmtv1client "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 type options struct {

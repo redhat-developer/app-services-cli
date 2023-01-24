@@ -6,8 +6,8 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
+	connectorerror "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/error"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
 
 	"github.com/spf13/cobra"
 )

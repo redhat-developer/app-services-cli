@@ -12,13 +12,13 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 
 	"github.com/AlecAivazis/survey/v2"
+	kafkainstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
 	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 
 	"github.com/spf13/cobra"
 )

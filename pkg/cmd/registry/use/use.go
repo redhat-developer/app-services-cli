@@ -16,7 +16,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	srsmgmtv1 "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 

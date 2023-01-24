@@ -5,7 +5,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
 	"github.com/AlecAivazis/survey/v2"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
+	connectormgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
 )
 
 func InteractiveSelect(connection connection.Connection, f *factory.Factory) (*connectormgmtclient.Connector, error) {

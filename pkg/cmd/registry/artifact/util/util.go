@@ -3,9 +3,9 @@ package util
 import (
 	"fmt"
 
+	registryinstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
+	registrymgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
-	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
-	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 // GetArtifactURL takes registry and artifact metadata to build URL to artifact in console

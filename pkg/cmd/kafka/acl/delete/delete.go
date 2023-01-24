@@ -2,6 +2,7 @@ package delete
 
 import (
 	"github.com/AlecAivazis/survey/v2"
+	kafkainstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/aclcmdutil"
 	aclFlagUtil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -12,7 +13,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
 	"github.com/spf13/cobra"
 )
 

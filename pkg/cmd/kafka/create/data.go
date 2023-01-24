@@ -1,9 +1,9 @@
 package create
 
 import (
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 // Types we use on backend to map AMS Quotas

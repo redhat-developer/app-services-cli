@@ -18,7 +18,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 type options struct {

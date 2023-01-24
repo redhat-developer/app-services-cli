@@ -14,19 +14,19 @@ import (
 	// embed static HTML file
 	_ "embed"
 
+	connectorerror "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/error"
+	svcacctmgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 	"github.com/pkg/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 
 	"gopkg.in/AlecAivazis/survey.v1"
 
+	connectormgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
 
 	"github.com/spf13/cobra"
 )

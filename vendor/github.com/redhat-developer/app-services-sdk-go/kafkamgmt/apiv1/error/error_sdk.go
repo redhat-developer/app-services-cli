@@ -3,7 +3,7 @@ package error
 import (
 	"errors"
 
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 // GetAPIError gets a strongly typed error from an error

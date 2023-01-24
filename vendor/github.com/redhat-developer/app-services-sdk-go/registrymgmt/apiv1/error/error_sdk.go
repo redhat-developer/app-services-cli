@@ -3,7 +3,7 @@ package error
 import (
 	"errors"
 
-	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
+	registrymgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 )
 
 // GetAPIError gets a strongly typed error from an error

@@ -7,31 +7,31 @@ import (
 	"net/http"
 	"net/url"
 
-	connectormgmt "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
-	kafkamgmt "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1"
+	connectormgmt "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1"
+	connectormgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
+	kafkamgmt "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
+	amsclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client"
+	kafkainstance "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1"
+	kafkainstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client"
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtv1errors "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/error"
+	registryinstance "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal"
+	registryinstanceclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
+	registrymgmt "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1"
+	registrymgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/svcstatus"
-	amsclient "github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client"
-	kafkainstance "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1"
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
-	kafkamgmtv1errors "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/error"
-	registryinstance "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal"
-	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
-	registrymgmt "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1"
-	registrymgmtclient "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
 	"golang.org/x/oauth2"
 
-	svcacctmgmt "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1"
+	svcacctmgmt "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1"
 
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 )
 
 // defaultAPI is a type which defines a number of API creator functions

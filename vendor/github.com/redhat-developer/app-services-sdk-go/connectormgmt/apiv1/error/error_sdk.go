@@ -3,7 +3,7 @@ package error
 import (
 	"errors"
 
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
+	connectormgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
 )
 
 // GetAPIError gets a strongly typed error from an error

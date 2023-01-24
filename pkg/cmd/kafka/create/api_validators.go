@@ -8,9 +8,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/accountmgmtutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 
+	kafkamgmtclient "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/remote"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"k8s.io/utils/strings/slices"
 )
 

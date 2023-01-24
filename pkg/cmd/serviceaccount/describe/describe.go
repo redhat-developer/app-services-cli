@@ -3,13 +3,13 @@ package describe
 import (
 	"context"
 
+	svcacctmgmterrors "github.com/jackdelahunt/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	svcacctmgmterrors "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/error"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
