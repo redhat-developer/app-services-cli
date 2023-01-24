@@ -274,19 +274,19 @@
 
 ### Bug Fixes
 
-* do not reuse connection for the commands ([#1624](https://github.com/redhat-developer/app-services-cli/issues/1624))
-* nil keys are now empty strings when consumed ([#1621](https://github.com/redhat-developer/app-services-cli/issues/1621))
-* billing model fixes ([#1617](https://github.com/redhat-developer/app-services-cli/issues/1617))
-* added topic name as a hint when confirming deletion of topic ([#1585](https://github.com/redhat-developer/app-services-cli/issues/1585))
+* update error message to reflect proper flag name ([#1602](https://github.com/redhat-developer/app-services-cli/issues/1602))
 * add prerelease support for documentation sync ([#1612](https://github.com/redhat-developer/app-services-cli/issues/1612))
+* do not reuse connection for the commands ([#1624](https://github.com/redhat-developer/app-services-cli/issues/1624))
+* remove redundant kafka admin slash ([#1600](https://github.com/redhat-developer/app-services-cli/issues/1600))
+* use kafka admin url from control plane ([#1601](https://github.com/redhat-developer/app-services-cli/issues/1601))
 * regenerate documentation ([#1611](https://github.com/redhat-developer/app-services-cli/issues/1611))
 * more examples for consume produce ([#1609](https://github.com/redhat-developer/app-services-cli/issues/1609))
 * restore hidden connectors commands on main
 * reenable connectors
 * enable using custom provider by specifying env var ([#1605](https://github.com/redhat-developer/app-services-cli/issues/1605))
-* update error message to reflect proper flag name ([#1602](https://github.com/redhat-developer/app-services-cli/issues/1602))
-* use kafka admin url from control plane ([#1601](https://github.com/redhat-developer/app-services-cli/issues/1601))
-* remove redundant kafka admin slash ([#1600](https://github.com/redhat-developer/app-services-cli/issues/1600))
+* billing model fixes ([#1617](https://github.com/redhat-developer/app-services-cli/issues/1617))
+* nil keys are now empty strings when consumed ([#1621](https://github.com/redhat-developer/app-services-cli/issues/1621))
+* added topic name as a hint when confirming deletion of topic ([#1585](https://github.com/redhat-developer/app-services-cli/issues/1585))
 * remove require mas-auth ([#1599](https://github.com/redhat-developer/app-services-cli/issues/1599))
 * add documentation import
 * add connector annotation for adoc generator
@@ -298,11 +298,11 @@
 
 ### Features
 
-* aws marketplace configuration for testing ([#1586](https://github.com/redhat-developer/app-services-cli/issues/1586))
 * consume now uses seperate time flags for date and Unix ([#1615](https://github.com/redhat-developer/app-services-cli/issues/1615))
 * connectors docs and enablement ([#1606](https://github.com/redhat-developer/app-services-cli/issues/1606))
 * added more examples to topic and consume docs ([#1607](https://github.com/redhat-developer/app-services-cli/issues/1607))
 * produce and consume records ([#1598](https://github.com/redhat-developer/app-services-cli/issues/1598))
+* aws marketplace configuration for testing ([#1586](https://github.com/redhat-developer/app-services-cli/issues/1586))
 * **completion:** add instruction for powershell completions ([#1620](https://github.com/redhat-developer/app-services-cli/issues/1620))
 * **generate-config:** add overwrite flag and change default env file ([#1604](https://github.com/redhat-developer/app-services-cli/issues/1604))
 * **service-account:** enable credentials to be saved as secret ([#1575](https://github.com/redhat-developer/app-services-cli/issues/1575))
@@ -313,11 +313,11 @@
 
 ### Bug Fixes
 
+* addressing feedback for instance sizes ([#1552](https://github.com/redhat-developer/app-services-cli/issues/1552))
 * add tech preview warning for kafka creation([#1577](https://github.com/redhat-developer/app-services-cli/issues/1577))
 * add support for dynamic config url ([#1565](https://github.com/redhat-developer/app-services-cli/issues/1565))
 * revert update kafka mgmt sdk for the latest version ([#1569](https://github.com/redhat-developer/app-services-cli/issues/1569))" ([#1570](https://github.com/redhat-developer/app-services-cli/issues/1570))
 * update kafka mgmt sdk for the latest version ([#1569](https://github.com/redhat-developer/app-services-cli/issues/1569))
-* addressing feedback for instance sizes ([#1552](https://github.com/redhat-developer/app-services-cli/issues/1552))
 * **connector cluster:** wrong sdk method used in delete cmd ([#1555](https://github.com/redhat-developer/app-services-cli/issues/1555))
 * **deps:** update module github.com/coreos/go-oidc/v3 to v3.2.0
 * **deps:** update docusaurus monorepo to v2.0.0-beta.20
@@ -387,24 +387,24 @@
 
 ### Bug Fixes
 
-* change message for compatibility APIs
-* change to info from error
-* address review comments
-* add remaining commands
+* use default page size from build
 * add messages placeholders
+* address review comments
+* map connector status to row ([#1518](https://github.com/redhat-developer/app-services-cli/issues/1518))
+* add remaining commands
 * build failing at lint
 * expose api config to enable using external clients and APIs ([#1523](https://github.com/redhat-developer/app-services-cli/issues/1523))
+* change message for compatibility APIs
+* default client
+* change to info from error
 * update client to enable using external clients
-* map connector status to row ([#1518](https://github.com/redhat-developer/app-services-cli/issues/1518))
-* remove invalid char in docs
-* use default page size from build
 * add create support
 * add parameters
 * improve messages
 * add example strings
 * add connectors to root
 * move messages generator
-* default client
+* remove invalid char in docs
 * **connector:** hide connector commands
 * **connector namespace:** add validation
 
@@ -431,37 +431,37 @@
 
 ### Bug Fixes
 
-* include toml files in build ([#1477](https://github.com/redhat-developer/app-services-cli/issues/1477))
-* suspend updating modular docs for prereleases ([#1521](https://github.com/redhat-developer/app-services-cli/issues/1521))
-* regenerate documentation
+* update go in CI/CD workflow ([#1514](https://github.com/redhat-developer/app-services-cli/issues/1514))
+* add migration to the contexts
+* enable self updating CLI ([#1509](https://github.com/redhat-developer/app-services-cli/issues/1509))
 * status builder lint issues
 * refactor status command
 * handle custom context location
 * rename context maps
 * address review comments
-* message for partition limit ([#1459](https://github.com/redhat-developer/app-services-cli/issues/1459))
-* add migration to the contexts
-* add validation for context create
-* build failing at test ([#1469](https://github.com/redhat-developer/app-services-cli/issues/1469))
-* update golang version
-* update golang version
-* update go in CI/CD workflow ([#1514](https://github.com/redhat-developer/app-services-cli/issues/1514))
-* update telemetry setup
 * add server side backed up metrics ([#1493](https://github.com/redhat-developer/app-services-cli/issues/1493))
+* include toml files in build ([#1477](https://github.com/redhat-developer/app-services-cli/issues/1477))
+* add validation for context create
+* update telemetry setup
+* update golang version
+* update golang version
+* regenerate documentation
+* message for partition limit ([#1459](https://github.com/redhat-developer/app-services-cli/issues/1459))
+* suspend updating modular docs for prereleases ([#1521](https://github.com/redhat-developer/app-services-cli/issues/1521))
 * add support for calling any endpoint from control plane ([#1497](https://github.com/redhat-developer/app-services-cli/issues/1497))
+* build failing at test ([#1469](https://github.com/redhat-developer/app-services-cli/issues/1469))
 * changes required for Kafka SDK update ([#1470](https://github.com/redhat-developer/app-services-cli/issues/1470))
-* enable self updating CLI ([#1509](https://github.com/redhat-developer/app-services-cli/issues/1509))
-* **context:** fixes bugs and add comments
 * **context:** examples of re-used commands
-* **deps:** update docusaurus monorepo to v2.0.0-beta.18
+* **context:** fixes bugs and add comments
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.3
+* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.4
 * **deps:** update module github.com/golang-jwt/jwt/v4 to v4.4.0
 * **deps:** update all
+* **deps:** update docusaurus monorepo to v2.0.0-beta.18
 * **deps:** update module github.com/golang-jwt/jwt/v4 to v4.4.1
-* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.4
-* **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.3
+* **deps:** update golang.org/x/oauth2 commit hash to ee48083
 * **deps:** update docusaurus monorepo to v2.0.0-beta.17
 * **deps:** update docusaurus monorepo to v2.0.0-beta.16
-* **deps:** update golang.org/x/oauth2 commit hash to ee48083
 
 ### Features
 
@@ -551,36 +551,36 @@
 
 ### Bug Fixes
 
-* use old branch name for documentation
-* add plural form for ACL messages ([#1369](https://github.com/redhat-developer/app-services-cli/issues/1369))
+* change base url
+* remove logging from segment
 * small style correction on documentation
 * clarify documentation process ([#1410](https://github.com/redhat-developer/app-services-cli/issues/1410))
 * capital case for message
 * typo in the message ([#1407](https://github.com/redhat-developer/app-services-cli/issues/1407))
 * Add error handling to service registry ([#1401](https://github.com/redhat-developer/app-services-cli/issues/1401))
-* change partition limit for new topic creation ([#1406](https://github.com/redhat-developer/app-services-cli/issues/1406))
-* change base url
-* regenerate documentation for registry ([#1378](https://github.com/redhat-developer/app-services-cli/issues/1378))
-* refactor: place utility methods in pkg/cmd ([#1371](https://github.com/redhat-developer/app-services-cli/issues/1371))
 * kill ams source code
 * replace AMS with SDK version
+* align roles for service registry ([#1413](https://github.com/redhat-developer/app-services-cli/issues/1413))
+* change partition limit for new topic creation ([#1406](https://github.com/redhat-developer/app-services-cli/issues/1406))
+* regenerate documentation for registry ([#1378](https://github.com/redhat-developer/app-services-cli/issues/1378))
+* refactor: place utility methods in pkg/cmd ([#1371](https://github.com/redhat-developer/app-services-cli/issues/1371))
 * parse yq version for different outputs ([#1388](https://github.com/redhat-developer/app-services-cli/issues/1388))
 * disable docs updates from main
 * add cli prefix to adoc files
 * missing formatter from previous PRs
-* remove logging from segment
-* align roles for service registry ([#1413](https://github.com/redhat-developer/app-services-cli/issues/1413))
+* add plural form for ACL messages ([#1369](https://github.com/redhat-developer/app-services-cli/issues/1369))
+* use old branch name for documentation
 * **acl grant-admin:** add flag for instance id ([#1363](https://github.com/redhat-developer/app-services-cli/issues/1363))
-* **deps:** update k8s.io/utils commit hash to 7d6a63d
-* **deps:** update docusaurus monorepo to v2.0.0-beta.15
-* **deps:** update k8s.io/utils commit hash to 9b34465
 * **deps:** update all
+* **deps:** update k8s.io/utils commit hash to 7d6a63d
+* **deps:** update module github.com/openconfig/goyang to v0.4.0
+* **deps:** update docusaurus monorepo to v2.0.0-beta.15
 * **deps:** update docusaurus monorepo to v2.0.0-beta.14
 * **deps:** pin dependencies
 * **deps:** pin dependencies
-* **deps:** update github.com/phayes/freeport commit hash to 74d24b5
+* **deps:** update k8s.io/utils commit hash to 9b34465
 * **deps:** update module github.com/openconfig/goyang to v0.3.2
-* **deps:** update module github.com/openconfig/goyang to v0.4.0
+* **deps:** update github.com/phayes/freeport commit hash to 74d24b5
 * **deps:** update all
 * **deps:** update module github.com/briandowns/spinner to v1.18.0
 * **deps:** update module github.com/briandowns/spinner to v1.17.0
@@ -701,17 +701,17 @@
 
 ### Bug Fixes
 
+* service account creation printing extra steps ([#1262](https://github.com/redhat-developer/app-services-cli/issues/1262))
 * remove ACL preview from delete command ([#1256](https://github.com/redhat-developer/app-services-cli/issues/1256))
-* restore delete command
 * missing i18n keys for kafka topics validation
 * address issues with acl documentation
-* enable dev mode for delete acl command
-* shorten very long documentation
-* documentation
-* typo in the help
-* service account creation printing extra steps ([#1262](https://github.com/redhat-developer/app-services-cli/issues/1262))
-* documentation for ACL in cluster connect ([#1259](https://github.com/redhat-developer/app-services-cli/issues/1259))
 * remove indentation in long descriptions ([#1240](https://github.com/redhat-developer/app-services-cli/issues/1240))
+* shorten very long documentation
+* restore delete command
+* documentation
+* enable dev mode for delete acl command
+* documentation for ACL in cluster connect ([#1259](https://github.com/redhat-developer/app-services-cli/issues/1259))
+* typo in the help
 * **command:** rhoas cluster clean -y command message ([#1252](https://github.com/redhat-developer/app-services-cli/issues/1252))
 * **deps:** update module github.com/openconfig/goyang to v0.3.1
 * **deps:** update module github.com/openconfig/goyang to v0.3.0
@@ -774,14 +774,14 @@
 
 ### Bug Fixes
 
-* use pre-defined service status constant values
 * replace service account "name" with "short description" ([#1193](https://github.com/redhat-developer/app-services-cli/issues/1193))
 * check HTTP code as instance quota check
 * detect and  handle API error code
-* changed the source path for rhoas binary
 * use pre-defined service status constant values (generate docs)
+* use pre-defined service status constant values
 * use realistic values and remove <> characters
 * add token endpoint URL to credentials file ([#1177](https://github.com/redhat-developer/app-services-cli/issues/1177))
+* changed the source path for rhoas binary
 * **deps:** update golang.org/x/oauth2 commit hash to 6b3c2da
 * **kafka acl:** address review comments for list command
 * **service-registry list:** adding input validation ([#1163](https://github.com/redhat-developer/app-services-cli/issues/1163))
@@ -954,8 +954,8 @@
 * remove invalid output flag from service registry artifacts delete cmd([#930](https://github.com/redhat-developer/app-services-cli/issues/930))
 * add -f flag shortcut to output file ([#935](https://github.com/redhat-developer/app-services-cli/issues/935))
 * rename flag for get and download commands ([#943](https://github.com/redhat-developer/app-services-cli/issues/943))
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.2 ([#855](https://github.com/redhat-developer/app-services-cli/issues/855))
-* **deps:** update golang.org/x/oauth2 commit hash to 2bc19b1
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go/registryinstance to v0.1.1
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.3 ([#862](https://github.com/redhat-developer/app-services-cli/issues/862))
 * **deps:** update all to v0.22.1
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go/registrymgmt to v0.1.1 ([#949](https://github.com/redhat-developer/app-services-cli/issues/949))
 * **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.0
@@ -963,14 +963,14 @@
 * **deps:** update module github.com/openconfig/goyang to v0.2.9
 * **deps:** update module github.com/aerogear/charmil to v0.8.2
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.5 ([#893](https://github.com/redhat-developer/app-services-cli/issues/893))
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go/registryinstance to v0.1.1
-* **deps:** update module github.com/openconfig/goyang to v0.2.8
 * **deps:** update module github.com/alecaivazis/survey/v2 to v2.3.1
+* **deps:** update module github.com/openconfig/goyang to v0.2.8
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.1 ([#849](https://github.com/redhat-developer/app-services-cli/issues/849))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.2 ([#855](https://github.com/redhat-developer/app-services-cli/issues/855))
 * **deps:** update all
 * **deps:** update all ([#885](https://github.com/redhat-developer/app-services-cli/issues/885))
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.4 ([#869](https://github.com/redhat-developer/app-services-cli/issues/869))
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.9.3 ([#862](https://github.com/redhat-developer/app-services-cli/issues/862))
+* **deps:** update golang.org/x/oauth2 commit hash to 2bc19b1
 * **i18n:** set "locales" as root dir ([#847](https://github.com/redhat-developer/app-services-cli/issues/847))
 * **login:** use mas-sso host in login success message ([#889](https://github.com/redhat-developer/app-services-cli/issues/889))
 * **service-account:** remove period from description validation error ([#891](https://github.com/redhat-developer/app-services-cli/issues/891))
@@ -997,19 +997,19 @@ This replaces the positional argument in `rhoas kafka use`, `rhoas kafka describ
 
 ### Bug Fixes
 
-* change default pagination flag ([#816](https://github.com/redhat-developer/app-services-cli/issues/816))
-* remove old workaround for migrating config file name ([#795](https://github.com/redhat-developer/app-services-cli/issues/795))
 * add owner to registry list ([#802](https://github.com/redhat-developer/app-services-cli/issues/802))
-* create folder for the initial config ([#806](https://github.com/redhat-developer/app-services-cli/issues/806))
 * remove URL from table view for serviceregistry list command ([#809](https://github.com/redhat-developer/app-services-cli/issues/809))
-* invalid location of shared service i18n files ([#808](https://github.com/redhat-developer/app-services-cli/issues/808))
-* update charmil & validatorOptions ([#814](https://github.com/redhat-developer/app-services-cli/issues/814))
 * cannot delete service registry by name ([#786](https://github.com/redhat-developer/app-services-cli/issues/786))
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.6.0
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.6.2
+* remove old workaround for migrating config file name ([#795](https://github.com/redhat-developer/app-services-cli/issues/795))
+* update charmil & validatorOptions ([#814](https://github.com/redhat-developer/app-services-cli/issues/814))
+* create folder for the initial config ([#806](https://github.com/redhat-developer/app-services-cli/issues/806))
+* change default pagination flag ([#816](https://github.com/redhat-developer/app-services-cli/issues/816))
+* invalid location of shared service i18n files ([#808](https://github.com/redhat-developer/app-services-cli/issues/808))
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.7.0
-* **deps:** update all to v0.21.3
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.6.0
 * **deps:** update module sigs.k8s.io/controller-runtime to v0.9.3
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.6.2
+* **deps:** update all to v0.21.3
 * **deps:** update all
 * **kafka consumer-group:** use group id filter for dynamic completions ([#827](https://github.com/redhat-developer/app-services-cli/issues/827))
 * **service-account:** reset-credentials prompt ([#838](https://github.com/redhat-developer/app-services-cli/issues/838))
@@ -1031,19 +1031,19 @@ This replaces the positional argument in `rhoas kafka use`, `rhoas kafka describ
 
 * fix not working insecure login ([#738](https://github.com/redhat-developer/app-services-cli/issues/738))
 * add cobra commands validator ([#767](https://github.com/redhat-developer/app-services-cli/issues/767))
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.7 ([#749](https://github.com/redhat-developer/app-services-cli/issues/749))
-* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.6 ([#740](https://github.com/redhat-developer/app-services-cli/issues/740))
-* **deps:** update module github.com/openconfig/goyang to v0.2.6 ([#737](https://github.com/redhat-developer/app-services-cli/issues/737))
-* **deps:** update golang.org/x/oauth2 commit hash to 14747e6 ([#741](https://github.com/redhat-developer/app-services-cli/issues/741))
 * **deps:** update golang.org/x/oauth2 commit hash to bce0382 ([#742](https://github.com/redhat-developer/app-services-cli/issues/742))
-* **deps:** update golang.org/x/oauth2 commit hash to a8dc77f ([#743](https://github.com/redhat-developer/app-services-cli/issues/743))
+* **deps:** update all
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.9.1 ([#736](https://github.com/redhat-developer/app-services-cli/issues/736))
+* **deps:** update module github.com/openconfig/goyang to v0.2.6 ([#737](https://github.com/redhat-developer/app-services-cli/issues/737))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.6 ([#740](https://github.com/redhat-developer/app-services-cli/issues/740))
+* **deps:** update golang.org/x/oauth2 commit hash to 14747e6 ([#741](https://github.com/redhat-developer/app-services-cli/issues/741))
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.4.0 ([#758](https://github.com/redhat-developer/app-services-cli/issues/758))
 * **deps:** update all ([#755](https://github.com/redhat-developer/app-services-cli/issues/755))
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.9 ([#754](https://github.com/redhat-developer/app-services-cli/issues/754))
 * **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.8 ([#752](https://github.com/redhat-developer/app-services-cli/issues/752))
 * **deps:** update module sigs.k8s.io/controller-runtime to v0.9.2 ([#751](https://github.com/redhat-developer/app-services-cli/issues/751))
-* **deps:** update all
-* **deps:** update module sigs.k8s.io/controller-runtime to v0.9.1 ([#736](https://github.com/redhat-developer/app-services-cli/issues/736))
+* **deps:** update module github.com/redhat-developer/app-services-sdk-go to v0.3.7 ([#749](https://github.com/redhat-developer/app-services-cli/issues/749))
+* **deps:** update golang.org/x/oauth2 commit hash to a8dc77f ([#743](https://github.com/redhat-developer/app-services-cli/issues/743))
 * **error:** remove blank line from error message ([#727](https://github.com/redhat-developer/app-services-cli/issues/727))
 * **kafka admin:** validations and show proper error messages ([#729](https://github.com/redhat-developer/app-services-cli/issues/729))
 * **kafka consumergroup list:** fix reference to the wrong i18n ID ([#775](https://github.com/redhat-developer/app-services-cli/issues/775))
@@ -1061,12 +1061,12 @@ This replaces the positional argument in `rhoas kafka use`, `rhoas kafka describ
 
 ### Bug Fixes
 
-* fix invalid i18n arg ([#681](https://github.com/redhat-developer/app-services-cli/issues/681))
 * minor bug fixes and validations ([#696](https://github.com/redhat-developer/app-services-cli/issues/696))
-* misformatted error message ([#669](https://github.com/redhat-developer/app-services-cli/issues/669))
 * erroneous message for invalid option ([#689](https://github.com/redhat-developer/app-services-cli/issues/689))
 * localize id for cluster info ([#688](https://github.com/redhat-developer/app-services-cli/issues/688))
+* fix invalid i18n arg ([#681](https://github.com/redhat-developer/app-services-cli/issues/681))
 * fix invalid i18n ID ([#680](https://github.com/redhat-developer/app-services-cli/issues/680))
+* misformatted error message ([#669](https://github.com/redhat-developer/app-services-cli/issues/669))
 * **config:** create config directory if it does not exist ([#683](https://github.com/redhat-developer/app-services-cli/issues/683))
 * **kafka create:** run interactive if no name provided and fix typos ([#705](https://github.com/redhat-developer/app-services-cli/issues/705))
 * **kafka delete:** show proper message for delete operation ([#700](https://github.com/redhat-developer/app-services-cli/issues/700))
@@ -1659,20 +1659,18 @@ This change will mean that old Kafka instances are inaccessible without overridi
 
 ### Bug Fixes
 
-* cleanup commands documents for usability ([#69](https://github.com/redhat-developer/app-services-cli/issues/69))
-* add basic documentation ([#67](https://github.com/redhat-developer/app-services-cli/issues/67))
+* switch to github package name
+* reorganize script for api updates
 * Remove token mock ([#66](https://github.com/redhat-developer/app-services-cli/issues/66))
 * add missing elements to guide
 * apply fedback by [@wtrocki](https://github.com/wtrocki)
-* provide script for the provisioning of the clusters
-* rename folder
 * make credentials file more secure
 * Update gomod version
 * add authz
 * add minor fixes
 * add package
 * resolve formatting problems
-* reorganize script for api updates
+* Add logout
 * add handy kafka docker compose to the mock
 * add release process docs
 * resolve confusion around authorization command
@@ -1682,7 +1680,7 @@ This change will mean that old Kafka instances are inaccessible without overridi
 * remove operator from the repository
 * disable invalid printing for login/logout
 * remove function used to test bot
-* rename yml file
+* minor improvements
 * general improvements to make file
 * reorganization of the structure
 * build for mac and linux
@@ -1691,28 +1689,27 @@ This change will mean that old Kafka instances are inaccessible without overridi
 * remove vendor folder. It should not be used with packages
 * add formatting check to PR's
 * revert changes for formatting
-* openapi make file
-* add missing files to client
-* move package to root
 * minor fixes
 * minor changes for the demo
-* CMD backbone
+* Initial architecture
+* provide script for the provisioning of the clusters
+* rename folder
 * support for help in browser
-* Base for the unit and integration tests
-* use packge name
+* openapi make file
+* add missing files to client
 * Guide for running this docs
-* disable documentation creator
+* cleanup commands documents for usability ([#69](https://github.com/redhat-developer/app-services-cli/issues/69))
 * documentation generator
 * Do not require gopath on build
 * Use make when building command
 * reduce golang versions
 * Use golang setup action
-* makefile install problem
+* build pipeline
 * build issue with wrong arg
 * minor fixes based on the approved spec
-* switch to github package name
-* Add logout
-* minor improvements
+* disable documentation creator
+* add basic documentation ([#67](https://github.com/redhat-developer/app-services-cli/issues/67))
+* rename yml file
 * list command
 * add error handling
 * Improve formatting
@@ -1745,28 +1742,31 @@ This change will mean that old Kafka instances are inaccessible without overridi
 * support for the create with some missing environment abstraction
 * rename client
 * rename cli
-* build pipeline
+* makefile install problem
 * improve architecture
-* Initial architecture
+* use packge name
+* Base for the unit and integration tests
+* CMD backbone
+* move package to root
 * **cmd:** typo in command name
 * **kafka:** delete status code results is 204 and not 200;
+* **kafka:** create command returns 202 and always require async=true
 * **kafka:** stop command execution when user is not loggen in
 * **kafka:** change default region to "us-west-1"
-* **kafka:** create command returns 202 and always require async=true
-* **login:** make staging the default environment and do not require "url"
-* **login:** check token expiration before sending request to control plane
 * **login:** make token required for now until a proper login flow is figured out
+* **login:** check token expiration before sending request to control plane
+* **login:** make staging the default environment and do not require "url"
 
 ### Features
 
-* positional argument to reference Kafka
-* open browser according to OS
 * add status command
 * add config
-* mock server used for the demo purposes
 * print kafka instances to table
+* positional argument to reference Kafka
+* open browser according to OS
 * Operator using SDK
 * OpenAPI generated client
+* mock server used for the demo purposes
 * Openshift CR's
 * **cmd:** Display message if there are no clusters ([#45](https://github.com/redhat-developer/app-services-cli/issues/45))
 * **kafka:** add mocked version of topics command
