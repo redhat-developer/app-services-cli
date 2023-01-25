@@ -6,7 +6,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	dedicatedcmdutil "github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
-	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
@@ -25,7 +24,6 @@ type options struct {
 	requestedMachinePoolNodeCount int
 	accessKafkasViaPrivateNetwork bool
 	newMachinePool                v1.MachinePool
-	fleetshardParams              map[string]string
 
 	f *factory.Factory
 }
@@ -39,6 +37,7 @@ const (
 	machinePoolInstanceType = "r5.xlarge"
 	machinePoolLabelKey     = "bf2.org/kafkaInstanceProfileType"
 	machinePoolLabelValue   = "standard"
+	clusterReadyState       = "ready"
 )
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
@@ -60,10 +59,10 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	// TODO add Localizer and flags
-	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
+	//flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
 	// this flag will allow the user to pass the cluster id as a flag
-	opts.selectedClusterId = "123"
-	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", "cluster id")
+	//opts.selectedClusterId = "123"
+	//flags.StringVar(&opts.selectedClusterId, "cluster-id", "", "cluster id")
 	//flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("registerCluster.flag.clusterId"))
 
 	return cmd
@@ -89,7 +88,8 @@ func getListClusters(opts *options) error {
 	if err != nil {
 		return err
 	}
-
+	defer cc()
+	// TODO deal with pagination, validate clusters -- must be multi AZ and ready.
 	resource := client.Clusters().List()
 	response, err := resource.Send()
 	if err != nil {
@@ -99,18 +99,17 @@ func getListClusters(opts *options) error {
 	var cls = []v1.Cluster{}
 	for _, cluster := range clusters.Slice() {
 		// TODO the cluster must be multiAZ
-		//if cluster.State() == "ready" && cluster.MultiAZ() == true {
-		if cluster.State() == "ready" {
+		//if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
+		if cluster.State() == clusterReadyState {
 			cls = append(cls, *cluster)
 		}
 	}
 	opts.clusterList = cls
-	defer cc()
-	//defer conn.Close()
 	return nil
 }
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
+	// TODO handle in case of empty cluster list, must be cleared up with UX etc.
 	// get rid of this
 	clusterListString := make([]string, 0)
 	for _, cluster := range opts.clusterList {
@@ -157,6 +156,7 @@ func getMachinePoolList(opts *options) error {
 	if err != nil {
 		return err
 	}
+	defer cc()
 	resource := client.Clusters().Cluster(opts.selectedCluster.ID()).MachinePools().List()
 	response, err := resource.Send()
 	if err != nil {
@@ -173,7 +173,6 @@ func getMachinePoolList(opts *options) error {
 			return err
 		}
 	}
-	defer cc()
 	return nil
 }
 
@@ -219,6 +218,7 @@ func createNewMachinePoolLabelsDedicated() map[string]string {
 	}
 }
 
+// TODO create an autoscaling machine pool
 func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*v1.MachinePool, error) {
 	mp := v1.NewMachinePool()
 	mp.ID(machinePoolId).
@@ -244,12 +244,12 @@ func createMachinePool(opts *options, mprequest *v1.MachinePool) error {
 	if err != nil {
 		return err
 	}
+	defer cc()
 	response, err := client.Clusters().Cluster(opts.selectedCluster.ID()).MachinePools().Add().Body(mprequest).Send()
 	if err != nil {
 		return err
 	}
 	opts.selectedClusterMachinePool = *response.Body()
-	defer cc()
 	return nil
 }
 
@@ -285,32 +285,22 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 func validateMachinePoolNodes(opts *options) error {
 	for _, machinePool := range opts.existingMachinePoolList {
 
-		// manyandas code here doesn't work.
-		//var nodeCount int
-		//replicas, ok :=	machinePool.GetReplicas()
-		//if ok {
-		//	nodeCount = replicas
-		//} else {
-		//	autoscaledReplicas, ok := machinePool.GetAutoscaling()
-		//	if ok {
-		//		nodeCount = autoscaledReplicas.MaxReplicas()
-		//	}
-		//}
-
-		// does this do as expected??
-		mp, ok := machinePool.GetReplicas()
-		if !ok {
-			mp = 0
+		//
+		var nodeCount int
+		replicas, ok := machinePool.GetReplicas()
+		if ok {
+			nodeCount = replicas
 		} else {
-			autoScaledReplicas, ok := machinePool.GetAutoscaling()
+			autoscaledReplicas, ok := machinePool.GetAutoscaling()
 			if ok {
-				mp = autoScaledReplicas.MaxReplicas()
+				nodeCount = autoscaledReplicas.MaxReplicas()
 			}
 		}
-		if validateMachinePoolNodeCount(mp) &&
+
+		if validateMachinePoolNodeCount(nodeCount) &&
 			checkForValidMachinePoolLabels(machinePool) &&
 			checkForValidMachinePoolTaints(machinePool) {
-			opts.f.Logger.Info("Found a valid machine pool: %s", machinePool.ID())
+			opts.f.Logger.Infof("Found a valid machine pool: %s", machinePool.ID())
 			opts.selectedClusterMachinePool = machinePool
 			return nil
 		} else {
@@ -342,17 +332,44 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	return nil
 }
 
+//func CreateAddonWithParams(opts *options, addonId string, params []ocm.AddOnParameter) error {
+//	// create a new addon via ocm
+//	conn, err := opts.f.Connection()
+//	if err != nil {
+//		return err
+//	}
+//	client, cc, err := conn.API().OCMClustermgmt()
+//	if err != nil {
+//		return err
+//	}
+//	response, err := client.Clusters().Cluster(opts.selectedCluster.ID()).
+//		Addons().Add().Body(&v1.AddOn{
+//		ID:     addonId,
+//		Params: params,
+//	}).Send()
+//	if err != nil {
+//		return err
+//	}
+//	opts.selectedClusterAddon = *response.Body()
+//	defer cc()
+//	return nil
+//
+//}
+
 func registerClusterWithKasFleetManager(opts *options) error {
 	clusterIngressDNSName, err := parseDNSURL(opts)
 	if err != nil {
 		return err
 	}
+
+	// TODO finish this
+	nodeCount := funcName(opts)
 	kfmPayload := kafkamgmtclient.EnterpriseOsdClusterPayload{
 		AccessKafkasViaPrivateNetwork: opts.accessKafkasViaPrivateNetwork,
 		ClusterId:                     opts.selectedCluster.ID(),
 		ClusterExternalId:             opts.selectedCluster.ExternalID(),
 		ClusterIngressDnsName:         clusterIngressDNSName,
-		KafkaMachinePoolNodeCount:     int32(opts.selectedClusterMachinePool.Replicas()),
+		KafkaMachinePoolNodeCount:     int32(nodeCount),
 	}
 	opts.f.Logger.Info("kfmPayload: ", kfmPayload)
 	conn, err := opts.f.Connection()
@@ -381,4 +398,18 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	opts.f.Logger.Info("response fleetshard params: ", response.FleetshardParameters)
 	opts.f.Logger.Info("r: ", r)
 	return nil
+}
+
+func funcName(opts *options) int {
+	var nodeCount int
+	replicas, ok := opts.selectedClusterMachinePool.GetReplicas()
+	if ok {
+		nodeCount = replicas
+	} else {
+		autoscaledReplicas, ok := opts.selectedClusterMachinePool.GetAutoscaling()
+		if ok {
+			nodeCount = autoscaledReplicas.MaxReplicas()
+		}
+	}
+	return nodeCount
 }

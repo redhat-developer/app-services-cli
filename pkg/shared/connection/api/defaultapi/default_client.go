@@ -292,6 +292,7 @@ func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 
 func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, func(), error) {
 	connection, err := ocmSdkClient.NewConnectionBuilder().
+		// the access token and url here should be specified and configurable
 		Tokens(a.AccessToken).
 		Build()
 	if err != nil {
