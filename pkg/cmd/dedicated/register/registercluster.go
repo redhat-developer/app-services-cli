@@ -6,6 +6,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	dedicatedcmdutil "github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
+	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
@@ -13,6 +14,7 @@ import (
 )
 
 type options struct {
+	selectedClusterId             string
 	clusterList                   []clustersmgmtv1.Cluster
 	selectedCluster               clustersmgmtv1.Cluster
 	clusterMachinePoolList        clustersmgmtv1.MachinePoolList
@@ -58,12 +60,11 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	// TODO add Localizer and flags
-	// add a flag for clustermgmt url, i.e --cluster-management-api-url, make the flag hidden, api.openshift.com or supply
-	// supply customer mgmt access token via a flag, i.e --access-token, make the flag hidden
-	//flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
+	// add a flag for clustermgmt url, i.e --cluster-management-api-url, make the flag hidden, default to api.openshift.com
+	// supply customer mgmt access token via a flag, i.e --access-token, make the flag hidden, default to ""
+	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
 	// this flag will allow the user to pass the cluster id as a flag
-	//opts.selectedClusterId = "123"
-	//flags.StringVar(&opts.selectedClusterId, "cluster-id", "", "cluster id")
+	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", "cluster id")
 	//flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("registerCluster.flag.clusterId"))
 
 	return cmd
@@ -71,7 +72,15 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 func runRegisterClusterCmd(opts *options) error {
 	getListClusters(opts)
-	runClusterSelectionInteractivePrompt(opts)
+	if opts.selectedClusterId == "" {
+		runClusterSelectionInteractivePrompt(opts)
+	} else {
+		for _, cluster := range opts.clusterList {
+			if cluster.ID() == opts.selectedClusterId {
+				opts.selectedCluster = cluster
+			}
+		}
+	}
 	getOrCreateMachinePoolList(opts)
 	selectAccessPrivateNetworkInteractivePrompt(opts)
 	registerClusterWithKasFleetManager(opts)
@@ -292,7 +301,7 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 func validateMachinePoolNodes(opts *options) error {
 	for _, machinePool := range opts.existingMachinePoolList {
 
-		nodeCount := nodeCountAutoscalingCheck(machinePool)
+		nodeCount := getMachinePoolNodeCount(machinePool)
 
 		if validateMachinePoolNodeCount(nodeCount) &&
 			checkForValidMachinePoolLabels(machinePool) &&
@@ -310,7 +319,7 @@ func validateMachinePoolNodes(opts *options) error {
 	return nil
 }
 
-func nodeCountAutoscalingCheck(machinePool clustersmgmtv1.MachinePool) int {
+func getMachinePoolNodeCount(machinePool clustersmgmtv1.MachinePool) int {
 	var nodeCount int
 	replicas, ok := machinePool.GetReplicas()
 	if ok {
@@ -327,7 +336,7 @@ func nodeCountAutoscalingCheck(machinePool clustersmgmtv1.MachinePool) int {
 func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	options := []string{"Yes", "No"}
 	prompt := &survey.Select{
-		Message: "Do you want to access Kafkas via a private network?",
+		Message: "Would you like your Kakfas to be accessible via a public network?",
 		Options: options,
 	}
 	err := survey.AskOne(prompt, &options)
@@ -335,9 +344,9 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 		return err
 	}
 	if options[0] == "Yes" {
-		opts.accessKafkasViaPrivateNetwork = true
-	} else {
 		opts.accessKafkasViaPrivateNetwork = false
+	} else {
+		opts.accessKafkasViaPrivateNetwork = true
 	}
 
 	return nil
@@ -391,7 +400,7 @@ func registerClusterWithKasFleetManager(opts *options) error {
 		return err
 	}
 
-	nodeCount := nodeCountAutoscalingCheck(opts.selectedClusterMachinePool)
+	nodeCount := getMachinePoolNodeCount(opts.selectedClusterMachinePool)
 	kfmPayload := kafkamgmtclient.EnterpriseOsdClusterPayload{
 		AccessKafkasViaPrivateNetwork: opts.accessKafkasViaPrivateNetwork,
 		ClusterId:                     opts.selectedCluster.ID(),
