@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/AlecAivazis/survey/v2"
-	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	dedicatedcmdutil "github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -13,17 +13,14 @@ import (
 )
 
 type options struct {
-	selectedClusterId string
-	clusterList       []v1.Cluster
-	//interactive                   bool
-	selectedCluster         v1.Cluster
-	clusterMachinePoolList  v1.MachinePoolList
-	existingMachinePoolList []v1.MachinePool
-	//validatedMachinePoolList      []v1.MachinePool
-	selectedClusterMachinePool    v1.MachinePool
+	clusterList                   []clustersmgmtv1.Cluster
+	selectedCluster               clustersmgmtv1.Cluster
+	clusterMachinePoolList        clustersmgmtv1.MachinePoolList
+	existingMachinePoolList       []clustersmgmtv1.MachinePool
+	selectedClusterMachinePool    clustersmgmtv1.MachinePool
 	requestedMachinePoolNodeCount int
 	accessKafkasViaPrivateNetwork bool
-	newMachinePool                v1.MachinePool
+	newMachinePool                clustersmgmtv1.MachinePool
 
 	f *factory.Factory
 }
@@ -38,6 +35,8 @@ const (
 	machinePoolLabelKey     = "bf2.org/kafkaInstanceProfileType"
 	machinePoolLabelValue   = "standard"
 	clusterReadyState       = "ready"
+	fleetshardAddonId       = "kas-fleetshard-operator"
+	strimziAddonId          = "managed-kafka"
 )
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
@@ -59,6 +58,8 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	// TODO add Localizer and flags
+	// add a flag for clustermgmt url, i.e --cluster-management-api-url, make the flag hidden, api.openshift.com or supply
+	// supply customer mgmt access token via a flag, i.e --access-token, make the flag hidden
 	//flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
 	// this flag will allow the user to pass the cluster id as a flag
 	//opts.selectedClusterId = "123"
@@ -71,7 +72,7 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 func runRegisterClusterCmd(opts *options) error {
 	getListClusters(opts)
 	runClusterSelectionInteractivePrompt(opts)
-	getMachinePoolList(opts)
+	getOrCreateMachinePoolList(opts)
 	selectAccessPrivateNetworkInteractivePrompt(opts)
 	registerClusterWithKasFleetManager(opts)
 
@@ -96,11 +97,11 @@ func getListClusters(opts *options) error {
 		return err
 	}
 	clusters := response.Items()
-	var cls = []v1.Cluster{}
+	var cls = []clustersmgmtv1.Cluster{}
 	for _, cluster := range clusters.Slice() {
 		// TODO the cluster must be multiAZ
-		//if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-		if cluster.State() == clusterReadyState {
+		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
+			//if cluster.State() == clusterReadyState {
 			cls = append(cls, *cluster)
 		}
 	}
@@ -110,7 +111,6 @@ func getListClusters(opts *options) error {
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
 	// TODO handle in case of empty cluster list, must be cleared up with UX etc.
-	// get rid of this
 	clusterListString := make([]string, 0)
 	for _, cluster := range opts.clusterList {
 		clusterListString = append(clusterListString, cluster.Name())
@@ -146,21 +146,11 @@ func parseDNSURL(opts *options) (string, error) {
 }
 
 // TODO this function should be split the ocm call and the response flow logic
-func getMachinePoolList(opts *options) error {
+func getOrCreateMachinePoolList(opts *options) error {
 	// ocm client connection
-	conn, err := opts.f.Connection()
-	if err != nil {
-		return err
-	}
-	client, cc, err := conn.API().OCMClustermgmt()
-	if err != nil {
-		return err
-	}
-	defer cc()
-	resource := client.Clusters().Cluster(opts.selectedCluster.ID()).MachinePools().List()
-	response, err := resource.Send()
-	if err != nil {
-		return err
+	err, response, err2 := getMachinePoolList(opts)
+	if err2 != nil {
+		return err2
 	}
 	if response.Size() == 0 {
 		createMachinePoolInteractivePrompt(opts)
@@ -176,7 +166,25 @@ func getMachinePoolList(opts *options) error {
 	return nil
 }
 
-func checkForValidMachinePoolLabels(machinePool v1.MachinePool) bool {
+func getMachinePoolList(opts *options) (error, *clustersmgmtv1.MachinePoolsListResponse, error) {
+	conn, err := opts.f.Connection()
+	if err != nil {
+		return nil, nil, err
+	}
+	client, cc, err := conn.API().OCMClustermgmt()
+	if err != nil {
+		return nil, nil, err
+	}
+	defer cc()
+	resource := client.Clusters().Cluster(opts.selectedCluster.ID()).MachinePools().List()
+	response, err := resource.Send()
+	if err != nil {
+		return nil, nil, err
+	}
+	return err, response, nil
+}
+
+func checkForValidMachinePoolLabels(machinePool clustersmgmtv1.MachinePool) bool {
 	labels := machinePool.Labels()
 	for key, value := range labels {
 		if key == machinePoolLabelKey && value == machinePoolLabelValue {
@@ -193,7 +201,7 @@ func validateMachinePoolNodeCount(nodeCount int) bool {
 	return true
 }
 
-func checkForValidMachinePoolTaints(machinePool v1.MachinePool) bool {
+func checkForValidMachinePoolTaints(machinePool clustersmgmtv1.MachinePool) bool {
 	taints := machinePool.Taints()
 	for _, taint := range taints {
 		if taint.Effect() == machinePoolTaintEffect &&
@@ -205,8 +213,8 @@ func checkForValidMachinePoolTaints(machinePool v1.MachinePool) bool {
 	return false
 }
 
-func createNewMachinePoolTaintsDedicated() *v1.TaintBuilder {
-	return v1.NewTaint().
+func createNewMachinePoolTaintsDedicated() *clustersmgmtv1.TaintBuilder {
+	return clustersmgmtv1.NewTaint().
 		Key(machinePoolTaintKey).
 		Effect(machinePoolTaintEffect).
 		Value(machinePoolTaintValue)
@@ -219,8 +227,8 @@ func createNewMachinePoolLabelsDedicated() map[string]string {
 }
 
 // TODO create an autoscaling machine pool
-func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*v1.MachinePool, error) {
-	mp := v1.NewMachinePool()
+func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*clustersmgmtv1.MachinePool, error) {
+	mp := clustersmgmtv1.NewMachinePool()
 	mp.ID(machinePoolId).
 		Replicas(machinePoolNodeCount).
 		InstanceType(machinePoolInstanceType).
@@ -234,7 +242,7 @@ func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*v1.Machine
 }
 
 // TODO this function should be moved to an ocm client / provider area
-func createMachinePool(opts *options, mprequest *v1.MachinePool) error {
+func createMachinePool(opts *options, mprequest *clustersmgmtv1.MachinePool) error {
 	// create a new machine pool via ocm
 	conn, err := opts.f.Connection()
 	if err != nil {
@@ -281,21 +289,10 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 }
 
 // machine pool replica count must be greater than or equal and a multiple of 3
-// refactor to take in list -- select or create
 func validateMachinePoolNodes(opts *options) error {
 	for _, machinePool := range opts.existingMachinePoolList {
 
-		//
-		var nodeCount int
-		replicas, ok := machinePool.GetReplicas()
-		if ok {
-			nodeCount = replicas
-		} else {
-			autoscaledReplicas, ok := machinePool.GetAutoscaling()
-			if ok {
-				nodeCount = autoscaledReplicas.MaxReplicas()
-			}
-		}
+		nodeCount := nodeCountAutoscalingCheck(machinePool)
 
 		if validateMachinePoolNodeCount(nodeCount) &&
 			checkForValidMachinePoolLabels(machinePool) &&
@@ -311,6 +308,20 @@ func validateMachinePoolNodes(opts *options) error {
 		}
 	}
 	return nil
+}
+
+func nodeCountAutoscalingCheck(machinePool clustersmgmtv1.MachinePool) int {
+	var nodeCount int
+	replicas, ok := machinePool.GetReplicas()
+	if ok {
+		nodeCount = replicas
+	} else {
+		autoscaledReplicas, ok := machinePool.GetAutoscaling()
+		if ok {
+			nodeCount = autoscaledReplicas.MaxReplicas()
+		}
+	}
+	return nodeCount
 }
 
 func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
@@ -332,38 +343,55 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	return nil
 }
 
-//func CreateAddonWithParams(opts *options, addonId string, params []ocm.AddOnParameter) error {
-//	// create a new addon via ocm
-//	conn, err := opts.f.Connection()
-//	if err != nil {
-//		return err
-//	}
-//	client, cc, err := conn.API().OCMClustermgmt()
-//	if err != nil {
-//		return err
-//	}
-//	response, err := client.Clusters().Cluster(opts.selectedCluster.ID()).
-//		Addons().Add().Body(&v1.AddOn{
-//		ID:     addonId,
-//		Params: params,
-//	}).Send()
-//	if err != nil {
-//		return err
-//	}
-//	opts.selectedClusterAddon = *response.Body()
-//	defer cc()
-//	return nil
-//
-//}
+func newAddonParameterListBuilder(params *[]kafkamgmtclient.FleetshardParameter) *clustersmgmtv1.AddOnInstallationParameterListBuilder {
+	if params == nil {
+		return nil
+	}
+	var items []*clustersmgmtv1.AddOnInstallationParameterBuilder
+	for _, p := range *params {
+		pb := clustersmgmtv1.NewAddOnInstallationParameter().ID(*p.Id).Value(*p.Value)
+		items = append(items, pb)
+	}
+	return clustersmgmtv1.NewAddOnInstallationParameterList().Items(items...)
+}
 
+func createAddonWithParams(opts *options, addonId string, params *[]kafkamgmtclient.FleetshardParameter) error {
+	// create a new addon via ocm
+	conn, err := opts.f.Connection()
+	if err != nil {
+		return err
+	}
+	client, cc, err := conn.API().OCMClustermgmt()
+	if err != nil {
+		return err
+	}
+	defer cc()
+	addon := clustersmgmtv1.NewAddOn().ID(addonId)
+	addonParameters := newAddonParameterListBuilder(params)
+	addonInstallationBuilder := clustersmgmtv1.NewAddOnInstallation().Addon(addon)
+	if addonParameters != nil {
+		addonInstallationBuilder = addonInstallationBuilder.Parameters(addonParameters)
+	}
+	addonInstallation, err := addonInstallationBuilder.Build()
+	if err != nil {
+		return err
+	}
+	_, err = client.Clusters().Cluster(opts.selectedCluster.ID()).Addons().Add().Body(addonInstallation).Send()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// TODO go through errs and make them more user friendly with actual error messages.
 func registerClusterWithKasFleetManager(opts *options) error {
 	clusterIngressDNSName, err := parseDNSURL(opts)
 	if err != nil {
 		return err
 	}
 
-	// TODO finish this
-	nodeCount := funcName(opts)
+	nodeCount := nodeCountAutoscalingCheck(opts.selectedClusterMachinePool)
 	kfmPayload := kafkamgmtclient.EnterpriseOsdClusterPayload{
 		AccessKafkasViaPrivateNetwork: opts.accessKafkasViaPrivateNetwork,
 		ClusterId:                     opts.selectedCluster.ID(),
@@ -371,7 +399,7 @@ func registerClusterWithKasFleetManager(opts *options) error {
 		ClusterIngressDnsName:         clusterIngressDNSName,
 		KafkaMachinePoolNodeCount:     int32(nodeCount),
 	}
-	opts.f.Logger.Info("kfmPayload: ", kfmPayload)
+	opts.f.Logger.Debug("kfmPayload: ", kfmPayload)
 	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
@@ -382,34 +410,15 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	if err != nil {
 		return err
 	}
-	fsoParams := []kafkamgmtclient.FleetshardParameter{}
-
-	for _, param := range response.GetFleetshardParameters() {
-		fsoParams = append(fsoParams, kafkamgmtclient.FleetshardParameter{
-			Id:    param.Id,
-			Value: param.Value,
-		})
+	err = createAddonWithParams(opts, strimziAddonId, nil)
+	if err != nil {
+		return err
 	}
-
-	opts.f.Logger.Info("fsoParams: ", fsoParams)
-	// add strimzi first
-	//opts.f.Logger.Info("response strimzi params: ", response.FleetshardParameters)
-	// id of the param and the value is the list
-	opts.f.Logger.Info("response fleetshard params: ", response.FleetshardParameters)
-	opts.f.Logger.Info("r: ", r)
+	err = createAddonWithParams(opts, fleetshardAddonId, response.FleetshardParameters)
+	if err != nil {
+		return err
+	}
+	opts.f.Logger.Debugf("response fleetshard params: ", response.FleetshardParameters)
+	opts.f.Logger.Debugf("r: ", r)
 	return nil
-}
-
-func funcName(opts *options) int {
-	var nodeCount int
-	replicas, ok := opts.selectedClusterMachinePool.GetReplicas()
-	if ok {
-		nodeCount = replicas
-	} else {
-		autoscaledReplicas, ok := opts.selectedClusterMachinePool.GetAutoscaling()
-		if ok {
-			nodeCount = autoscaledReplicas.MaxReplicas()
-		}
-	}
-	return nodeCount
 }
