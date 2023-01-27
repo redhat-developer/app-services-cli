@@ -1,0 +1,45 @@
+[dedicated.registerCluster.cmd.shortDescription]
+one = 'Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka'
+
+[dedicated.registerCluster.cmd.longDescription]
+one = '''
+You can use your own OpenShift cluster to provision your kafkas which will be managed by Red Hat Streams for Apache Kafka.
+This command will register your cluster with Red Hat Streams for Apache Kafka.
+'''
+
+[dedicated.registerCluster.run.noClusterFound]
+one = 'No valid OpenShift clusters found.'
+
+[dedicated.registerCluster.cmd.example]
+one = '''
+# Register an OpenShift cluster with Red Hat Streams for Apache Kafka by selecting from a list of available clusters.
+rhoas cluster register-cluster
+
+# Register an OpenShift cluster with Red Hat Streams for Apache Kafka by specifying the cluster ID.
+rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
+'''
+
+[dedicated.registerCluster.flag.clusterId.description]
+one = 'The ID of the OpenShift cluster to register:'
+
+[dedicated.registerCluster.prompt.selectCluster.message]
+one = 'Select the ready cluster to register'
+
+[dedicated.registerCluster.prompt.selectPublicNetworkAccess.message]
+one = 'Would you like your Kakfas to be accessible via a public network?'
+
+[dedicated.registerCluster.prompt.selectPublicNetworkAccess.help]
+one = 'If you select yes, your Kafka will be accessible via a public network'
+
+[dedicated.registerCluster.prompt.createMachinePoolNodeCount.message]
+one = 'Enter the desired machine pool node count'
+
+[dedicated.registerCluster.prompt.createMachinePoolNodeCount.help]
+one = '''
+The machine pool node count must be greater than or equal to 3. The count must also be a multiple of 3.
+
+There will be N/3 streaming units in your Kafka cluster, where N is the machine pool node count.
+'''
+
+[dedicated.registerCluster.info.foundValidMachinePool]
+one = 'Using the valid machine pool:'
