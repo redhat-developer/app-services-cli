@@ -52,6 +52,8 @@ type APIClient struct {
 
 	DefaultApi DefaultApi
 
+	EnterpriseDataplaneClustersApi EnterpriseDataplaneClustersApi
+
 	ErrorsApi ErrorsApi
 
 	SecurityApi SecurityApi
@@ -74,6 +76,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.DefaultApi = (*DefaultApiService)(&c.common)
+	c.EnterpriseDataplaneClustersApi = (*EnterpriseDataplaneClustersApiService)(&c.common)
 	c.ErrorsApi = (*ErrorsApiService)(&c.common)
 	c.SecurityApi = (*SecurityApiService)(&c.common)
 
