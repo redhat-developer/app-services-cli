@@ -128,13 +128,12 @@ require (
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
-	github.com/golang/glog v1.0.0
+	github.com/golang/glog v1.0.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.21 // indirect
-	github.com/patrickmn/go-cache v2.1.0+incompatible
 )
 
-require github.com/onsi/gomega v1.24.2
+require github.com/onsi/gomega v1.24.2 // indirect
 
 require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
@@ -148,5 +147,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/onsi/ginkgo/v2 v2.6.1 // indirect
 	sigs.k8s.io/json v0.0.0-20211208200746-9f7c6b3444d2 // indirect
 )

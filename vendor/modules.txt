@@ -243,6 +243,8 @@ github.com/munnerz/goautoneg
 github.com/nicksnyder/go-i18n/v2/i18n
 github.com/nicksnyder/go-i18n/v2/internal
 github.com/nicksnyder/go-i18n/v2/internal/plural
+# github.com/onsi/ginkgo/v2 v2.6.1
+## explicit; go 1.18
 # github.com/onsi/gomega v1.24.2
 ## explicit; go 1.18
 # github.com/openconfig/goyang v1.2.0
@@ -279,8 +281,6 @@ github.com/openshift-online/ocm-sdk-go/statusboard
 github.com/openshift-online/ocm-sdk-go/statusboard/v1
 github.com/openshift-online/ocm-sdk-go/webrca
 github.com/openshift-online/ocm-sdk-go/webrca/v1
-# github.com/patrickmn/go-cache v2.1.0+incompatible
-## explicit
 # github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 ## explicit
 github.com/phayes/freeport
