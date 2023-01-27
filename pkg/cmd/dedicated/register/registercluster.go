@@ -49,6 +49,7 @@ const (
 	strimziAddonId          = "managed-kafka"
 	fleetshardAddonIdQE     = "kas-fleetshard-operator-qe"
 	strimziAddonIdQE        = "managed-kafka-qe"
+	clusterManagementAPIURL = "https://api.openshift.com"
 )
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
