@@ -47,6 +47,13 @@ require (
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230222114134-d97c4c88765b
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230222114134-d97c4c88765b
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230222114134-d97c4c88765b
+	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
+	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.12.0
+	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
+	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.21.0
+	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.10.0
+	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.2
+	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
 )
 
 require (
@@ -136,16 +143,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.21 // indirect
 )
 
-require (
-	github.com/onsi/gomega v1.24.2 // indirect
-	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
-	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.12.0
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.21.0
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.10.0
-	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.2
-	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
-)
+require github.com/onsi/gomega v1.24.2 // indirect
 
 require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
