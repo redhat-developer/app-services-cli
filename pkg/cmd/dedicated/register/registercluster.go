@@ -75,20 +75,25 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 func runRegisterClusterCmd(opts *options) error {
 	setListClusters(opts)
-	if opts.selectedClusterId == "" {
-		runClusterSelectionInteractivePrompt(opts)
+	if len(opts.clusterList) == 0 {
+		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
 	} else {
-		for _, cluster := range opts.clusterList {
-			if cluster.ID() == opts.selectedClusterId {
-				opts.selectedCluster = cluster
+		// TODO if client has supplied a cluster id, validate it and set it as the selected cluster without listing getting all clusters
+		if opts.selectedClusterId == "" {
+			runClusterSelectionInteractivePrompt(opts)
+		} else {
+			for _, cluster := range opts.clusterList {
+				if cluster.ID() == opts.selectedClusterId {
+					opts.selectedCluster = cluster
+				}
 			}
 		}
-	}
-	getOrCreateMachinePoolList(opts)
-	selectAccessPrivateNetworkInteractivePrompt(opts)
-	registerClusterWithKasFleetManager(opts)
+		getOrCreateMachinePoolList(opts)
+		selectAccessPrivateNetworkInteractivePrompt(opts)
+		registerClusterWithKasFleetManager(opts)
 
-	return nil
+		return nil
+	}
 }
 
 func getClusterList(opts *options) (*clustersmgmtv1.ClusterList, error) {
@@ -118,6 +123,12 @@ func setListClusters(opts *options) error {
 		return err
 	}
 	var cls = []clustersmgmtv1.Cluster{}
+	cls = validateClusters(clusters, cls)
+	opts.clusterList = cls
+	return nil
+}
+
+func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1.Cluster) []clustersmgmtv1.Cluster {
 	for _, cluster := range clusters.Slice() {
 		// TODO the cluster must be multiAZ
 		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
@@ -125,8 +136,7 @@ func setListClusters(opts *options) error {
 			cls = append(cls, *cluster)
 		}
 	}
-	opts.clusterList = cls
-	return nil
+	return cls
 }
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
@@ -318,7 +328,7 @@ func validateMachinePoolNodes(opts *options) error {
 			checkForValidMachinePoolLabels(machinePool) &&
 			checkForValidMachinePoolTaints(machinePool) {
 			opts.f.Logger.Infof(opts.f.Localizer.MustLocalize(
-				"dedicated.registerCluster.info.foundValidMachinePool") + machinePool.ID())
+				"dedicated.registerCluster.info.foundValidMachinePool") + " " + machinePool.ID())
 			opts.selectedClusterMachinePool = machinePool
 			return nil
 		} else {

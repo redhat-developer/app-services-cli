@@ -1,11 +1,14 @@
 [dedicated.registerCluster.cmd.shortDescription]
-one = 'Register an OpenShift cluster with Red Hat Streams for Apache Kafka'
+one = 'Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka'
 
 [dedicated.registerCluster.cmd.longDescription]
 one = '''
 You can use your own OpenShift cluster to provision your kafkas which will be managed by Red Hat Streams for Apache Kafka.
 This command will register your cluster with Red Hat Streams for Apache Kafka.
 '''
+
+[dedicated.registerCluster.run.noClusterFound]
+one = 'No valid OpenShift clusters found.'
 
 [dedicated.registerCluster.cmd.example]
 one = '''
@@ -17,7 +20,7 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
 '''
 
 [dedicated.registerCluster.flag.clusterId.description]
-one = 'The ID of the OpenShift cluster to register'
+one = 'The ID of the OpenShift cluster to register:'
 
 [dedicated.registerCluster.prompt.selectCluster.message]
 one = 'Select the ready cluster to register'
@@ -39,4 +42,4 @@ There will be N/3 streaming units in your Kafka cluster, where N is the machine 
 '''
 
 [dedicated.registerCluster.info.foundValidMachinePool]
-one = 'Found and using the valid machine pool:'
+one = 'Using the valid machine pool:'
