@@ -58,6 +58,9 @@ $ rhoas cluster connect
 * link:{path}#ref-rhoas-context_{context}[rhoas context]	 - Group, share and manage your rhoas services
 
  
+* link:{path}#ref-rhoas-dedicated_{context}[rhoas dedicated]	 - shortDescription
+
+ 
 * link:{path}#ref-rhoas-generate-config_{context}[rhoas generate-config]	 - Generate configurations for the service context
 
  
