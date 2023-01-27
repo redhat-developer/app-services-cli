@@ -50,28 +50,25 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 		f: f,
 	}
 
-	//TODO add Localizer
 	cmd := &cobra.Command{
-		Use: "register-cluster",
-		//Short: f.Localizer.MustLocalize("registerCluster.cmd.shortDescription"),
-		Short:   "registerCluster.cmd.shortDescription",
-		Long:    "registerCluster.cmd.longDescription",
-		Example: "registerCluster.cmd.example",
+		Use:     "register-cluster",
+		Short:   f.Localizer.MustLocalize("dedicated.registerCluster.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("dedicated.registerCluster.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("dedicated.registerCluster.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runRegisterClusterCmd(opts)
 		},
 	}
 
-	// TODO add Localizer and flags
+	// TODO add flags
 	// add a flag for clustermgmt url, i.e --cluster-management-api-url, make the flag hidden, default to api.openshift.com
 	// supply customer mgmt access token via a flag, i.e --access-token, make the flag hidden, default to ""
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
 	//flags.StringVar(&opts.clusterManagementApiUrl, "cluster-management-api-url", clusterManagementAPIURL, "cluster management api url")
 	//flags.StringVar(&opts.accessToken, "access-token", "", "access token")
 	// this flag will allow the user to pass the cluster id as a flag
-	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", "cluster id")
-	//flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("registerCluster.flag.clusterId"))
+	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterId.description"))
 
 	return cmd
 }
@@ -123,8 +120,8 @@ func setListClusters(opts *options) error {
 	var cls = []clustersmgmtv1.Cluster{}
 	for _, cluster := range clusters.Slice() {
 		// TODO the cluster must be multiAZ
-		//if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-		if cluster.State() == clusterReadyState {
+		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
+			//if cluster.State() == clusterReadyState {
 			cls = append(cls, *cluster)
 		}
 	}
@@ -139,9 +136,9 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 		clusterStringList = append(clusterStringList, cluster.Name())
 	}
 
-	// TODO add page size and Localizer
+	// TODO add page size
 	prompt := &survey.Select{
-		Message: "Select the ready cluster to register",
+		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectCluster.message"),
 		Options: clusterStringList,
 	}
 
@@ -160,6 +157,7 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	return nil
 }
 
+// parses the
 func parseDNSURL(opts *options) (string, error) {
 	clusterIngressDNSName := opts.selectedCluster.Console().URL()
 	if len(clusterIngressDNSName) == 0 {
@@ -168,7 +166,6 @@ func parseDNSURL(opts *options) (string, error) {
 	return strings.SplitAfter(clusterIngressDNSName, ".apps.")[1], nil
 }
 
-// TODO this function should be split the ocm call and the response flow logic
 func getOrCreateMachinePoolList(opts *options) error {
 	// ocm client connection
 	response, err := getMachinePoolList(opts)
@@ -289,10 +286,10 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 		Localizer:  opts.f.Localizer,
 		Connection: opts.f.Connection,
 	}
-	// TODO add page size and Localizer, and better help message
+	// TODO add page size and better help message
 	promptNodeCount := &survey.Input{
-		Message: "Enter the desired machine pool node count",
-		Help:    "The machine pool node count must be greater than or equal to and a multiple of 3",
+		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.message"),
+		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.help"),
 	}
 	var nodeCount int
 	err := survey.AskOne(promptNodeCount, &nodeCount, survey.WithValidator(validator.ValidatorForMachinePoolNodes))
@@ -320,7 +317,8 @@ func validateMachinePoolNodes(opts *options) error {
 		if validateMachinePoolNodeCount(nodeCount) &&
 			checkForValidMachinePoolLabels(machinePool) &&
 			checkForValidMachinePoolTaints(machinePool) {
-			opts.f.Logger.Infof("Found a valid machine pool: %s", machinePool.ID())
+			opts.f.Logger.Infof(opts.f.Localizer.MustLocalize(
+				"dedicated.registerCluster.info.foundValidMachinePool") + machinePool.ID())
 			opts.selectedClusterMachinePool = machinePool
 			return nil
 		} else {
@@ -349,8 +347,8 @@ func getMachinePoolNodeCount(machinePool clustersmgmtv1.MachinePool) int {
 
 func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	prompt := &survey.Confirm{
-		Message: "Would you like your Kakfas to be accessible via a public network?",
-		Help:    "If you select yes, your Kafka will be accessible via a public network",
+		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectPublicNetworkAccess.message"),
+		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectPublicNetworkAccess.help"),
 		Default: false,
 	}
 	accessKafkasViaPublicNetwork := false
