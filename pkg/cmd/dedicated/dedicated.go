@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// TODO add localizer and descriptions
+// TO-DO add localizer and descriptions
 func NewDedicatedCmd(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "dedicated",

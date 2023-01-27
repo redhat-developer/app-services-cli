@@ -90,6 +90,9 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**GetMetricsByRangeQuery**](docs/DefaultApi.md#getmetricsbyrangequery) | **Get** /api/kafkas_mgmt/v1/kafkas/{id}/metrics/query_range | 
 *DefaultApi* | [**GetVersionMetadata**](docs/DefaultApi.md#getversionmetadata) | **Get** /api/kafkas_mgmt/v1 | 
 *DefaultApi* | [**UpdateKafkaById**](docs/DefaultApi.md#updatekafkabyid) | **Patch** /api/kafkas_mgmt/v1/kafkas/{id} | 
+*EnterpriseDataplaneClustersApi* | [**DeleteEnterpriseClusterById**](docs/EnterpriseDataplaneClustersApi.md#deleteenterpriseclusterbyid) | **Delete** /api/kafkas_mgmt/v1/clusters/{id} | 
+*EnterpriseDataplaneClustersApi* | [**GetEnterpriseOsdClusters**](docs/EnterpriseDataplaneClustersApi.md#getenterpriseosdclusters) | **Get** /api/kafkas_mgmt/v1/clusters | 
+*EnterpriseDataplaneClustersApi* | [**RegisterEnterpriseOsdCluster**](docs/EnterpriseDataplaneClustersApi.md#registerenterpriseosdcluster) | **Post** /api/kafkas_mgmt/v1/clusters | 
 *ErrorsApi* | [**GetErrorById**](docs/ErrorsApi.md#geterrorbyid) | **Get** /api/kafkas_mgmt/v1/errors/{id} | 
 *ErrorsApi* | [**GetErrors**](docs/ErrorsApi.md#geterrors) | **Get** /api/kafkas_mgmt/v1/errors | 
 *SecurityApi* | [**CreateServiceAccount**](docs/SecurityApi.md#createserviceaccount) | **Post** /api/kafkas_mgmt/v1/service_accounts | 
@@ -108,9 +111,17 @@ Class | Method | HTTP request | Description
  - [CloudRegion](docs/CloudRegion.md)
  - [CloudRegionList](docs/CloudRegionList.md)
  - [CloudRegionListAllOf](docs/CloudRegionListAllOf.md)
+ - [EnterpriseCluster](docs/EnterpriseCluster.md)
+ - [EnterpriseClusterAllOf](docs/EnterpriseClusterAllOf.md)
+ - [EnterpriseClusterList](docs/EnterpriseClusterList.md)
+ - [EnterpriseClusterListAllOf](docs/EnterpriseClusterListAllOf.md)
+ - [EnterpriseClusterRegistrationResponse](docs/EnterpriseClusterRegistrationResponse.md)
+ - [EnterpriseClusterRegistrationResponseAllOf](docs/EnterpriseClusterRegistrationResponseAllOf.md)
+ - [EnterpriseOsdClusterPayload](docs/EnterpriseOsdClusterPayload.md)
  - [Error](docs/Error.md)
  - [ErrorList](docs/ErrorList.md)
  - [ErrorListAllOf](docs/ErrorListAllOf.md)
+ - [FleetshardParameter](docs/FleetshardParameter.md)
  - [InstantQuery](docs/InstantQuery.md)
  - [KafkaRequest](docs/KafkaRequest.md)
  - [KafkaRequestAllOf](docs/KafkaRequestAllOf.md)

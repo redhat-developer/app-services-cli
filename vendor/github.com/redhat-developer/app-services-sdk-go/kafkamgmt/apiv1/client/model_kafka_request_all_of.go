@@ -18,7 +18,7 @@ import (
 
 // KafkaRequestAllOf struct for KafkaRequestAllOf
 type KafkaRequestAllOf struct {
-	// Values: [accepted, preparing, provisioning, ready, failed, deprovision, deleting] 
+	// Values: [accepted, preparing, provisioning, ready, failed, deprovision, deleting, suspending, suspended, resuming] 
 	Status *string `json:"status,omitempty"`
 	// Name of Cloud used to deploy. For example AWS
 	CloudProvider *string `json:"cloud_provider,omitempty"`

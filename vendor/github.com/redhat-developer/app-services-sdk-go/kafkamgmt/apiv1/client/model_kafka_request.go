@@ -21,7 +21,7 @@ type KafkaRequest struct {
 	Id string `json:"id"`
 	Kind string `json:"kind"`
 	Href string `json:"href"`
-	// Values: [accepted, preparing, provisioning, ready, failed, deprovision, deleting] 
+	// Values: [accepted, preparing, provisioning, ready, failed, deprovision, deleting, suspending, suspended, resuming] 
 	Status *string `json:"status,omitempty"`
 	// Name of Cloud used to deploy. For example AWS
 	CloudProvider *string `json:"cloud_provider,omitempty"`

@@ -2,10 +2,11 @@ package kafkacmdutil
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"strconv"
 )
 
 // Validator is a type for validating Kafka configuration values
@@ -25,7 +26,7 @@ func ValidateMachinePoolCount(count int) bool {
 func (v *Validator) ValidatorForMachinePoolNodes(val interface{}) error {
 	value := fmt.Sprintf("%v", val)
 	if val == "" {
-		return errors.NewCastError(val, "emtpy string")
+		return errors.NewCastError(val, "empty string")
 	}
 	value1, err := strconv.Atoi(value)
 	if err != nil {

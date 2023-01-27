@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2020 Jeevanandam M (jeeva@myjeeva.com), All rights reserved.
+// Copyright (c) 2015-2021 Jeevanandam M (jeeva@myjeeva.com), All rights reserved.
 // resty source code and usage is governed by a MIT style
 // license that can be found in the LICENSE file.
 
@@ -10,6 +10,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"io"
@@ -53,7 +54,7 @@ var (
 	hdrContentTypeKey     = http.CanonicalHeaderKey("Content-Type")
 	hdrContentLengthKey   = http.CanonicalHeaderKey("Content-Length")
 	hdrContentEncodingKey = http.CanonicalHeaderKey("Content-Encoding")
-	hdrAuthorizationKey   = http.CanonicalHeaderKey("Authorization")
+	hdrLocationKey        = http.CanonicalHeaderKey("Location")
 
 	plainTextType   = "text/plain; charset=utf-8"
 	jsonContentType = "application/json"
@@ -81,6 +82,9 @@ type (
 
 	// ResponseLogCallback type is for response logs, called before the response is logged
 	ResponseLogCallback func(*ResponseLog) error
+
+	// ErrorHook type is for reacting to request errors, called after all retries were attempted
+	ErrorHook func(*Request, error)
 )
 
 // Client struct is used to create Resty client with client level settings,
@@ -89,9 +93,11 @@ type (
 // Resty also provides an options to override most of the client settings
 // at request level.
 type Client struct {
-	HostURL               string
+	BaseURL               string
+	HostURL               string // Deprecated: use BaseURL instead. To be removed in v3.0.0 release.
 	QueryParam            url.Values
 	FormData              url.Values
+	PathParams            map[string]string
 	Header                http.Header
 	UserInfo              *User
 	Token                 string
@@ -105,9 +111,16 @@ type Client struct {
 	RetryWaitTime         time.Duration
 	RetryMaxWaitTime      time.Duration
 	RetryConditions       []RetryConditionFunc
+	RetryHooks            []OnRetryFunc
 	RetryAfter            RetryAfterFunc
 	JSONMarshal           func(v interface{}) ([]byte, error)
 	JSONUnmarshal         func(data []byte, v interface{}) error
+	XMLMarshal            func(v interface{}) ([]byte, error)
+	XMLUnmarshal          func(data []byte, v interface{}) error
+
+	// HeaderAuthorizationKey is used to set/access Request Authorization header
+	// value when `SetAuthToken` option is used.
+	HeaderAuthorizationKey string
 
 	jsonEscapeHTML     bool
 	setContentLength   bool
@@ -117,7 +130,6 @@ type Client struct {
 	debugBodySizeLimit int64
 	outputDirectory    string
 	scheme             string
-	pathParams         map[string]string
 	log                Logger
 	httpClient         *http.Client
 	proxyURL           *url.URL
@@ -127,6 +139,7 @@ type Client struct {
 	afterResponse      []ResponseMiddleware
 	requestLog         RequestLogCallback
 	responseLog        ResponseLogCallback
+	errorHooks         []ErrorHook
 }
 
 // User type is to hold an username and password information
@@ -145,8 +158,25 @@ type User struct {
 //
 //		// Setting HTTPS address
 //		client.SetHostURL("https://myjeeva.com")
+//
+// Deprecated: use SetBaseURL instead. To be removed in v3.0.0 release.
 func (c *Client) SetHostURL(url string) *Client {
-	c.HostURL = strings.TrimRight(url, "/")
+	c.SetBaseURL(url)
+	return c
+}
+
+// SetBaseURL method is to set Base URL in the client instance. It will be used with request
+// raised from this client with relative URL
+//		// Setting HTTP address
+//		client.SetBaseURL("http://myjeeva.com")
+//
+//		// Setting HTTPS address
+//		client.SetBaseURL("https://myjeeva.com")
+//
+// Since v2.7.0
+func (c *Client) SetBaseURL(url string) *Client {
+	c.BaseURL = strings.TrimRight(url, "/")
+	c.HostURL = c.BaseURL
 	return c
 }
 
@@ -182,6 +212,21 @@ func (c *Client) SetHeaders(headers map[string]string) *Client {
 	for h, v := range headers {
 		c.Header.Set(h, v)
 	}
+	return c
+}
+
+// SetHeaderVerbatim method is to set a single header field and its value verbatim in the current request.
+//
+// For Example: To set `all_lowercase` and `UPPERCASE` as `available`.
+// 		client.R().
+//			SetHeaderVerbatim("all_lowercase", "available").
+//			SetHeaderVerbatim("UPPERCASE", "available")
+//
+// Also you can override header value, which was set at client instance level.
+//
+// Since v2.6.0
+func (c *Client) SetHeaderVerbatim(header, value string) *Client {
+	c.Header[header] = []string{value}
 	return c
 }
 
@@ -343,7 +388,7 @@ func (c *Client) R() *Request {
 		client:          c,
 		multipartFiles:  []*File{},
 		multipartFields: []*MultipartField{},
-		pathParams:      map[string]string{},
+		PathParams:      map[string]string{},
 		jsonEscapeHTML:  true,
 	}
 	return r
@@ -380,6 +425,22 @@ func (c *Client) OnBeforeRequest(m RequestMiddleware) *Client {
 //			})
 func (c *Client) OnAfterResponse(m ResponseMiddleware) *Client {
 	c.afterResponse = append(c.afterResponse, m)
+	return c
+}
+
+// OnError method adds a callback that will be run whenever a request execution fails.
+// This is called after all retries have been attempted (if any).
+// If there was a response from the server, the error will be wrapped in *ResponseError
+// which has the last response received from the server.
+//
+//		client.OnError(func(req *resty.Request, err error) {
+//			if v, ok := err.(*resty.ResponseError); ok {
+//				// Do something with v.Response
+//			}
+//			// Log the error, increment a metric, etc...
+//		})
+func (c *Client) OnError(h ErrorHook) *Client {
+	c.errorHooks = append(c.errorHooks, h)
 	return c
 }
 
@@ -549,8 +610,31 @@ func (c *Client) SetRetryAfter(callback RetryAfterFunc) *Client {
 // AddRetryCondition method adds a retry condition function to array of functions
 // that are checked to determine if the request is retried. The request will
 // retry if any of the functions return true and error is nil.
+//
+// Note: These retry conditions are applied on all Request made using this Client.
+// For Request specific retry conditions check *Request.AddRetryCondition
 func (c *Client) AddRetryCondition(condition RetryConditionFunc) *Client {
 	c.RetryConditions = append(c.RetryConditions, condition)
+	return c
+}
+
+// AddRetryAfterErrorCondition adds the basic condition of retrying after encountering
+// an error from the http response
+//
+// Since v2.6.0
+func (c *Client) AddRetryAfterErrorCondition() *Client {
+	c.AddRetryCondition(func(response *Response, err error) bool {
+		return response.IsError()
+	})
+	return c
+}
+
+// AddRetryHook adds a side-effecting retry hook to an array of hooks
+// that will be executed on each retry.
+//
+// Since v2.6.0
+func (c *Client) AddRetryHook(hook OnRetryFunc) *Client {
+	c.RetryHooks = append(c.RetryHooks, hook)
 	return c
 }
 
@@ -698,7 +782,7 @@ func (c *Client) SetTransport(transport http.RoundTripper) *Client {
 // 		client.SetScheme("http")
 func (c *Client) SetScheme(scheme string) *Client {
 	if !IsStringEmpty(scheme) {
-		c.scheme = scheme
+		c.scheme = strings.TrimSpace(scheme)
 	}
 	return c
 }
@@ -721,6 +805,22 @@ func (c *Client) SetDoNotParseResponse(parse bool) *Client {
 	return c
 }
 
+// SetPathParam method sets single URL path key-value pair in the
+// Resty client instance.
+// 		client.SetPathParam("userId", "sample@sample.com")
+//
+// 		Result:
+// 		   URL - /v1/users/{userId}/details
+// 		   Composed URL - /v1/users/sample@sample.com/details
+// It replaces the value of the key while composing the request URL.
+//
+// Also it can be overridden at request level Path Params options,
+// see `Request.SetPathParam` or `Request.SetPathParams`.
+func (c *Client) SetPathParam(param, value string) *Client {
+	c.PathParams[param] = value
+	return c
+}
+
 // SetPathParams method sets multiple URL path key-value pairs at one go in the
 // Resty client instance.
 // 		client.SetPathParams(map[string]string{
@@ -731,11 +831,13 @@ func (c *Client) SetDoNotParseResponse(parse bool) *Client {
 // 		Result:
 // 		   URL - /v1/users/{userId}/{subAccountId}/details
 // 		   Composed URL - /v1/users/sample@sample.com/100002/details
-// It replace the value of the key while composing request URL. Also it can be
-// overridden at request level Path Params options, see `Request.SetPathParams`.
+// It replaces the value of the key while composing the request URL.
+//
+// Also it can be overridden at request level Path Params options,
+// see `Request.SetPathParam` or `Request.SetPathParams`.
 func (c *Client) SetPathParams(params map[string]string) *Client {
 	for p, v := range params {
-		c.pathParams[p] = v
+		c.SetPathParam(p, v)
 	}
 	return c
 }
@@ -791,7 +893,6 @@ func (c *Client) GetClient() *http.Client {
 // Executes method executes the given `Request` object and returns response
 // error.
 func (c *Client) execute(req *Request) (*Response, error) {
-	defer releaseBuffer(req.bodyBuf)
 	// Apply Request middleware
 	var err error
 
@@ -824,6 +925,8 @@ func (c *Client) execute(req *Request) (*Response, error) {
 	if err = requestLogger(c, req); err != nil {
 		return nil, wrapNoRetryErr(err)
 	}
+
+	req.RawRequest.Body = newRequestBodyReleaser(req.RawRequest.Body, req.bodyBuf)
 
 	req.Time = time.Now()
 	resp, err := c.httpClient.Do(req.RawRequest)
@@ -859,9 +962,10 @@ func (c *Client) execute(req *Request) (*Response, error) {
 			return response, err
 		}
 
-		response.setReceivedAt() // after we read the body
 		response.size = int64(len(response.body))
 	}
+
+	response.setReceivedAt() // after we read the body
 
 	// Apply Response middleware
 	for _, f := range c.afterResponse {
@@ -898,6 +1002,35 @@ func (c *Client) transport() (*http.Transport, error) {
 func (c *Client) outputLogTo(w io.Writer) *Client {
 	c.log.(*logger).l.SetOutput(w)
 	return c
+}
+
+// ResponseError is a wrapper for including the server response with an error.
+// Neither the err nor the response should be nil.
+type ResponseError struct {
+	Response *Response
+	Err      error
+}
+
+func (e *ResponseError) Error() string {
+	return e.Err.Error()
+}
+
+func (e *ResponseError) Unwrap() error {
+	return e.Err
+}
+
+// Helper to run onErrorHooks hooks.
+// It wraps the error in a ResponseError if the resp is not nil
+// so hooks can access it.
+func (c *Client) onErrorHooks(req *Request, resp *Response, err error) {
+	if err != nil {
+		if resp != nil { // wrap with ResponseError
+			err = &ResponseError{Response: resp, Err: err}
+		}
+		for _, h := range c.errorHooks {
+			h(req, err)
+		}
+	}
 }
 
 //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -938,18 +1071,22 @@ func createClient(hc *http.Client) *Client {
 	}
 
 	c := &Client{ // not setting lang default values
-		QueryParam:         url.Values{},
-		FormData:           url.Values{},
-		Header:             http.Header{},
-		Cookies:            make([]*http.Cookie, 0),
-		RetryWaitTime:      defaultWaitTime,
-		RetryMaxWaitTime:   defaultMaxWaitTime,
-		JSONMarshal:        json.Marshal,
-		JSONUnmarshal:      json.Unmarshal,
+		QueryParam:             url.Values{},
+		FormData:               url.Values{},
+		Header:                 http.Header{},
+		Cookies:                make([]*http.Cookie, 0),
+		RetryWaitTime:          defaultWaitTime,
+		RetryMaxWaitTime:       defaultMaxWaitTime,
+		PathParams:             make(map[string]string),
+		JSONMarshal:            json.Marshal,
+		JSONUnmarshal:          json.Unmarshal,
+		XMLMarshal:             xml.Marshal,
+		XMLUnmarshal:           xml.Unmarshal,
+		HeaderAuthorizationKey: http.CanonicalHeaderKey("Authorization"),
+
 		jsonEscapeHTML:     true,
 		httpClient:         hc,
 		debugBodySizeLimit: math.MaxInt32,
-		pathParams:         make(map[string]string),
 	}
 
 	// Logger
