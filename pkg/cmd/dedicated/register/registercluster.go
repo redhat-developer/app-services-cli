@@ -15,6 +15,8 @@ import (
 
 type options struct {
 	selectedClusterId             string
+	clusterManagementApiUrl       string
+	accessToken                   string
 	clusterList                   []clustersmgmtv1.Cluster
 	selectedCluster               clustersmgmtv1.Cluster
 	clusterMachinePoolList        clustersmgmtv1.MachinePoolList
@@ -27,6 +29,7 @@ type options struct {
 	f *factory.Factory
 }
 
+// list of consts should come from KFM
 const (
 	machinePoolId          = "kafka-standard"
 	machinePoolTaintKey    = "bf2.org/kafkaInstanceProfileType"
@@ -39,6 +42,7 @@ const (
 	clusterReadyState       = "ready"
 	fleetshardAddonId       = "kas-fleetshard-operator"
 	strimziAddonId          = "managed-kafka"
+	clusterManagementAPIURL = "https://api.openshift.com"
 )
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
@@ -49,7 +53,7 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	//TODO add Localizer
 	cmd := &cobra.Command{
 		Use: "register-cluster",
-		// Short: f.Localizer.MustLocalize("registerCluster.cmd.shortDescription"),
+		//Short: f.Localizer.MustLocalize("registerCluster.cmd.shortDescription"),
 		Short:   "registerCluster.cmd.shortDescription",
 		Long:    "registerCluster.cmd.longDescription",
 		Example: "registerCluster.cmd.example",
@@ -63,6 +67,8 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	// add a flag for clustermgmt url, i.e --cluster-management-api-url, make the flag hidden, default to api.openshift.com
 	// supply customer mgmt access token via a flag, i.e --access-token, make the flag hidden, default to ""
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
+	//flags.StringVar(&opts.clusterManagementApiUrl, "cluster-management-api-url", clusterManagementAPIURL, "cluster management api url")
+	//flags.StringVar(&opts.accessToken, "access-token", "", "access token")
 	// this flag will allow the user to pass the cluster id as a flag
 	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", "cluster id")
 	//flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("registerCluster.flag.clusterId"))
@@ -71,7 +77,7 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runRegisterClusterCmd(opts *options) error {
-	getListClusters(opts)
+	setListClusters(opts)
 	if opts.selectedClusterId == "" {
 		runClusterSelectionInteractivePrompt(opts)
 	} else {
@@ -88,29 +94,37 @@ func runRegisterClusterCmd(opts *options) error {
 	return nil
 }
 
-func getListClusters(opts *options) error {
+func getClusterList(opts *options) (*clustersmgmtv1.ClusterList, error) {
 	// ocm client connection
 	conn, err := opts.f.Connection()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	client, cc, err := conn.API().OCMClustermgmt()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer cc()
 	// TODO deal with pagination, validate clusters -- must be multi AZ and ready.
 	resource := client.Clusters().List()
 	response, err := resource.Send()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	clusters := response.Items()
+	return clusters, nil
+}
+
+func setListClusters(opts *options) error {
+	clusters, err := getClusterList(opts)
+	if err != nil {
+		return err
+	}
 	var cls = []clustersmgmtv1.Cluster{}
 	for _, cluster := range clusters.Slice() {
 		// TODO the cluster must be multiAZ
-		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-			//if cluster.State() == clusterReadyState {
+		//if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
+		if cluster.State() == clusterReadyState {
 			cls = append(cls, *cluster)
 		}
 	}
@@ -120,15 +134,15 @@ func getListClusters(opts *options) error {
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
 	// TODO handle in case of empty cluster list, must be cleared up with UX etc.
-	clusterListString := make([]string, 0)
+	clusterStringList := make([]string, 0)
 	for _, cluster := range opts.clusterList {
-		clusterListString = append(clusterListString, cluster.Name())
+		clusterStringList = append(clusterStringList, cluster.Name())
 	}
 
 	// TODO add page size and Localizer
 	prompt := &survey.Select{
 		Message: "Select the ready cluster to register",
-		Options: clusterListString,
+		Options: clusterStringList,
 	}
 
 	var selectedClusterName string
@@ -149,7 +163,7 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 func parseDNSURL(opts *options) (string, error) {
 	clusterIngressDNSName := opts.selectedCluster.Console().URL()
 	if len(clusterIngressDNSName) == 0 {
-		return "", fmt.Errorf("url is empty")
+		return "", fmt.Errorf("DNS url is empty")
 	}
 	return strings.SplitAfter(clusterIngressDNSName, ".apps.")[1], nil
 }
@@ -157,9 +171,9 @@ func parseDNSURL(opts *options) (string, error) {
 // TODO this function should be split the ocm call and the response flow logic
 func getOrCreateMachinePoolList(opts *options) error {
 	// ocm client connection
-	err, response, err2 := getMachinePoolList(opts)
-	if err2 != nil {
-		return err2
+	response, err := getMachinePoolList(opts)
+	if err != nil {
+		return err
 	}
 	if response.Size() == 0 {
 		createMachinePoolInteractivePrompt(opts)
@@ -175,22 +189,22 @@ func getOrCreateMachinePoolList(opts *options) error {
 	return nil
 }
 
-func getMachinePoolList(opts *options) (error, *clustersmgmtv1.MachinePoolsListResponse, error) {
+func getMachinePoolList(opts *options) (*clustersmgmtv1.MachinePoolsListResponse, error) {
 	conn, err := opts.f.Connection()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	client, cc, err := conn.API().OCMClustermgmt()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	defer cc()
 	resource := client.Clusters().Cluster(opts.selectedCluster.ID()).MachinePools().List()
 	response, err := resource.Send()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return err, response, nil
+	return response, nil
 }
 
 func checkForValidMachinePoolLabels(machinePool clustersmgmtv1.MachinePool) bool {
@@ -275,7 +289,7 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 		Localizer:  opts.f.Localizer,
 		Connection: opts.f.Connection,
 	}
-	// TODO add page size and Localizer
+	// TODO add page size and Localizer, and better help message
 	promptNodeCount := &survey.Input{
 		Message: "Enter the desired machine pool node count",
 		Help:    "The machine pool node count must be greater than or equal to and a multiple of 3",
@@ -334,16 +348,17 @@ func getMachinePoolNodeCount(machinePool clustersmgmtv1.MachinePool) int {
 }
 
 func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
-	options := []string{"Yes", "No"}
-	prompt := &survey.Select{
+	prompt := &survey.Confirm{
 		Message: "Would you like your Kakfas to be accessible via a public network?",
-		Options: options,
+		Help:    "If you select yes, your Kafka will be accessible via a public network",
+		Default: false,
 	}
-	err := survey.AskOne(prompt, &options)
+	accessKafkasViaPublicNetwork := false
+	err := survey.AskOne(prompt, &accessKafkasViaPublicNetwork)
 	if err != nil {
 		return err
 	}
-	if options[0] == "Yes" {
+	if accessKafkasViaPublicNetwork {
 		opts.accessKafkasViaPrivateNetwork = false
 	} else {
 		opts.accessKafkasViaPrivateNetwork = true
