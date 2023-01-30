@@ -56,6 +56,7 @@ type OrgQuotas struct {
 	StandardQuotas    []QuotaSpec
 	MarketplaceQuotas []QuotaSpec
 	TrialQuotas       []QuotaSpec
+	EvalQuotas        []QuotaSpec
 }
 
 func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amsclient.QuotaCostList, error) {
@@ -86,7 +87,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 		return nil, err
 	}
 
-	var standardQuotas, marketplaceQuotas, trialQuotas []QuotaSpec
+	var standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas []QuotaSpec
 	for _, quota := range quotaCostGet.GetItems() {
 		quotaResources := quota.GetRelatedResources()
 		for i := range quotaResources {
@@ -96,17 +97,24 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 					trialQuotas = append(trialQuotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel, nil})
 				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
-					if quotaResource.BillingModel == QuotaStandardType {
-						standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
-					} else if quotaResource.BillingModel == QuotaMarketplaceType {
-						marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
+					if remainingQuota > 0 {
+						if quotaResource.BillingModel == QuotaStandardType {
+							standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
+						} else if quotaResource.BillingModel == QuotaMarketplaceType {
+							marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
+						}
+					}
+				} else if quotaResource.GetProduct() == "RHOSAKEval" {
+					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
+					if remainingQuota > 0 {
+						evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 					}
 				}
 			}
 		}
 	}
 
-	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas}
+	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas}
 
 	return availableOrgQuotas, nil
 }
@@ -172,6 +180,8 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return &orgQuota.StandardQuotas[0], nil
+		} else if marketplaceInfo.BillingModel == QuotaEvalType {
+			return &orgQuota.EvalQuotas[0], nil
 		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 
 			var filteredMarketPlaceQuotas []QuotaSpec

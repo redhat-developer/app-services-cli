@@ -110,6 +110,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return f.Localizer.MustLocalizeError("kafka.create.error.standard.invalidFlags")
 			}
 
+			if opts.billingModel == accountmgmtutil.QuotaEvalType && (opts.marketplaceAcctId != "" || opts.marketplace != "") {
+				return f.Localizer.MustLocalizeError("kafka.create.error.eval.invalidFlags")
+			}
+
 			if !f.IOStreams.CanPrompt() && opts.name == "" {
 				return f.Localizer.MustLocalizeError("kafka.create.argument.name.error.requiredWhenNonInteractive")
 			} else if opts.name == "" {
