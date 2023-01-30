@@ -38,5 +38,5 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
 
 ### SEE ALSO
 
-* [rhoas dedicated](rhoas_dedicated.md)	 - shortDescription
+* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your OpenShift clusters which host your kafkas.
 
