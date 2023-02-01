@@ -46,6 +46,8 @@ const (
 	FlagMarketPlace = "marketplace"
 	// FlagMarketPlace is a flag representing billing model of the instance
 	FlagBillingModel = "billing-model"
+	// FlagInstanceType is a flag representing the type of instance
+	FlagInstanceType = "instance-type"
 )
 
 type options struct {
@@ -57,6 +59,7 @@ type options struct {
 	marketplaceAcctId string
 	marketplace       string
 	billingModel      string
+	instanceType      string
 
 	outputFormat string
 	autoUse      bool
@@ -141,6 +144,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.size, FlagSize, "", f.Localizer.MustLocalize("kafka.create.flag.size.description"))
 	flags.StringVar(&opts.marketplaceAcctId, FlagMarketPlaceAcctID, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceId.description"))
 	flags.StringVar(&opts.marketplace, FlagMarketPlace, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
+	flags.StringVar(&opts.instanceType, FlagInstanceType, "", f.Localizer.MustLocalize("kafka.create.flag.instanceType.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
@@ -246,6 +250,11 @@ func runCreate(opts *options) error {
 		if !opts.bypassChecks {
 
 			err = ValidateBillingModel(opts.billingModel)
+			if err != nil {
+				return err
+			}
+
+			err = ValidateInstanceType(opts.instanceType, opts.billingModel)
 			if err != nil {
 				return err
 			}

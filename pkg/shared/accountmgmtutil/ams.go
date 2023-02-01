@@ -122,6 +122,14 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 // nolint:funlen
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo, provider string) (*QuotaSpec, error) {
 
+	if marketplaceInfo.BillingModel == QuotaEvalType {
+		if len(orgQuota.EvalQuotas) > 0 {
+			return &orgQuota.EvalQuotas[0], nil
+		}
+
+		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noEval")
+	}
+
 	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
 		if marketplaceInfo.BillingModel != "" || marketplaceInfo.Provider != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.onlyTrialAvailable")
@@ -180,8 +188,6 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return &orgQuota.StandardQuotas[0], nil
-		} else if marketplaceInfo.BillingModel == QuotaEvalType {
-			return &orgQuota.EvalQuotas[0], nil
 		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 
 			var filteredMarketPlaceQuotas []QuotaSpec

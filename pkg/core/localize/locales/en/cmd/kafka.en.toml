@@ -295,6 +295,9 @@ one = 'Billing model to be used'
 [kafka.create.flag.marketplaceType.description]
 one = 'Name of the marketplace where the instance is purchased on'
 
+[kafka.create.flag.instanceType.description]
+one = 'Type of the Kafka instance'
+
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}"...'
@@ -439,6 +442,9 @@ one = "only trial quotas are available, don't specify billing model details"
 
 [kafka.create.quota.error.noMarketplace]
 one = "no marketplace quotas are available"
+
+[kafka.create.quota.error.noEval]
+one = "no evaluation quotas are available"
 
 [kafka.create.quota.error.noStandard]
 one = "no standard quotas are available"
