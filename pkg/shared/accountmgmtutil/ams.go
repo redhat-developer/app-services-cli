@@ -97,18 +97,14 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 					trialQuotas = append(trialQuotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel, nil})
 				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
-					if remainingQuota > 0 {
-						if quotaResource.BillingModel == QuotaStandardType {
-							standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
-						} else if quotaResource.BillingModel == QuotaMarketplaceType {
-							marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
-						}
+					if quotaResource.BillingModel == QuotaStandardType {
+						standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
+					} else if quotaResource.BillingModel == QuotaMarketplaceType {
+						marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 					}
 				} else if quotaResource.GetProduct() == "RHOSAKEval" {
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
-					if remainingQuota > 0 {
-						evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
-					}
+					evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 				}
 			}
 		}

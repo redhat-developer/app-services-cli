@@ -57,7 +57,6 @@ type options struct {
 	marketplaceAcctId string
 	marketplace       string
 	billingModel      string
-	instanceType      string
 
 	outputFormat string
 	autoUse      bool
