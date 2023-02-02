@@ -1,7 +1,6 @@
 package create
 
 import (
-	"errors"
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -139,18 +138,4 @@ func ValidateBillingModel(billingModel string) error {
 	}
 
 	return flagutil.InvalidValueError("billing-model", billingModel, validBillingModels...)
-}
-
-// ValidateBillingModel validates if user provided a valid instance type
-func ValidateInstanceType(instanceType string, billingModel string) error {
-
-	if billingModel == accountmgmtutil.QuotaEvalType {
-		if instanceType == accountmgmtutil.QuotaStandardType {
-			return nil
-		}
-
-		return errors.New("\"--instance-type\" flag needs to be provided")
-	}
-
-	return nil
 }

@@ -122,15 +122,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 // nolint:funlen
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo, provider string) (*QuotaSpec, error) {
 
-	if marketplaceInfo.BillingModel == QuotaEvalType {
-		if len(orgQuota.EvalQuotas) > 0 {
-			return &orgQuota.EvalQuotas[0], nil
-		}
-
-		return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noEval")
-	}
-
-	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.EvalQuotas) == 0 {
 		if marketplaceInfo.BillingModel != "" || marketplaceInfo.Provider != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.onlyTrialAvailable")
 		}
@@ -138,18 +130,38 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return &orgQuota.TrialQuotas[0], nil
 	}
 
-	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 {
+	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 {
 		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
+		}
+
+		if marketplaceInfo.BillingModel == QuotaEvalType {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noEval")
 		}
 		// select a standard quota
 		return &orgQuota.StandardQuotas[0], nil
 	}
 
-	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) == 0 && len(orgQuota.EvalQuotas) > 0 {
+		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
+		}
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
+		}
+
+		return &orgQuota.EvalQuotas[0], nil
+	}
+
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 {
+
+		if marketplaceInfo.BillingModel == QuotaStandardType {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
+		}
+
+		if marketplaceInfo.BillingModel == QuotaEvalType {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noEval")
 		}
 
 		var filteredMarketPlaceQuotas []QuotaSpec
@@ -184,10 +196,24 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return marketplaceQuota, nil
 	}
 
-	if len(orgQuota.StandardQuotas) > 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+	quotaTypeCount := 0
+
+	if len(orgQuota.StandardQuotas) > 0 {
+		quotaTypeCount++
+	}
+	if len(orgQuota.MarketplaceQuotas) > 0 {
+		quotaTypeCount++
+	}
+	if len(orgQuota.EvalQuotas) > 0 {
+		quotaTypeCount++
+	}
+
+	if quotaTypeCount > 1 {
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return &orgQuota.StandardQuotas[0], nil
+		} else if marketplaceInfo.BillingModel == QuotaEvalType {
+			return &orgQuota.EvalQuotas[0], nil
 		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 
 			var filteredMarketPlaceQuotas []QuotaSpec
