@@ -3,10 +3,9 @@ package register
 import (
 	"context"
 	"fmt"
-	"strings"
-
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
