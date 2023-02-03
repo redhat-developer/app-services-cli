@@ -67,3 +67,9 @@ terraforming your cluster for use with your Kafkas.
 
 [dedicated.registerCluster.kfmResponse.status.conflict]
 one = 'The cluster has already been registered with Red Hat OpenShift Streams for Apache Kafka.'
+
+[dedicated.registerCluster.flag.clusterMgmtApiUrl.description]
+one = 'The API URL of the OpenShift Cluster Management API.'
+
+[dedicated.registercluster.flag.accessToken.description]
+one = 'The access token to use to authenticate with the OpenShift Cluster Management API.'

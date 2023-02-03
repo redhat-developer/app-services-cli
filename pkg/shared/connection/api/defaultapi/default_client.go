@@ -290,10 +290,14 @@ func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 	}
 }
 
-func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, func(), error) {
+func (a *defaultAPI) createOCMConnection(clusterMgmtApiUrl, accessToken string) (*ocmSdkClient.Connection, func(), error) {
+	if accessToken == "" {
+		accessToken = a.AccessToken
+	}
 	connection, err := ocmSdkClient.NewConnectionBuilder().
 		// the access token and url here should be specified and configurable
-		Tokens(a.AccessToken).
+		URL(clusterMgmtApiUrl).
+		Tokens(accessToken).
 		Build()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
@@ -305,8 +309,8 @@ func (a *defaultAPI) CreateOCMConnection() (*ocmSdkClient.Connection, func(), er
 }
 
 // create an OCM clustermgmt client
-func (a *defaultAPI) OCMClustermgmt() (*ocmclustersmgmtv1.Client, func(), error) {
-	connection, closeConnection, err := a.CreateOCMConnection()
+func (a *defaultAPI) OCMClustermgmt(clusterMgmtApiUrl, accessToken string) (*ocmclustersmgmtv1.Client, func(), error) {
+	connection, closeConnection, err := a.createOCMConnection(clusterMgmtApiUrl, accessToken)
 	if err != nil {
 		return nil, nil, err
 	}
