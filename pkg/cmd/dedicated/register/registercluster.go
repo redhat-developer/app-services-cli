@@ -33,19 +33,18 @@ type options struct {
 
 // list of consts should come from KFM
 const (
-	machinePoolId                  = "kafka-standard"
-	machinePoolTaintKey            = "bf2.org/kafkaInstanceProfileType"
-	machinePoolTaintEffect         = "NoExecute"
-	machinePoolTaintValue          = "standard"
-	machinePoolInstanceType        = "r5.xlarge"
-	machinePoolLabelKey            = "bf2.org/kafkaInstanceProfileType"
-	machinePoolLabelValue          = "standard"
-	clusterReadyState              = "ready"
-	defaultClusterManagementAPIURL = "https://api.openshift.com"
-	fleetshardAddonId              = "kas-fleetshard-operator"
-	strimziAddonId                 = "managed-kafka"
-	fleetshardAddonIdQE            = "kas-fleetshard-operator-qe"
-	strimziAddonIdQE               = "managed-kafka-qe"
+	machinePoolId           = "kafka-standard"
+	machinePoolTaintKey     = "bf2.org/kafkaInstanceProfileType"
+	machinePoolTaintEffect  = "NoExecute"
+	machinePoolTaintValue   = "standard"
+	machinePoolInstanceType = "r5.xlarge"
+	machinePoolLabelKey     = "bf2.org/kafkaInstanceProfileType"
+	machinePoolLabelValue   = "standard"
+	clusterReadyState       = "ready"
+	fleetshardAddonId       = "kas-fleetshard-operator"
+	strimziAddonId          = "managed-kafka"
+	fleetshardAddonIdQE     = "kas-fleetshard-operator-qe"
+	strimziAddonIdQE        = "managed-kafka-qe"
 )
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
@@ -74,9 +73,6 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 func runRegisterClusterCmd(opts *options) (err error) {
 	// Set the base URL for the cluster management API
-	if opts.clusterManagementApiUrl == "" {
-		opts.clusterManagementApiUrl = defaultClusterManagementAPIURL
-	}
 	err = setListClusters(opts)
 	if err != nil {
 		return err

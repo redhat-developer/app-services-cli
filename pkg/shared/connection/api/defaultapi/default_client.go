@@ -291,11 +291,13 @@ func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 }
 
 func (a *defaultAPI) createOCMConnection(clusterMgmtApiUrl, accessToken string) (*ocmSdkClient.Connection, func(), error) {
+	if clusterMgmtApiUrl == "" {
+		clusterMgmtApiUrl = build.ProductionAPIURL
+	}
 	if accessToken == "" {
 		accessToken = a.AccessToken
 	}
 	connection, err := ocmSdkClient.NewConnectionBuilder().
-		// the access token and url here should be specified and configurable
 		URL(clusterMgmtApiUrl).
 		Tokens(accessToken).
 		Build()
