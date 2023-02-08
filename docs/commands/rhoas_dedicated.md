@@ -1,15 +1,19 @@
 ## rhoas dedicated
 
-shortDescription
+Manage your OpenShift clusters which host your kafkas.
 
 ### Synopsis
 
-longDescription
+Red Hat OpenShift Streams for Apache Kafka allows you to use your own OpenShift clusters to provision your
+kafkas. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka.
+
 
 ### Examples
 
 ```
-example
+# Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka.
+rhoas dedicated register-cluster
+
 ```
 
 ### Options inherited from parent commands
