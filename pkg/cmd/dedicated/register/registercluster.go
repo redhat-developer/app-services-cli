@@ -378,17 +378,12 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectPublicNetworkAccess.help"),
 		Default: false,
 	}
-	accessKafkasViaPublicNetwork := false
-	err := survey.AskOne(prompt, &accessKafkasViaPublicNetwork)
+	accessFromPublicNetwork := true
+	err := survey.AskOne(prompt, accessFromPublicNetwork)
 	if err != nil {
 		return err
 	}
-	if accessKafkasViaPublicNetwork {
-		opts.accessKafkasViaPrivateNetwork = false
-	} else {
-		opts.accessKafkasViaPrivateNetwork = true
-	}
-
+	opts.accessKafkasViaPrivateNetwork = !accessFromPublicNetwork
 	return nil
 }
 
@@ -440,7 +435,7 @@ func getStrimziAddonIdByEnv(con *config.Config) string {
 	return strimziAddonIdQE
 }
 
-func getKafkaFleetManagerAddonIdByEnv(con *config.Config) string {
+func getKafkaFleetShardAddonIdByEnv(con *config.Config) string {
 	if con.APIUrl == build.ProductionAPIURL {
 		return fleetshardAddonId
 	}
@@ -481,7 +476,7 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	if err != nil {
 		return err
 	}
-	err = createAddonWithParams(opts, getKafkaFleetManagerAddonIdByEnv(con), response.FleetshardParameters)
+	err = createAddonWithParams(opts, getKafkaFleetShardAddonIdByEnv(con), response.FleetshardParameters)
 	if err != nil {
 		return err
 	}
