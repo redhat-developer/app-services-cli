@@ -3,6 +3,8 @@ package register
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -15,12 +17,11 @@ import (
 )
 
 type options struct {
-	selectedClusterId string
-	// clusterManagementApiUrl       string
-	// accessToken                   string
-	clusterList     []clustersmgmtv1.Cluster
-	selectedCluster clustersmgmtv1.Cluster
-	// clusterMachinePoolList        clustersmgmtv1.MachinePoolList
+	selectedClusterId             string
+	clusterManagementApiUrl       string
+	accessToken                   string
+	clusterList                   []clustersmgmtv1.Cluster
+	selectedCluster               clustersmgmtv1.Cluster
 	existingMachinePoolList       []clustersmgmtv1.MachinePool
 	selectedClusterMachinePool    clustersmgmtv1.MachinePool
 	requestedMachinePoolNodeCount int
@@ -32,18 +33,18 @@ type options struct {
 
 // list of consts should come from KFM
 const (
-	machinePoolId          = "kafka-standard"
-	machinePoolTaintKey    = "bf2.org/kafkaInstanceProfileType"
-	machinePoolTaintEffect = "NoExecute"
-	machinePoolTaintValue  = "standard"
-	// machinePoolInstanceType = "m5.2xlarge"
+	machinePoolId           = "kafka-standard"
+	machinePoolTaintKey     = "bf2.org/kafkaInstanceProfileType"
+	machinePoolTaintEffect  = "NoExecute"
+	machinePoolTaintValue   = "standard"
 	machinePoolInstanceType = "r5.xlarge"
 	machinePoolLabelKey     = "bf2.org/kafkaInstanceProfileType"
 	machinePoolLabelValue   = "standard"
 	clusterReadyState       = "ready"
 	fleetshardAddonId       = "kas-fleetshard-operator"
 	strimziAddonId          = "managed-kafka"
-	// clusterManagementAPIURL = "https://api.openshift.com"
+	fleetshardAddonIdQE     = "kas-fleetshard-operator-qe"
+	strimziAddonIdQE        = "managed-kafka-qe"
 )
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
@@ -62,19 +63,16 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	// TO-DO add flags
-	// add a flag for clustermgmt url, i.e --cluster-management-api-url, make the flag hidden, default to api.openshift.com
-	// supply customer mgmt access token via a flag, i.e --access-token, make the flag hidden, default to ""
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
-	// flags.StringVar(&opts.clusterManagementApiUrl, "cluster-management-api-url", clusterManagementAPIURL, "cluster management api url")
-	// flags.StringVar(&opts.accessToken, "access-token", "", "access token")
-	// this flag will allow the user to pass the cluster id as a flag
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
 	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterId.description"))
 
 	return cmd
 }
 
 func runRegisterClusterCmd(opts *options) (err error) {
+	// Set the base URL for the cluster management API
 	err = setListClusters(opts)
 	if err != nil {
 		return err
@@ -114,12 +112,11 @@ func runRegisterClusterCmd(opts *options) (err error) {
 }
 
 func getClusterList(opts *options) (*clustersmgmtv1.ClusterList, error) {
-	// ocm client connection
 	conn, err := opts.f.Connection()
 	if err != nil {
 		return nil, err
 	}
-	client, cc, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt(opts.clusterManagementApiUrl, opts.accessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -147,9 +144,7 @@ func setListClusters(opts *options) error {
 
 func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1.Cluster) []clustersmgmtv1.Cluster {
 	for _, cluster := range clusters.Slice() {
-		// TO-DO the cluster must be multiAZ
 		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-			// if cluster.State() == clusterReadyState {
 			cls = append(cls, *cluster)
 		}
 	}
@@ -223,7 +218,7 @@ func getMachinePoolList(opts *options) (*clustersmgmtv1.MachinePoolsListResponse
 	if err != nil {
 		return nil, err
 	}
-	client, cc, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt(opts.clusterManagementApiUrl, opts.accessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -295,12 +290,11 @@ func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*clustersmg
 
 // TO-DO this function should be moved to an ocm client / provider area
 func createMachinePool(opts *options, mprequest *clustersmgmtv1.MachinePool) error {
-	// create a new machine pool via ocm
 	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}
-	client, cc, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt(opts.clusterManagementApiUrl, opts.accessToken)
 	if err != nil {
 		return err
 	}
@@ -384,17 +378,12 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectPublicNetworkAccess.help"),
 		Default: false,
 	}
-	accessKafkasViaPublicNetwork := false
-	err := survey.AskOne(prompt, &accessKafkasViaPublicNetwork)
+	accessFromPublicNetwork := true
+	err := survey.AskOne(prompt, &accessFromPublicNetwork)
 	if err != nil {
 		return err
 	}
-	if accessKafkasViaPublicNetwork {
-		opts.accessKafkasViaPrivateNetwork = false
-	} else {
-		opts.accessKafkasViaPrivateNetwork = true
-	}
-
+	opts.accessKafkasViaPrivateNetwork = !accessFromPublicNetwork
 	return nil
 }
 
@@ -416,7 +405,7 @@ func createAddonWithParams(opts *options, addonId string, params *[]kafkamgmtcli
 	if err != nil {
 		return err
 	}
-	client, cc, err := conn.API().OCMClustermgmt()
+	client, cc, err := conn.API().OCMClustermgmt(opts.clusterManagementApiUrl, opts.accessToken)
 	if err != nil {
 		return err
 	}
@@ -437,6 +426,20 @@ func createAddonWithParams(opts *options, addonId string, params *[]kafkamgmtcli
 	}
 
 	return nil
+}
+
+func getStrimziAddonIdByEnv(con *config.Config) string {
+	if con.APIUrl == build.ProductionAPIURL {
+		return strimziAddonId
+	}
+	return strimziAddonIdQE
+}
+
+func getKafkaFleetShardAddonIdByEnv(con *config.Config) string {
+	if con.APIUrl == build.ProductionAPIURL {
+		return fleetshardAddonId
+	}
+	return fleetshardAddonIdQE
 }
 
 // TO-DO go through errs and make them more user friendly with actual error messages.
@@ -465,11 +468,15 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	if err != nil {
 		return err
 	}
-	err = createAddonWithParams(opts, strimziAddonId, nil)
+	con, err := opts.f.Config.Load()
 	if err != nil {
 		return err
 	}
-	err = createAddonWithParams(opts, fleetshardAddonId, response.FleetshardParameters)
+	err = createAddonWithParams(opts, getStrimziAddonIdByEnv(con), nil)
+	if err != nil {
+		return err
+	}
+	err = createAddonWithParams(opts, getKafkaFleetShardAddonIdByEnv(con), response.FleetshardParameters)
 	if err != nil {
 		return err
 	}

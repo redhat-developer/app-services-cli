@@ -26,7 +26,7 @@ one = 'The ID of the OpenShift cluster to register:'
 one = 'Select the ready cluster to register'
 
 [dedicated.registerCluster.prompt.selectPublicNetworkAccess.message]
-one = 'Would you like your Kakfas to be accessible via a public network?'
+one = 'Would you like your Kafkas to be accessible via a public network?'
 
 [dedicated.registerCluster.prompt.selectPublicNetworkAccess.help]
 one = 'If you select yes, your Kafka will be accessible via a public network'
@@ -43,3 +43,33 @@ There will be N/3 streaming units in your Kafka cluster, where N is the machine 
 
 [dedicated.registerCluster.info.foundValidMachinePool]
 one = 'Using the valid machine pool:'
+
+[dedicated.cmd.shortDescription]
+one = 'Manage your OpenShift clusters which host your kafkas.'
+
+[dedicated.cmd.longDescription]
+one = '''
+Red Hat OpenShift Streams for Apache Kafka allows you to use your own OpenShift clusters to provision your
+kafkas. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka.
+'''
+
+[dedicated.cmd.example]
+one = '''
+# Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka.
+rhoas dedicated register-cluster
+'''
+
+[dedicated.registerCluster.kfmResponse.status.clusterAccepted]
+one = '''
+The cluster has been accepted. Red Hat OpenShift Streams for Apache Kafka control plane is now
+terraforming your cluster for use with your Kafkas.
+'''
+
+[dedicated.registerCluster.kfmResponse.status.conflict]
+one = 'The cluster has already been registered with Red Hat OpenShift Streams for Apache Kafka.'
+
+[dedicated.registerCluster.flag.clusterMgmtApiUrl.description]
+one = 'The API URL of the OpenShift Cluster Management API.'
+
+[dedicated.registercluster.flag.accessToken.description]
+one = 'The access token to use to authenticate with the OpenShift Cluster Management API.'

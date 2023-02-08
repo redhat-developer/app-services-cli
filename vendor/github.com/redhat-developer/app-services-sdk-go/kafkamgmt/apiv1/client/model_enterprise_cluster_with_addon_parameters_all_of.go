@@ -17,6 +17,12 @@ import (
 
 // EnterpriseClusterWithAddonParametersAllOf struct for EnterpriseClusterWithAddonParametersAllOf
 type EnterpriseClusterWithAddonParametersAllOf struct {
+	// Indicates whether Kafkas created on this data plane cluster have to be accessed via private network
+	AccessKafkasViaPrivateNetwork bool `json:"access_kafkas_via_private_network"`
+	// OCM cluster id of the registered Enterprise cluster
+	ClusterId *string `json:"cluster_id,omitempty"`
+	// status of registered Enterprise cluster
+	Status *string `json:"status,omitempty"`
 	FleetshardParameters *[]FleetshardParameter `json:"fleetshard_parameters,omitempty"`
 }
 
@@ -24,8 +30,9 @@ type EnterpriseClusterWithAddonParametersAllOf struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEnterpriseClusterWithAddonParametersAllOf() *EnterpriseClusterWithAddonParametersAllOf {
+func NewEnterpriseClusterWithAddonParametersAllOf(accessKafkasViaPrivateNetwork bool) *EnterpriseClusterWithAddonParametersAllOf {
 	this := EnterpriseClusterWithAddonParametersAllOf{}
+	this.AccessKafkasViaPrivateNetwork = accessKafkasViaPrivateNetwork
 	return &this
 }
 
@@ -35,6 +42,94 @@ func NewEnterpriseClusterWithAddonParametersAllOf() *EnterpriseClusterWithAddonP
 func NewEnterpriseClusterWithAddonParametersAllOfWithDefaults() *EnterpriseClusterWithAddonParametersAllOf {
 	this := EnterpriseClusterWithAddonParametersAllOf{}
 	return &this
+}
+
+// GetAccessKafkasViaPrivateNetwork returns the AccessKafkasViaPrivateNetwork field value
+func (o *EnterpriseClusterWithAddonParametersAllOf) GetAccessKafkasViaPrivateNetwork() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.AccessKafkasViaPrivateNetwork
+}
+
+// GetAccessKafkasViaPrivateNetworkOk returns a tuple with the AccessKafkasViaPrivateNetwork field value
+// and a boolean to check if the value has been set.
+func (o *EnterpriseClusterWithAddonParametersAllOf) GetAccessKafkasViaPrivateNetworkOk() (*bool, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.AccessKafkasViaPrivateNetwork, true
+}
+
+// SetAccessKafkasViaPrivateNetwork sets field value
+func (o *EnterpriseClusterWithAddonParametersAllOf) SetAccessKafkasViaPrivateNetwork(v bool) {
+	o.AccessKafkasViaPrivateNetwork = v
+}
+
+// GetClusterId returns the ClusterId field value if set, zero value otherwise.
+func (o *EnterpriseClusterWithAddonParametersAllOf) GetClusterId() string {
+	if o == nil || o.ClusterId == nil {
+		var ret string
+		return ret
+	}
+	return *o.ClusterId
+}
+
+// GetClusterIdOk returns a tuple with the ClusterId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *EnterpriseClusterWithAddonParametersAllOf) GetClusterIdOk() (*string, bool) {
+	if o == nil || o.ClusterId == nil {
+		return nil, false
+	}
+	return o.ClusterId, true
+}
+
+// HasClusterId returns a boolean if a field has been set.
+func (o *EnterpriseClusterWithAddonParametersAllOf) HasClusterId() bool {
+	if o != nil && o.ClusterId != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetClusterId gets a reference to the given string and assigns it to the ClusterId field.
+func (o *EnterpriseClusterWithAddonParametersAllOf) SetClusterId(v string) {
+	o.ClusterId = &v
+}
+
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *EnterpriseClusterWithAddonParametersAllOf) GetStatus() string {
+	if o == nil || o.Status == nil {
+		var ret string
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *EnterpriseClusterWithAddonParametersAllOf) GetStatusOk() (*string, bool) {
+	if o == nil || o.Status == nil {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *EnterpriseClusterWithAddonParametersAllOf) HasStatus() bool {
+	if o != nil && o.Status != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given string and assigns it to the Status field.
+func (o *EnterpriseClusterWithAddonParametersAllOf) SetStatus(v string) {
+	o.Status = &v
 }
 
 // GetFleetshardParameters returns the FleetshardParameters field value if set, zero value otherwise.
@@ -71,6 +166,15 @@ func (o *EnterpriseClusterWithAddonParametersAllOf) SetFleetshardParameters(v []
 
 func (o EnterpriseClusterWithAddonParametersAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["access_kafkas_via_private_network"] = o.AccessKafkasViaPrivateNetwork
+	}
+	if o.ClusterId != nil {
+		toSerialize["cluster_id"] = o.ClusterId
+	}
+	if o.Status != nil {
+		toSerialize["status"] = o.Status
+	}
 	if o.FleetshardParameters != nil {
 		toSerialize["fleetshard_parameters"] = o.FleetshardParameters
 	}

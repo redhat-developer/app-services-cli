@@ -22,16 +22,10 @@ type EnterpriseClusterWithAddonParameters struct {
 	Href string `json:"href"`
 	// Indicates whether Kafkas created on this data plane cluster have to be accessed via private network
 	AccessKafkasViaPrivateNetwork bool `json:"access_kafkas_via_private_network"`
-	// The OCM's cluster id of the registered Enterprise cluster.
+	// OCM cluster id of the registered Enterprise cluster
 	ClusterId *string `json:"cluster_id,omitempty"`
-	// The status of Enterprise cluster registration
+	// status of registered Enterprise cluster
 	Status *string `json:"status,omitempty"`
-	// The cloud provider for this cluster. This valus will be used as the Kafka's cloud provider value when a Kafka is created on this cluster
-	CloudProvider *string `json:"cloud_provider,omitempty"`
-	// The region of this cluster. This valus will be used as the Kafka's region value when a Kafka is created on this cluster
-	Region *string `json:"region,omitempty"`
-	// A flag indicating whether this cluster is available on multiple availability zones or not
-	MultiAz bool `json:"multi_az"`
 	FleetshardParameters *[]FleetshardParameter `json:"fleetshard_parameters,omitempty"`
 }
 
@@ -39,13 +33,12 @@ type EnterpriseClusterWithAddonParameters struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEnterpriseClusterWithAddonParameters(id string, kind string, href string, accessKafkasViaPrivateNetwork bool, multiAz bool) *EnterpriseClusterWithAddonParameters {
+func NewEnterpriseClusterWithAddonParameters(id string, kind string, href string, accessKafkasViaPrivateNetwork bool) *EnterpriseClusterWithAddonParameters {
 	this := EnterpriseClusterWithAddonParameters{}
 	this.Id = id
 	this.Kind = kind
 	this.Href = href
 	this.AccessKafkasViaPrivateNetwork = accessKafkasViaPrivateNetwork
-	this.MultiAz = multiAz
 	return &this
 }
 
@@ -217,94 +210,6 @@ func (o *EnterpriseClusterWithAddonParameters) SetStatus(v string) {
 	o.Status = &v
 }
 
-// GetCloudProvider returns the CloudProvider field value if set, zero value otherwise.
-func (o *EnterpriseClusterWithAddonParameters) GetCloudProvider() string {
-	if o == nil || o.CloudProvider == nil {
-		var ret string
-		return ret
-	}
-	return *o.CloudProvider
-}
-
-// GetCloudProviderOk returns a tuple with the CloudProvider field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *EnterpriseClusterWithAddonParameters) GetCloudProviderOk() (*string, bool) {
-	if o == nil || o.CloudProvider == nil {
-		return nil, false
-	}
-	return o.CloudProvider, true
-}
-
-// HasCloudProvider returns a boolean if a field has been set.
-func (o *EnterpriseClusterWithAddonParameters) HasCloudProvider() bool {
-	if o != nil && o.CloudProvider != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetCloudProvider gets a reference to the given string and assigns it to the CloudProvider field.
-func (o *EnterpriseClusterWithAddonParameters) SetCloudProvider(v string) {
-	o.CloudProvider = &v
-}
-
-// GetRegion returns the Region field value if set, zero value otherwise.
-func (o *EnterpriseClusterWithAddonParameters) GetRegion() string {
-	if o == nil || o.Region == nil {
-		var ret string
-		return ret
-	}
-	return *o.Region
-}
-
-// GetRegionOk returns a tuple with the Region field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *EnterpriseClusterWithAddonParameters) GetRegionOk() (*string, bool) {
-	if o == nil || o.Region == nil {
-		return nil, false
-	}
-	return o.Region, true
-}
-
-// HasRegion returns a boolean if a field has been set.
-func (o *EnterpriseClusterWithAddonParameters) HasRegion() bool {
-	if o != nil && o.Region != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRegion gets a reference to the given string and assigns it to the Region field.
-func (o *EnterpriseClusterWithAddonParameters) SetRegion(v string) {
-	o.Region = &v
-}
-
-// GetMultiAz returns the MultiAz field value
-func (o *EnterpriseClusterWithAddonParameters) GetMultiAz() bool {
-	if o == nil {
-		var ret bool
-		return ret
-	}
-
-	return o.MultiAz
-}
-
-// GetMultiAzOk returns a tuple with the MultiAz field value
-// and a boolean to check if the value has been set.
-func (o *EnterpriseClusterWithAddonParameters) GetMultiAzOk() (*bool, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.MultiAz, true
-}
-
-// SetMultiAz sets field value
-func (o *EnterpriseClusterWithAddonParameters) SetMultiAz(v bool) {
-	o.MultiAz = v
-}
-
 // GetFleetshardParameters returns the FleetshardParameters field value if set, zero value otherwise.
 func (o *EnterpriseClusterWithAddonParameters) GetFleetshardParameters() []FleetshardParameter {
 	if o == nil || o.FleetshardParameters == nil {
@@ -356,15 +261,6 @@ func (o EnterpriseClusterWithAddonParameters) MarshalJSON() ([]byte, error) {
 	}
 	if o.Status != nil {
 		toSerialize["status"] = o.Status
-	}
-	if o.CloudProvider != nil {
-		toSerialize["cloud_provider"] = o.CloudProvider
-	}
-	if o.Region != nil {
-		toSerialize["region"] = o.Region
-	}
-	if true {
-		toSerialize["multi_az"] = o.MultiAz
 	}
 	if o.FleetshardParameters != nil {
 		toSerialize["fleetshard_parameters"] = o.FleetshardParameters

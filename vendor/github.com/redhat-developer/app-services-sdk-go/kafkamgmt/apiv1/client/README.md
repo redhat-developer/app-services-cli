@@ -119,8 +119,6 @@ Class | Method | HTTP request | Description
  - [EnterpriseClusterAllOfCapacityInformation](docs/EnterpriseClusterAllOfCapacityInformation.md)
  - [EnterpriseClusterList](docs/EnterpriseClusterList.md)
  - [EnterpriseClusterListAllOf](docs/EnterpriseClusterListAllOf.md)
- - [EnterpriseClusterListItem](docs/EnterpriseClusterListItem.md)
- - [EnterpriseClusterListItemAllOf](docs/EnterpriseClusterListItemAllOf.md)
  - [EnterpriseClusterWithAddonParameters](docs/EnterpriseClusterWithAddonParameters.md)
  - [EnterpriseClusterWithAddonParametersAllOf](docs/EnterpriseClusterWithAddonParametersAllOf.md)
  - [EnterpriseOsdClusterPayload](docs/EnterpriseOsdClusterPayload.md)
