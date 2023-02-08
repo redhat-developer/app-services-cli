@@ -26,9 +26,9 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
 ### Options
 
 ```
-      --access-token string           access token
+      --access-token string           The access token to use to authenticate with the OpenShift Cluster Management API.
       --cluster-id string             The ID of the OpenShift cluster to register:
-      --cluster-mgmt-api-url string   cluster management api url
+      --cluster-mgmt-api-url string   The API URL of the OpenShift Cluster Management API.
 ```
 
 ### Options inherited from parent commands

@@ -379,13 +379,11 @@ func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 		Default: false,
 	}
 	accessFromPublicNetwork := true
-	err := survey.AskOne(prompt, accessFromPublicNetwork)
+	err := survey.AskOne(prompt, &accessFromPublicNetwork)
 	if err != nil {
 		return err
 	}
-	if !accessFromPublicNetwork {
-		opts.accessKafkasViaPrivateNetwork = false
-	}
+	opts.accessKafkasViaPrivateNetwork = !accessFromPublicNetwork
 	return nil
 }
 

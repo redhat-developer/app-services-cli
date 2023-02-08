@@ -1147,4 +1147,4 @@ one = 'ID of the Kafka instance owner'
 
 [kafka.create.flag.clusterId.description]
 description = 'Description for the --cluster-id flag'
-one = 'ID of the Customer-Cloud dataplane cluster to create the Kafka instance on.'
+one = 'ID of the Customer-Cloud data plane cluster to create the Kafka instance on.'
