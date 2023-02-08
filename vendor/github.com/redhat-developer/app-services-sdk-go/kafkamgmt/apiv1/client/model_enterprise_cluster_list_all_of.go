@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -17,15 +17,16 @@ import (
 
 // EnterpriseClusterListAllOf struct for EnterpriseClusterListAllOf
 type EnterpriseClusterListAllOf struct {
-	Items *[]EnterpriseCluster `json:"items,omitempty"`
+	Items []EnterpriseCluster `json:"items"`
 }
 
 // NewEnterpriseClusterListAllOf instantiates a new EnterpriseClusterListAllOf object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEnterpriseClusterListAllOf() *EnterpriseClusterListAllOf {
+func NewEnterpriseClusterListAllOf(items []EnterpriseCluster) *EnterpriseClusterListAllOf {
 	this := EnterpriseClusterListAllOf{}
+	this.Items = items
 	return &this
 }
 
@@ -37,41 +38,33 @@ func NewEnterpriseClusterListAllOfWithDefaults() *EnterpriseClusterListAllOf {
 	return &this
 }
 
-// GetItems returns the Items field value if set, zero value otherwise.
+// GetItems returns the Items field value
 func (o *EnterpriseClusterListAllOf) GetItems() []EnterpriseCluster {
-	if o == nil || o.Items == nil {
+	if o == nil {
 		var ret []EnterpriseCluster
 		return ret
 	}
-	return *o.Items
+
+	return o.Items
 }
 
-// GetItemsOk returns a tuple with the Items field value if set, nil otherwise
+// GetItemsOk returns a tuple with the Items field value
 // and a boolean to check if the value has been set.
 func (o *EnterpriseClusterListAllOf) GetItemsOk() (*[]EnterpriseCluster, bool) {
-	if o == nil || o.Items == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Items, true
+	return &o.Items, true
 }
 
-// HasItems returns a boolean if a field has been set.
-func (o *EnterpriseClusterListAllOf) HasItems() bool {
-	if o != nil && o.Items != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetItems gets a reference to the given []EnterpriseCluster and assigns it to the Items field.
+// SetItems sets field value
 func (o *EnterpriseClusterListAllOf) SetItems(v []EnterpriseCluster) {
-	o.Items = &v
+	o.Items = v
 }
 
 func (o EnterpriseClusterListAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Items != nil {
+	if true {
 		toSerialize["items"] = o.Items
 	}
 	return json.Marshal(toSerialize)
