@@ -93,16 +93,17 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 		for i := range quotaResources {
 			quotaResource := quotaResources[i]
 			if quotaResource.GetResourceName() == spec.ResourceName {
-				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
+				switch quotaResource.GetProduct() {
+				case spec.TrialProductQuotaID:
 					trialQuotas = append(trialQuotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel, nil})
-				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
+				case spec.InstanceQuotaID:
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					if quotaResource.BillingModel == QuotaStandardType {
 						standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
 					} else if quotaResource.BillingModel == QuotaMarketplaceType {
 						marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 					}
-				} else if quotaResource.GetProduct() == "RHOSAKEval" {
+				case "RHOSAKEval":
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 				}
@@ -206,11 +207,14 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 
 	if quotaTypeCount > 1 {
 
-		if marketplaceInfo.BillingModel == QuotaStandardType {
+		switch marketplaceInfo.BillingModel {
+		case QuotaStandardType:
 			return &orgQuota.StandardQuotas[0], nil
-		} else if marketplaceInfo.BillingModel == QuotaEvalType {
+		case QuotaEvalType:
 			return &orgQuota.EvalQuotas[0], nil
-		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+		}
+
+		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 
 			var filteredMarketPlaceQuotas []QuotaSpec
 
