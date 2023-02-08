@@ -26,7 +26,9 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
 ### Options
 
 ```
-      --cluster-id string   The ID of the OpenShift cluster to register:
+      --access-token string           The access token to use to authenticate with the OpenShift Cluster Management API.
+      --cluster-id string             The ID of the OpenShift cluster to register:
+      --cluster-mgmt-api-url string   The API URL of the OpenShift Cluster Management API.
 ```
 
 ### Options inherited from parent commands
@@ -38,5 +40,5 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
 
 ### SEE ALSO
 
-* [rhoas dedicated](rhoas_dedicated.md)	 - shortDescription
+* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your OpenShift clusters which host your kafkas.
 

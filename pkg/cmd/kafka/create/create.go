@@ -49,10 +49,11 @@ const (
 )
 
 type options struct {
-	name     string
-	provider string
-	region   string
-	size     string
+	name      string
+	provider  string
+	region    string
+	size      string
+	clusterId string
 
 	marketplaceAcctId string
 	marketplace       string
@@ -143,6 +144,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.BoolVarP(&opts.dryRun, "dry-run", "", false, f.Localizer.MustLocalize("kafka.create.flag.dryrun.description"))
 	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.create.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
+	flags.StringVar(&opts.clusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.create.flag.clusterId.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetCloudProviderCompletionValues(f)
@@ -237,6 +239,7 @@ func runCreate(opts *options) error {
 			Name:          opts.name,
 			Region:        &opts.region,
 			CloudProvider: &opts.provider,
+			ClusterId:     *kafkamgmtclient.NewNullableString(&opts.clusterId),
 		}
 
 		if !opts.bypassChecks {

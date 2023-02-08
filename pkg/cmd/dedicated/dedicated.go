@@ -6,16 +6,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// TO-DO add localizer and descriptions
 func NewDedicatedCmd(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "dedicated",
-		// Short:   f.Localizer.MustLocalize("kafka.topic.cmd.shortDescription"),
-		Short: "shortDescription",
-		// Long:    f.Localizer.MustLocalize("kafka.topic.cmd.longDescription"),
-		Long: "longDescription",
-		// Example: f.Localizer.MustLocalize("kafka.topic.cmd.example"),
-		Example: "example",
+		Use:     "dedicated",
+		Short:   f.Localizer.MustLocalize("dedicated.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("dedicated.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("dedicated.cmd.example"),
 	}
 
 	cmd.AddCommand(

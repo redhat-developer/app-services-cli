@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -21,20 +21,18 @@ type List struct {
 	Page int32 `json:"page"`
 	Size int32 `json:"size"`
 	Total int32 `json:"total"`
-	Items []ObjectReference `json:"items"`
 }
 
 // NewList instantiates a new List object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewList(kind string, page int32, size int32, total int32, items []ObjectReference) *List {
+func NewList(kind string, page int32, size int32, total int32) *List {
 	this := List{}
 	this.Kind = kind
 	this.Page = page
 	this.Size = size
 	this.Total = total
-	this.Items = items
 	return &this
 }
 
@@ -142,30 +140,6 @@ func (o *List) SetTotal(v int32) {
 	o.Total = v
 }
 
-// GetItems returns the Items field value
-func (o *List) GetItems() []ObjectReference {
-	if o == nil {
-		var ret []ObjectReference
-		return ret
-	}
-
-	return o.Items
-}
-
-// GetItemsOk returns a tuple with the Items field value
-// and a boolean to check if the value has been set.
-func (o *List) GetItemsOk() (*[]ObjectReference, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Items, true
-}
-
-// SetItems sets field value
-func (o *List) SetItems(v []ObjectReference) {
-	o.Items = v
-}
-
 func (o List) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -179,9 +153,6 @@ func (o List) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["total"] = o.Total
-	}
-	if true {
-		toSerialize["items"] = o.Items
 	}
 	return json.Marshal(toSerialize)
 }

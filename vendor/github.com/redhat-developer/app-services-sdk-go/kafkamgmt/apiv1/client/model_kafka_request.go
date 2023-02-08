@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -62,6 +62,12 @@ type KafkaRequest struct {
 	BillingCloudAccountId *string `json:"billing_cloud_account_id,omitempty"`
 	Marketplace *string `json:"marketplace,omitempty"`
 	BillingModel *string `json:"billing_model,omitempty"`
+	// Status of the Kafka request promotion. Possible values: ['promoting', 'failed']. If unset it means no promotion is in progress.
+	PromotionStatus *string `json:"promotion_status,omitempty"`
+	// The ID of the data plane where Kafka is deployed on. This information is only returned for kafka whose billing model is enterprise
+	ClusterId NullableString `json:"cluster_id,omitempty"`
+	// Details of the Kafka request promotion. It can be set when a Kafka request promotion is in progress or has failed
+	PromotionDetails *string `json:"promotion_details,omitempty"`
 }
 
 // NewKafkaRequest instantiates a new KafkaRequest object
@@ -1080,6 +1086,112 @@ func (o *KafkaRequest) SetBillingModel(v string) {
 	o.BillingModel = &v
 }
 
+// GetPromotionStatus returns the PromotionStatus field value if set, zero value otherwise.
+func (o *KafkaRequest) GetPromotionStatus() string {
+	if o == nil || o.PromotionStatus == nil {
+		var ret string
+		return ret
+	}
+	return *o.PromotionStatus
+}
+
+// GetPromotionStatusOk returns a tuple with the PromotionStatus field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *KafkaRequest) GetPromotionStatusOk() (*string, bool) {
+	if o == nil || o.PromotionStatus == nil {
+		return nil, false
+	}
+	return o.PromotionStatus, true
+}
+
+// HasPromotionStatus returns a boolean if a field has been set.
+func (o *KafkaRequest) HasPromotionStatus() bool {
+	if o != nil && o.PromotionStatus != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPromotionStatus gets a reference to the given string and assigns it to the PromotionStatus field.
+func (o *KafkaRequest) SetPromotionStatus(v string) {
+	o.PromotionStatus = &v
+}
+
+// GetClusterId returns the ClusterId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *KafkaRequest) GetClusterId() string {
+	if o == nil || o.ClusterId.Get() == nil {
+		var ret string
+		return ret
+	}
+	return *o.ClusterId.Get()
+}
+
+// GetClusterIdOk returns a tuple with the ClusterId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *KafkaRequest) GetClusterIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return o.ClusterId.Get(), o.ClusterId.IsSet()
+}
+
+// HasClusterId returns a boolean if a field has been set.
+func (o *KafkaRequest) HasClusterId() bool {
+	if o != nil && o.ClusterId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetClusterId gets a reference to the given NullableString and assigns it to the ClusterId field.
+func (o *KafkaRequest) SetClusterId(v string) {
+	o.ClusterId.Set(&v)
+}
+// SetClusterIdNil sets the value for ClusterId to be an explicit nil
+func (o *KafkaRequest) SetClusterIdNil() {
+	o.ClusterId.Set(nil)
+}
+
+// UnsetClusterId ensures that no value is present for ClusterId, not even an explicit nil
+func (o *KafkaRequest) UnsetClusterId() {
+	o.ClusterId.Unset()
+}
+
+// GetPromotionDetails returns the PromotionDetails field value if set, zero value otherwise.
+func (o *KafkaRequest) GetPromotionDetails() string {
+	if o == nil || o.PromotionDetails == nil {
+		var ret string
+		return ret
+	}
+	return *o.PromotionDetails
+}
+
+// GetPromotionDetailsOk returns a tuple with the PromotionDetails field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *KafkaRequest) GetPromotionDetailsOk() (*string, bool) {
+	if o == nil || o.PromotionDetails == nil {
+		return nil, false
+	}
+	return o.PromotionDetails, true
+}
+
+// HasPromotionDetails returns a boolean if a field has been set.
+func (o *KafkaRequest) HasPromotionDetails() bool {
+	if o != nil && o.PromotionDetails != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPromotionDetails gets a reference to the given string and assigns it to the PromotionDetails field.
+func (o *KafkaRequest) SetPromotionDetails(v string) {
+	o.PromotionDetails = &v
+}
+
 func (o KafkaRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -1177,6 +1289,15 @@ func (o KafkaRequest) MarshalJSON() ([]byte, error) {
 	}
 	if o.BillingModel != nil {
 		toSerialize["billing_model"] = o.BillingModel
+	}
+	if o.PromotionStatus != nil {
+		toSerialize["promotion_status"] = o.PromotionStatus
+	}
+	if o.ClusterId.IsSet() {
+		toSerialize["cluster_id"] = o.ClusterId.Get()
+	}
+	if o.PromotionDetails != nil {
+		toSerialize["promotion_details"] = o.PromotionDetails
 	}
 	return json.Marshal(toSerialize)
 }
