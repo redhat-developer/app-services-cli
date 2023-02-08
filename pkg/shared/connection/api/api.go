@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/url"
 
-	ocmclustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
