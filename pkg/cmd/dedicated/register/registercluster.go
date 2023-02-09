@@ -3,9 +3,10 @@ package register
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
-	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
@@ -181,13 +182,19 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	return nil
 }
 
-// parses the
+// parseDNSURL attempts to parse the cluster ingress dns name from the console url.
 func parseDNSURL(opts *options) (string, error) {
 	clusterIngressDNSName := opts.selectedCluster.Console().URL()
 	if len(clusterIngressDNSName) == 0 {
 		return "", fmt.Errorf("DNS url is empty")
 	}
-	return strings.SplitAfter(clusterIngressDNSName, ".apps.")[1], nil
+
+	splits := strings.SplitAfterN(clusterIngressDNSName, "console-openshift-console.", 2)
+	if len(splits) == 2 {
+		return splits[1], nil
+	}
+
+	return "", fmt.Errorf("could not construct cluster_ingress_dns_name")
 }
 
 func getOrCreateMachinePoolList(opts *options) error {
