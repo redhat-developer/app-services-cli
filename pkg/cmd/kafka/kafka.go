@@ -11,6 +11,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/describe"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/promote"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/providers"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/topic"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/update"
@@ -42,6 +43,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		acl.NewAclCommand(f),
 		billing.NewBillingCommand(f),
 		providers.NewProviderCommand(f),
+		promote.NewPromoteCommand(f),
 	)
 
 	return cmd

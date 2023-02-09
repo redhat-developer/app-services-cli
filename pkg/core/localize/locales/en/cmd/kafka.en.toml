@@ -54,6 +54,15 @@ one = 'Kafka instance ID. Uses the current instance if not set'
 [kafkas.common.flag.output.description]
 one = 'Format in which to display the Kafka instances (choose from: "json", "yml", "yaml")'
 
+[kafka.common.flag.marketplaceId.description]
+one = 'Cloud Account ID for the marketplace'
+
+[kafka.common.flag.billingModel.description]
+one = 'Billing model to be used'
+
+[kafka.common.flag.marketplaceType.description]
+one = 'Name of the marketplace where the instance is purchased on'
+
 [kafka.common.input.instanceName.message]
 one = 'Select Kafka instance:'
 
@@ -286,15 +295,6 @@ one = 'Wait until the Kafka instance is created'
 [kafka.create.flag.dryrun.description]
 one = 'Validate all user provided arguments without creating the Kafka instance'
 
-[kafka.create.flag.marketplaceId.description]
-one = 'Cloud Account ID for the marketplace'
-
-[kafka.create.flag.billingModel.description]
-one = 'Billing model to be used'
-
-[kafka.create.flag.marketplaceType.description]
-one = 'Name of the marketplace where the instance is purchased on'
-
 [kafka.create.log.info.creatingKafka]
 description = 'Message when Kafka instance is being created'
 one = 'Creating Kafka instance "{{.Name}}"...'
@@ -395,6 +395,9 @@ one = 'unable to create new Kafka instance at this time in specified cloud provi
 
 [kafka.create.error.instance.limit]
 one = 'maximum number of allowed kafka instances has been reached. Please review all instances that your user has access to and delete one or more instances before creating a new one'
+
+[kafka.create.error.standard.promote]
+one = 'only Kafka instances with billing model "eval" can be promoted'
 
 [kafka.create.region.error.invalidRegion]
 one = '''
@@ -591,6 +594,26 @@ $ rhoas kafka billing
 [kafka.billing.log.info.noStandardInstancesAvailable]
 one = "Only developer instances are available"
 
+[kafka.promote.cmd.shortDescription]
+one = 'Promote eval Kafka instance'
+
+[kafka.promote.cmd.longDescription]
+one = 'Promote an evaluation Kafka instance to billing model "standard" or "marketplace"'
+
+[kafka.promote.cmd.example]
+one = '''
+# Promote eval instance to standard
+$ rhoas kafka promote --billing-model standard --id 1iSY6RQ3JKI8Q0OTmjQFd3ocFRg
+'''
+
+[kafka.promote.flag.id]
+one = 'ID of the Kafka instance'
+
+[kafka.promote.flag.name]
+one = 'Name of the Kafka instance'
+
+[kafka.promote.info.success]
+one = 'The evaluation instance has been successfully promoted'
 
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"
