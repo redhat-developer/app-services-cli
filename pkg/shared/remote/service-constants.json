@@ -8,6 +8,7 @@
       "trialQuotaId": "cluster|rhinfra|rhosaktrial|standard",
       "quotaProductId": "RHOSAK",
       "trialQuotaProductId": "RHOSAKTrial",
+      "longLivedQuotaProductId": "RHOSAKEval",
       "resourceName": "rhosak"
     }
   },

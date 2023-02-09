@@ -27,6 +27,8 @@ func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId
 	switch amsType.Name {
 	case accountmgmtutil.QuotaStandardType:
 		return StandardType
+	case accountmgmtutil.QuotaEvalType:
+		return StandardType
 	case accountmgmtutil.QuotaMarketplaceType:
 		return StandardType
 	case accountmgmtutil.QuotaTrialType:
@@ -61,6 +63,10 @@ func FetchSupportedBillingModels(userQuotas *accountmgmtutil.OrgQuotas, provider
 
 	if len(userQuotas.StandardQuotas) > 0 {
 		billingModels = append(billingModels, accountmgmtutil.QuotaStandardType)
+	}
+
+	if len(userQuotas.EvalQuotas) > 0 {
+		billingModels = append(billingModels, accountmgmtutil.QuotaEvalType)
 	}
 
 	if len(userQuotas.MarketplaceQuotas) > 0 {
