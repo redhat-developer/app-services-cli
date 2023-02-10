@@ -612,8 +612,8 @@ one = 'ID of the Kafka instance'
 [kafka.promote.flag.name]
 one = 'Name of the Kafka instance'
 
-[kafka.promote.info.success]
-one = 'The evaluation instance has been successfully promoted'
+[kafka.promote.info.successAsync]
+one = 'Kafka instance is being promoted. To monitor its status run "rhoas kafka describe".'
 
 [kafka.list.cmd.shortDescription]
 description = "Short description for command"

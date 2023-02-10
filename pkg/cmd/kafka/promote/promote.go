@@ -130,7 +130,7 @@ func runPromote(opts *options) error {
 		return err
 	}
 
-	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.promote.info.success"))
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.promote.info.successAsync"))
 
 	return nil
 }
