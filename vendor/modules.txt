@@ -149,7 +149,7 @@ github.com/inconshreveable/go-update/internal/osext
 # github.com/inconshreveable/mousetrap v1.0.1
 ## explicit; go 1.18
 github.com/inconshreveable/mousetrap
-# github.com/jackdelahunt/survey-json-schema v0.12.0
+# github.com/jackdelahunt/survey-json-schema v0.13.0
 ## explicit; go 1.16
 github.com/jackdelahunt/survey-json-schema/pkg/surveyjson
 github.com/jackdelahunt/survey-json-schema/pkg/surveyjson/util
