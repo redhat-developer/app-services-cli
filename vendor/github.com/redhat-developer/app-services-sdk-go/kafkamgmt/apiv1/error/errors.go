@@ -92,6 +92,18 @@ const (
   // Billing account id missing or invalid
   ERROR_43 string = "KAFKAS-MGMT-43"
 
+  // Enterprise cluster ID is already used
+  ERROR_44 string = "KAFKAS-MGMT-44"
+
+  // Enterprise cluster ID is invalid
+  ERROR_45 string = "KAFKAS-MGMT-45"
+
+  // Enterprise external cluster ID is invalid
+  ERROR_46 string = "KAFKAS-MGMT-46"
+
+  // Dns name is invalid
+  ERROR_47 string = "KAFKAS-MGMT-47"
+
   // Synchronous action is not supported, use async=true parameter
   ERROR_103 string = "KAFKAS-MGMT-103"
 
