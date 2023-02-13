@@ -138,6 +138,10 @@ func (o *JSONSchemaOptions) Recurse(ctx SchemaContext) error {
 		err = o.RecurseString(ctx)
 	case "integer":
 		err = o.RecurseInteger(ctx)
+	default:
+		if len(ctx.SchemaType.OneOf) != 0 {
+			err = o.RecurseOneOf(ctx)
+		}
 	}
 
 	if err != nil {
@@ -371,6 +375,59 @@ func (o *JSONSchemaOptions) RecurseInteger(ctx SchemaContext) error {
 	err := o.handleBasicProperty(ctx, ctx.Required)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (o *JSONSchemaOptions) RecurseOneOf(ctx SchemaContext) error {
+	options := make([]string, len(ctx.SchemaType.OneOf))
+
+	for i := 0; i < len(options); i++ {
+		options[i] = ctx.SchemaType.OneOf[i].ToString()
+	}
+
+	prompt := &survey.Select{
+		Message: fmt.Sprintf("Select one of these types to use for %v", ctx.Name),
+		Options: options,
+	}
+
+	var answer int
+
+	err := survey.AskOne(prompt, &answer)
+	if err != nil {
+		return err
+	}
+
+	result := orderedmap.New()
+
+	subContext := SchemaContext{
+		Name:                 strconv.Itoa(answer),
+		Prefixes:             ctx.Prefixes,
+		RequiredFields:       ctx.SchemaType.Required,
+		ParentType:           ctx.SchemaType,
+		SchemaType:           ctx.SchemaType.OneOf[answer],
+		Output:               result,
+		AdditionalValidators: ctx.AdditionalValidators,
+		ExistingValues:       ctx.ExistingValues,
+		Definitions:          ctx.Definitions,
+		Required:             false,
+	}
+
+	err = o.Recurse(subContext)
+	if err != nil {
+		return err
+	}
+
+	if len(result.Keys()) > 0 {
+		rootValue, ok := result.Get(strconv.Itoa(answer))
+		if !ok {
+			return errors.New("Cannot get root value from one of result")
+		}
+
+		ctx.Output.Set(ctx.Name, rootValue)
+	} else {
+		ctx.Output.Set(ctx.Name, make(map[string]*JSONSchemaType))
 	}
 
 	return nil

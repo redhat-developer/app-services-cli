@@ -3,9 +3,14 @@ package surveyjson
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/iancoleman/orderedmap"
 	"github.com/jackdelahunt/survey-json-schema/pkg/surveyjson/util"
+)
+
+const (
+	commaSeperator = ", "
 )
 
 // Based of https://www.ietf.org/archive/id/draft-handrews-json-schema-validation-01.txt
@@ -129,4 +134,64 @@ func (t *Items) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (schema *JSONSchemaType) ToString() string {
+	contents := "{ "
+
+	if schema.Type != "" {
+		contents += "type: " + schema.Type + commaSeperator
+	}
+
+	if schema.Properties != nil && len(schema.Properties.Keys()) > 0 {
+		propertiesKeys := schema.Properties.Keys()
+		contents += "properties: { "
+		for index, key := range propertiesKeys {
+			if v, ok := schema.Properties.Get(key); ok {
+				value := v.(*JSONSchemaType)
+				contents += key + " : " + value.ToString()
+
+				if index < len(schema.OneOf)-1 {
+					contents += commaSeperator
+				}
+			}
+		}
+		contents += " }"
+	}
+
+	if len(schema.OneOf) > 0 {
+		contents += "oneOf: ["
+
+		for index, schemaType := range schema.OneOf {
+			contents += schemaType.ToString()
+
+			if index < len(schema.OneOf)-1 {
+				contents += commaSeperator
+			}
+		}
+
+		contents += "], "
+	}
+
+	if len(schema.AllOf) > 0 {
+		contents += "allOf: ["
+
+		for index, schemaType := range schema.AllOf {
+			contents += schemaType.ToString()
+
+			if index < len(schema.AllOf)-1 {
+				contents += commaSeperator
+			}
+		}
+
+		contents += "], "
+	}
+
+	if strings.HasSuffix(contents, commaSeperator) {
+		contents = strings.TrimSuffix(contents, commaSeperator)
+	}
+
+	contents += " }"
+
+	return contents
 }
