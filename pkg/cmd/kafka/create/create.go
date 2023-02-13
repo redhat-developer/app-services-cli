@@ -110,6 +110,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				return f.Localizer.MustLocalizeError("kafka.create.error.standard.invalidFlags")
 			}
 
+			if opts.billingModel == accountmgmtutil.QuotaEvalType && (opts.marketplaceAcctId != "" || opts.marketplace != "") {
+				return f.Localizer.MustLocalizeError("kafka.create.error.eval.invalidFlags")
+			}
+
 			if !f.IOStreams.CanPrompt() && opts.name == "" {
 				return f.Localizer.MustLocalizeError("kafka.create.argument.name.error.requiredWhenNonInteractive")
 			} else if opts.name == "" {
@@ -135,13 +139,13 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.provider, FlagProvider, "", f.Localizer.MustLocalize("kafka.create.flag.cloudProvider.description"))
 	flags.StringVar(&opts.region, FlagRegion, "", f.Localizer.MustLocalize("kafka.create.flag.cloudRegion.description"))
 	flags.StringVar(&opts.size, FlagSize, "", f.Localizer.MustLocalize("kafka.create.flag.size.description"))
-	flags.StringVar(&opts.marketplaceAcctId, FlagMarketPlaceAcctID, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceId.description"))
-	flags.StringVar(&opts.marketplace, FlagMarketPlace, "", f.Localizer.MustLocalize("kafka.create.flag.marketplaceType.description"))
+	flags.StringVar(&opts.marketplaceAcctId, FlagMarketPlaceAcctID, "", f.Localizer.MustLocalize("kafka.common.flag.marketplaceId.description"))
+	flags.StringVar(&opts.marketplace, FlagMarketPlace, "", f.Localizer.MustLocalize("kafka.common.flag.marketplaceType.description"))
 	flags.AddOutput(&opts.outputFormat)
 	flags.BoolVar(&opts.autoUse, "use", true, f.Localizer.MustLocalize("kafka.create.flag.autoUse.description"))
 	flags.BoolVarP(&opts.wait, "wait", "w", false, f.Localizer.MustLocalize("kafka.create.flag.wait.description"))
 	flags.BoolVarP(&opts.dryRun, "dry-run", "", false, f.Localizer.MustLocalize("kafka.create.flag.dryrun.description"))
-	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.create.flag.billingModel.description"))
+	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.common.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {

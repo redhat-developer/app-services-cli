@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -17,15 +17,16 @@ import (
 
 // CloudRegionListAllOf struct for CloudRegionListAllOf
 type CloudRegionListAllOf struct {
-	Items *[]CloudRegion `json:"items,omitempty"`
+	Items []CloudRegion `json:"items"`
 }
 
 // NewCloudRegionListAllOf instantiates a new CloudRegionListAllOf object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCloudRegionListAllOf() *CloudRegionListAllOf {
+func NewCloudRegionListAllOf(items []CloudRegion) *CloudRegionListAllOf {
 	this := CloudRegionListAllOf{}
+	this.Items = items
 	return &this
 }
 
@@ -37,41 +38,33 @@ func NewCloudRegionListAllOfWithDefaults() *CloudRegionListAllOf {
 	return &this
 }
 
-// GetItems returns the Items field value if set, zero value otherwise.
+// GetItems returns the Items field value
 func (o *CloudRegionListAllOf) GetItems() []CloudRegion {
-	if o == nil || o.Items == nil {
+	if o == nil {
 		var ret []CloudRegion
 		return ret
 	}
-	return *o.Items
+
+	return o.Items
 }
 
-// GetItemsOk returns a tuple with the Items field value if set, nil otherwise
+// GetItemsOk returns a tuple with the Items field value
 // and a boolean to check if the value has been set.
 func (o *CloudRegionListAllOf) GetItemsOk() (*[]CloudRegion, bool) {
-	if o == nil || o.Items == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Items, true
+	return &o.Items, true
 }
 
-// HasItems returns a boolean if a field has been set.
-func (o *CloudRegionListAllOf) HasItems() bool {
-	if o != nil && o.Items != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetItems gets a reference to the given []CloudRegion and assigns it to the Items field.
+// SetItems sets field value
 func (o *CloudRegionListAllOf) SetItems(v []CloudRegion) {
-	o.Items = &v
+	o.Items = v
 }
 
 func (o CloudRegionListAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Items != nil {
+	if true {
 		toSerialize["items"] = o.Items
 	}
 	return json.Marshal(toSerialize)

@@ -26,7 +26,7 @@ type ValidatorInput struct {
 	conn      connection.Connection
 }
 
-var validBillingModels []string = []string{accountmgmtutil.QuotaMarketplaceType, accountmgmtutil.QuotaStandardType}
+var validBillingModels []string = []string{accountmgmtutil.QuotaMarketplaceType, accountmgmtutil.QuotaStandardType, accountmgmtutil.QuotaEvalType}
 
 func (input *ValidatorInput) ValidateProviderAndRegion() error {
 	f := input.f

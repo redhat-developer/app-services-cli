@@ -7,4 +7,5 @@ const (
 	QuotaTrialType       QuotaType = "trial"
 	QuotaStandardType    QuotaType = "standard"
 	QuotaMarketplaceType QuotaType = "marketplace"
+	QuotaEvalType        QuotaType = "eval"
 )

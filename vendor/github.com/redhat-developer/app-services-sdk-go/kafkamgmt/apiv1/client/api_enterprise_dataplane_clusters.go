@@ -25,122 +25,555 @@ var (
 	_ _context.Context
 )
 
-type SecurityApi interface {
+type EnterpriseDataplaneClustersApi interface {
 
 	/*
-	 * CreateServiceAccount Method for CreateServiceAccount
-	 * Creates a service account
+	 * DeleteEnterpriseClusterById Method for DeleteEnterpriseClusterById
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @return ApiCreateServiceAccountRequest
+	 * @param id ID of the enterprise data plane cluster
+	 * @return ApiDeleteEnterpriseClusterByIdRequest
 	 */
-	CreateServiceAccount(ctx _context.Context) ApiCreateServiceAccountRequest
+	DeleteEnterpriseClusterById(ctx _context.Context, id string) ApiDeleteEnterpriseClusterByIdRequest
 
 	/*
-	 * CreateServiceAccountExecute executes the request
-	 * @return ServiceAccount
-	 */
-	CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, error)
-
-	/*
-	 * DeleteServiceAccountById Method for DeleteServiceAccountById
-	 * Deletes a service account by ID
-	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The ID of record
-	 * @return ApiDeleteServiceAccountByIdRequest
-	 */
-	DeleteServiceAccountById(ctx _context.Context, id string) ApiDeleteServiceAccountByIdRequest
-
-	/*
-	 * DeleteServiceAccountByIdExecute executes the request
+	 * DeleteEnterpriseClusterByIdExecute executes the request
 	 * @return Error
 	 */
-	DeleteServiceAccountByIdExecute(r ApiDeleteServiceAccountByIdRequest) (Error, *_nethttp.Response, error)
+	DeleteEnterpriseClusterByIdExecute(r ApiDeleteEnterpriseClusterByIdRequest) (Error, *_nethttp.Response, error)
 
 	/*
-	 * GetServiceAccountById Method for GetServiceAccountById
-	 * Returned service account by ID
+	 * GetEnterpriseClusterById Method for GetEnterpriseClusterById
+	 * Returns enterprise data plane cluster by ID
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The ID of record
-	 * @return ApiGetServiceAccountByIdRequest
+	 * @param id ID of the enterprise data plane cluster
+	 * @return ApiGetEnterpriseClusterByIdRequest
 	 */
-	GetServiceAccountById(ctx _context.Context, id string) ApiGetServiceAccountByIdRequest
+	GetEnterpriseClusterById(ctx _context.Context, id string) ApiGetEnterpriseClusterByIdRequest
 
 	/*
-	 * GetServiceAccountByIdExecute executes the request
-	 * @return ServiceAccount
+	 * GetEnterpriseClusterByIdExecute executes the request
+	 * @return EnterpriseCluster
 	 */
-	GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *_nethttp.Response, error)
+	GetEnterpriseClusterByIdExecute(r ApiGetEnterpriseClusterByIdRequest) (EnterpriseCluster, *_nethttp.Response, error)
 
 	/*
-	 * GetServiceAccounts Method for GetServiceAccounts
-	 * Returns a list of service accounts
+	 * GetEnterpriseClusterWithAddonParameters Method for GetEnterpriseClusterWithAddonParameters
+	 * Returns enterprise data plane cluster by ID along with its addon parameters
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @return ApiGetServiceAccountsRequest
+	 * @param id ID of the enterprise data plane cluster
+	 * @return ApiGetEnterpriseClusterWithAddonParametersRequest
 	 */
-	GetServiceAccounts(ctx _context.Context) ApiGetServiceAccountsRequest
+	GetEnterpriseClusterWithAddonParameters(ctx _context.Context, id string) ApiGetEnterpriseClusterWithAddonParametersRequest
 
 	/*
-	 * GetServiceAccountsExecute executes the request
-	 * @return ServiceAccountList
+	 * GetEnterpriseClusterWithAddonParametersExecute executes the request
+	 * @return EnterpriseClusterWithAddonParameters
 	 */
-	GetServiceAccountsExecute(r ApiGetServiceAccountsRequest) (ServiceAccountList, *_nethttp.Response, error)
+	GetEnterpriseClusterWithAddonParametersExecute(r ApiGetEnterpriseClusterWithAddonParametersRequest) (EnterpriseClusterWithAddonParameters, *_nethttp.Response, error)
 
 	/*
-	 * GetSsoProviders Method for GetSsoProviders
-	 * Return sso provider info
+	 * GetEnterpriseOsdClusters Method for GetEnterpriseOsdClusters
+	 * List all Enterprise data plane clusters
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @return ApiGetSsoProvidersRequest
+	 * @return ApiGetEnterpriseOsdClustersRequest
 	 */
-	GetSsoProviders(ctx _context.Context) ApiGetSsoProvidersRequest
+	GetEnterpriseOsdClusters(ctx _context.Context) ApiGetEnterpriseOsdClustersRequest
 
 	/*
-	 * GetSsoProvidersExecute executes the request
-	 * @return SsoProvider
+	 * GetEnterpriseOsdClustersExecute executes the request
+	 * @return EnterpriseClusterList
 	 */
-	GetSsoProvidersExecute(r ApiGetSsoProvidersRequest) (SsoProvider, *_nethttp.Response, error)
+	GetEnterpriseOsdClustersExecute(r ApiGetEnterpriseOsdClustersRequest) (EnterpriseClusterList, *_nethttp.Response, error)
 
 	/*
-	 * ResetServiceAccountCreds Method for ResetServiceAccountCreds
-	 * Resets the credentials for a service account by ID
+	 * RegisterEnterpriseOsdCluster Method for RegisterEnterpriseOsdCluster
+	 * Register enterprise data plane cluster
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id The ID of record
-	 * @return ApiResetServiceAccountCredsRequest
+	 * @return ApiRegisterEnterpriseOsdClusterRequest
 	 */
-	ResetServiceAccountCreds(ctx _context.Context, id string) ApiResetServiceAccountCredsRequest
+	RegisterEnterpriseOsdCluster(ctx _context.Context) ApiRegisterEnterpriseOsdClusterRequest
 
 	/*
-	 * ResetServiceAccountCredsExecute executes the request
-	 * @return ServiceAccount
+	 * RegisterEnterpriseOsdClusterExecute executes the request
+	 * @return EnterpriseClusterWithAddonParameters
 	 */
-	ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *_nethttp.Response, error)
+	RegisterEnterpriseOsdClusterExecute(r ApiRegisterEnterpriseOsdClusterRequest) (EnterpriseClusterWithAddonParameters, *_nethttp.Response, error)
 }
 
-// SecurityApiService SecurityApi service
-type SecurityApiService service
+// EnterpriseDataplaneClustersApiService EnterpriseDataplaneClustersApi service
+type EnterpriseDataplaneClustersApiService service
 
-type ApiCreateServiceAccountRequest struct {
+type ApiDeleteEnterpriseClusterByIdRequest struct {
 	ctx _context.Context
-	ApiService SecurityApi
-	serviceAccountRequest *ServiceAccountRequest
+	ApiService EnterpriseDataplaneClustersApi
+	async *bool
+	id string
 }
 
-func (r ApiCreateServiceAccountRequest) ServiceAccountRequest(serviceAccountRequest ServiceAccountRequest) ApiCreateServiceAccountRequest {
-	r.serviceAccountRequest = &serviceAccountRequest
+func (r ApiDeleteEnterpriseClusterByIdRequest) Async(async bool) ApiDeleteEnterpriseClusterByIdRequest {
+	r.async = &async
 	return r
 }
 
-func (r ApiCreateServiceAccountRequest) Execute() (ServiceAccount, *_nethttp.Response, error) {
-	return r.ApiService.CreateServiceAccountExecute(r)
+func (r ApiDeleteEnterpriseClusterByIdRequest) Execute() (Error, *_nethttp.Response, error) {
+	return r.ApiService.DeleteEnterpriseClusterByIdExecute(r)
 }
 
 /*
- * CreateServiceAccount Method for CreateServiceAccount
- * Creates a service account
+ * DeleteEnterpriseClusterById Method for DeleteEnterpriseClusterById
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @return ApiCreateServiceAccountRequest
+ * @param id ID of the enterprise data plane cluster
+ * @return ApiDeleteEnterpriseClusterByIdRequest
  */
-func (a *SecurityApiService) CreateServiceAccount(ctx _context.Context) ApiCreateServiceAccountRequest {
-	return ApiCreateServiceAccountRequest{
+func (a *EnterpriseDataplaneClustersApiService) DeleteEnterpriseClusterById(ctx _context.Context, id string) ApiDeleteEnterpriseClusterByIdRequest {
+	return ApiDeleteEnterpriseClusterByIdRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return Error
+ */
+func (a *EnterpriseDataplaneClustersApiService) DeleteEnterpriseClusterByIdExecute(r ApiDeleteEnterpriseClusterByIdRequest) (Error, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodDelete
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  Error
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnterpriseDataplaneClustersApiService.DeleteEnterpriseClusterById")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/clusters/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+	if r.async == nil {
+		return localVarReturnValue, nil, reportError("async is required and must be specified")
+	}
+
+	localVarQueryParams.Add("async", parameterToString(*r.async, ""))
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetEnterpriseClusterByIdRequest struct {
+	ctx _context.Context
+	ApiService EnterpriseDataplaneClustersApi
+	id string
+}
+
+
+func (r ApiGetEnterpriseClusterByIdRequest) Execute() (EnterpriseCluster, *_nethttp.Response, error) {
+	return r.ApiService.GetEnterpriseClusterByIdExecute(r)
+}
+
+/*
+ * GetEnterpriseClusterById Method for GetEnterpriseClusterById
+ * Returns enterprise data plane cluster by ID
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param id ID of the enterprise data plane cluster
+ * @return ApiGetEnterpriseClusterByIdRequest
+ */
+func (a *EnterpriseDataplaneClustersApiService) GetEnterpriseClusterById(ctx _context.Context, id string) ApiGetEnterpriseClusterByIdRequest {
+	return ApiGetEnterpriseClusterByIdRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return EnterpriseCluster
+ */
+func (a *EnterpriseDataplaneClustersApiService) GetEnterpriseClusterByIdExecute(r ApiGetEnterpriseClusterByIdRequest) (EnterpriseCluster, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  EnterpriseCluster
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnterpriseDataplaneClustersApiService.GetEnterpriseClusterById")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/clusters/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetEnterpriseClusterWithAddonParametersRequest struct {
+	ctx _context.Context
+	ApiService EnterpriseDataplaneClustersApi
+	id string
+}
+
+
+func (r ApiGetEnterpriseClusterWithAddonParametersRequest) Execute() (EnterpriseClusterWithAddonParameters, *_nethttp.Response, error) {
+	return r.ApiService.GetEnterpriseClusterWithAddonParametersExecute(r)
+}
+
+/*
+ * GetEnterpriseClusterWithAddonParameters Method for GetEnterpriseClusterWithAddonParameters
+ * Returns enterprise data plane cluster by ID along with its addon parameters
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param id ID of the enterprise data plane cluster
+ * @return ApiGetEnterpriseClusterWithAddonParametersRequest
+ */
+func (a *EnterpriseDataplaneClustersApiService) GetEnterpriseClusterWithAddonParameters(ctx _context.Context, id string) ApiGetEnterpriseClusterWithAddonParametersRequest {
+	return ApiGetEnterpriseClusterWithAddonParametersRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return EnterpriseClusterWithAddonParameters
+ */
+func (a *EnterpriseDataplaneClustersApiService) GetEnterpriseClusterWithAddonParametersExecute(r ApiGetEnterpriseClusterWithAddonParametersRequest) (EnterpriseClusterWithAddonParameters, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  EnterpriseClusterWithAddonParameters
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnterpriseDataplaneClustersApiService.GetEnterpriseClusterWithAddonParameters")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/clusters/{id}/addon_parameters"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetEnterpriseOsdClustersRequest struct {
+	ctx _context.Context
+	ApiService EnterpriseDataplaneClustersApi
+}
+
+
+func (r ApiGetEnterpriseOsdClustersRequest) Execute() (EnterpriseClusterList, *_nethttp.Response, error) {
+	return r.ApiService.GetEnterpriseOsdClustersExecute(r)
+}
+
+/*
+ * GetEnterpriseOsdClusters Method for GetEnterpriseOsdClusters
+ * List all Enterprise data plane clusters
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiGetEnterpriseOsdClustersRequest
+ */
+func (a *EnterpriseDataplaneClustersApiService) GetEnterpriseOsdClusters(ctx _context.Context) ApiGetEnterpriseOsdClustersRequest {
+	return ApiGetEnterpriseOsdClustersRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -148,30 +581,176 @@ func (a *SecurityApiService) CreateServiceAccount(ctx _context.Context) ApiCreat
 
 /*
  * Execute executes the request
- * @return ServiceAccount
+ * @return EnterpriseClusterList
  */
-func (a *SecurityApiService) CreateServiceAccountExecute(r ApiCreateServiceAccountRequest) (ServiceAccount, *_nethttp.Response, error) {
+func (a *EnterpriseDataplaneClustersApiService) GetEnterpriseOsdClustersExecute(r ApiGetEnterpriseOsdClustersRequest) (EnterpriseClusterList, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  EnterpriseClusterList
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnterpriseDataplaneClustersApiService.GetEnterpriseOsdClusters")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/clusters"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiRegisterEnterpriseOsdClusterRequest struct {
+	ctx _context.Context
+	ApiService EnterpriseDataplaneClustersApi
+	enterpriseOsdClusterPayload *EnterpriseOsdClusterPayload
+}
+
+func (r ApiRegisterEnterpriseOsdClusterRequest) EnterpriseOsdClusterPayload(enterpriseOsdClusterPayload EnterpriseOsdClusterPayload) ApiRegisterEnterpriseOsdClusterRequest {
+	r.enterpriseOsdClusterPayload = &enterpriseOsdClusterPayload
+	return r
+}
+
+func (r ApiRegisterEnterpriseOsdClusterRequest) Execute() (EnterpriseClusterWithAddonParameters, *_nethttp.Response, error) {
+	return r.ApiService.RegisterEnterpriseOsdClusterExecute(r)
+}
+
+/*
+ * RegisterEnterpriseOsdCluster Method for RegisterEnterpriseOsdCluster
+ * Register enterprise data plane cluster
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @return ApiRegisterEnterpriseOsdClusterRequest
+ */
+func (a *EnterpriseDataplaneClustersApiService) RegisterEnterpriseOsdCluster(ctx _context.Context) ApiRegisterEnterpriseOsdClusterRequest {
+	return ApiRegisterEnterpriseOsdClusterRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return EnterpriseClusterWithAddonParameters
+ */
+func (a *EnterpriseDataplaneClustersApiService) RegisterEnterpriseOsdClusterExecute(r ApiRegisterEnterpriseOsdClusterRequest) (EnterpriseClusterWithAddonParameters, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  ServiceAccount
+		localVarReturnValue  EnterpriseClusterWithAddonParameters
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SecurityApiService.CreateServiceAccount")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnterpriseDataplaneClustersApiService.RegisterEnterpriseOsdCluster")
 	if err != nil {
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/service_accounts"
+	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/clusters"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-	if r.serviceAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("serviceAccountRequest is required and must be specified")
+	if r.enterpriseOsdClusterPayload == nil {
+		return localVarReturnValue, nil, reportError("enterpriseOsdClusterPayload is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -192,7 +771,7 @@ func (a *SecurityApiService) CreateServiceAccountExecute(r ApiCreateServiceAccou
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.serviceAccountRequest
+	localVarPostBody = r.enterpriseOsdClusterPayload
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -214,6 +793,16 @@ func (a *SecurityApiService) CreateServiceAccountExecute(r ApiCreateServiceAccou
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v Error
@@ -235,377 +824,7 @@ func (a *SecurityApiService) CreateServiceAccountExecute(r ApiCreateServiceAccou
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiDeleteServiceAccountByIdRequest struct {
-	ctx _context.Context
-	ApiService SecurityApi
-	id string
-}
-
-
-func (r ApiDeleteServiceAccountByIdRequest) Execute() (Error, *_nethttp.Response, error) {
-	return r.ApiService.DeleteServiceAccountByIdExecute(r)
-}
-
-/*
- * DeleteServiceAccountById Method for DeleteServiceAccountById
- * Deletes a service account by ID
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The ID of record
- * @return ApiDeleteServiceAccountByIdRequest
- */
-func (a *SecurityApiService) DeleteServiceAccountById(ctx _context.Context, id string) ApiDeleteServiceAccountByIdRequest {
-	return ApiDeleteServiceAccountByIdRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return Error
- */
-func (a *SecurityApiService) DeleteServiceAccountByIdExecute(r ApiDeleteServiceAccountByIdRequest) (Error, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodDelete
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  Error
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SecurityApiService.DeleteServiceAccountById")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/service_accounts/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 403 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v interface{}
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiGetServiceAccountByIdRequest struct {
-	ctx _context.Context
-	ApiService SecurityApi
-	id string
-}
-
-
-func (r ApiGetServiceAccountByIdRequest) Execute() (ServiceAccount, *_nethttp.Response, error) {
-	return r.ApiService.GetServiceAccountByIdExecute(r)
-}
-
-/*
- * GetServiceAccountById Method for GetServiceAccountById
- * Returned service account by ID
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The ID of record
- * @return ApiGetServiceAccountByIdRequest
- */
-func (a *SecurityApiService) GetServiceAccountById(ctx _context.Context, id string) ApiGetServiceAccountByIdRequest {
-	return ApiGetServiceAccountByIdRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return ServiceAccount
- */
-func (a *SecurityApiService) GetServiceAccountByIdExecute(r ApiGetServiceAccountByIdRequest) (ServiceAccount, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  ServiceAccount
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SecurityApiService.GetServiceAccountById")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/service_accounts/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiGetServiceAccountsRequest struct {
-	ctx _context.Context
-	ApiService SecurityApi
-	clientId *string
-}
-
-func (r ApiGetServiceAccountsRequest) ClientId(clientId string) ApiGetServiceAccountsRequest {
-	r.clientId = &clientId
-	return r
-}
-
-func (r ApiGetServiceAccountsRequest) Execute() (ServiceAccountList, *_nethttp.Response, error) {
-	return r.ApiService.GetServiceAccountsExecute(r)
-}
-
-/*
- * GetServiceAccounts Method for GetServiceAccounts
- * Returns a list of service accounts
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @return ApiGetServiceAccountsRequest
- */
-func (a *SecurityApiService) GetServiceAccounts(ctx _context.Context) ApiGetServiceAccountsRequest {
-	return ApiGetServiceAccountsRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-/*
- * Execute executes the request
- * @return ServiceAccountList
- */
-func (a *SecurityApiService) GetServiceAccountsExecute(r ApiGetServiceAccountsRequest) (ServiceAccountList, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  ServiceAccountList
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SecurityApiService.GetServiceAccounts")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/service_accounts"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	if r.clientId != nil {
-		localVarQueryParams.Add("client_id", parameterToString(*r.clientId, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 403 {
+		if localVarHTTPResponse.StatusCode == 409 {
 			var v Error
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -617,262 +836,6 @@ func (a *SecurityApiService) GetServiceAccountsExecute(r ApiGetServiceAccountsRe
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiGetSsoProvidersRequest struct {
-	ctx _context.Context
-	ApiService SecurityApi
-}
-
-
-func (r ApiGetSsoProvidersRequest) Execute() (SsoProvider, *_nethttp.Response, error) {
-	return r.ApiService.GetSsoProvidersExecute(r)
-}
-
-/*
- * GetSsoProviders Method for GetSsoProviders
- * Return sso provider info
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @return ApiGetSsoProvidersRequest
- */
-func (a *SecurityApiService) GetSsoProviders(ctx _context.Context) ApiGetSsoProvidersRequest {
-	return ApiGetSsoProvidersRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-/*
- * Execute executes the request
- * @return SsoProvider
- */
-func (a *SecurityApiService) GetSsoProvidersExecute(r ApiGetSsoProvidersRequest) (SsoProvider, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  SsoProvider
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SecurityApiService.GetSsoProviders")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/sso_providers"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiResetServiceAccountCredsRequest struct {
-	ctx _context.Context
-	ApiService SecurityApi
-	id string
-}
-
-
-func (r ApiResetServiceAccountCredsRequest) Execute() (ServiceAccount, *_nethttp.Response, error) {
-	return r.ApiService.ResetServiceAccountCredsExecute(r)
-}
-
-/*
- * ResetServiceAccountCreds Method for ResetServiceAccountCreds
- * Resets the credentials for a service account by ID
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id The ID of record
- * @return ApiResetServiceAccountCredsRequest
- */
-func (a *SecurityApiService) ResetServiceAccountCreds(ctx _context.Context, id string) ApiResetServiceAccountCredsRequest {
-	return ApiResetServiceAccountCredsRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
-	}
-}
-
-/*
- * Execute executes the request
- * @return ServiceAccount
- */
-func (a *SecurityApiService) ResetServiceAccountCredsExecute(r ApiResetServiceAccountCredsRequest) (ServiceAccount, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  ServiceAccount
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SecurityApiService.ResetServiceAccountCreds")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/service_accounts/{id}/reset_credentials"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 401 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 403 {
-			var v Error
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 500 {
-			var v interface{}
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -21,7 +21,7 @@ type SupportedKafkaBillingModel struct {
 	Id string `json:"id"`
 	// AMS resource to be used. Accepted values: ['rhosak']
 	AmsResource string `json:"ams_resource"`
-	// AMS product to be used. Accepted values: ['RHOSAK', 'RHOSAKTrial', 'RHOSAKEval']
+	// AMS product to be used. Accepted values: ['RHOSAK', 'RHOSAKTrial', 'RHOSAKEval', 'RHOSAKCC']
 	AmsProduct string `json:"ams_product"`
 	// List of AMS available billing models: Accepted values: ['marketplace', 'marketplace-rhm', 'marketplace-aws']
 	AmsBillingModels []string `json:"ams_billing_models"`

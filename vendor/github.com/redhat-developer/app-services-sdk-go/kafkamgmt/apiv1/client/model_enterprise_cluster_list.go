@@ -15,21 +15,21 @@ import (
 	"encoding/json"
 )
 
-// CloudProviderList struct for CloudProviderList
-type CloudProviderList struct {
+// EnterpriseClusterList struct for EnterpriseClusterList
+type EnterpriseClusterList struct {
 	Kind string `json:"kind"`
 	Page int32 `json:"page"`
 	Size int32 `json:"size"`
 	Total int32 `json:"total"`
-	Items []CloudProvider `json:"items"`
+	Items []EnterpriseCluster `json:"items"`
 }
 
-// NewCloudProviderList instantiates a new CloudProviderList object
+// NewEnterpriseClusterList instantiates a new EnterpriseClusterList object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCloudProviderList(kind string, page int32, size int32, total int32, items []CloudProvider) *CloudProviderList {
-	this := CloudProviderList{}
+func NewEnterpriseClusterList(kind string, page int32, size int32, total int32, items []EnterpriseCluster) *EnterpriseClusterList {
+	this := EnterpriseClusterList{}
 	this.Kind = kind
 	this.Page = page
 	this.Size = size
@@ -38,16 +38,16 @@ func NewCloudProviderList(kind string, page int32, size int32, total int32, item
 	return &this
 }
 
-// NewCloudProviderListWithDefaults instantiates a new CloudProviderList object
+// NewEnterpriseClusterListWithDefaults instantiates a new EnterpriseClusterList object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewCloudProviderListWithDefaults() *CloudProviderList {
-	this := CloudProviderList{}
+func NewEnterpriseClusterListWithDefaults() *EnterpriseClusterList {
+	this := EnterpriseClusterList{}
 	return &this
 }
 
 // GetKind returns the Kind field value
-func (o *CloudProviderList) GetKind() string {
+func (o *EnterpriseClusterList) GetKind() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -58,7 +58,7 @@ func (o *CloudProviderList) GetKind() string {
 
 // GetKindOk returns a tuple with the Kind field value
 // and a boolean to check if the value has been set.
-func (o *CloudProviderList) GetKindOk() (*string, bool) {
+func (o *EnterpriseClusterList) GetKindOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -66,12 +66,12 @@ func (o *CloudProviderList) GetKindOk() (*string, bool) {
 }
 
 // SetKind sets field value
-func (o *CloudProviderList) SetKind(v string) {
+func (o *EnterpriseClusterList) SetKind(v string) {
 	o.Kind = v
 }
 
 // GetPage returns the Page field value
-func (o *CloudProviderList) GetPage() int32 {
+func (o *EnterpriseClusterList) GetPage() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -82,7 +82,7 @@ func (o *CloudProviderList) GetPage() int32 {
 
 // GetPageOk returns a tuple with the Page field value
 // and a boolean to check if the value has been set.
-func (o *CloudProviderList) GetPageOk() (*int32, bool) {
+func (o *EnterpriseClusterList) GetPageOk() (*int32, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -90,12 +90,12 @@ func (o *CloudProviderList) GetPageOk() (*int32, bool) {
 }
 
 // SetPage sets field value
-func (o *CloudProviderList) SetPage(v int32) {
+func (o *EnterpriseClusterList) SetPage(v int32) {
 	o.Page = v
 }
 
 // GetSize returns the Size field value
-func (o *CloudProviderList) GetSize() int32 {
+func (o *EnterpriseClusterList) GetSize() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -106,7 +106,7 @@ func (o *CloudProviderList) GetSize() int32 {
 
 // GetSizeOk returns a tuple with the Size field value
 // and a boolean to check if the value has been set.
-func (o *CloudProviderList) GetSizeOk() (*int32, bool) {
+func (o *EnterpriseClusterList) GetSizeOk() (*int32, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -114,12 +114,12 @@ func (o *CloudProviderList) GetSizeOk() (*int32, bool) {
 }
 
 // SetSize sets field value
-func (o *CloudProviderList) SetSize(v int32) {
+func (o *EnterpriseClusterList) SetSize(v int32) {
 	o.Size = v
 }
 
 // GetTotal returns the Total field value
-func (o *CloudProviderList) GetTotal() int32 {
+func (o *EnterpriseClusterList) GetTotal() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -130,7 +130,7 @@ func (o *CloudProviderList) GetTotal() int32 {
 
 // GetTotalOk returns a tuple with the Total field value
 // and a boolean to check if the value has been set.
-func (o *CloudProviderList) GetTotalOk() (*int32, bool) {
+func (o *EnterpriseClusterList) GetTotalOk() (*int32, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -138,14 +138,14 @@ func (o *CloudProviderList) GetTotalOk() (*int32, bool) {
 }
 
 // SetTotal sets field value
-func (o *CloudProviderList) SetTotal(v int32) {
+func (o *EnterpriseClusterList) SetTotal(v int32) {
 	o.Total = v
 }
 
 // GetItems returns the Items field value
-func (o *CloudProviderList) GetItems() []CloudProvider {
+func (o *EnterpriseClusterList) GetItems() []EnterpriseCluster {
 	if o == nil {
-		var ret []CloudProvider
+		var ret []EnterpriseCluster
 		return ret
 	}
 
@@ -154,7 +154,7 @@ func (o *CloudProviderList) GetItems() []CloudProvider {
 
 // GetItemsOk returns a tuple with the Items field value
 // and a boolean to check if the value has been set.
-func (o *CloudProviderList) GetItemsOk() (*[]CloudProvider, bool) {
+func (o *EnterpriseClusterList) GetItemsOk() (*[]EnterpriseCluster, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -162,11 +162,11 @@ func (o *CloudProviderList) GetItemsOk() (*[]CloudProvider, bool) {
 }
 
 // SetItems sets field value
-func (o *CloudProviderList) SetItems(v []CloudProvider) {
+func (o *EnterpriseClusterList) SetItems(v []EnterpriseCluster) {
 	o.Items = v
 }
 
-func (o CloudProviderList) MarshalJSON() ([]byte, error) {
+func (o EnterpriseClusterList) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["kind"] = o.Kind
@@ -186,38 +186,38 @@ func (o CloudProviderList) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableCloudProviderList struct {
-	value *CloudProviderList
+type NullableEnterpriseClusterList struct {
+	value *EnterpriseClusterList
 	isSet bool
 }
 
-func (v NullableCloudProviderList) Get() *CloudProviderList {
+func (v NullableEnterpriseClusterList) Get() *EnterpriseClusterList {
 	return v.value
 }
 
-func (v *NullableCloudProviderList) Set(val *CloudProviderList) {
+func (v *NullableEnterpriseClusterList) Set(val *EnterpriseClusterList) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableCloudProviderList) IsSet() bool {
+func (v NullableEnterpriseClusterList) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableCloudProviderList) Unset() {
+func (v *NullableEnterpriseClusterList) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableCloudProviderList(val *CloudProviderList) *NullableCloudProviderList {
-	return &NullableCloudProviderList{value: val, isSet: true}
+func NewNullableEnterpriseClusterList(val *EnterpriseClusterList) *NullableEnterpriseClusterList {
+	return &NullableEnterpriseClusterList{value: val, isSet: true}
 }
 
-func (v NullableCloudProviderList) MarshalJSON() ([]byte, error) {
+func (v NullableEnterpriseClusterList) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableCloudProviderList) UnmarshalJSON(src []byte) error {
+func (v *NullableEnterpriseClusterList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

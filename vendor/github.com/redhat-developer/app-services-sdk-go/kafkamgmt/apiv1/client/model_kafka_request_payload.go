@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -33,6 +33,8 @@ type KafkaRequestPayload struct {
 	Marketplace NullableString `json:"marketplace,omitempty"`
 	// billing model to use
 	BillingModel NullableString `json:"billing_model,omitempty"`
+	// enterprise OSD cluster ID to be used for kafka creation
+	ClusterId NullableString `json:"cluster_id,omitempty"`
 }
 
 // NewKafkaRequestPayload instantiates a new KafkaRequestPayload object
@@ -341,6 +343,48 @@ func (o *KafkaRequestPayload) UnsetBillingModel() {
 	o.BillingModel.Unset()
 }
 
+// GetClusterId returns the ClusterId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *KafkaRequestPayload) GetClusterId() string {
+	if o == nil || o.ClusterId.Get() == nil {
+		var ret string
+		return ret
+	}
+	return *o.ClusterId.Get()
+}
+
+// GetClusterIdOk returns a tuple with the ClusterId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *KafkaRequestPayload) GetClusterIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return o.ClusterId.Get(), o.ClusterId.IsSet()
+}
+
+// HasClusterId returns a boolean if a field has been set.
+func (o *KafkaRequestPayload) HasClusterId() bool {
+	if o != nil && o.ClusterId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetClusterId gets a reference to the given NullableString and assigns it to the ClusterId field.
+func (o *KafkaRequestPayload) SetClusterId(v string) {
+	o.ClusterId.Set(&v)
+}
+// SetClusterIdNil sets the value for ClusterId to be an explicit nil
+func (o *KafkaRequestPayload) SetClusterIdNil() {
+	o.ClusterId.Set(nil)
+}
+
+// UnsetClusterId ensures that no value is present for ClusterId, not even an explicit nil
+func (o *KafkaRequestPayload) UnsetClusterId() {
+	o.ClusterId.Unset()
+}
+
 func (o KafkaRequestPayload) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.CloudProvider != nil {
@@ -366,6 +410,9 @@ func (o KafkaRequestPayload) MarshalJSON() ([]byte, error) {
 	}
 	if o.BillingModel.IsSet() {
 		toSerialize["billing_model"] = o.BillingModel.Get()
+	}
+	if o.ClusterId.IsSet() {
+		toSerialize["cluster_id"] = o.ClusterId.Get()
 	}
 	return json.Marshal(toSerialize)
 }

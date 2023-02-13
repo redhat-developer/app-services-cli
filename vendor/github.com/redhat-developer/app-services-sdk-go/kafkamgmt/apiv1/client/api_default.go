@@ -3,7 +3,7 @@
  *
  * Kafka Management API is a REST API to manage Kafka instances
  *
- * API version: 1.14.0
+ * API version: 1.15.0
  * Contact: rhosak-support@redhat.com
  */
 
@@ -189,6 +189,20 @@ type DefaultApi interface {
 	 * @return VersionMetadata
 	 */
 	GetVersionMetadataExecute(r ApiGetVersionMetadataRequest) (VersionMetadata, *_nethttp.Response, error)
+
+	/*
+	 * PromoteKafka Method for PromoteKafka
+	 * Promote a Kafka instance. Promotion is performed asynchronously. The `async` query parameter has to be set to `true`. Only kafka instances with an `eval` billing_model are supported
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param id The ID of record
+	 * @return ApiPromoteKafkaRequest
+	 */
+	PromoteKafka(ctx _context.Context, id string) ApiPromoteKafkaRequest
+
+	/*
+	 * PromoteKafkaExecute executes the request
+	 */
+	PromoteKafkaExecute(r ApiPromoteKafkaRequest) (*_nethttp.Response, error)
 
 	/*
 	 * UpdateKafkaById Method for UpdateKafkaById
@@ -1845,6 +1859,179 @@ func (a *DefaultApiService) GetVersionMetadataExecute(r ApiGetVersionMetadataReq
 	}
 
 	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPromoteKafkaRequest struct {
+	ctx _context.Context
+	ApiService DefaultApi
+	id string
+	async *bool
+	kafkaPromoteRequest *KafkaPromoteRequest
+}
+
+func (r ApiPromoteKafkaRequest) Async(async bool) ApiPromoteKafkaRequest {
+	r.async = &async
+	return r
+}
+func (r ApiPromoteKafkaRequest) KafkaPromoteRequest(kafkaPromoteRequest KafkaPromoteRequest) ApiPromoteKafkaRequest {
+	r.kafkaPromoteRequest = &kafkaPromoteRequest
+	return r
+}
+
+func (r ApiPromoteKafkaRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.PromoteKafkaExecute(r)
+}
+
+/*
+ * PromoteKafka Method for PromoteKafka
+ * Promote a Kafka instance. Promotion is performed asynchronously. The `async` query parameter has to be set to `true`. Only kafka instances with an `eval` billing_model are supported
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param id The ID of record
+ * @return ApiPromoteKafkaRequest
+ */
+func (a *DefaultApiService) PromoteKafka(ctx _context.Context, id string) ApiPromoteKafkaRequest {
+	return ApiPromoteKafkaRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *DefaultApiService) PromoteKafkaExecute(r ApiPromoteKafkaRequest) (*_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.PromoteKafka")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/kafkas_mgmt/v1/kafkas/{id}/promote"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+	if r.async == nil {
+		return nil, reportError("async is required and must be specified")
+	}
+	if r.kafkaPromoteRequest == nil {
+		return nil, reportError("kafkaPromoteRequest is required and must be specified")
+	}
+
+	localVarQueryParams.Add("async", parameterToString(*r.async, ""))
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.kafkaPromoteRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
 }
 
 type ApiUpdateKafkaByIdRequest struct {

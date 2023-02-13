@@ -56,6 +56,7 @@ type OrgQuotas struct {
 	StandardQuotas    []QuotaSpec
 	MarketplaceQuotas []QuotaSpec
 	TrialQuotas       []QuotaSpec
+	EvalQuotas        []QuotaSpec
 }
 
 func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amsclient.QuotaCostList, error) {
@@ -86,27 +87,31 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 		return nil, err
 	}
 
-	var standardQuotas, marketplaceQuotas, trialQuotas []QuotaSpec
+	var standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas []QuotaSpec
 	for _, quota := range quotaCostGet.GetItems() {
 		quotaResources := quota.GetRelatedResources()
 		for i := range quotaResources {
 			quotaResource := quotaResources[i]
 			if quotaResource.GetResourceName() == spec.ResourceName {
-				if quotaResource.GetProduct() == spec.TrialProductQuotaID {
+				switch quotaResource.GetProduct() {
+				case spec.TrialProductQuotaID:
 					trialQuotas = append(trialQuotas, QuotaSpec{QuotaTrialType, 0, quotaResource.BillingModel, nil})
-				} else if quotaResource.GetProduct() == spec.InstanceQuotaID {
+				case spec.InstanceQuotaID:
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					if quotaResource.BillingModel == QuotaStandardType {
 						standardQuotas = append(standardQuotas, QuotaSpec{QuotaStandardType, remainingQuota, quotaResource.BillingModel, nil})
 					} else if quotaResource.BillingModel == QuotaMarketplaceType {
 						marketplaceQuotas = append(marketplaceQuotas, QuotaSpec{QuotaMarketplaceType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 					}
+				case "RHOSAKEval":
+					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
+					evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
 				}
 			}
 		}
 	}
 
-	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas}
+	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas}
 
 	return availableOrgQuotas, nil
 }
@@ -114,7 +119,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 // nolint:funlen
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo, provider string) (*QuotaSpec, error) {
 
-	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 {
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.EvalQuotas) == 0 {
 		if marketplaceInfo.BillingModel != "" || marketplaceInfo.Provider != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.onlyTrialAvailable")
 		}
@@ -122,18 +127,38 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return &orgQuota.TrialQuotas[0], nil
 	}
 
-	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 {
+	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 {
 		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
+		}
+
+		if marketplaceInfo.BillingModel == QuotaEvalType {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noEval")
 		}
 		// select a standard quota
 		return &orgQuota.StandardQuotas[0], nil
 	}
 
-	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) == 0 && len(orgQuota.EvalQuotas) > 0 {
+		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
+		}
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
+		}
+
+		return &orgQuota.EvalQuotas[0], nil
+	}
+
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 {
+
+		if marketplaceInfo.BillingModel == QuotaStandardType {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
+		}
+
+		if marketplaceInfo.BillingModel == QuotaEvalType {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noEval")
 		}
 
 		var filteredMarketPlaceQuotas []QuotaSpec
@@ -168,11 +193,28 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return marketplaceQuota, nil
 	}
 
-	if len(orgQuota.StandardQuotas) > 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+	quotaTypeCount := 0
 
-		if marketplaceInfo.BillingModel == QuotaStandardType {
+	if len(orgQuota.StandardQuotas) > 0 {
+		quotaTypeCount++
+	}
+	if len(orgQuota.MarketplaceQuotas) > 0 {
+		quotaTypeCount++
+	}
+	if len(orgQuota.EvalQuotas) > 0 {
+		quotaTypeCount++
+	}
+
+	if quotaTypeCount > 1 {
+
+		switch marketplaceInfo.BillingModel {
+		case QuotaStandardType:
 			return &orgQuota.StandardQuotas[0], nil
-		} else if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
+		case QuotaEvalType:
+			return &orgQuota.EvalQuotas[0], nil
+		}
+
+		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 
 			var filteredMarketPlaceQuotas []QuotaSpec
 
