@@ -12,7 +12,7 @@ import (
 
 const contentTemplate = `:context: rhoas-cli-command-reference
 [id="cli-command-reference_{context}"]
-= CLI command reference (rhoas)
+= OpenShift Application Services CLI command reference
 
 [role="_abstract"]
 You use the ` + "`rhoas`" + ` CLI to manage your application services from the command line.
