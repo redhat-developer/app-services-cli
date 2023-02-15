@@ -6,18 +6,28 @@ import (
 	"github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
-func GetClusterList(f *factory.Factory, accessToken string, clustermgmturl string) (*v1.ClusterList, error) {
+func clustermgmtConnection(f *factory.Factory, accessToken string, clustermgmturl string) (*v1.Client, func(), error) {
 	conn, err := f.Connection()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	client, closeConnection, err := conn.API().OCMClustermgmt(clustermgmturl, accessToken)
+	if err != nil {
+		return nil, nil, err
+	}
+	return client, closeConnection, nil
+}
+
+func GetClusterList(f *factory.Factory, accessToken string, clustermgmturl string, pageNumber int, pageLimit int) (*v1.ClusterList, error) {
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
 		return nil, err
 	}
 	defer closeConnection()
-	// TO-DO deal with pagination, validate clusters -- must be multi AZ and ready.
+
 	resource := client.Clusters().List()
+	resource = resource.Page(pageNumber)
+	resource = resource.Size(pageLimit)
 	response, err := resource.Send()
 	if err != nil {
 		return nil, err
@@ -27,11 +37,7 @@ func GetClusterList(f *factory.Factory, accessToken string, clustermgmturl strin
 }
 
 func GetMachinePoolList(f *factory.Factory, clustermgmturl string, accessToken string, clusterId string) (*v1.MachinePoolsListResponse, error) {
-	conn, err := f.Connection()
-	if err != nil {
-		return nil, err
-	}
-	client, closeConnection, err := conn.API().OCMClustermgmt(clustermgmturl, accessToken)
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
 		return nil, err
 	}
@@ -45,11 +51,7 @@ func GetMachinePoolList(f *factory.Factory, clustermgmturl string, accessToken s
 }
 
 func CreateAddonWithParams(f *factory.Factory, clustermgmturl string, accessToken string, addonId string, params *[]kafkamgmtclient.FleetshardParameter, clusterId string) error {
-	conn, err := f.Connection()
-	if err != nil {
-		return err
-	}
-	client, closeConnection, err := conn.API().OCMClustermgmt(clustermgmturl, accessToken)
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
 		return err
 	}
@@ -84,12 +86,8 @@ func newAddonParameterListBuilder(params *[]kafkamgmtclient.FleetshardParameter)
 	return v1.NewAddOnInstallationParameterList().Items(items...)
 }
 
-func CreateMachinePool(f *factory.Factory, clustermgmtapiurl string, accessToken string, mprequest *v1.MachinePool, clusterId string) (*v1.MachinePool, error) {
-	conn, err := f.Connection()
-	if err != nil {
-		return nil, err
-	}
-	client, closeConnection, err := conn.API().OCMClustermgmt(clustermgmtapiurl, accessToken)
+func CreateMachinePool(f *factory.Factory, clustermgmturl string, accessToken string, mprequest *v1.MachinePool, clusterId string) (*v1.MachinePool, error) {
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +96,6 @@ func CreateMachinePool(f *factory.Factory, clustermgmtapiurl string, accessToken
 	if err != nil {
 		return nil, err
 	}
-
 	return response.Body(), nil
 }
 

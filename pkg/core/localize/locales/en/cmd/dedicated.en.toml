@@ -73,3 +73,9 @@ one = 'The API URL of the OpenShift Cluster Management API.'
 
 [dedicated.registercluster.flag.accessToken.description]
 one = 'The access token to use to authenticate with the OpenShift Cluster Management API.'
+
+[dedicated.registerCluster.flag.pageNumber.description]
+one = 'The page number to use when listing clusters.'
+
+[dedicated.registerCluster.flag.pageSize.description]
+one = 'The page size to use when listing clusters.'

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"strings"
@@ -27,6 +28,8 @@ type options struct {
 	selectedClusterMachinePool    clustersmgmtv1.MachinePool
 	requestedMachinePoolNodeCount int
 	accessKafkasViaPrivateNetwork bool
+	pageNumber                    int
+	pageSize                      int
 
 	f *factory.Factory
 }
@@ -67,20 +70,22 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
 	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
 	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterId.description"))
+	flags.IntVar(&opts.pageNumber, "page-number", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("dedicated.registerCluster.flag.pageNumber.description"))
+	flags.IntVar(&opts.pageSize, "page-size", 100, f.Localizer.MustLocalize("dedicated.registerCluster.flag.pageSize.description"))
 
 	return cmd
 }
 
 func runRegisterClusterCmd(opts *options) (err error) {
-	// Set the base URL for the cluster management API
-	err = setListClusters(opts)
+	opts.pageNumber = int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber))
+	err = getPaginatedClusterList(opts)
 	if err != nil {
 		return err
 	}
 	if len(opts.clusterList) == 0 {
 		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
 	}
-	// TO-DO if client has supplied a cluster id, validate it and set it as the selected cluster without listing getting all clusters
+
 	if opts.selectedClusterId == "" {
 		err = runClusterSelectionInteractivePrompt(opts)
 		if err != nil {
@@ -111,17 +116,15 @@ func runRegisterClusterCmd(opts *options) (err error) {
 
 }
 
-func setListClusters(opts *options) error {
-	clusters, err := clustermgmt.GetClusterList(opts.f, opts.clusterManagementApiUrl, opts.accessToken)
+func getPaginatedClusterList(opts *options) error {
+	cl, err := clustermgmt.GetClusterList(opts.f, opts.accessToken, opts.clusterManagementApiUrl, opts.pageNumber, opts.pageSize)
 	if err != nil {
+		opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.errorGettingClusterList")
 		return err
 	}
-	var cls = []clustersmgmtv1.Cluster{}
-	cls = validateClusters(clusters, cls)
-	opts.clusterList = cls
+	opts.clusterList = validateClusters(cl, opts.clusterList)
 	return nil
 }
-
 func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1.Cluster) []clustersmgmtv1.Cluster {
 	for _, cluster := range clusters.Slice() {
 		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
@@ -132,14 +135,15 @@ func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1
 }
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
-	// TO-DO handle in case of empty cluster list, must be cleared up with UX etc.
+	if len(opts.clusterList) == 0 {
+		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
+	}
 	clusterStringList := make([]string, 0)
 	for i := range opts.clusterList {
 		cluster := opts.clusterList[i]
 		clusterStringList = append(clusterStringList, cluster.Name())
 	}
 
-	// TO-DO add page size
 	prompt := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectCluster.message"),
 		Options: clusterStringList,
@@ -261,6 +265,7 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 		Localizer:  opts.f.Localizer,
 		Connection: opts.f.Connection,
 	}
+
 	// TO-DO add page size and better help message
 	promptNodeCount := &survey.Input{
 		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.message"),
