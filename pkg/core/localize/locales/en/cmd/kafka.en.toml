@@ -55,13 +55,13 @@ one = 'Kafka instance ID. Uses the current instance if not set'
 one = 'Format in which to display the Kafka instances (choose from: "json", "yml", "yaml")'
 
 [kafka.common.flag.marketplaceId.description]
-one = 'Cloud Account ID for the marketplace'
+one = 'Account ID for cloud marketplace'
 
 [kafka.common.flag.billingModel.description]
 one = 'Billing model to be used'
 
 [kafka.common.flag.marketplaceType.description]
-one = 'Name of the marketplace where the instance is purchased on'
+one = 'Name of cloud marketplace where Kafka instance was purchased'
 
 [kafka.common.input.instanceName.message]
 one = 'Select Kafka instance:'
@@ -394,7 +394,7 @@ one = 'provided plan "{{.Plan}}" (kafka instances size) is not supported.'
 one = 'unable to create new Kafka instance at this time in specified cloud provider and region. Please try again later or choose another region.'
 
 [kafka.create.error.instance.limit]
-one = 'maximum number of allowed kafka instances has been reached. Please review all instances that your user has access to and delete one or more instances before creating a new one'
+one = 'the maximum number of Kafka instances for your organization has been reached. Before you can create a new instance, you must delete one or more of the existing instances'
 
 [kafka.create.error.standard.promote]
 one = 'only Kafka instances with billing model "eval" can be promoted'

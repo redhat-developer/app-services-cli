@@ -32,8 +32,8 @@ $ rhoas kafka create -o yaml
 ```
       --billing-model string            Billing model to be used
       --dry-run                         Validate all user provided arguments without creating the Kafka instance
-      --marketplace string              Name of the marketplace where the instance is purchased on
-      --marketplace-account-id string   Cloud Account ID for the marketplace
+      --marketplace string              Name of cloud marketplace where Kafka instance was purchased
+      --marketplace-account-id string   Account ID for cloud marketplace
       --name string                     Unique name of the Kafka instance
   -o, --output string                   Specify the output format. Choose from: "json", "yaml", "yml"
       --provider string                 Cloud Provider ID
