@@ -29,6 +29,8 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
       --access-token string           The access token to use to authenticate with the OpenShift Cluster Management API.
       --cluster-id string             The ID of the OpenShift cluster to register:
       --cluster-mgmt-api-url string   The API URL of the OpenShift Cluster Management API.
+      --page-number int               The page number to use when listing clusters. (default 1)
+      --page-size int                 The page size to use when listing clusters. (default 100)
 ```
 
 ### Options inherited from parent commands
