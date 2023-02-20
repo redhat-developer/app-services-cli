@@ -17,7 +17,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client"
 )
 
 var (

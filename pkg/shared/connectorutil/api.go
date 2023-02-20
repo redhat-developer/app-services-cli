@@ -3,7 +3,7 @@ package connectorutil
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	connectormgmtclient "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client"
+	connectormgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
 )
 
 func GetConnectorByID(api *connectormgmtclient.APIClient, id string, f *factory.Factory) (*connectormgmtclient.Connector, error) {

@@ -22,13 +22,6 @@ require (
 	github.com/openconfig/goyang v1.2.0
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
-	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
-	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.10.0
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.19.0
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.8.2
-	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.1
-	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
 	github.com/redhat-developer/service-binding-operator v0.9.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
@@ -44,6 +37,16 @@ require (
 	k8s.io/apimachinery v0.22.4
 	k8s.io/client-go v0.22.4
 	k8s.io/utils v0.0.0-20220713171938-56c0de1e6f5e
+)
+
+require (
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client v0.0.0-20230216114230-4ff0373de47f
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230220160753-3c2c52e7e98a
 )
 
 require (
@@ -93,7 +96,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
-	github.com/redhat-developer/app-services-sdk-go v0.11.0 // indirect
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go v0.1.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect

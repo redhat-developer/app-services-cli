@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client"
-	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/error"
+	srsmgmtv1 "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
+	srsmgmtv1errors "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/error"
 )
 
 func GetServiceRegistryByID(ctx context.Context, api srsmgmtv1.RegistriesApi, registryID string) (*srsmgmtv1.Registry, *http.Response, error) {

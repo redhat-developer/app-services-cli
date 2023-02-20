@@ -100,3 +100,13 @@ help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 .PHONY: help
 
+update-sdk:
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt@latest
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt@latest
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt@latest
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/accountmgmt@latest
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance@latest
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance@latest
+	go get github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt@latest
+	go mod tidy
+	go mod vendor

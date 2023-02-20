@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client"
+	kafkainstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client"
 )
 
 func TestCreateConfigEntries(t *testing.T) {

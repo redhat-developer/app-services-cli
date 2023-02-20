@@ -17,7 +17,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
+	svcacctmgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client"
 
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
