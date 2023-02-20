@@ -1,4 +1,14 @@
 
+<a name="v0.52.2"></a>
+## [v0.52.2](https://github.com/redhat-developer/app-services-cli/compare/v0.52.0...v0.52.2) (2023-02-15)
+
+### Features
+
+* updated json schema library ([#1808](https://github.com/redhat-developer/app-services-cli/issues/1808))
+* **connector:** load current context for commands ([#1796](https://github.com/redhat-developer/app-services-cli/issues/1796))
+* **kafka create:** enable creating long-lived trial instances  ([#1809](https://github.com/redhat-developer/app-services-cli/issues/1809))
+
+
 <a name="v0.52.0"></a>
 ## [v0.52.0](https://github.com/redhat-developer/app-services-cli/compare/v0.51.9...v0.52.0) (2023-01-14)
 
