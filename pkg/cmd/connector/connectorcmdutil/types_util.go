@@ -84,9 +84,9 @@ func FilterValidTypesArgs(f *factory.Factory, toComplete string) ([]string, cobr
 	}
 
 	items := types.GetItems()
-	for _, connector_type := range items {
-		if strings.HasPrefix(connector_type.GetId(), toComplete) {
-			validTypes = append(validTypes, connector_type.GetId())
+	for i := 0; i < len(items); i++ {
+		if strings.HasPrefix(items[i].GetId(), toComplete) {
+			validTypes = append(validTypes, items[i].GetId())
 		}
 	}
 
