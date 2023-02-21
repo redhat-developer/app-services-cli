@@ -2,6 +2,7 @@ package dedicated
 
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/listclusters"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/deregister"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/register"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -18,6 +19,7 @@ func NewDedicatedCmd(f *factory.Factory) *cobra.Command {
 	cmd.AddCommand(
 		register.NewRegisterClusterCommand(f),
 		listclusters.NewListClusterCommand(f),
+		deregister.NewDeRegisterClusterCommand(f),
 	)
 
 	return cmd
