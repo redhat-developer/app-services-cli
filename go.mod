@@ -41,12 +41,12 @@ require (
 
 require (
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client v0.0.0-20230216114230-4ff0373de47f
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230220160753-3c2c52e7e98a
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230222114134-d97c4c88765b
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230222114134-d97c4c88765b
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230220160753-3c2c52e7e98a
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230220160753-3c2c52e7e98a
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230220160753-3c2c52e7e98a
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230220160753-3c2c52e7e98a
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230222114134-d97c4c88765b
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230222114134-d97c4c88765b
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230222114134-d97c4c88765b
 )
 
 require (
@@ -96,7 +96,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go v0.1.0 // indirect
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go v0.2.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect

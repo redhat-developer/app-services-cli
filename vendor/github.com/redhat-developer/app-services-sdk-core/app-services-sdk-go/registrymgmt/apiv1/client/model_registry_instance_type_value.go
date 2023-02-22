@@ -3,7 +3,7 @@
  *
  * Service Registry Management API is a REST API for managing Service Registry instances. Service Registry is a datastore for event schemas and API designs, which is based on the open source Apicurio Registry project.
  *
- * API version: 0.0.6
+ * API version: 1.0.0
  * Contact: rhosak-eval-support@redhat.com
  */
 
@@ -16,7 +16,7 @@ import (
 	"fmt"
 )
 
-// RegistryInstanceTypeValue \"standard\": Standard, full-featured Registry instance  \"eval\": Evaluation (Trial) instance, provided for a limited time 
+// RegistryInstanceTypeValue Type of the Registry instance. This will determine functional and/or non-functional features provided by the instance.  \"standard\": Standard, full-featured Registry instance  \"eval\": Evaluation (Trial) instance, provided for a limited time 
 type RegistryInstanceTypeValue string
 
 // List of RegistryInstanceTypeValue
