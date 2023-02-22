@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	registryinstanceclient "github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client"
+	registryinstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
 )
 
 type Error struct {

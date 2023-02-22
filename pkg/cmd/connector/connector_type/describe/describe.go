@@ -7,7 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	connectorerror "github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/error"
+	connectorerror "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/error"
 
 	"github.com/spf13/cobra"
 )
