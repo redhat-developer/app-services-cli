@@ -373,7 +373,7 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	if err != nil {
 		return err
 	}
-	err = clustermgmt.CreateAddonWithParams(opts.f, opts.clusterManagementApiUrl, opts.accessToken, getStrimziAddonIdByEnv(con), response.FleetshardParameters, opts.selectedCluster.ID())
+	err = clustermgmt.CreateAddonWithParams(opts.f, opts.clusterManagementApiUrl, opts.accessToken, getStrimziAddonIdByEnv(con), nil, opts.selectedCluster.ID())
 	if err != nil {
 		return err
 	}
