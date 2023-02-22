@@ -1,6 +1,6 @@
 :context: rhoas-cli-command-reference
 [id="cli-command-reference_{context}"]
-= OpenShift Application Services CLI command reference
+= CLI command reference (rhoas)
 
 [role="_abstract"]
 You use the `rhoas` CLI to manage your application services from the command line.
@@ -41,6 +41,10 @@ include::../modules/ref-cli-context-status.adoc[leveloffset=+2]
 include::../modules/ref-cli-context-unset.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-context-use.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-dedicated.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-dedicated-register-cluster.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-generate-config.adoc[leveloffset=+2]
 
