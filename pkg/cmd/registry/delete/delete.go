@@ -20,9 +20,10 @@ import (
 )
 
 type options struct {
-	id    string
-	name  string
-	force bool
+	id               string
+	name             string
+	force            bool
+	registryInstance *srsmgmtv1client.Registry
 
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
@@ -48,7 +49,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 		Long:    f.Localizer.MustLocalize("registry.cmd.delete.longDescription"),
 		Example: f.Localizer.MustLocalize("registry.cmd.delete.example"),
 		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			if !opts.IO.CanPrompt() && !opts.force {
 				return flagutil.RequiredWhenNonInteractiveError("yes")
 			}
@@ -61,12 +62,12 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 				return runDelete(opts)
 			}
 
-			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
+			opts.registryInstance, err = contextutil.GetCurrentRegistryInstance(f)
 			if err != nil {
 				return err
 			}
 
-			opts.id = registryInstance.GetId()
+			opts.id = opts.registryInstance.GetId()
 
 			return runDelete(opts)
 		},
@@ -98,20 +99,21 @@ func runDelete(opts *options) error {
 
 	api := conn.API()
 
-	var registry *srsmgmtv1client.Registry
-	if opts.name != "" {
-		registry, _, err = serviceregistryutil.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
-		if err != nil {
-			return err
-		}
-	} else {
-		registry, _, err = serviceregistryutil.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
-		if err != nil {
-			return err
+	if opts.registryInstance == nil {
+		if opts.name != "" {
+			opts.registryInstance, _, err = serviceregistryutil.GetServiceRegistryByName(opts.Context, api.ServiceRegistryMgmt(), opts.name)
+			if err != nil {
+				return err
+			}
+		} else {
+			opts.registryInstance, _, err = serviceregistryutil.GetServiceRegistryByID(opts.Context, api.ServiceRegistryMgmt(), opts.id)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
-	registryName := registry.GetName()
+	registryName := opts.registryInstance.GetName()
 	opts.Logger.Info(opts.localizer.MustLocalize("registry.delete.log.info.deletingService", localize.NewEntry("Name", registryName)))
 	opts.Logger.Info("")
 
@@ -134,7 +136,7 @@ func runDelete(opts *options) error {
 
 	opts.Logger.Debug("Deleting Service registry", fmt.Sprintf("\"%s\"", registryName))
 
-	a := api.ServiceRegistryMgmt().DeleteRegistry(opts.Context, registry.GetId())
+	a := api.ServiceRegistryMgmt().DeleteRegistry(opts.Context, opts.registryInstance.GetId())
 	_, err = a.Execute()
 
 	if err != nil {

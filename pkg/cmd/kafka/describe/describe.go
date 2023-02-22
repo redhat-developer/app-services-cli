@@ -24,6 +24,7 @@ type options struct {
 	name            string
 	bootstrapServer bool
 	outputFormat    string
+	kafkaInstance   *kafkamgmtclient.KafkaRequest
 
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
@@ -51,7 +52,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 		Long:    opts.localizer.MustLocalize("kafka.describe.cmd.longDescription"),
 		Example: opts.localizer.MustLocalize("kafka.describe.cmd.example"),
 		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			validOutputFormats := flagutil.ValidOutputFormats
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
 				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
@@ -65,12 +66,12 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 				return runDescribe(opts)
 			}
 
-			kafkaInstance, err := contextutil.GetCurrentKafkaInstance(f)
+			opts.kafkaInstance, err = contextutil.GetCurrentKafkaInstance(f)
 			if err != nil {
 				return err
 			}
 
-			opts.id = kafkaInstance.GetId()
+			opts.id = opts.kafkaInstance.GetId()
 
 			return runDescribe(opts)
 		},
@@ -99,34 +100,36 @@ func runDescribe(opts *options) error {
 
 	api := conn.API()
 
-	var kafkaInstance *kafkamgmtclient.KafkaRequest
 	var httpRes *http.Response
-	if opts.name != "" {
-		kafkaInstance, httpRes, err = kafkautil.GetKafkaByName(opts.Context, api.KafkaMgmt(), opts.name)
-		if httpRes != nil {
-			defer httpRes.Body.Close()
-		}
-		if err != nil {
-			return err
-		}
-	} else {
-		kafkaInstance, httpRes, err = kafkautil.GetKafkaByID(opts.Context, api.KafkaMgmt(), opts.id)
-		if httpRes != nil {
-			defer httpRes.Body.Close()
-		}
-		if err != nil {
-			return err
+
+	if opts.kafkaInstance == nil {
+		if opts.name != "" {
+			opts.kafkaInstance, httpRes, err = kafkautil.GetKafkaByName(opts.Context, api.KafkaMgmt(), opts.name)
+			if httpRes != nil {
+				defer httpRes.Body.Close()
+			}
+			if err != nil {
+				return err
+			}
+		} else {
+			opts.kafkaInstance, httpRes, err = kafkautil.GetKafkaByID(opts.Context, api.KafkaMgmt(), opts.id)
+			if httpRes != nil {
+				defer httpRes.Body.Close()
+			}
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	if opts.bootstrapServer {
-		if host, ok := kafkaInstance.GetBootstrapServerHostOk(); ok {
+		if host, ok := opts.kafkaInstance.GetBootstrapServerHostOk(); ok {
 			fmt.Fprintln(opts.IO.Out, *host)
 			return nil
 		}
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.describe.bootstrapserver.not.available", localize.NewEntry("Name", kafkaInstance.GetName())))
+		opts.Logger.Info(opts.localizer.MustLocalize("kafka.describe.bootstrapserver.not.available", localize.NewEntry("Name", opts.kafkaInstance.GetName())))
 		return nil
 	}
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, kafkaInstance)
+	return dump.Formatted(opts.IO.Out, opts.outputFormat, opts.kafkaInstance)
 }
