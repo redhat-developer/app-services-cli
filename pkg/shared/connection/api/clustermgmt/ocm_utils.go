@@ -126,3 +126,37 @@ func GetMachinePoolNodeCount(machinePool *v1.MachinePool) int {
 	}
 	return nodeCount
 }
+
+func RemoveAddonsFromCluster(f *factory.Factory, clusterManagementApiUrl string, accessToken string, cluster *clustersmgmtv1.Cluster, addonList []string) error {
+	// create a new addon via ocm
+	conn, err := f.Connection()
+	if err != nil {
+		return err
+	}
+	client, cc, err := conn.API().OCMClustermgmt(clusterManagementApiUrl, accessToken)
+	if err != nil {
+		return err
+	}
+	defer cc()
+
+	addons, err := client.Clusters().Cluster(cluster.ID()).Addons().List().Send()
+	if err != nil {
+		return err
+	}
+
+	for _, addonToDelete := range addonList {
+		for i := 0; i < addons.Size(); i++ {
+			addon := addons.Items().Get(i)
+
+			if addon.ID() == addonToDelete {
+				f.Logger.Info("Removing the addon ", addon.ID())
+				_, err = client.Clusters().Cluster(cluster.ID()).Addons().Addoninstallation(addon.ID()).Delete().Send()
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return nil
+}
