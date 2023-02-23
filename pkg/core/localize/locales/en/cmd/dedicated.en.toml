@@ -1,3 +1,36 @@
+[dedicated.deregisterCluster.cmd.shortDescription]
+one = 'Deregister an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka'
+
+[dedicated.deregisterCluster.cmd.longDescription]
+one = '''
+Removes the ability to provision your own kafkas on a cluster, this command will deregister your 
+cluster with Red Hat Streams for Apache Kafka.
+'''
+
+[dedicated.deregisterCluster.cmd.example]
+one = '''
+# Deregister an OpenShift cluster with Red Hat Streams for Apache Kafka by selecting from a list of available clusters.
+rhoas cluster deregister-cluster
+
+# Deregister an OpenShift cluster with Red Hat Streams for Apache Kafka by specifying the cluster ID.
+rhoas cluster deregister-cluster --cluster-id 1234-5678-90ab-cdef
+'''
+
+[dedicated.deregisterCluster.flag.clusterMgmtApiUrl.description]
+one = 'The API URL of the OpenShift Cluster Management API.'
+
+[dedicated.deregistercluster.flag.accessToken.description]
+one = 'The access token to use to authenticate with the OpenShift Cluster Management API.'
+
+[dedicated.deregisterCluster.flag.clusterId.description]
+one = 'The ID of the OpenShift cluster to deregister.'
+
+[dedicated.deregisterCluster.run.noClusterFound]
+one = 'No valid OpenShift clusters found.'
+
+[dedicated.common.addons.deleting.message]
+one = 'Deleting addon from cluster with the id of {{.Id}}'
+
 [dedicated.registerCluster.cmd.shortDescription]
 one = 'Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka'
 

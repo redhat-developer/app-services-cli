@@ -44,9 +44,9 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "deregister-cluster",
-		Short:   f.Localizer.MustLocalize("dedicated.registerCluster.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("dedicated.registerCluster.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("dedicated.registerCluster.cmd.example"),
+		Short:   f.Localizer.MustLocalize("dedicated.deregisterCluster.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("dedicated.deregisterCluster.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("dedicated.deregisterCluster.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runDeRegisterClusterCmd(opts)
@@ -54,9 +54,9 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
-	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterId.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.deregisterCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.deregistercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.deregisterCluster.flag.clusterId.description"))
 
 	return cmd
 }
@@ -69,7 +69,7 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 	}
 
 	if len(clusterList) == 0 {
-		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
+		return opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.run.noClusterFound")
 	}
 
 	// TO-DO if client has supplied a cluster id, validate it and set it as the selected cluster without listing getting all clusters
@@ -217,8 +217,6 @@ func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]clusters
 }
 
 func deregisterClusterFromKasFleetManager(opts *options) error {
-	opts.f.Logger.Info("De-registering cluster with name ", opts.selectedCluster.Name())
-
 	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
