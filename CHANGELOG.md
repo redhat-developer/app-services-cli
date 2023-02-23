@@ -1,4 +1,16 @@
 
+<a name="v0.53.0"></a>
+## [v0.53.0](https://github.com/redhat-developer/app-services-cli/compare/v0.52.2...v0.53.0) (2023-02-23)
+
+### Bug Fixes
+
+* **service-registry create:** improve error handling ([#1814](https://github.com/redhat-developer/app-services-cli/issues/1814))
+
+### Features
+
+* now using core sdk ([#1813](https://github.com/redhat-developer/app-services-cli/issues/1813))
+
+
 <a name="v0.52.2"></a>
 ## [v0.52.2](https://github.com/redhat-developer/app-services-cli/compare/v0.52.0...v0.52.2) (2023-02-15)
 
