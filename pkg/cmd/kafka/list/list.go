@@ -34,6 +34,7 @@ type kafkaRow struct {
 	Status        string `json:"status" header:"Status"`
 	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
 	Region        string `json:"region" header:"Region"`
+	CustomerCloud string `json:"customer_cloud" header:"Customer Cloud"`
 }
 
 type options struct {
@@ -160,6 +161,14 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 		if k.GetId() == selectedId {
 			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))
 		}
+
+		var customerCloud string
+		if id, ok := k.GetClusterIdOk(); ok {
+			customerCloud = *id
+		} else {
+			customerCloud = "Red Hat Infrastructure"
+		}
+
 		row := kafkaRow{
 			ID:            k.GetId(),
 			Name:          name,
@@ -167,6 +176,7 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 			Status:        k.GetStatus(),
 			CloudProvider: k.GetCloudProvider(),
 			Region:        k.GetRegion(),
+			CustomerCloud: customerCloud,
 		}
 
 		rows[i] = row
