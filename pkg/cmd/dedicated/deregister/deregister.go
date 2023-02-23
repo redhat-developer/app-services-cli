@@ -18,13 +18,11 @@ type options struct {
 	selectedClusterId             string
 	clusterManagementApiUrl       string
 	accessToken                   string
-	clusterList                   []clustersmgmtv1.Cluster
 	selectedCluster               clustersmgmtv1.Cluster
 	existingMachinePoolList       []clustersmgmtv1.MachinePool
 	selectedClusterMachinePool    clustersmgmtv1.MachinePool
 	requestedMachinePoolNodeCount int
 	accessKafkasViaPrivateNetwork bool
-	// newMachinePool                clustersmgmtv1.MachinePool
 
 	f *factory.Factory
 }
@@ -65,44 +63,47 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 func runDeRegisterClusterCmd(opts *options) (err error) {
 	// Set the base URL for the cluster management API
-	err = setListClusters(opts)
+	clusterList, err := getListOfClusters(opts)
 	if err != nil {
 		return err
 	}
-	if len(opts.clusterList) == 0 {
+
+	if len(clusterList) == 0 {
 		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
 	}
+
 	// TO-DO if client has supplied a cluster id, validate it and set it as the selected cluster without listing getting all clusters
 	if opts.selectedClusterId == "" {
-		err = runClusterSelectionInteractivePrompt(opts)
+		err = runClusterSelectionInteractivePrompt(opts, &clusterList)
 		if err != nil {
 			return err
 		}
 	} else {
-		for i := range opts.clusterList {
-			cluster := opts.clusterList[i]
+		for i := range clusterList {
+			cluster := clusterList[i]
 			if cluster.ID() == opts.selectedClusterId {
 				opts.selectedCluster = cluster
 			}
 		}
 	}
 
-	//kafkas, err := getkafkasInCluster(opts)
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//err = deleteKafkasPrompt(opts, &kafkas)
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//err = deregisterClusterFromKasFleetManager(opts)
-	//if err != nil {
-	//	return err
-	//}
+	kafkas, err := getkafkasInCluster(opts)
+	if err != nil {
+		return err
+	}
 
-	err = removeAddonsFromCluster(opts)
+	err = deleteKafkasPrompt(opts, &kafkas)
+	if err != nil {
+		return err
+	}
+
+	err = deregisterClusterFromKasFleetManager(opts)
+	if err != nil {
+		return err
+	}
+
+	addonIdsToDelete := []string{fleetshardAddonIdQE, fleetshardAddonId, strimziAddonId, strimziAddonIdQE}
+	err = ocmUtils.RemoveAddonsFromCluster(opts.f, opts.clusterManagementApiUrl, opts.accessToken, &opts.selectedCluster, addonIdsToDelete)
 	if err != nil {
 		return err
 	}
@@ -110,55 +111,41 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 	return nil
 }
 
-func setListClusters(opts *options) error {
+func getListOfClusters(opts *options) ([]clustersmgmtv1.Cluster, error) {
 	clusters, err := ocmUtils.GetClusterList(opts.f, opts.accessToken, opts.clusterManagementApiUrl, 1, 99)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	var cls = []clustersmgmtv1.Cluster{}
-	cls = validateClusters(clusters, cls)
-	opts.clusterList = cls
-	return nil
-}
 
-func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1.Cluster) []clustersmgmtv1.Cluster {
+	var list []clustersmgmtv1.Cluster
 	for _, cluster := range clusters.Slice() {
 		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-			cls = append(cls, *cluster)
+			list = append(list, *cluster)
 		}
 	}
-	return cls
+
+	return list, nil
 }
 
 func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
 
-	kafkas := make([]kafkamgmtclient.KafkaRequest, 0)
-
 	conn, err := opts.f.Connection()
 	if err != nil {
-		return kafkas, err
+		return nil, err
 	}
 
 	api := conn.API()
 
 	// pagination is cringe
-	a := api.KafkaMgmt().GetKafkas(opts.f.Context)
-	a = a.Page(strconv.Itoa(1))
-	a = a.Size(strconv.Itoa(99))
+	a := api.KafkaMgmt().GetKafkas(opts.f.Context).Page(strconv.Itoa(1)).Size(strconv.Itoa(99)).Search(fmt.Sprintf("cluster_id = %v", opts.selectedCluster.ID()))
 
 	// deal with response errors at some point
 	kafkaList, _, err := a.Execute()
 	if err != nil {
-		return kafkas, err
+		return nil, err
 	}
 
-	for _, kafka := range kafkaList.Items {
-		if *kafka.BillingModel == billingModelEnterprise && kafka.ClusterId.IsSet() && *kafka.ClusterId.Get() == opts.selectedCluster.ID() {
-			kafkas = append(kafkas, kafka)
-		}
-	}
-
-	return kafkas, nil
+	return kafkaList.Items, nil
 }
 
 func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) error {
@@ -200,11 +187,10 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 	return nil
 }
 
-func runClusterSelectionInteractivePrompt(opts *options) error {
+func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]clustersmgmtv1.Cluster) error {
 	// TO-DO handle in case of empty cluster list, must be cleared up with UX etc.
 	clusterStringList := make([]string, 0)
-	for i := range opts.clusterList {
-		cluster := opts.clusterList[i]
+	for _, cluster := range *clusterList {
 		clusterStringList = append(clusterStringList, cluster.Name())
 	}
 
@@ -221,48 +207,12 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	}
 
 	// get the desired cluster
-	for i := range opts.clusterList {
-		cluster := opts.clusterList[i]
+	for _, cluster := range *clusterList {
 		if cluster.Name() == selectedClusterName {
 			opts.selectedCluster = cluster
+			opts.selectedClusterId = cluster.ID()
 		}
 	}
-	return nil
-}
-
-func removeAddonsFromCluster(opts *options) error {
-	// create a new addon via ocm
-	conn, err := opts.f.Connection()
-	if err != nil {
-		return err
-	}
-	client, cc, err := conn.API().OCMClustermgmt(opts.clusterManagementApiUrl, opts.accessToken)
-	if err != nil {
-		return err
-	}
-	defer cc()
-
-	addons, err := client.Addons().List().Page(1).Size(99).Send()
-	if err != nil {
-		return err
-	}
-
-	addonIdsToDelete := []string{fleetshardAddonId, strimziAddonId, fleetshardAddonId, fleetshardAddonIdQE, strimziAddonIdQE}
-
-	for i := 0; i < addons.Items().Len(); i++ {
-		addon := addons.Items().Get(i)
-
-		for _, addonToDelete := range addonIdsToDelete {
-			if addon.ID() == addonToDelete {
-				opts.f.Logger.Info("Removing the addon ", addon.ID())
-				_, err := client.Addons().Addon(addon.ID()).Delete().Send()
-				if err != nil {
-					return err
-				}
-			}
-		}
-	}
-
 	return nil
 }
 
