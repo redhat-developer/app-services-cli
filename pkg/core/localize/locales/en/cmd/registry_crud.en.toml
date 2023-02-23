@@ -146,6 +146,8 @@ one = '''
 Instance cannot be created. We have reached global the limit of service registry instances. 
 '''
 
+[registry.cmd.create.error.name.alreadyExists]
+one = 'Instance with name "{{.Name}}" already exists'
 
 [registry.cmd.create.flag.use.description]
 one = 'Set the new Service Registry instance to the current instance'

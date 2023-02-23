@@ -3,7 +3,7 @@
  *
  * Service Registry Management API is a REST API for managing Service Registry instances. Service Registry is a datastore for event schemas and API designs, which is based on the open source Apicurio Registry project.
  *
- * API version: 0.0.6
+ * API version: 1.0.0
  * Contact: rhosak-eval-support@redhat.com
  */
 

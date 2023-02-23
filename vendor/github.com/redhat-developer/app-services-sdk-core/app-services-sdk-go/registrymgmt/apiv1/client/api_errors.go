@@ -3,7 +3,7 @@
  *
  * Service Registry Management API is a REST API for managing Service Registry instances. Service Registry is a datastore for event schemas and API designs, which is based on the open source Apicurio Registry project.
  *
- * API version: 0.0.6
+ * API version: 1.0.0
  * Contact: rhosak-eval-support@redhat.com
  */
 
@@ -31,10 +31,10 @@ type ErrorsApi interface {
 	 * GetError Method for GetError
 	 * Get information about a specific error type
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param id A unique identifier for an error type.
+	 * @param id The id of the object you wish to interact with.
 	 * @return ApiGetErrorRequest
 	 */
-	GetError(ctx _context.Context, id int32) ApiGetErrorRequest
+	GetError(ctx _context.Context, id string) ApiGetErrorRequest
 
 	/*
 	 * GetErrorExecute executes the request
@@ -63,7 +63,7 @@ type ErrorsApiService service
 type ApiGetErrorRequest struct {
 	ctx _context.Context
 	ApiService ErrorsApi
-	id int32
+	id string
 }
 
 
@@ -75,10 +75,10 @@ func (r ApiGetErrorRequest) Execute() (Error, *_nethttp.Response, error) {
  * GetError Method for GetError
  * Get information about a specific error type
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param id A unique identifier for an error type.
+ * @param id The id of the object you wish to interact with.
  * @return ApiGetErrorRequest
  */
-func (a *ErrorsApiService) GetError(ctx _context.Context, id int32) ApiGetErrorRequest {
+func (a *ErrorsApiService) GetError(ctx _context.Context, id string) ApiGetErrorRequest {
 	return ApiGetErrorRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -111,9 +111,6 @@ func (a *ErrorsApiService) GetErrorExecute(r ApiGetErrorRequest) (Error, *_netht
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-	if r.id < 1 {
-		return localVarReturnValue, nil, reportError("id must be greater than 1")
-	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -125,7 +122,7 @@ func (a *ErrorsApiService) GetErrorExecute(r ApiGetErrorRequest) (Error, *_netht
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "*/*"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -153,6 +150,26 @@ func (a *ErrorsApiService) GetErrorExecute(r ApiGetErrorRequest) (Error, *_netht
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Empty
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
 			var v Error
@@ -262,7 +279,7 @@ func (a *ErrorsApiService) GetErrorsExecute(r ApiGetErrorsRequest) (ErrorList, *
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "*/*"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -290,6 +307,36 @@ func (a *ErrorsApiService) GetErrorsExecute(r ApiGetErrorsRequest) (ErrorList, *
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Empty
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v Error

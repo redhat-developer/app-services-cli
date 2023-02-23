@@ -197,6 +197,9 @@ func handleErrors(err error, opts *options) error {
 	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_7) {
 		return opts.localizer.MustLocalizeError("registry.cmd.create.error.limitreached")
 	}
+	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_9) {
+		return opts.localizer.MustLocalizeError("registry.cmd.create.error.name.alreadyExists", localize.NewEntry("Name", opts.name))
+	}
 	if srsmgmtv1errors.IsAPIError(err, srsmgmtv1errors.ERROR_13) {
 		return opts.localizer.MustLocalizeError("registry.cmd.create.error.trial.limitreached")
 	}

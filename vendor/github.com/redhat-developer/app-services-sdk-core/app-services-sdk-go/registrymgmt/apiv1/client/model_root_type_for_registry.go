@@ -3,7 +3,7 @@
  *
  * Service Registry Management API is a REST API for managing Service Registry instances. Service Registry is a datastore for event schemas and API designs, which is based on the open source Apicurio Registry project.
  *
- * API version: 0.0.6
+ * API version: 1.0.0
  * Contact: rhosak-eval-support@redhat.com
  */
 
@@ -18,7 +18,6 @@ import (
 
 // RootTypeForRegistry Service Registry instance in a multi-tenant deployment.
 type RootTypeForRegistry struct {
-	Id string `json:"id"`
 	Status RegistryStatusValue `json:"status"`
 	RegistryUrl *string `json:"registryUrl,omitempty"`
 	BrowserUrl *string `json:"browserUrl,omitempty"`
@@ -41,9 +40,8 @@ type RootTypeForRegistry struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRootTypeForRegistry(id string, status RegistryStatusValue, name string, owner string, createdAt time.Time, updatedAt time.Time, instanceType RegistryInstanceTypeValue) *RootTypeForRegistry {
+func NewRootTypeForRegistry(status RegistryStatusValue, name string, owner string, createdAt time.Time, updatedAt time.Time, instanceType RegistryInstanceTypeValue) *RootTypeForRegistry {
 	this := RootTypeForRegistry{}
-	this.Id = id
 	this.Status = status
 	this.Name = name
 	this.Owner = owner
@@ -59,30 +57,6 @@ func NewRootTypeForRegistry(id string, status RegistryStatusValue, name string, 
 func NewRootTypeForRegistryWithDefaults() *RootTypeForRegistry {
 	this := RootTypeForRegistry{}
 	return &this
-}
-
-// GetId returns the Id field value
-func (o *RootTypeForRegistry) GetId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Id
-}
-
-// GetIdOk returns a tuple with the Id field value
-// and a boolean to check if the value has been set.
-func (o *RootTypeForRegistry) GetIdOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Id, true
-}
-
-// SetId sets field value
-func (o *RootTypeForRegistry) SetId(v string) {
-	o.Id = v
 }
 
 // GetStatus returns the Status field value
@@ -359,9 +333,6 @@ func (o *RootTypeForRegistry) SetInstanceType(v RegistryInstanceTypeValue) {
 
 func (o RootTypeForRegistry) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
 	if true {
 		toSerialize["status"] = o.Status
 	}
