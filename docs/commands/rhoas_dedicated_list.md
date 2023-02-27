@@ -20,13 +20,6 @@ rhoas dedicated list
 
 ```
 
-### Options
-
-```
-      --page int   The page number to use when listing clusters. (default 1)
-      --size int   The page size to use when listing clusters. (default 10)
-```
-
 ### Options inherited from parent commands
 
 ```
