@@ -20,10 +20,8 @@ type clusterRow struct {
 }
 
 type options struct {
-	outputFormat            string
-	search                  string
 	kfmClusterList          *kafkamgmtclient.EnterpriseClusterList
-	clustermgmtClusterList  []*clustersmgmtv1.Cluster
+	clustermgmtClusterList  *clustersmgmtv1.ClusterList
 	registeredClusters      []clusterRow
 	accessToken             string
 	clusterManagementApiUrl string
@@ -59,12 +57,9 @@ func runListClusters(opts *options, f *factory.Factory) error {
 	if err != nil {
 		return err
 	}
-	opts.clustermgmtClusterList = clist.Slice()
+	opts.clustermgmtClusterList = clist
 	opts.registeredClusters = kfmListToClusterRowList(opts)
-	err = displayRegisteredClusters(opts)
-	if err != nil {
-		return err
-	}
+	displayRegisteredClusters(opts)
 	return nil
 }
 
@@ -81,9 +76,9 @@ func listEnterpriseClusters(opts *options, f *factory.Factory) error {
 		return err
 	}
 	opts.kfmClusterList = &clist
-	f.Logger.Info(response)
+	f.Logger.Debug(response)
 	if len(opts.kfmClusterList.Items) == 0 {
-		return f.Localizer.MustLocalizeError("dedicated.listClusters.log.info.noClusters")
+		return f.Localizer.MustLocalizeError("dedicated.list.cmd.errorNoRegisteredClusters")
 	}
 	return nil
 }
@@ -91,10 +86,10 @@ func listEnterpriseClusters(opts *options, f *factory.Factory) error {
 func createSearchString(opts *options) string {
 	searchString := ""
 	for idx, kfmcluster := range opts.kfmClusterList.Items {
-		searchString += fmt.Sprintf("id = '%s'", kfmcluster.Id)
 		if idx > 0 {
 			searchString += " or "
 		}
+		searchString += fmt.Sprintf("id = '%s'", kfmcluster.Id)
 	}
 	return searchString
 }
@@ -110,28 +105,26 @@ func getPaginatedClusterList(opts *options) (*clustersmgmtv1.ClusterList, error)
 
 func kfmListToClusterRowList(opts *options) []clusterRow {
 	var crl []clusterRow
+
+	clusterMap := make(map[string]*clustersmgmtv1.Cluster, len(opts.clustermgmtClusterList.Slice()))
+	// create a map of cluster ids to cluster objects
+	for _, ocmCluster := range opts.clustermgmtClusterList.Slice() {
+		clusterMap[ocmCluster.ID()] = ocmCluster
+	}
 	for _, kfmcluster := range opts.kfmClusterList.Items {
-		for _, ocmCluster := range opts.clustermgmtClusterList {
-			if kfmcluster.Id == ocmCluster.ID() {
-				crl = append(crl, clusterRow{
-					Name:          ocmCluster.Name(),
-					ID:            kfmcluster.Id,
-					Status:        *kfmcluster.Status,
-					CloudProvider: ocmCluster.CloudProvider().ID(),
-					Region:        ocmCluster.Region().ID(),
-				})
-			}
-		}
+		ocmCluster := clusterMap[kfmcluster.Id]
+		crl = append(crl, clusterRow{
+			Name:          ocmCluster.Name(),
+			ID:            kfmcluster.Id,
+			Status:        *kfmcluster.Status,
+			CloudProvider: ocmCluster.CloudProvider().ID(),
+			Region:        ocmCluster.Region().ID(),
+		})
 	}
 	return crl
 }
 
-func displayRegisteredClusters(opts *options) error {
-	if len(opts.registeredClusters) == 0 {
-		return opts.f.Localizer.MustLocalizeError("dedicated.list.cmd.errorNoRegisteredClusters")
-	}
+func displayRegisteredClusters(opts *options) {
 	dump.Table(opts.f.IOStreams.Out, opts.registeredClusters)
 	opts.f.Logger.Info("")
-
-	return nil
 }
