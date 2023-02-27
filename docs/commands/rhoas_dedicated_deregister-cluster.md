@@ -1,11 +1,11 @@
 ## rhoas dedicated deregister-cluster
 
-Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka
+Deregister an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka
 
 ### Synopsis
 
-You can use your own OpenShift cluster to provision your kafkas which will be managed by Red Hat Streams for Apache Kafka.
-This command will register your cluster with Red Hat Streams for Apache Kafka.
+Removes the ability to provision your own kafkas on a cluster, this command will deregister your 
+cluster with Red Hat Streams for Apache Kafka.
 
 
 ```
@@ -15,11 +15,11 @@ rhoas dedicated deregister-cluster [flags]
 ### Examples
 
 ```
-# Register an OpenShift cluster with Red Hat Streams for Apache Kafka by selecting from a list of available clusters.
-rhoas cluster register-cluster
+# Deregister an OpenShift cluster with Red Hat Streams for Apache Kafka by selecting from a list of available clusters.
+rhoas cluster deregister-cluster
 
-# Register an OpenShift cluster with Red Hat Streams for Apache Kafka by specifying the cluster ID.
-rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
+# Deregister an OpenShift cluster with Red Hat Streams for Apache Kafka by specifying the cluster ID.
+rhoas cluster deregister-cluster --cluster-id 1234-5678-90ab-cdef
 
 ```
 
@@ -27,7 +27,7 @@ rhoas cluster register-cluster --cluster-id 1234-5678-90ab-cdef
 
 ```
       --access-token string           The access token to use to authenticate with the OpenShift Cluster Management API.
-      --cluster-id string             The ID of the OpenShift cluster to register:
+      --cluster-id string             The ID of the OpenShift cluster to deregister.
       --cluster-mgmt-api-url string   The API URL of the OpenShift Cluster Management API.
 ```
 
