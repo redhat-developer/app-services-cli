@@ -9,9 +9,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	ocmUtils "github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
+	"net/http"
 	"strconv"
+	"time"
 )
 
 type options struct {
@@ -150,6 +152,8 @@ func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
 
 func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) error {
 
+	checkIfDeletedCallbacks := make([]func() (*kafkamgmtclient.KafkaRequest, *http.Response, error), 0)
+
 	for _, kafka := range *kafkas {
 		promptConfirmName := &survey.Input{
 			Message: opts.f.Localizer.MustLocalize("kafka.delete.input.confirmName.message", localize.NewEntry("Name", kafka.GetName())),
@@ -182,8 +186,47 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 		if err != nil {
 			return err
 		}
+
+		checkIfDeletedRefresh := func() (*kafkamgmtclient.KafkaRequest, *http.Response, error) {
+			a := api.KafkaMgmt().GetKafkaById(opts.f.Context, kafka.GetId())
+			kafka, response, err := a.Execute()
+			if err != nil {
+				return nil, response, err
+			}
+
+			return &kafka, response, nil
+		}
+
+		checkIfDeletedCallbacks = append(checkIfDeletedCallbacks, checkIfDeletedRefresh)
+	}
+	for len(checkIfDeletedCallbacks) > 0 {
+
+		for i := 0; i < len(checkIfDeletedCallbacks); i += 1 {
+			kafka, response, err := checkIfDeletedCallbacks[i]()
+			if err != nil {
+				if response == nil {
+					return err
+				}
+
+				if response.StatusCode == 404 {
+					// remove this callback from the callback list as the kafka is deleted
+					// break to restart the loop from the begining as we are modifying the list
+					// as we are iterating through it
+					checkIfDeletedCallbacks = append(checkIfDeletedCallbacks[:i], checkIfDeletedCallbacks[i+1:]...)
+					break
+				} else {
+					return fmt.Errorf(fmt.Sprintf("Bad response when polling for delting kafka, %v", response.Status))
+				}
+			}
+
+			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.message", localize.NewEntry("Name", kafka.GetName())))
+
+		}
+
+		time.Sleep(5 * time.Second)
 	}
 
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.success"))
 	return nil
 }
 
