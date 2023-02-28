@@ -79,3 +79,23 @@ one = 'The page number to use when listing clusters.'
 
 [dedicated.registerCluster.flag.pageSize.description]
 one = 'The page size to use when listing clusters.'
+
+[dedicated.list.cmd.shortDescription]
+one = 'List all OpenShift clusters registered with Red Hat OpenShift Streams for Apache Kafka.'
+
+[dedicated.list.cmd.longDescription]
+one = '''
+Red Hat OpenShift Streams for Apache Kafka allows you to use your own OpenShift clusters to provision your
+kafkas. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka.
+'''
+
+[dedicated.list.cmd.example]
+one = '''
+# List all OpenShift clusters registered with Red Hat OpenShift Streams for Apache Kafka.
+rhoas dedicated list
+'''
+
+[dedicated.list.cmd.errorNoRegisteredClusters]
+one = 'No registered clusters found.'
+
+
