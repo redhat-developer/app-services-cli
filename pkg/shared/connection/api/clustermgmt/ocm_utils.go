@@ -50,6 +50,20 @@ func GetMachinePoolList(f *factory.Factory, clustermgmturl string, accessToken s
 	return response, nil
 }
 
+func GetClusterListByIds(f *factory.Factory, clustermgmturl string, accessToken string, params string, size int) (*v1.ClusterList, error) {
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
+	if err != nil {
+		return nil, err
+	}
+	defer closeConnection()
+	resource := client.Clusters().List().Search(params).Size(size)
+	response, err := resource.Send()
+	if err != nil {
+		return nil, err
+	}
+	return response.Items(), nil
+}
+
 func CreateAddonWithParams(f *factory.Factory, clustermgmturl string, accessToken string, addonId string, params *[]kafkamgmtclient.FleetshardParameter, clusterId string) error {
 	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
