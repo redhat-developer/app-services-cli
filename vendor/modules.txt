@@ -312,55 +312,34 @@ github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/core
 # github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client v0.0.0-20230216114230-4ff0373de47f
 ## explicit; go 1.13
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client
-# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230222114134-d97c4c88765b
+# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230227102917-4a6410d5d4c2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/error
-# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230222114134-d97c4c88765b
+# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230227102917-4a6410d5d4c2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance/apiv1/client
-# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230220160753-3c2c52e7e98a
+# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230227102917-4a6410d5d4c2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/error
-# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230222114134-d97c4c88765b
+# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230227102917-4a6410d5d4c2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client
-# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230222114134-d97c4c88765b
+# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230227102917-4a6410d5d4c2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/error
-# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230222114134-d97c4c88765b
+# github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230227102917-4a6410d5d4c2
 ## explicit; go 1.15
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/client
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt/apiv1/error
-# github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/accountmgmt/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.12.0
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/connectormgmt/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/kafkainstance/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.19.0
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/registryinstance v0.10.0
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/registryinstance/apiv1internal/client
-# github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.2
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/registrymgmt/apiv1/client
-# github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
-## explicit; go 1.15
-github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt/apiv1/client
 # github.com/redhat-developer/service-binding-operator v0.9.0
 ## explicit; go 1.15
 github.com/redhat-developer/service-binding-operator/apis

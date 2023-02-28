@@ -41,19 +41,12 @@ require (
 
 require (
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/accountmgmt/apiv1/client v0.0.0-20230216114230-4ff0373de47f
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230222114134-d97c4c88765b
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230222114134-d97c4c88765b
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230220160753-3c2c52e7e98a
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230222114134-d97c4c88765b
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230222114134-d97c4c88765b
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230222114134-d97c4c88765b
-	github.com/redhat-developer/app-services-sdk-go/accountmgmt v0.3.0
-	github.com/redhat-developer/app-services-sdk-go/connectormgmt v0.12.0
-	github.com/redhat-developer/app-services-sdk-go/kafkainstance v0.11.0
-	github.com/redhat-developer/app-services-sdk-go/kafkamgmt v0.21.0
-	github.com/redhat-developer/app-services-sdk-go/registryinstance v0.10.0
-	github.com/redhat-developer/app-services-sdk-go/registrymgmt v0.11.2
-	github.com/redhat-developer/app-services-sdk-go/serviceaccountmgmt v0.9.0
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230227102917-4a6410d5d4c2
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230227102917-4a6410d5d4c2
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230227102917-4a6410d5d4c2
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230227102917-4a6410d5d4c2
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230227102917-4a6410d5d4c2
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230227102917-4a6410d5d4c2
 )
 
 require (
@@ -125,7 +118,7 @@ require (
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apiextensions-apiserver v0.24.0 // indirect
 	k8s.io/component-base v0.24.0 // indirect
 	k8s.io/klog/v2 v2.60.1 // indirect

@@ -1,9 +1,9 @@
 package clustermgmt
 
 import (
-	"github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	"github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
 func clustermgmtConnection(f *factory.Factory, accessToken string, clustermgmturl string) (*v1.Client, func(), error) {
