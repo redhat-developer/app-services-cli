@@ -3,6 +3,8 @@ package get
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
+	registryinstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
 	"os"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
@@ -25,6 +27,7 @@ type options struct {
 
 	registryID string
 	version    string
+	references bool
 
 	IO             *iostreams.IOStreams
 	Logger         logging.Logger
@@ -74,6 +77,7 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
 	cmd.Flags().StringVar(&opts.outputFile, "output-file", "", opts.localizer.MustLocalize("artifact.common.message.file.location"))
 	cmd.Flags().StringVar(&opts.version, "version", "", opts.localizer.MustLocalize("artifact.common.version"))
+	cmd.Flags().BoolVar(&opts.references, "references", false, opts.localizer.MustLocalize("artifact.cmd.get.references"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -95,33 +99,61 @@ func runGet(opts *options) error {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 	}
 
-	var dataFile *os.File
-	if opts.version != "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.with.version", localize.NewEntry("Version", opts.version)))
-		request := dataAPI.VersionsApi.GetArtifactVersion(opts.Context, opts.group, opts.artifact, opts.version)
-		dataFile, _, err = request.Execute()
-	} else {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.latest"))
-		request := dataAPI.ArtifactsApi.GetLatestArtifact(opts.Context, opts.group, opts.artifact)
-		dataFile, _, err = request.Execute()
-	}
-	if err != nil {
-		return registrycmdutil.TransformInstanceError(err)
-	}
-	fileContent, err := os.ReadFile(dataFile.Name())
-	if err != nil {
-		return err
-	}
-	if opts.outputFile != "" {
-		err := os.WriteFile(opts.outputFile, fileContent, 0600)
+	if !opts.references {
+
+		var dataFile *os.File
+		if opts.version != "" {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.with.version", localize.NewEntry("Version", opts.version)))
+			request := dataAPI.VersionsApi.GetArtifactVersion(opts.Context, opts.group, opts.artifact, opts.version)
+			dataFile, _, err = request.Execute()
+		} else {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.fetching.latest"))
+			request := dataAPI.ArtifactsApi.GetLatestArtifact(opts.Context, opts.group, opts.artifact)
+			dataFile, _, err = request.Execute()
+		}
+		if err != nil {
+			return registrycmdutil.TransformInstanceError(err)
+		}
+		fileContent, err := os.ReadFile(dataFile.Name())
 		if err != nil {
 			return err
 		}
+		if opts.outputFile != "" {
+			err := os.WriteFile(opts.outputFile, fileContent, 0600)
+			if err != nil {
+				return err
+			}
+		} else {
+			// Print to stdout
+			fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
+		}
+
+		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
+
 	} else {
-		// Print to stdout
-		fmt.Fprintf(os.Stdout, "%v\n", string(fileContent))
+		version, err := versionOrLatest(dataAPI, opts)
+		if err != nil {
+			return err
+		}
+		result, _, err := dataAPI.VersionsApi.GetArtifactVersionReferences(opts.Context, opts.group, opts.artifact, *version).Execute()
+		if err != nil {
+			return registrycmdutil.TransformInstanceError(err)
+		}
+		util.PrettyPrintReferences(os.Stdout, result)
 	}
 
-	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 	return nil
+}
+
+func versionOrLatest(client *registryinstanceclient.APIClient, opts *options) (*string, error) {
+	version := opts.version
+	if version == "" {
+		metaData, _, err := client.MetadataApi.GetArtifactMetaData(opts.Context, opts.group, opts.artifact).Execute()
+		if err != nil {
+			return nil, registrycmdutil.TransformInstanceError(err)
+		}
+		version = metaData.GetVersion()
+		opts.Logger.Info(opts.localizer.MustLocalize("registry.common.message.version.usingLatest", localize.NewEntry("Version", version)))
+	}
+	return &version, nil
 }

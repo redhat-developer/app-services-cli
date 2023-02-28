@@ -78,7 +78,13 @@ one = 'Custom name of the artifact'
 one = 'Custom description of the artifact'
 
 [artifact.common.type]
-one = 'Type of artifact. Choose from: {{.AllowedTypes}}'
+one = 'Type of artifact. Run "rhoas service-registry artifact types" to get a list.'
+
+[artifact.common.downloadOnServer]
+one = 'If enabled, artifact created by providing a URL will be downloaded on the server'
+
+[registry.common.flag.reference.gav]
+one = 'One or multiple artifact references in the form "<reference name>=<group>:<artifactId>:<version>". When referencing the default group and/or the latest version, these parts may be left empty'
 
 [artifact.common.webURL]
 one = '''
@@ -169,8 +175,14 @@ one = 'Successfully fetched artifact'
 [artifact.common.message.artifactIdRequired]
 one = 'artifact ID is required. Please specify artifact by using --artifact-id flag'
 
+[registry.common.message.version.usingLatest]
+one = 'Using latest artifact version: {{.Version}}'
+
 [artifact.common.message.running.editor.with.editable.metadata]
 one = 'Running editor with editable metadata. Please save contents and close editor to continue...'
+
+[artifact.common.error.fileNotUrl]
+one = 'provided file is not a valid URL: {{.FileName}}'
 
 [artifact.common.error.artifact.id.required]
 one = 'artifact is required. Please specify artifact by using --artifact-id flag'
@@ -196,6 +208,7 @@ one = 'Create new artifact from file or standard input'
 [artifact.cmd.create.description.long]
 one = '''
 Create a new artifact by posting the artifact content to the registry instance.
+Artifact content can be read from a file or downloaded from a URL, either locally by this CLI, or by the Service Registry server.
 
 Artifacts are typically in JSON format for most of the supported types, but might be in another format for a few types (for example, PROTOBUF).
 
@@ -228,10 +241,19 @@ rhoas service-registry artifact create my-artifact.json
 
 # Create an artifact with the specified type
 rhoas service-registry artifact create --type=JSON my-artifact.json
+
+# Create an artifact from a URL, dowloaded by the CLI:
+rhoas service-registry artifact create https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.json
+
+# Create an artifact from a URL, dowloaded by the Service Registry server:
+rhoas service-registry artifact create --download-on-server https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.json
 '''
 
 [artifact.cmd.create.error.invalidArtifactType]
 one = 'invalid artifact type. Please use one of following values: {{.AllowedTypes}}'
+
+[artifact.cmd.create.error.invalidReferenceFormatGAV]
+one = 'Invalid reference format "{{.Input}}". Use "<reference name>=<group>:<artifactId>:<version>". When referencing the default group and/or the latest version, these parts may be left empty'
 
 [artifact.cmd.delete.description.short]
 one = 'Deletes an artifact or all artifacts in a given group'
@@ -281,6 +303,9 @@ rhoas service-registry artifact get --artifact-id=my-artifact | grep -i 'user'
 ## Get artifact with custom version and print it out to standard out
 rhoas service-registry artifact get --artifact-id=myartifact --version=4
 '''
+
+[artifact.cmd.get.references]
+one = "Get a list of references the given artifact uses. Is returned instead of the artifact content."
 
 [artifact.cmd.list.description.short]
 one = 'List artifacts'
@@ -487,7 +512,7 @@ one = 'new artifact state'
 one = 'Successfully updated artifact state'
 
 [artifact.cmd.state.error.invalidArtifactState]
-one = 'invalid artifact state. Please use one of following values: {{.AllowedTypes}}'
+one = 'invalid artifact state. Please use one of following values: {{.AllowedStates}}'
 
 [artifact.cmd.list.flag.allgroups.description]
 one= 'List artifacts in all groups'
@@ -549,3 +574,17 @@ one = '''
 Owner of the artifact '{{.Name}}' was successfully updated.
 '''
 
+[artifact.cmd.types.description.short]
+one = 'List supported artifact types'
+
+[artifact.cmd.types.description.long]
+one = '''
+Get a list of artifact types supported by Service Registry.
+When creating a new artifact, one of the supported artifact types can be optionally provided as a parameter.
+'''
+
+[artifact.cmd.types.example]
+one = '''
+## List supported artifact types
+rhoas service-registry artifact types
+'''

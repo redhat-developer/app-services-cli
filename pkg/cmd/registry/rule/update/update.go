@@ -171,7 +171,7 @@ func updateGlobalRule(opts *options, dataAPI *registryinstanceclient.APIClient) 
 		),
 	)
 
-	req := dataAPI.GlobalRulesApi.UpdateGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
+	req := dataAPI.AdminApi.UpdateGlobalRuleConfig(opts.Context, *rulecmdutil.GetMappedRuleType(opts.ruleType))
 
 	rule := registryinstanceclient.Rule{
 		Config: rulecmdutil.GetMappedConfigValue(opts.config),

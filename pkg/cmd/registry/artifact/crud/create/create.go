@@ -2,11 +2,9 @@ package create
 
 import (
 	"context"
-	"os"
-
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/types"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
-
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -18,6 +16,9 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
+	"io"
+	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -35,6 +36,9 @@ type options struct {
 
 	registryID   string
 	outputFormat string
+
+	downloadOnServer bool
+	references       []string
 
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
@@ -70,12 +74,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 				opts.file = args[0]
 			}
 
-			if opts.artifactType != "" {
-				if _, err := registryinstanceclient.NewArtifactTypeFromValue(opts.artifactType); err != nil {
-					return opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidArtifactType", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString()))
-				}
-			}
-
 			if opts.registryID != "" {
 				return runCreate(opts)
 			}
@@ -100,14 +98,14 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.name, "name", "", opts.localizer.MustLocalize("artifact.common.custom.name"))
 	cmd.Flags().StringVar(&opts.description, "description", "", opts.localizer.MustLocalize("artifact.common.custom.description"))
 
-	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactTypeEnumValuesAsString())))
+	cmd.Flags().StringVarP(&opts.artifactType, "type", "t", "", opts.localizer.MustLocalize("artifact.common.type"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
 
-	flagutil.EnableOutputFlagCompletion(cmd)
+	cmd.Flags().BoolVar(&opts.downloadOnServer, "download-on-server", false, opts.localizer.MustLocalize("artifact.common.downloadOnServer"))
 
-	_ = cmd.RegisterFlagCompletionFunc("type", func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return util.AllowedArtifactTypeEnumValues, cobra.ShellCompDirectiveNoSpace
-	})
+	cmd.Flags().StringArrayVarP(&opts.references, "reference", "r", []string{}, opts.localizer.MustLocalize("registry.common.flag.reference.gav"))
+
+	flagutil.EnableOutputFlagCompletion(cmd)
 
 	return cmd
 }
@@ -132,32 +130,53 @@ func runCreate(opts *options) error {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 	}
 
+	executeExtended := false
 	var specifiedFile *os.File
-	if opts.file != "" {
-		if util.IsURL(opts.file) {
-			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
-			specifiedFile, err = util.GetContentFromFileURL(opts.Context, opts.file)
-			if err != nil {
-				return err
+	if opts.downloadOnServer {
+		if !util.IsURL(opts.file) {
+			return opts.localizer.MustLocalizeError("artifact.common.error.fileNotUrl", localize.NewEntry("FileName", opts.file))
+		}
+		executeExtended = true
+	} else {
+		if opts.file != "" {
+			if util.IsURL(opts.file) {
+				opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
+				specifiedFile, err = util.GetContentFromFileURL(opts.Context, opts.file)
+				if err != nil {
+					return err
+				}
+			} else {
+				opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
+				specifiedFile, err = os.Open(opts.file)
+				if err != nil {
+					return err
+				}
 			}
 		} else {
-			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
-			specifiedFile, err = os.Open(opts.file)
+			opts.Logger.Info(opts.localizer.MustLocalize("common.message.reading.file"))
+			specifiedFile, err = util.CreateFileFromStdin()
 			if err != nil {
 				return err
 			}
 		}
-	} else {
-		opts.Logger.Info(opts.localizer.MustLocalize("common.message.reading.file"))
-		specifiedFile, err = util.CreateFileFromStdin()
+	}
+	request := dataAPI.ArtifactsApi.CreateArtifact(opts.Context, opts.group)
+	if opts.artifactType != "" {
+		artifactTypes, err := types.GetArtifactTypes(dataAPI, opts.Context)
 		if err != nil {
 			return err
 		}
-	}
-
-	request := dataAPI.ArtifactsApi.CreateArtifact(opts.Context, opts.group)
-	if opts.artifactType != "" {
-		request = request.XRegistryArtifactType(registryinstanceclient.ArtifactType(opts.artifactType))
+		valid := false
+		for _, v := range artifactTypes {
+			if opts.artifactType == v {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			return opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidArtifactType", localize.NewEntry("AllowedTypes", strings.Join(artifactTypes, ", ")))
+		}
+		request = request.XRegistryArtifactType(opts.artifactType)
 	}
 	if opts.artifact != "" {
 		request = request.XRegistryArtifactId(opts.artifact)
@@ -172,7 +191,48 @@ func runCreate(opts *options) error {
 
 	request = request.XRegistryDescription(opts.description)
 
-	request = request.Body(specifiedFile)
+	if len(opts.references) > 0 {
+		executeExtended = true
+	}
+
+	if executeExtended {
+		// Content
+		var content string
+		if opts.downloadOnServer {
+			content = opts.file
+		} else {
+			bytes, err := io.ReadAll(specifiedFile)
+			if err != nil {
+				return err
+			}
+			content = string(bytes)
+		}
+		// References
+		references, err := loadReferences(dataAPI, opts)
+		if err != nil {
+			return err
+		}
+		body := registryinstanceclient.ContentCreateRequest{
+			Content:    content,
+			References: references,
+		}
+		bytes, err := body.MarshalJSON()
+		if err != nil {
+			return err
+		}
+		file, err := util.GetFileFromBytes(bytes)
+		if err != nil {
+			return err
+		}
+		request = request.
+			ContentType("application/create.extended+json").
+			Body(file)
+	} else {
+		request = request.
+			ContentType("").
+			Body(specifiedFile)
+	}
+
 	metadata, _, err := request.Execute()
 	if err != nil {
 		return registrycmdutil.TransformInstanceError(err)
@@ -186,4 +246,37 @@ func runCreate(opts *options) error {
 	}
 
 	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
+
+}
+
+func loadReferences(dataAPI *registryinstanceclient.APIClient, opts *options) ([]registryinstanceclient.ArtifactReference, error) {
+	result := make([]registryinstanceclient.ArtifactReference, len(opts.references))
+	for i, v := range opts.references {
+		ref := registryinstanceclient.ArtifactReference{}
+		parts := strings.Split(v, "=")
+		if len(parts) != 2 {
+			return nil, opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidReferenceFormatGAV", localize.NewEntry("Input", v))
+		}
+		ref.Name = parts[0]
+		gavParts := strings.Split(parts[1], ":")
+		if len(gavParts) == 3 {
+			ref.GroupId = gavParts[0]
+			ref.ArtifactId = gavParts[1]
+			ref.Version = &gavParts[2]
+			if ref.GroupId == "" {
+				ref.GroupId = "default"
+			}
+			if *ref.Version == "" {
+				metaData, _, err := dataAPI.MetadataApi.GetArtifactMetaData(opts.Context, ref.GroupId, ref.ArtifactId).Execute()
+				if err != nil {
+					return nil, registrycmdutil.TransformInstanceError(err)
+				}
+				*ref.Version = metaData.GetVersion()
+			}
+		} else {
+			return nil, opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidReferenceFormatGAV", localize.NewEntry("Input", v))
+		}
+		result[i] = ref
+	}
+	return result, nil
 }

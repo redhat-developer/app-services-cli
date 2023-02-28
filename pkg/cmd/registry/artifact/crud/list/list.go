@@ -2,7 +2,6 @@ package list
 
 import (
 	"context"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
@@ -29,7 +28,7 @@ type artifactRow struct {
 
 	CreatedBy string `json:"createdBy" header:"Created By"`
 
-	Type registryinstanceclient.ArtifactType `json:"type" header:"Type"`
+	Type string `json:"type" header:"Type"`
 
 	State registryinstanceclient.ArtifactState `json:"state" header:"State"`
 }
@@ -186,7 +185,7 @@ func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact)
 		row := artifactRow{
 			Id:        k.GetId(),
 			Name:      k.GetName(),
-			CreatedOn: k.GetCreatedOn(),
+			CreatedOn: k.GetCreatedOn().String(),
 			CreatedBy: k.GetCreatedBy(),
 			Type:      k.GetType(),
 			State:     k.GetState(),
