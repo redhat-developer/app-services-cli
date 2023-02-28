@@ -3,18 +3,19 @@ package register
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
-	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	dedicatedcmdutil "github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
-	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-go/kafkamgmt/apiv1/client"
+	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
 
@@ -354,7 +355,6 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	kfmPayload := kafkamgmtclient.EnterpriseOsdClusterPayload{
 		AccessKafkasViaPrivateNetwork: opts.accessKafkasViaPrivateNetwork,
 		ClusterId:                     opts.selectedCluster.ID(),
-		ClusterExternalId:             opts.selectedCluster.ExternalID(),
 		ClusterIngressDnsName:         clusterIngressDNSName,
 		KafkaMachinePoolNodeCount:     int32(nodeCount),
 	}
