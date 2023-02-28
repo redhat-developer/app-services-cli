@@ -1,8 +1,8 @@
 package listclusters
 
 import (
-	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
@@ -50,37 +50,21 @@ func NewListClusterCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runListClusters(opts *options, f *factory.Factory) error {
-	err := listEnterpriseClusters(opts, f)
+	kfmClusterList, err := kafkautil.ListEnterpriseClusters(f)
+	opts.kfmClusterList = kfmClusterList
 	if err != nil {
 		return err
 	}
-	clist, err := getPaginatedClusterList(opts)
+	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, createSearchString(opts), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
+	}
+	if clist == nil {
+		return opts.f.Localizer.MustLocalizeError("dedicated.list.error.noRegisteredClustersFound")
 	}
 	opts.clustermgmtClusterList = clist
 	opts.registeredClusters = kfmListToClusterRowList(opts)
 	displayRegisteredClusters(opts)
-	return nil
-}
-
-func listEnterpriseClusters(opts *options, f *factory.Factory) error {
-	conn, err := f.Connection()
-	if err != nil {
-		return err
-	}
-	ctx := context.Background()
-	api := conn.API()
-	cl := api.KafkaMgmtEnterprise().GetEnterpriseOsdClusters(ctx)
-	clist, response, err := cl.Execute()
-	if err != nil {
-		return err
-	}
-	opts.kfmClusterList = &clist
-	f.Logger.Debug(response)
-	if len(opts.kfmClusterList.Items) == 0 {
-		return f.Localizer.MustLocalizeError("dedicated.list.cmd.errorNoRegisteredClusters")
-	}
 	return nil
 }
 
@@ -93,15 +77,6 @@ func createSearchString(opts *options) string {
 		searchString += fmt.Sprintf("id = '%s'", kfmcluster.Id)
 	}
 	return searchString
-}
-
-func getPaginatedClusterList(opts *options) (*clustersmgmtv1.ClusterList, error) {
-	// get ids of clusters and create an ocm call filtering by those ids
-	ocmcl, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, createSearchString(opts), len(opts.kfmClusterList.Items))
-	if err != nil {
-		return nil, err
-	}
-	return ocmcl, nil
 }
 
 func kfmListToClusterRowList(opts *options) []clusterRow {
