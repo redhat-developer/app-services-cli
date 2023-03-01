@@ -3,6 +3,9 @@ package create
 import (
 	"encoding/json"
 	"fmt"
+	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/listclusters"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"os"
 	"os/signal"
@@ -70,6 +73,7 @@ type options struct {
 
 	kfmClusterList       *kafkamgmtclient.EnterpriseClusterList
 	selectedCluster      *kafkamgmtclient.EnterpriseClusterListItem
+	clusterMap           *map[string]v1.Cluster
 	useEnterpriseCluster bool
 
 	f *factory.Factory
@@ -460,15 +464,13 @@ func setEnterpriseClusterList(opts *options) error {
 		return err
 	}
 	opts.kfmClusterList = clist
-	return nil
-}
 
-func createPromptSliceFromEnterpriseClusterList(clusterList *kafkamgmtclient.EnterpriseClusterList) []string {
-	clusterListSlice := make([]string, 0)
-	for _, cluster := range clusterList.Items {
-		clusterListSlice = append(clusterListSlice, *cluster.ClusterId)
+	clusterMap, err := getClusterNameMap(opts.f, clist)
+	if err != nil {
+		return err
 	}
-	return clusterListSlice
+	opts.clusterMap = clusterMap
+	return nil
 }
 
 func selectEnterpriseOrRHInfraPrompt(opts *options) error {
@@ -516,7 +518,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	// Get the list of enterprise clusters in the users organization if there are any
+	// Get the list of enterprise clusters in the users organization if there are any, creates a map of cluster ids to names to include names in the prompt
 	err = setEnterpriseClusterList(opts)
 	if err != nil {
 		return nil, err
@@ -556,6 +558,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
 	}
 
+	// prompting for billing model if there are more than one available, otherwise using the only one available
 	if len(availableBillingModels) > 0 {
 		if len(availableBillingModels) == 1 {
 			answers.BillingModel = availableBillingModels[0]
@@ -571,17 +574,12 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
+	// if billing model is marketplace, prompt for marketplace provider and account id
 	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
 		answers, err = marketplaceQuotaPrompt(orgQuota, answers, f, err)
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	marketplaceInfo := accountmgmtutil.MarketplaceInfo{
-		BillingModel:   answers.BillingModel,
-		Provider:       answers.Marketplace,
-		CloudAccountID: answers.MarketplaceAcctID,
 	}
 
 	var sizes []kafkamgmtclient.SupportedKafkaSize
@@ -630,6 +628,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		var clusterIdSNS kafkamgmtclient.NullableString
 		clusterIdSNS.Set(opts.selectedCluster.ClusterId)
 
+		// need a better way to set billing model
 		var billingModelEnterprise kafkamgmtclient.NullableString
 		var enterprise = "enterprise"
 		billingModelEnterprise.Set(&enterprise)
@@ -641,11 +640,18 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			BillingCloudAccountId: nullString,
 			Marketplace:           nullString,
 			ClusterId:             clusterIdSNS,
-			//	set plan here
 		}
 		// enterprise quota spec, kfm will use the default, this should be returned by the `select quota` call
 		payload.SetPlan(mapAmsTypeToBackendType(&orgQuota.EnterpriseQuotas[0]) + "." + answers.Size)
 	} else {
+
+		// This flow is for the provisioning of a standard kafka instance
+		marketplaceInfo := accountmgmtutil.MarketplaceInfo{
+			BillingModel:   answers.BillingModel,
+			Provider:       answers.Marketplace,
+			CloudAccountID: answers.MarketplaceAcctID,
+		}
+
 		userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo, answers.CloudProvider)
 		if err != nil {
 			return nil, err
@@ -773,11 +779,51 @@ func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAns
 	return answers, nil
 }
 
+// This may need to altered as the `name` are mutable on ocm side
+func getClusterNameMap(f *factory.Factory, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
+	//	for each cluster in the list, get the name from ocm and add it to the cluster list
+	str := listclusters.CreateSearchString(clusterList)
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(f, "", "", str, len(clusterList.Items))
+	if err != nil {
+		return nil, err
+	}
+	clusterMap := make(map[string]v1.Cluster)
+	for _, cluster := range ocmClusterList.Slice() {
+		clusterMap[cluster.ID()] = *cluster
+	}
+	return &clusterMap, nil
+
+}
+
+func validateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafkamgmtclient.EnterpriseClusterList {
+	// if cluster is in a ready state add it to the list of clusters
+	returnList := kafkamgmtclient.EnterpriseClusterList{}
+	for _, cluster := range clusterList.Items {
+		if *cluster.Status == "ready" {
+			returnList.Items = append(returnList.Items, cluster)
+		}
+	}
+	// TO-DO add logic to return cluster capacity
+
+	return &returnList
+}
+
+func createPromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) *[]string {
+	promptOptions := []string{}
+	validatedClusters := validateClusters(clusterList)
+	for _, cluster := range validatedClusters.Items {
+		ocmCluster := (*clusterMap)[cluster.GetId()]
+		display := ocmCluster.Name() + " (" + cluster.GetId() + ")"
+		promptOptions = append(promptOptions, display)
+	}
+	return &promptOptions
+}
+
 func selectClusterPrompt(opts *options) error {
-	promptOptions := createPromptSliceFromEnterpriseClusterList(opts.kfmClusterList)
+	promptOptions := createPromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
 	promptForCluster := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.selectClusterMessage"),
-		Options: promptOptions,
+		Options: *promptOptions,
 	}
 
 	var index int
