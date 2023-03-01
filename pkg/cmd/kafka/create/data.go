@@ -33,6 +33,8 @@ func mapAmsTypeToBackendType(amsType *accountmgmtutil.QuotaSpec) CloudProviderId
 		return StandardType
 	case accountmgmtutil.QuotaTrialType:
 		return DeveloperType
+	case accountmgmtutil.QuotaEnterpriseType:
+		return StandardType
 	default:
 		return DeveloperType
 	}
