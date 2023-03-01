@@ -471,7 +471,7 @@ func createPromptSliceFromEnterpriseClusterList(clusterList *kafkamgmtclient.Ent
 	return clusterListSlice
 }
 
-func selectEnterpriseOrRHinfraPrompt(opts *options) error {
+func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	listOfOptions := []string{
 		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
 		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.enterprise"),
@@ -524,7 +524,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	// If there are enterprise clusters in the user's organization, prompt them to select one using the interactive prompt for enterprise flow
 	if len(opts.kfmClusterList.Items) > 0 {
-		err = selectEnterpriseOrRHinfraPrompt(opts)
+		err = selectEnterpriseOrRHInfraPrompt(opts)
 		if err != nil {
 			return nil, err
 		}
@@ -538,7 +538,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	// If the user is not using an enterprise cluster, prompt them to select a cloud provider
 	if !opts.useEnterpriseCluster {
-		answers, err = cloudProviderPrompt(opts, f, answers)
+		answers, err = cloudProviderPrompt(f, answers)
 		if err != nil {
 			return nil, err
 		}
@@ -572,36 +572,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
-		validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, answers.CloudProvider)
-		if len(validMarketPlaces) == 1 {
-			answers.Marketplace = validMarketPlaces[0]
-		} else {
-			marketplacePrompt := &survey.Select{
-				Message: f.Localizer.MustLocalize("kafka.create.input.marketplace.message"),
-				Options: validMarketPlaces,
-			}
-			err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		if len(validMarketPlaces) > 0 {
-
-			validMarketplaceAcctIDs := FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, answers.Marketplace)
-
-			if len(validMarketplaceAcctIDs) == 1 {
-				answers.MarketplaceAcctID = validMarketplaceAcctIDs[0]
-			} else {
-				marketplaceAccountPrompt := &survey.Select{
-					Message: f.Localizer.MustLocalize("kafka.create.input.marketplaceAccountID.message"),
-					Options: validMarketplaceAcctIDs,
-				}
-				err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
-				if err != nil {
-					return nil, err
-				}
-			}
+		answers, err = marketplaceQuotaPrompt(orgQuota, answers, f, err)
+		if err != nil {
+			return nil, err
 		}
 	}
 
@@ -747,8 +720,43 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	return payload, nil
 }
 
-func cloudProviderPrompt(opts *options, f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
-	cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
+func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers, f *factory.Factory, err error) (*promptAnswers, error) {
+	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, answers.CloudProvider)
+	if len(validMarketPlaces) == 1 {
+		answers.Marketplace = validMarketPlaces[0]
+	} else {
+		marketplacePrompt := &survey.Select{
+			Message: f.Localizer.MustLocalize("kafka.create.input.marketplace.message"),
+			Options: validMarketPlaces,
+		}
+		err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if len(validMarketPlaces) > 0 {
+
+		validMarketplaceAcctIDs := FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, answers.Marketplace)
+
+		if len(validMarketplaceAcctIDs) == 1 {
+			answers.MarketplaceAcctID = validMarketplaceAcctIDs[0]
+		} else {
+			marketplaceAccountPrompt := &survey.Select{
+				Message: f.Localizer.MustLocalize("kafka.create.input.marketplaceAccountID.message"),
+				Options: validMarketplaceAcctIDs,
+			}
+			err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return answers, nil
+}
+
+func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
+	cloudProviderNames, err := GetEnabledCloudProviderNames(f)
 	if err != nil {
 		return nil, err
 	}
