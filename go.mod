@@ -44,8 +44,8 @@ require (
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt v0.0.0-20230227102917-4a6410d5d4c2
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230227102917-4a6410d5d4c2
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230227102917-4a6410d5d4c2
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230227102917-4a6410d5d4c2
-	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230227102917-4a6410d5d4c2
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230301144502-065a5966657b
+	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230301144502-065a5966657b
 	github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230227102917-4a6410d5d4c2
 )
 

@@ -15,31 +15,34 @@ import (
 	"encoding/json"
 )
 
-// RuleViolationCause struct for RuleViolationCause
-type RuleViolationCause struct {
+// CreateGroupMetaData struct for CreateGroupMetaData
+type CreateGroupMetaData struct {
 	Description *string `json:"description,omitempty"`
-	Context *string `json:"context,omitempty"`
+	// User-defined name-value pairs. Name and value must be strings.
+	Properties *map[string]string `json:"properties,omitempty"`
+	Id string `json:"id"`
 }
 
-// NewRuleViolationCause instantiates a new RuleViolationCause object
+// NewCreateGroupMetaData instantiates a new CreateGroupMetaData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRuleViolationCause() *RuleViolationCause {
-	this := RuleViolationCause{}
+func NewCreateGroupMetaData(id string) *CreateGroupMetaData {
+	this := CreateGroupMetaData{}
+	this.Id = id
 	return &this
 }
 
-// NewRuleViolationCauseWithDefaults instantiates a new RuleViolationCause object
+// NewCreateGroupMetaDataWithDefaults instantiates a new CreateGroupMetaData object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRuleViolationCauseWithDefaults() *RuleViolationCause {
-	this := RuleViolationCause{}
+func NewCreateGroupMetaDataWithDefaults() *CreateGroupMetaData {
+	this := CreateGroupMetaData{}
 	return &this
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
-func (o *RuleViolationCause) GetDescription() string {
+func (o *CreateGroupMetaData) GetDescription() string {
 	if o == nil || o.Description == nil {
 		var ret string
 		return ret
@@ -49,7 +52,7 @@ func (o *RuleViolationCause) GetDescription() string {
 
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RuleViolationCause) GetDescriptionOk() (*string, bool) {
+func (o *CreateGroupMetaData) GetDescriptionOk() (*string, bool) {
 	if o == nil || o.Description == nil {
 		return nil, false
 	}
@@ -57,7 +60,7 @@ func (o *RuleViolationCause) GetDescriptionOk() (*string, bool) {
 }
 
 // HasDescription returns a boolean if a field has been set.
-func (o *RuleViolationCause) HasDescription() bool {
+func (o *CreateGroupMetaData) HasDescription() bool {
 	if o != nil && o.Description != nil {
 		return true
 	}
@@ -66,85 +69,112 @@ func (o *RuleViolationCause) HasDescription() bool {
 }
 
 // SetDescription gets a reference to the given string and assigns it to the Description field.
-func (o *RuleViolationCause) SetDescription(v string) {
+func (o *CreateGroupMetaData) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetContext returns the Context field value if set, zero value otherwise.
-func (o *RuleViolationCause) GetContext() string {
-	if o == nil || o.Context == nil {
-		var ret string
+// GetProperties returns the Properties field value if set, zero value otherwise.
+func (o *CreateGroupMetaData) GetProperties() map[string]string {
+	if o == nil || o.Properties == nil {
+		var ret map[string]string
 		return ret
 	}
-	return *o.Context
+	return *o.Properties
 }
 
-// GetContextOk returns a tuple with the Context field value if set, nil otherwise
+// GetPropertiesOk returns a tuple with the Properties field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RuleViolationCause) GetContextOk() (*string, bool) {
-	if o == nil || o.Context == nil {
+func (o *CreateGroupMetaData) GetPropertiesOk() (*map[string]string, bool) {
+	if o == nil || o.Properties == nil {
 		return nil, false
 	}
-	return o.Context, true
+	return o.Properties, true
 }
 
-// HasContext returns a boolean if a field has been set.
-func (o *RuleViolationCause) HasContext() bool {
-	if o != nil && o.Context != nil {
+// HasProperties returns a boolean if a field has been set.
+func (o *CreateGroupMetaData) HasProperties() bool {
+	if o != nil && o.Properties != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetContext gets a reference to the given string and assigns it to the Context field.
-func (o *RuleViolationCause) SetContext(v string) {
-	o.Context = &v
+// SetProperties gets a reference to the given map[string]string and assigns it to the Properties field.
+func (o *CreateGroupMetaData) SetProperties(v map[string]string) {
+	o.Properties = &v
 }
 
-func (o RuleViolationCause) MarshalJSON() ([]byte, error) {
+// GetId returns the Id field value
+func (o *CreateGroupMetaData) GetId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *CreateGroupMetaData) GetIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *CreateGroupMetaData) SetId(v string) {
+	o.Id = v
+}
+
+func (o CreateGroupMetaData) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Description != nil {
 		toSerialize["description"] = o.Description
 	}
-	if o.Context != nil {
-		toSerialize["context"] = o.Context
+	if o.Properties != nil {
+		toSerialize["properties"] = o.Properties
+	}
+	if true {
+		toSerialize["id"] = o.Id
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableRuleViolationCause struct {
-	value *RuleViolationCause
+type NullableCreateGroupMetaData struct {
+	value *CreateGroupMetaData
 	isSet bool
 }
 
-func (v NullableRuleViolationCause) Get() *RuleViolationCause {
+func (v NullableCreateGroupMetaData) Get() *CreateGroupMetaData {
 	return v.value
 }
 
-func (v *NullableRuleViolationCause) Set(val *RuleViolationCause) {
+func (v *NullableCreateGroupMetaData) Set(val *CreateGroupMetaData) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRuleViolationCause) IsSet() bool {
+func (v NullableCreateGroupMetaData) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRuleViolationCause) Unset() {
+func (v *NullableCreateGroupMetaData) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRuleViolationCause(val *RuleViolationCause) *NullableRuleViolationCause {
-	return &NullableRuleViolationCause{value: val, isSet: true}
+func NewNullableCreateGroupMetaData(val *CreateGroupMetaData) *NullableCreateGroupMetaData {
+	return &NullableCreateGroupMetaData{value: val, isSet: true}
 }
 
-func (v NullableRuleViolationCause) MarshalJSON() ([]byte, error) {
+func (v NullableCreateGroupMetaData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRuleViolationCause) UnmarshalJSON(src []byte) error {
+func (v *NullableCreateGroupMetaData) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

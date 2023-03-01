@@ -3,7 +3,7 @@
  *
  * Apicurio Registry is a datastore for standard event schemas and API designs. Apicurio Registry enables developers to manage and share the structure of their data using a REST interface. For example, client applications can dynamically push or pull the latest updates to or from the registry without needing to redeploy. Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. For example, this includes rules for content validation and version compatibility.  The Apicurio Registry REST API enables client applications to manage the artifacts in the registry. This API provides create, read, update, and delete operations for schema and API artifacts, rules, versions, and metadata.   The supported artifact types include: - Apache Avro schema - AsyncAPI specification - Google protocol buffers - GraphQL schema - JSON Schema - Kafka Connect schema - OpenAPI specification - Web Services Description Language - XML Schema Definition   **Important**: The Apicurio Registry REST API is available from `https://MY-REGISTRY-URL/apis/registry/v2` by default. Therefore you must prefix all API operation paths with `../apis/registry/v2` in this case. For example: `../apis/registry/v2/ids/globalIds/{globalId}`. 
  *
- * API version: 2.2.5.Final
+ * API version: 2.4.x
  * Contact: apicurio@lists.jboss.org
  */
 
@@ -13,15 +13,16 @@ package registryinstanceclient
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // SearchedVersion Models a single artifact from the result set returned when searching for artifacts.
 type SearchedVersion struct {
 	Name *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-	CreatedOn string `json:"createdOn"`
+	CreatedOn time.Time `json:"createdOn"`
 	CreatedBy string `json:"createdBy"`
-	Type ArtifactType `json:"type"`
+	Type string `json:"type"`
 	Labels *[]string `json:"labels,omitempty"`
 	State ArtifactState `json:"state"`
 	GlobalId int64 `json:"globalId"`
@@ -36,7 +37,7 @@ type SearchedVersion struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSearchedVersion(createdOn string, createdBy string, type_ ArtifactType, state ArtifactState, globalId int64, version string, contentId int64, references []ArtifactReference) *SearchedVersion {
+func NewSearchedVersion(createdOn time.Time, createdBy string, type_ string, state ArtifactState, globalId int64, version string, contentId int64, references []ArtifactReference) *SearchedVersion {
 	this := SearchedVersion{}
 	this.CreatedOn = createdOn
 	this.CreatedBy = createdBy
@@ -122,9 +123,9 @@ func (o *SearchedVersion) SetDescription(v string) {
 }
 
 // GetCreatedOn returns the CreatedOn field value
-func (o *SearchedVersion) GetCreatedOn() string {
+func (o *SearchedVersion) GetCreatedOn() time.Time {
 	if o == nil {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 
@@ -133,7 +134,7 @@ func (o *SearchedVersion) GetCreatedOn() string {
 
 // GetCreatedOnOk returns a tuple with the CreatedOn field value
 // and a boolean to check if the value has been set.
-func (o *SearchedVersion) GetCreatedOnOk() (*string, bool) {
+func (o *SearchedVersion) GetCreatedOnOk() (*time.Time, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -141,7 +142,7 @@ func (o *SearchedVersion) GetCreatedOnOk() (*string, bool) {
 }
 
 // SetCreatedOn sets field value
-func (o *SearchedVersion) SetCreatedOn(v string) {
+func (o *SearchedVersion) SetCreatedOn(v time.Time) {
 	o.CreatedOn = v
 }
 
@@ -170,9 +171,9 @@ func (o *SearchedVersion) SetCreatedBy(v string) {
 }
 
 // GetType returns the Type field value
-func (o *SearchedVersion) GetType() ArtifactType {
+func (o *SearchedVersion) GetType() string {
 	if o == nil {
-		var ret ArtifactType
+		var ret string
 		return ret
 	}
 
@@ -181,7 +182,7 @@ func (o *SearchedVersion) GetType() ArtifactType {
 
 // GetTypeOk returns a tuple with the Type field value
 // and a boolean to check if the value has been set.
-func (o *SearchedVersion) GetTypeOk() (*ArtifactType, bool) {
+func (o *SearchedVersion) GetTypeOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -189,7 +190,7 @@ func (o *SearchedVersion) GetTypeOk() (*ArtifactType, bool) {
 }
 
 // SetType sets field value
-func (o *SearchedVersion) SetType(v ArtifactType) {
+func (o *SearchedVersion) SetType(v string) {
 	o.Type = v
 }
 

@@ -821,10 +821,10 @@ github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainsta
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkainstance v0.0.0-20230227102917-4a6410d5d4c2/go.mod h1:eJWRq/utm2rgeF/CVTeiMdlUAlEoYE5P3/13KAJyaL8=
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230227102917-4a6410d5d4c2 h1:zM+BTqn+NRC6NGSXwey1CqsSQpitJ5eb0bSB276m2CA=
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt v0.0.0-20230227102917-4a6410d5d4c2/go.mod h1:AHZLQfBqzwY+uDWfo577AipCpnFPG4GNXTnXyWeFKD4=
-github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230227102917-4a6410d5d4c2 h1:zBqqP/hYG4aF/0jsYc1cp2nweIm5TfP2nTagzoLkUwI=
-github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230227102917-4a6410d5d4c2/go.mod h1:Pvw6KeJUK9tdvCHkDIoXcWUyjxWc3Nn//Eax2mcbMJ0=
-github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230227102917-4a6410d5d4c2 h1:KG600Cp9m/vI1y37+zMva0KskzmM8v/prWfd2yIaWHk=
-github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230227102917-4a6410d5d4c2/go.mod h1:T20A1WmLYXFpA5QntaAF1B44uj9geAgUbTco0qIX7kY=
+github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230301144502-065a5966657b h1:xPYpWkdPk6B/xg6SgMy+8X0nusik0BPBw/+Ay52WLmA=
+github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance v0.0.0-20230301144502-065a5966657b/go.mod h1:Pvw6KeJUK9tdvCHkDIoXcWUyjxWc3Nn//Eax2mcbMJ0=
+github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230301144502-065a5966657b h1:XojikrF6INRyA6dXG92fX6tVbYhdMZKAPjvLSk6UT8s=
+github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt v0.0.0-20230301144502-065a5966657b/go.mod h1:T20A1WmLYXFpA5QntaAF1B44uj9geAgUbTco0qIX7kY=
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230227102917-4a6410d5d4c2 h1:oLmjjv1oEN2x+k2wkPI0FJoO0w51p3bV1jTwnFcnPjY=
 github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/serviceaccountmgmt v0.0.0-20230227102917-4a6410d5d4c2/go.mod h1:9UjE86bWDvSfAwSAqweZPRNEAjAgI0ZvKYMIoz06qd0=
 github.com/redhat-developer/service-binding-operator v0.9.0 h1:CS+eEtzu/PtWuyvYQFQpZXd6ukSuFtN+U0EKKtTsvlA=

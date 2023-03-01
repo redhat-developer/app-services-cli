@@ -3,7 +3,7 @@
  *
  * Apicurio Registry is a datastore for standard event schemas and API designs. Apicurio Registry enables developers to manage and share the structure of their data using a REST interface. For example, client applications can dynamically push or pull the latest updates to or from the registry without needing to redeploy. Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. For example, this includes rules for content validation and version compatibility.  The Apicurio Registry REST API enables client applications to manage the artifacts in the registry. This API provides create, read, update, and delete operations for schema and API artifacts, rules, versions, and metadata.   The supported artifact types include: - Apache Avro schema - AsyncAPI specification - Google protocol buffers - GraphQL schema - JSON Schema - Kafka Connect schema - OpenAPI specification - Web Services Description Language - XML Schema Definition   **Important**: The Apicurio Registry REST API is available from `https://MY-REGISTRY-URL/apis/registry/v2` by default. Therefore you must prefix all API operation paths with `../apis/registry/v2` in this case. For example: `../apis/registry/v2/ids/globalIds/{globalId}`. 
  *
- * API version: 2.2.5.Final
+ * API version: 2.4.x
  * Contact: apicurio@lists.jboss.org
  */
 
@@ -13,6 +13,7 @@ package registryinstanceclient
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // SystemInfo struct for SystemInfo
@@ -20,7 +21,7 @@ type SystemInfo struct {
 	Name *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Version *string `json:"version,omitempty"`
-	BuiltOn *string `json:"builtOn,omitempty"`
+	BuiltOn *time.Time `json:"builtOn,omitempty"`
 }
 
 // NewSystemInfo instantiates a new SystemInfo object
@@ -137,9 +138,9 @@ func (o *SystemInfo) SetVersion(v string) {
 }
 
 // GetBuiltOn returns the BuiltOn field value if set, zero value otherwise.
-func (o *SystemInfo) GetBuiltOn() string {
+func (o *SystemInfo) GetBuiltOn() time.Time {
 	if o == nil || o.BuiltOn == nil {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.BuiltOn
@@ -147,7 +148,7 @@ func (o *SystemInfo) GetBuiltOn() string {
 
 // GetBuiltOnOk returns a tuple with the BuiltOn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SystemInfo) GetBuiltOnOk() (*string, bool) {
+func (o *SystemInfo) GetBuiltOnOk() (*time.Time, bool) {
 	if o == nil || o.BuiltOn == nil {
 		return nil, false
 	}
@@ -163,8 +164,8 @@ func (o *SystemInfo) HasBuiltOn() bool {
 	return false
 }
 
-// SetBuiltOn gets a reference to the given string and assigns it to the BuiltOn field.
-func (o *SystemInfo) SetBuiltOn(v string) {
+// SetBuiltOn gets a reference to the given time.Time and assigns it to the BuiltOn field.
+func (o *SystemInfo) SetBuiltOn(v time.Time) {
 	o.BuiltOn = &v
 }
 

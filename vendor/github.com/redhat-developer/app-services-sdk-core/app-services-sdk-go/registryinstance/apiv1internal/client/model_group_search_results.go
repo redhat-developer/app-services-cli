@@ -15,124 +15,124 @@ import (
 	"encoding/json"
 )
 
-// ContentCreateRequest struct for ContentCreateRequest
-type ContentCreateRequest struct {
-	// Raw content of the artifact or a valid (and accessible) URL where the content can be found.
-	Content string `json:"content"`
-	// Collection of references to other artifacts.
-	References []ArtifactReference `json:"references"`
+// GroupSearchResults Describes the response received when searching for groups.
+type GroupSearchResults struct {
+	// The groups returned in the result set.
+	Groups []SearchedGroup `json:"groups"`
+	// The total number of groups that matched the query that produced the result set (may be  more than the number of groups in the result set).
+	Count int32 `json:"count"`
 }
 
-// NewContentCreateRequest instantiates a new ContentCreateRequest object
+// NewGroupSearchResults instantiates a new GroupSearchResults object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewContentCreateRequest(content string, references []ArtifactReference) *ContentCreateRequest {
-	this := ContentCreateRequest{}
-	this.Content = content
-	this.References = references
+func NewGroupSearchResults(groups []SearchedGroup, count int32) *GroupSearchResults {
+	this := GroupSearchResults{}
+	this.Groups = groups
+	this.Count = count
 	return &this
 }
 
-// NewContentCreateRequestWithDefaults instantiates a new ContentCreateRequest object
+// NewGroupSearchResultsWithDefaults instantiates a new GroupSearchResults object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewContentCreateRequestWithDefaults() *ContentCreateRequest {
-	this := ContentCreateRequest{}
+func NewGroupSearchResultsWithDefaults() *GroupSearchResults {
+	this := GroupSearchResults{}
 	return &this
 }
 
-// GetContent returns the Content field value
-func (o *ContentCreateRequest) GetContent() string {
+// GetGroups returns the Groups field value
+func (o *GroupSearchResults) GetGroups() []SearchedGroup {
 	if o == nil {
-		var ret string
+		var ret []SearchedGroup
 		return ret
 	}
 
-	return o.Content
+	return o.Groups
 }
 
-// GetContentOk returns a tuple with the Content field value
+// GetGroupsOk returns a tuple with the Groups field value
 // and a boolean to check if the value has been set.
-func (o *ContentCreateRequest) GetContentOk() (*string, bool) {
+func (o *GroupSearchResults) GetGroupsOk() (*[]SearchedGroup, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Content, true
+	return &o.Groups, true
 }
 
-// SetContent sets field value
-func (o *ContentCreateRequest) SetContent(v string) {
-	o.Content = v
+// SetGroups sets field value
+func (o *GroupSearchResults) SetGroups(v []SearchedGroup) {
+	o.Groups = v
 }
 
-// GetReferences returns the References field value
-func (o *ContentCreateRequest) GetReferences() []ArtifactReference {
+// GetCount returns the Count field value
+func (o *GroupSearchResults) GetCount() int32 {
 	if o == nil {
-		var ret []ArtifactReference
+		var ret int32
 		return ret
 	}
 
-	return o.References
+	return o.Count
 }
 
-// GetReferencesOk returns a tuple with the References field value
+// GetCountOk returns a tuple with the Count field value
 // and a boolean to check if the value has been set.
-func (o *ContentCreateRequest) GetReferencesOk() (*[]ArtifactReference, bool) {
+func (o *GroupSearchResults) GetCountOk() (*int32, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.References, true
+	return &o.Count, true
 }
 
-// SetReferences sets field value
-func (o *ContentCreateRequest) SetReferences(v []ArtifactReference) {
-	o.References = v
+// SetCount sets field value
+func (o *GroupSearchResults) SetCount(v int32) {
+	o.Count = v
 }
 
-func (o ContentCreateRequest) MarshalJSON() ([]byte, error) {
+func (o GroupSearchResults) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["content"] = o.Content
+		toSerialize["groups"] = o.Groups
 	}
 	if true {
-		toSerialize["references"] = o.References
+		toSerialize["count"] = o.Count
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableContentCreateRequest struct {
-	value *ContentCreateRequest
+type NullableGroupSearchResults struct {
+	value *GroupSearchResults
 	isSet bool
 }
 
-func (v NullableContentCreateRequest) Get() *ContentCreateRequest {
+func (v NullableGroupSearchResults) Get() *GroupSearchResults {
 	return v.value
 }
 
-func (v *NullableContentCreateRequest) Set(val *ContentCreateRequest) {
+func (v *NullableGroupSearchResults) Set(val *GroupSearchResults) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableContentCreateRequest) IsSet() bool {
+func (v NullableGroupSearchResults) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableContentCreateRequest) Unset() {
+func (v *NullableGroupSearchResults) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableContentCreateRequest(val *ContentCreateRequest) *NullableContentCreateRequest {
-	return &NullableContentCreateRequest{value: val, isSet: true}
+func NewNullableGroupSearchResults(val *GroupSearchResults) *NullableGroupSearchResults {
+	return &NullableGroupSearchResults{value: val, isSet: true}
 }
 
-func (v NullableContentCreateRequest) MarshalJSON() ([]byte, error) {
+func (v NullableGroupSearchResults) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableContentCreateRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableGroupSearchResults) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
