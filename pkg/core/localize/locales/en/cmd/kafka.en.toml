@@ -426,6 +426,9 @@ one = 'all regions in the selected cloud provider are temporarily unavailable'
 [kafka.create.provider.error.noStandardInstancesAvailable]
 one = 'standard instances are unavailable for the cloud provider, try another provider'
 
+[kafka.create.cluster.error.noEnoughCapacity]
+one = 'the cluster you have selected does not have capacity for size {{.Size}}'
+
 [kafka.create.provider.error.noMarketplaceQuota]
 one = 'no marketplace quota available for given provider'
 
