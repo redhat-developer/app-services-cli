@@ -515,29 +515,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Help:    f.Localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	// Get the list of enterprise clusters in the users organization if there are any
-	err := setEnterpriseClusterList(opts)
-	if err != nil {
-		return nil, err
-	}
-
-	// If there are enterprise clusters in the user's organization, prompt them to select one using the interactive prompt for enterprise flow
-	if len(opts.kfmClusterList.Items) > 0 {
-		err = selectEnterpriseOrRHinfraPrompt(opts)
-		if err != nil {
-			return nil, err
-		}
-		if opts.useEnterpriseCluster {
-			err = selectClusterPrompt(opts)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-
 	answers := &promptAnswers{}
 
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
+	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
 		return nil, err
 	}
