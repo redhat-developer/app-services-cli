@@ -55,7 +55,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 	if err != nil {
 		return err
 	}
-	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, createSearchString(opts), len(opts.kfmClusterList.Items))
+	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, CreateSearchString(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
 	}
@@ -68,9 +68,9 @@ func runListClusters(opts *options, f *factory.Factory) error {
 	return nil
 }
 
-func createSearchString(opts *options) string {
+func CreateSearchString(kfmClusterList *kafkamgmtclient.EnterpriseClusterList) string {
 	searchString := ""
-	for idx, kfmcluster := range opts.kfmClusterList.Items {
+	for idx, kfmcluster := range kfmClusterList.Items {
 		if idx > 0 {
 			searchString += " or "
 		}
