@@ -464,6 +464,9 @@ one = 'no marketplace quota found with the specified marketplace provider and ac
 [kafka.create.quota.error.multipleCloudAccounts]
 one = 'multiple cloud accounts found, please specify "--marketplace" and "--marketplace-account-id"'
 
+[kafka.create.provider.error.onlyEnterpriseQuota]
+one = 'there is only quota availble for enterprise, cannot use Red Hat infrastructure'
+
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
 one = "Delete a Kafka instance"
