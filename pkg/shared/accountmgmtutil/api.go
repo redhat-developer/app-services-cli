@@ -8,4 +8,5 @@ const (
 	QuotaStandardType    QuotaType = "standard"
 	QuotaMarketplaceType QuotaType = "marketplace"
 	QuotaEvalType        QuotaType = "eval"
+	QuotaEnterpriseType  QuotaType = "enterprise"
 )
