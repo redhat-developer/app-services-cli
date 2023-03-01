@@ -661,25 +661,17 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			return nil, err
 		}
 
-		sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
+		sizes, err = FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
 		if err != nil {
 			return nil, err
 		}
 
-		if len(sizes) == 1 {
-			answers.Size = sizes[0].GetId()
-		} else {
-			sizeLabels := GetValidKafkaSizesLabels(sizes)
-			planPrompt := &survey.Select{
-				Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
-				Options: sizeLabels,
-			}
-
-			err = survey.AskOne(planPrompt, &answers.Size)
-			if err != nil {
-				return nil, err
-			}
+		index, err := promptUserForSizes(opts.f, &sizes)
+		if err == nil {
+			return nil, err
 		}
+
+		answers.Size = sizes[index].GetId()
 
 		accountIDNullable := kafkamgmtclient.NullableString{}
 		marketplaceProviderNullable := kafkamgmtclient.NullableString{}
