@@ -60,7 +60,6 @@ func runListClusters(opts *options, f *factory.Factory) error {
 
 		return fmt.Errorf("%v, %v", response.Status, err)
 	}
-
 	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, CreateSearchString(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
