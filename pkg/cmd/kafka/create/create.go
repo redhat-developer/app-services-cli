@@ -612,13 +612,13 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			}
 		}
 	}
-	
+
 	marketplaceInfo := accountmgmtutil.MarketplaceInfo{
 		BillingModel:   answers.BillingModel,
 		Provider:       answers.Marketplace,
 		CloudAccountID: answers.MarketplaceAcctID,
 	}
-	
+
 	var sizes []kafkamgmtclient.SupportedKafkaSize
 	payload := &kafkamgmtclient.KafkaRequestPayload{}
 
@@ -653,7 +653,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		selectedSize := sizes[index]
 
 		if selectedSize.GetCapacityConsumed() > cluster.CapacityInformation.RemainingKafkaStreamingUnits {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.cluster.error.noEnoughCapacity", localize.NewEntry("Size", selectedSize.GetId()))
 		}
 
 		answers.Size = selectedSize.GetId()
