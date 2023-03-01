@@ -680,10 +680,12 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
 
 	}
+
 	if opts.useEnterpriseCluster {
 		if len(orgQuota.EnterpriseQuotas) == 0 {
 			return nil, fmt.Errorf("No enterprise quota available")
 		}
+		
 		// casting to nullable string
 		var clusterIdSNS kafkamgmtclient.NullableString
 		clusterIdSNS.Set(opts.selectedCluster.ClusterId)
