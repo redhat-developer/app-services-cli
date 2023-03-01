@@ -3,6 +3,7 @@ package create
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"os"
 	"os/signal"
 	"time"
@@ -66,6 +67,10 @@ type options struct {
 	wait         bool
 	bypassChecks bool
 	dryRun       bool
+
+	kfmClusterList       *kafkamgmtclient.EnterpriseClusterList
+	selectedCluster      *kafkamgmtclient.EnterpriseClusterListItem
+	useEnterpriseCluster bool
 
 	f *factory.Factory
 }
@@ -448,6 +453,47 @@ type promptAnswers struct {
 	Marketplace       string
 }
 
+func setEnterpriseClusterList(opts *options) error {
+	// Get the list of enterprise clusters in the users organization
+	clist, err := kafkautil.ListEnterpriseClusters(opts.f)
+	if err != nil {
+		return err
+	}
+	opts.kfmClusterList = clist
+	return nil
+}
+
+func createPromptSliceFromEnterpriseClusterList(clusterList *kafkamgmtclient.EnterpriseClusterList) []string {
+	clusterListSlice := make([]string, 0)
+	for _, cluster := range clusterList.Items {
+		clusterListSlice = append(clusterListSlice, *cluster.ClusterId)
+	}
+	return clusterListSlice
+}
+
+func selectEnterpriseOrRHinfraPrompt(opts *options) error {
+	listOfOptions := []string{
+		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
+		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.enterprise"),
+	}
+
+	promptForCluster := &survey.Select{
+		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.message"),
+		Help:    opts.f.Localizer.MustLocalize("kafka.create.input.cluster.help"),
+		Options: listOfOptions,
+	}
+
+	var idx int
+	survey.AskOne(promptForCluster, &idx)
+	if idx == 0 {
+		opts.useEnterpriseCluster = false
+	} else {
+		opts.useEnterpriseCluster = true
+	}
+
+	return nil
+}
+
 // Show a prompt to allow the user to interactively insert the data for their Kafka
 // nolint:funlen
 func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (*kafkamgmtclient.KafkaRequestPayload, error) {
@@ -463,9 +509,29 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Help:    f.Localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
+	// Get the list of enterprise clusters in the users organization if there are any
+	err := setEnterpriseClusterList(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	// If there are enterprise clusters in the user's organization, prompt them to select one using the interactive prompt for enterprise flow
+	if len(opts.kfmClusterList.Items) > 0 {
+		err = selectEnterpriseOrRHinfraPrompt(opts)
+		if err != nil {
+			return nil, err
+		}
+		if opts.useEnterpriseCluster {
+			err = selectClusterPrompt(opts)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	answers := &promptAnswers{}
 
-	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
+	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
 		return nil, err
 	}
@@ -632,6 +698,27 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
 
 	return payload, nil
+}
+
+func selectClusterPrompt(opts *options) error {
+	promptForCluster := &survey.Select{
+		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.selectClusterMessage"),
+		Options: createPromptSliceFromEnterpriseClusterList(opts.kfmClusterList),
+	}
+
+	var selectedClusterId string
+	err := survey.AskOne(promptForCluster, &selectedClusterId)
+	if err != nil {
+		return err
+	}
+	//create a map of cluster ids to clusters
+	clusterMap := make(map[string]*kafkamgmtclient.EnterpriseClusterListItem)
+	for _, cluster := range opts.kfmClusterList.Items {
+		clusterMap[*cluster.ClusterId] = &cluster
+
+	}
+	opts.selectedCluster = clusterMap[selectedClusterId]
+	return nil
 }
 
 func printSizeWarningIfNeeded(f *factory.Factory, selectedSize string, sizes []kafkamgmtclient.SupportedKafkaSize) {

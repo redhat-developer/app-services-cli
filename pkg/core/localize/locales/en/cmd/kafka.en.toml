@@ -1180,3 +1180,19 @@ one = 'ID of the Kafka instance owner'
 [kafka.create.flag.clusterId.description]
 description = 'Description for the --cluster-id flag'
 one = 'ID of the Customer-Cloud data plane cluster to create the Kafka instance on.'
+
+[kafka.create.input.cluster.selectClusterMessage]
+one = 'Please select the cluster to provision your Kafka Instance on:'
+
+[kafka.create.input.cluster.message]
+one = 'Would you like to use Red Hat Managed infrastructure or your own OpenShift Cluster to provision your Kakfa instance on:'
+
+[kafka.create.input.cluster.option.enterprise]
+one = 'Bring your own OpenShift Cluster'
+
+[kafka.create.input.cluster.option.rhinfr]
+one = 'Red Hat Managed Infrastructure'
+
+
+[kafka.create.input.cluster.help]
+one = 'Select the cluster to provision your Kafka instance on.'
