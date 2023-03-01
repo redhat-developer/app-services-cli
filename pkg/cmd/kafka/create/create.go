@@ -509,8 +509,15 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Help:    f.Localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
+	answers := &promptAnswers{}
+
+	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
+	if err != nil {
+		return nil, err
+	}
+
 	// Get the list of enterprise clusters in the users organization if there are any
-	err := setEnterpriseClusterList(opts)
+	err = setEnterpriseClusterList(opts)
 	if err != nil {
 		return nil, err
 	}
@@ -529,30 +536,15 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
-	answers := &promptAnswers{}
-
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
-	if err != nil {
-		return nil, err
-	}
-
+	// If the user is not using an enterprise cluster, prompt them to select a cloud provider
 	if !opts.useEnterpriseCluster {
-		cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
-		if err != nil {
-			return nil, err
-		}
-
-		cloudProviderPrompt := &survey.Select{
-			Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
-			Options: cloudProviderNames,
-		}
-
-		err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
+		answers, err = cloudProviderPrompt(opts, f, answers)
 		if err != nil {
 			return nil, err
 		}
 	}
 
+	// getting org quotas
 	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
 	if err != nil {
 		return nil, err
@@ -678,7 +670,8 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			ClusterId:             clusterIdSNS,
 			//	set plan here
 		}
-
+		// enterprise quota spec, kfm will use the default, this should be returned by the `select quota` call
+		payload.SetPlan(mapAmsTypeToBackendType(&orgQuota.EnterpriseQuotas[0]) + "." + answers.Size)
 	} else {
 		userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo, answers.CloudProvider)
 		if err != nil {
@@ -752,6 +745,24 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	}
 	return payload, nil
+}
+
+func cloudProviderPrompt(opts *options, f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
+	cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
+	if err != nil {
+		return nil, err
+	}
+
+	cloudProviderPrompt := &survey.Select{
+		Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
+		Options: cloudProviderNames,
+	}
+
+	err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
+	if err != nil {
+		return nil, err
+	}
+	return answers, nil
 }
 
 func selectClusterPrompt(opts *options) error {
