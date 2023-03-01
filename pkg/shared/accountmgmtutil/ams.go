@@ -57,6 +57,7 @@ type OrgQuotas struct {
 	MarketplaceQuotas []QuotaSpec
 	TrialQuotas       []QuotaSpec
 	EvalQuotas        []QuotaSpec
+	EnterpriseQuotas  []QuotaSpec
 }
 
 func fetchOrgQuotaCost(ctx context.Context, conn connection.Connection) (*amsclient.QuotaCostList, error) {
@@ -87,7 +88,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 		return nil, err
 	}
 
-	var standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas []QuotaSpec
+	var standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas, enterpriseQuotas []QuotaSpec
 	for _, quota := range quotaCostGet.GetItems() {
 		quotaResources := quota.GetRelatedResources()
 		for i := range quotaResources {
@@ -106,12 +107,17 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 				case "RHOSAKEval":
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
+				//	this isn't working as it should be as the product is hardcoded here
+				case "RHOSAKCC":
+					//case spec.EnterpriseProductQuotaID:
+					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
+					enterpriseQuotas = append(enterpriseQuotas, QuotaSpec{QuotaEnterpriseType, remainingQuota, quotaResource.BillingModel, nil})
 				}
 			}
 		}
 	}
 
-	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas}
+	availableOrgQuotas := &OrgQuotas{standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas, enterpriseQuotas}
 
 	return availableOrgQuotas, nil
 }

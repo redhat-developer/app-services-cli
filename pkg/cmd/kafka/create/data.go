@@ -84,6 +84,10 @@ func FetchSupportedBillingModels(userQuotas *accountmgmtutil.OrgQuotas, provider
 		}
 	}
 
+	if len(userQuotas.EnterpriseQuotas) > 0 {
+		billingModels = append(billingModels, accountmgmtutil.QuotaEnterpriseType)
+	}
+
 	return billingModels
 }
 

@@ -536,19 +536,21 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
-	cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
-	if err != nil {
-		return nil, err
-	}
+	if !opts.useEnterpriseCluster {
+		cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
+		if err != nil {
+			return nil, err
+		}
 
-	cloudProviderPrompt := &survey.Select{
-		Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
-		Options: cloudProviderNames,
-	}
+		cloudProviderPrompt := &survey.Select{
+			Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
+			Options: cloudProviderNames,
+		}
 
-	err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
-	if err != nil {
-		return nil, err
+		err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
@@ -617,86 +619,109 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		CloudAccountID: answers.MarketplaceAcctID,
 	}
 
-	userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo, answers.CloudProvider)
-	if err != nil {
-		return nil, err
-	}
-
-	userQuotaJSON, marshalErr := json.MarshalIndent(userQuota, "", "  ")
-	if marshalErr != nil {
-		f.Logger.Debug(marshalErr)
-	} else {
-		f.Logger.Debug("Selected Quota object:")
-		f.Logger.Debug(string(userQuotaJSON))
-	}
-
-	regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuota)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(regionIDs) == 0 {
-		return nil, f.Localizer.MustLocalizeError("kafka.create.error.noRegionSupported")
-	}
-
-	regionPrompt := &survey.Select{
-		Message: f.Localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
-		Options: regionIDs,
-		Help:    f.Localizer.MustLocalize("kafka.create.input.cloudRegion.help"),
-	}
-
-	err = survey.AskOne(regionPrompt, &answers.Region)
-	if err != nil {
-		return nil, err
-	}
-
-	sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(sizes) == 1 {
-		answers.Size = sizes[0].GetId()
-	} else {
-		sizeLabels := GetValidKafkaSizesLabels(sizes)
-		planPrompt := &survey.Select{
-			Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
-			Options: sizeLabels,
-		}
-
-		err = survey.AskOne(planPrompt, &answers.Size)
+	payload := &kafkamgmtclient.KafkaRequestPayload{}
+	if !opts.useEnterpriseCluster {
+		userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo, answers.CloudProvider)
 		if err != nil {
 			return nil, err
 		}
+		userQuotaJSON, marshalErr := json.MarshalIndent(userQuota, "", "  ")
+		if marshalErr != nil {
+			f.Logger.Debug(marshalErr)
+		} else {
+			f.Logger.Debug("Selected Quota object:")
+			f.Logger.Debug(string(userQuotaJSON))
+		}
+
+		regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuota)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(regionIDs) == 0 {
+			return nil, f.Localizer.MustLocalizeError("kafka.create.error.noRegionSupported")
+		}
+
+		regionPrompt := &survey.Select{
+			Message: f.Localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
+			Options: regionIDs,
+			Help:    f.Localizer.MustLocalize("kafka.create.input.cloudRegion.help"),
+		}
+
+		err = survey.AskOne(regionPrompt, &answers.Region)
+		if err != nil {
+			return nil, err
+		}
+
+		sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(sizes) == 1 {
+			answers.Size = sizes[0].GetId()
+		} else {
+			sizeLabels := GetValidKafkaSizesLabels(sizes)
+			planPrompt := &survey.Select{
+				Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
+				Options: sizeLabels,
+			}
+
+			err = survey.AskOne(planPrompt, &answers.Size)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		accountIDNullable := kafkamgmtclient.NullableString{}
+		marketplaceProviderNullable := kafkamgmtclient.NullableString{}
+		billingNullable := kafkamgmtclient.NullableString{}
+
+		if answers.BillingModel != "" {
+			billingNullable.Set(&answers.BillingModel)
+		}
+
+		if answers.Marketplace != "" {
+			marketplaceProviderNullable.Set(&answers.Marketplace)
+		}
+
+		if answers.MarketplaceAcctID != "" {
+			accountIDNullable.Set(&answers.MarketplaceAcctID)
+		}
+		payload = &kafkamgmtclient.KafkaRequestPayload{
+			Name:                  answers.Name,
+			Region:                &answers.Region,
+			CloudProvider:         &answers.CloudProvider,
+			BillingModel:          billingNullable,
+			BillingCloudAccountId: accountIDNullable,
+			Marketplace:           marketplaceProviderNullable,
+		}
+		printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
+		payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
+
 	}
+	if opts.useEnterpriseCluster {
+		if len(orgQuota.EnterpriseQuotas) == 0 {
+			return nil, fmt.Errorf("No enterprise quota available")
+		}
+		// casting to nullable string
+		var clusterIdSNS kafkamgmtclient.NullableString
+		clusterIdSNS.Set(opts.selectedCluster.ClusterId)
 
-	accountIDNullable := kafkamgmtclient.NullableString{}
-	marketplaceProviderNullable := kafkamgmtclient.NullableString{}
-	billingNullable := kafkamgmtclient.NullableString{}
+		var billingModelEnterprise kafkamgmtclient.NullableString
+		var enterprise = "enterprise"
+		billingModelEnterprise.Set(&enterprise)
 
-	if answers.BillingModel != "" {
-		billingNullable.Set(&answers.BillingModel)
+		var nullString kafkamgmtclient.NullableString
+		payload = &kafkamgmtclient.KafkaRequestPayload{
+			Name:                  answers.Name,
+			BillingModel:          billingModelEnterprise,
+			BillingCloudAccountId: nullString,
+			Marketplace:           nullString,
+			ClusterId:             clusterIdSNS,
+			//	set plan here
+		}
 	}
-
-	if answers.Marketplace != "" {
-		marketplaceProviderNullable.Set(&answers.Marketplace)
-	}
-
-	if answers.MarketplaceAcctID != "" {
-		accountIDNullable.Set(&answers.MarketplaceAcctID)
-	}
-
-	payload := &kafkamgmtclient.KafkaRequestPayload{
-		Name:                  answers.Name,
-		Region:                &answers.Region,
-		CloudProvider:         &answers.CloudProvider,
-		BillingModel:          billingNullable,
-		BillingCloudAccountId: accountIDNullable,
-		Marketplace:           marketplaceProviderNullable,
-	}
-	printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
-	payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
-
 	return payload, nil
 }
 
@@ -706,18 +731,13 @@ func selectClusterPrompt(opts *options) error {
 		Options: createPromptSliceFromEnterpriseClusterList(opts.kfmClusterList),
 	}
 
-	var selectedClusterId string
-	err := survey.AskOne(promptForCluster, &selectedClusterId)
+	var index int
+	err := survey.AskOne(promptForCluster, &index)
 	if err != nil {
 		return err
 	}
-	//create a map of cluster ids to clusters
-	clusterMap := make(map[string]*kafkamgmtclient.EnterpriseClusterListItem)
-	for _, cluster := range opts.kfmClusterList.Items {
-		clusterMap[*cluster.ClusterId] = &cluster
 
-	}
-	opts.selectedCluster = clusterMap[selectedClusterId]
+	opts.selectedCluster = &opts.kfmClusterList.GetItems()[index]
 	return nil
 }
 
