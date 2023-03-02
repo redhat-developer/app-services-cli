@@ -608,19 +608,21 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 		sizes = supportedKafkaTypes[0].Sizes
 
-		index, err := promptUserForSizes(opts.f, &sizes)
-		if err != nil {
-			return nil, err
+		if opts.size == "" {
+			index, err := promptUserForSizes(opts.f, &sizes)
+			if err != nil {
+				return nil, err
+			}
+
+			selectedSize := sizes[index]
+
+			if selectedSize.GetCapacityConsumed() > cluster.CapacityInformation.RemainingKafkaStreamingUnits {
+				return nil, opts.f.Localizer.MustLocalizeError("kafka.create.cluster.error.noEnoughCapacity", localize.NewEntry("Size", selectedSize.GetId()))
+			}
+
+			answers.Size = selectedSize.GetId()
+
 		}
-
-		selectedSize := sizes[index]
-
-		if selectedSize.GetCapacityConsumed() > cluster.CapacityInformation.RemainingKafkaStreamingUnits {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.cluster.error.noEnoughCapacity", localize.NewEntry("Size", selectedSize.GetId()))
-		}
-
-		answers.Size = selectedSize.GetId()
-
 		if len(orgQuota.EnterpriseQuotas) == 0 {
 			return nil, fmt.Errorf("No enterprise quota available")
 		}

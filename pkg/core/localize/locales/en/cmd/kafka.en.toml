@@ -342,7 +342,7 @@ description = 'Input title for Cloud Region'
 one = "Cloud Region:"
 
 [kafka.create.input.plan.message]
-one = 'Instance type:'
+one = 'Instance size:'
 
 [kafka.create.input.marketPlace.message]
 one = 'Select a marketplace:'
@@ -1188,14 +1188,13 @@ one = 'ID of the Customer-Cloud data plane cluster to create the Kafka instance 
 one = 'Please select the cluster to provision your Kafka Instance on:'
 
 [kafka.create.input.cluster.message]
-one = 'Would you like to use Red Hat Managed infrastructure or your own OpenShift Cluster to provision your Kakfa instance on:'
+one = 'Would you like to use Red Hat Managed OpenShift clusters or your own OpenShift Cluster to provision your Kakfa instance on:'
 
 [kafka.create.input.cluster.option.enterprise]
-one = 'Bring your own OpenShift Cluster'
+one = 'Bring your own OpenShift Cluster for your Kafka Instances'
 
 [kafka.create.input.cluster.option.rhinfr]
-one = 'Red Hat Managed Infrastructure'
-
+one = 'Red Hat Managed OpenShift Cluster for your Kafka Instances'
 
 [kafka.create.input.cluster.help]
 one = 'Select the cluster to provision your Kafka instance on.'
