@@ -107,7 +107,9 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 				case "RHOSAKEval":
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
-				case spec.EnterpriseProductQuotaID:
+					// this needs to be reflected upstream to work
+					//case spec.EnterpriseProductQuotaID:
+				case "RHOSAKCC":
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					enterpriseQuotas = append(enterpriseQuotas, QuotaSpec{QuotaEnterpriseType, remainingQuota, quotaResource.BillingModel, nil})
 				}
