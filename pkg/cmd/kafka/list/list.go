@@ -37,10 +37,12 @@ type kafkaRow struct {
 }
 
 type options struct {
-	outputFormat string
-	page         int
-	limit        int
-	search       string
+	outputFormat            string
+	page                    int
+	limit                   int
+	search                  string
+	accessToken             string
+	clusterManagementApiUrl string
 
 	f *factory.Factory
 }
@@ -83,6 +85,11 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.f.Localizer.MustLocalize("kafka.list.flag.page"))
 	flags.IntVar(&opts.limit, "limit", 100, opts.f.Localizer.MustLocalize("kafka.list.flag.limit"))
 	flags.StringVar(&opts.search, "search", "", opts.f.Localizer.MustLocalize("kafka.list.flag.search"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
+
+	_ = flags.MarkHidden("cluster-mgmt-api-url")
+	_ = flags.MarkHidden("access-token")
 
 	return cmd
 }
@@ -181,10 +188,11 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 }
 
 func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequest) (map[string]*v1.Cluster, error) {
-	kafkaClusterIds := make([]string, len(kafkas))
+	// map[string]struct{} is used remove duplicated ids from being added to the request
+	kafkaClusterIds := make(map[string]struct{}, len(kafkas))
 	for _, kafka := range kafkas {
 		if kafka.GetClusterId() != "" {
-			kafkaClusterIds = append(kafkaClusterIds, kafka.GetClusterId())
+			kafkaClusterIds[kafka.GetClusterId()] = struct{}{}
 		}
 	}
 
@@ -193,7 +201,7 @@ func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequ
 	// if no kafkas have a cluster id assigned then we can skip the call to get
 	// the clusters as we dont need their info
 	if len(kafkaClusterIds) > 0 {
-		clusterList, err := clustermgmt.GetClusterListByIds(opts.f, "", "", createSearchString(kafkaClusterIds), 100)
+		clusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, createSearchString(&kafkaClusterIds), len(kafkaClusterIds))
 		if err != nil {
 			return nil, err
 		}
@@ -206,13 +214,15 @@ func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequ
 	return idToCluster, nil
 }
 
-func createSearchString(idList []string) string {
+func createSearchString(idSet *map[string]struct{}) string {
 	searchString := ""
-	for index, id := range idList {
+	index := 0
+	for id := range *idSet {
 		if index > 0 {
 			searchString += " or "
 		}
 		searchString += fmt.Sprintf("id = '%s'", id)
+		index += 1
 	}
 	return searchString
 }
