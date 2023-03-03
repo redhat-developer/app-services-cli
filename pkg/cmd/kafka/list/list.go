@@ -1,8 +1,8 @@
 package list
 
 import (
-	"context"
 	"fmt"
+	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"strconv"
 
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -12,12 +12,11 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
-	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
-	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/contextutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+
+	clustermgmt "github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 
@@ -43,33 +42,23 @@ type options struct {
 	limit        int
 	search       string
 
-	IO             *iostreams.IOStreams
-	Connection     factory.ConnectionFunc
-	Logger         logging.Logger
-	localizer      localize.Localizer
-	Context        context.Context
-	ServiceContext servicecontext.IContext
+	f *factory.Factory
 }
 
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		page:           0,
-		limit:          100,
-		search:         "",
-		Connection:     f.Connection,
-		Logger:         f.Logger,
-		IO:             f.IOStreams,
-		localizer:      f.Localizer,
-		Context:        f.Context,
-		ServiceContext: f.ServiceContext,
+		page:   0,
+		limit:  100,
+		search: "",
+		f:      f,
 	}
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   opts.localizer.MustLocalize("kafka.list.cmd.shortDescription"),
-		Long:    opts.localizer.MustLocalize("kafka.list.cmd.longDescription"),
-		Example: opts.localizer.MustLocalize("kafka.list.cmd.example"),
+		Short:   opts.f.Localizer.MustLocalize("kafka.list.cmd.shortDescription"),
+		Long:    opts.f.Localizer.MustLocalize("kafka.list.cmd.longDescription"),
+		Example: opts.f.Localizer.MustLocalize("kafka.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
@@ -77,7 +66,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			validator := &kafkacmdutil.Validator{
-				Localizer: opts.localizer,
+				Localizer: opts.f.Localizer,
 			}
 
 			if err := validator.ValidateSearchInput(opts.search); err != nil {
@@ -88,31 +77,31 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	flags := kafkaFlagutil.NewFlagSet(cmd, opts.localizer)
+	flags := kafkaFlagutil.NewFlagSet(cmd, opts.f.Localizer)
 
 	flags.AddOutput(&opts.outputFormat)
-	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.localizer.MustLocalize("kafka.list.flag.page"))
-	flags.IntVar(&opts.limit, "limit", 100, opts.localizer.MustLocalize("kafka.list.flag.limit"))
-	flags.StringVar(&opts.search, "search", "", opts.localizer.MustLocalize("kafka.list.flag.search"))
+	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.f.Localizer.MustLocalize("kafka.list.flag.page"))
+	flags.IntVar(&opts.limit, "limit", 100, opts.f.Localizer.MustLocalize("kafka.list.flag.limit"))
+	flags.StringVar(&opts.search, "search", "", opts.f.Localizer.MustLocalize("kafka.list.flag.search"))
 
 	return cmd
 }
 
 func runList(opts *options) error {
-	conn, err := opts.Connection()
+	conn, err := opts.f.Connection()
 	if err != nil {
 		return err
 	}
 
 	api := conn.API()
 
-	a := api.KafkaMgmt().GetKafkas(opts.Context)
+	a := api.KafkaMgmt().GetKafkas(opts.f.Context)
 	a = a.Page(strconv.Itoa(opts.page))
 	a = a.Size(strconv.Itoa(opts.limit))
 
 	if opts.search != "" {
 		query := buildQuery(opts.search)
-		opts.Logger.Debug(opts.localizer.MustLocalize("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
+		opts.f.Logger.Debug(opts.f.Localizer.MustLocalize("kafka.list.log.debug.filteringKafkaList", localize.NewEntry("Search", query)))
 		a = a.Search(query)
 	}
 
@@ -122,37 +111,42 @@ func runList(opts *options) error {
 	}
 
 	if response.Size == 0 && opts.outputFormat == "" {
-		opts.Logger.Info(opts.localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.common.log.info.noKafkaInstances"))
 		return nil
+	}
+
+	clusterIdMap, err := getClusterIdMapFromKafkas(opts, response.GetItems())
+	if err != nil {
+		return err
 	}
 
 	switch opts.outputFormat {
 	case dump.EmptyFormat:
 		var rows []kafkaRow
-		svcContext, err := opts.ServiceContext.Load()
+		svcContext, err := opts.f.ServiceContext.Load()
 		if err != nil {
 			return err
 		}
 
-		currCtx, err := contextutil.GetCurrentContext(svcContext, opts.localizer)
+		currCtx, err := contextutil.GetCurrentContext(svcContext, opts.f.Localizer)
 		if err != nil {
 			return err
 		}
 
 		if currCtx.KafkaID != "" {
-			rows = mapResponseItemsToRows(response.GetItems(), currCtx.KafkaID)
+			rows = mapResponseItemsToRows(response.GetItems(), currCtx.KafkaID, &clusterIdMap)
 		} else {
-			rows = mapResponseItemsToRows(response.GetItems(), "-")
+			rows = mapResponseItemsToRows(response.GetItems(), "-", &clusterIdMap)
 		}
-		dump.Table(opts.IO.Out, rows)
-		opts.Logger.Info("")
+		dump.Table(opts.f.IOStreams.Out, rows)
+		opts.f.Logger.Info("")
 	default:
-		return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+		return dump.Formatted(opts.f.IOStreams.Out, opts.outputFormat, response)
 	}
 	return nil
 }
 
-func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string) []kafkaRow {
+func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string, clusterIdMap *map[string]*v1.Cluster) []kafkaRow {
 	rows := make([]kafkaRow, len(kafkas))
 
 	for i := range kafkas {
@@ -164,7 +158,8 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 
 		var customerCloud string
 		if id, ok := k.GetClusterIdOk(); ok {
-			customerCloud = *id
+			cluster := (*clusterIdMap)[*id]
+			customerCloud = fmt.Sprintf("%v (%v)", cluster.Name(), cluster.ID())
 		} else {
 			customerCloud = "Red Hat Infrastructure"
 		}
@@ -183,6 +178,43 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 	}
 
 	return rows
+}
+
+func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequest) (map[string]*v1.Cluster, error) {
+	kafkaClusterIds := make([]string, len(kafkas))
+	for _, kafka := range kafkas {
+		if kafka.GetClusterId() != "" {
+			kafkaClusterIds = append(kafkaClusterIds, kafka.GetClusterId())
+		}
+	}
+
+	idToCluster := make(map[string]*v1.Cluster)
+
+	// if no kafkas have a cluster id assigned then we can skip the call to get
+	// the clusters as we dont need their info
+	if len(kafkaClusterIds) > 0 {
+		clusterList, err := clustermgmt.GetClusterListByIds(opts.f, "", "", createSearchString(kafkaClusterIds), 100)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, cluster := range clusterList.Slice() {
+			idToCluster[cluster.ID()] = cluster
+		}
+	}
+
+	return idToCluster, nil
+}
+
+func createSearchString(idList []string) string {
+	searchString := ""
+	for index, id := range idList {
+		if index > 0 {
+			searchString += " or "
+		}
+		searchString += fmt.Sprintf("id = '%s'", id)
+	}
+	return searchString
 }
 
 func buildQuery(search string) string {
