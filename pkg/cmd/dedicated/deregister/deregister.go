@@ -94,6 +94,8 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 		return err
 	}
 
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.warning"))
+
 	err = deleteKafkasPrompt(opts, &kafkas)
 	if err != nil {
 		return err
@@ -215,14 +217,13 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 					checkIfDeletedCallbacks = append(checkIfDeletedCallbacks[:i], checkIfDeletedCallbacks[i+1:]...)
 					break
 				} else {
-					return fmt.Errorf(fmt.Sprintf("Bad response when polling for delting kafka, %v", response.Status))
+					return fmt.Errorf(fmt.Sprintf("%v, %v", opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.failed"), response.Status))
 				}
 			}
-
 			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.message", localize.NewEntry("Name", kafka.GetName())))
-
 		}
 
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.progress"))
 		time.Sleep(5 * time.Second)
 	}
 
