@@ -144,7 +144,8 @@ func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
 	a := api.KafkaMgmt().GetKafkas(opts.f.Context).Search(fmt.Sprintf("cluster_id = %v", opts.selectedCluster.ID()))
 
 	// deal with response errors at some point
-	kafkaList, _, err := a.Execute()
+	kafkaList, httpresponse, err := a.Execute()
+	opts.f.Logger.Debug("HTTP Response", httpresponse)
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +246,6 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 }
 
 func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*clustersmgmtv1.Cluster) error {
-	// TO-DO handle in case of empty cluster list, must be cleared up with UX etc.
 	clusterStringList := make([]string, 0)
 	for _, cluster := range *clusterList {
 		clusterStringList = append(clusterStringList, cluster.Name())
