@@ -19,26 +19,20 @@ import (
 )
 
 type options struct {
-	selectedClusterId             string
-	clusterManagementApiUrl       string
-	accessToken                   string
-	selectedCluster               *clustersmgmtv1.Cluster
-	existingMachinePoolList       []clustersmgmtv1.MachinePool
-	selectedClusterMachinePool    clustersmgmtv1.MachinePool
-	requestedMachinePoolNodeCount int
-	accessKafkasViaPrivateNetwork bool
+	selectedClusterId       string
+	clusterManagementApiUrl string
+	accessToken             string
+	selectedCluster         *clustersmgmtv1.Cluster
 
 	f *factory.Factory
 }
 
 // list of consts should come from KFM
 const (
-	clusterReadyState      = "ready"
-	fleetshardAddonId      = "kas-fleetshard-operator"
-	strimziAddonId         = "managed-kafka"
-	fleetshardAddonIdQE    = "kas-fleetshard-operator-qe"
-	strimziAddonIdQE       = "managed-kafka-qe"
-	billingModelEnterprise = "enterprise"
+	fleetshardAddonId   = "kas-fleetshard-operator"
+	strimziAddonId      = "managed-kafka"
+	fleetshardAddonIdQE = "kas-fleetshard-operator-qe"
+	strimziAddonIdQE    = "managed-kafka-qe"
 )
 
 func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
