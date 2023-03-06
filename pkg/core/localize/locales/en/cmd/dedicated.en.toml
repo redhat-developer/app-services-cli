@@ -28,6 +28,9 @@ one = 'The ID of the OpenShift cluster to deregister.'
 [dedicated.deregisterCluster.run.noClusterFound]
 one = 'No valid OpenShift clusters found.'
 
+[dedicated.deregisterCluster.noClusterFoundFromIdFlag]
+one = 'The cluster ID you have given "{{.ID}}" is not associated with a cluster'
+
 [dedicated.deregisterCluster.deletingKafka.message]
 one = 'The kafka "{{.Name}}" is still deleting'
 
