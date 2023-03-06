@@ -4,8 +4,8 @@ Deregister an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka
 
 ### Synopsis
 
-Removes the ability to provision your own kafkas on a cluster, this command will deregister your 
-cluster with Red Hat Streams for Apache Kafka.
+Removes the ability to provision your own Kafka instances on a cluster, this command will deregister your 
+Hybrid cluster with Red Hat OpenShift Streams for Apache Kafka.
 
 
 ```
@@ -40,5 +40,5 @@ rhoas cluster deregister-cluster --cluster-id 1234-5678-90ab-cdef
 
 ### SEE ALSO
 
-* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your OpenShift clusters which host your kafkas.
+* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your Hybrid OpenShift clusters which host your Kafka instances.
 
