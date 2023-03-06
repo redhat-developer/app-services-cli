@@ -2,10 +2,22 @@ package kafkautil
 
 import (
 	"context"
+	"fmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"net/http"
 )
+
+func CreateClusterSearchStringFromKafkaList(kfmClusterList *kafkamgmtclient.EnterpriseClusterList) string {
+	searchString := ""
+	for idx, kfmcluster := range kfmClusterList.Items {
+		if idx > 0 {
+			searchString += " or "
+		}
+		searchString += fmt.Sprintf("id = '%s'", kfmcluster.Id)
+	}
+	return searchString
+}
 
 func ListEnterpriseClusters(f *factory.Factory) (*kafkamgmtclient.EnterpriseClusterList, *http.Response, error) {
 	conn, err := f.Connection()
