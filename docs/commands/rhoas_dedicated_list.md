@@ -5,7 +5,7 @@ List all OpenShift clusters registered with Red Hat OpenShift Streams for Apache
 ### Synopsis
 
 Red Hat OpenShift Streams for Apache Kafka allows you to use your own OpenShift clusters to provision your
-kafkas. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka.
+Kafka instances. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka.
 
 
 ```
@@ -29,5 +29,5 @@ rhoas dedicated list
 
 ### SEE ALSO
 
-* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your OpenShift clusters which host your kafkas.
+* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your Hybrid OpenShift clusters which host your Kafka instances.
 
