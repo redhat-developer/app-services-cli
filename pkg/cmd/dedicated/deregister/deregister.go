@@ -14,7 +14,6 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -59,7 +58,7 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	return cmd
 }
 
-func runDeRegisterClusterCmd(opts *options) (err error) {
+func runDeRegisterClusterCmd(opts *options) error {
 	clusterList, err := getListOfClusters(opts)
 	if err != nil {
 		return err
@@ -69,7 +68,6 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 		return opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.run.noClusterFound")
 	}
 
-	// TO-DO if client has supplied a cluster id, validate it and set it as the selected cluster without listing getting all clusters
 	if opts.selectedClusterId == "" {
 		err = runClusterSelectionInteractivePrompt(opts, &clusterList)
 		if err != nil {
@@ -81,6 +79,10 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 			if cluster.ID() == opts.selectedClusterId {
 				opts.selectedCluster = cluster
 			}
+		}
+
+		if opts.selectedCluster == nil {
+			return opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.noClusterFoundFromIdFlag", localize.NewEntry("ID", opts.selectedClusterId))
 		}
 	}
 
@@ -139,8 +141,7 @@ func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
 
 	api := conn.API()
 
-	// pagination is cringe
-	a := api.KafkaMgmt().GetKafkas(opts.f.Context).Page(strconv.Itoa(1)).Size(strconv.Itoa(99)).Search(fmt.Sprintf("cluster_id = %v", opts.selectedCluster.ID()))
+	a := api.KafkaMgmt().GetKafkas(opts.f.Context).Search(fmt.Sprintf("cluster_id = %v", opts.selectedCluster.ID()))
 
 	// deal with response errors at some point
 	kafkaList, _, err := a.Execute()
@@ -151,24 +152,38 @@ func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
 	return kafkaList.Items, nil
 }
 
-func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) error {
+func runKafkaNameConfirmPrompt(opts *options, kafka *kafkamgmtclient.KafkaRequest) error {
+	promptConfirmName := &survey.Input{
+		Message: opts.f.Localizer.MustLocalize("kafka.delete.input.confirmName.message", localize.NewEntry("Name", kafka.GetName())),
+	}
 
-	checkIfDeletedCallbacks := make([]func() (*kafkamgmtclient.KafkaRequest, *http.Response, error), 0)
-
-	for _, kafka := range *kafkas {
-		promptConfirmName := &survey.Input{
-			Message: opts.f.Localizer.MustLocalize("kafka.delete.input.confirmName.message", localize.NewEntry("Name", kafka.GetName())),
-		}
-
+	for true {
 		var confirmedKafkaName string
+
 		err := survey.AskOne(promptConfirmName, &confirmedKafkaName)
 		if err != nil {
 			return err
 		}
 
-		if confirmedKafkaName != kafka.GetName() {
-			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
+		if confirmedKafkaName == kafka.GetName() {
 			return nil
+		} else {
+			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
+		}
+	}
+
+	return nil
+}
+
+func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) error {
+
+	checkIfDeletedCallbacks := make([]func() (*kafkamgmtclient.KafkaRequest, *http.Response, error), 0)
+
+	for _, kafka := range *kafkas {
+
+		err := runKafkaNameConfirmPrompt(opts, &kafka)
+		if err != nil {
+			return err
 		}
 
 		conn, err := opts.f.Connection()
