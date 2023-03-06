@@ -107,9 +107,6 @@ terraforming your cluster for use with your Kafkas.
 [dedicated.deregisterCluster.kafka.delete.warning]
 one = 'To deregister a cluster all kafkas must be deleted'
 
-[dedicated.deregisterCluster.kafka.delete.progress]
-one = 'Kafkas are still deleting'
-
 [dedicated.deregisterCluster.kafka.delete.failed]
 one = 'There was an unexpected error when deleting the kafka'
 

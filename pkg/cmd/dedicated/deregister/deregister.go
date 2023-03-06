@@ -7,8 +7,10 @@ import (
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	ocmUtils "github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"net/http"
@@ -20,7 +22,7 @@ type options struct {
 	selectedClusterId             string
 	clusterManagementApiUrl       string
 	accessToken                   string
-	selectedCluster               clustersmgmtv1.Cluster
+	selectedCluster               *clustersmgmtv1.Cluster
 	existingMachinePoolList       []clustersmgmtv1.MachinePool
 	selectedClusterMachinePool    clustersmgmtv1.MachinePool
 	requestedMachinePoolNodeCount int
@@ -64,7 +66,6 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runDeRegisterClusterCmd(opts *options) (err error) {
-	// Set the base URL for the cluster management API
 	clusterList, err := getListOfClusters(opts)
 	if err != nil {
 		return err
@@ -107,7 +108,7 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 	}
 
 	addonIdsToDelete := []string{fleetshardAddonIdQE, fleetshardAddonId, strimziAddonId, strimziAddonIdQE}
-	err = ocmUtils.RemoveAddonsFromCluster(opts.f, opts.clusterManagementApiUrl, opts.accessToken, &opts.selectedCluster, addonIdsToDelete)
+	err = ocmUtils.RemoveAddonsFromCluster(opts.f, opts.clusterManagementApiUrl, opts.accessToken, opts.selectedCluster, addonIdsToDelete)
 	if err != nil {
 		return err
 	}
@@ -115,20 +116,24 @@ func runDeRegisterClusterCmd(opts *options) (err error) {
 	return nil
 }
 
-func getListOfClusters(opts *options) ([]clustersmgmtv1.Cluster, error) {
-	clusters, err := ocmUtils.GetClusterList(opts.f, opts.accessToken, opts.clusterManagementApiUrl, 1, 99)
+func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
+	kfmClusterList, err := kafkautil.ListEnterpriseClusters(opts.f)
 	if err != nil {
 		return nil, err
 	}
 
-	var list []clustersmgmtv1.Cluster
-	for _, cluster := range clusters.Slice() {
-		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-			list = append(list, *cluster)
-		}
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
+	if err != nil {
+		return nil, err
 	}
 
-	return list, nil
+	// this currently means there is no clusters based on the search we did, IMO
+	// this should not be null and should be an empty list
+	if ocmClusterList == nil {
+		return make([]*clustersmgmtv1.Cluster, 0), nil
+	}
+
+	return ocmClusterList.Slice(), nil
 }
 
 func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
@@ -223,7 +228,6 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.message", localize.NewEntry("Name", kafka.GetName())))
 		}
 
-		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.progress"))
 		time.Sleep(5 * time.Second)
 	}
 
@@ -231,7 +235,7 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 	return nil
 }
 
-func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]clustersmgmtv1.Cluster) error {
+func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*clustersmgmtv1.Cluster) error {
 	// TO-DO handle in case of empty cluster list, must be cleared up with UX etc.
 	clusterStringList := make([]string, 0)
 	for _, cluster := range *clusterList {

@@ -1,13 +1,11 @@
 package listclusters
 
 import (
-	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
-
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 )
@@ -55,7 +53,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 	if err != nil {
 		return err
 	}
-	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, CreateSearchString(opts.kfmClusterList), len(opts.kfmClusterList.Items))
+	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
 	}
@@ -66,17 +64,6 @@ func runListClusters(opts *options, f *factory.Factory) error {
 	opts.registeredClusters = kfmListToClusterRowList(opts)
 	displayRegisteredClusters(opts)
 	return nil
-}
-
-func CreateSearchString(kfmClusterList *kafkamgmtclient.EnterpriseClusterList) string {
-	searchString := ""
-	for idx, kfmcluster := range kfmClusterList.Items {
-		if idx > 0 {
-			searchString += " or "
-		}
-		searchString += fmt.Sprintf("id = '%s'", kfmcluster.Id)
-	}
-	return searchString
 }
 
 func kfmListToClusterRowList(opts *options) []clusterRow {
