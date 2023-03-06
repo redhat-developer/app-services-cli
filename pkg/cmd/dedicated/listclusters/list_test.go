@@ -3,6 +3,7 @@ package listclusters
 import (
 	"testing"
 
+	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 )
 
@@ -58,7 +59,7 @@ func TestCreateSearchString(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// Call the function
-			actual := CreateSearchString(tc.opts.kfmClusterList)
+			actual := kafkautil.CreateClusterSearchStringFromKafkaList(tc.opts.kfmClusterList)
 
 			// Compare the result with the expected value
 			if actual != tc.expected {

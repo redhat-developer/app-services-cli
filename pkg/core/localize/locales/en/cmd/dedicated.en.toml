@@ -143,7 +143,7 @@ one = '''
 rhoas dedicated list
 '''
 
-[dedicated.list.cmd.errorNoRegisteredClusters]
+[dedicated.list.error.noRegisteredClustersFound]
 one = 'No registered OpenShift clusters found.'
 
 [dedicated.list.error.permissionDenied]
