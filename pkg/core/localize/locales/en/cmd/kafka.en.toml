@@ -659,6 +659,9 @@ one = 'Text search to filter the Kafka instances by name, owner, cloud_provider,
 description = 'Debug message when filtering the list of Kafka instances'
 one = 'Filtering Kafka instances with the query "{{.Search}}"'
 
+[kafka.list.output.customerCloud.redhat]
+one = 'Red Hat Infrastructure'
+
 [kafka.topic.common.flag.name.description]
 one = 'Topic name'
 

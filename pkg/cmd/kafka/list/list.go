@@ -50,10 +50,7 @@ type options struct {
 // NewListCommand creates a new command for listing kafkas.
 func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
-		page:   0,
-		limit:  100,
-		search: "",
-		f:      f,
+		f: f,
 	}
 
 	cmd := &cobra.Command{
@@ -83,7 +80,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 
 	flags.AddOutput(&opts.outputFormat)
 	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.f.Localizer.MustLocalize("kafka.list.flag.page"))
-	flags.IntVar(&opts.limit, "limit", 100, opts.f.Localizer.MustLocalize("kafka.list.flag.limit"))
+	flags.IntVar(&opts.limit, "limit", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageSize)), opts.f.Localizer.MustLocalize("kafka.list.flag.limit"))
 	flags.StringVar(&opts.search, "search", "", opts.f.Localizer.MustLocalize("kafka.list.flag.search"))
 	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
 	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
@@ -141,9 +138,9 @@ func runList(opts *options) error {
 		}
 
 		if currCtx.KafkaID != "" {
-			rows = mapResponseItemsToRows(response.GetItems(), currCtx.KafkaID, &clusterIdMap)
+			rows = mapResponseItemsToRows(opts, response.GetItems(), currCtx.KafkaID, &clusterIdMap)
 		} else {
-			rows = mapResponseItemsToRows(response.GetItems(), "-", &clusterIdMap)
+			rows = mapResponseItemsToRows(opts, response.GetItems(), "-", &clusterIdMap)
 		}
 		dump.Table(opts.f.IOStreams.Out, rows)
 		opts.f.Logger.Info("")
@@ -153,7 +150,7 @@ func runList(opts *options) error {
 	return nil
 }
 
-func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId string, clusterIdMap *map[string]*v1.Cluster) []kafkaRow {
+func mapResponseItemsToRows(opts *options, kafkas []kafkamgmtclient.KafkaRequest, selectedId string, clusterIdMap *map[string]*v1.Cluster) []kafkaRow {
 	rows := make([]kafkaRow, len(kafkas))
 
 	for i := range kafkas {
@@ -168,7 +165,7 @@ func mapResponseItemsToRows(kafkas []kafkamgmtclient.KafkaRequest, selectedId st
 			cluster := (*clusterIdMap)[*id]
 			customerCloud = fmt.Sprintf("%v (%v)", cluster.Name(), cluster.ID())
 		} else {
-			customerCloud = "Red Hat Infrastructure"
+			customerCloud = opts.f.Localizer.MustLocalize("kafka.list.output.customerCloud.redhat")
 		}
 
 		row := kafkaRow{
@@ -200,15 +197,17 @@ func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequ
 
 	// if no kafkas have a cluster id assigned then we can skip the call to get
 	// the clusters as we dont need their info
-	if len(kafkaClusterIds) > 0 {
-		clusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, createSearchString(&kafkaClusterIds), len(kafkaClusterIds))
-		if err != nil {
-			return nil, err
-		}
+	if len(kafkaClusterIds) == 0 {
+		return idToCluster, nil
+	}
 
-		for _, cluster := range clusterList.Slice() {
-			idToCluster[cluster.ID()] = cluster
-		}
+	clusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, createSearchString(&kafkaClusterIds), len(kafkaClusterIds))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, cluster := range clusterList.Slice() {
+		idToCluster[cluster.ID()] = cluster
 	}
 
 	return idToCluster, nil
