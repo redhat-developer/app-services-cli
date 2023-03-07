@@ -16,7 +16,7 @@ func TestCreateSearchString(t *testing.T) {
 		{
 			name: "empty list",
 			opts: &options{kfmClusterList: &kafkamgmtclient.EnterpriseClusterList{
-				Items: []kafkamgmtclient.EnterpriseCluster{},
+				Items: []kafkamgmtclient.EnterpriseClusterListItem{},
 			},
 			},
 			expected: "",
@@ -24,7 +24,7 @@ func TestCreateSearchString(t *testing.T) {
 		{
 			name: "single clusters",
 			opts: &options{kfmClusterList: &kafkamgmtclient.EnterpriseClusterList{
-				Items: []kafkamgmtclient.EnterpriseCluster{
+				Items: []kafkamgmtclient.EnterpriseClusterListItem{
 					{
 						Id: "abc",
 					},
@@ -36,7 +36,7 @@ func TestCreateSearchString(t *testing.T) {
 		{
 			name: "two clusters",
 			opts: &options{kfmClusterList: &kafkamgmtclient.EnterpriseClusterList{
-				Items: []kafkamgmtclient.EnterpriseCluster{
+				Items: []kafkamgmtclient.EnterpriseClusterListItem{
 					{Id: "abc"},
 					{Id: "def"},
 				}}},
@@ -45,7 +45,7 @@ func TestCreateSearchString(t *testing.T) {
 		{
 			name: "multiple clusters",
 			opts: &options{kfmClusterList: &kafkamgmtclient.EnterpriseClusterList{
-				Items: []kafkamgmtclient.EnterpriseCluster{
+				Items: []kafkamgmtclient.EnterpriseClusterListItem{
 					{Id: "abc"},
 					{Id: "def"},
 					{Id: "ghi"},
@@ -58,7 +58,7 @@ func TestCreateSearchString(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// Call the function
-			actual := createSearchString(tc.opts)
+			actual := CreateSearchString(tc.opts.kfmClusterList)
 
 			// Compare the result with the expected value
 			if actual != tc.expected {

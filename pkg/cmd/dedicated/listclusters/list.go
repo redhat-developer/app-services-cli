@@ -50,12 +50,18 @@ func NewListClusterCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runListClusters(opts *options, f *factory.Factory) error {
-	kfmClusterList, err := kafkautil.ListEnterpriseClusters(f)
+	kfmClusterList, response, err := kafkautil.ListEnterpriseClusters(f)
 	opts.kfmClusterList = kfmClusterList
 	if err != nil {
-		return err
+
+		if response.StatusCode == 403 {
+			return opts.f.Localizer.MustLocalizeError("dedicated.list.error.permissionDenied")
+		}
+
+		return fmt.Errorf("%v, %v", response.Status, err)
 	}
-	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, createSearchString(opts), len(opts.kfmClusterList.Items))
+
+	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, CreateSearchString(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
 	}
@@ -68,9 +74,9 @@ func runListClusters(opts *options, f *factory.Factory) error {
 	return nil
 }
 
-func createSearchString(opts *options) string {
+func CreateSearchString(kfmClusterList *kafkamgmtclient.EnterpriseClusterList) string {
 	searchString := ""
-	for idx, kfmcluster := range opts.kfmClusterList.Items {
+	for idx, kfmcluster := range kfmClusterList.Items {
 		if idx > 0 {
 			searchString += " or "
 		}

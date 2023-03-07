@@ -342,7 +342,7 @@ description = 'Input title for Cloud Region'
 one = "Cloud Region:"
 
 [kafka.create.input.plan.message]
-one = 'Instance type:'
+one = 'Instance size:'
 
 [kafka.create.input.marketPlace.message]
 one = 'Select a marketplace:'
@@ -426,8 +426,23 @@ one = 'all regions in the selected cloud provider are temporarily unavailable'
 [kafka.create.provider.error.noStandardInstancesAvailable]
 one = 'standard instances are unavailable for the cloud provider, try another provider'
 
+[kafka.create.cluster.error.noEnoughCapacity]
+one = 'the cluster you have selected does not have capacity for size {{.Size}}'
+
 [kafka.create.provider.error.noMarketplaceQuota]
 one = 'no marketplace quota available for given provider'
+
+[kafka.create.error.notEnoughQuota]
+one = 'you do not have enough quota to create a kafka of size {{.Size}}'
+
+[kafka.create.error.noEnterpriseQuota]
+one = 'you do not have any enterprise quota availble'
+
+[kafka.create.error.noQuotaLeft]
+one = 'you have no remaining quoata to create a Kafka instance'
+
+[kafka.create.error.noCapacityInSelectedCluster]
+one = 'the cluster you selected does not have any remainging capacity'
 
 [kafka.create.provider.error.unsupportedMarketplace]
 one = 'selected marketplace is not supported for the cloud provider'
@@ -460,6 +475,9 @@ one = 'no marketplace quota found with the specified marketplace provider and ac
 
 [kafka.create.quota.error.multipleCloudAccounts]
 one = 'multiple cloud accounts found, please specify "--marketplace" and "--marketplace-account-id"'
+
+[kafka.create.provider.error.onlyEnterpriseQuota]
+one = 'there is only quota availble for enterprise, cannot use Red Hat infrastructure'
 
 [kafka.delete.cmd.shortDescription]
 description = "Short description for command"
@@ -1180,3 +1198,18 @@ one = 'ID of the Kafka instance owner'
 [kafka.create.flag.clusterId.description]
 description = 'Description for the --cluster-id flag'
 one = 'ID of the Customer-Cloud data plane cluster to create the Kafka instance on.'
+
+[kafka.create.input.cluster.selectClusterMessage]
+one = 'Please select the cluster to provision your Kafka Instance on:'
+
+[kafka.create.input.cluster.message]
+one = 'Would you like to use Red Hat Managed OpenShift clusters or your own OpenShift Cluster to provision your Kakfa instance on:'
+
+[kafka.create.input.cluster.option.enterprise]
+one = 'Bring your own OpenShift Cluster for your Kafka Instances'
+
+[kafka.create.input.cluster.option.rhinfr]
+one = 'Red Hat Managed OpenShift Cluster for your Kafka Instances'
+
+[kafka.create.input.cluster.help]
+one = 'Select the cluster to provision your Kafka instance on.'
