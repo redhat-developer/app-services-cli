@@ -2,10 +2,10 @@ package versions
 
 import (
 	"context"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -70,7 +70,7 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
 	cmd.Flags().StringVarP(&opts.group, "group", "g", registrycmdutil.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("artifact.common.message.output.formatNoTable"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -78,6 +78,11 @@ func NewVersionsCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runGet(opts *options) error {
+	format := util.OutputFormatFromString(opts.outputFormat)
+	if format == util.UnknownOutputFormat || format == util.TableOutputFormat {
+		return opts.localizer.MustLocalizeError("artifact.common.error.invalidOutputFormat")
+	}
+
 	conn, err := opts.Connection()
 	if err != nil {
 		return err
@@ -102,5 +107,5 @@ func runGet(opts *options) error {
 
 	opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.artifact.versions.fetched"))
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+	return util.Dump(opts.IO.Out, format, response, nil)
 }

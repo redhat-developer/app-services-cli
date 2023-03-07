@@ -2,10 +2,10 @@ package list
 
 import (
 	"context"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -73,10 +73,6 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("artifact.cmd.list.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
-				return flagutil.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
-			}
-
 			if opts.page < 1 || opts.limit < 1 {
 				return opts.localizer.MustLocalizeError("artifact.common.error.page.and.limit.too.small")
 			}
@@ -105,7 +101,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringArrayVar(&opts.properties, "property", []string{}, opts.localizer.MustLocalize("artifact.cmd.list.flag.properties.description"))
 
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", opts.localizer.MustLocalize("artifact.common.message.output.format"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -155,26 +151,21 @@ func runList(opts *options) error {
 		request = request.Properties(opts.properties)
 	}
 
+	format := util.OutputFormatFromString(opts.outputFormat)
+	if format == util.UnknownOutputFormat {
+		return opts.localizer.MustLocalizeError("artifact.common.error.invalidOutputFormat")
+	}
+
 	response, _, err := request.Execute()
 	if err != nil {
 		return registrycmdutil.TransformInstanceError(err)
 	}
 
-	if len(response.Artifacts) == 0 && opts.outputFormat == "" {
+	if len(response.Artifacts) == 0 && format == util.TableOutputFormat {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.no.artifact.available.for.group.and.registry", localize.NewEntry("Group", opts.group), localize.NewEntry("Registry", opts.registryID)))
 		return nil
 	}
-
-	switch opts.outputFormat {
-	case dump.EmptyFormat:
-		rows := mapResponseItemsToRows(response.Artifacts)
-		dump.Table(opts.IO.Out, rows)
-		opts.Logger.Info("")
-	default:
-		return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
-	}
-
-	return nil
+	return util.Dump(opts.IO.Out, format, mapResponseItemsToRows(response.Artifacts), response)
 }
 
 func mapResponseItemsToRows(artifacts []registryinstanceclient.SearchedArtifact) []artifactRow {

@@ -84,7 +84,10 @@ one = 'Type of artifact. Run "rhoas service-registry artifact types" to get a li
 one = 'If enabled, artifact created by providing a URL will be downloaded on the server'
 
 [registry.common.flag.reference.gav]
-one = 'One or multiple artifact references in the form "<reference name>=<group>:<artifactId>:<version>". When referencing the default group and/or the latest version, these parts may be left empty'
+one = 'One or multiple artifact reference records in the format "<reference name>=<group>:<artifactId>:<version>". When referencing an artifact from the default group and/or with the latest version, these parts may be left empty.'
+
+[registry.common.flag.reference.separators]
+one = 'Specify alternative separator characters when specifying reference records for an artifact. Two distinct characters in order are required.'
 
 [artifact.common.webURL]
 one = '''
@@ -112,8 +115,11 @@ one = 'Loading file from url: {{.FileName}}'
 [artifact.common.message.file.location]
 one = 'Location of the output file'
 
-[artifact.common.message.output.format]
+[artifact.common.message.output.formatNoTable]
 one = 'Output format (json, yaml, yml)'
+
+[artifact.common.message.output.format]
+one = 'Output format (table, json, yaml, yml)'
 
 [artifact.common.message.no.artifact.available.for.group.and.registry]
 one = 'No artifacts found for {{.Group}} group and registry ID {{.Registry}}'
@@ -180,6 +186,12 @@ one = 'Using latest artifact version: {{.Version}}'
 
 [artifact.common.message.running.editor.with.editable.metadata]
 one = 'Running editor with editable metadata. Please save contents and close editor to continue...'
+
+[registry.common.message.referenceListEmpty]
+one = 'This artifact has no reference records'
+
+[artifact.common.error.invalidOutputFormat]
+one = 'invalid output format flag'
 
 [artifact.common.error.fileNotUrl]
 one = 'provided file is not a valid URL: {{.FileName}}'
@@ -253,7 +265,10 @@ rhoas service-registry artifact create --download-on-server https://raw.githubus
 one = 'invalid artifact type. Please use one of following values: {{.AllowedTypes}}'
 
 [artifact.cmd.create.error.invalidReferenceFormatGAV]
-one = 'Invalid reference format "{{.Input}}". Use "<reference name>=<group>:<artifactId>:<version>". When referencing the default group and/or the latest version, these parts may be left empty'
+one = 'Invalid reference record format "{{.Input}}". Use "<reference name>=<group>:<artifactId>:<version>". When referencing the default group and/or the latest version, these parts may be left empty'
+
+[artifact.cmd.create.error.invalidReferenceSeparator]
+one = 'Invalid reference record format separator "{{.Separator}}". Two distinct characters in order are required, as in the default "=:" value'
 
 [artifact.cmd.delete.description.short]
 one = 'Deletes an artifact or all artifacts in a given group'
@@ -305,7 +320,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 '''
 
 [artifact.cmd.get.references]
-one = "Get a list of references the given artifact uses. Is returned instead of the artifact content."
+one = "Get a list of reference records for the given artifact. Is returned instead of the artifact content."
 
 [artifact.cmd.list.description.short]
 one = 'List artifacts'

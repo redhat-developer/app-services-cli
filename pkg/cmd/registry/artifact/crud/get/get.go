@@ -25,9 +25,10 @@ type options struct {
 	group      string
 	outputFile string
 
-	registryID string
-	version    string
-	references bool
+	registryID   string
+	version      string
+	references   bool
+	outputFormat string
 
 	IO             *iostreams.IOStreams
 	Logger         logging.Logger
@@ -78,6 +79,9 @@ func NewGetCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.outputFile, "output-file", "", opts.localizer.MustLocalize("artifact.common.message.file.location"))
 	cmd.Flags().StringVar(&opts.version, "version", "", opts.localizer.MustLocalize("artifact.common.version"))
 	cmd.Flags().BoolVar(&opts.references, "references", false, opts.localizer.MustLocalize("artifact.cmd.get.references"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "table", opts.localizer.MustLocalize("artifact.common.message.output.format"))
+
+	cmd.MarkFlagsMutuallyExclusive("references", "output-file")
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -131,6 +135,10 @@ func runGet(opts *options) error {
 		opts.Logger.Info(icon.SuccessPrefix(), opts.localizer.MustLocalize("artifact.common.message.fetched.successfully"))
 
 	} else {
+		format := util.OutputFormatFromString(opts.outputFormat)
+		if format == util.UnknownOutputFormat {
+			return opts.localizer.MustLocalizeError("artifact.common.error.invalidOutputFormat")
+		}
 		version, err := versionOrLatest(dataAPI, opts)
 		if err != nil {
 			return err
@@ -139,7 +147,7 @@ func runGet(opts *options) error {
 		if err != nil {
 			return registrycmdutil.TransformInstanceError(err)
 		}
-		util.PrettyPrintReferences(os.Stdout, result)
+		util.PrettyPrintReferences(os.Stdout, os.Stderr, format, result, opts.localizer)
 	}
 
 	return nil

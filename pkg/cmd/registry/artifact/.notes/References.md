@@ -50,7 +50,7 @@ Create first artifact:
 cat artifact1.json | ./rhoas service-registry artifact create
 ```
 
-Create second artifact:
+Create second artifact (Note: The ID of the first artifact will be different from the one in the following example):
 
 ```
 cat artifact2.json | ./rhoas service-registry artifact create -r 'https://example.com/schema1.json#/$defs/name=:0430a24f-ae35-485b-ada8-61376f1286d7:'

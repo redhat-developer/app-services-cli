@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
+	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
 	"io"
 )
@@ -13,7 +13,10 @@ type referenceRow struct {
 	Version    string `json:"version" header:"Version"`
 }
 
-func PrettyPrintReferences(out io.Writer, references []registryinstanceclient.ArtifactReference) {
+func PrettyPrintReferences(out io.Writer, err io.Writer, format OutputFormat, references []registryinstanceclient.ArtifactReference, localizer localize.Localizer) error {
+	if len(references) == 0 && format == TableOutputFormat {
+		_, _ = err.Write([]byte(localizer.MustLocalize("registry.common.message.referenceListEmpty")))
+	}
 	rows := make([]referenceRow, len(references))
 	version := "-"
 	groupId := "default"
@@ -32,7 +35,5 @@ func PrettyPrintReferences(out io.Writer, references []registryinstanceclient.Ar
 		}
 		rows[i] = row
 	}
-	_, _ = out.Write([]byte("\n"))
-	dump.Table(out, rows)
-	_, _ = out.Write([]byte("\n"))
+	return Dump(out, format, rows, nil)
 }

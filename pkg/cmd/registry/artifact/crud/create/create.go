@@ -7,7 +7,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
@@ -37,8 +36,9 @@ type options struct {
 	registryID   string
 	outputFormat string
 
-	downloadOnServer bool
-	references       []string
+	downloadOnServer    bool
+	references          []string
+	referenceSeparators string
 
 	IO             *iostreams.IOStreams
 	Connection     factory.ConnectionFunc
@@ -65,11 +65,6 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.MustLocalize("artifact.cmd.create.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			validOutputFormats := flagutil.ValidOutputFormats
-			if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
-				return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
-			}
-
 			if len(args) > 0 {
 				opts.file = args[0]
 			}
@@ -88,7 +83,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("artifact.common.message.output.format"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("artifact.common.message.output.formatNoTable"))
 	cmd.Flags().StringVar(&opts.file, "file", "", opts.localizer.MustLocalize("artifact.common.file.location"))
 
 	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
@@ -104,6 +99,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.downloadOnServer, "download-on-server", false, opts.localizer.MustLocalize("artifact.common.downloadOnServer"))
 
 	cmd.Flags().StringArrayVarP(&opts.references, "reference", "r", []string{}, opts.localizer.MustLocalize("registry.common.flag.reference.gav"))
+	cmd.Flags().StringVar(&opts.referenceSeparators, "reference-separators", "=:", opts.localizer.MustLocalize("registry.common.flag.reference.separators"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -111,6 +107,15 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runCreate(opts *options) error {
+	format := util.OutputFormatFromString(opts.outputFormat)
+	if format == util.UnknownOutputFormat || format == util.TableOutputFormat {
+		return opts.localizer.MustLocalizeError("artifact.common.error.invalidOutputFormat")
+	}
+	separators := []rune(opts.referenceSeparators)
+	if len(separators) != 2 || separators[0] == separators[1] {
+		return opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidReferenceSeparator", localize.NewEntry("Separator", opts.referenceSeparators))
+	}
+
 	conn, err := opts.Connection()
 	if err != nil {
 		return err
@@ -245,20 +250,22 @@ func runCreate(opts *options) error {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(artifactURL))))
 	}
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, metadata)
-
+	return util.Dump(opts.IO.Out, format, metadata, nil)
 }
 
 func loadReferences(dataAPI *registryinstanceclient.APIClient, opts *options) ([]registryinstanceclient.ArtifactReference, error) {
+	separators := []rune(opts.referenceSeparators)
+	separatorMain := separators[0]
+	separatorGAV := separators[1]
 	result := make([]registryinstanceclient.ArtifactReference, len(opts.references))
 	for i, v := range opts.references {
 		ref := registryinstanceclient.ArtifactReference{}
-		parts := strings.Split(v, "=")
+		parts := strings.Split(v, string(separatorMain))
 		if len(parts) != 2 {
 			return nil, opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidReferenceFormatGAV", localize.NewEntry("Input", v))
 		}
 		ref.Name = parts[0]
-		gavParts := strings.Split(parts[1], ":")
+		gavParts := strings.Split(parts[1], string(separatorGAV))
 		if len(gavParts) == 3 {
 			ref.GroupId = gavParts[0]
 			ref.ArtifactId = gavParts[1]
