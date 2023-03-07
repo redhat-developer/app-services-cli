@@ -4,23 +4,24 @@ import (
 	"context"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
+	"net/http"
 )
 
-func ListEnterpriseClusters(f *factory.Factory) (*kafkamgmtclient.EnterpriseClusterList, error) {
+func ListEnterpriseClusters(f *factory.Factory) (*kafkamgmtclient.EnterpriseClusterList, *http.Response, error) {
 	conn, err := f.Connection()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
+
 	ctx := context.Background()
 	api := conn.API()
 	cl := api.KafkaMgmtEnterprise().GetEnterpriseOsdClusters(ctx)
 	clist, response, err := cl.Execute()
 	if err != nil {
-		return nil, err
+		return nil, response, err
 	}
-	if len(clist.Items) == 0 {
-		return &clist, nil
-	}
+
 	f.Logger.Debug(response)
-	return &clist, nil
+
+	return &clist, response, nil
 }

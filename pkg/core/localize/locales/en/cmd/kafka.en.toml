@@ -432,6 +432,18 @@ one = 'the cluster you have selected does not have capacity for size {{.Size}}'
 [kafka.create.provider.error.noMarketplaceQuota]
 one = 'no marketplace quota available for given provider'
 
+[kafka.create.error.notEnoughQuota]
+one = 'you do not have enough quota to create a kafka of size {{.Size}}'
+
+[kafka.create.error.noEnterpriseQuota]
+one = 'you do not have any enterprise quota availble'
+
+[kafka.create.error.noQuotaLeft]
+one = 'you have no remaining quoata to create a Kafka instance'
+
+[kafka.create.error.noCapacityInSelectedCluster]
+one = 'the cluster you selected does not have any remainging capacity'
+
 [kafka.create.provider.error.unsupportedMarketplace]
 one = 'selected marketplace is not supported for the cloud provider'
 
@@ -664,6 +676,9 @@ one = 'Text search to filter the Kafka instances by name, owner, cloud_provider,
 [kafka.list.log.debug.filteringKafkaList]
 description = 'Debug message when filtering the list of Kafka instances'
 one = 'Filtering Kafka instances with the query "{{.Search}}"'
+
+[kafka.create.getEnterpriseClusters.noQuota]
+one = ''
 
 [kafka.topic.common.flag.name.description]
 one = 'Topic name'
