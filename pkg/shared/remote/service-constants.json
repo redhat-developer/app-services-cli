@@ -9,7 +9,8 @@
       "quotaProductId": "RHOSAK",
       "trialQuotaProductId": "RHOSAKTrial",
       "longLivedQuotaProductId": "RHOSAKEval",
-      "resourceName": "rhosak"
+      "resourceName": "rhosak",
+      "enterpriseProductQuotaId": "RHOSAKCC"
     }
   },
   "serviceRegistry": {

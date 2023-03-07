@@ -3,6 +3,9 @@ package create
 import (
 	"encoding/json"
 	"fmt"
+	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/listclusters"
+	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"os"
 	"os/signal"
@@ -69,7 +72,8 @@ type options struct {
 	dryRun       bool
 
 	kfmClusterList       *kafkamgmtclient.EnterpriseClusterList
-	selectedCluster      *kafkamgmtclient.EnterpriseClusterListItem
+	selectedCluster      *kafkamgmtclient.EnterpriseCluster
+	clusterMap           *map[string]v1.Cluster
 	useEnterpriseCluster bool
 
 	f *factory.Factory
@@ -453,25 +457,27 @@ type promptAnswers struct {
 	Marketplace       string
 }
 
-func setEnterpriseClusterList(opts *options) error {
+func setEnterpriseClusterList(opts *options) (*kafkamgmtclient.EnterpriseClusterList, *map[string]v1.Cluster, error) {
 	// Get the list of enterprise clusters in the users organization
-	clist, err := kafkautil.ListEnterpriseClusters(opts.f)
+	kfmClusterList, response, err := kafkautil.ListEnterpriseClusters(opts.f)
 	if err != nil {
-		return err
+		if response.StatusCode == 403 {
+			emptyClusterMap := make(map[string]v1.Cluster)
+			return &kafkamgmtclient.EnterpriseClusterList{}, &emptyClusterMap, nil
+		}
+
+		return nil, nil, fmt.Errorf("%v, %v", response.Status, err)
 	}
-	opts.kfmClusterList = clist
-	return nil
+
+	clusterMap, err := getClusterNameMap(opts.f, kfmClusterList)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return kfmClusterList, clusterMap, nil
 }
 
-func createPromptSliceFromEnterpriseClusterList(clusterList *kafkamgmtclient.EnterpriseClusterList) []string {
-	clusterListSlice := make([]string, 0)
-	for _, cluster := range clusterList.Items {
-		clusterListSlice = append(clusterListSlice, *cluster.ClusterId)
-	}
-	return clusterListSlice
-}
-
-func selectEnterpriseOrRHinfraPrompt(opts *options) error {
+func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	listOfOptions := []string{
 		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
 		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.enterprise"),
@@ -509,53 +515,74 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		Help:    f.Localizer.MustLocalize("kafka.create.input.name.help"),
 	}
 
-	// Get the list of enterprise clusters in the users organization if there are any
-	err := setEnterpriseClusterList(opts)
+	answers := &promptAnswers{}
+
+	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
 	if err != nil {
 		return nil, err
 	}
+
+	// Get the list of enterprise clusters in the users organization if there are any, creates a map of cluster ids to names to include names in the prompt
+	kfmClusterList, clusterMap, err := setEnterpriseClusterList(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	opts.kfmClusterList = kfmClusterList
+	opts.clusterMap = clusterMap
 
 	// If there are enterprise clusters in the user's organization, prompt them to select one using the interactive prompt for enterprise flow
 	if len(opts.kfmClusterList.Items) > 0 {
-		err = selectEnterpriseOrRHinfraPrompt(opts)
+		err = selectEnterpriseOrRHInfraPrompt(opts)
 		if err != nil {
 			return nil, err
 		}
-		if opts.useEnterpriseCluster {
-			err = selectClusterPrompt(opts)
-			if err != nil {
-				return nil, err
-			}
+	}
+
+	if opts.useEnterpriseCluster {
+		index, err := selectClusterPrompt(opts)
+		if err != nil {
+			return nil, err
 		}
+
+		cluster, err := getClusterDetails(opts.f, opts.kfmClusterList.GetItems()[index].GetId())
+		if err != nil {
+			return nil, err
+		}
+
+		if cluster.GetCapacityInformation().RemainingKafkaStreamingUnits == 0 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noCapacityInSelectedCluster")
+		}
+
+		opts.selectedCluster = cluster
 	}
 
-	answers := &promptAnswers{}
-
-	err = survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
-	if err != nil {
-		return nil, err
-	}
-
+	// If the user is not using an enterprise cluster, prompt them to select a cloud provider
 	if !opts.useEnterpriseCluster {
-		cloudProviderNames, err := GetEnabledCloudProviderNames(opts.f)
-		if err != nil {
-			return nil, err
-		}
-
-		cloudProviderPrompt := &survey.Select{
-			Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
-			Options: cloudProviderNames,
-		}
-
-		err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
+		answers, err = cloudProviderPrompt(f, answers)
 		if err != nil {
 			return nil, err
 		}
 	}
 
+	// getting org quotas
 	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
 	if err != nil {
 		return nil, err
+	}
+
+	var enterpriseQuota accountmgmtutil.QuotaSpec
+	if opts.useEnterpriseCluster {
+		if len(orgQuota.EnterpriseQuotas) < 1 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
+		}
+
+		enterpriseQuota = orgQuota.EnterpriseQuotas[0]
+
+		// there is no quota left to use enteprise
+		if enterpriseQuota.Quota == 0 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
+		}
 	}
 
 	availableBillingModels := FetchSupportedBillingModels(orgQuota, answers.CloudProvider)
@@ -564,6 +591,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
 	}
 
+	// prompting for billing model if there are more than one available, otherwise using the only one available
 	if len(availableBillingModels) > 0 {
 		if len(availableBillingModels) == 1 {
 			answers.BillingModel = availableBillingModels[0]
@@ -579,48 +607,77 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
+	// if billing model is marketplace, prompt for marketplace provider and account id
 	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
-		validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, answers.CloudProvider)
-		if len(validMarketPlaces) == 1 {
-			answers.Marketplace = validMarketPlaces[0]
-		} else {
-			marketplacePrompt := &survey.Select{
-				Message: f.Localizer.MustLocalize("kafka.create.input.marketplace.message"),
-				Options: validMarketPlaces,
-			}
-			err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		if len(validMarketPlaces) > 0 {
-
-			validMarketplaceAcctIDs := FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, answers.Marketplace)
-
-			if len(validMarketplaceAcctIDs) == 1 {
-				answers.MarketplaceAcctID = validMarketplaceAcctIDs[0]
-			} else {
-				marketplaceAccountPrompt := &survey.Select{
-					Message: f.Localizer.MustLocalize("kafka.create.input.marketplaceAccountID.message"),
-					Options: validMarketplaceAcctIDs,
-				}
-				err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
-				if err != nil {
-					return nil, err
-				}
-			}
+		answers, err = marketplaceQuotaPrompt(orgQuota, answers, f, err)
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	marketplaceInfo := accountmgmtutil.MarketplaceInfo{
-		BillingModel:   answers.BillingModel,
-		Provider:       answers.Marketplace,
-		CloudAccountID: answers.MarketplaceAcctID,
-	}
-
+	var sizes []kafkamgmtclient.SupportedKafkaSize
 	payload := &kafkamgmtclient.KafkaRequestPayload{}
-	if !opts.useEnterpriseCluster {
+
+	if opts.useEnterpriseCluster {
+		/*
+			if using dedicated cluster option then get the supported sizes for this cluster
+			based on the sizes it supports the user to select the one they want to use
+			then check if the size uses <= the remaining streaming units it takes up
+			on the cluster
+		*/
+		supportedInstanceTypes := opts.selectedCluster.GetSupportedInstanceTypes()
+		supportedKafkaTypes := supportedInstanceTypes.GetInstanceTypes()
+
+		// right now enterprise clusters only support one type of kafka, so we are hard
+		// checking this, this assumption may change in the future
+		if len(supportedKafkaTypes) != 1 {
+			return nil, fmt.Errorf("expected one supported kafka instance type")
+		}
+
+		sizes = supportedKafkaTypes[0].Sizes
+
+		index, err := promptUserForSizes(opts.f, &sizes)
+		if err != nil {
+			return nil, err
+		}
+
+		selectedSize := sizes[index]
+
+		if selectedSize.GetCapacityConsumed() > opts.selectedCluster.CapacityInformation.RemainingKafkaStreamingUnits {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.cluster.error.noEnoughCapacity", localize.NewEntry("Size", selectedSize.GetId()))
+		}
+
+		answers.Size = selectedSize.GetId()
+
+		if selectedSize.GetQuotaConsumed() > int32(enterpriseQuota.Quota) {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.notEnoughQuota", localize.NewEntry("Size", selectedSize.GetId()))
+		}
+
+		enterprise := "enterprise"
+		billingModelEnterprise := CreateNullableString(&enterprise)
+		clusterIdSNS := CreateNullableString(opts.selectedCluster.ClusterId)
+
+		payload = &kafkamgmtclient.KafkaRequestPayload{
+			Name:                  answers.Name,
+			BillingModel:          billingModelEnterprise,
+			BillingCloudAccountId: CreateNullableString(nil),
+			Marketplace:           CreateNullableString(nil),
+			ClusterId:             clusterIdSNS,
+		}
+
+		// enterprise quota spec, kfm will use the default, this should be returned by the `select quota` call
+		// we know someone has enterprise quota here because they have been able to select the
+		// cluster to add a kafka instance too
+		payload.SetPlan(mapAmsTypeToBackendType(&orgQuota.EnterpriseQuotas[0]) + "." + answers.Size)
+	} else {
+
+		// This flow is for the provisioning of a standard kafka instance
+		marketplaceInfo := accountmgmtutil.MarketplaceInfo{
+			BillingModel:   answers.BillingModel,
+			Provider:       answers.Marketplace,
+			CloudAccountID: answers.MarketplaceAcctID,
+		}
+
 		userQuota, err := accountmgmtutil.SelectQuotaForUser(f, orgQuota, marketplaceInfo, answers.CloudProvider)
 		if err != nil {
 			return nil, err
@@ -653,25 +710,17 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			return nil, err
 		}
 
-		sizes, err := FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
+		sizes, err = FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
 		if err != nil {
 			return nil, err
 		}
 
-		if len(sizes) == 1 {
-			answers.Size = sizes[0].GetId()
-		} else {
-			sizeLabels := GetValidKafkaSizesLabels(sizes)
-			planPrompt := &survey.Select{
-				Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
-				Options: sizeLabels,
-			}
-
-			err = survey.AskOne(planPrompt, &answers.Size)
-			if err != nil {
-				return nil, err
-			}
+		index, err := promptUserForSizes(opts.f, &sizes)
+		if err == nil {
+			return nil, err
 		}
+
+		answers.Size = sizes[index].GetId()
 
 		accountIDNullable := kafkamgmtclient.NullableString{}
 		marketplaceProviderNullable := kafkamgmtclient.NullableString{}
@@ -700,45 +749,121 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
 
 	}
-	if opts.useEnterpriseCluster {
-		if len(orgQuota.EnterpriseQuotas) == 0 {
-			return nil, fmt.Errorf("No enterprise quota available")
-		}
-		// casting to nullable string
-		var clusterIdSNS kafkamgmtclient.NullableString
-		clusterIdSNS.Set(opts.selectedCluster.ClusterId)
-
-		var billingModelEnterprise kafkamgmtclient.NullableString
-		var enterprise = "enterprise"
-		billingModelEnterprise.Set(&enterprise)
-
-		var nullString kafkamgmtclient.NullableString
-		payload = &kafkamgmtclient.KafkaRequestPayload{
-			Name:                  answers.Name,
-			BillingModel:          billingModelEnterprise,
-			BillingCloudAccountId: nullString,
-			Marketplace:           nullString,
-			ClusterId:             clusterIdSNS,
-			//	set plan here
-		}
-	}
 	return payload, nil
 }
 
-func selectClusterPrompt(opts *options) error {
+func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers, f *factory.Factory, err error) (*promptAnswers, error) {
+	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, answers.CloudProvider)
+	if len(validMarketPlaces) == 1 {
+		answers.Marketplace = validMarketPlaces[0]
+	} else {
+		marketplacePrompt := &survey.Select{
+			Message: f.Localizer.MustLocalize("kafka.create.input.marketplace.message"),
+			Options: validMarketPlaces,
+		}
+		err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if len(validMarketPlaces) > 0 {
+
+		validMarketplaceAcctIDs := FetchValidMarketplaceAccounts(orgQuota.MarketplaceQuotas, answers.Marketplace)
+
+		if len(validMarketplaceAcctIDs) == 1 {
+			answers.MarketplaceAcctID = validMarketplaceAcctIDs[0]
+		} else {
+			marketplaceAccountPrompt := &survey.Select{
+				Message: f.Localizer.MustLocalize("kafka.create.input.marketplaceAccountID.message"),
+				Options: validMarketplaceAcctIDs,
+			}
+			err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return answers, nil
+}
+
+func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
+	cloudProviderNames, err := GetEnabledCloudProviderNames(f)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(cloudProviderNames) == 1 {
+		answers.CloudProvider = cloudProviderNames[0]
+		return answers, nil
+	}
+
+	cloudProviderPrompt := &survey.Select{
+		Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
+		Options: cloudProviderNames,
+	}
+
+	err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
+	if err != nil {
+		return nil, err
+	}
+	return answers, nil
+}
+
+// This may need to altered as the `name` are mutable on ocm side
+func getClusterNameMap(f *factory.Factory, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
+	//	for each cluster in the list, get the name from ocm and add it to the cluster list
+	str := listclusters.CreateSearchString(clusterList)
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(f, "", "", str, len(clusterList.Items))
+	if err != nil {
+		return nil, err
+	}
+	clusterMap := make(map[string]v1.Cluster)
+	for _, cluster := range ocmClusterList.Slice() {
+		clusterMap[cluster.ID()] = *cluster
+	}
+	return &clusterMap, nil
+
+}
+
+func validateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafkamgmtclient.EnterpriseClusterList {
+	// if cluster is in a ready state add it to the list of clusters
+	items := make([]kafkamgmtclient.EnterpriseClusterListItem, 0, len(clusterList.Items))
+	for _, cluster := range clusterList.Items {
+		if *cluster.Status == "ready" {
+			items = append(items, cluster)
+		}
+	}
+
+	newClusterList := kafkamgmtclient.NewEnterpriseClusterList(clusterList.Kind, clusterList.Page, int32(len(items)), clusterList.Total, items)
+	return newClusterList
+}
+
+func createPromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) *[]string {
+	promptOptions := []string{}
+	validatedClusters := validateClusters(clusterList)
+	for _, cluster := range validatedClusters.Items {
+		ocmCluster := (*clusterMap)[cluster.GetId()]
+		display := ocmCluster.Name() + " (" + cluster.GetId() + ")"
+		promptOptions = append(promptOptions, display)
+	}
+	return &promptOptions
+}
+
+func selectClusterPrompt(opts *options) (int, error) {
+	promptOptions := createPromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
 	promptForCluster := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.selectClusterMessage"),
-		Options: createPromptSliceFromEnterpriseClusterList(opts.kfmClusterList),
+		Options: *promptOptions,
 	}
 
 	var index int
 	err := survey.AskOne(promptForCluster, &index)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	opts.selectedCluster = &opts.kfmClusterList.GetItems()[index]
-	return nil
+	return index, nil
 }
 
 func printSizeWarningIfNeeded(f *factory.Factory, selectedSize string, sizes []kafkamgmtclient.SupportedKafkaSize) {
@@ -751,4 +876,43 @@ func printSizeWarningIfNeeded(f *factory.Factory, selectedSize string, sizes []k
 			}
 		}
 	}
+}
+
+func promptUserForSizes(f *factory.Factory, sizes *[]kafkamgmtclient.SupportedKafkaSize) (int, error) {
+	var index int
+
+	if len(*sizes) == 1 {
+		return 0, nil
+	}
+
+	sizeLabels := GetValidKafkaSizesLabels(*sizes)
+	planPrompt := &survey.Select{
+		Message: f.Localizer.MustLocalize("kafka.create.input.plan.message"),
+		Options: sizeLabels,
+	}
+
+	err := survey.AskOne(planPrompt, &index)
+	if err != nil {
+		return 0, err
+	}
+
+	return index, nil
+}
+
+func getClusterDetails(f *factory.Factory, clusterId string) (*kafkamgmtclient.EnterpriseCluster, error) {
+	conn, err := f.Connection()
+	if err != nil {
+		return nil, err
+	}
+	client := conn.API()
+	resource := client.KafkaMgmtEnterprise().GetEnterpriseClusterById(f.Context, clusterId)
+	cluster, _, err := resource.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	return &cluster, nil
+}
+func CreateNullableString(str *string) kafkamgmtclient.NullableString {
+	return *kafkamgmtclient.NewNullableString(str)
 }

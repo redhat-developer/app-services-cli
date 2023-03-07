@@ -19,5 +19,5 @@ type AmsConfig struct {
 	TrialProductQuotaID         string `json:"trialQuotaProductId"`
 	LongLivedQuotaProductID     string `json:"longLivedQuotaProductId"`
 	ResourceName                string `json:"resourceName"`
-	EnterpriseProductQuotaID    string `json:"RHOSAKCC"`
+	EnterpriseProductQuotaID    string `json:"enterpriseProductQuotaId"`
 }

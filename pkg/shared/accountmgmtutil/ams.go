@@ -3,7 +3,6 @@ package accountmgmtutil
 import (
 	"context"
 	"errors"
-
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 
@@ -88,6 +87,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 		return nil, err
 	}
 
+	//this should be refactored and base of the logic by the billing model information that's returned by KFM for each supported instance type
 	var standardQuotas, marketplaceQuotas, trialQuotas, evalQuotas, enterpriseQuotas []QuotaSpec
 	for _, quota := range quotaCostGet.GetItems() {
 		quotaResources := quota.GetRelatedResources()
@@ -107,9 +107,9 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 				case "RHOSAKEval":
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					evalQuotas = append(evalQuotas, QuotaSpec{QuotaEvalType, remainingQuota, quotaResource.BillingModel, quota.CloudAccounts})
-				//	this isn't working as it should be as the product is hardcoded here
-				case "RHOSAKCC":
+					// this needs to be reflected upstream to work
 					//case spec.EnterpriseProductQuotaID:
+				case "RHOSAKCC":
 					remainingQuota := int(quota.GetAllowed() - quota.GetConsumed())
 					enterpriseQuotas = append(enterpriseQuotas, QuotaSpec{QuotaEnterpriseType, remainingQuota, quotaResource.BillingModel, nil})
 				}
@@ -125,7 +125,7 @@ func GetOrgQuotas(f *factory.Factory, spec *remote.AmsConfig) (*OrgQuotas, error
 // nolint:funlen
 func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo MarketplaceInfo, provider string) (*QuotaSpec, error) {
 
-	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.EvalQuotas) == 0 {
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.EvalQuotas) == 0 && len(orgQuota.EnterpriseQuotas) == 0 {
 		if marketplaceInfo.BillingModel != "" || marketplaceInfo.Provider != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.onlyTrialAvailable")
 		}
@@ -133,7 +133,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return &orgQuota.TrialQuotas[0], nil
 	}
 
-	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 {
+	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 && len(orgQuota.EnterpriseQuotas) == 0 {
 		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
 		}
@@ -145,7 +145,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return &orgQuota.StandardQuotas[0], nil
 	}
 
-	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) == 0 && len(orgQuota.EvalQuotas) > 0 {
+	if len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.StandardQuotas) == 0 && len(orgQuota.EvalQuotas) > 0 && len(orgQuota.EnterpriseQuotas) == 0 {
 		if marketplaceInfo.BillingModel == QuotaMarketplaceType || marketplaceInfo.Provider != "" || marketplaceInfo.CloudAccountID != "" {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noMarketplace")
 		}
@@ -157,7 +157,7 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		return &orgQuota.EvalQuotas[0], nil
 	}
 
-	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 {
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) > 0 && len(orgQuota.EvalQuotas) == 0 && len(orgQuota.EnterpriseQuotas) == 0 {
 
 		if marketplaceInfo.BillingModel == QuotaStandardType {
 			return nil, f.Localizer.MustLocalizeError("kafka.create.quota.error.noStandard")
@@ -197,6 +197,10 @@ func SelectQuotaForUser(f *factory.Factory, orgQuota *OrgQuotas, marketplaceInfo
 		}
 
 		return marketplaceQuota, nil
+	}
+
+	if len(orgQuota.StandardQuotas) == 0 && len(orgQuota.MarketplaceQuotas) == 0 && len(orgQuota.EvalQuotas) == 0 && len(orgQuota.EnterpriseQuotas) > 0 {
+		return nil, f.Localizer.MustLocalizeError("kafka.create.provider.error.onlyEnterpriseQuota")
 	}
 
 	quotaTypeCount := 0
