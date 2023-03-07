@@ -612,82 +612,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		if err != nil {
 			return nil, err
 		}
-		userQuotaJSON, marshalErr := json.MarshalIndent(userQuota, "", "  ")
-		if marshalErr != nil {
-			f.Logger.Debug(marshalErr)
-		} else {
-			f.Logger.Debug("Selected Quota object:")
-			f.Logger.Debug(string(userQuotaJSON))
-		}
-
-		regionIDs, err := GetEnabledCloudRegionIDs(opts.f, answers.CloudProvider, userQuota)
-		if err != nil {
-			return nil, err
-		}
-
-		if len(regionIDs) == 0 {
-			return nil, f.Localizer.MustLocalizeError("kafka.create.error.noRegionSupported")
-		}
-
-		regionPrompt := &survey.Select{
-			Message: f.Localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
-			Options: regionIDs,
-			Help:    f.Localizer.MustLocalize("kafka.create.input.cloudRegion.help"),
-		}
-
-		err = survey.AskOne(regionPrompt, &answers.Region)
-		if err != nil {
-			return nil, err
-		}
-
-		sizes, err = FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
-		if err != nil {
-			return nil, err
-		}
-
-		index, err := promptUserForSizes(opts.f, &sizes)
-		if err == nil {
-			return nil, err
-		}
-
-		answers.Size = sizes[index].GetId()
-
-		accountIDNullable := kafkamgmtclient.NullableString{}
-		marketplaceProviderNullable := kafkamgmtclient.NullableString{}
-		billingNullable := kafkamgmtclient.NullableString{}
-
-		if answers.BillingModel != "" {
-			billingNullable.Set(&answers.BillingModel)
-		}
-
-		if answers.Marketplace != "" {
-			marketplaceProviderNullable.Set(&answers.Marketplace)
-		}
-
-		if answers.MarketplaceAcctID != "" {
-			accountIDNullable.Set(&answers.MarketplaceAcctID)
-		}
-		payload = &kafkamgmtclient.KafkaRequestPayload{
-			Name:                  answers.Name,
-			Region:                &answers.Region,
-			CloudProvider:         &answers.CloudProvider,
-			BillingModel:          billingNullable,
-			BillingCloudAccountId: accountIDNullable,
-			Marketplace:           marketplaceProviderNullable,
-		}
-		printSizeWarningIfNeeded(opts.f, answers.Size, sizes)
-		payload.SetPlan(mapAmsTypeToBackendType(userQuota) + "." + answers.Size)
-
 	}
-
-	if opts.useEnterpriseCluster {
-		if len(orgQuota.EnterpriseQuotas) == 0 {
-			return nil, fmt.Errorf("No enterprise quota available")
-		}
-		
-		// casting to nullable string
-		var clusterIdSNS kafkamgmtclient.NullableString
-		clusterIdSNS.Set(opts.selectedCluster.ClusterId)
 
 	var sizes []kafkamgmtclient.SupportedKafkaSize
 	payload := &kafkamgmtclient.KafkaRequestPayload{}
@@ -710,20 +635,9 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 		sizes = supportedKafkaTypes[0].Sizes
 
-		if opts.size == "" {
-			index, err := promptUserForSizes(opts.f, &sizes)
-			if err != nil {
-				return nil, err
-			}
-
-			selectedSize := sizes[index]
-
-			if selectedSize.GetCapacityConsumed() > cluster.CapacityInformation.RemainingKafkaStreamingUnits {
-				return nil, opts.f.Localizer.MustLocalizeError("kafka.create.cluster.error.noEnoughCapacity", localize.NewEntry("Size", selectedSize.GetId()))
-			}
-
-			answers.Size = selectedSize.GetId()
-
+		index, err := promptUserForSizes(opts.f, &sizes)
+		if err != nil {
+			return nil, err
 		}
 
 		selectedSize := sizes[index]
