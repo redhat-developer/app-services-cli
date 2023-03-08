@@ -36,6 +36,7 @@ $ rhoas kafka create -o yaml
 == Options
 
       `--billing-model` _string_::            Billing model to be used
+      `--cluster-id` _string_::               ID of the Customer-Cloud data plane cluster to create the Kafka instance on.
       `--dry-run`::                           Validate all user provided arguments without creating the Kafka instance
       `--marketplace` _string_::              Name of cloud marketplace where Kafka instance was purchased
       `--marketplace-account-id` _string_::   Account ID for cloud marketplace

@@ -42,6 +42,14 @@ include::../modules/ref-cli-context-unset.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-context-use.adoc[leveloffset=+2]
 
+include::../modules/ref-cli-dedicated.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-dedicated-deregister-cluster.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-dedicated-list.adoc[leveloffset=+2]
+
+include::../modules/ref-cli-dedicated-register-cluster.adoc[leveloffset=+2]
+
 include::../modules/ref-cli-generate-config.adoc[leveloffset=+2]
 
 include::../modules/ref-cli-login.adoc[leveloffset=+2]
