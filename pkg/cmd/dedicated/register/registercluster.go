@@ -120,9 +120,9 @@ func runRegisterClusterCmd(opts *options) (err error) {
 func getPaginatedClusterList(opts *options) error {
 	cl, err := clustermgmt.GetClusterList(opts.f, opts.accessToken, opts.clusterManagementApiUrl, opts.pageNumber, opts.pageSize)
 	if err != nil {
-		opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.errorGettingClusterList")
 		return err
 	}
+
 	opts.clusterList = validateClusters(cl, opts.clusterList)
 	return nil
 }
