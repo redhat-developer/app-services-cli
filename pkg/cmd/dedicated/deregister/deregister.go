@@ -115,11 +115,15 @@ func runDeRegisterClusterCmd(opts *options) error {
 func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
 	kfmClusterList, response, err := kafkautil.ListEnterpriseClusters(opts.f)
 	if err != nil {
-		if response.StatusCode == 403 {
-			return nil, opts.f.Localizer.MustLocalizeError("")
+		if response != nil {
+			if response.StatusCode == 403 {
+				return nil, opts.f.Localizer.MustLocalizeError("")
+			}
+
+			return nil, fmt.Errorf("%v, %v", response.Status, err)
 		}
 
-		return nil, fmt.Errorf("%v, %v", response.Status, err)
+		return nil, err
 	}
 
 	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
