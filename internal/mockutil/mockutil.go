@@ -7,6 +7,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/core/config"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/logging"
+	"github.com/redhat-developer/app-services-cli/pkg/core/servicecontext"
 
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api"
@@ -29,6 +30,25 @@ func NewConfigMock(cfg *config.Config) config.IConfig {
 		},
 		RemoveFunc: func() error {
 			cfg = nil
+			return nil
+		},
+	}
+}
+
+func NewContextMock(context *servicecontext.Context) servicecontext.IContext {
+	return &servicecontext.IContextMock{
+		LocationFunc: func() (string, error) {
+			return ":mock_location:", nil
+		},
+		LoadFunc: func() (*servicecontext.Context, error) {
+			return context, nil
+		},
+		SaveFunc: func(c *servicecontext.Context) error {
+			context = c
+			return nil
+		},
+		RemoveFunc: func() error {
+			context = nil
 			return nil
 		},
 	}
