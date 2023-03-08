@@ -115,15 +115,11 @@ func runDeRegisterClusterCmd(opts *options) error {
 func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
 	kfmClusterList, response, err := kafkautil.ListEnterpriseClusters(opts.f)
 	if err != nil {
-		if response != nil {
-			if response.StatusCode == 403 {
-				return nil, opts.f.Localizer.MustLocalizeError("")
-			}
-
-			return nil, fmt.Errorf("%v, %v", response.Status, err)
+		if response.StatusCode == 403 {
+			return nil, opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.error.403")
 		}
 
-		return nil, err
+		return nil, fmt.Errorf("%v, %w", response.Status, err)
 	}
 
 	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
@@ -235,7 +231,7 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 
 				if response.StatusCode == 404 {
 					// remove this callback from the callback list as the kafka is deleted
-					// break to restart the loop from the begining as we are modifying the list
+					// break to restart the loop from the beginning as we are modifying the list
 					// as we are iterating through it
 					checkIfDeletedCallbacks = append(checkIfDeletedCallbacks[:i], checkIfDeletedCallbacks[i+1:]...)
 					break
@@ -256,7 +252,8 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*clustersmgmtv1.Cluster) error {
 	clusterStringList := make([]string, 0)
 	for _, cluster := range *clusterList {
-		clusterStringList = append(clusterStringList, cluster.Name())
+		display := fmt.Sprintf("%s (%s)", cluster.Name(), cluster.ID())
+		clusterStringList = append(clusterStringList, display)
 	}
 
 	// TO-DO add page size

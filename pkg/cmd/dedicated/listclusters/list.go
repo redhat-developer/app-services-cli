@@ -60,7 +60,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 			return fmt.Errorf("%v, %v", response.Status, err)
 		}
 
-		return err
+		return fmt.Errorf("%v, %w", response.Status, err)
 	}
 
 	opts.kfmClusterList = kfmClusterList

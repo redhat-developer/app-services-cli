@@ -152,4 +152,6 @@ one = 'You do not have permissions to list Hybrid clusters'
 [dedicated.deregisterCluster.error.403]
 one = 'You do not have permissions to deregister this cluster'
 
+[dedicated.registerCluster.info.clusterRegisteredWithKasFleetManager]
+one = 'The cluster has been registered with Red Hat OpenShift Streams for Apache Kafka and is being prepared for use'
 
