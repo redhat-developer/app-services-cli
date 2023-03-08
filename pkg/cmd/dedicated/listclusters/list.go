@@ -50,15 +50,21 @@ func NewListClusterCommand(f *factory.Factory) *cobra.Command {
 
 func runListClusters(opts *options, f *factory.Factory) error {
 	kfmClusterList, response, err := kafkautil.ListEnterpriseClusters(f)
-	opts.kfmClusterList = kfmClusterList
 	if err != nil {
 
-		if response.StatusCode == 403 {
-			return opts.f.Localizer.MustLocalizeError("dedicated.list.error.permissionDenied")
+		if response != nil {
+			if response.StatusCode == 403 {
+				return opts.f.Localizer.MustLocalizeError("dedicated.list.error.permissionDenied")
+			}
+
+			return fmt.Errorf("%v, %v", response.Status, err)
 		}
 
-		return fmt.Errorf("%v, %v", response.Status, err)
+		return err
 	}
+
+	opts.kfmClusterList = kfmClusterList
+
 	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
