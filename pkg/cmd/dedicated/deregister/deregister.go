@@ -186,7 +186,7 @@ func runKafkaNameConfirmPrompt(opts *options, kafka *kafkamgmtclient.KafkaReques
 
 func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) error {
 
-	checkIfDeletedCallbacks := make([]func() (*kafkamgmtclient.KafkaRequest, *http.Response, error), 0)
+	checkIfDeletedCallbacks := make([]func() (*http.Response, error), 0)
 
 	for _, kafka := range *kafkas {
 
@@ -212,14 +212,14 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 			return err
 		}
 
-		checkIfDeletedRefresh := func() (*kafkamgmtclient.KafkaRequest, *http.Response, error) {
+		checkIfDeletedRefresh := func() (*http.Response, error) {
 			a := api.KafkaMgmt().GetKafkaById(opts.f.Context, kafka.GetId())
-			kafka, response, err := a.Execute()
+			_, response, err := a.Execute()
 			if err != nil {
-				return nil, response, err
+				return response, err
 			}
 
-			return &kafka, response, nil
+			return response, nil
 		}
 
 		checkIfDeletedCallbacks = append(checkIfDeletedCallbacks, checkIfDeletedRefresh)
@@ -227,7 +227,7 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 	for len(checkIfDeletedCallbacks) > 0 {
 
 		for i := 0; i < len(checkIfDeletedCallbacks); i += 1 {
-			kafka, response, err := checkIfDeletedCallbacks[i]()
+			response, err := checkIfDeletedCallbacks[i]()
 			if err != nil {
 				if response == nil {
 					return err
@@ -243,9 +243,9 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 					return fmt.Errorf(fmt.Sprintf("%v, %v", opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.failed"), response.Status))
 				}
 			}
-			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.message", localize.NewEntry("Name", kafka.GetName())))
 		}
 
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.message"))
 		time.Sleep(5 * time.Second)
 	}
 
