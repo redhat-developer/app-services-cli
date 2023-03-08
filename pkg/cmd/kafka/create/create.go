@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/listclusters"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"os"
@@ -813,7 +812,7 @@ func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAns
 // This may need to altered as the `name` are mutable on ocm side
 func getClusterNameMap(f *factory.Factory, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
 	//	for each cluster in the list, get the name from ocm and add it to the cluster list
-	str := listclusters.CreateSearchString(clusterList)
+	str := kafkautil.CreateClusterSearchStringFromKafkaList(clusterList)
 	ocmClusterList, err := clustermgmt.GetClusterListByIds(f, "", "", str, len(clusterList.Items))
 	if err != nil {
 		return nil, err

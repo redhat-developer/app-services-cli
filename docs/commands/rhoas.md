@@ -41,7 +41,7 @@ $ rhoas cluster connect
 * [rhoas completion](rhoas_completion.md)	 - Install command completion for your shell (bash, zsh, fish or powershell)
 * [rhoas connector](rhoas_connector.md)	 - Connectors commands
 * [rhoas context](rhoas_context.md)	 - Group, share and manage your rhoas services
-* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your OpenShift clusters which host your kafkas.
+* [rhoas dedicated](rhoas_dedicated.md)	 - Manage your Hybrid OpenShift clusters which host your Kafka instances.
 * [rhoas generate-config](rhoas_generate-config.md)	 - Generate configurations for the service context
 * [rhoas kafka](rhoas_kafka.md)	 - Create, view, use, and manage your Kafka instances
 * [rhoas login](rhoas_login.md)	 - Log in to RHOAS
