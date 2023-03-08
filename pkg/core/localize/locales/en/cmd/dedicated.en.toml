@@ -32,7 +32,7 @@ one = 'No valid OpenShift clusters found.'
 one = 'The cluster ID you have given "{{.ID}}" is not associated with a cluster'
 
 [dedicated.deregisterCluster.deletingKafka.message]
-one = 'The Kafka instance: "{{.Name}}" is still deleting'
+one = 'Waiting for all Kafkas to be deleted'
 
 [dedicated.deregisterCluster.deletingKafka.success]
 one = 'All Kafka instances have been deleted from cluster'
