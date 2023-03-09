@@ -158,7 +158,9 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 		return err
 	}
 
-	// get the desired cluster
+	// get the desired cluster name from the selected cluster string, rosa clusters cannot have spaces in their name
+	// therefore, we can split the string by the first space and get the cluster name
+	selectedClusterName = strings.Split(selectedClusterName, " (")[0]
 	for i := range opts.clusterList {
 		cluster := opts.clusterList[i]
 		if cluster.Name() == selectedClusterName {

@@ -14,6 +14,7 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -268,7 +269,11 @@ func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*cluster
 		return err
 	}
 
-	// get the desired cluster
+	// get the desired cluster, ROSA cluster names and IDs cannot have spaces in them, so we can safely split on spaces
+	// strip brackets from the cluster ID
+	selectedClusterName = strings.Split(selectedClusterName, " ")[0]
+	selectedClusterName = strings.TrimSuffix(selectedClusterName, ")")
+	selectedClusterName = strings.TrimPrefix(selectedClusterName, "(")
 	for _, cluster := range *clusterList {
 		if cluster.Name() == selectedClusterName {
 			opts.selectedCluster = cluster

@@ -26,7 +26,7 @@ rhoas dedicated register-cluster
 ### SEE ALSO
 
 * [rhoas](rhoas.md)	 - RHOAS CLI
-* [rhoas dedicated deregister-cluster](rhoas_dedicated_deregister-cluster.md)	 - Deregister an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka
+* [rhoas dedicated deregister-cluster](rhoas_dedicated_deregister-cluster.md)	 - Deregister a Hybrid OpenShift cluster from use with Red Hat OpenShift Streams for Apache Kafka
 * [rhoas dedicated list](rhoas_dedicated_list.md)	 - List all OpenShift clusters registered with Red Hat OpenShift Streams for Apache Kafka
 * [rhoas dedicated register-cluster](rhoas_dedicated_register-cluster.md)	 - Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka
 

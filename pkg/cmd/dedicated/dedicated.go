@@ -22,5 +22,7 @@ func NewDedicatedCmd(f *factory.Factory) *cobra.Command {
 		deregister.NewDeRegisterClusterCommand(f),
 	)
 
+	cmd.Hidden = true
+
 	return cmd
 }

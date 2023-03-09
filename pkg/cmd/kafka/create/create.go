@@ -71,10 +71,12 @@ type options struct {
 	bypassChecks bool
 	dryRun       bool
 
-	kfmClusterList       *kafkamgmtclient.EnterpriseClusterList
-	selectedCluster      *kafkamgmtclient.EnterpriseCluster
-	clusterMap           *map[string]v1.Cluster
-	useEnterpriseCluster bool
+	kfmClusterList          *kafkamgmtclient.EnterpriseClusterList
+	selectedCluster         *kafkamgmtclient.EnterpriseCluster
+	clusterMap              *map[string]v1.Cluster
+	useEnterpriseCluster    bool
+	clusterManagementApiUrl string
+	accessToken             string
 
 	f *factory.Factory
 }
@@ -158,6 +160,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.common.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 	flags.StringVar(&opts.clusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.create.flag.clusterId.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetCloudProviderCompletionValues(f)
@@ -182,6 +186,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	_ = cmd.RegisterFlagCompletionFunc(FlagBillingModel, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetBillingModelCompletionValues(f)
 	})
+
+	_ = flags.MarkHidden("cluster-mgmt-api-url")
+	_ = flags.MarkHidden("access-token")
 
 	return cmd
 }
@@ -469,7 +476,7 @@ func setEnterpriseClusterList(opts *options) (*kafkamgmtclient.EnterpriseCluster
 		return nil, nil, fmt.Errorf("%v, %w", response.Status, err)
 	}
 
-	clusterMap, err := getClusterNameMap(opts.f, kfmClusterList)
+	clusterMap, err := getClusterNameMap(opts, kfmClusterList)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -542,7 +549,25 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
+	// getting org quotas
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, err
+	}
+
+	var enterpriseQuota accountmgmtutil.QuotaSpec
 	if opts.useEnterpriseCluster {
+		if len(orgQuota.EnterpriseQuotas) < 1 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
+		}
+
+		enterpriseQuota = orgQuota.EnterpriseQuotas[0]
+
+		// there is no quota left to use enterprise
+		if enterpriseQuota.Quota == 0 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
+		}
+	
 		index, err := selectClusterPrompt(opts)
 		if err != nil {
 			return nil, err
@@ -565,26 +590,6 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		answers, err = cloudProviderPrompt(f, answers)
 		if err != nil {
 			return nil, err
-		}
-	}
-
-	// getting org quotas
-	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
-	if err != nil {
-		return nil, err
-	}
-
-	var enterpriseQuota accountmgmtutil.QuotaSpec
-	if opts.useEnterpriseCluster {
-		if len(orgQuota.EnterpriseQuotas) < 1 {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
-		}
-
-		enterpriseQuota = orgQuota.EnterpriseQuotas[0]
-
-		// there is no quota left to use enterprise
-		if enterpriseQuota.Quota == 0 {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
 		}
 	}
 
@@ -814,10 +819,10 @@ func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAns
 }
 
 // This may need to altered as the `name` are mutable on ocm side
-func getClusterNameMap(f *factory.Factory, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
+func getClusterNameMap(opts *options, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
 	//	for each cluster in the list, get the name from ocm and add it to the cluster list
 	str := kafkautil.CreateClusterSearchStringFromKafkaList(clusterList)
-	ocmClusterList, err := clustermgmt.GetClusterListByIds(f, "", "", str, len(clusterList.Items))
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, str, len(clusterList.Items))
 	if err != nil {
 		return nil, err
 	}
