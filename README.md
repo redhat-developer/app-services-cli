@@ -3,7 +3,7 @@
    <img alt="Apache" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg">
   </a>   
   <a href="https://go.dev" target="_blank">
-    <img alt="Go" src="https://img.shields.io/github/go-mod/go-version/gomods/athens.svg">
+    <img alt="Go" src="https://img.shields.io/github/go-mod/go-version/redhat-developer/app-services-cli">
   </a>    
   <a href="https://goreportcard.com" target="_blank">
     <img alt="Go reference" src="https://pkg.go.dev/badge/github.com/redhat-developer/app-services-cli?utm_source=godoc">
