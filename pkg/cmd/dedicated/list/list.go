@@ -1,4 +1,4 @@
-package listclusters
+package list
 
 import (
 	"fmt"
@@ -71,7 +71,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 
 	opts.kfmClusterList = kfmClusterList
 
-	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(opts.kfmClusterList), len(opts.kfmClusterList.Items))
+	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, kafkautil.CreateClusterSearchStringFromKafkaList(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
 	}

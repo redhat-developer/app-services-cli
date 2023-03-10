@@ -4,8 +4,8 @@ Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka
 
 ### Synopsis
 
-You can use your own OpenShift cluster to provision your Kafka instances which will be managed by Red Hat Streams for Apache Kafka
-This command will register your cluster with Red Hat Streams for Apache Kafka
+You can use your own OpenShift cluster to provision your Kafka instances which will be managed by Red Hat OpenShift Streams for Apache Kafka
+This command will register your cluster with Red Hat OpenShift Streams for Apache Kafka
 
 
 ```
@@ -15,10 +15,10 @@ rhoas dedicated register-cluster [flags]
 ### Examples
 
 ```
-# Register an OpenShift cluster with Red Hat Streams for Apache Kafka by selecting from a list of available clusters
+# Register an OpenShift cluster with Red Hatl OpenShift Streams for Apache Kafka by selecting from a list of available clusters
 rhoas dedicated register-cluster
 
-# Register an OpenShift cluster with Red Hat Streams for Apache Kafka by specifying the cluster ID
+# Register an OpenShift cluster with Red Hat OpenShift Streams for Apache Kafka by specifying the cluster ID
 rhoas dedicated register-cluster --cluster-id 1234-5678-90ab-cdef
 
 ```

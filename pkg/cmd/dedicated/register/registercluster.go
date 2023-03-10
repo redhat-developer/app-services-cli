@@ -152,21 +152,14 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 		Options: clusterStringList,
 	}
 
-	var selectedClusterName string
-	err := survey.AskOne(prompt, &selectedClusterName)
+	var idx int
+	err := survey.AskOne(prompt, &idx)
 	if err != nil {
 		return err
 	}
+	opts.selectedCluster = opts.clusterList[idx]
+	opts.selectedClusterId = opts.clusterList[idx].ID()
 
-	// get the desired cluster name from the selected cluster string, rosa clusters cannot have spaces in their name
-	// therefore, we can split the string by the first space and get the cluster name
-	selectedClusterName = strings.Split(selectedClusterName, " (")[0]
-	for i := range opts.clusterList {
-		cluster := opts.clusterList[i]
-		if cluster.Name() == selectedClusterName {
-			opts.selectedCluster = cluster
-		}
-	}
 	return nil
 }
 

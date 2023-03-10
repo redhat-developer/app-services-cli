@@ -14,7 +14,6 @@ import (
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -120,11 +119,11 @@ func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
 			if response.StatusCode == 403 {
 				return nil, opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.error.403")
 			}
-
-			return nil, fmt.Errorf("%v, %w", response.Status, err)
+			return nil, fmt.Errorf("%v: %w", response.Status, err)
 		}
+		return nil, err
 	}
-	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
 	if err != nil {
 		return nil, err
 	}
@@ -258,29 +257,18 @@ func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*cluster
 		clusterStringList = append(clusterStringList, display)
 	}
 
-	// TO-DO add page size
 	prompt := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectCluster.message"),
 		Options: clusterStringList,
 	}
 
-	var selectedClusterName string
-	err := survey.AskOne(prompt, &selectedClusterName)
+	var idx int
+	err := survey.AskOne(prompt, &idx)
 	if err != nil {
 		return err
 	}
-
-	// get the desired cluster, ROSA cluster names and IDs cannot have spaces in them, so we can safely split on spaces
-	// strip brackets from the cluster ID
-	selectedClusterName = strings.Split(selectedClusterName, " ")[0]
-	selectedClusterName = strings.TrimSuffix(selectedClusterName, ")")
-	selectedClusterName = strings.TrimPrefix(selectedClusterName, "(")
-	for _, cluster := range *clusterList {
-		if cluster.Name() == selectedClusterName {
-			opts.selectedCluster = cluster
-			opts.selectedClusterId = cluster.ID()
-		}
-	}
+	opts.selectedCluster = (*clusterList)[idx]
+	opts.selectedClusterId = opts.selectedCluster.ID()
 	return nil
 }
 
