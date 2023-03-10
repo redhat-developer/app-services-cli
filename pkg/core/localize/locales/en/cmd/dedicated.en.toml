@@ -4,12 +4,12 @@ one = 'Deregister a Hybrid OpenShift cluster from use with Red Hat OpenShift Str
 [dedicated.deregisterCluster.cmd.longDescription]
 one = '''
 Removes the ability to provision your own Kafka instances on your OpenShift cluster, this command will deregister your
-Hybrid OpenShift cluster from use with Red Hat OpenShift Streams for Apache Kafka
+Hybrid OpenShift cluster from use with Red Hat OpenShift Streams for Apache Kafka.
 '''
 
 [dedicated.deregisterCluster.cmd.example]
 one = '''
-# Deregister an OpenShift cluster from use with Red Hat Streams for Apache Kafka by selecting from a list of available clusters
+# Deregister an OpenShift cluster from use with Red Hat Streams for Apache Kafka by selecting from a list of available clusters.
 rhoas dedicated deregister-cluster
 
 # Deregister an OpenShift cluster from Red Hat Streams for Apache Kafka by specifying the cluster ID
@@ -32,7 +32,7 @@ one = 'No valid OpenShift clusters found'
 one = 'The cluster ID you have given "{{.ID}}" is not associated with an OpenShift cluster'
 
 [dedicated.deregisterCluster.deletingKafka.message]
-one = 'Waiting for all Kafkas to be deleted'
+one = 'Waiting for all Kafka instances to be deleted'
 
 [dedicated.deregisterCluster.deletingKafka.success]
 one = 'All Kafka instances have been deleted from cluster'
@@ -92,7 +92,7 @@ one = 'Manage your Hybrid OpenShift clusters which host your Kafka instances'
 [dedicated.cmd.longDescription]
 one = '''
 Red Hat OpenShift Streams for Apache Kafka allows you to use your own OpenShift clusters to provision your
-Kafka instances. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka
+Kafka instances. These Kafka instances will be managed by Red Hat OpenShift Streams for Apache Kafka.
 '''
 
 [dedicated.cmd.example]
