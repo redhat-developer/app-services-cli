@@ -568,14 +568,14 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
 		}
 
-		index, err := selectClusterPrompt(opts)
-		if err != nil {
-			return nil, err
+		index, err2 := selectClusterPrompt(opts)
+		if err2 != nil {
+			return nil, err2
 		}
 
-		cluster, err := getClusterDetails(opts.f, opts.kfmClusterList.GetItems()[index].GetId())
-		if err != nil {
-			return nil, err
+		cluster, err2 := getClusterDetails(opts.f, opts.kfmClusterList.GetItems()[index].GetId())
+		if err2 != nil {
+			return nil, err2
 		}
 
 		if cluster.GetCapacityInformation().RemainingKafkaStreamingUnits == 0 {
@@ -624,6 +624,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	var sizes []kafkamgmtclient.SupportedKafkaSize
+	// nolint:staticcheck
 	payload := &kafkamgmtclient.KafkaRequestPayload{}
 
 	if opts.useEnterpriseCluster {
@@ -724,7 +725,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 
 		index, err := promptUserForSizes(opts.f, &sizes)
-		if err == nil {
+		if err != nil {
 			return nil, err
 		}
 

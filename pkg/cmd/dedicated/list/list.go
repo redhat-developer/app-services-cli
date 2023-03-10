@@ -63,7 +63,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 				return opts.f.Localizer.MustLocalizeError("dedicated.list.error.permissionDenied")
 			}
 
-			return fmt.Errorf("%v, %v", response.Status, err)
+			return fmt.Errorf("%v, %w", response.Status, err)
 		}
 
 		return err

@@ -13,7 +13,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"github.com/spf13/cobra"
-	"net/http"
 	"time"
 )
 
@@ -113,6 +112,7 @@ func runDeRegisterClusterCmd(opts *options) error {
 }
 
 func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
+	// nolint: bodyclose
 	kfmClusterList, response, err := kafkautil.ListEnterpriseClusters(opts.f)
 	if err != nil {
 		if response != nil {
@@ -147,13 +147,13 @@ func getkafkasInCluster(opts *options) ([]kafkamgmtclient.KafkaRequest, error) {
 	api := conn.API()
 
 	a := api.KafkaMgmt().GetKafkas(opts.f.Context).Search(fmt.Sprintf("cluster_id = %v", opts.selectedCluster.ID()))
-
-	// deal with response errors at some point
-	kafkaList, httpresponse, err := a.Execute()
-	opts.f.Logger.Debug("HTTP Response", httpresponse)
+	// nolint:bodyclose
+	kafkaList, response, err := a.Execute()
 	if err != nil {
 		return nil, err
 	}
+
+	opts.f.Logger.Debug("HTTP Response", response)
 
 	return kafkaList.Items, nil
 }
@@ -172,59 +172,50 @@ func runKafkaNameConfirmPrompt(opts *options, kafka *kafkamgmtclient.KafkaReques
 		}
 
 		if confirmedKafkaName == kafka.GetName() {
-			return nil
-		} else {
-			opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
+			break
 		}
+
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.delete.log.info.incorrectNameConfirmation"))
 	}
 
 	return nil
 }
 
 func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) error {
+	conn, err := opts.f.Connection()
+	if err != nil {
+		return err
+	}
 
-	checkIfDeletedCallbacks := make([]func() (*http.Response, error), 0)
+	api := conn.API()
 
-	for _, kafka := range *kafkas {
+	checkIfDeletedIdList := make([]string, 0)
+
+	for i := 0; i < len(*kafkas); i++ {
+		kafka := (*kafkas)[i]
 
 		err := runKafkaNameConfirmPrompt(opts, &kafka)
 		if err != nil {
 			return err
 		}
 
-		conn, err := opts.f.Connection()
-		if err != nil {
-			return err
-		}
-
-		api := conn.API()
-
 		// delete the Kafka
 		opts.f.Logger.Debug(opts.f.Localizer.MustLocalize("kafka.delete.log.debug.deletingKafka"), fmt.Sprintf("\"%s\"", kafka.GetName()))
-		a := api.KafkaMgmt().DeleteKafkaById(opts.f.Context, kafka.GetId())
-		a = a.Async(true)
+		a := api.KafkaMgmt().DeleteKafkaById(opts.f.Context, kafka.GetId()).Async(true)
+		// nolint: bodyclose
 		_, _, err = a.Execute()
-
 		if err != nil {
 			return err
 		}
 
-		checkIfDeletedRefresh := func() (*http.Response, error) {
-			a := api.KafkaMgmt().GetKafkaById(opts.f.Context, kafka.GetId())
-			_, response, err := a.Execute()
-			if err != nil {
-				return response, err
-			}
-
-			return response, nil
-		}
-
-		checkIfDeletedCallbacks = append(checkIfDeletedCallbacks, checkIfDeletedRefresh)
+		checkIfDeletedIdList = append(checkIfDeletedIdList, kafka.GetName())
 	}
-	for len(checkIfDeletedCallbacks) > 0 {
 
-		for i := 0; i < len(checkIfDeletedCallbacks); i += 1 {
-			response, err := checkIfDeletedCallbacks[i]()
+	for len(checkIfDeletedIdList) > 0 {
+		for i, id := range checkIfDeletedIdList {
+			a := api.KafkaMgmt().GetKafkaById(opts.f.Context, id)
+			_, response, err := a.Execute()
+
 			if err != nil {
 				if response == nil {
 					return err
@@ -234,7 +225,7 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 					// remove this callback from the callback list as the kafka is deleted
 					// break to restart the loop from the beginning as we are modifying the list
 					// as we are iterating through it
-					checkIfDeletedCallbacks = append(checkIfDeletedCallbacks[:i], checkIfDeletedCallbacks[i+1:]...)
+					checkIfDeletedIdList = append(checkIfDeletedIdList[:i], checkIfDeletedIdList[i+1:]...)
 					break
 				} else {
 					return fmt.Errorf(fmt.Sprintf("%v, %v", opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.failed"), response.Status))
