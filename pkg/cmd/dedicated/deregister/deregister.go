@@ -117,16 +117,13 @@ func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
 	if err != nil {
 		if response != nil {
 			if response.StatusCode == 403 {
-				return nil, opts.f.Localizer.MustLocalizeError("")
+				return nil, opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.error.403")
 			}
-
-			return nil, fmt.Errorf("%v, %v", response.Status, err)
+			return nil, fmt.Errorf("%v: %w", response.Status, err)
 		}
-
 		return nil, err
 	}
-
-	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
 	if err != nil {
 		return nil, err
 	}
@@ -235,7 +232,7 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 
 				if response.StatusCode == 404 {
 					// remove this callback from the callback list as the kafka is deleted
-					// break to restart the loop from the begining as we are modifying the list
+					// break to restart the loop from the beginning as we are modifying the list
 					// as we are iterating through it
 					checkIfDeletedCallbacks = append(checkIfDeletedCallbacks[:i], checkIfDeletedCallbacks[i+1:]...)
 					break
@@ -256,28 +253,22 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*clustersmgmtv1.Cluster) error {
 	clusterStringList := make([]string, 0)
 	for _, cluster := range *clusterList {
-		clusterStringList = append(clusterStringList, cluster.Name())
+		display := fmt.Sprintf("%s (%s)", cluster.Name(), cluster.ID())
+		clusterStringList = append(clusterStringList, display)
 	}
 
-	// TO-DO add page size
 	prompt := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectCluster.message"),
 		Options: clusterStringList,
 	}
 
-	var selectedClusterName string
-	err := survey.AskOne(prompt, &selectedClusterName)
+	var idx int
+	err := survey.AskOne(prompt, &idx)
 	if err != nil {
 		return err
 	}
-
-	// get the desired cluster
-	for _, cluster := range *clusterList {
-		if cluster.Name() == selectedClusterName {
-			opts.selectedCluster = cluster
-			opts.selectedClusterId = cluster.ID()
-		}
-	}
+	opts.selectedCluster = (*clusterList)[idx]
+	opts.selectedClusterId = opts.selectedCluster.ID()
 	return nil
 }
 

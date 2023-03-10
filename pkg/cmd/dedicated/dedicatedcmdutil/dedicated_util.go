@@ -1,7 +1,9 @@
-package kafkacmdutil
+package dedicatedcmdutil
 
 import (
 	"fmt"
+	"github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"strconv"
 
 	"github.com/redhat-developer/app-services-cli/pkg/core/errors"
@@ -37,4 +39,28 @@ func (v *Validator) ValidatorForMachinePoolNodes(val interface{}) error {
 			"must be a is a multiple of 3")
 	}
 	return nil
+}
+
+func CreatePromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) *[]string {
+	promptOptions := []string{}
+	validatedClusters := ValidateClusters(clusterList)
+	for _, cluster := range validatedClusters.Items {
+		ocmCluster := (*clusterMap)[cluster.GetId()]
+		display := ocmCluster.Name() + " (" + cluster.GetId() + ")"
+		promptOptions = append(promptOptions, display)
+	}
+	return &promptOptions
+}
+
+func ValidateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafkamgmtclient.EnterpriseClusterList {
+	// if cluster is in a ready state add it to the list of clusters
+	items := make([]kafkamgmtclient.EnterpriseClusterListItem, 0, len(clusterList.Items))
+	for _, cluster := range clusterList.Items {
+		if *cluster.Status == "ready" {
+			items = append(items, cluster)
+		}
+	}
+
+	newClusterList := kafkamgmtclient.NewEnterpriseClusterList(clusterList.Kind, clusterList.Page, int32(len(items)), clusterList.Total, items)
+	return newClusterList
 }

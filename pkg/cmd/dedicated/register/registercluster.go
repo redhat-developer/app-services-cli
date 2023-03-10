@@ -3,6 +3,7 @@ package register
 import (
 	"context"
 	"fmt"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
-	dedicatedcmdutil "github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	kafkamgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
@@ -126,6 +126,7 @@ func getPaginatedClusterList(opts *options) error {
 	opts.clusterList = validateClusters(cl, opts.clusterList)
 	return nil
 }
+
 func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1.Cluster) []clustersmgmtv1.Cluster {
 	for _, cluster := range clusters.Slice() {
 		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
@@ -142,7 +143,8 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	clusterStringList := make([]string, 0)
 	for i := range opts.clusterList {
 		cluster := opts.clusterList[i]
-		clusterStringList = append(clusterStringList, cluster.Name())
+		display := fmt.Sprintf("%s (%s)", cluster.Name(), cluster.ID())
+		clusterStringList = append(clusterStringList, display)
 	}
 
 	prompt := &survey.Select{
@@ -150,19 +152,14 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 		Options: clusterStringList,
 	}
 
-	var selectedClusterName string
-	err := survey.AskOne(prompt, &selectedClusterName)
+	var idx int
+	err := survey.AskOne(prompt, &idx)
 	if err != nil {
 		return err
 	}
+	opts.selectedCluster = opts.clusterList[idx]
+	opts.selectedClusterId = opts.clusterList[idx].ID()
 
-	// get the desired cluster
-	for i := range opts.clusterList {
-		cluster := opts.clusterList[i]
-		if cluster.Name() == selectedClusterName {
-			opts.selectedCluster = cluster
-		}
-	}
 	return nil
 }
 
@@ -267,7 +264,6 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 		Connection: opts.f.Connection,
 	}
 
-	// TO-DO add page size and better help message
 	promptNodeCount := &survey.Input{
 		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.message"),
 		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.help"),
@@ -282,8 +278,7 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 	if err != nil {
 		return err
 	}
-	mp := &clustersmgmtv1.MachinePool{}
-	mp, err = clustermgmt.CreateMachinePool(opts.f, opts.clusterManagementApiUrl, opts.accessToken, dedicatedMachinePool, opts.selectedCluster.ID())
+	mp, err := clustermgmt.CreateMachinePool(opts.f, opts.clusterManagementApiUrl, opts.accessToken, dedicatedMachinePool, opts.selectedCluster.ID())
 	if err != nil {
 		return err
 	}
@@ -344,7 +339,7 @@ func getKafkaFleetShardAddonIdByEnv(con *config.Config) string {
 	return fleetshardAddonIdQE
 }
 
-// TO-DO go through errs and make them more user friendly with actual error messages.
+// TO-DO go through errs and make them more user-friendly with actual error messages.
 func registerClusterWithKasFleetManager(opts *options) error {
 	clusterIngressDNSName, err := parseDNSURL(opts)
 	if err != nil {
@@ -383,5 +378,6 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	}
 	opts.f.Logger.Debugf("response fleetshard params: ", response.FleetshardParameters)
 	opts.f.Logger.Debugf("r: ", r)
+	opts.f.Logger.Infof(opts.f.Localizer.MustLocalize("dedicated.registerCluster.info.clusterRegisteredWithKasFleetManager"))
 	return nil
 }
