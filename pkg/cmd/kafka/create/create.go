@@ -567,7 +567,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		if enterpriseQuota.Quota == 0 {
 			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
 		}
-	
+
 		index, err := selectClusterPrompt(opts)
 		if err != nil {
 			return nil, err
