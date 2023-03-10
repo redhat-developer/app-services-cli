@@ -442,7 +442,7 @@ one = 'you do not have any enterprise quota availble'
 one = 'you have no remaining quoata to create a Kafka instance'
 
 [kafka.create.error.noCapacityInSelectedCluster]
-one = 'the cluster you selected does not have any remainging capacity'
+one = 'the cluster you selected does not have any remaining capacity'
 
 [kafka.create.provider.error.unsupportedMarketplace]
 one = 'selected marketplace is not supported for the cloud provider'

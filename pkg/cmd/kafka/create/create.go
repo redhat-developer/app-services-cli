@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"os"
@@ -70,10 +71,12 @@ type options struct {
 	bypassChecks bool
 	dryRun       bool
 
-	kfmClusterList       *kafkamgmtclient.EnterpriseClusterList
-	selectedCluster      *kafkamgmtclient.EnterpriseCluster
-	clusterMap           *map[string]v1.Cluster
-	useEnterpriseCluster bool
+	kfmClusterList          *kafkamgmtclient.EnterpriseClusterList
+	selectedCluster         *kafkamgmtclient.EnterpriseCluster
+	clusterMap              *map[string]v1.Cluster
+	useEnterpriseCluster    bool
+	clusterManagementApiUrl string
+	accessToken             string
 
 	f *factory.Factory
 }
@@ -157,6 +160,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.common.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 	flags.StringVar(&opts.clusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.create.flag.clusterId.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetCloudProviderCompletionValues(f)
@@ -181,6 +186,9 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	_ = cmd.RegisterFlagCompletionFunc(FlagBillingModel, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetBillingModelCompletionValues(f)
 	})
+
+	_ = flags.MarkHidden("cluster-mgmt-api-url")
+	_ = flags.MarkHidden("access-token")
 
 	return cmd
 }
@@ -465,10 +473,10 @@ func setEnterpriseClusterList(opts *options) (*kafkamgmtclient.EnterpriseCluster
 			return &kafkamgmtclient.EnterpriseClusterList{}, &emptyClusterMap, nil
 		}
 
-		return nil, nil, fmt.Errorf("%v, %v", response.Status, err)
+		return nil, nil, fmt.Errorf("%v, %w", response.Status, err)
 	}
 
-	clusterMap, err := getClusterNameMap(opts.f, kfmClusterList)
+	clusterMap, err := getClusterNameMap(opts, kfmClusterList)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -489,7 +497,10 @@ func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	}
 
 	var idx int
-	survey.AskOne(promptForCluster, &idx)
+	err := survey.AskOne(promptForCluster, &idx)
+	if err != nil {
+		return err
+	}
 	if idx == 0 {
 		opts.useEnterpriseCluster = false
 	} else {
@@ -538,7 +549,25 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
+	// getting org quotas
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, err
+	}
+
+	var enterpriseQuota accountmgmtutil.QuotaSpec
 	if opts.useEnterpriseCluster {
+		if len(orgQuota.EnterpriseQuotas) < 1 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
+		}
+
+		enterpriseQuota = orgQuota.EnterpriseQuotas[0]
+
+		// there is no quota left to use enterprise
+		if enterpriseQuota.Quota == 0 {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
+		}
+	
 		index, err := selectClusterPrompt(opts)
 		if err != nil {
 			return nil, err
@@ -561,26 +590,6 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		answers, err = cloudProviderPrompt(f, answers)
 		if err != nil {
 			return nil, err
-		}
-	}
-
-	// getting org quotas
-	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
-	if err != nil {
-		return nil, err
-	}
-
-	var enterpriseQuota accountmgmtutil.QuotaSpec
-	if opts.useEnterpriseCluster {
-		if len(orgQuota.EnterpriseQuotas) < 1 {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
-		}
-
-		enterpriseQuota = orgQuota.EnterpriseQuotas[0]
-
-		// there is no quota left to use enteprise
-		if enterpriseQuota.Quota == 0 {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noQuotaLeft")
 		}
 	}
 
@@ -608,7 +617,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	// if billing model is marketplace, prompt for marketplace provider and account id
 	if answers.BillingModel == accountmgmtutil.QuotaMarketplaceType {
-		answers, err = marketplaceQuotaPrompt(orgQuota, answers, f, err)
+		answers, err = marketplaceQuotaPrompt(orgQuota, answers, f)
 		if err != nil {
 			return nil, err
 		}
@@ -751,7 +760,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	return payload, nil
 }
 
-func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers, f *factory.Factory, err error) (*promptAnswers, error) {
+func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers, f *factory.Factory) (*promptAnswers, error) {
 	validMarketPlaces := FetchValidMarketplaces(orgQuota.MarketplaceQuotas, answers.CloudProvider)
 	if len(validMarketPlaces) == 1 {
 		answers.Marketplace = validMarketPlaces[0]
@@ -760,7 +769,7 @@ func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *prompt
 			Message: f.Localizer.MustLocalize("kafka.create.input.marketplace.message"),
 			Options: validMarketPlaces,
 		}
-		err = survey.AskOne(marketplacePrompt, &answers.Marketplace)
+		err := survey.AskOne(marketplacePrompt, &answers.Marketplace)
 		if err != nil {
 			return nil, err
 		}
@@ -777,7 +786,7 @@ func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *prompt
 				Message: f.Localizer.MustLocalize("kafka.create.input.marketplaceAccountID.message"),
 				Options: validMarketplaceAcctIDs,
 			}
-			err = survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
+			err := survey.AskOne(marketplaceAccountPrompt, &answers.MarketplaceAcctID)
 			if err != nil {
 				return nil, err
 			}
@@ -810,10 +819,10 @@ func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAns
 }
 
 // This may need to altered as the `name` are mutable on ocm side
-func getClusterNameMap(f *factory.Factory, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
+func getClusterNameMap(opts *options, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
 	//	for each cluster in the list, get the name from ocm and add it to the cluster list
 	str := kafkautil.CreateClusterSearchStringFromKafkaList(clusterList)
-	ocmClusterList, err := clustermgmt.GetClusterListByIds(f, "", "", str, len(clusterList.Items))
+	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, str, len(clusterList.Items))
 	if err != nil {
 		return nil, err
 	}
@@ -825,32 +834,8 @@ func getClusterNameMap(f *factory.Factory, clusterList *kafkamgmtclient.Enterpri
 
 }
 
-func validateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafkamgmtclient.EnterpriseClusterList {
-	// if cluster is in a ready state add it to the list of clusters
-	items := make([]kafkamgmtclient.EnterpriseClusterListItem, 0, len(clusterList.Items))
-	for _, cluster := range clusterList.Items {
-		if *cluster.Status == "ready" {
-			items = append(items, cluster)
-		}
-	}
-
-	newClusterList := kafkamgmtclient.NewEnterpriseClusterList(clusterList.Kind, clusterList.Page, int32(len(items)), clusterList.Total, items)
-	return newClusterList
-}
-
-func createPromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) *[]string {
-	promptOptions := []string{}
-	validatedClusters := validateClusters(clusterList)
-	for _, cluster := range validatedClusters.Items {
-		ocmCluster := (*clusterMap)[cluster.GetId()]
-		display := ocmCluster.Name() + " (" + cluster.GetId() + ")"
-		promptOptions = append(promptOptions, display)
-	}
-	return &promptOptions
-}
-
 func selectClusterPrompt(opts *options) (int, error) {
-	promptOptions := createPromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
+	promptOptions := dedicatedcmdutil.CreatePromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
 	promptForCluster := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.selectClusterMessage"),
 		Options: *promptOptions,
@@ -912,6 +897,7 @@ func getClusterDetails(f *factory.Factory, clusterId string) (*kafkamgmtclient.E
 
 	return &cluster, nil
 }
+
 func CreateNullableString(str *string) kafkamgmtclient.NullableString {
 	return *kafkamgmtclient.NewNullableString(str)
 }

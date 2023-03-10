@@ -1,4 +1,4 @@
-package listclusters
+package list
 
 import (
 	"testing"

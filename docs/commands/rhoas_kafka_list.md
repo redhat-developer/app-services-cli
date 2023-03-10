@@ -29,7 +29,7 @@ $ rhoas kafka list -o json
 ### Options
 
 ```
-      --limit int       The maximum number of Kafka instances to be returned (default 100)
+      --limit int       The maximum number of Kafka instances to be returned (default 10)
   -o, --output string   Specify the output format. Choose from: "json", "yaml", "yml"
       --page int        Display the Kafka instances from the specified page number (default 1)
       --search string   Text search to filter the Kafka instances by name, owner, cloud_provider, region and status

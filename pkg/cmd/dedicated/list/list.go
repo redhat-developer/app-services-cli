@@ -1,8 +1,9 @@
-package listclusters
+package list
 
 import (
 	"fmt"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
@@ -45,7 +46,12 @@ func NewListClusterCommand(f *factory.Factory) *cobra.Command {
 		},
 	}
 
+	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
+
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
 	return cmd
+
 }
 
 func runListClusters(opts *options, f *factory.Factory) error {
@@ -65,7 +71,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 
 	opts.kfmClusterList = kfmClusterList
 
-	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.accessToken, opts.clusterManagementApiUrl, kafkautil.CreateClusterSearchStringFromKafkaList(opts.kfmClusterList), len(opts.kfmClusterList.Items))
+	clist, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, kafkautil.CreateClusterSearchStringFromKafkaList(opts.kfmClusterList), len(opts.kfmClusterList.Items))
 	if err != nil {
 		return err
 	}
