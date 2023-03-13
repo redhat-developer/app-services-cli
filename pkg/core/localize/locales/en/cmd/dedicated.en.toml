@@ -26,7 +26,10 @@ one = 'The access token to use to authenticate with the OpenShift Cluster Manage
 one = 'The ID of the OpenShift cluster to deregister'
 
 [dedicated.deregisterCluster.run.noClusterFound]
-one = 'No valid OpenShift clusters found'
+one = '''
+No valid OpenShift clusters found.
+Try passing a different page number or increasing the page size.
+'''
 
 [dedicated.deregisterCluster.noClusterFoundFromIdFlag]
 one = 'The cluster ID you have given "{{.ID}}" is not associated with an OpenShift cluster'
@@ -50,7 +53,10 @@ This command will register your cluster with Red Hat Streams for Apache Kafka
 '''
 
 [dedicated.registerCluster.run.noClusterFound]
-one = 'No valid OpenShift clusters found'
+one = '''
+No valid OpenShift clusters found.
+Try passing a different page number or increasing the page size.
+'''
 
 [dedicated.registerCluster.cmd.example]
 one = '''

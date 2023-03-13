@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
@@ -187,8 +188,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetBillingModelCompletionValues(f)
 	})
 
-	_ = flags.MarkHidden("cluster-mgmt-api-url")
-	_ = flags.MarkHidden("access-token")
+	dedicatedcmdutil.HideClusterMgmtFlags(flags)
 
 	return cmd
 }
@@ -501,11 +501,7 @@ func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	if err != nil {
 		return err
 	}
-	if idx == 0 {
-		opts.useEnterpriseCluster = false
-	} else {
-		opts.useEnterpriseCluster = true
-	}
+	opts.useEnterpriseCluster = idx != 0
 
 	return nil
 }
@@ -823,7 +819,7 @@ func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAns
 func getClusterNameMap(opts *options, clusterList *kafkamgmtclient.EnterpriseClusterList) (*map[string]v1.Cluster, error) {
 	//	for each cluster in the list, get the name from ocm and add it to the cluster list
 	str := kafkautil.CreateClusterSearchStringFromKafkaList(clusterList)
-	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, str, len(clusterList.Items))
+	ocmClusterList, err := clustermgmt.GetClusterListWithSearchParams(opts.f, opts.clusterManagementApiUrl, opts.accessToken, str, int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), len(clusterList.Items))
 	if err != nil {
 		return nil, err
 	}

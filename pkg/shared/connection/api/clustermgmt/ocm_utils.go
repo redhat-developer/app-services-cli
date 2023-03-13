@@ -38,6 +38,22 @@ func GetClusterList(f *factory.Factory, accessToken string, clustermgmturl strin
 	return clusters, nil
 }
 
+func GetClusterById(f *factory.Factory, accessToken string, clustermgmturl string, clusterId string) (*v1.Cluster, error) {
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
+	if err != nil {
+		return nil, err
+	}
+	defer closeConnection()
+
+	resource := client.Clusters().Cluster(clusterId)
+	response, err := resource.Get().Send()
+	if err != nil {
+		return nil, err
+	}
+	cluster := response.Body()
+	return cluster, nil
+}
+
 func GetMachinePoolList(f *factory.Factory, clustermgmturl string, accessToken string, clusterId string) (*v1.MachinePoolsListResponse, error) {
 	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
@@ -52,13 +68,13 @@ func GetMachinePoolList(f *factory.Factory, clustermgmturl string, accessToken s
 	return response, nil
 }
 
-func GetClusterListByIds(f *factory.Factory, clustermgmturl string, accessToken string, params string, size int) (*v1.ClusterList, error) {
+func GetClusterListWithSearchParams(f *factory.Factory, clustermgmturl string, accessToken string, params string, page int, size int) (*v1.ClusterList, error) {
 	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
 	if err != nil {
 		return nil, err
 	}
 	defer closeConnection()
-	resource := client.Clusters().List().Search(params).Size(size)
+	resource := client.Clusters().List().Search(params).Size(size).Page(page)
 	response, err := resource.Send()
 	if err != nil {
 		return nil, err
