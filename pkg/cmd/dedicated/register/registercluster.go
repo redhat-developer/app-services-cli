@@ -23,10 +23,10 @@ type options struct {
 	selectedClusterId             string
 	clusterManagementApiUrl       string
 	accessToken                   string
-	clusterList                   []clustersmgmtv1.Cluster
-	selectedCluster               clustersmgmtv1.Cluster
-	existingMachinePoolList       []clustersmgmtv1.MachinePool
-	selectedClusterMachinePool    clustersmgmtv1.MachinePool
+	clusterList                   *clustersmgmtv1.ClusterList
+	selectedCluster               *clustersmgmtv1.Cluster
+	existingMachinePoolList       []*clustersmgmtv1.MachinePool
+	selectedClusterMachinePool    *clustersmgmtv1.MachinePool
 	requestedMachinePoolNodeCount int
 	accessKafkasViaPrivateNetwork bool
 	pageNumber                    int
@@ -74,75 +74,60 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	flags.IntVar(&opts.pageNumber, "page-number", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("dedicated.registerCluster.flag.pageNumber.description"))
 	flags.IntVar(&opts.pageSize, "page-size", 100, f.Localizer.MustLocalize("dedicated.registerCluster.flag.pageSize.description"))
 
+	dedicatedcmdutil.HideClusterMgmtFlags(flags)
+
 	return cmd
 }
 
-func runRegisterClusterCmd(opts *options) (err error) {
-	opts.pageNumber = int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber))
-	err = getPaginatedClusterList(opts)
-	if err != nil {
-		return err
-	}
-	if len(opts.clusterList) == 0 {
-		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
-	}
-
+func runRegisterClusterCmd(opts *options) error {
+	// get all valid clusters in the users org else if a clusterId is passed in via a flag, use that cluster
+	var err error
 	if opts.selectedClusterId == "" {
+
+		opts.clusterList, err = clustermgmt.GetClusterListWithSearchParams(opts.f, opts.clusterManagementApiUrl, opts.accessToken, validClusterString(), opts.pageNumber, opts.pageSize)
+		if err != nil {
+			return err
+		}
 		err = runClusterSelectionInteractivePrompt(opts)
 		if err != nil {
 			return err
 		}
 	} else {
-		for i := range opts.clusterList {
-			cluster := opts.clusterList[i]
-			if cluster.ID() == opts.selectedClusterId {
-				opts.selectedCluster = cluster
-			}
+		opts.selectedCluster, err = clustermgmt.GetClusterById(opts.f, opts.accessToken, opts.clusterManagementApiUrl, opts.selectedClusterId)
+		if err != nil {
+			return err
 		}
 	}
-	err = getOrCreateMachinePoolList(opts)
+
+	err = setOrCreateMachinePoolList(opts)
 	if err != nil {
 		return err
 	}
+
 	err = selectAccessPrivateNetworkInteractivePrompt(opts)
 	if err != nil {
 		return err
 	}
+
 	err = registerClusterWithKasFleetManager(opts)
 	if err != nil {
 		return err
 	}
 
 	return nil
-
 }
 
-func getPaginatedClusterList(opts *options) error {
-	cl, err := clustermgmt.GetClusterList(opts.f, opts.accessToken, opts.clusterManagementApiUrl, opts.pageNumber, opts.pageSize)
-	if err != nil {
-		return err
-	}
-
-	opts.clusterList = validateClusters(cl, opts.clusterList)
-	return nil
-}
-
-func validateClusters(clusters *clustersmgmtv1.ClusterList, cls []clustersmgmtv1.Cluster) []clustersmgmtv1.Cluster {
-	for _, cluster := range clusters.Slice() {
-		if cluster.State() == clusterReadyState && cluster.MultiAZ() == true {
-			cls = append(cls, *cluster)
-		}
-	}
-	return cls
+func validClusterString() string {
+	return "multi_az='true' AND state='ready'"
 }
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
-	if len(opts.clusterList) == 0 {
+	if len(opts.clusterList.Slice()) == 0 {
 		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
 	}
 	clusterStringList := make([]string, 0)
-	for i := range opts.clusterList {
-		cluster := opts.clusterList[i]
+	for i := range opts.clusterList.Slice() {
+		cluster := opts.clusterList.Get(i)
 		display := fmt.Sprintf("%s (%s)", cluster.Name(), cluster.ID())
 		clusterStringList = append(clusterStringList, display)
 	}
@@ -157,8 +142,8 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	if err != nil {
 		return err
 	}
-	opts.selectedCluster = opts.clusterList[idx]
-	opts.selectedClusterId = opts.clusterList[idx].ID()
+	opts.selectedCluster = opts.clusterList.Get(idx)
+	opts.selectedClusterId = opts.clusterList.Get(idx).ID()
 
 	return nil
 }
@@ -178,7 +163,7 @@ func parseDNSURL(opts *options) (string, error) {
 	return "", fmt.Errorf("could not construct cluster_ingress_dns_name")
 }
 
-func getOrCreateMachinePoolList(opts *options) error {
+func setOrCreateMachinePoolList(opts *options) error {
 	// ocm client connection
 	response, err := clustermgmt.GetMachinePoolList(opts.f, opts.clusterManagementApiUrl, opts.accessToken, opts.selectedCluster.ID())
 	if err != nil {
@@ -191,7 +176,7 @@ func getOrCreateMachinePoolList(opts *options) error {
 		}
 	} else {
 		for _, machinePool := range response.Items().Slice() {
-			opts.existingMachinePoolList = append(opts.existingMachinePoolList, *machinePool)
+			opts.existingMachinePoolList = append(opts.existingMachinePoolList, machinePool)
 		}
 		err = validateMachinePoolNodes(opts)
 		if err != nil {
@@ -282,7 +267,7 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 	if err != nil {
 		return err
 	}
-	opts.selectedClusterMachinePool = *mp
+	opts.selectedClusterMachinePool = mp
 	return nil
 }
 
@@ -292,11 +277,11 @@ func validateMachinePoolNodes(opts *options) error {
 
 		machinePool := opts.existingMachinePoolList[i]
 
-		nodeCount := clustermgmt.GetMachinePoolNodeCount(&machinePool)
+		nodeCount := clustermgmt.GetMachinePoolNodeCount(machinePool)
 
 		if validateMachinePoolNodeCount(nodeCount) &&
-			checkForValidMachinePoolLabels(&machinePool) &&
-			checkForValidMachinePoolTaints(&machinePool) {
+			checkForValidMachinePoolLabels(machinePool) &&
+			checkForValidMachinePoolTaints(machinePool) {
 			opts.f.Logger.Infof(opts.f.Localizer.MustLocalize(
 				"dedicated.registerCluster.info.foundValidMachinePool") + " " + machinePool.ID())
 			opts.selectedClusterMachinePool = machinePool
@@ -346,7 +331,7 @@ func registerClusterWithKasFleetManager(opts *options) error {
 		return err
 	}
 
-	nodeCount := clustermgmt.GetMachinePoolNodeCount(&opts.selectedClusterMachinePool)
+	nodeCount := clustermgmt.GetMachinePoolNodeCount(opts.selectedClusterMachinePool)
 	kfmPayload := kafkamgmtclient.EnterpriseOsdClusterPayload{
 		AccessKafkasViaPrivateNetwork: opts.accessKafkasViaPrivateNetwork,
 		ClusterId:                     opts.selectedCluster.ID(),

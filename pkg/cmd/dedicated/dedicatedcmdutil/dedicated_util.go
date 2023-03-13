@@ -3,6 +3,7 @@ package dedicatedcmdutil
 import (
 	"fmt"
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
 	"github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1/client"
 	"strconv"
 
@@ -63,4 +64,9 @@ func ValidateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafka
 
 	newClusterList := kafkamgmtclient.NewEnterpriseClusterList(clusterList.Kind, clusterList.Page, int32(len(items)), clusterList.Total, items)
 	return newClusterList
+}
+
+func HideClusterMgmtFlags(flags *flagutil.FlagSet) {
+	_ = flags.MarkHidden("cluster-mgmt-api-url")
+	_ = flags.MarkHidden("access-token")
 }

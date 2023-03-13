@@ -186,7 +186,7 @@ func mapResponseItemsToRows(opts *options, kafkas []kafkamgmtclient.KafkaRequest
 
 func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequest) (map[string]*v1.Cluster, error) {
 	// map[string]struct{} is used remove duplicated ids from being added to the request
-	kafkaClusterIds := make(map[string]struct{}, len(kafkas))
+	kafkaClusterIds := make(map[string]struct{})
 	for i := 0; i < len(kafkas); i++ {
 		kafka := kafkas[i]
 		if kafka.GetClusterId() != "" {
@@ -202,7 +202,7 @@ func getClusterIdMapFromKafkas(opts *options, kafkas []kafkamgmtclient.KafkaRequ
 		return idToCluster, nil
 	}
 
-	clusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, createSearchString(&kafkaClusterIds), len(kafkaClusterIds))
+	clusterList, err := clustermgmt.GetClusterListWithSearchParams(opts.f, opts.clusterManagementApiUrl, opts.accessToken, createSearchString(&kafkaClusterIds), int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), len(kafkaClusterIds))
 	if err != nil {
 		return nil, err
 	}

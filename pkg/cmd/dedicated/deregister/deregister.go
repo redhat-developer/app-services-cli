@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/redhat-developer/app-services-cli/internal/build"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	ocmUtils "github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
@@ -53,6 +56,8 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.deregisterCluster.flag.clusterMgmtApiUrl.description"))
 	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.deregistercluster.flag.accessToken.description"))
 	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.deregisterCluster.flag.clusterId.description"))
+
+	dedicatedcmdutil.HideClusterMgmtFlags(flags)
 
 	return cmd
 }
@@ -123,7 +128,7 @@ func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
 		}
 		return nil, err
 	}
-	ocmClusterList, err := clustermgmt.GetClusterListByIds(opts.f, opts.clusterManagementApiUrl, opts.accessToken, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), len(kfmClusterList.Items))
+	ocmClusterList, err := clustermgmt.GetClusterListWithSearchParams(opts.f, opts.clusterManagementApiUrl, opts.accessToken, kafkautil.CreateClusterSearchStringFromKafkaList(kfmClusterList), int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), len(kfmClusterList.Items))
 	if err != nil {
 		return nil, err
 	}
