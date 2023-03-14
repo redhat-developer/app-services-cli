@@ -1,6 +1,7 @@
 package api
 
 import (
+	ocmclustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"net/http"
 	"net/url"
 
@@ -22,12 +23,14 @@ type API interface {
 	ServiceRegistryMgmt() registrymgmtclient.RegistriesApi
 	ConnectorsMgmt() connectormgmtclient.APIClient
 	ServiceAccountMgmt() svcacctmgmtclient.ServiceAccountsApi
+	KafkaMgmtEnterprise() kafkamgmtclient.EnterpriseDataplaneClustersApi
 	KafkaAdmin(instanceID string) (*kafkainstanceclient.APIClient, *kafkamgmtclient.KafkaRequest, error)
 	ServiceRegistryInstance(instanceID string) (*registryinstanceclient.APIClient, *registrymgmtclient.Registry, error)
 	AccountMgmt() amsclient.AppServicesApi
 	RBAC() rbac.RbacAPI
 	GenericAPI() generic.GenericAPI
 	GetConfig() Config
+	OCMClustermgmt(apiGateway, accessToken string) (*ocmclustersmgmtv1.Client, func(), error)
 }
 
 type Config struct {

@@ -6,13 +6,17 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 
 	connectormgmt "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1"
 	connectormgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/connectormgmt/apiv1/client"
 	kafkamgmt "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/kafkamgmt/apiv1"
 
+	// "github.com/redhat-developer/app-services-cli/pkg/shared/connection"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 
+	ocmSdkClient "github.com/openshift-online/ocm-sdk-go"
+	ocmclustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/api/generic"
 	"github.com/redhat-developer/app-services-cli/pkg/api/rbac"
@@ -40,7 +44,7 @@ type defaultAPI struct {
 }
 
 // New creates a new default API client wrapper
-func New(cfg *api.Config) api.API {
+func New(cfg *api.Config) *defaultAPI {
 	return &defaultAPI{
 		Config: *cfg,
 	}
@@ -61,6 +65,18 @@ func (a *defaultAPI) KafkaMgmt() kafkamgmtclient.DefaultApi {
 	})
 
 	return client.DefaultApi
+}
+
+func (a *defaultAPI) KafkaMgmtEnterprise() kafkamgmtclient.EnterpriseDataplaneClustersApi {
+	tc := a.CreateOAuthTransport(a.AccessToken)
+	client := kafkamgmt.NewAPIClient(&kafkamgmt.Config{
+		BaseURL:    a.ApiURL.String(),
+		Debug:      a.Logger.DebugEnabled(),
+		HTTPClient: tc,
+		UserAgent:  a.UserAgent,
+	})
+
+	return client.EnterpriseDataplaneClustersApi
 }
 
 // ServiceRegistryMgmt return a new Service Registry Management API client instance
@@ -272,4 +288,35 @@ func (a *defaultAPI) CreateOAuthTransport(accessToken string) *http.Client {
 			Source: oauth2.ReuseTokenSource(nil, ts),
 		},
 	}
+}
+
+func (a *defaultAPI) createOCMConnection(clusterMgmtApiUrl, accessToken string) (*ocmSdkClient.Connection, func(), error) {
+	if clusterMgmtApiUrl == "" {
+		clusterMgmtApiUrl = build.ProductionAPIURL
+	}
+	if accessToken == "" {
+		accessToken = a.AccessToken
+	}
+	connection, err := ocmSdkClient.NewConnectionBuilder().
+		URL(clusterMgmtApiUrl).
+		Tokens(accessToken).
+		Build()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
+		return nil, nil, err
+	}
+	return connection, func() {
+		_ = connection.Close()
+	}, nil
+}
+
+// create an OCM clustermgmt client
+func (a *defaultAPI) OCMClustermgmt(clusterMgmtApiUrl, accessToken string) (*ocmclustersmgmtv1.Client, func(), error) {
+	connection, closeConnection, err := a.createOCMConnection(clusterMgmtApiUrl, accessToken)
+	if err != nil {
+		return nil, nil, err
+	}
+	return connection.ClustersMgmt().V1(), func() {
+		closeConnection()
+	}, nil
 }
