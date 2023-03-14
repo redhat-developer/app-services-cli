@@ -44,19 +44,16 @@ func NewGetTypesCommand(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if opts.registryID != "" {
-
-				return run(opts)
-
-			} else {
-
-				registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
-				if err != nil {
-					return err
-				}
-
-				opts.registryID = registryInstance.GetId()
 				return run(opts)
 			}
+
+			registryInstance, err := contextutil.GetCurrentRegistryInstance(f)
+			if err != nil {
+				return err
+			}
+
+			opts.registryID = registryInstance.GetId()
+			return run(opts)
 		},
 	}
 	return cmd
@@ -74,6 +71,9 @@ func run(opts *options) error {
 	}
 
 	types, err := GetArtifactTypes(dataAPI, opts.context)
+	if err != nil {
+		return err
+	}
 	for _, v := range types {
 		opts.Logger.Info(v)
 	}

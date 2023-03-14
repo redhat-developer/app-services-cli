@@ -15,6 +15,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/serviceregistryutil"
 	registryinstanceclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registryinstance/apiv1internal/client"
+	registrymgmtclient "github.com/redhat-developer/app-services-sdk-core/app-services-sdk-go/registrymgmt/apiv1/client"
 	"io"
 	"os"
 	"strings"
@@ -115,22 +116,18 @@ func runCreate(opts *options) error {
 	if len(separators) != 2 || separators[0] == separators[1] {
 		return opts.localizer.MustLocalizeError("artifact.cmd.create.error.invalidReferenceSeparator", localize.NewEntry("Separator", opts.referenceSeparators))
 	}
-
 	conn, err := opts.Connection()
 	if err != nil {
 		return err
 	}
-
 	registry, _, err := serviceregistryutil.GetServiceRegistryByID(opts.Context, conn.API().ServiceRegistryMgmt(), opts.registryID)
 	if err != nil {
 		return err
 	}
-
 	dataAPI, _, err := conn.API().ServiceRegistryInstance(opts.registryID)
 	if err != nil {
 		return err
 	}
-
 	if opts.group == registrycmdutil.DefaultArtifactGroup {
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.artifact.common.message.no.group", localize.NewEntry("DefaultArtifactGroup", registrycmdutil.DefaultArtifactGroup)))
 	}
@@ -143,33 +140,16 @@ func runCreate(opts *options) error {
 		}
 		executeExtended = true
 	} else {
-		if opts.file != "" {
-			if util.IsURL(opts.file) {
-				opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
-				specifiedFile, err = util.GetContentFromFileURL(opts.Context, opts.file)
-				if err != nil {
-					return err
-				}
-			} else {
-				opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
-				specifiedFile, err = os.Open(opts.file)
-				if err != nil {
-					return err
-				}
-			}
-		} else {
-			opts.Logger.Info(opts.localizer.MustLocalize("common.message.reading.file"))
-			specifiedFile, err = util.CreateFileFromStdin()
-			if err != nil {
-				return err
-			}
+		specifiedFile, err = loadLocalFile(opts)
+		if err != nil {
+			return err
 		}
 	}
 	request := dataAPI.ArtifactsApi.CreateArtifact(opts.Context, opts.group)
 	if opts.artifactType != "" {
-		artifactTypes, err := types.GetArtifactTypes(dataAPI, opts.Context)
-		if err != nil {
-			return err
+		artifactTypes, err2 := types.GetArtifactTypes(dataAPI, opts.Context)
+		if err2 != nil {
+			return err2
 		}
 		valid := false
 		for _, v := range artifactTypes {
@@ -189,17 +169,35 @@ func runCreate(opts *options) error {
 	if opts.version != "" {
 		request = request.XRegistryVersion(opts.version)
 	}
-
 	if opts.name != "" {
 		request = request.XRegistryName(opts.name)
 	}
-
 	request = request.XRegistryDescription(opts.description)
+	metadata, err := executeRequest(executeExtended, opts, dataAPI, &request, specifiedFile)
+	if err != nil {
+		return registrycmdutil.TransformInstanceError(err)
+	}
+	return printCreateResult(opts, registry, metadata, format)
+}
 
+func printCreateResult(opts *options, registry *registrymgmtclient.Registry,
+	metadata *registryinstanceclient.ArtifactMetaData, format util.OutputFormat) error {
+
+	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
+	artifactURL, ok := util.GetArtifactURL(registry, metadata)
+	if ok {
+		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(artifactURL))))
+	}
+	return util.Dump(opts.IO.Out, format, metadata, nil)
+}
+
+func executeRequest(executeExtended bool, opts *options,
+	dataAPI *registryinstanceclient.APIClient, requestP *registryinstanceclient.ApiCreateArtifactRequest,
+	specifiedFile *os.File) (*registryinstanceclient.ArtifactMetaData, error) {
+	request := *requestP
 	if len(opts.references) > 0 {
 		executeExtended = true
 	}
-
 	if executeExtended {
 		// Content
 		var content string
@@ -208,14 +206,14 @@ func runCreate(opts *options) error {
 		} else {
 			bytes, err := io.ReadAll(specifiedFile)
 			if err != nil {
-				return err
+				return nil, err
 			}
 			content = string(bytes)
 		}
 		// References
 		references, err := loadReferences(dataAPI, opts)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		body := registryinstanceclient.ContentCreateRequest{
 			Content:    content,
@@ -223,11 +221,11 @@ func runCreate(opts *options) error {
 		}
 		bytes, err := body.MarshalJSON()
 		if err != nil {
-			return err
+			return nil, err
 		}
 		file, err := util.GetFileFromBytes(bytes)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		request = request.
 			ContentType("application/create.extended+json").
@@ -237,20 +235,35 @@ func runCreate(opts *options) error {
 			ContentType("").
 			Body(specifiedFile)
 	}
-
 	metadata, _, err := request.Execute()
-	if err != nil {
-		return registrycmdutil.TransformInstanceError(err)
+	return &metadata, err
+}
+
+func loadLocalFile(opts *options) (*os.File, error) {
+	var specifiedFile *os.File
+	var err error
+	if opts.file != "" {
+		if util.IsURL(opts.file) {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.loading.file", localize.NewEntry("FileName", opts.file)))
+			specifiedFile, err = util.GetContentFromFileURL(opts.Context, opts.file)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.opening.file", localize.NewEntry("FileName", opts.file)))
+			specifiedFile, err = os.Open(opts.file)
+			if err != nil {
+				return nil, err
+			}
+		}
+	} else {
+		opts.Logger.Info(opts.localizer.MustLocalize("common.message.reading.file"))
+		specifiedFile, err = util.CreateFileFromStdin()
+		if err != nil {
+			return nil, err
+		}
 	}
-	opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.message.created"))
-
-	artifactURL, ok := util.GetArtifactURL(registry, &metadata)
-
-	if ok {
-		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(artifactURL))))
-	}
-
-	return util.Dump(opts.IO.Out, format, metadata, nil)
+	return specifiedFile, nil
 }
 
 func loadReferences(dataAPI *registryinstanceclient.APIClient, opts *options) ([]registryinstanceclient.ArtifactReference, error) {

@@ -147,7 +147,10 @@ func runGet(opts *options) error {
 		if err != nil {
 			return registrycmdutil.TransformInstanceError(err)
 		}
-		util.PrettyPrintReferences(os.Stdout, os.Stderr, format, result, opts.localizer)
+		err = util.PrettyPrintReferences(os.Stdout, os.Stderr, format, result, opts.localizer)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
