@@ -75,7 +75,9 @@ type options struct {
 	kfmClusterList          *kafkamgmtclient.EnterpriseClusterList
 	selectedCluster         *kafkamgmtclient.EnterpriseCluster
 	clusterMap              *map[string]v1.Cluster
-	useEnterpriseCluster    bool
+	useEnterpriseFlow       bool
+	hasLegacyQuota          bool
+	useLegacyFlow           bool
 	clusterManagementApiUrl string
 	accessToken             string
 
@@ -501,9 +503,40 @@ func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	if err != nil {
 		return err
 	}
-	opts.useEnterpriseCluster = idx != 0
+	opts.useEnterpriseFlow = idx != 0
+	opts.useLegacyFlow = idx == 0
 
 	return nil
+}
+
+func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
+	// Check if the user has enterprise quota
+	for _, quota := range orgQuotas.EnterpriseQuotas {
+		if quota.Quota > 0 {
+			opts.useEnterpriseFlow = true
+		}
+	}
+	// to-do may have to deal with trial (devoloper instances) quota here
+
+	// Check if the user has a legacy quota
+	for _, quota := range orgQuotas.StandardQuotas {
+		if quota.Quota > 0 {
+			opts.hasLegacyQuota = true
+			return
+		}
+	}
+	for _, quota := range orgQuotas.MarketplaceQuotas {
+		if quota.Quota > 0 {
+			opts.hasLegacyQuota = true
+			return
+		}
+	}
+	for _, quota := range orgQuotas.EvalQuotas {
+		if quota.Quota > 0 {
+			opts.hasLegacyQuota = true
+			return
+		}
+	}
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
@@ -511,19 +544,23 @@ func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants) (*kafkamgmtclient.KafkaRequestPayload, error) {
 	f := opts.f
 
-	validator := &kafkacmdutil.Validator{
-		Localizer:  f.Localizer,
-		Connection: f.Connection,
+	// getting org quotas
+	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
+	if err != nil {
+		return nil, err
 	}
 
-	promptName := &survey.Input{
-		Message: f.Localizer.MustLocalize("kafka.create.input.name.message"),
-		Help:    f.Localizer.MustLocalize("kafka.create.input.name.help"),
-	}
+	// check if org has legacy (non-hybrid) quota
+	checkForLegacyQuota(opts, orgQuota)
+
+	var enterpriseQuota accountmgmtutil.QuotaSpec
 
 	answers := &promptAnswers{}
 
-	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
+	if !opts.useEnterpriseFlow {
+		f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.info.enterpriseQuota"))
+	}
+	answers, err = promptForKafkaName(f, answers)
 	if err != nil {
 		return nil, err
 	}
@@ -538,21 +575,18 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	opts.clusterMap = clusterMap
 
 	// If there are enterprise clusters in the user's organization, prompt them to select one using the interactive prompt for enterprise flow
-	if len(opts.kfmClusterList.Items) > 0 {
+	if len(opts.kfmClusterList.Items) > 0 && opts.hasLegacyQuota {
 		err = selectEnterpriseOrRHInfraPrompt(opts)
 		if err != nil {
 			return nil, err
 		}
+	} else if opts.hasLegacyQuota {
+		opts.useLegacyFlow = true
+	} else {
+		opts.useEnterpriseFlow = true
 	}
 
-	// getting org quotas
-	orgQuota, err := accountmgmtutil.GetOrgQuotas(f, &constants.Kafka.Ams)
-	if err != nil {
-		return nil, err
-	}
-
-	var enterpriseQuota accountmgmtutil.QuotaSpec
-	if opts.useEnterpriseCluster {
+	if opts.useEnterpriseFlow {
 		if len(orgQuota.EnterpriseQuotas) < 1 {
 			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
 		}
@@ -582,7 +616,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	// If the user is not using an enterprise cluster, prompt them to select a cloud provider
-	if !opts.useEnterpriseCluster {
+	if opts.useLegacyFlow {
 		answers, err = cloudProviderPrompt(f, answers)
 		if err != nil {
 			return nil, err
@@ -623,7 +657,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	// nolint:staticcheck
 	payload := &kafkamgmtclient.KafkaRequestPayload{}
 
-	if opts.useEnterpriseCluster {
+	if opts.useEnterpriseFlow {
 		/*
 			if using dedicated cluster option then get the supported sizes for this cluster
 			based on the sizes it supports the user to select the one they want to use
@@ -755,6 +789,25 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	}
 	return payload, nil
+}
+
+func promptForKafkaName(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
+	validator := &kafkacmdutil.Validator{
+		Localizer:  f.Localizer,
+		Connection: f.Connection,
+	}
+
+	// prompt for kafka name
+	promptName := &survey.Input{
+		Message: f.Localizer.MustLocalize("kafka.create.input.name.message"),
+		Help:    f.Localizer.MustLocalize("kafka.create.input.name.help"),
+	}
+
+	err := survey.AskOne(promptName, &answers.Name, survey.WithValidator(validator.ValidateName), survey.WithValidator(validator.ValidateNameIsAvailable))
+	if err != nil {
+		return nil, err
+	}
+	return answers, nil
 }
 
 func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers, f *factory.Factory) (*promptAnswers, error) {
