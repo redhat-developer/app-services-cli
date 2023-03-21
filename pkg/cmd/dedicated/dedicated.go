@@ -10,11 +10,13 @@ import (
 
 func NewDedicatedCmd(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "dedicated",
-		Short:   f.Localizer.MustLocalize("dedicated.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("dedicated.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("dedicated.cmd.example"),
+		Use:     "openshift-cluster",
+		Short:   f.Localizer.MustLocalize("kafka.openshiftCluster.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.openshiftCluster.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.openshiftCluster.cmd.example"),
 	}
+
+	cmd.Aliases = append(cmd.Aliases, "oc")
 
 	cmd.AddCommand(
 		register.NewRegisterClusterCommand(f),

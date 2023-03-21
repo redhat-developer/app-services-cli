@@ -4,6 +4,7 @@ package kafka
 
 import (
 	"github.com/redhat-developer/app-services-cli/internal/doc"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/acl"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/billing"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/consumergroup"
@@ -44,6 +45,7 @@ func NewKafkaCommand(f *factory.Factory) *cobra.Command {
 		billing.NewBillingCommand(f),
 		providers.NewProviderCommand(f),
 		promote.NewPromoteCommand(f),
+		dedicated.NewDedicatedCmd(f),
 	)
 
 	return cmd

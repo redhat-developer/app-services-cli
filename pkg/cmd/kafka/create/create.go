@@ -163,8 +163,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.common.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 	flags.StringVar(&opts.clusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.create.flag.clusterId.description"))
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registercluster.flag.accessToken.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetCloudProviderCompletionValues(f)

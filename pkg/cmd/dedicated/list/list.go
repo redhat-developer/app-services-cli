@@ -40,9 +40,9 @@ func NewListClusterCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   f.Localizer.MustLocalize("dedicated.list.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("dedicated.list.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("dedicated.list.cmd.example"),
+		Short:   f.Localizer.MustLocalize("kafka.openshiftCluster.list.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.openshiftCluster.list.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.openshiftCluster.list.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runListClusters(opts, f)
@@ -51,8 +51,8 @@ func NewListClusterCommand(f *factory.Factory) *cobra.Command {
 
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
 
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registercluster.flag.accessToken.description"))
 
 	dedicatedcmdutil.HideClusterMgmtFlags(flags)
 
@@ -66,7 +66,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 
 		if response != nil {
 			if response.StatusCode == 403 {
-				return opts.f.Localizer.MustLocalizeError("dedicated.list.error.permissionDenied")
+				return opts.f.Localizer.MustLocalizeError("kafka.openshiftCluster.list.error.permissionDenied")
 			}
 
 			return fmt.Errorf("%v, %w", response.Status, err)
@@ -82,7 +82,7 @@ func runListClusters(opts *options, f *factory.Factory) error {
 		return err
 	}
 	if clist == nil {
-		return opts.f.Localizer.MustLocalizeError("dedicated.list.error.noRegisteredClustersFound")
+		return opts.f.Localizer.MustLocalizeError("kafka.openshiftCluster.list.error.noRegisteredClustersFound")
 	}
 	opts.clustermgmtClusterList = clist
 	opts.registeredClusters = kfmListToClusterRowList(opts)

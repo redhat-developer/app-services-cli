@@ -57,9 +57,9 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "register-cluster",
-		Short:   f.Localizer.MustLocalize("dedicated.registerCluster.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("dedicated.registerCluster.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("dedicated.registerCluster.cmd.example"),
+		Short:   f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runRegisterClusterCmd(opts)
@@ -67,11 +67,11 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
-	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterId.description"))
-	flags.IntVar(&opts.pageNumber, "page-number", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("dedicated.registerCluster.flag.pageNumber.description"))
-	flags.IntVar(&opts.pageSize, "page-size", 100, f.Localizer.MustLocalize("dedicated.registerCluster.flag.pageSize.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.clusterId.description"))
+	flags.IntVar(&opts.pageNumber, "page-number", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.pageNumber.description"))
+	flags.IntVar(&opts.pageSize, "page-size", 100, f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.pageSize.description"))
 
 	dedicatedcmdutil.HideClusterMgmtFlags(flags)
 
@@ -122,7 +122,7 @@ func validClusterString() string {
 
 func runClusterSelectionInteractivePrompt(opts *options) error {
 	if len(opts.clusterList.Slice()) == 0 {
-		return opts.f.Localizer.MustLocalizeError("dedicated.registerCluster.run.noClusterFound")
+		return opts.f.Localizer.MustLocalizeError("kafka.openshiftCluster.registerCluster.run.noClusterFound")
 	}
 	clusterStringList := make([]string, 0)
 	for i := range opts.clusterList.Slice() {
@@ -132,7 +132,7 @@ func runClusterSelectionInteractivePrompt(opts *options) error {
 	}
 
 	prompt := &survey.Select{
-		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectCluster.message"),
+		Message: opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.prompt.selectCluster.message"),
 		Options: clusterStringList,
 	}
 
@@ -249,8 +249,8 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 	}
 
 	promptNodeCount := &survey.Input{
-		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.message"),
-		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.createMachinePoolNodeCount.help"),
+		Message: opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.prompt.createMachinePoolNodeCount.message"),
+		Help:    opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.prompt.createMachinePoolNodeCount.help"),
 	}
 	var nodeCount int
 	err := survey.AskOne(promptNodeCount, &nodeCount, survey.WithValidator(validator.ValidatorForMachinePoolNodes))
@@ -282,7 +282,7 @@ func validateMachinePoolNodes(opts *options) error {
 			checkForValidMachinePoolLabels(machinePool) &&
 			checkForValidMachinePoolTaints(machinePool) {
 			opts.f.Logger.Infof(opts.f.Localizer.MustLocalize(
-				"dedicated.registerCluster.info.foundValidMachinePool") + " " + machinePool.ID())
+				"kafka.openshiftCluster.registerCluster.info.foundValidMachinePool") + " " + machinePool.ID())
 			opts.selectedClusterMachinePool = machinePool
 			return nil
 		}
@@ -296,8 +296,8 @@ func validateMachinePoolNodes(opts *options) error {
 
 func selectAccessPrivateNetworkInteractivePrompt(opts *options) error {
 	prompt := &survey.Confirm{
-		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectPublicNetworkAccess.message"),
-		Help:    opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectPublicNetworkAccess.help"),
+		Message: opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.prompt.selectPublicNetworkAccess.message"),
+		Help:    opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.prompt.selectPublicNetworkAccess.help"),
 		Default: false,
 	}
 	accessFromPublicNetwork := true
@@ -362,6 +362,6 @@ func registerClusterWithKasFleetManager(opts *options) error {
 	}
 	opts.f.Logger.Debugf("response fleetshard params: ", response.FleetshardParameters)
 	opts.f.Logger.Debugf("r: ", r)
-	opts.f.Logger.Infof(opts.f.Localizer.MustLocalize("dedicated.registerCluster.info.clusterRegisteredWithKasFleetManager"))
+	opts.f.Logger.Infof(opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.info.clusterRegisteredWithKasFleetManager"))
 	return nil
 }

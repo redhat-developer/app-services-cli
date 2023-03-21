@@ -82,8 +82,8 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	flags.IntVar(&opts.page, "page", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), opts.f.Localizer.MustLocalize("kafka.list.flag.page"))
 	flags.IntVar(&opts.limit, "limit", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageSize)), opts.f.Localizer.MustLocalize("kafka.list.flag.limit"))
 	flags.StringVar(&opts.search, "search", "", opts.f.Localizer.MustLocalize("kafka.list.flag.search"))
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registercluster.flag.accessToken.description"))
 
 	_ = flags.MarkHidden("cluster-mgmt-api-url")
 	_ = flags.MarkHidden("access-token")

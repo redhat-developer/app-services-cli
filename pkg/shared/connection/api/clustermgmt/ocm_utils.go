@@ -167,7 +167,7 @@ func RemoveAddonsFromCluster(f *factory.Factory, clusterManagementApiUrl string,
 			addon := addons.Items().Get(i)
 
 			if addon.ID() == addonToDelete {
-				f.Logger.Info(f.Localizer.MustLocalize("dedicated.common.addons.deleting.message", localize.NewEntry("Id", addon.ID())))
+				f.Logger.Info(f.Localizer.MustLocalize("kafka.openshiftCluster.common.addons.deleting.message", localize.NewEntry("Id", addon.ID())))
 				_, err = client.Clusters().Cluster(cluster.ID()).Addons().Addoninstallation(addon.ID()).Delete().Send()
 				if err != nil {
 					return err
