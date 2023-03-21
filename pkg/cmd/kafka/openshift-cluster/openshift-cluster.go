@@ -1,9 +1,9 @@
-package dedicated
+package openshift_cluster
 
 import (
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/deregister"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/list"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/register"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/deregister"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/list"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/register"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
 )

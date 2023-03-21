@@ -1,4 +1,4 @@
-package dedicatedcmdutil
+package openshiftclustercmdutil
 
 import (
 	"fmt"

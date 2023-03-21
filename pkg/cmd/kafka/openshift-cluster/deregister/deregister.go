@@ -6,8 +6,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
@@ -57,7 +57,7 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.deregistercluster.flag.accessToken.description"))
 	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.flag.clusterId.description"))
 
-	dedicatedcmdutil.HideClusterMgmtFlags(flags)
+	openshiftclustercmdutil.HideClusterMgmtFlags(flags)
 
 	return cmd
 }

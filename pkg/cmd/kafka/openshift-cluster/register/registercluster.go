@@ -3,7 +3,7 @@ package register
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
 	"strings"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
@@ -73,7 +73,7 @@ func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	flags.IntVar(&opts.pageNumber, "page-number", int(cmdutil.ConvertPageValueToInt32(build.DefaultPageNumber)), f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.pageNumber.description"))
 	flags.IntVar(&opts.pageSize, "page-size", 100, f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.pageSize.description"))
 
-	dedicatedcmdutil.HideClusterMgmtFlags(flags)
+	openshiftclustercmdutil.HideClusterMgmtFlags(flags)
 
 	return cmd
 }
@@ -243,7 +243,7 @@ func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*clustersmg
 }
 
 func createMachinePoolInteractivePrompt(opts *options) error {
-	validator := &dedicatedcmdutil.Validator{
+	validator := &openshiftclustercmdutil.Validator{
 		Localizer:  opts.f.Localizer,
 		Connection: opts.f.Connection,
 	}
