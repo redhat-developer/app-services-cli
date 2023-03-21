@@ -27,13 +27,13 @@ import (
 
 // row is the details of a Kafka instance needed to print to a table
 type kafkaRow struct {
-	ID            string `json:"id" header:"ID"`
-	Name          string `json:"name" header:"Name"`
-	Owner         string `json:"owner" header:"Owner"`
-	Status        string `json:"status" header:"Status"`
-	CloudProvider string `json:"cloud_provider" header:"Cloud Provider"`
-	Region        string `json:"region" header:"Region"`
-	CustomerCloud string `json:"customer_cloud" header:"Customer Cloud"`
+	ID               string `json:"id" header:"ID"`
+	Name             string `json:"name" header:"Name"`
+	Owner            string `json:"owner" header:"Owner"`
+	Status           string `json:"status" header:"Status"`
+	CloudProvider    string `json:"cloud_provider" header:"Cloud Provider"`
+	Region           string `json:"region" header:"Region"`
+	OpenshiftCluster string `json:"openshift_cluster" header:"Openshift Cluster"`
 }
 
 type options struct {
@@ -160,22 +160,22 @@ func mapResponseItemsToRows(opts *options, kafkas []kafkamgmtclient.KafkaRequest
 			name = fmt.Sprintf("%s %s", name, icon.Emoji("✔", "(current)"))
 		}
 
-		var customerCloud string
+		var openshiftCluster string
 		if id, ok := k.GetClusterIdOk(); ok {
 			cluster := (*clusterIdMap)[*id]
-			customerCloud = fmt.Sprintf("%v (%v)", cluster.Name(), cluster.ID())
+			openshiftCluster = fmt.Sprintf("%v (%v)", cluster.Name(), cluster.ID())
 		} else {
-			customerCloud = opts.f.Localizer.MustLocalize("kafka.list.output.customerCloud.redhat")
+			openshiftCluster = opts.f.Localizer.MustLocalize("kafka.list.output.openshiftCluster.redhat")
 		}
 
 		row := kafkaRow{
-			ID:            k.GetId(),
-			Name:          name,
-			Owner:         k.GetOwner(),
-			Status:        k.GetStatus(),
-			CloudProvider: k.GetCloudProvider(),
-			Region:        k.GetRegion(),
-			CustomerCloud: customerCloud,
+			ID:               k.GetId(),
+			Name:             name,
+			Owner:            k.GetOwner(),
+			Status:           k.GetStatus(),
+			CloudProvider:    k.GetCloudProvider(),
+			Region:           k.GetRegion(),
+			OpenshiftCluster: openshiftCluster,
 		}
 
 		rows[i] = row
