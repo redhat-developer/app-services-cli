@@ -516,7 +516,7 @@ func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
 			opts.useEnterpriseFlow = true
 		}
 	}
-	// to-do may have to deal with trial (devoloper instances) quota here
+	// to-do may have to deal with trial (developer instances) quota here
 
 	// Check if the user has a legacy quota
 	for _, quota := range orgQuotas.StandardQuotas {
@@ -557,33 +557,31 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	answers := &promptAnswers{}
 
+	// Message the user with a link to get enterprise quota if they don't have any
 	if !opts.useEnterpriseFlow {
 		f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.info.enterpriseQuota"))
 	}
+
 	answers, err = promptForKafkaName(f, answers)
 	if err != nil {
 		return nil, err
 	}
 
-	// Get the list of enterprise clusters in the users organization if there are any, creates a map of cluster ids to names to include names in the prompt
+	// Get the list of enterprise clusters in the users organization if there are any, creates a map of cluster ids
+	// to names to include names in the prompt
 	kfmClusterList, clusterMap, err := setEnterpriseClusterList(opts)
 	if err != nil {
 		return nil, err
 	}
-
 	opts.kfmClusterList = kfmClusterList
 	opts.clusterMap = clusterMap
 
-	// If there are enterprise clusters in the user's organization, prompt them to select one using the interactive prompt for enterprise flow
-	if len(opts.kfmClusterList.Items) > 0 && opts.hasLegacyQuota {
-		err = selectEnterpriseOrRHInfraPrompt(opts)
-		if err != nil {
-			return nil, err
-		}
-	} else if opts.hasLegacyQuota {
-		opts.useLegacyFlow = true
-	} else {
-		opts.useEnterpriseFlow = true
+	// If there are enterprise clusters in the user's organization, prompt them to select a flow (enterprise or legacy)
+	// using the interactive prompt. If there are no enterprise clusters, the user must use the legacy flow.
+	// Default to enterprise flow
+	err = determineFlowFromQuota(opts)
+	if err != nil {
+		return nil, err
 	}
 
 	if opts.useEnterpriseFlow {
@@ -623,26 +621,10 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
-	availableBillingModels := FetchSupportedBillingModels(orgQuota, answers.CloudProvider)
-
-	if len(availableBillingModels) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
-		return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
-	}
-
-	// prompting for billing model if there are more than one available, otherwise using the only one available
-	if len(availableBillingModels) > 0 {
-		if len(availableBillingModels) == 1 {
-			answers.BillingModel = availableBillingModels[0]
-		} else {
-			billingModelPrompt := &survey.Select{
-				Message: f.Localizer.MustLocalize("kafka.create.input.billingModel.message"),
-				Options: availableBillingModels,
-			}
-			err = survey.AskOne(billingModelPrompt, &answers.BillingModel)
-			if err != nil {
-				return nil, err
-			}
-		}
+	// gets the billing model for the kafka, if the user has more than one billing model, a prompt is shown to select one
+	answers, err = getBillingModel(opts, orgQuota, answers)
+	if err != nil {
+		return nil, err
 	}
 
 	// if billing model is marketplace, prompt for marketplace provider and account id
@@ -789,6 +771,48 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	}
 	return payload, nil
+}
+
+func getBillingModel(opts *options, orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers) (*promptAnswers, error) {
+	availableBillingModels := FetchSupportedBillingModels(orgQuota, answers.CloudProvider)
+
+	if len(availableBillingModels) == 0 && len(orgQuota.MarketplaceQuotas) > 0 {
+		return nil, opts.f.Localizer.MustLocalizeError("kafka.create.provider.error.noStandardInstancesAvailable")
+	}
+
+	// prompting for billing model if there are more than one available, otherwise using the only one available
+	if len(availableBillingModels) > 0 {
+		if len(availableBillingModels) == 1 {
+			answers.BillingModel = availableBillingModels[0]
+		} else {
+			billingModelPrompt := &survey.Select{
+				Message: opts.f.Localizer.MustLocalize("kafka.create.input.billingModel.message"),
+				Options: availableBillingModels,
+			}
+			err := survey.AskOne(billingModelPrompt, &answers.BillingModel)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return answers, nil
+}
+
+func determineFlowFromQuota(opts *options) error {
+	switch {
+	case len(opts.kfmClusterList.Items) > 0 && opts.hasLegacyQuota:
+		err := selectEnterpriseOrRHInfraPrompt(opts)
+		if err != nil {
+			return err
+		}
+		return nil
+	case opts.hasLegacyQuota:
+		opts.useLegacyFlow = true
+		return nil
+	default:
+		opts.useEnterpriseFlow = true
+		return nil
+	}
 }
 
 func promptForKafkaName(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
