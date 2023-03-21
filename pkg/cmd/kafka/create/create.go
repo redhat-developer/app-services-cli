@@ -554,7 +554,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	var enterpriseQuota accountmgmtutil.QuotaSpec
 	if opts.useEnterpriseCluster {
 		if len(orgQuota.EnterpriseQuotas) < 1 {
-			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noEnterpriseQuota")
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noStandardQuota")
 		}
 
 		enterpriseQuota = orgQuota.EnterpriseQuotas[0]
