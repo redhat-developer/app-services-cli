@@ -516,7 +516,14 @@ func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
 			opts.useEnterpriseFlow = true
 		}
 	}
-	// to-do may have to deal with trial (developer instances) quota here
+
+	// Check if the user has a legacy quota
+	for _, quota := range orgQuotas.TrialQuotas {
+		if quota.Quota > 0 {
+			opts.hasLegacyQuota = true
+			return
+		}
+	}
 
 	// Check if the user has a legacy quota
 	for _, quota := range orgQuotas.StandardQuotas {
