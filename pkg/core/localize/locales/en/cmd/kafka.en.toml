@@ -1220,6 +1220,9 @@ one = 'Cannot create another trial Kafka Instance, you already have on created'
 [kafka.create.error.cannotFindUserDetails]
 one = 'Cannot retrive user details to make trial Kafka Instance'
 
+[kafka.create.usingTrialInstance]
+one = 'You can only create trial Kafka instances, this Kafka Instance will delete after 48 hours'
+
 [kafka.create.info.enterpriseQuota]
 one = '''
 You do not have enough quota to create a Kafka instance on your own OpenShift Cluster.

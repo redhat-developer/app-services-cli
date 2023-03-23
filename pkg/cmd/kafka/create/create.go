@@ -593,6 +593,10 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
+	if opts.useTrialFlow {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.usingTrialInstance"))
+	}
+
 	if opts.useEnterpriseFlow {
 		if len(orgQuota.EnterpriseQuotas) < 1 {
 			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noStandardQuota")
@@ -623,7 +627,7 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	}
 
 	if opts.useTrialFlow {
-		hasOtherTrialKafka, err2 := doesUserHaveTrialQuotas(opts)
+		hasOtherTrialKafka, err2 := doesUserHaveTrialInstances(opts)
 		if err2 != nil {
 			return nil, err2
 		}
@@ -838,7 +842,7 @@ func determineFlowFromQuota(opts *options) error {
 	}
 }
 
-func doesUserHaveTrialQuotas(opts *options) (bool, error) {
+func doesUserHaveTrialInstances(opts *options) (bool, error) {
 	conn, err := opts.f.Connection()
 	if err != nil {
 		return false, err
