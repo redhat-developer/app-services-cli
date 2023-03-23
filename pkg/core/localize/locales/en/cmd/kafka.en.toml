@@ -1221,7 +1221,7 @@ one = 'Cannot create another trial Kafka Instance, you already have on created'
 one = 'Cannot retrive user details to make trial Kafka Instance'
 
 [kafka.create.usingTrialInstance]
-one = 'You can only create trial Kafka instances, this Kafka Instance will delete after 48 hours'
+one = 'You can only create trial Kafka instances, this Kafka Instance will be deleted after 48 hours'
 
 [kafka.create.info.enterpriseQuota]
 one = '''

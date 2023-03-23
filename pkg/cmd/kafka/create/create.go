@@ -860,14 +860,21 @@ func doesUserHaveTrialInstances(opts *options) (bool, error) {
 		return false, opts.f.Localizer.MustLocalizeError("kafka.create.error.cannotFindUserDetails")
 	}
 
-	list, _, err := api.KafkaMgmt().GetKafkas(opts.f.Context).Page(strconv.Itoa(1)).Size(strconv.Itoa(99)).Execute()
+	searchQuery := fmt.Sprintf("owner = %v", userName)
+
+	list, _, err := api.KafkaMgmt().GetKafkas(opts.f.Context).
+		Page(strconv.Itoa(1)).
+		Size(strconv.Itoa(1000)).
+		Search(searchQuery).
+		Execute()
+
 	if err != nil {
 		return false, err
 	}
 
 	for i := int32(0); i < list.GetSize(); i++ {
 		kafka := list.Items[i]
-		if kafka.GetOwner() == userName && kafka.GetInstanceTypeName() == TrialInstanceType {
+		if kafka.GetInstanceTypeName() == TrialInstanceType {
 			return true, nil
 		}
 	}
