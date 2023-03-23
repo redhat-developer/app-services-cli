@@ -1212,7 +1212,13 @@ one = 'Bring your own OpenShift Cluster for your Kafka Instances'
 one = 'Red Hat Managed OpenShift Cluster for your Kafka Instances'
 
 [kafka.create.input.cluster.help]
-one = 'Select the cluster to provision your Kafka instance on.'
+one = 'Select the cluster to provision your Kafka Instance on.'
+
+[kafka.create.error.trialInstanceAlreadyExists]
+one = 'Cannot create another trial Kafka Instance, you already have on created'
+
+[kafka.create.error.cannotFindUserDetails]
+one = 'Cannot retrive user details to make trial Kafka Instance'
 
 [kafka.create.info.enterpriseQuota]
 one = '''
