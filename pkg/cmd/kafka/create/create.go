@@ -78,6 +78,7 @@ type options struct {
 	useEnterpriseFlow       bool
 	hasLegacyQuota          bool
 	useLegacyFlow           bool
+	useTrialFlow            bool
 	clusterManagementApiUrl string
 	accessToken             string
 
@@ -518,14 +519,6 @@ func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
 	}
 
 	// Check if the user has a legacy quota
-	for _, quota := range orgQuotas.TrialQuotas {
-		if quota.Quota > 0 {
-			opts.hasLegacyQuota = true
-			return
-		}
-	}
-
-	// Check if the user has a legacy quota
 	for _, quota := range orgQuotas.StandardQuotas {
 		if quota.Quota > 0 {
 			opts.hasLegacyQuota = true
@@ -544,6 +537,12 @@ func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
 			return
 		}
 	}
+
+	// use trial flow if user has no other quota
+	if !opts.useEnterpriseFlow {
+		opts.useTrialFlow = true
+	}
+	return
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
@@ -816,10 +815,19 @@ func determineFlowFromQuota(opts *options) error {
 	case opts.hasLegacyQuota:
 		opts.useLegacyFlow = true
 		return nil
+	case opts.useTrialFlow:
+		opts.useLegacyFlow = true
+		return nil
 	default:
 		opts.useEnterpriseFlow = true
 		return nil
 	}
+}
+
+func checkForTrialKafkas(opts *options) error {
+	// Check if the user has any trial kafkas
+	
+	return nil
 }
 
 func promptForKafkaName(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
