@@ -5,7 +5,7 @@ import (
 	"fmt"
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
@@ -167,8 +167,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	flags.StringVar(&opts.billingModel, FlagBillingModel, "", f.Localizer.MustLocalize("kafka.common.flag.billingModel.description"))
 	flags.AddBypassTermsCheck(&opts.bypassChecks)
 	flags.StringVar(&opts.clusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.create.flag.clusterId.description"))
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.registerCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.registercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.registercluster.flag.accessToken.description"))
 
 	_ = cmd.RegisterFlagCompletionFunc(FlagProvider, func(cmd *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return GetCloudProviderCompletionValues(f)
@@ -194,7 +194,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 		return GetBillingModelCompletionValues(f)
 	})
 
-	dedicatedcmdutil.HideClusterMgmtFlags(flags)
+	openshiftclustercmdutil.HideClusterMgmtFlags(flags)
 
 	return cmd
 }
@@ -977,7 +977,7 @@ func getClusterNameMap(opts *options, clusterList *kafkamgmtclient.EnterpriseClu
 }
 
 func selectClusterPrompt(opts *options) (int, error) {
-	promptOptions := dedicatedcmdutil.CreatePromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
+	promptOptions := openshiftclustercmdutil.CreatePromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
 	promptForCluster := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.selectClusterMessage"),
 		Options: *promptOptions,

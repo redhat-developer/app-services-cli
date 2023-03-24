@@ -3,8 +3,6 @@ package root
 import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/cluster"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/completion"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/connector"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/context"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/docs"
@@ -62,8 +60,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 	cmd.AddCommand(docs.NewDocsCmd(f))
 	cmd.AddCommand(request.NewCallCmd(f))
 	cmd.AddCommand(context.NewContextCmd(f))
-	// Dedicated commands
-	cmd.AddCommand(dedicated.NewDedicatedCmd(f))
 
 	return cmd
 }

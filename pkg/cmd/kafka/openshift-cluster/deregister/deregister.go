@@ -6,8 +6,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	clustersmgmtv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/internal/build"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/dedicated/dedicatedcmdutil"
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
@@ -43,9 +43,9 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "deregister-cluster",
-		Short:   f.Localizer.MustLocalize("dedicated.deregisterCluster.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("dedicated.deregisterCluster.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("dedicated.deregisterCluster.cmd.example"),
+		Short:   f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.cmd.shortDescription"),
+		Long:    f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.cmd.longDescription"),
+		Example: f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.cmd.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runDeRegisterClusterCmd(opts)
@@ -53,11 +53,11 @@ func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	flags := kafkaFlagutil.NewFlagSet(cmd, f.Localizer)
-	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("dedicated.deregisterCluster.flag.clusterMgmtApiUrl.description"))
-	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("dedicated.deregistercluster.flag.accessToken.description"))
-	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("dedicated.deregisterCluster.flag.clusterId.description"))
+	flags.StringVar(&opts.clusterManagementApiUrl, "cluster-mgmt-api-url", "", f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.flag.clusterMgmtApiUrl.description"))
+	flags.StringVar(&opts.accessToken, "access-token", "", f.Localizer.MustLocalize("kafka.openshiftCluster.deregistercluster.flag.accessToken.description"))
+	flags.StringVar(&opts.selectedClusterId, "cluster-id", "", f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.flag.clusterId.description"))
 
-	dedicatedcmdutil.HideClusterMgmtFlags(flags)
+	openshiftclustercmdutil.HideClusterMgmtFlags(flags)
 
 	return cmd
 }
@@ -69,7 +69,7 @@ func runDeRegisterClusterCmd(opts *options) error {
 	}
 
 	if len(clusterList) == 0 {
-		return opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.run.noClusterFound")
+		return opts.f.Localizer.MustLocalizeError("kafka.openshiftCluster.deregisterCluster.run.noClusterFound")
 	}
 
 	if opts.selectedClusterId == "" {
@@ -86,7 +86,7 @@ func runDeRegisterClusterCmd(opts *options) error {
 		}
 
 		if opts.selectedCluster == nil {
-			return opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.noClusterFoundFromIdFlag", localize.NewEntry("ID", opts.selectedClusterId))
+			return opts.f.Localizer.MustLocalizeError("kafka.openshiftCluster.deregisterCluster.noClusterFoundFromIdFlag", localize.NewEntry("ID", opts.selectedClusterId))
 		}
 	}
 
@@ -95,7 +95,7 @@ func runDeRegisterClusterCmd(opts *options) error {
 		return err
 	}
 
-	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.warning"))
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.kafka.delete.warning"))
 
 	err = deleteKafkasPrompt(opts, &kafkas)
 	if err != nil {
@@ -122,7 +122,7 @@ func getListOfClusters(opts *options) ([]*clustersmgmtv1.Cluster, error) {
 	if err != nil {
 		if response != nil {
 			if response.StatusCode == 403 {
-				return nil, opts.f.Localizer.MustLocalizeError("dedicated.deregisterCluster.error.403")
+				return nil, opts.f.Localizer.MustLocalizeError("kafka.openshiftCluster.deregisterCluster.error.403")
 			}
 			return nil, fmt.Errorf("%v: %w", response.Status, err)
 		}
@@ -233,16 +233,16 @@ func deleteKafkasPrompt(opts *options, kafkas *[]kafkamgmtclient.KafkaRequest) e
 					checkIfDeletedIdList = append(checkIfDeletedIdList[:i], checkIfDeletedIdList[i+1:]...)
 					break
 				} else {
-					return fmt.Errorf(fmt.Sprintf("%v, %v", opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.kafka.delete.failed"), response.Status))
+					return fmt.Errorf(fmt.Sprintf("%v, %v", opts.f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.kafka.delete.failed"), response.Status))
 				}
 			}
 		}
 
-		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.message"))
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.deletingKafka.message"))
 		time.Sleep(5 * time.Second)
 	}
 
-	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("dedicated.deregisterCluster.deletingKafka.success"))
+	opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.openshiftCluster.deregisterCluster.deletingKafka.success"))
 	return nil
 }
 
@@ -254,7 +254,7 @@ func runClusterSelectionInteractivePrompt(opts *options, clusterList *[]*cluster
 	}
 
 	prompt := &survey.Select{
-		Message: opts.f.Localizer.MustLocalize("dedicated.registerCluster.prompt.selectCluster.message"),
+		Message: opts.f.Localizer.MustLocalize("kafka.openshiftCluster.registerCluster.prompt.selectCluster.message"),
 		Options: clusterStringList,
 	}
 
