@@ -492,8 +492,8 @@ func setEnterpriseClusterList(opts *options) (*kafkamgmtclient.EnterpriseCluster
 
 func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	listOfOptions := []string{
-		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
 		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.enterprise"),
+		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
 	}
 
 	promptForCluster := &survey.Select{
@@ -502,13 +502,14 @@ func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 		Options: listOfOptions,
 	}
 
-	var idx int
-	err := survey.AskOne(promptForCluster, &idx)
+	var index int
+	err := survey.AskOne(promptForCluster, &index)
 	if err != nil {
 		return err
 	}
-	opts.useEnterpriseFlow = idx != 0
-	opts.useLegacyFlow = idx == 0
+
+	opts.useEnterpriseFlow = index == 0
+	opts.useLegacyFlow = index == 1
 
 	return nil
 }
