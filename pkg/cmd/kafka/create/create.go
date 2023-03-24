@@ -6,10 +6,12 @@ import (
 	v1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
+	"github.com/redhat-developer/app-services-cli/pkg/core/auth/token"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/connection/api/clustermgmt"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/kafkautil"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	kafkaFlagutil "github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/flagutil"
@@ -50,7 +52,8 @@ const (
 	// FlagMarketPlace is a flag representing marketplace where the instance is purchased on
 	FlagMarketPlace = "marketplace"
 	// FlagMarketPlace is a flag representing billing model of the instance
-	FlagBillingModel = "billing-model"
+	FlagBillingModel  = "billing-model"
+	TrialInstanceType = "Trial"
 )
 
 type options struct {
@@ -78,6 +81,7 @@ type options struct {
 	useEnterpriseFlow       bool
 	hasLegacyQuota          bool
 	useLegacyFlow           bool
+	useTrialFlow            bool
 	clusterManagementApiUrl string
 	accessToken             string
 
@@ -488,8 +492,8 @@ func setEnterpriseClusterList(opts *options) (*kafkamgmtclient.EnterpriseCluster
 
 func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 	listOfOptions := []string{
-		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
 		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.enterprise"),
+		opts.f.Localizer.MustLocalize("kafka.create.input.cluster.option.rhinfr"),
 	}
 
 	promptForCluster := &survey.Select{
@@ -498,13 +502,14 @@ func selectEnterpriseOrRHInfraPrompt(opts *options) error {
 		Options: listOfOptions,
 	}
 
-	var idx int
-	err := survey.AskOne(promptForCluster, &idx)
+	var index int
+	err := survey.AskOne(promptForCluster, &index)
 	if err != nil {
 		return err
 	}
-	opts.useEnterpriseFlow = idx != 0
-	opts.useLegacyFlow = idx == 0
+
+	opts.useEnterpriseFlow = index == 0
+	opts.useLegacyFlow = index == 1
 
 	return nil
 }
@@ -516,7 +521,6 @@ func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
 			opts.useEnterpriseFlow = true
 		}
 	}
-	// to-do may have to deal with trial (developer instances) quota here
 
 	// Check if the user has a legacy quota
 	for _, quota := range orgQuotas.StandardQuotas {
@@ -537,6 +541,12 @@ func checkForLegacyQuota(opts *options, orgQuotas *accountmgmtutil.OrgQuotas) {
 			return
 		}
 	}
+
+	// use trial flow if user has no other quota
+	if !opts.useEnterpriseFlow {
+		opts.useTrialFlow = true
+	}
+	return
 }
 
 // Show a prompt to allow the user to interactively insert the data for their Kafka
@@ -584,6 +594,10 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		return nil, err
 	}
 
+	if opts.useTrialFlow {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.usingTrialInstance"))
+	}
+
 	if opts.useEnterpriseFlow {
 		if len(orgQuota.EnterpriseQuotas) < 1 {
 			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.noStandardQuota")
@@ -611,6 +625,17 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 
 		opts.selectedCluster = cluster
+	}
+
+	if opts.useTrialFlow {
+		hasOtherTrialKafka, err2 := doesUserHaveTrialInstances(opts)
+		if err2 != nil {
+			return nil, err2
+		}
+
+		if hasOtherTrialKafka {
+			return nil, opts.f.Localizer.MustLocalizeError("kafka.create.error.trialInstanceAlreadyExists")
+		}
 	}
 
 	// If the user is not using an enterprise cluster, prompt them to select a cloud provider
@@ -809,10 +834,53 @@ func determineFlowFromQuota(opts *options) error {
 	case opts.hasLegacyQuota:
 		opts.useLegacyFlow = true
 		return nil
+	case opts.useTrialFlow:
+		opts.useLegacyFlow = true
+		return nil
 	default:
 		opts.useEnterpriseFlow = true
 		return nil
 	}
+}
+
+func doesUserHaveTrialInstances(opts *options) (bool, error) {
+	conn, err := opts.f.Connection()
+	if err != nil {
+		return false, err
+	}
+
+	api := conn.API()
+
+	cfg, err := opts.f.Config.Load()
+	if err != nil {
+		return false, err
+	}
+
+	userName, ok := token.GetUsername(cfg.AccessToken)
+	if !ok {
+		return false, opts.f.Localizer.MustLocalizeError("kafka.create.error.cannotFindUserDetails")
+	}
+
+	searchQuery := fmt.Sprintf("owner = %v", userName)
+
+	list, _, err := api.KafkaMgmt().GetKafkas(opts.f.Context).
+		Page(strconv.Itoa(1)).
+		Size(strconv.Itoa(1000)).
+		Search(searchQuery).
+		Execute()
+
+	if err != nil {
+		return false, err
+	}
+
+	for i := int32(0); i < list.GetSize(); i++ {
+		kafka := list.Items[i]
+		if kafka.GetInstanceTypeName() == TrialInstanceType {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 func promptForKafkaName(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
