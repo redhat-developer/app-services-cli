@@ -131,6 +131,40 @@ func CreateMachinePool(f *factory.Factory, clustermgmturl string, accessToken st
 	return response.Body(), nil
 }
 
+func GetMachinePoolIdByTaintKey(f *factory.Factory, clustermgmturl string, accessToken string, clusterId string, machinePoolTaintKey string) (string, error) {
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
+	if err != nil {
+		return "", err
+	}
+	defer closeConnection()
+	response, err := client.Clusters().Cluster(clusterId).MachinePools().List().Send()
+	if err != nil {
+		return "", err
+	}
+	machinePools := response.Items()
+	for _, machinePool := range machinePools.Slice() {
+		for _, taint := range machinePool.Taints() {
+			if taint.Key() == machinePoolTaintKey {
+				return machinePool.ID(), nil
+			}
+		}
+	}
+	return "", nil
+}
+
+func DeleteMachinePool(f *factory.Factory, clustermgmturl string, accessToken string, clusterId string, machinePoolId string) error {
+	client, closeConnection, err := clustermgmtConnection(f, accessToken, clustermgmturl)
+	if err != nil {
+		return err
+	}
+	defer closeConnection()
+	_, err = client.Clusters().Cluster(clusterId).MachinePools().MachinePool(machinePoolId).Delete().Send()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetMachinePoolNodeCount(machinePool *v1.MachinePool) int {
 	var nodeCount int
 	replicas, ok := machinePool.GetReplicas()
