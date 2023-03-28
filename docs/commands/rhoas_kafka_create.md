@@ -31,7 +31,7 @@ $ rhoas kafka create -o yaml
 
 ```
       --billing-model string            Billing model to be used
-      --cluster-id string               ID of the Openshift Cluster data plane to create the Kafka instance on.
+      --cluster-id string               ID of the Openshift Cluster data plane to create the Kafka instance on
       --dry-run                         Validate all user provided arguments without creating the Kafka instance
       --marketplace string              Name of cloud marketplace where Kafka instance was purchased
       --marketplace-account-id string   Account ID for cloud marketplace
