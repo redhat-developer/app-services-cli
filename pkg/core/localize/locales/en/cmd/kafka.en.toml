@@ -1227,5 +1227,5 @@ one = 'You can only create trial Kafka instances, this Kafka Instance will be de
 one = '''
 You do not have enough quota to create a Kafka instance on your own OpenShift Cluster.
 
-Please visit https://console.redhat.com/application-services/streams/overview to request more quota.
+Please visit https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-streams-for-apache-kafka/pricing to request more quota.
 '''
