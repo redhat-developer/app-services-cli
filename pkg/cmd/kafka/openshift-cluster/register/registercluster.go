@@ -3,8 +3,9 @@ package register
 import (
 	"context"
 	"fmt"
-	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
 	"strings"
+
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/kafka/openshift-cluster/openshiftclustercmdutil"
 
 	"github.com/redhat-developer/app-services-cli/internal/build"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil"
@@ -37,18 +38,24 @@ type options struct {
 
 // list of consts should come from KFM
 const (
-	machinePoolId           = "kafka-standard"
-	machinePoolTaintKey     = "bf2.org/kafkaInstanceProfileType"
-	machinePoolTaintEffect  = "NoExecute"
-	machinePoolTaintValue   = "standard"
-	machinePoolInstanceType = "r5.xlarge"
-	machinePoolLabelKey     = "bf2.org/kafkaInstanceProfileType"
-	machinePoolLabelValue   = "standard"
-	fleetshardAddonId       = "kas-fleetshard-operator"
-	strimziAddonId          = "managed-kafka"
-	fleetshardAddonIdQE     = "kas-fleetshard-operator-qe"
-	strimziAddonIdQE        = "managed-kafka-qe"
+	aws                    = "aws"
+	gcp                    = "gcp"
+	machinePoolId          = "kafka-standard"
+	machinePoolTaintKey    = "bf2.org/kafkaInstanceProfileType"
+	machinePoolTaintEffect = "NoExecute"
+	machinePoolTaintValue  = "standard"
+	machinePoolLabelKey    = "bf2.org/kafkaInstanceProfileType"
+	machinePoolLabelValue  = "standard"
+	fleetshardAddonId      = "kas-fleetshard-operator"
+	strimziAddonId         = "managed-kafka"
+	fleetshardAddonIdQE    = "kas-fleetshard-operator-qe"
+	strimziAddonIdQE       = "managed-kafka-qe"
 )
+
+var kafkaMachinePoolMachineTypesPerCloudProvider = map[string]string{
+	aws: "r5.xlarge",
+	gcp: "custom-4-32768-ext",
+}
 
 func NewRegisterClusterCommand(f *factory.Factory) *cobra.Command {
 	opts := &options{
@@ -174,9 +181,7 @@ func setOrCreateMachinePoolList(opts *options) error {
 			return err
 		}
 	} else {
-		for _, machinePool := range response.Items().Slice() {
-			opts.existingMachinePoolList = append(opts.existingMachinePoolList, machinePool)
-		}
+		opts.existingMachinePoolList = append(opts.existingMachinePoolList, response.Items().Slice()...)
 		err = validateMachinePoolNodes(opts)
 		if err != nil {
 			return err
@@ -228,11 +233,16 @@ func createNewMachinePoolLabelsDedicated() map[string]string {
 }
 
 // TO-DO create an autoscaling machine pool
-func createMachinePoolRequestForDedicated(machinePoolNodeCount int) (*clustersmgmtv1.MachinePool, error) {
+func createMachinePoolRequestForDedicated(machinePoolNodeCount int, cloudProvider string) (*clustersmgmtv1.MachinePool, error) {
+	machineType, ok := kafkaMachinePoolMachineTypesPerCloudProvider[cloudProvider]
+	if !ok {
+		return nil, fmt.Errorf("unsupported %q cloud provider", cloudProvider)
+	}
+
 	mp := clustersmgmtv1.NewMachinePool()
 	mp.ID(machinePoolId).
 		Replicas(machinePoolNodeCount).
-		InstanceType(machinePoolInstanceType).
+		InstanceType(machineType).
 		Labels(createNewMachinePoolLabelsDedicated()).
 		Taints(createNewMachinePoolTaintsDedicated())
 	machinePool, err := mp.Build()
@@ -258,7 +268,8 @@ func createMachinePoolInteractivePrompt(opts *options) error {
 		return err
 	}
 	opts.requestedMachinePoolNodeCount = nodeCount
-	dedicatedMachinePool, err := createMachinePoolRequestForDedicated(nodeCount)
+	cloudProvider := opts.selectedCluster.CloudProvider().ID()
+	dedicatedMachinePool, err := createMachinePoolRequestForDedicated(nodeCount, cloudProvider)
 	if err != nil {
 		return err
 	}
