@@ -24,6 +24,7 @@ type options struct {
 	clusterManagementApiUrl string
 	accessToken             string
 	selectedCluster         *clustersmgmtv1.Cluster
+	machinePoolId           string
 
 	f *factory.Factory
 }
@@ -34,6 +35,7 @@ const (
 	strimziAddonId      = "managed-kafka"
 	fleetshardAddonIdQE = "kas-fleetshard-operator-qe"
 	strimziAddonIdQE    = "managed-kafka-qe"
+	machinePoolTaintKey = "bf2.org/kafkaInstanceProfileType"
 )
 
 func NewDeRegisterClusterCommand(f *factory.Factory) *cobra.Command {
@@ -109,6 +111,18 @@ func runDeRegisterClusterCmd(opts *options) error {
 
 	addonIdsToDelete := []string{fleetshardAddonIdQE, fleetshardAddonId, strimziAddonId, strimziAddonIdQE}
 	err = ocmUtils.RemoveAddonsFromCluster(opts.f, opts.clusterManagementApiUrl, opts.accessToken, opts.selectedCluster, addonIdsToDelete)
+	if err != nil {
+		return err
+	}
+
+	// Get the kafka machine pool id
+	opts.machinePoolId, err = ocmUtils.GetMachinePoolIdByTaintKey(opts.f, opts.clusterManagementApiUrl, opts.accessToken, opts.selectedCluster.ID(), machinePoolTaintKey)
+	if err != nil {
+		return err
+	}
+
+	// remove the kafka machine pool from the cluster
+	err = ocmUtils.DeleteMachinePool(opts.f, opts.clusterManagementApiUrl, opts.accessToken, opts.selectedCluster.ID(), opts.machinePoolId)
 	if err != nil {
 		return err
 	}
