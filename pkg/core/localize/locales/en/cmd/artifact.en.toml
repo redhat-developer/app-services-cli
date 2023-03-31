@@ -78,16 +78,16 @@ one = 'Custom name of the artifact'
 one = 'Custom description of the artifact'
 
 [artifact.common.type]
-one = 'Type of artifact. Run "rhoas service-registry artifact types" to get a list.'
+one = 'Type of artifact. Run "rhoas service-registry artifact types" to get a list'
 
 [artifact.common.downloadOnServer]
 one = 'If enabled, artifact created by providing a URL will be downloaded on the server'
 
 [registry.common.flag.reference.gav]
-one = 'One or multiple artifact reference records in the format "<reference name>=<group>:<artifactId>:<version>". When referencing an artifact from the default group and/or with the latest version, these parts may be left empty.'
+one = 'One or multiple artifact reference records in the format "<reference name>=<group>:<artifactId>:<version>". When referencing an artifact from the default group and/or with the latest version, these parts may be left empty'
 
 [registry.common.flag.reference.separators]
-one = 'Specify alternative separator characters when specifying reference records for an artifact. Two distinct characters in order are required.'
+one = 'Specify alternative separator characters when specifying reference records for an artifact. Two distinct characters in order are required'
 
 [artifact.common.webURL]
 one = '''
@@ -320,7 +320,7 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
 '''
 
 [artifact.cmd.get.references]
-one = "Get a list of reference records for the given artifact. Is returned instead of the artifact content."
+one = "Get a list of reference records for the given artifact. Is returned instead of the artifact content"
 
 [artifact.cmd.list.description.short]
 one = 'List artifacts'
