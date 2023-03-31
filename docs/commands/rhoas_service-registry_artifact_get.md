@@ -39,7 +39,9 @@ rhoas service-registry artifact get --artifact-id=myartifact --version=4
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
       --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
+  -o, --output string        Output format (table, json, yaml, yml) (default "table")
       --output-file string   Location of the output file
+      --references           Get a list of reference records for the given artifact. Is returned instead of the artifact content.
       --version string       Version of the artifact
 ```
 

@@ -5,6 +5,7 @@ Create new artifact from file or standard input
 ### Synopsis
 
 Create a new artifact by posting the artifact content to the registry instance.
+Artifact content can be read from a file or downloaded from a URL, either locally by this CLI, or by the Service Registry server.
 
 Artifacts are typically in JSON format for most of the supported types, but might be in another format for a few types (for example, PROTOBUF).
 
@@ -43,20 +44,29 @@ rhoas service-registry artifact create my-artifact.json
 # Create an artifact with the specified type
 rhoas service-registry artifact create --type=JSON my-artifact.json
 
+# Create an artifact from a URL, dowloaded by the CLI:
+rhoas service-registry artifact create https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.json
+
+# Create an artifact from a URL, dowloaded by the Service Registry server:
+rhoas service-registry artifact create --download-on-server https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.json
+
 ```
 
 ### Options
 
 ```
-      --artifact-id string   ID of the artifact
-      --description string   Custom description of the artifact
-      --file string          File location of the artifact
-  -g, --group string         Artifact group (default "default")
-      --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-      --name string          Custom name of the artifact
-  -o, --output string        Output format (json, yaml, yml) (default "json")
-  -t, --type string          Type of artifact. Choose from: AVRO, PROTOBUF, JSON, OPENAPI, ASYNCAPI, GRAPHQL, KCONNECT, WSDL, XSD, XML
-      --version string       Custom version of the artifact (for example 1.0.0)
+      --artifact-id string            ID of the artifact
+      --description string            Custom description of the artifact
+      --download-on-server            If enabled, artifact created by providing a URL will be downloaded on the server
+      --file string                   File location of the artifact
+  -g, --group string                  Artifact group (default "default")
+      --instance-id string            ID of the Service Registry instance to be used (by default, uses the currently selected instance)
+      --name string                   Custom name of the artifact
+  -o, --output string                 Output format (json, yaml, yml) (default "json")
+  -r, --reference stringArray         One or multiple artifact reference records in the format "<reference name>=<group>:<artifactId>:<version>". When referencing an artifact from the default group and/or with the latest version, these parts may be left empty.
+      --reference-separators string   Specify alternative separator characters when specifying reference records for an artifact. Two distinct characters in order are required. (default "=:")
+  -t, --type string                   Type of artifact. Run "rhoas service-registry artifact types" to get a list.
+      --version string                Custom version of the artifact (for example 1.0.0)
 ```
 
 ### Options inherited from parent commands
