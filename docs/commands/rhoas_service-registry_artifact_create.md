@@ -63,9 +63,9 @@ rhoas service-registry artifact create --download-on-server https://raw.githubus
       --instance-id string            ID of the Service Registry instance to be used (by default, uses the currently selected instance)
       --name string                   Custom name of the artifact
   -o, --output string                 Output format (json, yaml, yml) (default "json")
-  -r, --reference stringArray         One or multiple artifact reference records in the format "<reference name>=<group>:<artifactId>:<version>". When referencing an artifact from the default group and/or with the latest version, these parts may be left empty.
-      --reference-separators string   Specify alternative separator characters when specifying reference records for an artifact. Two distinct characters in order are required. (default "=:")
-  -t, --type string                   Type of artifact. Run "rhoas service-registry artifact types" to get a list.
+  -r, --reference stringArray         One or multiple artifact reference records in the format "<reference name>=<group>:<artifactId>:<version>". When referencing an artifact from the default group and/or with the latest version, these parts may be left empty
+      --reference-separators string   Specify alternative separator characters when specifying reference records for an artifact. Two distinct characters in order are required (default "=:")
+  -t, --type string                   Type of artifact. Run "rhoas service-registry artifact types" to get a list
       --version string                Custom version of the artifact (for example 1.0.0)
 ```
 
