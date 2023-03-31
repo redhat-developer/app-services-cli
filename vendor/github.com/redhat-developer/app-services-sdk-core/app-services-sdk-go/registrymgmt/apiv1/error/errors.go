@@ -36,13 +36,16 @@ const (
   // Could not check quota for user?
   ERROR_11 string = "SRS-MGMT-11"
 
-  // Evaluation instances not allowed.
+  // Evaluation instances not allowed
   ERROR_12 string = "SRS-MGMT-12"
 
-  // User already has the maximum number of allowed Evaluation instances.
+  // User already has the maximum number of allowed Evaluation instances
   ERROR_13 string = "SRS-MGMT-13"
 
-  // Total (global) number of instances exhausted.
+  // Total (global) number of instances exhausted
   ERROR_14 string = "SRS-MGMT-14"
+
+  // User is not authorized to perform the operation
+  ERROR_15 string = "SRS-MGMT-15"
 
 )

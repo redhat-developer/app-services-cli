@@ -3,7 +3,7 @@
  *
  * Apicurio Registry is a datastore for standard event schemas and API designs. Apicurio Registry enables developers to manage and share the structure of their data using a REST interface. For example, client applications can dynamically push or pull the latest updates to or from the registry without needing to redeploy. Apicurio Registry also enables developers to create rules that govern how registry content can evolve over time. For example, this includes rules for content validation and version compatibility.  The Apicurio Registry REST API enables client applications to manage the artifacts in the registry. This API provides create, read, update, and delete operations for schema and API artifacts, rules, versions, and metadata.   The supported artifact types include: - Apache Avro schema - AsyncAPI specification - Google protocol buffers - GraphQL schema - JSON Schema - Kafka Connect schema - OpenAPI specification - Web Services Description Language - XML Schema Definition   **Important**: The Apicurio Registry REST API is available from `https://MY-REGISTRY-URL/apis/registry/v2` by default. Therefore you must prefix all API operation paths with `../apis/registry/v2` in this case. For example: `../apis/registry/v2/ids/globalIds/{globalId}`. 
  *
- * API version: 2.2.5.Final
+ * API version: 2.4.x
  * Contact: apicurio@lists.jboss.org
  */
 
@@ -83,7 +83,7 @@ This operation may fail for one of the following reasons:
 * A server error occurred (HTTP error `500`)
 
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param groupId Unique ID of an artifact group.
+	 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
 	 * @return ApiCreateArtifactRequest
 	 */
 	CreateArtifact(ctx _context.Context, groupId string) ApiCreateArtifactRequest
@@ -117,7 +117,7 @@ deleted.  This may fail for one of the following reasons:
 	 * DeleteArtifactsInGroup Delete artifacts in group
 	 * Deletes all of the artifacts that exist in a given group.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param groupId Unique ID of an artifact group.
+	 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
 	 * @return ApiDeleteArtifactsInGroupRequest
 	 */
 	DeleteArtifactsInGroup(ctx _context.Context, groupId string) ApiDeleteArtifactsInGroupRequest
@@ -223,7 +223,7 @@ This operation may fail for one of the following reasons:
 	 * ListArtifactsInGroup List artifacts in group
 	 * Returns a list of all artifacts in the group.  This list is paged.
 	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 * @param groupId Unique ID of an artifact group.
+	 * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
 	 * @return ApiListArtifactsInGroupRequest
 	 */
 	ListArtifactsInGroup(ctx _context.Context, groupId string) ApiListArtifactsInGroupRequest
@@ -274,8 +274,8 @@ This operation may fail for one of the following reasons:
 	ReferencesByContentIdExecute(r ApiReferencesByContentIdRequest) ([]ArtifactReference, *_nethttp.Response, error)
 
 	/*
-	 * ReferencesByGlobalId Returns a list with all the references for the artifact with the given global id.
-	 * Returns a list containing all the artifact references using the artifact global id.
+	 * ReferencesByGlobalId List artifact references by global ID
+	 * Returns a list containing all the artifact references using the artifact global ID.
 
 This operation may fail for one of the following reasons:
 
@@ -355,7 +355,7 @@ type ApiCreateArtifactRequest struct {
 	ApiService ArtifactsApi
 	groupId string
 	body **os.File
-	xRegistryArtifactType *ArtifactType
+	xRegistryArtifactType *string
 	xRegistryArtifactId *string
 	xRegistryVersion *string
 	ifExists *IfExists
@@ -366,13 +366,14 @@ type ApiCreateArtifactRequest struct {
 	xRegistryNameEncoded *string
 	xRegistryContentHash *string
 	xRegistryHashAlgorithm *string
+	contentType *string
 }
 
 func (r ApiCreateArtifactRequest) Body(body *os.File) ApiCreateArtifactRequest {
 	r.body = &body
 	return r
 }
-func (r ApiCreateArtifactRequest) XRegistryArtifactType(xRegistryArtifactType ArtifactType) ApiCreateArtifactRequest {
+func (r ApiCreateArtifactRequest) XRegistryArtifactType(xRegistryArtifactType string) ApiCreateArtifactRequest {
 	r.xRegistryArtifactType = &xRegistryArtifactType
 	return r
 }
@@ -414,6 +415,10 @@ func (r ApiCreateArtifactRequest) XRegistryContentHash(xRegistryContentHash stri
 }
 func (r ApiCreateArtifactRequest) XRegistryHashAlgorithm(xRegistryHashAlgorithm string) ApiCreateArtifactRequest {
 	r.xRegistryHashAlgorithm = &xRegistryHashAlgorithm
+	return r
+}
+func (r ApiCreateArtifactRequest) ContentType(contentType string) ApiCreateArtifactRequest {
+	r.contentType = &contentType
 	return r
 }
 
@@ -476,7 +481,7 @@ This operation may fail for one of the following reasons:
 * A server error occurred (HTTP error `500`)
 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupId Unique ID of an artifact group.
+ * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
  * @return ApiCreateArtifactRequest
  */
 func (a *ArtifactsApiService) CreateArtifact(ctx _context.Context, groupId string) ApiCreateArtifactRequest {
@@ -523,7 +528,7 @@ func (a *ArtifactsApiService) CreateArtifactExecute(r ApiCreateArtifactRequest) 
 		localVarQueryParams.Add("canonical", parameterToString(*r.canonical, ""))
 	}
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{"application/json", "application/vnd.json"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -565,6 +570,9 @@ func (a *ArtifactsApiService) CreateArtifactExecute(r ApiCreateArtifactRequest) 
 	}
 	if r.xRegistryHashAlgorithm != nil {
 		localVarHeaderParams["X-Registry-Hash-Algorithm"] = parameterToString(*r.xRegistryHashAlgorithm, "")
+	}
+	if r.contentType != nil {
+		localVarHeaderParams["Content-Type"] = parameterToString(*r.contentType, "")
 	}
 	// body params
 	localVarPostBody = r.body
@@ -771,7 +779,7 @@ func (r ApiDeleteArtifactsInGroupRequest) Execute() (*_nethttp.Response, error) 
  * DeleteArtifactsInGroup Delete artifacts in group
  * Deletes all of the artifacts that exist in a given group.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupId Unique ID of an artifact group.
+ * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
  * @return ApiDeleteArtifactsInGroupRequest
  */
 func (a *ArtifactsApiService) DeleteArtifactsInGroup(ctx _context.Context, groupId string) ApiDeleteArtifactsInGroupRequest {
@@ -1446,7 +1454,7 @@ func (r ApiListArtifactsInGroupRequest) Execute() (ArtifactSearchResults, *_neth
  * ListArtifactsInGroup List artifacts in group
  * Returns a list of all artifacts in the group.  This list is paged.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupId Unique ID of an artifact group.
+ * @param groupId The artifact group ID.  Must be a string provided by the client, representing the name of the grouping of artifacts.
  * @return ApiListArtifactsInGroupRequest
  */
 func (a *ArtifactsApiService) ListArtifactsInGroup(ctx _context.Context, groupId string) ApiListArtifactsInGroupRequest {
@@ -1791,8 +1799,8 @@ func (r ApiReferencesByGlobalIdRequest) Execute() ([]ArtifactReference, *_nethtt
 }
 
 /*
- * ReferencesByGlobalId Returns a list with all the references for the artifact with the given global id.
- * Returns a list containing all the artifact references using the artifact global id.
+ * ReferencesByGlobalId List artifact references by global ID
+ * Returns a list containing all the artifact references using the artifact global ID.
 
 This operation may fail for one of the following reasons:
 
@@ -1894,15 +1902,16 @@ type ApiUpdateArtifactRequest struct {
 	ApiService ArtifactsApi
 	groupId string
 	artifactId string
-	body *interface{}
+	body **os.File
 	xRegistryVersion *string
 	xRegistryName *string
 	xRegistryNameEncoded *string
 	xRegistryDescription *string
 	xRegistryDescriptionEncoded *string
+	contentType *string
 }
 
-func (r ApiUpdateArtifactRequest) Body(body interface{}) ApiUpdateArtifactRequest {
+func (r ApiUpdateArtifactRequest) Body(body *os.File) ApiUpdateArtifactRequest {
 	r.body = &body
 	return r
 }
@@ -1924,6 +1933,10 @@ func (r ApiUpdateArtifactRequest) XRegistryDescription(xRegistryDescription stri
 }
 func (r ApiUpdateArtifactRequest) XRegistryDescriptionEncoded(xRegistryDescriptionEncoded string) ApiUpdateArtifactRequest {
 	r.xRegistryDescriptionEncoded = &xRegistryDescriptionEncoded
+	return r
+}
+func (r ApiUpdateArtifactRequest) ContentType(contentType string) ApiUpdateArtifactRequest {
+	r.contentType = &contentType
 	return r
 }
 
@@ -1994,7 +2007,7 @@ func (a *ArtifactsApiService) UpdateArtifactExecute(r ApiUpdateArtifactRequest) 
 	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{"application/json", "application/vnd.json"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -2024,6 +2037,9 @@ func (a *ArtifactsApiService) UpdateArtifactExecute(r ApiUpdateArtifactRequest) 
 	}
 	if r.xRegistryDescriptionEncoded != nil {
 		localVarHeaderParams["X-Registry-Description-Encoded"] = parameterToString(*r.xRegistryDescriptionEncoded, "")
+	}
+	if r.contentType != nil {
+		localVarHeaderParams["Content-Type"] = parameterToString(*r.contentType, "")
 	}
 	// body params
 	localVarPostBody = r.body

@@ -11,6 +11,7 @@ import (
 	migrate "github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/migrate"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/owner"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/state"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/types"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/versions"
 	"github.com/redhat-developer/app-services-cli/pkg/shared/factory"
 	"github.com/spf13/cobra"
@@ -44,6 +45,7 @@ func NewArtifactsCommand(f *factory.Factory) *cobra.Command {
 		state.NewSetStateCommand(f),
 		owner.NewGetCommand(f),
 		owner.NewSetCommand(f),
+		types.NewGetTypesCommand(f),
 	)
 
 	return cmd

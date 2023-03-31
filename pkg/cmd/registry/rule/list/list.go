@@ -117,7 +117,7 @@ func runList(opts *options) error {
 
 		opts.Logger.Info(opts.localizer.MustLocalize("registry.rule.list.log.info.fetching.globalRules"))
 
-		req := dataAPI.GlobalRulesApi.ListGlobalRules(opts.Context)
+		req := dataAPI.AdminApi.ListGlobalRules(opts.Context)
 
 		enabledRules, httpRes, newErr = req.Execute()
 		if httpRes != nil {

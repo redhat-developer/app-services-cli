@@ -2,7 +2,6 @@ package state
 
 import (
 	"context"
-
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/artifact/util"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
@@ -55,7 +54,7 @@ func NewSetStateCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			if _, err := registryinstanceclient.NewArtifactStateFromValue(opts.state); err != nil {
-				return opts.localizer.MustLocalizeError("artifact.cmd.state.error.invalidArtifactState", localize.NewEntry("AllowedTypes", util.GetAllowedArtifactStateEnumValuesAsString()))
+				return opts.localizer.MustLocalizeError("artifact.cmd.state.error.invalidArtifactState", localize.NewEntry("AllowedStates", util.GetAllowedArtifactStateEnumValuesAsString()))
 			}
 
 			if opts.registryID != "" {

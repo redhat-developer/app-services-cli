@@ -7,7 +7,6 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/registrycmdutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/cmdutil/flagutil"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/color"
-	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/dump"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/icon"
 	"github.com/redhat-developer/app-services-cli/pkg/core/ioutil/iostreams"
 	"github.com/redhat-developer/app-services-cli/pkg/core/localize"
@@ -74,7 +73,7 @@ func NewGetMetadataCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.artifact, "artifact-id", "", opts.localizer.MustLocalize("artifact.common.id"))
 	cmd.Flags().StringVarP(&opts.group, "group", "g", registrycmdutil.DefaultArtifactGroup, opts.localizer.MustLocalize("artifact.common.group"))
 	cmd.Flags().StringVar(&opts.registryID, "instance-id", "", opts.localizer.MustLocalize("registry.common.flag.instance.id"))
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", opts.localizer.MustLocalize("artifact.common.message.output.format"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", opts.localizer.MustLocalize("artifact.common.message.output.formatNoTable"))
 
 	flagutil.EnableOutputFlagCompletion(cmd)
 
@@ -82,6 +81,11 @@ func NewGetMetadataCommand(f *factory.Factory) *cobra.Command {
 }
 
 func runGet(opts *GetOptions) error {
+	format := util.OutputFormatFromString(opts.outputFormat)
+	if format == util.UnknownOutputFormat || format == util.TableOutputFormat {
+		return opts.localizer.MustLocalizeError("artifact.common.error.invalidOutputFormat")
+	}
+
 	conn, err := opts.Connection()
 	if err != nil {
 		return err
@@ -117,5 +121,5 @@ func runGet(opts *GetOptions) error {
 		opts.Logger.Info(opts.localizer.MustLocalize("artifact.common.webURL", localize.NewEntry("URL", color.Info(artifactURL))))
 	}
 
-	return dump.Formatted(opts.IO.Out, opts.outputFormat, response)
+	return util.Dump(opts.IO.Out, format, response, nil)
 }

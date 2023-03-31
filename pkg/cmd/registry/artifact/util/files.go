@@ -10,24 +10,12 @@ import (
 )
 
 func CreateFileFromStdin() (*os.File, error) {
-	var specifiedFile *os.File
 	data, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return nil, err
 	}
-	specifiedFile, err = os.CreateTemp("", "rhoas-std-input")
-	if err != nil {
-		return nil, err
-	}
-	_, err = (*specifiedFile).Write(data)
-	if err != nil {
-		return nil, err
-	}
-	_, err = (*specifiedFile).Seek(0, io.SeekStart)
-	if err != nil {
-		return nil, err
-	}
-	return specifiedFile, nil
+
+	return GetFileFromBytes(data)
 }
 
 // IsURL accepts a string and determines if it is a URL
@@ -61,19 +49,24 @@ func GetContentFromFileURL(ctx context.Context, url string) (*os.File, error) {
 
 	defer resp.Body.Close()
 
-	tmpfile, err := os.CreateTemp("", "rhoas-std-input")
+	return GetFileFromBytes(data)
+}
+
+func GetFileFromBytes(bytes []byte) (*os.File, error) {
+
+	file, err := os.CreateTemp("", "rhoas-std-input")
 	if err != nil {
 		return nil, fmt.Errorf("error initializing temporary file: %w", err)
 	}
 
-	_, err = (*tmpfile).Write(data)
+	_, err = (*file).Write(bytes)
 	if err != nil {
 		return nil, err
 	}
-	_, err = (*tmpfile).Seek(0, io.SeekStart)
+	_, err = (*file).Seek(0, io.SeekStart)
 	if err != nil {
 		return nil, err
 	}
 
-	return tmpfile, nil
+	return file, nil
 }

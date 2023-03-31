@@ -27,7 +27,7 @@ rhoas service-registry artifact versions --artifact-id=my-artifact --group mygro
       --artifact-id string   ID of the artifact
   -g, --group string         Artifact group (default "default")
       --instance-id string   ID of the Service Registry instance to be used (by default, uses the currently selected instance)
-  -o, --output string        Output format (json, yaml, yml)
+  -o, --output string        Output format (json, yaml, yml) (default "json")
 ```
 
 ### Options inherited from parent commands
