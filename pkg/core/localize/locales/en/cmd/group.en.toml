@@ -1,0 +1,100 @@
+[group.cmd.description.short]
+one = 'Manage artifacts groups of Service Registry instance'
+
+[group.cmd.description.long]
+one = '''
+Manage artifacts groups of Service Registry instance
+'''
+
+[group.cmd.example]
+one = '''
+## List all artifacts groups of the current Service Registry instance
+$ rhoas service-registry group list
+
+## Get artifact group metadata by group-id
+$ rhoas service-registry group get --group-id example-group
+
+## Create new artifact group
+$ rhoas service-registry group create --group-id example-group --description "Description for example-group" --properties prop1=value1 --properties prop2=value2
+'''
+
+[group.list.cmd.description.short]
+one = 'List all artifact groups of a Service Registry instance'
+
+[group.list.cmd.description.long]
+one = '''
+List artifact groups of a Service Registry instance with their id and description
+'''
+
+[group.list.cmd.example]
+one = '''
+## List first 100 groups in the current Service Registry instance
+$ rhoas service-registry group list --limit 100 --page 1
+
+## List first 50 groups in the current Service Registry instance in descending order
+$ rhoas service-registry group list --limit 100 --page 1 --descending
+
+## List first 100 groups in a specific Service Registry instance
+$ rhoas service-registry group list --instance-id=8ecff228-1ffe-4cf5-b38b-55223885ee00 --limit 100 --page 1
+'''
+
+[group.cmd.list.flag.page]
+description = 'Description for the --page flag'
+one = 'Display the groups from the specified page number'
+
+[group.cmd.list.flag.limit]
+description = 'Description for the --limit flag'
+one = 'The maximum number of groups to be returned'
+
+[group.cmd.list.flag.descending]
+description = 'Description for the --descending flag'
+one = 'Display the groups in descending order'
+
+[group.cmd.list.flag.orderby]
+description = 'Description for the --order-by flag'
+one = 'Display the groups ordered by'
+
+[group.create.cmd.description.short]
+one = 'Create a new artifact group'
+
+[group.create.cmd.description.long]
+one = 'Create a new artifact group with description and properties'
+
+[group.create.cmd.example]
+one = '''
+## Create new artifact group
+$ rhoas service-registry group create --group-id example-group --description "Description for example-group" --properties prop1=value1 --properties prop2=value2
+'''
+
+[group.cmd.create.flag.description]
+one = 'Description of the group'
+
+[group.cmd.create.flag.group-id]
+one = 'ID of the group'
+
+[group.cmd.create.flag.properties]
+one = 'List of the group properties in format <name>=<value>'
+
+[group.cmd.create.log.info.created]
+one = 'Group {{.GroupId}} was successfully created'
+
+[group.cmd.create.input.group-id.message]
+one = 'Name of the group:'
+
+[group.get.cmd.description.short]
+one = 'Get metadata of the artifact group'
+
+[group.get.cmd.description.long]
+one = 'Get metadata of the artifact group'
+
+[group.get.cmd.example]
+one = '''
+## Get metadata of the artifact group
+$ rhoas service-registry group get --group-id example-group
+'''
+
+[group.cmd.get.flag.group-id]
+one = 'ID of the group'
+
+[group.cmd.get.input.group-id.message]
+one = 'Name of the group:'
