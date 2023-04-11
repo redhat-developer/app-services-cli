@@ -103,7 +103,7 @@ func kfmListToClusterRowList(opts *options) []clusterRow {
 		crl = append(crl, clusterRow{
 			Name:          ocmCluster.Name(),
 			ID:            kfmcluster.Id,
-			Status:        *kfmcluster.Status,
+			Status:        kafkautil.MapClusterStatus(kfmcluster.GetStatus()),
 			CloudProvider: ocmCluster.CloudProvider().ID(),
 			Region:        ocmCluster.Region().ID(),
 		})

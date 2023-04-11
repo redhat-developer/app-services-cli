@@ -8,6 +8,43 @@ import (
 	"net/http"
 )
 
+const (
+	statusClusterAccepted         = "cluster_accepted"
+	statusClusterProvisioning     = "cluster_provisioning"
+	statusClusterProvisioned      = "cluster_provisioned"
+	statusWaitingForKasFleetshard = "waiting_for_kas_fleetshard_operator"
+	statusReady                   = "ready"
+	statusFailed                  = "failed"
+	statusDeprovisioning          = "deprovisioning"
+	statusCleanup                 = "cleanup"
+
+	customStatusAccepted      = "Cluster Accepted"
+	customStatusRegistering   = "Registering"
+	customStatusUnregistering = "Unregistering"
+	customStatusReady         = "Ready"
+	customStatusFailed        = "Failed"
+)
+
+func MapClusterStatus(clusterStatus string) string {
+	switch clusterStatus {
+	case statusClusterAccepted:
+		return customStatusAccepted
+	case statusClusterProvisioning:
+	case statusClusterProvisioned:
+	case statusWaitingForKasFleetshard:
+		return customStatusRegistering
+	case statusCleanup:
+	case statusDeprovisioning:
+		return customStatusUnregistering
+	case statusReady:
+		return customStatusReady
+	case statusFailed:
+		return customStatusFailed
+	}
+
+	return clusterStatus
+}
+
 func CreateClusterSearchStringFromKafkaList(kfmClusterList *kafkamgmtclient.EnterpriseClusterList) string {
 	searchString := ""
 	for idx, kfmcluster := range kfmClusterList.Items {
