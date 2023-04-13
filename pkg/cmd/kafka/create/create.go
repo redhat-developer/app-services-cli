@@ -54,6 +54,7 @@ const (
 	// FlagMarketPlace is a flag representing billing model of the instance
 	FlagBillingModel  = "billing-model"
 	TrialInstanceType = "Trial"
+	CloudProvider     = "aws"
 )
 
 type options struct {
@@ -572,19 +573,27 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.info.enterpriseQuota"))
 	}
 
+	if opts.useTrialFlow {
+		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.usingTrialInstance"))
+	}
+
 	answers, err = promptForKafkaName(f, answers)
 	if err != nil {
 		return nil, err
 	}
 
-	// Get the list of enterprise clusters in the users organization if there are any, creates a map of cluster ids
-	// to names to include names in the prompt
-	kfmClusterList, clusterMap, err := setEnterpriseClusterList(opts)
-	if err != nil {
-		return nil, err
+	opts.kfmClusterList = &kafkamgmtclient.EnterpriseClusterList{}
+
+	if opts.useEnterpriseFlow {
+		// Get the list of enterprise clusters in the users organization if there are any, creates a map of cluster ids
+		// to names to include names in the prompt
+		kfmClusterList, clusterMap, err2 := setEnterpriseClusterList(opts)
+		if err2 != nil {
+			return nil, err2
+		}
+		opts.kfmClusterList = kfmClusterList
+		opts.clusterMap = clusterMap
 	}
-	opts.kfmClusterList = kfmClusterList
-	opts.clusterMap = clusterMap
 
 	// If there are enterprise clusters in the user's organization, prompt them to select a flow (enterprise or legacy)
 	// using the interactive prompt. If there are no enterprise clusters, the user must use the legacy flow.
@@ -592,10 +601,6 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 	err = determineFlowFromQuota(opts)
 	if err != nil {
 		return nil, err
-	}
-
-	if opts.useTrialFlow {
-		opts.f.Logger.Info(opts.f.Localizer.MustLocalize("kafka.create.usingTrialInstance"))
 	}
 
 	if opts.useEnterpriseFlow {
@@ -638,12 +643,10 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 		}
 	}
 
-	// If the user is not using an enterprise cluster, prompt them to select a cloud provider
+	// If the user is not using an enterprise cluster, we set the cloud provider to aws as this is currently the only
+	// cloud provider that we support
 	if opts.useLegacyFlow {
-		answers, err = cloudProviderPrompt(f, answers)
-		if err != nil {
-			return nil, err
-		}
+		answers.CloudProvider = CloudProvider
 	}
 
 	// gets the billing model for the kafka, if the user has more than one billing model, a prompt is shown to select one
@@ -741,21 +744,18 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 			return nil, err
 		}
 
-		if len(regionIDs) == 0 {
+		// selecting the region, if there is only one region available, we skip the prompt
+		switch {
+		case len(regionIDs) == 0:
 			return nil, f.Localizer.MustLocalizeError("kafka.create.error.noRegionSupported")
+		case len(regionIDs) == 1:
+			answers.Region = regionIDs[0]
+		default:
+			err = promptForCloudRegion(f, regionIDs, answers)
+			if err != nil {
+				return nil, err
+			}
 		}
-
-		regionPrompt := &survey.Select{
-			Message: f.Localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
-			Options: regionIDs,
-			Help:    f.Localizer.MustLocalize("kafka.create.input.cloudRegion.help"),
-		}
-
-		err = survey.AskOne(regionPrompt, &answers.Region)
-		if err != nil {
-			return nil, err
-		}
-
 		sizes, err = FetchValidKafkaSizes(opts.f, answers.CloudProvider, answers.Region, *userQuota)
 		if err != nil {
 			return nil, err
@@ -796,6 +796,20 @@ func promptKafkaPayload(opts *options, constants *remote.DynamicServiceConstants
 
 	}
 	return payload, nil
+}
+
+func promptForCloudRegion(f *factory.Factory, regionIDs []string, answers *promptAnswers) error {
+	regionPrompt := &survey.Select{
+		Message: f.Localizer.MustLocalize("kafka.create.input.cloudRegion.message"),
+		Options: regionIDs,
+		Help:    f.Localizer.MustLocalize("kafka.create.input.cloudRegion.help"),
+	}
+
+	err := survey.AskOne(regionPrompt, &answers.Region)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func getBillingModel(opts *options, orgQuota *accountmgmtutil.OrgQuotas, answers *promptAnswers) (*promptAnswers, error) {
@@ -933,29 +947,6 @@ func marketplaceQuotaPrompt(orgQuota *accountmgmtutil.OrgQuotas, answers *prompt
 				return nil, err
 			}
 		}
-	}
-	return answers, nil
-}
-
-func cloudProviderPrompt(f *factory.Factory, answers *promptAnswers) (*promptAnswers, error) {
-	cloudProviderNames, err := GetEnabledCloudProviderNames(f)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(cloudProviderNames) == 1 {
-		answers.CloudProvider = cloudProviderNames[0]
-		return answers, nil
-	}
-
-	cloudProviderPrompt := &survey.Select{
-		Message: f.Localizer.MustLocalize("kafka.create.input.cloudProvider.message"),
-		Options: cloudProviderNames,
-	}
-
-	err = survey.AskOne(cloudProviderPrompt, &answers.CloudProvider)
-	if err != nil {
-		return nil, err
 	}
 	return answers, nil
 }
