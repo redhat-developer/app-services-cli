@@ -1229,3 +1229,5 @@ You do not have enough quota to create a Kafka instance on your own OpenShift Cl
 
 Please visit https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-streams-for-apache-kafka/pricing to request more quota.
 '''
+[kafka.cluster.common.error.noClustersAvailable]
+one = 'no registered OpenShift clusters found, an OpenShit cluster must be registered to use the service'

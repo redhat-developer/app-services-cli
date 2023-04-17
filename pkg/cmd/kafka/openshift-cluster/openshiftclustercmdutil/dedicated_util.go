@@ -42,15 +42,18 @@ func (v *Validator) ValidatorForMachinePoolNodes(val interface{}) error {
 	return nil
 }
 
-func CreatePromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) *[]string {
+func CreatePromptOptionsFromClusters(f *factory.Factory, clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) (*[]string, error) {
 	promptOptions := []string{}
 	validatedClusters := ValidateClusters(clusterList)
+	if len(validatedClusters.Items) == 0 {
+		return &promptOptions, f.Localizer.MustLocalizeError("kafka.cluster.common.error.noClustersAvailable")
+	}
 	for _, cluster := range validatedClusters.Items {
 		ocmCluster := (*clusterMap)[cluster.GetId()]
 		display := ocmCluster.Name() + " (" + cluster.GetId() + ")"
 		promptOptions = append(promptOptions, display)
 	}
-	return &promptOptions
+	return &promptOptions, nil
 }
 
 func ValidateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafkamgmtclient.EnterpriseClusterList {
