@@ -968,7 +968,7 @@ func getClusterNameMap(opts *options, clusterList *kafkamgmtclient.EnterpriseClu
 }
 
 func selectClusterPrompt(opts *options) (int, error) {
-	promptOptions, err := openshiftclustercmdutil.CreatePromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
+	promptOptions, err := openshiftclustercmdutil.CreatePromptOptionsFromClusters(opts.f, opts.kfmClusterList, opts.clusterMap)
 	if err != nil {
 		return 0, err
 	}
