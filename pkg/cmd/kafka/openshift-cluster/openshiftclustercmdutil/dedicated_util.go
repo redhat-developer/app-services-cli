@@ -42,15 +42,18 @@ func (v *Validator) ValidatorForMachinePoolNodes(val interface{}) error {
 	return nil
 }
 
-func CreatePromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) *[]string {
+func CreatePromptOptionsFromClusters(clusterList *kafkamgmtclient.EnterpriseClusterList, clusterMap *map[string]v1.Cluster) (*[]string, error) {
 	promptOptions := []string{}
 	validatedClusters := ValidateClusters(clusterList)
+	if len(validatedClusters.Items) == 0 {
+		return &promptOptions, fmt.Errorf("no registered OpenShift clusters found, an OpenShit cluster must be registered to use the service ")
+	}
 	for _, cluster := range validatedClusters.Items {
 		ocmCluster := (*clusterMap)[cluster.GetId()]
 		display := ocmCluster.Name() + " (" + cluster.GetId() + ")"
 		promptOptions = append(promptOptions, display)
 	}
-	return &promptOptions
+	return &promptOptions, nil
 }
 
 func ValidateClusters(clusterList *kafkamgmtclient.EnterpriseClusterList) *kafkamgmtclient.EnterpriseClusterList {

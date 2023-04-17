@@ -968,14 +968,17 @@ func getClusterNameMap(opts *options, clusterList *kafkamgmtclient.EnterpriseClu
 }
 
 func selectClusterPrompt(opts *options) (int, error) {
-	promptOptions := openshiftclustercmdutil.CreatePromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
+	promptOptions, err := openshiftclustercmdutil.CreatePromptOptionsFromClusters(opts.kfmClusterList, opts.clusterMap)
+	if err != nil {
+		return 0, err
+	}
 	promptForCluster := &survey.Select{
 		Message: opts.f.Localizer.MustLocalize("kafka.create.input.cluster.selectClusterMessage"),
 		Options: *promptOptions,
 	}
 
 	var index int
-	err := survey.AskOne(promptForCluster, &index)
+	err = survey.AskOne(promptForCluster, &index)
 	if err != nil {
 		return 0, err
 	}
