@@ -13,9 +13,13 @@
   <img alt="Logo" src="https://user-images.githubusercontent.com/11743717/127519981-97c76ae4-f17b-4ac8-8b4d-365bfa4a6374.png">
 </p>
 
-`rhoas` is a command-line client for managing Red Hat application services
+`rhoas` is a command-line client for managing Red Hat OpenShift Application Services.
 
+**IMPORTANT:** This project is no longer active. The cloud services managed by the `rhoas` command are no longer available. For the latest self-managed alternatives, see the following products:
 
+* OpenShift Streams for Apache Kakfa: see [Red Hat Streams for Apache Kakfa](https://docs.redhat.com/en/documentation/red_hat_streams_for_apache_kafka/)
+* OpenShift Service Registry: see [Red Hat build of Apicurio Registry](https://access.redhat.com/documentation/en-us/red_hat_build_of_apicurio_registry)
+* OpenShift Connectors: see [Red Hat build of Apache Camel K](https://access.redhat.com/documentation/en-us/red_hat_build_of_apache_camel_k)
 
 ## Installing RHOAS
 
