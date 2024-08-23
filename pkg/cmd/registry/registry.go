@@ -8,6 +8,7 @@ import (
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/create"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/delete"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/describe"
+	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/group"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/list"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/rule"
 	"github.com/redhat-developer/app-services-cli/pkg/cmd/registry/setting"
@@ -38,6 +39,7 @@ func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 		role.NewRoleCommand(f),
 		rule.NewRuleCommand(f),
 		setting.NewSettingCommand(f),
+		group.NewGroupCommand(f),
 	)
 
 	return cmd
