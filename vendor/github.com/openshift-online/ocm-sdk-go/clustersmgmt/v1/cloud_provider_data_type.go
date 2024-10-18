@@ -30,7 +30,9 @@ type CloudProviderData struct {
 	keyLocation       string
 	keyRingName       string
 	region            *CloudRegion
+	subnets           []string
 	version           *Version
+	vpcIds            []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -176,12 +178,35 @@ func (o *CloudProviderData) GetRegion() (value *CloudRegion, ok bool) {
 	return
 }
 
+// Subnets returns the value of the 'subnets' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Subnets
+func (o *CloudProviderData) Subnets() []string {
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.subnets
+	}
+	return nil
+}
+
+// GetSubnets returns the value of the 'subnets' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Subnets
+func (o *CloudProviderData) GetSubnets() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&64 != 0
+	if ok {
+		value = o.subnets
+	}
+	return
+}
+
 // Version returns the value of the 'version' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Openshift version
 func (o *CloudProviderData) Version() *Version {
-	if o != nil && o.bitmap_&64 != 0 {
+	if o != nil && o.bitmap_&128 != 0 {
 		return o.version
 	}
 	return nil
@@ -192,9 +217,32 @@ func (o *CloudProviderData) Version() *Version {
 //
 // Openshift version
 func (o *CloudProviderData) GetVersion() (value *Version, ok bool) {
-	ok = o != nil && o.bitmap_&64 != 0
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.version
+	}
+	return
+}
+
+// VpcIds returns the value of the 'vpc_ids' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// VPC ids
+func (o *CloudProviderData) VpcIds() []string {
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.vpcIds
+	}
+	return nil
+}
+
+// GetVpcIds returns the value of the 'vpc_ids' attribute and
+// a flag indicating if the attribute has a value.
+//
+// VPC ids
+func (o *CloudProviderData) GetVpcIds() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&256 != 0
+	if ok {
+		value = o.vpcIds
 	}
 	return
 }

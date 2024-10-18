@@ -37,7 +37,7 @@ jobs:
       - 
         name: Install git-chglog
         # v1
-        uses: craicoverflow/install-git-chglog@6d338c1d96dcbf12a2115fbe8e5b9817293aae33
+        uses: craicoverflow/install-git-chglog@fd5ace93851e0e2a8deb0b3c31a07c79cb76fcf2
       - 
         name: Generate release notes
         if: steps.check-tag.outputs.prerelease == 'false'
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run GoReleaser
         # v3
-        uses: goreleaser/goreleaser-action@b508e2e3ef3b19d4e4146d4f8fb3ba9db644a757
+        uses: goreleaser/goreleaser-action@f7623f3e7168fa800ac616fe8d03643abbc6edda
         if: steps.check-tag.outputs.prerelease == 'false'
         with:
           version: latest
@@ -60,7 +60,7 @@ jobs:
 
       - name: Run GoReleaser on pre-release
         # v3
-        uses: goreleaser/goreleaser-action@b508e2e3ef3b19d4e4146d4f8fb3ba9db644a757
+        uses: goreleaser/goreleaser-action@f7623f3e7168fa800ac616fe8d03643abbc6edda
         if: steps.check-tag.outputs.prerelease == 'true'
         with:
           version: latest
@@ -71,7 +71,7 @@ jobs:
       - name: Notify Guides of new version
         if: steps.check-tag.outputs.prerelease == 'false'
         # v2
-        uses: peter-evans/repository-dispatch@26b39ed245ab8f31526069329e112ab2fb224588
+        uses: peter-evans/repository-dispatch@e614736e88253e8888967eafadb9b75b237d52ba
         with:
           token: ${{ secrets.APP_SERVICES_CI }}
           repository: redhat-developer/app-services-guides
