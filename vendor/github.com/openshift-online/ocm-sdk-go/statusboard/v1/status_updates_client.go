@@ -228,10 +228,12 @@ type StatusUpdatesListRequest struct {
 	header        http.Header
 	createdAfter  *time.Time
 	createdBefore *time.Time
+	flapDetection *bool
 	fullNames     *string
 	limitScope    *time.Time
 	page          *int
 	productIds    *string
+	search        *string
 	size          *int
 }
 
@@ -266,6 +268,12 @@ func (r *StatusUpdatesListRequest) CreatedBefore(value time.Time) *StatusUpdates
 	return r
 }
 
+// FlapDetection sets the value of the 'flap_detection' parameter.
+func (r *StatusUpdatesListRequest) FlapDetection(value bool) *StatusUpdatesListRequest {
+	r.flapDetection = &value
+	return r
+}
+
 // FullNames sets the value of the 'full_names' parameter.
 func (r *StatusUpdatesListRequest) FullNames(value string) *StatusUpdatesListRequest {
 	r.fullNames = &value
@@ -287,6 +295,12 @@ func (r *StatusUpdatesListRequest) Page(value int) *StatusUpdatesListRequest {
 // ProductIds sets the value of the 'product_ids' parameter.
 func (r *StatusUpdatesListRequest) ProductIds(value string) *StatusUpdatesListRequest {
 	r.productIds = &value
+	return r
+}
+
+// Search sets the value of the 'search' parameter.
+func (r *StatusUpdatesListRequest) Search(value string) *StatusUpdatesListRequest {
+	r.search = &value
 	return r
 }
 
@@ -313,6 +327,9 @@ func (r *StatusUpdatesListRequest) SendContext(ctx context.Context) (result *Sta
 	if r.createdBefore != nil {
 		helpers.AddValue(&query, "created_before", *r.createdBefore)
 	}
+	if r.flapDetection != nil {
+		helpers.AddValue(&query, "flap_detection", *r.flapDetection)
+	}
 	if r.fullNames != nil {
 		helpers.AddValue(&query, "full_names", *r.fullNames)
 	}
@@ -324,6 +341,9 @@ func (r *StatusUpdatesListRequest) SendContext(ctx context.Context) (result *Sta
 	}
 	if r.productIds != nil {
 		helpers.AddValue(&query, "product_ids", *r.productIds)
+	}
+	if r.search != nil {
+		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
