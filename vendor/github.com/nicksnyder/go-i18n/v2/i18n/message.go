@@ -21,7 +21,7 @@ type Message struct {
 	// LeftDelim is the left Go template delimiter.
 	LeftDelim string
 
-	// RightDelim is the right Go template delimiter.``
+	// RightDelim is the right Go template delimiter.
 	RightDelim string
 
 	// Zero is the content of the message for the CLDR plural form "zero".
@@ -188,7 +188,7 @@ func stringSubmap(k string, v interface{}, strdata map[string]string) error {
 func isMessage(v interface{}) bool {
 	reservedKeys := []string{"id", "description", "hash", "leftdelim", "rightdelim", "zero", "one", "two", "few", "many", "other"}
 	switch data := v.(type) {
-	case string:
+	case nil, string:
 		return true
 	case map[string]interface{}:
 		for _, key := range reservedKeys {
