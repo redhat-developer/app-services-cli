@@ -21,6 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"io"
+	"time"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
@@ -29,7 +30,7 @@ import (
 // MarshalManifest writes a value of the 'manifest' type to the given writer.
 func MarshalManifest(object *Manifest, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeManifest(object, stream)
+	WriteManifest(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +38,8 @@ func MarshalManifest(object *Manifest, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeManifest writes a value of the 'manifest' type to the given stream.
-func writeManifest(object *Manifest, stream *jsoniter.Stream) {
+// WriteManifest writes a value of the 'manifest' type to the given stream.
+func WriteManifest(object *Manifest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -65,13 +66,49 @@ func writeManifest(object *Manifest, stream *jsoniter.Stream) {
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0 && object.workloads != nil
+	present_ = object.bitmap_&8 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("creation_timestamp")
+		stream.WriteString((object.creationTimestamp).Format(time.RFC3339))
+		count++
+	}
+	present_ = object.bitmap_&16 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("live_resource")
+		stream.WriteVal(object.liveResource)
+		count++
+	}
+	present_ = object.bitmap_&32 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("spec")
+		stream.WriteVal(object.spec)
+		count++
+	}
+	present_ = object.bitmap_&64 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("updated_timestamp")
+		stream.WriteString((object.updatedTimestamp).Format(time.RFC3339))
+		count++
+	}
+	present_ = object.bitmap_&128 != 0 && object.workloads != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("workloads")
-		writeInterfaceList(object.workloads, stream)
+		WriteInterfaceList(object.workloads, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -83,13 +120,13 @@ func UnmarshalManifest(source interface{}) (object *Manifest, err error) {
 	if err != nil {
 		return
 	}
-	object = readManifest(iterator)
+	object = ReadManifest(iterator)
 	err = iterator.Error
 	return
 }
 
-// readManifest reads a value of the 'manifest' type from the given iterator.
-func readManifest(iterator *jsoniter.Iterator) *Manifest {
+// ReadManifest reads a value of the 'manifest' type from the given iterator.
+func ReadManifest(iterator *jsoniter.Iterator) *Manifest {
 	object := &Manifest{}
 	for {
 		field := iterator.ReadObject()
@@ -108,10 +145,36 @@ func readManifest(iterator *jsoniter.Iterator) *Manifest {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
-		case "workloads":
-			value := readInterfaceList(iterator)
-			object.workloads = value
+		case "creation_timestamp":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.creationTimestamp = value
 			object.bitmap_ |= 8
+		case "live_resource":
+			var value interface{}
+			iterator.ReadVal(&value)
+			object.liveResource = value
+			object.bitmap_ |= 16
+		case "spec":
+			var value interface{}
+			iterator.ReadVal(&value)
+			object.spec = value
+			object.bitmap_ |= 32
+		case "updated_timestamp":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.updatedTimestamp = value
+			object.bitmap_ |= 64
+		case "workloads":
+			value := ReadInterfaceList(iterator)
+			object.workloads = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}
