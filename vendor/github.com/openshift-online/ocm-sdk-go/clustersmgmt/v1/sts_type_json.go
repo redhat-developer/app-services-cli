@@ -29,7 +29,7 @@ import (
 // MarshalSTS writes a value of the 'STS' type to the given writer.
 func MarshalSTS(object *STS, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeSTS(object, stream)
+	WriteSTS(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalSTS(object *STS, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeSTS writes a value of the 'STS' type to the given stream.
-func writeSTS(object *STS, stream *jsoniter.Stream) {
+// WriteSTS writes a value of the 'STS' type to the given stream.
+func WriteSTS(object *STS, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -65,20 +65,11 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("bound_service_account_key_kms_id")
-		stream.WriteString(object.boundServiceAccountKeyKmsId)
+		stream.WriteObjectField("enabled")
+		stream.WriteBool(object.enabled)
 		count++
 	}
 	present_ = object.bitmap_&8 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("bound_service_account_signing_key")
-		stream.WriteString(object.boundServiceAccountSigningKey)
-		count++
-	}
-	present_ = object.bitmap_&16 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -87,25 +78,43 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		stream.WriteString(object.externalID)
 		count++
 	}
-	present_ = object.bitmap_&32 != 0 && object.instanceIAMRoles != nil
+	present_ = object.bitmap_&16 != 0 && object.instanceIAMRoles != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("instance_iam_roles")
-		writeInstanceIAMRoles(object.instanceIAMRoles, stream)
+		WriteInstanceIAMRoles(object.instanceIAMRoles, stream)
 		count++
 	}
-	present_ = object.bitmap_&64 != 0 && object.operatorIAMRoles != nil
+	present_ = object.bitmap_&32 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("managed_policies")
+		stream.WriteBool(object.managedPolicies)
+		count++
+	}
+	present_ = object.bitmap_&64 != 0 && object.oidcConfig != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("oidc_config")
+		WriteOidcConfig(object.oidcConfig, stream)
+		count++
+	}
+	present_ = object.bitmap_&128 != 0 && object.operatorIAMRoles != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("operator_iam_roles")
-		writeOperatorIAMRoleList(object.operatorIAMRoles, stream)
+		WriteOperatorIAMRoleList(object.operatorIAMRoles, stream)
 		count++
 	}
-	present_ = object.bitmap_&128 != 0
+	present_ = object.bitmap_&256 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -114,7 +123,7 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		stream.WriteString(object.operatorRolePrefix)
 		count++
 	}
-	present_ = object.bitmap_&256 != 0
+	present_ = object.bitmap_&512 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -123,7 +132,7 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		stream.WriteString(object.permissionBoundary)
 		count++
 	}
-	present_ = object.bitmap_&512 != 0
+	present_ = object.bitmap_&1024 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -132,7 +141,7 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		stream.WriteString(object.roleARN)
 		count++
 	}
-	present_ = object.bitmap_&1024 != 0
+	present_ = object.bitmap_&2048 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -150,13 +159,13 @@ func UnmarshalSTS(source interface{}) (object *STS, err error) {
 	if err != nil {
 		return
 	}
-	object = readSTS(iterator)
+	object = ReadSTS(iterator)
 	err = iterator.Error
 	return
 }
 
-// readSTS reads a value of the 'STS' type from the given iterator.
-func readSTS(iterator *jsoniter.Iterator) *STS {
+// ReadSTS reads a value of the 'STS' type from the given iterator.
+func ReadSTS(iterator *jsoniter.Iterator) *STS {
 	object := &STS{}
 	for {
 		field := iterator.ReadObject()
@@ -172,42 +181,46 @@ func readSTS(iterator *jsoniter.Iterator) *STS {
 			value := iterator.ReadBool()
 			object.autoMode = value
 			object.bitmap_ |= 2
-		case "bound_service_account_key_kms_id":
-			value := iterator.ReadString()
-			object.boundServiceAccountKeyKmsId = value
+		case "enabled":
+			value := iterator.ReadBool()
+			object.enabled = value
 			object.bitmap_ |= 4
-		case "bound_service_account_signing_key":
-			value := iterator.ReadString()
-			object.boundServiceAccountSigningKey = value
-			object.bitmap_ |= 8
 		case "external_id":
 			value := iterator.ReadString()
 			object.externalID = value
-			object.bitmap_ |= 16
+			object.bitmap_ |= 8
 		case "instance_iam_roles":
-			value := readInstanceIAMRoles(iterator)
+			value := ReadInstanceIAMRoles(iterator)
 			object.instanceIAMRoles = value
+			object.bitmap_ |= 16
+		case "managed_policies":
+			value := iterator.ReadBool()
+			object.managedPolicies = value
 			object.bitmap_ |= 32
-		case "operator_iam_roles":
-			value := readOperatorIAMRoleList(iterator)
-			object.operatorIAMRoles = value
+		case "oidc_config":
+			value := ReadOidcConfig(iterator)
+			object.oidcConfig = value
 			object.bitmap_ |= 64
+		case "operator_iam_roles":
+			value := ReadOperatorIAMRoleList(iterator)
+			object.operatorIAMRoles = value
+			object.bitmap_ |= 128
 		case "operator_role_prefix":
 			value := iterator.ReadString()
 			object.operatorRolePrefix = value
-			object.bitmap_ |= 128
+			object.bitmap_ |= 256
 		case "permission_boundary":
 			value := iterator.ReadString()
 			object.permissionBoundary = value
-			object.bitmap_ |= 256
+			object.bitmap_ |= 512
 		case "role_arn":
 			value := iterator.ReadString()
 			object.roleARN = value
-			object.bitmap_ |= 512
+			object.bitmap_ |= 1024
 		case "support_role_arn":
 			value := iterator.ReadString()
 			object.supportRoleARN = value
-			object.bitmap_ |= 1024
+			object.bitmap_ |= 2048
 		default:
 			iterator.ReadAny()
 		}

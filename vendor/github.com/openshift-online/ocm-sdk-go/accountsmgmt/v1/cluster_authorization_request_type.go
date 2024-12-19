@@ -33,6 +33,7 @@ type ClusterAuthorizationRequest struct {
 	productCategory   string
 	quotaVersion      string
 	resources         []*ReservedResource
+	scope             string
 	byoc              bool
 	disconnected      bool
 	managed           bool
@@ -329,6 +330,25 @@ func (o *ClusterAuthorizationRequest) GetResources() (value []*ReservedResource,
 	return
 }
 
+// Scope returns the value of the 'scope' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+func (o *ClusterAuthorizationRequest) Scope() string {
+	if o != nil && o.bitmap_&32768 != 0 {
+		return o.scope
+	}
+	return ""
+}
+
+// GetScope returns the value of the 'scope' attribute and
+// a flag indicating if the attribute has a value.
+func (o *ClusterAuthorizationRequest) GetScope() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&32768 != 0
+	if ok {
+		value = o.scope
+	}
+	return
+}
+
 // ClusterAuthorizationRequestListKind is the name of the type used to represent list of objects of
 // type 'cluster_authorization_request'.
 const ClusterAuthorizationRequestListKind = "ClusterAuthorizationRequestList"
@@ -354,6 +374,29 @@ func (l *ClusterAuthorizationRequestList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *ClusterAuthorizationRequestList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *ClusterAuthorizationRequestList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *ClusterAuthorizationRequestList) SetItems(items []*ClusterAuthorizationRequest) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *ClusterAuthorizationRequestList) Items() []*ClusterAuthorizationRequest {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.
