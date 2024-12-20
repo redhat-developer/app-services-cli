@@ -29,7 +29,7 @@ import (
 // MarshalManagementClusterParent writes a value of the 'management_cluster_parent' type to the given writer.
 func MarshalManagementClusterParent(object *ManagementClusterParent, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeManagementClusterParent(object, stream)
+	WriteManagementClusterParent(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalManagementClusterParent(object *ManagementClusterParent, writer io.W
 	return stream.Error
 }
 
-// writeManagementClusterParent writes a value of the 'management_cluster_parent' type to the given stream.
-func writeManagementClusterParent(object *ManagementClusterParent, stream *jsoniter.Stream) {
+// WriteManagementClusterParent writes a value of the 'management_cluster_parent' type to the given stream.
+func WriteManagementClusterParent(object *ManagementClusterParent, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -67,6 +67,15 @@ func writeManagementClusterParent(object *ManagementClusterParent, stream *jsoni
 		}
 		stream.WriteObjectField("kind")
 		stream.WriteString(object.kind)
+		count++
+	}
+	present_ = object.bitmap_&8 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("name")
+		stream.WriteString(object.name)
 	}
 	stream.WriteObjectEnd()
 }
@@ -78,13 +87,13 @@ func UnmarshalManagementClusterParent(source interface{}) (object *ManagementClu
 	if err != nil {
 		return
 	}
-	object = readManagementClusterParent(iterator)
+	object = ReadManagementClusterParent(iterator)
 	err = iterator.Error
 	return
 }
 
-// readManagementClusterParent reads a value of the 'management_cluster_parent' type from the given iterator.
-func readManagementClusterParent(iterator *jsoniter.Iterator) *ManagementClusterParent {
+// ReadManagementClusterParent reads a value of the 'management_cluster_parent' type from the given iterator.
+func ReadManagementClusterParent(iterator *jsoniter.Iterator) *ManagementClusterParent {
 	object := &ManagementClusterParent{}
 	for {
 		field := iterator.ReadObject()
@@ -104,6 +113,10 @@ func readManagementClusterParent(iterator *jsoniter.Iterator) *ManagementCluster
 			value := iterator.ReadString()
 			object.kind = value
 			object.bitmap_ |= 4
+		case "name":
+			value := iterator.ReadString()
+			object.name = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

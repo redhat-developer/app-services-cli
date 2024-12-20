@@ -29,7 +29,7 @@ import (
 // MarshalMachineType writes a value of the 'machine_type' type to the given writer.
 func MarshalMachineType(object *MachineType, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeMachineType(object, stream)
+	WriteMachineType(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalMachineType(object *MachineType, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeMachineType writes a value of the 'machine_type' type to the given stream.
-func writeMachineType(object *MachineType, stream *jsoniter.Stream) {
+// WriteMachineType writes a value of the 'machine_type' type to the given stream.
+func WriteMachineType(object *MachineType, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -80,10 +80,19 @@ func writeMachineType(object *MachineType, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cpu")
-		writeValue(object.cpu, stream)
+		WriteValue(object.cpu, stream)
 		count++
 	}
 	present_ = object.bitmap_&32 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("architecture")
+		stream.WriteString(string(object.architecture))
+		count++
+	}
+	present_ = object.bitmap_&64 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -92,16 +101,16 @@ func writeMachineType(object *MachineType, stream *jsoniter.Stream) {
 		stream.WriteString(string(object.category))
 		count++
 	}
-	present_ = object.bitmap_&64 != 0 && object.cloudProvider != nil
+	present_ = object.bitmap_&128 != 0 && object.cloudProvider != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cloud_provider")
-		writeCloudProvider(object.cloudProvider, stream)
+		WriteCloudProvider(object.cloudProvider, stream)
 		count++
 	}
-	present_ = object.bitmap_&128 != 0
+	present_ = object.bitmap_&256 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -110,16 +119,16 @@ func writeMachineType(object *MachineType, stream *jsoniter.Stream) {
 		stream.WriteString(object.genericName)
 		count++
 	}
-	present_ = object.bitmap_&256 != 0 && object.memory != nil
+	present_ = object.bitmap_&512 != 0 && object.memory != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("memory")
-		writeValue(object.memory, stream)
+		WriteValue(object.memory, stream)
 		count++
 	}
-	present_ = object.bitmap_&512 != 0
+	present_ = object.bitmap_&1024 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -128,7 +137,7 @@ func writeMachineType(object *MachineType, stream *jsoniter.Stream) {
 		stream.WriteString(object.name)
 		count++
 	}
-	present_ = object.bitmap_&1024 != 0
+	present_ = object.bitmap_&2048 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -146,13 +155,13 @@ func UnmarshalMachineType(source interface{}) (object *MachineType, err error) {
 	if err != nil {
 		return
 	}
-	object = readMachineType(iterator)
+	object = ReadMachineType(iterator)
 	err = iterator.Error
 	return
 }
 
-// readMachineType reads a value of the 'machine_type' type from the given iterator.
-func readMachineType(iterator *jsoniter.Iterator) *MachineType {
+// ReadMachineType reads a value of the 'machine_type' type from the given iterator.
+func ReadMachineType(iterator *jsoniter.Iterator) *MachineType {
 	object := &MachineType{}
 	for {
 		field := iterator.ReadObject()
@@ -176,35 +185,40 @@ func readMachineType(iterator *jsoniter.Iterator) *MachineType {
 			object.ccsOnly = value
 			object.bitmap_ |= 8
 		case "cpu":
-			value := readValue(iterator)
+			value := ReadValue(iterator)
 			object.cpu = value
 			object.bitmap_ |= 16
+		case "architecture":
+			text := iterator.ReadString()
+			value := ProcessorType(text)
+			object.architecture = value
+			object.bitmap_ |= 32
 		case "category":
 			text := iterator.ReadString()
 			value := MachineTypeCategory(text)
 			object.category = value
-			object.bitmap_ |= 32
-		case "cloud_provider":
-			value := readCloudProvider(iterator)
-			object.cloudProvider = value
 			object.bitmap_ |= 64
+		case "cloud_provider":
+			value := ReadCloudProvider(iterator)
+			object.cloudProvider = value
+			object.bitmap_ |= 128
 		case "generic_name":
 			value := iterator.ReadString()
 			object.genericName = value
-			object.bitmap_ |= 128
-		case "memory":
-			value := readValue(iterator)
-			object.memory = value
 			object.bitmap_ |= 256
+		case "memory":
+			value := ReadValue(iterator)
+			object.memory = value
+			object.bitmap_ |= 512
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
-			object.bitmap_ |= 512
+			object.bitmap_ |= 1024
 		case "size":
 			text := iterator.ReadString()
 			value := MachineTypeSize(text)
 			object.size = value
-			object.bitmap_ |= 1024
+			object.bitmap_ |= 2048
 		default:
 			iterator.ReadAny()
 		}
