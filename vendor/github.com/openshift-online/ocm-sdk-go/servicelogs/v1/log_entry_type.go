@@ -42,8 +42,12 @@ type LogEntry struct {
 	href           string
 	clusterID      string
 	clusterUUID    string
+	createdAt      time.Time
+	createdBy      string
 	description    string
+	docReferences  []string
 	eventStreamID  string
+	logType        LogType
 	serviceName    string
 	severity       Severity
 	subscriptionID string
@@ -64,7 +68,7 @@ func (o *LogEntry) Kind() string {
 	return LogEntryKind
 }
 
-// Link returns true iif this is a link.
+// Link returns true if this is a link.
 func (o *LogEntry) Link() bool {
 	return o != nil && o.bitmap_&1 != 0
 }
@@ -156,12 +160,58 @@ func (o *LogEntry) GetClusterUUID() (value string, ok bool) {
 	return
 }
 
+// CreatedAt returns the value of the 'created_at' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The time at which the cluster log was created.
+func (o *LogEntry) CreatedAt() time.Time {
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.createdAt
+	}
+	return time.Time{}
+}
+
+// GetCreatedAt returns the value of the 'created_at' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The time at which the cluster log was created.
+func (o *LogEntry) GetCreatedAt() (value time.Time, ok bool) {
+	ok = o != nil && o.bitmap_&32 != 0
+	if ok {
+		value = o.createdAt
+	}
+	return
+}
+
+// CreatedBy returns the value of the 'created_by' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The name of the user who created the cluster log.
+func (o *LogEntry) CreatedBy() string {
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.createdBy
+	}
+	return ""
+}
+
+// GetCreatedBy returns the value of the 'created_by' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The name of the user who created the cluster log.
+func (o *LogEntry) GetCreatedBy() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&64 != 0
+	if ok {
+		value = o.createdBy
+	}
+	return
+}
+
 // Description returns the value of the 'description' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Full description of the log entry content (supports Markdown format as well).
 func (o *LogEntry) Description() string {
-	if o != nil && o.bitmap_&32 != 0 {
+	if o != nil && o.bitmap_&128 != 0 {
 		return o.description
 	}
 	return ""
@@ -172,9 +222,32 @@ func (o *LogEntry) Description() string {
 //
 // Full description of the log entry content (supports Markdown format as well).
 func (o *LogEntry) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&32 != 0
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.description
+	}
+	return
+}
+
+// DocReferences returns the value of the 'doc_references' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The list of documentation references (i.e links) contained in the event.
+func (o *LogEntry) DocReferences() []string {
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.docReferences
+	}
+	return nil
+}
+
+// GetDocReferences returns the value of the 'doc_references' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The list of documentation references (i.e links) contained in the event.
+func (o *LogEntry) GetDocReferences() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&256 != 0
+	if ok {
+		value = o.docReferences
 	}
 	return
 }
@@ -184,7 +257,7 @@ func (o *LogEntry) GetDescription() (value string, ok bool) {
 //
 // Log custom event id for a simple search of related cluster logs.
 func (o *LogEntry) EventStreamID() string {
-	if o != nil && o.bitmap_&64 != 0 {
+	if o != nil && o.bitmap_&512 != 0 {
 		return o.eventStreamID
 	}
 	return ""
@@ -195,7 +268,7 @@ func (o *LogEntry) EventStreamID() string {
 //
 // Log custom event id for a simple search of related cluster logs.
 func (o *LogEntry) GetEventStreamID() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&64 != 0
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.eventStreamID
 	}
@@ -207,7 +280,7 @@ func (o *LogEntry) GetEventStreamID() (value string, ok bool) {
 //
 // A flag that indicates whether the log entry should be internal/private only.
 func (o *LogEntry) InternalOnly() bool {
-	if o != nil && o.bitmap_&128 != 0 {
+	if o != nil && o.bitmap_&1024 != 0 {
 		return o.internalOnly
 	}
 	return false
@@ -218,9 +291,32 @@ func (o *LogEntry) InternalOnly() bool {
 //
 // A flag that indicates whether the log entry should be internal/private only.
 func (o *LogEntry) GetInternalOnly() (value bool, ok bool) {
-	ok = o != nil && o.bitmap_&128 != 0
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.internalOnly
+	}
+	return
+}
+
+// LogType returns the value of the 'log_type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Type of the service log entry.
+func (o *LogEntry) LogType() LogType {
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.logType
+	}
+	return LogType("")
+}
+
+// GetLogType returns the value of the 'log_type' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Type of the service log entry.
+func (o *LogEntry) GetLogType() (value LogType, ok bool) {
+	ok = o != nil && o.bitmap_&2048 != 0
+	if ok {
+		value = o.logType
 	}
 	return
 }
@@ -230,7 +326,7 @@ func (o *LogEntry) GetInternalOnly() (value bool, ok bool) {
 //
 // The name of the service who created the log.
 func (o *LogEntry) ServiceName() string {
-	if o != nil && o.bitmap_&256 != 0 {
+	if o != nil && o.bitmap_&4096 != 0 {
 		return o.serviceName
 	}
 	return ""
@@ -241,7 +337,7 @@ func (o *LogEntry) ServiceName() string {
 //
 // The name of the service who created the log.
 func (o *LogEntry) GetServiceName() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&256 != 0
+	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
 		value = o.serviceName
 	}
@@ -253,7 +349,7 @@ func (o *LogEntry) GetServiceName() (value string, ok bool) {
 //
 // Log severity for the specific log entry.
 func (o *LogEntry) Severity() Severity {
-	if o != nil && o.bitmap_&512 != 0 {
+	if o != nil && o.bitmap_&8192 != 0 {
 		return o.severity
 	}
 	return Severity("")
@@ -264,7 +360,7 @@ func (o *LogEntry) Severity() Severity {
 //
 // Log severity for the specific log entry.
 func (o *LogEntry) GetSeverity() (value Severity, ok bool) {
-	ok = o != nil && o.bitmap_&512 != 0
+	ok = o != nil && o.bitmap_&8192 != 0
 	if ok {
 		value = o.severity
 	}
@@ -276,7 +372,7 @@ func (o *LogEntry) GetSeverity() (value Severity, ok bool) {
 //
 // The related subscription id of the cluster.
 func (o *LogEntry) SubscriptionID() string {
-	if o != nil && o.bitmap_&1024 != 0 {
+	if o != nil && o.bitmap_&16384 != 0 {
 		return o.subscriptionID
 	}
 	return ""
@@ -287,7 +383,7 @@ func (o *LogEntry) SubscriptionID() string {
 //
 // The related subscription id of the cluster.
 func (o *LogEntry) GetSubscriptionID() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&1024 != 0
+	ok = o != nil && o.bitmap_&16384 != 0
 	if ok {
 		value = o.subscriptionID
 	}
@@ -299,7 +395,7 @@ func (o *LogEntry) GetSubscriptionID() (value string, ok bool) {
 //
 // Title of the log entry.
 func (o *LogEntry) Summary() string {
-	if o != nil && o.bitmap_&2048 != 0 {
+	if o != nil && o.bitmap_&32768 != 0 {
 		return o.summary
 	}
 	return ""
@@ -310,7 +406,7 @@ func (o *LogEntry) Summary() string {
 //
 // Title of the log entry.
 func (o *LogEntry) GetSummary() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2048 != 0
+	ok = o != nil && o.bitmap_&32768 != 0
 	if ok {
 		value = o.summary
 	}
@@ -320,7 +416,7 @@ func (o *LogEntry) GetSummary() (value string, ok bool) {
 // Timestamp returns the value of the 'timestamp' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 func (o *LogEntry) Timestamp() time.Time {
-	if o != nil && o.bitmap_&4096 != 0 {
+	if o != nil && o.bitmap_&65536 != 0 {
 		return o.timestamp
 	}
 	return time.Time{}
@@ -329,7 +425,7 @@ func (o *LogEntry) Timestamp() time.Time {
 // GetTimestamp returns the value of the 'timestamp' attribute and
 // a flag indicating if the attribute has a value.
 func (o *LogEntry) GetTimestamp() (value time.Time, ok bool) {
-	ok = o != nil && o.bitmap_&4096 != 0
+	ok = o != nil && o.bitmap_&65536 != 0
 	if ok {
 		value = o.timestamp
 	}
@@ -341,7 +437,7 @@ func (o *LogEntry) GetTimestamp() (value time.Time, ok bool) {
 //
 // The username that triggered the event (if available).
 func (o *LogEntry) Username() string {
-	if o != nil && o.bitmap_&8192 != 0 {
+	if o != nil && o.bitmap_&131072 != 0 {
 		return o.username
 	}
 	return ""
@@ -352,7 +448,7 @@ func (o *LogEntry) Username() string {
 //
 // The username that triggered the event (if available).
 func (o *LogEntry) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&8192 != 0
+	ok = o != nil && o.bitmap_&131072 != 0
 	if ok {
 		value = o.username
 	}
@@ -418,6 +514,29 @@ func (l *LogEntryList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *LogEntryList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *LogEntryList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *LogEntryList) SetItems(items []*LogEntry) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *LogEntryList) Items() []*LogEntry {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.
