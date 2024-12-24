@@ -29,7 +29,7 @@ import (
 // MarshalAddOnVersion writes a value of the 'add_on_version' type to the given writer.
 func MarshalAddOnVersion(object *AddOnVersion, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAddOnVersion(object, stream)
+	WriteAddOnVersion(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalAddOnVersion(object *AddOnVersion, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeAddOnVersion writes a value of the 'add_on_version' type to the given stream.
-func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
+// WriteAddOnVersion writes a value of the 'add_on_version' type to the given stream.
+func WriteAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -71,7 +71,7 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("additional_catalog_sources")
-		writeAdditionalCatalogSourceList(object.additionalCatalogSources, stream)
+		WriteAdditionalCatalogSourceList(object.additionalCatalogSources, stream)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0 && object.availableUpgrades != nil
@@ -80,7 +80,7 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("available_upgrades")
-		writeStringList(object.availableUpgrades, stream)
+		WriteStringList(object.availableUpgrades, stream)
 		count++
 	}
 	present_ = object.bitmap_&32 != 0
@@ -98,7 +98,7 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("config")
-		writeAddOnConfig(object.config, stream)
+		WriteAddOnConfig(object.config, stream)
 		count++
 	}
 	present_ = object.bitmap_&128 != 0
@@ -110,7 +110,16 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 		stream.WriteBool(object.enabled)
 		count++
 	}
-	present_ = object.bitmap_&256 != 0 && object.parameters != nil
+	present_ = object.bitmap_&256 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("package_image")
+		stream.WriteString(object.packageImage)
+		count++
+	}
+	present_ = object.bitmap_&512 != 0 && object.parameters != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -118,11 +127,11 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 		stream.WriteObjectField("parameters")
 		stream.WriteObjectStart()
 		stream.WriteObjectField("items")
-		writeAddOnParameterList(object.parameters.items, stream)
+		WriteAddOnParameterList(object.parameters.Items(), stream)
 		stream.WriteObjectEnd()
 		count++
 	}
-	present_ = object.bitmap_&512 != 0
+	present_ = object.bitmap_&1024 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -131,16 +140,16 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 		stream.WriteString(object.pullSecretName)
 		count++
 	}
-	present_ = object.bitmap_&1024 != 0 && object.requirements != nil
+	present_ = object.bitmap_&2048 != 0 && object.requirements != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("requirements")
-		writeAddOnRequirementList(object.requirements, stream)
+		WriteAddOnRequirementList(object.requirements, stream)
 		count++
 	}
-	present_ = object.bitmap_&2048 != 0
+	present_ = object.bitmap_&4096 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -149,13 +158,13 @@ func writeAddOnVersion(object *AddOnVersion, stream *jsoniter.Stream) {
 		stream.WriteString(object.sourceImage)
 		count++
 	}
-	present_ = object.bitmap_&4096 != 0 && object.subOperators != nil
+	present_ = object.bitmap_&8192 != 0 && object.subOperators != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("sub_operators")
-		writeAddOnSubOperatorList(object.subOperators, stream)
+		WriteAddOnSubOperatorList(object.subOperators, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -167,13 +176,13 @@ func UnmarshalAddOnVersion(source interface{}) (object *AddOnVersion, err error)
 	if err != nil {
 		return
 	}
-	object = readAddOnVersion(iterator)
+	object = ReadAddOnVersion(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAddOnVersion reads a value of the 'add_on_version' type from the given iterator.
-func readAddOnVersion(iterator *jsoniter.Iterator) *AddOnVersion {
+// ReadAddOnVersion reads a value of the 'add_on_version' type from the given iterator.
+func ReadAddOnVersion(iterator *jsoniter.Iterator) *AddOnVersion {
 	object := &AddOnVersion{}
 	for {
 		field := iterator.ReadObject()
@@ -193,11 +202,11 @@ func readAddOnVersion(iterator *jsoniter.Iterator) *AddOnVersion {
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
 		case "additional_catalog_sources":
-			value := readAdditionalCatalogSourceList(iterator)
+			value := ReadAdditionalCatalogSourceList(iterator)
 			object.additionalCatalogSources = value
 			object.bitmap_ |= 8
 		case "available_upgrades":
-			value := readStringList(iterator)
+			value := ReadStringList(iterator)
 			object.availableUpgrades = value
 			object.bitmap_ |= 16
 		case "channel":
@@ -205,13 +214,17 @@ func readAddOnVersion(iterator *jsoniter.Iterator) *AddOnVersion {
 			object.channel = value
 			object.bitmap_ |= 32
 		case "config":
-			value := readAddOnConfig(iterator)
+			value := ReadAddOnConfig(iterator)
 			object.config = value
 			object.bitmap_ |= 64
 		case "enabled":
 			value := iterator.ReadBool()
 			object.enabled = value
 			object.bitmap_ |= 128
+		case "package_image":
+			value := iterator.ReadString()
+			object.packageImage = value
+			object.bitmap_ |= 256
 		case "parameters":
 			value := &AddOnParameterList{}
 			for {
@@ -222,33 +235,33 @@ func readAddOnVersion(iterator *jsoniter.Iterator) *AddOnVersion {
 				switch field {
 				case "kind":
 					text := iterator.ReadString()
-					value.link = text == AddOnParameterListLinkKind
+					value.SetLink(text == AddOnParameterListLinkKind)
 				case "href":
-					value.href = iterator.ReadString()
+					value.SetHREF(iterator.ReadString())
 				case "items":
-					value.items = readAddOnParameterList(iterator)
+					value.SetItems(ReadAddOnParameterList(iterator))
 				default:
 					iterator.ReadAny()
 				}
 			}
 			object.parameters = value
-			object.bitmap_ |= 256
+			object.bitmap_ |= 512
 		case "pull_secret_name":
 			value := iterator.ReadString()
 			object.pullSecretName = value
-			object.bitmap_ |= 512
-		case "requirements":
-			value := readAddOnRequirementList(iterator)
-			object.requirements = value
 			object.bitmap_ |= 1024
+		case "requirements":
+			value := ReadAddOnRequirementList(iterator)
+			object.requirements = value
+			object.bitmap_ |= 2048
 		case "source_image":
 			value := iterator.ReadString()
 			object.sourceImage = value
-			object.bitmap_ |= 2048
-		case "sub_operators":
-			value := readAddOnSubOperatorList(iterator)
-			object.subOperators = value
 			object.bitmap_ |= 4096
+		case "sub_operators":
+			value := ReadAddOnSubOperatorList(iterator)
+			object.subOperators = value
+			object.bitmap_ |= 8192
 		default:
 			iterator.ReadAny()
 		}

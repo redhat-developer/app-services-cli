@@ -24,6 +24,7 @@ type CloudAccount struct {
 	bitmap_         uint32
 	cloudAccountID  string
 	cloudProviderID string
+	contracts       []*Contract
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -69,6 +70,25 @@ func (o *CloudAccount) GetCloudProviderID() (value string, ok bool) {
 	return
 }
 
+// Contracts returns the value of the 'contracts' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+func (o *CloudAccount) Contracts() []*Contract {
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.contracts
+	}
+	return nil
+}
+
+// GetContracts returns the value of the 'contracts' attribute and
+// a flag indicating if the attribute has a value.
+func (o *CloudAccount) GetContracts() (value []*Contract, ok bool) {
+	ok = o != nil && o.bitmap_&4 != 0
+	if ok {
+		value = o.contracts
+	}
+	return
+}
+
 // CloudAccountListKind is the name of the type used to represent list of objects of
 // type 'cloud_account'.
 const CloudAccountListKind = "CloudAccountList"
@@ -94,6 +114,29 @@ func (l *CloudAccountList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *CloudAccountList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *CloudAccountList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *CloudAccountList) SetItems(items []*CloudAccount) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *CloudAccountList) Items() []*CloudAccount {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.
