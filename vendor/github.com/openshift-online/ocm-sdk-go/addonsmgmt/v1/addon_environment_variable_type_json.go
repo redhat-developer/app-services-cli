@@ -29,7 +29,7 @@ import (
 // MarshalAddonEnvironmentVariable writes a value of the 'addon_environment_variable' type to the given writer.
 func MarshalAddonEnvironmentVariable(object *AddonEnvironmentVariable, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAddonEnvironmentVariable(object, stream)
+	WriteAddonEnvironmentVariable(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalAddonEnvironmentVariable(object *AddonEnvironmentVariable, writer io
 	return stream.Error
 }
 
-// writeAddonEnvironmentVariable writes a value of the 'addon_environment_variable' type to the given stream.
-func writeAddonEnvironmentVariable(object *AddonEnvironmentVariable, stream *jsoniter.Stream) {
+// WriteAddonEnvironmentVariable writes a value of the 'addon_environment_variable' type to the given stream.
+func WriteAddonEnvironmentVariable(object *AddonEnvironmentVariable, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -47,11 +47,20 @@ func writeAddonEnvironmentVariable(object *AddonEnvironmentVariable, stream *jso
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("id")
+		stream.WriteString(object.id)
+		count++
+	}
+	present_ = object.bitmap_&2 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("enabled")
 		stream.WriteBool(object.enabled)
 		count++
 	}
-	present_ = object.bitmap_&2 != 0
+	present_ = object.bitmap_&4 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -60,7 +69,7 @@ func writeAddonEnvironmentVariable(object *AddonEnvironmentVariable, stream *jso
 		stream.WriteString(object.name)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -78,13 +87,13 @@ func UnmarshalAddonEnvironmentVariable(source interface{}) (object *AddonEnviron
 	if err != nil {
 		return
 	}
-	object = readAddonEnvironmentVariable(iterator)
+	object = ReadAddonEnvironmentVariable(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAddonEnvironmentVariable reads a value of the 'addon_environment_variable' type from the given iterator.
-func readAddonEnvironmentVariable(iterator *jsoniter.Iterator) *AddonEnvironmentVariable {
+// ReadAddonEnvironmentVariable reads a value of the 'addon_environment_variable' type from the given iterator.
+func ReadAddonEnvironmentVariable(iterator *jsoniter.Iterator) *AddonEnvironmentVariable {
 	object := &AddonEnvironmentVariable{}
 	for {
 		field := iterator.ReadObject()
@@ -92,18 +101,22 @@ func readAddonEnvironmentVariable(iterator *jsoniter.Iterator) *AddonEnvironment
 			break
 		}
 		switch field {
+		case "id":
+			value := iterator.ReadString()
+			object.id = value
+			object.bitmap_ |= 1
 		case "enabled":
 			value := iterator.ReadBool()
 			object.enabled = value
-			object.bitmap_ |= 1
+			object.bitmap_ |= 2
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 4
 		case "value":
 			value := iterator.ReadString()
 			object.value = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

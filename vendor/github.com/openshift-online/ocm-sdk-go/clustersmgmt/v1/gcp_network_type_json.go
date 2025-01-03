@@ -29,7 +29,7 @@ import (
 // MarshalGCPNetwork writes a value of the 'GCP_network' type to the given writer.
 func MarshalGCPNetwork(object *GCPNetwork, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeGCPNetwork(object, stream)
+	WriteGCPNetwork(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalGCPNetwork(object *GCPNetwork, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeGCPNetwork writes a value of the 'GCP_network' type to the given stream.
-func writeGCPNetwork(object *GCPNetwork, stream *jsoniter.Stream) {
+// WriteGCPNetwork writes a value of the 'GCP_network' type to the given stream.
+func WriteGCPNetwork(object *GCPNetwork, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -56,11 +56,20 @@ func writeGCPNetwork(object *GCPNetwork, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("vpc_project_id")
+		stream.WriteString(object.vpcProjectID)
+		count++
+	}
+	present_ = object.bitmap_&4 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("compute_subnet")
 		stream.WriteString(object.computeSubnet)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -78,13 +87,13 @@ func UnmarshalGCPNetwork(source interface{}) (object *GCPNetwork, err error) {
 	if err != nil {
 		return
 	}
-	object = readGCPNetwork(iterator)
+	object = ReadGCPNetwork(iterator)
 	err = iterator.Error
 	return
 }
 
-// readGCPNetwork reads a value of the 'GCP_network' type from the given iterator.
-func readGCPNetwork(iterator *jsoniter.Iterator) *GCPNetwork {
+// ReadGCPNetwork reads a value of the 'GCP_network' type from the given iterator.
+func ReadGCPNetwork(iterator *jsoniter.Iterator) *GCPNetwork {
 	object := &GCPNetwork{}
 	for {
 		field := iterator.ReadObject()
@@ -96,14 +105,18 @@ func readGCPNetwork(iterator *jsoniter.Iterator) *GCPNetwork {
 			value := iterator.ReadString()
 			object.vpcName = value
 			object.bitmap_ |= 1
+		case "vpc_project_id":
+			value := iterator.ReadString()
+			object.vpcProjectID = value
+			object.bitmap_ |= 2
 		case "compute_subnet":
 			value := iterator.ReadString()
 			object.computeSubnet = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 4
 		case "control_plane_subnet":
 			value := iterator.ReadString()
 			object.controlPlaneSubnet = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}
