@@ -27,12 +27,13 @@ type MachinePoolBuilder struct {
 	id                   string
 	href                 string
 	aws                  *AWSMachinePoolBuilder
+	gcp                  *GCPMachinePoolBuilder
 	autoscaling          *MachinePoolAutoscalingBuilder
 	availabilityZones    []string
-	cluster              *ClusterBuilder
 	instanceType         string
 	labels               map[string]string
 	replicas             int
+	rootVolume           *RootVolumeBuilder
 	securityGroupFilters []*MachinePoolSecurityGroupFilterBuilder
 	subnets              []string
 	taints               []*TaintBuilder
@@ -81,11 +82,11 @@ func (b *MachinePoolBuilder) AWS(value *AWSMachinePoolBuilder) *MachinePoolBuild
 	return b
 }
 
-// Autoscaling sets the value of the 'autoscaling' attribute to the given value.
+// GCP sets the value of the 'GCP' attribute to the given value.
 //
-// Representation of a autoscaling in a machine pool.
-func (b *MachinePoolBuilder) Autoscaling(value *MachinePoolAutoscalingBuilder) *MachinePoolBuilder {
-	b.autoscaling = value
+// Representation of gcp machine pool specific parameters.
+func (b *MachinePoolBuilder) GCP(value *GCPMachinePoolBuilder) *MachinePoolBuilder {
+	b.gcp = value
 	if value != nil {
 		b.bitmap_ |= 16
 	} else {
@@ -94,62 +95,24 @@ func (b *MachinePoolBuilder) Autoscaling(value *MachinePoolAutoscalingBuilder) *
 	return b
 }
 
+// Autoscaling sets the value of the 'autoscaling' attribute to the given value.
+//
+// Representation of a autoscaling in a machine pool.
+func (b *MachinePoolBuilder) Autoscaling(value *MachinePoolAutoscalingBuilder) *MachinePoolBuilder {
+	b.autoscaling = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
+	return b
+}
+
 // AvailabilityZones sets the value of the 'availability_zones' attribute to the given values.
 func (b *MachinePoolBuilder) AvailabilityZones(values ...string) *MachinePoolBuilder {
 	b.availabilityZones = make([]string, len(values))
 	copy(b.availabilityZones, values)
-	b.bitmap_ |= 32
-	return b
-}
-
-// Cluster sets the value of the 'cluster' attribute to the given value.
-//
-// Definition of an _OpenShift_ cluster.
-//
-// The `cloud_provider` attribute is a reference to the cloud provider. When a
-// cluster is retrieved it will be a link to the cloud provider, containing only
-// the kind, id and href attributes:
-//
-// ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "kind": "CloudProviderLink",
-//	    "id": "123",
-//	    "href": "/api/clusters_mgmt/v1/cloud_providers/123"
-//	  }
-//	}
-//
-// ```
-//
-// When a cluster is created this is optional, and if used it should contain the
-// identifier of the cloud provider to use:
-//
-// ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "id": "123",
-//	  }
-//	}
-//
-// ```
-//
-// If not included, then the cluster will be created using the default cloud
-// provider, which is currently Amazon Web Services.
-//
-// The region attribute is mandatory when a cluster is created.
-//
-// The `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`
-// attributes are mandatory when creation a cluster with your own Amazon Web
-// Services account.
-func (b *MachinePoolBuilder) Cluster(value *ClusterBuilder) *MachinePoolBuilder {
-	b.cluster = value
-	if value != nil {
-		b.bitmap_ |= 64
-	} else {
-		b.bitmap_ &^= 64
-	}
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -178,11 +141,24 @@ func (b *MachinePoolBuilder) Replicas(value int) *MachinePoolBuilder {
 	return b
 }
 
+// RootVolume sets the value of the 'root_volume' attribute to the given value.
+//
+// Root volume capabilities.
+func (b *MachinePoolBuilder) RootVolume(value *RootVolumeBuilder) *MachinePoolBuilder {
+	b.rootVolume = value
+	if value != nil {
+		b.bitmap_ |= 1024
+	} else {
+		b.bitmap_ &^= 1024
+	}
+	return b
+}
+
 // SecurityGroupFilters sets the value of the 'security_group_filters' attribute to the given values.
 func (b *MachinePoolBuilder) SecurityGroupFilters(values ...*MachinePoolSecurityGroupFilterBuilder) *MachinePoolBuilder {
 	b.securityGroupFilters = make([]*MachinePoolSecurityGroupFilterBuilder, len(values))
 	copy(b.securityGroupFilters, values)
-	b.bitmap_ |= 1024
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -190,7 +166,7 @@ func (b *MachinePoolBuilder) SecurityGroupFilters(values ...*MachinePoolSecurity
 func (b *MachinePoolBuilder) Subnets(values ...string) *MachinePoolBuilder {
 	b.subnets = make([]string, len(values))
 	copy(b.subnets, values)
-	b.bitmap_ |= 2048
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -198,7 +174,7 @@ func (b *MachinePoolBuilder) Subnets(values ...string) *MachinePoolBuilder {
 func (b *MachinePoolBuilder) Taints(values ...*TaintBuilder) *MachinePoolBuilder {
 	b.taints = make([]*TaintBuilder, len(values))
 	copy(b.taints, values)
-	b.bitmap_ |= 4096
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -215,6 +191,11 @@ func (b *MachinePoolBuilder) Copy(object *MachinePool) *MachinePoolBuilder {
 	} else {
 		b.aws = nil
 	}
+	if object.gcp != nil {
+		b.gcp = NewGCPMachinePool().Copy(object.gcp)
+	} else {
+		b.gcp = nil
+	}
 	if object.autoscaling != nil {
 		b.autoscaling = NewMachinePoolAutoscaling().Copy(object.autoscaling)
 	} else {
@@ -226,11 +207,6 @@ func (b *MachinePoolBuilder) Copy(object *MachinePool) *MachinePoolBuilder {
 	} else {
 		b.availabilityZones = nil
 	}
-	if object.cluster != nil {
-		b.cluster = NewCluster().Copy(object.cluster)
-	} else {
-		b.cluster = nil
-	}
 	b.instanceType = object.instanceType
 	if len(object.labels) > 0 {
 		b.labels = map[string]string{}
@@ -241,6 +217,11 @@ func (b *MachinePoolBuilder) Copy(object *MachinePool) *MachinePoolBuilder {
 		b.labels = nil
 	}
 	b.replicas = object.replicas
+	if object.rootVolume != nil {
+		b.rootVolume = NewRootVolume().Copy(object.rootVolume)
+	} else {
+		b.rootVolume = nil
+	}
 	if object.securityGroupFilters != nil {
 		b.securityGroupFilters = make([]*MachinePoolSecurityGroupFilterBuilder, len(object.securityGroupFilters))
 		for i, v := range object.securityGroupFilters {
@@ -278,6 +259,12 @@ func (b *MachinePoolBuilder) Build() (object *MachinePool, err error) {
 			return
 		}
 	}
+	if b.gcp != nil {
+		object.gcp, err = b.gcp.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.autoscaling != nil {
 		object.autoscaling, err = b.autoscaling.Build()
 		if err != nil {
@@ -288,12 +275,6 @@ func (b *MachinePoolBuilder) Build() (object *MachinePool, err error) {
 		object.availabilityZones = make([]string, len(b.availabilityZones))
 		copy(object.availabilityZones, b.availabilityZones)
 	}
-	if b.cluster != nil {
-		object.cluster, err = b.cluster.Build()
-		if err != nil {
-			return
-		}
-	}
 	object.instanceType = b.instanceType
 	if b.labels != nil {
 		object.labels = make(map[string]string)
@@ -302,6 +283,12 @@ func (b *MachinePoolBuilder) Build() (object *MachinePool, err error) {
 		}
 	}
 	object.replicas = b.replicas
+	if b.rootVolume != nil {
+		object.rootVolume, err = b.rootVolume.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.securityGroupFilters != nil {
 		object.securityGroupFilters = make([]*MachinePoolSecurityGroupFilter, len(b.securityGroupFilters))
 		for i, v := range b.securityGroupFilters {

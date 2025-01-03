@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v3
       - name: golangci-lint
         # v3
-        uses: golangci/golangci-lint-action@08e2f20817b15149a52b5b3ebe7de50aff2ba8c5
+        uses: golangci/golangci-lint-action@2f13b8027d5e60ac6e32b086a0dc4d2ae4cb3f77
         with:
           version: v1.48.0
           # skip-go-installation: true
