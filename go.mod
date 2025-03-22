@@ -12,7 +12,7 @@ require (
 	github.com/briandowns/spinner v1.19.0
 	github.com/coreos/go-oidc/v3 v3.4.0
 	github.com/fatih/color v1.13.0
-	github.com/golang-jwt/jwt/v4 v4.5.1
+	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/google/go-github/v39 v39.2.0
 	github.com/jackdelahunt/survey-json-schema v0.13.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
