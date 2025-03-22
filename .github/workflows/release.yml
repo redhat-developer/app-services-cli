@@ -11,12 +11,12 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       -
         name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: 1.18.x
 
@@ -29,7 +29,7 @@ jobs:
             echo "::set-output name=prerelease::true"
           fi
       - id: set-version
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const version = context.ref.replace(/^refs\/tags\//, '').replace(/^v/, '')
@@ -82,9 +82,9 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.release.steps.check-tag.outputs.prerelease == 'false'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Notify tools repo
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with: 
           script: |
             github.request('POST /repos/redhat-developer/app-services-tools/actions/workflows/20880234/dispatches', {

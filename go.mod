@@ -5,15 +5,15 @@ go 1.18
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
 	github.com/BurntSushi/toml v1.2.1
-	github.com/MakeNowJust/heredoc v1.0.0
-	github.com/Nerzal/gocloak/v7 v7.11.0
+	github.com/MakeNowJust/heredoc/v2 v2.0.1
+	github.com/Nerzal/gocloak/v13 v13.9.0
 	github.com/aerogear/charmil v0.8.3
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/briandowns/spinner v1.19.0
 	github.com/coreos/go-oidc/v3 v3.4.0
 	github.com/fatih/color v1.13.0
-	github.com/golang-jwt/jwt/v4 v4.5.2
-	github.com/google/go-github/v39 v39.2.0
+	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/google/go-github/v70 v70.0.0
 	github.com/jackdelahunt/survey-json-schema v0.13.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
@@ -30,9 +30,9 @@ require (
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/oauth2 v0.3.0
 	golang.org/x/text v0.5.0
-	gopkg.in/AlecAivazis/survey.v1 v1.8.8
+	gopkg.in/AlecAivazis/survey.v2 v2.3.7
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.24.8
 	k8s.io/apimachinery v0.24.8
 	k8s.io/client-go v0.24.8
