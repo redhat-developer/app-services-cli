@@ -41,6 +41,7 @@ type AddonStatus struct {
 	addonId          string
 	correlationID    string
 	statusConditions []*AddonStatusCondition
+	version          string
 }
 
 // Kind returns the name of the type of the object.
@@ -54,7 +55,7 @@ func (o *AddonStatus) Kind() string {
 	return AddonStatusKind
 }
 
-// Link returns true iif this is a link.
+// Link returns true if this is a link.
 func (o *AddonStatus) Link() bool {
 	return o != nil && o.bitmap_&1 != 0
 }
@@ -169,6 +170,29 @@ func (o *AddonStatus) GetStatusConditions() (value []*AddonStatusCondition, ok b
 	return
 }
 
+// Version returns the value of the 'version' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Version of the addon reporting the status
+func (o *AddonStatus) Version() string {
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.version
+	}
+	return ""
+}
+
+// GetVersion returns the value of the 'version' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Version of the addon reporting the status
+func (o *AddonStatus) GetVersion() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&64 != 0
+	if ok {
+		value = o.version
+	}
+	return
+}
+
 // AddonStatusListKind is the name of the type used to represent list of objects of
 // type 'addon_status'.
 const AddonStatusListKind = "AddonStatusList"
@@ -228,6 +252,29 @@ func (l *AddonStatusList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *AddonStatusList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *AddonStatusList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *AddonStatusList) SetItems(items []*AddonStatus) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *AddonStatusList) Items() []*AddonStatus {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.

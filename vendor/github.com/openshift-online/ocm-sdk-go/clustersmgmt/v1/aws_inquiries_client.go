@@ -42,6 +42,16 @@ func NewAWSInquiriesClient(transport http.RoundTripper, path string) *AWSInquiri
 	}
 }
 
+// STSAccountRoles returns the target 'AWSSTS_account_roles_inquiry' resource.
+//
+// Reference to the resource that manages aws sts roles.
+func (c *AWSInquiriesClient) STSAccountRoles() *AWSSTSAccountRolesInquiryClient {
+	return NewAWSSTSAccountRolesInquiryClient(
+		c.transport,
+		path.Join(c.path, "sts_account_roles"),
+	)
+}
+
 // STSCredentialRequests returns the target 'STS_credential_requests_inquiry' resource.
 //
 // Reference to the resource that manages sts cred request.
@@ -72,6 +82,16 @@ func (c *AWSInquiriesClient) MachineTypes() *AWSRegionMachineTypesInquiryClient 
 	)
 }
 
+// OidcThumbprint returns the target 'oidc_thumbprint' resource.
+//
+// Reference to the resource that manages OIDC Config Thumbprint fetching.
+func (c *AWSInquiriesClient) OidcThumbprint() *OidcThumbprintClient {
+	return NewOidcThumbprintClient(
+		c.transport,
+		path.Join(c.path, "oidc_thumbprint"),
+	)
+}
+
 // Regions returns the target 'available_regions_inquiry' resource.
 //
 // Reference to the resource that manages a collection of regions.
@@ -79,6 +99,16 @@ func (c *AWSInquiriesClient) Regions() *AvailableRegionsInquiryClient {
 	return NewAvailableRegionsInquiryClient(
 		c.transport,
 		path.Join(c.path, "regions"),
+	)
+}
+
+// ValidateCredentials returns the target 'aws_validate_credentials' resource.
+//
+// Reference to the resource that manages creds validation.
+func (c *AWSInquiriesClient) ValidateCredentials() *AwsValidateCredentialsClient {
+	return NewAwsValidateCredentialsClient(
+		c.transport,
+		path.Join(c.path, "validate_credentials"),
 	)
 }
 

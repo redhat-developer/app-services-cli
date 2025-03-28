@@ -29,8 +29,11 @@ type ClusterNodesBuilder struct {
 	compute              int
 	computeLabels        map[string]string
 	computeMachineType   *MachineTypeBuilder
+	computeRootVolume    *RootVolumeBuilder
 	infra                int
+	infraMachineType     *MachineTypeBuilder
 	master               int
+	masterMachineType    *MachineTypeBuilder
 	securityGroupFilters []*MachinePoolSecurityGroupFilterBuilder
 	total                int
 }
@@ -97,17 +100,56 @@ func (b *ClusterNodesBuilder) ComputeMachineType(value *MachineTypeBuilder) *Clu
 	return b
 }
 
+// ComputeRootVolume sets the value of the 'compute_root_volume' attribute to the given value.
+//
+// Root volume capabilities.
+func (b *ClusterNodesBuilder) ComputeRootVolume(value *RootVolumeBuilder) *ClusterNodesBuilder {
+	b.computeRootVolume = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
+	return b
+}
+
 // Infra sets the value of the 'infra' attribute to the given value.
 func (b *ClusterNodesBuilder) Infra(value int) *ClusterNodesBuilder {
 	b.infra = value
-	b.bitmap_ |= 32
+	b.bitmap_ |= 64
+	return b
+}
+
+// InfraMachineType sets the value of the 'infra_machine_type' attribute to the given value.
+//
+// Machine type.
+func (b *ClusterNodesBuilder) InfraMachineType(value *MachineTypeBuilder) *ClusterNodesBuilder {
+	b.infraMachineType = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
 // Master sets the value of the 'master' attribute to the given value.
 func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
 	b.master = value
-	b.bitmap_ |= 64
+	b.bitmap_ |= 256
+	return b
+}
+
+// MasterMachineType sets the value of the 'master_machine_type' attribute to the given value.
+//
+// Machine type.
+func (b *ClusterNodesBuilder) MasterMachineType(value *MachineTypeBuilder) *ClusterNodesBuilder {
+	b.masterMachineType = value
+	if value != nil {
+		b.bitmap_ |= 512
+	} else {
+		b.bitmap_ &^= 512
+	}
 	return b
 }
 
@@ -115,14 +157,14 @@ func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
 func (b *ClusterNodesBuilder) SecurityGroupFilters(values ...*MachinePoolSecurityGroupFilterBuilder) *ClusterNodesBuilder {
 	b.securityGroupFilters = make([]*MachinePoolSecurityGroupFilterBuilder, len(values))
 	copy(b.securityGroupFilters, values)
-	b.bitmap_ |= 128
+	b.bitmap_ |= 1024
 	return b
 }
 
 // Total sets the value of the 'total' attribute to the given value.
 func (b *ClusterNodesBuilder) Total(value int) *ClusterNodesBuilder {
 	b.total = value
-	b.bitmap_ |= 256
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -157,8 +199,23 @@ func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
 	} else {
 		b.computeMachineType = nil
 	}
+	if object.computeRootVolume != nil {
+		b.computeRootVolume = NewRootVolume().Copy(object.computeRootVolume)
+	} else {
+		b.computeRootVolume = nil
+	}
 	b.infra = object.infra
+	if object.infraMachineType != nil {
+		b.infraMachineType = NewMachineType().Copy(object.infraMachineType)
+	} else {
+		b.infraMachineType = nil
+	}
 	b.master = object.master
+	if object.masterMachineType != nil {
+		b.masterMachineType = NewMachineType().Copy(object.masterMachineType)
+	} else {
+		b.masterMachineType = nil
+	}
 	if object.securityGroupFilters != nil {
 		b.securityGroupFilters = make([]*MachinePoolSecurityGroupFilterBuilder, len(object.securityGroupFilters))
 		for i, v := range object.securityGroupFilters {
@@ -198,8 +255,26 @@ func (b *ClusterNodesBuilder) Build() (object *ClusterNodes, err error) {
 			return
 		}
 	}
+	if b.computeRootVolume != nil {
+		object.computeRootVolume, err = b.computeRootVolume.Build()
+		if err != nil {
+			return
+		}
+	}
 	object.infra = b.infra
+	if b.infraMachineType != nil {
+		object.infraMachineType, err = b.infraMachineType.Build()
+		if err != nil {
+			return
+		}
+	}
 	object.master = b.master
+	if b.masterMachineType != nil {
+		object.masterMachineType, err = b.masterMachineType.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.securityGroupFilters != nil {
 		object.securityGroupFilters = make([]*MachinePoolSecurityGroupFilter, len(b.securityGroupFilters))
 		for i, v := range b.securityGroupFilters {

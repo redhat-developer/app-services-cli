@@ -29,7 +29,7 @@ import (
 // MarshalCloudVPC writes a value of the 'cloud_VPC' type to the given writer.
 func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeCloudVPC(object, stream)
+	WriteCloudVPC(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,21 +37,39 @@ func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
-func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
+// WriteCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
+func WriteCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
-	present_ = object.bitmap_&1 != 0 && object.awsSubnets != nil
+	present_ = object.bitmap_&1 != 0 && object.awsSecurityGroups != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("aws_security_groups")
+		WriteSecurityGroupList(object.awsSecurityGroups, stream)
+		count++
+	}
+	present_ = object.bitmap_&2 != 0 && object.awsSubnets != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("aws_subnets")
-		writeSubnetworkList(object.awsSubnets, stream)
+		WriteSubnetworkList(object.awsSubnets, stream)
 		count++
 	}
-	present_ = object.bitmap_&2 != 0
+	present_ = object.bitmap_&4 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cidr_block")
+		stream.WriteString(object.cidrBlock)
+		count++
+	}
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -60,7 +78,7 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		stream.WriteString(object.id)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&16 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -69,13 +87,22 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		stream.WriteString(object.name)
 		count++
 	}
-	present_ = object.bitmap_&8 != 0 && object.subnets != nil
+	present_ = object.bitmap_&32 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("red_hat_managed")
+		stream.WriteBool(object.redHatManaged)
+		count++
+	}
+	present_ = object.bitmap_&64 != 0 && object.subnets != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subnets")
-		writeStringList(object.subnets, stream)
+		WriteStringList(object.subnets, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -87,13 +114,13 @@ func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
 	if err != nil {
 		return
 	}
-	object = readCloudVPC(iterator)
+	object = ReadCloudVPC(iterator)
 	err = iterator.Error
 	return
 }
 
-// readCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
-func readCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
+// ReadCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
+func ReadCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
 	object := &CloudVPC{}
 	for {
 		field := iterator.ReadObject()
@@ -101,22 +128,34 @@ func readCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
 			break
 		}
 		switch field {
-		case "aws_subnets":
-			value := readSubnetworkList(iterator)
-			object.awsSubnets = value
+		case "aws_security_groups":
+			value := ReadSecurityGroupList(iterator)
+			object.awsSecurityGroups = value
 			object.bitmap_ |= 1
+		case "aws_subnets":
+			value := ReadSubnetworkList(iterator)
+			object.awsSubnets = value
+			object.bitmap_ |= 2
+		case "cidr_block":
+			value := iterator.ReadString()
+			object.cidrBlock = value
+			object.bitmap_ |= 4
 		case "id":
 			value := iterator.ReadString()
 			object.id = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 8
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 16
+		case "red_hat_managed":
+			value := iterator.ReadBool()
+			object.redHatManaged = value
+			object.bitmap_ |= 32
 		case "subnets":
-			value := readStringList(iterator)
+			value := ReadStringList(iterator)
 			object.subnets = value
-			object.bitmap_ |= 8
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}

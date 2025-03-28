@@ -102,6 +102,14 @@ func (c *ClusterClient) Update() *ClusterUpdateRequest {
 	}
 }
 
+// AWS returns the target 'AWS' resource.
+func (c *ClusterClient) AWS() *AWSClient {
+	return NewAWSClient(
+		c.transport,
+		path.Join(c.path, "aws"),
+	)
+}
+
 // AWSInfrastructureAccessRoleGrants returns the target 'AWS_infrastructure_access_role_grants' resource.
 //
 // Reference to the resource that manages the collection of AWS infrastructure
@@ -131,6 +139,16 @@ func (c *ClusterClient) AddonInquiries() *AddonInquiriesClient {
 	)
 }
 
+// AddonUpgradePolicies returns the target 'addon_upgrade_policies' resource.
+//
+// Reference to the resource that manages the collection of addon upgrade policies defined for this cluster.
+func (c *ClusterClient) AddonUpgradePolicies() *AddonUpgradePoliciesClient {
+	return NewAddonUpgradePoliciesClient(
+		c.transport,
+		path.Join(c.path, "addon_upgrade_policies"),
+	)
+}
+
 // Addons returns the target 'add_on_installations' resource.
 //
 // Reference to the resource that manages the collection of add-ons installed on this cluster.
@@ -138,6 +156,26 @@ func (c *ClusterClient) Addons() *AddOnInstallationsClient {
 	return NewAddOnInstallationsClient(
 		c.transport,
 		path.Join(c.path, "addons"),
+	)
+}
+
+// Autoscaler returns the target 'autoscaler' resource.
+//
+// Reference to the resource that manages the cluster autoscaler.
+func (c *ClusterClient) Autoscaler() *AutoscalerClient {
+	return NewAutoscalerClient(
+		c.transport,
+		path.Join(c.path, "autoscaler"),
+	)
+}
+
+// BreakGlassCredentials returns the target 'break_glass_credentials' resource.
+//
+// Reference to the resource that manages the break glass credentials.
+func (c *ClusterClient) BreakGlassCredentials() *BreakGlassCredentialsClient {
+	return NewBreakGlassCredentialsClient(
+		c.transport,
+		path.Join(c.path, "break_glass_credentials"),
 	)
 }
 
@@ -151,6 +189,16 @@ func (c *ClusterClient) Clusterdeployment() *ClusterdeploymentClient {
 	)
 }
 
+// ControlPlane returns the target 'control_plane' resource.
+//
+// Reference to the resource that manages the collection of upgrade policies defined for control plane for this cluster.
+func (c *ClusterClient) ControlPlane() *ControlPlaneClient {
+	return NewControlPlaneClient(
+		c.transport,
+		path.Join(c.path, "control_plane"),
+	)
+}
+
 // Credentials returns the target 'credentials' resource.
 //
 // Reference to the resource that manages the credentials of the cluster.
@@ -158,6 +206,24 @@ func (c *ClusterClient) Credentials() *CredentialsClient {
 	return NewCredentialsClient(
 		c.transport,
 		path.Join(c.path, "credentials"),
+	)
+}
+
+// DeleteProtection returns the target 'delete_protection' resource.
+func (c *ClusterClient) DeleteProtection() *DeleteProtectionClient {
+	return NewDeleteProtectionClient(
+		c.transport,
+		path.Join(c.path, "delete_protection"),
+	)
+}
+
+// ExternalAuthConfig returns the target 'external_auth_config' resource.
+//
+// Reference to the resource that manages the external authentication configuration.
+func (c *ClusterClient) ExternalAuthConfig() *ExternalAuthConfigClient {
+	return NewExternalAuthConfigClient(
+		c.transport,
+		path.Join(c.path, "external_auth_config"),
 	)
 }
 
@@ -209,6 +275,16 @@ func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
 	)
 }
 
+// InflightChecks returns the target 'inflight_checks' resource.
+//
+// Reference to the resource that manages the collection of inflight checks.
+func (c *ClusterClient) InflightChecks() *InflightChecksClient {
+	return NewInflightChecksClient(
+		c.transport,
+		path.Join(c.path, "inflight_checks"),
+	)
+}
+
 // Ingresses returns the target 'ingresses' resource.
 //
 // Reference to the resource that manages the collection of ingress resources.
@@ -216,6 +292,22 @@ func (c *ClusterClient) Ingresses() *IngressesClient {
 	return NewIngressesClient(
 		c.transport,
 		path.Join(c.path, "ingresses"),
+	)
+}
+
+// KubeletConfig returns the target 'kubelet_config' resource.
+func (c *ClusterClient) KubeletConfig() *KubeletConfigClient {
+	return NewKubeletConfigClient(
+		c.transport,
+		path.Join(c.path, "kubelet_config"),
+	)
+}
+
+// KubeletConfigs returns the target 'kubelet_configs' resource.
+func (c *ClusterClient) KubeletConfigs() *KubeletConfigsClient {
+	return NewKubeletConfigsClient(
+		c.transport,
+		path.Join(c.path, "kubelet_configs"),
 	)
 }
 
@@ -259,6 +351,14 @@ func (c *ClusterClient) MetricQueries() *MetricQueriesClient {
 	)
 }
 
+// Migrations returns the target 'cluster_migrations' resource.
+func (c *ClusterClient) Migrations() *ClusterMigrationsClient {
+	return NewClusterMigrationsClient(
+		c.transport,
+		path.Join(c.path, "migrations"),
+	)
+}
+
 // NodePools returns the target 'node_pools' resource.
 //
 // Reference to the resource that manages the collection of node pool resources.
@@ -266,16 +366,6 @@ func (c *ClusterClient) NodePools() *NodePoolsClient {
 	return NewNodePoolsClient(
 		c.transport,
 		path.Join(c.path, "node_pools"),
-	)
-}
-
-// Product returns the target 'product' resource.
-//
-// Reference to the resource that manages the product type of the cluster
-func (c *ClusterClient) Product() *ProductClient {
-	return NewProductClient(
-		c.transport,
-		path.Join(c.path, "product"),
 	)
 }
 
@@ -309,6 +399,24 @@ func (c *ClusterClient) Status() *ClusterStatusClient {
 	)
 }
 
+// StsSupportJumpRole returns the target 'sts_support_jump_role' resource.
+func (c *ClusterClient) StsSupportJumpRole() *StsSupportJumpRoleClient {
+	return NewStsSupportJumpRoleClient(
+		c.transport,
+		path.Join(c.path, "sts_support_jump_role"),
+	)
+}
+
+// TuningConfigs returns the target 'tuning_configs' resource.
+//
+// Reference to the resource that manages the collection of tuning configs for this cluster.
+func (c *ClusterClient) TuningConfigs() *TuningConfigsClient {
+	return NewTuningConfigsClient(
+		c.transport,
+		path.Join(c.path, "tuning_configs"),
+	)
+}
+
 // UpgradePolicies returns the target 'upgrade_policies' resource.
 //
 // Reference to the resource that manages the collection of upgrade policies defined for this cluster.
@@ -316,6 +424,16 @@ func (c *ClusterClient) UpgradePolicies() *UpgradePoliciesClient {
 	return NewUpgradePoliciesClient(
 		c.transport,
 		path.Join(c.path, "upgrade_policies"),
+	)
+}
+
+// Vpc returns the target 'vpc' resource.
+//
+// Reference to the resource that manages the vpc resource.
+func (c *ClusterClient) Vpc() *VpcClient {
+	return NewVpcClient(
+		c.transport,
+		path.Join(c.path, "vpc"),
 	)
 }
 
@@ -442,6 +560,7 @@ type ClusterDeleteRequest struct {
 	path        string
 	query       url.Values
 	header      http.Header
+	bestEffort  *bool
 	deprovision *bool
 	dryRun      *bool
 }
@@ -462,6 +581,14 @@ func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDe
 // Note: Services that do not support this feature may silently ignore this call.
 func (r *ClusterDeleteRequest) Impersonate(user string) *ClusterDeleteRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
+// BestEffort sets the value of the 'best_effort' parameter.
+//
+// BestEffort flag is used to check if the cluster deletion should be best-effort mode or not.
+func (r *ClusterDeleteRequest) BestEffort(value bool) *ClusterDeleteRequest {
+	r.bestEffort = &value
 	return r
 }
 
@@ -493,6 +620,9 @@ func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.bestEffort != nil {
+		helpers.AddValue(&query, "best_effort", *r.bestEffort)
+	}
 	if r.deprovision != nil {
 		helpers.AddValue(&query, "deprovision", *r.deprovision)
 	}

@@ -3,6 +3,729 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.463
+- Updated model version to v0.0.415
+  - Added `ClusterCapabilities` type
+  - Added `Capabilities` field to `Cluster` type
+
+## 0.1.462
+- Updated model version to v0.0.414
+  - Added node pool endpoint resources for aro_hcp
+  - Added node pool state model in clusters_mgmt
+  - Added node pool status resources for aro_hcp
+- Updated meta model version to v0.0.67
+  - Added async methods
+
+## 0.1.461
+- Updated model version to v0.0.413
+  - Add the new inflight check endpoints
+- Updated meta model version to v0.0.66
+
+## 0.1.460
+- Updated model version to v0.0.412
+  - Added `ClusterCondition` field to `VersionGate` type
+
+## 0.1.459
+- Update model version to v0.0.411
+  - Update json values for SDN to OVN Cluster Migration configuration properties
+
+## 0.1.458
+- Update metamodel version to v0.0.65
+  - Enhance 'ref' mechanism
+- Update model versiont to v0.0.410
+  - Add ClusterStatus to aro_hcp
+
+## 0.1.457
+- Fix leadership/flag not respecting initial context supplied
+
+## 0.1.456
+- Update model version to v0.0.409
+  - Update cluster migration state to match API object
+
+## 0.1.455
+- Update model version to v0.0.408
+  - Update cluster migration type constant
+
+## 0.1.454
+- Update model version to v0.0.407
+  - Add ClusterMigration resources
+
+## 0.1.453
+- Update model version to v0.0.406
+  - Expose the GCP Shielded VM secure boot setting at the machine pool level
+
+## 0.1.452
+- Update model version v0.0.405
+- Update metamodel version v0.0.64
+  - Add ARO HCP v1alpha1 root resource
+
+## 0.1.451
+- Update model version v0.0.404
+  - Add WifConfig patch endpoint
+
+## 0.1.450
+- Update model version v0.0.403
+  - Add `NodesOutboundConnectivity` in azure_type.model to the `Azure` model
+  - Add `AzureNodesOutboundConnectivity` model
+
+## 0.1.449
+Update model version v0.0.402
+  - Add WifConfig status endpoint
+  - Add `WifConfigStatus` model
+
+## 0.1.448
+- Update model version v0.0.401
+  - Include support for HCP shared vpc fields in `Cluster` and `DNS` models.
+
+## 0.1.447
+- Update model version v0.0.400
+  - Update ocm-sdk-go examples for Addons
+  - Update `Parameters` attribute in addon_installation_type.model to the List of `AddonInstallationParameter` type.
+  - Update `Parameters` attribute in addon_type.model to the  List of `AddonParameter` type.
+
+## 0.1.446
+- Update model version v0.0.399
+  - Improve Clusters Azure API type documentation
+  - Add Azure Operators Authentication related types
+  - Add `AzureOperatorsAuthentication` type to `Azure` type
+
+## 0.1.445
+- Update model version v0.0.398
+  - Add updates for GCP Private Service Connect feature
+  
+## 0.1.444
+- Update model version v0.0.397
+  - Add `FlapDetection` field to `status_board.statuses` model
+
+## 0.1.443
+- Update model version v0.0.396
+  - Add `FlapDetection` field to `status_board.status_updates` model
+
+## 0.1.442
+- Update model version v0.0.395
+  - Add `ASWShard` struct
+  - Add `WifEnabled` field to `Version` model
+
+## 0.1.441
+- Update model version v0.0.394
+  - Add `WifTemplates` field to `WifConfig` model
+
+## 0.1.440
+- Update model version v0.0.393
+  - Include missing field to hypershift model
+  - Include new fields to manifest model
+  - Remove v2alpha1 resources
+
+## 0.1.439
+- Update model version v0.0.392
+  - Add `vm` WIF access type
+  - Add `support` field to WifConfig resource
+
+## 0.1.438
+- Update model version v0.0.391
+  - Add `RegistryConfig` attribute to `Cluster` model
+  - Add `RegistryAllowlist` resource and endpoints
+
+## 0.1.437
+- Update model version v0.0.390
+  - Add `RolePrefix` field to `WifGcp` model
+
+## 0.1.436
+- Update model version v0.0.389
+  - Add state struct to node pool
+  - Add limited support reason override
+
+## 0.1.435
+- Add 'OidcThumbprint' type model to v1 and v2alpha1
+- Add 'OidcThumbprintInput' type model to v1 and v2alpha1
+- Add 'OidcThumbprint' resource model to v1 and v2alpha1
+
+## 0.1.434
+- Update model version v0.0.386
+  - Add `RootVolume` attribute to `AWSNodePool` model
+- Update model version v0.0.387
+  - Add `ProjectNumber` field to `WifConfig` model
+
+## 0.1.433
+- Update model version v0.0.384
+  - Add clusters_mgmt API model for v2alpha1
+- Update model version v0.0.385
+  - Update WIF endpoint path
+  - Remove WIF templates endpoints
+
+## 0.1.432
+- Update model version v0.0.383
+  - Add `Kind` and `Id` field to GCP `Authentication` structure
+
+## 0.1.431
+- Update model version v0.0.382
+  - Add `Authentication` field to GCP model
+
+## 0.1.430
+- Added WIF endpoints and resources
+
+## 0.1.429
+- Update model version v0.0.380
+  - Add `Architecture` attribute to `MachineType` model
+  - Add `ReleaseImages` attribute to `Version` model
+
+## 0.1.428
+- Update model version v0.0.379
+  - Add `Ec2MetadataHttpTokens` to `AWSNodePool` resource
+
+## 0.1.427
+- Update model version v0.0.378
+  - Add `MultiArchEnabled` attribute to `Cluster` model
+
+## 0.1.426
+- Update for Windows support including systemcertpool
+
+## 0.1.425
+- Update Windows certificates
+
+## 0.1.424
+- Update model version v0.0.377
+  - Change type of the `OSDiskSizeGibibytes` attribute in the `AzureNodePool` resource from String to Integer.
+
+## 0.1.423
+- Update model version v0.0.376
+  - Add `AzureNodePool` to `NodePool` type
+
+## 0.1.422
+- Update model version v0.0.375
+  - Add `ManagementUpgrade` parameters to the `NodePool` model to support additional upgrade configuration.
+  - Support server name inference for regionalized OCM redirects
+  - Add `AdditionalAllowedPrincipals` to `AWS` type to support additional allowed principal ARNs to be added to the hosted control plane's VPC Endpoint Service.
+
+## 0.1.421
+- Update model version v0.0.374
+  - Add `CreationTimestamp` and `LastUpdateTimestamp` to `RolePolicyBinding` type
+  - Add `access_transparency` service
+
+## 0.1.420
+- Update model version v0.0.373
+  - Add `subnet_resource_id` to `Azure` resource
+  - Add `network_security_group_resource_id to `Azure` resource
+
+## 0.1.419
+- Update model version v0.0.372
+  - Exposed the `/api/clusters_mgmt/v1/clusters/{id}/kubelet_configs` endpoint
+  - Added `name` field to `KubeletConfig`
+  - Added `kubelet_configs` field to `NodePool`
+
+## 0.1.418
+- Update model version v0.0.371
+  - Add Tags to the AWSMachinePool model to support custom AWS tags for day 2 creation of machine pools
+
+## 0.1.417
+- Add RolePolicyBindings to the AWS resource model to support STS Arbitrary Policies feature.
+
+## 0.1.416
+- Update windows api.openshift certs 
+
+## 0.1.415
+- Update model version v0.0.369
+  - Update metamodel version to 0.0.60
+  - [OCM-6294] add /load_balancer_quota_values endpoint
+  - [OCM-7027] feat: document pagination and ordering support for break glass
+  - [OCM-7144] Add /storage_quota_values endpoint
+  - Add Azure resource to Cluster resource.
+  - Fix spacing in description of Azure's ManagedResourceGroupName
+
+## 0.1.414
+- Update metamodel version v0.0.60
+
+## 0.1.413
+- Update model version v0.0.366
+  - Fix Default Capabilities.
+
+## 0.1.412
+- Update model version v0.0.365
+  - [OCM-6763] Add default capability resource to SDK.
+
+## 0.1.411
+- Upgrade pgx version and other dependencies
+
+## 0.1.410
+- Update model version v0.0.364
+  - Add `BreakGlassCredentials` to the `Cluster` resource model.
+
+## 0.1.409
+- Update model version v0.0.363
+  - Add `NodeDrainGracePeriod` to the `NodePool` model.
+- Update model version v0.0.362
+  - Changed `UserName` attribute for TokenClaimMappings to `Username`.
+
+## 0.1.408
+- Update model version v0.0.361
+  - Add `Scope` attribute to `ReservedResource`.
+  - Add `Scope` attribute to `ClusterAuthorizationRequest`.
+
+## 0.1.407
+- Update model version v0.0.360
+  - Add `ComponentRoutes` attribute to `Ingress`
+
+## 0.1.406
+- Migrate Keychain `securestore` usage to non-CGO libraries 
+
+## 0.1.405
+- Update model version v0.0.359
+  - Add `ExternalAuthConfig` resource to `Cluster` model.
+  - Add `DomainPrefix` to `Cluster` model.
+
+## 0.1.404
+- Update model version v0.0.357
+  - Add `ExternalAuth` to `ExternalAuthConfig` model
+
+## 0.1.403
+- Update model version v0.0.356
+  - Reverting change to remove provision shard from cluster
+
+## 0.1.402
+- Update model version v0.0.355
+  - Removed undefined api calls from the model
+  - Add support to `securestore` that allows the caller to define a keyring target
+  - Additional `securestore` Error Standardization
+  - Add error handling to `securestore` for denied Keychain access due to permissions
+
+## 0.1.401
+- Update model version v0.0.353
+  - Added support for `PackageImage` for `clusters_mgmt`
+
+## 0.1.400
+- Update model version v0.0.352
+  - Remove `StatusBoard` `fullname` search parameter.
+  - Deprecate `Notify` resource.
+
+## 0.1.399
+- Additional error handling for `securestore`
+
+## 0.1.398
+- Add regions support from ocm shards
+- Don't error when response is 204 and no content-type
+
+## 0.1.397
+- Add `NewUnauthenticatedConnectionBuilder` function to allow creating a
+  `Connection` without client side authentication
+
+## 0.1.396
+- Remove redundant fields from /notify_details
+- Add `ExternalAuthConfig` to `Cluster` model.
+
+## 0.1.395
+- Add `SubnetOutposts` and `AvailabilityZoneTypes` to `aws_node_pool_type` and `aws_machine_pool_type` resources.
+
+## 0.1.394
+- Added Device Code flow to `authentication`
+- Update model version v0.0.347
+  - Add `HostedControlPlaneDefault` boolean to `Version` Type model.
+
+## 0.1.393
+- Add authentication using OAuth2 and PCKE
+- Add secure token storage
+
+## 0.1.392
+- Update model version v0.0.346
+  - Modify notify_details response
+
+## 0.1.391
+- Update model version v0.0.345
+  - Add `validate_credentials` resource to `AwsInquiries`
+- Update model version v0.0.344
+  - Add the /notify_details endpoint to the SDK
+
+## 0.1.390
+- Update model version v0.0.343
+  -  Add `Platform`to `subnet_network_verification_type` resource
+
+## 0.1.389
+- Update model version v0.0.342
+  -  Add `Search` and `Order` methods to List `/api/clusters_mgmt/v1/clusters/{id}/node_pools`
+
+## 0.1.388
+- Update model version v0.0.341
+  -  Add DELETE /api/addons_mgmt/v1/clusters/{id}/addons endpoint
+
+## 0.1.387
+- Update model version v0.0.340
+  - Add get `Platform` to `network_verification_type` resource
+
+## 0.1.386
+- Update model version to v0.0.339
+  - Add `MachineTypes` to `GCPInquiriesClient` endpoints
+
+## 0.1.385
+- Update model version to v0.0.338
+  - Add `ProductTechnologyPreviews` and `ProductMinimalVersions` endpoints
+
+## 0.1.384
+- Updated client for `KubeletConfig` to align `post` and `update` function signatures
+
+## 0.1.383
+- Update model version to v0.0.336
+  - Added `security` field to Cluster Service GCP field
+
+## 0.1.382
+- Update model version to v0.0.335
+  - Add `doc_references` field in `LogEntry`
+  - Add tags to subnet network verification resource
+
+- Update model version to v0.0.334
+  - Add Search method to status_board status_updates model
+
+## 0.1.381
+- Update model version to v0.0.333
+  - Add `/api/clusters_mgmt/v1/clusters/{id}/kubelet_config` endpoint
+  - Add `KubeletConfig` struct
+  - Update `Cluster` struct to be able to optionally embed the `KubeletConfig` struct
+
+## 0.1.380
+- Update model version v0.0.332
+  - Add `AdditionalInfraSecurityGroupIds` to `AWS` type
+  - Add `AdditionalControlPlaneSecurityGroupIds` to `AWS` type
+- Update model version v0.0.331
+  - Add `Search` method to `status_board` `products_resource`, `applications_resource`, and `services_resource models`
+
+## 0.1.379
+- Require Go 1.21
+
+## 0.1.378
+- Update model version v0.0.330
+  - Add `Update` method to `HypershiftConfig` resource
+
+## 0.1.377
+- Update model version v0.0.329
+  - Add get `ClusterId` to `network_verification_type` resource
+
+## 0.1.376
+- Update model version v0.0.328
+  - Add get `VPC` to `Cluster` resource
+
+## 0.1.375
+- Update model version v0.0.327
+  - Add `BestEffort` to method `Delete` in `Cluster`
+
+## 0.1.374
+- Update model version v0.0.326
+  - Add `BackplaneURL` to `Environment` type
+
+## 0.1.373
+- Update model version to v0.0.325
+  - Add `OrganizationId` to `FeatureReviewRequest` type
+
+## 0.1.372
+- Update model version to v0.0.324
+  - Add `CreatedAt` to `LogEntry` type
+  - Add `CreatedBy` to `LogEntry` type
+
+## 0.1.371
+- Update model version to v0.0.323
+  - Add `GCPMarketplaceEnabled` to `version` type
+
+## 0.1.370
+- Update model version to v0.0.322
+  - Add AdditionalComputeSecurityGroupIds to AWS type
+  - Add AdditionalSecurityGroupIds to AWS Machine Pool type
+  - Add AwsSecurityGroups to VPC type
+
+## 0.1.369
+- Update model version to v0.0.321
+  - Exposes `/api/clusters_mgmt/v1/aws_inquiries/sts_account_roles` in the SDK 
+
+## 0.1.368
+- Update model version v0.0.318
+  - Add `ImageOverrides` to `Version` type
+
+## 0.1.367
+- Windows: Update SSO CA
+- Update model version v0.0.315
+  - Add DisplayName and Description properties to `BillingModelItem`
+
+## 0.1.366
+- Update model version v0.0.314
+  - Add new resources and a type for `BillingModelItem`
+
+## 0.1.365
+- Update model version v0.0.312
+  - Added support for `AddonInstallations` endpoints for `addons_mgmt`.
+  - Updated APIs for `AddonStatus`, `AddonStatusCondition`, `AddonSubOperator` and `AddonVersion`.
+
+## 0.1.364
+- Update model version v0.0.311
+  - Add a new resource to OSL clusters/cluster_log
+
+## 0.1.363
+  - Modify SelfAccessReview to return IsOCMInternal field
+
+## 0.1.362
+  - Redact aws access and secret access keys from debug logs
+
+## 0.1.361
+- Update model version v0.0.309
+  - Modify access review response to include `is_ocm_internal` field.
+  - Add the remainder of cluster-autoscaler parameters.
+
+## 0.1.360
+- Update model version v0.0.307
+  - Move `PrivateHostedZoneID` and `PrivateHostedZoneRoleARN` to `aws_type` resource
+
+## 0.1.359
+- Update model version v0.0.306
+  - Fix upgrade related constants JSON output to align with existing values
+- Update model version v0.0.305
+  - Add `PrivateHostedZoneID` and `PrivateHostedZoneRoleARN` to `cluster_type` resource
+
+## 0.1.358
+- Update model version v0.0.304
+  - Add upgrade related constants also for `NodePoolUpgradePolicy`.
+  - Change DNS domain field names.
+
+## 0.1.357
+- Update model version v0.0.303
+  - Add upgrade related constants.
+- Update model version v0.0.302
+  - Add property `MarketplaceGCP` to `billing_model_type` in `clusters_mgmt` and `accounts_mgmt`
+  - Document `GovCloud`, `KMSLocationID` and `KMSLocationName` fields to `CloudRegion`
+  - Document `fetchRegions=true` to `cloud_providers` 
+
+## 0.1.356
+- Update model version v0.0.301
+  - Update name for `ClusterStsSupportRole` resource and type to `StsSupportJumpRole`
+
+## 0.1.355
+- Update model version v0.0.300
+  - Add `UserDefined` in dns domain resource
+
+## 0.1.354
+- Update model version v0.0.299
+  - OCM-209 | feat: Add cluster autoscaler API resources
+  - OCM-209 | feat: Add autoscaler locator in cluster resource
+
+## 0.1.353
+- Prevent connection leak in retry wrapper
+
+## 0.1.352
+- Update model version v0.0.297
+  - Add managed ingress attributes
+  - Fix `fetchLabels` and `fetchAccounts` url parameter names
+  - Add `ClusterStsSupportRole` resource and type
+
+## 0.1.351
+- Update model version v0.0.296
+  - Add json annotation to `DeleteAssociatedResources` parameter in account resource
+
+## 0.1.350
+- Update model version v0.0.294
+  - Add `DeleteAssociatedResources` locator to account resource
+- Update model version v0.0.295
+  - Update `ReservedAt` to `ReservedAtTimestamp` in dns domain type
+- Update metamodel version 0.0.59:
+  - Honor`@http` annotation for query parameters
+
+## 0.1.349
+- Update model to version v0.0.293
+  - Add label list to OSDFM cluster request payloads
+  - Replace references to labels in OSDFM cluster structs with the labels themselves
+  - Fix typos in OSDFM cluster Label struct fields
+  - Add HashedPassword field to clusters_mgmt to provide encrypted value
+  - Add cluster autoscaler structs
+
+## 0.1.348
+- Update model version v0.0.291
+  - Add Reason to access review responses
+  - Enable users to provide both hashed and plain-text passwords
+  - API model for network verification
+
+## 0.1.347
+- Update model version v0.0.290
+  - Rename `MachineTypeRootVolume` to `RootVolume`
+  - Put `RootVolume` in `ClusterNodes`
+  - add contracts to cloud accounts (#765)
+
+## 0.1.346
+- Update model version v0.0.289
+  - Add Load balancer type to Ingress model
+  - remove unused API endpoints
+
+## 0.1.345
+- Update model version v0.0.288
+  - Add `DNSDomains` resource to the `root_resource`.
+  - Complete OSD FM api for SDK usage.
+
+## 0.1.344
+- Update model version v0.0.287
+  - Add Htpasswd to Cluster
+
+## 0.1.343
+- Update model version v0.0.286
+  - Add MachineTypeRootVolume to MachinePool
+
+## 0.1.342
+- Update model version v0.0.285
+  - Changed DNS Domain from Class to a Struct.
+  - Change dns domain type to class and remove ID.
+
+## 0.1.341
+- Update model version v0.0.282
+  - Changing parameter name from HttpTokensState to Ec2MetadataHttpTokens
+
+## 0.1.340
+- Update model version v0.0.281
+  - Add `RootVolume` of type `MachineTypeRootVolume` to `MachineType` type.
+
+## 0.1.339
+- Update model version v0.0.280
+  - Add `HttpTokensState` to `AWS` resource.
+
+## 0.1.338
+- Windows: Update API CA
+
+## 0.1.337
+- Windows: Update SSO CA
+
+## 0.1.336
+- Update model version v0.0.279
+  - Add `AuditLog` to `AWS` resource.
+  - Add `RoleArn` attribute to the `AuditLog` model.
+
+## 0.1.335
+- Update model version v0.0.278
+  - Add InflightChecks locator to cluster resource
+  - Add BillingAccountID to AWS model
+
+## 0.1.334
+- Update model version v0.0.276
+  - Add delete method to `Account` resource.
+  - Add `tuning_configs` endpoints.
+  - Add `tuning_configs` field to Node Pools.
+
+## 0.1.333
+- Update model version v0.0.275
+  - Add pending delete cluster API.
+- Update model version v0.0.274
+  - Add `Subnets` property to the CloudProviderData model.
+
+## 0.1.332
+- Update model version v0.0.273
+  - update metamodel version 0.0.57
+  - remove circular dependencies from clusters mgmt
+
+## 0.1.331
+- Update model to v0.0.272
+  - adding quota version
+
+## 0.1.330
+- Update model to v0.0.271
+  - Adding `version_inquiry` endpoint to Managed Services.
+
+## 0.1.329
+- Update model to v0.0.270
+  - adding quota auth to root resource model
+
+## 0.1.328
+- Update model to v0.0.269
+  - Add `DeleteProtection` resource to `Cluster` resource.
+  - adding quota auth models
+
+## 0.1.327
+- Update model to v0.0.268
+  - Replace `OidcConfigId` for `OidcConfig` in `STS` resource.
+
+## 0.1.326
+- Update model to v0.0.267
+  - Add `OidcConfigId` to `STS` resource.
+  - Remove `OidcPrivateKeySecretArn` from `STS` resource.
+
+## 0.1.325
+- Update model to v0.0.266
+  - Adjust `Oidc Configs` endpoints.
+
+## 0.1.324
+- Update model to v0.0.265
+  - Rename `HypershiftEnabled` boolean to `HostedControlPlaneEnabled` in `Version` Type model.
+
+## 0.1.323
+- Update model to v0.0.264
+  - Add `Hosted Oidc Configs` endpoints.
+
+## 0.1.322
+- Update model to v0.0.263
+  - Add `HypershiftEnabled` boolean to `Version` Type model.
+
+## 0.1.321
+- Update model to v0.0.262
+  - Add `Control Plane Upgrade Scheduler` endpoints.
+
+## 0.1.320
+- Update to model v0.0.261
+  - Add `commonAnnotations` and `commonLabels` to addons
+- Update to Addon structs and openapi.json for supporting
+  - `commonAnnotations`
+  - `commonLabels`
+
+## 0.1.319
+- Update to model v0.0.260
+  - Add `ManagedPolicies` field to the `STS` type model.
+
+## 0.1.318
+- Update to model v0.0.259
+  - Add master and infra instance types to cluster nodes
+- Update to model v0.0.258
+  - Export cluster name for mgmt, mgmt_parent, and svc clusters
+
+## 0.1.317
+- Update to model v0.0.257
+  - Add `ByoOidc` type to Cluster type model
+  - Add addon upgrade policy to clusters_mgmt
+  - Add `Labels` and `Taints` to NodePool type
+
+## 0.1.316
+- Update to model v0.0.256
+  - Add `LogType` field to Cluster Log type model
+  - Fix Addon status type and value constants
+
+## 0.1.315
+- Update to model v0.0.255
+  - Add `Version` field to node pool
+
+## 0.1.314
+- Update to model v0.0.254
+  - Add `PrivateLinkConfiguration` type with related endpoints
+
+## 0.1.313
+- Update to model v0.0.253
+  - Update Permission resource attributes
+    * Rename ResourceType to Resource
+
+## 0.1.312
+- Update to metamodel 0.0.57
+
+## 0.1.311
+- Update to model v0.0.252
+  - Update `STS` resource attributes
+    * Remove `BoundServiceAccountSigningKey`
+    * Remove `BoundServiceAccountKeyKmsId`
+    * Rename `BoundServiceAccountKeySecretArn` to `OidcPrivateKeySecretArn`
+
+## 0.1.310
+- Update to model v0.0.251
+  - Update `NodePool` with status attributes
+  - Added `current_compute` attribute in `ClusterStatus` for hosted clusters.
+  - Added missing variable to `addon environment variable` for addons mgmt
+
+## 0.1.309
+- Update to model v0.0.250
+  - Add `Addon Inquiries API` to `addons_mgmt`
+
+## 0.1.308
+- Update to model v0.0.249
+  - Add `BoundServiceAccountKeySecretArn` attribute to the `Sts` model.
+
+## 0.1.307
+- Update to model v0.0.248
+  - Add `AwsEtcdEncryption` type model and reference from `AWS`.
+  - Add `Enabled` attribute to `STS` model.
+
 ## 0.1.306
 - Update to model v0.0.247
   - Corrected `Metrics` type on `DeletedSubscription`
@@ -33,20 +756,20 @@ SDK.
   - Add `DeletedSubscriptions`
   - Add `AddonCluster`
   - Add `AddonStatus`
-  
+
 ## 0.1.300
 - Update PR check to include go v1.19
 - Update goimports to v0.4.0
 - Update to model v0.0.240
   - Fix `AddonConfig` on `AddonConfigType` resource model.
 
-## 0.1.299 
+## 0.1.299
 - Update to model 0.0.239
   - Fixes for `NodePoolAutoScaling` and `AWSNodePool`.
 
 ## 0.1.298
 - Update to model 0.0.238
-  - `NodePool` fixes. 
+  - `NodePool` fixes.
 
 ## 0.1.297
 - Update to model 0.0.237

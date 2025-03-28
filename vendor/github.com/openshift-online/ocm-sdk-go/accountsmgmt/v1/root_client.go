@@ -70,6 +70,16 @@ func (c *Client) Accounts() *AccountsClient {
 	)
 }
 
+// BillingModels returns the target 'billing_models' resource.
+//
+// Reference to the resource that manages billing models.
+func (c *Client) BillingModels() *BillingModelsClient {
+	return NewBillingModelsClient(
+		c.transport,
+		path.Join(c.path, "billing_models"),
+	)
+}
+
 // Capabilities returns the target 'capabilities' resource.
 //
 // Reference to the resource that manages the collection of capabilities.
@@ -132,6 +142,16 @@ func (c *Client) CurrentAccount() *CurrentAccountClient {
 	)
 }
 
+// DefaultCapabilities returns the target 'default_capabilities' resource.
+//
+// Reference to the resource that manages the collection of default capabilities.
+func (c *Client) DefaultCapabilities() *DefaultCapabilitiesClient {
+	return NewDefaultCapabilitiesClient(
+		c.transport,
+		path.Join(c.path, "default_capabilities"),
+	)
+}
+
 // DeletedSubscriptions returns the target 'deleted_subscriptions' resource.
 //
 // Reference to the resource that manages the collection of deleted subscriptions.
@@ -162,13 +182,13 @@ func (c *Client) Labels() *LabelsClient {
 	)
 }
 
-// Notify returns the target 'notify' resource.
+// NotifyDetails returns the target 'notify_details' resource.
 //
-// Reference to the resource that manages the notifications.
-func (c *Client) Notify() *NotifyClient {
-	return NewNotifyClient(
+// Reference to the resource that manages the notifications details.
+func (c *Client) NotifyDetails() *NotifyDetailsClient {
+	return NewNotifyDetailsClient(
 		c.transport,
-		path.Join(c.path, "notify"),
+		path.Join(c.path, "notify_details"),
 	)
 }
 
@@ -200,6 +220,16 @@ func (c *Client) PullSecrets() *PullSecretsClient {
 	return NewPullSecretsClient(
 		c.transport,
 		path.Join(c.path, "pull_secrets"),
+	)
+}
+
+// QuotaAuthorizations returns the target 'quota_authorizations' resource.
+//
+// Reference to the resource that manages quota authorizations.
+func (c *Client) QuotaAuthorizations() *QuotaAuthorizationsClient {
+	return NewQuotaAuthorizationsClient(
+		c.transport,
+		path.Join(c.path, "quota_authorizations"),
 	)
 }
 

@@ -30,12 +30,16 @@ type AddonVersionBuilder struct {
 	availableUpgrades        []string
 	channel                  string
 	config                   *AddonConfigBuilder
-	parameters               []*AddonParameterBuilder
+	metricsFederation        *MetricsFederationBuilder
+	monitoringStack          *MonitoringStackBuilder
+	packageImage             string
+	parameters               *AddonParametersBuilder
 	pullSecretName           string
 	requirements             []*AddonRequirementBuilder
 	sourceImage              string
 	subOperators             []*AddonSubOperatorBuilder
 	enabled                  bool
+	upgradePlansCreated      bool
 }
 
 // NewAddonVersion creates a new builder of 'addon_version' objects.
@@ -112,18 +116,56 @@ func (b *AddonVersionBuilder) Enabled(value bool) *AddonVersionBuilder {
 	return b
 }
 
-// Parameters sets the value of the 'parameters' attribute to the given values.
-func (b *AddonVersionBuilder) Parameters(values ...*AddonParameterBuilder) *AddonVersionBuilder {
-	b.parameters = make([]*AddonParameterBuilder, len(values))
-	copy(b.parameters, values)
-	b.bitmap_ |= 256
+// MetricsFederation sets the value of the 'metrics_federation' attribute to the given value.
+//
+// Representation of Metrics Federation
+func (b *AddonVersionBuilder) MetricsFederation(value *MetricsFederationBuilder) *AddonVersionBuilder {
+	b.metricsFederation = value
+	if value != nil {
+		b.bitmap_ |= 256
+	} else {
+		b.bitmap_ &^= 256
+	}
+	return b
+}
+
+// MonitoringStack sets the value of the 'monitoring_stack' attribute to the given value.
+//
+// Representation of Monitoring Stack
+func (b *AddonVersionBuilder) MonitoringStack(value *MonitoringStackBuilder) *AddonVersionBuilder {
+	b.monitoringStack = value
+	if value != nil {
+		b.bitmap_ |= 512
+	} else {
+		b.bitmap_ &^= 512
+	}
+	return b
+}
+
+// PackageImage sets the value of the 'package_image' attribute to the given value.
+func (b *AddonVersionBuilder) PackageImage(value string) *AddonVersionBuilder {
+	b.packageImage = value
+	b.bitmap_ |= 1024
+	return b
+}
+
+// Parameters sets the value of the 'parameters' attribute to the given value.
+//
+// Representation of AddonParameters
+func (b *AddonVersionBuilder) Parameters(value *AddonParametersBuilder) *AddonVersionBuilder {
+	b.parameters = value
+	if value != nil {
+		b.bitmap_ |= 2048
+	} else {
+		b.bitmap_ &^= 2048
+	}
 	return b
 }
 
 // PullSecretName sets the value of the 'pull_secret_name' attribute to the given value.
 func (b *AddonVersionBuilder) PullSecretName(value string) *AddonVersionBuilder {
 	b.pullSecretName = value
-	b.bitmap_ |= 512
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -131,14 +173,14 @@ func (b *AddonVersionBuilder) PullSecretName(value string) *AddonVersionBuilder 
 func (b *AddonVersionBuilder) Requirements(values ...*AddonRequirementBuilder) *AddonVersionBuilder {
 	b.requirements = make([]*AddonRequirementBuilder, len(values))
 	copy(b.requirements, values)
-	b.bitmap_ |= 1024
+	b.bitmap_ |= 8192
 	return b
 }
 
 // SourceImage sets the value of the 'source_image' attribute to the given value.
 func (b *AddonVersionBuilder) SourceImage(value string) *AddonVersionBuilder {
 	b.sourceImage = value
-	b.bitmap_ |= 2048
+	b.bitmap_ |= 16384
 	return b
 }
 
@@ -146,7 +188,14 @@ func (b *AddonVersionBuilder) SourceImage(value string) *AddonVersionBuilder {
 func (b *AddonVersionBuilder) SubOperators(values ...*AddonSubOperatorBuilder) *AddonVersionBuilder {
 	b.subOperators = make([]*AddonSubOperatorBuilder, len(values))
 	copy(b.subOperators, values)
-	b.bitmap_ |= 4096
+	b.bitmap_ |= 32768
+	return b
+}
+
+// UpgradePlansCreated sets the value of the 'upgrade_plans_created' attribute to the given value.
+func (b *AddonVersionBuilder) UpgradePlansCreated(value bool) *AddonVersionBuilder {
+	b.upgradePlansCreated = value
+	b.bitmap_ |= 65536
 	return b
 }
 
@@ -179,11 +228,19 @@ func (b *AddonVersionBuilder) Copy(object *AddonVersion) *AddonVersionBuilder {
 		b.config = nil
 	}
 	b.enabled = object.enabled
+	if object.metricsFederation != nil {
+		b.metricsFederation = NewMetricsFederation().Copy(object.metricsFederation)
+	} else {
+		b.metricsFederation = nil
+	}
+	if object.monitoringStack != nil {
+		b.monitoringStack = NewMonitoringStack().Copy(object.monitoringStack)
+	} else {
+		b.monitoringStack = nil
+	}
+	b.packageImage = object.packageImage
 	if object.parameters != nil {
-		b.parameters = make([]*AddonParameterBuilder, len(object.parameters))
-		for i, v := range object.parameters {
-			b.parameters[i] = NewAddonParameter().Copy(v)
-		}
+		b.parameters = NewAddonParameters().Copy(object.parameters)
 	} else {
 		b.parameters = nil
 	}
@@ -205,6 +262,7 @@ func (b *AddonVersionBuilder) Copy(object *AddonVersion) *AddonVersionBuilder {
 	} else {
 		b.subOperators = nil
 	}
+	b.upgradePlansCreated = object.upgradePlansCreated
 	return b
 }
 
@@ -235,13 +293,23 @@ func (b *AddonVersionBuilder) Build() (object *AddonVersion, err error) {
 		}
 	}
 	object.enabled = b.enabled
+	if b.metricsFederation != nil {
+		object.metricsFederation, err = b.metricsFederation.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.monitoringStack != nil {
+		object.monitoringStack, err = b.monitoringStack.Build()
+		if err != nil {
+			return
+		}
+	}
+	object.packageImage = b.packageImage
 	if b.parameters != nil {
-		object.parameters = make([]*AddonParameter, len(b.parameters))
-		for i, v := range b.parameters {
-			object.parameters[i], err = v.Build()
-			if err != nil {
-				return
-			}
+		object.parameters, err = b.parameters.Build()
+		if err != nil {
+			return
 		}
 	}
 	object.pullSecretName = b.pullSecretName
@@ -264,5 +332,6 @@ func (b *AddonVersionBuilder) Build() (object *AddonVersion, err error) {
 			}
 		}
 	}
+	object.upgradePlansCreated = b.upgradePlansCreated
 	return
 }

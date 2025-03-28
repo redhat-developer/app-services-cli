@@ -29,7 +29,7 @@ import (
 // MarshalAddonStatusCondition writes a value of the 'addon_status_condition' type to the given writer.
 func MarshalAddonStatusCondition(object *AddonStatusCondition, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAddonStatusCondition(object, stream)
+	WriteAddonStatusCondition(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalAddonStatusCondition(object *AddonStatusCondition, writer io.Writer)
 	return stream.Error
 }
 
-// writeAddonStatusCondition writes a value of the 'addon_status_condition' type to the given stream.
-func writeAddonStatusCondition(object *AddonStatusCondition, stream *jsoniter.Stream) {
+// WriteAddonStatusCondition writes a value of the 'addon_status_condition' type to the given stream.
+func WriteAddonStatusCondition(object *AddonStatusCondition, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -47,11 +47,20 @@ func writeAddonStatusCondition(object *AddonStatusCondition, stream *jsoniter.St
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("message")
+		stream.WriteString(object.message)
+		count++
+	}
+	present_ = object.bitmap_&2 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("reason")
 		stream.WriteString(object.reason)
 		count++
 	}
-	present_ = object.bitmap_&2 != 0
+	present_ = object.bitmap_&4 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -60,7 +69,7 @@ func writeAddonStatusCondition(object *AddonStatusCondition, stream *jsoniter.St
 		stream.WriteString(string(object.statusType))
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -78,13 +87,13 @@ func UnmarshalAddonStatusCondition(source interface{}) (object *AddonStatusCondi
 	if err != nil {
 		return
 	}
-	object = readAddonStatusCondition(iterator)
+	object = ReadAddonStatusCondition(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAddonStatusCondition reads a value of the 'addon_status_condition' type from the given iterator.
-func readAddonStatusCondition(iterator *jsoniter.Iterator) *AddonStatusCondition {
+// ReadAddonStatusCondition reads a value of the 'addon_status_condition' type from the given iterator.
+func ReadAddonStatusCondition(iterator *jsoniter.Iterator) *AddonStatusCondition {
 	object := &AddonStatusCondition{}
 	for {
 		field := iterator.ReadObject()
@@ -92,20 +101,24 @@ func readAddonStatusCondition(iterator *jsoniter.Iterator) *AddonStatusCondition
 			break
 		}
 		switch field {
+		case "message":
+			value := iterator.ReadString()
+			object.message = value
+			object.bitmap_ |= 1
 		case "reason":
 			value := iterator.ReadString()
 			object.reason = value
-			object.bitmap_ |= 1
+			object.bitmap_ |= 2
 		case "status_type":
 			text := iterator.ReadString()
 			value := AddonStatusConditionType(text)
 			object.statusType = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 4
 		case "status_value":
 			text := iterator.ReadString()
 			value := AddonStatusConditionValue(text)
 			object.statusValue = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

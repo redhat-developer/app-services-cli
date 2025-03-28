@@ -42,6 +42,26 @@ func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
 	}
 }
 
+// AddonInquiries returns the target 'addon_inquiries' resource.
+//
+// Reference to the inquiries of addons on a specific cluster
+func (c *ClusterClient) AddonInquiries() *AddonInquiriesClient {
+	return NewAddonInquiriesClient(
+		c.transport,
+		path.Join(c.path, "addon_inquiries"),
+	)
+}
+
+// Addons returns the target 'addon_installations' resource.
+//
+// Reference to the installations of addon on a specific cluster
+func (c *ClusterClient) Addons() *AddonInstallationsClient {
+	return NewAddonInstallationsClient(
+		c.transport,
+		path.Join(c.path, "addons"),
+	)
+}
+
 // Status returns the target 'addon_statuses' resource.
 //
 // Reference to the status of addon installation on a specific cluster

@@ -28,6 +28,7 @@ type QuotaCost struct {
 	organizationID   string
 	quotaID          string
 	relatedResources []*RelatedResource
+	version          string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -149,6 +150,25 @@ func (o *QuotaCost) GetRelatedResources() (value []*RelatedResource, ok bool) {
 	return
 }
 
+// Version returns the value of the 'version' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+func (o *QuotaCost) Version() string {
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.version
+	}
+	return ""
+}
+
+// GetVersion returns the value of the 'version' attribute and
+// a flag indicating if the attribute has a value.
+func (o *QuotaCost) GetVersion() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&64 != 0
+	if ok {
+		value = o.version
+	}
+	return
+}
+
 // QuotaCostListKind is the name of the type used to represent list of objects of
 // type 'quota_cost'.
 const QuotaCostListKind = "QuotaCostList"
@@ -174,6 +194,29 @@ func (l *QuotaCostList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *QuotaCostList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *QuotaCostList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *QuotaCostList) SetItems(items []*QuotaCost) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *QuotaCostList) Items() []*QuotaCost {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.

@@ -15,12 +15,12 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.17.13
       - run: make generate-downstream-docs
         name: Generate generate-downstream-docs
       - name: Deploy
         # v4.4.1
-        uses: JamesIves/github-pages-deploy-action@ba1486788b0490a235422264426c45848eac35c6
+        uses: JamesIves/github-pages-deploy-action@8d7df4a575972ab761c35ce7433e69e9ec98f236
         with:
           branch: modular-docs # The branch the action should deploy to.
           folder: dist # The folder the action should deploy.

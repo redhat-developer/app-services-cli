@@ -35,16 +35,24 @@ const NodePoolNilKind = "NodePoolNil"
 //
 // Representation of a node pool in a cluster.
 type NodePool struct {
-	bitmap_          uint32
-	id               string
-	href             string
-	awsNodePool      *AWSNodePool
-	autoscaling      *NodePoolAutoscaling
-	availabilityZone string
-	cluster          *Cluster
-	replicas         int
-	subnet           string
-	autoRepair       bool
+	bitmap_              uint32
+	id                   string
+	href                 string
+	awsNodePool          *AWSNodePool
+	autoscaling          *NodePoolAutoscaling
+	availabilityZone     string
+	azureNodePool        *AzureNodePool
+	kubeletConfigs       []string
+	labels               map[string]string
+	managementUpgrade    *NodePoolManagementUpgrade
+	nodeDrainGracePeriod *Value
+	replicas             int
+	status               *NodePoolStatus
+	subnet               string
+	taints               []*Taint
+	tuningConfigs        []string
+	version              *Version
+	autoRepair           bool
 }
 
 // Kind returns the name of the type of the object.
@@ -58,7 +66,7 @@ func (o *NodePool) Kind() string {
 	return NodePoolKind
 }
 
-// Link returns true iif this is a link.
+// Link returns true if this is a link.
 func (o *NodePool) Link() bool {
 	return o != nil && o.bitmap_&1 != 0
 }
@@ -198,25 +206,117 @@ func (o *NodePool) GetAvailabilityZone() (value string, ok bool) {
 	return
 }
 
-// Cluster returns the value of the 'cluster' attribute, or
+// AzureNodePool returns the value of the 'azure_node_pool' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// ID used to identify the cluster that this nodepool is attached to.
-func (o *NodePool) Cluster() *Cluster {
+// Azure specific parameters.
+func (o *NodePool) AzureNodePool() *AzureNodePool {
 	if o != nil && o.bitmap_&128 != 0 {
-		return o.cluster
+		return o.azureNodePool
 	}
 	return nil
 }
 
-// GetCluster returns the value of the 'cluster' attribute and
+// GetAzureNodePool returns the value of the 'azure_node_pool' attribute and
 // a flag indicating if the attribute has a value.
 //
-// ID used to identify the cluster that this nodepool is attached to.
-func (o *NodePool) GetCluster() (value *Cluster, ok bool) {
+// Azure specific parameters.
+func (o *NodePool) GetAzureNodePool() (value *AzureNodePool, ok bool) {
 	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = o.cluster
+		value = o.azureNodePool
+	}
+	return
+}
+
+// KubeletConfigs returns the value of the 'kubelet_configs' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The names of the KubeletConfigs for this node pool.
+func (o *NodePool) KubeletConfigs() []string {
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.kubeletConfigs
+	}
+	return nil
+}
+
+// GetKubeletConfigs returns the value of the 'kubelet_configs' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The names of the KubeletConfigs for this node pool.
+func (o *NodePool) GetKubeletConfigs() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&256 != 0
+	if ok {
+		value = o.kubeletConfigs
+	}
+	return
+}
+
+// Labels returns the value of the 'labels' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The labels set on the Nodes created.
+func (o *NodePool) Labels() map[string]string {
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.labels
+	}
+	return nil
+}
+
+// GetLabels returns the value of the 'labels' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The labels set on the Nodes created.
+func (o *NodePool) GetLabels() (value map[string]string, ok bool) {
+	ok = o != nil && o.bitmap_&512 != 0
+	if ok {
+		value = o.labels
+	}
+	return
+}
+
+// ManagementUpgrade returns the value of the 'management_upgrade' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Management parameters (Optional).
+func (o *NodePool) ManagementUpgrade() *NodePoolManagementUpgrade {
+	if o != nil && o.bitmap_&1024 != 0 {
+		return o.managementUpgrade
+	}
+	return nil
+}
+
+// GetManagementUpgrade returns the value of the 'management_upgrade' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Management parameters (Optional).
+func (o *NodePool) GetManagementUpgrade() (value *NodePoolManagementUpgrade, ok bool) {
+	ok = o != nil && o.bitmap_&1024 != 0
+	if ok {
+		value = o.managementUpgrade
+	}
+	return
+}
+
+// NodeDrainGracePeriod returns the value of the 'node_drain_grace_period' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Time to wait for a NodePool to drain when it is upgraded or replaced before it is forcibly removed.
+func (o *NodePool) NodeDrainGracePeriod() *Value {
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.nodeDrainGracePeriod
+	}
+	return nil
+}
+
+// GetNodeDrainGracePeriod returns the value of the 'node_drain_grace_period' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Time to wait for a NodePool to drain when it is upgraded or replaced before it is forcibly removed.
+func (o *NodePool) GetNodeDrainGracePeriod() (value *Value, ok bool) {
+	ok = o != nil && o.bitmap_&2048 != 0
+	if ok {
+		value = o.nodeDrainGracePeriod
 	}
 	return
 }
@@ -227,7 +327,7 @@ func (o *NodePool) GetCluster() (value *Cluster, ok bool) {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *NodePool) Replicas() int {
-	if o != nil && o.bitmap_&256 != 0 {
+	if o != nil && o.bitmap_&4096 != 0 {
 		return o.replicas
 	}
 	return 0
@@ -239,9 +339,32 @@ func (o *NodePool) Replicas() int {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *NodePool) GetReplicas() (value int, ok bool) {
-	ok = o != nil && o.bitmap_&256 != 0
+	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
 		value = o.replicas
+	}
+	return
+}
+
+// Status returns the value of the 'status' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// NodePool status.
+func (o *NodePool) Status() *NodePoolStatus {
+	if o != nil && o.bitmap_&8192 != 0 {
+		return o.status
+	}
+	return nil
+}
+
+// GetStatus returns the value of the 'status' attribute and
+// a flag indicating if the attribute has a value.
+//
+// NodePool status.
+func (o *NodePool) GetStatus() (value *NodePoolStatus, ok bool) {
+	ok = o != nil && o.bitmap_&8192 != 0
+	if ok {
+		value = o.status
 	}
 	return
 }
@@ -251,7 +374,7 @@ func (o *NodePool) GetReplicas() (value int, ok bool) {
 //
 // The subnet upon which the nodes are created.
 func (o *NodePool) Subnet() string {
-	if o != nil && o.bitmap_&512 != 0 {
+	if o != nil && o.bitmap_&16384 != 0 {
 		return o.subnet
 	}
 	return ""
@@ -262,9 +385,78 @@ func (o *NodePool) Subnet() string {
 //
 // The subnet upon which the nodes are created.
 func (o *NodePool) GetSubnet() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&512 != 0
+	ok = o != nil && o.bitmap_&16384 != 0
 	if ok {
 		value = o.subnet
+	}
+	return
+}
+
+// Taints returns the value of the 'taints' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The taints set on the Nodes created.
+func (o *NodePool) Taints() []*Taint {
+	if o != nil && o.bitmap_&32768 != 0 {
+		return o.taints
+	}
+	return nil
+}
+
+// GetTaints returns the value of the 'taints' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The taints set on the Nodes created.
+func (o *NodePool) GetTaints() (value []*Taint, ok bool) {
+	ok = o != nil && o.bitmap_&32768 != 0
+	if ok {
+		value = o.taints
+	}
+	return
+}
+
+// TuningConfigs returns the value of the 'tuning_configs' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The names of the tuning configs for this node pool.
+func (o *NodePool) TuningConfigs() []string {
+	if o != nil && o.bitmap_&65536 != 0 {
+		return o.tuningConfigs
+	}
+	return nil
+}
+
+// GetTuningConfigs returns the value of the 'tuning_configs' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The names of the tuning configs for this node pool.
+func (o *NodePool) GetTuningConfigs() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&65536 != 0
+	if ok {
+		value = o.tuningConfigs
+	}
+	return
+}
+
+// Version returns the value of the 'version' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Version of the node pool.
+func (o *NodePool) Version() *Version {
+	if o != nil && o.bitmap_&131072 != 0 {
+		return o.version
+	}
+	return nil
+}
+
+// GetVersion returns the value of the 'version' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Version of the node pool.
+func (o *NodePool) GetVersion() (value *Version, ok bool) {
+	ok = o != nil && o.bitmap_&131072 != 0
+	if ok {
+		value = o.version
 	}
 	return
 }
@@ -328,6 +520,29 @@ func (l *NodePoolList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *NodePoolList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *NodePoolList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *NodePoolList) SetItems(items []*NodePool) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *NodePoolList) Items() []*NodePool {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.
