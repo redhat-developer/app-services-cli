@@ -29,7 +29,7 @@ import (
 // MarshalAccessReviewResponse writes a value of the 'access_review_response' type to the given writer.
 func MarshalAccessReviewResponse(object *AccessReviewResponse, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAccessReviewResponse(object, stream)
+	WriteAccessReviewResponse(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalAccessReviewResponse(object *AccessReviewResponse, writer io.Writer)
 	return stream.Error
 }
 
-// writeAccessReviewResponse writes a value of the 'access_review_response' type to the given stream.
-func writeAccessReviewResponse(object *AccessReviewResponse, stream *jsoniter.Stream) {
+// WriteAccessReviewResponse writes a value of the 'access_review_response' type to the given stream.
+func WriteAccessReviewResponse(object *AccessReviewResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -92,11 +92,29 @@ func writeAccessReviewResponse(object *AccessReviewResponse, stream *jsoniter.St
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("is_ocm_internal")
+		stream.WriteBool(object.isOCMInternal)
+		count++
+	}
+	present_ = object.bitmap_&64 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("organization_id")
 		stream.WriteString(object.organizationID)
 		count++
 	}
-	present_ = object.bitmap_&64 != 0
+	present_ = object.bitmap_&128 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("reason")
+		stream.WriteString(object.reason)
+		count++
+	}
+	present_ = object.bitmap_&256 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -105,7 +123,7 @@ func writeAccessReviewResponse(object *AccessReviewResponse, stream *jsoniter.St
 		stream.WriteString(object.resourceType)
 		count++
 	}
-	present_ = object.bitmap_&128 != 0
+	present_ = object.bitmap_&512 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -123,13 +141,13 @@ func UnmarshalAccessReviewResponse(source interface{}) (object *AccessReviewResp
 	if err != nil {
 		return
 	}
-	object = readAccessReviewResponse(iterator)
+	object = ReadAccessReviewResponse(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAccessReviewResponse reads a value of the 'access_review_response' type from the given iterator.
-func readAccessReviewResponse(iterator *jsoniter.Iterator) *AccessReviewResponse {
+// ReadAccessReviewResponse reads a value of the 'access_review_response' type from the given iterator.
+func ReadAccessReviewResponse(iterator *jsoniter.Iterator) *AccessReviewResponse {
 	object := &AccessReviewResponse{}
 	for {
 		field := iterator.ReadObject()
@@ -157,18 +175,26 @@ func readAccessReviewResponse(iterator *jsoniter.Iterator) *AccessReviewResponse
 			value := iterator.ReadString()
 			object.clusterUUID = value
 			object.bitmap_ |= 16
+		case "is_ocm_internal":
+			value := iterator.ReadBool()
+			object.isOCMInternal = value
+			object.bitmap_ |= 32
 		case "organization_id":
 			value := iterator.ReadString()
 			object.organizationID = value
-			object.bitmap_ |= 32
+			object.bitmap_ |= 64
+		case "reason":
+			value := iterator.ReadString()
+			object.reason = value
+			object.bitmap_ |= 128
 		case "resource_type":
 			value := iterator.ReadString()
 			object.resourceType = value
-			object.bitmap_ |= 64
+			object.bitmap_ |= 256
 		case "subscription_id":
 			value := iterator.ReadString()
 			object.subscriptionID = value
-			object.bitmap_ |= 128
+			object.bitmap_ |= 512
 		default:
 			iterator.ReadAny()
 		}

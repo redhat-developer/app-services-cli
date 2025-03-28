@@ -35,12 +35,17 @@ const AWSNodePoolNilKind = "AWSNodePoolNil"
 //
 // Representation of aws node pool specific parameters.
 type AWSNodePool struct {
-	bitmap_         uint32
-	id              string
-	href            string
-	instanceProfile string
-	instanceType    string
-	tags            map[string]string
+	bitmap_                    uint32
+	id                         string
+	href                       string
+	additionalSecurityGroupIds []string
+	availabilityZoneTypes      map[string]string
+	ec2MetadataHttpTokens      Ec2MetadataHttpTokens
+	instanceProfile            string
+	instanceType               string
+	rootVolume                 *AWSVolume
+	subnetOutposts             map[string]string
+	tags                       map[string]string
 }
 
 // Kind returns the name of the type of the object.
@@ -54,7 +59,7 @@ func (o *AWSNodePool) Kind() string {
 	return AWSNodePoolKind
 }
 
-// Link returns true iif this is a link.
+// Link returns true if this is a link.
 func (o *AWSNodePool) Link() bool {
 	return o != nil && o.bitmap_&1 != 0
 }
@@ -100,12 +105,81 @@ func (o *AWSNodePool) Empty() bool {
 	return o == nil || o.bitmap_&^1 == 0
 }
 
+// AdditionalSecurityGroupIds returns the value of the 'additional_security_group_ids' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Additional AWS Security Groups to be added node pool.
+func (o *AWSNodePool) AdditionalSecurityGroupIds() []string {
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.additionalSecurityGroupIds
+	}
+	return nil
+}
+
+// GetAdditionalSecurityGroupIds returns the value of the 'additional_security_group_ids' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Additional AWS Security Groups to be added node pool.
+func (o *AWSNodePool) GetAdditionalSecurityGroupIds() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&8 != 0
+	if ok {
+		value = o.additionalSecurityGroupIds
+	}
+	return
+}
+
+// AvailabilityZoneTypes returns the value of the 'availability_zone_types' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Associates nodepool availability zones with zone types (e.g. wavelength, local).
+func (o *AWSNodePool) AvailabilityZoneTypes() map[string]string {
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.availabilityZoneTypes
+	}
+	return nil
+}
+
+// GetAvailabilityZoneTypes returns the value of the 'availability_zone_types' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Associates nodepool availability zones with zone types (e.g. wavelength, local).
+func (o *AWSNodePool) GetAvailabilityZoneTypes() (value map[string]string, ok bool) {
+	ok = o != nil && o.bitmap_&16 != 0
+	if ok {
+		value = o.availabilityZoneTypes
+	}
+	return
+}
+
+// Ec2MetadataHttpTokens returns the value of the 'ec_2_metadata_http_tokens' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances
+func (o *AWSNodePool) Ec2MetadataHttpTokens() Ec2MetadataHttpTokens {
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.ec2MetadataHttpTokens
+	}
+	return Ec2MetadataHttpTokens("")
+}
+
+// GetEc2MetadataHttpTokens returns the value of the 'ec_2_metadata_http_tokens' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances
+func (o *AWSNodePool) GetEc2MetadataHttpTokens() (value Ec2MetadataHttpTokens, ok bool) {
+	ok = o != nil && o.bitmap_&32 != 0
+	if ok {
+		value = o.ec2MetadataHttpTokens
+	}
+	return
+}
+
 // InstanceProfile returns the value of the 'instance_profile' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // InstanceProfile is the AWS EC2 instance profile, which is a container for an IAM role that the EC2 instance uses.
 func (o *AWSNodePool) InstanceProfile() string {
-	if o != nil && o.bitmap_&8 != 0 {
+	if o != nil && o.bitmap_&64 != 0 {
 		return o.instanceProfile
 	}
 	return ""
@@ -116,7 +190,7 @@ func (o *AWSNodePool) InstanceProfile() string {
 //
 // InstanceProfile is the AWS EC2 instance profile, which is a container for an IAM role that the EC2 instance uses.
 func (o *AWSNodePool) GetInstanceProfile() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&8 != 0
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.instanceProfile
 	}
@@ -128,7 +202,7 @@ func (o *AWSNodePool) GetInstanceProfile() (value string, ok bool) {
 //
 // InstanceType is an ec2 instance type for node instances (e.g. m5.large).
 func (o *AWSNodePool) InstanceType() string {
-	if o != nil && o.bitmap_&16 != 0 {
+	if o != nil && o.bitmap_&128 != 0 {
 		return o.instanceType
 	}
 	return ""
@@ -139,9 +213,55 @@ func (o *AWSNodePool) InstanceType() string {
 //
 // InstanceType is an ec2 instance type for node instances (e.g. m5.large).
 func (o *AWSNodePool) GetInstanceType() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&16 != 0
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.instanceType
+	}
+	return
+}
+
+// RootVolume returns the value of the 'root_volume' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// AWS Volume specification to be used to set custom worker disk size
+func (o *AWSNodePool) RootVolume() *AWSVolume {
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.rootVolume
+	}
+	return nil
+}
+
+// GetRootVolume returns the value of the 'root_volume' attribute and
+// a flag indicating if the attribute has a value.
+//
+// AWS Volume specification to be used to set custom worker disk size
+func (o *AWSNodePool) GetRootVolume() (value *AWSVolume, ok bool) {
+	ok = o != nil && o.bitmap_&256 != 0
+	if ok {
+		value = o.rootVolume
+	}
+	return
+}
+
+// SubnetOutposts returns the value of the 'subnet_outposts' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Associates nodepool subnets with AWS Outposts.
+func (o *AWSNodePool) SubnetOutposts() map[string]string {
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.subnetOutposts
+	}
+	return nil
+}
+
+// GetSubnetOutposts returns the value of the 'subnet_outposts' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Associates nodepool subnets with AWS Outposts.
+func (o *AWSNodePool) GetSubnetOutposts() (value map[string]string, ok bool) {
+	ok = o != nil && o.bitmap_&512 != 0
+	if ok {
+		value = o.subnetOutposts
 	}
 	return
 }
@@ -149,9 +269,16 @@ func (o *AWSNodePool) GetInstanceType() (value string, ok bool) {
 // Tags returns the value of the 'tags' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Optional keys and values that the installer will add as tags to all AWS resources it creates
+// Optional keys and values that the installer will add as tags to all AWS resources it creates.
+//
+// AWS tags must conform to the following standards:
+// - Each resource may have a maximum of 25 tags
+// - Tags beginning with "aws:" are reserved for system use and may not be set
+// - Tag keys may be between 1 and 128 characters in length
+// - Tag values may be between 0 and 256 characters in length
+// - Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]
 func (o *AWSNodePool) Tags() map[string]string {
-	if o != nil && o.bitmap_&32 != 0 {
+	if o != nil && o.bitmap_&1024 != 0 {
 		return o.tags
 	}
 	return nil
@@ -160,9 +287,16 @@ func (o *AWSNodePool) Tags() map[string]string {
 // GetTags returns the value of the 'tags' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Optional keys and values that the installer will add as tags to all AWS resources it creates
+// Optional keys and values that the installer will add as tags to all AWS resources it creates.
+//
+// AWS tags must conform to the following standards:
+// - Each resource may have a maximum of 25 tags
+// - Tags beginning with "aws:" are reserved for system use and may not be set
+// - Tag keys may be between 1 and 128 characters in length
+// - Tag values may be between 0 and 256 characters in length
+// - Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]
 func (o *AWSNodePool) GetTags() (value map[string]string, ok bool) {
-	ok = o != nil && o.bitmap_&32 != 0
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.tags
 	}
@@ -228,6 +362,29 @@ func (l *AWSNodePoolList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *AWSNodePoolList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *AWSNodePoolList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *AWSNodePoolList) SetItems(items []*AWSNodePool) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *AWSNodePoolList) Items() []*AWSNodePool {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.

@@ -29,7 +29,7 @@ import (
 // MarshalHTPasswdUser writes a value of the 'HT_passwd_user' type to the given writer.
 func MarshalHTPasswdUser(object *HTPasswdUser, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeHTPasswdUser(object, stream)
+	WriteHTPasswdUser(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalHTPasswdUser(object *HTPasswdUser, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeHTPasswdUser writes a value of the 'HT_passwd_user' type to the given stream.
-func writeHTPasswdUser(object *HTPasswdUser, stream *jsoniter.Stream) {
+// WriteHTPasswdUser writes a value of the 'HT_passwd_user' type to the given stream.
+func WriteHTPasswdUser(object *HTPasswdUser, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -56,11 +56,20 @@ func writeHTPasswdUser(object *HTPasswdUser, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("hashed_password")
+		stream.WriteString(object.hashedPassword)
+		count++
+	}
+	present_ = object.bitmap_&4 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("password")
 		stream.WriteString(object.password)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -78,13 +87,13 @@ func UnmarshalHTPasswdUser(source interface{}) (object *HTPasswdUser, err error)
 	if err != nil {
 		return
 	}
-	object = readHTPasswdUser(iterator)
+	object = ReadHTPasswdUser(iterator)
 	err = iterator.Error
 	return
 }
 
-// readHTPasswdUser reads a value of the 'HT_passwd_user' type from the given iterator.
-func readHTPasswdUser(iterator *jsoniter.Iterator) *HTPasswdUser {
+// ReadHTPasswdUser reads a value of the 'HT_passwd_user' type from the given iterator.
+func ReadHTPasswdUser(iterator *jsoniter.Iterator) *HTPasswdUser {
 	object := &HTPasswdUser{}
 	for {
 		field := iterator.ReadObject()
@@ -96,14 +105,18 @@ func readHTPasswdUser(iterator *jsoniter.Iterator) *HTPasswdUser {
 			value := iterator.ReadString()
 			object.id = value
 			object.bitmap_ |= 1
+		case "hashed_password":
+			value := iterator.ReadString()
+			object.hashedPassword = value
+			object.bitmap_ |= 2
 		case "password":
 			value := iterator.ReadString()
 			object.password = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 4
 		case "username":
 			value := iterator.ReadString()
 			object.username = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

@@ -30,7 +30,7 @@ import (
 // MarshalAWSNodePool writes a value of the 'AWS_node_pool' type to the given writer.
 func MarshalAWSNodePool(object *AWSNodePool, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAWSNodePool(object, stream)
+	WriteAWSNodePool(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -38,8 +38,8 @@ func MarshalAWSNodePool(object *AWSNodePool, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeAWSNodePool writes a value of the 'AWS_node_pool' type to the given stream.
-func writeAWSNodePool(object *AWSNodePool, stream *jsoniter.Stream) {
+// WriteAWSNodePool writes a value of the 'AWS_node_pool' type to the given stream.
+func WriteAWSNodePool(object *AWSNodePool, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -66,7 +66,54 @@ func writeAWSNodePool(object *AWSNodePool, stream *jsoniter.Stream) {
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0
+	present_ = object.bitmap_&8 != 0 && object.additionalSecurityGroupIds != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("additional_security_group_ids")
+		WriteStringList(object.additionalSecurityGroupIds, stream)
+		count++
+	}
+	present_ = object.bitmap_&16 != 0 && object.availabilityZoneTypes != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("availability_zone_types")
+		if object.availabilityZoneTypes != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.availabilityZoneTypes))
+			i := 0
+			for key := range object.availabilityZoneTypes {
+				keys[i] = key
+				i++
+			}
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.availabilityZoneTypes[key]
+				stream.WriteObjectField(key)
+				stream.WriteString(item)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
+		}
+		count++
+	}
+	present_ = object.bitmap_&32 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("ec2_metadata_http_tokens")
+		stream.WriteString(string(object.ec2MetadataHttpTokens))
+		count++
+	}
+	present_ = object.bitmap_&64 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -75,7 +122,7 @@ func writeAWSNodePool(object *AWSNodePool, stream *jsoniter.Stream) {
 		stream.WriteString(object.instanceProfile)
 		count++
 	}
-	present_ = object.bitmap_&16 != 0
+	present_ = object.bitmap_&128 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -84,7 +131,45 @@ func writeAWSNodePool(object *AWSNodePool, stream *jsoniter.Stream) {
 		stream.WriteString(object.instanceType)
 		count++
 	}
-	present_ = object.bitmap_&32 != 0 && object.tags != nil
+	present_ = object.bitmap_&256 != 0 && object.rootVolume != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("root_volume")
+		WriteAWSVolume(object.rootVolume, stream)
+		count++
+	}
+	present_ = object.bitmap_&512 != 0 && object.subnetOutposts != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("subnet_outposts")
+		if object.subnetOutposts != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.subnetOutposts))
+			i := 0
+			for key := range object.subnetOutposts {
+				keys[i] = key
+				i++
+			}
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.subnetOutposts[key]
+				stream.WriteObjectField(key)
+				stream.WriteString(item)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
+		}
+		count++
+	}
+	present_ = object.bitmap_&1024 != 0 && object.tags != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -122,13 +207,13 @@ func UnmarshalAWSNodePool(source interface{}) (object *AWSNodePool, err error) {
 	if err != nil {
 		return
 	}
-	object = readAWSNodePool(iterator)
+	object = ReadAWSNodePool(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAWSNodePool reads a value of the 'AWS_node_pool' type from the given iterator.
-func readAWSNodePool(iterator *jsoniter.Iterator) *AWSNodePool {
+// ReadAWSNodePool reads a value of the 'AWS_node_pool' type from the given iterator.
+func ReadAWSNodePool(iterator *jsoniter.Iterator) *AWSNodePool {
 	object := &AWSNodePool{}
 	for {
 		field := iterator.ReadObject()
@@ -147,14 +232,51 @@ func readAWSNodePool(iterator *jsoniter.Iterator) *AWSNodePool {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
+		case "additional_security_group_ids":
+			value := ReadStringList(iterator)
+			object.additionalSecurityGroupIds = value
+			object.bitmap_ |= 8
+		case "availability_zone_types":
+			value := map[string]string{}
+			for {
+				key := iterator.ReadObject()
+				if key == "" {
+					break
+				}
+				item := iterator.ReadString()
+				value[key] = item
+			}
+			object.availabilityZoneTypes = value
+			object.bitmap_ |= 16
+		case "ec2_metadata_http_tokens":
+			text := iterator.ReadString()
+			value := Ec2MetadataHttpTokens(text)
+			object.ec2MetadataHttpTokens = value
+			object.bitmap_ |= 32
 		case "instance_profile":
 			value := iterator.ReadString()
 			object.instanceProfile = value
-			object.bitmap_ |= 8
+			object.bitmap_ |= 64
 		case "instance_type":
 			value := iterator.ReadString()
 			object.instanceType = value
-			object.bitmap_ |= 16
+			object.bitmap_ |= 128
+		case "root_volume":
+			value := ReadAWSVolume(iterator)
+			object.rootVolume = value
+			object.bitmap_ |= 256
+		case "subnet_outposts":
+			value := map[string]string{}
+			for {
+				key := iterator.ReadObject()
+				if key == "" {
+					break
+				}
+				item := iterator.ReadString()
+				value[key] = item
+			}
+			object.subnetOutposts = value
+			object.bitmap_ |= 512
 		case "tags":
 			value := map[string]string{}
 			for {
@@ -166,7 +288,7 @@ func readAWSNodePool(iterator *jsoniter.Iterator) *AWSNodePool {
 				value[key] = item
 			}
 			object.tags = value
-			object.bitmap_ |= 32
+			object.bitmap_ |= 1024
 		default:
 			iterator.ReadAny()
 		}

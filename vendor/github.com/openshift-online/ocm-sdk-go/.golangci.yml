@@ -16,10 +16,12 @@
 
 run:
   skip-dirs:
+  - accesstransparency
   - accountsmgmt
   - addonsmgmt
   - authorizations
   - clustersmgmt
+  - arohcp
   - errors
   - helpers
   - jobqueue

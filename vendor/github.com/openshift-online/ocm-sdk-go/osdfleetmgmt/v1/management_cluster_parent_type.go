@@ -27,6 +27,7 @@ type ManagementClusterParent struct {
 	clusterId string
 	href      string
 	kind      string
+	name      string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -103,6 +104,29 @@ func (o *ManagementClusterParent) GetKind() (value string, ok bool) {
 	return
 }
 
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Parent Cluster Name
+func (o *ManagementClusterParent) Name() string {
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.name
+	}
+	return ""
+}
+
+// GetName returns the value of the 'name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Parent Cluster Name
+func (o *ManagementClusterParent) GetName() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&8 != 0
+	if ok {
+		value = o.name
+	}
+	return
+}
+
 // ManagementClusterParentListKind is the name of the type used to represent list of objects of
 // type 'management_cluster_parent'.
 const ManagementClusterParentListKind = "ManagementClusterParentList"
@@ -128,6 +152,29 @@ func (l *ManagementClusterParentList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Items sets the items of the list.
+func (l *ManagementClusterParentList) SetLink(link bool) {
+	l.link = link
+}
+
+// Items sets the items of the list.
+func (l *ManagementClusterParentList) SetHREF(href string) {
+	l.href = href
+}
+
+// Items sets the items of the list.
+func (l *ManagementClusterParentList) SetItems(items []*ManagementClusterParent) {
+	l.items = items
+}
+
+// Items returns the items of the list.
+func (l *ManagementClusterParentList) Items() []*ManagementClusterParent {
+	if l == nil {
+		return nil
+	}
+	return l.items
 }
 
 // Empty returns true if the list is empty.

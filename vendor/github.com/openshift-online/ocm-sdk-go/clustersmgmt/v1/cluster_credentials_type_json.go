@@ -29,7 +29,7 @@ import (
 // MarshalClusterCredentials writes a value of the 'cluster_credentials' type to the given writer.
 func MarshalClusterCredentials(object *ClusterCredentials, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterCredentials(object, stream)
+	WriteClusterCredentials(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalClusterCredentials(object *ClusterCredentials, writer io.Writer) err
 	return stream.Error
 }
 
-// writeClusterCredentials writes a value of the 'cluster_credentials' type to the given stream.
-func writeClusterCredentials(object *ClusterCredentials, stream *jsoniter.Stream) {
+// WriteClusterCredentials writes a value of the 'cluster_credentials' type to the given stream.
+func WriteClusterCredentials(object *ClusterCredentials, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -65,25 +65,7 @@ func writeClusterCredentials(object *ClusterCredentials, stream *jsoniter.Stream
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0 && object.ssh != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("ssh")
-		writeSSHCredentials(object.ssh, stream)
-		count++
-	}
-	present_ = object.bitmap_&16 != 0 && object.admin != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("admin")
-		writeAdminCredentials(object.admin, stream)
-		count++
-	}
-	present_ = object.bitmap_&32 != 0
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -101,13 +83,13 @@ func UnmarshalClusterCredentials(source interface{}) (object *ClusterCredentials
 	if err != nil {
 		return
 	}
-	object = readClusterCredentials(iterator)
+	object = ReadClusterCredentials(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterCredentials reads a value of the 'cluster_credentials' type from the given iterator.
-func readClusterCredentials(iterator *jsoniter.Iterator) *ClusterCredentials {
+// ReadClusterCredentials reads a value of the 'cluster_credentials' type from the given iterator.
+func ReadClusterCredentials(iterator *jsoniter.Iterator) *ClusterCredentials {
 	object := &ClusterCredentials{}
 	for {
 		field := iterator.ReadObject()
@@ -126,18 +108,10 @@ func readClusterCredentials(iterator *jsoniter.Iterator) *ClusterCredentials {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
-		case "ssh":
-			value := readSSHCredentials(iterator)
-			object.ssh = value
-			object.bitmap_ |= 8
-		case "admin":
-			value := readAdminCredentials(iterator)
-			object.admin = value
-			object.bitmap_ |= 16
 		case "kubeconfig":
 			value := iterator.ReadString()
 			object.kubeconfig = value
-			object.bitmap_ |= 32
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

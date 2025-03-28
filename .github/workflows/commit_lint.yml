@@ -12,4 +12,4 @@ jobs:
         with:
           fetch-depth: 0
         # v4
-      - uses: wagoid/commitlint-github-action@416045160973f9fff174ac6698412cfe7181c3f3
+      - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed

@@ -29,7 +29,7 @@ import (
 // MarshalClusterStatus writes a value of the 'cluster_status' type to the given writer.
 func MarshalClusterStatus(object *ClusterStatus, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterStatus(object, stream)
+	WriteClusterStatus(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalClusterStatus(object *ClusterStatus, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeClusterStatus writes a value of the 'cluster_status' type to the given stream.
-func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
+// WriteClusterStatus writes a value of the 'cluster_status' type to the given stream.
+func WriteClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -97,11 +97,20 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("current_compute")
+		stream.WriteInt(object.currentCompute)
+		count++
+	}
+	present_ = object.bitmap_&128 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("description")
 		stream.WriteString(object.description)
 		count++
 	}
-	present_ = object.bitmap_&128 != 0
+	present_ = object.bitmap_&256 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -110,7 +119,7 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		stream.WriteInt(object.limitedSupportReasonCount)
 		count++
 	}
-	present_ = object.bitmap_&256 != 0
+	present_ = object.bitmap_&512 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -119,7 +128,7 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		stream.WriteString(object.provisionErrorCode)
 		count++
 	}
-	present_ = object.bitmap_&512 != 0
+	present_ = object.bitmap_&1024 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -128,7 +137,7 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		stream.WriteString(object.provisionErrorMessage)
 		count++
 	}
-	present_ = object.bitmap_&1024 != 0
+	present_ = object.bitmap_&2048 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -146,13 +155,13 @@ func UnmarshalClusterStatus(source interface{}) (object *ClusterStatus, err erro
 	if err != nil {
 		return
 	}
-	object = readClusterStatus(iterator)
+	object = ReadClusterStatus(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterStatus reads a value of the 'cluster_status' type from the given iterator.
-func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
+// ReadClusterStatus reads a value of the 'cluster_status' type from the given iterator.
+func ReadClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
 	object := &ClusterStatus{}
 	for {
 		field := iterator.ReadObject()
@@ -184,27 +193,31 @@ func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
 			value := ClusterConfigurationMode(text)
 			object.configurationMode = value
 			object.bitmap_ |= 32
+		case "current_compute":
+			value := iterator.ReadInt()
+			object.currentCompute = value
+			object.bitmap_ |= 64
 		case "description":
 			value := iterator.ReadString()
 			object.description = value
-			object.bitmap_ |= 64
+			object.bitmap_ |= 128
 		case "limited_support_reason_count":
 			value := iterator.ReadInt()
 			object.limitedSupportReasonCount = value
-			object.bitmap_ |= 128
+			object.bitmap_ |= 256
 		case "provision_error_code":
 			value := iterator.ReadString()
 			object.provisionErrorCode = value
-			object.bitmap_ |= 256
+			object.bitmap_ |= 512
 		case "provision_error_message":
 			value := iterator.ReadString()
 			object.provisionErrorMessage = value
-			object.bitmap_ |= 512
+			object.bitmap_ |= 1024
 		case "state":
 			text := iterator.ReadString()
 			value := ClusterState(text)
 			object.state = value
-			object.bitmap_ |= 1024
+			object.bitmap_ |= 2048
 		default:
 			iterator.ReadAny()
 		}

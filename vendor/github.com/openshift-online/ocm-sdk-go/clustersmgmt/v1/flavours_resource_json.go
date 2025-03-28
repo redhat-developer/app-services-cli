@@ -25,14 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeFlavoursAddRequest(request *FlavoursAddRequest, writer io.Writer) error {
-	return MarshalFlavour(request.body, writer)
-}
-func readFlavoursAddResponse(response *FlavoursAddResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalFlavour(reader)
-	return err
-}
 func writeFlavoursListRequest(request *FlavoursListRequest, writer io.Writer) error {
 	return nil
 }
@@ -57,7 +49,7 @@ func readFlavoursListResponse(response *FlavoursListResponse, reader io.Reader) 
 			value := iterator.ReadInt()
 			response.total = &value
 		case "items":
-			items := readFlavourList(iterator)
+			items := ReadFlavourList(iterator)
 			response.items = &FlavourList{
 				items: items,
 			}

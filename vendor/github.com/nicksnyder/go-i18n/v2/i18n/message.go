@@ -2,6 +2,7 @@ package i18n
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -21,7 +22,7 @@ type Message struct {
 	// LeftDelim is the left Go template delimiter.
 	LeftDelim string
 
-	// RightDelim is the right Go template delimiter.``
+	// RightDelim is the right Go template delimiter.
 	RightDelim string
 
 	// Zero is the content of the message for the CLDR plural form "zero".
@@ -175,47 +176,94 @@ func stringSubmap(k string, v interface{}, strdata map[string]string) error {
 	}
 }
 
-// isMessage tells whether the given data is a message, or a map containing
-// nested messages.
-// A map is assumed to be a message if it contains any of the "reserved" keys:
-// "id", "description", "hash", "leftdelim", "rightdelim", "zero", "one", "two", "few", "many", "other"
-// with a string value.
-// e.g.,
-// - {"message": {"description": "world"}} is a message
-// - {"message": {"description": "world", "foo": "bar"}} is a message ("foo" key is ignored)
-// - {"notmessage": {"description": {"hello": "world"}}} is not
-// - {"notmessage": {"foo": "bar"}} is not
-func isMessage(v interface{}) bool {
-	reservedKeys := []string{"id", "description", "hash", "leftdelim", "rightdelim", "zero", "one", "two", "few", "many", "other"}
-	switch data := v.(type) {
-	case string:
-		return true
-	case map[string]interface{}:
-		for _, key := range reservedKeys {
-			val, ok := data[key]
-			if !ok {
-				continue
-			}
-			_, ok = val.(string)
-			if !ok {
-				continue
-			}
-			// v is a message if it contains a "reserved" key holding a string value
+var reservedKeys = map[string]struct{}{
+	"id":          {},
+	"description": {},
+	"hash":        {},
+	"leftdelim":   {},
+	"rightdelim":  {},
+	"zero":        {},
+	"one":         {},
+	"two":         {},
+	"few":         {},
+	"many":        {},
+	"other":       {},
+	"translation": {},
+}
+
+func isReserved(key string, val any) bool {
+	lk := strings.ToLower(key)
+	if _, ok := reservedKeys[lk]; ok {
+		if key == "translation" {
 			return true
 		}
-	case map[interface{}]interface{}:
-		for _, key := range reservedKeys {
-			val, ok := data[key]
-			if !ok {
-				continue
-			}
-			_, ok = val.(string)
-			if !ok {
-				continue
-			}
-			// v is a message if it contains a "reserved" key holding a string value
+		if _, ok := val.(string); ok {
 			return true
 		}
 	}
 	return false
+}
+
+// isMessage returns true if v contains only message keys and false if it contains no message keys.
+// It returns an error if v contains both message and non-message keys.
+// - {"message": {"description": "world"}} is a message
+// - {"error": {"description": "world", "foo": "bar"}} is an error
+// - {"notmessage": {"description": {"hello": "world"}}} is not a message
+// - {"notmessage": {"foo": "bar"}} is not a message
+func isMessage(v interface{}) (bool, error) {
+	switch data := v.(type) {
+	case nil, string:
+		return true, nil
+	case map[string]interface{}:
+		reservedKeys := make([]string, 0, len(reservedKeys))
+		unreservedKeys := make([]string, 0, len(data))
+		for k, v := range data {
+			if isReserved(k, v) {
+				reservedKeys = append(reservedKeys, k)
+			} else {
+				unreservedKeys = append(unreservedKeys, k)
+			}
+		}
+		hasReservedKeys := len(reservedKeys) > 0
+		if hasReservedKeys && len(unreservedKeys) > 0 {
+			return false, &mixedKeysError{
+				reservedKeys:   reservedKeys,
+				unreservedKeys: unreservedKeys,
+			}
+		}
+		return hasReservedKeys, nil
+	case map[interface{}]interface{}:
+		reservedKeys := make([]string, 0, len(reservedKeys))
+		unreservedKeys := make([]string, 0, len(data))
+		for key, v := range data {
+			k, ok := key.(string)
+			if !ok {
+				unreservedKeys = append(unreservedKeys, fmt.Sprintf("%+v", key))
+			} else if isReserved(k, v) {
+				reservedKeys = append(reservedKeys, k)
+			} else {
+				unreservedKeys = append(unreservedKeys, k)
+			}
+		}
+		hasReservedKeys := len(reservedKeys) > 0
+		if hasReservedKeys && len(unreservedKeys) > 0 {
+			return false, &mixedKeysError{
+				reservedKeys:   reservedKeys,
+				unreservedKeys: unreservedKeys,
+			}
+		}
+		return hasReservedKeys, nil
+	}
+	return false, nil
+}
+
+type mixedKeysError struct {
+	reservedKeys   []string
+	unreservedKeys []string
+}
+
+func (e *mixedKeysError) Error() string {
+	sort.Strings(e.reservedKeys)
+	sort.Strings(e.unreservedKeys)
+	return fmt.Sprintf("reserved keys %v mixed with unreserved keys %v", e.reservedKeys, e.unreservedKeys)
 }
