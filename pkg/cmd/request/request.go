@@ -65,7 +65,7 @@ func runCmd(opts *options) (err error) {
 		opts.Logger.Info("POST request. Reading file from standard input")
 		specifiedFile, err1 := util.CreateFileFromStdin()
 		if err1 != nil {
-			return err
+			return err1
 		}
 		data, response, err = conn.API().GenericAPI().POST(opts.Context, opts.urlPath, specifiedFile)
 	} else {

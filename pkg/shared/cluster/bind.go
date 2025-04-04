@@ -112,7 +112,7 @@ func (c *KubernetesClusterAPIImpl) performBinding(
 		}
 		errAsk := survey.AskOne(confirm, &shouldContinue)
 		if errAsk != nil {
-			return err
+			return errAsk
 		}
 
 		if !shouldContinue {
