@@ -20,33 +20,3 @@
 * OpenShift Streams for Apache Kakfa: see [Red Hat Streams for Apache Kakfa](https://docs.redhat.com/en/documentation/red_hat_streams_for_apache_kafka/)
 * OpenShift Service Registry: see [Red Hat build of Apicurio Registry](https://access.redhat.com/documentation/en-us/red_hat_build_of_apicurio_registry)
 * OpenShift Connectors: see [Red Hat build of Apache Camel K](https://access.redhat.com/documentation/en-us/red_hat_build_of_apache_camel_k)
-
-## Installing RHOAS
-
-See [Installing the rhoas CLI](https://github.com/redhat-developer/app-services-guides/tree/main/docs/rhoas/rhoas-cli-installation#installing-the-rhoas-cli) 
-for instructions on how to install CLI from official sources.
-
-To install or update to latest version of CLI use following script:
-
-```shell
-curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/scripts/install.sh | bash 
-```
-
-## RHOAS Container Image
-
-RHOAS CLI can be also used as container image. This can be useful when using CLI in OpenShift environment, automation and testing. Image contains also oc cli and kafkacat binaries. For more information please refer to [redhat-developer/app-services-tools](https://github.com/redhat-developer/app-services-tools) github repository
-
-Running the image:
-
-```shell
-docker run -ti --rm --name rhoas-devsandbox --entrypoint /bin/bash quay.io/rhoas/tools
-```
-
-## Guides
-
-See our [Guides](https://github.com/redhat-developer/app-services-guides/tree/main/docs/rhoas/rhoas-cli-installation) for installation and usage instructions.
-
-## Commands
-
-See the [Command-Line Reference](http://appservices.tech/commands/rhoas) section for details of all available commands and options.
-
