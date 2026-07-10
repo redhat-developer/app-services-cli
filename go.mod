@@ -1,40 +1,40 @@
 module github.com/redhat-developer/app-services-cli
 
-go 1.18
+go 1.26.5
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.6
-	github.com/BurntSushi/toml v1.2.1
+	github.com/AlecAivazis/survey/v2 v2.3.7
+	github.com/BurntSushi/toml v1.6.0
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Nerzal/gocloak/v7 v7.11.0
 	github.com/aerogear/charmil v0.8.3
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/briandowns/spinner v1.19.0
-	github.com/coreos/go-oidc/v3 v3.4.0
-	github.com/fatih/color v1.13.0
+	github.com/briandowns/spinner v1.23.2
+	github.com/coreos/go-oidc/v3 v3.20.0
+	github.com/fatih/color v1.19.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/google/go-github/v39 v39.2.0
 	github.com/jackdelahunt/survey-json-schema v0.13.0
 	github.com/kataras/tablewriter v0.0.0-20180708051242-e063d29b7c23 // indirect
 	github.com/landoop/tableprinter v0.0.0-20201125135848-89e81fc956e7
-	github.com/mattn/go-isatty v0.0.16
-	github.com/nicksnyder/go-i18n/v2 v2.2.1
-	github.com/openconfig/goyang v1.2.0
+	github.com/mattn/go-isatty v0.0.22
+	github.com/nicksnyder/go-i18n/v2 v2.6.1
+	github.com/openconfig/goyang v1.6.3
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/pkg/errors v0.9.1
 	github.com/redhat-developer/service-binding-operator v0.9.0
-	github.com/spf13/cobra v1.6.1
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/cobra v1.10.2
+	github.com/spf13/pflag v1.0.10
 	github.com/wtrocki/go-github-selfupdate v1.2.4
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	gitlab.com/c0b/go-ordered-json v0.0.0-20201030195603-febf46534d5a
 	golang.org/x/oauth2 v0.3.0
-	golang.org/x/text v0.5.0
+	golang.org/x/text v0.40.0
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8
 	gopkg.in/segmentio/analytics-go.v3 v3.1.0
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/api v0.24.8
-	k8s.io/apimachinery v0.24.8
+	k8s.io/api v0.36.2
+	k8s.io/apimachinery v0.36.2
 	k8s.io/client-go v0.24.8
 	k8s.io/utils v0.0.0-20220713171938-56c0de1e6f5e
 )
@@ -91,7 +91,7 @@ require (
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/openshift-online/ocm-sdk-go v0.1.306
+	github.com/openshift-online/ocm-sdk-go v0.1.505
 	github.com/prometheus/client_golang v1.14.0 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.39.0 // indirect
